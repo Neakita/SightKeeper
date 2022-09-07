@@ -4,9 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SightKeeper"
+        xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Windows"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <viewModels:MainWindowVM/>
+    </Window.DataContext>
     <Grid>
-
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <ListBox Name="SideMenu" Grid.Column="0" ItemsSource="{Binding SideMenuItems, Mode=OneTime}"
+                 SelectedItem="{Binding SelectedSideMenuItem, UpdateSourceTrigger=PropertyChanged}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name, Mode=OneTime}"
+                               Style="{StaticResource SideMenuTextBlock}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <ContentControl Name="SideMenuContent" Grid.Column="1"
+                        Content="{Binding SelectedSideMenuItem.Content, UpdateSourceTrigger=PropertyChanged}"/>
+        
     </Grid>
 </Window>
