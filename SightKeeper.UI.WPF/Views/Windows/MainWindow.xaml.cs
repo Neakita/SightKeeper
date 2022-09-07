@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.UI.WPF.Views;
+﻿namespace SightKeeper.UI.WPF.Views.Windows;
 
 public partial class MainWindow
 {
