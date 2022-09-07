@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper", "SightKeeper\SightKeeper.csproj", "{138E1667-0472-47BE-A037-BF5B3F96724E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.UI.WPF", "SightKeeper.UI.WPF\SightKeeper.UI.WPF.csproj", "{138E1667-0472-47BE-A037-BF5B3F96724E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
