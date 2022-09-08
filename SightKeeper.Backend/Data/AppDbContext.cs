@@ -14,11 +14,20 @@ public class AppDbContext : DbContext
 	public DbSet<BoundingBox> BoundingBoxes { get; set; } = null!;
 	public DbSet<Resolution> Resolutions { get; set; } = null!;
 
+
+	public AppDbContext(string dataSource = "App.db")
+	{
+		_dataSource = dataSource;
+	}
+	
+	
+	private readonly string _dataSource;
+	
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		var connectionStringBuilder = new SqliteConnectionStringBuilder
 		{
-			DataSource = "App.db"
+			DataSource = _dataSource
 		};
 		optionsBuilder.UseSqlite(connectionStringBuilder.ConnectionString);
 	}

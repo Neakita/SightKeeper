@@ -7,7 +7,7 @@ public abstract class Model
 {
 	public Guid Id { get; set; }
 	public string Name { get; set; } = string.Empty;
-	public Resolution Resolution { get; set; }
+	public Resolution Resolution { get; set; } = new();
 	public List<ItemClass> Classes { get; set; } = new();
 
 	[NotMapped] public abstract List<Screenshot> Screenshots { get; }

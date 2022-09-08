@@ -1,14 +1,17 @@
 using SightKeeper.Backend.Data;
+using SightKeeper.Backend.Data.Members.Detector;
 
 namespace SightKeeper.Tests;
 
 public class DbContextTests
 {
+	private const string TestDbName = "test.db";
+
 	[Fact]
 	public void CanCreateDbContext()
 	{
 		// assign
-		using var dbContext = new AppDbContext();
+		using var dbContext = new AppDbContext(TestDbName);
 		dbContext.Database.EnsureDeleted();
 		
 		// act
@@ -19,5 +22,35 @@ public class DbContextTests
 		
 		// clean-up
 		dbContext.Database.EnsureDeleted();
+	}
+
+	[Fact]
+	public void DeletingModelWillNotDeleteScreenshot()
+	{
+		// assign
+		var detectorModel = new DetectorModel();
+		var screenshot = new DetectorScreenshot {Model = detectorModel};
+		detectorModel.Screenshots.Add(screenshot);
+		using (var dbContext = new AppDbContext(TestDbName))
+		{
+			dbContext.Database.EnsureDeleted();
+			dbContext.Database.EnsureCreated();
+			dbContext.DetectorModels.Add(detectorModel);
+			dbContext.DetectorScreenshots.Add(screenshot);
+			dbContext.SaveChanges();
+			Assert.NotEmpty(dbContext.DetectorModels);
+			Assert.NotEmpty(dbContext.DetectorScreenshots);
+		}
+		
+		using (var dbContext = new AppDbContext(TestDbName))
+		{
+			// act
+			dbContext.DetectorModels.Remove(detectorModel);
+			dbContext.SaveChanges();
+			
+			// assert
+			Assert.Empty(dbContext.DetectorModels);
+			Assert.NotEmpty(dbContext.DetectorScreenshots);
+		}
 	}
 }
