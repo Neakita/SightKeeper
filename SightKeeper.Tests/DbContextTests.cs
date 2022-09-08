@@ -51,6 +51,42 @@ public class DbContextTests
 			// assert
 			Assert.Empty(dbContext.DetectorModels);
 			Assert.NotEmpty(dbContext.DetectorScreenshots);
+			
+			// clean-up
+			dbContext.Database.EnsureDeleted();
+		}
+	}
+
+	[Fact]
+	public void DeletingScreenshotWillNotDeleteDetectorModel()
+	{
+		// assign
+		var detectorModel = new DetectorModel();
+		var screenshot = new DetectorScreenshot {Model = detectorModel};
+		detectorModel.Screenshots.Add(screenshot);
+		using (var dbContext = new AppDbContext(TestDbName))
+		{
+			dbContext.Database.EnsureDeleted();
+			dbContext.Database.EnsureCreated();
+			dbContext.DetectorModels.Add(detectorModel);
+			dbContext.DetectorScreenshots.Add(screenshot);
+			dbContext.SaveChanges();
+			Assert.NotEmpty(dbContext.DetectorModels);
+			Assert.NotEmpty(dbContext.DetectorScreenshots);
+		}
+		
+		using (var dbContext = new AppDbContext(TestDbName))
+		{
+			// act
+			dbContext.DetectorScreenshots.Remove(screenshot);
+			dbContext.SaveChanges();
+			
+			// assert
+			Assert.NotEmpty(dbContext.DetectorModels);
+			Assert.Empty(dbContext.DetectorScreenshots);
+			
+			// clean-up
+			dbContext.Database.EnsureDeleted();
 		}
 	}
 }
