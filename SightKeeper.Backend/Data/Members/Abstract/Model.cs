@@ -10,5 +10,5 @@ public abstract class Model
 	public Resolution Resolution { get; set; } = new();
 	public List<ItemClass> Classes { get; set; } = new();
 
-	[NotMapped] public abstract List<Screenshot> Screenshots { get; }
+	[NotMapped] public abstract IEnumerable<Screenshot> Screenshots { get; }
 }

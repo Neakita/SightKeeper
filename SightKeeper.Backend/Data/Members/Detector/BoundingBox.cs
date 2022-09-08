@@ -1,5 +1,8 @@
-﻿namespace SightKeeper.Backend.Data.Members.Detector;
+﻿using Microsoft.EntityFrameworkCore;
 
+namespace SightKeeper.Backend.Data.Members.Detector;
+
+[Owned]
 public sealed class BoundingBox
 {
 	public Guid Id { get; set; }
