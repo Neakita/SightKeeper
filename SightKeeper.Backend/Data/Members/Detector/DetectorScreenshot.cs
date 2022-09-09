@@ -6,4 +6,10 @@ public sealed class DetectorScreenshot : Screenshot
 {
 	public DetectorModel? Model { get; set; }
 	public List<DetectorItem> Items { get; set; } = new();
+	
+	public DetectorScreenshot() : base() { }
+
+	public DetectorScreenshot(DateTime date) : base(date)
+	{
+	}
 }
