@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
 	public DbSet<DetectorScreenshot> DetectorScreenshots { get; set; } = null!;
 	public DbSet<DetectorItem> DetectorItems { get; set; } = null!;
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
+	public DbSet<Game> Games { get; set; } = null!;
 
 
 	public AppDbContext(string dataSource = "App.db")
