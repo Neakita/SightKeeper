@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using SightKeeper.Backend.Data.Members.Common;
 using SightKeeper.Backend.Data.Members.Detector;
 
 namespace SightKeeper.Backend.Data.Members.Abstract;

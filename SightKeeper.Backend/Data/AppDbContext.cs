@@ -11,7 +11,6 @@ public class AppDbContext : DbContext
 	public DbSet<DetectorScreenshot> DetectorScreenshots { get; set; } = null!;
 	public DbSet<DetectorItem> DetectorItems { get; set; } = null!;
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
-	public DbSet<Resolution> Resolutions { get; set; } = null!;
 
 
 	public AppDbContext(string dataSource = "App.db")
@@ -33,6 +32,6 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.Entity<DetectorItem>().OwnsOne(entity => entity.BoundingBox);
+		
 	}
 }
