@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SightKeeper.Backend.Data;
 using SightKeeper.Backend.Data.Members;
 using SightKeeper.Backend.Data.Members.Detector;
@@ -250,6 +251,94 @@ public class DbContextTests
 			
 			// assert
 			Assert.NotEmpty(dbContext.ItemClasses);
+
+			// clean-up
+			dbContext.Database.EnsureDeleted();
+		}
+	}
+
+	[Fact]
+	public void DeletingModelWillNotDeleteGame()
+	{
+		// assign
+		var game = new Game();
+		var detectorModel = new DetectorModel {Game = game};
+		var screenshot = new DetectorScreenshot {Model = detectorModel};
+		var detectorItem = new DetectorItem
+		{
+			Screenshot = screenshot,
+			ItemClass = new ItemClass(),
+			BoundingBox = new BoundingBox()
+		};
+
+		detectorModel.DetectorScreenshots.Add(screenshot);
+		screenshot.Items.Add(detectorItem);
+		using (var dbContext = new AppDbContext(TestDbName))
+		{
+			dbContext.Database.EnsureDeleted();
+			dbContext.Database.EnsureCreated();
+			dbContext.DetectorModels.Add(detectorModel);
+			dbContext.DetectorScreenshots.Add(screenshot);
+			dbContext.DetectorScreenshots.Add(screenshot);
+			dbContext.Games.Add(game);
+			dbContext.SaveChanges();
+			Assert.NotEmpty(dbContext.DetectorModels);
+			Assert.NotEmpty(dbContext.Games);
+		}
+		
+		using (var dbContext = new AppDbContext(TestDbName))
+		{
+			// act
+			dbContext.DetectorModels.Remove(detectorModel);
+			dbContext.SaveChanges();
+			
+			// assert
+			Assert.NotEmpty(dbContext.Games);
+
+			// clean-up
+			dbContext.Database.EnsureDeleted();
+		}
+	}
+
+	[Fact]
+	public void DeletingGameWillSetNullModelGame()
+	{
+		// assign
+		var game = new Game();
+		var detectorModel = new DetectorModel {Game = game};
+		var screenshot = new DetectorScreenshot {Model = detectorModel};
+		var detectorItem = new DetectorItem
+		{
+			Screenshot = screenshot,
+			ItemClass = new ItemClass(),
+			BoundingBox = new BoundingBox()
+		};
+
+		detectorModel.DetectorScreenshots.Add(screenshot);
+		screenshot.Items.Add(detectorItem);
+		using (var dbContext = new AppDbContext(TestDbName))
+		{
+			dbContext.Database.EnsureDeleted();
+			dbContext.Database.EnsureCreated();
+			dbContext.DetectorModels.Add(detectorModel);
+			dbContext.DetectorScreenshots.Add(screenshot);
+			dbContext.DetectorScreenshots.Add(screenshot);
+			dbContext.Games.Add(game);
+			dbContext.SaveChanges();
+			Assert.NotEmpty(dbContext.DetectorModels);
+			Assert.NotEmpty(dbContext.Games);
+		}
+		
+		using (var dbContext = new AppDbContext(TestDbName))
+		{
+			// act
+			dbContext.Games.Remove(game);
+			dbContext.SaveChanges();
+			
+			// assert
+			Assert.Empty(dbContext.Games);
+			Assert.NotEmpty(dbContext.DetectorModels);
+			Assert.Null(dbContext.DetectorModels.Include(model => model.Game).Single().Game);
 
 			// clean-up
 			dbContext.Database.EnsureDeleted();

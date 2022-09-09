@@ -10,6 +10,7 @@ public abstract class Model
 	public string Name { get; set; } = string.Empty;
 	public Resolution Resolution { get; set; } = new();
 	public List<ItemClass> Classes { get; set; } = new();
+	public Game? Game { get; set; }
 
 	[NotMapped] public abstract IEnumerable<Screenshot> Screenshots { get; }
 }

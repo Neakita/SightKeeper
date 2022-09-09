@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SightKeeper.Backend.Data.Members;
+using SightKeeper.Backend.Data.Members.Abstract;
 using SightKeeper.Backend.Data.Members.Detector;
 
 namespace SightKeeper.Backend.Data;
@@ -33,6 +34,6 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		
+		modelBuilder.Entity<Screenshot>().Ignore(screenshot => screenshot.Bitmap);
 	}
 }
