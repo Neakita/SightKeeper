@@ -3,7 +3,7 @@ using SightKeeper.Backend.Data;
 using SightKeeper.Backend.Data.Members;
 using SightKeeper.Backend.Data.Members.Detector;
 
-namespace SightKeeper.Tests;
+namespace SightKeeper.Tests.Data;
 
 public class DbContextTests
 {
