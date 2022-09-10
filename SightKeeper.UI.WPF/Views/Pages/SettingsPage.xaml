@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="SightKeeper.UI.WPF.Views.Pages.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SightKeeper.UI.WPF.Views.Pages"
+             xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Pages"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="600">
+    <UserControl.DataContext>
+        <viewModels:SettingsPageVM/>
+    </UserControl.DataContext>
+    <ScrollViewer>
+        <UniformGrid Rows="2" Columns="2">
+            <GroupBox Header="Games">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <UniformGrid Grid.Row="0" Columns="2">
+                        <TextBlock>Name</TextBlock>
+                        <TextBlock>Process name</TextBlock>
+                    </UniformGrid>
+                    <ListBox Grid.Row="1" ItemsSource="{Binding Games, UpdateSourceTrigger=PropertyChanged}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <UniformGrid Columns="2">
+                                    <TextBlock Text="{Binding Name}"/> <!--TODO добавить возможность изменения имени заменив это на TextBox и создав GameVM где нужно обновлять имя в бд-->
+                                    <TextBlock Text="{Binding ProcessName}"/>
+                                </UniformGrid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                        <Button Margin="5">Remove</Button>
+                        <Button Margin="5">Add</Button>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+        </UniformGrid>
+    </ScrollViewer>
+</UserControl>
