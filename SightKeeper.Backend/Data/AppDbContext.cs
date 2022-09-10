@@ -34,6 +34,6 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.Entity<Screenshot>().Ignore(screenshot => screenshot.Bitmap);
+		modelBuilder.Entity<Screenshot>().Ignore(screenshot => screenshot.File);
 	}
 }

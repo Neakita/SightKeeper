@@ -21,13 +21,19 @@ public abstract class Screenshot
 		get
 		{
 			if (!IsExists) return null;
-			using var memoryStream = new MemoryStream(System.IO.File.ReadAllBytes(FilePath));
+			using MemoryStream memoryStream = new(System.IO.File.ReadAllBytes(FilePath));
 			return new Bitmap(memoryStream);
 		}
 		set
 		{
 			if (value == null) EnsureDeleted();
-			else value.Save(FilePath);
+			else
+			{
+				if (value.Width != Width) throw new Exception("The width of the image does not match the required");
+				if (value.Height != Height) throw new Exception("The height of the image does not match the required");
+				if (!Directory.Exists(DirectoryPath)) Directory.CreateDirectory(DirectoryPath);
+				value.Save(FilePath);
+			}
 		}
 	}
 
