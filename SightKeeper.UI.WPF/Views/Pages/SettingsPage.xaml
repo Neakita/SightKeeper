@@ -15,27 +15,20 @@
             <GroupBox Header="Games">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <UniformGrid Grid.Row="0" Columns="2">
-                        <TextBlock>Name</TextBlock>
-                        <TextBlock>Process name</TextBlock>
-                    </UniformGrid>
-                    <ListBox Grid.Row="1" ItemsSource="{Binding Games, UpdateSourceTrigger=PropertyChanged}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <UniformGrid Columns="2">
-                                    <TextBlock Text="{Binding Name}"/> <!--TODO добавить возможность изменения имени заменив это на TextBox и создав GameVM где нужно обновлять имя в бд-->
-                                    <TextBlock Text="{Binding ProcessName}"/>
-                                </UniformGrid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <StackPanel Grid.Row="2" Orientation="Horizontal">
-                        <Button Margin="5">Remove</Button>
-                        <Button Margin="5">Add</Button>
+                    <ListView Grid.Row="0" ItemsSource="{Binding Games, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedGame, UpdateSourceTrigger=PropertyChanged}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}"/>
+                                <GridViewColumn Header="Process name" DisplayMemberBinding="{Binding ProcessName}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Add" Command="{Binding AddNewProcessCommand}" Style="{StaticResource MediumButtonStyle}"/>
+                        <Button Content="Remove" Command="{Binding RemoveProcessCommand}" Style="{StaticResource MediumButtonStyle}"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>

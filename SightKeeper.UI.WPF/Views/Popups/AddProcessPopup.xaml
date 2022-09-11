@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="SightKeeper.UI.WPF.Views.Popups.AddProcessPopup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SightKeeper.UI.WPF.Views.Popups"
+             xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Popups"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.DataContext>
+        <viewModels:AddProcessPopupVM/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <ListView Grid.Row="0" ItemsSource="{Binding Processes, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedProcess, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding MainWindowTitle, Mode=OneTime}"/>
+                    <GridViewColumn Header="Process name" DisplayMemberBinding="{Binding ProcessName, Mode=OneTime}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Apply" Command="{Binding ApplyCommand}" Style="{StaticResource MediumButtonStyle}"/>
+            <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource MediumButtonStyle}"/>
+        </StackPanel>
+        
+    </Grid>
+</UserControl>

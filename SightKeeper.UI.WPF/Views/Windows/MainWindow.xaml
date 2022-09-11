@@ -30,5 +30,11 @@
         <ContentControl Name="SideMenuContent" Grid.Column="1"
                         Content="{Binding SelectedSideMenuItem.Content, UpdateSourceTrigger=PropertyChanged}"/>
         
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Background="#50000000" Visibility="{Binding PopupVisibility, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Border Background="White" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ContentControl Content="{Binding PopupToShow, UpdateSourceTrigger=PropertyChanged}"/>
+            </Border>
+        </Border>
+        
     </Grid>
 </Window>
