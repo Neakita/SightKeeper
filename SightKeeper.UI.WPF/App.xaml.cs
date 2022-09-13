@@ -2,15 +2,36 @@
 using System.Threading.Tasks;
 using System.Windows;
 using Serilog;
+using Serilog.Core;
+using Serilog.Events;
+using SightKeeper.Backend;
 using SightKeeper.Backend.Data;
+using SightKeeper.Backend.Data.Members;
 
 namespace SightKeeper.UI.WPF;
 
 public partial class App
 {
+    #region Static members
+
+    public static LogEventLevel MinimumLoggerLevel
+    {
+        get => _levelSwitch.MinimumLevel;
+        set
+        {
+            _levelSwitch.MinimumLevel = value;
+            Log.Logger.Information("Minimum level is set to {CurrentMinimumLevel}", value.ToString());
+        }
+    }
+
+    private static LoggingLevelSwitch _levelSwitch = null!;
+
+    #endregion
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        SetupLogging();
         SetupExceptionHandling();
         SetupDatabase();
     }
@@ -18,47 +39,36 @@ public partial class App
     private static void SetupDatabase()
     {
         using AppDbContext dbContext = new();
-        dbContext.Database.EnsureCreated();
+        if (dbContext.Database.EnsureCreated()) Log.Logger.Information("Database just created");
+        else Log.Logger.Verbose("Database already exists");
+    }
+
+    private static void SetupLogging()
+    {
+        _levelSwitch = new LoggingLevelSwitch();
+        _levelSwitch.MinimumLevel = LogEventLevel.Verbose;
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.Debug()
+            .MinimumLevel.ControlledBy(_levelSwitch).CreateLogger();
+        Log.Logger.Verbose("Logger initialized");
     }
 
     private void SetupExceptionHandling()
     {
-        Log.Logger = new LoggerConfiguration()
-            .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-            .MinimumLevel.Debug().CreateLogger();
-
         AppDomain.CurrentDomain.UnhandledException += (_, args) =>
-            LogUnhandledException((Exception) args.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+            Log.Logger.Fatal((Exception) args.ExceptionObject, "An unhandled exception occured");
 
         DispatcherUnhandledException += (_, args) =>
         {
-            LogUnhandledException(args.Exception, "Application.Current.DispatcherUnhandledException");
+            Log.Logger.Fatal(args.Exception, "An unhandled dispatcher exception occured");
             args.Handled = true;
         };
 
         TaskScheduler.UnobservedTaskException += (_, args) =>
         {
-            LogUnhandledException(args.Exception, "TaskScheduler.UnobservedTaskException");
+            Log.Logger.Fatal(args.Exception, "An unhandled unobserved task exception occured");
             args.SetObserved();
         };
-    }
-
-    private static void LogUnhandledException(Exception exception, string source)
-    {
-        string message = $"Unhandled exception ({source})";
-        try
-        {
-            System.Reflection.AssemblyName assemblyName =
-                System.Reflection.Assembly.GetExecutingAssembly().GetName();
-            message = $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
-        }
-        catch (Exception ex)
-        {
-            Log.Logger.Error(ex, "Exception in LogUnhandledException");
-        }
-        finally
-        {
-            Log.Logger.Error(exception, message);
-        }
     }
 }

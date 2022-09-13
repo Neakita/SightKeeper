@@ -2,12 +2,15 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SightKeeper.Backend;
+using SightKeeper.Backend.Data.Members;
 using SightKeeper.UI.WPF.Views.Pages;
 
 namespace SightKeeper.UI.WPF.ViewModels.Windows;
