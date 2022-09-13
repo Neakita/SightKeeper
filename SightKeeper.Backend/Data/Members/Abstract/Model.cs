@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
 using SightKeeper.Backend.Data.Members.Common;
 using SightKeeper.Backend.Data.Members.Detector;
 
@@ -13,4 +14,13 @@ public abstract class Model
 	public Game? Game { get; set; }
 
 	[NotMapped] public abstract IEnumerable<Screenshot> Screenshots { get; }
+	
+	public Model() { }
+
+	public Model(string name, Resolution resolution, Game? game = null)
+	{
+		Name = name;
+		Resolution = resolution;
+		Game = game;
+	}
 }

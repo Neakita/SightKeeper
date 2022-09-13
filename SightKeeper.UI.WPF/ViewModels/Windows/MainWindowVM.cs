@@ -22,6 +22,7 @@ public class MainWindowVM : ReactiveObject
 	{
 		new("Dashboard", new DashboardPage()),
 		new("Annotator", new AnnotatorPage()),
+		new("Models", new ModelsPage()),
 		new("Settings", new SettingsPage())
 	};
 

@@ -8,6 +8,7 @@ namespace SightKeeper.Backend.Data;
 
 public class AppDbContext : DbContext
 {
+	public DbSet<Model> Models { get; set; } = null!;
 	public DbSet<DetectorModel> DetectorModels { get; set; } = null!;
 	public DbSet<DetectorScreenshot> DetectorScreenshots { get; set; } = null!;
 	public DbSet<DetectorItem> DetectorItems { get; set; } = null!;
