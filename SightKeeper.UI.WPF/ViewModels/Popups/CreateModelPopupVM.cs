@@ -14,9 +14,12 @@ namespace SightKeeper.UI.WPF.ViewModels.Popups;
 
 public class CreateModelPopupVM : ReactiveObject
 {
+	private const string DefaultModelName = "Untitled model";
+	
+	
 	public event CreateModelPopup.ModelHandler? Done;
 	
-	[Reactive] public string Name { get; set; } = string.Empty;
+	[Reactive] public string Name { get; set; } = DefaultModelName;
 
 	[Reactive] public ushort Width { get; set; } = 320;
 	[Reactive] public ushort Height { get; set; } = 320;

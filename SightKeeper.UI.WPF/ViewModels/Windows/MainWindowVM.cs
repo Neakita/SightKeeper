@@ -2,22 +2,19 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SightKeeper.Backend;
-using SightKeeper.Backend.Data.Members;
 using SightKeeper.UI.WPF.Views.Pages;
 
 namespace SightKeeper.UI.WPF.ViewModels.Windows;
 
 public class MainWindowVM : ReactiveObject
 {
-	public static MainWindowVM Current { get; private set; }
+	public static MainWindowVM Current { get; private set; } = null!;
 	
 	#region SideMenu
 
@@ -43,7 +40,7 @@ public class MainWindowVM : ReactiveObject
 
 	private readonly ObservableCollection<UserControl> _popups = new();
 
-	[ObservableAsProperty] public UserControl? PopupToShow { get; } = null!;
+	[ObservableAsProperty] public UserControl? PopupToShow { get; } = null;
 	[ObservableAsProperty] public Visibility PopupVisibility { get; } = Visibility.Collapsed;
 	
 	public void ShowPopup(UserControl userControl) => _popups.Add(userControl);

@@ -46,7 +46,6 @@ public partial class App
     private static void SetupLogging()
     {
         _levelSwitch = new LoggingLevelSwitch();
-        _levelSwitch.MinimumLevel = LogEventLevel.Verbose;
         Log.Logger = new LoggerConfiguration()
             .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
             .WriteTo.Debug()
