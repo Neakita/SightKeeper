@@ -7,7 +7,7 @@ namespace SightKeeper.DAL.Repositories;
 /// Base Entity Framework repository class which implements <see cref="IRepository{TEntity}"/> interface and can be inherited to specified entity if needed
 /// </summary>
 /// <typeparam name="TEntity">The type of entity that will be associated with the repository inherited from the <see cref="Entity"/> abstract class</typeparam>
-public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
+public class EFRepository<TEntity> : IDisposable, IRepository<TEntity> where TEntity : Entity
 {
 	private readonly DbContext _dbContext;
 	private readonly DbSet<TEntity> _set;
@@ -68,7 +68,7 @@ public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
 		await _dbContext.SaveChangesAsync(cancellationToken);
 	}
 
-	void IRepository<TEntity>.Update(TEntity entity)
+	public void Update(TEntity entity)
 	{
 		_set.Update(entity);
 		_dbContext.SaveChanges();
@@ -91,4 +91,13 @@ public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
 		_set.UpdateRange(entities);
 		await _dbContext.SaveChangesAsync(cancellationToken);
 	}
+
+	public void Dispose() => _dbContext.Dispose();
+
+	public void Clear()
+	{
+		_dbContext.Database.EnsureDeleted();
+	}
+
+	public async Task ClearAsync(CancellationToken cancellationToken = default) => await _dbContext.Database.EnsureDeletedAsync(cancellationToken);
 }

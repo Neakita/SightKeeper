@@ -1,4 +1,6 @@
-﻿using SightKeeper.Abstract.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SightKeeper.Abstract.Interfaces;
 using SightKeeper.DAL.Members.Common;
 
 namespace SightKeeper.DAL.Members.Abstract;
@@ -13,9 +15,9 @@ public abstract class Screenshot : Entity, IScreenshot
 	
 	public DateTime CreationDate { get; private set; }
 	
-	public IResolution Resolution { get; private set; }
+	public Resolution Resolution { get; private set; }
 
-	public Screenshot(IResolution resolution)
+	public Screenshot(Resolution resolution)
 	{
 		Resolution = resolution;
 		CreationDate = DateTime.UtcNow;
@@ -24,4 +26,13 @@ public abstract class Screenshot : Entity, IScreenshot
 	
 	protected Screenshot(Guid id) : base(id) =>
 		Resolution = new Resolution();
+}
+
+
+internal sealed class ScreenshotConfiguration : IEntityTypeConfiguration<Screenshot>
+{
+	public void Configure(EntityTypeBuilder<Screenshot> builder)
+	{
+		builder.OwnsOne(screenshot => screenshot.Resolution);
+	}
 }

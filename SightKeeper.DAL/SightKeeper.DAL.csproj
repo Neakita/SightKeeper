@@ -13,10 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Members\Abstract\Interfaces" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\SightKeeper.Abstract\SightKeeper.Abstract.csproj" />
     </ItemGroup>
 

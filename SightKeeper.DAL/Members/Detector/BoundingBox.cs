@@ -5,10 +5,10 @@ namespace SightKeeper.DAL.Members.Detector;
 
 public sealed class BoundingBox
 {
-	public float X { get; }
-	public float Y { get; }
-	public float Width { get; }
-	public float Height { get; }
+	public float X { get; private set; }
+	public float Y { get; private set; }
+	public float Width { get; private set; }
+	public float Height { get; private set; }
 	
 	
 	public BoundingBox(float x, float y, float width, float height)
@@ -17,16 +17,5 @@ public sealed class BoundingBox
 		Y = y;
 		Width = width;
 		Height = height;
-	}
-}
-
-internal sealed class BoundingBoxConfiguration : IEntityTypeConfiguration<BoundingBox>
-{
-	public void Configure(EntityTypeBuilder<BoundingBox> builder)
-	{
-		builder.Property(boundingBox => boundingBox.X);
-		builder.Property(boundingBox => boundingBox.Y);
-		builder.Property(boundingBox => boundingBox.Width);
-		builder.Property(boundingBox => boundingBox.Height);
 	}
 }

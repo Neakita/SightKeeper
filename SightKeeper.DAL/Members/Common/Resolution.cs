@@ -6,8 +6,8 @@ namespace SightKeeper.DAL.Members.Common;
 
 public sealed class Resolution : IResolution
 {
-	public ushort Width { get; }
-	public ushort Height { get; }
+	public ushort Width { get; private set; }
+	public ushort Height { get; private set; }
 	
 	public Resolution(ushort width = 320, ushort height = 320)
 	{
@@ -19,13 +19,4 @@ public sealed class Resolution : IResolution
 	}
 
 	private static bool IsValid(ushort value) => value % 32 == 0;
-}
-
-public class ResolutionConfiguration : IEntityTypeConfiguration<Resolution>
-{
-	public void Configure(EntityTypeBuilder<Resolution> builder)
-	{
-		builder.Property(resolution => resolution.Width);
-		builder.Property(resolution => resolution.Height);
-	}
 }

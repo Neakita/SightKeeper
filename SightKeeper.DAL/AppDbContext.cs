@@ -18,6 +18,7 @@ public class AppDbContext : DbContext
 	public AppDbContext(string dataSource = "App.db")
 	{
 		_dataSource = dataSource;
+		Database.EnsureCreated();
 	}
 	
 	
@@ -37,7 +38,7 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new EntityConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
-		modelBuilder.ApplyConfiguration(new ResolutionConfiguration());
-		modelBuilder.ApplyConfiguration(new BoundingBoxConfiguration());
+		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
+		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
 	}
 }
