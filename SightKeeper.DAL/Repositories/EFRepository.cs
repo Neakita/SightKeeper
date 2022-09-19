@@ -93,11 +93,4 @@ public class EFRepository<TEntity> : IDisposable, IRepository<TEntity> where TEn
 	}
 
 	public void Dispose() => _dbContext.Dispose();
-
-	public void Clear()
-	{
-		_dbContext.Database.EnsureDeleted();
-	}
-
-	public async Task ClearAsync(CancellationToken cancellationToken = default) => await _dbContext.Database.EnsureDeletedAsync(cancellationToken);
 }

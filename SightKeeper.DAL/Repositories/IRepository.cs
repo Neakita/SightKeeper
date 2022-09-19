@@ -29,8 +29,4 @@ public interface IRepository<TEntity> where TEntity : Entity
 	void UpdateRange(IEnumerable<TEntity> entities);
 
 	Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken);
-
-	void Clear();
-
-	Task ClearAsync(CancellationToken cancellationToken);
 }

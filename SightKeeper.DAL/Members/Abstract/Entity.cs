@@ -9,6 +9,8 @@ public abstract class Entity
 
 	protected Entity() => id = Guid.NewGuid();
 	protected Entity(Guid id) => this.id = id;
+	
+	public bool EqualsById(Entity? other) => id.Equals(other?.id);
 }
 
 internal sealed class EntityConfiguration : IEntityTypeConfiguration<Entity>
