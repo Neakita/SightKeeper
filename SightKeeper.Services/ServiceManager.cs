@@ -15,7 +15,7 @@ public static class ServiceManager
 {
 	public static T GetService<T>() where T : notnull => Host.Services.GetRequiredService<T>();
 
-	public static LoggingLevelSwitch LoggingLevelSwitch { get; } = new();
+	public static LoggingLevelSwitch LoggingLevelSwitch { get; } = new(); // TODO тут не место для этого, нужно выделить в отдельный сервис
 
 
 	private static IHost BuildServices(string[]? args = null)
