@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SightKeeper.Abstract.Interfaces;
 using SightKeeper.DAL.Members.Abstract;
 
 namespace SightKeeper.DAL.Members.Common;
 
-public sealed class Game : Entity
+public sealed class Game : Entity, IGame
 {
 	public string Title { get; set; }
 	public string ProcessName { get; }
