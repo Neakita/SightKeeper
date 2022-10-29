@@ -4,31 +4,39 @@ using SightKeeper.DAL.Members.Common;
 
 namespace SightKeeper.DAL.Members.Abstract;
 
-public abstract class Model : Entity
+public abstract class Model
 {
+	public Guid Id { get; }
 	public string Name { get; set; }
-	public Resolution Resolution { get; }
-	public ICollection<ItemClass> Classes { get; } = new List<ItemClass>();
+	public Resolution Resolution { get; private set; }
+	public List<ItemClass> Classes { get; private set; } = new();
 	public Game? Game { get; set; }
 
 	public abstract IEnumerable<Screenshot> Screenshots { get; }
+	
 
-	protected Model(Guid id, string name) : base(id)
-	{
-		Name = name;
-		Resolution = new Resolution();
-	}
+	public Model(string name) : this(name, new Resolution()) { }
 
-	public Model(string name, Resolution resolution, Game? game)
+	public Model(string name, Resolution resolution)
 	{
 		Name = name;
 		Resolution = resolution;
-		Game = game;
+	}
+	
+	
+	protected Model(Guid id, string name)
+	{
+		Id = id;
+		Name = name;
+		Resolution = null!;
 	}
 }
 
 internal sealed class ModelConfiguration : IEntityTypeConfiguration<Model>
 {
-	public void Configure(EntityTypeBuilder<Model> builder) =>
+	public void Configure(EntityTypeBuilder<Model> builder)
+	{
+		builder.HasKey(model => model.Id);
 		builder.OwnsOne(model => model.Resolution);
+	}
 }

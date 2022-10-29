@@ -5,23 +5,25 @@ using SightKeeper.DAL.Members.Abstract;
 
 namespace SightKeeper.DAL.Members.Common;
 
-public sealed class Game : Entity, IGame
+public sealed class Game : IGame
 {
+	public Guid Id { get; }
 	public string Title { get; set; }
 	public string ProcessName { get; }
 
-	public ICollection<Model> Models { get; } = new List<Model>();
+	public List<Model> Models { get; private set; } = new();
 	
-
+	
 	public Game(string title, string processName)
 	{
 		Title = title;
 		ProcessName = processName;
 	}
-	
-	
-	private Game(Guid id, string title, string processName) : base(id)
+
+
+	private Game(Guid id, string title, string processName)
 	{
+		Id = id;
 		Title = title;
 		ProcessName = processName;
 	}
@@ -29,6 +31,9 @@ public sealed class Game : Entity, IGame
 
 internal class GameConfiguration : IEntityTypeConfiguration<Game>
 {
-	public void Configure(EntityTypeBuilder<Game> builder) =>
+	public void Configure(EntityTypeBuilder<Game> builder)
+	{
+		builder.HasKey(game => game.Id);
 		builder.Property(game => game.ProcessName);
+	}
 }

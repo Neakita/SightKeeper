@@ -1,14 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace SightKeeper.DAL.Members.Detector;
+﻿namespace SightKeeper.DAL.Members.Detector;
 
 public sealed class BoundingBox
 {
-	public float X { get; private set; }
-	public float Y { get; private set; }
-	public float Width { get; private set; }
-	public float Height { get; private set; }
+	public float X { get; set; }
+	public float Y { get; set; }
+	public float Width { get; set; }
+	public float Height { get; set; }
 	
 	
 	public BoundingBox(float x, float y, float width, float height)

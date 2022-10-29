@@ -7,7 +7,6 @@ using Serilog.Events;
 using SightKeeper.DAL;
 using SightKeeper.DAL.Members.Common;
 using SightKeeper.DAL.Members.Detector;
-using SightKeeper.DAL.Repositories;
 
 namespace SightKeeper.Services;
 
@@ -28,16 +27,12 @@ public static class ServiceManager
 	
 	private static IHost? _host;
 	private static IHost Host => _host ??= BuildServices();
-	
-	
+
+
 	private static void InitializeServices(this IServiceCollection services) =>
-		services.AddLogger().AddDatabase().AddDbRepositories();
+		services.AddLogger().AddDatabase();
 
 	private static IServiceCollection AddDatabase(this IServiceCollection services) => services.AddTransient<DbContext, AppDbContext>();
-
-	private static IServiceCollection AddDbRepositories(this IServiceCollection services) => services
-		.AddTransient<IRepository<DetectorModel>, EFRepository<DetectorModel>>()
-		.AddTransient<IRepository<Game>, EFRepository<Game>>();
 
 	private static IServiceCollection AddLogger(this IServiceCollection services) => services.AddSingleton(LoggerFactory);
 	

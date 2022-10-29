@@ -4,12 +4,11 @@ namespace SightKeeper.DAL.Members.Detector;
 
 public sealed class DetectorScreenshot : Screenshot
 {
-	public DetectorModel Model { get; private set; }
-	public ICollection<DetectorItem> Items { get; private set; } = new List<DetectorItem>();
+	public List<DetectorItem> Items { get; private set; } = new();
 
 
-	private DetectorScreenshot(Guid id) : base(id)
-	{
-		Model = null!;
-	}
+	public DetectorScreenshot() { }
+
+
+	private DetectorScreenshot(Guid id, DateTime creationDate) : base(id, creationDate) { }
 }

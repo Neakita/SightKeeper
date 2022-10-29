@@ -15,13 +15,9 @@ public class AppDbContext : DbContext
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 
-	public AppDbContext(string dataSource = "App.db")
-	{
-		_dataSource = dataSource;
-		Database.EnsureCreated();
-	}
-	
-	
+	public AppDbContext(string dataSource = "App.db") => _dataSource = dataSource;
+
+
 	private readonly string _dataSource;
 	
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -35,7 +31,6 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.ApplyConfiguration(new EntityConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
