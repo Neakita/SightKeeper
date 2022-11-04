@@ -22,7 +22,7 @@ public class AppDbContext : DbContext
 	
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		var connectionStringBuilder = new SqliteConnectionStringBuilder
+		SqliteConnectionStringBuilder connectionStringBuilder = new()
 		{
 			DataSource = _dataSource
 		};
@@ -31,6 +31,8 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
+		modelBuilder.ApplyConfiguration(new ProfileConfiguration());
+		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());

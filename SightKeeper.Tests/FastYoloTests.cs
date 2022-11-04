@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
-using FastYolo;
-using FastYolo.Model;
+//using FastYolo;
+//using FastYolo.Model;
 using Xunit.Abstractions;
 
 namespace SightKeeper.Tests;
@@ -12,7 +12,7 @@ public sealed class FastYoloTests
 
 	public FastYoloTests(ITestOutputHelper testOutputHelper) => _testOutputHelper = testOutputHelper;
 
-	[Fact]
+	/*[Fact]
 	public void ShouldRun()
 	{
 		const string yoloConfigFile = "Samples/yolov3-tiny.cfg";
@@ -50,5 +50,5 @@ public sealed class FastYoloTests
 		TimeSpan elapsed = stopwatch.Elapsed;
 		stopwatch.Stop();
 		_testOutputHelper.WriteLine($"Elapsed: {Math.Round(elapsed.TotalSeconds, 1)} seconds for {iterations} iterations.\nAverage fps: {Math.Round(iterations / elapsed.TotalSeconds, 1)}");
-	}
+	}*/
 }
