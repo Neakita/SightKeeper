@@ -23,10 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.Services\SightKeeper.Services.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="Samples\cars road.jpg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
@@ -39,6 +35,10 @@
       <None Update="Samples\yolov3-tiny.weights">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SightKeeper.DAL\SightKeeper.DAL.csproj" />
     </ItemGroup>
 
 </Project>

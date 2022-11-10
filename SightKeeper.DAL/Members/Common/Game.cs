@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SightKeeper.Abstract.Interfaces;
 using SightKeeper.DAL.Members.Abstract;
+using SightKeeper.DAL.Members.Abstract.Interfaces;
 
 namespace SightKeeper.DAL.Members.Common;
 

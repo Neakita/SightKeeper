@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Abstract.Interfaces;
+﻿namespace SightKeeper.DAL.Members.Abstract.Interfaces;
 
 public interface IFile
 {

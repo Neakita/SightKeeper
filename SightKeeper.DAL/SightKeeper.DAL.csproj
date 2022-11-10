@@ -12,8 +12,4 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.Abstract\SightKeeper.Abstract.csproj" />
-    </ItemGroup>
-
 </Project>

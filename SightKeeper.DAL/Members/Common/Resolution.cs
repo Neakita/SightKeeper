@@ -1,4 +1,4 @@
-﻿using SightKeeper.Abstract.Interfaces;
+﻿using SightKeeper.DAL.Members.Abstract.Interfaces;
 
 namespace SightKeeper.DAL.Members.Common;
 

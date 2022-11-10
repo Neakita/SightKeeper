@@ -2,13 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Tests", "SightKeeper.Tests\SightKeeper.Tests.csproj", "{7D95C029-7CE1-476A-AD5F-543934A5F04F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services", "SightKeeper.Services\SightKeeper.Services.csproj", "{8B432227-8D7D-471D-A71A-4400FC2048ED}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.DAL", "SightKeeper.DAL\SightKeeper.DAL.csproj", "{25EDE1E2-060A-4124-834C-89545A50AB6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Abstract", "SightKeeper.Abstract\SightKeeper.Abstract.csproj", "{29022FA6-C2A7-4F28-A0BA-B3EBDD375DB9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.UI.WPF", "SightKeeper.UI.WPF\SightKeeper.UI.WPF.csproj", "{2F00BDEB-4AA9-4F37-8292-01E3456E904D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Backend", "SightKeeper.Backend\SightKeeper.Backend.csproj", "{90E309B6-012B-4243-AC31-8E575193C76A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,21 +18,17 @@ Global
 		{7D95C029-7CE1-476A-AD5F-543934A5F04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D95C029-7CE1-476A-AD5F-543934A5F04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D95C029-7CE1-476A-AD5F-543934A5F04F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B432227-8D7D-471D-A71A-4400FC2048ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B432227-8D7D-471D-A71A-4400FC2048ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B432227-8D7D-471D-A71A-4400FC2048ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B432227-8D7D-471D-A71A-4400FC2048ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25EDE1E2-060A-4124-834C-89545A50AB6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25EDE1E2-060A-4124-834C-89545A50AB6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25EDE1E2-060A-4124-834C-89545A50AB6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25EDE1E2-060A-4124-834C-89545A50AB6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{29022FA6-C2A7-4F28-A0BA-B3EBDD375DB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29022FA6-C2A7-4F28-A0BA-B3EBDD375DB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29022FA6-C2A7-4F28-A0BA-B3EBDD375DB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29022FA6-C2A7-4F28-A0BA-B3EBDD375DB9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2F00BDEB-4AA9-4F37-8292-01E3456E904D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F00BDEB-4AA9-4F37-8292-01E3456E904D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F00BDEB-4AA9-4F37-8292-01E3456E904D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F00BDEB-4AA9-4F37-8292-01E3456E904D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90E309B6-012B-4243-AC31-8E575193C76A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90E309B6-012B-4243-AC31-8E575193C76A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90E309B6-012B-4243-AC31-8E575193C76A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90E309B6-012B-4243-AC31-8E575193C76A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

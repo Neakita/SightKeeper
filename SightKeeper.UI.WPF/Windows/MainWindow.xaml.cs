@@ -1,6 +1,12 @@
-﻿namespace SightKeeper.UI.WPF.Windows;
+﻿using SightKeeper.UI.WPF.ViewModels.Windows;
+
+namespace SightKeeper.UI.WPF.Windows;
 
 public partial class MainWindow
 {
-	public MainWindow() => InitializeComponent();
+	public MainWindow(MainWindowVM viewModel)
+	{
+		InitializeComponent();
+		DataContext = viewModel;
+	}
 }
