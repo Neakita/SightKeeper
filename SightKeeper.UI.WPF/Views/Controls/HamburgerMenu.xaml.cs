@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Media.Animation;
 using SightKeeper.UI.WPF.ViewModels;
 
-namespace SightKeeper.UI.WPF.Controls;
+namespace SightKeeper.UI.WPF.Views.Controls;
 
 public partial class HamburgerMenu
 {

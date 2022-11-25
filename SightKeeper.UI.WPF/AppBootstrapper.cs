@@ -1,11 +1,40 @@
-﻿using Splat;
+﻿using ReactiveUI;
+using Serilog;
+using Serilog.Core;
+using SightKeeper.DAL;
+using SightKeeper.UI.WPF.ViewModels.Windows;
+using SightKeeper.UI.WPF.Views.Windows;
+using Splat;
+using Splat.Serilog;
 
 namespace SightKeeper.UI.WPF;
 
-public sealed class AppBootstrapper : IEnableLogger
+internal static class AppBootstrapper
 {
-	public AppBootstrapper()
+	internal static void Setup()
 	{
-		
+		SetupLogging();
+		SetupDatabase();
+		SetupViews();
+		SplatRegistrations.SetupIOC();
+	}
+	
+
+	private static void SetupLogging()
+	{
+		LoggingLevelSwitch loggingLevelSwitch = new();
+		SplatRegistrations.RegisterConstant(loggingLevelSwitch);
+		Log.Logger = new LoggerConfiguration()
+			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+			.MinimumLevel.ControlledBy(loggingLevelSwitch)
+			.CreateLogger();
+		Locator.CurrentMutable.UseSerilogFullLogger();
+	}
+	
+	private static void SetupDatabase() => SplatRegistrations.Register<IAppDbContext, AppDbContext>();
+	
+	private static void SetupViews()
+	{
+		SplatRegistrations.Register<IViewFor<MainWindowVM>, MainWindow>();
 	}
 }

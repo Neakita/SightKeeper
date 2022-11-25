@@ -6,7 +6,7 @@ using SightKeeper.DAL.Members.Detector;
 
 namespace SightKeeper.DAL;
 
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IAppDbContext
 {
 	public DbSet<Model> Models { get; set; } = null!;
 	public DbSet<DetectorModel> DetectorModels { get; set; } = null!;
@@ -37,5 +37,6 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
+		modelBuilder.ApplyConfiguration(new ItemClassGroupConfiguration());
 	}
 }

@@ -1,24 +1,23 @@
-﻿<mah:MetroWindow x:Class="SightKeeper.UI.WPF.Windows.MainWindow"
+﻿<mah:MetroWindow x:Class="SightKeeper.UI.WPF.Views.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-        xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Windows"
         GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
         mc:Ignorable="d"
         Title="Sight Keeper" Height="450" Width="800"
-        WindowTitleBrush="{DynamicResource MahApps.Brushes.ThemeBackground}"
-        d:DataContext="{d:DesignInstance Type=viewModels:MainWindowVM, IsDesignTimeCreatable=True}">
+        WindowTitleBrush="{DynamicResource MahApps.Brushes.ThemeBackground}">
     
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
+            <!-- ReSharper disable Xaml.PathError -->
             <svgc:SvgViewbox Source="Resources/icon.svg"/>
+            <!-- ReSharper restore Xaml.PathError -->
         </DataTemplate>
     </mah:MetroWindow.IconTemplate>
     
-    <Grid>
-        <TextBlock Text="{Binding TimeService.Time, Mode=OneTime}"/>
-    </Grid>
+    <TextBlock Name="TextBlock"/>
+    
 </mah:MetroWindow>
