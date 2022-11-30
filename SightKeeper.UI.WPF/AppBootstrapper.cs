@@ -2,6 +2,7 @@
 using Serilog;
 using Serilog.Core;
 using SightKeeper.DAL;
+using SightKeeper.UI.WPF.ViewModels.Elements;
 using SightKeeper.UI.WPF.ViewModels.Windows;
 using SightKeeper.UI.WPF.Views.Windows;
 using Splat;
@@ -16,6 +17,7 @@ internal static class AppBootstrapper
 		SetupLogging();
 		SetupDatabase();
 		SetupViews();
+		SetupViewModels();
 		SplatRegistrations.SetupIOC();
 	}
 	
@@ -33,8 +35,11 @@ internal static class AppBootstrapper
 	
 	private static void SetupDatabase() => SplatRegistrations.Register<IAppDbContext, AppDbContext>();
 	
-	private static void SetupViews()
+	private static void SetupViews() => SplatRegistrations.Register<MainWindow>();
+
+	private static void SetupViewModels()
 	{
-		SplatRegistrations.Register<IViewFor<MainWindowVM>, MainWindow>();
+		SplatRegistrations.Register<MainWindowVM>();
+		SplatRegistrations.Register<HamburgerMenuVM>();
 	}
 }

@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:abstract="clr-namespace:SightKeeper.UI.WPF.Abstract"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    mc:Ignorable="d">
+    
+    <Style x:Key="SightKeeperWindow" TargetType="mah:MetroWindow">
+        <Setter Property="WindowTitleBrush" Value="{DynamicResource MahApps.Brushes.ThemeBackground}"/>
+        <Setter Property="GlowBrush" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+    </Style>
+    
+    <Style x:Key="HamburgerMenu"
+           TargetType="mah:HamburgerMenu"
+           BasedOn="{StaticResource MahApps.Styles.HamburgerMenu}"
+           d:DataContext="{d:DesignInstance abstract:IHamburgerMenuVM}">
+        
+        <Setter Property="SelectedItem" Value="{Binding SelectedMenuItem, UpdateSourceTrigger=PropertyChanged}"/>
+        <Setter Property="Content" Value="{Binding SelectedMenuItem.Content, UpdateSourceTrigger=PropertyChanged}"/>
+        <Setter Property="ItemsSource" Value="{Binding MenuItems, Mode=OneTime}"/>
+        <Setter Property="OptionsItemsSource" Value="{Binding OptionsMenuItems, Mode=OneTime}"/>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate DataType="{x:Type abstract:IMenuItem}">
+                    <Grid Height="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=CompactPaneLength, Mode=OneWay}"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <ContentControl Grid.Column="0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Content="{Binding Icon}"
+                                        Focusable="False" />
+                        <TextBlock Grid.Column="1"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Text="{Binding Label}" />
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        
+    </Style>
+    
+</ResourceDictionary>

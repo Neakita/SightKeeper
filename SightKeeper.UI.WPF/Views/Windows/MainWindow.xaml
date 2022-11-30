@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-        GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
+        xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Windows"
+        xmlns:elements="clr-namespace:SightKeeper.UI.WPF.ViewModels.Elements"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Sight Keeper" Height="450" Width="800"
-        WindowTitleBrush="{DynamicResource MahApps.Brushes.ThemeBackground}">
+        Style="{StaticResource SightKeeperWindow}"
+        WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
     
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
@@ -18,6 +22,7 @@
         </DataTemplate>
     </mah:MetroWindow.IconTemplate>
     
-    <TextBlock Name="TextBlock"/>
+    <mah:HamburgerMenu DataContext="{Binding HamburgerMenuVM}"
+                       Style="{StaticResource HamburgerMenu}"/>
     
 </mah:MetroWindow>
