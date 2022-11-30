@@ -6,8 +6,6 @@
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Windows"
-        xmlns:elements="clr-namespace:SightKeeper.UI.WPF.ViewModels.Elements"
-        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Sight Keeper" Height="450" Width="800"
         Style="{StaticResource SightKeeperWindow}"

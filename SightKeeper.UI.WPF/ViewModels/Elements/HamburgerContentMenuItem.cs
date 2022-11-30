@@ -7,7 +7,7 @@ using SightKeeper.UI.WPF.Abstract;
 
 namespace SightKeeper.UI.WPF.ViewModels.Elements;
 
-public sealed class HamburgerContentMenuItem : ReactiveObject, IContentInclusiveMenuItem, ISelectable
+public sealed class HamburgerContentMenuItem : ReactiveObject, IContentInclusiveMenuItem
 {
 	public string Label { get; }
 	public ContentControl Content { get; }
@@ -15,18 +15,19 @@ public sealed class HamburgerContentMenuItem : ReactiveObject, IContentInclusive
 	[Reactive] public bool IsSelected { get; set; }
 
 
-	public HamburgerContentMenuItem(string label, ContentControl content,
-		PackIconBootstrapIconsKind deactivatedIconKind, PackIconBootstrapIconsKind activatedIconKind)
+	public HamburgerContentMenuItem(string label, ContentControl content, PackIconBootstrapIconsKind deactivatedIconKind, PackIconBootstrapIconsKind activatedIconKind) 
+		: this(label, content, CreateIcon(deactivatedIconKind), CreateIcon(activatedIconKind)) { }
+
+	private HamburgerContentMenuItem(string label, ContentControl content,
+		Control deactivatedIconKind, Control activatedIconKind)
 	{
 		Label = label;
 		Content = content;
-		PackIconBase activatedIcon = CreateIcon(activatedIconKind);
-		PackIconBase deactivatedIcon = CreateIcon(deactivatedIconKind);
 		this.WhenAnyValue(menuItem => menuItem.IsSelected)
-			.Select(isSelected => isSelected ? activatedIcon : deactivatedIcon)
+			.Select(isSelected => isSelected ? activatedIconKind : deactivatedIconKind)
 			.ToPropertyEx(this, menuItem => menuItem.Icon);
 	}
 
 
-	private static PackIconBase CreateIcon(PackIconBootstrapIconsKind iconKind) => new PackIconBootstrapIcons {Kind = iconKind};
+	private static Control CreateIcon(PackIconBootstrapIconsKind iconKind) => new PackIconBootstrapIcons {Kind = iconKind};
 }

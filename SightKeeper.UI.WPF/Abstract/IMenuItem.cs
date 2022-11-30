@@ -6,4 +6,5 @@ public interface IMenuItem
 {
 	string Label { get; }
 	Control Icon { get; }
+	bool IsSelected { get; set; }
 }

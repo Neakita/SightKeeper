@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="SightKeeper.UI.WPF.Views.Pages.ModelsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Pages"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance viewModels:ModelsPageVM}"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Content="{icons:BootstrapIcons Plus}" Style="{StaticResource SingleIconButton}"/>
+        </StackPanel>
+        
+        <ListBox Grid.Row="1" ItemsSource="{Binding Models, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource WrappedListBox}" md:ListBoxItemAssist.ShowSelection="False"/>
+        
+    </Grid>
+</UserControl>
