@@ -6,7 +6,5 @@
              xmlns:local="clr-namespace:SightKeeper.UI.WPF.Views.Pages"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="Aqua">
-        <TextBlock>12435ddfg</TextBlock>
-    </Grid>
+    
 </UserControl>

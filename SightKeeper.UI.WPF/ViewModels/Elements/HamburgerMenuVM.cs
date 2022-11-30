@@ -12,8 +12,7 @@ public sealed class HamburgerMenuVM : ReactiveObject, IHamburgerMenuVM
 {
 	public IEnumerable<IContentInclusiveMenuItem> MenuItems { get; } = new IContentInclusiveMenuItem[]
 	{
-		new HamburgerContentMenuItem("Dashboard", new Dashboard(), PackIconBootstrapIconsKind.Grid3x2Gap, PackIconBootstrapIconsKind.Grid3x2GapFill),
-		new HamburgerContentMenuItem("Dashboard", new Dashboard(), PackIconBootstrapIconsKind.Grid1x2, PackIconBootstrapIconsKind.Grid1x2Fill)
+		new HamburgerContentMenuItem("Dashboard", new Dashboard(), PackIconBootstrapIconsKind.Grid1x2, PackIconBootstrapIconsKind.Grid1x2Fill),
 	};
 	
 	public IEnumerable<IContentInclusiveMenuItem> OptionsMenuItems { get; } = Enumerable.Empty<IContentInclusiveMenuItem>();
@@ -21,8 +20,5 @@ public sealed class HamburgerMenuVM : ReactiveObject, IHamburgerMenuVM
 	[Reactive] public IContentInclusive SelectedMenuItem { get; set; }
 
 
-	public HamburgerMenuVM()
-	{
-		SelectedMenuItem = MenuItems.First();
-	}
+	public HamburgerMenuVM() => SelectedMenuItem = MenuItems.First();
 }
