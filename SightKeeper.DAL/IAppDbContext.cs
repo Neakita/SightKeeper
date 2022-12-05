@@ -5,7 +5,7 @@ using SightKeeper.DAL.Members.Detector;
 
 namespace SightKeeper.DAL;
 
-public interface IAppDbContext
+public interface IAppDbContext : IDbContext
 {
 	public DbSet<Model> Models { get; }
 	public DbSet<DetectorModel> DetectorModels { get; }
@@ -13,9 +13,4 @@ public interface IAppDbContext
 	public DbSet<DetectorItem> DetectorItems { get; }
 	public DbSet<ItemClass> ItemClasses { get; }
 	public DbSet<Game> Games { get; }
-
-
-	int SaveChanges();
-	Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-	void RollBack();
 }
