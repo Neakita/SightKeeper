@@ -54,9 +54,4 @@
       </Page>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="ViewModels\Members" />
-      <Folder Include="Views\Controls" />
-    </ItemGroup>
-
 </Project>
