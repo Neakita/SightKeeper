@@ -23,7 +23,7 @@ public class AppDbContext : DbContext, IAppDbContext
 		IEnumerable<EntityEntry> changedEntries = ChangeTracker.Entries().Where(x => x.State != EntityState.Unchanged);
 		foreach (EntityEntry entry in changedEntries)
 		{
-			switch(entry.State)
+			switch (entry.State)
 			{
 				case EntityState.Modified:
 					entry.CurrentValues.SetValues(entry.OriginalValues);
@@ -36,6 +36,24 @@ public class AppDbContext : DbContext, IAppDbContext
 					entry.State = EntityState.Unchanged;
 					break;
 			}
+		}
+	}
+
+	public void RollBack<TEntity>(TEntity entity) where TEntity : class
+	{
+		EntityEntry<TEntity> entry = Entry(entity);
+		switch (entry.State)
+		{
+			case EntityState.Modified:
+				entry.CurrentValues.SetValues(entry.OriginalValues);
+				entry.State = EntityState.Unchanged;
+				break;
+			case EntityState.Added:
+				entry.State = EntityState.Detached;
+				break;
+			case EntityState.Deleted:
+				entry.State = EntityState.Unchanged;
+				break;
 		}
 	}
 
