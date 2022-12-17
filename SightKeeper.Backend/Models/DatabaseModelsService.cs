@@ -5,12 +5,12 @@ using SightKeeper.DAL.Members.Abstract;
 
 namespace SightKeeper.Backend.Models;
 
-public sealed class DatabaseModelService : IModelService
+public sealed class DatabaseModelsService : ModelsService
 {
 	public IEnumerable<Model> Models { get; } = Enumerable.Empty<Model>();
 
 
-	public DatabaseModelService(IAppDbFactory dbFactory, INewModelNameValidator nameValidator)
+	public DatabaseModelsService(IAppDbFactory dbFactory, INewModelNameValidator nameValidator)
 	{
 		_dbFactory = dbFactory;
 		_nameValidator = nameValidator;

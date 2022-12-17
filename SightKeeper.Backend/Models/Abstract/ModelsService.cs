@@ -2,10 +2,8 @@
 
 namespace SightKeeper.Backend.Models.Abstract;
 
-public interface IModelService
+public interface ModelsService
 {
-	IEnumerable<Model> Models { get; }
-	
 	void AddModel(Model model);
 	Task AddModelAsync(Model model, CancellationToken cancellationToken = default);
 	void DeleteModel(Model model);
