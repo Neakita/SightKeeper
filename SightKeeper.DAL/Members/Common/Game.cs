@@ -5,13 +5,27 @@ using SightKeeper.DAL.Members.Abstract.Interfaces;
 
 namespace SightKeeper.DAL.Members.Common;
 
-public sealed class Game : IGame
+/// <summary>
+/// A class representing a simple game(process) with title and process name
+/// </summary>
+public sealed class Game : Abstract.Interfaces.Game
 {
 	public Guid Id { get; }
+	
+	/// <summary>
+	/// Display name
+	/// </summary>
 	public string Title { get; set; }
+	
+	/// <summary>
+	/// System process name
+	/// </summary>
 	public string ProcessName { get; }
 
-	public List<Model> Models { get; private set; } = new();
+	/// <summary>
+	/// Dependent models
+	/// </summary>
+	public List<Model>? Models { get; private set; } = new();
 	
 	
 	public Game(string title, string processName)
@@ -21,6 +35,10 @@ public sealed class Game : IGame
 	}
 
 
+	// ReSharper disable once UnusedMember.Local
+	/// <summary>
+	/// Constructor used by Entity Framework
+	/// </summary>
 	private Game(Guid id, string title, string processName)
 	{
 		Id = id;

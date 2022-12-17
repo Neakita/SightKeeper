@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SightKeeper.DAL.Members.Abstract.Interfaces;
 using SightKeeper.DAL.Members.Common;
+using Resolution = SightKeeper.DAL.Members.Common.Resolution;
 
 namespace SightKeeper.DAL.Members.Abstract;
 
-public abstract class Screenshot : IScreenshot
+public abstract class Screenshot : Interfaces.Screenshot
 {
 	private const string DirectoryPath = "Data/Images/";
 	private const string Extension = ".png";

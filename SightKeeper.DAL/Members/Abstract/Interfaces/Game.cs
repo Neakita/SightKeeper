@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.DAL.Members.Abstract.Interfaces;
 
-public interface IGame
+public interface Game
 {
 	string Title { get; set; }
 	string ProcessName { get; }

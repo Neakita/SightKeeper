@@ -2,7 +2,7 @@
 
 namespace SightKeeper.DAL.Members.Common;
 
-public sealed class Resolution : IResolution
+public sealed class Resolution : Abstract.Interfaces.Resolution
 {
 	public ushort Width
 	{

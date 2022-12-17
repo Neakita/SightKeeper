@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Backend.Abstract;
 
-public interface IGameManager<TGame> where TGame: IGame
+public interface GameManager<TGame> where TGame: Game
 {
 	IEnumerable<TGame> AvailableGames { get; }
 	
