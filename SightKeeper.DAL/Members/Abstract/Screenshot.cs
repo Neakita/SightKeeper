@@ -1,23 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SightKeeper.DAL.Members.Abstract.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
 using SightKeeper.DAL.Members.Common;
-using Resolution = SightKeeper.DAL.Members.Common.Resolution;
 
 namespace SightKeeper.DAL.Members.Abstract;
 
-public abstract class Screenshot : Interfaces.Screenshot
+public abstract class Screenshot
 {
-	private const string DirectoryPath = "Data/Images/";
-	private const string Extension = ".png";
+	private const string DirectoryPath = "Data/Images";
+	private const string Extension = "png";
 	
-	public Guid Id { get; }
+	[Key] public Guid Id { get; private set; }
 
-	public DateTime CreationDate { get; }
+	public DateTime CreationDate { get; private set; }
 	
-	public Resolution Resolution { get; private set; }
+	public virtual Resolution Resolution { get; private set; }
 	
-	public string FilePath => DirectoryPath + Id + Extension;
+	public string FilePath => $"{DirectoryPath}/{Id}.{Extension}";
 	
 	
 	public Screenshot() : this(new Resolution()) { }
@@ -34,16 +31,5 @@ public abstract class Screenshot : Interfaces.Screenshot
 		Id = id;
 		CreationDate = creationDate;
 		Resolution = new Resolution();
-	}
-}
-
-
-internal sealed class ScreenshotConfiguration : IEntityTypeConfiguration<Screenshot>
-{
-	public void Configure(EntityTypeBuilder<Screenshot> builder)
-	{
-		builder.HasKey(screenshot => screenshot.Id);
-		builder.OwnsOne(screenshot => screenshot.Resolution);
-		builder.Property(screenshot => screenshot.CreationDate);
 	}
 }

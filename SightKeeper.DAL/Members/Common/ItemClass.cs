@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SightKeeper.DAL.Members.Common;
 
-public sealed class ItemClass
+public class ItemClass
 {
-	public Guid Id { get; }
+	[Key] public Guid Id { get; private set; }
 	public string Name { get; set; }
 
 	
@@ -16,13 +15,5 @@ public sealed class ItemClass
 	{
 		Id = id;
 		Name = name;
-	}
-}
-
-internal sealed class ItemClassConfiguration : IEntityTypeConfiguration<ItemClass>
-{
-	public void Configure(EntityTypeBuilder<ItemClass> builder)
-	{
-		builder.HasKey(itemClass => itemClass.Id);
 	}
 }

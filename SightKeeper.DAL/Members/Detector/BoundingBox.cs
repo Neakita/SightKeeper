@@ -1,6 +1,9 @@
-﻿namespace SightKeeper.DAL.Members.Detector;
+﻿using Microsoft.EntityFrameworkCore;
 
-public sealed class BoundingBox
+namespace SightKeeper.DAL.Members.Detector;
+
+[Owned]
+public class BoundingBox
 {
 	public float X { get; set; }
 	public float Y { get; set; }

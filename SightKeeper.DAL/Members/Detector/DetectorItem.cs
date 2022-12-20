@@ -1,14 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using System.ComponentModel.DataAnnotations;
 using SightKeeper.DAL.Members.Common;
 
 namespace SightKeeper.DAL.Members.Detector;
 
-public sealed class DetectorItem
+public class DetectorItem
 {
-	public Guid Id { get; }
-	public ItemClass ItemClass { get; private set; }
-	public BoundingBox BoundingBox { get; private set; }
+	[Key] public Guid Id { get; private set; }
+	public virtual ItemClass ItemClass { get; private set; }
+	public virtual BoundingBox BoundingBox { get; private set; }
 	
 	
 	public DetectorItem(ItemClass itemClass, BoundingBox boundingBox)
@@ -18,19 +17,10 @@ public sealed class DetectorItem
 	}
 
 
-	private DetectorItem(Guid id)
+	private DetectorItem()
 	{
-		Id = id;
+		Id = Guid.Empty;
 		ItemClass = null!;
 		BoundingBox = null!;
-	}
-}
-
-internal sealed class DetectorItemConfiguration : IEntityTypeConfiguration<DetectorItem>
-{
-	public void Configure(EntityTypeBuilder<DetectorItem> builder)
-	{
-		builder.HasKey(item => item.Id);
-		builder.OwnsOne(item => item.BoundingBox);
 	}
 }

@@ -29,11 +29,11 @@ public sealed class DetectorModelTests
 		// arrange
 		using AppDbContext dbContext = Helper.NewDbContext;
 		DetectorModel model = TestDetectorModel;
-		DetectorScreenshot screenshot = new();
+		DetectorScreenshot iScreenshot = new();
 		ItemClass itemClass = new("class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 1, 1));
-		screenshot.Items.Add(item);
-		model.DetectorScreenshots.Add(screenshot);
+		iScreenshot.Items.Add(item);
+		model.DetectorScreenshots.Add(iScreenshot);
 		
 		// act
 		dbContext.Add(model);
@@ -43,7 +43,7 @@ public sealed class DetectorModelTests
 		dbContext.DetectorModels.Should().Contain(model);
 		dbContext.ItemClasses.Should().Contain(itemClass);
 		dbContext.DetectorItems.Should().Contain(item);
-		dbContext.DetectorScreenshots.Should().Contain(screenshot);
+		dbContext.DetectorScreenshots.Should().Contain(iScreenshot);
 	}
 
 

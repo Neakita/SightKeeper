@@ -7,6 +7,7 @@ public sealed class MainWindowVM : ReactiveObject
 {
 	public HamburgerMenuVM HamburgerMenuVM { get; }
 
+	
 
 	public MainWindowVM(HamburgerMenuVM hamburgerMenuVM)
 	{

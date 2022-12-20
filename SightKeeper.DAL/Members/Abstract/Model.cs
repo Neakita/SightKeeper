@@ -1,18 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using SightKeeper.DAL.Members.Common;
 
 namespace SightKeeper.DAL.Members.Abstract;
 
 public abstract class Model
 {
-	public Guid Id { get; }
+	[Key] public Guid Id { get; private set; }
 	public string Name { get; set; }
-	public Resolution Resolution { get; private set; }
-	public List<ItemClass> Classes { get; private set; } = new();
-	public Game? Game { get; set; }
+	public virtual Resolution Resolution { get; private set; }
+	public virtual List<ItemClass> Classes { get; private set; } = null!;
+	public virtual Game? Game { get; set; }
 
-	public abstract IEnumerable<Screenshot> Screenshots { get; }
+	[NotMapped] public abstract IEnumerable<Screenshot> Screenshots { get; }
 	
 
 	public Model(string name) : this(name, new Resolution()) { }
@@ -29,14 +29,5 @@ public abstract class Model
 		Id = id;
 		Name = name;
 		Resolution = null!;
-	}
-}
-
-internal sealed class ModelConfiguration : IEntityTypeConfiguration<Model>
-{
-	public void Configure(EntityTypeBuilder<Model> builder)
-	{
-		builder.HasKey(model => model.Id);
-		builder.OwnsOne(model => model.Resolution);
 	}
 }

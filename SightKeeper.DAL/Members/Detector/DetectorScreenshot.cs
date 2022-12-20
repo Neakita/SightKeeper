@@ -1,10 +1,12 @@
-﻿using SightKeeper.DAL.Members.Abstract;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using SightKeeper.DAL.Members.Abstract;
 
 namespace SightKeeper.DAL.Members.Detector;
 
-public sealed class DetectorScreenshot : Screenshot
+[Table("DetectorScreenshots")]
+public class DetectorScreenshot : Screenshot
 {
-	public List<DetectorItem> Items { get; private set; } = new();
+	public virtual List<DetectorItem> Items { get; private set; } = new();
 
 
 	public DetectorScreenshot() { }

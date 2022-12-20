@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SightKeeper.DAL.Members.Abstract;
-using SightKeeper.DAL.Members.Abstract.Interfaces;
 
 namespace SightKeeper.DAL.Members.Common;
 
 /// <summary>
-/// A class representing a simple game(process) with title and process name
+/// A class representing a game (process) with title and process name
 /// </summary>
-public sealed class Game : Abstract.Interfaces.Game
+public class Game
 {
-	public Guid Id { get; }
+	[Key] public Guid Id { get; private set; }
 	
 	/// <summary>
 	/// Display name
@@ -20,12 +20,12 @@ public sealed class Game : Abstract.Interfaces.Game
 	/// <summary>
 	/// System process name
 	/// </summary>
-	public string ProcessName { get; }
+	public string ProcessName { get; private set; }
 
 	/// <summary>
 	/// Dependent models
 	/// </summary>
-	public List<Model>? Models { get; private set; } = new();
+	public virtual List<Model> Models { get; private set; } = new();
 	
 	
 	public Game(string title, string processName)
@@ -44,14 +44,5 @@ public sealed class Game : Abstract.Interfaces.Game
 		Id = id;
 		Title = title;
 		ProcessName = processName;
-	}
-}
-
-internal class GameConfiguration : IEntityTypeConfiguration<Game>
-{
-	public void Configure(EntityTypeBuilder<Game> builder)
-	{
-		builder.HasKey(game => game.Id);
-		builder.Property(game => game.ProcessName);
 	}
 }

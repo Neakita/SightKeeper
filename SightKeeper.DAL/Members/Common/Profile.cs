@@ -1,16 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using System.ComponentModel.DataAnnotations;
 using SightKeeper.DAL.Members.Detector;
 
 namespace SightKeeper.DAL.Members.Common;
 
-public sealed class Profile
+public class Profile
 {
-	public Guid Id { get; }
+	[Key] public Guid Id { get; private set; }
 	public string Name { get; set; }
 	public string Description { get; set; }
-	public Game Game { get; set; }
-	public DetectorModel DetectorModel { get; set; }
+	public virtual Game Game { get; set; }
+	public virtual DetectorModel DetectorModel { get; set; }
 
 
 	public Profile(string name, string description, Game game, DetectorModel detectorModel)
@@ -30,9 +29,4 @@ public sealed class Profile
 		Game = null!;
 		DetectorModel = null!;
 	}
-}
-
-internal sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
-{
-	public void Configure(EntityTypeBuilder<Profile> builder) => builder.HasKey(profile => profile.Id);
 }

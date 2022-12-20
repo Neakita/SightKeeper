@@ -44,6 +44,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SightKeeper.DAL\SightKeeper.DAL.csproj" />
+      <ProjectReference Include="..\SightKeeper.UI\SightKeeper.UI.csproj" />
     </ItemGroup>
 
     <ItemGroup>

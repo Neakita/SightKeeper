@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SightKeeper.UI.WPF.Abstract;
+﻿namespace SightKeeper.UI.Abstract;
 
 public interface IHamburgerMenuVM
 {

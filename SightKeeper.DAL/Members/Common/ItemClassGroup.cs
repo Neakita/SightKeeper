@@ -1,13 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SightKeeper.DAL.Members.Common;
 
-public sealed class ItemClassGroup
+public class ItemClassGroup
 {
-	public Guid Id { get; }
-	public Profile Profile { get; private set; }
-	public List<ItemClass> ItemClasses { get; private set; }
+	[Key] public Guid Id { get; private set; }
+	public virtual Profile Profile { get; private set; }
+	public virtual List<ItemClass> ItemClasses { get; private set; }
 
 
 	public ItemClassGroup(Profile profile, IEnumerable<ItemClass>? itemClasses = null)
@@ -15,12 +14,11 @@ public sealed class ItemClassGroup
 		Profile = profile;
 		ItemClasses = itemClasses?.ToList() ?? new List<ItemClass>();
 	}
-}
 
-internal sealed class ItemClassGroupConfiguration : IEntityTypeConfiguration<ItemClassGroup>
-{
-	public void Configure(EntityTypeBuilder<ItemClassGroup> builder)
+	private ItemClassGroup()
 	{
-		builder.HasKey(group => group.Id);
+		Id = Guid.Empty;
+		Profile = null!;
+		ItemClasses = null!;
 	}
 }

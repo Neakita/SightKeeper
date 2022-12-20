@@ -10,7 +10,7 @@ public sealed class DatabaseModelsService : ModelsService
 	public IEnumerable<Model> Models { get; } = Enumerable.Empty<Model>();
 
 
-	public DatabaseModelsService(IAppDbFactory dbFactory, INewModelNameValidator nameValidator)
+	public DatabaseModelsService(IAppDbProvider dbFactory, INewModelNameValidator nameValidator)
 	{
 		_dbFactory = dbFactory;
 		_nameValidator = nameValidator;
@@ -63,6 +63,6 @@ public sealed class DatabaseModelsService : ModelsService
 	}
 
 
-	private readonly IAppDbFactory _dbFactory;
+	private readonly IAppDbProvider _dbFactory;
 	private readonly INewModelNameValidator _nameValidator;
 }

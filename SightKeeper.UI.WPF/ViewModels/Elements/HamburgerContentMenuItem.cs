@@ -3,15 +3,15 @@ using System.Windows.Controls;
 using MahApps.Metro.IconPacks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SightKeeper.UI.WPF.Abstract;
+using SightKeeper.UI.Abstract;
 
 namespace SightKeeper.UI.WPF.ViewModels.Elements;
 
 public sealed class HamburgerContentMenuItem : ReactiveObject, IContentInclusiveMenuItem
 {
 	public string Label { get; }
-	public ContentControl Content { get; }
-	[ObservableAsProperty] public Control Icon { get; } = null!;
+	public object Content { get; }
+	[ObservableAsProperty] public object Icon { get; } = null!;
 	[Reactive] public bool IsSelected { get; set; }
 
 

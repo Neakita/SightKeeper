@@ -66,17 +66,8 @@ public class AppDbContext : DbContext, IAppDbContext
 		{
 			DataSource = _dataSource
 		};
-		optionsBuilder.UseSqlite(connectionStringBuilder.ConnectionString);
-	}
-
-	protected override void OnModelCreating(ModelBuilder modelBuilder)
-	{
-		modelBuilder.ApplyConfiguration(new ProfileConfiguration());
-		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());
-		modelBuilder.ApplyConfiguration(new ModelConfiguration());
-		modelBuilder.ApplyConfiguration(new GameConfiguration());
-		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
-		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
-		modelBuilder.ApplyConfiguration(new ItemClassGroupConfiguration());
+		optionsBuilder
+			.UseLazyLoadingProxies()
+			.UseSqlite(connectionStringBuilder.ConnectionString);
 	}
 }

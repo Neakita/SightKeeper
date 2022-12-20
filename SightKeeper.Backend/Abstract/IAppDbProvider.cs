@@ -2,4 +2,4 @@
 
 namespace SightKeeper.Backend.Abstract;
 
-public interface IAppDbFactory : IDbFactory<IAppDbContext> { }
+public interface IAppDbProvider : IDbProvider<IAppDbContext> { }

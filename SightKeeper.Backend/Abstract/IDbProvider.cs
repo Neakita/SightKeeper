@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Backend.Abstract;
 
-public interface IDbFactory<T> where T : IDbContext
+public interface IDbProvider<T> where T : IDbContext
 {
 	T NewContext { get; }
 }
