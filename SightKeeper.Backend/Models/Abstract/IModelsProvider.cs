@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Backend.Models.Abstract;
 
-public interface ModelsProvider
+public interface IModelsProvider
 {
 	IEnumerable<Model> Models { get; }
 

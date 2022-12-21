@@ -1,11 +1,12 @@
-﻿using SightKeeper.Backend.Abstract;
+﻿using SightKeeper.Abstractions;
 using SightKeeper.Backend.Models.Abstract;
 using SightKeeper.DAL;
 using SightKeeper.DAL.Members.Abstract;
+using IModelsService = SightKeeper.Backend.Models.Abstract.IModelsService;
 
 namespace SightKeeper.Backend.Models;
 
-public sealed class DatabaseModelsService : ModelsService
+public sealed class DatabaseModelsService : IModelsService
 {
 	public IEnumerable<Model> Models { get; } = Enumerable.Empty<Model>();
 

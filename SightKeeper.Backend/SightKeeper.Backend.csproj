@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SightKeeper.Abstractions\SightKeeper.Abstractions.csproj" />
       <ProjectReference Include="..\SightKeeper.DAL\SightKeeper.DAL.csproj" />
     </ItemGroup>
 
@@ -14,6 +15,10 @@
       <PackageReference Include="Serilog" Version="2.12.0" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
       <PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Abstract" />
     </ItemGroup>
 
 </Project>

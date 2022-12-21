@@ -1,6 +1,6 @@
 ﻿using SightKeeper.DAL;
 
-namespace SightKeeper.Backend.Abstract;
+namespace SightKeeper.Abstractions;
 
 public interface IDbProvider<T> where T : IDbContext
 {

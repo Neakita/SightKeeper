@@ -1,5 +1,5 @@
 ﻿using SightKeeper.DAL;
 
-namespace SightKeeper.Backend.Abstract;
+namespace SightKeeper.Abstractions;
 
 public interface IAppDbProvider : IDbProvider<IAppDbContext> { }

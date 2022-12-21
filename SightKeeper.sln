@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Backend", "Sigh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.UI", "SightKeeper.UI\SightKeeper.UI.csproj", "{77878F56-58DD-4FE4-8832-2C76B6D3CB7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Abstractions", "SightKeeper.Abstractions\SightKeeper.Abstractions.csproj", "{27C40EDA-8A78-438A-9A3E-047CFAA2DB1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{77878F56-58DD-4FE4-8832-2C76B6D3CB7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77878F56-58DD-4FE4-8832-2C76B6D3CB7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77878F56-58DD-4FE4-8832-2C76B6D3CB7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27C40EDA-8A78-438A-9A3E-047CFAA2DB1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C40EDA-8A78-438A-9A3E-047CFAA2DB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C40EDA-8A78-438A-9A3E-047CFAA2DB1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C40EDA-8A78-438A-9A3E-047CFAA2DB1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

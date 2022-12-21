@@ -4,7 +4,7 @@ using SightKeeper.DAL.Members.Abstract;
 
 namespace SightKeeper.Backend.Models;
 
-public abstract class DatabaseModelEditor<T> :  ModelEditor<T>, IDisposable where T : Model
+public abstract class DatabaseModelEditor<T> :  IModelEditor<T>, IDisposable where T : Model
 {
 	public T EditableModel { get; }
 	public abstract bool CanSaveChanges { get; }

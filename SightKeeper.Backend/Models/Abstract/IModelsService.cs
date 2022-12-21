@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Backend.Models.Abstract;
 
-public interface ModelsService
+public interface IModelsService
 {
 	void AddModel(Model model);
 	Task AddModelAsync(Model model, CancellationToken cancellationToken = default);
