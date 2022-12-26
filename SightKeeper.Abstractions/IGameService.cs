@@ -1,13 +1,13 @@
-﻿using SightKeeper.DAL.Members.Common;
+﻿using SightKeeper.Abstractions.Domain;
 
 namespace SightKeeper.Abstractions;
 
 public interface IGameService
 {
-	IEnumerable<Game> Games { get; }
+	IEnumerable<IGame> Games { get; }
 	
-	void Create(Game game);
-	void Delete(Game game);
-	void Update(Game game);
-	void Rollback(Game game);
+	void Create(IGame game);
+	void Delete(IGame game);
+	void Update(IGame game);
+	void Rollback(IGame game);
 }

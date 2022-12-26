@@ -6,22 +6,35 @@
              xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Pages"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance viewModels:ModelsPageVM}"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
-    <Grid>
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             d:DataContext="{d:DesignInstance viewModels:ModelsPageVM}">
+    
+    <StackPanel>
         
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Content="{icons:BootstrapIcons Plus}" Style="{StaticResource SingleIconButton}"/>
-        </StackPanel>
-        
-        <ListBox Grid.Row="1" ItemsSource="{Binding Models, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource WrappedListBox}" md:ListBoxItemAssist.ShowSelection="False"/>
-        
-    </Grid>
+        <GroupBox DataContext="{Binding DetectorModelsList}"
+                  Header="{Binding}">
+            
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <TextBlock Text="Detectors"/>
+                        <Button HorizontalAlignment="Right" Content="{icons:BootstrapIcons Plus}" Command="{Binding CreateNewModelCommand, Mode=OneTime}"/>
+                    </Grid>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            
+            <ListBox ItemsSource="{Binding Models, UpdateSourceTrigger=PropertyChanged}"
+                     md:ListBoxItemAssist.ShowSelection="False">
+            
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            
+            </ListBox>
+        </GroupBox>
+    </StackPanel>
+    
 </UserControl>

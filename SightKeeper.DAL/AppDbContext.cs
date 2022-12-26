@@ -1,9 +1,9 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using SightKeeper.DAL.Members.Abstract;
-using SightKeeper.DAL.Members.Common;
-using SightKeeper.DAL.Members.Detector;
+using SightKeeper.DAL.Domain.Abstract;
+using SightKeeper.DAL.Domain.Common;
+using SightKeeper.DAL.Domain.Detector;
 
 namespace SightKeeper.DAL;
 
@@ -17,6 +17,7 @@ public class AppDbContext : DbContext, IAppDbContext
 	public DbSet<Game> Games { get; set; } = null!;
 
 	public AppDbContext(string dataSource = "App.db") => _dataSource = dataSource;
+	
 	
 	public void RollBack()
 	{

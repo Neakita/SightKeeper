@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SightKeeper.DAL.Members.Common;
+using SightKeeper.DAL.Domain.Common;
 
-namespace SightKeeper.DAL.Members.Detector;
+namespace SightKeeper.DAL.Domain.Detector;
 
 public class DetectorItem
 {
-	[Key] public Guid Id { get; private set; }
+	[Key] public int Id { get; private set; }
 	public virtual ItemClass ItemClass { get; private set; }
 	public virtual BoundingBox BoundingBox { get; private set; }
 	
@@ -19,7 +19,7 @@ public class DetectorItem
 
 	private DetectorItem()
 	{
-		Id = Guid.Empty;
+		Id = 0;
 		ItemClass = null!;
 		BoundingBox = null!;
 	}

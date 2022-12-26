@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SightKeeper.DAL.Members.Common;
+namespace SightKeeper.DAL.Domain.Common;
 
 public class ItemClassGroup
 {
-	[Key] public Guid Id { get; private set; }
+	[Key] public int Id { get; private set; }
 	public virtual Profile Profile { get; private set; }
 	public virtual List<ItemClass> ItemClasses { get; private set; }
 
@@ -17,7 +17,7 @@ public class ItemClassGroup
 
 	private ItemClassGroup()
 	{
-		Id = Guid.Empty;
+		Id = 0;
 		Profile = null!;
 		ItemClasses = null!;
 	}

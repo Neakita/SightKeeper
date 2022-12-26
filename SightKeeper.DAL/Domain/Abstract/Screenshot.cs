@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SightKeeper.DAL.Members.Common;
+using SightKeeper.Abstractions.Domain;
+using SightKeeper.DAL.Domain.Common;
 
-namespace SightKeeper.DAL.Members.Abstract;
+namespace SightKeeper.DAL.Domain.Abstract;
 
-public abstract class Screenshot
+public abstract class Screenshot : IScreenshot
 {
 	private const string DirectoryPath = "Data/Images";
 	private const string Extension = "png";
 	
-	[Key] public Guid Id { get; private set; }
+	[Key] public int Id { get; private set; }
 
 	public DateTime CreationDate { get; private set; }
 	
@@ -26,7 +27,7 @@ public abstract class Screenshot
 	}
 
 
-	protected Screenshot(Guid id, DateTime creationDate)
+	protected Screenshot(int id, DateTime creationDate)
 	{
 		Id = id;
 		CreationDate = creationDate;

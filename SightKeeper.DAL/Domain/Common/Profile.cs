@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SightKeeper.DAL.Members.Detector;
+using SightKeeper.DAL.Domain.Detector;
 
-namespace SightKeeper.DAL.Members.Common;
+namespace SightKeeper.DAL.Domain.Common;
 
 public class Profile
 {
-	[Key] public Guid Id { get; private set; }
+	[Key] public int Id { get; private set; }
 	public string Name { get; set; }
 	public string Description { get; set; }
 	public virtual Game Game { get; set; }
@@ -21,7 +21,7 @@ public class Profile
 	}
 	
 	
-	private Profile(Guid id, string name, string description)
+	private Profile(int id, string name, string description)
 	{
 		Id = id;
 		Name = name;

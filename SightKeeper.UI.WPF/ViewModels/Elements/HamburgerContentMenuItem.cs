@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using MahApps.Metro.IconPacks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SightKeeper.UI.Abstract;
+using SightKeeper.UI.WPF.Abstract;
 
 namespace SightKeeper.UI.WPF.ViewModels.Elements;
 

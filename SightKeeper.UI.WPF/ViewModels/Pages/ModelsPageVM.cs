@@ -1,27 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using ReactiveUI;
+﻿using ReactiveUI;
+using SightKeeper.Abstractions.Domain;
+using SightKeeper.UI.WPF.ViewModels.Domain;
 using SightKeeper.UI.WPF.ViewModels.Elements;
 
 namespace SightKeeper.UI.WPF.ViewModels.Pages;
 
 public sealed class ModelsPageVM : ReactiveObject
 {
-	public IEnumerable<ModelVM> Models { get; } = Enumerable.Empty<ModelVM>();
+	public IModelsListVM<DetectorModelVM, IDetectorModel> DetectorModelsList { get; }
 	
-	
-	public ReactiveCommand<ModelVM, Unit> DeleteModelCommand { get; }
 
-
-	public ModelsPageVM()
+	public ModelsPageVM(IModelsListVM<DetectorModelVM, IDetectorModel> detectorModelsList)
 	{
-		DeleteModelCommand = ReactiveCommand.Create<ModelVM>(DeleteModel);
-	}
-
-
-	private void DeleteModel(ModelVM model)
-	{
-		
+		DetectorModelsList = detectorModelsList;
 	}
 }

@@ -23,22 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Samples\cars road.jpg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Samples\coco.names">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Samples\yolov3-tiny.cfg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Samples\yolov3-tiny.weights">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.DAL\SightKeeper.DAL.csproj" />
+      <ProjectReference Include="..\SightKeeper.Backend\SightKeeper.Backend.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Abstractions.Domain;
 
-public interface IDetectorModel
+public interface IDetectorModel : IModel
 {
 	
 }

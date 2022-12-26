@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SightKeeper.DAL.Members.Abstract;
+using SightKeeper.DAL.Domain.Abstract;
 
-namespace SightKeeper.DAL.Members.Detector;
+namespace SightKeeper.DAL.Domain.Detector;
 
 [Table("DetectorScreenshots")]
 public class DetectorScreenshot : Screenshot
@@ -12,5 +12,5 @@ public class DetectorScreenshot : Screenshot
 	public DetectorScreenshot() { }
 
 
-	private DetectorScreenshot(Guid id, DateTime creationDate) : base(id, creationDate) { }
+	private DetectorScreenshot(int id, DateTime creationDate) : base(id, creationDate) { }
 }

@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.DAL.Members.Abstract;
-using SightKeeper.DAL.Members.Common;
-using SightKeeper.DAL.Members.Detector;
+using SightKeeper.Abstractions;
+using SightKeeper.DAL.Domain.Abstract;
+using SightKeeper.DAL.Domain.Common;
+using SightKeeper.DAL.Domain.Detector;
 
 namespace SightKeeper.DAL;
 

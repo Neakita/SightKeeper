@@ -4,7 +4,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-                    xmlns:abstract="clr-namespace:SightKeeper.UI.Abstract;assembly=SightKeeper.UI"
+                    xmlns:abstract="clr-namespace:SightKeeper.UI.WPF.Abstract"
                     mc:Ignorable="d">
     
     <Style x:Key="SightKeeperWindow" TargetType="mah:MetroWindow">

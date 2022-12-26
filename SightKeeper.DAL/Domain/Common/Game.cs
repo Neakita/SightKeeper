@@ -1,16 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SightKeeper.DAL.Members.Abstract;
+using SightKeeper.DAL.Domain.Abstract;
 
-namespace SightKeeper.DAL.Members.Common;
+namespace SightKeeper.DAL.Domain.Common;
 
 /// <summary>
 /// A class representing a game (process) with title and process name
 /// </summary>
 public class Game
 {
-	[Key] public Guid Id { get; private set; }
+	[Key] public int Id { get; private set; }
 	
 	/// <summary>
 	/// Display name
@@ -39,7 +37,7 @@ public class Game
 	/// <summary>
 	/// Constructor used by Entity Framework
 	/// </summary>
-	private Game(Guid id, string title, string processName)
+	private Game(int id, string title, string processName)
 	{
 		Id = id;
 		Title = title;

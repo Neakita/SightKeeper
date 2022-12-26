@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace SightKeeper.DAL.Members.Common;
+namespace SightKeeper.DAL.Domain.Common;
 
 /// <summary>
 /// A class representing resolution of screenshots and models 

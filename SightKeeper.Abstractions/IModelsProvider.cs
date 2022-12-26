@@ -1,6 +1,8 @@
-﻿namespace SightKeeper.Abstractions;
+﻿using SightKeeper.Abstractions.Domain;
 
-public interface IModelsProvider
+namespace SightKeeper.Abstractions;
+
+public interface IModelsProvider<TModel> where TModel : class, IModel
 {
-	
+	IEnumerable<TModel> Models { get; }
 }

@@ -1,9 +1,19 @@
-﻿using ReactiveUI;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
+using ReactiveUI;
 using Serilog;
 using Serilog.Core;
+using SightKeeper.Abstractions;
+using SightKeeper.Abstractions.Domain;
+using SightKeeper.Backend.Models;
 using SightKeeper.DAL;
+using SightKeeper.UI.WPF.Misc;
+using SightKeeper.UI.WPF.ViewModels.Domain;
 using SightKeeper.UI.WPF.ViewModels.Elements;
+using SightKeeper.UI.WPF.ViewModels.Pages;
 using SightKeeper.UI.WPF.ViewModels.Windows;
+using SightKeeper.UI.WPF.Views.Pages;
 using SightKeeper.UI.WPF.Views.Windows;
 using Splat;
 using Splat.Serilog;
@@ -15,10 +25,13 @@ internal static class AppBootstrapper
 	internal static void Setup()
 	{
 		SetupLogging();
+		SetupExceptionHandling();
 		SetupDatabase();
 		SetupViews();
 		SetupViewModels();
+		SetupServices();
 		SplatRegistrations.SetupIOC();
+		EnsureDatabaseExists();
 	}
 	
 
@@ -33,13 +46,68 @@ internal static class AppBootstrapper
 		Locator.CurrentMutable.UseSerilogFullLogger();
 	}
 	
-	private static void SetupDatabase() => SplatRegistrations.Register<IAppDbContext, AppDbContext>();
-	
-	private static void SetupViews() => SplatRegistrations.Register<MainWindow>();
+	private static void SetupDatabase()
+	{
+		SplatRegistrations.Register<IAppDbContext, AppDbContext>();
+		SplatRegistrations.Register<IAppDbProvider, AppDbProvider>();
+	}
+
+	private static void EnsureDatabaseExists() => ((AppDbContext) Locator.Current.GetService<IAppDbContext>()!).Database.EnsureCreated();
+
+	private static void SetupViews()
+	{
+		SplatRegistrations.Register<MainWindow>();
+		SplatRegistrations.Register<ModelsPage>();
+	}
 
 	private static void SetupViewModels()
 	{
 		SplatRegistrations.Register<MainWindowVM>();
 		SplatRegistrations.Register<HamburgerMenuVM>();
+		SplatRegistrations.Register<ModelsPageVM>();
+		SplatRegistrations.Register<IModelsListVM<DetectorModelVM, IDetectorModel>, ModelsListVM<DetectorModelVM, IDetectorModel>>();
+		SplatRegistrations.Register<IModelToVMStrategy<DetectorModelVM, IDetectorModel>, DetectorModelToVMStrategy>();
+	}
+
+	private static void SetupServices()
+	{
+		SplatRegistrations.Register<IModelsProvider<IDetectorModel>, DetectorModelsProvider>();
+		SplatRegistrations.Register<IModelsService<IDetectorModel>, DetectorModelsService>();
+	}
+	
+	private static void SetupExceptionHandling()
+	{
+		AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+			LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+
+		Application.Current.DispatcherUnhandledException += (_, e) =>
+		{
+			LogUnhandledException(e.Exception, "Application.Current.DispatcherUnhandledException");
+			e.Handled = true;
+		};
+
+		TaskScheduler.UnobservedTaskException += (_, e) =>
+		{
+			LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException");
+			e.SetObserved();
+		};
+	}
+
+	private static void LogUnhandledException(Exception exception, string source)
+	{
+		string message = $"Unhandled exception ({source})";
+		try
+		{
+			System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+			message = $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
+		}
+		catch (Exception ex)
+		{
+			Log.Error(ex, "Exception in LogUnhandledException");
+		}
+		finally
+		{
+			Log.Error(exception, message);
+		}
 	}
 }

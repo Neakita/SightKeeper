@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using SightKeeper.DAL.Members.Common;
+using SightKeeper.Abstractions.Domain;
+using SightKeeper.DAL.Domain.Common;
 
-namespace SightKeeper.DAL.Members.Abstract;
+namespace SightKeeper.DAL.Domain.Abstract;
 
-public abstract class Model
+public abstract class Model : IModel
 {
-	[Key] public Guid Id { get; private set; }
+	[Key] public int Id { get; private set; }
 	public string Name { get; set; }
 	public virtual Resolution Resolution { get; private set; }
 	public virtual List<ItemClass> Classes { get; private set; }
@@ -25,7 +26,7 @@ public abstract class Model
 	}
 	
 	
-	protected Model(Guid id, string name)
+	protected Model(int id, string name)
 	{
 		Id = id;
 		Name = name;

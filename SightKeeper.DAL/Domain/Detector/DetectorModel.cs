@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SightKeeper.DAL.Members.Abstract;
-using SightKeeper.DAL.Members.Common;
+using SightKeeper.Abstractions.Domain;
+using SightKeeper.DAL.Domain.Abstract;
+using SightKeeper.DAL.Domain.Common;
 
-namespace SightKeeper.DAL.Members.Detector;
+namespace SightKeeper.DAL.Domain.Detector;
 
 [Table("DetectorModels")]
-public class DetectorModel : Model
+public class DetectorModel : Model, IDetectorModel
 {
 	public override IEnumerable<Screenshot> Screenshots => DetectorScreenshots.Cast<Screenshot>().ToList();
 	
@@ -16,5 +17,5 @@ public class DetectorModel : Model
 	public DetectorModel(string name, Resolution resolution) : base(name, resolution) { }
 
 
-	private DetectorModel(Guid id, string name) : base(id, name) { }
+	private DetectorModel(int id, string name) : base(id, name) { }
 }
