@@ -1,5 +1,4 @@
-﻿
-using SightKeeper.DAL.Domain.Abstract;
+﻿using SightKeeper.DAL.Domain.Abstract;
 
 namespace SightKeeper.Backend.Models;
 

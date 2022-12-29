@@ -9,10 +9,28 @@ namespace SightKeeper.UI.WPF.ViewModels.Elements;
 
 public sealed class HamburgerMenuVM : ReactiveObject, IHamburgerMenuVM
 {
+	private IContentInclusiveMenuItem _selectedMenuItem;
+
+
+	public HamburgerMenuVM(ModelsPage modelsPage)
+	{
+		MenuItems = new IContentInclusiveMenuItem[]
+		{
+			new HamburgerContentMenuItem("Dashboard", new Dashboard(), PackIconBootstrapIconsKind.Grid1x2,
+				PackIconBootstrapIconsKind.Grid1x2Fill),
+			new HamburgerContentMenuItem("Models", modelsPage, PackIconBootstrapIconsKind.Grid,
+				PackIconBootstrapIconsKind.GridFill)
+		};
+
+		_selectedMenuItem = MenuItems.First();
+		_selectedMenuItem.IsSelected = true;
+	}
+
 	public IEnumerable<IContentInclusiveMenuItem> MenuItems { get; }
-	
-	public IEnumerable<IContentInclusiveMenuItem> OptionsMenuItems { get; } = Enumerable.Empty<IContentInclusiveMenuItem>();
-	
+
+	public IEnumerable<IContentInclusiveMenuItem> OptionsMenuItems { get; } =
+		Enumerable.Empty<IContentInclusiveMenuItem>();
+
 	public IContentInclusiveMenuItem SelectedMenuItem
 	{
 		get => _selectedMenuItem;
@@ -24,20 +42,4 @@ public sealed class HamburgerMenuVM : ReactiveObject, IHamburgerMenuVM
 			this.RaisePropertyChanged();
 		}
 	}
-
-
-	public HamburgerMenuVM(ModelsPage modelsPage)
-	{
-		MenuItems = new IContentInclusiveMenuItem[]
-		{
-			new HamburgerContentMenuItem("Dashboard", new Dashboard(), PackIconBootstrapIconsKind.Grid1x2, PackIconBootstrapIconsKind.Grid1x2Fill),
-			new HamburgerContentMenuItem("Models", modelsPage, PackIconBootstrapIconsKind.Grid, PackIconBootstrapIconsKind.GridFill)
-		};
-		
-		_selectedMenuItem = MenuItems.First();
-		_selectedMenuItem.IsSelected = true;
-	}
-
-
-	private IContentInclusiveMenuItem _selectedMenuItem;
 }

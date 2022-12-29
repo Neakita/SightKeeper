@@ -8,6 +8,8 @@ namespace SightKeeper.Tests.Backend.Models;
 
 public sealed class DetectorModelsProviderTests : DbRelatedTests
 {
+	private IModelsProvider<DetectorModel> DetectorModelsProvider => new DetectorModelsProvider(DbProvider);
+
 	[Fact]
 	public void ShouldGetSomeDetectorModels()
 	{
@@ -15,11 +17,9 @@ public sealed class DetectorModelsProviderTests : DbRelatedTests
 		using AppDbContext dbContext = DbProvider.NewContext;
 		dbContext.DetectorModels.Add(testDetectorModel);
 		dbContext.SaveChanges();
-		
+
 		IEnumerable<DetectorModel> detectorModels = DetectorModelsProvider.Models;
-		
+
 		detectorModels.Should().NotBeEmpty();
 	}
-	
-	private IModelsProvider<DetectorModel> DetectorModelsProvider => new DetectorModelsProvider(DbProvider);
 }

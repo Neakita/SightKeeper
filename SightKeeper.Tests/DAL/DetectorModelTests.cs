@@ -7,17 +7,19 @@ namespace SightKeeper.Tests.DAL;
 
 public sealed class DetectorModelTests : DbRelatedTests
 {
+	private static DetectorModel TestDetectorModel => new("TestDetectorModel");
+
 	[Fact]
 	public void ShouldAddDetectorModel()
 	{
 		// arrange
 		using AppDbContext dbContext = DbProvider.NewContext;
 		DetectorModel testModel = TestDetectorModel;
-		
+
 		// act
 		dbContext.Add(testModel);
 		dbContext.SaveChanges();
-		
+
 		// assert
 		dbContext.DetectorModels.Should().Contain(testModel);
 	}
@@ -33,11 +35,11 @@ public sealed class DetectorModelTests : DbRelatedTests
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 1, 1));
 		iScreenshot.Items.Add(item);
 		model.DetectorScreenshots.Add(iScreenshot);
-		
+
 		// act
 		dbContext.Add(model);
 		dbContext.SaveChanges();
-		
+
 		// assert
 		dbContext.DetectorModels.Should().Contain(model);
 		dbContext.ItemClasses.Should().Contain(itemClass);
@@ -49,9 +51,5 @@ public sealed class DetectorModelTests : DbRelatedTests
 	public void DeletingModelWithScreenshotShouldCascadeDeleteScreenshots()
 	{
 		using AppDbContext dbContext = DbProvider.NewContext;
-		
 	}
-
-
-	private static DetectorModel TestDetectorModel => new("TestDetectorModel");
 }

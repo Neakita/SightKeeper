@@ -6,11 +6,14 @@ namespace SightKeeper.DAL.Domain.Detector;
 [Table("DetectorScreenshots")]
 public class DetectorScreenshot : Screenshot
 {
-	public virtual List<DetectorItem> Items { get; private set; } = new();
+	public DetectorScreenshot()
+	{
+	}
 
 
-	public DetectorScreenshot() { }
+	private DetectorScreenshot(int id, DateTime creationDate) : base(id, creationDate)
+	{
+	}
 
-
-	private DetectorScreenshot(int id, DateTime creationDate) : base(id, creationDate) { }
+	public virtual List<DetectorItem> Items { get; } = new();
 }

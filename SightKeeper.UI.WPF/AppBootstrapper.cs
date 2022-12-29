@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using Serilog;
@@ -31,7 +32,7 @@ internal static class AppBootstrapper
 		SplatRegistrations.SetupIOC();
 		EnsureDatabaseExists();
 	}
-	
+
 
 	private static void SetupLogging()
 	{
@@ -43,14 +44,17 @@ internal static class AppBootstrapper
 			.CreateLogger();
 		Locator.CurrentMutable.UseSerilogFullLogger();
 	}
-	
+
 	private static void SetupDatabase()
 	{
 		SplatRegistrations.Register<AppDbContext>();
 		SplatRegistrations.Register<IAppDbProvider, AppDbProvider>();
 	}
 
-	private static void EnsureDatabaseExists() => Locator.Current.GetService<AppDbContext>()!.Database.EnsureCreated();
+	private static void EnsureDatabaseExists()
+	{
+		Locator.Current.GetService<AppDbContext>()!.Database.EnsureCreated();
+	}
 
 	private static void SetupViews()
 	{
@@ -63,7 +67,8 @@ internal static class AppBootstrapper
 		SplatRegistrations.Register<MainWindowVM>();
 		SplatRegistrations.Register<HamburgerMenuVM>();
 		SplatRegistrations.Register<ModelsPageVM>();
-		SplatRegistrations.Register<IModelsListVM<DetectorModelVM, DetectorModel>, ModelsListVM<DetectorModelVM, DetectorModel>>();
+		SplatRegistrations
+			.Register<IModelsListVM<DetectorModelVM, DetectorModel>, ModelsListVM<DetectorModelVM, DetectorModel>>();
 		SplatRegistrations.Register<IModelToVMStrategy<DetectorModelVM, DetectorModel>, DetectorModelToVMStrategy>();
 	}
 
@@ -72,11 +77,11 @@ internal static class AppBootstrapper
 		SplatRegistrations.Register<IModelsProvider<DetectorModel>, DetectorModelsProvider>();
 		SplatRegistrations.Register<IModelsService<DetectorModel>, DetectorModelsService>();
 	}
-	
+
 	private static void SetupExceptionHandling()
 	{
 		AppDomain.CurrentDomain.UnhandledException += (_, e) =>
-			LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+			LogUnhandledException((Exception) e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
 
 		Application.Current.DispatcherUnhandledException += (_, e) =>
 		{
@@ -96,7 +101,7 @@ internal static class AppBootstrapper
 		string message = $"Unhandled exception ({source})";
 		try
 		{
-			System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+			AssemblyName assemblyName = Assembly.GetExecutingAssembly().GetName();
 			message = $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
 		}
 		catch (Exception ex)

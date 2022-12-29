@@ -7,11 +7,8 @@ namespace SightKeeper.UI.WPF.ViewModels.Pages;
 
 public sealed class ModelsPageVM : ReactiveObject
 {
-	public IModelsListVM<DetectorModelVM, DetectorModel> DetectorModelsList { get; }
-	
-
-	public ModelsPageVM(IModelsListVM<DetectorModelVM, DetectorModel> detectorModelsList)
-	{
+	public ModelsPageVM(IModelsListVM<DetectorModelVM, DetectorModel> detectorModelsList) =>
 		DetectorModelsList = detectorModelsList;
-	}
+
+	public IModelsListVM<DetectorModelVM, DetectorModel> DetectorModelsList { get; }
 }

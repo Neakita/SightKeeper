@@ -4,10 +4,6 @@ namespace SightKeeper.DAL.Domain.Common;
 
 public class ItemClass
 {
-	[Key] public int Id { get; private set; }
-	public string Name { get; set; }
-
-	
 	public ItemClass(string name) => Name = name;
 
 
@@ -16,4 +12,7 @@ public class ItemClass
 		Id = id;
 		Name = name;
 	}
+
+	[Key] public int Id { get; }
+	public string Name { get; set; }
 }

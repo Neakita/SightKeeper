@@ -9,6 +9,14 @@ namespace SightKeeper.DAL;
 
 public class AppDbContext : DbContext
 {
+	public AppDbContext()
+	{
+	}
+
+	public AppDbContext(DbContextOptions options) : base(options)
+	{
+	}
+
 	public DbSet<Model> Models { get; set; } = null!;
 	public DbSet<DetectorModel> DetectorModels { get; set; } = null!;
 	public DbSet<DetectorScreenshot> DetectorScreenshots { get; set; } = null!;
@@ -16,16 +24,11 @@ public class AppDbContext : DbContext
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 
-	
-	public AppDbContext() { }
-	public AppDbContext(DbContextOptions options) : base(options) { } 
-	
-	
+
 	public void RollBack()
 	{
 		IEnumerable<EntityEntry> changedEntries = ChangeTracker.Entries().Where(x => x.State != EntityState.Unchanged);
 		foreach (EntityEntry entry in changedEntries)
-		{
 			switch (entry.State)
 			{
 				case EntityState.Modified:
@@ -39,7 +42,6 @@ public class AppDbContext : DbContext
 					entry.State = EntityState.Unchanged;
 					break;
 			}
-		}
 	}
 
 	public void RollBack<TEntity>(TEntity entity) where TEntity : class

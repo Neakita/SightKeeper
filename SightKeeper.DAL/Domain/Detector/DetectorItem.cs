@@ -5,11 +5,6 @@ namespace SightKeeper.DAL.Domain.Detector;
 
 public class DetectorItem
 {
-	[Key] public int Id { get; private set; }
-	public virtual ItemClass ItemClass { get; private set; }
-	public virtual BoundingBox BoundingBox { get; private set; }
-	
-	
 	public DetectorItem(ItemClass itemClass, BoundingBox boundingBox)
 	{
 		ItemClass = itemClass;
@@ -23,4 +18,8 @@ public class DetectorItem
 		ItemClass = null!;
 		BoundingBox = null!;
 	}
+
+	[Key] public int Id { get; }
+	public virtual ItemClass ItemClass { get; }
+	public virtual BoundingBox BoundingBox { get; }
 }

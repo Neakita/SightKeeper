@@ -1,26 +1,26 @@
 ﻿<mah:MetroWindow x:Class="SightKeeper.UI.WPF.Views.Windows.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-        xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Windows"
-        mc:Ignorable="d"
-        Title="Sight Keeper" Height="450" Width="800"
-        Style="{StaticResource SightKeeperWindow}"
-        WindowStartupLocation="CenterScreen"
-        d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
-    
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+                 xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Windows"
+                 mc:Ignorable="d"
+                 Title="Sight Keeper" Height="450" Width="800"
+                 Style="{StaticResource SightKeeperWindow}"
+                 WindowStartupLocation="CenterScreen"
+                 d:DataContext="{d:DesignInstance viewModels:MainWindowVM}">
+
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
             <!-- ReSharper disable Xaml.PathError -->
-            <svgc:SvgViewbox Source="Resources/icon.svg"/>
+            <svgc:SvgViewbox Source="Resources/icon.svg" />
             <!-- ReSharper restore Xaml.PathError -->
         </DataTemplate>
     </mah:MetroWindow.IconTemplate>
-    
+
     <mah:HamburgerMenu DataContext="{Binding HamburgerMenuVM}"
-                       Style="{StaticResource HamburgerMenu}"/>
-    
+                       Style="{StaticResource HamburgerMenu}" />
+
 </mah:MetroWindow>

@@ -9,32 +9,33 @@
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
              d:DataContext="{d:DesignInstance viewModels:ModelsPageVM}">
-    
+
     <StackPanel>
-        
+
         <GroupBox DataContext="{Binding DetectorModelsList}"
                   Header="{Binding}">
-            
+
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock Text="Detectors"/>
-                        <Button HorizontalAlignment="Right" Content="{icons:BootstrapIcons Plus}" Command="{Binding CreateNewModelCommand, Mode=OneTime}"/>
+                        <TextBlock Text="Detectors" />
+                        <Button HorizontalAlignment="Right" Content="{icons:BootstrapIcons Plus}"
+                                Command="{Binding CreateNewModelCommand, Mode=OneTime}" />
                     </Grid>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
-            
+
             <ListBox ItemsSource="{Binding Models, UpdateSourceTrigger=PropertyChanged}"
                      md:ListBoxItemAssist.ShowSelection="False">
-            
+
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-            
+
             </ListBox>
         </GroupBox>
     </StackPanel>
-    
+
 </UserControl>

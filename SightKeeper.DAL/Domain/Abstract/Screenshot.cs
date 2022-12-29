@@ -6,17 +6,11 @@ public abstract class Screenshot
 {
 	private const string DirectoryPath = "Data/Images";
 	private const string Extension = "png";
-	
-	public int Id { get; private set; }
 
-	public DateTime CreationDate { get; private set; }
-	
-	public Resolution Resolution { get; private set; }
-	
-	public string FilePath => $"{DirectoryPath}/{Id}.{Extension}";
-	
-	
-	public Screenshot() : this(new Resolution()) { }
+
+	public Screenshot() : this(new Resolution())
+	{
+	}
 
 	public Screenshot(Resolution resolution)
 	{
@@ -31,4 +25,12 @@ public abstract class Screenshot
 		CreationDate = creationDate;
 		Resolution = new Resolution();
 	}
+
+	public int Id { get; }
+
+	public DateTime CreationDate { get; }
+
+	public Resolution Resolution { get; }
+
+	public string FilePath => $"{DirectoryPath}/{Id}.{Extension}";
 }

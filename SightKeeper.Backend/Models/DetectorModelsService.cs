@@ -6,6 +6,11 @@ namespace SightKeeper.Backend.Models;
 
 public sealed class DetectorModelsService : IModelsService<DetectorModel>
 {
+	private readonly IAppDbProvider _dbProvider;
+
+
+	public DetectorModelsService(IAppDbProvider dbProvider) => _dbProvider = dbProvider;
+
 	public DetectorModel Create(string name, ushort width, ushort height)
 	{
 		using AppDbContext dbContext = _dbProvider.NewContext;
@@ -25,13 +30,7 @@ public sealed class DetectorModelsService : IModelsService<DetectorModel>
 	public void Delete(IEnumerable<DetectorModel> models)
 	{
 		using AppDbContext dbContext = _dbProvider.NewContext;
-		dbContext.DetectorModels.RemoveRange(models.Cast<DetectorModel>());
+		dbContext.DetectorModels.RemoveRange(models);
 		dbContext.SaveChanges();
 	}
-
-
-	public DetectorModelsService(IAppDbProvider dbProvider) => _dbProvider = dbProvider;
-
-
-	private readonly IAppDbProvider _dbProvider;
 }

@@ -10,9 +10,8 @@ namespace SightKeeper.UI.WPF.ViewModels.Elements;
 
 public sealed class DetectorModelsList : ReactiveObject, IModelsListVM<DetectorModelVM, DetectorModel>
 {
-	public IEnumerable<DetectorModelVM> Models => _modelsProvider.Models.Select(model => new DetectorModelVM(model));
-	public ReactiveCommand<Unit, Unit> CreateNewModelCommand { get; }
-	public ReactiveCommand<DetectorModelVM, Unit> DeleteModelCommand { get; }
+	private readonly IModelsProvider<DetectorModel> _modelsProvider;
+	private readonly IModelsService<DetectorModel> _modelsService;
 
 
 	private DetectorModelsList(IModelsProvider<DetectorModel> modelsProvider,
@@ -24,14 +23,13 @@ public sealed class DetectorModelsList : ReactiveObject, IModelsListVM<DetectorM
 		DeleteModelCommand = ReactiveCommand.Create<DetectorModelVM>(DeleteModel);
 	}
 
-
-	private readonly IModelsProvider<DetectorModel> _modelsProvider;
-	private readonly IModelsService<DetectorModel> _modelsService;
+	public IEnumerable<DetectorModelVM> Models => _modelsProvider.Models.Select(model => new DetectorModelVM(model));
+	public ReactiveCommand<Unit, Unit> CreateNewModelCommand { get; }
+	public ReactiveCommand<DetectorModelVM, Unit> DeleteModelCommand { get; }
 
 
 	private void CreateNewModel()
 	{
-		
 	}
 
 	private void DeleteModel(DetectorModelVM model)

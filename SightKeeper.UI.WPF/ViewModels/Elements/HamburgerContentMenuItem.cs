@@ -9,14 +9,11 @@ namespace SightKeeper.UI.WPF.ViewModels.Elements;
 
 public sealed class HamburgerContentMenuItem : ReactiveObject, IContentInclusiveMenuItem
 {
-	public string Label { get; }
-	public object Content { get; }
-	[ObservableAsProperty] public object Icon { get; } = null!;
-	[Reactive] public bool IsSelected { get; set; }
-
-
-	public HamburgerContentMenuItem(string label, ContentControl content, PackIconBootstrapIconsKind deactivatedIconKind, PackIconBootstrapIconsKind activatedIconKind) 
-		: this(label, content, CreateIcon(deactivatedIconKind), CreateIcon(activatedIconKind)) { }
+	public HamburgerContentMenuItem(string label, ContentControl content,
+		PackIconBootstrapIconsKind deactivatedIconKind, PackIconBootstrapIconsKind activatedIconKind)
+		: this(label, content, CreateIcon(deactivatedIconKind), CreateIcon(activatedIconKind))
+	{
+	}
 
 	private HamburgerContentMenuItem(string label, ContentControl content,
 		Control deactivatedIconKind, Control activatedIconKind)
@@ -28,6 +25,12 @@ public sealed class HamburgerContentMenuItem : ReactiveObject, IContentInclusive
 			.ToPropertyEx(this, menuItem => menuItem.Icon);
 	}
 
+	public string Label { get; }
+	public object Content { get; }
+	[ObservableAsProperty] public object Icon { get; } = null!;
+	[Reactive] public bool IsSelected { get; set; }
 
-	private static Control CreateIcon(PackIconBootstrapIconsKind iconKind) => new PackIconBootstrapIcons {Kind = iconKind};
+
+	private static Control CreateIcon(PackIconBootstrapIconsKind iconKind) =>
+		new PackIconBootstrapIcons {Kind = iconKind};
 }

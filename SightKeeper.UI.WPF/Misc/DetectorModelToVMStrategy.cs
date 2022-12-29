@@ -5,5 +5,5 @@ namespace SightKeeper.UI.WPF.Misc;
 
 public sealed class DetectorModelToVMStrategy : IModelToVMStrategy<DetectorModelVM, DetectorModel>
 {
-	public DetectorModelVM ConvertToVM(DetectorModel model) => new(model);
+	public DetectorModelVM ConvertToVM(DetectorModel model) => new DetectorModelVM(model);
 }

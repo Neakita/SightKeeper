@@ -12,17 +12,14 @@ namespace SightKeeper.UI.WPF.ViewModels.Elements;
 public class ModelsListVM<TModelVM, TModelEntity> : ReactiveObject, IModelsListVM<TModelVM, TModelEntity>
 	where TModelVM : class, IModelVM<TModelEntity> where TModelEntity : Model
 {
-	public IEnumerable<TModelVM> Models => _modelsProvider.Models.Select(_entityToVMStrategy.ConvertToVM);
-	public ReactiveCommand<Unit, Unit> CreateNewModelCommand { get; }
-	public ReactiveCommand<TModelVM, Unit> DeleteModelCommand { get; }
+	private readonly IModelToVMStrategy<TModelVM, TModelEntity> _entityToVMStrategy;
 
 
 	private readonly IModelsProvider<TModelEntity> _modelsProvider;
 	private readonly IModelsService<TModelEntity> _modelsService;
-	private readonly IModelToVMStrategy<TModelVM, TModelEntity> _entityToVMStrategy;
 
 
-	internal ModelsListVM(IModelsProvider<TModelEntity> modelsProvider, IModelsService<TModelEntity> modelsService, 
+	internal ModelsListVM(IModelsProvider<TModelEntity> modelsProvider, IModelsService<TModelEntity> modelsService,
 		IModelToVMStrategy<TModelVM, TModelEntity> entityToVMStrategy)
 	{
 		_modelsProvider = modelsProvider;
@@ -31,10 +28,13 @@ public class ModelsListVM<TModelVM, TModelEntity> : ReactiveObject, IModelsListV
 		CreateNewModelCommand = ReactiveCommand.Create(CreateNewModel);
 		DeleteModelCommand = ReactiveCommand.Create<TModelVM>(DeleteModel);
 	}
-	
+
+	public IEnumerable<TModelVM> Models => _modelsProvider.Models.Select(_entityToVMStrategy.ConvertToVM);
+	public ReactiveCommand<Unit, Unit> CreateNewModelCommand { get; }
+	public ReactiveCommand<TModelVM, Unit> DeleteModelCommand { get; }
+
 	private void CreateNewModel()
 	{
-		
 	}
 
 	private void DeleteModel(TModelVM model)

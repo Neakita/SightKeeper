@@ -6,39 +6,40 @@
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:abstract="clr-namespace:SightKeeper.UI.WPF.Abstract"
                     mc:Ignorable="d">
-    
+
     <Style x:Key="SightKeeperWindow" TargetType="mah:MetroWindow">
-        <Setter Property="WindowTitleBrush" Value="{DynamicResource MahApps.Brushes.ThemeBackground}"/>
-        <Setter Property="GlowBrush" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+        <Setter Property="WindowTitleBrush" Value="{DynamicResource MahApps.Brushes.ThemeBackground}" />
+        <Setter Property="GlowBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
     </Style>
-    
+
     <Style x:Key="FlatButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
-        <Setter Property="Height" Value="40"/>
-        <Setter Property="Margin" Value="5"/>
-        <Setter Property="md:ButtonAssist.CornerRadius" Value="5"/>
-        <Setter Property="MinWidth" Value="40"/>
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="md:ButtonAssist.CornerRadius" Value="5" />
+        <Setter Property="MinWidth" Value="40" />
     </Style>
-    
+
     <Style x:Key="SingleIconButton" TargetType="Button" BasedOn="{StaticResource FlatButton}">
-        <Setter Property="Width" Value="40"/>
-        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Padding" Value="0" />
     </Style>
-    
+
     <Style x:Key="HamburgerMenu"
            TargetType="mah:HamburgerMenu"
            BasedOn="{StaticResource MahApps.Styles.HamburgerMenu}"
            d:DataContext="{d:DesignInstance abstract:IHamburgerMenuVM}">
-        
-        <Setter Property="SelectedItem" Value="{Binding SelectedMenuItem, UpdateSourceTrigger=PropertyChanged}"/>
-        <Setter Property="Content" Value="{Binding SelectedMenuItem.Content, UpdateSourceTrigger=PropertyChanged}"/>
-        <Setter Property="ItemsSource" Value="{Binding MenuItems, Mode=OneTime}"/>
-        <Setter Property="OptionsItemsSource" Value="{Binding OptionsMenuItems, Mode=OneTime}"/>
+
+        <Setter Property="SelectedItem" Value="{Binding SelectedMenuItem, UpdateSourceTrigger=PropertyChanged}" />
+        <Setter Property="Content" Value="{Binding SelectedMenuItem.Content, UpdateSourceTrigger=PropertyChanged}" />
+        <Setter Property="ItemsSource" Value="{Binding MenuItems, Mode=OneTime}" />
+        <Setter Property="OptionsItemsSource" Value="{Binding OptionsMenuItems, Mode=OneTime}" />
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate DataType="{x:Type abstract:IMenuItem}">
                     <Grid Height="50">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=CompactPaneLength, Mode=OneWay}"/>
+                            <ColumnDefinition
+                                Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=CompactPaneLength, Mode=OneWay}" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <ContentControl Grid.Column="0"
@@ -54,18 +55,18 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        
+
     </Style>
-    
+
     <Style x:Key="WrappedListBox" TargetType="ListBox" BasedOn="{StaticResource MaterialDesignListBox}">
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True"/>
+                    <WrapPanel IsItemsHost="True" />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 </ResourceDictionary>

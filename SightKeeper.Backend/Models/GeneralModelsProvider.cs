@@ -6,6 +6,11 @@ namespace SightKeeper.Backend.Models;
 
 public sealed class GeneralModelsProvider : IModelsProvider<Model>
 {
+	private readonly IAppDbProvider _dbProvider;
+
+
+	public GeneralModelsProvider(IAppDbProvider dbProvider) => _dbProvider = dbProvider;
+
 	public IEnumerable<Model> Models
 	{
 		get
@@ -14,13 +19,4 @@ public sealed class GeneralModelsProvider : IModelsProvider<Model>
 			return dbContext.Models.AsNoTracking().ToList();
 		}
 	}
-
-
-	public GeneralModelsProvider(IAppDbProvider dbProvider)
-	{
-		_dbProvider = dbProvider;
-	}
-
-
-	private readonly IAppDbProvider _dbProvider;
 }

@@ -4,11 +4,6 @@ namespace SightKeeper.DAL.Domain.Common;
 
 public class ItemClassGroup
 {
-	[Key] public int Id { get; private set; }
-	public virtual Profile Profile { get; private set; }
-	public virtual List<ItemClass> ItemClasses { get; private set; }
-
-
 	public ItemClassGroup(Profile profile, IEnumerable<ItemClass>? itemClasses = null)
 	{
 		Profile = profile;
@@ -21,4 +16,8 @@ public class ItemClassGroup
 		Profile = null!;
 		ItemClasses = null!;
 	}
+
+	[Key] public int Id { get; }
+	public virtual Profile Profile { get; }
+	public virtual List<ItemClass> ItemClasses { get; }
 }
