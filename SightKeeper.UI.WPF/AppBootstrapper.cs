@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using Serilog;
 using Serilog.Core;
-using SightKeeper.Abstractions.Domain;
 using SightKeeper.Backend.Models;
 using SightKeeper.DAL;
+using SightKeeper.DAL.Domain.Detector;
 using SightKeeper.UI.WPF.Misc;
 using SightKeeper.UI.WPF.ViewModels.Domain;
 using SightKeeper.UI.WPF.ViewModels.Elements;
@@ -63,14 +63,14 @@ internal static class AppBootstrapper
 		SplatRegistrations.Register<MainWindowVM>();
 		SplatRegistrations.Register<HamburgerMenuVM>();
 		SplatRegistrations.Register<ModelsPageVM>();
-		SplatRegistrations.Register<IModelsListVM<DetectorModelVM, IDetectorModel>, ModelsListVM<DetectorModelVM, IDetectorModel>>();
-		SplatRegistrations.Register<IModelToVMStrategy<DetectorModelVM, IDetectorModel>, DetectorModelToVMStrategy>();
+		SplatRegistrations.Register<IModelsListVM<DetectorModelVM, DetectorModel>, ModelsListVM<DetectorModelVM, DetectorModel>>();
+		SplatRegistrations.Register<IModelToVMStrategy<DetectorModelVM, DetectorModel>, DetectorModelToVMStrategy>();
 	}
 
 	private static void SetupServices()
 	{
-		SplatRegistrations.Register<IModelsProvider<IDetectorModel>, DetectorModelsProvider>();
-		SplatRegistrations.Register<IModelsService<IDetectorModel>, DetectorModelsService>();
+		SplatRegistrations.Register<IModelsProvider<DetectorModel>, DetectorModelsProvider>();
+		SplatRegistrations.Register<IModelsService<DetectorModel>, DetectorModelsService>();
 	}
 	
 	private static void SetupExceptionHandling()

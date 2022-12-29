@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SightKeeper.Abstractions.Domain;
 using SightKeeper.DAL.Domain.Common;
 
 namespace SightKeeper.DAL.Domain.Abstract;
 
-public abstract class Model : IModel
+public abstract class Model
 {
 	public int Id { get; private set; }
 	public string Name { get; set; }

@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.Abstractions\SightKeeper.Abstractions.csproj" />
       <ProjectReference Include="..\SightKeeper.DAL\SightKeeper.DAL.csproj" />
     </ItemGroup>
 

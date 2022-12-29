@@ -1,14 +1,14 @@
-﻿using SightKeeper.Abstractions.Domain;
+﻿using SightKeeper.DAL.Domain.Detector;
 
 namespace SightKeeper.UI.WPF.ViewModels.Domain;
 
-public sealed class DetectorModelVM : IModelVM<IDetectorModel>
+public sealed class DetectorModelVM : IModelVM<DetectorModel>
 {
-	public IDetectorModel Model { get; }
+	public DetectorModel Model { get; }
 	public string Name => Model.Name;
 
 
-	internal DetectorModelVM(IDetectorModel detectorModel)
+	internal DetectorModelVM(DetectorModel detectorModel)
 	{
 		Model = detectorModel;
 	}

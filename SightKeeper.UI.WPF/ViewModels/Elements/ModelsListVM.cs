@@ -2,15 +2,15 @@
 using System.Linq;
 using System.Reactive;
 using ReactiveUI;
-using SightKeeper.Abstractions.Domain;
 using SightKeeper.Backend.Models;
+using SightKeeper.DAL.Domain.Abstract;
 using SightKeeper.UI.WPF.Misc;
 using SightKeeper.UI.WPF.ViewModels.Domain;
 
 namespace SightKeeper.UI.WPF.ViewModels.Elements;
 
 public class ModelsListVM<TModelVM, TModelEntity> : ReactiveObject, IModelsListVM<TModelVM, TModelEntity>
-	where TModelVM : class, IModelVM<TModelEntity> where TModelEntity : class, IModel
+	where TModelVM : class, IModelVM<TModelEntity> where TModelEntity : Model
 {
 	public IEnumerable<TModelVM> Models => _modelsProvider.Models.Select(_entityToVMStrategy.ConvertToVM);
 	public ReactiveCommand<Unit, Unit> CreateNewModelCommand { get; }

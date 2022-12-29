@@ -1,8 +1,8 @@
-﻿using SightKeeper.Abstractions.Domain;
+﻿using SightKeeper.DAL.Domain.Abstract;
 
 namespace SightKeeper.UI.WPF.ViewModels.Domain;
 
-public interface IModelVM<TModel> where TModel : IModel
+public interface IModelVM<TModel> where TModel : Model
 {
 	TModel Model { get; }
 

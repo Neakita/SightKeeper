@@ -45,6 +45,13 @@ public sealed class DetectorModelTests : DbRelatedTests
 		dbContext.DetectorScreenshots.Should().Contain(iScreenshot);
 	}
 
+	[Fact]
+	public void DeletingModelWithScreenshotShouldCascadeDeleteScreenshots()
+	{
+		using AppDbContext dbContext = DbProvider.NewContext;
+		
+	}
+
 
 	private static DetectorModel TestDetectorModel => new("TestDetectorModel");
 }

@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Abstractions.Domain;
 using SightKeeper.DAL;
+using SightKeeper.DAL.Domain.Detector;
 
 namespace SightKeeper.Backend.Models;
 
-public sealed class DetectorModelsProvider : IModelsProvider<IDetectorModel>
+public sealed class DetectorModelsProvider : IModelsProvider<DetectorModel>
 {
-	public IEnumerable<IDetectorModel> Models
+	public IEnumerable<DetectorModel> Models
 	{
 		get
 		{

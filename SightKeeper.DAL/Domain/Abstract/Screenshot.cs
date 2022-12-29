@@ -1,9 +1,8 @@
-﻿using SightKeeper.Abstractions.Domain;
-using SightKeeper.DAL.Domain.Common;
+﻿using SightKeeper.DAL.Domain.Common;
 
 namespace SightKeeper.DAL.Domain.Abstract;
 
-public abstract class Screenshot : IScreenshot
+public abstract class Screenshot
 {
 	private const string DirectoryPath = "Data/Images";
 	private const string Extension = "png";

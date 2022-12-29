@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SightKeeper.Abstractions.Domain;
 using SightKeeper.DAL.Domain.Abstract;
 using SightKeeper.DAL.Domain.Common;
 
 namespace SightKeeper.DAL.Domain.Detector;
 
 [Table("DetectorModels")]
-public class DetectorModel : Model, IDetectorModel
+public class DetectorModel : Model
 {
 	public override IEnumerable<Screenshot> Screenshots => DetectorScreenshots.Cast<Screenshot>().ToList();
 	

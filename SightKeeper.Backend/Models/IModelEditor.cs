@@ -1,8 +1,8 @@
-﻿using SightKeeper.Abstractions.Domain;
+﻿using SightKeeper.DAL.Domain.Abstract;
 
 namespace SightKeeper.Backend.Models;
 
-public interface IModelEditor<T> where T : class, IModel
+public interface IModelEditor<T> where T : Model
 {
 	T EditableModel { get; }
 

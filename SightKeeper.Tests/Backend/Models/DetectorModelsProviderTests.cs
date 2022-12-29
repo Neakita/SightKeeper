@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using SightKeeper.Abstractions.Domain;
 using SightKeeper.Backend.Models;
 using SightKeeper.DAL;
 using SightKeeper.DAL.Domain.Common;
@@ -17,10 +16,10 @@ public sealed class DetectorModelsProviderTests : DbRelatedTests
 		dbContext.DetectorModels.Add(testDetectorModel);
 		dbContext.SaveChanges();
 		
-		IEnumerable<IDetectorModel> detectorModels = DetectorModelsProvider.Models;
+		IEnumerable<DetectorModel> detectorModels = DetectorModelsProvider.Models;
 		
 		detectorModels.Should().NotBeEmpty();
 	}
 	
-	private IModelsProvider<IDetectorModel> DetectorModelsProvider => new DetectorModelsProvider(DbProvider);
+	private IModelsProvider<DetectorModel> DetectorModelsProvider => new DetectorModelsProvider(DbProvider);
 }

@@ -1,9 +1,9 @@
-﻿using SightKeeper.Abstractions.Domain;
+﻿using SightKeeper.DAL.Domain.Detector;
 using SightKeeper.UI.WPF.ViewModels.Domain;
 
 namespace SightKeeper.UI.WPF.Misc;
 
-public sealed class DetectorModelToVMStrategy : IModelToVMStrategy<DetectorModelVM, IDetectorModel>
+public sealed class DetectorModelToVMStrategy : IModelToVMStrategy<DetectorModelVM, DetectorModel>
 {
-	public DetectorModelVM ConvertToVM(IDetectorModel model) => new(model);
+	public DetectorModelVM ConvertToVM(DetectorModel model) => new(model);
 }

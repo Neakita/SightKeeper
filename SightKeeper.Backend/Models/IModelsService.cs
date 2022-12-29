@@ -1,8 +1,8 @@
-﻿using SightKeeper.Abstractions.Domain;
+﻿using SightKeeper.DAL.Domain.Abstract;
 
 namespace SightKeeper.Backend.Models;
 
-public interface IModelsService<TModel> where TModel : class, IModel
+public interface IModelsService<TModel> where TModel : Model
 {
 	TModel Create(string name, ushort width, ushort height);
 
