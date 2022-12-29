@@ -47,7 +47,6 @@ internal static class AppBootstrapper
 
 	private static void SetupDatabase()
 	{
-		SplatRegistrations.Register<AppDbContext>();
 		SplatRegistrations.Register<IAppDbProvider, AppDbProvider>();
 	}
 
