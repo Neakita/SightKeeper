@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Reactive;
 using ReactiveUI;
-using SightKeeper.Abstractions;
 using SightKeeper.Abstractions.Domain;
+using SightKeeper.Backend.Models;
 using SightKeeper.UI.WPF.ViewModels.Domain;
 
 namespace SightKeeper.UI.WPF.ViewModels.Elements;

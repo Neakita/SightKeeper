@@ -5,14 +5,13 @@ using SightKeeper.DAL.Domain.Detector;
 
 namespace SightKeeper.Tests.DAL;
 
-[ManageDatabase]
-public sealed class DetectorModelTests
+public sealed class DetectorModelTests : DbRelatedTests
 {
 	[Fact]
 	public void ShouldAddDetectorModel()
 	{
 		// arrange
-		using AppDbContext dbContext = Helper.NewDbContext;
+		using AppDbContext dbContext = DbProvider.NewContext;
 		DetectorModel testModel = TestDetectorModel;
 		
 		// act
@@ -27,7 +26,7 @@ public sealed class DetectorModelTests
 	public void AddingModelWithScreenshotShouldAddScreenshot()
 	{
 		// arrange
-		using AppDbContext dbContext = Helper.NewDbContext;
+		using AppDbContext dbContext = DbProvider.NewContext;
 		DetectorModel model = TestDetectorModel;
 		DetectorScreenshot iScreenshot = new();
 		ItemClass itemClass = new("class");

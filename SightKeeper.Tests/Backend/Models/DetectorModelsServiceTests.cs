@@ -6,7 +6,7 @@ using SightKeeper.DAL.Domain.Detector;
 
 namespace SightKeeper.Tests.Backend.Models;
 
-public sealed class DetectorModelsServiceTests
+public sealed class DetectorModelsServiceTests : DbRelatedTests
 {
 	[Fact]
 	public void ShouldCreateDetectorModel()
@@ -15,12 +15,11 @@ public sealed class DetectorModelsServiceTests
 		const string testModelName = "Test model";
 		
 		// act
-		_service.Create(testModelName, 320, 320);
+		Service.Create(testModelName, 320, 320);
 		
 		// assert
-		using IAppDbContext dbContext = Helper.DbContext;
+		using AppDbContext dbContext = DbProvider.NewContext;
 		dbContext.DetectorModels.Should().Contain(model => model.Name == testModelName);
-		dbContext.Clear();
 	}
 
 	[Fact]
@@ -29,20 +28,17 @@ public sealed class DetectorModelsServiceTests
 		// arrange
 		const string testModelName = "Test model";
 		DetectorModel detectorModel = new(testModelName, new Resolution());
-		using (IAppDbContext arrangeDbContext = Helper.DbContext)
-		{
-			arrangeDbContext.DetectorModels.Add(detectorModel);
-			arrangeDbContext.SaveChanges();
-		}
+		using AppDbContext dbContext = DbProvider.NewContext;
+		dbContext.DetectorModels.Add(detectorModel);
+		dbContext.SaveChanges();
 		
 		// act
-		_service.Delete(detectorModel);
+		Service.Delete(detectorModel);
 		
 		// assert
-		using IAppDbContext dbContext = Helper.DbContext;
 		dbContext.DetectorModels.Should().NotContain(model => model.Name == testModelName);
 	}
 	
 	
-	private readonly DetectorModelsService _service = new(Helper.DbProvider);
+	private DetectorModelsService Service => new(DbProvider);
 }

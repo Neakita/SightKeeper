@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-using ReactiveUI;
 using Serilog;
 using Serilog.Core;
-using SightKeeper.Abstractions;
 using SightKeeper.Abstractions.Domain;
 using SightKeeper.Backend.Models;
 using SightKeeper.DAL;
@@ -48,11 +46,11 @@ internal static class AppBootstrapper
 	
 	private static void SetupDatabase()
 	{
-		SplatRegistrations.Register<IAppDbContext, AppDbContext>();
+		SplatRegistrations.Register<AppDbContext>();
 		SplatRegistrations.Register<IAppDbProvider, AppDbProvider>();
 	}
 
-	private static void EnsureDatabaseExists() => ((AppDbContext) Locator.Current.GetService<IAppDbContext>()!).Database.EnsureCreated();
+	private static void EnsureDatabaseExists() => Locator.Current.GetService<AppDbContext>()!.Database.EnsureCreated();
 
 	private static void SetupViews()
 	{

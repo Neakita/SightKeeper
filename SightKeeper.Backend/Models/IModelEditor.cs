@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Abstractions.Domain;
 
-namespace SightKeeper.Abstractions;
+namespace SightKeeper.Backend.Models;
 
 public interface IModelEditor<T> where T : class, IModel
 {

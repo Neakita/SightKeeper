@@ -1,5 +1,4 @@
-﻿using SightKeeper.Abstractions;
-using SightKeeper.Abstractions.Domain;
+﻿using SightKeeper.Abstractions.Domain;
 using SightKeeper.DAL;
 using SightKeeper.DAL.Domain.Common;
 using SightKeeper.DAL.Domain.Detector;
@@ -10,7 +9,7 @@ public sealed class GeneralModelsService : IModelsService<IModel>
 {
 	public IModel Create(string name, ushort width, ushort height)
 	{
-		using IAppDbContext dbContext = _dbProvider.NewContext;
+		using AppDbContext dbContext = _dbProvider.NewContext;
 		DetectorModel newDetectorModel = new(name, new Resolution(width, height));
 		dbContext.DetectorModels.Add(newDetectorModel);
 		dbContext.SaveChanges();
@@ -21,14 +20,14 @@ public sealed class GeneralModelsService : IModelsService<IModel>
 	{
 		if (model is not DetectorModel detectorModel)
 			throw new InvalidCastException($"Model {model} of type {model.GetType().FullName} cannot be casted to {typeof(DetectorModel).FullName} to delete it from db.");
-		using IAppDbContext dbContext = _dbProvider.NewContext;
+		using AppDbContext dbContext = _dbProvider.NewContext;
 		dbContext.DetectorModels.Remove(detectorModel);
 		dbContext.SaveChanges();
 	}
 
 	public void Delete(IEnumerable<IModel> models)
 	{
-		using IAppDbContext dbContext = _dbProvider.NewContext;
+		using AppDbContext dbContext = _dbProvider.NewContext;
 		dbContext.DetectorModels.RemoveRange(models.Cast<DetectorModel>());
 		dbContext.SaveChanges();
 	}

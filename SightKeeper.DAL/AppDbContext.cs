@@ -7,7 +7,7 @@ using SightKeeper.DAL.Domain.Detector;
 
 namespace SightKeeper.DAL;
 
-public class AppDbContext : DbContext, IAppDbContext
+public class AppDbContext : DbContext
 {
 	public DbSet<Model> Models { get; set; } = null!;
 	public DbSet<DetectorModel> DetectorModels { get; set; } = null!;
@@ -16,7 +16,9 @@ public class AppDbContext : DbContext, IAppDbContext
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 
-	public AppDbContext(string dataSource = "App.db") => _dataSource = dataSource;
+	
+	public AppDbContext() { }
+	public AppDbContext(DbContextOptions options) : base(options) { } 
 	
 	
 	public void RollBack()
@@ -59,16 +61,13 @@ public class AppDbContext : DbContext, IAppDbContext
 	}
 
 
-	private readonly string _dataSource;
-	
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
+		if (optionsBuilder.IsConfigured) return;
 		SqliteConnectionStringBuilder connectionStringBuilder = new()
 		{
-			DataSource = _dataSource
+			DataSource = "App.db"
 		};
-		optionsBuilder
-			.UseLazyLoadingProxies()
-			.UseSqlite(connectionStringBuilder.ConnectionString);
+		optionsBuilder.UseSqlite(connectionStringBuilder.ConnectionString);
 	}
 }

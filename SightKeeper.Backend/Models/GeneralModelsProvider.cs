@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Abstractions;
 using SightKeeper.Abstractions.Domain;
 using SightKeeper.DAL;
 
@@ -11,7 +10,7 @@ public sealed class GeneralModelsProvider : IModelsProvider<IModel>
 	{
 		get
 		{
-			using IAppDbContext dbContext = _dbProvider.NewContext;
+			using AppDbContext dbContext = _dbProvider.NewContext;
 			return dbContext.Models.AsNoTracking().ToList();
 		}
 	}

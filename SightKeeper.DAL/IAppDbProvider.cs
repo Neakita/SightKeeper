@@ -1,5 +1,3 @@
-﻿using SightKeeper.Abstractions;
+﻿namespace SightKeeper.DAL;
 
-namespace SightKeeper.DAL;
-
-public interface IAppDbProvider : IDbProvider<IAppDbContext> { }
+public interface IAppDbProvider : IDbProvider<AppDbContext> { }

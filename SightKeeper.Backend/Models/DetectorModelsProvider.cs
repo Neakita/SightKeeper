@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Abstractions;
 using SightKeeper.Abstractions.Domain;
 using SightKeeper.DAL;
 
@@ -11,16 +10,13 @@ public sealed class DetectorModelsProvider : IModelsProvider<IDetectorModel>
 	{
 		get
 		{
-			using IAppDbContext dbContext = _dbProvider.NewContext;
+			using AppDbContext dbContext = _dbProvider.NewContext;
 			return dbContext.DetectorModels.AsNoTracking().ToList();
 		}
 	}
 
 
-	public DetectorModelsProvider(IAppDbProvider dbProvider)
-	{
-		_dbProvider = dbProvider;
-	}
+	public DetectorModelsProvider(IAppDbProvider dbProvider) => _dbProvider = dbProvider;
 
 
 	private readonly IAppDbProvider _dbProvider;

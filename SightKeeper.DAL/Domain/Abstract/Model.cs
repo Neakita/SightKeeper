@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using SightKeeper.Abstractions.Domain;
 using SightKeeper.DAL.Domain.Common;
 
@@ -7,11 +6,11 @@ namespace SightKeeper.DAL.Domain.Abstract;
 
 public abstract class Model : IModel
 {
-	[Key] public int Id { get; private set; }
+	public int Id { get; private set; }
 	public string Name { get; set; }
-	public virtual Resolution Resolution { get; private set; }
-	public virtual List<ItemClass> Classes { get; private set; }
-	public virtual Game? Game { get; set; }
+	public Resolution Resolution { get; private set; }
+	public List<ItemClass> Classes { get; private set; }
+	public Game? Game { get; set; }
 
 	[NotMapped] public abstract IEnumerable<Screenshot> Screenshots { get; }
 	

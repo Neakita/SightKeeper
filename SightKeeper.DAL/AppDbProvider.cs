@@ -2,13 +2,5 @@
 
 public sealed class AppDbProvider : IAppDbProvider
 {
-	public IAppDbContext NewContext
-	{
-		get
-		{
-			AppDbContext dbContext = new();
-			dbContext.Database.EnsureCreated();
-			return dbContext;
-		}
-	}
+	public AppDbContext NewContext => new();
 }

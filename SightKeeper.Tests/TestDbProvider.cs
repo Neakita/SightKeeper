@@ -1,16 +1,19 @@
-﻿using SightKeeper.DAL;
+﻿using Microsoft.EntityFrameworkCore;
+using SightKeeper.DAL;
 
 namespace SightKeeper.Tests;
 
 public sealed class TestDbProvider : IAppDbProvider
 {
-	public IAppDbContext NewContext
+	public AppDbContext NewContext => new(_options);
+
+
+	public TestDbProvider()
 	{
-		get
-		{
-			AppDbContext result = new("Test.db");
-			result.Database.EnsureCreated();
-			return result;
-		}
+		_options = new DbContextOptionsBuilder<AppDbContext>()
+			.UseInMemoryDatabase(Guid.NewGuid().ToString("N")).Options;
 	}
+
+	
+	private readonly DbContextOptions<AppDbContext> _options;
 }

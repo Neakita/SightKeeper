@@ -4,14 +4,13 @@ using SightKeeper.DAL.Domain.Common;
 
 namespace SightKeeper.Tests.DAL;
 
-[ManageDatabase]
-public sealed class GameTests
+public sealed class GameTests : DbRelatedTests
 {
 	[Fact]
 	public void ShouldAddGame()
 	{
 		// arrange
-		using AppDbContext dbContext = Helper.NewDbContext;
+		using AppDbContext dbContext = DbProvider.NewContext;
 		Game testGame = TestGame;
 		
 		// act
@@ -26,7 +25,7 @@ public sealed class GameTests
 	public void ShouldDeleteGame()
 	{
 		// arrange
-		using AppDbContext dbContext = Helper.NewDbContext;
+		using AppDbContext dbContext = DbProvider.NewContext;
 		Game testGame = TestGame;
 		dbContext.Add(testGame);
 		dbContext.SaveChanges();
@@ -44,7 +43,7 @@ public sealed class GameTests
 	public void ShouldGetGame()
 	{
 		// arrange
-		using AppDbContext dbContext = Helper.NewDbContext;
+		using AppDbContext dbContext = DbProvider.NewContext;
 		Game testGame = TestGame;
 		dbContext.Add(testGame);
 		dbContext.SaveChanges();

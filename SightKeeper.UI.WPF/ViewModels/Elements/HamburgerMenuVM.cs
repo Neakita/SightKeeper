@@ -3,7 +3,6 @@ using System.Linq;
 using MahApps.Metro.IconPacks;
 using ReactiveUI;
 using SightKeeper.UI.WPF.Abstract;
-using SightKeeper.UI.WPF.ViewModels.Pages;
 using SightKeeper.UI.WPF.Views.Pages;
 
 namespace SightKeeper.UI.WPF.ViewModels.Elements;

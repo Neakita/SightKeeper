@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using SightKeeper.Abstractions.Domain;
+﻿using SightKeeper.Abstractions.Domain;
 using SightKeeper.DAL.Domain.Common;
 
 namespace SightKeeper.DAL.Domain.Abstract;
@@ -9,11 +8,11 @@ public abstract class Screenshot : IScreenshot
 	private const string DirectoryPath = "Data/Images";
 	private const string Extension = "png";
 	
-	[Key] public int Id { get; private set; }
+	public int Id { get; private set; }
 
 	public DateTime CreationDate { get; private set; }
 	
-	public virtual Resolution Resolution { get; private set; }
+	public Resolution Resolution { get; private set; }
 	
 	public string FilePath => $"{DirectoryPath}/{Id}.{Extension}";
 	
