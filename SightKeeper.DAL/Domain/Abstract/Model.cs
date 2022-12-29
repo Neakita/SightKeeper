@@ -25,11 +25,10 @@ public abstract class Model
 		Classes = null!;
 	}
 
-	public int Id { get; }
+	public int Id { get; private set; }
 	public string Name { get; set; }
+	
 	public Resolution Resolution { get; }
 	public List<ItemClass> Classes { get; }
 	public Game? Game { get; set; }
-
-	[NotMapped] public abstract IEnumerable<Screenshot> Screenshots { get; }
 }

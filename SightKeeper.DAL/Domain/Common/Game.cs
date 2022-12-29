@@ -26,7 +26,7 @@ public class Game
 		ProcessName = processName;
 	}
 
-	[Key] public int Id { get; }
+	public int Id { get; private set; }
 
 	/// <summary>
 	///     Display name
@@ -36,7 +36,7 @@ public class Game
 	/// <summary>
 	///     System process name
 	/// </summary>
-	public string ProcessName { get; }
+	public string ProcessName { get; private set; }
 
 	/// <summary>
 	///     Dependent models

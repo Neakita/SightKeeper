@@ -17,7 +17,7 @@ public class ItemClassGroup
 		ItemClasses = null!;
 	}
 
-	[Key] public int Id { get; }
+	public int Id { get; private set; }
 	public virtual Profile Profile { get; }
 	public virtual List<ItemClass> ItemClasses { get; }
 }

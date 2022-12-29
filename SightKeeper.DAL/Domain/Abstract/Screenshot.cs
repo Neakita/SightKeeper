@@ -26,9 +26,9 @@ public abstract class Screenshot
 		Resolution = new Resolution();
 	}
 
-	public int Id { get; }
+	public int Id { get; private set; }
 
-	public DateTime CreationDate { get; }
+	public DateTime CreationDate { get; private set; }
 
 	public Resolution Resolution { get; }
 

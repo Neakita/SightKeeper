@@ -19,7 +19,7 @@ public class DetectorItem
 		BoundingBox = null!;
 	}
 
-	[Key] public int Id { get; }
-	public virtual ItemClass ItemClass { get; }
-	public virtual BoundingBox BoundingBox { get; }
+	public int Id { get; private set; }
+	public virtual ItemClass ItemClass { get; private set; }
+	public virtual BoundingBox BoundingBox { get; private set; }
 }

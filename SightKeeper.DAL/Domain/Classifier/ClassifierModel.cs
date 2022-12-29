@@ -16,6 +16,4 @@ public sealed class ClassifierModel : Model
 	public ClassifierModel(int id, string name) : base(id, name)
 	{
 	}
-
-	public override IEnumerable<Screenshot> Screenshots { get; }
 }

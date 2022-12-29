@@ -52,7 +52,9 @@ internal static class AppBootstrapper
 
 	private static void EnsureDatabaseExists()
 	{
-		Locator.Current.GetService<AppDbContext>()!.Database.EnsureCreated();
+		IAppDbProvider? dbProvider = Locator.Current.GetService<IAppDbProvider>();
+		if (dbProvider == null) throw new Exception($"Service of type {typeof(IAppDbProvider)} not found.");
+		dbProvider.NewContext.Database.EnsureCreated();
 	}
 
 	private static void SetupViews()

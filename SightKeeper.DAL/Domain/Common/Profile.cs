@@ -23,7 +23,7 @@ public class Profile
 		DetectorModel = null!;
 	}
 
-	[Key] public int Id { get; }
+	public int Id { get; private set; }
 	public string Name { get; set; }
 	public string Description { get; set; }
 	public virtual Game Game { get; set; }

@@ -27,29 +27,41 @@ public sealed class DetectorModelTests : DbRelatedTests
 	[Fact]
 	public void AddingModelWithScreenshotShouldAddScreenshot()
 	{
-		// arrange
 		using AppDbContext dbContext = DbProvider.NewContext;
 		DetectorModel model = TestDetectorModel;
-		DetectorScreenshot iScreenshot = new();
+		DetectorScreenshot screenshot = new(model);
 		ItemClass itemClass = new("class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 1, 1));
-		iScreenshot.Items.Add(item);
-		model.DetectorScreenshots.Add(iScreenshot);
-
-		// act
-		dbContext.Add(model);
+		screenshot.Items.Add(item);
+		model.DetectorScreenshots.Add(screenshot);
+		
+		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 
-		// assert
 		dbContext.DetectorModels.Should().Contain(model);
-		dbContext.ItemClasses.Should().Contain(itemClass);
+		dbContext.DetectorScreenshots.Should().Contain(screenshot);
 		dbContext.DetectorItems.Should().Contain(item);
-		dbContext.DetectorScreenshots.Should().Contain(iScreenshot);
+		dbContext.ItemClasses.ToList().Should().Contain(itemClass);
 	}
 
 	[Fact]
-	public void DeletingModelWithScreenshotShouldCascadeDeleteScreenshots()
+	public void ShouldDeleteWithScreenshots()
 	{
 		using AppDbContext dbContext = DbProvider.NewContext;
+		DetectorModel model = new("Test model");
+		DetectorScreenshot screenshot = new(model);
+		model.DetectorScreenshots.Add(screenshot);
+
+		dbContext.DetectorModels.Add(model);
+		dbContext.SaveChanges();
+
+		dbContext.DetectorModels.Should().Contain(model);
+		dbContext.DetectorScreenshots.Should().Contain(screenshot);
+
+		dbContext.DetectorModels.Remove(model);
+		dbContext.SaveChanges();
+
+		dbContext.DetectorModels.Should().BeEmpty();
+		dbContext.DetectorScreenshots.Should().BeEmpty();
 	}
 }
