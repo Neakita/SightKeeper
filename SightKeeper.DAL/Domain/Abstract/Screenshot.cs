@@ -4,10 +4,6 @@ namespace SightKeeper.DAL.Domain.Abstract;
 
 public abstract class Screenshot
 {
-	private const string DirectoryPath = "Data/Images";
-	private const string Extension = "png";
-
-
 	public Screenshot() : this(new Resolution())
 	{
 	}
@@ -31,6 +27,4 @@ public abstract class Screenshot
 	public DateTime CreationDate { get; private set; }
 
 	public Resolution Resolution { get; }
-
-	public string FilePath => $"{DirectoryPath}/{Id}.{Extension}";
 }

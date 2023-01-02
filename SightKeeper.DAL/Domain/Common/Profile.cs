@@ -1,16 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using SightKeeper.DAL.Domain.Detector;
+﻿using SightKeeper.DAL.Domain.Common.Synergies;
 
 namespace SightKeeper.DAL.Domain.Common;
 
 public class Profile
 {
-	public Profile(string name, string description, Game game, DetectorModel detectorModel)
+	public Profile(string name)
 	{
 		Name = name;
-		Description = description;
-		Game = game;
-		DetectorModel = detectorModel;
+		Components = new List<ProfileComponent>();
 	}
 
 
@@ -20,12 +17,13 @@ public class Profile
 		Name = name;
 		Description = description;
 		Game = null!;
-		DetectorModel = null!;
+		Components = null!;
 	}
 
 	public int Id { get; private set; }
 	public string Name { get; set; }
-	public string Description { get; set; }
-	public virtual Game Game { get; set; }
-	public virtual DetectorModel DetectorModel { get; set; }
+	public string Description { get; set; } = string.Empty;
+	public virtual Game? Game { get; set; }
+	public virtual List<ProfileComponent> Components { get; private set; }
+	public virtual Synergy? Synergy { get; set; }
 }

@@ -1,23 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SightKeeper.DAL.Domain.Common;
+﻿namespace SightKeeper.DAL.Domain.Common;
 
 public class ItemClassGroup
 {
-	public ItemClassGroup(Profile profile, IEnumerable<ItemClass>? itemClasses = null)
+	public ItemClassGroup(ProfileComponent component)
 	{
-		Profile = profile;
-		ItemClasses = itemClasses?.ToList() ?? new List<ItemClass>();
+		ItemClasses = new List<ItemClass>();
+		Component = component;
 	}
 
 	private ItemClassGroup()
 	{
-		Id = 0;
-		Profile = null!;
 		ItemClasses = null!;
+		Component = null!;
 	}
 
-	public int Id { get; private set; }
-	public virtual Profile Profile { get; }
-	public virtual List<ItemClass> ItemClasses { get; }
+	public int Id { get; private set; } = 0;
+	public virtual List<ItemClass> ItemClasses { get; private set; }
+	public virtual ProfileComponent Component { get; private set; }
 }

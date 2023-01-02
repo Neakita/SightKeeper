@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SightKeeper.DAL.Domain.Abstract;
 using SightKeeper.DAL.Domain.Common;
+using SightKeeper.DAL.Domain.Common.Modifiers;
+using SightKeeper.DAL.Domain.Common.Synergies;
 using SightKeeper.DAL.Domain.Detector;
 
 namespace SightKeeper.DAL;
@@ -17,12 +19,17 @@ public class AppDbContext : DbContext
 	{
 	}
 
+	public DbSet<Profile> Profiles { get; set; } = null!;
+	public DbSet<ProfileComponent> ProfileComponents { get; set; } = null!;
+	public DbSet<ItemClassGroup> ItemClassesGroups { get; set; } = null!;
 	public DbSet<Model> Models { get; set; } = null!;
 	public DbSet<DetectorModel> DetectorModels { get; set; } = null!;
 	public DbSet<DetectorScreenshot> DetectorScreenshots { get; set; } = null!;
 	public DbSet<DetectorItem> DetectorItems { get; set; } = null!;
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
+	public DbSet<Modifier> Modifiers { get; set; } = null!;
+	public DbSet<Synergy> Synergies { get; set; } = null!;
 
 
 	public void RollBack()
@@ -71,5 +78,19 @@ public class AppDbContext : DbContext
 			DataSource = "App.db"
 		};
 		optionsBuilder.UseSqlite(connectionStringBuilder.ConnectionString);
+	}
+
+	protected override void OnModelCreating(ModelBuilder builder)
+	{
+		builder.Entity<AdaptiveAreaModifier>();
+		builder.Entity<AdaptiveResolutionModifier>();
+		builder.Entity<PassiveVariableResolutionModifier>();
+		builder.Entity<ResolutionMultiplierModifier>();
+		builder.Entity<VariableResolutionModifier>();
+		builder.Entity<KeyHoldSynergy>();
+		builder.Entity<KeyWrapper>();
+		builder.Entity<MultiKeySwitchSynergy>();
+		builder.Entity<SingleKeySwitchSynergy>();
+		base.OnModelCreating(builder);
 	}
 }

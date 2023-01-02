@@ -7,10 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.9"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.9"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="System.Windows.Forms">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\6.0.11\System.Windows.Forms.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
