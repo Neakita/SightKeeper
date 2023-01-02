@@ -14,9 +14,6 @@ public sealed class ItemClassesTests : DbRelatedTests
 		ItemClass itemClass = new("Test item class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 1, 1));
 		DetectorModel model = new("Test model");
-		DetectorScreenshot screenshot = new(model);
-		screenshot.Items.Add(item);
-		model.DetectorScreenshots.Add(screenshot);
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 

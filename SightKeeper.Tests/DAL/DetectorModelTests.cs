@@ -29,9 +29,10 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using AppDbContext dbContext = DbProvider.NewContext;
 		DetectorModel model = TestDetectorModel;
-		DetectorScreenshot screenshot = new(model);
+		Image image = new(Array.Empty<byte>(), new Resolution());
+		DetectorScreenshot screenshot = new(model, image);
 		ItemClass itemClass = new("class");
-		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 1, 1));
+		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 0, 0));
 		screenshot.Items.Add(item);
 		model.DetectorScreenshots.Add(screenshot);
 		
@@ -49,7 +50,8 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using AppDbContext dbContext = DbProvider.NewContext;
 		DetectorModel model = new("Test model");
-		DetectorScreenshot screenshot = new(model);
+		Image image = new(Array.Empty<byte>(), new Resolution());
+		DetectorScreenshot screenshot = new(model, image);
 		model.DetectorScreenshots.Add(screenshot);
 
 		dbContext.DetectorModels.Add(model);

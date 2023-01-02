@@ -1,30 +1,16 @@
-﻿using SightKeeper.DAL.Domain.Common;
-
-namespace SightKeeper.DAL.Domain.Abstract;
+﻿namespace SightKeeper.DAL.Domain.Abstract;
 
 public abstract class Screenshot
 {
-	public Screenshot() : this(new Resolution())
-	{
-	}
-
-	public Screenshot(Resolution resolution)
-	{
-		Resolution = resolution;
-		CreationDate = DateTime.UtcNow;
-	}
+	public Screenshot(Image image) => Image = image;
 
 
-	protected Screenshot(int id, DateTime creationDate)
+	protected Screenshot(int id)
 	{
 		Id = id;
-		CreationDate = creationDate;
-		Resolution = new Resolution();
+		Image = null!;
 	}
 
 	public int Id { get; private set; }
-
-	public DateTime CreationDate { get; private set; }
-
-	public Resolution Resolution { get; }
+	public Image Image { get; private set; }
 }
