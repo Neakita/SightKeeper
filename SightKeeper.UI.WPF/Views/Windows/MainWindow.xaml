@@ -28,7 +28,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-        <Grid Grid.Column="0" DataContext="{Binding HamburgerMenuVM}">
+        <Grid Grid.Column="0" DataContext="{Binding HamburgerMenuVM}" Name="HamburgerMenuContainer" Width="50">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition/>
@@ -47,7 +47,7 @@
                     <EventTrigger RoutedEvent="ToggleButton.Checked">
                         <EventTrigger.Actions>
                             <BeginStoryboard>
-                                <Storyboard TargetName="HamburgerMenuListBox" TargetProperty="Width">
+                                <Storyboard TargetName="HamburgerMenuContainer" TargetProperty="Width">
                                     <DoubleAnimation To="150" Duration="0:0:0.2">
                                         <DoubleAnimation.EasingFunction>
                                             <QuadraticEase EasingMode="EaseInOut"/>
@@ -78,7 +78,7 @@
                     <EventTrigger RoutedEvent="ToggleButton.Unchecked">
                         <EventTrigger.Actions>
                             <BeginStoryboard>
-                                <Storyboard TargetName="HamburgerMenuListBox" TargetProperty="Width">
+                                <Storyboard TargetName="HamburgerMenuContainer" TargetProperty="Width">
                                     <DoubleAnimation To="50" Duration="0:0:0.2">
                                         <DoubleAnimation.EasingFunction>
                                             <QuadraticEase EasingMode="EaseInOut"/>
@@ -109,7 +109,7 @@
                 </ToggleButton.Triggers>
             </ToggleButton>
             
-            <ListBox Grid.Row="1" Name="HamburgerMenuListBox" Width="50" Cursor="Hand" VerticalAlignment="Top"
+            <ListBox Grid.Row="1" Cursor="Hand" VerticalAlignment="Top"
                      ItemsSource="{Binding MenuItems, Mode=OneTime}"
                      SelectedItem="{Binding SelectedMenuItem, UpdateSourceTrigger=PropertyChanged}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
