@@ -2,23 +2,22 @@
 using System.Linq;
 using MahApps.Metro.IconPacks;
 using ReactiveUI;
-using SightKeeper.UI.WPF.Abstract;
+using ReactiveUI.Fody.Helpers;
 using SightKeeper.UI.WPF.Views.Pages;
 
 namespace SightKeeper.UI.WPF.ViewModels.Elements;
 
-public sealed class HamburgerMenuVM : ReactiveObject, IHamburgerMenuVM
+public sealed class HamburgerMenuVM : ReactiveObject
 {
-	private IContentInclusiveMenuItem _selectedMenuItem;
-
+	private HamburgerMenuItem _selectedMenuItem;
 
 	public HamburgerMenuVM(ModelsPage modelsPage)
 	{
-		MenuItems = new IContentInclusiveMenuItem[]
+		MenuItems = new HamburgerMenuItem[]
 		{
-			new HamburgerContentMenuItem("Dashboard", new Dashboard(), PackIconBootstrapIconsKind.Grid1x2,
+			new("Dashboard", new Dashboard(), PackIconBootstrapIconsKind.Grid1x2,
 				PackIconBootstrapIconsKind.Grid1x2Fill),
-			new HamburgerContentMenuItem("Models", modelsPage, PackIconBootstrapIconsKind.Grid,
+			new("Models", modelsPage, PackIconBootstrapIconsKind.Grid,
 				PackIconBootstrapIconsKind.GridFill)
 		};
 
@@ -26,12 +25,14 @@ public sealed class HamburgerMenuVM : ReactiveObject, IHamburgerMenuVM
 		_selectedMenuItem.IsSelected = true;
 	}
 
-	public IEnumerable<IContentInclusiveMenuItem> MenuItems { get; }
+	[Reactive] public bool IsExpanded { get; set; }
+	
+	public IEnumerable<HamburgerMenuItem> MenuItems { get; }
 
-	public IEnumerable<IContentInclusiveMenuItem> OptionsMenuItems { get; } =
-		Enumerable.Empty<IContentInclusiveMenuItem>();
+	public IEnumerable<HamburgerMenuItem> OptionsMenuItems { get; } =
+		Enumerable.Empty<HamburgerMenuItem>();
 
-	public IContentInclusiveMenuItem SelectedMenuItem
+	public HamburgerMenuItem SelectedMenuItem
 	{
 		get => _selectedMenuItem;
 		set

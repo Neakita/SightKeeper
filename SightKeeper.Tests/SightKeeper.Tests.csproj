@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net6.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\SightKeeper.Backend.Windows\SightKeeper.Backend.Windows.csproj" />
         <ProjectReference Include="..\SightKeeper.Backend\SightKeeper.Backend.csproj" />
     </ItemGroup>
 

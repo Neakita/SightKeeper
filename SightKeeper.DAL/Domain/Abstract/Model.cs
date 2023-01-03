@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using SightKeeper.DAL.Domain.Common;
+﻿using SightKeeper.DAL.Domain.Common;
 
 namespace SightKeeper.DAL.Domain.Abstract;
 
@@ -31,4 +30,5 @@ public abstract class Model
 	public Resolution Resolution { get; }
 	public List<ItemClass> Classes { get; }
 	public Game? Game { get; set; }
+	public ModelState State { get; set; }
 }

@@ -55,4 +55,8 @@
         </Page>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Abstract" />
+    </ItemGroup>
+
 </Project>

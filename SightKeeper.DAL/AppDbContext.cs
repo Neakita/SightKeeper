@@ -34,37 +34,26 @@ public class AppDbContext : DbContext
 
 	public void RollBack()
 	{
-		IEnumerable<EntityEntry> changedEntries = ChangeTracker.Entries().Where(x => x.State != EntityState.Unchanged);
-		foreach (EntityEntry entry in changedEntries)
-			switch (entry.State)
-			{
-				case EntityState.Modified:
-					entry.CurrentValues.SetValues(entry.OriginalValues);
-					entry.State = EntityState.Unchanged;
-					break;
-				case EntityState.Added:
-					entry.State = EntityState.Detached;
-					break;
-				case EntityState.Deleted:
-					entry.State = EntityState.Unchanged;
-					break;
-			}
+		IEnumerable<EntityEntry> changedEntries = ChangeTracker.Entries().Where(entry => entry.State != EntityState.Unchanged);
+		foreach (EntityEntry entry in changedEntries) RollbackEntry(entry);
 	}
 
-	public void RollBack<TEntity>(TEntity entity) where TEntity : class
+	public void RollBack<TEntity>(TEntity entity) where TEntity : class => RollbackEntry(Entry(entity));
+
+	private void RollbackEntry(EntityEntry entry)
 	{
-		EntityEntry<TEntity> entry = Entry(entity);
 		switch (entry.State)
 		{
 			case EntityState.Modified:
-				entry.CurrentValues.SetValues(entry.OriginalValues);
+			case EntityState.Deleted:
+				entry.State = EntityState.Modified; //Revert changes made to deleted entity.
 				entry.State = EntityState.Unchanged;
 				break;
 			case EntityState.Added:
 				entry.State = EntityState.Detached;
 				break;
-			case EntityState.Deleted:
-				entry.State = EntityState.Unchanged;
+			case EntityState.Detached:
+				entry.Reload();
 				break;
 		}
 	}
