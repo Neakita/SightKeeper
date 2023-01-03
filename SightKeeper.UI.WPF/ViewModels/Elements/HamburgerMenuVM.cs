@@ -7,7 +7,7 @@ using SightKeeper.UI.WPF.Views.Pages;
 
 namespace SightKeeper.UI.WPF.ViewModels.Elements;
 
-public sealed class HamburgerMenuVM : ReactiveObject
+public sealed class HamburgerMenuVM : ReactiveObject, IHamburgerMenuVM
 {
 	public HamburgerMenuVM(ModelsPage modelsPage)
 	{

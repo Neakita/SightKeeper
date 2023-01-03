@@ -6,8 +6,7 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
                  xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Windows"
-                 xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-                 xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 xmlns:controls="clr-namespace:SightKeeper.UI.WPF.Views.Controls"
                  mc:Ignorable="d"
                  Title="Sight Keeper" Height="450" Width="800"
                  Style="{StaticResource SightKeeperWindow}"
@@ -28,123 +27,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
-        <Grid Grid.Column="0" DataContext="{Binding HamburgerMenuVM}" Name="HamburgerMenuContainer" Width="50">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            
-            <ToggleButton Grid.Row="0" md:ButtonAssist.CornerRadius="0" Height="50"
-                          IsChecked="{Binding IsExpanded, UpdateSourceTrigger=PropertyChanged}"
-                          Style="{StaticResource MaterialDesignFlatButton}" md:RippleAssist.IsDisabled="True">
-                
-                <Grid>
-                    <ContentControl Name="ListIcon" Content="{icons:BootstrapIcons List}"/>
-                    <ContentControl Name="ArrowIcon" Content="{icons:BootstrapIcons ArrowLeft}" Opacity="0"/>
-                </Grid>
-                
-                <ToggleButton.Triggers>
-                    <EventTrigger RoutedEvent="ToggleButton.Checked">
-                        <EventTrigger.Actions>
-                            <BeginStoryboard>
-                                <Storyboard TargetName="HamburgerMenuContainer" TargetProperty="Width">
-                                    <DoubleAnimation To="150" Duration="0:0:0.2">
-                                        <DoubleAnimation.EasingFunction>
-                                            <QuadraticEase EasingMode="EaseInOut"/>
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                </Storyboard>
-                            </BeginStoryboard>
-                            <BeginStoryboard>
-                                <Storyboard TargetName="ListIcon" TargetProperty="Opacity">
-                                    <DoubleAnimation To="0" Duration="0:0:0.2">
-                                        <DoubleAnimation.EasingFunction>
-                                            <QuadraticEase EasingMode="EaseInOut"/>
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                </Storyboard>
-                            </BeginStoryboard>
-                            <BeginStoryboard>
-                                <Storyboard TargetName="ArrowIcon" TargetProperty="Opacity">
-                                    <DoubleAnimation To="1" Duration="0:0:0.2">
-                                        <DoubleAnimation.EasingFunction>
-                                            <QuadraticEase EasingMode="EaseInOut"/>
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger.Actions>
-                    </EventTrigger>
-                    <EventTrigger RoutedEvent="ToggleButton.Unchecked">
-                        <EventTrigger.Actions>
-                            <BeginStoryboard>
-                                <Storyboard TargetName="HamburgerMenuContainer" TargetProperty="Width">
-                                    <DoubleAnimation To="50" Duration="0:0:0.2">
-                                        <DoubleAnimation.EasingFunction>
-                                            <QuadraticEase EasingMode="EaseInOut"/>
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                </Storyboard>
-                            </BeginStoryboard>
-                            <BeginStoryboard>
-                                <Storyboard TargetName="ListIcon" TargetProperty="Opacity">
-                                    <DoubleAnimation To="1" Duration="0:0:0.2">
-                                        <DoubleAnimation.EasingFunction>
-                                            <QuadraticEase EasingMode="EaseInOut"/>
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                </Storyboard>
-                            </BeginStoryboard>
-                            <BeginStoryboard>
-                                <Storyboard TargetName="ArrowIcon" TargetProperty="Opacity">
-                                    <DoubleAnimation To="0" Duration="0:0:0.2">
-                                        <DoubleAnimation.EasingFunction>
-                                            <QuadraticEase EasingMode="EaseInOut"/>
-                                        </DoubleAnimation.EasingFunction>
-                                    </DoubleAnimation>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger.Actions>
-                    </EventTrigger>
-                </ToggleButton.Triggers>
-            </ToggleButton>
-            
-            <ListBox Grid.Row="1" Cursor="Hand" VerticalAlignment="Top"
-                     ItemsSource="{Binding MenuItems, Mode=OneTime}"
-                     SelectedItem="{Binding SelectedMenuItem, UpdateSourceTrigger=PropertyChanged}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
-                        <Setter Property="IsSelected"
-                                Value="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Setter Property="Height" Value="50"/>
-                        <Setter Property="Margin" Value="-4 0 0 0"/>
-                        <Setter Property="FontWeight" Value="Normal"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="FontWeight" Value="DemiBold"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <ContentControl Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                            Content="{Binding Icon, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Label, Mode=OneTime}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                
-            </ListBox>
-        </Grid>
+        <controls:CustomHamburgerMenu Grid.Column="0" DataContext="{Binding HamburgerMenuVM}"/>
         
         
     </Grid>
