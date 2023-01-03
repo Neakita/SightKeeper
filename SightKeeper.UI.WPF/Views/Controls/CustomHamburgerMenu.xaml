@@ -91,7 +91,10 @@
             <ListBox Grid.Row="1" Cursor="Hand" VerticalAlignment="Top"
                      ItemsSource="{Binding MenuItems, Mode=OneTime}"
                      SelectedItem="{Binding SelectedMenuItem, UpdateSourceTrigger=PropertyChanged}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown" 
+                     PreviewMouseLeftButtonUp="ListBox_PreviewMouseLeftButtonUp"
+                     PreviewMouseMove="ListBox_PreviewMouseMove">
                 
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">

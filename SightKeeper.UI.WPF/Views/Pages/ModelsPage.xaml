@@ -13,14 +13,14 @@
     <StackPanel>
 
         <GroupBox DataContext="{Binding DetectorModelsList}"
-                  Header="{Binding}">
+                  Header="{Binding}" BorderThickness="0">
 
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock Text="Detectors" />
+                        <TextBlock Text="Detectors" FontSize="12" VerticalAlignment="Center"/>
                         <Button HorizontalAlignment="Right" Content="{icons:BootstrapIcons Plus}"
-                                Command="{Binding CreateNewModelCommand, Mode=OneTime}" />
+                                Command="{Binding CreateNewModelCommand, Mode=OneTime}" Style="{StaticResource SingleIconButton}" Margin="0"/>
                     </Grid>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>

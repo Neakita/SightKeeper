@@ -29,6 +29,7 @@
         
         <controls:CustomHamburgerMenu Grid.Column="0" DataContext="{Binding HamburgerMenuVM}"/>
         
+        <ContentControl Grid.Column="1" Content="{Binding Content, UpdateSourceTrigger=PropertyChanged}"/>
         
     </Grid>
     
