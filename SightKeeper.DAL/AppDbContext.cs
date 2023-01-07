@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SightKeeper.DAL.Domain.Abstract;
+using SightKeeper.DAL.Domain.Classifier;
 using SightKeeper.DAL.Domain.Common;
 using SightKeeper.DAL.Domain.Common.Modifiers;
 using SightKeeper.DAL.Domain.Common.Synergies;
@@ -26,6 +27,7 @@ public class AppDbContext : DbContext
 	public DbSet<DetectorModel> DetectorModels { get; set; } = null!;
 	public DbSet<DetectorScreenshot> DetectorScreenshots { get; set; } = null!;
 	public DbSet<DetectorItem> DetectorItems { get; set; } = null!;
+	public DbSet<ClassifierModel> ClassifierModels { get; set; } = null!;
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 	public DbSet<Modifier> Modifiers { get; set; } = null!;

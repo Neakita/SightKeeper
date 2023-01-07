@@ -5,37 +5,80 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Pages"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DesignHeight="300" d:DesignWidth="300"
              xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
              d:DataContext="{d:DesignInstance viewModels:ModelsPageVM}">
 
-    <StackPanel>
-
-        <GroupBox DataContext="{Binding DetectorModelsList}"
-                  Header="{Binding}" BorderThickness="0">
-
-            <GroupBox.HeaderTemplate>
+    <ScrollViewer HorizontalAlignment="Center">
+        <ItemsControl ItemsSource="{Binding ModelsLists, Mode=OneTime}"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      HorizontalAlignment="Center" ScrollViewer.CanContentScroll="False" Margin="20">
+            <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <TextBlock Text="Detectors" FontSize="12" VerticalAlignment="Center"/>
-                        <Button HorizontalAlignment="Right" Content="{icons:BootstrapIcons Plus}"
-                                Command="{Binding CreateNewModelCommand, Mode=OneTime}" Style="{StaticResource SingleIconButton}" Margin="0"/>
-                    </Grid>
+                    <Expander Header="{Binding}" BorderThickness="0" md:ColorZoneAssist.Mode="SecondaryMid" Padding="0"
+                              MinWidth="400" MaxWidth="1000" Style="{StaticResource MaterialDesignExpander}">
+                        <Expander.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding Label, Mode=OneTime}" FontSize="18" FontWeight="SemiBold"
+                                               VerticalAlignment="Center" />
+                                    <Button HorizontalAlignment="Right" Content="{icons:BootstrapIcons Plus}"
+                                            Command="{Binding CreateNewModelCommand, Mode=OneTime}"
+                                            Style="{StaticResource SingleIconButton}" Margin="0" />
+                                </Grid>
+                            </DataTemplate>
+                        </Expander.HeaderTemplate>
+
+                        <StackPanel Margin="20">
+                            <ItemsControl ItemsSource="{Binding Models, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource WrapPanelItemsControl}" Background="Transparent"
+                                     BorderThickness="0"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     HorizontalAlignment="Center" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                     ScrollViewer.CanContentScroll="False">
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{StaticResource AttentionToActionBrush}"
+                                                CornerRadius="10" Margin="10">
+
+                                            <Grid Width="300" Height="90">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="80" />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                           FontSize="14" Margin="5" />
+
+                                            </Grid>
+
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+
+                            </ItemsControl>
+
+                            <Border
+                                Visibility="{Binding Models, Converter={StaticResource EmptyToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="20">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="There are no models here yet. Create them by clicking the"
+                                               Margin="5" FontSize="14" />
+                                    <ContentControl Content="{icons:BootstrapIcons Plus}" VerticalAlignment="Center" />
+                                    <TextBlock Text="button" Margin="5" FontSize="14" />
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+
+
+                    </Expander>
                 </DataTemplate>
-            </GroupBox.HeaderTemplate>
-
-            <ListBox ItemsSource="{Binding Models, UpdateSourceTrigger=PropertyChanged}"
-                     md:ListBoxItemAssist.ShowSelection="False">
-
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-
-            </ListBox>
-        </GroupBox>
-    </StackPanel>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
 
 </UserControl>

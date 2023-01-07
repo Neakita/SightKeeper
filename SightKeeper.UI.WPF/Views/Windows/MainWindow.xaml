@@ -7,6 +7,8 @@
                  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
                  xmlns:viewModels="clr-namespace:SightKeeper.UI.WPF.ViewModels.Windows"
                  xmlns:controls="clr-namespace:SightKeeper.UI.WPF.Views.Controls"
+                 xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+                 xmlns:dialogs="clr-namespace:SightKeeper.UI.WPF.Dialogs"
                  mc:Ignorable="d"
                  Title="Sight Keeper" Height="450" Width="800"
                  Style="{StaticResource SightKeeperWindow}"
@@ -21,16 +23,46 @@
         </DataTemplate>
     </mah:MetroWindow.IconTemplate>
     
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+    <md:DialogHost Name="DialogHost">
+        <md:DialogHost.DialogContentTemplate>
+            <DataTemplate DataType="{x:Type dialogs:IDialog}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="{Binding Header}"/>
+                    <ContentControl Grid.Row="1" Content="{Binding}"/>
+                    
+                </Grid>
+            </DataTemplate>
+        </md:DialogHost.DialogContentTemplate>
+    
+        <Grid>
+            
+            <Grid.Triggers>
+                <Trigger SourceName="DialogHost" Property="IsOpen" Value="True">
+                    <Setter Property="Grid.Effect">
+                        <Setter.Value>
+                            <BlurEffect Radius="10"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Grid.Triggers>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
         
-        <controls:CustomHamburgerMenu Grid.Column="0" DataContext="{Binding HamburgerMenuVM}"/>
+            <controls:CustomHamburgerMenu Grid.Column="0" DataContext="{Binding HamburgerMenuVM}"/>
         
-        <ContentControl Grid.Column="1" Content="{Binding Content, UpdateSourceTrigger=PropertyChanged}"/>
+            <ContentControl Grid.Column="1" Content="{Binding Content, UpdateSourceTrigger=PropertyChanged}"/>
         
-    </Grid>
+        </Grid>
+        
+    </md:DialogHost>
     
 </mah:MetroWindow>

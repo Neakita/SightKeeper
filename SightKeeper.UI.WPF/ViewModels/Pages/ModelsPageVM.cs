@@ -1,5 +1,5 @@
-﻿using ReactiveUI;
-using SightKeeper.DAL.Domain.Detector;
+﻿using System.Collections.Generic;
+using ReactiveUI;
 using SightKeeper.UI.WPF.ViewModels.Domain;
 using SightKeeper.UI.WPF.ViewModels.Elements;
 
@@ -7,8 +7,10 @@ namespace SightKeeper.UI.WPF.ViewModels.Pages;
 
 public sealed class ModelsPageVM : ReactiveObject
 {
-	public ModelsPageVM(IModelsListVM<DetectorModelVM, DetectorModel> detectorModelsList) =>
-		DetectorModelsList = detectorModelsList;
-
-	public IModelsListVM<DetectorModelVM, DetectorModel> DetectorModelsList { get; }
+	public ModelsPageVM(IModelsList<DetectorModelVM> detectorModelsList, IModelsList<ClassifierModelVM> classifierModelsList)
+	{
+		ModelsLists = new IModelsList[] {detectorModelsList, classifierModelsList};
+	}
+	
+	public IEnumerable<IModelsList> ModelsLists { get; }
 }

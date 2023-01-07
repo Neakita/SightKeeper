@@ -2,7 +2,11 @@
 
 public abstract class Screenshot
 {
-	public Screenshot(Image image) => Image = image;
+	public Screenshot(Image image)
+	{
+		Image = image;
+		CreationDate = DateTime.UtcNow;
+	}
 
 
 	protected Screenshot(int id)
@@ -13,4 +17,5 @@ public abstract class Screenshot
 
 	public int Id { get; private set; }
 	public Image Image { get; private set; }
+	public DateTime CreationDate { get; private set; }
 }

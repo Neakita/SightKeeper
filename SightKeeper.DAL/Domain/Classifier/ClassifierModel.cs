@@ -1,8 +1,10 @@
-﻿using SightKeeper.DAL.Domain.Abstract;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using SightKeeper.DAL.Domain.Abstract;
 using SightKeeper.DAL.Domain.Common;
 
 namespace SightKeeper.DAL.Domain.Classifier;
 
+[Table("ClassifierModels")]
 public sealed class ClassifierModel : Model
 {
 	public ClassifierModel(string name) : base(name)

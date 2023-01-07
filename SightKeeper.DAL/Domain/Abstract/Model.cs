@@ -11,8 +11,9 @@ public abstract class Model
 	public Model(string name, Resolution resolution)
 	{
 		Name = name;
+		Description = string.Empty;
 		Resolution = resolution;
-		Classes = null!;
+		Classes = new List<ItemClass>();
 	}
 
 
@@ -20,15 +21,18 @@ public abstract class Model
 	{
 		Id = id;
 		Name = name;
+		Description = null!;
 		Resolution = null!;
 		Classes = null!;
 	}
 
 	public int Id { get; private set; }
 	public string Name { get; set; }
+	public string Description { get; set; }
+	public Image? Image { get; set; }
 	
-	public Resolution Resolution { get; }
-	public List<ItemClass> Classes { get; }
+	public Resolution Resolution { get; private set; }
+	public List<ItemClass> Classes { get; private set; }
 	public Game? Game { get; set; }
 	public ModelState State { get; set; }
 }

@@ -6,6 +6,7 @@ using Serilog;
 using Serilog.Core;
 using SightKeeper.Backend.Models;
 using SightKeeper.DAL;
+using SightKeeper.DAL.Domain.Classifier;
 using SightKeeper.DAL.Domain.Detector;
 using SightKeeper.UI.WPF.Misc;
 using SightKeeper.UI.WPF.ViewModels.Domain;
@@ -68,15 +69,22 @@ internal static class AppBootstrapper
 		SplatRegistrations.Register<MainWindowVM>();
 		SplatRegistrations.Register<HamburgerMenuVM>();
 		SplatRegistrations.Register<ModelsPageVM>();
-		SplatRegistrations
-			.Register<IModelsListVM<DetectorModelVM, DetectorModel>, ModelsListVM<DetectorModelVM, DetectorModel>>();
+		SplatRegistrations.Register<IModelsList<DetectorModelVM>, GenericModelsList<DetectorModel, DetectorModelVM>>();
+		SplatRegistrations.Register<IModelsList<ClassifierModelVM>, GenericModelsList<ClassifierModel, ClassifierModelVM>>();
 		SplatRegistrations.Register<IModelToVMStrategy<DetectorModelVM, DetectorModel>, DetectorModelToVMStrategy>();
+		SplatRegistrations.Register<IModelToVMStrategy<ClassifierModelVM, ClassifierModel>, ClassifierModelToVMStrategy>();
+		SplatRegistrations.Register<IModelsListInfo<DetectorModelVM>, DetectorModelsListInfo>();
+		SplatRegistrations.Register<IModelsListInfo<ClassifierModelVM>, ClassifierModelsListInfo>();
 	}
 
 	private static void SetupServices()
 	{
-		SplatRegistrations.Register<IModelsProvider<DetectorModel>, DetectorModelsProvider>();
-		SplatRegistrations.Register<IModelsService<DetectorModel>, DetectorModelsService>();
+		SplatRegistrations.Register<IModelsProvider<DetectorModel>, GenericModelsProvider<DetectorModel>>();
+		SplatRegistrations.Register<IModelsService<DetectorModel>, GenericModelsService<DetectorModel>>();
+		SplatRegistrations.Register<IModelsProvider<ClassifierModel>, GenericModelsProvider<ClassifierModel>>();
+		SplatRegistrations.Register<IModelsService<ClassifierModel>, GenericModelsService<ClassifierModel>>();
+		SplatRegistrations.Register<IModelsFactory<DetectorModel>, DetectorModelsFactory>();
+		SplatRegistrations.Register<IModelsFactory<ClassifierModel>, ClassifierModelsFactory>();
 	}
 
 	private static void SetupExceptionHandling()

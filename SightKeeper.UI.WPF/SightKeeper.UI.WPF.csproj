@@ -43,6 +43,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\SightKeeper.Backend.Windows\SightKeeper.Backend.Windows.csproj" />
         <ProjectReference Include="..\SightKeeper.Backend\SightKeeper.Backend.csproj" />
         <ProjectReference Include="..\SightKeeper.DAL\SightKeeper.DAL.csproj" />
     </ItemGroup>

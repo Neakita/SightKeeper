@@ -27,4 +27,13 @@
         <ProjectReference Include="..\SightKeeper.Backend\SightKeeper.Backend.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Backend\Samples\duck.jpg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Backend\Samples\LoremIpsum.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

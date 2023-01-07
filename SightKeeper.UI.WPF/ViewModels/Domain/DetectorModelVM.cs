@@ -2,10 +2,9 @@
 
 namespace SightKeeper.UI.WPF.ViewModels.Domain;
 
-public sealed class DetectorModelVM : IModelVM<DetectorModel>
+public sealed class DetectorModelVM : ModelVM, IModelVM<DetectorModel>
 {
-	internal DetectorModelVM(DetectorModel detectorModel) => Model = detectorModel;
+	internal DetectorModelVM(DetectorModel detectorModel) : base(detectorModel) => Model = detectorModel;
 
-	public DetectorModel Model { get; }
-	public string Name => Model.Name;
+	public new DetectorModel Model { get; }
 }

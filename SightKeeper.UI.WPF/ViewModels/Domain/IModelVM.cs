@@ -2,9 +2,15 @@
 
 namespace SightKeeper.UI.WPF.ViewModels.Domain;
 
-public interface IModelVM<TModel> where TModel : Model
+public interface IModelVM
 {
-	TModel Model { get; }
+	string Name { get; set; }
+	
+	
+	public Model Model { get; }
+}
 
-	string Name { get; }
+public interface IModelVM<TModel> : IModelVM where TModel : Model
+{
+	new TModel Model { get; }
 }

@@ -6,9 +6,9 @@ using SightKeeper.DAL.Domain.Detector;
 
 namespace SightKeeper.Tests.Backend.Models;
 
-public sealed class DetectorModelsServiceTests : DbRelatedTests
+public sealed class GenericModelsServiceTests : DbRelatedTests
 {
-	private DetectorModelsService Service => new(DbProvider);
+	private GenericModelsService<DetectorModel> Service => new(new DetectorModelsFactory(), DbProvider);
 
 	[Fact]
 	public void ShouldCreateDetectorModel()
@@ -17,7 +17,7 @@ public sealed class DetectorModelsServiceTests : DbRelatedTests
 		const string testModelName = "Test model";
 
 		// act
-		Service.Create(testModelName, 320, 320);
+		Service.Create(testModelName, new Resolution());
 
 		// assert
 		using AppDbContext dbContext = DbProvider.NewContext;

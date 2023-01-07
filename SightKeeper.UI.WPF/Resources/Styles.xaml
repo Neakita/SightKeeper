@@ -4,6 +4,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+                    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
                     mc:Ignorable="d">
 
     <Style x:Key="SightKeeperWindow" TargetType="mah:MetroWindow">
@@ -11,14 +12,14 @@
         <Setter Property="GlowBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
     </Style>
 
-    <Style x:Key="FlatButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+    <Style x:Key="FlatButton" TargetType="ButtonBase" BasedOn="{StaticResource MaterialDesignFlatButton}">
         <Setter Property="Height" Value="40" />
         <Setter Property="Margin" Value="5" />
         <Setter Property="md:ButtonAssist.CornerRadius" Value="5" />
         <Setter Property="MinWidth" Value="40" />
     </Style>
 
-    <Style x:Key="SingleIconButton" TargetType="Button" BasedOn="{StaticResource FlatButton}">
+    <Style x:Key="SingleIconButton" TargetType="ButtonBase" BasedOn="{StaticResource FlatButton}">
         <Setter Property="Width" Value="40" />
         <Setter Property="Padding" Value="0" />
     </Style>
@@ -30,6 +31,39 @@
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" />
                 </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="WrapPanelItemsControl" TargetType="ItemsControl">
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="DialogApplyButton" TargetType="ButtonBase" BasedOn="{StaticResource FlatButton}">
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Horizontal">
+                    <icons:BootstrapIcons Kind="CheckLg"/>
+                    <TextBlock Text="Apply" Margin="5 0 0 0"/>
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="DialogCancelButton" TargetType="ButtonBase" BasedOn="{StaticResource FlatButton}">
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Vertical">
+                    <icons:BootstrapIcons Kind="XLg"/>
+                    <TextBlock Text="Cancel" Margin="5 0 0 0"/>
+                </StackPanel>
             </Setter.Value>
         </Setter>
     </Style>
