@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using SightKeeper.Backend.Models;
-using SightKeeper.DAL;
-using SightKeeper.DAL.Domain.Abstract;
-using SightKeeper.DAL.Domain.Classifier;
-using SightKeeper.DAL.Domain.Common;
-using SightKeeper.DAL.Domain.Detector;
+using SightKeeper.Domain.Abstract;
+using SightKeeper.Domain.Classifier;
+using SightKeeper.Domain.Common;
+using SightKeeper.Domain.Detector;
+using SightKeeper.Persistance;
 
 namespace SightKeeper.Tests.Backend.Models;
 

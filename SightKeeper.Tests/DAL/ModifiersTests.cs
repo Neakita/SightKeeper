@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
-using SightKeeper.DAL;
-using SightKeeper.DAL.Domain.Common;
-using SightKeeper.DAL.Domain.Common.Modifiers;
-using SightKeeper.DAL.Domain.Detector;
+using SightKeeper.Domain.Common;
+using SightKeeper.Domain.Common.Modifiers;
+using SightKeeper.Domain.Detector;
+using SightKeeper.Persistance;
 
 namespace SightKeeper.Tests.DAL;
 

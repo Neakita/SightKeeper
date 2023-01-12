@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using SightKeeper.DAL.Domain.Common;
-using Image = SightKeeper.DAL.Image;
+﻿using SightKeeper.Domain.Common;
 
 namespace SightKeeper.Backend.Windows;
 

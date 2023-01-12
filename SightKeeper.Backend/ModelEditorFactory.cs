@@ -1,4 +1,4 @@
-﻿using SightKeeper.DAL.Domain.Abstract;
+﻿using SightKeeper.Domain.Abstract;
 using Splat;
 
 namespace SightKeeper.Backend;

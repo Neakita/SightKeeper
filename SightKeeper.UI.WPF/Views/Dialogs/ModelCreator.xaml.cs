@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using SightKeeper.Common;
+using SightKeeper.Infrastructure;
 using SightKeeper.UI.WPF.Dialogs;
 using SightKeeper.UI.WPF.ViewModels.Dialogs;
 

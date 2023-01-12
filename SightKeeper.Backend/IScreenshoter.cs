@@ -1,4 +1,4 @@
-﻿using SightKeeper.DAL;
+﻿using SightKeeper.Domain.Common;
 
 namespace SightKeeper.Backend;
 

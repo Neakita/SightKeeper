@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SightKeeper.Backend;
-using SightKeeper.DAL;
-using SightKeeper.DAL.Domain.Detector;
+using SightKeeper.Domain.Detector;
+using SightKeeper.Persistance;
 
 namespace SightKeeper.Tests.Backend.Models;
 

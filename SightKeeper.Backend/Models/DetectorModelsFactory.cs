@@ -1,5 +1,5 @@
-﻿using SightKeeper.DAL.Domain.Common;
-using SightKeeper.DAL.Domain.Detector;
+﻿using SightKeeper.Domain.Common;
+using SightKeeper.Domain.Detector;
 
 namespace SightKeeper.Backend.Models;
 

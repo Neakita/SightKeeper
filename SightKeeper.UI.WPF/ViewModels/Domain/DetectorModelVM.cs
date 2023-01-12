@@ -1,4 +1,4 @@
-﻿using SightKeeper.DAL.Domain.Detector;
+﻿using SightKeeper.Domain.Detector;
 
 namespace SightKeeper.UI.WPF.ViewModels.Domain;
 

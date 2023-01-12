@@ -1,4 +1,4 @@
-﻿using SightKeeper.DAL.Domain.Abstract;
+﻿using SightKeeper.Domain.Abstract;
 using SightKeeper.UI.WPF.ViewModels.Domain;
 
 namespace SightKeeper.UI.WPF.Misc;

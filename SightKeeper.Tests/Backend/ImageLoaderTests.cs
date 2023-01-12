@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using SightKeeper.Backend.Windows;
-using SightKeeper.DAL;
+using SightKeeper.Domain.Common;
 
 namespace SightKeeper.Tests.Backend;
 

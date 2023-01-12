@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using SightKeeper.DAL;
-using SightKeeper.DAL.Domain.Common;
+using SightKeeper.Domain.Common;
+using SightKeeper.Persistance;
 
 namespace SightKeeper.Tests.DAL;
 

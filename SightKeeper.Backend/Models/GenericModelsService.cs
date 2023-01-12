@@ -1,6 +1,6 @@
-﻿using SightKeeper.DAL;
-using SightKeeper.DAL.Domain.Abstract;
-using SightKeeper.DAL.Domain.Common;
+﻿using SightKeeper.Persistance;
+using SightKeeper.Domain.Abstract;
+using SightKeeper.Domain.Common;
 
 namespace SightKeeper.Backend.Models;
 

@@ -1,5 +1,5 @@
-﻿using SightKeeper.DAL.Domain.Classifier;
-using SightKeeper.DAL.Domain.Common;
+﻿using SightKeeper.Domain.Classifier;
+using SightKeeper.Domain.Common;
 
 namespace SightKeeper.Backend.Models;
 

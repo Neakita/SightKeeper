@@ -1,8 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using FluentAssertions;
-using SightKeeper.DAL;
-using SightKeeper.DAL.Domain.Common;
-using SightKeeper.DAL.Domain.Detector;
+﻿using FluentAssertions;
+using SightKeeper.Domain.Common;
+using SightKeeper.Domain.Detector;
+using SightKeeper.Persistance;
 
 namespace SightKeeper.Tests.DAL;
 

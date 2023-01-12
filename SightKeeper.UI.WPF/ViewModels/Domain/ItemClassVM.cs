@@ -1,5 +1,5 @@
 ﻿using ReactiveUI;
-using SightKeeper.DAL.Domain.Common;
+using SightKeeper.Domain.Common;
 
 namespace SightKeeper.UI.WPF.ViewModels.Domain;
 

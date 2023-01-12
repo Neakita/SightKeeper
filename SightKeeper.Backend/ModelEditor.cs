@@ -1,5 +1,5 @@
-﻿using SightKeeper.DAL;
-using SightKeeper.DAL.Domain.Abstract;
+﻿using SightKeeper.Persistance;
+using SightKeeper.Domain.Abstract;
 
 namespace SightKeeper.Backend;
 
