@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ReactiveUI;
 using SightKeeper.Backend.Windows;
-using SightKeeper.DAL;
 using SightKeeper.DAL.Domain.Abstract;
 using SightKeeper.DAL.Domain.Common;
 using Image = System.Drawing.Image;

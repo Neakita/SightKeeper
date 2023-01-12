@@ -7,12 +7,12 @@ namespace SightKeeper.UI.WPF.ViewModels.Dialogs;
 
 public sealed class ModelCreatorVM : ReactiveObject, IModelCreatorVM
 {
-	public string NewModelName { get; set; } = "New model";
+	public string Name { get; set; } = "New model";
 	public ushort ResolutionWidth { get; set; } = 320;
 	public ushort ResolutionHeight { get; set; } = 320;
-	public ModelType ModelType { get; set; } = ModelType.Detector;
+	public ModelType Type { get; set; } = ModelType.Detector;
 
-	public IEnumerable<ModelType> AvailableModelTypes { get; } = new[] {ModelType.Detector, ModelType.Classifier};
+	public IEnumerable<ModelType> AvailableTypes { get; } = new[] {ModelType.Detector, ModelType.Classifier};
 
 	public ICommand ApplyCommand { get; }
 	public ICommand CancelCommand { get; }
