@@ -3,14 +3,13 @@ using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Tests;
 
-public sealed class TestDbProvider : IAppDbProvider
+public sealed class TestDbContextFactory : IAppDbContextFactory
 {
 	private readonly DbContextOptions<AppDbContext> _options;
-
-
-	public TestDbProvider() =>
+	
+	public TestDbContextFactory() =>
 		_options = new DbContextOptionsBuilder<AppDbContext>()
 			.UseInMemoryDatabase(Guid.NewGuid().ToString("N")).Options;
-
-	public AppDbContext NewContext => new(_options);
+	
+	public AppDbContext CreateDbContext() => new(_options);
 }

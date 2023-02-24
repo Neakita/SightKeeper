@@ -2,7 +2,6 @@
 
 namespace SightKeeper.Infrastructure.Data;
 
-public interface IDbProvider<T> where T : DbContext
+public interface IAppDbContextFactory : IDbContextFactory<AppDbContext>
 {
-	T NewContext { get; }
 }

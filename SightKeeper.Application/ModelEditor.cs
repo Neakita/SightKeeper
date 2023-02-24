@@ -11,7 +11,7 @@ public sealed class ModelEditor : IModelEditor
 	public void SaveChanges()
 	{
 		if (EditableModel == null) throw new InvalidOperationException($"{nameof(EditableModel)} was null.");
-		using AppDbContext dbContext = _dbProvider.NewContext;
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Models.Update(EditableModel);
 		dbContext.SaveChanges();
 	}
@@ -19,7 +19,7 @@ public sealed class ModelEditor : IModelEditor
 	public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
 		if (EditableModel == null) throw new InvalidOperationException($"{nameof(EditableModel)} was null.");
-		await using AppDbContext dbContext = _dbProvider.NewContext;
+		await using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Models.Update(EditableModel);
 		await dbContext.SaveChangesAsync(cancellationToken);
 	}
@@ -27,22 +27,22 @@ public sealed class ModelEditor : IModelEditor
 	public void DiscardChanges()
 	{
 		if (EditableModel == null) throw new InvalidOperationException($"{nameof(EditableModel)} was null.");
-		using AppDbContext dbContext = _dbProvider.NewContext;
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.RollBack(EditableModel);
 	}
 
 	public async Task DiscardChangesAsync(CancellationToken cancellationToken = default)
 	{
 		if (EditableModel == null) throw new InvalidOperationException($"{nameof(EditableModel)} was null.");
-		await using AppDbContext dbContext = _dbProvider.NewContext;
+		await using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.RollBack(EditableModel);
 	}
 
 
-	public ModelEditor(IAppDbProvider dbProvider)
+	public ModelEditor(IAppDbContextFactory dbContextFactory)
 	{
-		_dbProvider = dbProvider;
+		_dbContextFactory = dbContextFactory;
 	}
 
-	private readonly IAppDbProvider _dbProvider;
+	private readonly IAppDbContextFactory _dbContextFactory;
 }

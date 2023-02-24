@@ -17,7 +17,7 @@ public sealed class SynergiesTests : DbRelatedTests
 		SingleKeySwitchSynergy synergy = new(component);
 		profile.Components.Add(component);
 		profile.Synergy = synergy;
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.Profiles.Add(profile);
 		dbContext.SaveChanges();
 

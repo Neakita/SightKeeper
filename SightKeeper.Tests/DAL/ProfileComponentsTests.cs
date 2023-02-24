@@ -17,7 +17,7 @@ public sealed class ProfileComponentsTests : DbRelatedTests
 		component.ItemClassesGroups.Add(group);
 		profile.Components.Add(component);
 		
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.Profiles.Add(profile);
 		dbContext.SaveChanges();
 

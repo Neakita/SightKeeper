@@ -12,7 +12,7 @@ public sealed class GameTests : DbRelatedTests
 	public void ShouldAddGame()
 	{
 		// arrange
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		Game testGame = TestGame;
 
 		// act
@@ -27,7 +27,7 @@ public sealed class GameTests : DbRelatedTests
 	public void ShouldDeleteGame()
 	{
 		// arrange
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		Game testGame = TestGame;
 		dbContext.Add(testGame);
 		dbContext.SaveChanges();
@@ -45,7 +45,7 @@ public sealed class GameTests : DbRelatedTests
 	public void ShouldGetGame()
 	{
 		// arrange
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		Game testGame = TestGame;
 		dbContext.Add(testGame);
 		dbContext.SaveChanges();

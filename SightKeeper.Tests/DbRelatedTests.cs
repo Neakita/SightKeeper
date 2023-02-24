@@ -4,5 +4,5 @@ namespace SightKeeper.Tests;
 
 public abstract class DbRelatedTests
 {
-	protected readonly IAppDbProvider DbProvider = new TestDbProvider();
+	protected readonly IAppDbContextFactory DbContextFactory = new TestDbContextFactory();
 }

@@ -13,7 +13,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	public void ShouldAddDetectorModel()
 	{
 		// arrange
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel testModel = TestDetectorModel;
 
 		// act
@@ -27,7 +27,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	[Fact]
 	public void AddingModelWithScreenshotShouldAddScreenshot()
 	{
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = TestDetectorModel;
 		Image image = new(Array.Empty<byte>(), new Resolution());
 		DetectorScreenshot screenshot = new(model, image);
@@ -48,7 +48,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	[Fact]
 	public void ShouldDeleteWithScreenshots()
 	{
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
 		Image image = new(Array.Empty<byte>(), new Resolution());
 		DetectorScreenshot screenshot = new(model, image);

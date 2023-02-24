@@ -6,16 +6,16 @@ namespace SightKeeper.Application.Models;
 
 public sealed class DetectorModelsProvider : IModelsProvider<DetectorModel>
 {
-	private readonly IAppDbProvider _dbProvider;
+	private readonly IAppDbContextFactory _dbContextFactory;
 
 
-	public DetectorModelsProvider(IAppDbProvider dbProvider) => _dbProvider = dbProvider;
+	public DetectorModelsProvider(IAppDbContextFactory dbContextFactory) => _dbContextFactory = dbContextFactory;
 
 	public IEnumerable<DetectorModel> Models
 	{
 		get
 		{
-			using AppDbContext dbContext = _dbProvider.NewContext;
+			using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 			return dbContext.DetectorModels.AsNoTracking().ToList();
 		}
 	}

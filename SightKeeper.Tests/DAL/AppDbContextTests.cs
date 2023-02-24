@@ -13,7 +13,7 @@ public sealed class AppDbContextTests : DbRelatedTests
 		const string changedTestProfileName = "Test profile changed name";
 		
 		Profile profile = new(originTestProfileName);
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.Profiles.Add(profile);
 		dbContext.SaveChanges();
 		dbContext.Profiles.Should().Contain(profile);
@@ -33,7 +33,7 @@ public sealed class AppDbContextTests : DbRelatedTests
 		const string changedTestProfileName = "Test profile changed";
 		
 		Profile profile = new(originTestProfileName);
-		using (AppDbContext dbContext = DbProvider.NewContext)
+		using (AppDbContext dbContext = DbContextFactory.CreateDbContext())
 		{
 			dbContext.Profiles.Add(profile);
 			dbContext.SaveChanges();
@@ -44,7 +44,7 @@ public sealed class AppDbContextTests : DbRelatedTests
 
 		profile.Name.Should().Be(changedTestProfileName);
 
-		using (AppDbContext dbContext = DbProvider.NewContext)
+		using (AppDbContext dbContext = DbContextFactory.CreateDbContext())
 		{
 			dbContext.RollBack(profile);
 		}

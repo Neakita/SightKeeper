@@ -16,7 +16,7 @@ public sealed class ModifiersTests : DbRelatedTests
 		ProfileComponent component = new(profile, model);
 		ResolutionMultiplierModifier modifier = new(component);
 		component.Modifiers.Add(modifier);
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.ProfileComponents.Add(component);
 		dbContext.SaveChanges();
 

@@ -8,13 +8,13 @@ namespace SightKeeper.Tests.Backend.Models;
 
 public sealed class DetectorModelsProviderTests : DbRelatedTests
 {
-	private IModelsProvider<DetectorModel> DetectorModelsProvider => new DetectorModelsProvider(DbProvider);
+	private IModelsProvider<DetectorModel> DetectorModelsProvider => new DetectorModelsProvider(DbContextFactory);
 
 	[Fact]
 	public void ShouldGetSomeDetectorModels()
 	{
 		DetectorModel testDetectorModel = new("test detector model", new Resolution());
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.DetectorModels.Add(testDetectorModel);
 		dbContext.SaveChanges();
 

@@ -10,7 +10,7 @@ public sealed class ProfilesTests : DbRelatedTests
 	[Fact]
 	public void ShouldCreateProfile()
 	{
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		Profile profile = new("Test profile");
 
 		dbContext.Profiles.Add(profile);
@@ -22,7 +22,7 @@ public sealed class ProfilesTests : DbRelatedTests
 	[Fact]
 	public void ShouldNotDeleteModelOnProfileDelete()
 	{
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		Profile profile = new("Test profile");
 		DetectorModel model = new("Test model");
 		ProfileComponent component = new(profile, model);
@@ -48,7 +48,7 @@ public sealed class ProfilesTests : DbRelatedTests
 		ProfileComponent component = new(profile, model);
 		profile.Components.Add(component);
 
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.Profiles.Add(profile);
 		dbContext.SaveChanges();
 

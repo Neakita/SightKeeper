@@ -8,7 +8,7 @@ namespace SightKeeper.Tests.Backend.Models;
 
 public sealed class GenericModelsServiceTests : DbRelatedTests
 {
-	private GenericModelsService<DetectorModel> Service => new(new DetectorModelsFactory(), DbProvider);
+	private GenericModelsService<DetectorModel> Service => new(new DetectorModelsFactory(), DbContextFactory);
 
 	[Fact]
 	public void ShouldCreateDetectorModel()
@@ -20,7 +20,7 @@ public sealed class GenericModelsServiceTests : DbRelatedTests
 		Service.Create(testModelName, new Resolution());
 
 		// assert
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.DetectorModels.Should().Contain(model => model.Name == testModelName);
 	}
 
@@ -30,7 +30,7 @@ public sealed class GenericModelsServiceTests : DbRelatedTests
 		// arrange
 		const string testModelName = "Test model";
 		DetectorModel detectorModel = new(testModelName, new Resolution());
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.DetectorModels.Add(detectorModel);
 		dbContext.SaveChanges();
 

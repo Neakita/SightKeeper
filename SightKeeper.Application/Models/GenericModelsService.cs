@@ -6,16 +6,16 @@ namespace SightKeeper.Application.Models;
 
 public sealed class GenericModelsService<TModel> : IModelsService<TModel> where TModel : Model
 {
-	public GenericModelsService(IModelsFactory<TModel> modelsFactory, IAppDbProvider dbProvider)
+	public GenericModelsService(IModelsFactory<TModel> modelsFactory, IAppDbContextFactory dbContextFactory)
 	{
 		_modelsFactory = modelsFactory;
-		_dbProvider = dbProvider;
+		_dbContextFactory = dbContextFactory;
 	}
 
 
 	public TModel Create(string name, Resolution resolution)
 	{
-		using AppDbContext dbContext = _dbProvider.NewContext;
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		TModel newModel = _modelsFactory.Create(name, resolution);
 		dbContext.Add(newModel);
 		dbContext.SaveChanges();
@@ -24,26 +24,26 @@ public sealed class GenericModelsService<TModel> : IModelsService<TModel> where 
 
 	public void Add(TModel model)
 	{
-		using AppDbContext dbContext = _dbProvider.NewContext;
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Add(model);
 		dbContext.SaveChanges();
 	}
 
 	public void Delete(TModel model)
 	{
-		using AppDbContext dbContext = _dbProvider.NewContext;
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Remove(model);
 		dbContext.SaveChanges();
 	}
 
 	public void Delete(IEnumerable<TModel> models)
 	{
-		using AppDbContext dbContext = _dbProvider.NewContext;
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Set<TModel>().RemoveRange(models);
 		dbContext.SaveChanges();
 	}
 
 
 	private readonly IModelsFactory<TModel> _modelsFactory;
-	private readonly IAppDbProvider _dbProvider;
+	private readonly IAppDbContextFactory _dbContextFactory;
 }

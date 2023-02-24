@@ -6,20 +6,20 @@ namespace SightKeeper.Application.Models;
 
 public sealed class GenericModelsProvider<TModel> : IModelsProvider<TModel> where TModel : Model
 {
-	public GenericModelsProvider(IAppDbProvider dbProvider)
+	public GenericModelsProvider(IAppDbContextFactory dbContextFactory)
 	{
-		_dbProvider = dbProvider;
+		_dbContextFactory = dbContextFactory;
 	}
 
 	public IEnumerable<TModel> Models
 	{
 		get
 		{
-			using AppDbContext dbContext = _dbProvider.NewContext;
+			using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 			return dbContext.Set<TModel>().AsNoTracking().ToList();
 		}
 	}
 
 
-	private readonly IAppDbProvider _dbProvider;
+	private readonly IAppDbContextFactory _dbContextFactory;
 }

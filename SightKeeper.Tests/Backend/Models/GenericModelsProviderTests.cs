@@ -13,7 +13,7 @@ public sealed class GenericModelsProviderTests : DbRelatedTests
 	[Fact]
 	public void ShouldGetDetectorModel()
 	{
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel testModel = new("Test model", new Resolution());
 		dbContext.DetectorModels.Add(testModel);
 		dbContext.SaveChanges();
@@ -25,7 +25,7 @@ public sealed class GenericModelsProviderTests : DbRelatedTests
 	public void ShouldGetDetectorAndClassifierModels()
 	{
 		
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel testDetectorModel = new("Test detector model");
 		ClassifierModel testClassifierModel = new("Test classifier model");
 		dbContext.DetectorModels.Add(testDetectorModel);
@@ -39,6 +39,6 @@ public sealed class GenericModelsProviderTests : DbRelatedTests
 	}
 
 
-	private GenericModelsProvider<DetectorModel> DetectorModelsProvider => new(DbProvider);
-	private GenericModelsProvider<Model> ModelsProvider => new(DbProvider);
+	private GenericModelsProvider<DetectorModel> DetectorModelsProvider => new(DbContextFactory);
+	private GenericModelsProvider<Model> ModelsProvider => new(DbContextFactory);
 }

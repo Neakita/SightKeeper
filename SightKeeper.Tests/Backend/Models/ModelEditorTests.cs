@@ -13,7 +13,7 @@ public sealed class ModelEditorTests : DbRelatedTests
 		const string testModelName = "Test model";
 		const string changedTestModelName = "Changed test model";
 		DetectorModel testModel = new(testModelName);
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.Models.Add(testModel);
 		dbContext.SaveChanges();
 		IModelEditor editor = ModelEditor;
@@ -38,7 +38,7 @@ public sealed class ModelEditorTests : DbRelatedTests
 		const string testModelName = "Test model";
 		const string changedTestModelName = "Changed test model";
 		DetectorModel testModel = new(testModelName);
-		using AppDbContext dbContext = DbProvider.NewContext;
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.Models.Add(testModel);
 		dbContext.SaveChanges();
 		IModelEditor editor = ModelEditor;
@@ -58,5 +58,5 @@ public sealed class ModelEditorTests : DbRelatedTests
 	}
 
 
-	private IModelEditor ModelEditor => new ModelEditor(DbProvider);
+	private IModelEditor ModelEditor => new ModelEditor(DbContextFactory);
 }
