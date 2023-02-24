@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using SightKeeper.Backend.Models;
-using SightKeeper.Domain.Abstract;
-using SightKeeper.Domain.Classifier;
-using SightKeeper.Domain.Common;
-using SightKeeper.Domain.Detector;
+using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Classifier;
+using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Persistance;
 
 namespace SightKeeper.Tests.Backend.Models;

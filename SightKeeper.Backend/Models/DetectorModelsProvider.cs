@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SightKeeper.Persistance;
-using SightKeeper.Domain.Detector;
+using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Backend.Models;
 

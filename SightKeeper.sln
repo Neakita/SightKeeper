@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Backend.Windows
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Infrastructure", "SightKeeper.Infrastructure\SightKeeper.Infrastructure.csproj", "{1C59B6DF-8C4D-4628-8E65-2BEC739B5505}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Domain", "SightKeeper.Domain\SightKeeper.Domain.csproj", "{93AFDA60-ADAA-49E0-855A-BB4584750A08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Domain.Model", "SightKeeper.Domain.Model\SightKeeper.Domain.Model.csproj", "{93AFDA60-ADAA-49E0-855A-BB4584750A08}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{3F9DA67B-6094-4F35-A674-153AB8D8DCDA}"
 EndProject

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SightKeeper.Backend;
 using SightKeeper.Backend.Windows;
-using SightKeeper.Domain.Common;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Tests.Backend.Screenshots;
 

@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.Domain\SightKeeper.Domain.csproj" />
+      <ProjectReference Include="..\SightKeeper.Domain.Model\SightKeeper.Domain.Model.csproj" />
     </ItemGroup>
 
 </Project>

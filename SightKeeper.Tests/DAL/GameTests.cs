@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Common;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Persistance;
 
 namespace SightKeeper.Tests.DAL;

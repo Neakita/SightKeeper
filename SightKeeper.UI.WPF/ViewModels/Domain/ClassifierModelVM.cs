@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Classifier;
+﻿using SightKeeper.Domain.Model.Classifier;
 
 namespace SightKeeper.UI.WPF.ViewModels.Domain;
 

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using SightKeeper.Domain.Abstract;
-using SightKeeper.Domain.Classifier;
-using SightKeeper.Domain.Common;
-using SightKeeper.Domain.Common.Modifiers;
-using SightKeeper.Domain.Common.Synergies;
-using SightKeeper.Domain.Detector;
+using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Classifier;
+using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Common.Modifiers;
+using SightKeeper.Domain.Model.Common.Synergies;
+using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Persistance;
 

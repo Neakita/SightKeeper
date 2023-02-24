@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Abstract;
+﻿using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Backend.Models;
 

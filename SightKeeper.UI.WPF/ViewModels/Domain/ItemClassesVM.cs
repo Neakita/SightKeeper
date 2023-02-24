@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reactive;
 using ReactiveUI;
-using SightKeeper.Domain.Common;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.UI.WPF.ViewModels.Domain;
 
