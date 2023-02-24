@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Infrastructure.Data;
 
-namespace SightKeeper.Tests;
+namespace SightKeeper.Tests.Common;
 
 public abstract class DbRelatedTests
 {

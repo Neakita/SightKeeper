@@ -2,6 +2,7 @@
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Infrastructure.Data;
+using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Tests.Backend.Models;
 

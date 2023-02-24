@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SightKeeper.Infrastructure.Data;
 
-namespace SightKeeper.Tests;
+namespace SightKeeper.Tests.Common;
 
 public sealed class TestDbContextFactory : IAppDbContextFactory
 {
