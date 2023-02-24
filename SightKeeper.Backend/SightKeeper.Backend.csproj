@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>SightKeeper.Backend</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\SightKeeper.Infrastructure.Common\SightKeeper.Infrastructure.Common.csproj" />
         <ProjectReference Include="..\SightKeeper.Persistance\SightKeeper.Persistance.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Serilog" Version="2.12.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-        <PackageReference Include="Splat" Version="14.6.1" />
         <PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
     </ItemGroup>
 

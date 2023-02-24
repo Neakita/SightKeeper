@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using Autofac;
+using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using SightKeeper.Backend.Models;
@@ -24,21 +27,21 @@ internal static class AppBootstrapper
 {
 	internal static void Setup()
 	{
-		SetupLogging();
 		SetupExceptionHandling();
-		SetupDatabase();
-		SetupViews();
-		SetupViewModels();
-		SetupServices();
-		SplatRegistrations.SetupIOC();
+		ContainerBuilder containerBuilder = new();
+		SetupLogging(containerBuilder);
+		SetupDatabase(containerBuilder);
+		SetupViews(containerBuilder);
+		SetupViewModels(containerBuilder);
+		SetupServices(containerBuilder);
 		EnsureDatabaseExists();
 	}
 
 
-	private static void SetupLogging()
+	private static void SetupLogging(ContainerBuilder builder)
 	{
 		LoggingLevelSwitch loggingLevelSwitch = new();
-		SplatRegistrations.RegisterConstant(loggingLevelSwitch);
+		builder.RegisterInstance(loggingLevelSwitch);
 		Log.Logger = new LoggerConfiguration()
 			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
 			.MinimumLevel.ControlledBy(loggingLevelSwitch)
@@ -46,9 +49,9 @@ internal static class AppBootstrapper
 		Locator.CurrentMutable.UseSerilogFullLogger();
 	}
 
-	private static void SetupDatabase()
+	private static void SetupDatabase(ContainerBuilder builder)
 	{
-		SplatRegistrations.Register<IAppDbProvider, AppDbProvider>();
+		builder.RegisterType<AppDbProvider>().As<IAppDbProvider>();
 	}
 
 	private static void EnsureDatabaseExists()
@@ -58,68 +61,64 @@ internal static class AppBootstrapper
 		dbProvider.NewContext.Database.EnsureCreated();
 	}
 
-	private static void SetupViews()
+	private static void SetupViews(ContainerBuilder builder)
 	{
-		SplatRegistrations.Register<MainWindow>();
-		SplatRegistrations.Register<ModelsPage>();
+		builder.RegisterType<MainWindow>();
+		builder.RegisterType<ModelsPage>();
 	}
 
-	private static void SetupViewModels()
+	private static void SetupViewModels(ContainerBuilder builder)
 	{
-		SplatRegistrations.Register<MainWindowVM>();
-		SplatRegistrations.Register<HamburgerMenuVM>();
-		SplatRegistrations.Register<ModelsPageVM>();
-		SplatRegistrations.Register<IModelsList<DetectorModelVM>, GenericModelsList<DetectorModel, DetectorModelVM>>();
-		SplatRegistrations.Register<IModelsList<ClassifierModelVM>, GenericModelsList<ClassifierModel, ClassifierModelVM>>();
-		SplatRegistrations.Register<IModelToVMStrategy<DetectorModelVM, DetectorModel>, DetectorModelToVMStrategy>();
-		SplatRegistrations.Register<IModelToVMStrategy<ClassifierModelVM, ClassifierModel>, ClassifierModelToVMStrategy>();
-		SplatRegistrations.Register<IModelsListInfo<DetectorModelVM>, DetectorModelsListInfo>();
-		SplatRegistrations.Register<IModelsListInfo<ClassifierModelVM>, ClassifierModelsListInfo>();
+		builder.RegisterType<MainWindowVM>();
+		builder.RegisterType<HamburgerMenuVM>();
+		builder.RegisterType<ModelsPageVM>();
+		builder.RegisterType<GenericModelsList<DetectorModel, DetectorModelVM>>().As<IModelsList<DetectorModelVM>>();
+		builder.RegisterType<GenericModelsList<ClassifierModel, ClassifierModelVM>>().As<IModelsList<ClassifierModelVM>>();
+		builder.RegisterType<DetectorModelToVMStrategy>().As<IModelToVMStrategy<DetectorModelVM, DetectorModel>>();
+		builder.RegisterType<ClassifierModelToVMStrategy>().As<IModelToVMStrategy<ClassifierModelVM, ClassifierModel>>();
+		builder.RegisterType<DetectorModelsListInfo>().As<IModelsListInfo<DetectorModelVM>>();
+		builder.RegisterType<ClassifierModelsListInfo>().As<IModelsListInfo<ClassifierModelVM>>();
 	}
 
-	private static void SetupServices()
+	private static void SetupServices(ContainerBuilder builder)
 	{
-		SplatRegistrations.Register<IModelsProvider<DetectorModel>, GenericModelsProvider<DetectorModel>>();
-		SplatRegistrations.Register<IModelsService<DetectorModel>, GenericModelsService<DetectorModel>>();
-		SplatRegistrations.Register<IModelsProvider<ClassifierModel>, GenericModelsProvider<ClassifierModel>>();
-		SplatRegistrations.Register<IModelsService<ClassifierModel>, GenericModelsService<ClassifierModel>>();
-		SplatRegistrations.Register<IModelsFactory<DetectorModel>, DetectorModelsFactory>();
-		SplatRegistrations.Register<IModelsFactory<ClassifierModel>, ClassifierModelsFactory>();
+		builder.RegisterType<GenericModelsProvider<DetectorModel>>().As<IModelsProvider<DetectorModel>>();
+		builder.RegisterType<GenericModelsService<DetectorModel>>().As<IModelsService<DetectorModel>>();
+		builder.RegisterType<GenericModelsProvider<ClassifierModel>>().As<IModelsProvider<ClassifierModel>>();
+		builder.RegisterType<GenericModelsService<ClassifierModel>>().As<IModelsService<ClassifierModel>>();
+		builder.RegisterType<DetectorModelsFactory>().As<IModelsFactory<DetectorModel>>();
+		builder.RegisterType<ClassifierModelsFactory>().As<IModelsFactory<ClassifierModel>>();
 	}
 
 	private static void SetupExceptionHandling()
 	{
-		AppDomain.CurrentDomain.UnhandledException += (_, e) =>
-			LogUnhandledException((Exception) e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
-
-		Application.Current.DispatcherUnhandledException += (_, e) =>
+		AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+			LogUnhandledException((Exception) args.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+		Application.Current.DispatcherUnhandledException += (_, args) =>
 		{
-			LogUnhandledException(e.Exception, "Application.Current.DispatcherUnhandledException");
-			e.Handled = true;
+			LogUnhandledException(args.Exception, "Application.Current.DispatcherUnhandledException");
+			args.Handled = true;
 		};
-
-		TaskScheduler.UnobservedTaskException += (_, e) =>
+		TaskScheduler.UnobservedTaskException += (_, args) =>
 		{
-			LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException");
-			e.SetObserved();
+			LogUnhandledException(args.Exception, "TaskScheduler.UnobservedTaskException");
+			args.SetObserved();
 		};
+		RxApp.DefaultExceptionHandler = Observer.Create<Exception>(exception =>
+			LogUnhandledException(exception, "RxApp.DefaultExceptionHandler"));
 	}
 
 	private static void LogUnhandledException(Exception exception, string source)
 	{
-		string message = $"Unhandled exception ({source})";
 		try
 		{
 			AssemblyName assemblyName = Assembly.GetExecutingAssembly().GetName();
-			message = $"Unhandled exception in {assemblyName.Name} v{assemblyName.Version}";
+			Log.Error(exception, "Unhandled exception in {Name} v{Version}", assemblyName.Name, assemblyName.Version);
 		}
-		catch (Exception ex)
+		catch (Exception anotherException)
 		{
-			Log.Error(ex, "Exception in LogUnhandledException");
-		}
-		finally
-		{
-			Log.Error(exception, message);
+			Log.Error(anotherException, "Exception in {MethodName}", nameof(LogUnhandledException));
+			Log.Error(exception, "Unhandled exception ({Source})", source);
 		}
 	}
 }

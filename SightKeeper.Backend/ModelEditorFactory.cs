@@ -1,5 +1,5 @@
 ﻿using SightKeeper.Domain.Model.Abstract;
-using Splat;
+using SightKeeper.Infrastructure.Common;
 
 namespace SightKeeper.Backend;
 
@@ -7,8 +7,7 @@ public sealed class ModelEditorFactory : IModelEditorFactory
 {
 	public IModelEditor Create(Model model)
 	{
-		IModelEditor editor = Locator.Current.GetService<IModelEditor>() ??
-		                      throw new ServiceNotFoundException(typeof(IModelEditor));
+		IModelEditor editor = Locator.Resolve<IModelEditor>();
 		editor.EditableModel = model;
 		return editor;
 	}
