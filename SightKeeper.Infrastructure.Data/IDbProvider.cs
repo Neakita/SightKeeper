@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace SightKeeper.Persistance;
+namespace SightKeeper.Infrastructure.Data;
 
 public interface IDbProvider<T> where T : DbContext
 {

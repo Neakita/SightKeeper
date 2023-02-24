@@ -7,7 +7,7 @@ using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using SightKeeper.Application.Models;
-using SightKeeper.Persistance;
+using SightKeeper.Infrastructure.Data;
 using SightKeeper.Domain.Model.Classifier;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.UI.WPF.Misc;

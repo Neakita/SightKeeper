@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Persistance;
+﻿namespace SightKeeper.Infrastructure.Data;
 
 public sealed class AppDbProvider : IAppDbProvider
 {

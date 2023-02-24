@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Persistance;
+using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Tests;
 

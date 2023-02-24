@@ -8,7 +8,7 @@ using SightKeeper.Domain.Model.Common.Modifiers;
 using SightKeeper.Domain.Model.Common.Synergies;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Persistance;
+namespace SightKeeper.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {

@@ -1,4 +1,4 @@
-﻿using SightKeeper.Persistance;
+﻿using SightKeeper.Infrastructure.Data;
 using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Application;
