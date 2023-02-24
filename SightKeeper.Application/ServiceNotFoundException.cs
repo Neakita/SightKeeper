@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Backend;
+﻿namespace SightKeeper.Application;
 
 public sealed class ServiceNotFoundException : Exception
 {

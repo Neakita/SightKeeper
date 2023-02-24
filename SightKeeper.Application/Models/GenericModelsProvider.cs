@@ -2,7 +2,7 @@
 using SightKeeper.Persistance;
 using SightKeeper.Domain.Model.Abstract;
 
-namespace SightKeeper.Backend.Models;
+namespace SightKeeper.Application.Models;
 
 public sealed class GenericModelsProvider<TModel> : IModelsProvider<TModel> where TModel : Model
 {

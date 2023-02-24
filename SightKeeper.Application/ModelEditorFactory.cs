@@ -1,7 +1,7 @@
 ﻿using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Infrastructure.Common;
 
-namespace SightKeeper.Backend;
+namespace SightKeeper.Application;
 
 public sealed class ModelEditorFactory : IModelEditorFactory
 {

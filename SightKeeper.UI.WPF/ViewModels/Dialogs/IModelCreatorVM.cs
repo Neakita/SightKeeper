@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
-using SightKeeper.Backend;
+using SightKeeper.Application;
 
 namespace SightKeeper.UI.WPF.ViewModels.Dialogs;
 

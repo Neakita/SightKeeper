@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Backend;
+namespace SightKeeper.Application;
 
 public interface IImageLoader
 {

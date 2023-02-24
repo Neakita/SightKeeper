@@ -2,12 +2,11 @@
 using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
 using Autofac;
 using ReactiveUI;
 using Serilog;
 using Serilog.Core;
-using SightKeeper.Backend.Models;
+using SightKeeper.Application.Models;
 using SightKeeper.Persistance;
 using SightKeeper.Domain.Model.Classifier;
 using SightKeeper.Domain.Model.Detector;
@@ -94,7 +93,7 @@ internal static class AppBootstrapper
 	{
 		AppDomain.CurrentDomain.UnhandledException += (_, args) =>
 			LogUnhandledException((Exception) args.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
-		Application.Current.DispatcherUnhandledException += (_, args) =>
+		System.Windows.Application.Current.DispatcherUnhandledException += (_, args) =>
 		{
 			LogUnhandledException(args.Exception, "Application.Current.DispatcherUnhandledException");
 			args.Handled = true;

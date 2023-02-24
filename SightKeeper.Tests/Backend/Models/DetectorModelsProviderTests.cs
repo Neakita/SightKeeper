@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using SightKeeper.Backend.Models;
+using SightKeeper.Application.Models;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Persistance;

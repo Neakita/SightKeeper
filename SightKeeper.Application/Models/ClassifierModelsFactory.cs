@@ -1,7 +1,7 @@
 ﻿using SightKeeper.Domain.Model.Classifier;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Backend.Models;
+namespace SightKeeper.Application.Models;
 
 public sealed class ClassifierModelsFactory : IModelsFactory<ClassifierModel>
 {

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace SightKeeper.Backend.Windows;
+namespace SightKeeper.Application.Windows;
 
 public static class ImageConverter
 {

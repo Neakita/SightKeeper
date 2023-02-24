@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using SightKeeper.Backend.Windows;
+using SightKeeper.Application.Windows;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Tests.Backend;

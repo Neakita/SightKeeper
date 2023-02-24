@@ -4,7 +4,7 @@ using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using ReactiveUI;
-using SightKeeper.Backend.Models;
+using SightKeeper.Application.Models;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.UI.WPF.Dialogs;

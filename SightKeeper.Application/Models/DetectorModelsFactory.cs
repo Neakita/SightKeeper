@@ -1,7 +1,7 @@
 ﻿using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Backend.Models;
+namespace SightKeeper.Application.Models;
 
 public sealed class DetectorModelsFactory : IModelsFactory<DetectorModel>
 {

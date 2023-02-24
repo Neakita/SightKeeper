@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Backend.Models;
+namespace SightKeeper.Application.Models;
 
 public interface IGameService
 {

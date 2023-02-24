@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.Backend\SightKeeper.Backend.csproj" />
+      <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>

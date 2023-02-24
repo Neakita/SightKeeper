@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Backend.Windows;
+namespace SightKeeper.Application.Windows;
 
 public sealed class ImageLoader : IImageLoader
 {
