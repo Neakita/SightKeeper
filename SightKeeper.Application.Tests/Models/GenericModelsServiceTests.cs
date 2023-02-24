@@ -1,11 +1,10 @@
-﻿using FluentAssertions;
-using SightKeeper.Application.Models;
+﻿using SightKeeper.Application.Models;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Infrastructure.Data;
 using SightKeeper.Tests.Common;
 
-namespace SightKeeper.Tests.Backend.Models;
+namespace SightKeeper.Application.Tests.Models;
 
 public sealed class GenericModelsServiceTests : DbRelatedTests
 {

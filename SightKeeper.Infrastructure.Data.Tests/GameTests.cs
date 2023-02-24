@@ -1,9 +1,7 @@
-﻿using FluentAssertions;
-using SightKeeper.Domain.Model.Common;
-using SightKeeper.Infrastructure.Data;
+﻿using SightKeeper.Domain.Model.Common;
 using SightKeeper.Tests.Common;
 
-namespace SightKeeper.Tests.DAL;
+namespace SightKeeper.Infrastructure.Data.Tests;
 
 public sealed class GameTests : DbRelatedTests
 {

@@ -1,11 +1,9 @@
-﻿using FluentAssertions;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Common.Synergies;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Infrastructure.Data;
 using SightKeeper.Tests.Common;
 
-namespace SightKeeper.Tests.DAL;
+namespace SightKeeper.Infrastructure.Data.Tests;
 
 public sealed class SynergiesTests : DbRelatedTests
 {

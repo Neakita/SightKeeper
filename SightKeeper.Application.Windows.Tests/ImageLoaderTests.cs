@@ -1,8 +1,6 @@
-﻿using FluentAssertions;
-using SightKeeper.Application.Windows;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Tests.Backend;
+namespace SightKeeper.Application.Windows.Tests;
 
 public sealed class ImageLoaderTests
 {
