@@ -41,7 +41,6 @@
     <ItemGroup>
         <ProjectReference Include="..\SightKeeper.Application.Windows\SightKeeper.Application.Windows.csproj" />
         <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
-        <ProjectReference Include="..\SightKeeper.Infrastructure\SightKeeper.Infrastructure.csproj" />
         <ProjectReference Include="..\SightKeeper.Persistance\SightKeeper.Persistance.csproj" />
     </ItemGroup>
 

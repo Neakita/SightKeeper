@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Infrastructure;
+﻿namespace SightKeeper.Infrastructure.Common;
 
 public class ResultPender<TResult>
 {
