@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ReactiveUI;
-using SightKeeper.Application.Windows;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using Image = System.Drawing.Image;
@@ -44,7 +44,7 @@ public abstract class ModelVM : ReactiveObject, IModelVM
 		}
 	}
 
-	public Image? Image => Model.Image == null ? null : ImageConverter.BytesToImage(Model.Image.Content);
+	public Image? Image => Model.Image == null ? null : throw new NotImplementedException();
 
 	public Resolution Resolution { get; private set; }
 	public IEnumerable<ItemClass> Classes { get; private set; }

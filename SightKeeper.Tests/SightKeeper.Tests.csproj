@@ -23,7 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SightKeeper.Application.Windows\SightKeeper.Application.Windows.csproj" />
         <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
         <ProjectReference Include="..\SightKeeper.Tests.Common\SightKeeper.Tests.Common.csproj" />
     </ItemGroup>
