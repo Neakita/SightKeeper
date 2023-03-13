@@ -3,7 +3,7 @@ using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Tests.Common;
 
-public sealed class TestDbContextFactory : IAppDbContextFactory
+public sealed class TestDbContextFactory : AppDbContextFactory
 {
 	private readonly DbContextOptions<AppDbContext> _options;
 	

@@ -39,10 +39,10 @@ public sealed class ModelEditor : IModelEditor
 	}
 
 
-	public ModelEditor(IAppDbContextFactory dbContextFactory)
+	public ModelEditor(AppDbContextFactory dbContextFactory)
 	{
 		_dbContextFactory = dbContextFactory;
 	}
 
-	private readonly IAppDbContextFactory _dbContextFactory;
+	private readonly AppDbContextFactory _dbContextFactory;
 }

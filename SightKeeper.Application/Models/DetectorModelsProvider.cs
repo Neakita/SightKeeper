@@ -6,10 +6,10 @@ namespace SightKeeper.Application.Models;
 
 public sealed class DetectorModelsProvider : IModelsProvider<DetectorModel>
 {
-	private readonly IAppDbContextFactory _dbContextFactory;
+	private readonly AppDbContextFactory _dbContextFactory;
 
 
-	public DetectorModelsProvider(IAppDbContextFactory dbContextFactory) => _dbContextFactory = dbContextFactory;
+	public DetectorModelsProvider(AppDbContextFactory dbContextFactory) => _dbContextFactory = dbContextFactory;
 
 	public IEnumerable<DetectorModel> Models
 	{

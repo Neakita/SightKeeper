@@ -2,19 +2,11 @@
 
 public class ItemClassGroup
 {
-	public ItemClassGroup(ProfileComponent component)
+	public ItemClassGroup()
 	{
 		ItemClasses = new List<ItemClass>();
-		Component = component;
-	}
-
-	private ItemClassGroup()
-	{
-		ItemClasses = null!;
-		Component = null!;
 	}
 
 	public int Id { get; private set; } = 0;
-	public virtual List<ItemClass> ItemClasses { get; private set; }
-	public virtual ProfileComponent Component { get; private set; }
+	public virtual ICollection<ItemClass> ItemClasses { get; private set; }
 }

@@ -1,4 +1,5 @@
 ﻿using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Infrastructure.Data.Tests;
@@ -11,7 +12,7 @@ public sealed class AppDbContextTests : DbRelatedTests
 		const string originTestProfileName = "Test profile";
 		const string changedTestProfileName = "Test profile changed name";
 		
-		Profile profile = new(originTestProfileName);
+		Profile profile = new(originTestProfileName, new DetectorModel("Detector"));
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.Profiles.Add(profile);
 		dbContext.SaveChanges();
@@ -31,7 +32,7 @@ public sealed class AppDbContextTests : DbRelatedTests
 		const string originTestProfileName = "Test profile";
 		const string changedTestProfileName = "Test profile changed";
 		
-		Profile profile = new(originTestProfileName);
+		Profile profile = new(originTestProfileName, new DetectorModel("Detector"));
 		using (AppDbContext dbContext = DbContextFactory.CreateDbContext())
 		{
 			dbContext.Profiles.Add(profile);

@@ -50,13 +50,13 @@ internal static class AppBootstrapper
 
 	private static void SetupDatabase(ContainerBuilder builder)
 	{
-		builder.RegisterType<AppDbContextFactory>().As<IAppDbContextFactory>();
+		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>();
 	}
 
 	private static void EnsureDatabaseExists()
 	{
-		IAppDbContextFactory? dbProvider = Locator.Current.GetService<IAppDbContextFactory>();
-		if (dbProvider == null) throw new Exception($"Service of type {typeof(IAppDbContextFactory)} not found.");
+		AppDbContextFactory? dbProvider = Locator.Current.GetService<AppDbContextFactory>();
+		if (dbProvider == null) throw new Exception($"Service of type {typeof(AppDbContextFactory)} not found.");
 		dbProvider.CreateDbContext().Database.EnsureCreated();
 	}
 

@@ -34,22 +34,11 @@ public abstract class ModelVM : ReactiveObject, IModelVM
 		}
 	}
 
-	public ModelState ModelState
-	{
-		get => Model.State;
-		set
-		{
-			Model.State = value;
-			this.RaisePropertyChanged();
-		}
-	}
-
 	public Image? Image => Model.Image == null ? null : throw new NotImplementedException();
 
 	public Resolution Resolution { get; private set; }
 	public IEnumerable<ItemClass> Classes { get; private set; }
 	public Game? Game { get; set; }
-	public ModelState State { get; set; }
 	
 	
 	public Model Model { get; }

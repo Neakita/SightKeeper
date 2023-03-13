@@ -1,7 +1,9 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Abstract;
 
+[Table("Models")]
 public abstract class Model
 {
 	public Model(string name) : this(name, new Resolution())
@@ -34,5 +36,4 @@ public abstract class Model
 	public Resolution Resolution { get; private set; }
 	public List<ItemClass> Classes { get; private set; }
 	public Game? Game { get; set; }
-	public ModelState State { get; set; }
 }

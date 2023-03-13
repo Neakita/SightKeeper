@@ -6,7 +6,7 @@ namespace SightKeeper.Application.Models;
 
 public sealed class GenericModelsService<TModel> : IModelsService<TModel> where TModel : Model
 {
-	public GenericModelsService(IModelsFactory<TModel> modelsFactory, IAppDbContextFactory dbContextFactory)
+	public GenericModelsService(IModelsFactory<TModel> modelsFactory, AppDbContextFactory dbContextFactory)
 	{
 		_modelsFactory = modelsFactory;
 		_dbContextFactory = dbContextFactory;
@@ -45,5 +45,5 @@ public sealed class GenericModelsService<TModel> : IModelsService<TModel> where 
 
 
 	private readonly IModelsFactory<TModel> _modelsFactory;
-	private readonly IAppDbContextFactory _dbContextFactory;
+	private readonly AppDbContextFactory _dbContextFactory;
 }

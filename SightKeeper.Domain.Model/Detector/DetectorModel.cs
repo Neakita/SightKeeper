@@ -20,5 +20,5 @@ public class DetectorModel : Abstract.Model
 	{
 	}
 
-	public virtual List<DetectorScreenshot> DetectorScreenshots { get; } = new();
+	public virtual ICollection<DetectorScreenshot> DetectorScreenshots { get; } = new List<DetectorScreenshot>();
 }

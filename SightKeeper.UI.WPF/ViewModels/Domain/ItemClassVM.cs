@@ -14,26 +14,6 @@ public sealed class ItemClassVM : ReactiveObject
 			this.RaisePropertyChanged();
 		}
 	}
-
-	public float HorizontalOffset
-	{
-		get => ItemClass.Offset.Horizontal;
-		set
-		{
-			ItemClass.Offset.Horizontal = value;
-			this.RaisePropertyChanged();
-		}
-	}
-
-	public float VerticalOffset
-	{
-		get => ItemClass.Offset.Vertical;
-		set
-		{
-			ItemClass.Offset.Vertical = value;
-			this.RaisePropertyChanged();
-		}
-	}
 	
 	
 	public ItemClassVM(ItemClass itemClass)

@@ -1,6 +1,7 @@
-﻿namespace SightKeeper.Infrastructure.Data;
+﻿using Microsoft.EntityFrameworkCore;
 
-public sealed class AppDbContextFactory : IAppDbContextFactory
+namespace SightKeeper.Infrastructure.Data;
+
+public interface AppDbContextFactory : IDbContextFactory<AppDbContext>
 {
-	public AppDbContext CreateDbContext() => new();
 }

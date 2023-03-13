@@ -20,6 +20,6 @@ public class DetectorScreenshot : Screenshot
 		Items = null!;
 	}
 
-	public virtual List<DetectorItem> Items { get; private set; }
+	public virtual ICollection<DetectorItem> Items { get; private set; }
 	public DetectorModel Model { get; private set; }
 }
