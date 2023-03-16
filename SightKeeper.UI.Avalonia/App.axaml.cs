@@ -3,7 +3,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using SightKeeper.UI.Avalonia.ViewModels;
+using SightKeeper.UI.Avalonia.ViewModels.Windows;
 using SightKeeper.UI.Avalonia.Views;
+using MainWindow = SightKeeper.UI.Avalonia.Views.Windows.MainWindow;
 
 namespace SightKeeper.UI.Avalonia;
 
