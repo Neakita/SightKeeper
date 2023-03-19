@@ -1,8 +1,8 @@
 ﻿using Avalonia.Controls;
 
-namespace SightKeeper.UI.Avalonia.ViewModels;
+namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
-public sealed class TabItemViewModel : ViewModelBase
+public sealed class TabItemViewModel : ViewModel
 {
 	public string Header { get; }
 	public Control Content { get; }

@@ -2,5 +2,10 @@
 
 public sealed class DefaultAppDbContextFactory : AppDbContextFactory
 {
-	public AppDbContext CreateDbContext() => new();
+	public AppDbContext CreateDbContext()
+	{
+		AppDbContext dbContext = new();
+		dbContext.Database.EnsureCreated();
+		return dbContext;
+	}
 }

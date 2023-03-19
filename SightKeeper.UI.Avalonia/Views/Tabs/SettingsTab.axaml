@@ -1,0 +1,51 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:tabs="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Tabs"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.UI.Avalonia.Views.Tabs.SettingsTab">
+
+    <Design.DataContext>
+        <tabs:SettingsTabVM/>
+    </Design.DataContext>
+    
+    <ScrollViewer>
+        <StackPanel>
+            <Expander Header="Registered Games" DataContext="{Binding RegisteredGamesVM}" MaxWidth="800" Margin="50" HorizontalContentAlignment="Stretch">
+                <Grid RowDefinitions="50, *" ColumnDefinitions="*, 80, 80">
+                    <ComboBox Grid.Row="0" Grid.Column="0"
+                              Name="AvailableToAddGamesComboBox"
+                              Items="{Binding AvailableToAddGames}"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Stretch">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Grid.Row="0" Grid.Column="1" Content="Add" Command="{Binding AddGame}" CommandParameter="{Binding SelectedItem, ElementName=AvailableToAddGamesComboBox}"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="Refresh" Command="{Binding RefreshAvailableToAddGames}"/>
+                    <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                              Name="RegisteredGamesDataGrid"
+                              Items="{Binding RegisteredGames}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              Height="300">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete" Command="{Binding DeleteGame}" CommandParameter="{Binding SelectedItem, ElementName=RegisteredGamesDataGrid}"/>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
+                            <DataGridTextColumn Header="Process" Binding="{Binding ProcessName}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+    
+</UserControl>

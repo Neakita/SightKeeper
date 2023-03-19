@@ -9,7 +9,7 @@
         Title="SightKeeper.UI.Avalonia">
 
     <Design.DataContext>
-        <windows:MainWindowViewModel/>
+        <windows:MainWindowVM/>
     </Design.DataContext>
 
     <SplitView DisplayMode="CompactInline"
