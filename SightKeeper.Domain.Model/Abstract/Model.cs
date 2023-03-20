@@ -36,4 +36,5 @@ public abstract class Model
 	public Resolution Resolution { get; private set; }
 	public List<ItemClass> Classes { get; private set; }
 	public Game? Game { get; set; }
+	public ModelConfig Config { get; set; }
 }
