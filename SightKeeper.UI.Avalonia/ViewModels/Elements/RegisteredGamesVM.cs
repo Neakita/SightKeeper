@@ -4,57 +4,50 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using ReactiveUI;
+using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
 public sealed class RegisteredGamesVM : ViewModel
 {
-	private readonly AppDbContextFactory _dbContextFactory;
+	private readonly GamesRegistrator _gamesRegistrator;
 	public ObservableCollection<Game> RegisteredGames { get; }
 
-	public IReadOnlyCollection<Game> AvailableToAddGames => 
-		Process.GetProcesses()
-			.Where(process => process.MainWindowHandle != 0 && RegisteredGames.All(game => game.ProcessName != process.ProcessName))
-			.Select(process => new Game(process.MainWindowTitle, process.ProcessName))
-			.ToList();
+	public IReadOnlyCollection<Game> AvailableToAddGames => _gamesRegistrator.AvailableGames;
 
 
-	public RegisteredGamesVM(AppDbContextFactory dbContextFactory)
+	public RegisteredGamesVM(GamesRegistrator gamesRegistrator)
 	{
-		_dbContextFactory = dbContextFactory;
-		using AppDbContext dbContext = dbContextFactory.CreateDbContext();
-		RegisteredGames = new ObservableCollection<Game>(dbContext.Games);
+		_gamesRegistrator = gamesRegistrator;
+		RegisteredGames = new ObservableCollection<Game>(gamesRegistrator.RegisteredGames);
 		RegisteredGames.CollectionChanged += RegisteredGamesOnCollectionChanged;
 	}
 
-	private void RegisteredGamesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-	{
+	private void RegisteredGamesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
 		this.RaisePropertyChanged(nameof(RegisteredGames));
-	}
 
 	public void AddGame(Game game)
 	{
-		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.Games.Add(game);
-		dbContext.SaveChanges();
+		_gamesRegistrator.RegisterGame(game);
 		RegisteredGames.Add(game);
-		RefreshAvailableToAddGames();
+		RefreshAvailableGames();
 	}
 
 	private bool CanAddGame(object? parameter) => parameter != null;
 
 	public void DeleteGame(Game game)
 	{
-		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.Games.Remove(game);
-		dbContext.SaveChanges();
+		_gamesRegistrator.UnregisterGame(game);
 		RegisteredGames.Remove(game);
-		RefreshAvailableToAddGames();
+		RefreshAvailableGames();
 	}
 
 	private bool CanDeleteGame(object? parameter) => parameter != null;
 
-	public void RefreshAvailableToAddGames() => this.RaisePropertyChanged(nameof(AvailableToAddGames));
+	public void RefreshAvailableGames()
+	{
+		_gamesRegistrator.RefreshAvailableGames();
+		this.RaisePropertyChanged(nameof(AvailableToAddGames));
+	}
 }

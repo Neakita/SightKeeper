@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Serilog;
 using Serilog.Core;
+using SightKeeper.Application;
 using SightKeeper.Infrastructure.Common;
+using SightKeeper.Infrastructure.Services;
 using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
 using SightKeeper.UI.Avalonia.Views.Tabs;
@@ -33,7 +35,7 @@ public static class AppBootstrapper
 
 	private static void SetupServices(ContainerBuilder builder)
 	{
-		
+		builder.RegisterType<DbGamesRegistrator>().As<GamesRegistrator>().SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)

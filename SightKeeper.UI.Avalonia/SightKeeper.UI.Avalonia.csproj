@@ -42,5 +42,6 @@
       <ProjectReference Include="..\SightKeeper.Domain.Model\SightKeeper.Domain.Model.csproj" />
       <ProjectReference Include="..\SightKeeper.Infrastructure.Common\SightKeeper.Infrastructure.Common.csproj" />
       <ProjectReference Include="..\SightKeeper.Infrastructure.Data\SightKeeper.Infrastructure.Data.csproj" />
+      <ProjectReference Include="..\SightKeeper.Infrastructure.Services\SightKeeper.Infrastructure.Services.csproj" />
     </ItemGroup>
 </Project>

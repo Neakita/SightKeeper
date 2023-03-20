@@ -26,7 +26,7 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Button Grid.Row="0" Grid.Column="1" Content="Add" Command="{Binding AddGame}" CommandParameter="{Binding SelectedItem, ElementName=AvailableToAddGamesComboBox}"/>
-                    <Button Grid.Row="0" Grid.Column="2" Content="Refresh" Command="{Binding RefreshAvailableToAddGames}"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="Refresh" Command="{Binding RefreshAvailableGames}"/>
                     <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
                               Name="RegisteredGamesDataGrid"
                               Items="{Binding RegisteredGames}"
