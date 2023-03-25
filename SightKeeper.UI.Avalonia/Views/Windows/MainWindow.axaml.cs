@@ -1,9 +1,9 @@
-using Avalonia.Controls;
+using Avalonia.ReactiveUI;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
 
 namespace SightKeeper.UI.Avalonia.Views.Windows;
 
-public partial class MainWindow : Window
+public partial class MainWindow : ReactiveWindow<MainWindowVM>
 {
 	public MainWindow()
 	{

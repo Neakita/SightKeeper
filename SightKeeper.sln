@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpHook.Test", "SharpHook
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Infrastructure.Services", "SightKeeper.Infrastructure.Services\SightKeeper.Infrastructure.Services.csproj", "{F3D86443-0586-4043-A967-C001F5529373}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Domain.Services", "SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj", "{63560340-C375-46E6-A0D3-15B6B51763E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,10 @@ Global
 		{F3D86443-0586-4043-A967-C001F5529373}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3D86443-0586-4043-A967-C001F5529373}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3D86443-0586-4043-A967-C001F5529373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63560340-C375-46E6-A0D3-15B6B51763E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63560340-C375-46E6-A0D3-15B6B51763E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63560340-C375-46E6-A0D3-15B6B51763E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63560340-C375-46E6-A0D3-15B6B51763E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7D95C029-7CE1-476A-AD5F-543934A5F04F} = {F48B1EF3-DEFC-4506-B237-2A955EEB8FD7}
@@ -102,5 +108,6 @@ Global
 		{1A69F59F-12F3-40F6-9283-3A7D123D6E8D} = {5197E042-0B51-48A6-9AEB-1AD1940BDD4B}
 		{CEE68EF6-F256-47A6-B259-5780BF5602F9} = {F48B1EF3-DEFC-4506-B237-2A955EEB8FD7}
 		{F3D86443-0586-4043-A967-C001F5529373} = {4635E6E2-6679-4A68-813D-D52C1BC11992}
+		{63560340-C375-46E6-A0D3-15B6B51763E6} = {6301DD76-F4B9-476B-A763-F75F39FE4B4E}
 	EndGlobalSection
 EndGlobal

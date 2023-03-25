@@ -12,7 +12,6 @@ public class MainWindowVM : ViewModel
 
 	[Reactive] public TabItemViewModel SelectedTab { get; set; }
 
-
 	public MainWindowVM(ProfilesTab profilesTab, ModelsTab modelsTab, SettingsTab settingsTab)
 	{
 		Tabs = new List<TabItemViewModel>

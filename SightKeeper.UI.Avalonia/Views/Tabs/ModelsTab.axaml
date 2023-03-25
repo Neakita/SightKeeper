@@ -10,7 +10,9 @@
         <tabs:ModelsTabVM/>
     </Design.DataContext>
     
-    <DataGrid>
-        
+    <DataGrid Items="{Binding Models}">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Name" Binding="{Binding }"/>
+        </DataGrid.Columns>
     </DataGrid>
 </UserControl>

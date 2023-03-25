@@ -1,4 +1,3 @@
-using System;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using SightKeeper.Infrastructure.Common;
@@ -15,7 +14,6 @@ public class App : global::Avalonia.Application
 		AppBootstrapper.Setup();
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 			desktop.MainWindow = Locator.Resolve<MainWindow>();
-		else throw new Exception($"Unexpected environment: {ApplicationLifetime}");
 
 		base.OnFrameworkInitializationCompleted();
 	}

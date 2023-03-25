@@ -6,31 +6,36 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SightKeeper.UI.Avalonia.Views.Windows.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="SightKeeper.UI.Avalonia">
+        Title="SightKeeper.UI.Avalonia"
+        Classes="ModernBlack">
 
     <Design.DataContext>
         <windows:MainWindowVM/>
     </Design.DataContext>
-
-    <SplitView DisplayMode="CompactInline"
-               CompactPaneLength="50"
-               OpenPaneLength="150"
-               IsPaneOpen="{Binding IsChecked, ElementName=SideMenuToggleButton}">
-        <SplitView.Pane>
-            <StackPanel>
-                <ToggleButton Name="SideMenuToggleButton" HorizontalAlignment="Stretch" Height="40"/>
-                <ListBox Name="TabsListBox" Items="{Binding Tabs, Mode=OneTime}" SelectedItem="{Binding SelectedTab}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Header, Mode=OneTime}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
-        </SplitView.Pane>
+    
+    <Grid>
         
-        <ContentControl Content="{Binding SelectedTab.Content}"/>
+        <SplitView DisplayMode="CompactInline"
+                   CompactPaneLength="50"
+                   OpenPaneLength="150"
+                   IsPaneOpen="{Binding IsChecked, ElementName=SideMenuToggleButton}">
+            <SplitView.Pane>
+                <StackPanel>
+                    <ToggleButton Name="SideMenuToggleButton" HorizontalAlignment="Stretch" Height="40"/>
+                    <ListBox Name="TabsListBox" Items="{Binding Tabs, Mode=OneTime}" SelectedItem="{Binding SelectedTab}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Header, Mode=OneTime}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </SplitView.Pane>
         
-    </SplitView>
+            <ContentControl Content="{Binding SelectedTab.Content}"/>
+        
+        </SplitView>
+        
+    </Grid>
 
 </Window>

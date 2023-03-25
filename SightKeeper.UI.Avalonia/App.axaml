@@ -3,8 +3,9 @@
              x:Class="SightKeeper.UI.Avalonia.App">
 
     <Application.Styles>
-        <FluentTheme Mode="Light"/>
+        <FluentTheme Mode="Dark"/>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="avares://SightKeeper.UI.Avalonia/Assets/Styles.axaml"/>
     </Application.Styles>
     
 </Application>

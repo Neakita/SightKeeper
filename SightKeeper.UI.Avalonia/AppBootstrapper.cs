@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Serilog;
 using Serilog.Core;
-using SightKeeper.Application;
+using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Services;
 using SightKeeper.UI.Avalonia.ViewModels.Tabs;

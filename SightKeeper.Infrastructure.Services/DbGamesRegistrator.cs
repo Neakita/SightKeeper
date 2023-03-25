@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
-using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Infrastructure.Services;

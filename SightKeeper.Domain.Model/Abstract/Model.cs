@@ -31,7 +31,6 @@ public abstract class Model
 	public int Id { get; private set; }
 	public string Name { get; set; }
 	public string Description { get; set; }
-	public Image? Image { get; set; }
 	
 	public Resolution Resolution { get; private set; }
 	public List<ItemClass> Classes { get; private set; }

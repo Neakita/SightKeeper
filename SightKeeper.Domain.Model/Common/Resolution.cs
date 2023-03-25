@@ -11,7 +11,7 @@ public class Resolution
 		Height = height;
 	}
 
-	public ushort Width { get; private set; }
+	public ushort Width { get; set; }
 
-	public ushort Height { get; private set; }
+	public ushort Height { get; set; }
 }
