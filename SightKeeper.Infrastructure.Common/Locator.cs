@@ -4,7 +4,12 @@ namespace SightKeeper.Infrastructure.Common;
 
 public static class Locator
 {
-	public static T Resolve<T>() where T : notnull => Container.Resolve<T>();
+	public static TService Resolve<TService>() where TService : notnull => Container.Resolve<TService>();
+
+	public static TService Resolve<TService, TParam>(TParam param)
+		where TService : notnull
+		where TParam : notnull =>
+		Container.Resolve<TService>(new PositionalParameter(0, param));
 
 	public static void Setup(IContainer container) => _container = container;
 

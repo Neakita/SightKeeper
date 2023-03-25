@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Application;
+﻿namespace SightKeeper.Domain.Model;
 
 public enum ModelType
 {

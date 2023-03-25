@@ -10,7 +10,7 @@
         Classes="ModernBlack">
 
     <Design.DataContext>
-        <windows:MainWindowVM/>
+        <windows:MainWindowViewModel/>
     </Design.DataContext>
     
     <Grid>

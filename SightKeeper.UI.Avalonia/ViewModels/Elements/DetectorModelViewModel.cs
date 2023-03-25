@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
-public sealed class DetectorModelVM : ReactiveObject, ModelVM<DetectorModel>
+public sealed class DetectorModelViewModel : ReactiveObject, ModelViewModel<DetectorModel>
 {
 	public string Name
 	{
@@ -47,10 +47,10 @@ public sealed class DetectorModelVM : ReactiveObject, ModelVM<DetectorModel>
 		}
 	}
 
-	Model ModelVM.Model => Model;
+	Model ModelViewModel.Model => Model;
 	public DetectorModel Model { get; }
 	
-	public DetectorModelVM(DetectorModel model)
+	public DetectorModelViewModel(DetectorModel model)
 	{
 		Model = model;
 	}

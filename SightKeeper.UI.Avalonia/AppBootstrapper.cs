@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using SightKeeper.Domain.Services;
@@ -40,21 +41,23 @@ public static class AppBootstrapper
 
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
-		builder.RegisterType<MainWindowVM>().SingleInstance();
+		builder.RegisterType<MainWindowViewModel>().SingleInstance();
+		builder.RegisterType<ModelEditorViewModel>();
 		
-		builder.RegisterType<AnnotatingTabVM>().SingleInstance();
-		builder.RegisterType<ModelsTabVM>().SingleInstance();
-		builder.RegisterType<ProfilesTabVM>().SingleInstance();
-		builder.RegisterType<SettingsTabVM>().SingleInstance();
+		builder.RegisterType<AnnotatingTabViewModel>().SingleInstance();
+		builder.RegisterType<ModelsTabViewModel>().SingleInstance();
+		builder.RegisterType<ProfilesTabViewModel>().SingleInstance();
+		builder.RegisterType<SettingsTabViewModel>().SingleInstance();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
 	{
-		builder.RegisterType<MainWindow>().SingleInstance();
+		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainWindowViewModel>>().SingleInstance();
+		builder.RegisterType<ModelEditor>();
 		
-		builder.RegisterType<AnnotatingTab>().SingleInstance();
-		builder.RegisterType<ModelsTab>().SingleInstance();
-		builder.RegisterType<ProfilesTab>().SingleInstance();
-		builder.RegisterType<SettingsTab>().SingleInstance();
+		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingTabViewModel>>().SingleInstance();
+		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsTabViewModel>>().SingleInstance();
+		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesTabViewModel>>().SingleInstance();
+		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsTabViewModel>>().SingleInstance();
 	}
 }

@@ -3,16 +3,31 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:tabs="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Tabs"
+             xmlns:elements="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Elements"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.UI.Avalonia.Views.Tabs.ModelsTab">
 
     <Design.DataContext>
-        <tabs:ModelsTabVM/>
+        <tabs:ModelsTabViewModel/>
     </Design.DataContext>
     
-    <DataGrid Items="{Binding Models}">
-        <DataGrid.Columns>
-            <DataGridTextColumn Header="Name" Binding="{Binding }"/>
-        </DataGrid.Columns>
-    </DataGrid>
+    <Grid RowDefinitions="50, *">
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button Command="{Binding CreateNewModel}">
+                <Button.Content>
+                    <avalonia:MaterialIcon Kind="Plus"/>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        
+        <DataGrid Grid.Row="1" Items="{Binding Models}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding (elements:ModelViewModel).Name}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+    </Grid>
+    
 </UserControl>
