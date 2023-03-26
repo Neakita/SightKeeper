@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Domain.Services;
+namespace SightKeeper.Application;
 
 public interface GamesRegistrator
 {

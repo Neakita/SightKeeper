@@ -10,7 +10,7 @@
         <tabs:SettingsTabViewModel/>
     </Design.DataContext>
     
-    <ScrollViewer>
+    <ScrollViewer Margin="50" MaxWidth="800">
         <StackPanel>
             <Expander Header="Registered Games" DataContext="{Binding RegisteredGamesVM}" MaxWidth="800" Margin="50" HorizontalContentAlignment="Stretch">
                 <Grid RowDefinitions="50, *" ColumnDefinitions="*, 80, 80">

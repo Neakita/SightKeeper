@@ -2,8 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using ReactiveUI;
+using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 

@@ -17,6 +17,7 @@ public interface ModelViewModel
 	ushort Width { get; set; }
 	ushort Height { get; set; }
 	ModelConfig Config { get; set; }
+	Game? Game { get; set; }
 
 	Model Model { get; }
 }

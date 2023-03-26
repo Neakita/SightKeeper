@@ -3,15 +3,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:windows="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Windows"
+        xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SightKeeper.UI.Avalonia.Views.Windows.ModelEditor"
         Title="ModelEditor"
         Classes="ModernBlack Dialog"
-        Width="800" Height="500">
+        Width="600" Height="400"
+        MinWidth="350" MinHeight="240">
         
         <Design.DataContext>
                 <windows:ModelEditorViewModel/>
         </Design.DataContext>
         
-        <Button Command="{Binding ApplyCommand}"/>
+        
+        
+        <Grid RowDefinitions="*, 50" ColumnDefinitions="*, *">
+                
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="5">
+                        <TextBox Text="{Binding Model.Name}" Watermark="Name" Margin="5"/>
+                        <ComboBox SelectedItem="{Binding Model.Game}" Margin="5"/>
+                        <ComboBox SelectedItem="{Binding Model.Config}" Margin="5"/>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBox Text="{Binding Model.Width}" VerticalAlignment="Top" Margin="5"/>
+                                <TextBox Text="{Binding Model.Height}" VerticalAlignment="Top" Margin="5"/>
+                        </StackPanel>
+                </StackPanel>
+                
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                        <Button Command="{Binding ApplyCommand}" Margin="5">
+                                <StackPanel Orientation="Horizontal">
+                                        <icons:MaterialIcon Kind="Check"/>
+                                        <TextBlock Text="Apply"/>
+                                </StackPanel>
+                        </Button>
+                        <Button Command="{Binding CancelCommand}" Margin="5">
+                                <StackPanel Orientation="Horizontal">
+                                        <icons:MaterialIcon Kind="Close"/>
+                                        <TextBlock Text="Cancel"/>
+                                </StackPanel>
+                        </Button>
+                </StackPanel>
+        </Grid>
+        
 </Window>

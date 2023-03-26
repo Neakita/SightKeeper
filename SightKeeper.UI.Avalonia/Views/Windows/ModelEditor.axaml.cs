@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
-using SightKeeper.Infrastructure.Common;
 using SightKeeper.UI.Avalonia.Misc;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
@@ -16,14 +15,14 @@ public partial class ModelEditor : ReactiveWindow<ModelEditorViewModel>, Dialog<
 {
 	public enum DialogResult
 	{
-		Apply,
-		Cancel
+		Cancel,
+		Apply
 	}
 	
 	public ModelEditor(ModelViewModel model)
 	{
 		InitializeComponent();
-		ViewModel = Locator.Resolve<ModelEditorViewModel, ModelViewModel>(model);
+		ViewModel = ModelEditorViewModel.Create(model);
 		this.WhenActivated(disposables =>
 		{
 			disposables(ViewModel.ApplyCommand.Subscribe(_ => Close(DialogResult.Apply)));

@@ -22,9 +22,32 @@
             </Button>
         </StackPanel>
         
-        <DataGrid Grid.Row="1" Items="{Binding Models}">
+        <DataGrid Grid.Row="1"
+                  Items="{Binding Models}"
+                  IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding (elements:ModelViewModel).Name}"/>
+                
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding (elements:ModelViewModel).Name}"/>
+                
+                <DataGridTextColumn Header="Game"
+                                    Binding="{Binding (elements:ModelViewModel).Game.Title}"/>
+                
+                <DataGridTemplateColumn Header="Resolution">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="elements:ModelViewModel">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Width}"/>
+                                <TextBlock Text="x"/>
+                                <TextBlock Text="{Binding Height}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTextColumn Header="Config"
+                                    Binding="{Binding (elements:ModelViewModel).Config.Name}"/>
+                
             </DataGrid.Columns>
         </DataGrid>
         

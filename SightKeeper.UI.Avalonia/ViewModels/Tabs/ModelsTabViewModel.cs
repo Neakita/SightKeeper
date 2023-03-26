@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using DynamicData;
-using ReactiveUI;
-using SightKeeper.Application;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Infrastructure.Data;
 using SightKeeper.UI.Avalonia.Extensions;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
-using SightKeeper.UI.Avalonia.ViewModels.Windows;
-using Splat;
 using ModelEditor = SightKeeper.UI.Avalonia.Views.Windows.ModelEditor;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Tabs;
@@ -33,7 +25,8 @@ public sealed class ModelsTabViewModel : ViewModel
 	{
 		_modelsSource.Connect()
 			.Transform(ModelViewModel.Create)
-			.Bind(out _models);
+			.Bind(out _models)
+			.Subscribe();
 	}
 
 	private readonly SourceCache<Model, int> _modelsSource = new(model => model.Id);

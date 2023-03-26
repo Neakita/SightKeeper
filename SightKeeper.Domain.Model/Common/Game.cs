@@ -1,6 +1,8 @@
-﻿namespace SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Abstract;
 
-public class Game
+namespace SightKeeper.Domain.Model.Common;
+
+public class Game : Entity
 {
 	public Game(string title, string processName)
 	{

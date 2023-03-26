@@ -1,11 +1,13 @@
 ﻿using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
-public sealed class DetectorModelViewModel : ReactiveObject, ModelViewModel<DetectorModel>
+public sealed class DetectorModelViewModel : ReactiveValidationObject, ModelViewModel<DetectorModel>
 {
 	public string Name
 	{
@@ -47,11 +49,30 @@ public sealed class DetectorModelViewModel : ReactiveObject, ModelViewModel<Dete
 		}
 	}
 
+	public Game? Game
+	{
+		get => Model.Game;
+		set
+		{
+			Model.Game = value;
+			this.RaisePropertyChanged();
+		}
+	}
+
 	Model ModelViewModel.Model => Model;
 	public DetectorModel Model { get; }
 	
 	public DetectorModelViewModel(DetectorModel model)
 	{
 		Model = model;
+		this.ValidationRule(
+			viewModel => viewModel.Width,
+			width => width > 0 && width % 32 == 0,
+			"Width must be greater than 0 and multiple of 32");
+		
+		this.ValidationRule(
+			viewModel => viewModel.Height,
+			height => height > 0 && height % 32 == 0,
+			"Height must be greater than 0 and multiple of 32");
 	}
 }

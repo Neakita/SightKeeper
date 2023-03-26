@@ -27,7 +27,7 @@ public class AppDbContext : DbContext
 	public DbSet<ClassifierModel> ClassifierModels { get; set; } = null!;
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
-	public DbSet<ModelConfig> Configs { get; set; } = null!;
+	public DbSet<ModelConfig> ModelConfigs { get; set; } = null!;
 
 	public void RollBack()
 	{
