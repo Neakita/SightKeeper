@@ -33,19 +33,13 @@ public sealed class ModelEditorViewModel : ReactiveObject, IDisposable
 
 	public ModelEditorViewModel()
 	{
-		ApplyCommand = ReactiveCommand.Create(Apply);
-		CancelCommand = ReactiveCommand.Create(Cancel);
+		ApplyCommand = ReactiveCommand.Create(Done);
+		CancelCommand = ReactiveCommand.Create(Done);
 		Model = null!;
 	}
 
-	private void Apply()
+	private void Done()
 	{
-		// TODO save model data here
-	}
-
-	private void Cancel()
-	{
-		// TODO rollback model data here
 	}
 
 	public void Dispose()

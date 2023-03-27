@@ -60,6 +60,11 @@ public sealed class DetectorModelViewModel : ReactiveValidationObject, ModelView
 	}
 
 	Model ModelViewModel.Model => Model;
+	public void UpdateProperties()
+	{
+		this.RaisePropertyChanged(nameof(Name));
+	}
+
 	public DetectorModel Model { get; }
 	
 	public DetectorModelViewModel(DetectorModel model)

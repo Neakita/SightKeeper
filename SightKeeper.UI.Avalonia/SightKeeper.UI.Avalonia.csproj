@@ -18,11 +18,11 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac" Version="7.0.0" />
-        <PackageReference Include="Avalonia" Version="0.10.18" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
+        <PackageReference Include="Avalonia" Version="0.10.19" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.19" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.19" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.19" />
         <PackageReference Include="DynamicData" Version="7.13.1" />
         <PackageReference Include="Material.Icons.Avalonia" Version="1.1.10" />
         <PackageReference Include="ReactiveUI.Fody" Version="18.4.26" />
@@ -30,13 +30,6 @@
         <PackageReference Include="Serilog" Version="2.12.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Views\Windows\MainWindow.axaml.cs">
-        <DependentUpon>MainWindow.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
     </ItemGroup>
 
     <ItemGroup>

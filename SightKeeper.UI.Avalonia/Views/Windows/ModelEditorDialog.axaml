@@ -5,7 +5,7 @@
         xmlns:windows="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Windows"
         xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="SightKeeper.UI.Avalonia.Views.Windows.ModelEditor"
+        x:Class="SightKeeper.UI.Avalonia.Views.Windows.ModelEditorDialog"
         Title="ModelEditor"
         Classes="ModernBlack Dialog"
         Width="600" Height="400"

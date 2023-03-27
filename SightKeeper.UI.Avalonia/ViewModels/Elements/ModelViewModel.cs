@@ -20,6 +20,8 @@ public interface ModelViewModel
 	Game? Game { get; set; }
 
 	Model Model { get; }
+
+	void UpdateProperties();
 }
 
 public interface ModelViewModel<TModel> : ModelViewModel where TModel : Model

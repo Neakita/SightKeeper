@@ -15,16 +15,13 @@ public sealed class ModelEditorTests : DbRelatedTests
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.Models.Add(testModel);
 		dbContext.SaveChanges();
-		IModelEditor editor = ModelEditor;
-		editor.EditableModel = testModel;
-
-		testModel.Name.Should().Be(testModelName);
+		ModelEditor editor = ModelEditor;
 
 		testModel.Name = changedTestModelName;
 
 		testModel.Name.Should().Be(changedTestModelName);
 		
-		editor.SaveChanges();
+		editor.SaveChanges(testModel);
 
 		testModel.Name.Should().Be(changedTestModelName);
 
@@ -40,16 +37,13 @@ public sealed class ModelEditorTests : DbRelatedTests
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		dbContext.Models.Add(testModel);
 		dbContext.SaveChanges();
-		IModelEditor editor = ModelEditor;
-		editor.EditableModel = testModel;
-
-		testModel.Name.Should().Be(testModelName);
+		ModelEditor editor = ModelEditor;
 
 		testModel.Name = changedTestModelName;
 
 		testModel.Name.Should().Be(changedTestModelName);
 		
-		editor.DiscardChanges();
+		editor.RollbackChanges(testModel);
 
 		testModel.Name.Should().Be(testModelName);
 
@@ -57,5 +51,5 @@ public sealed class ModelEditorTests : DbRelatedTests
 	}
 
 
-	private IModelEditor ModelEditor => new ModelEditor(DbContextFactory);
+	private ModelEditor ModelEditor => new ModelEditorImplementation(DbContextFactory);
 }

@@ -11,15 +11,16 @@ using SightKeeper.UI.Avalonia.ViewModels.Windows;
 
 namespace SightKeeper.UI.Avalonia.Views.Windows;
 
-public partial class ModelEditor : ReactiveWindow<ModelEditorViewModel>, Dialog<ModelEditor.DialogResult>
+public partial class ModelEditorDialog : ReactiveWindow<ModelEditorViewModel>, Dialog<ModelEditorDialog.DialogResult>
 {
 	public enum DialogResult
 	{
+		None,
 		Cancel,
 		Apply
 	}
 	
-	public ModelEditor(ModelViewModel model)
+	public ModelEditorDialog(ModelViewModel model)
 	{
 		InitializeComponent();
 		ViewModel = ModelEditorViewModel.Create(model);
@@ -33,7 +34,7 @@ public partial class ModelEditor : ReactiveWindow<ModelEditorViewModel>, Dialog<
 #endif
 	}
 
-	public ModelEditor() : this(null!)
+	public ModelEditorDialog() : this(null!)
 	{
 	}
 

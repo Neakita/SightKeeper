@@ -4,5 +4,5 @@ namespace SightKeeper.Application;
 
 public interface IModelEditorFactory
 {
-	public IModelEditor Create(Model model);
+	public ModelEditor Create(Model model);
 }

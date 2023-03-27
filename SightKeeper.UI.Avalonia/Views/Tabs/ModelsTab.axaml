@@ -23,8 +23,21 @@
         </StackPanel>
         
         <DataGrid Grid.Row="1"
+                  Name="ModelsDataGrid"
                   Items="{Binding Models}"
                   IsReadOnly="True">
+            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Edit"
+                              Command="{Binding EditModel}"
+                              CommandParameter="{Binding SelectedItem, ElementName=ModelsDataGrid}"/>
+                    <MenuItem Header="Delete"
+                              Command="{Binding DeleteModel}"
+                              CommandParameter="{Binding SelectedItem, ElementName=ModelsDataGrid}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            
             <DataGrid.Columns>
                 
                 <DataGridTextColumn Header="Name"

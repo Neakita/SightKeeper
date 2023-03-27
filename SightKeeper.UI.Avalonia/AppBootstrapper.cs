@@ -3,6 +3,7 @@ using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using SightKeeper.Application;
+using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
@@ -13,7 +14,6 @@ using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
 using SightKeeper.UI.Avalonia.Views.Tabs;
 using SightKeeper.UI.Avalonia.Views.Windows;
-using ModelEditor = SightKeeper.UI.Avalonia.Views.Windows.ModelEditor;
 
 namespace SightKeeper.UI.Avalonia;
 
@@ -45,6 +45,8 @@ public static class AppBootstrapper
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>().SingleInstance();
 		builder.RegisterType<GamesRepositoryRegistrator>().As<GamesRegistrator>().SingleInstance();
 		builder.RegisterType<GenericDbRepository<Game>>().As<Repository<Game>>().SingleInstance();
+		builder.RegisterType<GenericDbRepository<Model>>().As<Repository<Model>>().SingleInstance();
+		builder.RegisterType<ModelEditorImplementation>().As<ModelEditor>().SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
@@ -61,7 +63,7 @@ public static class AppBootstrapper
 	private static void SetupViews(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainWindowViewModel>>().SingleInstance();
-		builder.RegisterType<ModelEditor>();
+		builder.RegisterType<ModelEditorDialog>();
 		
 		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingTabViewModel>>().SingleInstance();
 		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsTabViewModel>>().SingleInstance();

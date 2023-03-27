@@ -1,48 +1,11 @@
-﻿using SightKeeper.Infrastructure.Data;
-using SightKeeper.Domain.Model.Abstract;
+﻿using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Application;
 
-public sealed class ModelEditor : IModelEditor
+public interface ModelEditor
 {
-	public Model? EditableModel { get; set; }
-	
-	
-	public void SaveChanges()
-	{
-		if (EditableModel == null) throw new InvalidOperationException($"{nameof(EditableModel)} was null.");
-		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.Models.Update(EditableModel);
-		dbContext.SaveChanges();
-	}
-
-	public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-	{
-		if (EditableModel == null) throw new InvalidOperationException($"{nameof(EditableModel)} was null.");
-		await using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.Models.Update(EditableModel);
-		await dbContext.SaveChangesAsync(cancellationToken);
-	}
-
-	public void DiscardChanges()
-	{
-		if (EditableModel == null) throw new InvalidOperationException($"{nameof(EditableModel)} was null.");
-		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.RollBack(EditableModel);
-	}
-
-	public async Task DiscardChangesAsync(CancellationToken cancellationToken = default)
-	{
-		if (EditableModel == null) throw new InvalidOperationException($"{nameof(EditableModel)} was null.");
-		await using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.RollBack(EditableModel);
-	}
-
-
-	public ModelEditor(AppDbContextFactory dbContextFactory)
-	{
-		_dbContextFactory = dbContextFactory;
-	}
-
-	private readonly AppDbContextFactory _dbContextFactory;
+	void SaveChanges(Model model);
+	Task SaveChangesAsync(Model model, CancellationToken cancellationToken = default);
+	void RollbackChanges(Model model);
+	Task RollbackChangesAsync(Model model, CancellationToken cancellationToken = default);
 }
