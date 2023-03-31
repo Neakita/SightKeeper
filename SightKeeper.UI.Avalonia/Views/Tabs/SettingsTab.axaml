@@ -7,7 +7,7 @@
              x:Class="SightKeeper.UI.Avalonia.Views.Tabs.SettingsTab">
 
     <Design.DataContext>
-        <tabs:SettingsTabViewModel/>
+        <tabs:SettingsTabVM/>
     </Design.DataContext>
     
     <ScrollViewer Margin="50" MaxWidth="800">

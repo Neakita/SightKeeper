@@ -2,11 +2,11 @@
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
-public sealed class SettingsTabViewModel
+public sealed class SettingsTabVM
 {
 	public RegisteredGamesVM RegisteredGamesVM { get; }
 	
-	public SettingsTabViewModel(RegisteredGamesVM registeredGamesVM)
+	public SettingsTabVM(RegisteredGamesVM registeredGamesVM)
 	{
 		RegisteredGamesVM = registeredGamesVM;
 	}

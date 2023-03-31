@@ -5,11 +5,11 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
-public interface ModelViewModel
+public interface ModelVM
 {
-	public static ModelViewModel Create(Model model)
+	public static ModelVM Create(Model model)
 	{
-		if (model is DetectorModel detectorModel) return new DetectorModelViewModel(detectorModel);
+		if (model is DetectorModel detectorModel) return new DetectorModelVM(detectorModel);
 		throw new Exception($"Unexpected type {model.GetType()}");
 	}
 
@@ -24,7 +24,7 @@ public interface ModelViewModel
 	void UpdateProperties();
 }
 
-public interface ModelViewModel<TModel> : ModelViewModel where TModel : Model
+public interface ModelVM<TModel> : ModelVM where TModel : Model
 {
 	new TModel Model { get; }
 }

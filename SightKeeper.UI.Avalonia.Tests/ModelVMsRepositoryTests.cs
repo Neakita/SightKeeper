@@ -14,7 +14,7 @@ public sealed class ModelVMsRepositoryTests
 	public void ShouldGetSameInstanceAfterAdd()
 	{
 		ModelVMsRepository repository = Repository;
-		DetectorModelViewModel testModel = new(new DetectorModel("Test model"));
+		DetectorModelVM testModel = new(new DetectorModel("Test model"));
 		repository.Add(testModel);
 		repository.Items.Single().Should().BeSameAs(testModel);
 	}
@@ -35,7 +35,7 @@ public sealed class ModelVMsRepositoryTests
 		var innerRepository = new GenericDynamicDbRepository<Model>(new TestDbContextFactory());
 		ModelVMsRepository repository = new(innerRepository);
 		DetectorModel testModel = new("Test model");
-		DetectorModelViewModel testModelVM = new(testModel);
+		DetectorModelVM testModelVM = new(testModel);
 		repository.Add(testModelVM);
 		repository.Items.Single().Should().BeSameAs(testModelVM);
 		

@@ -7,7 +7,7 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
-public sealed class DetectorModelViewModel : ReactiveValidationObject, ModelViewModel<DetectorModel>
+public sealed class DetectorModelVM : ReactiveValidationObject, ModelVM<DetectorModel>
 {
 	public string Name
 	{
@@ -59,7 +59,7 @@ public sealed class DetectorModelViewModel : ReactiveValidationObject, ModelView
 		}
 	}
 
-	Model ModelViewModel.Model => Model;
+	Model ModelVM.Model => Model;
 	public void UpdateProperties()
 	{
 		this.RaisePropertyChanged(nameof(Name));
@@ -67,7 +67,7 @@ public sealed class DetectorModelViewModel : ReactiveValidationObject, ModelView
 
 	public DetectorModel Model { get; }
 	
-	public DetectorModelViewModel(DetectorModel model)
+	public DetectorModelVM(DetectorModel model)
 	{
 		Model = model;
 		this.ValidationRule(

@@ -5,17 +5,17 @@ using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
 namespace SightKeeper.UI.Avalonia.Views.Tabs;
 
-public partial class SettingsTab : ReactiveUserControl<SettingsTabViewModel>
+public partial class SettingsTab : ReactiveUserControl<SettingsTabVM>
 {
 	public SettingsTab()
 	{
 		
 	}
 	
-	public SettingsTab(SettingsTabViewModel viewModel)
+	public SettingsTab(SettingsTabVM vm)
 	{
 		InitializeComponent();
-		ViewModel = viewModel;
+		ViewModel = vm;
 	}
 
 	private void InitializeComponent()

@@ -4,11 +4,11 @@ using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
 namespace SightKeeper.UI.Avalonia.Views.Tabs;
 
-public partial class ModelsTab : ReactiveUserControl<ModelsTabViewModel>
+public partial class ModelsTab : ReactiveUserControl<ModelsTabVM>
 {
-	public ModelsTab(ModelsTabViewModel viewModel) : this()
+	public ModelsTab(ModelsTabVM vm) : this()
 	{
-		ViewModel = viewModel;
+		ViewModel = vm;
 	}
 
 	public ModelsTab()

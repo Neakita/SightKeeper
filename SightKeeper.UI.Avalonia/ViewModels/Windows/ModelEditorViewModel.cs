@@ -12,18 +12,18 @@ namespace SightKeeper.UI.Avalonia.ViewModels.Windows;
 
 public sealed class ModelEditorViewModel : ReactiveObject, IDisposable
 {
-	public static ModelEditorViewModel Create(ModelViewModel model) =>
-		Locator.Resolve<ModelEditorViewModel, ModelViewModel>(model);
+	public static ModelEditorViewModel Create(ModelVM model) =>
+		Locator.Resolve<ModelEditorViewModel, ModelVM>(model);
 
 	public IReadOnlyCollection<Game> Games { get; }
 	public IReadOnlyCollection<ModelConfig> Configs { get; }
 
-	public ModelViewModel Model { get; }
+	public ModelVM Model { get; }
 	
 	public ReactiveCommand<Unit, Unit> ApplyCommand { get; }
 	public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
-	public ModelEditorViewModel(ModelViewModel model, AppDbContextFactory dbContextFactory) : this()
+	public ModelEditorViewModel(ModelVM model, AppDbContextFactory dbContextFactory) : this()
 	{
 		Model = model;
 		using AppDbContext dbContext = dbContextFactory.CreateDbContext();

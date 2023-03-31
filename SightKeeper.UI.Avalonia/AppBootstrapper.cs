@@ -54,10 +54,10 @@ public static class AppBootstrapper
 		builder.RegisterType<MainWindowViewModel>().SingleInstance();
 		builder.RegisterType<ModelEditorViewModel>();
 		
-		builder.RegisterType<AnnotatingTabViewModel>().SingleInstance();
-		builder.RegisterType<ModelsTabViewModel>().SingleInstance();
-		builder.RegisterType<ProfilesTabViewModel>().SingleInstance();
-		builder.RegisterType<SettingsTabViewModel>().SingleInstance();
+		builder.RegisterType<AnnotatingTabVM>().SingleInstance();
+		builder.RegisterType<ModelsTabVM>().SingleInstance();
+		builder.RegisterType<ProfilesTabVM>().SingleInstance();
+		builder.RegisterType<SettingsTabVM>().SingleInstance();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -65,10 +65,10 @@ public static class AppBootstrapper
 		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainWindowViewModel>>().SingleInstance();
 		builder.RegisterType<ModelEditorDialog>();
 		
-		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingTabViewModel>>().SingleInstance();
-		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsTabViewModel>>().SingleInstance();
-		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesTabViewModel>>().SingleInstance();
-		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsTabViewModel>>().SingleInstance();
+		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingTabVM>>().SingleInstance();
+		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsTabVM>>().SingleInstance();
+		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesTabVM>>().SingleInstance();
+		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsTabVM>>().SingleInstance();
 	}
 
 	private static void SetupUISpecificServices(ContainerBuilder builder)

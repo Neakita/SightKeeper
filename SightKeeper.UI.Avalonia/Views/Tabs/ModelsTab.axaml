@@ -9,7 +9,7 @@
              x:Class="SightKeeper.UI.Avalonia.Views.Tabs.ModelsTab">
 
     <Design.DataContext>
-        <tabs:ModelsTabViewModel/>
+        <tabs:ModelsTabVM/>
     </Design.DataContext>
     
     <Grid RowDefinitions="50, *">
@@ -41,14 +41,14 @@
             <DataGrid.Columns>
                 
                 <DataGridTextColumn Header="Name"
-                                    Binding="{Binding (elements:ModelViewModel).Name}"/>
+                                    Binding="{Binding (elements:ModelVM).Name}"/>
                 
                 <DataGridTextColumn Header="Game"
-                                    Binding="{Binding (elements:ModelViewModel).Game.Title}"/>
+                                    Binding="{Binding (elements:ModelVM).Game.Title}"/>
                 
                 <DataGridTemplateColumn Header="Resolution">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="elements:ModelViewModel">
+                        <DataTemplate DataType="elements:ModelVM">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding Width}"/>
                                 <TextBlock Text="x"/>
@@ -59,7 +59,7 @@
                 </DataGridTemplateColumn>
                 
                 <DataGridTextColumn Header="Config"
-                                    Binding="{Binding (elements:ModelViewModel).Config.Name}"/>
+                                    Binding="{Binding (elements:ModelVM).Config.Name}"/>
                 
             </DataGrid.Columns>
         </DataGrid>

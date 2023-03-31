@@ -6,7 +6,7 @@ using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
 namespace SightKeeper.UI.Avalonia.Views.Tabs;
 
-public partial class ProfilesTab : ReactiveUserControl<ProfilesTabViewModel>
+public partial class ProfilesTab : ReactiveUserControl<ProfilesTabVM>
 {
 	public ProfilesTab()
 	{

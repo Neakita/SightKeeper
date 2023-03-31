@@ -6,11 +6,11 @@ using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
 namespace SightKeeper.UI.Avalonia.Views.Tabs;
 
-public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabViewModel>
+public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 {
-	public AnnotatingTab(AnnotatingTabViewModel viewModel) : this()
+	public AnnotatingTab(AnnotatingTabVM vm) : this()
 	{
-		ViewModel = viewModel;
+		ViewModel = vm;
 	}
 	
 	public AnnotatingTab()

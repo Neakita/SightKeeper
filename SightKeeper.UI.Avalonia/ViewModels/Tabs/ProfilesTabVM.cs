@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
-public sealed class ProfilesTabViewModel
+public sealed class ProfilesTabVM
 {
 	
 }
