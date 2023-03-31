@@ -9,6 +9,7 @@ using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Data;
 using SightKeeper.Infrastructure.Services;
+using SightKeeper.UI.Avalonia.ViewModels.Components;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
@@ -47,6 +48,7 @@ public static class AppBootstrapper
 		builder.RegisterType<GenericDbRepository<Game>>().As<Repository<Game>>().SingleInstance();
 		builder.RegisterType<GenericDbRepository<Model>>().As<Repository<Model>>().SingleInstance();
 		builder.RegisterType<ModelEditorImplementation>().As<ModelEditor>().SingleInstance();
+		builder.RegisterType<GenericDynamicDbRepository<Model>>().As<DynamicRepository<Model>>().SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
@@ -74,5 +76,6 @@ public static class AppBootstrapper
 	private static void SetupUISpecificServices(ContainerBuilder builder)
 	{
 		builder.RegisterType<RegisteredGamesVM>();
+		builder.RegisterType<ModelVMsRepository>().As<Repository<ModelVM>>();
 	}
 }

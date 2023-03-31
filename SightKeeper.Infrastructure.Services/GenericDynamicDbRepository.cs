@@ -16,13 +16,17 @@ public sealed class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEnt
 	public GenericDynamicDbRepository(AppDbContextFactory dbContextFactory)
 	{
 		_dbContextFactory = dbContextFactory;
+
 		ItemsCache = new SourceCache<TEntity, int>(entity => entity.Id);
 		ItemsCache
 			.Connect()
 			.Bind(out ReadOnlyObservableCollection<TEntity> items)
 			.Subscribe();
-		
 		Items = items;
+		
+		using AppDbContext dbContext = dbContextFactory.CreateDbContext();
+		ItemsCache.AddOrUpdate(dbContext.Set<TEntity>());
+		
 	}
 
 	public TEntity Get(int id) =>

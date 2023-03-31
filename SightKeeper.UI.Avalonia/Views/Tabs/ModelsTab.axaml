@@ -24,7 +24,7 @@
         
         <DataGrid Grid.Row="1"
                   Name="ModelsDataGrid"
-                  Items="{Binding Models}"
+                  Items="{Binding ModelVMsRepository.Items}"
                   IsReadOnly="True">
             
             <DataGrid.ContextMenu>

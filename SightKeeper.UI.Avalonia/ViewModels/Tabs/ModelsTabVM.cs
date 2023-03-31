@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using DynamicData;
+﻿using System.Threading.Tasks;
 using Material.Icons;
 using SightKeeper.Application;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.UI.Avalonia.Extensions;
@@ -15,24 +11,14 @@ namespace SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
 public sealed class ModelsTabVM : ViewModel
 {
-	private readonly Repository<Model> _modelsRepository;
+	public Repository<ModelVM> ModelVMsRepository { get; }
 	private readonly ModelEditor _modelEditor;
-	public ReadOnlyObservableCollection<ModelVM> Models => _models;
 
-	public ModelsTabVM(Repository<Model> modelsRepository, ModelEditor modelEditor)
+	public ModelsTabVM(Repository<ModelVM> modelVMsRepository, ModelEditor modelEditor)
 	{
-		_modelsRepository = modelsRepository;
+		ModelVMsRepository = modelVMsRepository;
 		_modelEditor = modelEditor;
-		_modelsSource.AddOrUpdate(modelsRepository.Items);
-		
-		_modelsSource.Connect()
-			.Transform(ModelVM.Create)
-			.Bind(out _models)
-			.Subscribe();
 	}
-
-	private readonly SourceCache<Model, int> _modelsSource = new(model => model.Id);
-	private readonly ReadOnlyObservableCollection<ModelVM> _models;
 
 	private async Task CreateNewModel()
 	{
@@ -40,10 +26,7 @@ public sealed class ModelsTabVM : ViewModel
 		ModelEditorDialog editorDialog = new(model);
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
 		if (result == ModelEditorDialog.DialogResult.Apply)
-		{
-			_modelsRepository.Add(model.Model);
-			_modelsSource.AddOrUpdate(model.Model);
-		}
+			ModelVMsRepository.Add(model);
 	}
 
 	private async Task EditModel(ModelVM model)
@@ -51,9 +34,7 @@ public sealed class ModelsTabVM : ViewModel
 		ModelEditorDialog editorDialog = new(model);
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
 		if (result == ModelEditorDialog.DialogResult.Apply)
-		{
 			await _modelEditor.SaveChangesAsync(model.Model);
-		}
 		else
 		{
 			await _modelEditor.RollbackChangesAsync(model.Model);
@@ -70,8 +51,7 @@ public sealed class ModelsTabVM : ViewModel
 			"Confirm model deletion", MaterialIconKind.TrashCanOutline);
 		if (result == MessageBoxDialog.DialogResult.Yes)
 		{
-			_modelsRepository.Remove(model.Model);
-			_modelsSource.Remove(model.Model);
+			ModelVMsRepository.Remove(model);
 		}
 	}
 
