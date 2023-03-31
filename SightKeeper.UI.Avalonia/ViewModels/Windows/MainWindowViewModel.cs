@@ -15,12 +15,13 @@ public class MainWindowViewModel : ViewModel
 
 	[Reactive] public TabItemViewModel SelectedTab { get; set; }
 
-	public MainWindowViewModel(ProfilesTab profilesTab, ModelsTab modelsTab, SettingsTab settingsTab)
+	public MainWindowViewModel(ProfilesTab profilesTab, ModelsTab modelsTab, AnnotatingTab annotatingTab, SettingsTab settingsTab)
 	{
 		Tabs = new List<TabItemViewModel>
 		{
 			new("Profiles", profilesTab),
 			new("Models", modelsTab),
+			new("Annotating", annotatingTab),
 			new("Settings", settingsTab)
 		};
 		

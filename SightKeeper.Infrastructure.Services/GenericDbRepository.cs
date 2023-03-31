@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.ObjectModel;
+using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Data;
@@ -7,16 +8,17 @@ namespace SightKeeper.Infrastructure.Services;
 
 public sealed class GenericDbRepository<TItem> : Repository<TItem> where TItem : class, Entity
 {
-	public IReadOnlyCollection<TItem> Items => _items;
+	public ReadOnlyObservableCollection<TItem> Items { get; }
 	public TItem Get(int id) => _itemsByIds[id];
-	public bool Contains(TItem item) => _itemsByIds.ContainsKey(item.Id);
+	public bool Contains(TItem modelVM) => _itemsByIds.ContainsKey(modelVM.Id);
 
 	public GenericDbRepository(AppDbContextFactory dbContextFactory)
 	{
 		_dbContextFactory = dbContextFactory;
 		using AppDbContext dbContext = dbContextFactory.CreateDbContext();
 		DbSet<TItem> set = dbContext.Set<TItem>();
-		_items = set.ToList();
+		_items = new ObservableCollection<TItem>(set);
+		Items = new ReadOnlyObservableCollection<TItem>(_items);
 		_itemsByIds = _items.ToDictionary(item => item.Id);
 	}
 
@@ -41,6 +43,6 @@ public sealed class GenericDbRepository<TItem> : Repository<TItem> where TItem :
 	}
 	
 	private readonly AppDbContextFactory _dbContextFactory;
-	private readonly List<TItem> _items;
+	private readonly ObservableCollection<TItem> _items;
 	private readonly Dictionary<int, TItem> _itemsByIds;
 }

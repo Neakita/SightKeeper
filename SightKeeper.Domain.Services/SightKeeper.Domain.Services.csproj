@@ -10,4 +10,8 @@
       <ProjectReference Include="..\SightKeeper.Domain.Model\SightKeeper.Domain.Model.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="DynamicData" Version="7.13.1" />
+    </ItemGroup>
+
 </Project>

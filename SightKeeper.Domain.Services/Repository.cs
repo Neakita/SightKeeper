@@ -1,11 +1,13 @@
-﻿namespace SightKeeper.Domain.Services;
+﻿using System.Collections.ObjectModel;
+
+namespace SightKeeper.Domain.Services;
 
 public interface Repository<TItem>
 {
-	IReadOnlyCollection<TItem> Items { get; }
+	ReadOnlyObservableCollection<TItem> Items { get; }
 
 	TItem Get(int id);
-	bool Contains(TItem item);
+	bool Contains(TItem modelVM);
 	void Add(TItem item);
 	void Remove(TItem item);
 }

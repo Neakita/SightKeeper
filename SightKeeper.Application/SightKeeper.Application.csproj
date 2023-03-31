@@ -14,6 +14,7 @@
     <ItemGroup>
         <PackageReference Include="Serilog" Version="2.12.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="SharpHook" Version="4.0.1" />
         <PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
     </ItemGroup>
 

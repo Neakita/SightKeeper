@@ -11,4 +11,8 @@
       <ProjectReference Include="..\SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="SharpHook" Version="4.0.1" />
+    </ItemGroup>
+
 </Project>

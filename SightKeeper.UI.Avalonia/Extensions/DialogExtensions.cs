@@ -25,6 +25,12 @@ public static class DialogExtensions
 		return await callerView.ShowDialog(dialog);
 	}
 
+	public static async Task<MessageBoxDialog.DialogResult> ShowMessageBoxDialog<TCallerViewModel>(this IViewFor<TCallerViewModel> callerView, string message, MessageBoxDialog.DialogResult dialogResults = MessageBoxDialog.DialogResult.Ok, string title = "", MaterialIconKind? icon = null) where TCallerViewModel : class
+	{
+		MessageBoxDialog dialog = new(message, dialogResults, title, icon);
+		return await callerView.ShowDialog(dialog);
+	}
+	
 	public static async Task<MessageBoxDialog.DialogResult> ShowMessageBoxDialog<TCallerViewModel>(this TCallerViewModel callerViewModel, string message, MessageBoxDialog.DialogResult dialogResults = MessageBoxDialog.DialogResult.Ok, string title = "", MaterialIconKind? icon = null) where TCallerViewModel : class
 	{
 		MessageBoxDialog dialog = new(message, dialogResults, title, icon);
