@@ -1,6 +1,9 @@
-﻿namespace SightKeeper.Domain.Model.Common;
+﻿using ReactiveUI;
+using SightKeeper.Domain.Model.Abstract;
 
-public sealed class Image
+namespace SightKeeper.Domain.Model.Common;
+
+public sealed class Image : ReactiveObject, Entity
 {
 	public Image(byte[] content, Resolution resolution)
 	{

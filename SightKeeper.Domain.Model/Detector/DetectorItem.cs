@@ -1,8 +1,10 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using ReactiveUI;
+using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
 
-public class DetectorItem
+public class DetectorItem : ReactiveObject, Entity
 {
 	public DetectorItem(ItemClass itemClass, BoundingBox boundingBox)
 	{

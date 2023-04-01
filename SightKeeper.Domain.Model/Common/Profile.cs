@@ -1,8 +1,11 @@
-﻿using SightKeeper.Domain.Model.Detector;
+﻿using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public class Profile
+public class Profile : ReactiveObject, Entity
 {
 	public Profile(string name, DetectorModel detectorModel)
 	{
@@ -22,8 +25,8 @@ public class Profile
 	}
 
 	public int Id { get; private set; }
-	public string Name { get; set; }
-	public string Description { get; set; } = string.Empty;
-	public virtual Game? Game { get; set; }
-	public virtual DetectorModel DetectorModel { get; set; }
+	[Reactive] public string Name { get; set; }
+	[Reactive] public string Description { get; set; } = string.Empty;
+	[Reactive] public virtual Game? Game { get; set; }
+	[Reactive] public virtual DetectorModel DetectorModel { get; set; }
 }

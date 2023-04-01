@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace SightKeeper.Domain.Model.Detector;
 
 [Owned]
-public class BoundingBox
+public class BoundingBox : ReactiveObject
 {
 	public BoundingBox(float x, float y, float width, float height)
 	{
@@ -13,8 +15,8 @@ public class BoundingBox
 		Height = height;
 	}
 
-	public float X { get; set; }
-	public float Y { get; set; }
-	public float Width { get; set; }
-	public float Height { get; set; }
+	[Reactive] public float X { get; set; }
+	[Reactive] public float Y { get; set; }
+	[Reactive] public float Width { get; set; }
+	[Reactive] public float Height { get; set; }
 }

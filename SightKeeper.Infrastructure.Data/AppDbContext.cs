@@ -65,4 +65,9 @@ public class AppDbContext : DbContext
 		};
 		optionsBuilder.UseSqlite(connectionStringBuilder.ConnectionString);
 	}
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
+	}
 }

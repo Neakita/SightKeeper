@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 
@@ -20,5 +21,5 @@ public class DetectorModel : Abstract.Model
 	{
 	}
 
-	public virtual ICollection<DetectorScreenshot> DetectorScreenshots { get; } = new List<DetectorScreenshot>();
+	public virtual ObservableCollection<DetectorScreenshot> DetectorScreenshots { get; } = new();
 }

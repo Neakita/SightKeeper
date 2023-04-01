@@ -1,8 +1,11 @@
-﻿using SightKeeper.Domain.Model.Abstract;
+﻿using System.Collections.ObjectModel;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public class Game : Entity
+public class Game : ReactiveObject, Entity
 {
 	public Game(string title, string processName)
 	{
@@ -19,11 +22,11 @@ public class Game : Entity
 
 	public int Id { get; set; } = -1;
 	
-	public string Title { get; set; }
+	[Reactive] public string Title { get; set; }
 	
 	public string ProcessName { get; private set; }
 
-	public virtual ICollection<Abstract.Model> Models { get; } = new List<Abstract.Model>();
+	public virtual ObservableCollection<Abstract.Model> Models { get; } = new();
 
 	public override string ToString() => Title;
 }

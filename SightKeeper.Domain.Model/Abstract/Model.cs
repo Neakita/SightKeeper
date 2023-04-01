@@ -1,10 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Abstract;
 
 [Table("Models")]
-public abstract class Model : Entity
+public abstract class Model : ReactiveObject, Entity
 {
 	public Model(string name) : this(name, new Resolution())
 	{
@@ -15,7 +18,7 @@ public abstract class Model : Entity
 		Name = name;
 		Description = string.Empty;
 		Resolution = resolution;
-		ItemClasses = new List<ItemClass>();
+		ItemClasses = new ObservableCollection<ItemClass>();
 	}
 
 
@@ -29,11 +32,12 @@ public abstract class Model : Entity
 	}
 
 	public int Id { get; private set; }
-	public string Name { get; set; }
-	public string Description { get; set; }
+
+	[Reactive] public string Name { get; set; }
+	[Reactive] public string Description { get; set; }
 	
 	public Resolution Resolution { get; private set; }
-	public ICollection<ItemClass> ItemClasses { get; private set; }
-	public Game? Game { get; set; }
-	public ModelConfig? Config { get; set; }
+	public ObservableCollection<ItemClass> ItemClasses { get; private set; }
+	[Reactive] public Game? Game { get; set; }
+	[Reactive] public ModelConfig? Config { get; set; }
 }

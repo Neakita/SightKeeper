@@ -1,8 +1,9 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using ReactiveUI;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Abstract;
 
-public abstract class Screenshot
+public abstract class Screenshot : ReactiveObject, Entity
 {
 	public Screenshot(Image image)
 	{

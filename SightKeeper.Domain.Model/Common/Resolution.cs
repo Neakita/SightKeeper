@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace SightKeeper.Domain.Model.Common;
 
 [Owned]
-public class Resolution
+public class Resolution : ReactiveObject
 {
 	public Resolution(ushort width = 320, ushort height = 320)
 	{
@@ -11,7 +13,7 @@ public class Resolution
 		Height = height;
 	}
 
-	public ushort Width { get; set; }
+	[Reactive] public ushort Width { get; set; }
 
-	public ushort Height { get; set; }
+	[Reactive] public ushort Height { get; set; }
 }

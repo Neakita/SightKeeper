@@ -1,6 +1,10 @@
-﻿namespace SightKeeper.Domain.Model.Common;
+﻿using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using SightKeeper.Domain.Model.Abstract;
 
-public class ItemClass
+namespace SightKeeper.Domain.Model.Common;
+
+public class ItemClass : ReactiveObject, Entity
 {
 	public ItemClass(string name)
 	{
@@ -15,5 +19,5 @@ public class ItemClass
 	}
 
 	public int Id { get; private set; }
-	public string Name { get; set; }
+	[Reactive] public string Name { get; set; }
 }
