@@ -1,30 +1,22 @@
-﻿using System;
-using SightKeeper.Domain.Model.Abstract;
+﻿using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Infrastructure.Common;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
-public interface ModelVM
+public interface ModelVM<out TModel> : ItemVM<TModel> where TModel : Model
 {
-	public static ModelVM Create(Model model)
-	{
-		if (model is DetectorModel detectorModel) return new DetectorModelVM(detectorModel);
-		throw new Exception($"Unexpected type {model.GetType()}");
-	}
-
 	string Name { get; set; }
 	ushort Width { get; set; }
 	ushort Height { get; set; }
-	ModelConfig Config { get; set; }
+	ModelConfig? Config { get; set; }
 	Game? Game { get; set; }
-
-	Model Model { get; }
 
 	void UpdateProperties();
 }
 
-public interface ModelVM<TModel> : ModelVM where TModel : Model
+public interface ModelVM : ModelVM<Model>
 {
-	new TModel Model { get; }
+	public static ModelVM<TModel> Create<TModel>(TModel model) where TModel : Model =>
+		Locator.Resolve<ModelVM<TModel>, TModel>(model);
 }

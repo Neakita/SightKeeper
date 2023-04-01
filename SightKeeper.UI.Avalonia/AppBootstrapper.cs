@@ -5,6 +5,7 @@ using Serilog.Core;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Data;
@@ -49,6 +50,7 @@ public static class AppBootstrapper
 		builder.RegisterType<GenericDbRepository<Model>>().As<Repository<Model>>().SingleInstance();
 		builder.RegisterType<ModelEditorImplementation>().As<ModelEditor>().SingleInstance();
 		builder.RegisterType<GenericDynamicDbRepository<Model>>().As<DynamicRepository<Model>>().SingleInstance();
+		builder.RegisterGeneric(typeof(GenericDbRepository<>)).As(typeof(Repository<>)).SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
@@ -75,7 +77,8 @@ public static class AppBootstrapper
 
 	private static void SetupUISpecificServices(ContainerBuilder builder)
 	{
-		builder.RegisterType<RegisteredGamesVM>();
-		builder.RegisterType<ModelVMsRepository>().As<Repository<ModelVM>>();
+		builder.RegisterType<RegisteredGamesVM>().SingleInstance();
+		builder.RegisterType<ModelVMsRepository>().As<Repository<ModelVM<Model>>>().SingleInstance();
+		builder.RegisterType<DetectorModelVMImplementation>().As<DetectorModelVM>().As<ModelVM<DetectorModel>>().As<ModelVM>().As<ModelVM<Model>>();
 	}
 }

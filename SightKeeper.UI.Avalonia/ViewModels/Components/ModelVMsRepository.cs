@@ -8,12 +8,12 @@ using SightKeeper.UI.Avalonia.ViewModels.Elements;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Components;
 
-public sealed class ModelVMsRepository : DynamicRepository<ModelVM>
+public sealed class ModelVMsRepository : DynamicRepository<ModelVM<Model>>
 {
-	public ReadOnlyObservableCollection<ModelVM> Items { get; }
+	public ReadOnlyObservableCollection<ModelVM<Model>> Items { get; }
 
-	public ISourceCache<ModelVM, int> ItemsCache { get; } =
-		new SourceCache<ModelVM, int>(modelVM => modelVM.Model.Id);
+	public ISourceCache<ModelVM<Model>, int> ItemsCache { get; } =
+		new SourceCache<ModelVM<Model>, int>(modelVM => modelVM.Item.Id);
 	
 
 	public ModelVMsRepository(DynamicRepository<Model> modelsRepository)
@@ -25,29 +25,29 @@ public sealed class ModelVMsRepository : DynamicRepository<ModelVM>
 			.Transform(ModelVM.Create)
 			.PopulateInto(ItemsCache);
 
-		ItemsCache.Connect().Bind(out ReadOnlyObservableCollection<ModelVM> items).Subscribe();
+		ItemsCache.Connect().Bind(out ReadOnlyObservableCollection<ModelVM<Model>> items).Subscribe();
 		
 		Items = items;
 	}
 
-	public ModelVM Get(int id) => ItemsCache.Lookup(id)
-		.ValueOrThrow(() => new Exception($"Not found {nameof(ModelVM)} with id {id}"));
+	public ModelVM<Model> Get(int id) => ItemsCache.Lookup(id)
+		.ValueOrThrow(() => new Exception($"Not found {nameof(ModelVM<Model>)} with id {id}"));
 
-	public bool Contains(ModelVM modelVM)
+	public bool Contains(ModelVM<Model> modelVM)
 	{
-		Optional<ModelVM> lookup = ItemsCache.Lookup(modelVM.Model.Id);
+		Optional<ModelVM<Model>> lookup = ItemsCache.Lookup(modelVM.Item.Id);
 		return lookup.HasValue && lookup.Value == modelVM;
 	}
 
-	public void Add(ModelVM item)
+	public void Add(ModelVM<Model> item)
 	{
-		_modelsRepository.Add(item.Model);
+		_modelsRepository.Add(item.Item);
 		ItemsCache.AddOrUpdate(item);
 	}
 
-	public void Remove(ModelVM item)
+	public void Remove(ModelVM<Model> item)
 	{
-		_modelsRepository.Remove(item.Model);
+		_modelsRepository.Remove(item.Item);
 	}
 	
 	private readonly Repository<Model> _modelsRepository;

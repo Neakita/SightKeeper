@@ -13,8 +13,9 @@ public sealed class ModelVMsRepositoryTests
 	[Fact]
 	public void ShouldGetSameInstanceAfterAdd()
 	{
+		AppBootstrapper.Setup();
 		ModelVMsRepository repository = Repository;
-		DetectorModelVM testModel = new(new DetectorModel("Test model"));
+		DetectorModelVMImplementation testModel = new(new DetectorModel("Test model"));
 		repository.Add(testModel);
 		repository.Items.Single().Should().BeSameAs(testModel);
 	}
@@ -22,22 +23,24 @@ public sealed class ModelVMsRepositoryTests
 	[Fact]
 	public void ShouldAddInstanceFromInnerRepository()
 	{
+		AppBootstrapper.Setup();
 		var innerRepository = new GenericDynamicDbRepository<Model>(new TestDbContextFactory());
 		ModelVMsRepository repository = new(innerRepository);
 		DetectorModel testModel = new("Test model");
 		innerRepository.Add(testModel);
-		repository.Items.Should().ContainSingle(modelVM => modelVM.Model == testModel);
+		repository.Items.Should().ContainSingle(modelVM => modelVM.Item == testModel);
 	}
 
 	[Fact]
 	public void ShouldDeleteModelVMFromModelRepository()
 	{
+		AppBootstrapper.Setup();
 		var innerRepository = new GenericDynamicDbRepository<Model>(new TestDbContextFactory());
 		ModelVMsRepository repository = new(innerRepository);
 		DetectorModel testModel = new("Test model");
-		DetectorModelVM testModelVM = new(testModel);
-		repository.Add(testModelVM);
-		repository.Items.Single().Should().BeSameAs(testModelVM);
+		DetectorModelVMImplementation testModelVMImplementation = new(testModel);
+		repository.Add(testModelVMImplementation);
+		repository.Items.Single().Should().BeSameAs(testModelVMImplementation);
 		
 		innerRepository.Remove(testModel);
 		repository.Items.Should().BeEmpty();
@@ -46,11 +49,12 @@ public sealed class ModelVMsRepositoryTests
 	[Fact]
 	public void ShouldDeleteModelFromModelVMRepository()
 	{
+		AppBootstrapper.Setup();
 		var innerRepository = new GenericDynamicDbRepository<Model>(new TestDbContextFactory());
 		ModelVMsRepository repository = new(innerRepository);
 		DetectorModel testModel = new("Test model");
 		innerRepository.Add(testModel);
-		repository.Items.Should().ContainSingle(modelVM => modelVM.Model == testModel);
+		repository.Items.Should().ContainSingle(modelVM => modelVM.Item == testModel);
 		repository.Remove(repository.Items.Single());
 		innerRepository.Items.Should().BeEmpty();
 	}

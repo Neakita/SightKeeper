@@ -49,7 +49,7 @@
                 <DataGridTemplateColumn Header="Resolution">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="elements:ModelVM">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <TextBlock Text="{Binding Width}"/>
                                 <TextBlock Text="x"/>
                                 <TextBlock Text="{Binding Height}"/>

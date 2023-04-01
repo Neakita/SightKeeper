@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
+using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.UI.Avalonia.Misc;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
@@ -20,7 +21,7 @@ public partial class ModelEditorDialog : ReactiveWindow<ModelEditorViewModel>, D
 		Apply
 	}
 	
-	public ModelEditorDialog(ModelVM model)
+	public ModelEditorDialog(ModelVM<Model> model)
 	{
 		InitializeComponent();
 		ViewModel = ModelEditorViewModel.Create(model);
