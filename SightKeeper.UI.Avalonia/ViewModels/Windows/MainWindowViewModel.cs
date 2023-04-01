@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SightKeeper.Infrastructure.Common;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.Views.Tabs;
 
@@ -11,6 +12,8 @@ namespace SightKeeper.UI.Avalonia.ViewModels.Windows;
 
 public class MainWindowViewModel : ViewModel
 {
+	public static MainWindowViewModel New => Locator.Resolve<MainWindowViewModel>();
+	
 	public ICollection<TabItemViewModel> Tabs { get; }
 
 	[Reactive] public TabItemViewModel SelectedTab { get; set; }

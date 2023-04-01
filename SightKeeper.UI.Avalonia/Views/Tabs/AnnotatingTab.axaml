@@ -2,17 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:tabs="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Tabs"
+             xmlns:viewModels="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Tabs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.UI.Avalonia.Views.Tabs.AnnotatingTab">
-
-    <Design.DataContext>
-        <tabs:AnnotatingTabVM/>
-    </Design.DataContext>
+             x:Class="SightKeeper.UI.Avalonia.Views.Tabs.AnnotatingTab"
+             d:DataContext="{x:Static viewModels:AnnotatingTabVM.New}">
     
     <Grid ColumnDefinitions="*, 250">
-        
-        <Image Grid.Column="0" Source="{Binding IBitmap}"/>
         
         <StackPanel Grid.Column="1" Spacing="10" Margin="10 50 10 10">
             <ComboBox Items="{Binding ModelsRepository.Items}"

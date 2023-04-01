@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Input.Platform;
 using Material.Icons;
 using ReactiveUI;
+using SightKeeper.Infrastructure.Common;
 using SightKeeper.UI.Avalonia.Extensions;
 using SightKeeper.UI.Avalonia.Views.Windows;
 
@@ -11,6 +12,12 @@ namespace SightKeeper.UI.Avalonia.ViewModels.Windows;
 
 public sealed class MessageBoxDialogViewModel : ViewModel
 {
+	public static MessageBoxDialogViewModel DesignTimeInstance => new(
+		MessageBoxDialog.DialogResult.Ok | MessageBoxDialog.DialogResult.Cancel,
+		"Some message",
+		"Some title",
+		MaterialIconKind.Abc);
+	
 	public IReadOnlyCollection<MessageBoxDialog.DialogResult> DialogResults { get; }
 	public string Title { get; }
 	public MaterialIconKind? Icon { get; }

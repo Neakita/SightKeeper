@@ -2,18 +2,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Windows"
         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:viewModels="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Windows"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SightKeeper.UI.Avalonia.Views.Windows.MessageBoxDialog"
         Title="{Binding Title}"
         Classes="ModernBlack Dialog"
         SizeToContent="WidthAndHeight"
-        Name="Root">
-    
-    <Design.DataContext>
-        <viewModels:MessageBoxDialogViewModel/>
-    </Design.DataContext>
+        Name="Root"
+        d:DataContext="{x:Static viewModels:MessageBoxDialogViewModel.DesignTimeInstance}">
     
     <Grid RowDefinitions="*, 50" Margin="10 50, 10, 10">
     

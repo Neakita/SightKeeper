@@ -3,6 +3,7 @@ using Material.Icons;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
+using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Data;
 using SightKeeper.UI.Avalonia.Extensions;
 using SightKeeper.UI.Avalonia.Views.Windows;
@@ -11,6 +12,9 @@ namespace SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
 public sealed class ModelsTabVM : ViewModel
 {
+	public static ModelsTabVM New => Locator.Resolve<ModelsTabVM>();
+
+
 	public Repository<Model> ModelsRepository { get; }
 
 	public ModelsTabVM(Repository<Model> modelsRepository, AppDbContextFactory dbContextFactory)
