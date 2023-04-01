@@ -78,7 +78,14 @@ public static class AppBootstrapper
 	private static void SetupUISpecificServices(ContainerBuilder builder)
 	{
 		builder.RegisterType<RegisteredGamesVM>().SingleInstance();
-		builder.RegisterType<ModelVMsRepository>().As<Repository<ModelVM<Model>>>().SingleInstance();
-		builder.RegisterType<DetectorModelVMImplementation>().As<DetectorModelVM>().As<ModelVM<DetectorModel>>().As<ModelVM>().As<ModelVM<Model>>();
+		builder.RegisterType<GenericVMsRepository<ModelVM, Model>>().As<Repository<ModelVM>>().SingleInstance();
+		
+		builder.RegisterType<DetectorModelVMImplementation>()
+			.As<DetectorModelVM>()
+			.As<ModelVM<DetectorModel>>()
+			.As<ModelVM>()
+			.As<ModelVM<Model>>()
+			.As<ItemVM<Model>>()
+			.As<ItemVM<DetectorModel>>();
 	}
 }

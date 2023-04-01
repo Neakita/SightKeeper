@@ -33,10 +33,10 @@ public sealed class ModelVMsRepository : DynamicRepository<ModelVM<Model>>
 	public ModelVM<Model> Get(int id) => ItemsCache.Lookup(id)
 		.ValueOrThrow(() => new Exception($"Not found {nameof(ModelVM<Model>)} with id {id}"));
 
-	public bool Contains(ModelVM<Model> modelVM)
+	public bool Contains(ModelVM<Model> itemVM)
 	{
-		Optional<ModelVM<Model>> lookup = ItemsCache.Lookup(modelVM.Item.Id);
-		return lookup.HasValue && lookup.Value == modelVM;
+		Optional<ModelVM<Model>> lookup = ItemsCache.Lookup(itemVM.Item.Id);
+		return lookup.HasValue && lookup.Value == itemVM;
 	}
 
 	public void Add(ModelVM<Model> item)

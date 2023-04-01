@@ -33,7 +33,7 @@ public sealed class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEnt
 		ItemsCache.Lookup(id)
 			.ValueOrThrow(() => new Exception($"Item of type {typeof(TEntity)} with id {id} not found"));
 
-	public bool Contains(TEntity modelVM) => ItemsCache.Lookup(modelVM.Id).HasValue;
+	public bool Contains(TEntity itemVM) => ItemsCache.Lookup(itemVM.Id).HasValue;
 
 	public void Add(TEntity item)
 	{

@@ -10,7 +10,7 @@ public sealed class GenericDbRepository<TItem> : Repository<TItem> where TItem :
 {
 	public ReadOnlyObservableCollection<TItem> Items { get; }
 	public TItem Get(int id) => _itemsByIds[id];
-	public bool Contains(TItem modelVM) => _itemsByIds.ContainsKey(modelVM.Id);
+	public bool Contains(TItem itemVM) => _itemsByIds.ContainsKey(itemVM.Id);
 
 	public GenericDbRepository(AppDbContextFactory dbContextFactory)
 	{

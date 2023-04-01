@@ -7,7 +7,7 @@ public interface Repository<TItem>
 	ReadOnlyObservableCollection<TItem> Items { get; }
 
 	TItem Get(int id);
-	bool Contains(TItem modelVM);
+	bool Contains(TItem itemVM);
 	void Add(TItem item);
 	void Remove(TItem item);
 }
