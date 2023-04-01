@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using System.Collections.Generic;
+using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
 using SightKeeper.Domain.Model.Abstract;
@@ -7,7 +8,7 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
-public sealed class DetectorModelVMImplementation : ReactiveValidationObject, DetectorModelVM
+public sealed class DetectorModelVMImplementation : ReactiveValidationObject, DetectorModelVM, ItemVM<DetectorModel>
 {
 	public string Name
 	{
@@ -48,6 +49,8 @@ public sealed class DetectorModelVMImplementation : ReactiveValidationObject, De
 			this.RaisePropertyChanged();
 		}
 	}
+
+	public ICollection<ItemClass> ItemClasses => Item.ItemClasses;
 
 	public Game? Game
 	{

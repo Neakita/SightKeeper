@@ -1,6 +1,8 @@
-﻿namespace SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Abstract;
 
-public sealed class ModelConfig
+namespace SightKeeper.Domain.Model.Common;
+
+public sealed class ModelConfig : Entity
 {
 	public int Id { get; private set; }
 	public string Name { get; private set; }

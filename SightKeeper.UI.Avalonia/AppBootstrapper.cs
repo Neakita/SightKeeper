@@ -88,9 +88,7 @@ public static class AppBootstrapper
 		
 		builder.RegisterType<DetectorModelVMImplementation>()
 			.As<DetectorModelVM>()
-			.As<ModelVM<DetectorModel>>()
 			.As<ModelVM>()
-			.As<ModelVM<Model>>()
 			.As<ItemVM<Model>>()
 			.As<ItemVM<DetectorModel>>();
 	}

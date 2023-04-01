@@ -31,7 +31,7 @@ public sealed class ModelsTabVM : ViewModel
 			ModelVMsRepository.Add(model);
 	}
 
-	private async Task EditModel(ModelVM<Model> model)
+	private async Task EditModel(ModelVM model)
 	{
 		ModelEditorDialog editorDialog = new(model);
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
@@ -44,7 +44,7 @@ public sealed class ModelsTabVM : ViewModel
 		}
 	}
 
-	private bool CanEditModel(object parameter) => parameter is ModelVM<Model>;
+	private bool CanEditModel(object parameter) => parameter is ModelVM;
 
 	private async Task DeleteModel(ModelVM model)
 	{
@@ -55,5 +55,5 @@ public sealed class ModelsTabVM : ViewModel
 			ModelVMsRepository.Remove(model);
 	}
 
-	private bool CanDeleteModel(object parameter) => parameter is ModelVM<Model>;
+	private bool CanDeleteModel(object parameter) => parameter is ModelVM;
 }

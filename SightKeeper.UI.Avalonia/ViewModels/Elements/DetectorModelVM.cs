@@ -1,8 +1,6 @@
-﻿using SightKeeper.Domain.Model.Detector;
+﻿namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
-namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
-
-public interface DetectorModelVM : ModelVM<DetectorModel>, ModelVM
+public interface DetectorModelVM : ModelVM
 {
 	
 }

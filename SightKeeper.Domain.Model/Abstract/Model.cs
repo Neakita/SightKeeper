@@ -15,7 +15,7 @@ public abstract class Model : Entity
 		Name = name;
 		Description = string.Empty;
 		Resolution = resolution;
-		Classes = new List<ItemClass>();
+		ItemClasses = new List<ItemClass>();
 	}
 
 
@@ -25,7 +25,7 @@ public abstract class Model : Entity
 		Name = name;
 		Description = null!;
 		Resolution = null!;
-		Classes = null!;
+		ItemClasses = null!;
 	}
 
 	public int Id { get; private set; }
@@ -33,7 +33,7 @@ public abstract class Model : Entity
 	public string Description { get; set; }
 	
 	public Resolution Resolution { get; private set; }
-	public List<ItemClass> Classes { get; private set; }
+	public ICollection<ItemClass> ItemClasses { get; private set; }
 	public Game? Game { get; set; }
 	public ModelConfig? Config { get; set; }
 }

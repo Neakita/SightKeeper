@@ -15,8 +15,6 @@
                 <windows:ModelEditorViewModel/>
         </Design.DataContext>
         
-        
-        
         <Grid RowDefinitions="*, 50" ColumnDefinitions="*, *">
                 
                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="5">
@@ -27,6 +25,8 @@
                                 <TextBox Text="{Binding Model.Width}" VerticalAlignment="Top" Margin="5"/>
                                 <TextBox Text="{Binding Model.Height}" VerticalAlignment="Top" Margin="5"/>
                         </StackPanel>
+                        <TextBlock Text="Item classes"/>
+                        <ListBox Items="{Binding Model.ItemClasses}"/>
                 </StackPanel>
                 
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">

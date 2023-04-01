@@ -33,7 +33,7 @@ public sealed class GenericVMsRepository<TItemVM, TItem> : Repository<TItemVM> w
 	}
 
 	public TItemVM Get(int id) => ItemsCache.Lookup(id)
-		.ValueOrThrow(() => new Exception($"Not found {nameof(ModelVM<Model>)} with id {id}"));
+		.ValueOrThrow(() => new Exception($"Not found {nameof(ModelVM)} with id {id}"));
 
 	public bool Contains(TItemVM itemVM)
 	{
