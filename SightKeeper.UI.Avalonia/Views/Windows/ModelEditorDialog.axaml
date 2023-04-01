@@ -11,56 +11,89 @@
         Width="600" Height="400"
         MinWidth="350" MinHeight="240"
         d:DataContext="{x:Static viewModels:ModelEditorViewModel.DesignTimeInstance}">
-        
-        <Grid RowDefinitions="*, 50" ColumnDefinitions="*, *">
-                
-                <StackPanel Grid.Row="0" Grid.Column="0" Margin="20" Spacing="20">
-                        <TextBox Text="{Binding Model.Name}" Watermark="Name"/>
-                        <Grid ColumnDefinitions="*, *">
-                                <ComboBox Grid.Column="0"
-                                          SelectedItem="{Binding Model.Game}"
-                                          Items="{Binding GamesRepository.Items}"
-                                          PlaceholderText="Game"
-                                          HorizontalAlignment="Stretch"
-                                          Margin="0 0 10 0"/>
-                                <ComboBox Grid.Column="1"
-                                          SelectedItem="{Binding Model.Config}"
-                                          Items="{Binding ConfigsRepository.Items}"
-                                          PlaceholderText="Config"
-                                          HorizontalAlignment="Stretch"
-                                          Margin="10 0 0 0"/>
-                        </Grid>
-                        <StackPanel Orientation="Horizontal" Spacing="20">
-                                <StackPanel.Styles>
-                                        <Style Selector="NumericUpDown.Resolution">
-                                                <Setter Property="Increment" Value="32"/>
-                                                <Setter Property="Minimum" Value="32"/>
-                                                <Setter Property="Maximum" Value="640"/>
-                                        </Style>
-                                </StackPanel.Styles>
-                                <NumericUpDown Text="{Binding Model.Resolution.Width}"
-                                               Classes="Resolution"/>
-                                <NumericUpDown Text="{Binding Model.Resolution.Height}"
-                                               Classes="Resolution"/>
+
+    <Grid RowDefinitions="*, 50" ColumnDefinitions="*, *">
+
+        <ScrollViewer Grid.Row="0" Grid.Column="0">
+            <StackPanel Margin="20" Spacing="20">
+                <TextBox Text="{Binding Model.Name}" Watermark="Name" />
+                <Grid ColumnDefinitions="*, *">
+                    <ComboBox Grid.Column="0"
+                              SelectedItem="{Binding Model.Game}"
+                              Items="{Binding GamesRepository.Items}"
+                              PlaceholderText="Game"
+                              HorizontalAlignment="Stretch"
+                              Margin="0 0 10 0" />
+                    <ComboBox Grid.Column="1"
+                              SelectedItem="{Binding Model.Config}"
+                              Items="{Binding ConfigsRepository.Items}"
+                              PlaceholderText="Config"
+                              HorizontalAlignment="Stretch"
+                              Margin="10 0 0 0" />
+                </Grid>
+                <StackPanel Orientation="Horizontal" Spacing="20">
+                    <StackPanel.Styles>
+                        <Style Selector="NumericUpDown.Resolution">
+                            <Setter Property="Increment" Value="32" />
+                            <Setter Property="Minimum" Value="32" />
+                            <Setter Property="Maximum" Value="640" />
+                        </Style>
+                    </StackPanel.Styles>
+                    <NumericUpDown Text="{Binding Model.Resolution.Width}"
+                                   Classes="Resolution" />
+                    <NumericUpDown Text="{Binding Model.Resolution.Height}"
+                                   Classes="Resolution" />
+                </StackPanel>
+
+                <Border BorderBrush="Gray" BorderThickness="1">
+
+                    <StackPanel Margin="10" Spacing="10">
+
+                        <TextBlock Text="Item classes" />
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBox Watermark="New item class"
+                                     Text="{Binding NewItemClassName}" />
+                            <Button Content="{icons:MaterialIconExt Plus}"
+                                    Command="{Binding AddNewItemClass}" />
                         </StackPanel>
-                        <TextBlock Text="Item classes"/>
-                        <ListBox Items="{Binding Model.ItemClasses}"/>
+
+                        <ListBox Name="ItemClassesListBox"
+                                 Items="{Binding Model.ItemClasses}"
+                                 IsVisible="{Binding !!Model.ItemClasses.Count}">
+                            <ListBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Delete"
+                                              Command="{Binding DeleteItemClass}"
+                                              CommandParameter="{Binding SelectedIndex, ElementName=ItemClassesListBox}" />
+                                </ContextMenu>
+                            </ListBox.ContextMenu>
+                        </ListBox>
+
+                        <TextBlock Text="No items yet" IsVisible="{Binding !Model.ItemClasses.Count}" />
+
+                    </StackPanel>
+
+                </Border>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+            <Button Command="{Binding ApplyCommand}" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <icons:MaterialIcon Kind="Check" />
+                    <TextBlock Text="Apply" />
                 </StackPanel>
-                
-                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                        <Button Command="{Binding ApplyCommand}" Margin="5">
-                                <StackPanel Orientation="Horizontal">
-                                        <icons:MaterialIcon Kind="Check"/>
-                                        <TextBlock Text="Apply"/>
-                                </StackPanel>
-                        </Button>
-                        <Button Command="{Binding CancelCommand}" Margin="5">
-                                <StackPanel Orientation="Horizontal">
-                                        <icons:MaterialIcon Kind="Close"/>
-                                        <TextBlock Text="Cancel"/>
-                                </StackPanel>
-                        </Button>
+            </Button>
+            <Button Command="{Binding CancelCommand}" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <icons:MaterialIcon Kind="Close" />
+                    <TextBlock Text="Cancel" />
                 </StackPanel>
-        </Grid>
-        
+            </Button>
+        </StackPanel>
+    </Grid>
+
 </Window>

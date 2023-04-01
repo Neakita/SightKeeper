@@ -20,4 +20,6 @@ public class ItemClass : ReactiveObject, Entity
 
 	public int Id { get; private set; }
 	[Reactive] public string Name { get; set; }
+
+	public override string ToString() => Name;
 }
