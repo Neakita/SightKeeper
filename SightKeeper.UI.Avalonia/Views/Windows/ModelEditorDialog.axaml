@@ -22,8 +22,8 @@
                         <ComboBox SelectedItem="{Binding Model.Game}" Margin="5"/>
                         <ComboBox SelectedItem="{Binding Model.Config}" Margin="5"/>
                         <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBox Text="{Binding Model.Width}" VerticalAlignment="Top" Margin="5"/>
-                                <TextBox Text="{Binding Model.Height}" VerticalAlignment="Top" Margin="5"/>
+                                <TextBox Text="{Binding Model.Resolution.Width}" VerticalAlignment="Top" Margin="5"/>
+                                <TextBox Text="{Binding Model.Resolution.Height}" VerticalAlignment="Top" Margin="5"/>
                         </StackPanel>
                         <TextBlock Text="Item classes"/>
                         <ListBox Items="{Binding Model.ItemClasses}"/>

@@ -1,59 +1,57 @@
 ﻿using System.Threading.Tasks;
 using Material.Icons;
-using SightKeeper.Application;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
-using SightKeeper.Infrastructure.Common;
+using SightKeeper.Infrastructure.Data;
 using SightKeeper.UI.Avalonia.Extensions;
-using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.Views.Windows;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
 public sealed class ModelsTabVM : ViewModel
 {
-	public Repository<ModelVM> ModelVMsRepository { get; }
-	private readonly ModelEditor _modelEditor;
+	public Repository<Model> ModelsRepository { get; }
 
-	public ModelsTabVM(Repository<ModelVM> modelVMsRepository, ModelEditor modelEditor)
+	public ModelsTabVM(Repository<Model> modelsRepository, AppDbContextFactory dbContextFactory)
 	{
-		ModelVMsRepository = modelVMsRepository;
-		_modelEditor = modelEditor;
+		_dbContextFactory = dbContextFactory;
+		ModelsRepository = modelsRepository;
 	}
+	
+	private readonly AppDbContextFactory _dbContextFactory;
 
 	private async Task CreateNewModel()
 	{
-		ModelVM model = Locator.Resolve<ModelVM, Model>(new DetectorModel("Unnamed detector model"));
-		ModelEditorDialog editorDialog = new(model);
+		DetectorModel newModel = new("Unnamed detector model");
+		ModelEditorDialog editorDialog = new(newModel);
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
 		if (result == ModelEditorDialog.DialogResult.Apply)
-			ModelVMsRepository.Add(model);
+			ModelsRepository.Add(newModel);
 	}
 
-	private async Task EditModel(ModelVM model)
+	private async Task EditModel(Model model)
 	{
+		await using AppDbContext dbContext = await _dbContextFactory.CreateDbContextAsync();
+		dbContext.Update(model);
 		ModelEditorDialog editorDialog = new(model);
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
 		if (result == ModelEditorDialog.DialogResult.Apply)
-			await _modelEditor.SaveChangesAsync(model.Item);
+			await dbContext.SaveChangesAsync();
 		else
-		{
-			await _modelEditor.RollbackChangesAsync(model.Item);
-			model.UpdateProperties();
-		}
+			dbContext.RollBack();
 	}
 
-	private bool CanEditModel(object parameter) => parameter is ModelVM;
+	private bool CanEditModel(object parameter) => parameter is Model;
 
-	private async Task DeleteModel(ModelVM model)
+	private async Task DeleteModel(Model model)
 	{
 		MessageBoxDialog.DialogResult result = await this.ShowMessageBoxDialog($"Do you really want to remove the {model.Name}? This action cannot be undone",
 			MessageBoxDialog.DialogResult.Yes | MessageBoxDialog.DialogResult.No,
 			"Confirm model deletion", MaterialIconKind.TrashCanOutline);
 		if (result == MessageBoxDialog.DialogResult.Yes)
-			ModelVMsRepository.Remove(model);
+			ModelsRepository.Remove(model);
 	}
 
-	private bool CanDeleteModel(object parameter) => parameter is ModelVM;
+	private bool CanDeleteModel(object parameter) => parameter is Model;
 }

@@ -6,13 +6,11 @@ using Serilog.Events;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Data;
 using SightKeeper.Infrastructure.Services;
 using SightKeeper.Infrastructure.Services.Windows;
-using SightKeeper.UI.Avalonia.ViewModels.Components;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
@@ -84,12 +82,5 @@ public static class AppBootstrapper
 	private static void SetupUISpecificServices(ContainerBuilder builder)
 	{
 		builder.RegisterType<RegisteredGamesVM>().SingleInstance();
-		builder.RegisterType<GenericVMsRepository<ModelVM, Model>>().As<Repository<ModelVM>>().SingleInstance();
-		
-		builder.RegisterType<DetectorModelVMImplementation>()
-			.As<DetectorModelVM>()
-			.As<ModelVM>()
-			.As<ItemVM<Model>>()
-			.As<ItemVM<DetectorModel>>();
 	}
 }

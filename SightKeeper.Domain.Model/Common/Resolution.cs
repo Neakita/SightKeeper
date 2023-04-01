@@ -16,4 +16,6 @@ public class Resolution : ReactiveObject
 	[Reactive] public ushort Width { get; set; }
 
 	[Reactive] public ushort Height { get; set; }
+
+	public override string ToString() => $"{Width}x{Height}";
 }

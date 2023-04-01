@@ -5,6 +5,7 @@
              xmlns:tabs="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Tabs"
              xmlns:elements="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Elements"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:abstract="clr-namespace:SightKeeper.Domain.Model.Abstract;assembly=SightKeeper.Domain.Model"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.UI.Avalonia.Views.Tabs.ModelsTab">
 
@@ -24,7 +25,7 @@
         
         <DataGrid Grid.Row="1"
                   Name="ModelsDataGrid"
-                  Items="{Binding ModelVMsRepository.Items}"
+                  Items="{Binding ModelsRepository.Items}"
                   IsReadOnly="True">
             
             <DataGrid.ContextMenu>
@@ -41,25 +42,16 @@
             <DataGrid.Columns>
                 
                 <DataGridTextColumn Header="Name"
-                                    Binding="{Binding (elements:ModelVM).Name}"/>
+                                    Binding="{Binding (abstract:Model).Name}"/>
                 
                 <DataGridTextColumn Header="Game"
-                                    Binding="{Binding (elements:ModelVM).Game.Title}"/>
+                                    Binding="{Binding (abstract:Model).Game.Title, FallbackValue=[Not selected]}"/>
                 
-                <DataGridTemplateColumn Header="Resolution">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="elements:ModelVM">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding Width}"/>
-                                <TextBlock Text="x"/>
-                                <TextBlock Text="{Binding Height}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Resolution"
+                                    Binding="{Binding (abstract:Model).Resolution}"/>
                 
                 <DataGridTextColumn Header="Config"
-                                    Binding="{Binding (elements:ModelVM).Config.Name}"/>
+                                    Binding="{Binding (abstract:Model).Config.Name, FallbackValue=[Not selected]}"/>
                 
             </DataGrid.Columns>
         </DataGrid>

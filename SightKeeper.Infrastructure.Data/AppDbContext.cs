@@ -55,6 +55,24 @@ public class AppDbContext : DbContext
 		}
 	}
 
+	private async Task RollbackEntryAsync(EntityEntry entry)
+	{
+		switch (entry.State)
+		{
+			case EntityState.Modified:
+			case EntityState.Deleted:
+				entry.State = EntityState.Modified; //Revert changes made to deleted entity.
+				entry.State = EntityState.Unchanged;
+				break;
+			case EntityState.Added:
+				entry.State = EntityState.Detached;
+				break;
+			case EntityState.Detached:
+				await entry.ReloadAsync();
+				break;
+		}
+	}
+
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{

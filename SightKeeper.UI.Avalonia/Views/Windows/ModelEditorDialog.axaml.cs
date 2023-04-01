@@ -21,7 +21,7 @@ public partial class ModelEditorDialog : ReactiveWindow<ModelEditorViewModel>, D
 		Apply
 	}
 	
-	public ModelEditorDialog(ModelVM model)
+	public ModelEditorDialog(Model model)
 	{
 		InitializeComponent();
 		ViewModel = ModelEditorViewModel.Create(model);
