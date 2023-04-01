@@ -18,8 +18,8 @@ public sealed class ModelEditorViewModel : ReactiveObject, IDisposable
 	public static ModelEditorViewModel Create(Model model) =>
 		Locator.Resolve<ModelEditorViewModel, Model>(model);
 
-	public IReadOnlyCollection<Game> Games { get; }
-	public IReadOnlyCollection<ModelConfig> Configs { get; }
+	public Repository<Game> GamesRepository { get; }
+	public Repository<ModelConfig> ConfigsRepository { get; }
 	
 	public Model Model { get; }
 	
@@ -29,13 +29,13 @@ public sealed class ModelEditorViewModel : ReactiveObject, IDisposable
 	public ModelEditorViewModel(
 		Model model,
 		AppDbContextFactory dbContextFactory,
-		Repository<Game> gamesRepository,
-		Repository<ModelConfig> configsRepository)
+		Repository<Game> gamesRepositoryRepository,
+		Repository<ModelConfig> configsRepositoryRepository)
 	{
 		Model = model;
 		using AppDbContext dbContext = dbContextFactory.CreateDbContext();
-		Games = gamesRepository.Items;
-		Configs = configsRepository.Items;
+		GamesRepository = gamesRepositoryRepository;
+		ConfigsRepository = configsRepositoryRepository;
 		ApplyCommand = ReactiveCommand.Create(Done);
 		CancelCommand = ReactiveCommand.Create(Done);
 	}

@@ -14,13 +14,34 @@
         
         <Grid RowDefinitions="*, 50" ColumnDefinitions="*, *">
                 
-                <StackPanel Grid.Row="0" Grid.Column="0" Margin="5">
-                        <TextBox Text="{Binding Model.Name}" Watermark="Name" Margin="5"/>
-                        <ComboBox SelectedItem="{Binding Model.Game}" Margin="5"/>
-                        <ComboBox SelectedItem="{Binding Model.Config}" Margin="5"/>
-                        <StackPanel Orientation="Horizontal" Margin="5">
-                                <TextBox Text="{Binding Model.Resolution.Width}" VerticalAlignment="Top" Margin="5"/>
-                                <TextBox Text="{Binding Model.Resolution.Height}" VerticalAlignment="Top" Margin="5"/>
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="20" Spacing="20">
+                        <TextBox Text="{Binding Model.Name}" Watermark="Name"/>
+                        <Grid ColumnDefinitions="*, *">
+                                <ComboBox Grid.Column="0"
+                                          SelectedItem="{Binding Model.Game}"
+                                          Items="{Binding GamesRepository.Items}"
+                                          PlaceholderText="Game"
+                                          HorizontalAlignment="Stretch"
+                                          Margin="0 0 10 0"/>
+                                <ComboBox Grid.Column="1"
+                                          SelectedItem="{Binding Model.Config}"
+                                          Items="{Binding ConfigsRepository.Items}"
+                                          PlaceholderText="Config"
+                                          HorizontalAlignment="Stretch"
+                                          Margin="10 0 0 0"/>
+                        </Grid>
+                        <StackPanel Orientation="Horizontal" Spacing="20">
+                                <StackPanel.Styles>
+                                        <Style Selector="NumericUpDown.Resolution">
+                                                <Setter Property="Increment" Value="32"/>
+                                                <Setter Property="Minimum" Value="32"/>
+                                                <Setter Property="Maximum" Value="640"/>
+                                        </Style>
+                                </StackPanel.Styles>
+                                <NumericUpDown Text="{Binding Model.Resolution.Width}"
+                                               Classes="Resolution"/>
+                                <NumericUpDown Text="{Binding Model.Resolution.Height}"
+                                               Classes="Resolution"/>
                         </StackPanel>
                         <TextBlock Text="Item classes"/>
                         <ListBox Items="{Binding Model.ItemClasses}"/>
