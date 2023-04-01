@@ -2,6 +2,7 @@
 using ReactiveUI;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
@@ -10,6 +11,7 @@ using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Data;
 using SightKeeper.Infrastructure.Services;
+using SightKeeper.Infrastructure.Services.Windows;
 using SightKeeper.UI.Avalonia.ViewModels.Components;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.ViewModels.Tabs;
@@ -34,7 +36,10 @@ public static class AppBootstrapper
 
 	private static void SetupLogger(ContainerBuilder builder)
 	{
-		LoggingLevelSwitch levelSwitch = new();
+		LoggingLevelSwitch levelSwitch = new()
+		{
+			MinimumLevel = LogEventLevel.Verbose
+		};
 		builder.RegisterInstance(levelSwitch);
 		Log.Logger = new LoggerConfiguration()
 			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
@@ -51,6 +56,7 @@ public static class AppBootstrapper
 		builder.RegisterType<ModelEditorImplementation>().As<ModelEditor>().SingleInstance();
 		builder.RegisterType<GenericDynamicDbRepository<Model>>().As<DynamicRepository<Model>>().SingleInstance();
 		builder.RegisterGeneric(typeof(GenericDbRepository<>)).As(typeof(Repository<>)).SingleInstance();
+		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)

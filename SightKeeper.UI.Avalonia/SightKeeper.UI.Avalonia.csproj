@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net7.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -38,6 +38,13 @@
       <ProjectReference Include="..\SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj" />
       <ProjectReference Include="..\SightKeeper.Infrastructure.Common\SightKeeper.Infrastructure.Common.csproj" />
       <ProjectReference Include="..\SightKeeper.Infrastructure.Data\SightKeeper.Infrastructure.Data.csproj" />
+      <ProjectReference Include="..\SightKeeper.Infrastructure.Services.Windows\SightKeeper.Infrastructure.Services.Windows.csproj" />
       <ProjectReference Include="..\SightKeeper.Infrastructure.Services\SightKeeper.Infrastructure.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Avalonia.Controls.DataGrid">
+        <HintPath>C:\Users\narca\.nuget\packages\avalonia.controls.datagrid\0.10.19\lib\netstandard2.0\Avalonia.Controls.DataGrid.dll</HintPath>
+      </Reference>
     </ItemGroup>
 </Project>

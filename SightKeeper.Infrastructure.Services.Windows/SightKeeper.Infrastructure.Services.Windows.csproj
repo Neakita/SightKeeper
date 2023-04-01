@@ -1,19 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net7.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
-      <ProjectReference Include="..\SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Pranas.ScreenshotCapture" Version="1.0.11" />
-      <PackageReference Include="SharpHook" Version="4.0.1" />
+      <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
     </ItemGroup>
 
 </Project>
