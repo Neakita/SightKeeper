@@ -43,8 +43,19 @@
                 <DataGridTextColumn Header="Game"
                                     Binding="{Binding (abstract:Model).Game.Title, FallbackValue=[Not selected]}"/>
                 
-                <DataGridTextColumn Header="Resolution"
-                                    Binding="{Binding (abstract:Model).Resolution}"/>
+                <DataGridTemplateColumn Header="Resolution">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="abstract:Model">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        Margin="10 0">
+                                <TextBlock Text="{Binding Resolution.Width}"/>
+                                <TextBlock Text="x"/>
+                                <TextBlock Text="{Binding Resolution.Height}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 
                 <DataGridTextColumn Header="Config"
                                     Binding="{Binding (abstract:Model).Config.Name, FallbackValue=[Not selected]}"/>
