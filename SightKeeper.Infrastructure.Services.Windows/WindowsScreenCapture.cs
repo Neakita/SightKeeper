@@ -9,22 +9,20 @@ namespace SightKeeper.Infrastructure.Services.Windows;
 
 public sealed class WindowsScreenCapture : ScreenCapture
 {
-	public IBitmap Capture()
+	public byte[] Capture()
 	{
-		using Bitmap windowsBitmap = new(Width, Height);
+		if (Resolution == null) throw new InvalidOperationException("Resolution is null");
+		using Bitmap windowsBitmap = new(Resolution.Width, Resolution.Height);
 		using Graphics graphics = Graphics.FromImage(windowsBitmap);
-		graphics.CopyFromScreen(new Point(XOffset, YOffset), Point.Empty, new Size(Width, Height));
+		graphics.CopyFromScreen(new Point(XOffset, YOffset), Point.Empty, new Size(Resolution.Width, Resolution.Height));
 		using MemoryStream stream = new();
 		windowsBitmap.Save(stream, ImageFormat.Bmp);
-		stream.Position = 0;
-		Avalonia.Media.Imaging.Bitmap result = new(stream);
-		return result;
+		return stream.ToArray();
 	}
 
 	public bool IsEnabled { get; set; }
 	public Game? Game { get; set; }
-	public ushort Width { get; set; }
-	public ushort Height { get; set; }
+	public Resolution? Resolution { get; set; }
 	public ushort XOffset { get; set; }
 	public ushort YOffset { get; set; }
 }

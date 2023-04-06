@@ -9,4 +9,5 @@ namespace SightKeeper.Domain.Model.Common;
 public sealed class KeyGesture : ReactiveObject
 {
 	[Reactive] public Key Key { get; set; }
+	[Reactive] public KeyModifiers Modifiers { get; set; }
 }

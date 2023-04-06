@@ -7,7 +7,7 @@ using Image = System.Drawing.Image;
 
 namespace SightKeeper.Infrastructure.Services.Windows;
 
-public sealed class WindowsAPIScreenCapture : ScreenCapture
+/*public sealed class WindowsAPIScreenCapture : ScreenCapture
 {
 	public IBitmap Capture()
 	{
@@ -26,4 +26,4 @@ public sealed class WindowsAPIScreenCapture : ScreenCapture
 	public ushort Height { get; set; }
 	public ushort XOffset { get; set; }
 	public ushort YOffset { get; set; }
-}
+}*/

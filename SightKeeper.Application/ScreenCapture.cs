@@ -5,12 +5,11 @@ namespace SightKeeper.Application;
 
 public interface ScreenCapture
 {
-	IBitmap Capture();
+	byte[] Capture();
 	
 	bool IsEnabled { get; set; }
 	Game? Game { get; set; }
-	public ushort Width { get; set; }
-	public ushort Height { get; set; }
+	public Resolution? Resolution { get; set; }
 	public ushort XOffset { get; set; }
 	public ushort YOffset { get; set; }
 }

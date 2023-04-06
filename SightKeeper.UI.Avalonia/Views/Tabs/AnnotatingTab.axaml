@@ -3,22 +3,80 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Tabs"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.UI.Avalonia.Views.Tabs.AnnotatingTab"
              d:DataContext="{x:Static viewModels:AnnotatingTabVM.New}">
     
-    <Grid ColumnDefinitions="*, 250">
+    <Grid ColumnDefinitions="250, *, 250">
         
-        <StackPanel Grid.Column="1" Spacing="10" Margin="10 50 10 10">
+        <ListBox Grid.Column="0"
+                 Items="{Binding SelectedDetectorModel.DetectorScreenshots}"
+                 SelectionMode="Multiple">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Image
+                        Source="{Binding Image.Content,
+                        Converter={StaticResource BytesToBitmapConverter}}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <StackPanel Grid.Column="2" Spacing="10" Margin="10 50 10 10">
+            <Button Content="{avalonia:MaterialIconExt Camera}">
+                <Button.Flyout>
+                    <Flyout>
+                        <StackPanel Width="125" Spacing="10"
+                                    DataContext="{Binding ModelScreenshoter}">
+                            <CheckBox Content="Capture"
+                                      IsChecked="{Binding IsEnabled}"
+                                      IsEnabled="{Binding Model, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                            <NumericUpDown Watermark="On hold FPS"
+                                           HorizontalAlignment="Stretch"
+                                           Minimum="1"
+                                           Maximum="30"
+                                           Increment="1"
+                                           Value="{Binding OnHoldFPS}"/>
+                            <NumericUpDown Watermark="Max quantity"
+                                           HorizontalAlignment="Stretch"
+                                           Minimum="50"
+                                           Maximum="1000"
+                                           Increment="50"
+                                           Value="{Binding MaxImages}"/>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
             <ComboBox Items="{Binding ModelsRepository.Items}"
+                      SelectedItem="{Binding SelectedModel}"
                       HorizontalAlignment="Stretch"
-                      PlaceholderText="Model">
+                      PlaceholderText="Model"
+                      IsEnabled="{Binding !ModelScreenshoter.IsEnabled}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            
+            <Border BorderBrush="Gray" BorderThickness="1">
+                <StackPanel Margin="10" Spacing="10">
+                    <TextBlock Text="Item classes" />
+                    <ListBox Name="ItemClassesListBox"
+                             Items="{Binding SelectedModel.ItemClasses}"
+                             IsVisible="{Binding !!SelectedModel.ItemClasses.Count}"
+                             SelectedItem="{Binding SelectedItemClass}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock Text="No items yet"
+                               IsVisible="{Binding !SelectedModel.ItemClasses.Count}"/>
+                </StackPanel>
+            </Border>
+            
         </StackPanel>
         
     </Grid>

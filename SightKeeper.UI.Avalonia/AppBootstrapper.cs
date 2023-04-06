@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Avalonia.Input.Raw;
 using ReactiveUI;
 using Serilog;
 using Serilog.Core;
@@ -55,6 +56,8 @@ public static class AppBootstrapper
 		builder.RegisterType<GenericDynamicDbRepository<Model>>().As<DynamicRepository<Model>>().SingleInstance();
 		builder.RegisterGeneric(typeof(GenericDbRepository<>)).As(typeof(Repository<>)).SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
+		builder.RegisterType<ModelScreenshoterImplementation>().As<ModelScreenshoter>().SingleInstance();
+		builder.RegisterType<GlobalKeyHook>().As<KeyHook>().SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
