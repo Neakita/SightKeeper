@@ -7,7 +7,6 @@ using Avalonia.ReactiveUI;
 using ReactiveUI;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.UI.Avalonia.Misc;
-using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
 
 namespace SightKeeper.UI.Avalonia.Views.Windows;

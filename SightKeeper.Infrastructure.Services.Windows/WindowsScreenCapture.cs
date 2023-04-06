@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
-using Avalonia.Media.Imaging;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
 using Bitmap = System.Drawing.Bitmap;

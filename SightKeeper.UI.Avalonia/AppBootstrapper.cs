@@ -1,10 +1,10 @@
 ﻿using Autofac;
-using Avalonia.Input.Raw;
 using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using SightKeeper.Application;
+using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
@@ -56,7 +56,7 @@ public static class AppBootstrapper
 		builder.RegisterType<GenericDynamicDbRepository<Model>>().As<DynamicRepository<Model>>().SingleInstance();
 		builder.RegisterGeneric(typeof(GenericDbRepository<>)).As(typeof(Repository<>)).SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
-		builder.RegisterType<ModelScreenshoterImplementation>().As<ModelScreenshoter>().SingleInstance();
+		builder.RegisterType<OnShootModelScreenshoter>().As<ModelScreenshoter>().SingleInstance();
 		builder.RegisterType<GlobalKeyHook>().As<KeyHook>().SingleInstance();
 	}
 

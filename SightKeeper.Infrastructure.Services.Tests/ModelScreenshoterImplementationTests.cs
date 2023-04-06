@@ -19,7 +19,7 @@ public sealed class ModelScreenshoterImplementationTests
 			model.DetectorScreenshots.Add(new DetectorScreenshot(model, new Image(Array.Empty<byte>())));
 			arrangeContext.SaveChanges();
 		}
-		ModelScreenshoterImplementation screenshoter = new(null!, null!, testDbContextFactory);
+		OnShootModelScreenshoter screenshoter = new(null!, null!, testDbContextFactory);
 		
 		using AppDbContext dbContext = testDbContextFactory.CreateDbContext();
 		DetectorModel modelFromDb = dbContext.DetectorModels.Single();

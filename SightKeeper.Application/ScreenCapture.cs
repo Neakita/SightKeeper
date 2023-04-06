@@ -1,5 +1,4 @@
-﻿using Avalonia.Media.Imaging;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application;
 

@@ -2,6 +2,7 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application;
+using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -10,7 +11,7 @@ using MouseButton = SharpHook.Native.MouseButton;
 
 namespace SightKeeper.Infrastructure.Services;
 
-public sealed class ModelScreenshoterImplementation : ReactiveObject, ModelScreenshoter
+public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 {
 	public Model? Model
 	{
@@ -40,7 +41,7 @@ public sealed class ModelScreenshoterImplementation : ReactiveObject, ModelScree
 		}
 	}
 
-	public byte OnHoldFPS
+	public byte FramesPerSecond
 	{
 		get => _onHoldFPS;
 		set
@@ -53,12 +54,12 @@ public sealed class ModelScreenshoterImplementation : ReactiveObject, ModelScree
 
 	[Reactive] public ushort MaxImages { get; set; } = 500;
 
-	public ModelScreenshoterImplementation(ScreenCapture screenCapture, KeyHook keyHook, AppDbContextFactory dbContextFactory)
+	public OnShootModelScreenshoter(ScreenCapture screenCapture, KeyHook keyHook, AppDbContextFactory dbContextFactory)
 	{
 		_screenCapture = screenCapture;
 		_keyHook = keyHook;
 		_dbContextFactory = dbContextFactory;
-		_interval = 1000 / OnHoldFPS;
+		_interval = 1000 / FramesPerSecond;
 	}
 
 	private readonly ScreenCapture _screenCapture;

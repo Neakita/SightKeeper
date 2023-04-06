@@ -1,7 +1,7 @@
 ﻿using Avalonia.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SightKeeper.Application;
+using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;

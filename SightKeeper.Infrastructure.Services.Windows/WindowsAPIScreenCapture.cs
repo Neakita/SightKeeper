@@ -1,11 +1,4 @@
-﻿using System.Drawing.Imaging;
-using Avalonia.Media.Imaging;
-using SightKeeper.Application;
-using SightKeeper.Domain.Model.Common;
-using Bitmap = Avalonia.Media.Imaging.Bitmap;
-using Image = System.Drawing.Image;
-
-namespace SightKeeper.Infrastructure.Services.Windows;
+﻿namespace SightKeeper.Infrastructure.Services.Windows;
 
 /*public sealed class WindowsAPIScreenCapture : ScreenCapture
 {
