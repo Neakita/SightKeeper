@@ -14,7 +14,6 @@ namespace SightKeeper.UI.Avalonia.ViewModels.Windows;
 
 public sealed class ModelEditorViewModel : ReactiveObject, IDisposable
 {
-	private readonly AppDbContextFactory _dbContextFactory;
 	public static ModelEditorViewModel DesignTimeInstance => Create(new DetectorModel("Design time detector model"));
 
 	public static ModelEditorViewModel Create(Model model) =>
@@ -47,22 +46,18 @@ public sealed class ModelEditorViewModel : ReactiveObject, IDisposable
 		dbContext.Entry(model).Collection(m => m.ItemClasses).Load();
 	}
 
-	private void Done()
-	{
-		// TODO remove this workaround (fixes rollback will not delete added item classes)
-		Model.ItemClasses = null!;
-		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.Update(Model);
-		dbContext.Entry(Model).Collection(model => model.ItemClasses).Load();
-	}
-
-	private void AddNewItemClass()
+	public void AddNewItemClass()
 	{
 		ItemClass newItemClass = new(NewItemClassName);
 		NewItemClassName = string.Empty;
 		Model.ItemClasses.Add(newItemClass);
 	}
+	
+	
+	private readonly AppDbContextFactory _dbContextFactory;
+	private bool _disposed;
 
+	
 	[DependsOn(nameof(NewItemClassName))]
 	private bool CanAddNewItemClass(object parameter) =>
 		!string.IsNullOrWhiteSpace(NewItemClassName);
@@ -81,5 +76,12 @@ public sealed class ModelEditorViewModel : ReactiveObject, IDisposable
 		_disposed = true;
 	}
 
-	private bool _disposed;
+	private void Done()
+	{
+		// TODO remove this workaround (fixes rollback will not delete added item classes)
+		Model.ItemClasses = null!;
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
+		dbContext.Update(Model);
+		dbContext.Entry(Model).Collection(model => model.ItemClasses).Load();
+	}
 }

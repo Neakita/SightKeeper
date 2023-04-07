@@ -11,27 +11,22 @@
     
     <Grid RowDefinitions="50, *">
         
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Button Command="{Binding CreateNewModel}">
-                <Button.Content>
-                    <avalonia:MaterialIcon Kind="Plus"/>
-                </Button.Content>
-            </Button>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 0">
+            <Button Command="{Binding CreateNewModel}"
+                    Content="{avalonia:MaterialIconExt Plus}"/>
         </StackPanel>
         
         <DataGrid Grid.Row="1"
-                  Name="ModelsDataGrid"
                   Items="{Binding ModelsRepository.Items}"
+                  SelectedItem="{Binding SelectedModel}"
                   IsReadOnly="True">
             
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Edit"
-                              Command="{Binding EditModel}"
-                              CommandParameter="{Binding SelectedItem, ElementName=ModelsDataGrid}"/>
+                              Command="{ReflectionBinding EditModel}"/>
                     <MenuItem Header="Delete"
-                              Command="{Binding DeleteModel}"
-                              CommandParameter="{Binding SelectedItem, ElementName=ModelsDataGrid}"/>
+                              Command="{ReflectionBinding DeleteModel}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             

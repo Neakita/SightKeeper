@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Avalonia.Metadata;
 using Material.Icons;
+using ReactiveUI.Fody.Helpers;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
@@ -16,6 +19,7 @@ public sealed class ModelsTabVM : ViewModel
 
 
 	public Repository<Model> ModelsRepository { get; }
+	[Reactive] public Model? SelectedModel { get; set; }
 
 	public ModelsTabVM(Repository<Model> modelsRepository, AppDbContextFactory dbContextFactory)
 	{
@@ -34,11 +38,12 @@ public sealed class ModelsTabVM : ViewModel
 			ModelsRepository.Add(newModel);
 	}
 
-	private async Task EditModel(Model model)
+	public async Task EditModel()
 	{
+		if (SelectedModel == null) throw new Exception();
 		await using AppDbContext dbContext = await _dbContextFactory.CreateDbContextAsync();
-		dbContext.Update(model);
-		ModelEditorDialog editorDialog = new(model);
+		dbContext.Update(SelectedModel);
+		ModelEditorDialog editorDialog = new(SelectedModel);
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
 		if (result == ModelEditorDialog.DialogResult.Apply)
 			await dbContext.SaveChangesAsync();
@@ -46,16 +51,19 @@ public sealed class ModelsTabVM : ViewModel
 			dbContext.RollBack();
 	}
 
-	private bool CanEditModel(object parameter) => parameter is Model;
+	[DependsOn(nameof(SelectedModel))]
+	public bool CanEditModel(object parameter) => SelectedModel != null;
 
-	private async Task DeleteModel(Model model)
+	public async Task DeleteModel()
 	{
-		MessageBoxDialog.DialogResult result = await this.ShowMessageBoxDialog($"Do you really want to remove the {model.Name}? This action cannot be undone",
+		if (SelectedModel == null) throw new Exception();
+		MessageBoxDialog.DialogResult result = await this.ShowMessageBoxDialog($"Do you really want to remove the {SelectedModel.Name}? This action cannot be undone",
 			MessageBoxDialog.DialogResult.Yes | MessageBoxDialog.DialogResult.No,
 			"Confirm model deletion", MaterialIconKind.TrashCanOutline);
 		if (result == MessageBoxDialog.DialogResult.Yes)
-			ModelsRepository.Remove(model);
+			ModelsRepository.Remove(SelectedModel);
 	}
 
-	private bool CanDeleteModel(object parameter) => parameter is Model;
+	[DependsOn(nameof(SelectedModel))]
+	public bool CanDeleteModel(object parameter) => SelectedModel != null;
 }

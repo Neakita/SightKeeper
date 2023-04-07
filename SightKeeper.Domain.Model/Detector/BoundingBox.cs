@@ -23,12 +23,15 @@ public class BoundingBox : ReactiveObject
 		Height = height;
 	}
 
-	public BoundingBox(Point position, Size size, Size canvasSize) : this(
-			position.X / canvasSize.Width, 
-			position.Y / canvasSize.Height,
-			size.Width / canvasSize.Width,
-			size.Height / canvasSize.Height)
+	public void SetFromTwoPositions(Point position1, Point position2)
 	{
+		double
+			x1 = Math.Min(position1.X, position2.X),
+			x2 = Math.Max(position1.X, position2.X),
+			y1 = Math.Min(position1.Y, position2.Y),
+			y2 = Math.Max(position1.Y, position2.Y);
+		Width = x2 - x1;
+		Height = y2 - y1;
 	}
 
 	[Reactive] public double X { get; set; }

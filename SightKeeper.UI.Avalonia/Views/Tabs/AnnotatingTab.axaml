@@ -13,23 +13,23 @@
 
         <ListBox Grid.Column="0"
                  Items="{Binding Model.DetectorScreenshots}"
-                 SelectedItem="{Binding Annotator.SelectedScreenshot}"
-                 SelectionMode="Multiple">
+                 Selection="{Binding ScreenshotsSelection}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Image
                         Source="{Binding Image.Content,
-                        Converter={StaticResource BytesToBitmapConverter}}" />
+                        Converter={StaticResource BytesToBitmapConverter}}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
         <Panel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-            <Image Source="{Binding Annotator.SelectedScreenshot.Image.Content, Converter={StaticResource BytesToBitmapConverter}}" />
+            <Image Name="Image" IsHitTestVisible="True" Source="{Binding SelectedScreenshot.Image.Content, Converter={StaticResource BytesToBitmapConverter}}" />
 
             <ListBox Name="CanvasItemsControl"
-                     Items="{Binding Path=Annotator.SelectedScreenshot.Items}" Background="Transparent">
+                     Items="{Binding Path=SelectedScreenshot.Items}" Background="Transparent"
+                     IsHitTestVisible="False">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas />
@@ -79,11 +79,35 @@
                             </Setter.Value>
                         </Setter>
                         
+                        <Setter Property="BorderBrush" Value="#80FF0000"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        
                     </Style>
+                    
+                    <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="#10000000" />
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:selected">
+                        <Setter Property="BorderBrush" Value="#80FF0080"/>
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:pointerover">
+                        <Setter Property="BorderBrush" Value="#A0FF0000"/>
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:pointerover:selected">
+                        <Setter Property="BorderBrush" Value="#A0FF00A0"/>
+                    </Style>
+                    
                 </ListBox.Styles>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Red" BorderThickness="1" />
+                        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding ItemClass.Name}" FontSize="7"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -102,7 +126,7 @@
                             <NumericUpDown Watermark="On hold FPS"
                                            HorizontalAlignment="Stretch"
                                            Minimum="1"
-                                           Maximum="30"
+                                           Maximum="60"
                                            Increment="1"
                                            Value="{Binding FramesPerSecond}" />
                             <NumericUpDown Watermark="Max quantity"
@@ -144,6 +168,12 @@
                                IsVisible="{Binding !Annotator.Model.ItemClasses.Count}" />
                 </StackPanel>
             </Border>
+            
+            <WrapPanel>
+                <Button Content="{avalonia:MaterialIconExt TrashCan}"
+                        Command="{Binding DeleteSelectedScreenshots}"
+                        HotKey="Delete"/>
+            </WrapPanel>
 
         </StackPanel>
 

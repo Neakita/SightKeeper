@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Material.Icons;
 using ReactiveUI;
@@ -13,7 +14,7 @@ public static class DialogExtensions
 {
 	public static async Task<TResult> ShowDialog<TResult, TCallerViewModel>(this IViewFor<TCallerViewModel> callerView, Dialog<TResult> dialog) where TCallerViewModel : class
 	{
-		IControl control = (IControl)callerView;
+		StyledElement control = (StyledElement)callerView;
 		Window dialogOwner = control as Window ?? control.GetParentWindow();
 		return await dialog.ShowDialog(dialogOwner);
 	}
