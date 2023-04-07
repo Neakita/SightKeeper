@@ -18,7 +18,7 @@ public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 		KeyDown += OnKeyDown;
 	}
 
-	private void OnKeyDown(object? sender, KeyEventArgs e) => ViewModel?.OnKeyDown(e.Key);
+	private void OnKeyDown(object? sender, KeyEventArgs e) => ViewModel?.NotifyKeyDown(e.Key);
 
 	private void InitializeComponent()
 	{

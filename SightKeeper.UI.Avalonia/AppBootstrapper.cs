@@ -7,6 +7,7 @@ using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Data;
@@ -50,14 +51,15 @@ public static class AppBootstrapper
 	{
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>().SingleInstance();
 		builder.RegisterType<GamesRepositoryRegistrator>().As<GamesRegistrator>().SingleInstance();
-		builder.RegisterType<GenericDbRepository<Game>>().As<Repository<Game>>().SingleInstance();
-		builder.RegisterType<GenericDbRepository<Model>>().As<Repository<Model>>().SingleInstance();
+		builder.RegisterType<GenericDynamicDbRepository<Game>>().As<Repository<Game>>().SingleInstance();
+		builder.RegisterType<GenericDynamicDbRepository<Model>>().As<DynamicRepository<Model>>().As<Repository<Model>>().SingleInstance();
 		builder.RegisterType<ModelEditorImplementation>().As<ModelEditor>().SingleInstance();
-		builder.RegisterType<GenericDynamicDbRepository<Model>>().As<DynamicRepository<Model>>().SingleInstance();
-		builder.RegisterGeneric(typeof(GenericDbRepository<>)).As(typeof(Repository<>)).SingleInstance();
+		builder.RegisterType<InheritedGenericRepository<DetectorModel, Model>>().As<Repository<DetectorModel>>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<OnShootModelScreenshoter>().As<ModelScreenshoter>().SingleInstance();
 		builder.RegisterType<GlobalKeyHook>().As<KeyHook>().SingleInstance();
+		builder.RegisterType<DetectorAnnotatorImplementation>().As<DetectorAnnotator>().SingleInstance();
+		builder.RegisterType<GenericDynamicDbRepository<ModelConfig>>().As<DynamicRepository<ModelConfig>>().As<Repository<ModelConfig>>().SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)

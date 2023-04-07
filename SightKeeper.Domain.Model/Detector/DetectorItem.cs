@@ -1,4 +1,5 @@
 ﻿using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 
@@ -21,6 +22,6 @@ public class DetectorItem : ReactiveObject, Entity
 	}
 
 	public int Id { get; private set; }
-	public virtual ItemClass ItemClass { get; private set; }
-	public virtual BoundingBox BoundingBox { get; private set; }
+	[Reactive] public ItemClass ItemClass { get; set; }
+	[Reactive] public BoundingBox BoundingBox { get; set; }
 }

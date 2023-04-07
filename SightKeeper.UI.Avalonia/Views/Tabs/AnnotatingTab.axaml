@@ -4,81 +4,149 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Tabs"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:detector="clr-namespace:SightKeeper.Domain.Model.Detector;assembly=SightKeeper.Domain.Model"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.UI.Avalonia.Views.Tabs.AnnotatingTab"
              d:DataContext="{x:Static viewModels:AnnotatingTabVM.New}">
-    
+
     <Grid ColumnDefinitions="250, *, 250">
-        
+
         <ListBox Grid.Column="0"
-                 Items="{Binding SelectedDetectorModel.DetectorScreenshots}"
+                 Items="{Binding Model.DetectorScreenshots}"
+                 SelectedItem="{Binding Annotator.SelectedScreenshot}"
                  SelectionMode="Multiple">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Image
                         Source="{Binding Image.Content,
-                        Converter={StaticResource BytesToBitmapConverter}}"/>
+                        Converter={StaticResource BytesToBitmapConverter}}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
+
+        <Panel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <Image Source="{Binding Annotator.SelectedScreenshot.Image.Content, Converter={StaticResource BytesToBitmapConverter}}" />
+
+            <ListBox Name="CanvasItemsControl"
+                     Items="{Binding Path=Annotator.SelectedScreenshot.Items}" Background="Transparent">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Canvas.Left">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
+                                    <MultiBinding.Bindings>
+                                        <Binding Path="(detector:DetectorItem).BoundingBox.X" />
+                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Width" />
+                                    </MultiBinding.Bindings>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Canvas.Top">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
+                                    <MultiBinding.Bindings>
+                                        <Binding Path="(detector:DetectorItem).BoundingBox.Y" />
+                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Height" />
+                                    </MultiBinding.Bindings>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Width">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
+                                    <MultiBinding.Bindings>
+                                        <Binding Path="(detector:DetectorItem).BoundingBox.Width" />
+                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Width" />
+                                    </MultiBinding.Bindings>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Height">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
+                                    <MultiBinding.Bindings>
+                                        <Binding Path="(detector:DetectorItem).BoundingBox.Height" />
+                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Height" />
+                                    </MultiBinding.Bindings>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Red" BorderThickness="1" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+        </Panel>
+
         <StackPanel Grid.Column="2" Spacing="10" Margin="10 50 10 10">
             <Button Content="{avalonia:MaterialIconExt Camera}">
                 <Button.Flyout>
                     <Flyout>
                         <StackPanel Width="125" Spacing="10"
-                                    DataContext="{Binding ModelScreenshoter}">
+                                    DataContext="{Binding Screenshoter}">
                             <CheckBox Content="Capture"
                                       IsChecked="{Binding IsEnabled}"
-                                      IsEnabled="{Binding Model, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                      IsEnabled="{Binding Model, Converter={x:Static ObjectConverters.IsNotNull}}" />
                             <NumericUpDown Watermark="On hold FPS"
                                            HorizontalAlignment="Stretch"
                                            Minimum="1"
                                            Maximum="30"
                                            Increment="1"
-                                           Value="{Binding FramesPerSecond}"/>
+                                           Value="{Binding FramesPerSecond}" />
                             <NumericUpDown Watermark="Max quantity"
                                            HorizontalAlignment="Stretch"
                                            Minimum="50"
                                            Maximum="1000"
                                            Increment="50"
-                                           Value="{Binding MaxImages}"/>
+                                           Value="{Binding MaxImages}" />
                         </StackPanel>
                     </Flyout>
                 </Button.Flyout>
             </Button>
             <ComboBox Items="{Binding ModelsRepository.Items}"
-                      SelectedItem="{Binding SelectedModel}"
+                      SelectedItem="{Binding Model}"
                       HorizontalAlignment="Stretch"
                       PlaceholderText="Model"
-                      IsEnabled="{Binding !ModelScreenshoter.IsEnabled}">
+                      IsEnabled="{Binding !Screenshoter.IsEnabled}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            
+
             <Border BorderBrush="Gray" BorderThickness="1">
                 <StackPanel Margin="10" Spacing="10">
                     <TextBlock Text="Item classes" />
                     <ListBox Name="ItemClassesListBox"
-                             Items="{Binding SelectedModel.ItemClasses}"
-                             IsVisible="{Binding !!SelectedModel.ItemClasses.Count}"
+                             Items="{Binding Annotator.Model.ItemClasses}"
+                             IsVisible="{Binding !!Annotator.Model.ItemClasses.Count}"
                              SelectedItem="{Binding SelectedItemClass}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding Name}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                     <TextBlock Text="No items yet"
-                               IsVisible="{Binding !SelectedModel.ItemClasses.Count}"/>
+                               IsVisible="{Binding !Annotator.Model.ItemClasses.Count}" />
                 </StackPanel>
             </Border>
-            
+
         </StackPanel>
-        
+
     </Grid>
-    
+
 </UserControl>

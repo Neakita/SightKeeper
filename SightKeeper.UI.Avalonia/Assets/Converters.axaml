@@ -2,4 +2,5 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:SightKeeper.UI.Avalonia.Misc.Converters">
     <converters:BytesToBitmapConverter x:Key="BytesToBitmapConverter"/>
+    <converters:CanvasNormalizeConverter x:Key="CanvasNormalizeConverter"/>
 </ResourceDictionary>

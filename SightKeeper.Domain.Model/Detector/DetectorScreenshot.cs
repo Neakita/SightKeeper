@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations.Schema;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
@@ -13,14 +14,20 @@ public class DetectorScreenshot : Screenshot
 		Model = model;
 		Items = new ObservableCollection<DetectorItem>();
 	}
-
-
+	
 	private DetectorScreenshot(int id) : base(id)
 	{
 		Model = null!;
 		Items = null!;
 	}
 
-	public virtual ObservableCollection<DetectorItem> Items { get; private set; }
+	private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		
+	}
+
+	public bool IsAsset { get; set; }
+
+	public ObservableCollection<DetectorItem> Items { get; private set; }
 	public DetectorModel Model { get; private set; }
 }
