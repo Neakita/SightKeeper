@@ -3,6 +3,7 @@ using ReactiveUI;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Infrastructure.Common;
 
 namespace SightKeeper.Infrastructure.Services;
 
@@ -33,30 +34,34 @@ public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDra
 		}
 	}
 
-	public void BeginDrawing(Point startPosition)
+	public bool BeginDrawing(Point startPosition)
 	{
-		if (_drawing) throw new Exception();
-		if (Screenshot == null) throw new Exception();
-		if (ItemClass == null) throw new Exception();
+		if (_drawing) return false;
+		if (ItemClass == null) return false;
+		Screenshot.ThrowIfNull(nameof(Screenshot));
 		_drawing = true;
+		startPosition = ClampToNormalized(startPosition);
 		_startPosition = startPosition;
-		_item = new DetectorItem(ItemClass, new BoundingBox(startPosition.X, startPosition.Y, 0, 0));
-		Screenshot.Items.Add(_item);
+		_item = new DetectorItem(ItemClass!, new BoundingBox(startPosition.X, startPosition.Y, 0, 0));
+		Screenshot!.Items.Add(_item);
+		return true;
 	}
 
 	public void UpdateDrawing(Point currentPosition)
 	{
-		if (!_drawing) throw new Exception();
-		if (_item == null) throw new Exception();
-		_item.BoundingBox.SetFromTwoPositions(_startPosition, currentPosition);
+		ThrowHelper.ThrowIf(!_drawing, "Cannot update drawing because no currently drawing");
+		_item.ThrowIfNull(nameof(_item));
+		currentPosition = ClampToNormalized(currentPosition);
+		_item!.BoundingBox.SetFromTwoPositions(_startPosition, currentPosition);
 	}
 
 	public void EndDrawing(Point finishPosition)
 	{
-		if (!_drawing) throw new Exception();
-		if (_item == null) throw new Exception();
+		ThrowHelper.ThrowIf(!_drawing, "Cannot update drawing because no currently drawing");
+		_item.ThrowIfNull(nameof(_item));
 		_drawing = false;
-		_item.BoundingBox.SetFromTwoPositions(_startPosition, finishPosition);
+		finishPosition = ClampToNormalized(finishPosition);
+		_item!.BoundingBox.SetFromTwoPositions(_startPosition, finishPosition);
 		Drawn?.Invoke(_item);
 		_item = null;
 	}
@@ -64,4 +69,8 @@ public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDra
 	private bool _drawing;
 	private Point _startPosition;
 	private DetectorItem? _item;
+
+	private static Point ClampToNormalized(Point position) =>
+		new(Math.Clamp(position.X, 0, 1), 
+			Math.Clamp(position.Y, 0, 1));
 }

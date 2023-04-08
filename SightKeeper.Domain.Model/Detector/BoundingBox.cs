@@ -30,6 +30,8 @@ public class BoundingBox : ReactiveObject
 			x2 = Math.Max(position1.X, position2.X),
 			y1 = Math.Min(position1.Y, position2.Y),
 			y2 = Math.Max(position1.Y, position2.Y);
+		X = x1;
+		Y = y1;
 		Width = x2 - x1;
 		Height = y2 - y1;
 	}

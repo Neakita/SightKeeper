@@ -1,7 +1,7 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Input;
 using Avalonia.ReactiveUI;
+using SightKeeper.Infrastructure.Common;
 using SightKeeper.UI.Avalonia.Extensions;
 using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
@@ -28,34 +28,49 @@ public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 
 	private void ImageOnPointerPressed(object? sender, PointerPressedEventArgs e)
 	{
-		if (ViewModel == null) return;
-		// begin drawing
+		ViewModel.ThrowIfNull(nameof(ViewModel));
+		Point normalizedPosition = GetNormalizedPosition(e);
+		if (!ViewModel!.BeginDrawing(normalizedPosition)) return;
+		Image.PointerPressed -= ImageOnPointerPressed;
 		this.GetParentWindow().PointerReleased += OnPointerReleased;
 		this.GetParentWindow().PointerMoved += OnPointerMoved;
-		Point position = e.GetPosition(Image);
-		Point normalizedPosition = new(position.X / Image.Bounds.Width, position.Y / Image.Bounds.Height);
-		ViewModel.BeginDrawing(normalizedPosition);
 	}
 
 	private void OnPointerMoved(object? sender, PointerEventArgs e)
 	{
-		if (ViewModel == null) throw new Exception();
-		// update drawing
-		Point position = e.GetPosition(Image);
-		Point normalizedPosition = new(position.X / Image.Bounds.Width, position.Y / Image.Bounds.Height);
-		ViewModel.UpdateDrawing(normalizedPosition);
+		ViewModel.ThrowIfNull(nameof(ViewModel));
+		Point normalizedPosition = GetNormalizedPosition(e);
+		ViewModel!.UpdateDrawing(normalizedPosition);
 	}
 
 	private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
 	{
-		if (ViewModel == null) throw new Exception();
+		ViewModel.ThrowIfNull(nameof(ViewModel));
 		this.GetParentWindow().PointerReleased -= OnPointerReleased;
 		this.GetParentWindow().PointerMoved -= OnPointerMoved;
-		// end drawing
-		Point position = e.GetPosition(Image);
-		Point normalizedPosition = new(position.X / Image.Bounds.Width, position.Y / Image.Bounds.Height);
-		ViewModel.EndDrawing(normalizedPosition);
+		Image.PointerPressed += ImageOnPointerPressed;
+		Point normalizedPosition = GetNormalizedPosition(e);
+		ViewModel!.EndDrawing(normalizedPosition);
 	}
 
-	private void OnKeyDown(object? sender, KeyEventArgs e) => ViewModel?.NotifyKeyDown(e.Key);
+	private Point GetNormalizedPosition(PointerEventArgs e)
+	{
+		Point position = e.GetPosition(Image);
+		Point normalizedPosition = new(position.X / Image.Bounds.Width, position.Y / Image.Bounds.Height);
+		return normalizedPosition;
+	}
+
+	private void OnKeyDown(object? sender, KeyEventArgs e)
+	{
+		ViewModel.ThrowIfNull(nameof(ViewModel));
+		Key key = e.Key;
+		SetSelectedItemByIndex(key);
+	}
+
+	private void SetSelectedItemByIndex(Key key)
+	{
+		if (key is < Key.D1 or > Key.D9) return;
+		int itemClassIndex = key - Key.D1;
+		ViewModel!.SelectItemClassByIndex(itemClassIndex);
+	}
 }

@@ -1,10 +1,10 @@
 ﻿using Avalonia;
-using DynamicData.Kernel;
 using ReactiveUI;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Infrastructure.Services;
@@ -49,33 +49,25 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 
 	public void RemoveItem(DetectorItem item)
 	{
-		if (SelectedScreenshot == null) throw new NullReferenceException("No selected screenshot");
-		SelectedScreenshot.Items.Remove(item);
+		SelectedScreenshot.ThrowIfNull(nameof(SelectedScreenshot));
+		SelectedScreenshot!.Items.Remove(item);
 	}
 
-	public void MarkAsAssets(IReadOnlyCollection<DetectorScreenshot> screenshots)
+	public void MarkAsAssets(IReadOnlyCollection<int> screenshotsIndexes)
 	{
-		throw new NotImplementedException();
+		Model.ThrowIfNull(nameof(Model));
+		foreach (int index in screenshotsIndexes)
+			Model!.DetectorScreenshots[index].IsAsset = true;
 	}
 
-	public void Move(DetectorItem item, Point position, Size size)
+	public void RemoveScreenshots(IReadOnlyCollection<int> screenshotsIndexes)
 	{
-		throw new NotImplementedException();
+		Model.ThrowIfNull(nameof(Model));
+		foreach (int index in screenshotsIndexes.OrderDescending())
+			Model!.DetectorScreenshots.RemoveAt(index);
 	}
 
-	public void RemoveScreenshots(IReadOnlyCollection<DetectorScreenshot> screenshots)
-	{
-		if (Model == null) throw new Exception();
-		// match all indexes and and remove in reverse as it is more efficient
-		List<ItemWithIndex<DetectorScreenshot?>> toRemove = Model.DetectorScreenshots
-			.IndexOfMany(screenshots)
-			.OrderByDescending(x => x.Index)
-			.ToList();
-		// Fast remove because we know the index of all and we remove in order
-		toRemove.ForEach(t => Model.DetectorScreenshots.RemoveAt(t.Index));
-	}
-
-	public void BeginDrawing(Point position) => _drawer.BeginDrawing(position);
+	public bool BeginDrawing(Point position) => _drawer.BeginDrawing(position);
 	public void UpdateDrawing(Point position) => _drawer.UpdateDrawing(position);
 	public void EndDrawing(Point position) => _drawer.EndDrawing(position);
 	

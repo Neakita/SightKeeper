@@ -10,9 +10,9 @@ public interface DetectorAnnotator
 	DetectorScreenshot? SelectedScreenshot { get; set; }
 	ItemClass? SelectedItemClass { get; set; }
 	void RemoveItem(DetectorItem item);
-	void MarkAsAssets(IReadOnlyCollection<DetectorScreenshot> screenshots);
-	void RemoveScreenshots(IReadOnlyCollection<DetectorScreenshot> screenshots);
-	void BeginDrawing(Point position);
+	void MarkAsAssets(IReadOnlyCollection<int> screenshotsIndexes);
+	void RemoveScreenshots(IReadOnlyCollection<int> screenshotsIndexes);
+	bool BeginDrawing(Point position);
 	void UpdateDrawing(Point position);
 	void EndDrawing(Point position);
 }

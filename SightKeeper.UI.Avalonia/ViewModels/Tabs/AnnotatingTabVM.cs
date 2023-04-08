@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls.Selection;
-using Avalonia.Input;
 using Avalonia.Metadata;
-using DynamicData.Kernel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
@@ -55,40 +49,13 @@ public sealed class AnnotatingTabVM : ViewModel
 		Annotator = annotator;
 		Screenshoter = screenshoter;
 		
-		ScreenshotsSelection.SelectionChanged += OnSelectionChanged;
+		ScreenshotsSelection.SelectionChanged += OnScreenshotsSelectionChanged;
 		ScreenshotsSelection.SingleSelect = false;
 	}
 
-	private void OnSelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<DetectorScreenshot> e)
-	{
-		Annotator.SelectedScreenshot = ScreenshotsSelection.SelectedItem;
-		SelectedScreenshot = ScreenshotsSelection.SelectedItem;
-	}
-
-	public void NotifyKeyDown(Key key)
-	{
-		Model? model = Annotator.Model;
-		if (model == null) return;
-		if (key is < Key.D1 or > Key.D9) return;
-		int itemClassIndex = key - Key.D1;
-		if (itemClassIndex < model.ItemClasses.Count)
-			SelectedItemClass = model.ItemClasses[itemClassIndex];
-	}
-	
-	private DetectorModel? _model;
-	private ItemClass? _selectedItemClass;
-
 	public void DeleteSelectedScreenshots()
 	{
-		if (Model == null) throw new Exception();
-		// match all indexes and and remove in reverse as it is more efficient
-		List<ItemWithIndex<DetectorScreenshot?>> toRemove = Model.DetectorScreenshots
-			.IndexOfMany(ScreenshotsSelection.SelectedItems)
-			.OrderByDescending(x => x.Index)
-			.ToList();
-
-		// Fast remove because we know the index of all and we remove in order
-		toRemove.ForEach(t => Model.DetectorScreenshots.RemoveAt(t.Index));
+		Annotator.RemoveScreenshots(ScreenshotsSelection.SelectedIndexes);
 	}
 
 	[DependsOn(nameof(Model))]
@@ -97,7 +64,23 @@ public sealed class AnnotatingTabVM : ViewModel
 		Model != null &&
 		SelectedScreenshot != null;
 
-	public void BeginDrawing(Point position) => Annotator.BeginDrawing(position);
+	public bool BeginDrawing(Point position) => Annotator.BeginDrawing(position);
 	public void UpdateDrawing(Point position) => Annotator.UpdateDrawing(position);
 	public void EndDrawing(Point position) => Annotator.EndDrawing(position);
+
+	public void SelectItemClassByIndex(int itemClassIndex)
+	{
+		Model.ThrowIfNull(nameof(Model));
+		if (itemClassIndex < Model!.ItemClasses.Count)
+			SelectedItemClass = Model.ItemClasses[itemClassIndex];
+	}
+	
+	private DetectorModel? _model;
+	private ItemClass? _selectedItemClass;
+
+	private void OnScreenshotsSelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<DetectorScreenshot> e)
+	{
+		Annotator.SelectedScreenshot = ScreenshotsSelection.SelectedItem;
+		SelectedScreenshot = ScreenshotsSelection.SelectedItem;
+	}
 }

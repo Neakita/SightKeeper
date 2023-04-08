@@ -10,7 +10,7 @@ public interface AnnotatorDrawer
 
 	DetectorScreenshot? Screenshot { get; set; }
 	ItemClass? ItemClass { get; set; }
-	void BeginDrawing(Point startPosition);
+	bool BeginDrawing(Point startPosition);
 	void UpdateDrawing(Point currentPosition);
 	void EndDrawing(Point finishPosition);
 }
