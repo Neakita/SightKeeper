@@ -54,17 +54,19 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 
 	[Reactive] public ushort MaxImages { get; set; } = 500;
 
-	public OnShootModelScreenshoter(ScreenCapture screenCapture, KeyHook keyHook, AppDbContextFactory dbContextFactory)
+	public OnShootModelScreenshoter(ScreenCapture screenCapture, KeyHook keyHook, AppDbContextFactory dbContextFactory, ScreenBoundsProvider screenBoundsProvider)
 	{
 		_screenCapture = screenCapture;
 		_keyHook = keyHook;
 		_dbContextFactory = dbContextFactory;
+		_screenBoundsProvider = screenBoundsProvider;
 		_interval = 1000 / FramesPerSecond;
 	}
 
 	private readonly ScreenCapture _screenCapture;
 	private readonly KeyHook _keyHook;
 	private readonly AppDbContextFactory _dbContextFactory;
+	private readonly ScreenBoundsProvider _screenBoundsProvider;
 	private Model? _model;
 	private DetectorModel? _detectorModel;
 	private bool _isEnabled;
