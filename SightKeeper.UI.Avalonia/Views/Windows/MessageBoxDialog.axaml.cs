@@ -13,6 +13,15 @@ namespace SightKeeper.UI.Avalonia.Views.Windows;
 
 public partial class MessageBoxDialog : ReactiveWindow<MessageBoxDialogViewModel>, Dialog<MessageBoxDialog.DialogResult>
 {
+	public static void Show(
+		string message,
+		DialogResult dialogResults = DialogResult.Ok,
+		string title = "",
+		MaterialIconKind? icon = null)
+	{
+		new MessageBoxDialog(message, dialogResults, title, icon).Show();
+	}
+	
 	[Flags]
 	public enum DialogResult
 	{

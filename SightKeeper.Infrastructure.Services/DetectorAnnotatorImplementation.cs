@@ -1,8 +1,6 @@
 ﻿using Avalonia;
 using DynamicData.Kernel;
-using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
@@ -90,6 +88,7 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 	private void LoadItemClasses(Model model)
 	{
 		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.Models.Where(m => m.Id == model.Id).Select(m => m.ItemClasses).Load();
+		dbContext.Models.Attach(model);
+		dbContext.Entry(model).Collection(m => m.ItemClasses).Load();
 	}
 }

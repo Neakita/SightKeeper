@@ -53,7 +53,6 @@ public static class AppBootstrapper
 		builder.RegisterType<GamesRepositoryRegistrator>().As<GamesRegistrator>().SingleInstance();
 		builder.RegisterType<GenericDynamicDbRepository<Game>>().As<Repository<Game>>().SingleInstance();
 		builder.RegisterType<GenericDynamicDbRepository<Model>>().As<DynamicRepository<Model>>().As<Repository<Model>>().SingleInstance();
-		builder.RegisterType<ModelEditorImplementation>().As<ModelEditor>().SingleInstance();
 		builder.RegisterType<InheritedGenericRepository<DetectorModel, Model>>().As<Repository<DetectorModel>>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<OnShootModelScreenshoter>().As<ModelScreenshoter>().SingleInstance();
@@ -61,12 +60,13 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectorAnnotatorImplementation>().As<DetectorAnnotator>().SingleInstance();
 		builder.RegisterType<GenericDynamicDbRepository<ModelConfig>>().As<DynamicRepository<ModelConfig>>().As<Repository<ModelConfig>>().SingleInstance();
 		builder.RegisterType<AnnotatorDrawerImplementation>().As<AnnotatorDrawer>().SingleInstance();
+		builder.RegisterType<ModelEditorFactoryImplementation>().As<ModelEditorFactory>().SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainWindowViewModel>().SingleInstance();
-		builder.RegisterType<ModelEditorViewModel>();
+		builder.RegisterType<ModelEditorVM>();
 		
 		builder.RegisterType<AnnotatingTabVM>().SingleInstance();
 		builder.RegisterType<ModelsTabVM>().SingleInstance();

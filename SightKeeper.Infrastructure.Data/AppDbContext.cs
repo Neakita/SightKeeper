@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using Splat.ModeDetection;
 
 namespace SightKeeper.Infrastructure.Data;
 
@@ -32,6 +33,12 @@ public class AppDbContext : DbContext
 	{
 		IEnumerable<EntityEntry> changedEntries = ChangeTracker.Entries().Where(entry => entry.State != EntityState.Unchanged);
 		foreach (EntityEntry entry in changedEntries) RollbackEntry(entry);
+	}
+
+	public async Task RollBackAsync()
+	{
+		IEnumerable<EntityEntry> changedEntries = ChangeTracker.Entries().Where(entry => entry.State != EntityState.Unchanged);
+		foreach (EntityEntry entry in changedEntries) await RollbackEntryAsync(entry);
 	}
 
 	public void RollBack<TEntity>(TEntity entity) where TEntity : class => RollbackEntry(Entry(entity));
@@ -86,5 +93,6 @@ public class AppDbContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
+		modelBuilder.Entity<Model>().OwnsOne(model => model.Resolution).Ignore(resolution => resolution.HasErrors);
 	}
 }

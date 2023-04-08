@@ -1,11 +1,9 @@
-﻿using SightKeeper.Domain.Model.Abstract;
+﻿namespace SightKeeper.Application;
 
-namespace SightKeeper.Application;
-
-public interface ModelEditor
+public interface ModelEditor : IDisposable, IAsyncDisposable
 {
-	void SaveChanges(Model model);
-	Task SaveChangesAsync(Model model, CancellationToken cancellationToken = default);
-	void RollbackChanges(Model model);
-	Task RollbackChangesAsync(Model model, CancellationToken cancellationToken = default);
+	void SaveChanges();
+	Task SaveChangesAsync(CancellationToken cancellationToken = default);
+	void RollbackChanges();
+	Task RollbackChangesAsync(CancellationToken cancellationToken = default);
 }

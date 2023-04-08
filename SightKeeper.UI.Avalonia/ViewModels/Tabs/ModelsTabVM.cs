@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using Avalonia.Metadata;
 using Material.Icons;
 using ReactiveUI.Fody.Helpers;
+using SightKeeper.Application;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
-using SightKeeper.Infrastructure.Data;
 using SightKeeper.UI.Avalonia.Extensions;
+using SightKeeper.UI.Avalonia.ViewModels.Windows;
 using SightKeeper.UI.Avalonia.Views.Windows;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Tabs;
@@ -16,23 +17,20 @@ namespace SightKeeper.UI.Avalonia.ViewModels.Tabs;
 public sealed class ModelsTabVM : ViewModel
 {
 	public static ModelsTabVM New => Locator.Resolve<ModelsTabVM>();
-
-
+	
 	public Repository<Model> ModelsRepository { get; }
 	[Reactive] public Model? SelectedModel { get; set; }
 
-	public ModelsTabVM(Repository<Model> modelsRepository, AppDbContextFactory dbContextFactory)
+	public ModelsTabVM(Repository<Model> modelsRepository, ModelEditorFactory modelEditorFactory)
 	{
-		_dbContextFactory = dbContextFactory;
+		_modelEditorFactory = modelEditorFactory;
 		ModelsRepository = modelsRepository;
 	}
-	
-	private readonly AppDbContextFactory _dbContextFactory;
 
-	private async Task CreateNewModel()
+	public async Task CreateNewModel()
 	{
 		DetectorModel newModel = new("Unnamed detector model");
-		ModelEditorDialog editorDialog = new(newModel);
+		ModelEditorDialog editorDialog = new(ModelEditorVM.Create(newModel));
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
 		if (result == ModelEditorDialog.DialogResult.Apply)
 			ModelsRepository.Add(newModel);
@@ -41,14 +39,14 @@ public sealed class ModelsTabVM : ViewModel
 	public async Task EditModel()
 	{
 		if (SelectedModel == null) throw new Exception();
-		await using AppDbContext dbContext = await _dbContextFactory.CreateDbContextAsync();
-		dbContext.Update(SelectedModel);
-		ModelEditorDialog editorDialog = new(SelectedModel);
+		await using ModelEditor editor = await _modelEditorFactory.BeginEditAsync(SelectedModel);
+		using ModelEditorVM modelEditorVM = ModelEditorVM.Create(SelectedModel);
+		ModelEditorDialog editorDialog = new(modelEditorVM);
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
 		if (result == ModelEditorDialog.DialogResult.Apply)
-			await dbContext.SaveChangesAsync();
+			await editor.SaveChangesAsync();
 		else
-			dbContext.RollBack();
+			await editor.RollbackChangesAsync();
 	}
 
 	[DependsOn(nameof(SelectedModel))]
@@ -66,4 +64,6 @@ public sealed class ModelsTabVM : ViewModel
 
 	[DependsOn(nameof(SelectedModel))]
 	public bool CanDeleteModel(object parameter) => SelectedModel != null;
+	
+	private readonly ModelEditorFactory _modelEditorFactory;
 }

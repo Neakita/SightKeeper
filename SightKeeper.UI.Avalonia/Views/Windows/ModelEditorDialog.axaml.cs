@@ -1,17 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
-using Avalonia;
+﻿using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
-using ReactiveUI;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.UI.Avalonia.Misc;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
 
 namespace SightKeeper.UI.Avalonia.Views.Windows;
 
-public partial class ModelEditorDialog : ReactiveWindow<ModelEditorViewModel>, Dialog<ModelEditorDialog.DialogResult>
+public partial class ModelEditorDialog : ReactiveWindow<ModelEditorVM>, Dialog<ModelEditorDialog.DialogResult>
 {
 	public enum DialogResult
 	{
@@ -19,30 +15,14 @@ public partial class ModelEditorDialog : ReactiveWindow<ModelEditorViewModel>, D
 		Cancel,
 		Apply
 	}
-	
-	public ModelEditorDialog(Model model)
-	{
-		InitializeComponent();
-		ViewModel = ModelEditorViewModel.Create(model);
-		this.WhenActivated(disposables =>
-		{
-			disposables(ViewModel.ApplyCommand.Subscribe(_ => Close(DialogResult.Apply)));
-			disposables(ViewModel.CancelCommand.Subscribe(_ => Close(DialogResult.Cancel)));
-		});
-#if DEBUG
-		this.AttachDevTools();
-#endif
-	}
 
-	public ModelEditorDialog() : this(null!)
-	{
-	}
+	public ModelEditorDialog(ModelEditorVM viewModel) : this() => ViewModel = viewModel;
 
-	private void InitializeComponent()
-	{
-		AvaloniaXamlLoader.Load(this);
-	}
+	public ModelEditorDialog() => InitializeComponent();
 
 	public new async Task<DialogResult> ShowDialog(Window owner) =>
 		await base.ShowDialog<DialogResult>(owner);
+
+	private void Cancel(object? sender, RoutedEventArgs e) => Close(DialogResult.Cancel);
+	private void Apply(object? sender, RoutedEventArgs e) => Close(DialogResult.Apply);
 }

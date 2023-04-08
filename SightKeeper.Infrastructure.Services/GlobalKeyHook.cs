@@ -14,7 +14,7 @@ public sealed class GlobalKeyHook : KeyHook, IDisposable
 		_hook.MousePressed += HookOnMousePressed;
 		_hook.MouseReleased += HookOnMouseReleased;
 		_hook.MouseClicked += HookOnMouseClicked;
-		_hook.RunAsync();
+		//_hook.RunAsync();
 	}
 
 	private void HookOnMouseClicked(object? sender, MouseHookEventArgs e)
