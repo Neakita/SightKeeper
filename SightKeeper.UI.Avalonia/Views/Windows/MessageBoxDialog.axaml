@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:viewModels="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Windows"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d"
         x:Class="SightKeeper.UI.Avalonia.Views.Windows.MessageBoxDialog"
         Title="{Binding Title}"
         Classes="ModernBlack Dialog"
@@ -22,9 +22,8 @@
                      TextWrapping="Wrap"
                      MaxWidth="400"
                      MinWidth="100"/>
-            <Button Command="{Binding CopyMessage}">
-                <avalonia:MaterialIcon Kind="ContentCopy"/>
-            </Button>
+            <Button Command="{Binding CopyMessage}"
+                    Content="{avalonia:MaterialIconExt ContentCopy}"/>
         </StackPanel>
         
         <ItemsRepeater Grid.Row="1" Items="{Binding DialogResults}" Margin="10" HorizontalAlignment="Right">
