@@ -13,6 +13,7 @@ using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Data;
 using SightKeeper.Infrastructure.Services;
 using SightKeeper.Infrastructure.Services.Windows;
+using SightKeeper.UI.Avalonia.Misc;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
@@ -61,6 +62,7 @@ public static class AppBootstrapper
 		builder.RegisterType<GenericDynamicDbRepository<ModelConfig>>().As<DynamicRepository<ModelConfig>>().As<Repository<ModelConfig>>().SingleInstance();
 		builder.RegisterType<AnnotatorDrawerImplementation>().As<AnnotatorDrawer>().SingleInstance();
 		builder.RegisterType<ModelEditorFactoryImplementation>().As<ModelEditorFactory>().SingleInstance();
+		builder.RegisterType<ScreenBoundsProviderImplementation>().As<ScreenBoundsProvider>().SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
