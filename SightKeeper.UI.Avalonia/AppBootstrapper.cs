@@ -57,7 +57,7 @@ public static class AppBootstrapper
 		builder.RegisterType<InheritedGenericRepository<DetectorModel, Model>>().As<Repository<DetectorModel>>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<OnShootModelScreenshoter>().As<ModelScreenshoter>().SingleInstance();
-		builder.RegisterType<GlobalKeyHook>().As<KeyHook>().SingleInstance();
+		builder.RegisterType<SharpHookGlobalKeyHook>().As<KeyHook>().SingleInstance();
 		builder.RegisterType<DetectorAnnotatorImplementation>().As<DetectorAnnotator>().SingleInstance();
 		builder.RegisterType<GenericDynamicDbRepository<ModelConfig>>().As<DynamicRepository<ModelConfig>>().As<Repository<ModelConfig>>().SingleInstance();
 		builder.RegisterType<AnnotatorDrawerImplementation>().As<AnnotatorDrawer>().SingleInstance();
