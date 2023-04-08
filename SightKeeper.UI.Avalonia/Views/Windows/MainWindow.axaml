@@ -8,7 +8,9 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="SightKeeper.UI.Avalonia"
         Classes="ModernBlack"
-        d:DataContext="{x:Static viewModels:MainWindowViewModel.New}">
+        d:DataContext="{x:Static viewModels:MainWindowViewModel.New}"
+        MinWidth="500"
+        MinHeight="300">
     
     <Grid>
         
