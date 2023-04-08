@@ -9,6 +9,7 @@
         Title="{Binding Title}"
         Classes="ModernBlack Dialog"
         SizeToContent="WidthAndHeight"
+        CanResize="False"
         Name="Root"
         d:DataContext="{x:Static viewModels:MessageBoxDialogViewModel.DesignTimeInstance}">
     
