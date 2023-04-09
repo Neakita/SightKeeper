@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SightKeeper.UI.Avalonia.ViewModels.Tabs"
+             xmlns:common="clr-namespace:SightKeeper.Domain.Model.Common;assembly=SightKeeper.Domain.Model"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.UI.Avalonia.Views.Tabs.SettingsTab"
              d:DataContext="{x:Static viewModels:SettingsTabVM.New}">
@@ -12,32 +13,35 @@
             <Expander Header="Registered Games" DataContext="{Binding RegisteredGamesVM}" MaxWidth="800" Margin="50" HorizontalContentAlignment="Stretch">
                 <Grid RowDefinitions="50, *" ColumnDefinitions="*, 80, 80">
                     <ComboBox Grid.Row="0" Grid.Column="0"
-                              Name="AvailableToAddGamesComboBox"
                               Items="{Binding AvailableToAddGames}"
                               VerticalAlignment="Center"
-                              HorizontalAlignment="Stretch">
+                              HorizontalAlignment="Stretch"
+                              SelectedItem="{Binding SelectedGameToAdd}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Title}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <Button Grid.Row="0" Grid.Column="1" Content="Add" Command="{Binding AddGame}" CommandParameter="{Binding SelectedItem, ElementName=AvailableToAddGamesComboBox}"/>
-                    <Button Grid.Row="0" Grid.Column="2" Content="Refresh" Command="{Binding RefreshAvailableGames}"/>
+                    <Button Grid.Row="0" Grid.Column="1" Content="Add"
+                            Command="{Binding AddGame}"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="Refresh"
+                            Command="{Binding RefreshAvailableGames}"/>
                     <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
-                              Name="RegisteredGamesDataGrid"
                               Items="{Binding RegisteredGames}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
-                              Height="300">
+                              Height="300"
+                              SelectedItem="{Binding SelectedGame}">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Delete" Command="{Binding DeleteGame}" CommandParameter="{Binding SelectedItem, ElementName=RegisteredGamesDataGrid}"/>
+                                <MenuItem Header="Delete"
+                                          Command="{Binding DeleteGame}"/>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
-                            <DataGridTextColumn Header="Process" Binding="{Binding ProcessName}"/>
+                            <DataGridTextColumn Header="Title" Binding="{Binding (common:Game).Title}"/>
+                            <DataGridTextColumn Header="Process" Binding="{Binding (common:Game).ProcessName}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

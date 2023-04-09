@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Avalonia.Metadata;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Infrastructure.Common;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 
@@ -13,6 +16,8 @@ public sealed class RegisteredGamesVM : ViewModel
 	public ObservableCollection<Game> RegisteredGames { get; }
 
 	public IReadOnlyCollection<Game> AvailableToAddGames => _gamesRegistrator.AvailableGames;
+	[Reactive] public Game? SelectedGameToAdd { get; set; }
+	[Reactive] public Game? SelectedGame { get; set; }
 
 
 	public RegisteredGamesVM(GamesRegistrator gamesRegistrator)
@@ -25,23 +30,27 @@ public sealed class RegisteredGamesVM : ViewModel
 	private void RegisteredGamesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
 		this.RaisePropertyChanged(nameof(RegisteredGames));
 
-	public void AddGame(Game game)
+	public void AddGame()
 	{
-		_gamesRegistrator.RegisterGame(game);
-		RegisteredGames.Add(game);
+		SelectedGameToAdd.ThrowIfNull(nameof(SelectedGameToAdd));
+		_gamesRegistrator.RegisterGame(SelectedGameToAdd!);
+		RegisteredGames.Add(SelectedGameToAdd!);
 		RefreshAvailableGames();
 	}
 
-	private bool CanAddGame(object? parameter) => parameter != null;
+	[DependsOn(nameof(SelectedGameToAdd))]
+	public bool CanAddGame(object? parameter) => SelectedGameToAdd != null;
 
-	public void DeleteGame(Game game)
+	public void DeleteGame()
 	{
-		_gamesRegistrator.UnregisterGame(game);
-		RegisteredGames.Remove(game);
+		SelectedGame.ThrowIfNull(nameof(SelectedGame));
+		_gamesRegistrator.UnregisterGame(SelectedGame!);
+		RegisteredGames.Remove(SelectedGame!);
 		RefreshAvailableGames();
 	}
 
-	private bool CanDeleteGame(object? parameter) => parameter != null;
+	[DependsOn(nameof(SelectedGame))]
+	public bool CanDeleteGame(object? parameter) => SelectedGame != null;
 
 	public void RefreshAvailableGames()
 	{

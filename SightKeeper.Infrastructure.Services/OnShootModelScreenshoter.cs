@@ -25,6 +25,7 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 			if (_model == null) return;
 			_ = LoadScreenshotsAsync(_model);
 			_screenCapture.Resolution = _model.Resolution;
+			_screenCapture.Game = _model.Game;
 		}
 	}
 
@@ -77,6 +78,7 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 	{
 		if (button != MouseButton.Button1) return;
 		if (Model == null) return;
+		if (!_screenCapture.CanCapture) return;
 		if (_capturing) return;
 		_detectorModel.ThrowIfNull(nameof(_detectorModel));
 		_capturing = true;
