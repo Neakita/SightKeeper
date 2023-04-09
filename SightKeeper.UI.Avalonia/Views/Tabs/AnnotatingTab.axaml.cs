@@ -18,6 +18,7 @@ public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 	{
 		InitializeComponent();
 		KeyDown += OnKeyDown;
+		KeyUp += OnKeyUp;
 	}
 
 	protected override void OnInitialized()
@@ -65,6 +66,15 @@ public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 		ViewModel.ThrowIfNull(nameof(ViewModel));
 		Key key = e.Key;
 		SetSelectedItemByIndex(key);
+
+		if (key == Key.LeftCtrl) ViewModel!.ItemSelectionMode = true;
+	}
+
+	private void OnKeyUp(object? sender, KeyEventArgs e)
+	{
+		ViewModel.ThrowIfNull(nameof(ViewModel));
+		Key key = e.Key;
+		if (key == Key.LeftCtrl) ViewModel!.ItemSelectionMode = false;
 	}
 
 	private void SetSelectedItemByIndex(Key key)

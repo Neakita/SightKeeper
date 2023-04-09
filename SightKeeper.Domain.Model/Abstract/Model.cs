@@ -38,6 +38,8 @@ public abstract class Model : ReactiveObject, Entity
 	
 	public Resolution Resolution { get; private set; }
 	public ObservableCollection<ItemClass> ItemClasses { get; private set; }
+	public int? GameId { get; private set; }
 	[Reactive] public Game? Game { get; set; }
+	public int? ConfigId { get; private set; }
 	[Reactive] public ModelConfig? Config { get; set; }
 }

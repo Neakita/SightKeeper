@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations.Schema;
+using ReactiveUI.Fody.Helpers;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 
@@ -26,8 +27,8 @@ public class DetectorScreenshot : Screenshot
 		
 	}
 
-	public bool IsAsset { get; set; }
+	[Reactive] public bool IsAsset { get; set; }
 
-	public ObservableCollection<DetectorItem> Items { get; private set; }
+	public ObservableCollection<DetectorItem> Items { get; set; }
 	public DetectorModel Model { get; private set; }
 }

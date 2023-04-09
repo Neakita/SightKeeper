@@ -42,6 +42,8 @@ public sealed class AnnotatingTabVM : ViewModel
 			this.RaiseAndSetIfChanged(ref _model, value);
 		}
 	}
+	
+	[Reactive] public bool ItemSelectionMode { get; set; }
 
 	public AnnotatingTabVM(Repository<DetectorModel> modelsRepository, DetectorAnnotator annotator, ModelScreenshoter screenshoter)
 	{

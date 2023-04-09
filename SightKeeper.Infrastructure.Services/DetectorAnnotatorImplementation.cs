@@ -45,26 +45,45 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 	{
 		_drawer = drawer;
 		_dbContextFactory = dbContextFactory;
+		_drawer.Drawn += DrawerOnDrawn;
+	}
+
+	private void DrawerOnDrawn(DetectorItem obj)
+	{
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
+		dbContext.Attach(SelectedScreenshot!);
+		SelectedScreenshot.ThrowIfNull(nameof(SelectedScreenshot));
+		SelectedScreenshot!.IsAsset = true;
+		dbContext.SaveChanges();
 	}
 
 	public void RemoveItem(DetectorItem item)
 	{
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
+		dbContext.Attach(SelectedScreenshot!);
 		SelectedScreenshot.ThrowIfNull(nameof(SelectedScreenshot));
 		SelectedScreenshot!.Items.Remove(item);
+		dbContext.SaveChanges();
 	}
 
 	public void MarkAsAssets(IReadOnlyCollection<int> screenshotsIndexes)
 	{
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
+		dbContext.Attach(Model!);
 		Model.ThrowIfNull(nameof(Model));
 		foreach (int index in screenshotsIndexes)
 			Model!.DetectorScreenshots[index].IsAsset = true;
+		dbContext.SaveChanges();
 	}
 
 	public void RemoveScreenshots(IReadOnlyCollection<int> screenshotsIndexes)
 	{
 		Model.ThrowIfNull(nameof(Model));
+		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
+		dbContext.Attach(Model!);
 		foreach (int index in screenshotsIndexes.OrderDescending())
 			Model!.DetectorScreenshots.RemoveAt(index);
+		dbContext.SaveChanges();
 	}
 
 	public bool BeginDrawing(Point position) => _drawer.BeginDrawing(position);

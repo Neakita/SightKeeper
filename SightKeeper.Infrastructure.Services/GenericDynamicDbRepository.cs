@@ -8,14 +8,14 @@ using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Infrastructure.Services;
 
-public sealed class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEntity> where TEntity : class, Entity
+public class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEntity> where TEntity : class, Entity
 {
 	public ReadOnlyObservableCollection<TEntity> Items { get; }
 	public ISourceCache<TEntity, int> ItemsCache { get; }
 
 	public GenericDynamicDbRepository(AppDbContextFactory dbContextFactory)
 	{
-		_dbContextFactory = dbContextFactory;
+		DbContextFactory = dbContextFactory;
 
 		ItemsCache = new SourceCache<TEntity, int>(entity => entity.Id);
 		ItemsCache
@@ -26,7 +26,6 @@ public sealed class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEnt
 		
 		using AppDbContext dbContext = dbContextFactory.CreateDbContext();
 		ItemsCache.AddOrUpdate(dbContext.Set<TEntity>());
-		
 	}
 
 	public TEntity Get(int id) =>
@@ -37,7 +36,7 @@ public sealed class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEnt
 
 	public void Add(TEntity item)
 	{
-		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DbSet<TEntity> set = dbContext.Set<TEntity>();
 		set.Add(item);
 		dbContext.SaveChanges();
@@ -47,12 +46,12 @@ public sealed class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEnt
 	public void Remove(TEntity item)
 	{
 		
-		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DbSet<TEntity> set = dbContext.Set<TEntity>();
 		set.Remove(item);
 		dbContext.SaveChanges();
 		ItemsCache.Remove(item);
 	}
 	
-	private readonly AppDbContextFactory _dbContextFactory;
+	protected readonly AppDbContextFactory DbContextFactory;
 }

@@ -57,7 +57,7 @@
 
             <ListBox Name="CanvasItemsControl"
                      Items="{Binding Path=SelectedScreenshot.Items}" Background="Transparent"
-                     IsHitTestVisible="False">
+                     IsHitTestVisible="{Binding ItemSelectionMode}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas />
@@ -65,6 +65,8 @@
                 </ListBox.ItemsPanel>
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem">
+                        <Setter Property="ZIndex"
+                                Value="{Binding (detector:DetectorItem).BoundingBox.Width, Converter={StaticResource WidthToZIndexConverter}}"/>
                         <Setter Property="Padding" Value="0"/>
                         <Setter Property="Canvas.Left">
                             <Setter.Value>

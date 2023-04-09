@@ -53,7 +53,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>().SingleInstance();
 		builder.RegisterType<GamesRepositoryRegistrator>().As<GamesRegistrator>().SingleInstance();
 		builder.RegisterType<GenericDynamicDbRepository<Game>>().As<Repository<Game>>().SingleInstance();
-		builder.RegisterType<GenericDynamicDbRepository<Model>>().As<DynamicRepository<Model>>().As<Repository<Model>>().SingleInstance();
+		builder.RegisterType<ModelsDynamicDbRepository>().As<DynamicRepository<Model>>().As<Repository<Model>>().SingleInstance();
 		builder.RegisterType<InheritedGenericRepository<DetectorModel, Model>>().As<Repository<DetectorModel>>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<OnShootModelScreenshoter>().As<ModelScreenshoter>().SingleInstance();
