@@ -29,7 +29,8 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Panel>
-                        <Image Source="{Binding Image.Content, Converter={StaticResource BytesToBitmapConverter}}"/>
+                        <Image Source="{Binding Image.Content, Converter={StaticResource BytesToBitmapConverter}}"
+                               Margin="1"/>
                         <avalonia:MaterialIcon Kind="BookmarkCheck"
                                                Width="30" Height="30"
                                                Foreground="Green"
@@ -37,7 +38,6 @@
                                                HorizontalAlignment="Right"
                                                Margin="0 -5 20 0"
                                                ToolTip.Tip="Asset"
-                                               ToolTip.ShowDelay="100"
                                                Background="#01000000"
                                                IsVisible="{Binding IsAsset}">
                             <avalonia:MaterialIcon.Clip>
@@ -161,7 +161,7 @@
                                            Value="{Binding FramesPerSecond}" />
                             <NumericUpDown Watermark="Max quantity"
                                            HorizontalAlignment="Stretch"
-                                           Minimum="50"
+                                           Minimum="1"
                                            Maximum="1000"
                                            Increment="50"
                                            Value="{Binding MaxImages}" />
@@ -202,7 +202,8 @@
             <WrapPanel>
                 <Button Content="{avalonia:MaterialIconExt TrashCan}"
                         Command="{Binding DeleteSelectedScreenshots}"
-                        HotKey="Delete"/>
+                        HotKey="Delete"
+                        ToolTip.Tip="Delete one or many selected screenshots"/>
             </WrapPanel>
 
         </StackPanel>
