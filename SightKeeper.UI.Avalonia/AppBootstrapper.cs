@@ -45,7 +45,7 @@ public static class AppBootstrapper
 		Log.Logger = new LoggerConfiguration()
 			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
 			#if DEBUG
-			.WriteTo.Debug(restrictedToMinimumLevel: LogEventLevel.Debug)
+			.WriteTo.Debug()
 			#endif
 			.MinimumLevel.ControlledBy(levelSwitch)
 			.CreateLogger();

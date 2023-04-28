@@ -60,7 +60,6 @@ public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDra
 		_dbContext = _dbContextFactory.CreateDbContext();
 		_dbContext.Attach(Screenshot!);
 		_item = new DetectorItem(ItemClass!, new BoundingBox(startPosition.X, startPosition.Y, 0, 0));
-		_item.Screenshot = Screenshot!;
 		Screenshot!.Items.Add(_item);
 		return true;
 	}

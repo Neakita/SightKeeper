@@ -98,6 +98,5 @@ public class AppDbContext : DbContext
 	{
 		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
 		modelBuilder.Entity<Model>().OwnsOne(model => model.Resolution).Ignore(resolution => resolution.HasErrors);
-		modelBuilder.Entity<DetectorScreenshot>().HasMany<DetectorItem>().WithOne(nameof(DetectorItem.Screenshot)).OnDelete(DeleteBehavior.Cascade);
 	}
 }

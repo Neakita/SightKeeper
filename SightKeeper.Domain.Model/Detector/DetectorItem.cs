@@ -22,7 +22,6 @@ public class DetectorItem : ReactiveObject, Entity
 	}
 
 	public int Id { get; private set; }
-	public DetectorScreenshot Screenshot { get; set; }
 	[Reactive] public ItemClass ItemClass { get; set; }
 	[Reactive] public BoundingBox BoundingBox { get; set; }
 }
