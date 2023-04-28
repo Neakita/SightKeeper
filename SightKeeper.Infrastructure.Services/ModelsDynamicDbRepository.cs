@@ -1,4 +1,6 @@
-﻿using SightKeeper.Domain.Model.Abstract;
+﻿using DynamicData;
+using Microsoft.EntityFrameworkCore;
+using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Data;
@@ -25,5 +27,15 @@ public sealed class ModelsDynamicDbRepository : GenericDynamicDbRepository<Model
 			if (modelInfo.configId != null)
 				model.Config = configsRepository.Get(modelInfo.configId.Value);
 		}
+	}
+
+	public override void Add(Model item)
+	{
+		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
+		if (item.Game != null) dbContext.Attach(item.Game);
+		DbSet<Model> set = dbContext.Models;
+		set.Add(item);
+		dbContext.SaveChanges();
+		ItemsCache.AddOrUpdate(item);
 	}
 }

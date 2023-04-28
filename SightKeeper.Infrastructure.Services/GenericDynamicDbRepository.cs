@@ -34,7 +34,7 @@ public class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEntity> wh
 
 	public bool Contains(TEntity itemVM) => ItemsCache.Lookup(itemVM.Id).HasValue;
 
-	public void Add(TEntity item)
+	public virtual void Add(TEntity item)
 	{
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DbSet<TEntity> set = dbContext.Set<TEntity>();
@@ -45,7 +45,6 @@ public class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEntity> wh
 
 	public void Remove(TEntity item)
 	{
-		
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DbSet<TEntity> set = dbContext.Set<TEntity>();
 		set.Remove(item);
