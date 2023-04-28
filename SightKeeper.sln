@@ -28,19 +28,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Tests.Common", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Application.Tests", "SightKeeper.Application.Tests\SightKeeper.Application.Tests.csproj", "{D0989226-25E7-4BBC-B17E-AE3BEEB23ABF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Infrastructure.Data.Tests", "SightKeeper.Infrastructure.Data.Tests\SightKeeper.Infrastructure.Data.Tests.csproj", "{0E2DE015-3704-413D-A9A8-4ECBF2140153}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Data.Tests", "SightKeeper.Data.Tests\SightKeeper.Data.Tests.csproj", "{0E2DE015-3704-413D-A9A8-4ECBF2140153}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.UI.Avalonia", "SightKeeper.UI.Avalonia\SightKeeper.UI.Avalonia.csproj", "{1A69F59F-12F3-40F6-9283-3A7D123D6E8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Avalonia", "SightKeeper.Avalonia\SightKeeper.Avalonia.csproj", "{1A69F59F-12F3-40F6-9283-3A7D123D6E8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpHook.Test", "SharpHook.Test\SharpHook.Test.csproj", "{CEE68EF6-F256-47A6-B259-5780BF5602F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Infrastructure.Services", "SightKeeper.Infrastructure.Services\SightKeeper.Infrastructure.Services.csproj", "{F3D86443-0586-4043-A967-C001F5529373}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services", "SightKeeper.Services\SightKeeper.Services.csproj", "{F3D86443-0586-4043-A967-C001F5529373}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Domain.Services", "SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj", "{63560340-C375-46E6-A0D3-15B6B51763E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Infrastructure.Services.Tests", "SightKeeper.Infrastructure.Services.Tests\SightKeeper.Infrastructure.Services.Tests.csproj", "{2B6327C9-7BA1-47D8-8729-1BACD4322F35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services.Tests", "SightKeeper.Services.Tests\SightKeeper.Services.Tests.csproj", "{2B6327C9-7BA1-47D8-8729-1BACD4322F35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Infrastructure.Services.Windows", "SightKeeper.Infrastructure.Services.Windows\SightKeeper.Infrastructure.Services.Windows.csproj", "{F2F03FC0-D639-4EF7-829E-C3174B2CD3ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services.Windows", "SightKeeper.Services.Windows\SightKeeper.Services.Windows.csproj", "{F2F03FC0-D639-4EF7-829E-C3174B2CD3ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

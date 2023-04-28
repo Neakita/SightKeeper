@@ -1,0 +1,63 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:abstract="clr-namespace:SightKeeper.Domain.Model.Abstract;assembly=SightKeeper.Domain.Model"
+             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Views.Tabs.ModelsTab"
+             d:DataContext="{x:Static viewModels:ModelsTabVM.New}">
+    
+    <Grid RowDefinitions="50, *">
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 0">
+            <Button Command="{Binding CreateNewModel}"
+                    Content="{avalonia:MaterialIconExt Plus}"/>
+        </StackPanel>
+        
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding ModelsRepository.Items}"
+                  SelectedItem="{Binding SelectedModel}"
+                  IsReadOnly="True">
+            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Edit"
+                              Command="{ReflectionBinding EditModel}"/>
+                    <MenuItem Header="Delete"
+                              Command="{ReflectionBinding DeleteModel}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            
+            <DataGrid.Columns>
+                
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding (abstract:Model).Name}"/>
+                
+                <DataGridTextColumn Header="Game"
+                                    Binding="{Binding (abstract:Model).Game.Title, FallbackValue=[Not selected]}"/>
+                
+                <DataGridTemplateColumn Header="Resolution">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="abstract:Model">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        Margin="10 0">
+                                <TextBlock Text="{Binding Resolution.Width}"/>
+                                <TextBlock Text="x"/>
+                                <TextBlock Text="{Binding Resolution.Height}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTextColumn Header="Config"
+                                    Binding="{Binding (abstract:Model).Config.Name, FallbackValue=[Not selected]}"/>
+                
+            </DataGrid.Columns>
+        </DataGrid>
+        
+    </Grid>
+    
+</UserControl>

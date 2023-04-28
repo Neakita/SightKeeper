@@ -1,18 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
-      <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+      <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
+      <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj" />
+      <ProjectReference Include="..\SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.DAL\SightKeeper.DAL.csproj" />
+      <PackageReference Include="Pranas.ScreenshotCapture" Version="1.0.11" />
+      <PackageReference Include="SerilogTimings" Version="3.0.1" />
+      <PackageReference Include="SharpHook" Version="4.2.0" />
     </ItemGroup>
 
 </Project>

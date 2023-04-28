@@ -1,0 +1,219 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:detector="clr-namespace:SightKeeper.Domain.Model.Detector;assembly=SightKeeper.Domain.Model"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Views.Tabs.AnnotatingTab"
+             d:DataContext="{x:Static viewModels:AnnotatingTabVM.New}">
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="50"/>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="4*" MinWidth="200"/>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="200" MaxWidth="300" MinWidth="150"/>
+        </Grid.ColumnDefinitions>
+        <ListBox Grid.Column="0"
+                 ItemsSource="{Binding Model.DetectorScreenshots}"
+                 Selection="{Binding ScreenshotsSelection}">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="0"/>
+                </Style>
+            </ListBox.Styles>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Panel>
+                        <Image Source="{Binding Image.Content, Converter={StaticResource BytesToBitmapConverter}}"
+                               Margin="1"/>
+                        <avalonia:MaterialIcon Kind="BookmarkCheck"
+                                               Width="30" Height="30"
+                                               Foreground="Green"
+                                               VerticalAlignment="Top"
+                                               HorizontalAlignment="Right"
+                                               Margin="0 -5 20 0"
+                                               ToolTip.Tip="Asset"
+                                               Background="#01000000"
+                                               IsVisible="{Binding IsAsset}">
+                            <avalonia:MaterialIcon.Clip>
+                                <RectangleGeometry Rect="0, 5, 30, 30"/>
+                            </avalonia:MaterialIcon.Clip>
+                        </avalonia:MaterialIcon>
+                    </Panel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <GridSplitter Grid.Column="1" ResizeDirection="Columns"/>
+
+        <Panel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <Image Name="Image" IsHitTestVisible="True" Source="{Binding SelectedScreenshot.Image.Content, Converter={StaticResource BytesToBitmapConverter}}" />
+
+            <ListBox Name="CanvasItemsControl"
+                     ItemsSource="{Binding Path=SelectedScreenshot.Items}" Background="Transparent"
+                     IsHitTestVisible="{Binding ItemSelectionMode}"
+                     SelectedIndex="{Binding SelectedItemIndex}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="ZIndex"
+                                Value="{Binding (detector:DetectorItem).BoundingBox.Width, Converter={StaticResource WidthToZIndexConverter}}"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Canvas.Left">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
+                                    <MultiBinding.Bindings>
+                                        <Binding Path="(detector:DetectorItem).BoundingBox.X" />
+                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Width" />
+                                    </MultiBinding.Bindings>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Canvas.Top">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
+                                    <MultiBinding.Bindings>
+                                        <Binding Path="(detector:DetectorItem).BoundingBox.Y" />
+                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Height" />
+                                    </MultiBinding.Bindings>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Width">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
+                                    <MultiBinding.Bindings>
+                                        <Binding Path="(detector:DetectorItem).BoundingBox.Width" />
+                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Width" />
+                                    </MultiBinding.Bindings>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Height">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
+                                    <MultiBinding.Bindings>
+                                        <Binding Path="(detector:DetectorItem).BoundingBox.Height" />
+                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Height" />
+                                    </MultiBinding.Bindings>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        
+                        <Setter Property="BorderBrush" Value="#80FF0000"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="Background" Value="#10000000" />
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:selected">
+                        <Setter Property="BorderBrush" Value="#80FF0080"/>
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:pointerover">
+                        <Setter Property="BorderBrush" Value="#A0FF0000"/>
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:pointerover:selected">
+                        <Setter Property="BorderBrush" Value="#A0FF00A0"/>
+                    </Style>
+                    
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding ItemClass.Name}" FontSize="7"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+        </Panel>
+        
+        <GridSplitter Grid.Column="3" ResizeDirection="Columns"/>
+
+        <StackPanel Grid.Column="4" Spacing="10" Margin="10 50 10 10">
+            <Button Content="{avalonia:MaterialIconExt Camera}">
+                <Button.Flyout>
+                    <Flyout>
+                        <StackPanel Width="125" Spacing="10"
+                                    DataContext="{Binding Screenshoter}">
+                            <CheckBox Content="Capture"
+                                      IsChecked="{Binding IsEnabled}"
+                                      IsEnabled="{Binding Model, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                            <NumericUpDown Watermark="On hold FPS"
+                                           HorizontalAlignment="Stretch"
+                                           Minimum="1"
+                                           Maximum="60"
+                                           Increment="1"
+                                           Value="{Binding FramesPerSecond}" />
+                            <NumericUpDown Watermark="Max quantity"
+                                           HorizontalAlignment="Stretch"
+                                           Minimum="1"
+                                           Maximum="1000"
+                                           Increment="50"
+                                           Value="{Binding MaxImages}" />
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+            <ComboBox ItemsSource="{Binding ModelsRepository.Items}"
+                      SelectedItem="{Binding Model}"
+                      HorizontalAlignment="Stretch"
+                      PlaceholderText="Model"
+                      IsEnabled="{Binding !Screenshoter.IsEnabled}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Border BorderBrush="Gray" BorderThickness="1">
+                <StackPanel Margin="10" Spacing="10">
+                    <TextBlock Text="Item classes" />
+                    <ListBox Name="ItemClassesListBox"
+                             ItemsSource="{Binding Annotator.Model.ItemClasses}"
+                             IsVisible="{Binding !!Annotator.Model.ItemClasses.Count}"
+                             SelectedItem="{Binding SelectedItemClass}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock Text="No items yet"
+                               IsVisible="{Binding !Annotator.Model.ItemClasses.Count}" />
+                </StackPanel>
+            </Border>
+            
+            <WrapPanel>
+                <Button Content="{avalonia:MaterialIconExt TrashCan}"
+                        Command="{Binding DeleteSelectedScreenshots}"
+                        HotKey="Delete"
+                        ToolTip.Tip="Delete one or many selected screenshots"/>
+                <Button Content="{avalonia:MaterialIconExt VectorSquareRemove}"
+                        Command="{Binding DeleteSelectedItemAsync}"
+                        ToolTip.Tip="Delete selected item in current screenshot"/>
+            </WrapPanel>
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>
