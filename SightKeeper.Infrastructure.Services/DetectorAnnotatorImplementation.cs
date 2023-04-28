@@ -1,11 +1,11 @@
 ﻿using Avalonia;
 using ReactiveUI;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Infrastructure.Common;
-using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Infrastructure.Services;
 

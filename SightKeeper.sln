@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Tests", "SightKeeper.Tests\SightKeeper.Tests.csproj", "{7D95C029-7CE1-476A-AD5F-543934A5F04F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Infrastructure.Data", "SightKeeper.Infrastructure.Data\SightKeeper.Infrastructure.Data.csproj", "{25EDE1E2-060A-4124-834C-89545A50AB6F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Data", "SightKeeper.Data\SightKeeper.Data.csproj", "{25EDE1E2-060A-4124-834C-89545A50AB6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Application", "SightKeeper.Application\SightKeeper.Application.csproj", "{90E309B6-012B-4243-AC31-8E575193C76A}"
 EndProject

@@ -8,7 +8,7 @@ using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using Splat.ModeDetection;
 
-namespace SightKeeper.Infrastructure.Data;
+namespace SightKeeper.Data;
 
 public class AppDbContext : DbContext
 {

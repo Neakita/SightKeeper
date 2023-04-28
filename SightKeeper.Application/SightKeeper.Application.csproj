@@ -8,7 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SightKeeper.Infrastructure.Common\SightKeeper.Infrastructure.Common.csproj" />
-        <ProjectReference Include="..\SightKeeper.Infrastructure.Data\SightKeeper.Infrastructure.Data.csproj" />
+        <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj" />
     </ItemGroup>
 
     <ItemGroup>

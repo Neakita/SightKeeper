@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace SightKeeper.Infrastructure.Data;
+namespace SightKeeper.Data;
 
 public interface AppDbContextFactory : IDbContextFactory<AppDbContext>
 {

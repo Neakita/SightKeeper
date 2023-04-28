@@ -1,9 +1,9 @@
 ﻿using DynamicData;
 using Microsoft.EntityFrameworkCore;
+using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
-using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Infrastructure.Services;
 

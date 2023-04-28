@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SightKeeper.Application;
+using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Infrastructure.Services;
 

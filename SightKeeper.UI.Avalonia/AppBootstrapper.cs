@@ -12,7 +12,7 @@ using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
-using SightKeeper.Infrastructure.Data;
+using SightKeeper.Data;
 using SightKeeper.Infrastructure.Services;
 using SightKeeper.Infrastructure.Services.Input;
 using SightKeeper.Infrastructure.Services.Windows;

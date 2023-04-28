@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Application;
+using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Infrastructure.Data;
 
 namespace SightKeeper.Infrastructure.Services;
 

@@ -4,11 +4,11 @@ using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Input;
+using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Infrastructure.Common;
-using SightKeeper.Infrastructure.Data;
 using MouseButton = SharpHook.Native.MouseButton;
 
 namespace SightKeeper.Infrastructure.Services;

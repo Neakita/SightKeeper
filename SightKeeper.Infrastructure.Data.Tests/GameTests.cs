@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Data;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Infrastructure.Data.Tests;

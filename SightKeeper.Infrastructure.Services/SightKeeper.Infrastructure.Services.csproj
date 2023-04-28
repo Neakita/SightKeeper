@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
+      <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj" />
       <ProjectReference Include="..\SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj" />
     </ItemGroup>
 
