@@ -3,8 +3,10 @@ using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using SharpHook.Native;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Application.Input;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -12,6 +14,7 @@ using SightKeeper.Domain.Services;
 using SightKeeper.Infrastructure.Common;
 using SightKeeper.Infrastructure.Data;
 using SightKeeper.Infrastructure.Services;
+using SightKeeper.Infrastructure.Services.Input;
 using SightKeeper.Infrastructure.Services.Windows;
 using SightKeeper.UI.Avalonia.Misc;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
@@ -60,12 +63,12 @@ public static class AppBootstrapper
 		builder.RegisterType<InheritedGenericRepository<DetectorModel, Model>>().As<Repository<DetectorModel>>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<OnShootModelScreenshoter>().As<ModelScreenshoter>().SingleInstance();
-		builder.RegisterType<SharpHookGlobalKeyHook>().As<KeyHook>().SingleInstance();
 		builder.RegisterType<DetectorAnnotatorImplementation>().As<DetectorAnnotator>().SingleInstance();
 		builder.RegisterType<GenericDynamicDbRepository<ModelConfig>>().As<DynamicRepository<ModelConfig>>().As<Repository<ModelConfig>>().SingleInstance();
 		builder.RegisterType<AnnotatorDrawerImplementation>().As<AnnotatorDrawer>().SingleInstance();
 		builder.RegisterType<ModelEditorFactoryImplementation>().As<ModelEditorFactory>().SingleInstance();
 		builder.RegisterType<ScreenBoundsProviderImplementation>().As<ScreenBoundsProvider>().SingleInstance();
+		builder.RegisterType<SharpHookHotKeyManager>().AsSelf().As<HotKeyManager<KeyCode>>().As<HotKeyManager<MouseButton>>().SingleInstance();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)

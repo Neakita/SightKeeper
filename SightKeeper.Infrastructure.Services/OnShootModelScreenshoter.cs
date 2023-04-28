@@ -3,6 +3,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Application.Input;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -37,9 +38,8 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 			if (Model == null) throw new InvalidOperationException("Cannot enable when no model selected");
 			this.RaiseAndSetIfChanged(ref _isEnabled, value);
 			if (value)
-				_keyHook.MouseButtonPressed += KeyHookOnMouseButtonPressed;
-			else
-				_keyHook.MouseButtonPressed -= KeyHookOnMouseButtonPressed;
+				_hotKey = _hotKeyManager.Register(MouseButton.Button1, Pressed);
+			else _hotKey.Dispose();
 		}
 	}
 
@@ -56,16 +56,16 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 
 	[Reactive] public ushort MaxImages { get; set; } = 500;
 
-	public OnShootModelScreenshoter(ScreenCapture screenCapture, KeyHook keyHook, AppDbContextFactory dbContextFactory)
+	public OnShootModelScreenshoter(ScreenCapture screenCapture, HotKeyManager<MouseButton> hotKeyManager, AppDbContextFactory dbContextFactory)
 	{
 		_screenCapture = screenCapture;
-		_keyHook = keyHook;
+		_hotKeyManager = hotKeyManager;
 		_dbContextFactory = dbContextFactory;
 		_interval = 1000 / FramesPerSecond;
 	}
 
 	private readonly ScreenCapture _screenCapture;
-	private readonly KeyHook _keyHook;
+	private readonly HotKeyManager<MouseButton> _hotKeyManager;
 	private readonly AppDbContextFactory _dbContextFactory;
 	private Model? _model;
 	private DetectorModel? _detectorModel;
@@ -73,10 +73,10 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 	private byte _onHoldFPS = 1;
 	private int _interval;
 	private bool _capturing;
+	private HotKey _hotKey;
 
-	private void KeyHookOnMouseButtonPressed(KeyHook sender, MouseButton button)
+	private void Pressed(HotKey hotKey)
 	{
-		if (button != MouseButton.Button1) return;
 		if (Model == null) return;
 		if (!_screenCapture.CanCapture) return;
 		if (_capturing) return;
@@ -84,7 +84,7 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 		_capturing = true;
 		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Attach(_detectorModel!);
-		while (sender.IsPressed(button))
+		while (hotKey.IsPressed)
 		{
 			lock (this)
 			{
