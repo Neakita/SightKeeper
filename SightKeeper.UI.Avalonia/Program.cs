@@ -4,14 +4,12 @@ using System;
 using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Material.Icons;
 using ReactiveUI;
 using Serilog;
-using SightKeeper.UI.Avalonia.Views.Windows;
 
 namespace SightKeeper.UI.Avalonia;
 
-class Program
+internal static class Program
 {
 	// Initialization code. Don't use any Avalonia, third-party APIs or any
 	// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -28,7 +26,7 @@ class Program
 		}
 		catch (Exception exception)
 		{
-			HandleUnhandledExceptions(exception, "UI thread");
+			HandleUnhandledExceptions(exception, "Program.Main");
 		}
 	}
 
@@ -47,6 +45,5 @@ class Program
 	private static void HandleUnhandledExceptions(Exception exception, string source)
 	{
 		Log.Fatal(exception, "Unhandled exception occured from {Source}", source);
-		MessageBoxDialog.Show(exception.Message, MessageBoxDialog.DialogResult.Ok, "Unhandled exception", MaterialIconKind.Alert);
 	}
 }

@@ -17,7 +17,7 @@
         </StackPanel>
         
         <DataGrid Grid.Row="1"
-                  Items="{Binding ModelsRepository.Items}"
+                  ItemsSource="{Binding ModelsRepository.Items}"
                   SelectedItem="{Binding SelectedModel}"
                   IsReadOnly="True">
             

@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls.Selection;
 using Avalonia.Metadata;
 using ReactiveUI;
@@ -32,6 +33,8 @@ public sealed class AnnotatingTabVM : ViewModel
 	public SelectionModel<DetectorScreenshot> ScreenshotsSelection { get; } = new();
 	[Reactive] public DetectorScreenshot? SelectedScreenshot { get; private set; }
 
+	[Reactive] public int? SelectedItemIndex { get; set; }
+
 	public DetectorModel? Model
 	{
 		get => _model;
@@ -55,16 +58,21 @@ public sealed class AnnotatingTabVM : ViewModel
 		ScreenshotsSelection.SingleSelect = false;
 	}
 
-	public void DeleteSelectedScreenshots()
-	{
-		Annotator.RemoveScreenshots(ScreenshotsSelection.SelectedIndexes);
-	}
+	public void DeleteSelectedScreenshots() =>
+		Annotator.DeleteScreenshots(ScreenshotsSelection.SelectedIndexes);
 
-	[DependsOn(nameof(Model))]
 	[DependsOn(nameof(SelectedScreenshot))]
 	public bool CanDeleteSelectedScreenshots(object parameter) =>
-		Model != null &&
 		SelectedScreenshot != null;
+
+	public async Task DeleteSelectedItemAsync()
+	{
+		SelectedItemIndex.ThrowIfNull(nameof(SelectedItemIndex));
+		await Annotator.DeleteItemAsync(SelectedItemIndex!.Value);
+	}
+
+	[DependsOn(nameof(SelectedItemIndex))]
+	public bool CanDeleteSelectedItem(object parameter) => SelectedItemIndex != null;
 
 	public bool BeginDrawing(Point position) => Annotator.BeginDrawing(position);
 	public void UpdateDrawing(Point position) => Annotator.UpdateDrawing(position);

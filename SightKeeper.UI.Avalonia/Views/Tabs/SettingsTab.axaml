@@ -13,7 +13,7 @@
             <Expander Header="Registered Games" DataContext="{Binding RegisteredGamesVM}" MaxWidth="800" Margin="50" HorizontalContentAlignment="Stretch">
                 <Grid RowDefinitions="50, *" ColumnDefinitions="*, 80, 80">
                     <ComboBox Grid.Row="0" Grid.Column="0"
-                              Items="{Binding AvailableToAddGames}"
+                              ItemsSource="{Binding AvailableToAddGames}"
                               VerticalAlignment="Center"
                               HorizontalAlignment="Stretch"
                               SelectedItem="{Binding SelectedGameToAdd}">
@@ -28,7 +28,7 @@
                     <Button Grid.Row="0" Grid.Column="2" Content="Refresh"
                             Command="{Binding RefreshAvailableGames}"/>
                     <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
-                              Items="{Binding RegisteredGames}"
+                              ItemsSource="{Binding RegisteredGames}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
                               Height="300"

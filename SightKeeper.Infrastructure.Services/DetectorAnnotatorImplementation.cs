@@ -57,15 +57,6 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 		dbContext.SaveChanges();
 	}
 
-	public void RemoveItem(DetectorItem item)
-	{
-		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.Attach(SelectedScreenshot!);
-		SelectedScreenshot.ThrowIfNull(nameof(SelectedScreenshot));
-		SelectedScreenshot!.Items.Remove(item);
-		dbContext.SaveChanges();
-	}
-
 	public void MarkAsAssets(IReadOnlyCollection<int> screenshotsIndexes)
 	{
 		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
@@ -76,7 +67,7 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 		dbContext.SaveChanges();
 	}
 
-	public void RemoveScreenshots(IReadOnlyCollection<int> screenshotsIndexes)
+	public void DeleteScreenshots(IReadOnlyCollection<int> screenshotsIndexes)
 	{
 		Model.ThrowIfNull(nameof(Model));
 		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
@@ -84,6 +75,15 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 		foreach (int index in screenshotsIndexes.OrderDescending())
 			Model!.DetectorScreenshots.RemoveAt(index);
 		dbContext.SaveChanges();
+	}
+
+	public async Task DeleteItemAsync(int itemIndex)
+	{
+		Model.ThrowIfNull(nameof(SelectedScreenshot));
+		await using AppDbContext dbContext = await _dbContextFactory.CreateDbContextAsync();
+		dbContext.Attach(SelectedScreenshot!);
+		SelectedScreenshot!.Items.RemoveAt(itemIndex);
+		await dbContext.SaveChangesAsync();
 	}
 
 	public bool BeginDrawing(Point position) => _drawer.BeginDrawing(position);

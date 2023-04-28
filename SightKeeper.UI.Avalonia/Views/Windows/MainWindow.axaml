@@ -21,7 +21,7 @@
             <SplitView.Pane>
                 <StackPanel>
                     <ToggleButton Name="SideMenuToggleButton" HorizontalAlignment="Stretch" Height="40"/>
-                    <ListBox Name="TabsListBox" Items="{Binding Tabs, Mode=OneTime}" SelectedItem="{Binding SelectedTab}">
+                    <ListBox Name="TabsListBox" ItemsSource="{Binding Tabs, Mode=OneTime}" SelectedItem="{Binding SelectedTab}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Header, Mode=OneTime}"/>

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -83,6 +85,8 @@ public class AppDbContext : DbContext
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		if (optionsBuilder.IsConfigured) return;
+		optionsBuilder.LogTo(Log.Verbose, LogLevel.Trace);
+		optionsBuilder.EnableSensitiveDataLogging();
 		SqliteConnectionStringBuilder connectionStringBuilder = new()
 		{
 			DataSource = "App.db"
@@ -94,5 +98,6 @@ public class AppDbContext : DbContext
 	{
 		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
 		modelBuilder.Entity<Model>().OwnsOne(model => model.Resolution).Ignore(resolution => resolution.HasErrors);
+		modelBuilder.Entity<DetectorScreenshot>().HasMany<DetectorItem>().WithOne(nameof(DetectorItem.Screenshot)).OnDelete(DeleteBehavior.Cascade);
 	}
 }

@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <PackageReference Include="Pranas.ScreenshotCapture" Version="1.0.11" />
+      <PackageReference Include="SerilogTimings" Version="3.0.1" />
       <PackageReference Include="SharpHook" Version="4.0.1" />
     </ItemGroup>
 

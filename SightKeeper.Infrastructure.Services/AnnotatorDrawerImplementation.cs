@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using ReactiveUI;
+using SerilogTimings;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -59,6 +60,7 @@ public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDra
 		_dbContext = _dbContextFactory.CreateDbContext();
 		_dbContext.Attach(Screenshot!);
 		_item = new DetectorItem(ItemClass!, new BoundingBox(startPosition.X, startPosition.Y, 0, 0));
+		_item.Screenshot = Screenshot!;
 		Screenshot!.Items.Add(_item);
 		return true;
 	}
@@ -73,6 +75,7 @@ public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDra
 
 	public void EndDrawing(Point finishPosition)
 	{
+		Operation operation = Operation.Begin("Сохранение аннотации");
 		ThrowHelper.ThrowIf(!_drawing, "Cannot update drawing because no currently drawing");
 		_item.ThrowIfNull(nameof(_item));
 		_dbContext.ThrowIfNull(nameof(_dbContext));
@@ -82,6 +85,7 @@ public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDra
 		_dbContext!.SaveChanges();
 		Drawn?.Invoke(_item);
 		_item = null;
+		operation.Complete();
 	}
 
 	private bool _drawing;

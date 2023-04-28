@@ -27,7 +27,7 @@
                     Content="{avalonia:MaterialIconExt ContentCopy}"/>
         </StackPanel>
         
-        <ItemsRepeater Grid.Row="1" Items="{Binding DialogResults}" Margin="10" HorizontalAlignment="Right">
+        <ItemsRepeater Grid.Row="1" ItemsSource="{Binding DialogResults}" Margin="10" HorizontalAlignment="Right">
         
             <ItemsRepeater.Layout>
                 <StackLayout Spacing="10" Orientation="Horizontal"/>

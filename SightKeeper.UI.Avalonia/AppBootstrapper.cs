@@ -44,6 +44,9 @@ public static class AppBootstrapper
 		builder.RegisterInstance(levelSwitch);
 		Log.Logger = new LoggerConfiguration()
 			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+			#if DEBUG
+			.WriteTo.Debug(restrictedToMinimumLevel: LogEventLevel.Debug)
+			#endif
 			.MinimumLevel.ControlledBy(levelSwitch)
 			.CreateLogger();
 	}

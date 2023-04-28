@@ -20,13 +20,13 @@
                 <Grid ColumnDefinitions="*, *">
                     <ComboBox Grid.Column="0"
                               SelectedItem="{Binding Model.Game}"
-                              Items="{Binding GamesRepository.Items}"
+                              ItemsSource="{Binding GamesRepository.Items}"
                               PlaceholderText="Game"
                               HorizontalAlignment="Stretch"
                               Margin="0 0 10 0" />
                     <ComboBox Grid.Column="1"
                               SelectedItem="{Binding Model.Config}"
-                              Items="{Binding ConfigsRepository.Items}"
+                              ItemsSource="{Binding ConfigsRepository.Items}"
                               PlaceholderText="Config"
                               HorizontalAlignment="Stretch"
                               Margin="10 0 0 0" />
@@ -57,7 +57,7 @@
                                     Command="{Binding AddNewItemClass}" />
                         </StackPanel>
 
-                        <ListBox Items="{Binding Model.ItemClasses}"
+                        <ListBox ItemsSource="{Binding Model.ItemClasses}"
                                  SelectedIndex="{Binding SelectedItemIndex}"
                                  IsVisible="{Binding !!Model.ItemClasses.Count}">
                             <ListBox.ContextMenu>
