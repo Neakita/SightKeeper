@@ -1,4 +1,4 @@
-﻿using SightKeeper.Infrastructure.Common;
+﻿using SightKeeper.Common;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Tabs;

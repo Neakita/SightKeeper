@@ -11,7 +11,7 @@ using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
-using SightKeeper.Infrastructure.Common;
+using SightKeeper.Common;
 using SightKeeper.Data;
 using SightKeeper.Infrastructure.Services;
 using SightKeeper.Infrastructure.Services.Input;

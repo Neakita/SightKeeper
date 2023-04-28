@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ReactiveUI.Fody.Helpers;
-using SightKeeper.Infrastructure.Common;
+using SightKeeper.Common;
 using SightKeeper.UI.Avalonia.ViewModels.Elements;
 using SightKeeper.UI.Avalonia.Views.Tabs;
 

@@ -6,7 +6,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Infrastructure.Common;
+using SightKeeper.Common;
 
 namespace SightKeeper.UI.Avalonia.ViewModels.Elements;
 

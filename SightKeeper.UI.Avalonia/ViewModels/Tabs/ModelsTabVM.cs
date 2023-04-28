@@ -7,7 +7,7 @@ using SightKeeper.Application;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
-using SightKeeper.Infrastructure.Common;
+using SightKeeper.Common;
 using SightKeeper.UI.Avalonia.Extensions;
 using SightKeeper.UI.Avalonia.ViewModels.Windows;
 using SightKeeper.UI.Avalonia.Views.Windows;

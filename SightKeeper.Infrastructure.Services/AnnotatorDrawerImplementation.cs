@@ -2,10 +2,10 @@
 using ReactiveUI;
 using SerilogTimings;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Common;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Infrastructure.Common;
 
 namespace SightKeeper.Infrastructure.Services;
 

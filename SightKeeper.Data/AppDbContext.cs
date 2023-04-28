@@ -6,7 +6,6 @@ using Serilog;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using Splat.ModeDetection;
 
 namespace SightKeeper.Data;
 

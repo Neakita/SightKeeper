@@ -1,6 +1,6 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SightKeeper.Infrastructure.Common;
+using SightKeeper.Common;
 using SightKeeper.Infrastructure.Services.Input;
 using MainWindow = SightKeeper.UI.Avalonia.Views.Windows.MainWindow;
 

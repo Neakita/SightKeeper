@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Infrastructure.Common;
+﻿namespace SightKeeper.Common;
 
 public static class ThrowHelper
 {

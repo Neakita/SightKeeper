@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-using System.Text;
+
 //https://www.cyberforum.ru/csharp-net/thread1385397.html
 namespace SightKeeper.Infrastructure.Services.Windows;
 

@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Material.Icons;
 using ReactiveUI;
-using SightKeeper.Infrastructure.Common;
+using SightKeeper.Common;
 using SightKeeper.UI.Avalonia.Misc;
 using SightKeeper.UI.Avalonia.Views.Windows;
 

@@ -2,8 +2,8 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using SightKeeper.Application;
+using SightKeeper.Common;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Infrastructure.Common;
 using Bitmap = System.Drawing.Bitmap;
 
 namespace SightKeeper.Infrastructure.Services.Windows;

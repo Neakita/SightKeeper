@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Material.Icons;
 using ReactiveUI;
-using SightKeeper.Infrastructure.Common;
+using SightKeeper.Common;
 using SightKeeper.UI.Avalonia.Extensions;
 using SightKeeper.UI.Avalonia.Views.Windows;
 

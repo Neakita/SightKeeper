@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{6301DD76-F4B9-476B-A763-F75F39FE4B4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Infrastructure.Common", "SightKeeper.Infrastructure.Common\SightKeeper.Infrastructure.Common.csproj", "{E12B25AF-71E4-4306-BADE-B80D84829418}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Common", "SightKeeper.Common\SightKeeper.Common.csproj", "{E12B25AF-71E4-4306-BADE-B80D84829418}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{D820CE7D-73DE-4323-A6F7-8EE68B02E825}"
 EndProject

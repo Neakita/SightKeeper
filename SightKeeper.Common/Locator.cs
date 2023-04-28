@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace SightKeeper.Infrastructure.Common;
+namespace SightKeeper.Common;
 
 public static class Locator
 {

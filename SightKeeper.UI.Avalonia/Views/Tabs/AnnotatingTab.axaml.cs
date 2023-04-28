@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Input;
 using Avalonia.ReactiveUI;
-using SightKeeper.Infrastructure.Common;
+using SightKeeper.Common;
 using SightKeeper.UI.Avalonia.Extensions;
 using SightKeeper.UI.Avalonia.ViewModels.Tabs;
 
