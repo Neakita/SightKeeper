@@ -11,17 +11,20 @@ public class DetectorItem : ReactiveObject, Entity
 	{
 		ItemClass = itemClass;
 		BoundingBox = boundingBox;
+		// EF sets the screenshot property itself when adding an item to an observable collection of screenshot items
+		Screenshot = null!;
 	}
-
-
+	
 	private DetectorItem()
 	{
-		Id = 0;
 		ItemClass = null!;
 		BoundingBox = null!;
+		Screenshot = null!;
 	}
 
-	public int Id { get; private set; }
+	public int Id { get; private set; } = -1;
 	[Reactive] public ItemClass ItemClass { get; set; }
 	[Reactive] public BoundingBox BoundingBox { get; set; }
+	public int ScreenshotId { get; private set; } = -1;
+	public DetectorScreenshot Screenshot { get; private set; }
 }
