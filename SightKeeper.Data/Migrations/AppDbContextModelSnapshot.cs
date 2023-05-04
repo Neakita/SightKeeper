@@ -91,7 +91,7 @@ namespace SightKeeper.Data.Migrations
                     b.Property<int?>("ItemClassGroupId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ModelId")
+                    b.Property<int>("ModelId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -264,9 +264,13 @@ namespace SightKeeper.Data.Migrations
                         .WithMany("ItemClasses")
                         .HasForeignKey("ItemClassGroupId");
 
-                    b.HasOne("SightKeeper.Domain.Model.Abstract.Model", null)
+                    b.HasOne("SightKeeper.Domain.Model.Abstract.Model", "Model")
                         .WithMany("ItemClasses")
-                        .HasForeignKey("ModelId");
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.Profile", b =>
