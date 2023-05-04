@@ -50,6 +50,7 @@ public static class AppBootstrapper
 			#if DEBUG
 			.WriteTo.Debug()
 			#endif
+			.WriteTo.Seq("http://localhost:5341/")
 			.MinimumLevel.ControlledBy(levelSwitch)
 			.CreateLogger();
 	}
