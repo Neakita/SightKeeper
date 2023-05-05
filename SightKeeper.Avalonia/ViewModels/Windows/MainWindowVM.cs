@@ -7,17 +7,17 @@ using SightKeeper.Common;
 
 namespace SightKeeper.Avalonia.ViewModels.Windows;
 
-public class MainWindowViewModel : ViewModel
+public class MainWindowVM : ViewModel
 {
-	public static MainWindowViewModel New => Locator.Resolve<MainWindowViewModel>();
+	public static MainWindowVM New => Locator.Resolve<MainWindowVM>();
 	
-	public ICollection<TabItemViewModel> Tabs { get; }
+	public ICollection<TabItem> Tabs { get; }
 
-	[Reactive] public TabItemViewModel SelectedTab { get; set; }
+	[Reactive] public TabItem SelectedTab { get; set; }
 
-	public MainWindowViewModel(ProfilesTab profilesTab, ModelsTab modelsTab, AnnotatingTab annotatingTab, SettingsTab settingsTab)
+	public MainWindowVM(ProfilesTab profilesTab, ModelsTab modelsTab, AnnotatingTab annotatingTab, SettingsTab settingsTab)
 	{
-		Tabs = new List<TabItemViewModel>
+		Tabs = new List<TabItem>
 		{
 			new("Profiles", profilesTab),
 			new("Models", modelsTab),

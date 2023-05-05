@@ -4,7 +4,7 @@ using SightKeeper.Avalonia.ViewModels.Windows;
 
 namespace SightKeeper.Avalonia.Views.Windows;
 
-public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
+public partial class MainWindow : ReactiveWindow<MainWindowVM>
 {
 	public MainWindow()
 	{
@@ -14,9 +14,9 @@ public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 #endif
 	}
 	
-	public MainWindow(MainWindowViewModel viewModel)
+	public MainWindow(MainWindowVM vm)
 	{
 		InitializeComponent();
-		ViewModel = viewModel;
+		ViewModel = vm;
 	}
 }

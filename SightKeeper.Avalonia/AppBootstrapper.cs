@@ -74,7 +74,7 @@ public static class AppBootstrapper
 
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
-		builder.RegisterType<MainWindowViewModel>().SingleInstance();
+		builder.RegisterType<MainWindowVM>().SingleInstance();
 		builder.RegisterType<ModelEditorVM>();
 		
 		builder.RegisterType<AnnotatingTabVM>().SingleInstance();
@@ -85,7 +85,7 @@ public static class AppBootstrapper
 	
 	private static void SetupViews(ContainerBuilder builder)
 	{
-		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainWindowViewModel>>().SingleInstance();
+		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainWindowVM>>().SingleInstance();
 		builder.RegisterType<ModelEditorDialog>();
 		
 		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingTabVM>>().SingleInstance();

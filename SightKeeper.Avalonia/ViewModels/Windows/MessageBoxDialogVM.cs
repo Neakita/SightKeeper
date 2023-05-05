@@ -11,9 +11,9 @@ using SightKeeper.Avalonia.Extensions;
 
 namespace SightKeeper.Avalonia.ViewModels.Windows;
 
-public sealed class MessageBoxDialogViewModel : ViewModel
+public sealed class MessageBoxDialogVM : ViewModel
 {
-	public static MessageBoxDialogViewModel DesignTimeInstance => new(
+	public static MessageBoxDialogVM DesignTimeInstance => new(
 		MessageBoxDialog.DialogResult.Ok | MessageBoxDialog.DialogResult.Cancel,
 		"Some message",
 		"Some title",
@@ -26,7 +26,7 @@ public sealed class MessageBoxDialogViewModel : ViewModel
 	
 	public ReactiveCommand<MessageBoxDialog.DialogResult, MessageBoxDialog.DialogResult> DoneCommand { get; }
 
-	public MessageBoxDialogViewModel(MessageBoxDialog.DialogResult dialogResults, string message, string title = "", MaterialIconKind? icon = null)
+	public MessageBoxDialogVM(MessageBoxDialog.DialogResult dialogResults, string message, string title = "", MaterialIconKind? icon = null)
 	{
 		DialogResults = dialogResults.GetFlags();
 		Message = message;

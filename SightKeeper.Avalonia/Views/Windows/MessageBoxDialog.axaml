@@ -11,7 +11,7 @@
         SizeToContent="WidthAndHeight"
         CanResize="False"
         Name="Root"
-        d:DataContext="{x:Static viewModels:MessageBoxDialogViewModel.DesignTimeInstance}">
+        d:DataContext="{x:Static viewModels:MessageBoxDialogVM.DesignTimeInstance}">
     
     <Grid RowDefinitions="*, 50" Margin="10 50, 10, 10">
     
