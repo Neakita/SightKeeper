@@ -84,8 +84,18 @@ public class AppDbContext : DbContext
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		if (optionsBuilder.IsConfigured) return;
-		optionsBuilder.LogTo(Log.Verbose, LogLevel.Trace);
+		SetupLogging(optionsBuilder);
+		SetupSqlite(optionsBuilder);
+	}
+
+	private static void SetupLogging(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder.LogTo(content => Log.Verbose("[EF] {Content}", content), LogLevel.Trace);
 		optionsBuilder.EnableSensitiveDataLogging();
+	}
+
+	private static void SetupSqlite(DbContextOptionsBuilder optionsBuilder)
+	{
 		SqliteConnectionStringBuilder connectionStringBuilder = new()
 		{
 			DataSource = "App.db"
