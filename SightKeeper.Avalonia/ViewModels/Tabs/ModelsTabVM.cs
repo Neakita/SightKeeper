@@ -46,7 +46,7 @@ public sealed class ModelsTabVM : ViewModel
 		if (result == ModelEditorDialog.DialogResult.Apply)
 			await editor.SaveChangesAsync();
 		else
-			await editor.RollbackChangesAsync();
+			await editor.DiscardChangesAsync();
 	}
 
 	[DependsOn(nameof(SelectedModel))]

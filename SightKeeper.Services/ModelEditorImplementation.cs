@@ -16,7 +16,7 @@ public sealed class ModelEditorImplementation : ModelEditor
 	public void SaveChanges() => _dbContext.SaveChanges();
 	public async Task SaveChangesAsync(CancellationToken cancellationToken = default) =>
 		await _dbContext.SaveChangesAsync(cancellationToken);
-	public void RollbackChanges()
+	public void DiscardChanges()
 	{
 		_dbContext.RollBack();
 		for (int i = 0; i < _model.ItemClasses.Count; i++)
@@ -27,7 +27,7 @@ public sealed class ModelEditorImplementation : ModelEditor
 		}
 	}
 
-	public async Task RollbackChangesAsync(CancellationToken cancellationToken = default)
+	public async Task DiscardChangesAsync(CancellationToken cancellationToken = default)
 	{
 		await _dbContext.RollBackAsync();
 		for (int i = 0; i < _model.ItemClasses.Count; i++)
@@ -42,7 +42,7 @@ public sealed class ModelEditorImplementation : ModelEditor
 	{
 		try
 		{
-			RollbackChanges();
+			DiscardChanges();
 		}
 		finally
 		{
@@ -54,7 +54,7 @@ public sealed class ModelEditorImplementation : ModelEditor
 	{
 		try
 		{
-			await RollbackChangesAsync();
+			await DiscardChangesAsync();
 		}
 		finally
 		{

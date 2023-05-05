@@ -4,6 +4,6 @@ public interface ModelEditor : IDisposable, IAsyncDisposable
 {
 	void SaveChanges();
 	Task SaveChangesAsync(CancellationToken cancellationToken = default);
-	void RollbackChanges();
-	Task RollbackChangesAsync(CancellationToken cancellationToken = default);
+	void DiscardChanges();
+	Task DiscardChangesAsync(CancellationToken cancellationToken = default);
 }
