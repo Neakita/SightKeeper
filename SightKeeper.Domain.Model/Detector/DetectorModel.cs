@@ -16,7 +16,7 @@ public class DetectorModel : Abstract.Model
 	}
 
 
-	private DetectorModel(int id, string name) : base(id, name)
+	private DetectorModel(int id, string name, string description) : base(id, name, description)
 	{
 	}
 

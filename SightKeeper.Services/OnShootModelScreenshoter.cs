@@ -102,7 +102,7 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 		if (_detectorModel == null) throw new InvalidOperationException("Detector model not set");
 		byte[] bytes = _screenCapture.Capture();
 		Image image = new(bytes);
-		DetectorScreenshot screenshot = new(_detectorModel, image);
+		DetectorScreenshot screenshot = new(image);
 		_detectorModel.DetectorScreenshots.Add(screenshot);
 	}
 
@@ -123,7 +123,6 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 			await using AppDbContext dbContext = await _dbContextFactory.CreateDbContextAsync();
 			dbContext.Attach(model);
 			await dbContext.Entry(detectorModel).Collection(m => m.DetectorScreenshots).LoadAsync();
-			await dbContext.DetectorScreenshots.Where(screenshot => screenshot.Model == model).Select(screenshot => screenshot.Image).LoadAsync();
 		}
 		else throw new InvalidCastException();
 	}

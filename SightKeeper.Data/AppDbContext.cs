@@ -107,5 +107,6 @@ public class AppDbContext : DbContext
 	{
 		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
 		modelBuilder.Entity<Model>().OwnsOne(model => model.Resolution).Ignore(resolution => resolution.HasErrors);
+		modelBuilder.Entity<DetectorModel>().HasMany(model => model.DetectorScreenshots).WithOne().IsRequired();
 	}
 }

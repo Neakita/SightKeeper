@@ -22,11 +22,11 @@ public abstract class Model : ReactiveObject, Entity
 	}
 
 
-	protected Model(int id, string name)
+	protected Model(int id, string name, string description)
 	{
 		Id = id;
 		Name = name;
-		Description = null!;
+		Description = description;
 		Resolution = null!;
 		ItemClasses = null!;
 	}

@@ -10,15 +10,13 @@ namespace SightKeeper.Domain.Model.Detector;
 [Table("DetectorScreenshots")]
 public class DetectorScreenshot : Screenshot
 {
-	public DetectorScreenshot(DetectorModel model, Image image) : base(image)
+	public DetectorScreenshot(Image image) : base(image)
 	{
-		Model = model;
 		Items = new ObservableCollection<DetectorItem>();
 	}
 	
 	private DetectorScreenshot(int id) : base(id)
 	{
-		Model = null!;
 		Items = null!;
 	}
 
@@ -30,5 +28,4 @@ public class DetectorScreenshot : Screenshot
 	[Reactive] public bool IsAsset { get; set; }
 
 	public ObservableCollection<DetectorItem> Items { get; set; }
-	public DetectorModel Model { get; private set; }
 }
