@@ -24,7 +24,10 @@
                     <ListBox Name="TabsListBox" ItemsSource="{Binding Tabs, Mode=OneTime}" SelectedItem="{Binding SelectedTab}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Header, Mode=OneTime}"/>
+                                <Grid ColumnDefinitions="26, *">
+                                    <ContentControl Grid.Column="0" Content="{Binding Icon, Mode=OneTime}" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Header, Mode=OneTime}"/>
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

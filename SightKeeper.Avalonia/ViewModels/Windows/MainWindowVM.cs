@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Material.Icons;
 using ReactiveUI.Fody.Helpers;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.Views.Tabs;
@@ -19,10 +20,10 @@ public class MainWindowVM : ViewModel
 	{
 		Tabs = new List<TabItem>
 		{
-			new("Profiles", profilesTab),
-			new("Models", modelsTab),
-			new("Annotating", annotatingTab),
-			new("Settings", settingsTab)
+			new(MaterialIconKind.DotsGrid, "Profiles", profilesTab),
+			new(MaterialIconKind.TableEye, "Models", modelsTab),
+			new(MaterialIconKind.Image, "Annotating", annotatingTab),
+			new(MaterialIconKind.Cog, "Settings", settingsTab)
 		};
 		
 		SelectedTab = Tabs.First();
