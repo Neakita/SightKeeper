@@ -30,7 +30,7 @@ public sealed class ModelsTabVM : ViewModel
 	public async Task CreateNewModel()
 	{
 		DetectorModel newModel = new("Unnamed detector model");
-		ModelEditorDialog editorDialog = new(ModelEditorVM.Create(newModel));
+		ModelEditorDialog editorDialog = new(new ModelEditorVM(newModel, true));
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
 		if (result == ModelEditorDialog.DialogResult.Apply)
 			ModelsRepository.Add(newModel);
@@ -40,13 +40,10 @@ public sealed class ModelsTabVM : ViewModel
 	{
 		if (SelectedModel == null) throw new Exception();
 		await using ModelEditor editor = await _modelEditorFactory.BeginEditAsync(SelectedModel);
-		using ModelEditorVM modelEditorVM = ModelEditorVM.Create(SelectedModel);
+		using ModelEditorVM modelEditorVM = new(SelectedModel);
 		ModelEditorDialog editorDialog = new(modelEditorVM);
-		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
-		if (result == ModelEditorDialog.DialogResult.Apply)
-			await editor.SaveChangesAsync();
-		else
-			await editor.DiscardChangesAsync();
+		await this.ShowDialog(editorDialog);
+		await editor.SaveChangesAsync();
 	}
 
 	[DependsOn(nameof(SelectedModel))]

@@ -19,9 +19,8 @@ public sealed class ModelEditorFactoryImplementation : ModelEditorFactory
 		dbContext.Models.Attach(model);
 		CollectionEntry<Model, ItemClass> itemClassesCollectionEntry =
 			dbContext.Entry(model).Collection(m => m.ItemClasses);
-		bool isItemClassesLoaded = itemClassesCollectionEntry.IsLoaded;
-		if (!isItemClassesLoaded) itemClassesCollectionEntry.Load();
-		return new ModelEditorImplementation(model, dbContext, isItemClassesLoaded);
+		itemClassesCollectionEntry.Load();
+		return new ModelEditorImplementation(dbContext);
 	}
 
 	public async Task<ModelEditor> BeginEditAsync(Model model, CancellationToken cancellationToken = default)
@@ -30,9 +29,8 @@ public sealed class ModelEditorFactoryImplementation : ModelEditorFactory
 		dbContext.Models.Attach(model);
 		CollectionEntry<Model, ItemClass> itemClassesCollectionEntry =
 			dbContext.Entry(model).Collection(m => m.ItemClasses);
-		bool isItemClassesLoaded = itemClassesCollectionEntry.IsLoaded;
 		await itemClassesCollectionEntry.LoadAsync(cancellationToken);
-		return new ModelEditorImplementation(model, dbContext, isItemClassesLoaded);
+		return new ModelEditorImplementation(dbContext);
 	}
 	
 	private readonly AppDbContextFactory _dbContextFactory;

@@ -88,7 +88,8 @@
                 </StackPanel>
             </Button>
             <Button Click="Cancel"
-                    IsCancel="True">
+                    IsCancel="True"
+                    IsVisible="{Binding CanCancel, Mode=OneTime}">
                 <StackPanel Orientation="Horizontal">
                     <icons:MaterialIcon Kind="Close" />
                     <TextBlock Text="Cancel" />

@@ -30,57 +30,6 @@ public class AppDbContext : DbContext
 	public DbSet<ModelConfig> ModelConfigs { get; set; } = null!;
 	public DbSet<Image> Images { get; set; } = null!;
 
-	public void RollBack()
-	{
-		IEnumerable<EntityEntry> changedEntries = ChangeTracker.Entries().Where(entry => entry.State != EntityState.Unchanged);
-		foreach (EntityEntry entry in changedEntries) RollbackEntry(entry);
-	}
-
-	public async Task RollBackAsync()
-	{
-		IEnumerable<EntityEntry> changedEntries = ChangeTracker.Entries().Where(entry => entry.State != EntityState.Unchanged);
-		foreach (EntityEntry entry in changedEntries) await RollbackEntryAsync(entry);
-	}
-
-	public void RollBack<TEntity>(TEntity entity) where TEntity : class => RollbackEntry(Entry(entity));
-
-	private void RollbackEntry(EntityEntry entry)
-	{
-		switch (entry.State)
-		{
-			case EntityState.Modified:
-			case EntityState.Deleted:
-				entry.State = EntityState.Modified; //Revert changes made to deleted entity.
-				entry.State = EntityState.Unchanged;
-				break;
-			case EntityState.Added:
-				entry.State = EntityState.Detached;
-				break;
-			case EntityState.Detached:
-				entry.Reload();
-				break;
-		}
-	}
-
-	private async Task RollbackEntryAsync(EntityEntry entry)
-	{
-		switch (entry.State)
-		{
-			case EntityState.Modified:
-			case EntityState.Deleted:
-				entry.State = EntityState.Modified; //Revert changes made to deleted entity.
-				entry.State = EntityState.Unchanged;
-				break;
-			case EntityState.Added:
-				entry.State = EntityState.Detached;
-				break;
-			case EntityState.Detached:
-				await entry.ReloadAsync();
-				break;
-		}
-	}
-
-
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		if (optionsBuilder.IsConfigured) return;

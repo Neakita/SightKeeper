@@ -22,6 +22,7 @@ public sealed class ModelEditorVM : ViewModel, IDisposable
 	public Repository<ModelConfig> ConfigsRepository { get; }
 	
 	public Model Model { get; }
+	public bool CanCancel { get; }
 
 	[Reactive] public string NewItemClassName { get; set; } = string.Empty;
 
@@ -29,14 +30,12 @@ public sealed class ModelEditorVM : ViewModel, IDisposable
 	
 	[Reactive] public int? SelectedItemIndex { get; set; }
 
-	public ModelEditorVM(
-		Model model,
-		Repository<Game> gamesRepositoryRepository,
-		Repository<ModelConfig> configsRepositoryRepository)
+	public ModelEditorVM(Model model, bool canCancel = false)
 	{
 		Model = model;
-		GamesRepository = gamesRepositoryRepository;
-		ConfigsRepository = configsRepositoryRepository;
+		CanCancel = canCancel;
+		GamesRepository = Locator.Resolve<Repository<Game>>();
+		ConfigsRepository = Locator.Resolve<Repository<ModelConfig>>();
 		
 		_disposable = this.WhenAnyValue(vm => vm.Model.Resolution.HasErrors)
 			.Select(hasErrors => !hasErrors)
