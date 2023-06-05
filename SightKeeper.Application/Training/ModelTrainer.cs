@@ -11,6 +11,7 @@ public interface ModelTrainer<TModel> where TModel : Model
 	string? Status { get; }
 	double? AverageLoss { get; }
 	TimeSpan? TimeRemaining { get; }
+	bool CanEndTraining { get; }
 
 	void BeginTraining(TModel model, bool fromScratch);
 	void EndTraining();

@@ -11,8 +11,7 @@ public sealed class ModelsDynamicDbRepository : GenericDynamicDbRepository<Model
 {
 	public ModelsDynamicDbRepository(
 		AppDbContextFactory dbContextFactory,
-		Repository<Game> gamesRepository,
-		Repository<ModelConfig> configsRepository) : base(dbContextFactory)
+		Repository<Game> gamesRepository) : base(dbContextFactory)
 	{
 		AppDbContext dbContext = dbContextFactory.CreateDbContext();
 		var models = dbContext.Models
@@ -24,8 +23,6 @@ public sealed class ModelsDynamicDbRepository : GenericDynamicDbRepository<Model
 			Model model = Get(modelInfo.modelId);
 			if (modelInfo.gameId != null)
 				model.Game = gamesRepository.Get(modelInfo.gameId.Value);
-			if (modelInfo.configId != null)
-				model.Config = configsRepository.Get(modelInfo.configId.Value);
 		}
 	}
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ReactiveUI;
+﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
@@ -7,8 +6,8 @@ using SightKeeper.Application.Input;
 using SightKeeper.Common;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using Image = SightKeeper.Domain.Model.Common.Image;
 using MouseButton = SharpHook.Native.MouseButton;
 
 namespace SightKeeper.Services;

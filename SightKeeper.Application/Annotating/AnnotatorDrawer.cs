@@ -1,6 +1,6 @@
-﻿using Avalonia;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using Point = Avalonia.Point;
 
 namespace SightKeeper.Application.Annotating;
 

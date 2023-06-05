@@ -40,4 +40,6 @@ public class BoundingBox : ReactiveObject
 	[Reactive] public double Y { get; set; }
 	[Reactive] public double Width { get; set; }
 	[Reactive] public double Height { get; set; }
+	public double XCenter => X + Width / 2;
+	public double YCenter => Y + Height / 2;
 }

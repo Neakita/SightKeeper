@@ -6,6 +6,7 @@ using SightKeeper.Common;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using Point = Avalonia.Point;
 
 namespace SightKeeper.Services;
 

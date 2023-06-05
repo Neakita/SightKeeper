@@ -21,4 +21,5 @@ public class DetectorModel : Abstract.Model
 	}
 
 	public ObservableCollection<DetectorScreenshot> DetectorScreenshots {  get; private set; } = new();
+	public DetectorConfig? Config { get; set; }
 }
