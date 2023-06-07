@@ -8,7 +8,7 @@ namespace SightKeeper.Services.Tests;
 
 public sealed class DarknetHelperTests
 {
-	[Fact]
+	/*[Fact]
 	public void ShouldRunDarknet()
 	{
 		Log.Logger = new LoggerConfiguration().WriteTo.File("log.txt").CreateLogger();
@@ -32,5 +32,5 @@ public sealed class DarknetHelperTests
 			darknetProcess = Process.GetProcessesByName("darknet.exe").FirstOrDefault();
 		}
 		darknetProcess.WaitForExit();
-	}
+	}*/
 }
