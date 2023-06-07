@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Services;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Services.Tests;

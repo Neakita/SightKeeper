@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using ReactiveUI;
+﻿using ReactiveUI;
 using SerilogTimings;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Common;
