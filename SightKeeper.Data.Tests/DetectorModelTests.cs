@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
@@ -72,14 +73,14 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
-		DetectorConfig config = new("Test config", "Test content");
+		ModelConfig config = new("Test config", "Test content", ModelType.Detector);
 		model.Config = config;
 		dbContext.Add(model);
 		dbContext.SaveChanges();
-		dbContext.DetectorConfigs.Should().Contain(config);
+		dbContext.ModelConfigs.Should().Contain(config);
 		dbContext.Remove(model);
 		dbContext.SaveChanges();
-		dbContext.DetectorConfigs.Should().Contain(config);
+		dbContext.ModelConfigs.Should().Contain(config);
 	}
 
 	[Fact]
@@ -87,11 +88,11 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel newTestModel = new("Test model");
-		DetectorConfig config = new("Test config", "Test content");
+		ModelConfig config = new("Test config", "Test content", ModelType.Detector);
 		newTestModel.Config = config;
 		dbContext.Add(newTestModel);
 		dbContext.SaveChanges();
-		dbContext.DetectorConfigs.Should().Contain(config);
+		dbContext.ModelConfigs.Should().Contain(config);
 		dbContext.Remove(config);
 		dbContext.SaveChanges();
 		DetectorModel? modelFromDb = dbContext.DetectorModels.Find(newTestModel.Id);

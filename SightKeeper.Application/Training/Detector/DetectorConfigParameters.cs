@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.Detector;
+﻿using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Application.Training;
 
@@ -29,7 +30,7 @@ public sealed class DetectorConfigParameters
         ClassesCount = classesCount;
     }
 
-    public string Deploy(DetectorConfig config)
+    public string Deploy(ModelConfig config)
     {
         Dictionary<string, string> replaceables = new()
         {

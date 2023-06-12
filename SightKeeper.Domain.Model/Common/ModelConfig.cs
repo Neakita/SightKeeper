@@ -3,15 +3,17 @@ using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public abstract class ModelConfig : ReactiveObject, Entity
+public sealed class ModelConfig : ReactiveObject, Entity
 {
 	public int Id { get; private set; }
-	public string Name { get; private set; }
-	public string Content { get; private set; }
+	public string Name { get; set; }
+	public string Content { get; set; }
+	public ModelType ModelType { get; set; }
 
-	public ModelConfig(string name, string content)
+	public ModelConfig(string name, string content, ModelType modelType)
 	{
 		Name = name;
 		Content = content;
+		ModelType = modelType;
 	}
 }

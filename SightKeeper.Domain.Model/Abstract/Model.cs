@@ -12,11 +12,12 @@ public abstract class Model : ReactiveObject, Entity
 	public int Id { get; private set; }
 	[Reactive] public string Name { get; set; }
 	[Reactive] public string Description { get; set; }
-	public Resolution Resolution { get; private set; }
-	public ObservableCollection<ItemClass> ItemClasses { get; private set; }
-	public int? GameId { get; private set; }
+	public Resolution Resolution { get; set; }
+	public ObservableCollection<ItemClass> ItemClasses { get; set; }
+	public int? GameId { get; set; }
 	[Reactive] public Game? Game { get; set; }
-	public int? ConfigId { get; private set; }
+	public int? ConfigId { get; set; }
+	public ModelConfig? Config { get; set; }
 	
 	
 	public Model(string name) : this(name, new Resolution())

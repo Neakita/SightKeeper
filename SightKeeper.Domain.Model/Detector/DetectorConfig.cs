@@ -1,8 +1,6 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿namespace SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Domain.Model.Detector;
-
-public sealed class DetectorConfig : ModelConfig
+public static class DetectorConfig
 {
 	public static void Validate(string content)
 	{
@@ -27,8 +25,4 @@ public sealed class DetectorConfig : ModelConfig
 	public const string ClassesCountPlaceholder = "{ClassesCount}";
 	public const string FiltersPlaceholder = "{Filters}";
 	public const string GaussianFiltersPlaceholder = "{GaussianFilters}";
-
-	public DetectorConfig(string name, string content) : base(name, content)
-	{
-	}
 }

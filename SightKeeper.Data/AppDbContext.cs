@@ -27,7 +27,6 @@ public class AppDbContext : DbContext
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 	public DbSet<ModelConfig> ModelConfigs { get; set; } = null!;
-	public DbSet<DetectorConfig> DetectorConfigs { get; set; } = null!;
 	public DbSet<Image> Images { get; set; } = null!;
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
