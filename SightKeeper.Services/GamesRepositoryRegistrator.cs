@@ -36,7 +36,6 @@ public sealed class GamesRepositoryRegistrator : GamesRegistrator
 		
 		_repository.Remove(game);
 		_registeredGamesByProcessNames.Remove(game.ProcessName);
-		game.Id = -1;
 		_availableGames.Add(game);
 	}
 

@@ -20,7 +20,7 @@ public class Game : ReactiveObject, Entity
 		ProcessName = processName;
 	}
 
-	public int Id { get; set; } = -1;
+	public int Id { get; private set; }
 	
 	[Reactive] public string Title { get; set; }
 	
