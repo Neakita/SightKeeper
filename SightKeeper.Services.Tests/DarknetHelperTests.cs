@@ -2,7 +2,6 @@
 using Serilog;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Services.Training.Darknet;
 
 namespace SightKeeper.Services.Tests;
 

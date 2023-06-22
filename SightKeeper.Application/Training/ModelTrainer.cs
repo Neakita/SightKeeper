@@ -1,18 +1,19 @@
-﻿using SightKeeper.Domain.Model.Abstract;
+﻿using SightKeeper.Application.Training.Parsing;
+using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application.Training;
 
 public interface ModelTrainer<TModel> where TModel : Model
 {
-	bool IsRunning { get; }
-	float? Progress { get; }
-	uint? CurrentBatch { get; }
+	TModel? Model { get; set; }
+	bool FromScratch { get; set; }
 	uint? MaxBatches { get; }
-	string? Status { get; }
-	double? AverageLoss { get; }
-	TimeSpan? TimeRemaining { get; }
-	bool CanEndTraining { get; }
+	IObservable<TrainingProgress> Progress { get; }
 
-	void BeginTraining(TModel model, bool fromScratch);
-	void EndTraining();
+	Task<ModelWeights?> TrainAsync(CancellationToken cancellationToken = default);
+}
+
+public interface ModelTrainer : ModelTrainer<Model>
+{
 }

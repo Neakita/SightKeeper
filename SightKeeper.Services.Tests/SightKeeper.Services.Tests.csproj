@@ -27,13 +27,4 @@
       <ProjectReference Include="..\SightKeeper.Tests.Common\SightKeeper.Tests.Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="Samples\YoloV3.config">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Samples\320screenshot.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
 </Project>

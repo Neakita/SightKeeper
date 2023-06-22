@@ -1,13 +1,15 @@
 ﻿namespace SightKeeper.Application.Training.Parsing;
 
-public struct TrainingProgress
+public readonly struct TrainingProgress
 {
-    public int CurrentBatch;
-    public double AverageLoss;
+    public uint? CurrentBatch { get; }
+    public double? AverageLoss { get; }
 
-    public TrainingProgress(int currentBatch, double averageLoss)
+    public TrainingProgress(uint? currentBatch, double? averageLoss)
     {
         CurrentBatch = currentBatch;
         AverageLoss = averageLoss;
     }
+
+    public override string ToString() => $"CurrentBatch: {CurrentBatch}, AverageLoss: {AverageLoss}";
 }

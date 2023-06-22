@@ -12,14 +12,15 @@ public class DarknetDetectorOutputParser : DarknetOutputParser<DetectorModel>
 {
     public bool TryParse(string output, [NotNullWhen(true)] out TrainingProgress? progress)
     {
-        using var operation = Operation.At(LogEventLevel.Verbose).Begin("Parsing darknet output: {Output}", output);
+        using var operation = Operation.At(LogEventLevel.Verbose).Begin("Parsing darknet output \"{Output}\"", output);
         progress = null;
         if (!TargetStringRegex.IsMatch(output))
         {
             Log.Verbose("Could not parse output: {Output} as it is not in expected format", output);
+            operation.Complete();
             return false;
         }
-        var currentBatch = int.Parse(ExtractSingleSubstringWithRegex(output, CurrentBatchRegex));
+        var currentBatch = uint.Parse(ExtractSingleSubstringWithRegex(output, CurrentBatchRegex));
         var averageLoss = double.Parse(ExtractSingleSubstringWithRegex(output, AverageLossRegex), CultureInfo.InvariantCulture);
         progress = new TrainingProgress(currentBatch, averageLoss);
         operation.Complete(nameof(progress), progress);
