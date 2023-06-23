@@ -3,7 +3,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Services.Validating;
 
-public class ResolutionValidator : AbstractValidator<IResolution>
+public sealed class ResolutionValidator : AbstractValidator<IResolution>
 {
     public ResolutionValidator()
     {
