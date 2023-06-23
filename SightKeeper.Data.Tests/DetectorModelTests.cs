@@ -31,17 +31,17 @@ public sealed class DetectorModelTests : DbRelatedTests
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = TestDetectorModel;
 		Image image = new(Array.Empty<byte>());
-		DetectorScreenshot screenshot = new(image);
+		DetectorAsset asset = new(image);
 		ItemClass itemClass = new("class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 0, 0));
-		screenshot.Items.Add(item);
-		model.DetectorScreenshots.Add(screenshot);
+		asset.Items.Add(item);
+		model.DetectorScreenshots.Add(asset);
 		
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 
 		dbContext.DetectorModels.Should().Contain(model);
-		dbContext.DetectorScreenshots.Should().Contain(screenshot);
+		dbContext.DetectorScreenshots.Should().Contain(asset);
 		dbContext.DetectorItems.Should().Contain(item);
 		dbContext.ItemClasses.ToList().Should().Contain(itemClass);
 	}
@@ -52,14 +52,14 @@ public sealed class DetectorModelTests : DbRelatedTests
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
 		Image image = new(Array.Empty<byte>());
-		DetectorScreenshot screenshot = new(image);
-		model.DetectorScreenshots.Add(screenshot);
+		DetectorAsset asset = new(image);
+		model.DetectorScreenshots.Add(asset);
 
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 
 		dbContext.DetectorModels.Should().Contain(model);
-		dbContext.DetectorScreenshots.Should().Contain(screenshot);
+		dbContext.DetectorScreenshots.Should().Contain(asset);
 
 		dbContext.DetectorModels.Remove(model);
 		dbContext.SaveChanges();

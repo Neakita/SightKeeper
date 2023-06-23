@@ -1,6 +1,15 @@
 ﻿namespace SightKeeper.Domain.Model.Abstract;
 
-public interface Entity
+public abstract class Entity
 {
-	int Id { get; }
+	public int Id { get; private set; }
+
+	protected Entity(int id)
+	{
+		Id = id;
+	}
+
+	protected Entity()
+	{
+	}
 }

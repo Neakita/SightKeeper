@@ -1,11 +1,8 @@
 ﻿using Avalonia;
-using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace SightKeeper.Domain.Model.Detector;
 
-[Owned]
 public class BoundingBox : ReactiveObject
 {
 	public BoundingBox(double x, double y, double width, double height)
@@ -25,21 +22,18 @@ public class BoundingBox : ReactiveObject
 
 	public void SetFromTwoPositions(Point position1, Point position2)
 	{
-		double
-			x1 = Math.Min(position1.X, position2.X),
-			x2 = Math.Max(position1.X, position2.X),
-			y1 = Math.Min(position1.Y, position2.Y),
-			y2 = Math.Max(position1.Y, position2.Y);
-		X = x1;
-		Y = y1;
-		Width = x2 - x1;
-		Height = y2 - y1;
+		X = Math.Min(position1.X, position2.X);
+		Y = Math.Min(position1.Y, position2.Y);
+		var x2 = Math.Max(position1.X, position2.X);
+		var y2 = Math.Max(position1.Y, position2.Y);
+		Width = x2 - X;
+		Height = y2 - Y;
 	}
 
-	[Reactive] public double X { get; set; }
-	[Reactive] public double Y { get; set; }
-	[Reactive] public double Width { get; set; }
-	[Reactive] public double Height { get; set; }
+	public double X { get; private set; }
+	public double Y { get; private set; }
+	public double Width { get; private set; }
+	public double Height { get; private set; }
 	public double XCenter => X + Width / 2;
 	public double YCenter => Y + Height / 2;
 }

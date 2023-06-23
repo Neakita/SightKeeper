@@ -9,12 +9,12 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorModel>
 	public IReadOnlyCollection<string> Export(string targetDirectoryPath, DetectorModel model) => 
 		model.DetectorScreenshots.Select((screenshot, index) => Export(targetDirectoryPath, index, screenshot, model.ItemClasses)).ToList();
 	
-	private static string Export(string targetDirectoryPath, int index, DetectorScreenshot screenshot, IReadOnlyCollection<ItemClass> itemClasses)
+	private static string Export(string targetDirectoryPath, int index, DetectorAsset asset, IReadOnlyCollection<ItemClass> itemClasses)
 	{
 		string imageFilePath = Path.Combine(targetDirectoryPath, $"image{index}.png");
 		string infoFilePath = Path.Combine(targetDirectoryPath, $"image{index}.txt");
-		Image.Load(screenshot.Image.Content).Save(imageFilePath);
-		File.WriteAllText(infoFilePath, ItemsToString(screenshot.Items, itemClasses));
+		Image.Load(asset.Image.Content).Save(imageFilePath);
+		File.WriteAllText(infoFilePath, ItemsToString(asset.Items, itemClasses));
 		return imageFilePath;
 	}
 

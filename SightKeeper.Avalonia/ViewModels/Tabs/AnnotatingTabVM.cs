@@ -30,8 +30,8 @@ public sealed class AnnotatingTabVM : ViewModel
 		}
 	}
 
-	public SelectionModel<DetectorScreenshot> ScreenshotsSelection { get; } = new();
-	[Reactive] public DetectorScreenshot? SelectedScreenshot { get; private set; }
+	public SelectionModel<DetectorAsset> ScreenshotsSelection { get; } = new();
+	[Reactive] public DetectorAsset? SelectedScreenshot { get; private set; }
 
 	[Reactive] public int? SelectedItemIndex { get; set; }
 
@@ -88,7 +88,7 @@ public sealed class AnnotatingTabVM : ViewModel
 	private DetectorModel? _model;
 	private ItemClass? _selectedItemClass;
 
-	private void OnScreenshotsSelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<DetectorScreenshot> e)
+	private void OnScreenshotsSelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<DetectorAsset> e)
 	{
 		Annotator.SelectedScreenshot = ScreenshotsSelection.SelectedItem;
 		SelectedScreenshot = ScreenshotsSelection.SelectedItem;

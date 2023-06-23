@@ -1,24 +1,24 @@
-﻿using ReactiveUI;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Abstract;
 
-public abstract class Screenshot : ReactiveObject, Entity
+public abstract class Screenshot : Entity
 {
-	public Screenshot(Image image)
+	[ForeignKey(nameof(Id))]
+	public Image Image { get; private set; }
+	public Game? Game { get; private set; }
+	public DateTime CreationDate { get; private set; }
+	
+	public Screenshot(Image image, Game? game = null)
 	{
 		Image = image;
+		Game = game;
 		CreationDate = DateTime.UtcNow;
 	}
-
-
-	protected Screenshot(int id)
+	
+	protected Screenshot(int id) : base(id)
 	{
-		Id = id;
 		Image = null!;
 	}
-
-	public int Id { get; private set; }
-	public Image Image { get; private set; }
-	public DateTime CreationDate { get; private set; }
 }

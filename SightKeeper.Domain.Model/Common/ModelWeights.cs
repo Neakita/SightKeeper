@@ -2,9 +2,8 @@
 
 namespace SightKeeper.Domain.Model.Common;
 
-public class ModelWeights
+public class ModelWeights : Entity
 {
-    public int Id { get; private set; }
     public int Batch { get; private set; }
     public DateTime Date { get; private set; }
     public byte[] Data { get; private set; }

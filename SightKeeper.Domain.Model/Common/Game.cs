@@ -1,32 +1,21 @@
-﻿using System.Collections.ObjectModel;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using SightKeeper.Domain.Model.Abstract;
+﻿using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public class Game : ReactiveObject, Entity
+public sealed class Game : Entity
 {
+	public string Title { get; set; }
+	public string ProcessName { get; private set; }
+	
 	public Game(string title, string processName)
 	{
 		Title = title;
 		ProcessName = processName;
 	}
 	
-	private Game(int id, string title, string processName)
+	private Game(int id, string title, string processName) : base(id)
 	{
-		Id = id;
 		Title = title;
 		ProcessName = processName;
 	}
-
-	public int Id { get; private set; }
-	
-	[Reactive] public string Title { get; set; }
-	
-	public string ProcessName { get; private set; }
-
-	public virtual ObservableCollection<Abstract.Model> Models { get; } = new();
-
-	public override string ToString() => Title;
 }

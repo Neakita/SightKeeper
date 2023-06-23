@@ -1,16 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using ReactiveUI;
-using SightKeeper.Domain.Model.Abstract;
+﻿using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public class ItemClassGroup : ReactiveObject, Entity
+public sealed class ItemClassGroup : Entity
 {
+	public ICollection<ItemClass> ItemClasses { get; private set; }
+	
 	public ItemClassGroup()
 	{
-		ItemClasses = new ObservableCollection<ItemClass>();
+		ItemClasses = new List<ItemClass>();
 	}
-
-	public int Id { get; private set; } = 0;
-	public virtual ObservableCollection<ItemClass> ItemClasses { get; private set; }
 }

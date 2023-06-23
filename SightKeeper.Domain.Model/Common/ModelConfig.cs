@@ -1,11 +1,9 @@
-﻿using ReactiveUI;
-using SightKeeper.Domain.Model.Abstract;
+﻿using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public sealed class ModelConfig : ReactiveObject, Entity
+public sealed class ModelConfig : Entity
 {
-	public int Id { get; private set; }
 	public string Name { get; set; }
 	public string Content { get; set; }
 	public ModelType ModelType { get; set; }

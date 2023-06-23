@@ -20,7 +20,7 @@ public class DarknetTrainerTests
         ItemClass itemClass = new("TestItemClass");
         model.ItemClasses.Add(itemClass);
         var image = File.ReadAllBytes("Samples/320screenshot.png");
-        var screenshots = Enumerable.Repeat(Unit.Default, 64).Select(_ => new DetectorScreenshot(new Image(image))
+        var screenshots = Enumerable.Repeat(Unit.Default, 64).Select(_ => new DetectorAsset(new Image(image))
         {
             IsAsset = true,
             Items = new ObservableCollection<DetectorItem>

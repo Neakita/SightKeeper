@@ -101,8 +101,8 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 		if (_detectorModel == null) throw new InvalidOperationException("Detector model not set");
 		byte[] bytes = _screenCapture.Capture();
 		Image image = new(bytes);
-		DetectorScreenshot screenshot = new(image);
-		_detectorModel.DetectorScreenshots.Add(screenshot);
+		DetectorAsset asset = new(image);
+		_detectorModel.DetectorScreenshots.Add(asset);
 	}
 
 	private void DeleteExceedScreenshots()

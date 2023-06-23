@@ -22,7 +22,7 @@ public class AppDbContext : DbContext
 	public DbSet<ItemClassGroup> ItemClassesGroups { get; set; } = null!;
 	public DbSet<Model> Models { get; set; } = null!;
 	public DbSet<DetectorModel> DetectorModels { get; set; } = null!;
-	public DbSet<DetectorScreenshot> DetectorScreenshots { get; set; } = null!;
+	public DbSet<DetectorAsset> DetectorScreenshots { get; set; } = null!;
 	public DbSet<DetectorItem> DetectorItems { get; set; } = null!;
 	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;

@@ -7,7 +7,7 @@ namespace SightKeeper.Application.Annotating;
 public interface DetectorAnnotator
 {
 	DetectorModel? Model { get; set; }
-	DetectorScreenshot? SelectedScreenshot { get; set; }
+	DetectorAsset? SelectedScreenshot { get; set; }
 	ItemClass? SelectedItemClass { get; set; }
 	Task DeleteItemAsync(int itemIndex);
 	void MarkAsAssets(IReadOnlyCollection<int> screenshotsIndexes);

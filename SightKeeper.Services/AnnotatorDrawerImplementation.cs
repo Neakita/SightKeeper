@@ -12,12 +12,12 @@ namespace SightKeeper.Services;
 public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDrawer
 {
 	private readonly AppDbContextFactory _dbContextFactory;
-	private DetectorScreenshot? _screenshot;
+	private DetectorAsset? _screenshot;
 	private ItemClass? _itemClass;
 
 	public event Action<DetectorItem>? Drawn;
 
-	public DetectorScreenshot? Screenshot
+	public DetectorAsset? Screenshot
 	{
 		get => _screenshot;
 		set

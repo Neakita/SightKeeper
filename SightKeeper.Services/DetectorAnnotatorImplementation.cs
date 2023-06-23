@@ -21,7 +21,7 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 		}
 	}
 
-	public DetectorScreenshot? SelectedScreenshot
+	public DetectorAsset? SelectedScreenshot
 	{
 		get => _selectedScreenshot;
 		set
@@ -92,7 +92,7 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 	
 	private readonly AnnotatorDrawer _drawer;
 	private readonly AppDbContextFactory _dbContextFactory;
-	private DetectorScreenshot? _selectedScreenshot;
+	private DetectorAsset? _selectedScreenshot;
 	private ItemClass? _selectedItemClass;
 	private DetectorModel? _model;
 

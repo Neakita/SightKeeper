@@ -8,7 +8,7 @@ public interface AnnotatorDrawer
 {
 	event Action<DetectorItem> Drawn;
 
-	DetectorScreenshot? Screenshot { get; set; }
+	DetectorAsset? Screenshot { get; set; }
 	ItemClass? ItemClass { get; set; }
 	bool BeginDrawing(Point startPosition);
 	void UpdateDrawing(Point currentPosition);

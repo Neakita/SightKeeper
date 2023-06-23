@@ -2,19 +2,6 @@
 
 public static class DetectorConfig
 {
-	public static void Validate(string content)
-	{
-		string[] requiredFields =
-		{
-			BatchPlaceholder, SubdivisionsPlaceholder, WidthPlaceholder, HeightPlaceholder, MaxBatchesPlaceholder,
-			Steps80Placeholder, Steps90Placeholder, ClassesCountPlaceholder
-		};
-		List<string> missingFields = requiredFields.Where(requiredField =>
-			!content.Contains(requiredField, StringComparison.InvariantCultureIgnoreCase)).ToList();
-		if (missingFields.Any())
-			throw new Exception($"Detector config is missing required fields: {string.Join(", ", missingFields)}");
-	}
-	
 	public const string BatchPlaceholder = "{Batch}";
 	public const string SubdivisionsPlaceholder = "{Subdivisions}";
 	public const string WidthPlaceholder = "{Width}";
