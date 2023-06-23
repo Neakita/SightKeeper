@@ -16,8 +16,7 @@ public class DarknetDetectorOutputParser : DarknetOutputParser<DetectorModel>
         progress = null;
         if (!TargetStringRegex.IsMatch(output))
         {
-            Log.Verbose("Could not parse output: {Output} as it is not in expected format", output);
-            operation.Complete();
+            Log.Verbose("Ignoring output \"{Output}\" as it does not match the expected format", output);
             return false;
         }
         var currentBatch = uint.Parse(ExtractSingleSubstringWithRegex(output, CurrentBatchRegex));
@@ -30,12 +29,12 @@ public class DarknetDetectorOutputParser : DarknetOutputParser<DetectorModel>
     /// <summary>
     /// Matches the whole string "4: 1292.006348, 1291.511230 avg loss, 0.000000 rate, 43.140034 seconds, 256 images"
     /// </summary>
-    private static readonly Regex TargetStringRegex = new("\\d+: \\d+.\\d+, \\d+.\\d+ avg loss, \\d+.\\d+ rate, \\d+.\\d+ seconds, \\d+ images", RegexOptions.Compiled);
+    private static readonly Regex TargetStringRegex = new(@"^ \d+: \d+.\d+, \d+.\d+ avg loss, \d+.\d+ rate, \d+.\d+ seconds, \d+ images&", RegexOptions.Compiled);
 
     /// <summary>
     /// Matches only the "4" at start of the "4: 1292.006348, 1291.511230 avg loss, 0.000000 rate, 43.140034 seconds, 256 images"
     /// </summary>
-    private static readonly Regex CurrentBatchRegex = new("^\\d+");
+    private static readonly Regex CurrentBatchRegex = new(@"(?<=^ )\d+");
 
     /// <summary>
     /// Matches only the 1291.511230 (third number) of the "4: 1292.006348, 1291.511230 avg loss, 0.000000 rate, 43.140034 seconds, 256 images"
