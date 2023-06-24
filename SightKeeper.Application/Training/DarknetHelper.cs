@@ -30,7 +30,7 @@ public class DarknetHelper
 		_imagesExporter = imagesExporter;
 	}
 
-	public DarknetProcess StartNewTrainer(DetectorModel model)
+	public DarknetProcessImplementation StartNewTrainer(DetectorModel model)
 	{
 		PrepareDirectories();
 		IReadOnlyCollection<string> images = _imagesExporter.Export(ImagesDirectoryPath, model);
@@ -38,7 +38,7 @@ public class DarknetHelper
 		PrepareClassesList(model.ItemClasses);
 		PrepareDataFile((byte) model.ItemClasses.Count);
 		PrepareConfig(model);
-		DarknetProcess result = new(DarknetExecutablePath);
+		DarknetProcessImplementation result = new(DarknetExecutablePath);
 		DarknetArguments arguments = new()
 		{
 			ModelType = ModelType.Detector,
@@ -46,7 +46,7 @@ public class DarknetHelper
 			ConfigPath = ConfigFilePath.Replace(DarknetDirectory, string.Empty),
 			DoNotShow = false
 		};
-		result.Run(arguments);
+		result.RunProcess(arguments);
 		return result;
 	}
 	
