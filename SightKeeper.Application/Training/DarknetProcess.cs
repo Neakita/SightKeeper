@@ -9,7 +9,7 @@ public sealed class DarknetProcess : IDisposable
 {
 	public IObservable<string> OutputReceived => _outputReceived.AsObservable();
 
-	public bool IsRunning => Process != null;
+	public bool IsRunning { get; private set; }
 
 	public DarknetProcess(string darknetExecutablePath, ILogger? logger = null)
 	{
@@ -34,6 +34,7 @@ public sealed class DarknetProcess : IDisposable
 		Process.Start();
 		Process.BeginOutputReadLine();
 		Process.BeginErrorReadLine();
+		IsRunning = true;
 	}
 
 	public void Run(DarknetArguments arguments) =>
@@ -56,6 +57,7 @@ public sealed class DarknetProcess : IDisposable
 		Process.OutputDataReceived -= OnOutputDataReceived;
 		Process.Dispose();
 		_outputReceived.OnCompleted();
+		IsRunning = false;
 	}
 	
 	public void Dispose()
