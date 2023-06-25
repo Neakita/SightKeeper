@@ -35,7 +35,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		ItemClass itemClass = new("class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 0, 0));
 		asset.Items.Add(item);
-		model.DetectorScreenshots.Add(asset);
+		model.Screenshots.Add(asset);
 		
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
@@ -53,7 +53,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		DetectorModel model = new("Test model");
 		Image image = new(Array.Empty<byte>());
 		DetectorAsset asset = new(image);
-		model.DetectorScreenshots.Add(asset);
+		model.Screenshots.Add(asset);
 
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();

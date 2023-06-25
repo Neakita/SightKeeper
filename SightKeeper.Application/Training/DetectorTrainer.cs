@@ -1,7 +1,4 @@
-﻿using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using CommunityToolkit.Diagnostics;
-using Serilog;
+﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -10,48 +7,24 @@ namespace SightKeeper.Application.Training;
 
 public sealed class DetectorTrainer : ModelTrainer<DetectorModel>
 {
+    private readonly DarknetAdapter<DetectorModel> _darknetAdapter;
     public DetectorModel? Model { get; set; }
     public bool FromScratch { get; set; }
-    public uint? MaxBatches { get; }
-    public IObservable<TrainingProgress> Progress => _progressSubject.AsObservable();
+    public int? MaxBatches => _darknetAdapter.MaxBatches;
+    public IObservable<TrainingProgress> Progress => _darknetAdapter.Progress;
 
-    public DetectorTrainer(DarknetHelper darknetHelper, DarknetOutputParser<DetectorModel> outputParser)
+    public DetectorTrainer(DarknetAdapter<DetectorModel> darknetAdapter)
     {
-        _darknetHelper = darknetHelper;
-        _outputParser = outputParser;
+        _darknetAdapter = darknetAdapter;
     }
     
     public async Task<ModelWeights?> TrainAsync(CancellationToken cancellationToken = default)
     {
         if (Model == null) ThrowHelper.ThrowArgumentNullException(nameof(Model));
-        var trainer = _darknetHelper.StartNewTrainer(Model);
-        if (trainer.Process == null) ThrowHelper.ThrowArgumentNullException(nameof(trainer.Process));
-        var outputDisposable = trainer.OutputReceived
-            .Select(output => _outputParser.TryParse(output, out var progress) ? progress : null)
-            .Where(progress => progress != null)
-            .Select(progress => progress!.Value)
-            .Subscribe(progress => _progressSubject.OnNext(progress));
-        string? weightsFilePath;
-        try
-        {
-            await trainer.Process.WaitForExitAsync(cancellationToken);
-        }
-        catch (OperationCanceledException exception)
-        {
-            Log.Verbose(exception, "Training was cancelled");
-        }
-        finally
-        {
-            weightsFilePath = DarknetHelper.GetLastWeightsFilePath();
-            outputDisposable.Dispose();
-            trainer.Dispose();
-            DarknetHelper.ClearDataDirectory();
-        }
-        if (weightsFilePath == null) return null;
-        return new ModelWeights(0, await File.ReadAllBytesAsync(weightsFilePath, CancellationToken.None), Model.DetectorScreenshots);
+        var assets = Model.Assets.ToList();
+        var baseWeights = FromScratch ? null : Model.Weights.MaxBy(weights => weights.Date);
+        var weightsData = await _darknetAdapter.RunAsync(Model, baseWeights?.Data, cancellationToken);
+        if (weightsData == null) return null;
+        return new ModelWeights(0, weightsData, assets);
     }
-    
-    private readonly DarknetHelper _darknetHelper;
-    private readonly DarknetOutputParser<DetectorModel> _outputParser;
-    private readonly Subject<TrainingProgress> _progressSubject = new();
 }

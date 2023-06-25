@@ -12,8 +12,9 @@ public abstract class Model : Entity
 	public ICollection<ItemClass> ItemClasses { get; set; }
 	public Game? Game { get; set; }
 	public ModelConfig? Config { get; set; }
-	
-	
+	public ICollection<ModelWeights> Weights { get; set; }
+
+
 	public Model(string name) : this(name, new Resolution())
 	{
 	}
@@ -24,6 +25,7 @@ public abstract class Model : Entity
 		Description = string.Empty;
 		Resolution = resolution;
 		ItemClasses = new ObservableCollection<ItemClass>();
+		Weights = new List<ModelWeights>();
 	}
 
 
@@ -33,5 +35,6 @@ public abstract class Model : Entity
 		Description = description;
 		Resolution = null!;
 		ItemClasses = null!;
+		Weights = null!;
 	}
 }

@@ -102,17 +102,17 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 		byte[] bytes = _screenCapture.Capture();
 		Image image = new(bytes);
 		DetectorAsset asset = new(image);
-		_detectorModel.DetectorScreenshots.Add(asset);
+		_detectorModel.Screenshots.Add(asset);
 	}
 
 	private void DeleteExceedScreenshots()
 	{
 		_detectorModel.ThrowIfNull(nameof(_detectorModel));
-		List<int> notAssetsIndexes = _detectorModel!.DetectorScreenshots.Select((screenshot, index) => (screenshot, index)).Where(item => !item.screenshot.IsAsset).Select(item => item.index).ToList();
+		List<int> notAssetsIndexes = _detectorModel!.Screenshots.Select((screenshot, index) => (screenshot, index)).Where(item => !item.screenshot.IsAsset).Select(item => item.index).ToList();
 		if (notAssetsIndexes.Count <= MaxImages) return;
 		IOrderedEnumerable<int> indexesToRemove = notAssetsIndexes.Take(notAssetsIndexes.Count - MaxImages).OrderDescending();
 		foreach (int index in indexesToRemove)
-			_detectorModel.DetectorScreenshots.RemoveAt(index);
+			_detectorModel.Screenshots.RemoveAt(index);
 	}
 
 	private async Task LoadScreenshotsAsync(Model model)
@@ -121,7 +121,7 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 		{
 			await using AppDbContext dbContext = await _dbContextFactory.CreateDbContextAsync();
 			dbContext.Attach(model);
-			await dbContext.Entry(detectorModel).Collection(m => m.DetectorScreenshots).LoadAsync();
+			await dbContext.Entry(detectorModel).Collection(m => m.Screenshots).LoadAsync();
 		}
 		else throw new InvalidCastException();
 	}

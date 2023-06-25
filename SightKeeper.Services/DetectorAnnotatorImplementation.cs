@@ -63,7 +63,7 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 		dbContext.Attach(Model!);
 		Model.ThrowIfNull(nameof(Model));
 		foreach (int index in screenshotsIndexes)
-			Model!.DetectorScreenshots[index].IsAsset = true;
+			Model!.Screenshots[index].IsAsset = true;
 		dbContext.SaveChanges();
 	}
 
@@ -73,7 +73,7 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Attach(Model!);
 		foreach (int index in screenshotsIndexes.OrderDescending())
-			Model!.DetectorScreenshots.RemoveAt(index);
+			Model!.Screenshots.RemoveAt(index);
 		dbContext.SaveChanges();
 	}
 

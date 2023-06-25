@@ -1,8 +1,6 @@
-﻿using SightKeeper.Application.Training.Data;
+﻿namespace SightKeeper.Application.Training.Data;
 
-namespace SightKeeper.Application.Training;
-
-public interface DarknetProcess
+public static class DarknetPaths
 {
     public const string DarknetDirectory = "Darknet/";
     public const string DarknetExecutablePath = DarknetDirectory + "darknet.exe";
@@ -13,7 +11,5 @@ public interface DarknetProcess
     public const string ImagesDirectoryPath = DataDirectoryPath + "Images/";
     public const string ClassesListFilePath = DataDirectoryPath + "Classes.txt";
     public const string OutputDirectoryPath = DataDirectoryPath + "Output/";
-    
-    IObservable<string> OutputReceived { get; }
-    Task RunAsync(DarknetArguments arguments, CancellationToken cancellationToken = default);
+    public const string BaseWeightsPath = DataDirectoryPath + "base.weights";
 }

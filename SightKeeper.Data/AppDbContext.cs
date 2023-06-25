@@ -54,7 +54,6 @@ public class AppDbContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
-		modelBuilder.Entity<Model>().OwnsOne(model => model.Resolution).Ignore(resolution => resolution.HasErrors);
-		modelBuilder.Entity<DetectorModel>().HasMany(model => model.DetectorScreenshots).WithOne().IsRequired();
+		modelBuilder.Entity<DetectorModel>().HasMany(model => model.Screenshots).WithOne().IsRequired();
 	}
 }

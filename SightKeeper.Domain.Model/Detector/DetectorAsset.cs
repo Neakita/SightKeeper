@@ -5,7 +5,7 @@ namespace SightKeeper.Domain.Model.Detector;
 public class DetectorAsset : Entity
 {
 	public Screenshot Screenshot { get; private set; }
-	public ICollection<DetectorItem> Items { get; private set; }
+	public ICollection<DetectorItem> Items { get; set; }
 	
 	public DetectorAsset(Screenshot screenshot)
 	{

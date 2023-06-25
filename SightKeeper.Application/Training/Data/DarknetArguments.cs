@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Application.Training;
+namespace SightKeeper.Application.Training.Data;
 
 public sealed class DarknetArguments
 {
@@ -8,7 +8,7 @@ public sealed class DarknetArguments
 	public string Action { get; set; } = "train";
 	public string DataPath { get; set; } = string.Empty;
 	public string ConfigPath { get; set; } = string.Empty;
-	public string? PreTrainedWeightsPath { get; set; } = string.Empty;
+	public string? BaseWeightsPath { get; set; } = string.Empty;
 	public bool DoNotShow { get; set; } = true;
 
 	public override string ToString() => string.Join(' ', GetArguments());
@@ -19,8 +19,8 @@ public sealed class DarknetArguments
 		yield return Action;
 		yield return DataPath;
 		yield return ConfigPath;
-		if (PreTrainedWeightsPath != null)
-			yield return PreTrainedWeightsPath;
+		if (BaseWeightsPath != null)
+			yield return BaseWeightsPath;
 		if (DoNotShow)
 			yield return "-dont_show"; 
 	}

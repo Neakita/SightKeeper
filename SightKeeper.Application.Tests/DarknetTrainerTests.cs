@@ -1,10 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using System.Reactive;
-using DynamicData;
+﻿using System.Reactive;
 using Serilog;
 using SightKeeper.Application.Training;
+using SightKeeper.Application.Training.Images;
 using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
@@ -20,18 +20,18 @@ public class DarknetTrainerTests
         ItemClass itemClass = new("TestItemClass");
         model.ItemClasses.Add(itemClass);
         var image = File.ReadAllBytes("Samples/320screenshot.png");
-        var screenshots = Enumerable.Repeat(Unit.Default, 64).Select(_ => new DetectorAsset(new Image(image))
+        var assets = Enumerable.Repeat(Unit.Default, 200).Select(_ => new DetectorAsset(new Screenshot(new Image(image)))
         {
-            IsAsset = true,
-            Items = new ObservableCollection<DetectorItem>
+            Items = new List<DetectorItem>
             {
                 new(itemClass, new BoundingBox(0, 0, 1, 1))
             }
         }).ToList();
-        model.DetectorScreenshots.AddRange(screenshots);
+        model.Assets = assets;
         ModelConfig config = new("Yolo V3", File.ReadAllText("Samples/YoloV3.config"), ModelType.Detector);
         model.Config = config;
-        DetectorTrainer trainer = new(new DarknetHelper(new DetectorImagesExporter()), new DarknetDetectorOutputParser());
+        DetectorTrainer trainer = new(new DarknetDetectorAdapter(new DetectorImagesExporter(),
+            new DarknetProcessImplementation(), new DarknetDetectorOutputParser()));
         trainer.Model = model;
         trainer.TrainAsync().GetAwaiter().GetResult();
     }

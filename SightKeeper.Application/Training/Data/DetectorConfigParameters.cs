@@ -1,7 +1,7 @@
 ﻿using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Application.Training;
+namespace SightKeeper.Application.Training.Data;
 
 public sealed class DetectorConfigParameters
 {

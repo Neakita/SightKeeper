@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Application.Training;
+﻿namespace SightKeeper.Application.Training.Data;
 
 public sealed class DarknetData
 {

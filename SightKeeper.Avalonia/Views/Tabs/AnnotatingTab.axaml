@@ -19,7 +19,7 @@
             <ColumnDefinition Width="200" MaxWidth="300" MinWidth="150"/>
         </Grid.ColumnDefinitions>
         <ListBox Grid.Column="0"
-                 ItemsSource="{Binding Model.DetectorScreenshots}"
+                 ItemsSource="{Binding Model.Screenshots}"
                  Selection="{Binding ScreenshotsSelection}">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">

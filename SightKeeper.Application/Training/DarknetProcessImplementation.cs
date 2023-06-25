@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Serilog;
+using SightKeeper.Application.Training.Data;
 
 namespace SightKeeper.Application.Training;
 
@@ -9,12 +10,9 @@ public sealed class DarknetProcessImplementation : DarknetProcess, IDisposable
 {
 	public IObservable<string> OutputReceived => _outputReceived.AsObservable();
 
-	public DarknetProcessImplementation(string darknetExecutablePath, ILogger? logger = null)
+	public DarknetProcessImplementation(ILogger? logger = null)
 	{
-		_darknetExecutablePath = darknetExecutablePath;
-		_logger = logger == null
-			? Log.Logger
-			: new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.Logger(Log.Logger).WriteTo.Logger(logger).CreateLogger();
+		_logger = logger.WithGlobal();
 	}
 	public async Task RunAsync(DarknetArguments arguments, CancellationToken cancellationToken = default)
 	{
@@ -25,6 +23,7 @@ public sealed class DarknetProcessImplementation : DarknetProcess, IDisposable
 		}
 		catch (OperationCanceledException)
 		{
+			Log.Debug("Operation canceled");
 		}
 		finally
 		{
@@ -35,9 +34,9 @@ public sealed class DarknetProcessImplementation : DarknetProcess, IDisposable
 
 	private Process RunProcess(DarknetArguments arguments)
 	{
-		ProcessStartInfo processStartInfo = new(_darknetExecutablePath, arguments.ToString())
+		ProcessStartInfo processStartInfo = new(DarknetPaths.DarknetExecutablePath, arguments.ToString())
 		{
-			WorkingDirectory = DarknetHelper.DarknetDirectory,
+			WorkingDirectory = DarknetPaths.DarknetDirectory,
 			RedirectStandardOutput = true,
 			RedirectStandardError = true,
 			UseShellExecute = false,
@@ -75,7 +74,6 @@ public sealed class DarknetProcessImplementation : DarknetProcess, IDisposable
 	}
 	
 	private readonly Subject<string> _outputReceived = new();
-	private readonly string _darknetExecutablePath;
 	private readonly ILogger _logger;
 
 	private void OnOutputDataReceived(object sender, DataReceivedEventArgs e)

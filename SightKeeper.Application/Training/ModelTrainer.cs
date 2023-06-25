@@ -8,7 +8,7 @@ public interface ModelTrainer<TModel> where TModel : Model
 {
 	TModel? Model { get; set; }
 	bool FromScratch { get; set; }
-	uint? MaxBatches { get; }
+	int? MaxBatches { get; }
 	IObservable<TrainingProgress> Progress { get; }
 
 	Task<ModelWeights?> TrainAsync(CancellationToken cancellationToken = default);
