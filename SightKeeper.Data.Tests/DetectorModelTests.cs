@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Internal;
-using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
@@ -31,11 +31,11 @@ public sealed class DetectorModelTests : DbRelatedTests
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = TestDetectorModel;
 		Image image = new(Array.Empty<byte>());
-		DetectorAsset asset = new(image);
+		DetectorAsset asset = new(new Screenshot(image));
 		ItemClass itemClass = new("class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 0, 0));
 		asset.Items.Add(item);
-		model.Screenshots.Add(asset);
+		model.Assets.Add(asset);
 		
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
@@ -52,8 +52,8 @@ public sealed class DetectorModelTests : DbRelatedTests
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
 		Image image = new(Array.Empty<byte>());
-		DetectorAsset asset = new(image);
-		model.Screenshots.Add(asset);
+		DetectorAsset asset = new(new Screenshot(image));
+		model.Assets.Add(asset);
 
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();

@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
 
@@ -13,9 +14,9 @@ public sealed class ItemClassesTests : DbRelatedTests
 		ItemClass itemClass = new("Test item class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 1, 1));
 		DetectorModel model = new("Test model");
-		DetectorAsset asset = new(new Image(Array.Empty<byte>()));
+		DetectorAsset asset = new(new Screenshot(new Image(Array.Empty<byte>())));
 		asset.Items.Add(item);
-		model.Screenshots.Add(asset);
+		model.Assets.Add(asset);
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 

@@ -16,6 +16,6 @@ public class GenericDynamicDbRepositoryTests
 		repository.Items.Single().Should().BeSameAs(model);
 	}
 
-	private GenericDynamicDbRepository<TEntity> GetRepository<TEntity>() where TEntity : class, Entity =>
+	private GenericDynamicDbRepository<TEntity> GetRepository<TEntity>() where TEntity : Entity =>
 		new(new TestDbContextFactory());
 }

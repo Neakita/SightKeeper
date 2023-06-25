@@ -7,13 +7,11 @@ public sealed class Screenshot : Entity
 {
 	[ForeignKey(nameof(Id))]
 	public Image Image { get; private set; }
-	public Game? Game { get; private set; }
 	public DateTime CreationDate { get; private set; }
 	
-	public Screenshot(Image image, Game? game = null)
+	public Screenshot(Image image)
 	{
 		Image = image;
-		Game = game;
 		CreationDate = DateTime.UtcNow;
 	}
 
