@@ -13,7 +13,3 @@ public interface ModelTrainer<TModel> where TModel : Model
 
 	Task<ModelWeights?> TrainAsync(CancellationToken cancellationToken = default);
 }
-
-public interface ModelTrainer : ModelTrainer<Model>
-{
-}
