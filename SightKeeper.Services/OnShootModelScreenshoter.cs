@@ -1,5 +1,4 @@
 ﻿using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Input;
@@ -12,15 +11,14 @@ using MouseButton = SharpHook.Native.MouseButton;
 
 namespace SightKeeper.Services;
 
-public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
+public sealed class ShootModelScreenshoter : ModelScreenshoter
 {
 	public Model? Model
 	{
 		get => _model;
 		set
 		{
-			if (IsEnabled) throw new InvalidOperationException("Cannot change model when enabled");
-			this.RaiseAndSetIfChanged(ref _model, value);
+			if (IsEnabled) throw new InvalidOperationException("Cannot change model while enabled");
 			_detectorModel = value as DetectorModel;
 			if (_model == null) return;
 			_ = LoadScreenshotsAsync(_model);
@@ -53,9 +51,9 @@ public sealed class OnShootModelScreenshoter : ReactiveObject, ModelScreenshoter
 		}
 	}
 
-	[Reactive] public ushort MaxImages { get; set; } = 500;
+	public ushort MaxImages { get; set; } = 500;
 
-	public OnShootModelScreenshoter(ScreenCapture screenCapture, HotKeyManager<MouseButton> hotKeyManager, AppDbContextFactory dbContextFactory)
+	public ShootModelScreenshoter(ScreenCapture screenCapture, HotKeyManager<MouseButton> hotKeyManager, AppDbContextFactory dbContextFactory)
 	{
 		_screenCapture = screenCapture;
 		_hotKeyManager = hotKeyManager;

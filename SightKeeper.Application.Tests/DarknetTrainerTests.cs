@@ -33,6 +33,8 @@ public class DarknetTrainerTests
         DetectorTrainer trainer = new(new DarknetDetectorAdapter(new DetectorImagesExporter(),
             new DarknetProcessImplementation(), new DarknetDetectorOutputParser()));
         trainer.Model = model;
-        trainer.TrainAsync().GetAwaiter().GetResult();
+        CancellationTokenSource cancellationTokenSource = new();
+        cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
+        trainer.TrainAsync(cancellationTokenSource.Token).GetAwaiter().GetResult();
     }
 }

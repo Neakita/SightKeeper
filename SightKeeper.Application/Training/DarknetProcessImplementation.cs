@@ -27,7 +27,7 @@ public sealed class DarknetProcessImplementation : DarknetProcess, IDisposable
 		}
 		finally
 		{
-			if (!process.HasExited) Close(process);
+			EnsureClosed(process);
 			Complete(process);
 		}
 	}
@@ -59,13 +59,22 @@ public sealed class DarknetProcessImplementation : DarknetProcess, IDisposable
 		_outputReceived.OnCompleted();
 	}
 
-	private void Close(Process process)
+	private void EnsureClosed(Process process)
 	{
-		process.Close();
-		if (process.WaitForExit(1000)) return;
-		_logger.Warning("Process did not exit in time, terminating...");
-		process.Kill();
-		_logger.Information("Process terminated");
+		try
+		{
+			if (!process.HasExited) return;
+			process.Close();
+			if (process.HasExited) return;
+			if (process.WaitForExit(1000)) return;
+			_logger.Warning("Process did not exit in time, terminating...");
+			process.Kill();
+			_logger.Information("Process terminated");
+		}
+		catch (InvalidOperationException exception)
+		{
+			Log.Debug(exception, "Expected exception has occured");
+		}
 	}
 	
 	public void Dispose()
