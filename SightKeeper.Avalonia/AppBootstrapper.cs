@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Autofac.Extras.CommonServiceLocator;
+using CommonServiceLocator;
 using ReactiveUI;
 using Serilog;
 using Serilog.Core;
@@ -17,7 +19,6 @@ using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
-using SightKeeper.Common;
 using SightKeeper.Data;
 using SightKeeper.Services;
 using SightKeeper.Services.Input;
@@ -35,7 +36,7 @@ public static class AppBootstrapper
 		SetupViewModels(builder);
 		SetupViews(builder);
 		SetupUISpecificServices(builder);
-		Locator.Setup(builder.Build());
+		ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(builder.Build()));
 	}
 
 	private static void SetupLogger(ContainerBuilder builder)
