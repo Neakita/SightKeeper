@@ -1,9 +1,6 @@
-﻿using Avalonia;
-using ReactiveUI;
+﻿namespace SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Domain.Model.Detector;
-
-public sealed class BoundingBox : ReactiveObject
+public sealed class BoundingBox
 {
 	public BoundingBox(double x, double y, double width, double height)
 	{
@@ -13,14 +10,12 @@ public sealed class BoundingBox : ReactiveObject
 		Height = height;
 	}
 
-	public void SetFromTwoPositions(Point position1, Point position2)
+	public void SetFromTwoPositions(double x1, double y1, double x2, double y2)
 	{
-		X = Math.Min(position1.X, position2.X);
-		Y = Math.Min(position1.Y, position2.Y);
-		var x2 = Math.Max(position1.X, position2.X);
-		var y2 = Math.Max(position1.Y, position2.Y);
-		Width = x2 - X;
-		Height = y2 - Y;
+		X = Math.Min(x1, x2);
+		Y = Math.Min(y1, y2);
+		Width = Math.Max(x1, x2) - X;
+		Height = Math.Max(y1, y2) - Y;
 	}
 
 	public double X { get; private set; }
