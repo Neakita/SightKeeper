@@ -20,9 +20,20 @@ public abstract class Model : Entity
 	}
 	public ICollection<ItemClass> ItemClasses { get; set; }
 	public Game? Game { get; set; }
-	public ModelConfig? Config { get; set; }
+
+	public ModelConfig? Config
+	{
+		get => _config;
+		set
+		{
+			if (value != null && value.ModelType != this.GetDomainType())
+				ThrowHelper.ThrowArgumentException(nameof(Config), "Model type mismatch");
+			_config = value;
+		}
+	}
+
 	public ICollection<ModelWeights> Weights { get; set; }
-	public ICollection<Screenshot> Screenshots {  get; set; }
+	public ICollection<Screenshot> Screenshots { get; set; }
 
 
 	public Model(string name) : this(name, new Resolution())
@@ -52,4 +63,5 @@ public abstract class Model : Entity
 	}
 
 	private Resolution _resolution;
+	private ModelConfig? _config;
 }
