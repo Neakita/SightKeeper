@@ -50,7 +50,7 @@ public abstract class Model : Entity
 		Screenshots = new List<Screenshot>();
 	}
 
-	protected abstract bool GetCanChangeResolution([NotNullWhen(false)] out string? errorMessage);
+	public abstract bool GetCanChangeResolution([NotNullWhen(false)] out string? errorMessage);
 
 	protected Model(int id, string name, string description) : base(id)
 	{

@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services.Windows", "SightKeeper.Services.Windows\SightKeeper.Services.Windows.csproj", "{F2F03FC0-D639-4EF7-829E-C3174B2CD3ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Domain.Model.Tests", "SightKeeper.Domain.Model.Tests\SightKeeper.Domain.Model.Tests.csproj", "{5FCF28B0-3E77-4D7C-859A-F1F22F05FB92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{F2F03FC0-D639-4EF7-829E-C3174B2CD3ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2F03FC0-D639-4EF7-829E-C3174B2CD3ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2F03FC0-D639-4EF7-829E-C3174B2CD3ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FCF28B0-3E77-4D7C-859A-F1F22F05FB92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FCF28B0-3E77-4D7C-859A-F1F22F05FB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FCF28B0-3E77-4D7C-859A-F1F22F05FB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FCF28B0-3E77-4D7C-859A-F1F22F05FB92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7D95C029-7CE1-476A-AD5F-543934A5F04F} = {F48B1EF3-DEFC-4506-B237-2A955EEB8FD7}
@@ -107,5 +113,6 @@ Global
 		{F2F03FC0-D639-4EF7-829E-C3174B2CD3ED} = {4635E6E2-6679-4A68-813D-D52C1BC11992}
 		{90E309B6-012B-4243-AC31-8E575193C76A} = {3F9DA67B-6094-4F35-A674-153AB8D8DCDA}
 		{25EDE1E2-060A-4124-834C-89545A50AB6F} = {4635E6E2-6679-4A68-813D-D52C1BC11992}
+		{5FCF28B0-3E77-4D7C-859A-F1F22F05FB92} = {F48B1EF3-DEFC-4506-B237-2A955EEB8FD7}
 	EndGlobalSection
 EndGlobal

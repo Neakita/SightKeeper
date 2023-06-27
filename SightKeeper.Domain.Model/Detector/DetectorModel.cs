@@ -26,7 +26,7 @@ public sealed class DetectorModel : Abstract.Model
 		Assets = null!;
 	}
 
-	protected override bool GetCanChangeResolution([NotNullWhen(false)] out string? errorMessage)
+	public override bool GetCanChangeResolution([NotNullWhen(false)] out string? errorMessage)
 	{
 		var hasAssets = Assets.Any();
 		var hasScreenshots = Screenshots.Any();
