@@ -20,32 +20,22 @@ public sealed class DetectorModel : Abstract.Model
 		Assets = new List<DetectorAsset>();
 	}
 
-
+	public override bool GetCanChangeResolution([NotNullWhen(false)] out string? errorMessage)
+	{
+		errorMessage = null;
+		var hasScreenshots = Screenshots.Any();
+		var hasAssets = Assets.Any();
+		if (hasScreenshots && hasAssets)
+			errorMessage = "Cannot change resolution of model with screenshots and assets";
+		else if (hasAssets)
+			errorMessage = "Cannot change resolution of model with assets";
+		else if (hasScreenshots)
+			errorMessage = "Cannot change resolution of model with screenshots";
+		return errorMessage == null;
+	}
+	
 	private DetectorModel(int id, string name, string description) : base(id, name, description)
 	{
 		Assets = null!;
-	}
-
-	public override bool GetCanChangeResolution([NotNullWhen(false)] out string? errorMessage)
-	{
-		var hasAssets = Assets.Any();
-		var hasScreenshots = Screenshots.Any();
-		if (hasAssets && hasScreenshots)
-		{
-			errorMessage = "Cannot change resolution of model with assets and screenshots";
-			return false;
-		}
-		if (hasAssets)
-		{
-			errorMessage = "Cannot change resolution of model with assets";
-			return false;
-		}
-		if (hasScreenshots)
-		{
-			errorMessage = "Cannot change resolution of model with screenshots";
-			return false;
-		}
-		errorMessage = null;
-		return true;
 	}
 }
