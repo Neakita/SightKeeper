@@ -22,9 +22,10 @@ public sealed class DetectorTrainer : ModelTrainer<DetectorModel>
     {
         if (Model == null) ThrowHelper.ThrowArgumentNullException(nameof(Model));
         var assets = Model.Assets.ToList();
+        var config = Model.Config ?? ThrowHelper.ThrowArgumentNullException<ModelConfig>(nameof(Model.Config));
         var baseWeights = FromScratch ? null : Model.Weights.MaxBy(weights => weights.Date);
         var weightsData = await _darknetAdapter.RunAsync(Model, baseWeights?.Data, cancellationToken);
         if (weightsData == null) return null;
-        return new ModelWeights(0, weightsData, assets);
+        return new ModelWeights(0, weightsData, assets, config);
     }
 }
