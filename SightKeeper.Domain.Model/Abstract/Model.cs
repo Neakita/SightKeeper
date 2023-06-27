@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Abstract;
@@ -13,7 +14,7 @@ public abstract class Model : Entity
 		set
 		{
 			if (!GetCanChangeResolution(out var message))
-				throw new InvalidOperationException(message);
+				ThrowHelper.ThrowInvalidOperationException(message);
 			_resolution = value;
 		}
 	}
