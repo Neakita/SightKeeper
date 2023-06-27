@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Abstract;
@@ -22,6 +21,7 @@ public abstract class Model : Entity
 	public Game? Game { get; set; }
 	public ModelConfig? Config { get; set; }
 	public ICollection<ModelWeights> Weights { get; set; }
+	public ICollection<Screenshot> Screenshots {  get; set; }
 
 
 	public Model(string name) : this(name, new Resolution())
@@ -35,6 +35,7 @@ public abstract class Model : Entity
 		_resolution = resolution;
 		ItemClasses = new List<ItemClass>();
 		Weights = new List<ModelWeights>();
+		Screenshots = new List<Screenshot>();
 	}
 
 	protected abstract bool GetCanChangeResolution([NotNullWhen(false)] out string? errorMessage);
@@ -46,6 +47,7 @@ public abstract class Model : Entity
 		_resolution = null!;
 		ItemClasses = null!;
 		Weights = null!;
+		Screenshots = null!;
 	}
 
 	private Resolution _resolution;
