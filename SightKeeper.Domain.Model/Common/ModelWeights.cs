@@ -22,4 +22,10 @@ public sealed class ModelWeights : Entity
         Assets = assets;
         Config = config;
     }
+
+    private ModelWeights()
+    {
+        Data = null!;
+        Assets = null!;
+    }
 }

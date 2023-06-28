@@ -20,13 +20,13 @@ public sealed class ItemClassesTests : DbRelatedTests
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 
-		dbContext.ItemClasses.Should().Contain(itemClass);
-		dbContext.DetectorItems.Should().Contain(item);
+		dbContext.Set<ItemClass>().Should().Contain(itemClass);
+		dbContext.Set<DetectorItem>().Should().Contain(item);
 
-		dbContext.DetectorItems.Remove(item);
+		dbContext.Set<DetectorItem>().Remove(item);
 		dbContext.SaveChanges();
 
-		dbContext.ItemClasses.Should().Contain(itemClass);
-		dbContext.DetectorItems.Should().BeEmpty();
+		dbContext.Set<ItemClass>().Should().Contain(itemClass);
+		dbContext.Set<DetectorItem>().Should().BeEmpty();
 	}
 }

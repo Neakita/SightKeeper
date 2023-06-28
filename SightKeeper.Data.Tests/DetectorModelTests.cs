@@ -26,12 +26,13 @@ public sealed class DetectorModelTests : DbRelatedTests
 	}
 
 	[Fact]
-	public void AddingModelWithScreenshotShouldAddScreenshot()
+	public void AddingModelWithAssetShouldAddImageScreenshotAndAsset()
 	{
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = TestDetectorModel;
 		Image image = new(Array.Empty<byte>());
-		DetectorAsset asset = new(new Screenshot(image));
+		Screenshot screenshot = new(image);
+		DetectorAsset asset = new(screenshot);
 		ItemClass itemClass = new("class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 0, 0));
 		asset.Items.Add(item);
@@ -41,31 +42,42 @@ public sealed class DetectorModelTests : DbRelatedTests
 		dbContext.SaveChanges();
 
 		dbContext.DetectorModels.Should().Contain(model);
-		dbContext.DetectorScreenshots.Should().Contain(asset);
-		dbContext.DetectorItems.Should().Contain(item);
-		dbContext.ItemClasses.ToList().Should().Contain(itemClass);
+		dbContext.Set<Image>().Should().Contain(image);
+		dbContext.Set<Screenshot>().Should().Contain(screenshot);
+		dbContext.Set<DetectorAsset>().Should().Contain(asset);
+		dbContext.Set<DetectorItem>().Should().Contain(item);
+		dbContext.Set<ItemClass>().Should().Contain(itemClass);
 	}
 
 	[Fact]
-	public void ShouldDeleteWithScreenshots()
+	public void ShouldCascadeDelete()
 	{
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
 		Image image = new(Array.Empty<byte>());
-		DetectorAsset asset = new(new Screenshot(image));
+		Screenshot screenshot = new(image);
+		DetectorAsset asset = new(screenshot);
+		ItemClass itemClass = new("Test item class");
+		model.ItemClasses.Add(itemClass);
+		DetectorItem detectorItem = new(itemClass, new BoundingBox(0, 0, 1, 1));
+		asset.Items.Add(detectorItem);
 		model.Assets.Add(asset);
-
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 
 		dbContext.DetectorModels.Should().Contain(model);
-		dbContext.DetectorScreenshots.Should().Contain(asset);
+		dbContext.Set<Screenshot>().Should().Contain(screenshot);
+		dbContext.Set<DetectorAsset>().Should().Contain(asset);
+		dbContext.Set<ItemClass>().Should().Contain(itemClass);
+		dbContext.Set<DetectorItem>().Should().Contain(detectorItem);
 
 		dbContext.DetectorModels.Remove(model);
 		dbContext.SaveChanges();
-
 		dbContext.DetectorModels.Should().BeEmpty();
-		dbContext.DetectorScreenshots.Should().BeEmpty();
+		dbContext.Set<Screenshot>().Should().BeEmpty();
+		dbContext.Set<DetectorAsset>().Should().BeEmpty();
+		dbContext.Set<ItemClass>().Should().BeEmpty();
+		dbContext.Set<DetectorItem>().Should().BeEmpty();
 	}
 
 	[Fact]

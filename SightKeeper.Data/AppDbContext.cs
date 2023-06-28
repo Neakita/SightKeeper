@@ -19,15 +19,10 @@ public class AppDbContext : DbContext
 	}
 
 	public DbSet<Profile> Profiles { get; set; } = null!;
-	public DbSet<ItemClassGroup> ItemClassesGroups { get; set; } = null!;
 	public DbSet<Model> Models { get; set; } = null!;
 	public DbSet<DetectorModel> DetectorModels { get; set; } = null!;
-	public DbSet<DetectorAsset> DetectorScreenshots { get; set; } = null!;
-	public DbSet<DetectorItem> DetectorItems { get; set; } = null!;
-	public DbSet<ItemClass> ItemClasses { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 	public DbSet<ModelConfig> ModelConfigs { get; set; } = null!;
-	public DbSet<Image> Images { get; set; } = null!;
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
@@ -53,7 +48,12 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
-		modelBuilder.Entity<DetectorModel>().HasMany(model => model.Screenshots).WithOne().IsRequired();
+		modelBuilder.Entity<Entity>().Property<int>("Id");
+		modelBuilder.Entity<Entity>().HasKey("Id");
+		modelBuilder.Entity<Model>().OwnsOne(model => model.Resolution);
+		modelBuilder.Entity<DetectorItem>().OwnsOne(item => item.BoundingBox);
+		modelBuilder.Entity<DetectorModel>().HasMany(model => model.Assets).WithOne().IsRequired();
+		modelBuilder.Entity<DetectorAsset>().HasOne(asset => asset.Screenshot).WithOne().HasPrincipalKey<DetectorAsset>("Id").IsRequired();
+		modelBuilder.Entity<Model>().HasMany(model => model.ItemClasses).WithOne().IsRequired();
 	}
 }
