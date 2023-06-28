@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Abstract;
 
-public abstract class Model : Entity
+public abstract class Model
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
@@ -52,7 +52,7 @@ public abstract class Model : Entity
 
 	public abstract bool GetCanChangeResolution([NotNullWhen(false)] out string? errorMessage);
 
-	protected Model(int id, string name, string description) : base(id)
+	protected Model(string name, string description)
 	{
 		Name = name;
 		Description = description;

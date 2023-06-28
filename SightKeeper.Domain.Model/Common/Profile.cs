@@ -1,9 +1,8 @@
-﻿using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Model.Detector;
+﻿using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public sealed class Profile : Entity
+public sealed class Profile
 {
 	public string Name { get; set; }
 	public string Description { get; set; } = string.Empty;
@@ -16,7 +15,7 @@ public sealed class Profile : Entity
 		DetectorModel = detectorModel;
 	}
 	
-	private Profile(int id, string name, string description) : base(id)
+	private Profile(string name, string description)
 	{
 		Name = name;
 		Description = description;

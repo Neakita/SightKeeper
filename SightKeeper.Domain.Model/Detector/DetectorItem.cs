@@ -1,9 +1,8 @@
-﻿using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
 
-public class DetectorItem : Entity
+public sealed class DetectorItem
 {
 	public ItemClass ItemClass { get; set; }
 	public BoundingBox BoundingBox { get; set; }

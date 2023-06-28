@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.Model.Detector;
 
-public class DetectorAsset : Entity
+public class DetectorAsset
 {
 	public Screenshot Screenshot { get; private set; }
 	public ICollection<DetectorItem> Items { get; set; }
@@ -13,7 +13,7 @@ public class DetectorAsset : Entity
 		Items = new List<DetectorItem>();
 	}
 	
-	private DetectorAsset(int id) : base(id)
+	private DetectorAsset()
 	{
 		Screenshot = null!;
 		Items = null!;

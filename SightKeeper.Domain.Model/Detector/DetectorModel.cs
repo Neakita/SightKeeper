@@ -34,7 +34,7 @@ public sealed class DetectorModel : Abstract.Model
 		return errorMessage == null;
 	}
 	
-	private DetectorModel(int id, string name, string description) : base(id, name, description)
+	private DetectorModel(string name, string description) : base(name, description)
 	{
 		Assets = null!;
 	}

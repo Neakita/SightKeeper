@@ -48,12 +48,18 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.Entity<Entity>().Property<int>("Id");
-		modelBuilder.Entity<Entity>().HasKey("Id");
+		modelBuilder.Entity<Model>().HasShadowKey();
 		modelBuilder.Entity<Model>().OwnsOne(model => model.Resolution);
-		modelBuilder.Entity<DetectorItem>().OwnsOne(item => item.BoundingBox);
-		modelBuilder.Entity<DetectorModel>().HasMany(model => model.Assets).WithOne().IsRequired();
-		modelBuilder.Entity<DetectorAsset>().HasOne(asset => asset.Screenshot).WithOne().HasPrincipalKey<DetectorAsset>("Id").IsRequired();
 		modelBuilder.Entity<Model>().HasMany(model => model.ItemClasses).WithOne().IsRequired();
+		modelBuilder.Entity<DetectorItem>().HasShadowKey().OwnsOne(item => item.BoundingBox);
+		modelBuilder.Entity<DetectorModel>().HasMany(model => model.Assets).WithOne().IsRequired();
+		modelBuilder.Entity<DetectorAsset>().HasShadowKey().HasOne(asset => asset.Screenshot).WithOne().HasPrincipalKey<DetectorAsset>("Id").IsRequired();
+		modelBuilder.Entity<Screenshot>().HasShadowKey();
+		modelBuilder.Entity<Game>().HasShadowKey();
+		modelBuilder.Entity<Image>().HasShadowKey();
+		modelBuilder.Entity<ItemClass>().HasShadowKey();
+		modelBuilder.Entity<ModelConfig>().HasShadowKey();
+		modelBuilder.Entity<ModelWeights>().HasShadowKey();
+		modelBuilder.Entity<Profile>().HasShadowKey();
 	}
 }

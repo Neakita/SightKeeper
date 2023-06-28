@@ -1,15 +1,8 @@
-﻿using SightKeeper.Domain.Model.Abstract;
+﻿namespace SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Domain.Model.Common;
-
-public sealed class Image : Entity
+public sealed class Image
 {
 	public Image(byte[] content)
-	{
-		Content = content;
-	}
-
-	private Image(int id, byte[] content) : base(id)
 	{
 		Content = content;
 	}

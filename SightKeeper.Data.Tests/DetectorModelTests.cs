@@ -99,16 +99,15 @@ public sealed class DetectorModelTests : DbRelatedTests
 	public void ShouldSetConfigToNullOnConfigDelete()
 	{
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
-		DetectorModel newTestModel = new("Test model");
+		DetectorModel model = new("Test model");
 		ModelConfig config = new("Test config", "Test content", ModelType.Detector);
-		newTestModel.Config = config;
-		dbContext.Add(newTestModel);
+		model.Config = config;
+		dbContext.Add(model);
 		dbContext.SaveChanges();
 		dbContext.ModelConfigs.Should().Contain(config);
 		dbContext.Remove(config);
 		dbContext.SaveChanges();
-		DetectorModel? modelFromDb = dbContext.DetectorModels.Find(newTestModel.Id);
-		modelFromDb.Should().NotBeNull();
-		modelFromDb!.Config.Should().BeNull();
+		model.Should().NotBeNull();
+		model.Config.Should().BeNull();
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.Model.Abstract;
 
-public sealed class Screenshot : Entity
+public sealed class Screenshot
 {
 	public Image Image { get; private set; }
 	public DateTime CreationDate { get; private set; }
@@ -13,7 +13,7 @@ public sealed class Screenshot : Entity
 		CreationDate = DateTime.UtcNow;
 	}
 
-	private Screenshot(int id) : base(id)
+	private Screenshot()
 	{
 		Image = null!;
 	}

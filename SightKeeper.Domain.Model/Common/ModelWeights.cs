@@ -1,9 +1,8 @@
-﻿using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Model.Detector;
+﻿using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public sealed class ModelWeights : Entity
+public sealed class ModelWeights
 {
     public int Batch { get; private set; }
     public DateTime Date { get; private set; }
