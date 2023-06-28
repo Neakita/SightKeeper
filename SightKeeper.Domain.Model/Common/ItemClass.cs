@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.Model.Common;
 
-public class ItemClass
+public sealed class ItemClass
 {
 	public string Name { get; set; }
 	
@@ -8,4 +8,6 @@ public class ItemClass
 	{
 		Name = name;
 	}
+
+	public override string ToString() => Name;
 }

@@ -10,6 +10,10 @@ public sealed class BoundingBox
 		Height = height;
 	}
 
+	public BoundingBox()
+	{
+	}
+
 	public void SetFromTwoPositions(double x1, double y1, double x2, double y2)
 	{
 		X = Math.Min(x1, x2);
