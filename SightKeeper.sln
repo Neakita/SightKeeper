@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Tests", "SightKeeper.Tests\SightKeeper.Tests.csproj", "{7D95C029-7CE1-476A-AD5F-543934A5F04F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Data", "SightKeeper.Data\SightKeeper.Data.csproj", "{25EDE1E2-060A-4124-834C-89545A50AB6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Application", "SightKeeper.Application\SightKeeper.Application.csproj", "{90E309B6-012B-4243-AC31-8E575193C76A}"
@@ -42,10 +40,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7D95C029-7CE1-476A-AD5F-543934A5F04F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D95C029-7CE1-476A-AD5F-543934A5F04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D95C029-7CE1-476A-AD5F-543934A5F04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D95C029-7CE1-476A-AD5F-543934A5F04F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25EDE1E2-060A-4124-834C-89545A50AB6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25EDE1E2-060A-4124-834C-89545A50AB6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25EDE1E2-060A-4124-834C-89545A50AB6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -100,7 +94,6 @@ Global
 		{5FCF28B0-3E77-4D7C-859A-F1F22F05FB92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7D95C029-7CE1-476A-AD5F-543934A5F04F} = {F48B1EF3-DEFC-4506-B237-2A955EEB8FD7}
 		{6301DD76-F4B9-476B-A763-F75F39FE4B4E} = {3F9DA67B-6094-4F35-A674-153AB8D8DCDA}
 		{93AFDA60-ADAA-49E0-855A-BB4584750A08} = {6301DD76-F4B9-476B-A763-F75F39FE4B4E}
 		{494AEAE3-9A58-47D2-980C-FDD6CF2846AA} = {F48B1EF3-DEFC-4506-B237-2A955EEB8FD7}
