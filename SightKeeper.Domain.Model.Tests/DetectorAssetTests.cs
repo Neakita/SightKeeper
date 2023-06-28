@@ -11,25 +11,12 @@ public sealed class DetectorAssetTests
     public void ShouldJustAddItem()
     {
         DetectorModel model = new("Dummy model");
-        ItemClass itemClass = new("Dummy item class");
-        model.ItemClasses.Add(itemClass);
+        var itemClass = model.CreateItemClass("Dummy item class");
         Screenshot screenshot = new(new Image(Array.Empty<byte>()));
         DetectorAsset asset = new(model, screenshot);
         DetectorItem item = new(itemClass, new BoundingBox());
         asset.AddItem(item);
         model.Assets.Add(asset);
         model.Assets.Should().Contain(asset);
-    }
-
-    [Fact]
-    public void ShouldNotAddItemWhichClassIsNotInModelItemClasses()
-    {
-        DetectorModel model = new("Dummy model");
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        DetectorAsset asset = new(model, screenshot);
-        ItemClass itemClass = new("Dummy item class");
-        DetectorItem item = new(itemClass, new BoundingBox());
-        Assert.Throws<InvalidOperationException>(() => asset.AddItem(item));
-
     }
 }

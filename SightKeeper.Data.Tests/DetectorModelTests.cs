@@ -28,13 +28,12 @@ public sealed class DetectorModelTests : DbRelatedTests
 	[Fact]
 	public void AddingModelWithAssetShouldAddImageScreenshotAndAsset()
 	{
-		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
-		DetectorModel model = TestDetectorModel;
+		using var dbContext = DbContextFactory.CreateDbContext();
+		var model = TestDetectorModel;
 		Image image = new(Array.Empty<byte>());
 		Screenshot screenshot = new(image);
 		DetectorAsset asset = new(model, screenshot);
-		ItemClass itemClass = new("class");
-		model.ItemClasses.Add(itemClass);
+		var itemClass = model.CreateItemClass("Test item class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 0, 0));
 		asset.AddItem(item);
 		model.Assets.Add(asset);
@@ -53,13 +52,12 @@ public sealed class DetectorModelTests : DbRelatedTests
 	[Fact]
 	public void ShouldCascadeDelete()
 	{
-		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
+		using var dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
 		Image image = new(Array.Empty<byte>());
 		Screenshot screenshot = new(image);
 		DetectorAsset asset = new(model, screenshot);
-		ItemClass itemClass = new("Test item class");
-		model.ItemClasses.Add(itemClass);
+		var itemClass = model.CreateItemClass("Test item class");
 		DetectorItem detectorItem = new(itemClass, new BoundingBox(0, 0, 1, 1));
 		asset.AddItem(detectorItem);
 		model.Assets.Add(asset);

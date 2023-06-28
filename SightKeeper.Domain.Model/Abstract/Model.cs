@@ -13,12 +13,14 @@ public abstract class Model
 		get => _resolution;
 		set
 		{
-			if (!GetCanChangeResolution(out var message))
+			if (!CanChangeResolution(out var message))
 				ThrowHelper.ThrowInvalidOperationException(message);
 			_resolution = value;
 		}
 	}
-	public ICollection<ItemClass> ItemClasses { get; set; }
+
+	public IReadOnlyCollection<ItemClass> ItemClasses => _itemClasses;
+
 	public Game? Game { get; set; }
 
 	public ModelConfig? Config
@@ -45,23 +47,41 @@ public abstract class Model
 		Name = name;
 		Description = string.Empty;
 		_resolution = resolution;
-		ItemClasses = new List<ItemClass>();
+		_itemClasses = new List<ItemClass>();
 		Weights = new List<ModelWeights>();
 		Screenshots = new List<Screenshot>();
 	}
 
-	public abstract bool GetCanChangeResolution([NotNullWhen(false)] out string? errorMessage);
+	private bool CanCreateItemClass(string newItemClassName, [NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		if (_itemClasses.Any(itemClass => itemClass.Name == newItemClassName))
+			message = $"Item class with name \"{newItemClassName}\" already exists";
+		return message == null;
+	}
+	
+	public ItemClass CreateItemClass(string name)
+	{
+		if (!CanCreateItemClass(name, out var message))
+			throw new InvalidOperationException(message);
+		ItemClass newItemClass = new(name);
+		_itemClasses.Add(newItemClass);
+		return newItemClass;
+	}
+	
+	public abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
 
 	protected Model(string name, string description)
 	{
 		Name = name;
 		Description = description;
 		_resolution = null!;
-		ItemClasses = null!;
+		_itemClasses = null!;
 		Weights = null!;
 		Screenshots = null!;
 	}
 
+	private readonly List<ItemClass> _itemClasses;
 	private Resolution _resolution;
 	private ModelConfig? _config;
 }

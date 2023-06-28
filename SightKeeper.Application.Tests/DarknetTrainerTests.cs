@@ -18,8 +18,7 @@ public class DarknetTrainerTests
         Skip.If(true);
         Log.Logger = new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.Seq("http://localhost:5341").CreateLogger();
         DetectorModel model = new("Test model");
-        ItemClass itemClass = new("TestItemClass");
-        model.ItemClasses.Add(itemClass);
+        var itemClass = model.CreateItemClass("Test item class");
         var image = File.ReadAllBytes("Samples/320screenshot.png");
         var assets = Enumerable.Repeat(Unit.Default, 200).Select(_ =>
         {

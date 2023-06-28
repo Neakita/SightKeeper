@@ -11,7 +11,7 @@ public class DetectorModelTests
     public void ShouldBeAbleChangeResolutionAndMessageIsNull()
     {
         DetectorModel model = new("Test model");
-        model.GetCanChangeResolution(out var message).Should().BeTrue();
+        model.CanChangeResolution(out var message).Should().BeTrue();
         message.Should().BeNull();
     }
     
@@ -31,7 +31,7 @@ public class DetectorModelTests
     {
         DetectorModel model = new("Test model");
         model.Screenshots.Add(new Screenshot(new Image(Array.Empty<byte>())));
-        model.GetCanChangeResolution(out var message).Should().BeFalse();
+        model.CanChangeResolution(out var message).Should().BeFalse();
         message.Should().NotBeNull();
     }
 
@@ -55,7 +55,7 @@ public class DetectorModelTests
     {
         DetectorModel model = new("Test model");
         model.Assets.Add(new DetectorAsset(model, new Screenshot(new Image(Array.Empty<byte>()))));
-        model.GetCanChangeResolution(out var message).Should().BeFalse();
+        model.CanChangeResolution(out var message).Should().BeFalse();
         message.Should().NotBeNull();
     }
 
@@ -72,5 +72,14 @@ public class DetectorModelTests
             model.Resolution = secondResolution;
         });
         model.Resolution.Should().Be(firstResolution);
+    }
+
+    [Fact]
+    public void ShouldNotBeAbleCreateTwoItemClassesWithTheSameName()
+    {
+        const string itemClassName = "Test item class";
+        DetectorModel model = new("Dummy model");
+        model.CreateItemClass(itemClassName);
+        Assert.Throws<InvalidOperationException>(() => model.CreateItemClass(itemClassName));
     }
 }

@@ -10,10 +10,9 @@ public sealed class ItemClassesTests : DbRelatedTests
 	[Fact]
 	public void ShouldNotDeleteItemClassesOnItemDelete()
 	{
-		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
+		using var dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
-		ItemClass itemClass = new("Test item class");
-		model.ItemClasses.Add(itemClass);
+		var itemClass = model.CreateItemClass("Test item class");
 		DetectorItem item = new(itemClass, new BoundingBox());
 		DetectorAsset asset = new(model, new Screenshot(new Image(Array.Empty<byte>())));
 		asset.AddItem(item);
