@@ -1,22 +1,20 @@
-﻿using ReactiveUI;
-using SightKeeper.Application.Annotating;
-using SightKeeper.Common;
+﻿using SightKeeper.Application.Annotating;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using Point = Avalonia.Point;
 
 namespace SightKeeper.Services;
 
-public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAnnotator
+public sealed class DetectorAnnotatorImplementation : DetectorAnnotator
 {
 	public DetectorModel? Model
 	{
 		get => _model;
 		set
 		{
-			this.RaiseAndSetIfChanged(ref _model, value);
+			throw new NotImplementedException();
+			//this.RaiseAndSetIfChanged(ref _model, value);
 			if (_model != null) LoadItemClasses(_model);
 		}
 	}
@@ -26,7 +24,8 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 		get => _selectedScreenshot;
 		set
 		{
-			this.RaiseAndSetIfChanged(ref _selectedScreenshot, value);
+			throw new NotImplementedException();
+			//this.RaiseAndSetIfChanged(ref _selectedScreenshot, value);
 			_drawer.Screenshot = value;
 		}
 	}
@@ -36,7 +35,8 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 		get => _selectedItemClass;
 		set
 		{
-			this.RaiseAndSetIfChanged(ref _selectedItemClass, value);
+			throw new NotImplementedException();
+			//this.RaiseAndSetIfChanged(ref _selectedItemClass, value);
 			_drawer.ItemClass = value;
 		}
 	}
@@ -50,10 +50,11 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 
 	private void DrawerOnDrawn(DetectorItem obj)
 	{
+		throw new NotImplementedException();
 		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Attach(SelectedScreenshot!);
-		SelectedScreenshot.ThrowIfNull(nameof(SelectedScreenshot));
-		SelectedScreenshot!.IsAsset = true;
+		//SelectedScreenshot.ThrowIfNull(nameof(SelectedScreenshot));
+		//SelectedScreenshot!.IsAsset = true;
 		dbContext.SaveChanges();
 	}
 
@@ -61,28 +62,30 @@ public sealed class DetectorAnnotatorImplementation : ReactiveObject, DetectorAn
 	{
 		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Attach(Model!);
-		Model.ThrowIfNull(nameof(Model));
-		foreach (int index in screenshotsIndexes)
-			Model!.Screenshots[index].IsAsset = true;
+		//Model.ThrowIfNull(nameof(Model));
+		//foreach (int index in screenshotsIndexes)
+		//	Model!.Screenshots[index].IsAsset = true;
 		dbContext.SaveChanges();
 	}
 
 	public void DeleteScreenshots(IReadOnlyCollection<int> screenshotsIndexes)
 	{
-		Model.ThrowIfNull(nameof(Model));
+		throw new NotImplementedException();
+		//Model.ThrowIfNull(nameof(Model));
 		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Attach(Model!);
 		foreach (int index in screenshotsIndexes.OrderDescending())
-			Model!.Screenshots.RemoveAt(index);
+		//	Model!.Screenshots.RemoveAt(index);
 		dbContext.SaveChanges();
 	}
 
 	public async Task DeleteItemAsync(int itemIndex)
 	{
-		Model.ThrowIfNull(nameof(SelectedScreenshot));
+		throw new NotImplementedException();
+		//Model.ThrowIfNull(nameof(SelectedScreenshot));
 		await using AppDbContext dbContext = await _dbContextFactory.CreateDbContextAsync();
 		dbContext.Attach(SelectedScreenshot!);
-		SelectedScreenshot!.Items.RemoveAt(itemIndex);
+		//SelectedScreenshot!.Items.RemoveAt(itemIndex);
 		await dbContext.SaveChangesAsync();
 	}
 

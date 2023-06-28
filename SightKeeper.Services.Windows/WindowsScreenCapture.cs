@@ -1,10 +1,6 @@
 ﻿using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using SightKeeper.Application;
-using SightKeeper.Common;
 using SightKeeper.Domain.Model.Common;
-using Bitmap = System.Drawing.Bitmap;
 
 namespace SightKeeper.Services.Windows;
 
@@ -17,7 +13,8 @@ public sealed class WindowsScreenCapture : ScreenCapture
 	
 	public byte[] Capture()
 	{
-		Resolution.ThrowIfNull(nameof(Resolution));
+		throw new NotImplementedException();
+		/*Resolution.ThrowIfNull(nameof(Resolution));
 		using Bitmap windowsBitmap = new(Resolution!.Width, Resolution.Height);
 		using Graphics graphics = Graphics.FromImage(windowsBitmap);
 
@@ -28,7 +25,7 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		graphics.CopyFromScreen(point, Point.Empty, new Size(Resolution.Width, Resolution.Height));
 		using MemoryStream stream = new();
 		windowsBitmap.Save(stream, ImageFormat.Bmp);
-		return stream.ToArray();
+		return stream.ToArray();*/
 	}
 
 	public Game? Game { get; set; }

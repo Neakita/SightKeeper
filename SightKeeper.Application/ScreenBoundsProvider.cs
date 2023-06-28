@@ -1,9 +1,9 @@
-﻿using Avalonia;
-
-namespace SightKeeper.Application;
+﻿namespace SightKeeper.Application;
 
 public interface ScreenBoundsProvider
 {
-	PixelSize MainScreenSize { get; }
-	PixelPoint MainScreenCenter { get; }
+	int MainScreenWidth { get; }
+	int MainScreenHeight { get; }
+	int MainScreenHorizontalCenter => MainScreenWidth / 2;
+	int MainScreenVerticalCenter => MainScreenHeight / 2;
 }

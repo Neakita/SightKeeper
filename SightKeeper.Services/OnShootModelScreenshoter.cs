@@ -1,8 +1,6 @@
-﻿using ReactiveUI;
-using SightKeeper.Application;
+﻿using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Input;
-using SightKeeper.Common;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
@@ -32,8 +30,9 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 		get => _isEnabled;
 		set
 		{
+			throw new NotImplementedException();
 			if (Model == null) throw new InvalidOperationException("Cannot enable when no model selected");
-			this.RaiseAndSetIfChanged(ref _isEnabled, value);
+			//this.RaiseAndSetIfChanged(ref _isEnabled, value);
 			if (value)
 				_hotKey = _hotKeyManager.Register(MouseButton.Button1, Pressed);
 			else _hotKey.Dispose();
@@ -45,8 +44,9 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 		get => _onHoldFPS;
 		set
 		{
+			throw new NotImplementedException();
 			if (_onHoldFPS == value) return;
-			this.RaiseAndSetIfChanged(ref _onHoldFPS, value);
+			//this.RaiseAndSetIfChanged(ref _onHoldFPS, value);
 			_interval = 1000 / value;
 		}
 	}
@@ -74,10 +74,11 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 
 	private void Pressed(HotKey hotKey)
 	{
+		throw new NotImplementedException();
 		if (Model == null) return;
 		if (!_screenCapture.CanCapture) return;
 		if (_capturing) return;
-		_detectorModel.ThrowIfNull(nameof(_detectorModel));
+		//_detectorModel.ThrowIfNull(nameof(_detectorModel));
 		_capturing = true;
 		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 		dbContext.Attach(_detectorModel!);
@@ -96,21 +97,23 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 
 	private void Capture()
 	{
+		throw new NotImplementedException();
 		if (_detectorModel == null) throw new InvalidOperationException("Detector model not set");
 		byte[] bytes = _screenCapture.Capture();
 		Image image = new(bytes);
-		DetectorAsset asset = new(image);
-		_detectorModel.Screenshots.Add(asset);
+		//DetectorAsset asset = new(image);
+		//_detectorModel.Screenshots.Add(asset);
 	}
 
 	private void DeleteExceedScreenshots()
 	{
-		_detectorModel.ThrowIfNull(nameof(_detectorModel));
+		throw new NotImplementedException();
+		/*_detectorModel.ThrowIfNull(nameof(_detectorModel));
 		List<int> notAssetsIndexes = _detectorModel!.Screenshots.Select((screenshot, index) => (screenshot, index)).Where(item => !item.screenshot.IsAsset).Select(item => item.index).ToList();
 		if (notAssetsIndexes.Count <= MaxImages) return;
 		IOrderedEnumerable<int> indexesToRemove = notAssetsIndexes.Take(notAssetsIndexes.Count - MaxImages).OrderDescending();
 		foreach (int index in indexesToRemove)
-			_detectorModel.Screenshots.RemoveAt(index);
+			_detectorModel.Screenshots.RemoveAt(index);*/
 	}
 
 	private async Task LoadScreenshotsAsync(Model model)

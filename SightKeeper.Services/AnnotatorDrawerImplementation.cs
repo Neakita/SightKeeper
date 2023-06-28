@@ -1,15 +1,12 @@
-﻿using ReactiveUI;
-using SerilogTimings;
+﻿using SerilogTimings;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Common;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using Point = Avalonia.Point;
 
 namespace SightKeeper.Services;
 
-public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDrawer
+public sealed class AnnotatorDrawerImplementation : AnnotatorDrawer
 {
 	private readonly AppDbContextFactory _dbContextFactory;
 	private DetectorAsset? _screenshot;
@@ -22,9 +19,10 @@ public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDra
 		get => _screenshot;
 		set
 		{
+			throw new NotImplementedException();
 			if (_drawing) throw new Exception();
-			if (_screenshot != null) _screenshot.Items = null!;
-			this.RaiseAndSetIfChanged(ref _screenshot, value);
+			// if (_screenshot != null) _screenshot.Items = null!;
+			// this.RaiseAndSetIfChanged(ref _screenshot, value);
 			if (_screenshot != null)
 			{
 				using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
@@ -39,8 +37,9 @@ public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDra
 		get => _itemClass;
 		set
 		{
+			throw new NotImplementedException();
 			if (_drawing) throw new Exception();
-			this.RaiseAndSetIfChanged(ref _itemClass, value);
+			// this.RaiseAndSetIfChanged(ref _itemClass, value);
 		}
 	}
 
@@ -51,36 +50,39 @@ public sealed class AnnotatorDrawerImplementation : ReactiveObject, AnnotatorDra
 
 	public bool BeginDrawing(Point startPosition)
 	{
+		throw new NotImplementedException();
 		if (_drawing) return false;
 		if (ItemClass == null) return false;
-		Screenshot.ThrowIfNull(nameof(Screenshot));
+		//Screenshot.ThrowIfNull(nameof(Screenshot));
 		_drawing = true;
 		startPosition = ClampToNormalized(startPosition);
 		_startPosition = startPosition;
 		_dbContext = _dbContextFactory.CreateDbContext();
 		_dbContext.Attach(Screenshot!);
 		_item = new DetectorItem(ItemClass!, new BoundingBox(startPosition.X, startPosition.Y, 0, 0));
-		Screenshot!.Items.Add(_item);
+		//Screenshot!.Items.Add(_item);
 		return true;
 	}
 
 	public void UpdateDrawing(Point currentPosition)
 	{
-		ThrowHelper.ThrowIf(!_drawing, "Cannot update drawing because no currently drawing");
-		_item.ThrowIfNull(nameof(_item));
+		throw new NotImplementedException();
+		//ThrowHelper.ThrowIf(!_drawing, "Cannot update drawing because no currently drawing");
+		//_item.ThrowIfNull(nameof(_item));
 		currentPosition = ClampToNormalized(currentPosition);
-		_item!.BoundingBox.SetFromTwoPositions(_startPosition, currentPosition);
+		//_item!.BoundingBox.SetFromTwoPositions(_startPosition, currentPosition);
 	}
 
 	public void EndDrawing(Point finishPosition)
 	{
+		throw new NotImplementedException();
 		Operation operation = Operation.Begin("Сохранение аннотации");
-		ThrowHelper.ThrowIf(!_drawing, "Cannot update drawing because no currently drawing");
-		_item.ThrowIfNull(nameof(_item));
-		_dbContext.ThrowIfNull(nameof(_dbContext));
+		//ThrowHelper.ThrowIf(!_drawing, "Cannot update drawing because no currently drawing");
+		//_item.ThrowIfNull(nameof(_item));
+		//_dbContext.ThrowIfNull(nameof(_dbContext));
 		_drawing = false;
 		finishPosition = ClampToNormalized(finishPosition);
-		_item!.BoundingBox.SetFromTwoPositions(_startPosition, finishPosition);
+		//_item!.BoundingBox.SetFromTwoPositions(_startPosition, finishPosition);
 		_dbContext!.SaveChanges();
 		Drawn?.Invoke(_item);
 		_item = null;

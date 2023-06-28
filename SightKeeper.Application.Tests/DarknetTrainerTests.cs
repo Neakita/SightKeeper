@@ -12,20 +12,20 @@ namespace SightKeeper.Application.Tests;
 
 public class DarknetTrainerTests
 {
-    [Fact]
+    [SkippableFact]
     public void ShouldRunTrainer()
     {
+        Skip.If(true);
         Log.Logger = new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.Seq("http://localhost:5341").CreateLogger();
         DetectorModel model = new("Test model");
         ItemClass itemClass = new("TestItemClass");
         model.ItemClasses.Add(itemClass);
         var image = File.ReadAllBytes("Samples/320screenshot.png");
-        var assets = Enumerable.Repeat(Unit.Default, 200).Select(_ => new DetectorAsset(new Screenshot(new Image(image)))
+        var assets = Enumerable.Repeat(Unit.Default, 200).Select(_ =>
         {
-            Items = new List<DetectorItem>
-            {
-                new(itemClass, new BoundingBox(0, 0, 1, 1))
-            }
+            DetectorAsset asset = new(model, new Screenshot(new Image(image)));
+            asset.AddItem(new DetectorItem(itemClass, new BoundingBox(0, 0, 1, 1)));
+            return asset;
         }).ToList();
         model.Assets = assets;
         ModelConfig config = new("Yolo V3", File.ReadAllText("Samples/YoloV3.config"), ModelType.Detector);

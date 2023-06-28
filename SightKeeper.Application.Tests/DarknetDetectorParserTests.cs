@@ -4,7 +4,7 @@ namespace SightKeeper.Application.Tests;
 
 public class DarknetDetectorParserTests
 {
-    private const string Sample = "4: 1292.006348, 1291.511230 avg loss, 0.000000 rate, 43.140034 seconds, 256 images";
+    private const string Sample = " 4: 1292.006348, 1291.511230 avg loss, 0.000000 rate, 43.140034 seconds, 256 images";
     
     [Fact]
     public void ShouldProperlyParse()

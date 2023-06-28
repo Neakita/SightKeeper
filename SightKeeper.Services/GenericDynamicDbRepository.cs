@@ -8,16 +8,17 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services;
 
-public class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEntity> where TEntity : class, Entity
+public class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEntity> where TEntity : class
 {
 	public ReadOnlyObservableCollection<TEntity> Items { get; }
 	public ISourceCache<TEntity, int> ItemsCache { get; }
 
 	public GenericDynamicDbRepository(AppDbContextFactory dbContextFactory)
 	{
+		throw new NotImplementedException();
 		DbContextFactory = dbContextFactory;
 
-		ItemsCache = new SourceCache<TEntity, int>(entity => entity.Id);
+		//ItemsCache = new SourceCache<TEntity, int>(entity => entity.Id);
 		ItemsCache
 			.Connect()
 			.Bind(out ReadOnlyObservableCollection<TEntity> items)
@@ -32,7 +33,7 @@ public class GenericDynamicDbRepository<TEntity> : DynamicRepository<TEntity> wh
 		ItemsCache.Lookup(id)
 			.ValueOrThrow(() => new Exception($"Item of type {typeof(TEntity)} with id {id} not found"));
 
-	public bool Contains(TEntity itemVM) => ItemsCache.Lookup(itemVM.Id).HasValue;
+	public bool Contains(TEntity itemVM) => throw new NotImplementedException(); // ItemsCache.Lookup(itemVM.Id).HasValue;
 
 	public virtual void Add(TEntity item)
 	{

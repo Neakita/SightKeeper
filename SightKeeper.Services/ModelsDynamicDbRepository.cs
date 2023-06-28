@@ -13,17 +13,18 @@ public sealed class ModelsDynamicDbRepository : GenericDynamicDbRepository<Model
 		AppDbContextFactory dbContextFactory,
 		Repository<Game> gamesRepository) : base(dbContextFactory)
 	{
+		throw new NotImplementedException();
 		AppDbContext dbContext = dbContextFactory.CreateDbContext();
-		var models = dbContext.Models
-			.Select(model => new {modelId = model.Id, gameId = model.GameId, configId = model.ConfigId})
-			.Where(modelInfo => modelInfo.gameId != null || modelInfo.configId != null)
-			.ToList();
-		foreach (var modelInfo in models)
-		{
-			Model model = Get(modelInfo.modelId);
-			if (modelInfo.gameId != null)
-				model.Game = gamesRepository.Get(modelInfo.gameId.Value);
-		}
+		//var models = dbContext.Models
+		//	.Select(model => new {modelId = model.Id, gameId = model.GameId, configId = model.ConfigId})
+		//	.Where(modelInfo => modelInfo.gameId != null || modelInfo.configId != null)
+		//	.ToList();
+		// foreach (var modelInfo in models)
+		// {
+		// 	Model model = Get(modelInfo.modelId);
+		// 	if (modelInfo.gameId != null)
+		// 		model.Game = gamesRepository.Get(modelInfo.gameId.Value);
+		// }
 	}
 
 	public override void Add(Model item)

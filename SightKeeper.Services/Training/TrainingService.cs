@@ -4,7 +4,7 @@ using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Services;
+namespace SightKeeper.Services.Training;
 
 public sealed class TrainingService
 {
