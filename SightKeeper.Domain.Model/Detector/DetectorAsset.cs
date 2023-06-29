@@ -3,15 +3,13 @@ using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Domain.Model.Detector;
 
-public sealed class DetectorAsset
+public sealed class DetectorAsset : Asset
 {
-	public Screenshot Screenshot { get; private set; }
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 	
-	public DetectorAsset(DetectorModel model, Screenshot screenshot)
+	public DetectorAsset(DetectorModel model, Screenshot screenshot) : base(screenshot)
 	{
 		_model = model;
-		Screenshot = screenshot;
 		_items = new List<DetectorItem>();
 	}
 
@@ -30,7 +28,6 @@ public sealed class DetectorAsset
 	private DetectorAsset()
 	{
 		_model = null!;
-		Screenshot = null!;
 		_items = null!;
 	}
 }

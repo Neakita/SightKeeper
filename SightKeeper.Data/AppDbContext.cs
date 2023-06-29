@@ -53,7 +53,7 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<Model>().HasMany(model => model.ItemClasses).WithOne().IsRequired();
 		modelBuilder.Entity<DetectorItem>().HasShadowKey().OwnsOne(item => item.BoundingBox);
 		modelBuilder.Entity<DetectorModel>().HasMany(model => model.Assets).WithOne().IsRequired();
-		modelBuilder.Entity<DetectorAsset>().HasShadowKey().HasOne(asset => asset.Screenshot).WithOne().HasPrincipalKey<DetectorAsset>("Id").IsRequired();
+		modelBuilder.Entity<Asset>().HasShadowKey().HasOne(asset => asset.Screenshot).WithOne().HasPrincipalKey<Asset>("Id").IsRequired();
 		modelBuilder.Entity<Screenshot>().HasShadowKey();
 		modelBuilder.Entity<Game>().HasShadowKey();
 		modelBuilder.Entity<Image>().HasShadowKey();
@@ -61,5 +61,6 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<ModelConfig>().HasShadowKey();
 		modelBuilder.Entity<ModelWeights>().HasShadowKey();
 		modelBuilder.Entity<Profile>().HasShadowKey();
+		modelBuilder.Entity<ModelWeights>().HasMany(weights => weights.Assets).WithMany();
 	}
 }

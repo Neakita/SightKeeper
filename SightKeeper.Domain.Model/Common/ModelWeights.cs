@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Model.Detector;
+﻿using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Domain.Model.Common;
 
@@ -7,13 +7,13 @@ public sealed class ModelWeights
     public int Batch { get; private set; }
     public DateTime Date { get; private set; }
     public byte[] Data { get; private set; }
-    public ICollection<DetectorAsset> Assets { get; private set; }
+    public ICollection<Asset> Assets { get; private set; }
     public ModelConfig? Config { get; private set; }
 
-    public ModelWeights(int batch, byte[] data, IEnumerable<DetectorAsset> assets, ModelConfig? config = null)
+    public ModelWeights(int batch, byte[] data, IEnumerable<Asset> assets, ModelConfig? config = null)
         : this(batch, DateTime.Now, data, assets.ToList(), config) { }
     
-    public ModelWeights(int batch, DateTime date, byte[] data, ICollection<DetectorAsset> assets, ModelConfig? config)
+    public ModelWeights(int batch, DateTime date, byte[] data, ICollection<Asset> assets, ModelConfig? config)
     {
         Batch = batch;
         Date = date;
