@@ -29,7 +29,8 @@ public abstract class Model
 		set
 		{
 			if (value != null && value.ModelType != this.GetDomainType())
-				ThrowHelper.ThrowArgumentException(nameof(Config), "Model type mismatch");
+				ThrowHelper.ThrowArgumentException(nameof(Config),
+					$"Model type mismatch, model type must be equal to config model type, but model type is {value.ModelType} and config model type is {this.GetDomainType()}");
 			_config = value;
 		}
 	}
