@@ -61,8 +61,24 @@ public abstract class Model
 		_itemClasses.Add(newItemClass);
 		return newItemClass;
 	}
+
+	public void DeleteItemClass(ItemClass itemClass)
+	{
+		if (!CanDeleteItemClass(itemClass, out var message))
+			throw new InvalidOperationException(message);
+		_itemClasses.Remove(itemClass);
+	}
 	
 	public abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
+	public abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
+
+	public bool CanCreateItemClass(string newItemClassName, [NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		if (_itemClasses.Any(itemClass => itemClass.Name == newItemClassName))
+			message = $"Item class with name \"{newItemClassName}\" already exists";
+		return message == null;
+	}
 
 	public void AddWeights(ModelWeights weights)
 	{
@@ -84,12 +100,4 @@ public abstract class Model
 	private readonly List<ModelWeights> _weights;
 	private Resolution _resolution;
 	private ModelConfig? _config;
-
-	private bool CanCreateItemClass(string newItemClassName, [NotNullWhen(false)] out string? message)
-	{
-		message = null;
-		if (_itemClasses.Any(itemClass => itemClass.Name == newItemClassName))
-			message = $"Item class with name \"{newItemClassName}\" already exists";
-		return message == null;
-	}
 }

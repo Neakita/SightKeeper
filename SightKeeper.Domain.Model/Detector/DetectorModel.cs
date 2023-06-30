@@ -33,7 +33,15 @@ public sealed class DetectorModel : Abstract.Model
 			message = "Cannot change resolution of model with screenshots";
 		return message == null;
 	}
-	
+
+	public override bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		if (Assets.Any(asset => asset.Items.Any(item => item.ItemClass == itemClass)))
+			message = "Cannot delete item class with assets";
+		return message == null;
+	}
+
 	private DetectorModel(string name, string description) : base(name, description)
 	{
 		Assets = null!;
