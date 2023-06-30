@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -14,8 +15,8 @@ public sealed class DetectorModelTests : DbRelatedTests
 	public void ShouldAddDetectorModel()
 	{
 		// arrange
-		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
-		DetectorModel testModel = TestDetectorModel;
+		using var dbContext = DbContextFactory.CreateDbContext();
+		var testModel = TestDetectorModel;
 
 		// act
 		dbContext.Add(testModel);
@@ -82,7 +83,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	[Fact]
 	public void ShouldNotDeleteConfigOnModelDelete()
 	{
-		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
+		using var dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
 		ModelConfig config = new("Test config", "Test content", ModelType.Detector);
 		model.Config = config;
@@ -97,7 +98,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	[Fact]
 	public void ShouldSetConfigToNullOnConfigDelete()
 	{
-		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
+		using var dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
 		ModelConfig config = new("Test config", "Test content", ModelType.Detector);
 		model.Config = config;
@@ -108,5 +109,28 @@ public sealed class DetectorModelTests : DbRelatedTests
 		dbContext.SaveChanges();
 		model.Should().NotBeNull();
 		model.Config.Should().BeNull();
+	}
+
+	[Fact]
+	public void ScreenshotsShouldBeEmptyWhenHaveAssets()
+	{
+		using (var dbContext = DbContextFactory.CreateDbContext())
+		{
+			DetectorModel model = new("Test model");
+			Screenshot screenshot = new(new Image(Array.Empty<byte>()));
+			DetectorAsset asset = new(model, screenshot);
+			model.Assets.Add(asset);
+			dbContext.Add(model);
+			dbContext.SaveChanges();
+		}
+		using (var dbContext = DbContextFactory.CreateDbContext())
+		{
+			var model = dbContext.DetectorModels
+				.Include(m => m.Assets)
+				.Include(m => m.Screenshots)
+				.Single();
+			model.Assets.Should().NotBeEmpty();
+			model.Screenshots.Should().BeEmpty();
+		}
 	}
 }
