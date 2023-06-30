@@ -4,7 +4,7 @@ public sealed class ItemClass
 {
 	public string Name { get; set; }
 	
-	internal ItemClass(string name)
+	public ItemClass(string name)
 	{
 		Name = name;
 	}

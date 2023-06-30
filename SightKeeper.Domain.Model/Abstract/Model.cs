@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Abstract;
 
-public abstract class Model
+public abstract class Model : IModel
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
@@ -30,7 +30,7 @@ public abstract class Model
 		{
 			if (value != null && value.ModelType != this.GetDomainType())
 				ThrowHelper.ThrowArgumentException(nameof(Config),
-					$"Model type mismatch, model type must be equal to config model type, but model type is {value.ModelType} and config model type is {this.GetDomainType()}");
+					$"Model type mismatch, model type must be equal to config model type, but model type is {this.GetDomainType()} and config type is {value.ModelType}");
 			_config = value;
 		}
 	}
@@ -62,6 +62,13 @@ public abstract class Model
 		return newItemClass;
 	}
 
+	public void AddItemClass(ItemClass itemClass)
+	{
+		if (!CanAddItemClass(itemClass, out var message))
+			throw new InvalidOperationException(message);
+		_itemClasses.Add(itemClass);
+	}
+
 	public void DeleteItemClass(ItemClass itemClass)
 	{
 		if (!CanDeleteItemClass(itemClass, out var message))
@@ -77,6 +84,15 @@ public abstract class Model
 		message = null;
 		if (_itemClasses.Any(itemClass => itemClass.Name == newItemClassName))
 			message = $"Item class with name \"{newItemClassName}\" already exists";
+		return message == null;
+	}
+
+	public bool CanAddItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		if (_itemClasses.Contains(itemClass)) message = "Item class already added";
+		else if (_itemClasses.Any(i => i.Name == itemClass.Name))
+			message = $"Item class with name \"{itemClass.Name}\" already exists";
 		return message == null;
 	}
 
