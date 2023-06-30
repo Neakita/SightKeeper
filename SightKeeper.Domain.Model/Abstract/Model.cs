@@ -35,7 +35,7 @@ public abstract class Model
 		}
 	}
 
-	public ICollection<ModelWeights> Weights { get; set; }
+	public IReadOnlyCollection<ModelWeights> Weights => _weights;
 	public ICollection<Screenshot> Screenshots { get; set; }
 
 
@@ -49,16 +49,8 @@ public abstract class Model
 		Description = string.Empty;
 		_resolution = resolution;
 		_itemClasses = new List<ItemClass>();
-		Weights = new List<ModelWeights>();
+		_weights = new List<ModelWeights>();
 		Screenshots = new List<Screenshot>();
-	}
-
-	private bool CanCreateItemClass(string newItemClassName, [NotNullWhen(false)] out string? message)
-	{
-		message = null;
-		if (_itemClasses.Any(itemClass => itemClass.Name == newItemClassName))
-			message = $"Item class with name \"{newItemClassName}\" already exists";
-		return message == null;
 	}
 	
 	public ItemClass CreateItemClass(string name)
@@ -72,17 +64,32 @@ public abstract class Model
 	
 	public abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
 
+	public void AddWeights(ModelWeights weights)
+	{
+		if (_weights.Contains(weights)) ThrowHelper.ThrowArgumentException("Weights already added");
+		_weights.Add(weights);
+	}
+
 	protected Model(string name, string description)
 	{
 		Name = name;
 		Description = description;
 		_resolution = null!;
 		_itemClasses = null!;
-		Weights = null!;
+		_weights = null!;
 		Screenshots = null!;
 	}
 
 	private readonly List<ItemClass> _itemClasses;
+	private readonly List<ModelWeights> _weights;
 	private Resolution _resolution;
 	private ModelConfig? _config;
+
+	private bool CanCreateItemClass(string newItemClassName, [NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		if (_itemClasses.Any(itemClass => itemClass.Name == newItemClassName))
+			message = $"Item class with name \"{newItemClassName}\" already exists";
+		return message == null;
+	}
 }
