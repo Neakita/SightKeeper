@@ -36,7 +36,7 @@ public abstract class Model : IModel
 	}
 
 	public IReadOnlyCollection<ModelWeights> Weights => _weights;
-	public ICollection<Screenshot> Screenshots { get; set; }
+	public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
 
 
 	public Model(string name) : this(name, new Resolution())
@@ -50,7 +50,7 @@ public abstract class Model : IModel
 		_resolution = resolution;
 		_itemClasses = new List<ItemClass>();
 		_weights = new List<ModelWeights>();
-		Screenshots = new List<Screenshot>();
+		_screenshots = new List<Screenshot>();
 	}
 	
 	public ItemClass CreateItemClass(string name)
@@ -102,6 +102,19 @@ public abstract class Model : IModel
 		_weights.Add(weights);
 	}
 
+	public void AddScreenshot(Screenshot screenshot)
+	{
+		if (Screenshots.Contains(screenshot))
+			ThrowHelper.ThrowInvalidOperationException("Screenshot already added");
+		_screenshots.Add(screenshot);
+	}
+	
+	public void DeleteScreenshot(Screenshot screenshot)
+	{
+		if (!_screenshots.Remove(screenshot))
+			ThrowHelper.ThrowInvalidOperationException("Screenshot not found");
+	}
+
 	protected Model(string name, string description)
 	{
 		Name = name;
@@ -109,11 +122,12 @@ public abstract class Model : IModel
 		_resolution = null!;
 		_itemClasses = null!;
 		_weights = null!;
-		Screenshots = null!;
+		_screenshots = null!;
 	}
 
 	private readonly List<ItemClass> _itemClasses;
 	private readonly List<ModelWeights> _weights;
+	private readonly List<Screenshot> _screenshots;
 	private Resolution _resolution;
 	private ModelConfig? _config;
 }

@@ -19,14 +19,14 @@ public class DarknetTrainerTests
         Log.Logger = new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.Seq("http://localhost:5341").CreateLogger();
         DetectorModel model = new("Test model");
         var itemClass = model.CreateItemClass("Test item class");
-        var image = File.ReadAllBytes("Samples/320screenshot.png");
-        var assets = Enumerable.Repeat(Unit.Default, 200).Select(_ =>
+        var imageData = File.ReadAllBytes("Samples/320screenshot.png");
+        for (int i = 0; i < 200; i++)
         {
-            DetectorAsset asset = new(model, new Screenshot(new Image(image)));
+            Screenshot screenshot = new(new Image(imageData));
+            model.AddScreenshot(screenshot);
+            var asset = model.MakeAssetFromScreenshot(screenshot);
             asset.AddItem(new DetectorItem(itemClass, new BoundingBox(0, 0, 1, 1)));
-            return asset;
-        }).ToList();
-        model.Assets = assets;
+        }
         ModelConfig config = new("Yolo V3", File.ReadAllText("Samples/YoloV3.config"), ModelType.Detector);
         model.Config = config;
         DetectorTrainer trainer = new(new DarknetDetectorAdapter(new DetectorImagesExporter(),

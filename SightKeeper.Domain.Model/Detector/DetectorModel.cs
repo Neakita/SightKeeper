@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
 
 public sealed class DetectorModel : Abstract.Model
 {
-	public ICollection<DetectorAsset> Assets { get; set; }
+	public IReadOnlyCollection<DetectorAsset> Assets => _assets;
 
 	public DetectorModel(string name) : this(name, new Resolution())
 	{
@@ -17,7 +19,7 @@ public sealed class DetectorModel : Abstract.Model
 
 	public DetectorModel(string name, Resolution resolution) : base(name, resolution)
 	{
-		Assets = new List<DetectorAsset>();
+		_assets = new List<DetectorAsset>();
 	}
 
 	public override bool CanChangeResolution([NotNullWhen(false)] out string? message)
@@ -42,8 +44,20 @@ public sealed class DetectorModel : Abstract.Model
 		return message == null;
 	}
 
+	public DetectorAsset MakeAssetFromScreenshot(Screenshot screenshot)
+	{
+		if (Assets.Any(asset => asset.Screenshot == screenshot))
+			ThrowHelper.ThrowArgumentException("Asset with same screenshot already exists");
+		DeleteScreenshot(screenshot);
+		DetectorAsset asset = new(this, screenshot);
+		_assets.Add(asset);
+		return asset;
+	}
+
+	private readonly List<DetectorAsset> _assets;
+
 	private DetectorModel(string name, string description) : base(name, description)
 	{
-		Assets = null!;
+		_assets = null!;
 	}
 }

@@ -33,11 +33,11 @@ public sealed class DetectorModelTests : DbRelatedTests
 		var model = TestDetectorModel;
 		Image image = new(Array.Empty<byte>());
 		Screenshot screenshot = new(image);
-		DetectorAsset asset = new(model, screenshot);
+		model.AddScreenshot(screenshot);
+		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
 		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 0, 0));
 		asset.AddItem(item);
-		model.Assets.Add(asset);
 		
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
@@ -57,11 +57,11 @@ public sealed class DetectorModelTests : DbRelatedTests
 		DetectorModel model = new("Test model");
 		Image image = new(Array.Empty<byte>());
 		Screenshot screenshot = new(image);
-		DetectorAsset asset = new(model, screenshot);
+		model.AddScreenshot(screenshot);
+		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
 		DetectorItem detectorItem = new(itemClass, new BoundingBox(0, 0, 1, 1));
 		asset.AddItem(detectorItem);
-		model.Assets.Add(asset);
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 
@@ -118,8 +118,8 @@ public sealed class DetectorModelTests : DbRelatedTests
 		{
 			DetectorModel model = new("Test model");
 			Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-			DetectorAsset asset = new(model, screenshot);
-			model.Assets.Add(asset);
+			model.AddScreenshot(screenshot);
+			model.MakeAssetFromScreenshot(screenshot);
 			dbContext.Add(model);
 			dbContext.SaveChanges();
 		}
