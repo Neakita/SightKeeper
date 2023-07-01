@@ -39,11 +39,11 @@ public abstract class Model : IModel
 	public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
 
 
-	public Model(string name) : this(name, new Resolution())
+	protected Model(string name) : this(name, new Resolution())
 	{
 	}
 
-	public Model(string name, Resolution resolution)
+	protected Model(string name, Resolution resolution)
 	{
 		Name = name;
 		Description = string.Empty;

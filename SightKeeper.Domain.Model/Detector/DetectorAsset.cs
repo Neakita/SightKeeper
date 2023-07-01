@@ -1,6 +1,10 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Runtime.CompilerServices;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
+
+[assembly: InternalsVisibleTo("SightKeeper.Data.Tests"),
+           InternalsVisibleTo("SightKeeper.Data")]
 
 namespace SightKeeper.Domain.Model.Detector;
 
@@ -8,18 +12,22 @@ public sealed class DetectorAsset : Asset
 {
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 
-	internal override Abstract.Model Model => _model;
+	internal override Abstract.Model Model => DetectorModel;
+
+	internal DetectorModel DetectorModel { get; private set; }
 	
-	internal DetectorAsset(DetectorModel model, Screenshot screenshot) : base(screenshot)
+	internal DetectorAsset(DetectorModel detectorModel, Screenshot screenshot) : base(screenshot)
 	{
-		_model = model;
+		DetectorModel = detectorModel;
 		_items = new List<DetectorItem>();
 	}
 
 	public DetectorItem CreateItem(ItemClass itemClass, BoundingBox boundingBox)
 	{
+		if (!DetectorModel.ItemClasses.Contains(itemClass))
+			ThrowHelper.ThrowInvalidOperationException($"Model \"{DetectorModel}\" does not contain item class \"{itemClass}\"");
 		DetectorItem item = new(this, itemClass, boundingBox);
-		AddItem(item);
+		_items.Add(item);
 		return item;
 	}
 
@@ -27,22 +35,12 @@ public sealed class DetectorAsset : Asset
 	{
 		if (!_items.Remove(item)) ThrowHelper.ThrowArgumentException(nameof(item), "Item not found");
 	}
-
-	private readonly DetectorModel _model;
+	
 	private readonly List<DetectorItem> _items;
 
 	private DetectorAsset()
 	{
-		_model = null!;
+		DetectorModel = null!;
 		_items = null!;
-	}
-
-	private void AddItem(DetectorItem item)
-	{
-		if (!_model.ItemClasses.Contains(item.ItemClass))
-			ThrowHelper.ThrowInvalidOperationException($"Model \"{_model}\" does not contain item class \"{item.ItemClass}\"");
-		if (Items.Contains(item))
-			ThrowHelper.ThrowInvalidOperationException("Item already added");
-		_items.Add(item);
 	}
 }
