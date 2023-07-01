@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Linq;
+using CommunityToolkit.Diagnostics;
 using Serilog;
 using SightKeeper.Application.Training.Data;
 using SightKeeper.Application.Training.Images;
@@ -102,7 +103,8 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
 
     private static Task PrepareConfigAsync(Model model, out int maxBatches, CancellationToken cancellationToken)
     {
-        if (model.Config == null) throw new NullReferenceException($"{nameof(model.Config)} is null");
+        if (model.Config == null)
+            ThrowHelper.ThrowArgumentNullException(nameof(model.Config), $"{nameof(model.Config)} is null");
         DetectorConfigParameters parameters = new(64, 16, (ushort)model.Resolution.Width, (ushort)model.Resolution.Height, (ushort) model.ItemClasses.Count);
         maxBatches = parameters.MaxBatches;
         var fileContent = parameters.Deploy(model.Config);

@@ -6,6 +6,8 @@ namespace SightKeeper.Domain.Model.Detector;
 public sealed class DetectorAsset : Asset
 {
 	public IReadOnlyCollection<DetectorItem> Items => _items;
+
+	internal override Abstract.Model Model => _model;
 	
 	internal DetectorAsset(DetectorModel model, Screenshot screenshot) : base(screenshot)
 	{

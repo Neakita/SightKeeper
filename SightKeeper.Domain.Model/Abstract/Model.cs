@@ -56,7 +56,7 @@ public abstract class Model : IModel
 	public ItemClass CreateItemClass(string name)
 	{
 		if (!CanCreateItemClass(name, out var message))
-			throw new InvalidOperationException(message);
+			ThrowHelper.ThrowInvalidOperationException(message);
 		ItemClass newItemClass = new(name);
 		_itemClasses.Add(newItemClass);
 		return newItemClass;
@@ -65,14 +65,14 @@ public abstract class Model : IModel
 	public void AddItemClass(ItemClass itemClass)
 	{
 		if (!CanAddItemClass(itemClass, out var message))
-			throw new InvalidOperationException(message);
+			ThrowHelper.ThrowInvalidOperationException(message);
 		_itemClasses.Add(itemClass);
 	}
 
 	public void DeleteItemClass(ItemClass itemClass)
 	{
 		if (!CanDeleteItemClass(itemClass, out var message))
-			throw new InvalidOperationException(message);
+			ThrowHelper.ThrowInvalidOperationException(message);
 		_itemClasses.Remove(itemClass);
 	}
 	

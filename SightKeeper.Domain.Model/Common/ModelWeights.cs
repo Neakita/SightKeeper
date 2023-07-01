@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.Abstract;
+﻿using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.Abstract;
 
 namespace SightKeeper.Domain.Model.Common;
 
@@ -10,11 +11,13 @@ public sealed class ModelWeights
     public ICollection<Asset> Assets { get; private set; }
     public ModelConfig? Config { get; private set; }
 
-    public ModelWeights(int batch, byte[] data, IEnumerable<Asset> assets, ModelConfig? config = null)
-        : this(batch, DateTime.Now, data, assets.ToList(), config) { }
-    
-    public ModelWeights(int batch, DateTime date, byte[] data, ICollection<Asset> assets, ModelConfig? config)
+    public ModelWeights(Abstract.Model model, int batch, byte[] data, IEnumerable<Asset> assets, ModelConfig? config = null)
+        : this(model, batch, DateTime.Now, data, assets.ToList(), config) { }
+
+    private ModelWeights(Abstract.Model model, int batch, DateTime date, byte[] data, ICollection<Asset> assets, ModelConfig? config)
     {
+        if (assets.Any(asset => asset.Model != model))
+            ThrowHelper.ThrowArgumentException(nameof(assets), $"All assets must must belong to the model {model}");
         Batch = batch;
         Date = date;
         Data = data;
