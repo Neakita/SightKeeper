@@ -1,5 +1,4 @@
-﻿using System.Reactive;
-using Serilog;
+﻿using Serilog;
 using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Images;
 using SightKeeper.Application.Training.Parsing;
@@ -10,7 +9,7 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Application.Tests;
 
-public class DarknetTrainerTests
+public sealed class DarknetTrainerTests
 {
     [SkippableFact]
     public void ShouldRunTrainer()
@@ -20,12 +19,12 @@ public class DarknetTrainerTests
         DetectorModel model = new("Test model");
         var itemClass = model.CreateItemClass("Test item class");
         var imageData = File.ReadAllBytes("Samples/320screenshot.png");
-        for (int i = 0; i < 200; i++)
+        for (var i = 0; i < 200; i++)
         {
             Screenshot screenshot = new(new Image(imageData));
             model.AddScreenshot(screenshot);
             var asset = model.MakeAssetFromScreenshot(screenshot);
-            asset.AddItem(new DetectorItem(itemClass, new BoundingBox(0, 0, 1, 1)));
+            asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
         }
         ModelConfig config = new("Yolo V3", File.ReadAllText("Samples/YoloV3.config"), ModelType.Detector);
         model.Config = config;

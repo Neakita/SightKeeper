@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
 
@@ -15,13 +16,11 @@ public sealed class DetectorAsset : Asset
 		_items = new List<DetectorItem>();
 	}
 
-	public void AddItem(DetectorItem item)
+	public DetectorItem CreateItem(ItemClass itemClass, BoundingBox boundingBox)
 	{
-		if (!_model.ItemClasses.Contains(item.ItemClass))
-			ThrowHelper.ThrowInvalidOperationException($"Model \"{_model}\" does not contain item class \"{item.ItemClass}\"");
-		if (Items.Contains(item))
-			ThrowHelper.ThrowInvalidOperationException("Item already added");
-		_items.Add(item);
+		DetectorItem item = new(this, itemClass, boundingBox);
+		AddItem(item);
+		return item;
 	}
 
 	private readonly DetectorModel _model;
@@ -31,5 +30,14 @@ public sealed class DetectorAsset : Asset
 	{
 		_model = null!;
 		_items = null!;
+	}
+
+	private void AddItem(DetectorItem item)
+	{
+		if (!_model.ItemClasses.Contains(item.ItemClass))
+			ThrowHelper.ThrowInvalidOperationException($"Model \"{_model}\" does not contain item class \"{item.ItemClass}\"");
+		if (Items.Contains(item))
+			ThrowHelper.ThrowInvalidOperationException("Item already added");
+		_items.Add(item);
 	}
 }

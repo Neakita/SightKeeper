@@ -36,8 +36,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		model.AddScreenshot(screenshot);
 		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
-		DetectorItem item = new(itemClass, new BoundingBox(0, 0, 0, 0));
-		asset.AddItem(item);
+		var item = asset.CreateItem(itemClass, new BoundingBox());
 		
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
@@ -60,8 +59,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		model.AddScreenshot(screenshot);
 		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
-		DetectorItem detectorItem = new(itemClass, new BoundingBox(0, 0, 1, 1));
-		asset.AddItem(detectorItem);
+		var item = asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 
@@ -69,7 +67,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		dbContext.Set<Screenshot>().Should().Contain(screenshot);
 		dbContext.Set<DetectorAsset>().Should().Contain(asset);
 		dbContext.Set<ItemClass>().Should().Contain(itemClass);
-		dbContext.Set<DetectorItem>().Should().Contain(detectorItem);
+		dbContext.Set<DetectorItem>().Should().Contain(item);
 
 		dbContext.DetectorModels.Remove(model);
 		dbContext.SaveChanges();

@@ -16,8 +16,7 @@ public sealed class ItemClassesTests : DbRelatedTests
 		Screenshot screenshot = new(new Image(Array.Empty<byte>()));
 		model.AddScreenshot(screenshot);
 		var asset = model.MakeAssetFromScreenshot(screenshot);
-		DetectorItem item = new(itemClass, new BoundingBox());
-		asset.AddItem(item);
+		var item = asset.CreateItem(itemClass, new BoundingBox());
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 

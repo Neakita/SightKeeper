@@ -108,7 +108,7 @@ public sealed class ModelEditorTests
         Screenshot screenshot = new(new Image(Array.Empty<byte>()));
         model.AddScreenshot(screenshot);
         var asset = model.MakeAssetFromScreenshot(screenshot);
-        asset.AddItem(new DetectorItem(itemClass, new BoundingBox()));
+        asset.CreateItem(itemClass, new BoundingBox());
         ModelChanges changes = new(model.Name, model.Description, model.Resolution, new List<ItemClass>(), model.Game, model.Config);
         Assert.Throws<InvalidOperationException>(() => editor.ApplyChanges(model, changes));
         model.ItemClasses.Should().Contain(itemClass);
