@@ -7,10 +7,16 @@ public sealed class BoundingBoxValidator : AbstractValidator<BoundingBox>
 {
     public BoundingBoxValidator()
     {
-        RuleFor(boundingBox => boundingBox.X)
+        RuleFor(boundingBox => boundingBox.X1)
             .Must(x => x >= 0).WithMessage("{PropertyName} must be greater than or equal to 0")
             .Must(x => x <= 1).WithMessage("{PropertyName} must be less than or equal to 1");
-        RuleFor(boundingBox => boundingBox.Y)
+        RuleFor(boundingBox => boundingBox.Y1)
+            .Must(y => y >= 0).WithMessage("{PropertyName} must be greater than or equal to 0")
+            .Must(y => y <= 1).WithMessage("{PropertyName} must be less than or equal to 1");
+        RuleFor(boundingBox => boundingBox.X2)
+            .Must(x => x >= 0).WithMessage("{PropertyName} must be greater than or equal to 0")
+            .Must(x => x <= 1).WithMessage("{PropertyName} must be less than or equal to 1");
+        RuleFor(boundingBox => boundingBox.Y2)
             .Must(y => y >= 0).WithMessage("{PropertyName} must be greater than or equal to 0")
             .Must(y => y <= 1).WithMessage("{PropertyName} must be less than or equal to 1");
         RuleFor(boundingBox => boundingBox.Width)
