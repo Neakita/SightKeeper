@@ -23,6 +23,11 @@ public sealed class DetectorAsset : Asset
 		return item;
 	}
 
+	public void DeleteItem(DetectorItem item)
+	{
+		if (!_items.Remove(item)) ThrowHelper.ThrowArgumentException(nameof(item), "Item not found");
+	}
+
 	private readonly DetectorModel _model;
 	private readonly List<DetectorItem> _items;
 
