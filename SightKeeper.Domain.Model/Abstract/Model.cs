@@ -8,18 +8,6 @@ public abstract class Model : IModel
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
-	public Resolution Resolution
-	{
-		get => _resolution;
-		set
-		{
-			if (!CanChangeResolution(out var message))
-				ThrowHelper.ThrowInvalidOperationException(message);
-			_resolution = value;
-		}
-	}
-
-	public IReadOnlyCollection<ItemClass> ItemClasses => _itemClasses;
 
 	public Game? Game { get; set; }
 
@@ -35,23 +23,28 @@ public abstract class Model : IModel
 		}
 	}
 
-	public IReadOnlyCollection<ModelWeights> Weights => _weights;
-	public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
+	#region Resolution
 
-
-	protected Model(string name) : this(name, new Resolution())
+	public Resolution Resolution
 	{
+		get => _resolution;
+		set
+		{
+			if (!CanChangeResolution(out var message))
+				ThrowHelper.ThrowInvalidOperationException(message);
+			_resolution = value;
+		}
 	}
+	
+	public abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
 
-	protected Model(string name, Resolution resolution)
-	{
-		Name = name;
-		Description = string.Empty;
-		_resolution = resolution;
-		_itemClasses = new List<ItemClass>();
-		_weights = new List<ModelWeights>();
-		_screenshots = new List<Screenshot>();
-	}
+	private Resolution _resolution;
+
+	#endregion
+
+	#region ItemClasses
+	
+	public IReadOnlyCollection<ItemClass> ItemClasses => _itemClasses;
 	
 	public ItemClass CreateItemClass(string name)
 	{
@@ -62,29 +55,19 @@ public abstract class Model : IModel
 		return newItemClass;
 	}
 
-	public void AddItemClass(ItemClass itemClass)
-	{
-		if (!CanAddItemClass(itemClass, out var message))
-			ThrowHelper.ThrowInvalidOperationException(message);
-		_itemClasses.Add(itemClass);
-	}
-
-	public void DeleteItemClass(ItemClass itemClass)
-	{
-		if (!CanDeleteItemClass(itemClass, out var message))
-			ThrowHelper.ThrowInvalidOperationException(message);
-		_itemClasses.Remove(itemClass);
-	}
-	
-	public abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
-	public abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
-
 	public bool CanCreateItemClass(string newItemClassName, [NotNullWhen(false)] out string? message)
 	{
 		message = null;
 		if (_itemClasses.Any(itemClass => itemClass.Name == newItemClassName))
 			message = $"Item class with name \"{newItemClassName}\" already exists";
 		return message == null;
+	}
+
+	public void AddItemClass(ItemClass itemClass)
+	{
+		if (!CanAddItemClass(itemClass, out var message))
+			ThrowHelper.ThrowInvalidOperationException(message);
+		_itemClasses.Add(itemClass);
 	}
 
 	public bool CanAddItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
@@ -95,12 +78,23 @@ public abstract class Model : IModel
 			message = $"Item class with name \"{itemClass.Name}\" already exists";
 		return message == null;
 	}
-
-	public void AddWeights(ModelWeights weights)
+	
+	public void DeleteItemClass(ItemClass itemClass)
 	{
-		if (_weights.Contains(weights)) ThrowHelper.ThrowArgumentException("Weights already added");
-		_weights.Add(weights);
+		if (!CanDeleteItemClass(itemClass, out var message))
+			ThrowHelper.ThrowInvalidOperationException(message);
+		_itemClasses.Remove(itemClass);
 	}
+
+	public abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
+	
+	private readonly List<ItemClass> _itemClasses;
+
+	#endregion
+
+	#region Screenshots
+	
+	public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
 
 	public void AddScreenshot(Screenshot screenshot)
 	{
@@ -114,6 +108,38 @@ public abstract class Model : IModel
 		if (!_screenshots.Remove(screenshot))
 			ThrowHelper.ThrowInvalidOperationException("Screenshot not found");
 	}
+	
+	private readonly List<Screenshot> _screenshots;
+
+	#endregion
+
+	#region Weights
+	
+	public IReadOnlyCollection<ModelWeights> Weights => _weights;
+
+	public void AddWeights(ModelWeights weights)
+	{
+		if (_weights.Contains(weights)) ThrowHelper.ThrowArgumentException("Weights already added");
+		_weights.Add(weights);
+	}
+	
+	private readonly List<ModelWeights> _weights;
+
+	#endregion
+	
+	protected Model(string name) : this(name, new Resolution())
+	{
+	}
+
+	protected Model(string name, Resolution resolution)
+	{
+		Name = name;
+		Description = string.Empty;
+		_resolution = resolution;
+		_itemClasses = new List<ItemClass>();
+		_weights = new List<ModelWeights>();
+		_screenshots = new List<Screenshot>();
+	}
 
 	protected Model(string name, string description)
 	{
@@ -124,10 +150,6 @@ public abstract class Model : IModel
 		_weights = null!;
 		_screenshots = null!;
 	}
-
-	private readonly List<ItemClass> _itemClasses;
-	private readonly List<ModelWeights> _weights;
-	private readonly List<Screenshot> _screenshots;
-	private Resolution _resolution;
+	
 	private ModelConfig? _config;
 }
