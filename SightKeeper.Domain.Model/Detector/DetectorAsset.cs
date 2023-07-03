@@ -26,7 +26,7 @@ public sealed class DetectorAsset : Asset
 	{
 		if (!DetectorModel.ItemClasses.Contains(itemClass))
 			ThrowHelper.ThrowInvalidOperationException($"Model \"{DetectorModel}\" does not contain item class \"{itemClass}\"");
-		DetectorItem item = new(this, itemClass, boundingBox);
+		DetectorItem item = new(itemClass, boundingBox);
 		_items.Add(item);
 		return item;
 	}
@@ -35,7 +35,16 @@ public sealed class DetectorAsset : Asset
 	{
 		if (!_items.Remove(item)) ThrowHelper.ThrowArgumentException(nameof(item), "Item not found");
 	}
-	
+
+	public void DeleteItems(IEnumerable<DetectorItem> items)
+	{
+		foreach (var item in items)
+			if (!_items.Remove(item))
+				ThrowHelper.ThrowArgumentException(nameof(items), "One or more items not found");
+	}
+
+	public void ClearItems() => _items.Clear();
+
 	private readonly List<DetectorItem> _items;
 
 	private DetectorAsset()

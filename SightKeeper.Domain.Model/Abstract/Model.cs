@@ -98,10 +98,12 @@ public abstract class Model : IModel
 
 	public void AddScreenshot(Screenshot screenshot)
 	{
-		if (Screenshots.Contains(screenshot))
-			ThrowHelper.ThrowInvalidOperationException("Screenshot already added");
+		if (!CanAddScreenshot(screenshot, out var message))
+			ThrowHelper.ThrowInvalidOperationException(message);
 		_screenshots.Add(screenshot);
 	}
+	
+	public abstract bool CanAddScreenshot(Screenshot screenshot, [NotNullWhen(false)] out string? message);
 	
 	public void DeleteScreenshot(Screenshot screenshot)
 	{

@@ -44,6 +44,16 @@ public sealed class DetectorModel : Abstract.Model
 		return message == null;
 	}
 
+	public override bool CanAddScreenshot(Screenshot screenshot, [NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		if (Screenshots.Contains(screenshot))
+			message = "Screenshot already added";
+		else if (Assets.Any(asset => asset.Screenshot == screenshot))
+			message = "Screenshot already added via asset";
+		return message == null;
+	}
+
 	public DetectorAsset MakeAssetFromScreenshot(Screenshot screenshot)
 	{
 		if (Assets.Any(asset => asset.Screenshot == screenshot))
@@ -52,6 +62,12 @@ public sealed class DetectorModel : Abstract.Model
 		DetectorAsset asset = new(this, screenshot);
 		_assets.Add(asset);
 		return asset;
+	}
+
+	public void DeleteAsset(DetectorAsset asset)
+	{
+		if (!_assets.Remove(asset))
+			ThrowHelper.ThrowArgumentException(nameof(asset), "Asset not found");
 	}
 
 	private readonly List<DetectorAsset> _assets;

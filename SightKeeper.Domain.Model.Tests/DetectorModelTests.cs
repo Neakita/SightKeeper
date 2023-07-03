@@ -123,4 +123,61 @@ public class DetectorModelTests
         Screenshot screenshot = new(new Image(Array.Empty<byte>()));
         Assert.Throws<InvalidOperationException>(() => model.MakeAssetFromScreenshot(screenshot));
     }
+
+    [Fact]
+    public void ShouldNotAddDuplicateItemClasses()
+    {
+        DetectorModel model = new("Model");
+        ItemClass itemClass = new("Item class");
+        model.AddItemClass(itemClass);
+        Assert.Throws<InvalidOperationException>(() => model.AddItemClass(itemClass));
+    }
+
+    [Fact]
+    public void ShouldNotBeAbleAddDuplicateItemClasses()
+    {
+        DetectorModel model = new("Model");
+        ItemClass itemClass = new("Item class");
+        model.AddItemClass(itemClass);
+        model.CanAddItemClass(itemClass, out var message).Should().BeFalse();
+        message.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void ShouldAddWeights()
+    {
+        DetectorModel model = new("Model");
+        ModelWeights weights = new(model, 0, Array.Empty<byte>(), Enumerable.Empty<Asset>());
+        model.AddWeights(weights);
+        model.Weights.Should().Contain(weights);
+    }
+
+    [Fact]
+    public void ShouldNotAddDuplicateWeights()
+    {
+        DetectorModel model = new("Model");
+        ModelWeights weights = new(model, 0, Array.Empty<byte>(), Enumerable.Empty<Asset>());
+        model.AddWeights(weights);
+        Assert.Throws<ArgumentException>(() => model.AddWeights(weights));
+    }
+
+    [Fact]
+    public void ShouldNotSetConfigForDifferentModelType()
+    {
+        DetectorModel model = new("Model");
+        ModelConfig config = new("Config", string.Empty, ModelType.Classifier);
+        Assert.Throws<ArgumentException>(() => model.Config = config);
+    }
+
+    [Fact]
+    public void ShouldNotDeleteItemClassWithAssetItems()
+    {
+        DetectorModel model = new("Model");
+        var itemClass = model.CreateItemClass("Item class");
+        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
+        model.AddScreenshot(screenshot);
+        var asset = model.MakeAssetFromScreenshot(screenshot);
+        asset.CreateItem(itemClass, new BoundingBox());
+        Assert.Throws<InvalidOperationException>(() => model.DeleteItemClass(itemClass));
+    }
 }
