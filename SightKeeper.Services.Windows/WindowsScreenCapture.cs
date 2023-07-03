@@ -1,6 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
+using Image = SightKeeper.Domain.Model.Common.Image;
 
 namespace SightKeeper.Services.Windows;
 
@@ -11,22 +15,24 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		_screenBoundsProvider = screenBoundsProvider;
 	}
 	
-	public byte[] Capture()
+	public Image Capture()
 	{
-		throw new NotImplementedException();
-		/*Resolution.ThrowIfNull(nameof(Resolution));
+		ThrowHelper.ThrowArgumentNullException(nameof(Resolution));
 		using Bitmap windowsBitmap = new(Resolution!.Width, Resolution.Height);
 		using Graphics graphics = Graphics.FromImage(windowsBitmap);
 
 		Point point = new(
-			_screenBoundsProvider.MainScreenCenter.X - Resolution.Width / 2 - XOffset, 
-			_screenBoundsProvider.MainScreenCenter.Y - Resolution.Height / 2 - YOffset);
+			_screenBoundsProvider.MainScreenHorizontalCenter - Resolution.Width / 2 - XOffset, 
+			_screenBoundsProvider.MainScreenVerticalCenter - Resolution.Height / 2 - YOffset);
 
 		graphics.CopyFromScreen(point, Point.Empty, new Size(Resolution.Width, Resolution.Height));
 		using MemoryStream stream = new();
 		windowsBitmap.Save(stream, ImageFormat.Bmp);
-		return stream.ToArray();*/
+		return new Image(stream.ToArray());
 	}
+
+	public Task<Image> CaptureAsync(CancellationToken cancellationToken = default) =>
+		Task.FromResult(Capture());
 
 	public Game? Game { get; set; }
 	public Resolution? Resolution { get; set; }

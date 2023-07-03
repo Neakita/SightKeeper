@@ -1,8 +1,9 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Application.Training.Images;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using Image = SixLabors.ImageSharp.Image;
 
-namespace SightKeeper.Application.Training.Images;
+namespace SightKeeper.Services;
 
 public sealed class DetectorImagesExporter : ImagesExporter<DetectorModel>
 {

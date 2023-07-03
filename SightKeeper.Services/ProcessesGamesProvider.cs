@@ -2,7 +2,7 @@
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Services;
 
 public sealed class ProcessesGamesProvider : AvailableGamesProvider
 {

@@ -1,17 +1,17 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Application.Annotating;
 
 public interface DetectorAnnotator
 {
-	DetectorModel? Model { get; set; }
-	DetectorAsset? SelectedScreenshot { get; set; }
-	ItemClass? SelectedItemClass { get; set; }
-	Task DeleteItemAsync(int itemIndex);
-	void MarkAsAssets(IReadOnlyCollection<int> screenshotsIndexes);
-	void DeleteScreenshots(IReadOnlyCollection<int> screenshotsIndexes);
-	bool BeginDrawing(Point position);
-	void UpdateDrawing(Point position);
-	void EndDrawing(Point position);
+    void Annotate(DetectorModel model, Screenshot screenshot, ItemClass itemClass, BoundingBox boundingBox);
+    void Annotate(DetectorAsset asset, ItemClass itemClass, BoundingBox boundingBox);
+    void MakeAsset(DetectorModel model, Screenshot screenshot);
+    void Move(DetectorItem item, BoundingBox boundingBox);
+    void ChangeItemClass(DetectorItem item, ItemClass newItemClass);
+    void DeleteItem(DetectorAsset asset, DetectorItem item);
+    void ReturnToScreenshots(DetectorModel model, DetectorAsset asset);
+    void ClearItems(DetectorAsset asset);
 }

@@ -1,13 +1,12 @@
 ﻿using Serilog;
 using SightKeeper.Application.Training;
-using SightKeeper.Application.Training.Images;
 using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Application.Tests;
+namespace SightKeeper.Services.Tests;
 
 public sealed class DarknetTrainerTests
 {

@@ -24,7 +24,7 @@ public sealed class TrainingService
             {
                 var dbContext = _scope.Resolve<AppDbContext>();
                 dbContext.Attach(detectorModel);
-                detectorModel.Weights.Add(weights);
+                detectorModel.AddWeights(weights);
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
         }

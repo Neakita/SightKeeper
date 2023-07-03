@@ -11,9 +11,8 @@ namespace SightKeeper.Services.Windows;
 
 public sealed class DirectXScreenCapture : ScreenCapture
 {
-	public byte[] Capture()
+	public Domain.Model.Common.Image Capture()
 	{
-		throw new NotSupportedException();
 		var factory = new Factory1();
         var adapter = factory.GetAdapter1(0);
         Console.WriteLine(adapter.Description1.Description);
@@ -46,7 +45,7 @@ public sealed class DirectXScreenCapture : ScreenCapture
         try
         {
             if (duplicatedOutput.TryAcquireNextFrame(10, out OutputDuplicateFrameInformation _, out screenResource) != Result.Ok)
-                return ImageToBytes(bmp);
+                return new Domain.Model.Common.Image(ImageToBytes(bmp));
 
             using (Texture2D screenTexture2D = screenResource.QueryInterface<Texture2D>())
             {
@@ -70,7 +69,12 @@ public sealed class DirectXScreenCapture : ScreenCapture
         {
             screenResource?.Dispose();
         }
-        return ImageToBytes(bmp);
+        return new Domain.Model.Common.Image(ImageToBytes(bmp));
+	}
+
+	public Task<Domain.Model.Common.Image> CaptureAsync(CancellationToken cancellationToken = default)
+	{
+		return Task.FromResult(Capture());
 	}
 
 	public Game? Game { get; set; }

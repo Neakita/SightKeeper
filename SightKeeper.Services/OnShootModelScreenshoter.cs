@@ -1,11 +1,10 @@
-﻿using SightKeeper.Application;
+﻿using CommunityToolkit.Diagnostics;
+using SharpHook.Native;
+using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Input;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Model.Detector;
-using Image = SightKeeper.Domain.Model.Common.Image;
-using MouseButton = SharpHook.Native.MouseButton;
 
 namespace SightKeeper.Services;
 
@@ -16,12 +15,11 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 		get => _model;
 		set
 		{
-			if (IsEnabled) throw new InvalidOperationException("Cannot change model while enabled");
-			_detectorModel = value as DetectorModel;
-			if (_model == null) return;
-			_ = LoadScreenshotsAsync(_model);
-			_screenCapture.Resolution = _model.Resolution;
-			_screenCapture.Game = _model.Game;
+			if (IsEnabled)
+				ThrowHelper.ThrowInvalidOperationException("Cannot change model while enabled");
+			_model = value;
+			_screenCapture.Resolution = _model?.Resolution;
+			_screenCapture.Game = _model?.Game;
 		}
 	}
 
@@ -30,12 +28,13 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 		get => _isEnabled;
 		set
 		{
-			throw new NotImplementedException();
-			if (Model == null) throw new InvalidOperationException("Cannot enable when no model selected");
-			//this.RaiseAndSetIfChanged(ref _isEnabled, value);
+			if (Model == null)
+				ThrowHelper.ThrowInvalidOperationException("Cannot enable when no model selected");
+			if (_isEnabled == value) return;
+			_isEnabled = value;
 			if (value)
-				_hotKey = _hotKeyManager.Register(MouseButton.Button1, Pressed);
-			else _hotKey.Dispose();
+				_hotKey = _hotKeyManager.Register(MouseButton.Button1, OnPressed);
+			else _hotKey?.Dispose();
 		}
 	}
 
@@ -44,9 +43,7 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 		get => _onHoldFPS;
 		set
 		{
-			throw new NotImplementedException();
-			if (_onHoldFPS == value) return;
-			//this.RaiseAndSetIfChanged(ref _onHoldFPS, value);
+			_onHoldFPS = value;
 			_interval = 1000 / value;
 		}
 	}
@@ -65,65 +62,51 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 	private readonly HotKeyManager<MouseButton> _hotKeyManager;
 	private readonly AppDbContextFactory _dbContextFactory;
 	private Model? _model;
-	private DetectorModel? _detectorModel;
 	private bool _isEnabled;
 	private byte _onHoldFPS = 1;
 	private int _interval;
 	private bool _capturing;
-	private HotKey _hotKey;
+	private HotKey? _hotKey;
 
-	private void Pressed(HotKey hotKey)
+	private void OnPressed(HotKey hotKey)
 	{
-		throw new NotImplementedException();
+		// TODO this is probably not thread safe
+		Task.Run(() => OnPressedAsync(hotKey));
+	}
+	
+	private async Task OnPressedAsync(HotKey hotKey, CancellationToken cancellationToken = default)
+	{
 		if (Model == null) return;
 		if (!_screenCapture.CanCapture) return;
-		if (_capturing) return;
-		//_detectorModel.ThrowIfNull(nameof(_detectorModel));
+		if (_capturing) return; // TODO double checked locking?
 		_capturing = true;
-		using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
-		dbContext.Attach(_detectorModel!);
 		while (hotKey.IsPressed)
 		{
-			lock (this)
-			{
-				Capture();
-			}
+			await CaptureAsync(cancellationToken);
 			Thread.Sleep(_interval);
 		}
-		DeleteExceedScreenshots();
-		dbContext.SaveChanges();
+		await DeleteExceedScreenshotsAsync(cancellationToken);
 		_capturing = false;
 	}
 
-	private void Capture()
+	private async Task CaptureAsync(CancellationToken cancellationToken)
 	{
-		throw new NotImplementedException();
-		if (_detectorModel == null) throw new InvalidOperationException("Detector model not set");
-		byte[] bytes = _screenCapture.Capture();
-		Image image = new(bytes);
-		//DetectorAsset asset = new(image);
-		//_detectorModel.Screenshots.Add(asset);
+		if (Model == null)
+			ThrowHelper.ThrowInvalidOperationException("Cannot capture when no model selected");
+		var image = await _screenCapture.CaptureAsync(cancellationToken);
+		Screenshot screenshot = new(image);
+		Model.AddScreenshot(screenshot);
 	}
 
-	private void DeleteExceedScreenshots()
+	private async Task DeleteExceedScreenshotsAsync(CancellationToken cancellationToken)
 	{
-		throw new NotImplementedException();
-		/*_detectorModel.ThrowIfNull(nameof(_detectorModel));
-		List<int> notAssetsIndexes = _detectorModel!.Screenshots.Select((screenshot, index) => (screenshot, index)).Where(item => !item.screenshot.IsAsset).Select(item => item.index).ToList();
-		if (notAssetsIndexes.Count <= MaxImages) return;
-		IOrderedEnumerable<int> indexesToRemove = notAssetsIndexes.Take(notAssetsIndexes.Count - MaxImages).OrderDescending();
-		foreach (int index in indexesToRemove)
-			_detectorModel.Screenshots.RemoveAt(index);*/
-	}
-
-	private async Task LoadScreenshotsAsync(Model model)
-	{
-		if (model is DetectorModel detectorModel)
+		if (Model == null)
+			ThrowHelper.ThrowInvalidOperationException("Cannot delete screenshots when no model selected");
+		await Task.Run(() =>
 		{
-			await using AppDbContext dbContext = await _dbContextFactory.CreateDbContextAsync();
-			dbContext.Attach(model);
-			await dbContext.Entry(detectorModel).Collection(m => m.Screenshots).LoadAsync();
-		}
-		else throw new InvalidCastException();
+			var screenshotsToDelete = Model.Screenshots.OrderByDescending(screenshot => screenshot.CreationDate).Skip(MaxImages).ToList();
+			foreach (var screenshot in screenshotsToDelete)
+				Model.DeleteScreenshot(screenshot); // TODO optimization (delete by indexes)
+		}, cancellationToken);
 	}
 }
