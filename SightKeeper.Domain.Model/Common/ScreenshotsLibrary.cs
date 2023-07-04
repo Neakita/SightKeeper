@@ -7,9 +7,24 @@ public class ScreenshotsLibrary
 {
     public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
 
-    public ScreenshotsLibrary()
+    internal ScreenshotsLibrary()
     {
         _screenshots = new List<Screenshot>();
+    }
+
+    public Screenshot CreateScreenshot(Image image)
+    {
+        Screenshot screenshot = new(this, image);
+        _screenshots.Add(screenshot);
+        return screenshot;
+    }
+
+    public virtual bool CanCreateScreenshot(Image image, [NotNullWhen(false)] out string? message)
+    {
+        message = null;
+        if (Screenshots.Any(screenshot => screenshot.Image == image))
+            message = "Screenshot already added";
+        return message == null;
     }
 
     public void AddScreenshot(Screenshot screenshot)

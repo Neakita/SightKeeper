@@ -30,7 +30,7 @@ public class DetectorModelTests
     public void ShouldCannotChangeResolutionAndMessageIsNotNullWhenHaveScreenshots()
     {
         DetectorModel model = new("Test model");
-        model.ScreenshotsLibrary.AddScreenshot(new Screenshot(new Image(Array.Empty<byte>())));
+        model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         model.CanChangeResolution(out var message).Should().BeFalse();
         message.Should().NotBeNull();
     }
@@ -41,7 +41,7 @@ public class DetectorModelTests
         Resolution firstResolution = new(64, 64);
         Resolution secondResolution = new(128, 128);
         DetectorModel model = new("Test model", firstResolution);
-        model.ScreenshotsLibrary.AddScreenshot(new Screenshot(new Image(Array.Empty<byte>())));
+        model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         model.Resolution.Should().Be(firstResolution);
         Assert.Throws<InvalidOperationException>(() =>
         {
@@ -54,8 +54,7 @@ public class DetectorModelTests
     public void ShouldCannotChangeResolutionAndMessageIsNotNullWhenHaveAssets()
     {
         DetectorModel model = new("Test model");
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.AddScreenshot(screenshot);
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         model.MakeAssetFromScreenshot(screenshot);
         model.CanChangeResolution(out var message).Should().BeFalse();
         message.Should().NotBeNull();
@@ -67,8 +66,7 @@ public class DetectorModelTests
         Resolution firstResolution = new(64, 64);
         Resolution secondResolution = new(128, 128);
         DetectorModel model = new("Test model", firstResolution);
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.AddScreenshot(screenshot);
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         model.MakeAssetFromScreenshot(screenshot);
         model.Resolution.Should().Be(firstResolution);
         Assert.Throws<InvalidOperationException>(() =>
@@ -91,8 +89,7 @@ public class DetectorModelTests
     public void ShouldAddScreenshot()
     {
         DetectorModel model = new("Test model");
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.AddScreenshot(screenshot);
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         model.ScreenshotsLibrary.Screenshots.Should().OnlyContain(x => x == screenshot);
     }
 
@@ -100,8 +97,7 @@ public class DetectorModelTests
     public void ShouldNotAddDuplicateScreenshot()
     {
         DetectorModel model = new("Test model");
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.AddScreenshot(screenshot);
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         Assert.Throws<InvalidOperationException>(() => model.ScreenshotsLibrary.AddScreenshot(screenshot));
     }
 
@@ -109,19 +105,10 @@ public class DetectorModelTests
     public void ShouldMakeAssetAndDeleteItFromScreenshots()
     {
         DetectorModel model = new("Test model");
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.AddScreenshot(screenshot);
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         var asset = model.MakeAssetFromScreenshot(screenshot);
         model.ScreenshotsLibrary.Screenshots.Should().BeEmpty();
         model.Assets.Should().Contain(asset);
-    }
-
-    [Fact]
-    public void ShouldNotMakeAssetFromNotOwnedScreenshot()
-    {
-        DetectorModel model = new("Test model");
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        Assert.Throws<InvalidOperationException>(() => model.MakeAssetFromScreenshot(screenshot));
     }
 
     [Fact]
@@ -174,8 +161,7 @@ public class DetectorModelTests
     {
         DetectorModel model = new("Model");
         var itemClass = model.CreateItemClass("Item class");
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.AddScreenshot(screenshot);
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         var asset = model.MakeAssetFromScreenshot(screenshot);
         asset.CreateItem(itemClass, new BoundingBox());
         Assert.Throws<InvalidOperationException>(() => model.DeleteItemClass(itemClass));

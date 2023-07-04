@@ -47,7 +47,12 @@ public sealed class DetectorModel : Abstract.Model
 	{
 		if (Assets.Any(asset => asset.Screenshot == screenshot))
 			ThrowHelper.ThrowArgumentException("Asset with same screenshot already exists");
-		ScreenshotsLibrary.DeleteScreenshot(screenshot);
+		if (screenshot.Library is ModelScreenshotsLibrary modelLibrary)
+		{
+			if (modelLibrary.Model == this) ScreenshotsLibrary.DeleteScreenshot(screenshot);
+			else ThrowHelper.ThrowArgumentException(nameof(screenshot), $"Screenshot is owned by {modelLibrary.Model}");
+		}
+		
 		DetectorAsset asset = new(this, screenshot);
 		_assets.Add(asset);
 		return asset;

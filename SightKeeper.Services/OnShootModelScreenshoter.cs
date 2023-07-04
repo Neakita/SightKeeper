@@ -3,9 +3,7 @@ using SharpHook.Native;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Input;
-using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Services;
 
@@ -51,17 +49,15 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 
 	public ushort MaxImages { get; set; } = 500;
 
-	public ShootModelScreenshoter(ScreenCapture screenCapture, HotKeyManager<MouseButton> hotKeyManager, AppDbContextFactory dbContextFactory)
+	public ShootModelScreenshoter(ScreenCapture screenCapture, HotKeyManager<MouseButton> hotKeyManager)
 	{
 		_screenCapture = screenCapture;
 		_hotKeyManager = hotKeyManager;
-		_dbContextFactory = dbContextFactory;
 		_interval = 1000 / FramesPerSecond;
 	}
 
 	private readonly ScreenCapture _screenCapture;
 	private readonly HotKeyManager<MouseButton> _hotKeyManager;
-	private readonly AppDbContextFactory _dbContextFactory;
 	private Model? _model;
 	private bool _isEnabled;
 	private byte _onHoldFPS = 1;
@@ -95,8 +91,7 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 		if (Model == null)
 			ThrowHelper.ThrowInvalidOperationException("Cannot capture when no model selected");
 		var image = await _screenCapture.CaptureAsync(cancellationToken);
-		Screenshot screenshot = new(image);
-		Model.ScreenshotsLibrary.AddScreenshot(screenshot);
+		Model.ScreenshotsLibrary.CreateScreenshot(image);
 	}
 
 	private async Task DeleteExceedScreenshotsAsync(CancellationToken cancellationToken)

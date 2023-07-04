@@ -13,8 +13,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
         using (var initialDbContext = DbContextFactory.CreateDbContext())
         {
             DetectorModel model = new("Model");
-            Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-            model.ScreenshotsLibrary.AddScreenshot(screenshot);
+            var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
             model.MakeAssetFromScreenshot(screenshot);
             initialDbContext.Add(model);
             initialDbContext.SaveChanges();

@@ -104,8 +104,7 @@ public sealed class ModelEditorTests
         var editor = Editor;
         DetectorModel model = new("Untitled model");
         var itemClass = model.CreateItemClass("Item class");
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.AddScreenshot(screenshot);
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         var asset = model.MakeAssetFromScreenshot(screenshot);
         asset.CreateItem(itemClass, new BoundingBox());
         ModelChanges changes = new(model.Name, model.Description, model.Resolution, new List<ItemClass>(), model.Game, model.Config);

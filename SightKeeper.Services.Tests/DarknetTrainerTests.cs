@@ -19,8 +19,7 @@ public sealed class DarknetTrainerTests
         var imageData = File.ReadAllBytes("Samples/320screenshot.png");
         for (var i = 0; i < 200; i++)
         {
-            Screenshot screenshot = new(new Image(imageData));
-            model.ScreenshotsLibrary.AddScreenshot(screenshot);
+            var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(imageData));
             var asset = model.MakeAssetFromScreenshot(screenshot);
             asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
         }

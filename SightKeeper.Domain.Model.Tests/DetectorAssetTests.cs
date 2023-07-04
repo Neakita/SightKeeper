@@ -10,8 +10,7 @@ public sealed class DetectorAssetTests
     public void ShouldDeleteItems()
     {
         DetectorModel model = new("Model");
-        Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.AddScreenshot(screenshot);
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         var asset = model.MakeAssetFromScreenshot(screenshot);
         var itemClass = model.CreateItemClass("Item class");
         var item = asset.CreateItem(itemClass, new BoundingBox());
@@ -24,10 +23,8 @@ public sealed class DetectorAssetTests
     public void ShouldNotDeleteItemWhichIsNotInAsset()
     {
         DetectorModel model = new("Model");
-        Screenshot screenshot1 = new(new Image(Array.Empty<byte>()));
-        Screenshot screenshot2 = new(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.AddScreenshot(screenshot1);
-        model.ScreenshotsLibrary.AddScreenshot(screenshot2);
+        var screenshot1 = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+        var screenshot2 =  model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         var asset1 = model.MakeAssetFromScreenshot(screenshot1);
         var asset2 = model.MakeAssetFromScreenshot(screenshot2);
         var itemClass = model.CreateItemClass("Item class");
