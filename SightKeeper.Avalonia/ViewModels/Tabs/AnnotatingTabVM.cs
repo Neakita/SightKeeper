@@ -7,8 +7,6 @@ using ReactiveUI.Fody.Helpers;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Domain.Services;
-using SightKeeper.Common;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 

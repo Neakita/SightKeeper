@@ -4,9 +4,7 @@ using System.Collections.Specialized;
 using Avalonia.Metadata;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Common;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 

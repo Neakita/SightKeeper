@@ -6,7 +6,6 @@ using Material.Icons;
 using ReactiveUI;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.Views.Windows;
-using SightKeeper.Common;
 
 namespace SightKeeper.Avalonia.Extensions;
 

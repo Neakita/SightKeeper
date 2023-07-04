@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
@@ -12,7 +11,7 @@ public sealed class DetectorAssetTests
     {
         DetectorModel model = new("Model");
         Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.AddScreenshot(screenshot);
+        model.ScreenshotsLibrary.AddScreenshot(screenshot);
         var asset = model.MakeAssetFromScreenshot(screenshot);
         var itemClass = model.CreateItemClass("Item class");
         var item = asset.CreateItem(itemClass, new BoundingBox());
@@ -27,8 +26,8 @@ public sealed class DetectorAssetTests
         DetectorModel model = new("Model");
         Screenshot screenshot1 = new(new Image(Array.Empty<byte>()));
         Screenshot screenshot2 = new(new Image(Array.Empty<byte>()));
-        model.AddScreenshot(screenshot1);
-        model.AddScreenshot(screenshot2);
+        model.ScreenshotsLibrary.AddScreenshot(screenshot1);
+        model.ScreenshotsLibrary.AddScreenshot(screenshot2);
         var asset1 = model.MakeAssetFromScreenshot(screenshot1);
         var asset2 = model.MakeAssetFromScreenshot(screenshot2);
         var itemClass = model.CreateItemClass("Item class");

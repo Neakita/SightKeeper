@@ -2,7 +2,6 @@
 using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
@@ -21,7 +20,7 @@ public sealed class DarknetTrainerTests
         for (var i = 0; i < 200; i++)
         {
             Screenshot screenshot = new(new Image(imageData));
-            model.AddScreenshot(screenshot);
+            model.ScreenshotsLibrary.AddScreenshot(screenshot);
             var asset = model.MakeAssetFromScreenshot(screenshot);
             asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
         }

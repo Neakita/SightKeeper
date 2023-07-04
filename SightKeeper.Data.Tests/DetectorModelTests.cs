@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
@@ -33,7 +32,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		var model = TestDetectorModel;
 		Image image = new(Array.Empty<byte>());
 		Screenshot screenshot = new(image);
-		model.AddScreenshot(screenshot);
+		model.ScreenshotsLibrary.AddScreenshot(screenshot);
 		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
 		var item = asset.CreateItem(itemClass, new BoundingBox());
@@ -56,7 +55,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		DetectorModel model = new("Test model");
 		Image image = new(Array.Empty<byte>());
 		Screenshot screenshot = new(image);
-		model.AddScreenshot(screenshot);
+		model.ScreenshotsLibrary.AddScreenshot(screenshot);
 		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
 		var item = asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
@@ -116,7 +115,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		{
 			DetectorModel model = new("Test model");
 			Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-			model.AddScreenshot(screenshot);
+			model.ScreenshotsLibrary.AddScreenshot(screenshot);
 			model.MakeAssetFromScreenshot(screenshot);
 			dbContext.Add(model);
 			dbContext.SaveChanges();
@@ -125,10 +124,10 @@ public sealed class DetectorModelTests : DbRelatedTests
 		{
 			var model = dbContext.DetectorModels
 				.Include(m => m.Assets)
-				.Include(m => m.Screenshots)
+				.Include(m => m.ScreenshotsLibrary.Screenshots)
 				.Single();
 			model.Assets.Should().NotBeEmpty();
-			model.Screenshots.Should().BeEmpty();
+			model.ScreenshotsLibrary.Screenshots.Should().BeEmpty();
 		}
 	}
 }

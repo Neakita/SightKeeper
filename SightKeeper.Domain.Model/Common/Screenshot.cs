@@ -1,6 +1,4 @@
-﻿using SightKeeper.Domain.Model.Common;
-
-namespace SightKeeper.Domain.Model.Abstract;
+﻿namespace SightKeeper.Domain.Model.Common;
 
 public sealed class Screenshot
 {

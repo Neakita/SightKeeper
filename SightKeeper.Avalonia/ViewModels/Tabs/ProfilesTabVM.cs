@@ -1,6 +1,4 @@
-﻿using SightKeeper.Common;
-
-namespace SightKeeper.Avalonia.ViewModels.Tabs;
+﻿namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
 public sealed class ProfilesTabVM
 {

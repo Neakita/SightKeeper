@@ -1,6 +1,5 @@
 ﻿using SightKeeper.Application.Annotating;
 using SightKeeper.Data;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
@@ -60,7 +59,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         _dbContext.Attach(model);
         var screenshot = asset.Screenshot;
         model.DeleteAsset(asset);
-        model.AddScreenshot(screenshot);
+        model.ScreenshotsLibrary.AddScreenshot(screenshot);
         _dbContext.SaveChanges();
     }
 

@@ -18,7 +18,6 @@ using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Domain.Services;
 using SightKeeper.Data;
 using SightKeeper.Services;
 using SightKeeper.Services.Input;

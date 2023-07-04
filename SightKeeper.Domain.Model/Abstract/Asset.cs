@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.Abstract;
+﻿using SightKeeper.Domain.Model.Common;
+
+namespace SightKeeper.Domain.Model.Abstract;
 
 public abstract class Asset
 {

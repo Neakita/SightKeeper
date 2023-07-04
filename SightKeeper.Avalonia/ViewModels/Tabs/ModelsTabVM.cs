@@ -8,8 +8,6 @@ using SightKeeper.Avalonia.ViewModels.Windows;
 using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Domain.Services;
-using SightKeeper.Common;
 using SightKeeper.Avalonia.Extensions;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;

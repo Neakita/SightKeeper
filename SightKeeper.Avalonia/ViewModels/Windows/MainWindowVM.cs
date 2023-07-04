@@ -4,7 +4,6 @@ using Material.Icons;
 using ReactiveUI.Fody.Helpers;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.Views.Tabs;
-using SightKeeper.Common;
 
 namespace SightKeeper.Avalonia.ViewModels.Windows;
 

@@ -5,6 +5,7 @@ using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Input;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Services;
 
@@ -95,7 +96,7 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 			ThrowHelper.ThrowInvalidOperationException("Cannot capture when no model selected");
 		var image = await _screenCapture.CaptureAsync(cancellationToken);
 		Screenshot screenshot = new(image);
-		Model.AddScreenshot(screenshot);
+		Model.ScreenshotsLibrary.AddScreenshot(screenshot);
 	}
 
 	private async Task DeleteExceedScreenshotsAsync(CancellationToken cancellationToken)
@@ -104,9 +105,9 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 			ThrowHelper.ThrowInvalidOperationException("Cannot delete screenshots when no model selected");
 		await Task.Run(() =>
 		{
-			var screenshotsToDelete = Model.Screenshots.OrderByDescending(screenshot => screenshot.CreationDate).Skip(MaxImages).ToList();
+			var screenshotsToDelete = Model.ScreenshotsLibrary.Screenshots.OrderByDescending(screenshot => screenshot.CreationDate).Skip(MaxImages).ToList();
 			foreach (var screenshot in screenshotsToDelete)
-				Model.DeleteScreenshot(screenshot); // TODO optimization (delete by indexes)
+				Model.ScreenshotsLibrary.DeleteScreenshot(screenshot); // TODO optimization (delete by indexes)
 		}, cancellationToken);
 	}
 }

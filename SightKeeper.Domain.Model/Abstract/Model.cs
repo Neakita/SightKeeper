@@ -92,28 +92,7 @@ public abstract class Model : IModel
 
 	#endregion
 
-	#region Screenshots
-	
-	public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
-
-	public void AddScreenshot(Screenshot screenshot)
-	{
-		if (!CanAddScreenshot(screenshot, out var message))
-			ThrowHelper.ThrowInvalidOperationException(message);
-		_screenshots.Add(screenshot);
-	}
-	
-	public abstract bool CanAddScreenshot(Screenshot screenshot, [NotNullWhen(false)] out string? message);
-	
-	public void DeleteScreenshot(Screenshot screenshot)
-	{
-		if (!_screenshots.Remove(screenshot))
-			ThrowHelper.ThrowInvalidOperationException("Screenshot not found");
-	}
-	
-	private readonly List<Screenshot> _screenshots;
-
-	#endregion
+	public ModelScreenshotsLibrary ScreenshotsLibrary { get; }
 
 	#region Weights
 	
@@ -140,7 +119,7 @@ public abstract class Model : IModel
 		_resolution = resolution;
 		_itemClasses = new List<ItemClass>();
 		_weights = new List<ModelWeights>();
-		_screenshots = new List<Screenshot>();
+		ScreenshotsLibrary = new ModelScreenshotsLibrary(this);
 	}
 
 	protected Model(string name, string description)
@@ -150,7 +129,7 @@ public abstract class Model : IModel
 		_resolution = null!;
 		_itemClasses = null!;
 		_weights = null!;
-		_screenshots = null!;
+		ScreenshotsLibrary = null!;
 	}
 	
 	private ModelConfig? _config;

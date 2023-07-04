@@ -63,5 +63,7 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		modelBuilder.Entity<ModelWeights>().HasMany(weights => weights.Assets).WithMany();
 		modelBuilder.Entity<DetectorAsset>().HasOne(asset => asset.DetectorModel).WithMany(model => model.Assets);
+		modelBuilder.Entity<Model>().HasOne(model => model.ScreenshotsLibrary).WithOne().HasPrincipalKey<Model>();
+		modelBuilder.Entity<ScreenshotsLibrary>().HasShadowKey();
 	}
 }

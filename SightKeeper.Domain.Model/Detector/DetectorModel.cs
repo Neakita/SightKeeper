@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
@@ -25,7 +24,7 @@ public sealed class DetectorModel : Abstract.Model
 	public override bool CanChangeResolution([NotNullWhen(false)] out string? message)
 	{
 		message = null;
-		var hasScreenshots = Screenshots.Any();
+		var hasScreenshots = ScreenshotsLibrary.Screenshots.Any();
 		var hasAssets = Assets.Any();
 		if (hasScreenshots && hasAssets)
 			message = "Cannot change resolution of model with screenshots and assets";
@@ -44,21 +43,11 @@ public sealed class DetectorModel : Abstract.Model
 		return message == null;
 	}
 
-	public override bool CanAddScreenshot(Screenshot screenshot, [NotNullWhen(false)] out string? message)
-	{
-		message = null;
-		if (Screenshots.Contains(screenshot))
-			message = "Screenshot already added";
-		else if (Assets.Any(asset => asset.Screenshot == screenshot))
-			message = "Screenshot already added via asset";
-		return message == null;
-	}
-
 	public DetectorAsset MakeAssetFromScreenshot(Screenshot screenshot)
 	{
 		if (Assets.Any(asset => asset.Screenshot == screenshot))
 			ThrowHelper.ThrowArgumentException("Asset with same screenshot already exists");
-		DeleteScreenshot(screenshot);
+		ScreenshotsLibrary.DeleteScreenshot(screenshot);
 		DetectorAsset asset = new(this, screenshot);
 		_assets.Add(asset);
 		return asset;

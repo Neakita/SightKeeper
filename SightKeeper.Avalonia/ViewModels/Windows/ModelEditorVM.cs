@@ -6,8 +6,6 @@ using ReactiveUI.Fody.Helpers;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Domain.Services;
-using SightKeeper.Common;
 
 namespace SightKeeper.Avalonia.ViewModels.Windows;
 

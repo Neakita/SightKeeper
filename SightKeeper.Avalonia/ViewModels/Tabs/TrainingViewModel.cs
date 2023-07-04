@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Training;
 using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 

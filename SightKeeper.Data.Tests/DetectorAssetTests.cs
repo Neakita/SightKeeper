@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
@@ -15,7 +14,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
         {
             DetectorModel model = new("Model");
             Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-            model.AddScreenshot(screenshot);
+            model.ScreenshotsLibrary.AddScreenshot(screenshot);
             model.MakeAssetFromScreenshot(screenshot);
             initialDbContext.Add(model);
             initialDbContext.SaveChanges();

@@ -1,5 +1,4 @@
 ﻿using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Common;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 

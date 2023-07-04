@@ -1,6 +1,5 @@
 ﻿using SightKeeper.Application.Modelling;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services.Validating;
@@ -106,7 +105,7 @@ public sealed class ModelEditorTests
         DetectorModel model = new("Untitled model");
         var itemClass = model.CreateItemClass("Item class");
         Screenshot screenshot = new(new Image(Array.Empty<byte>()));
-        model.AddScreenshot(screenshot);
+        model.ScreenshotsLibrary.AddScreenshot(screenshot);
         var asset = model.MakeAssetFromScreenshot(screenshot);
         asset.CreateItem(itemClass, new BoundingBox());
         ModelChanges changes = new(model.Name, model.Description, model.Resolution, new List<ItemClass>(), model.Game, model.Config);

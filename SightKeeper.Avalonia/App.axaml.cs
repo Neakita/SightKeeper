@@ -1,6 +1,5 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SightKeeper.Common;
 using SightKeeper.Services.Input;
 
 namespace SightKeeper.Avalonia;
