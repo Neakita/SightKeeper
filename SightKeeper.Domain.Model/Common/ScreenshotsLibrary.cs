@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.Common;
 
@@ -7,45 +6,34 @@ public class ScreenshotsLibrary
 {
     public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
 
-    internal ScreenshotsLibrary()
+    public ScreenshotsLibrary()
     {
         _screenshots = new List<Screenshot>();
     }
 
     public Screenshot CreateScreenshot(Image image)
     {
+        if (image.Screenshot != null)
+            ThrowHelper.ThrowArgumentException("Image already added as screenshot");
         Screenshot screenshot = new(this, image);
         _screenshots.Add(screenshot);
+        image.Screenshot = screenshot;
         return screenshot;
-    }
-
-    public virtual bool CanCreateScreenshot(Image image, [NotNullWhen(false)] out string? message)
-    {
-        message = null;
-        if (Screenshots.Any(screenshot => screenshot.Image == image))
-            message = "Screenshot already added";
-        return message == null;
     }
 
     public void AddScreenshot(Screenshot screenshot)
     {
-        if (!CanAddScreenshot(screenshot, out var message))
-            ThrowHelper.ThrowInvalidOperationException(message);
+        if (screenshot.Library != null)
+            ThrowHelper.ThrowArgumentException("Screenshot already added to library");
         _screenshots.Add(screenshot);
-    }
-
-    public virtual bool CanAddScreenshot(Screenshot screenshot, [NotNullWhen(false)] out string? message)
-    {
-        message = null;
-        if (Screenshots.Contains(screenshot))
-            message = "Screenshot already added";
-        return message == null;
+        screenshot.Library = this;
     }
 	
     public void DeleteScreenshot(Screenshot screenshot)
     {
         if (!_screenshots.Remove(screenshot))
             ThrowHelper.ThrowInvalidOperationException("Screenshot not found");
+        screenshot.Library = null;
     }
 	
     private readonly List<Screenshot> _screenshots;

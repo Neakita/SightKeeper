@@ -98,7 +98,7 @@ public class DetectorModelTests
     {
         DetectorModel model = new("Test model");
         var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
-        Assert.Throws<InvalidOperationException>(() => model.ScreenshotsLibrary.AddScreenshot(screenshot));
+        Assert.Throws<ArgumentException>(() => model.ScreenshotsLibrary.AddScreenshot(screenshot));
     }
 
     [Fact]

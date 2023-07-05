@@ -12,14 +12,6 @@ public sealed class ModelScreenshotsLibrary : ScreenshotsLibrary
         Model = model;
     }
 
-    public override bool CanCreateScreenshot(Image image, [NotNullWhen(false)] out string? message)
-    {
-        if (!base.CanCreateScreenshot(image, out message)) return false;
-        if (Model is DetectorModel detector && detector.Assets.Any(asset => asset.Screenshot.Image == image))
-            message = "Screenshot already added via asset";
-        return message == null;
-    }
-
     private ModelScreenshotsLibrary()
     {
         Model = null!;
