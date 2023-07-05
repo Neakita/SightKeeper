@@ -93,20 +93,7 @@ public abstract class Model : IModel
 	#endregion
 
 	public ModelScreenshotsLibrary ScreenshotsLibrary { get; }
-
-	#region Weights
-	
-	public IReadOnlyCollection<ModelWeights> Weights => _weights;
-
-	public void AddWeights(ModelWeights weights)
-	{
-		if (_weights.Contains(weights)) ThrowHelper.ThrowArgumentException("Weights already added");
-		_weights.Add(weights);
-	}
-	
-	private readonly List<ModelWeights> _weights;
-
-	#endregion
+	public ModelWeightsLibrary WeightsLibrary { get; }
 	
 	protected Model(string name) : this(name, new Resolution())
 	{
@@ -118,7 +105,7 @@ public abstract class Model : IModel
 		Description = string.Empty;
 		_resolution = resolution;
 		_itemClasses = new List<ItemClass>();
-		_weights = new List<ModelWeights>();
+		WeightsLibrary = new ModelWeightsLibrary();
 		ScreenshotsLibrary = new ModelScreenshotsLibrary(this);
 	}
 
@@ -128,7 +115,7 @@ public abstract class Model : IModel
 		Description = description;
 		_resolution = null!;
 		_itemClasses = null!;
-		_weights = null!;
+		WeightsLibrary = null!;
 		ScreenshotsLibrary = null!;
 	}
 	

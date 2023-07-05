@@ -135,8 +135,8 @@ public class DetectorModelTests
     {
         DetectorModel model = new("Model");
         ModelWeights weights = new(model, 0, Array.Empty<byte>(), Enumerable.Empty<Asset>());
-        model.AddWeights(weights);
-        model.Weights.Should().Contain(weights);
+        model.WeightsLibrary.AddWeights(weights);
+        model.WeightsLibrary.Weights.Should().Contain(weights);
     }
 
     [Fact]
@@ -144,8 +144,8 @@ public class DetectorModelTests
     {
         DetectorModel model = new("Model");
         ModelWeights weights = new(model, 0, Array.Empty<byte>(), Enumerable.Empty<Asset>());
-        model.AddWeights(weights);
-        Assert.Throws<ArgumentException>(() => model.AddWeights(weights));
+        model.WeightsLibrary.AddWeights(weights);
+        Assert.Throws<ArgumentException>(() => model.WeightsLibrary.AddWeights(weights));
     }
 
     [Fact]
