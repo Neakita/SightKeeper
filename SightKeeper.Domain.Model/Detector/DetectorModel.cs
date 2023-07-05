@@ -38,7 +38,7 @@ public sealed class DetectorModel : Abstract.Model
 	public override bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
 	{
 		message = null;
-		if (Assets.Any(asset => asset.Items.Any(item => item.ItemClass == itemClass)))
+		if (itemClass.DetectorItems.Any())
 			message = "Cannot delete item class with assets";
 		return message == null;
 	}
