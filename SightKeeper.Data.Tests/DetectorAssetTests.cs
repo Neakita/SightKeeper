@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
 
@@ -8,22 +7,30 @@ namespace SightKeeper.Data.Tests;
 public sealed class DetectorAssetTests : DbRelatedTests
 {
     [Fact]
-    public void EFShouldSetModelInAbstractAssetForDetectorAsset()
+    public void ShouldAddAssetWithScreenshot()
     {
-        using (var initialDbContext = DbContextFactory.CreateDbContext())
-        {
-            DetectorModel model = new("Model");
-            var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
-            model.MakeAssetFromScreenshot(screenshot);
-            initialDbContext.Add(model);
-            initialDbContext.SaveChanges();
-        }
+        DetectorModel model = new("Model");
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+        var asset = model.MakeAssetFromScreenshot(screenshot);
+        using var dbContext = DbContextFactory.CreateDbContext();
+        dbContext.Add(model);
+        dbContext.SaveChanges();
+        dbContext.Set<Screenshot>().Should().Contain(screenshot);
+        dbContext.Set<DetectorAsset>().Should().Contain(asset);
+    }
 
-        using (var dbContext = DbContextFactory.CreateDbContext())
-        {
-            var model = dbContext.DetectorModels.Include(model => model.Assets).Single();
-            var asset = model.Assets.Single();
-            asset.DetectorModel.Should().Be(model);
-        }
+    [Fact]
+    public void AssetAndScreenshotShouldHaveEqualIds()
+    {
+        DetectorModel model = new("Model");
+        model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+        model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+        var screenshot3 = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+        var asset = model.MakeAssetFromScreenshot(screenshot3);
+        using var dbContext = DbContextFactory.CreateDbContext();
+        dbContext.Add(model);
+        var screenshotId = dbContext.Entry(screenshot3).IdProperty().CurrentValue;
+        var assetId = dbContext.Entry(asset).IdProperty().CurrentValue;
+        screenshotId.Should().Be(assetId);
     }
 }

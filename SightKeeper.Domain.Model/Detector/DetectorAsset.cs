@@ -1,10 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
-
-[assembly: InternalsVisibleTo("SightKeeper.Data.Tests"),
-           InternalsVisibleTo("SightKeeper.Data")]
 
 namespace SightKeeper.Domain.Model.Detector;
 

@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using SightKeeper.Domain.Model.Detector;
-
-namespace SightKeeper.Domain.Model.Common;
+﻿namespace SightKeeper.Domain.Model.Common;
 
 public sealed class ModelScreenshotsLibrary : ScreenshotsLibrary
 {

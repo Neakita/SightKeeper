@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -48,22 +49,23 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
+		modelBuilder.ApplyConfiguration(new AssetConfiguration());
+		modelBuilder.ApplyConfiguration(new DetectorAssetConfiguration());
+		modelBuilder.ApplyConfiguration(new DetectorModelConfiguration());
+		modelBuilder.ApplyConfiguration(new ModelScreenshotsLibraryConfiguration());
+		modelBuilder.ApplyConfiguration(new ScreenshotsLibraryConfiguration());
+		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
+		modelBuilder.ApplyConfiguration(new ImageConfiguration());
+		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());
 		modelBuilder.Entity<Model>().HasShadowKey();
 		modelBuilder.Entity<Model>().OwnsOne(model => model.Resolution);
 		modelBuilder.Entity<Model>().HasMany(model => model.ItemClasses).WithOne().IsRequired();
 		modelBuilder.Entity<DetectorItem>().HasShadowKey().OwnsOne(item => item.BoundingBox);
-		modelBuilder.Entity<DetectorModel>().HasMany(model => model.Assets).WithOne().IsRequired();
-		modelBuilder.Entity<Asset>().HasShadowKey().HasOne(asset => asset.Screenshot).WithOne().HasPrincipalKey<Asset>("Id").IsRequired();
-		modelBuilder.Entity<Screenshot>().HasShadowKey();
 		modelBuilder.Entity<Game>().HasShadowKey();
-		modelBuilder.Entity<Image>().HasShadowKey();
-		modelBuilder.Entity<ItemClass>().HasShadowKey();
 		modelBuilder.Entity<ModelConfig>().HasShadowKey();
 		modelBuilder.Entity<ModelWeights>().HasShadowKey();
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		modelBuilder.Entity<ModelWeights>().HasMany(weights => weights.Assets).WithMany();
-		modelBuilder.Entity<DetectorAsset>().HasOne(asset => asset.DetectorModel).WithMany(model => model.Assets);
 		modelBuilder.Entity<Model>().HasOne(model => model.ScreenshotsLibrary).WithOne().HasPrincipalKey<Model>();
-		modelBuilder.Entity<ScreenshotsLibrary>().HasShadowKey();
 	}
 }
