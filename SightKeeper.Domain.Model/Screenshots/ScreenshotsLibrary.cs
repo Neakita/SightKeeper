@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Domain.Model.Common;
+namespace SightKeeper.Domain.Model;
 
 public class ScreenshotsLibrary
 {

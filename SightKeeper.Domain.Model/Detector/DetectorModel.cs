@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
 
-public sealed class DetectorModel : Abstract.Model
+public sealed class DetectorModel : Model.Model
 {
 	public IReadOnlyCollection<DetectorAsset> Assets => _assets;
 

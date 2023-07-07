@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Model.Common;
+namespace SightKeeper.Domain.Model.Model;
 
 public sealed class ModelWeightsLibrary
 {

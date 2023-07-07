@@ -4,6 +4,7 @@ using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Model.Model;
 
 namespace SightKeeper.Services.Tests;
 

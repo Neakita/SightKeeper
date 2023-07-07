@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
+
+namespace SightKeeper.Domain.Model;
 
 public sealed class ItemClassGroup
 {

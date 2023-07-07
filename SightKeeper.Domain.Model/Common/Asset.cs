@@ -1,12 +1,10 @@
-﻿using SightKeeper.Domain.Model.Common;
-
-namespace SightKeeper.Domain.Model.Abstract;
+﻿namespace SightKeeper.Domain.Model.Common;
 
 public abstract class Asset
 {
     public Screenshot Screenshot { get; private set; }
     
-    internal abstract Model Model { get; }
+    internal abstract Model.Model Model { get; }
     
     protected Asset(Screenshot screenshot)
     {

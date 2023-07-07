@@ -1,8 +1,8 @@
 ﻿using Autofac;
 using SightKeeper.Application.Training;
 using SightKeeper.Data;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Model.Model;
 
 namespace SightKeeper.Services.Training;
 

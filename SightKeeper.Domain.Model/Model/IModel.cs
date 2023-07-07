@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Domain.Model.Abstract;
+namespace SightKeeper.Domain.Model.Model;
 
 public interface IModel
 {

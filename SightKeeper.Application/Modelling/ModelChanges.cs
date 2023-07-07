@@ -1,5 +1,5 @@
-﻿using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Model;
 
 namespace SightKeeper.Application.Modelling;
 

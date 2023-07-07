@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.Abstract;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
@@ -8,7 +7,7 @@ public sealed class DetectorAsset : Asset
 {
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 
-	internal override Abstract.Model Model => DetectorModel;
+	internal override Model.Model Model => DetectorModel;
 
 	internal DetectorModel DetectorModel { get; private set; }
 	

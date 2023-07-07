@@ -3,7 +3,7 @@ using SharpHook.Native;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Input;
-using SightKeeper.Domain.Model.Abstract;
+using SightKeeper.Domain.Model.Model;
 
 namespace SightKeeper.Services;
 

@@ -1,6 +1,7 @@
-﻿using SightKeeper.Domain.Model.Detector;
+﻿using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Domain.Model.Common;
+namespace SightKeeper.Domain.Model;
 
 public sealed class Profile
 {

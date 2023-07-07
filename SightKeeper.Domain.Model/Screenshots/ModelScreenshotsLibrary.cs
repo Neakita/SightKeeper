@@ -1,10 +1,10 @@
-﻿namespace SightKeeper.Domain.Model.Common;
+﻿namespace SightKeeper.Domain.Model;
 
 public sealed class ModelScreenshotsLibrary : ScreenshotsLibrary
 {
-    internal Abstract.Model Model { get; private set; }
+    internal Model.Model Model { get; private set; }
     
-    internal ModelScreenshotsLibrary(Abstract.Model model)
+    internal ModelScreenshotsLibrary(Model.Model model)
     {
         Model = model;
     }
