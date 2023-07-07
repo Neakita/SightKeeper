@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
 
@@ -32,5 +33,22 @@ public sealed class DetectorAssetTests : DbRelatedTests
         var screenshotId = dbContext.Entry(screenshot3).IdProperty().CurrentValue;
         var assetId = dbContext.Entry(asset).IdProperty().CurrentValue;
         screenshotId.Should().Be(assetId);
+    }
+
+    [Fact]
+    public void ScreenshotsShouldBeEmptyAndAssetsShouldNot()
+    {
+        using (var initialDbContext = DbContextFactory.CreateDbContext())
+        {
+            DetectorModel newModel = new("Model");
+            var screenshot = newModel.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+            newModel.MakeAssetFromScreenshot(screenshot);
+            initialDbContext.Add(newModel);
+            initialDbContext.SaveChanges();
+        }
+        using var dbContext = DbContextFactory.CreateDbContext();
+        var model = dbContext.DetectorModels.Include(model => model.ScreenshotsLibrary.Screenshots).Include(model => model.Assets).Single();
+        model.ScreenshotsLibrary.Screenshots.Should().BeEmpty();
+        model.Assets.Should().NotBeEmpty();
     }
 }

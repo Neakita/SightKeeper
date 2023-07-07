@@ -8,9 +8,7 @@ public abstract class Model : IModel
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
-
 	public Game? Game { get; set; }
-
 	public ModelConfig? Config
 	{
 		get => _config;
@@ -35,8 +33,6 @@ public abstract class Model : IModel
 			_resolution = value;
 		}
 	}
-	
-	public abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
 
 	private Resolution _resolution;
 
@@ -48,35 +44,19 @@ public abstract class Model : IModel
 	
 	public ItemClass CreateItemClass(string name)
 	{
-		if (!CanCreateItemClass(name, out var message))
-			ThrowHelper.ThrowInvalidOperationException(message);
+		if (_itemClasses.Any(itemClass => itemClass.Name == name))
+			ThrowHelper.ThrowArgumentException($"Item class with name \"{name}\" already exists");
 		ItemClass newItemClass = new(name);
 		_itemClasses.Add(newItemClass);
 		return newItemClass;
 	}
 
-	public bool CanCreateItemClass(string newItemClassName, [NotNullWhen(false)] out string? message)
-	{
-		message = null;
-		if (_itemClasses.Any(itemClass => itemClass.Name == newItemClassName))
-			message = $"Item class with name \"{newItemClassName}\" already exists";
-		return message == null;
-	}
-
 	public void AddItemClass(ItemClass itemClass)
 	{
-		if (!CanAddItemClass(itemClass, out var message))
-			ThrowHelper.ThrowInvalidOperationException(message);
-		_itemClasses.Add(itemClass);
-	}
-
-	public bool CanAddItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
-	{
-		message = null;
-		if (_itemClasses.Contains(itemClass)) message = "Item class already added";
+		if (_itemClasses.Contains(itemClass)) ThrowHelper.ThrowArgumentException($"Item class \"{itemClass}\" already added");
 		else if (_itemClasses.Any(i => i.Name == itemClass.Name))
-			message = $"Item class with name \"{itemClass.Name}\" already exists";
-		return message == null;
+			ThrowHelper.ThrowArgumentException($"Item class with name \"{itemClass.Name}\" already exists");
+		_itemClasses.Add(itemClass);
 	}
 	
 	public void DeleteItemClass(ItemClass itemClass)
@@ -85,8 +65,6 @@ public abstract class Model : IModel
 			ThrowHelper.ThrowInvalidOperationException(message);
 		_itemClasses.Remove(itemClass);
 	}
-
-	public abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
 	
 	private readonly List<ItemClass> _itemClasses;
 
@@ -118,6 +96,9 @@ public abstract class Model : IModel
 		WeightsLibrary = null!;
 		ScreenshotsLibrary = null!;
 	}
+	
+	protected abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
+	protected abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
 	
 	private ModelConfig? _config;
 }

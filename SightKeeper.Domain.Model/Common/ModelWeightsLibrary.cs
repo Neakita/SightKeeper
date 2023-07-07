@@ -13,7 +13,8 @@ public sealed class ModelWeightsLibrary
     
     public void AddWeights(ModelWeights weights)
     {
-        if (_weights.Contains(weights)) ThrowHelper.ThrowArgumentException("Weights already added");
+        if (_weights.Contains(weights))
+            ThrowHelper.ThrowArgumentException("Weights already added");
         _weights.Add(weights);
     }
 	

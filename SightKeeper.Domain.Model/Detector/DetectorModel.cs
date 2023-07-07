@@ -21,28 +21,6 @@ public sealed class DetectorModel : Abstract.Model
 		_assets = new List<DetectorAsset>();
 	}
 
-	public override bool CanChangeResolution([NotNullWhen(false)] out string? message)
-	{
-		message = null;
-		var hasScreenshots = ScreenshotsLibrary.Screenshots.Any();
-		var hasAssets = Assets.Any();
-		if (hasScreenshots && hasAssets)
-			message = "Cannot change resolution of model with screenshots and assets";
-		else if (hasAssets)
-			message = "Cannot change resolution of model with assets";
-		else if (hasScreenshots)
-			message = "Cannot change resolution of model with screenshots";
-		return message == null;
-	}
-
-	public override bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
-	{
-		message = null;
-		if (itemClass.DetectorItems.Any())
-			message = "Cannot delete item class with assets";
-		return message == null;
-	}
-
 	public DetectorAsset MakeAssetFromScreenshot(Screenshot screenshot)
 	{
 		if (screenshot.DetectorAsset != null)
@@ -62,6 +40,28 @@ public sealed class DetectorModel : Abstract.Model
 		if (!_assets.Remove(asset))
 			ThrowHelper.ThrowArgumentException(nameof(asset), "Asset not found");
 		asset.Screenshot.DetectorAsset = null;
+	}
+
+	protected override bool CanChangeResolution([NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		var hasScreenshots = ScreenshotsLibrary.Screenshots.Any();
+		var hasAssets = Assets.Any();
+		if (hasScreenshots && hasAssets)
+			message = "Cannot change resolution of model with screenshots and assets";
+		else if (hasAssets)
+			message = "Cannot change resolution of model with assets";
+		else if (hasScreenshots)
+			message = "Cannot change resolution of model with screenshots";
+		return message == null;
+	}
+
+	protected override bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		if (itemClass.DetectorItems.Any())
+			message = "Cannot delete item class with assets";
+		return message == null;
 	}
 
 	private readonly List<DetectorAsset> _assets;

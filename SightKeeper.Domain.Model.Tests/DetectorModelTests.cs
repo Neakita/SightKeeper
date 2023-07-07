@@ -5,15 +5,8 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Domain.Model.Tests;
 
-public class DetectorModelTests
+public sealed class DetectorModelTests
 {
-    [Fact]
-    public void ShouldBeAbleChangeResolutionAndMessageIsNull()
-    {
-        DetectorModel model = new("Test model");
-        model.CanChangeResolution(out var message).Should().BeTrue();
-        message.Should().BeNull();
-    }
     
     [Fact]
     public void ShouldChangeResolutionWhenNoScreenshotsAndAssets()
@@ -24,15 +17,6 @@ public class DetectorModelTests
         model.Resolution.Should().Be(firstResolution);
         model.Resolution = secondResolution;
         model.Resolution.Should().Be(secondResolution);
-    }
-    
-    [Fact]
-    public void ShouldCannotChangeResolutionAndMessageIsNotNullWhenHaveScreenshots()
-    {
-        DetectorModel model = new("Test model");
-        model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
-        model.CanChangeResolution(out var message).Should().BeFalse();
-        message.Should().NotBeNull();
     }
 
     [Fact]
@@ -48,16 +32,6 @@ public class DetectorModelTests
             model.Resolution = secondResolution;
         });
         model.Resolution.Should().Be(firstResolution);
-    }
-    
-    [Fact]
-    public void ShouldCannotChangeResolutionAndMessageIsNotNullWhenHaveAssets()
-    {
-        DetectorModel model = new("Test model");
-        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
-        model.MakeAssetFromScreenshot(screenshot);
-        model.CanChangeResolution(out var message).Should().BeFalse();
-        message.Should().NotBeNull();
     }
 
     [Fact]
@@ -118,16 +92,6 @@ public class DetectorModelTests
         ItemClass itemClass = new("Item class");
         model.AddItemClass(itemClass);
         Assert.Throws<InvalidOperationException>(() => model.AddItemClass(itemClass));
-    }
-
-    [Fact]
-    public void ShouldNotBeAbleAddDuplicateItemClasses()
-    {
-        DetectorModel model = new("Model");
-        ItemClass itemClass = new("Item class");
-        model.AddItemClass(itemClass);
-        model.CanAddItemClass(itemClass, out var message).Should().BeFalse();
-        message.Should().NotBeNull();
     }
 
     [Fact]
