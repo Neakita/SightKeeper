@@ -69,7 +69,7 @@ public sealed class ModelEditorTests
         model.CreateItemClass(itemClassName);
         var newItemClasses = model.ItemClasses.Append(new ItemClass(itemClassName)).ToList();
         ModelChanges changes = new(model.Name, model.Description, model.Resolution, newItemClasses, model.Game, model.Config);
-        Assert.Throws<InvalidOperationException>(() => editor.ApplyChanges(model, changes));
+        Assert.Throws<ArgumentException>(() => editor.ApplyChanges(model, changes));
         model.ItemClasses.Should().ContainSingle(itemClass => itemClass.Name == itemClassName);
     }
 

@@ -2,9 +2,9 @@
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Domain.Model.Tests;
+namespace SightKeeper.Domain.Model.Tests.DetectorModelTests;
 
-public sealed class DetectorAssetTests
+public sealed class AssetsTests
 {
     [Fact]
     public void ShouldDeleteItems()
