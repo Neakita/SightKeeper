@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Domain.Model.Model;
+namespace SightKeeper.Domain.Model;
 
 public sealed class ModelWeights
 {

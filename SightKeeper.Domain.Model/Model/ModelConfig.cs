@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model.Model;
+﻿namespace SightKeeper.Domain.Model;
 
 public sealed class ModelConfig
 {

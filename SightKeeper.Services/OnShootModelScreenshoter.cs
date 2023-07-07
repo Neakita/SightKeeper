@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SharpHook.Native;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Application.Input;
-using SightKeeper.Domain.Model.Model;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Services;
 
@@ -31,9 +29,9 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 				ThrowHelper.ThrowInvalidOperationException("Cannot enable when no model selected");
 			if (_isEnabled == value) return;
 			_isEnabled = value;
-			if (value)
+			/*if (value)
 				_hotKey = _hotKeyManager.Register(MouseButton.Button1, OnPressed);
-			else _hotKey?.Dispose();
+			else _hotKey?.Dispose();*/
 		}
 	}
 
@@ -49,29 +47,29 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 
 	public ushort MaxImages { get; set; } = 500;
 
-	public ShootModelScreenshoter(ScreenCapture screenCapture, HotKeyManager<MouseButton> hotKeyManager)
+	public ShootModelScreenshoter(ScreenCapture screenCapture/*, HotKeyManager<MouseButton> hotKeyManager*/)
 	{
 		_screenCapture = screenCapture;
-		_hotKeyManager = hotKeyManager;
+		/*_hotKeyManager = hotKeyManager;*/
 		_interval = 1000 / FramesPerSecond;
 	}
 
 	private readonly ScreenCapture _screenCapture;
-	private readonly HotKeyManager<MouseButton> _hotKeyManager;
+	/*private readonly HotKeyManager<MouseButton> _hotKeyManager;*/
 	private Model? _model;
 	private bool _isEnabled;
 	private byte _onHoldFPS = 1;
 	private int _interval;
 	private bool _capturing;
-	private HotKey? _hotKey;
+	/*private HotKey? _hotKey;*/
 
-	private void OnPressed(HotKey hotKey)
+	/*private void OnPressed(HotKey hotKey)
 	{
 		// TODO this is probably not thread safe
 		Task.Run(() => OnPressedAsync(hotKey));
-	}
+	}*/
 	
-	private async Task OnPressedAsync(HotKey hotKey, CancellationToken cancellationToken = default)
+	/*private async Task OnPressedAsync(HotKey hotKey, CancellationToken cancellationToken = default)
 	{
 		if (Model == null) return;
 		if (!_screenCapture.CanCapture) return;
@@ -84,7 +82,7 @@ public sealed class ShootModelScreenshoter : ModelScreenshoter
 		}
 		await DeleteExceedScreenshotsAsync(cancellationToken);
 		_capturing = false;
-	}
+	}*/
 
 	private async Task CaptureAsync(CancellationToken cancellationToken)
 	{

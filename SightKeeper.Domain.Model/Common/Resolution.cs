@@ -1,8 +1,14 @@
 ﻿namespace SightKeeper.Domain.Model.Common;
 
-public sealed class Resolution : IResolution
+public sealed class Resolution
 {
-	public Resolution(int width = 320, int height = 320)
+	public Resolution()
+	{
+		Width = 320;
+		Height = 320;
+	}
+	
+	public Resolution(int width, int height)
 	{
 		Width = width;
 		Height = height;

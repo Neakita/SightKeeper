@@ -4,7 +4,7 @@ public abstract class Asset
 {
     public Screenshot Screenshot { get; private set; }
     
-    internal abstract Model.Model Model { get; }
+    internal abstract Model Model { get; }
     
     protected Asset(Screenshot screenshot)
     {

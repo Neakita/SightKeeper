@@ -1,30 +1,16 @@
-﻿using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Model;
+﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application.Modelling;
 
-public sealed class ModelChanges : IModel
+public interface ModelChanges
 {
-    public string Name { get; }
-    public string Description { get; }
-    public Resolution Resolution { get; }
-    public IReadOnlyCollection<ItemClass> ItemClasses { get; }
-    public Game? Game { get; }
-    public ModelConfig? Config { get; }
-    
-    public ModelChanges(
-        string name,
-        string description,
-        Resolution resolution,
-        IReadOnlyCollection<ItemClass> itemClasses,
-        Game? game,
-        ModelConfig? config)
-    {
-        Name = name;
-        Description = description;
-        Resolution = resolution;
-        ItemClasses = itemClasses;
-        Game = game;
-        Config = config;
-    }
+    Model Model { get; }
+    string Name { get; }
+    string Description { get; }
+    int ResolutionWidth { get; }
+    int ResolutionHeight { get; }
+    IReadOnlyCollection<string> ItemClasses { get; }
+    Game? Game { get; }
+    ModelConfig? Config { get; }
 }

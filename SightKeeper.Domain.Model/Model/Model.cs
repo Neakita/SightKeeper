@@ -2,9 +2,9 @@
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Domain.Model.Model;
+namespace SightKeeper.Domain.Model;
 
-public abstract class Model : IModel
+public abstract class Model
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
@@ -33,6 +33,8 @@ public abstract class Model : IModel
 			_resolution = value;
 		}
 	}
+	
+	public abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
 
 	private Resolution _resolution;
 
@@ -97,7 +99,6 @@ public abstract class Model : IModel
 		ScreenshotsLibrary = null!;
 	}
 	
-	protected abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
 	protected abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
 	
 	private ModelConfig? _config;

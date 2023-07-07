@@ -1,5 +1,5 @@
-﻿using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Domain.Model.Model;
+﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Application.Training.Data;
 

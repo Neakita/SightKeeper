@@ -1,39 +1,45 @@
 ﻿using CommunityToolkit.Diagnostics;
 using FluentValidation;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Model;
 
 namespace SightKeeper.Application.Modelling;
 
 public sealed class ModelEditorImplementation : ModelEditor
 {
-    public ModelEditorImplementation(IValidator<IModel> modelValidator)
+    public ModelEditorImplementation(IValidator<ModelChanges> changesValidator)
     {
-        _modelValidator = modelValidator;
+        _changesValidator = changesValidator;
     }
     
     public void ApplyChanges(Model model, ModelChanges changes)
     {
-        var validationResult = _modelValidator.Validate(changes);
+        var validationResult = _changesValidator.Validate(changes);
         if (!validationResult.IsValid)
             ThrowHelper.ThrowArgumentException($"Invalid model changes: {validationResult}");
         model.Name = changes.Name;
         model.Description = changes.Description;
-        model.Resolution = changes.Resolution;
+        model.Resolution = new Resolution(changes.ResolutionWidth, changes.ResolutionHeight);
         model.Game = changes.Game;
         model.Config = changes.Config;
         ApplyItemClassesChanges(model, changes.ItemClasses);
     }
 
-    private static void ApplyItemClassesChanges(Model model, IReadOnlyCollection<ItemClass> itemClasses)
+    private static void ApplyItemClassesChanges(Model model, IReadOnlyCollection<string> itemClasses)
     {
-        var deletedItemClasses = model.ItemClasses.Except(itemClasses).ToList();
-        var addedItemClasses = itemClasses.Except(model.ItemClasses).ToList();
+        var deletedItemClasses = GetDeletedItemClasses(model, itemClasses);
+        var addedItemClasses = GetAddedItemClasses(model, itemClasses);
         foreach (var deletedItemClass in deletedItemClasses)
             model.DeleteItemClass(deletedItemClass);
         foreach (var addedItemClass in addedItemClasses)
-            model.AddItemClass(addedItemClass);
+            model.CreateItemClass(addedItemClass);
     }
-    
-    private readonly IValidator<IModel> _modelValidator;
+
+    private static IReadOnlyCollection<ItemClass> GetDeletedItemClasses(Model model, IReadOnlyCollection<string> itemClasses) =>
+        model.ItemClasses.Where(existingItemClass => !itemClasses.Contains(existingItemClass.Name)).ToList();
+
+    private static IReadOnlyCollection<string> GetAddedItemClasses(Model model, IReadOnlyCollection<string> itemClasses) =>
+        itemClasses.Where(newItemClass => model.ItemClasses.All(existingItemClass => existingItemClass.Name != newItemClass)).ToList();
+
+    private readonly IValidator<ModelChanges> _changesValidator;
 }

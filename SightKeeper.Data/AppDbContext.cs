@@ -6,7 +6,6 @@ using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Domain.Model.Model;
 
 namespace SightKeeper.Data;
 

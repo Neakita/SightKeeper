@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
 
-public sealed class DetectorModel : Model.Model
+public sealed class DetectorModel : Model
 {
 	public IReadOnlyCollection<DetectorAsset> Assets => _assets;
 
@@ -42,7 +42,7 @@ public sealed class DetectorModel : Model.Model
 		asset.Screenshot.DetectorAsset = null;
 	}
 
-	protected override bool CanChangeResolution([NotNullWhen(false)] out string? message)
+	public override bool CanChangeResolution([NotNullWhen(false)] out string? message)
 	{
 		message = null;
 		var hasScreenshots = ScreenshotsLibrary.Screenshots.Any();

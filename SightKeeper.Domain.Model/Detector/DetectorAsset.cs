@@ -7,7 +7,7 @@ public sealed class DetectorAsset : Asset
 {
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 
-	internal override Model.Model Model => DetectorModel;
+	internal override Model Model => DetectorModel;
 
 	internal DetectorModel DetectorModel { get; private set; }
 	
