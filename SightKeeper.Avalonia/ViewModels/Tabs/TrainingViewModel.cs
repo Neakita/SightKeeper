@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application.Training;
-using SightKeeper.Domain.Model.Abstract;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
 public sealed partial class TrainingViewModel : ObservableObject
 {
-    private readonly ModelTrainer<Model> _trainer;
+    /*private readonly ModelTrainer<Model> _trainer;
     public ReadOnlyObservableCollection<Model> AvailableModels { get; }
     [ObservableProperty] private Model? _selectedModel;
     [ObservableProperty] private bool _isTraining;
@@ -36,5 +30,5 @@ public sealed partial class TrainingViewModel : ObservableObject
     {
         _trainer = trainer;
         AvailableModels = modelsRepository.Items;
-    }
+    }*/
 }

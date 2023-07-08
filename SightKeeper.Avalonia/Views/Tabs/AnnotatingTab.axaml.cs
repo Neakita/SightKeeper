@@ -1,14 +1,11 @@
-﻿using Avalonia;
-using Avalonia.Input;
-using Avalonia.ReactiveUI;
+﻿using Avalonia.ReactiveUI;
 using SightKeeper.Avalonia.ViewModels.Tabs;
-using SightKeeper.Avalonia.Extensions;
 
 namespace SightKeeper.Avalonia.Views.Tabs;
 
-public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
+public sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabViewModel>
 {
-	public AnnotatingTab(AnnotatingTabVM viewModel) : this()
+	/*public AnnotatingTab(AnnotatingTabViewModel viewModel) : this()
 	{
 		ViewModel = viewModel;
 	}
@@ -28,9 +25,9 @@ public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 
 	private void ImageOnPointerPressed(object? sender, PointerPressedEventArgs e)
 	{
-		ViewModel.ThrowIfNull(nameof(ViewModel));
+		if (ViewModel == null) return;
 		Point normalizedPosition = GetNormalizedPosition(e);
-		if (!ViewModel!.BeginDrawing(normalizedPosition)) return;
+		if (!ViewModel.BeginDrawing(normalizedPosition)) return;
 		Image.PointerPressed -= ImageOnPointerPressed;
 		this.GetParentWindow().PointerReleased += OnPointerReleased;
 		this.GetParentWindow().PointerMoved += OnPointerMoved;
@@ -38,14 +35,14 @@ public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 
 	private void OnPointerMoved(object? sender, PointerEventArgs e)
 	{
-		ViewModel.ThrowIfNull(nameof(ViewModel));
+		if (ViewModel == null) return;
 		Point normalizedPosition = GetNormalizedPosition(e);
 		ViewModel!.UpdateDrawing(normalizedPosition);
 	}
 
 	private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
 	{
-		ViewModel.ThrowIfNull(nameof(ViewModel));
+		if (ViewModel == null) return;
 		this.GetParentWindow().PointerReleased -= OnPointerReleased;
 		this.GetParentWindow().PointerMoved -= OnPointerMoved;
 		Image.PointerPressed += ImageOnPointerPressed;
@@ -62,7 +59,7 @@ public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 
 	private void OnKeyDown(object? sender, KeyEventArgs e)
 	{
-		ViewModel.ThrowIfNull(nameof(ViewModel));
+		if (ViewModel == null) return;
 		Key key = e.Key;
 		SetSelectedItemByIndex(key);
 
@@ -71,7 +68,7 @@ public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 
 	private void OnKeyUp(object? sender, KeyEventArgs e)
 	{
-		ViewModel.ThrowIfNull(nameof(ViewModel));
+		if (ViewModel == null) return;
 		Key key = e.Key;
 		if (key == Key.LeftCtrl) ViewModel!.ItemSelectionMode = false;
 	}
@@ -81,5 +78,5 @@ public partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabVM>
 		if (key is < Key.D1 or > Key.D9) return;
 		int itemClassIndex = key - Key.D1;
 		ViewModel!.SelectItemClassByIndex(itemClassIndex);
-	}
+	}*/
 }

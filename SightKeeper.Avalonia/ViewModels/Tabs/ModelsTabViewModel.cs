@@ -1,20 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Avalonia.Metadata;
-using Material.Icons;
-using ReactiveUI.Fody.Helpers;
-using SightKeeper.Application;
-using SightKeeper.Avalonia.ViewModels.Windows;
-using SightKeeper.Avalonia.Views.Windows;
-using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Avalonia.Extensions;
+﻿namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
-namespace SightKeeper.Avalonia.ViewModels.Tabs;
-
-public sealed class ModelsTabVM : ViewModel
+public sealed class ModelsTabViewModel : ViewModel
 {
-	public static ModelsTabVM New => Locator.Resolve<ModelsTabVM>();
+	/*public static ModelsTabVM New => Locator.Resolve<ModelsTabVM>();
 	
 	public Repository<Model> ModelsRepository { get; }
 	[Reactive] public Model? SelectedModel { get; set; }
@@ -28,7 +16,7 @@ public sealed class ModelsTabVM : ViewModel
 	public async Task CreateNewModel()
 	{
 		DetectorModel newModel = new("Unnamed detector model");
-		ModelEditorDialog editorDialog = new(new ModelEditorVM(newModel, true));
+		ModelEditorDialog editorDialog = new(new ModelEditorViewModel(newModel, true));
 		ModelEditorDialog.DialogResult result = await this.ShowDialog(editorDialog);
 		if (result == ModelEditorDialog.DialogResult.Apply)
 			ModelsRepository.Add(newModel);
@@ -38,8 +26,8 @@ public sealed class ModelsTabVM : ViewModel
 	{
 		if (SelectedModel == null) throw new Exception();
 		await using ModelEditor editor = await _modelEditorFactory.BeginEditAsync(SelectedModel);
-		using ModelEditorVM modelEditorVM = new(SelectedModel);
-		ModelEditorDialog editorDialog = new(modelEditorVM);
+		using ModelEditorViewModel modelEditorViewModel = new(SelectedModel);
+		ModelEditorDialog editorDialog = new(modelEditorViewModel);
 		await this.ShowDialog(editorDialog);
 		await editor.SaveChangesAsync();
 	}
@@ -60,5 +48,5 @@ public sealed class ModelsTabVM : ViewModel
 	[DependsOn(nameof(SelectedModel))]
 	public bool CanDeleteModel(object parameter) => SelectedModel != null;
 	
-	private readonly ModelEditorFactory _modelEditorFactory;
+	private readonly ModelEditorFactory _modelEditorFactory;*/
 }

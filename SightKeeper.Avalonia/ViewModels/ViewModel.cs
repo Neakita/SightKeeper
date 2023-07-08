@@ -1,7 +1,7 @@
-﻿using ReactiveUI;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SightKeeper.Avalonia.ViewModels;
 
-public class ViewModel : ReactiveObject
+public class ViewModel : ObservableObject
 {
 }

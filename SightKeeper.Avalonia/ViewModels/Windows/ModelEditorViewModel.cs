@@ -1,22 +1,8 @@
-﻿using System;
-using System.Reactive.Linq;
-using Avalonia.Metadata;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using SightKeeper.Domain.Model.Abstract;
-using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
+﻿namespace SightKeeper.Avalonia.ViewModels.Windows;
 
-namespace SightKeeper.Avalonia.ViewModels.Windows;
-
-public sealed class ModelEditorVM : ViewModel, IDisposable
+public sealed class ModelEditorViewModel : ViewModel
 {
-	public static ModelEditorVM DesignTimeInstance => Create(new DetectorModel("Design time detector model"));
-	
-	public static ModelEditorVM Create(Model model) =>
-		Locator.Resolve<ModelEditorVM, Model>(model);
-
-	public Repository<Game> GamesRepository { get; }
+	/*public Repository<Game> GamesRepository { get; }
 	public Repository<ModelConfig> ConfigsRepository { get; }
 	
 	public Model Model { get; }
@@ -28,7 +14,7 @@ public sealed class ModelEditorVM : ViewModel, IDisposable
 	
 	[Reactive] public int? SelectedItemIndex { get; set; }
 
-	public ModelEditorVM(Model model, bool canCancel = false)
+	public ModelEditorViewModel(Model model, bool canCancel = false)
 	{
 		Model = model;
 		CanCancel = canCancel;
@@ -65,5 +51,5 @@ public sealed class ModelEditorVM : ViewModel, IDisposable
 	}
 
 	[DependsOn(nameof(SelectedItemIndex))]
-	public bool CanDeleteItemClass(object parameter) => SelectedItemIndex != null;
+	public bool CanDeleteItemClass(object parameter) => SelectedItemIndex != null;*/
 }

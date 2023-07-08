@@ -8,9 +8,9 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="SightKeeper.Avalonia"
         Classes="ModernBlack"
-        d:DataContext="{x:Static viewModels:MainWindowVM.New}"
         MinWidth="500"
-        MinHeight="300">
+        MinHeight="300"
+        x:DataType="viewModels:MainWindowViewModel">
     
     <Grid>
         
@@ -34,7 +34,7 @@
                 </StackPanel>
             </SplitView.Pane>
         
-            <ContentControl Content="{Binding SelectedTab.Content}"/>
+            <ContentControl Content="{Binding SelectedTab.ViewModel}"/>
         
         </SplitView>
         

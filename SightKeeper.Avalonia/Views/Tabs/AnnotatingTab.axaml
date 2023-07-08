@@ -3,13 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:detector="clr-namespace:SightKeeper.Domain.Model.Detector;assembly=SightKeeper.Domain.Model"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Tabs.AnnotatingTab"
-             d:DataContext="{x:Static viewModels:AnnotatingTabVM.New}">
+             x:DataType="viewModels:AnnotatingTabViewModel">
 
-    <Grid>
+    <!--<Grid>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="50"/>
@@ -214,6 +212,6 @@
 
         </StackPanel>
 
-    </Grid>
+    </Grid>-->
 
 </UserControl>

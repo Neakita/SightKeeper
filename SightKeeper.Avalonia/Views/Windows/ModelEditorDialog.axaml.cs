@@ -7,7 +7,7 @@ using SightKeeper.Avalonia.ViewModels.Windows;
 
 namespace SightKeeper.Avalonia.Views.Windows;
 
-public partial class ModelEditorDialog : ReactiveWindow<ModelEditorVM>, Dialog<ModelEditorDialog.DialogResult>
+public sealed partial class ModelEditorDialog : ReactiveWindow<ModelEditorViewModel>, Dialog<ModelEditorDialog.DialogResult>
 {
 	public enum DialogResult
 	{
@@ -16,9 +16,12 @@ public partial class ModelEditorDialog : ReactiveWindow<ModelEditorVM>, Dialog<M
 		Apply
 	}
 
-	public ModelEditorDialog(ModelEditorVM viewModel) : this() => ViewModel = viewModel;
+	public ModelEditorDialog(ModelEditorViewModel viewModel) : this() => ViewModel = viewModel;
 
-	public ModelEditorDialog() => InitializeComponent();
+	public ModelEditorDialog()
+	{
+		InitializeComponent();
+	}
 
 	public new async Task<DialogResult> ShowDialog(Window owner) =>
 		await base.ShowDialog<DialogResult>(owner);

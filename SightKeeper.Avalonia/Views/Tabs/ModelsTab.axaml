@@ -2,14 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:abstract="clr-namespace:SightKeeper.Domain.Model.Abstract;assembly=SightKeeper.Domain.Model"
-             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Views.Tabs.ModelsTab"
-             d:DataContext="{x:Static viewModels:ModelsTabVM.New}">
+             x:Class="SightKeeper.Avalonia.Views.Tabs.ModelsTab">
     
-    <Grid RowDefinitions="50, *">
+    <!--<Grid RowDefinitions="50, *">
         
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 0">
             <Button Command="{Binding CreateNewModel}"
@@ -58,6 +54,6 @@
             </DataGrid.Columns>
         </DataGrid>
         
-    </Grid>
+    </Grid>-->
     
 </UserControl>

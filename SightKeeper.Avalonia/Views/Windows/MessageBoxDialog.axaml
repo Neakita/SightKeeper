@@ -2,18 +2,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Windows"
         mc:Ignorable="d"
         x:Class="SightKeeper.Avalonia.Views.Windows.MessageBoxDialog"
-        Title="{Binding Title}"
+        Title="{}"
         Classes="ModernBlack Dialog"
         SizeToContent="WidthAndHeight"
         CanResize="False"
         Name="Root"
-        d:DataContext="{x:Static viewModels:MessageBoxDialogVM.DesignTimeInstance}">
+        d:DataContext="{x:Static viewModels:MessageBoxDialogViewModel.DesignTimeInstance}">
     
-    <Grid RowDefinitions="*, 50" Margin="10 50, 10, 10">
+    <!--<Grid RowDefinitions="*, 50" Margin="10 50, 10, 10">
     
         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="10">
             <avalonia:MaterialIcon Kind="{Binding Icon}" Width="30" Height="30"/>
@@ -41,6 +40,6 @@
         
         </ItemsRepeater>
         
-    </Grid>
+    </Grid>-->
     
 </Window>

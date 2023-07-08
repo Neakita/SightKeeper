@@ -3,11 +3,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform;
-using SightKeeper.Application;
 
 namespace SightKeeper.Avalonia.Misc;
 
-public sealed class ScreenBoundsProviderImplementation : ScreenBoundsProvider
+public sealed class ScreenBoundsProviderImplementation
 {
 	public PixelSize MainScreenSize => PrimaryScreenBounds.Size;
 	public PixelPoint MainScreenCenter => PrimaryScreenBounds.Center;

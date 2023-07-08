@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Autofac;
 using Avalonia;
 using Avalonia.Controls;
 using Material.Icons;
@@ -20,8 +21,8 @@ public static class DialogExtensions
 	
 	public static async Task<TResult> ShowDialog<TResult, TCallerViewModel>(this TCallerViewModel callerViewModel, Dialog<TResult> dialog) where TCallerViewModel : class
 	{
-		var callerView = Locator.Resolve<IViewFor<TCallerViewModel>>();
-		if (callerView.ViewModel != callerViewModel) throw new Exception($"Incorrect View Instance ({callerView}) for {callerViewModel.GetType()} received from {nameof(Locator)}");
+		var callerView = ServiceLocator.Instance.Resolve<IViewFor<TCallerViewModel>>();
+		if (callerView.ViewModel != callerViewModel) throw new Exception($"Incorrect View Instance ({callerView}) for {callerViewModel.GetType()} received from {nameof(ServiceLocator)}");
 		return await callerView.ShowDialog(dialog);
 	}
 

@@ -4,16 +4,16 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services;
 
-public sealed class ProcessesGamesProvider : AvailableGamesProvider
+public sealed class ProcessesAvailableGamesProvider : AvailableGamesProvider
 {
-    public ProcessesGamesProvider(GamesDataAccess gamesDataAccess)
+    public ProcessesAvailableGamesProvider(GamesDataAccess gamesDataAccess)
     {
         _gamesDataAccess = gamesDataAccess;
     }
     
-    public async Task<IReadOnlyCollection<Game>> GetAvailableGamesAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Game>> GetAvailableGames(CancellationToken cancellationToken = default)
     {
-        var existing = await _gamesDataAccess.GetGamesAsync(cancellationToken);
+        var existing = await _gamesDataAccess.GetGames(cancellationToken);
         return Process.GetProcesses()
             .Where(process => process.MainWindowHandle != 0 && existing.Any(game => game.ProcessName == process.ProcessName))
             .Select(process => new Game(process.MainWindowTitle, process.ProcessName))

@@ -1,22 +1,18 @@
-using Avalonia;
 using Avalonia.ReactiveUI;
 using SightKeeper.Avalonia.ViewModels.Windows;
 
 namespace SightKeeper.Avalonia.Views.Windows;
 
-public partial class MainWindow : ReactiveWindow<MainWindowVM>
+public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 {
 	public MainWindow()
 	{
 		InitializeComponent();
-#if DEBUG
-		this.AttachDevTools();
-#endif
 	}
 	
-	public MainWindow(MainWindowVM vm)
+	public MainWindow(MainWindowViewModel viewModel)
 	{
 		InitializeComponent();
-		ViewModel = vm;
+		ViewModel = viewModel;
 	}
 }

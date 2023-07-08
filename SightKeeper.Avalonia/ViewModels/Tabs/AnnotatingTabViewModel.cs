@@ -1,33 +1,12 @@
-﻿using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls.Selection;
-using Avalonia.Metadata;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using SightKeeper.Application.Annotating;
-using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
+﻿namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
-namespace SightKeeper.Avalonia.ViewModels.Tabs;
-
-public sealed class AnnotatingTabVM : ViewModel
+public sealed partial class AnnotatingTabViewModel : ViewModel
 {
-	public static AnnotatingTabVM New => Locator.Resolve<AnnotatingTabVM>();
-	
-	public Repository<DetectorModel> ModelsRepository { get; }
+	/*public Task<IReadOnlyCollection<Model>> Models => _modelsDataAccess.GetModels();
 	public DetectorAnnotator Annotator { get; }
 	public ModelScreenshoter Screenshoter { get; }
 
-	public ItemClass? SelectedItemClass
-	{
-		get => _selectedItemClass;
-		set
-		{
-			this.RaiseAndSetIfChanged(ref _selectedItemClass, value);
-			Annotator.SelectedItemClass = value;
-		}
-	}
-
+	[ObservableProperty] private ItemClass? _selectedItemClass;
 	public SelectionModel<DetectorAsset> ScreenshotsSelection { get; } = new();
 	[Reactive] public DetectorAsset? SelectedScreenshot { get; private set; }
 
@@ -46,11 +25,22 @@ public sealed class AnnotatingTabVM : ViewModel
 	
 	[Reactive] public bool ItemSelectionMode { get; set; }
 
-	public AnnotatingTabVM(Repository<DetectorModel> modelsRepository, DetectorAnnotator annotator, ModelScreenshoter screenshoter)
+	public AnnotatingTabViewModel(DetectorAnnotator annotator, ModelScreenshoter screenshoter)
 	{
-		ModelsRepository = modelsRepository;
 		Annotator = annotator;
 		Screenshoter = screenshoter;
+		
+		this.WhenActivated(disposables =>
+		{
+			Disposable.Crea
+			
+			var selectionChangedObservable =
+				Observable.FromEventPattern<SelectionModelSelectionChangedEventArgs<DetectorAsset>>(
+					handler => ScreenshotsSelection.SelectionChanged += handler,
+					handler => ScreenshotsSelection.SelectionChanged -= handler);
+
+			disposables.DisposeWith(selectionChangedObservable);
+		});
 		
 		ScreenshotsSelection.SelectionChanged += OnScreenshotsSelectionChanged;
 		ScreenshotsSelection.SingleSelect = false;
@@ -84,11 +74,13 @@ public sealed class AnnotatingTabVM : ViewModel
 	}
 	
 	private DetectorModel? _model;
-	private ItemClass? _selectedItemClass;
 
 	private void OnScreenshotsSelectionChanged(object? sender, SelectionModelSelectionChangedEventArgs<DetectorAsset> e)
 	{
 		Annotator.SelectedScreenshot = ScreenshotsSelection.SelectedItem;
 		SelectedScreenshot = ScreenshotsSelection.SelectedItem;
 	}
+
+	private ModelsDataAccess _modelsDataAccess;
+	public ViewModelActivator Activator { get; } = new();*/
 }

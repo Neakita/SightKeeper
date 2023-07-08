@@ -1,14 +1,13 @@
+using Autofac;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SightKeeper.Services.Input;
 
 namespace SightKeeper.Avalonia;
 
-public class App : global::Avalonia.Application
+public sealed class App : global::Avalonia.Application
 {
 	public override void Initialize()
 	{
-		AppBootstrapper.Setup();
 		AvaloniaXamlLoader.Load(this);
 	}
 
@@ -16,15 +15,9 @@ public class App : global::Avalonia.Application
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			desktop.Exit += Shutdown;
-			desktop.MainWindow = Locator.Resolve<Views.Windows.MainWindow>();
+			desktop.MainWindow = ServiceLocator.Instance.Resolve<Views.Windows.MainWindow>();
 		}
 
 		base.OnFrameworkInitializationCompleted();
-	}
-
-	private void Shutdown(object? sender, ControlledApplicationLifetimeExitEventArgs e)
-	{
-		Locator.Resolve<SharpHookHotKeyManager>().Dispose();
 	}
 }

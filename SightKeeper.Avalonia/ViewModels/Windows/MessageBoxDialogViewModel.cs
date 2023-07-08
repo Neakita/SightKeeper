@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Autofac;
 using Avalonia.Controls;
-using Avalonia.Input.Platform;
 using Material.Icons;
 using ReactiveUI;
-using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Avalonia.Extensions;
+using SightKeeper.Avalonia.Views.Windows;
 
 namespace SightKeeper.Avalonia.ViewModels.Windows;
 
-public sealed class MessageBoxDialogVM : ViewModel
+public sealed class MessageBoxDialogViewModel : ViewModel
 {
-	public static MessageBoxDialogVM DesignTimeInstance => new(
+	public static MessageBoxDialogViewModel DesignTimeInstance => new(
 		MessageBoxDialog.DialogResult.Ok | MessageBoxDialog.DialogResult.Cancel,
 		"Some message",
 		"Some title",
@@ -25,7 +25,7 @@ public sealed class MessageBoxDialogVM : ViewModel
 	
 	public ReactiveCommand<MessageBoxDialog.DialogResult, MessageBoxDialog.DialogResult> DoneCommand { get; }
 
-	public MessageBoxDialogVM(MessageBoxDialog.DialogResult dialogResults, string message, string title = "", MaterialIconKind? icon = null)
+	public MessageBoxDialogViewModel(MessageBoxDialog.DialogResult dialogResults, string message, string title = "", MaterialIconKind? icon = null)
 	{
 		DialogResults = dialogResults.GetFlags();
 		Message = message;
@@ -36,7 +36,7 @@ public sealed class MessageBoxDialogVM : ViewModel
 
 	private async Task CopyMessage()
 	{
-		IClipboard? applicationClipboard = TopLevel.GetTopLevel(Locator.Resolve<MainWindow>())!.Clipboard;
+		var applicationClipboard = TopLevel.GetTopLevel(ServiceLocator.Instance.Resolve<MainWindow>())!.Clipboard;
 		if (applicationClipboard == null) throw new Exception("Application clipboard is not set");
 		await applicationClipboard.SetTextAsync(Message);
 	}

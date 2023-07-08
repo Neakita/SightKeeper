@@ -1,10 +1,8 @@
-﻿using Avalonia;
-using Avalonia.ReactiveUI;
-using System;
-using System.Reactive;
+﻿using System;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.ReactiveUI;
 using Avalonia.Threading;
-using ReactiveUI;
 using Serilog;
 
 namespace SightKeeper.Avalonia;
@@ -20,13 +18,13 @@ internal static class Program
 		try
 		{
 			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-			RxApp.DefaultExceptionHandler = Observer.Create<Exception>(exception => HandleUnhandledExceptions(exception, "RxApp.DefaultExceptionHandler"));
 			BuildAvaloniaApp()
 				.StartWithClassicDesktopLifetime(args);
 		}
 		catch (Exception exception)
 		{
 			HandleUnhandledExceptions(exception, "Program.Main");
+			throw;
 		}
 	}
 

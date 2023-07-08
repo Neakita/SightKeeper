@@ -2,17 +2,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Windows"
-        xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SightKeeper.Avalonia.Views.Windows.ModelEditorDialog"
         Title="ModelEditor"
         Classes="ModernBlack Dialog"
         Width="600" Height="400"
-        MinWidth="350" MinHeight="240"
-        d:DataContext="{x:Static viewModels:ModelEditorVM.DesignTimeInstance}">
+        MinWidth="350" MinHeight="240">
 
-    <Grid RowDefinitions="*, 50" ColumnDefinitions="*, *">
+    <!--<Grid RowDefinitions="*, 50" ColumnDefinitions="*, *">
 
         <ScrollViewer Grid.Row="0" Grid.Column="0">
             <StackPanel Margin="20" Spacing="20">
@@ -96,6 +93,6 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-    </Grid>
+    </Grid>-->
 
 </Window>
