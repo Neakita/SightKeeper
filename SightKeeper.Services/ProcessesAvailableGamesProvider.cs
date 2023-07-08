@@ -15,7 +15,7 @@ public sealed class ProcessesAvailableGamesProvider : AvailableGamesProvider
     {
         var existing = await _gamesDataAccess.GetGames(cancellationToken);
         return Process.GetProcesses()
-            .Where(process => process.MainWindowHandle != 0 && existing.Any(game => game.ProcessName == process.ProcessName))
+            .Where(process => process.MainWindowHandle != 0 && !string.IsNullOrWhiteSpace(process.MainWindowTitle) && existing.All(game => game.ProcessName != process.ProcessName))
             .Select(process => new Game(process.MainWindowTitle, process.ProcessName))
             .ToList();
     }

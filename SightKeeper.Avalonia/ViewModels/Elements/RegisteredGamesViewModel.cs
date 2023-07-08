@@ -25,6 +25,7 @@ public sealed partial class RegisteredGamesViewModel : ViewModel
 	
 	[NotifyCanExecuteChangedFor(nameof(AddGameCommand))]
 	[ObservableProperty] private Game? _selectedToAddGame;
+	[NotifyCanExecuteChangedFor(nameof(DeleteGameCommand))]
 	[ObservableProperty] private Game? _selectedExistingGame;
 
 	[RelayCommand(CanExecute = nameof(CanAddGame))]
@@ -48,7 +49,7 @@ public sealed partial class RegisteredGamesViewModel : ViewModel
 	}
 
 	[RelayCommand]
-	private void RefreshAvailableToAddGames()
+	private async Task RefreshAvailableToAddGames(CancellationToken cancellationToken)
 	{
 		OnPropertyChanged(nameof(AvailableToAddGames));
 	}

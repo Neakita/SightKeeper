@@ -13,10 +13,12 @@ public class AppDbContext : DbContext
 {
 	public AppDbContext()
 	{
+		Log.Debug("Instantiated {Name}", nameof(AppDbContext));
 	}
 
 	public AppDbContext(DbContextOptions options) : base(options)
 	{
+		Log.Debug("Instantiated {Name} with options {@Options}", nameof(AppDbContext), options);
 	}
 
 	public DbSet<Profile> Profiles { get; set; } = null!;
@@ -30,6 +32,12 @@ public class AppDbContext : DbContext
 		if (optionsBuilder.IsConfigured) return;
 		SetupLogging(optionsBuilder);
 		SetupSqlite(optionsBuilder);
+	}
+
+	public override void Dispose()
+	{
+		Log.Debug("Disposing {Name}", nameof(AppDbContext));
+		base.Dispose();
 	}
 
 	private static void SetupLogging(DbContextOptionsBuilder optionsBuilder)

@@ -17,14 +17,14 @@ public sealed partial class MainWindowViewModel : ViewModel
 		ProfilesTabViewModel profilesTabViewModel,
 		ModelsTabViewModel modelsTabViewModel,
 		AnnotatingTabViewModel annotatingTabViewModel,
-		SettingsTabViewModel settingsTabViewModel)
+		SettingsViewModel settingsViewModel)
 	{
 		Tabs = new List<TabItem>
 		{
 			new(MaterialIconKind.DotsGrid, "Profiles", profilesTabViewModel),
 			new(MaterialIconKind.TableEye, "Models", modelsTabViewModel),
 			new(MaterialIconKind.Image, "Annotating", annotatingTabViewModel),
-			new(MaterialIconKind.Cog, "Settings", settingsTabViewModel)
+			new(MaterialIconKind.Cog, "Settings", settingsViewModel)
 		};
 		
 		SelectedTab = Tabs.First();

@@ -31,5 +31,5 @@ public sealed class DbGamesDataAccess : GamesDataAccess
     private readonly AppDbContext _dbContext;
 
     private Task<bool> IsExistsAsync(Game game, CancellationToken cancellationToken) =>
-        _dbContext.Games.ContainsAsync(game, cancellationToken);
+        _dbContext.Games.AnyAsync(dbGame => dbGame.ProcessName == game.ProcessName, cancellationToken);
 }

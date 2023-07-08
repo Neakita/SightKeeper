@@ -3,12 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
-             xmlns:common="clr-namespace:SightKeeper.Domain.Model.Common;assembly=SightKeeper.Domain.Model"
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Tabs.SettingsTab"
-             x:DataType="viewModels:SettingsTabViewModel">
+             x:DataType="viewModels:SettingsViewModel">
     
     <ScrollViewer Margin="50" MaxWidth="800">
         <StackPanel>
@@ -31,22 +30,23 @@
                         </i:Interaction.Behaviors>
                     </ComboBox>
                     <Button Grid.Row="0" Grid.Column="1" Content="Add"
-                            Command="{Binding AddGame}"/>
+                            Command="{Binding AddGameCommand}"/>
                     <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
-                              ItemsSource="{Binding RegisteredGames}"
+                              ItemsSource="{Binding RegisteredGames^}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
                               Height="300"
-                              SelectedItem="{Binding SelectedToAddGame}">
+                              SelectedItem="{Binding SelectedExistingGame}"
+                              SelectionMode="Single">
                         <DataGrid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Delete"
-                                          Command="{Binding DeleteGame}"/>
+                                          Command="{Binding DeleteGameCommand}"/>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Title" Binding="{Binding (common:Game).Title}"/>
-                            <DataGridTextColumn Header="Process" Binding="{Binding (common:Game).ProcessName}"/>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
+                            <DataGridTextColumn Header="Process" Binding="{Binding ProcessName}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

@@ -24,7 +24,11 @@ public static class AppBootstrapper
 		SetupServices(builder);
 		SetupViewModels(builder);
 		SetupViews(builder);
-		return builder.Build();
+		var container = builder.Build();
+		using var initialScope = container.BeginLifetimeScope();
+		var dbContext = initialScope.Resolve<AppDbContext>();
+		dbContext.Database.EnsureCreated();
+		return container;
 	}
 
 	private static void SetupLogger(ContainerBuilder builder)
@@ -49,29 +53,29 @@ public static class AppBootstrapper
 		builder.RegisterType<DbGamesDataAccess>().As<GamesDataAccess>();
 		builder.RegisterType<ProcessesAvailableGamesProvider>().As<AvailableGamesProvider>();
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>();
-		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext());
+		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerLifetimeScope();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
-		builder.RegisterType<MainWindowViewModel>().SingleInstance();
+		builder.RegisterType<MainWindowViewModel>();
 		builder.RegisterType<ModelEditorViewModel>();
-		
-		builder.RegisterType<AnnotatingTabViewModel>().SingleInstance();
-		builder.RegisterType<ModelsTabViewModel>().SingleInstance();
-		builder.RegisterType<ProfilesTabViewModel>().SingleInstance();
-		builder.RegisterType<SettingsTabViewModel>().SingleInstance();
-		builder.RegisterType<RegisteredGamesViewModel>().SingleInstance();
+
+		builder.RegisterType<AnnotatingTabViewModel>();
+		builder.RegisterType<ModelsTabViewModel>();
+		builder.RegisterType<ProfilesTabViewModel>();
+		builder.RegisterType<SettingsViewModel>();
+		builder.RegisterType<RegisteredGamesViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
 	{
-		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainWindowViewModel>>().SingleInstance();
+		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainWindowViewModel>>();
 		builder.RegisterType<ModelEditorDialog>();
 		
-		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingTabViewModel>>().SingleInstance();
-		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsTabViewModel>>().SingleInstance();
-		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesTabViewModel>>().SingleInstance();
-		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsTabViewModel>>().SingleInstance();
+		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingTabViewModel>>();
+		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsTabViewModel>>();
+		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesTabViewModel>>();
+		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
 	}
 }
