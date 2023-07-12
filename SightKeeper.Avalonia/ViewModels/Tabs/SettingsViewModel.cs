@@ -9,7 +9,7 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs;
 public sealed partial class SettingsViewModel : ViewModel, IActivatableViewModel
 {
 	public ViewModelActivator Activator { get; } = new();
-	[ObservableProperty] private RegisteredGamesViewModel _registeredGamesViewModel;
+	[ObservableProperty] private RegisteredGamesViewModel? _registeredGamesViewModel;
 	
 	public SettingsViewModel()
 	{

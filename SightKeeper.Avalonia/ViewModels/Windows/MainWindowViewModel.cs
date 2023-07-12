@@ -26,7 +26,6 @@ public sealed partial class MainWindowViewModel : ViewModel
 			new(MaterialIconKind.Image, "Annotating", annotatingTabViewModel),
 			new(MaterialIconKind.Cog, "Settings", settingsViewModel)
 		};
-		
 		SelectedTab = Tabs.First();
 	}
 }

@@ -7,4 +7,7 @@ public sealed class DefaultAppDbContextFactory : AppDbContextFactory
 		AppDbContext dbContext = new();
 		return dbContext;
 	}
+
+	public Task<AppDbContext> CreateDbContextAsync(CancellationToken cancellationToken = default) =>
+		Task.Run(CreateDbContext, cancellationToken);
 }

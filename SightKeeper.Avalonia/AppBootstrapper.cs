@@ -12,6 +12,7 @@ using SightKeeper.Data;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services;
+using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia;
 
@@ -54,6 +55,7 @@ public static class AppBootstrapper
 		builder.RegisterType<ProcessesAvailableGamesProvider>().As<AvailableGamesProvider>();
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>();
 		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerLifetimeScope();
+		builder.RegisterType<RegisteredGamesService>();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)

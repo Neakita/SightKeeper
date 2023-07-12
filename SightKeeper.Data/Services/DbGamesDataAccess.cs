@@ -15,7 +15,7 @@ public sealed class DbGamesDataAccess : GamesDataAccess
 
     public async Task AddGame(Game game, CancellationToken cancellationToken = default)
     {
-        if (await IsExistsAsync(game, cancellationToken))
+        if (await ContainsGameAsync(game, cancellationToken))
             ThrowHelper.ThrowArgumentException($"Game \"{game}\" already added");
         await _dbContext.Games.AddAsync(game, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -23,13 +23,16 @@ public sealed class DbGamesDataAccess : GamesDataAccess
 
     public async Task RemoveGame(Game game, CancellationToken cancellationToken = default)
     {
-        if (!await IsExistsAsync(game, cancellationToken)) ThrowHelper.ThrowArgumentException($"Game {game} not found");
+        if (!await ContainsGameAsync(game, cancellationToken))
+            ThrowHelper.ThrowArgumentException($"Game {game} not found");
         _dbContext.Games.Remove(game);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
-    
+
+    public bool ContainsGame(Game game) => _dbContext.Games.Any(dbGame => dbGame.ProcessName == game.ProcessName);
+
     private readonly AppDbContext _dbContext;
 
-    private Task<bool> IsExistsAsync(Game game, CancellationToken cancellationToken) =>
+    private Task<bool> ContainsGameAsync(Game game, CancellationToken cancellationToken) =>
         _dbContext.Games.AnyAsync(dbGame => dbGame.ProcessName == game.ProcessName, cancellationToken);
 }
