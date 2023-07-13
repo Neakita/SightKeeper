@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac;
 using Avalonia.Controls;
+using CommunityToolkit.Diagnostics;
 using Material.Icons;
 using ReactiveUI;
 using SightKeeper.Avalonia.Extensions;
@@ -37,7 +37,7 @@ public sealed class MessageBoxDialogViewModel : ViewModel
 	private async Task CopyMessage()
 	{
 		var applicationClipboard = TopLevel.GetTopLevel(ServiceLocator.Instance.Resolve<MainWindow>())!.Clipboard;
-		if (applicationClipboard == null) throw new Exception("Application clipboard is not set");
+		Guard.IsNotNull(applicationClipboard);
 		await applicationClipboard.SetTextAsync(Message);
 	}
 }

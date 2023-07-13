@@ -28,8 +28,7 @@ public sealed partial class RegisteredGamesViewModel : ViewModel
 	[RelayCommand(CanExecute = nameof(CanAddGame))]
 	private async Task AddGame(CancellationToken cancellationToken)
 	{
-		if (SelectedToAddGame == null)
-			ThrowHelper.ThrowArgumentException(nameof(SelectedToAddGame), $"{nameof(SelectedToAddGame)} must be set");
+		Guard.IsNotNull(SelectedToAddGame);
 		await _registeredGamesService.RegisterGame(SelectedToAddGame, cancellationToken);
 		OnPropertyChanged(nameof(RegisteredGames));
 		OnPropertyChanged(nameof(AvailableToAddGames));
@@ -38,8 +37,7 @@ public sealed partial class RegisteredGamesViewModel : ViewModel
 	[RelayCommand(CanExecute = nameof(CanDeleteGame))]
 	private async Task DeleteGame(CancellationToken cancellationToken)
 	{
-		if (SelectedExistingGame == null)
-			ThrowHelper.ThrowArgumentException(nameof(SelectedExistingGame), $"{nameof(SelectedExistingGame)} must be set");
+		Guard.IsNotNull(SelectedExistingGame);
 		await _registeredGamesService.UnRegisterGame(SelectedExistingGame, cancellationToken);
 		OnPropertyChanged(nameof(RegisteredGames));
 		OnPropertyChanged(nameof(AvailableToAddGames));

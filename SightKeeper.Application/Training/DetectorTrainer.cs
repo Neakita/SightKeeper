@@ -20,7 +20,7 @@ public sealed class DetectorTrainer : ModelTrainer<DetectorModel>
     
     public async Task<ModelWeights?> TrainAsync(CancellationToken cancellationToken = default)
     {
-        if (Model == null) ThrowHelper.ThrowArgumentNullException(nameof(Model));
+        Guard.IsNotNull(Model);
         var assets = Model.Assets.ToList();
         var config = Model.Config ?? ThrowHelper.ThrowArgumentNullException<ModelConfig>(nameof(Model.Config));
         var baseWeights = FromScratch ? null : Model.WeightsLibrary.Weights.MaxBy(weights => weights.Date);
