@@ -82,7 +82,10 @@ public sealed partial class ModelsViewModel : ViewModel, IActivatableViewModel
 	[RelayCommand(CanExecute = nameof(CanDeleteModel))]
 	private async Task DeleteModel()
 	{
-		
+		Guard.IsNotNull(SelectedModel);
+		Guard.IsNotNull(_modelsDataAccess);
+		await _modelsDataAccess.RemoveModel(SelectedModel);
+		OnPropertyChanged(nameof(Models));
 	}
 
 	private bool CanDeleteModel() => SelectedModel != null;
