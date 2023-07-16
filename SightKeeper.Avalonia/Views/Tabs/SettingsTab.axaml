@@ -5,13 +5,29 @@
              xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Tabs.SettingsTab"
-             x:DataType="viewModels:SettingsViewModel">
+             x:DataType="viewModels:ISettingsViewModel">
+    
+    <Design.DataContext>
+        <fakes:FakeSettingsViewModel/>
+    </Design.DataContext>
     
     <ScrollViewer Margin="50" MaxWidth="800">
         <StackPanel>
-            <Expander Header="Registered Games" DataContext="{Binding RegisteredGamesViewModel}" MaxWidth="800" Margin="50" HorizontalContentAlignment="Stretch">
+            <StackPanel.Styles>
+                <Style Selector="Expander">
+                    <Setter Property="MaxWidth" Value="800"/>
+                    <Setter Property="Margin" Value="50"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </StackPanel.Styles>
+            
+            
+            <Expander Header="Registered Games"
+                      DataContext="{Binding RegisteredGamesViewModel}">
                 <Grid RowDefinitions="50, *" ColumnDefinitions="*, 80, 80">
                     <ComboBox Name="GameToAddComboBox" Grid.Row="0" Grid.Column="0"
                               ItemsSource="{Binding AvailableToAddGames^}"
@@ -49,6 +65,24 @@
                             <DataGridTextColumn Header="Process" Binding="{Binding ProcessName}"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                </Grid>
+            </Expander>
+            <Expander Header="Configs"
+                      DataContext="{Binding ConfigsViewModel}">
+                <Grid RowDefinitions="Auto *">
+                    <Button Grid.Row="0"
+                            Content="{icons:MaterialIconExt Plus}"
+                            Command="{Binding AddConfigCommand}"/>
+                    <ListBox Grid.Row="1"
+                             ItemsSource="{Binding Configs^}"
+                             SelectedItem="{Binding SelectedConfig}">
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete"
+                                          Command="{Binding DeleteConfigCommand}"/>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                    </ListBox>
                 </Grid>
             </Expander>
         </StackPanel>

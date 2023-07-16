@@ -67,6 +67,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DbModelsDataAccess>().As<ModelsDataAccess>();
 		builder.RegisterType<DbModelEditor>().As<Application.Model.Editing.ModelEditor>();
 		builder.RegisterType<ModelChangesValidator>().As<IValidator<ModelChanges>>();
+		builder.RegisterType<DbConfigsDataAccess>().As<ConfigsDataAccess>();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
@@ -79,6 +80,7 @@ public static class AppBootstrapper
 		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<SettingsViewModel>();
 		builder.RegisterType<RegisteredGamesViewModel>();
+		builder.RegisterType<ConfigsViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)

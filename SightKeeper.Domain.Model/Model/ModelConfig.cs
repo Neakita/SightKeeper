@@ -12,4 +12,6 @@ public sealed class ModelConfig
 		Content = content;
 		ModelType = modelType;
 	}
+
+	public override string ToString() => Name;
 }

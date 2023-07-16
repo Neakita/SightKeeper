@@ -1,15 +1,15 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
-using Avalonia.Controls;
+using Avalonia.VisualTree;
 
 namespace SightKeeper.Avalonia.Extensions;
 
 public static class ControlExtensions
 {
-	public static Window GetParentWindow(this StyledElement control)
+	public static IEnumerable<Visual> GetVisualChildrenRecursive(this Visual visual)
 	{
-		StyledElement? parent = control.Parent;
-		if (parent == null) throw new Exception("Parent window not found");
-		return parent as Window ?? GetParentWindow(parent);
+		var children = visual.GetVisualChildren();
+		return children.SelectMany(child => GetVisualChildrenRecursive(child).Prepend(child));
 	}
 }

@@ -10,7 +10,7 @@ using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
-public sealed partial class RegisteredGamesViewModel : ViewModel
+public sealed partial class RegisteredGamesViewModel : ViewModel, IRegisteredGamesViewModel
 {
 	public Task<IReadOnlyCollection<Game>> RegisteredGames => _registeredGamesService.GetRegisteredGames();
 	public Task<IReadOnlyCollection<Game>> AvailableToAddGames => _registeredGamesService.GetAvailableGames();
