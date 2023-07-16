@@ -23,7 +23,7 @@ public sealed partial class MainViewModel : ViewModel, IActivatableViewModel
 	{
 		this.WhenActivated(disposables =>
 		{
-			var ownScope = scope.BeginLifetimeScope(builder => builder.RegisterInstance(scope.Resolve<AppDbContext>()));
+			var ownScope = scope.BeginLifetimeScope(this, builder => builder.RegisterInstance(scope.Resolve<AppDbContext>()));
 			ownScope.DisposeWith(disposables);
 			DbContext = ownScope.Resolve<AppDbContext>();
 			var profilesViewModel = ownScope.Resolve<ProfilesViewModel>();

@@ -25,7 +25,7 @@ public sealed class DbGamesDataAccess : GamesDataAccess
     {
         if (!await ContainsGameAsync(game, cancellationToken))
             ThrowHelper.ThrowArgumentException($"Game {game} not found");
-        _dbContext.Games.Remove(game);
+        _dbContext.Remove(game);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 

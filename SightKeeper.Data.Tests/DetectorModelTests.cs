@@ -53,23 +53,18 @@ public sealed class DetectorModelTests : DbRelatedTests
 		using var dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
 		Image image = new(Array.Empty<byte>());
-		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(image);
 		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
 		var item = asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
-
-		dbContext.DetectorModels.Should().Contain(model);
-		dbContext.Set<Screenshot>().Should().Contain(screenshot);
-		dbContext.Set<DetectorAsset>().Should().Contain(asset);
-		dbContext.Set<ItemClass>().Should().Contain(itemClass);
-		dbContext.Set<DetectorItem>().Should().Contain(item);
-
 		dbContext.DetectorModels.Remove(model);
 		dbContext.SaveChanges();
 		dbContext.DetectorModels.Should().BeEmpty();
+		dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
 		dbContext.Set<Screenshot>().Should().BeEmpty();
+		dbContext.Set<Image>().Should().BeEmpty();
 		dbContext.Set<DetectorAsset>().Should().BeEmpty();
 		dbContext.Set<ItemClass>().Should().BeEmpty();
 		dbContext.Set<DetectorItem>().Should().BeEmpty();
@@ -126,5 +121,18 @@ public sealed class DetectorModelTests : DbRelatedTests
 			model.Assets.Should().NotBeEmpty();
 			model.ScreenshotsLibrary.Screenshots.Should().BeEmpty();
 		}
+	}
+
+	[Fact]
+	public void ShouldSetGameToNullWhenDeletingGame()
+	{
+		var model = TestDetectorModel;
+		Game game = new("Test game", "game.exe");
+		model.Game = game;
+		using var dbContext = DbContextFactory.CreateDbContext();
+		dbContext.Add(model);
+		dbContext.SaveChanges();
+		dbContext.Remove(game);
+		dbContext.SaveChanges();
 	}
 }

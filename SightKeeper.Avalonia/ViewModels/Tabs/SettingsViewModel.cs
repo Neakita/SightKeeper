@@ -11,15 +11,18 @@ public sealed partial class SettingsViewModel : ViewModel, IActivatableViewModel
 	public ViewModelActivator Activator { get; } = new();
 	[ObservableProperty] private RegisteredGamesViewModel? _registeredGamesViewModel;
 	
-	public SettingsViewModel()
+	public SettingsViewModel(ILifetimeScope scope)
 	{
+		_scope = scope;
 		this.WhenActivated(HandleActivation);
 	}
 
 	private void HandleActivation(CompositeDisposable disposables)
 	{
-		var scope = ServiceLocator.Instance.BeginLifetimeScope(this);
+		var scope = _scope.BeginLifetimeScope(this);
 		scope.DisposeWith(disposables);
 		RegisteredGamesViewModel = scope.Resolve<RegisteredGamesViewModel>();
 	}
+	
+	private readonly ILifetimeScope _scope;
 }
