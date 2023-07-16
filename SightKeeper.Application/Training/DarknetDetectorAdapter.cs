@@ -100,7 +100,7 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
         return File.WriteAllTextAsync(DarknetPaths.DataFilePath, data.ToString(), cancellationToken);
     }
 
-    private static Task PrepareConfigAsync(Model model, out int maxBatches, CancellationToken cancellationToken)
+    private static Task PrepareConfigAsync(Domain.Model.Model model, out int maxBatches, CancellationToken cancellationToken)
     {
         if (model.Config == null)
             ThrowHelper.ThrowArgumentNullException(nameof(model.Config), $"{nameof(model.Config)} is null");

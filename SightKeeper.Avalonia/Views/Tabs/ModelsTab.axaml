@@ -2,41 +2,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:tabs="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
+             xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Views.Tabs.ModelsTab">
+             x:Class="SightKeeper.Avalonia.Views.Tabs.ModelsTab"
+             x:DataType="tabs:ModelsViewModel">
     
-    <!--<Grid RowDefinitions="50, *">
+    <Grid RowDefinitions="50, *">
         
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 0">
-            <Button Command="{Binding CreateNewModel}"
-                    Content="{avalonia:MaterialIconExt Plus}"/>
+            <Button Command="{Binding CreateNewModelCommand}"
+                    Content="{icons:MaterialIconExt Plus}"/>
         </StackPanel>
         
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding ModelsRepository.Items}"
+                  ItemsSource="{Binding Models^}"
                   SelectedItem="{Binding SelectedModel}"
                   IsReadOnly="True">
             
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Edit"
-                              Command="{ReflectionBinding EditModel}"/>
+                              Command="{Binding EditModelCommand}"/>
                     <MenuItem Header="Delete"
-                              Command="{ReflectionBinding DeleteModel}"/>
+                              Command="{Binding DeleteModelCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             
             <DataGrid.Columns>
                 
                 <DataGridTextColumn Header="Name"
-                                    Binding="{Binding (abstract:Model).Name}"/>
+                                    Binding="{Binding (model:Model).Name}"/>
                 
                 <DataGridTextColumn Header="Game"
-                                    Binding="{Binding (abstract:Model).Game.Title, FallbackValue=[Not selected]}"/>
+                                    Binding="{Binding (model:Model).Game.Title, FallbackValue=[Not selected]}"/>
                 
                 <DataGridTemplateColumn Header="Resolution">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="abstract:Model">
+                        <DataTemplate DataType="model:Model">
                             <StackPanel Orientation="Horizontal"
                                         VerticalAlignment="Center"
                                         Margin="10 0">
@@ -49,11 +53,11 @@
                 </DataGridTemplateColumn>
                 
                 <DataGridTextColumn Header="Config"
-                                    Binding="{Binding (abstract:Model).Config.Name, FallbackValue=[Not selected]}"/>
+                                    Binding="{Binding (model:Model).Config.Name, FallbackValue=[Not selected]}"/>
                 
             </DataGrid.Columns>
         </DataGrid>
         
-    </Grid>-->
+    </Grid>
     
 </UserControl>

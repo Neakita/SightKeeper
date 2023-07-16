@@ -9,12 +9,15 @@
     <Style Selector="Window.ModernBlack">
         <Setter Property="TransparencyLevelHint" Value="AcrylicBlur"/>
         <Setter Property="Background" Value="#C0000000"/>
-        <Setter Property="ExtendClientAreaToDecorationsHint" Value="True"/>
         <Setter Property="WindowStartupLocation" Value="CenterScreen"/>
     </Style>
     
     <Style Selector="Window.Dialog">
         <Setter Property="WindowStartupLocation" Value="CenterScreen"/>
+    </Style>
+    
+    <Style Selector="ComboBox">
+        <Setter Property="PlaceholderForeground" Value="Gray"/>
     </Style>
     
 </Styles>

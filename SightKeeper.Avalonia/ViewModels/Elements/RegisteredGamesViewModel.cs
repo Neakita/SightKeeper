@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
 public sealed partial class RegisteredGamesViewModel : ViewModel
 {
-	public Task<IReadOnlyCollection<GameDTO>> RegisteredGames => _registeredGamesService.GetRegisteredGames();
-	public Task<IReadOnlyCollection<GameDTO>> AvailableToAddGames => _registeredGamesService.GetAvailableGames();
+	public Task<IReadOnlyCollection<Game>> RegisteredGames => _registeredGamesService.GetRegisteredGames();
+	public Task<IReadOnlyCollection<Game>> AvailableToAddGames => _registeredGamesService.GetAvailableGames();
 	
 	public RegisteredGamesViewModel(RegisteredGamesService registeredGamesService)
 	{
@@ -21,9 +23,19 @@ public sealed partial class RegisteredGamesViewModel : ViewModel
 	private readonly RegisteredGamesService _registeredGamesService;
 	
 	[NotifyCanExecuteChangedFor(nameof(AddGameCommand))]
-	[ObservableProperty] private GameDTO? _selectedToAddGame;
+	[ObservableProperty] private Game? _selectedToAddGame;
 	[NotifyCanExecuteChangedFor(nameof(DeleteGameCommand))]
-	[ObservableProperty] private GameDTO? _selectedExistingGame;
+	[ObservableProperty] private Game? _selectedExistingGame;
+
+	partial void OnSelectedToAddGameChanged(Game? oldValue, Game? newValue)
+	{
+		Debug.WriteLine($"Changed from {oldValue} to {newValue}");
+	}
+
+	partial void OnSelectedToAddGameChanging(Game? oldValue, Game? newValue)
+	{
+		Debug.WriteLine($"Changed from {oldValue} to {newValue}");
+	}
 
 	[RelayCommand(CanExecute = nameof(CanAddGame))]
 	private async Task AddGame(CancellationToken cancellationToken)
@@ -47,6 +59,7 @@ public sealed partial class RegisteredGamesViewModel : ViewModel
 	private void RefreshAvailableToAddGames()
 	{
 		OnPropertyChanged(nameof(AvailableToAddGames));
+		OnPropertyChanged(nameof(RegisteredGames));
 	}
 
 	private bool CanAddGame() => SelectedToAddGame != null && _registeredGamesService.CanRegisterGame(SelectedToAddGame);

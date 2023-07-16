@@ -1,40 +1,42 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using Avalonia;
 using Avalonia.Controls;
-using Material.Icons;
-using ReactiveUI;
-using SightKeeper.Avalonia.Misc;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.VisualTree;
+using CommunityToolkit.Diagnostics;
+using SightKeeper.Avalonia.ViewModels;
 using SightKeeper.Avalonia.Views.Windows;
 
 namespace SightKeeper.Avalonia.Extensions;
 
 public static class DialogExtensions
 {
-	public static async Task<TResult> ShowDialog<TResult, TCallerViewModel>(this IViewFor<TCallerViewModel> callerView, Dialog<TResult> dialog) where TCallerViewModel : class
-	{
-		StyledElement control = (StyledElement)callerView;
-		Window dialogOwner = control as Window ?? control.GetParentWindow();
-		return await dialog.ShowDialog(dialogOwner);
-	}
-	
-	public static async Task<TResult> ShowDialog<TResult, TCallerViewModel>(this TCallerViewModel callerViewModel, Dialog<TResult> dialog) where TCallerViewModel : class
-	{
-		var callerView = ServiceLocator.Instance.Resolve<IViewFor<TCallerViewModel>>();
-		if (callerView.ViewModel != callerViewModel) throw new Exception($"Incorrect View Instance ({callerView}) for {callerViewModel.GetType()} received from {nameof(ServiceLocator)}");
-		return await callerView.ShowDialog(dialog);
-	}
+    public static async Task ShowDialog(this DialogViewModel viewModel, ViewModel owner)
+    {
+        DialogWindow dialog = new();
+        dialog.DataContext = viewModel;
+        await dialog.ShowDialog(GetOwnerWindow(owner));
+    }
 
-	public static async Task<MessageBoxDialog.DialogResult> ShowMessageBoxDialog<TCallerViewModel>(this IViewFor<TCallerViewModel> callerView, string message, MessageBoxDialog.DialogResult dialogResults = MessageBoxDialog.DialogResult.Ok, string title = "", MaterialIconKind? icon = null) where TCallerViewModel : class
-	{
-		MessageBoxDialog dialog = new(message, dialogResults, title, icon);
-		return await callerView.ShowDialog(dialog);
-	}
-	
-	public static async Task<MessageBoxDialog.DialogResult> ShowMessageBoxDialog<TCallerViewModel>(this TCallerViewModel callerViewModel, string message, MessageBoxDialog.DialogResult dialogResults = MessageBoxDialog.DialogResult.Ok, string title = "", MaterialIconKind? icon = null) where TCallerViewModel : class
-	{
-		MessageBoxDialog dialog = new(message, dialogResults, title, icon);
-		return await callerViewModel.ShowDialog(dialog);
-	}
+    private static Window GetOwnerWindow(ViewModel dataContext)
+    {
+        var firstWithDataContext = GetWindows().SelectMany(window => window.GetVisualChildrenRecursive().Prepend(window))
+            .OfType<StyledElement>().FirstOrDefault(element => element.DataContext == dataContext) as Visual;
+        Guard.IsNotNull(firstWithDataContext);
+        return (Window)TopLevel.GetTopLevel(firstWithDataContext)!;
+    }
+
+    private static IEnumerable<Window> GetWindows()
+    {
+        var lifetime = (ClassicDesktopStyleApplicationLifetime)global::Avalonia.Application.Current!.ApplicationLifetime!;
+        return lifetime.Windows;
+    }
+
+    private static IEnumerable<Visual> GetVisualChildrenRecursive(this Visual visual)
+    {
+        var children = visual.GetVisualChildren();
+        return children.SelectMany(child => GetVisualChildrenRecursive(child).Prepend(child));
+    }
 }

@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="SightKeeper.Avalonia.App"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia">
+             xmlns:local="clr-namespace:SightKeeper.Avalonia"
+             RequestedThemeVariant="Dark">
 
     <Application.Resources>
         <ResourceDictionary>

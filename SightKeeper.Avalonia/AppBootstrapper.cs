@@ -1,8 +1,13 @@
 ﻿using Autofac;
+using FluentValidation;
 using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using SightKeeper.Application.Model;
+using SightKeeper.Application.Model.Creating;
+using SightKeeper.Application.Model.Editing;
+using SightKeeper.Avalonia.ViewModels;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 using SightKeeper.Avalonia.ViewModels.Windows;
@@ -13,6 +18,7 @@ using SightKeeper.Data.Services;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 using SightKeeper.Services.Games;
+using ModelEditor = SightKeeper.Avalonia.Views.ModelEditor;
 
 namespace SightKeeper.Avalonia;
 
@@ -56,28 +62,33 @@ public static class AppBootstrapper
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>();
 		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerLifetimeScope();
 		builder.RegisterType<RegisteredGamesService>();
+		builder.RegisterType<DbModelCreator>().As<ModelCreator>();
+		builder.RegisterType<ModelDataValidator>().As<IValidator<ModelData>>();
+		builder.RegisterType<DbModelsDataAccess>().As<ModelsDataAccess>();
+		builder.RegisterType<DbModelEditor>().As<Application.Model.Editing.ModelEditor>();
+		builder.RegisterType<ModelChangesValidator>().As<IValidator<ModelChanges>>();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
-		builder.RegisterType<MainWindowViewModel>();
+		builder.RegisterType<MainViewModel>().SingleInstance();
 		builder.RegisterType<ModelEditorViewModel>();
 
 		builder.RegisterType<AnnotatingTabViewModel>();
-		builder.RegisterType<ModelsTabViewModel>();
-		builder.RegisterType<ProfilesTabViewModel>();
+		builder.RegisterType<ModelsViewModel>();
+		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<SettingsViewModel>();
 		builder.RegisterType<RegisteredGamesViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
 	{
-		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainWindowViewModel>>();
-		builder.RegisterType<ModelEditorDialog>();
+		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainViewModel>>();
+		builder.RegisterType<ModelEditor>().AsSelf().As<IViewFor<ModelEditorViewModel>>();
 		
 		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingTabViewModel>>();
-		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsTabViewModel>>();
-		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesTabViewModel>>();
+		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsViewModel>>();
+		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
 	}
 }

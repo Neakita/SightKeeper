@@ -3,9 +3,9 @@ using FluentValidation.Validators;
 
 namespace SightKeeper.Commons.Validation.Validators;
 
-public sealed class NoDuplicatesValidator<T, TItem> : PropertyValidator<T, IEnumerable<TItem>>
+public sealed class NoDuplicatesValidator<T, TProperty> : PropertyValidator<T, IEnumerable<TProperty>>
 {
-    public override bool IsValid(ValidationContext<T> context, IEnumerable<TItem> value)
+    public override bool IsValid(ValidationContext<T> context, IEnumerable<TProperty> value)
     {
         var duplicates = value
             .GroupBy(item => item)

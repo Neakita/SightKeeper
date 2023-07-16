@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Services;
+﻿using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services.Games;
 
@@ -10,29 +11,25 @@ public sealed class RegisteredGamesService
         _availableGamesProvider = availableGamesProvider;
     }
     
-    public async Task<IReadOnlyCollection<GameDTO>> GetRegisteredGames(CancellationToken cancellationToken = default)
+    public Task<IReadOnlyCollection<Game>> GetRegisteredGames(CancellationToken cancellationToken = default)
     {
-        var games = await _gamesDataAccess.GetGames(cancellationToken);
-        return games.Select(game => new GameDTO(game)).ToList();
+        return _gamesDataAccess.GetGames(cancellationToken);
     }
 
-    public async Task<IReadOnlyCollection<GameDTO>> GetAvailableGames(CancellationToken cancellationToken = default)
-    {
-        var games = await _availableGamesProvider.GetAvailableGames(cancellationToken);
-        return games.Select(game => new GameDTO(game)).ToList();
-    }
+    public Task<IReadOnlyCollection<Game>> GetAvailableGames(CancellationToken cancellationToken = default) =>
+        _availableGamesProvider.GetAvailableGames(cancellationToken);
 
-    public bool CanRegisterGame(GameDTO game) =>
-        !_gamesDataAccess.ContainsGame(game.Game);
+    public bool CanRegisterGame(Game game) =>
+        !_gamesDataAccess.ContainsGame(game);
 
-    public Task RegisterGame(GameDTO game, CancellationToken cancellationToken = default) =>
-        _gamesDataAccess.AddGame(game.Game, cancellationToken);
+    public Task RegisterGame(Game game, CancellationToken cancellationToken = default) =>
+        _gamesDataAccess.AddGame(game, cancellationToken);
 
-    public bool CanUnRegisterGame(GameDTO game) =>
-        _gamesDataAccess.ContainsGame(game.Game);
+    public bool CanUnRegisterGame(Game game) =>
+        _gamesDataAccess.ContainsGame(game);
 
-    public Task UnRegisterGame(GameDTO game, CancellationToken cancellationToken = default) =>
-        _gamesDataAccess.RemoveGame(game.Game, cancellationToken);
+    public Task UnRegisterGame(Game game, CancellationToken cancellationToken = default) =>
+        _gamesDataAccess.RemoveGame(game, cancellationToken);
 
     private readonly GamesDataAccess _gamesDataAccess;
     private readonly AvailableGamesProvider _availableGamesProvider;

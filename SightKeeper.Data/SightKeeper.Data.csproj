@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="DynamicData" Version="7.14.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0-preview.5.23280.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.0-preview.5.23280.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0-preview.5.23280.1" />
@@ -25,6 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
       <ProjectReference Include="..\SightKeeper.Domain.Model\SightKeeper.Domain.Model.csproj" />
       <ProjectReference Include="..\SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj" />
     </ItemGroup>

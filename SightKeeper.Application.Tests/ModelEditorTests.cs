@@ -1,4 +1,7 @@
-﻿using SightKeeper.Application.Modelling;
+﻿using SightKeeper.Application.Model;
+using SightKeeper.Application.Model.Editing;
+using SightKeeper.Data;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -7,37 +10,13 @@ namespace SightKeeper.Application.Tests;
 
 public sealed class ModelEditorTests
 {
-    private sealed class ModelChangesMock : ModelChanges
-    {
-        public Model Model { get; }
-        public string Name { get; }
-        public string Description { get; }
-        public int ResolutionWidth { get; }
-        public int ResolutionHeight { get; }
-        public IReadOnlyCollection<string> ItemClasses { get; }
-        public Game? Game { get; }
-        public ModelConfig? Config { get; }
-        
-        public ModelChangesMock(Model model, string name, string description, Resolution resolution, IEnumerable<ItemClass> itemClasses, Game? game, ModelConfig? config)
-        {
-            Model = model;
-            Name = name;
-            Description = description;
-            ResolutionWidth = resolution.Width;
-            ResolutionHeight = resolution.Width;
-            ItemClasses = itemClasses.Select(itemClass => itemClass.Name).ToList();
-            Game = game;
-            Config = config;
-        }
-    }
-    
     [Fact]
     public void ShouldApplyNameChange()
     {
         var editor = Editor;
         DetectorModel model = new("Untitled model");
-        ModelChangesMock changes = new(model, "New name", model.Description, model.Resolution, model.ItemClasses, model.Game, model.Config);
-        editor.ApplyChanges(model, changes);
+        ModelChangesDTO changes = new(model, "New name", model.Description, model.Resolution, model.ItemClasses, model.Game, model.Config);
+        editor.ApplyChanges(changes);
         model.Name.Should().Be(changes.Name);
     }
 
@@ -46,8 +25,8 @@ public sealed class ModelEditorTests
     {
         var editor = Editor;
         DetectorModel model = new("Untitled model");
-        ModelChangesMock changes = new(model, model.Name, "New description", model.Resolution, model.ItemClasses, model.Game, model.Config);
-        editor.ApplyChanges(model, changes);
+        ModelChangesDTO changes = new(model, model.Name, "New description", model.Resolution, model.ItemClasses, model.Game, model.Config);
+        editor.ApplyChanges(changes);
         model.Description.Should().Be(changes.Description);
     }
 
@@ -57,8 +36,8 @@ public sealed class ModelEditorTests
         var editor = Editor;
         DetectorModel model = new("Untitled model");
         Resolution changedResolution = new(640, 640);
-        ModelChangesMock changes = new(model, model.Name, model.Description, changedResolution, model.ItemClasses, model.Game, model.Config);
-        editor.ApplyChanges(model, changes);
+        ModelChangesDTO changes = new(model, model.Name, model.Description, changedResolution, model.ItemClasses, model.Game, model.Config);
+        editor.ApplyChanges(changes);
         model.Resolution.Should().BeEquivalentTo(changedResolution);
     }
 
@@ -68,8 +47,8 @@ public sealed class ModelEditorTests
         var editor = Editor;
         DetectorModel model = new("Untitled model");
         Resolution changedResolution = new(636, 636);
-        ModelChangesMock changes = new(model, model.Name, model.Description, changedResolution, model.ItemClasses, model.Game, model.Config);
-        Assert.Throws<ArgumentException>(() => editor.ApplyChanges(model, changes));
+        ModelChangesDTO changes = new(model, model.Name, model.Description, changedResolution, model.ItemClasses, model.Game, model.Config);
+        Assert.Throws<ArgumentException>(() => editor.ApplyChanges(changes));
         model.Resolution.Should().NotBe(changedResolution);
     }
 
@@ -79,8 +58,8 @@ public sealed class ModelEditorTests
         var editor = Editor;
         DetectorModel model = new("Untitled model");
         var newItemClasses = model.ItemClasses.Append(new ItemClass("New item class")).ToList();
-        ModelChangesMock changes = new(model, model.Name, model.Description, model.Resolution, newItemClasses, model.Game, model.Config);
-        editor.ApplyChanges(model, changes);
+        ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, newItemClasses, model.Game, model.Config);
+        editor.ApplyChanges(changes);
         model.ItemClasses.Select(itemClass => itemClass.Name).Should().BeEquivalentTo(changes.ItemClasses);
     }
 
@@ -92,8 +71,8 @@ public sealed class ModelEditorTests
         DetectorModel model = new("Untitled model");
         model.CreateItemClass(itemClassName);
         var newItemClasses = model.ItemClasses.Append(new ItemClass(itemClassName)).ToList();
-        ModelChangesMock changes = new(model, model.Name, model.Description, model.Resolution, newItemClasses, model.Game, model.Config);
-        Assert.Throws<ArgumentException>(() => editor.ApplyChanges(model, changes));
+        ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, newItemClasses, model.Game, model.Config);
+        Assert.Throws<ArgumentException>(() => editor.ApplyChanges(changes));
         model.ItemClasses.Should().ContainSingle(itemClass => itemClass.Name == itemClassName);
     }
 
@@ -104,8 +83,8 @@ public sealed class ModelEditorTests
         DetectorModel model = new("Untitled model");
         const string itemClassName = "Item class";
         model.CreateItemClass(itemClassName);
-        ModelChangesMock changes = new(model, model.Name, model.Description, model.Resolution, new List<ItemClass>(), model.Game, model.Config);
-        editor.ApplyChanges(model, changes);
+        ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, new List<ItemClass>(), model.Game, model.Config);
+        editor.ApplyChanges(changes);
         model.ItemClasses.Should().BeEmpty();
     }
 
@@ -118,8 +97,8 @@ public sealed class ModelEditorTests
         const string itemClassName2 = "Item class 2";
         var itemClass1 = model.CreateItemClass(itemClassName1);
         model.CreateItemClass(itemClassName2);
-        ModelChangesMock changes = new(model, model.Name, model.Description, model.Resolution, new List<ItemClass> { itemClass1 }, model.Game, model.Config);
-        editor.ApplyChanges(model, changes);
+        ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, new List<ItemClass> { itemClass1 }, model.Game, model.Config);
+        editor.ApplyChanges(changes);
         model.ItemClasses.Should().ContainSingle(itemClass => itemClass == itemClass1);
     }
 
@@ -132,8 +111,8 @@ public sealed class ModelEditorTests
         var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
         var asset = model.MakeAssetFromScreenshot(screenshot);
         asset.CreateItem(itemClass, new BoundingBox());
-        ModelChangesMock changes = new(model, model.Name, model.Description, model.Resolution, new List<ItemClass>(), model.Game, model.Config);
-        Assert.Throws<InvalidOperationException>(() => editor.ApplyChanges(model, changes));
+        ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, new List<ItemClass>(), model.Game, model.Config);
+        Assert.Throws<InvalidOperationException>(() => editor.ApplyChanges(changes));
         model.ItemClasses.Should().Contain(itemClass);
     }
 
@@ -143,8 +122,8 @@ public sealed class ModelEditorTests
         var editor = Editor;
         DetectorModel model = new("Untitled model");
         Game newGame = new("New game", "game.exe");
-        ModelChangesMock changes = new(model, model.Name, model.Description, model.Resolution, model.ItemClasses, newGame, model.Config);
-        editor.ApplyChanges(model, changes);
+        ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, model.ItemClasses, newGame, model.Config);
+        editor.ApplyChanges(changes);
         model.Game.Should().Be(newGame);
     }
 
@@ -154,10 +133,10 @@ public sealed class ModelEditorTests
         var editor = Editor;
         DetectorModel model = new("Untitled model");
         ModelConfig newConfig = new("New game", "game.exe", ModelType.Detector);
-        ModelChangesMock changes = new(model, model.Name, model.Description, model.Resolution, model.ItemClasses, model.Game, newConfig);
-        editor.ApplyChanges(model, changes);
+        ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, model.ItemClasses, model.Game, newConfig);
+        editor.ApplyChanges(changes);
         model.Config.Should().Be(newConfig);
     }
 
-    private static ModelEditorImplementation Editor => new(new ModelChangesValidator());
+    private static DbModelEditor Editor => new(new ModelChangesValidator(), new AppDbContext());
 }

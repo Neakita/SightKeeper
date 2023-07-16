@@ -65,15 +65,12 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
 		modelBuilder.ApplyConfiguration(new ImageConfiguration());
 		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());
-		modelBuilder.Entity<Model>().HasShadowKey();
-		modelBuilder.Entity<Model>().OwnsOne(model => model.Resolution);
-		modelBuilder.Entity<Model>().HasMany(model => model.ItemClasses).WithOne().IsRequired();
+		modelBuilder.ApplyConfiguration(new ModelConfiguration());
+		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.Entity<DetectorItem>().HasShadowKey().OwnsOne(item => item.BoundingBox);
-		modelBuilder.Entity<Game>().HasShadowKey();
 		modelBuilder.Entity<ModelConfig>().HasShadowKey();
 		modelBuilder.Entity<ModelWeights>().HasShadowKey();
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		modelBuilder.Entity<ModelWeights>().HasMany(weights => weights.Assets).WithMany();
-		modelBuilder.Entity<Model>().HasOne(model => model.ScreenshotsLibrary).WithOne().HasPrincipalKey<Model>();
 	}
 }

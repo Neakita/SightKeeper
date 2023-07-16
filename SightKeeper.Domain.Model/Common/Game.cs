@@ -10,4 +10,6 @@ public sealed class Game
 		Title = title;
 		ProcessName = processName;
 	}
+
+	public override string ToString() => Title;
 }

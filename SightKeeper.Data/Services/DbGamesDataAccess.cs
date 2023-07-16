@@ -12,7 +12,7 @@ public sealed class DbGamesDataAccess : GamesDataAccess
 
     public async Task<IReadOnlyCollection<Game>> GetGames(CancellationToken cancellationToken = default) =>
         await _dbContext.Games.ToListAsync(cancellationToken);
-
+ 
     public async Task AddGame(Game game, CancellationToken cancellationToken = default)
     {
         if (await ContainsGameAsync(game, cancellationToken))
