@@ -78,6 +78,8 @@
                              SelectedItem="{Binding SelectedConfig}">
                         <ListBox.ContextMenu>
                             <ContextMenu>
+                                <MenuItem Header="Edit"
+                                          Command="{Binding EditConfigCommand}"/>
                                 <MenuItem Header="Delete"
                                           Command="{Binding DeleteConfigCommand}"/>
                             </ContextMenu>

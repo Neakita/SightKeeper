@@ -1,10 +1,9 @@
-﻿using CommunityToolkit.Diagnostics;
-using FluentValidation;
+﻿using FluentValidation;
 using SightKeeper.Application.Model;
 using SightKeeper.Application.Model.Editing;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Data.Services;
+namespace SightKeeper.Data.Services.Model;
 
 public sealed class DbModelEditor : ModelEditor
 {
@@ -14,11 +13,9 @@ public sealed class DbModelEditor : ModelEditor
         _dbContext = dbContext;
     }
     
-    public void ApplyChanges(ModelChangesDTO changes)
+    public async Task ApplyChanges(ModelChangesDTO changes, CancellationToken cancellationToken = default)
     {
-        var validationResult = _changesValidator.Validate(changes);
-        if (!validationResult.IsValid)
-            ThrowHelper.ThrowArgumentException($"Invalid model changes: {validationResult}");
+        await _changesValidator.ValidateAndThrowAsync(changes, cancellationToken);
         var model = changes.Model;
         model.Name = changes.Name;
         model.Description = changes.Description;
@@ -27,6 +24,7 @@ public sealed class DbModelEditor : ModelEditor
         model.Config = changes.Config;
         ApplyItemClassesChanges(model, changes.ItemClasses);
         _dbContext.Models.Update(model);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     private static void ApplyItemClassesChanges(Domain.Model.Model model, IReadOnlyCollection<string> itemClasses)

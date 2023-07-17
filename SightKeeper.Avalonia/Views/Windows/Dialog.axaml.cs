@@ -1,6 +1,6 @@
 ﻿using System;
 using Avalonia.Controls;
-using SightKeeper.Avalonia.ViewModels;
+using SightKeeper.Avalonia.ViewModels.Dialogs;
 
 namespace SightKeeper.Avalonia.Views.Windows;
 

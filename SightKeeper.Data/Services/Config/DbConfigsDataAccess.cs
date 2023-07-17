@@ -2,7 +2,7 @@
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
-namespace SightKeeper.Data.Services;
+namespace SightKeeper.Data.Services.Config;
 
 public sealed class DbConfigsDataAccess : ConfigsDataAccess
 {

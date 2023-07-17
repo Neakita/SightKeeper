@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SightKeeper.Avalonia.ViewModels;
+using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.Views.Windows;
 
 namespace SightKeeper.Avalonia.Extensions;

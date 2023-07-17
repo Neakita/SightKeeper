@@ -11,6 +11,6 @@ public interface IConfigsViewModel
     ModelConfig? SelectedConfig { get; set; }
     
     IAsyncRelayCommand AddConfigCommand { get; }
-    
+    IAsyncRelayCommand EditConfigCommand { get; }
     IAsyncRelayCommand DeleteConfigCommand { get; }
 }

@@ -2,5 +2,5 @@
 
 public interface ModelEditor
 {
-    public void ApplyChanges(ModelChangesDTO changes);
+    public Task ApplyChanges(ModelChangesDTO changes, CancellationToken cancellationToken = default);
 }

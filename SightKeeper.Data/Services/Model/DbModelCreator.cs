@@ -5,7 +5,7 @@ using SightKeeper.Application.Model.Creating;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Data.Services;
+namespace SightKeeper.Data.Services.Model;
 
 public sealed class DbModelCreator : ModelCreator
 {
@@ -15,16 +15,14 @@ public sealed class DbModelCreator : ModelCreator
         _dbContext = dbContext;
     }
 
-    public Model CreateModel(NewModelDataDTO data)
+    public async Task<Domain.Model.Model> CreateModel(NewModelDataDTO data, CancellationToken cancellationToken = default)
     {
-        var validationResult = _validator.Validate(data);
-        if (!validationResult.IsValid)
-            ThrowHelper.ThrowArgumentException($"Invalid data: {validationResult}");
+        await _validator.ValidateAndThrowAsync(data, cancellationToken);
         var model = data.ModelType switch
         {
             ModelType.Detector => new DetectorModel(data.Name, data.Resolution),
             ModelType.Classifier => throw new NotImplementedException("Classifier model creation not implemented yet"),
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Model>(nameof(data.ModelType))
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Domain.Model.Model>(nameof(data.ModelType))
         };
         _dbContext.Models.Add(model);
         model.Description = data.Description;
@@ -32,6 +30,7 @@ public sealed class DbModelCreator : ModelCreator
             model.CreateItemClass(itemClass);
         model.Game = data.Game;
         model.Config = data.Config;
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return model;
     }
     

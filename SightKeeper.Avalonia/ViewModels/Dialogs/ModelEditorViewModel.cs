@@ -16,7 +16,7 @@ using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Services.Games;
 
-namespace SightKeeper.Avalonia.ViewModels;
+namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
 public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, DialogViewModel, ModelData
 {
@@ -86,7 +86,7 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
     [RelayCommand(CanExecute = nameof(CanDeleteItemClass))]
     private void DeleteItemClass()
     {
-        Guard.IsNotNull(SelectedItemClass);
+        Guard.IsNotNull<string>(SelectedItemClass);
         if (!_itemClasses.Remove(SelectedItemClass))
             ThrowHelper.ThrowArgumentException(nameof(SelectedItemClass), $"{SelectedItemClass} not removed from {ItemClasses}");
     }

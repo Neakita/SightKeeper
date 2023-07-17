@@ -1,9 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ReactiveUI;
-using SightKeeper.Avalonia.ViewModels;
+using SightKeeper.Avalonia.ViewModels.Dialogs;
 
-namespace SightKeeper.Avalonia.Views;
+namespace SightKeeper.Avalonia.Views.Dialogs;
 
 public sealed partial class ModelEditor : UserControl, IViewFor<ModelEditorViewModel>
 {

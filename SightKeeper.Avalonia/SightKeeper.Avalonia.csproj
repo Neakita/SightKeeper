@@ -39,4 +39,11 @@
       <ProjectReference Include="..\SightKeeper.Services.Windows\SightKeeper.Services.Windows.csproj" />
       <ProjectReference Include="..\SightKeeper.Services\SightKeeper.Services.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Dialogs\ModelEditor.axaml.cs">
+        <DependentUpon>ModelEditor.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 </Project>

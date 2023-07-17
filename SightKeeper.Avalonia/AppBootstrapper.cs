@@ -4,10 +4,11 @@ using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using SightKeeper.Application.Config;
 using SightKeeper.Application.Model;
 using SightKeeper.Application.Model.Creating;
 using SightKeeper.Application.Model.Editing;
-using SightKeeper.Avalonia.ViewModels;
+using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 using SightKeeper.Avalonia.ViewModels.Windows;
@@ -15,10 +16,12 @@ using SightKeeper.Avalonia.Views.Tabs;
 using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
+using SightKeeper.Data.Services.Config;
+using SightKeeper.Data.Services.Model;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 using SightKeeper.Services.Games;
-using ModelEditor = SightKeeper.Avalonia.Views.ModelEditor;
+using ModelEditor = SightKeeper.Avalonia.Views.Dialogs.ModelEditor;
 
 namespace SightKeeper.Avalonia;
 
@@ -68,6 +71,9 @@ public static class AppBootstrapper
 		builder.RegisterType<DbModelEditor>().As<Application.Model.Editing.ModelEditor>();
 		builder.RegisterType<ModelChangesValidator>().As<IValidator<ModelChanges>>();
 		builder.RegisterType<DbConfigsDataAccess>().As<ConfigsDataAccess>();
+		builder.RegisterType<DbConfigCreator>().As<ConfigCreator>();
+		builder.RegisterType<DbConfigEditor>().As<ConfigEditor>();
+		builder.RegisterType<ConfigDataValidator>().As<IValidator<ConfigData>>();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
@@ -81,6 +87,7 @@ public static class AppBootstrapper
 		builder.RegisterType<SettingsViewModel>();
 		builder.RegisterType<RegisteredGamesViewModel>();
 		builder.RegisterType<ConfigsViewModel>();
+		builder.RegisterType<ConfigEditorViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -92,5 +99,6 @@ public static class AppBootstrapper
 		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsViewModel>>();
 		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
+		builder.RegisterType<Views.Dialogs.ConfigEditor>().As<IViewFor<ConfigEditorViewModel>>();
 	}
 }

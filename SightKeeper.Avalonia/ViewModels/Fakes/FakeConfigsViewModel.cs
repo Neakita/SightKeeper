@@ -11,5 +11,6 @@ public sealed class FakeConfigsViewModel : IConfigsViewModel
     public Task<IReadOnlyCollection<ModelConfig>> Configs { get; }
     public ModelConfig? SelectedConfig { get; set; }
     public IAsyncRelayCommand AddConfigCommand { get; }
+    public IAsyncRelayCommand EditConfigCommand { get; }
     public IAsyncRelayCommand DeleteConfigCommand { get; }
 }

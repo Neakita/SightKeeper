@@ -31,13 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Samples\320screenshot.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Samples\Yolo V3">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Samples\YoloV3.config">
+      <None Update="Samples\YoloV3ValidConfig">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Darknet\_yolo_mark.exe">

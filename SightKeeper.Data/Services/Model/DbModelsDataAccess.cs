@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
-namespace SightKeeper.Data.Services;
+namespace SightKeeper.Data.Services.Model;
 
 public sealed class DbModelsDataAccess : ModelsDataAccess
 {
@@ -11,7 +10,7 @@ public sealed class DbModelsDataAccess : ModelsDataAccess
         _dbContext = dbContext;
     }
     
-    public async Task<IReadOnlyCollection<Model>> GetModels(CancellationToken cancellationToken = default) =>
+    public async Task<IReadOnlyCollection<Domain.Model.Model>> GetModels(CancellationToken cancellationToken = default) =>
         await _dbContext.Models
             .Include(model => model.ItemClasses)
             .Include(model => model.Game)
@@ -19,7 +18,7 @@ public sealed class DbModelsDataAccess : ModelsDataAccess
             .Include(model => model.ScreenshotsLibrary)
             .ToListAsync(cancellationToken);
 
-    public Task RemoveModel(Model model, CancellationToken cancellationToken = default)
+    public Task RemoveModel(Domain.Model.Model model, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         _dbContext.Models.Remove(model);

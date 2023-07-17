@@ -2,5 +2,5 @@
 
 public interface ModelCreator
 {
-    Domain.Model.Model CreateModel(NewModelDataDTO data);
+    Task<Domain.Model.Model> CreateModel(NewModelDataDTO data, CancellationToken cancellationToken = default);
 }
