@@ -3,8 +3,13 @@ using SightKeeper.Avalonia.ViewModels.Tabs;
 
 namespace SightKeeper.Avalonia.Views.Tabs;
 
-public sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatingTabViewModel>
+public sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatingViewModel>
 {
+	public AnnotatingTab()
+	{
+		InitializeComponent();
+	}
+	
 	/*public AnnotatingTab(AnnotatingTabViewModel viewModel) : this()
 	{
 		ViewModel = viewModel;

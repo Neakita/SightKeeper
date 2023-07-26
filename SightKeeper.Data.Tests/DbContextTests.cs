@@ -6,6 +6,6 @@ public sealed class DbContextTests
     public void ShouldJustCreateAppDbFile()
     {
         DefaultAppDbContextFactory factory = new();
-        factory.CreateDbContext();
+        factory.CreateDbContext().Database.EnsureCreated();
     }
 }

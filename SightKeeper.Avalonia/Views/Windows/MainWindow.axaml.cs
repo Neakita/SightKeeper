@@ -10,11 +10,8 @@ public sealed partial class MainWindow : ReactiveWindow<MainViewModel>
 		InitializeComponent();
 	}
 	
-	public MainWindow(MainViewModel viewModel)
+	public MainWindow(MainViewModel viewModel) : this()
 	{
-		InitializeComponent();
 		ViewModel = viewModel;
-		
-		
 	}
 }

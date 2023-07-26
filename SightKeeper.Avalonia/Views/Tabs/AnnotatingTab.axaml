@@ -3,10 +3,67 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
+             xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
+             xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Tabs.AnnotatingTab"
-             x:DataType="viewModels:AnnotatingTabViewModel">
+             x:DataType="viewModels:IAnnotatingViewModel">
+    
+    <Design.DataContext>
+        <fakes:FakeAnnotatingViewModel/>
+    </Design.DataContext>
 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="50" Width="150"/>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition MinWidth="200"/>
+            <ColumnDefinition Width="4"/>
+            <ColumnDefinition Width="165" MinWidth="165" MaxWidth="300"/>
+        </Grid.ColumnDefinitions>
+        <ListBox Grid.Column="0"
+                 ItemsSource="{Binding Screenshots}">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="1"/>
+                </Style>
+            </ListBox.Styles>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="model:Screenshot">
+                    <Image Source="{Binding Image.Content, Converter={StaticResource BytesToBitmapConverter}}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <GridSplitter Grid.Column="1"/>
+        <GridSplitter Grid.Column="3" Background="Gray"/>
+        <StackPanel Grid.Column="4">
+            <ComboBox ItemsSource="{Binding Models^}"
+                      SelectedItem="{Binding SelectedModel}"
+                      HorizontalAlignment="Stretch"
+                      PlaceholderText="Model"
+                      IsEnabled="{Binding CanChangeSelectedModel}"/>
+            <Expander Header="Screenshoting"
+                      HorizontalAlignment="Stretch"
+                      DataContext="{Binding Screenshoter}">
+                <StackPanel>
+                    <CheckBox Content="Enabled"
+                              IsChecked="{Binding IsEnabled}"
+                              IsEnabled="{Binding CanToggleIsEnabled}"/>
+                    <NumericUpDown Watermark="Max images"
+                                   Value="{Binding MaxImages}"
+                                   Minimum="50"
+                                   Maximum="1000"
+                                   Increment="50"/>
+                    <NumericUpDown Watermark="Screenshots per second"
+                                   Value="{Binding ScreenshotsPerSecond}"
+                                   Minimum="1"
+                                   Maximum="60"
+                                   Increment="1"/>
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </Grid>
+    
     <!--<Grid>
 
         <Grid.ColumnDefinitions>

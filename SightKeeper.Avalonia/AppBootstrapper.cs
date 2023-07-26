@@ -4,10 +4,14 @@ using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using SharpHook.Reactive;
+using SightKeeper.Application;
+using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Config;
 using SightKeeper.Application.Model;
 using SightKeeper.Application.Model.Creating;
 using SightKeeper.Application.Model.Editing;
+using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
@@ -20,7 +24,10 @@ using SightKeeper.Data.Services.Config;
 using SightKeeper.Data.Services.Model;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services;
+using SightKeeper.Services.Annotating;
 using SightKeeper.Services.Games;
+using SightKeeper.Services.Input;
+using SightKeeper.Services.Windows;
 using ModelEditor = SightKeeper.Avalonia.Views.Dialogs.ModelEditor;
 
 namespace SightKeeper.Avalonia;
@@ -74,6 +81,14 @@ public static class AppBootstrapper
 		builder.RegisterType<DbConfigCreator>().As<ConfigCreator>();
 		builder.RegisterType<DbConfigEditor>().As<ConfigEditor>();
 		builder.RegisterType<ConfigDataValidator>().As<IValidator<ConfigData>>();
+		builder.RegisterType<HotKeyScreenshoter>().As<Screenshoter>().SingleInstance();
+		builder.RegisterType<HotKeyManager>().SingleInstance();
+		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>();
+		builder.RegisterType<AvaloniaScreenBoundsProvider>().As<ScreenBoundsProvider>();
+		
+		SimpleReactiveGlobalHook hook = new();
+		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
+		hook.RunAsync();
 	}
 
 	private static void SetupViewModels(ContainerBuilder builder)
@@ -81,13 +96,14 @@ public static class AppBootstrapper
 		builder.RegisterType<MainViewModel>().SingleInstance();
 		builder.RegisterType<ModelEditorViewModel>();
 
-		builder.RegisterType<AnnotatingTabViewModel>();
+		builder.RegisterType<AnnotatingViewModel>();
 		builder.RegisterType<ModelsViewModel>();
 		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<SettingsViewModel>();
 		builder.RegisterType<RegisteredGamesViewModel>();
 		builder.RegisterType<ConfigsViewModel>();
 		builder.RegisterType<ConfigEditorViewModel>();
+		builder.RegisterType<ScreenshoterViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -95,7 +111,7 @@ public static class AppBootstrapper
 		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainViewModel>>();
 		builder.RegisterType<ModelEditor>().AsSelf().As<IViewFor<ModelEditorViewModel>>();
 		
-		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingTabViewModel>>();
+		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingViewModel>>();
 		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsViewModel>>();
 		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();

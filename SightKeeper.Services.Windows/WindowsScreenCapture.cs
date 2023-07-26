@@ -17,7 +17,7 @@ public sealed class WindowsScreenCapture : ScreenCapture
 	
 	public Image Capture()
 	{
-		ThrowHelper.ThrowArgumentNullException(nameof(Resolution));
+		Guard.IsNotNull(Resolution);
 		using Bitmap windowsBitmap = new(Resolution!.Width, Resolution.Height);
 		using Graphics graphics = Graphics.FromImage(windowsBitmap);
 

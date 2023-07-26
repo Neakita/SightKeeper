@@ -11,7 +11,7 @@ public sealed class ModelConfiguration : IEntityTypeConfiguration<Model>
         builder.HasShadowKey();
         builder.OwnsOne(model => model.Resolution);
         builder.HasMany(model => model.ItemClasses).WithOne().IsRequired();
-        builder.HasOne(model => model.ScreenshotsLibrary).WithOne().HasPrincipalKey<Model>().IsRequired();
+        builder.HasOne(model => model.ScreenshotsLibrary).WithOne(library => library.Model).HasPrincipalKey<Model>().IsRequired();
         builder.HasIndex(model => model.Name).IsUnique();
     }
 }

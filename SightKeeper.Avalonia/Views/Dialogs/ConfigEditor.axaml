@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs"
              xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Dialogs.ConfigEditor"
              x:DataType="dialogs:ConfigEditorViewModel">
@@ -19,7 +19,7 @@
                 <ComboBox PlaceholderText="Model type"
                           SelectedItem="{Binding ModelType}"
                           ItemsSource="{Binding ModelTypes}"/>
-                <Button Content="{avalonia:MaterialIconExt File}"
+                <Button Content="{icons:MaterialIconExt File}"
                         Command="{Binding SelectFromFileCommand}"/>
             </StackPanel>
             <TextBox Watermark="Name"

@@ -74,7 +74,9 @@ public abstract class Model
 
 	public ModelScreenshotsLibrary ScreenshotsLibrary { get; }
 	public ModelWeightsLibrary WeightsLibrary { get; }
-	
+
+	public override string ToString() => Name;
+
 	protected Model(string name) : this(name, new Resolution())
 	{
 	}

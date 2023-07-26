@@ -2,7 +2,7 @@
 
 public sealed class ModelScreenshotsLibrary : ScreenshotsLibrary
 {
-    internal Model Model { get; private set; }
+    public Model Model { get; private set; }
     
     internal ModelScreenshotsLibrary(Model model)
     {

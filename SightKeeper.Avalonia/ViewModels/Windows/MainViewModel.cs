@@ -28,7 +28,7 @@ public sealed partial class MainViewModel : ViewModel, IActivatableViewModel
 			DbContext = ownScope.Resolve<AppDbContext>();
 			var profilesViewModel = ownScope.Resolve<ProfilesViewModel>();
 			var modelsViewModel = ownScope.Resolve<ModelsViewModel>();
-			var annotatingTabViewModel = ownScope.Resolve<AnnotatingTabViewModel>();
+			var annotatingTabViewModel = ownScope.Resolve<AnnotatingViewModel>();
 			var settingsViewModel = ownScope.Resolve<SettingsViewModel>();
 			Tabs.Add(new TabItem(MaterialIconKind.DotsGrid, "Profiles", profilesViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.TableEye, "Models", modelsViewModel));
