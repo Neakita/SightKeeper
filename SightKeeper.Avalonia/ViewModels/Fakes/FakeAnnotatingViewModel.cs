@@ -23,10 +23,10 @@ public sealed class FakeAnnotatingViewModel : IAnnotatingViewModel
     public bool CanChangeSelectedModel { get; } = true;
     public IReadOnlyCollection<Screenshot> Screenshots => new List<Screenshot>();
 
-    public ScreenshoterViewModel Screenshoter => new(new MockScreenshoter());
+    public ScreenshoterViewModel Screenshoter => new(new MockStreamModelScreenshoter());
 }
 
-internal sealed class MockScreenshoter : Screenshoter
+internal sealed class MockStreamModelScreenshoter : StreamModelScreenshoter
 {
     public IObservable<Screenshot> Screenshoted { get; } = new Subject<Screenshot>();
     public IObservable<Screenshot> ScreenshotRemoved { get; } = new Subject<Screenshot>();

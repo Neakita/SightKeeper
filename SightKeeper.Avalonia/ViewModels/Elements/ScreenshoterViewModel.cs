@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Subjects;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
 
@@ -16,6 +17,8 @@ public sealed class ScreenshoterViewModel : ViewModel
         {
             _screenshoter.Model = model;
             OnPropertyChanged(nameof(CanToggleIsEnabled));
+            OnPropertyChanged(nameof(MaxScreenshotsQuantity));
+            OnPropertyChanged(nameof(CanChangeMaxScreenshotsQuantity));
         });
     }
 
@@ -52,19 +55,25 @@ public sealed class ScreenshoterViewModel : ViewModel
         set => SetProperty(_screenshoter.ScreenshotsPerSecond, value, framesPerSecond => _screenshoter.ScreenshotsPerSecond = framesPerSecond ?? 0);
     }
 
-    public ushort? MaxImages
+    public ushort? MaxScreenshotsQuantity
     {
-        get => _screenshoter.MaxImages;
-        set => SetProperty(_screenshoter.MaxImages, value, maxImages => _screenshoter.MaxImages = maxImages);
+        get => Model?.ScreenshotsLibrary.MaxQuantity;
+        set => SetProperty(Model?.ScreenshotsLibrary.MaxQuantity, value, maxImages =>
+        {
+            Guard.IsNotNull(Model);
+            Model.ScreenshotsLibrary.MaxQuantity = maxImages;
+        });
     }
 
-    public ScreenshoterViewModel(Screenshoter screenshoter)
+    public bool CanChangeMaxScreenshotsQuantity => Model != null;
+
+    public ScreenshoterViewModel(StreamModelScreenshoter screenshoter)
     {
         _screenshoter = screenshoter;
     }
 
-    private readonly Screenshoter _screenshoter;
     private readonly Subject<bool> _isEnabledChanged = new();
+    private readonly StreamModelScreenshoter _screenshoter;
 
     private bool _isEnabled;
     private bool _isSuspended = true;

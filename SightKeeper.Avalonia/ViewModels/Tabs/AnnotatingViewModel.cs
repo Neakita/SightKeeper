@@ -4,14 +4,14 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
-using SightKeeper.Application.Annotating;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
@@ -29,20 +29,17 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 	public ScreenshoterViewModel Screenshoter { get; }
 	public bool CanChangeSelectedModel => !Screenshoter.IsEnabled;
 
-	public AnnotatingViewModel(Screenshoter screenshoter, ScreenshoterViewModel screenshoterViewModel, ModelsDataAccess modelsDataAccess)
+	public AnnotatingViewModel(ScreenshoterViewModel screenshoterViewModel, ModelsDataAccess modelsDataAccess)
 	{
 		Screenshoter = screenshoterViewModel;
 		_modelsDataAccess = modelsDataAccess;
 		this.WhenActivated(HandleActivation);
-		screenshoter.Screenshoted.Merge(screenshoter.ScreenshotRemoved).Subscribe(_ => Dispatcher.UIThread.Invoke(() => OnPropertyChanged(nameof(Screenshots))));
 		_screenshots.Connect()
 			.Sort(SortExpressionComparer<Screenshot>.Descending(screenshot => screenshot.CreationDate))
 			.ObserveOn(RxApp.MainThreadScheduler)
 			.Bind(out var screenshots)
 			.Subscribe();
 		Screenshots = screenshots;
-		screenshoter.Screenshoted.Subscribe(newScreenshot => _screenshots.Add(newScreenshot));
-		screenshoter.ScreenshotRemoved.Subscribe(removedScreenshot => _screenshots.Remove(removedScreenshot));
 		screenshoterViewModel.IsEnabledChanged.Subscribe(_ =>
 			OnPropertyChanged(nameof(CanChangeSelectedModel)));
 	}
@@ -51,15 +48,34 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 	
 	[ObservableProperty] private Model? _selectedModel;
 	private readonly SourceList<Screenshot> _screenshots = new();
+	private CompositeDisposable? _selectedModelDisposable;
+	private TopLevel? _topLevel;
 
 	private IObservable<Unit> TopLevelGotFocus => Observable.FromEventPattern<GotFocusEventArgs>(
-		handler => this.GetTopLevel().GotFocus += handler, handler => this.GetTopLevel().GotFocus -= handler).Select(_ => Unit.Default);
+		handler =>
+		{
+			Guard.IsNotNull(_topLevel);
+			_topLevel.GotFocus += handler;
+		}, handler =>
+		{
+			Guard.IsNotNull(_topLevel);
+			_topLevel.GotFocus -= handler;
+		}).Select(_ => Unit.Default);
 
 	private IObservable<Unit> TopLevelLostFocus => Observable.FromEventPattern<RoutedEventArgs>(
-		handler => this.GetTopLevel().LostFocus += handler, handler => this.GetTopLevel().LostFocus -= handler).Select(_ => Unit.Default);
+		handler =>
+		{
+			Guard.IsNotNull(_topLevel);
+			_topLevel.LostFocus += handler;
+		}, handler =>
+		{
+			Guard.IsNotNull(_topLevel);
+			_topLevel.LostFocus -= handler;
+		}).Select(_ => Unit.Default);
 
 	private void HandleActivation(CompositeDisposable disposable)
 	{
+		_topLevel = this.GetTopLevel();
 		Disposable.Create(HandleDeactivation).DisposeWith(disposable);
 		OnPropertyChanged(nameof(Models));
 		TopLevelGotFocus.Subscribe(_ => Screenshoter.IsSuspended = true).DisposeWith(disposable);
@@ -74,9 +90,17 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 
 	partial void OnSelectedModelChanged(Model? value)
 	{
+		_selectedModelDisposable?.Dispose();
 		Screenshoter.Model = value;
 		_screenshots.Clear();
-		if (value != null)
-			_screenshots.AddRange(value.ScreenshotsLibrary.Screenshots);
+		if (value == null) return;
+		_selectedModelDisposable = new CompositeDisposable();
+		_screenshots.AddRange(value.ScreenshotsLibrary.Screenshots);
+		value.ScreenshotsLibrary.ScreenshotAdded
+			.Subscribe(newScreenshot => _screenshots.Add(newScreenshot))
+			.DisposeWith(_selectedModelDisposable);
+		value.ScreenshotsLibrary.ScreenshotRemoved
+			.Subscribe(removedScreenshot => _screenshots.Remove(removedScreenshot))
+			.DisposeWith(_selectedModelDisposable);
 	}
 }

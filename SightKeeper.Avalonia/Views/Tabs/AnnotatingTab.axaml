@@ -44,16 +44,16 @@
                       IsEnabled="{Binding CanChangeSelectedModel}"/>
             <Expander Header="Screenshoting"
                       HorizontalAlignment="Stretch"
-                      DataContext="{Binding Screenshoter}">
+                      DataContext="{Binding Screenshoter}"
+                      IsExpanded="True">
                 <StackPanel>
                     <CheckBox Content="Enabled"
                               IsChecked="{Binding IsEnabled}"
                               IsEnabled="{Binding CanToggleIsEnabled}"/>
                     <NumericUpDown Watermark="Max images"
-                                   Value="{Binding MaxImages}"
-                                   Minimum="50"
-                                   Maximum="1000"
-                                   Increment="50"/>
+                                   Value="{Binding MaxScreenshotsQuantity}"
+                                   Increment="10"
+                                   IsEnabled="{Binding CanChangeMaxScreenshotsQuantity}"/>
                     <NumericUpDown Watermark="Screenshots per second"
                                    Value="{Binding ScreenshotsPerSecond}"
                                    Minimum="1"

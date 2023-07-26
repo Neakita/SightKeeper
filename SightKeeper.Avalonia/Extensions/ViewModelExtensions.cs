@@ -17,7 +17,8 @@ public static class ViewModelExtensions
     {
         var firstWithDataContext = GetWindows().SelectMany(window => window.GetVisualChildrenRecursive().Prepend(window))
             .OfType<StyledElement>().FirstOrDefault(element => element.DataContext == viewModel);
-        Guard.IsNotNull(firstWithDataContext);
+        if (firstWithDataContext == null)
+            ThrowHelper.ThrowArgumentException(nameof(viewModel), $"View of view model \"{viewModel}\" not found");
         return firstWithDataContext;
     }
 

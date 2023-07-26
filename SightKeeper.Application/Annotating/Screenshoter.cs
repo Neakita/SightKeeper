@@ -1,13 +1,23 @@
-﻿using SightKeeper.Domain.Model;
+﻿using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Annotating;
 
-public interface Screenshoter
+public sealed class Screenshoter
 {
-	IObservable<Screenshot> Screenshoted { get; }
-	IObservable<Screenshot> ScreenshotRemoved { get; }
-	Domain.Model.Model? Model { get; set; }
-	bool IsEnabled { get; set; }
-	byte ScreenshotsPerSecond { get; set; }
-	ushort? MaxImages { get; set; }
+	public ScreenshotsLibrary? Library { get; set; }
+
+	public Screenshoter(ScreenCapture screenCapture)
+	{
+		_screenCapture = screenCapture;
+	}
+	
+	public void MakeScreenshot()
+	{
+		Guard.IsNotNull(Library);
+		var image = _screenCapture.Capture();
+		Library.CreateScreenshot(image);
+	}
+	
+	private readonly ScreenCapture _screenCapture;
 }

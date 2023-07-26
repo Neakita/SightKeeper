@@ -1,28 +1,20 @@
-﻿using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using SharpHook.Native;
-using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
 using SightKeeper.Services.Input;
 
 namespace SightKeeper.Services.Annotating;
 
-public sealed class HotKeyScreenshoter : Screenshoter
+public sealed class HotKeyScreenshoter : StreamModelScreenshoter
 {
-    public IObservable<Screenshot> Screenshoted => _screenshoted.AsObservable();
-    public IObservable<Screenshot> ScreenshotRemoved => _removed.AsObservable();
-
     public Model? Model
     {
-        get => _model;
+        get => _screenshoter.Model;
         set
         {
             Guard.IsFalse(IsEnabled);
-            _model = value;
-            _screenCapture.Resolution = _model?.Resolution;
-            _screenCapture.Game = _model?.Game;
+            _screenshoter.Model = value;
         }
     }
 
@@ -55,62 +47,39 @@ public sealed class HotKeyScreenshoter : Screenshoter
         }
     }
 
-    public ushort? MaxImages { get; set; } = 500;
-
-    public HotKeyScreenshoter(HotKeyManager hotKeyManager, ScreenCapture screenCapture)
+    public HotKeyScreenshoter(HotKeyManager hotKeyManager, ModelScreenshoter screenshoter)
     {
         _hotKeyManager = hotKeyManager;
-        _screenCapture = screenCapture;
+        _screenshoter = screenshoter;
         ScreenshotsPerSecond = 1;
     }
 
     private readonly HotKeyManager _hotKeyManager;
-    private readonly ScreenCapture _screenCapture;
-    private readonly Subject<Screenshot> _screenshoted = new();
-    private readonly Subject<Screenshot> _removed = new();
+    private readonly ModelScreenshoter _screenshoter;
 
     private IDisposable? _disposable;
     private bool _isEnabled;
     private byte _framesPerSecond;
     private int? _timeout;
-    private Model? _model;
 
     private void Enable() => _disposable = _hotKeyManager.Register(MouseButton.Button1, OnHotKeyPressed);
-    private void Disable() => _disposable?.Dispose();
+    private void Disable()
+    {
+        Guard.IsNotNull(_disposable);
+        _disposable.Dispose();
+    }
+
     private void OnHotKeyPressed(HotKey hotKey)
     {
         lock (this)
         {
             while (hotKey.IsPressed)
             {
-                Screenshot();
+                _screenshoter.MakeScreenshot();
                 if (_timeout == null)
                     break;
                 Thread.Sleep(_timeout.Value);
             }
-            ClearExceedScreenshots(); 
-        }
-    }
-    private void Screenshot()
-    {
-        Guard.IsNotNull(Model);
-        var image = _screenCapture.Capture();
-        var screenshot = Model.ScreenshotsLibrary.CreateScreenshot(image);
-        _screenshoted.OnNext(screenshot);
-    }
-    private void ClearExceedScreenshots()
-    {
-        if (MaxImages == null)
-            return;
-        Guard.IsNotNull(Model);
-        var screenshotsToDelete = Model.ScreenshotsLibrary.Screenshots
-            .OrderByDescending(screenshot => screenshot.CreationDate)
-            .Skip(MaxImages.Value)
-            .ToList();
-        foreach (var screenshot in screenshotsToDelete)
-        {
-            Model.ScreenshotsLibrary.DeleteScreenshot(screenshot);
-            _removed.OnNext(screenshot);
         }
     }
 }
