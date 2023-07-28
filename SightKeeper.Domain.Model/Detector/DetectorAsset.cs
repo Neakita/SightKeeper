@@ -7,7 +7,7 @@ public sealed class DetectorAsset : Asset
 {
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 
-	internal DetectorModel Model { get; private set; }
+	public DetectorModel Model { get; private set; }
 	
 	internal DetectorAsset(DetectorModel model, Screenshot screenshot) : base(screenshot)
 	{
