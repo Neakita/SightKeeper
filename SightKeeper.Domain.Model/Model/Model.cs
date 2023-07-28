@@ -72,8 +72,8 @@ public abstract class Model
 
 	#endregion
 
-	public ModelScreenshotsLibrary ScreenshotsLibrary { get; }
-	public ModelWeightsLibrary WeightsLibrary { get; }
+	public ModelScreenshotsLibrary ScreenshotsLibrary { get; private set; }
+	public ModelWeightsLibrary WeightsLibrary { get; private set; }
 
 	public override string ToString() => Name;
 

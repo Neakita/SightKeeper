@@ -23,7 +23,7 @@ public sealed class DetectorModel : Model
 
 	public DetectorAsset MakeAssetFromScreenshot(Screenshot screenshot)
 	{
-		if (screenshot.DetectorAsset != null)
+		if (screenshot.Asset != null)
 			ThrowHelper.ThrowArgumentException("Asset with same screenshot already exists");
 		if (screenshot.Library is ModelScreenshotsLibrary modelLibrary)
 		{
@@ -39,7 +39,7 @@ public sealed class DetectorModel : Model
 	{
 		if (!_assets.Remove(asset))
 			ThrowHelper.ThrowArgumentException(nameof(asset), "Asset not found");
-		asset.Screenshot.DetectorAsset = null;
+		asset.Screenshot.Asset = null;
 	}
 
 	public override bool CanChangeResolution([NotNullWhen(false)] out string? message)

@@ -14,7 +14,7 @@ public sealed class DetectorAsset : Asset
 	internal DetectorAsset(DetectorModel detectorModel, Screenshot screenshot) : base(screenshot)
 	{
 		DetectorModel = detectorModel;
-		screenshot.DetectorAsset = this;
+		screenshot.Asset = this;
 		_items = new List<DetectorItem>();
 	}
 
