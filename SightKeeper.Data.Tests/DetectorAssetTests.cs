@@ -36,7 +36,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
     }
 
     [Fact]
-    public void ScreenshotsShouldBeEmptyAndAssetsShouldNot()
+    public void ScreenshotsAndAssetsShouldNotBeEmpty()
     {
         using (var initialDbContext = DbContextFactory.CreateDbContext())
         {
@@ -48,7 +48,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
         }
         using var dbContext = DbContextFactory.CreateDbContext();
         var model = dbContext.DetectorModels.Include(model => model.ScreenshotsLibrary.Screenshots).Include(model => model.Assets).Single();
-        model.ScreenshotsLibrary.Screenshots.Should().BeEmpty();
+        model.ScreenshotsLibrary.Screenshots.Should().NotBeEmpty();
         model.Assets.Should().NotBeEmpty();
     }
 }

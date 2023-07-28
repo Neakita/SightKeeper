@@ -6,12 +6,12 @@ namespace SightKeeper.Domain.Model.Tests.DetectorModelTests;
 public sealed class CooperationTests
 {
     [Fact]
-    public void ShouldMakeAssetAndDeleteItFromScreenshots()
+    public void ShouldMakeAssetAndKeepItInScreenshots()
     {
         DetectorModel model = new("Test model");
         var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset = model.MakeAssetFromScreenshot(screenshot);
-        model.ScreenshotsLibrary.Screenshots.Should().BeEmpty();
+        model.ScreenshotsLibrary.Screenshots.Should().Contain(screenshot);
         model.Assets.Should().Contain(asset);
     }
     

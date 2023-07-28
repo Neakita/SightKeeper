@@ -98,7 +98,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	}
 
 	[Fact]
-	public void ScreenshotShouldNotBeRepresentedInLibraryWhenItIsAsset()
+	public void ScreenshotShouldBeRepresentedInLibraryWhenItIsAsset()
 	{
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
@@ -115,7 +115,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 				.Include(m => m.ScreenshotsLibrary.Screenshots)
 				.Single();
 			model.Assets.Should().NotBeEmpty();
-			model.ScreenshotsLibrary.Screenshots.Should().BeEmpty();
+			model.ScreenshotsLibrary.Screenshots.Should().NotBeEmpty();
 		}
 	}
 
