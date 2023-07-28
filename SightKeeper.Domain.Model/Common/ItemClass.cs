@@ -5,7 +5,7 @@ namespace SightKeeper.Domain.Model.Common;
 public sealed class ItemClass
 {
 	public string Name { get; set; }
-	internal ICollection<DetectorItem> DetectorItems { get; set; }
+	public ICollection<DetectorItem> DetectorItems { get; internal set; }
 
 	public ItemClass(string name)
 	{
