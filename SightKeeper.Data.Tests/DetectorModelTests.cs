@@ -56,16 +56,16 @@ public sealed class DetectorModelTests : DbRelatedTests
 		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(image);
 		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
-		var item = asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
+		asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
 		dbContext.DetectorModels.Add(model);
 		dbContext.SaveChanges();
 		dbContext.DetectorModels.Remove(model);
 		dbContext.SaveChanges();
 		dbContext.DetectorModels.Should().BeEmpty();
 		dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
-		dbContext.Set<Screenshot>().Should().BeEmpty();
-		dbContext.Set<Image>().Should().BeEmpty();
 		dbContext.Set<DetectorAsset>().Should().BeEmpty();
+		dbContext.Set<Screenshot>().Should().BeEmpty(); // test fails because screenshot is principal entity, and so, it is not cascade deleting when asset got deleted
+		dbContext.Set<Image>().Should().BeEmpty();
 		dbContext.Set<ItemClass>().Should().BeEmpty();
 		dbContext.Set<DetectorItem>().Should().BeEmpty();
 	}
@@ -102,7 +102,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	}
 
 	[Fact]
-	public void ScreenshotsShouldBeEmptyWhenHaveAssets()
+	public void ScreenshotShouldNotBeRepresentedInLibraryWhenItIsAsset()
 	{
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{

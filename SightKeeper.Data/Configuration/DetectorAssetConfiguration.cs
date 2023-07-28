@@ -6,7 +6,9 @@ namespace SightKeeper.Data.Configuration;
 
 public sealed class DetectorAssetConfiguration : IEntityTypeConfiguration<DetectorAsset>
 {
-    public void Configure(EntityTypeBuilder<DetectorAsset> builder) => builder
-        .ToTable("DetectorAssets")
-        .HasOne<DetectorModel>("DetectorModel").WithMany(model => model.Assets);
+    public void Configure(EntityTypeBuilder<DetectorAsset> builder)
+    {
+        builder.ToTable("DetectorAssets");
+        builder.HasOne<DetectorModel>("DetectorModel").WithMany(model => model.Assets);
+    }
 }

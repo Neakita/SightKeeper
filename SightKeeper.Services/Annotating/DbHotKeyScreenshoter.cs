@@ -2,11 +2,15 @@
 using SharpHook.Native;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Services;
 using SightKeeper.Services.Input;
 
 namespace SightKeeper.Services.Annotating;
 
-public sealed class HotKeyScreenshoter : StreamModelScreenshoter
+/// <summary>
+/// TODO Too many responsibilities, this class should not be named "Db..." and should not use ScreenshotLibrariesDataAccess
+/// </summary>
+public sealed class DbHotKeyScreenshoter : StreamModelScreenshoter
 {
     public Model? Model
     {
@@ -47,15 +51,17 @@ public sealed class HotKeyScreenshoter : StreamModelScreenshoter
         }
     }
 
-    public HotKeyScreenshoter(HotKeyManager hotKeyManager, ModelScreenshoter screenshoter)
+    public DbHotKeyScreenshoter(HotKeyManager hotKeyManager, ModelScreenshoter screenshoter, ScreenshotLibrariesDataAccess librariesDataAccess)
     {
         _hotKeyManager = hotKeyManager;
         _screenshoter = screenshoter;
+        _librariesDataAccess = librariesDataAccess;
         ScreenshotsPerSecond = 1;
     }
 
     private readonly HotKeyManager _hotKeyManager;
     private readonly ModelScreenshoter _screenshoter;
+    private readonly ScreenshotLibrariesDataAccess _librariesDataAccess;
 
     private IDisposable? _disposable;
     private bool _isEnabled;
@@ -71,6 +77,7 @@ public sealed class HotKeyScreenshoter : StreamModelScreenshoter
 
     private void OnHotKeyPressed(HotKey hotKey)
     {
+        Guard.IsNotNull(Model);
         lock (this)
         {
             while (hotKey.IsPressed)
@@ -80,6 +87,7 @@ public sealed class HotKeyScreenshoter : StreamModelScreenshoter
                     break;
                 Thread.Sleep(_timeout.Value);
             }
+            _librariesDataAccess.SaveChanges(Model.ScreenshotsLibrary);
         }
     }
 }
