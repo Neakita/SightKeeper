@@ -15,9 +15,9 @@ public sealed class DbContextTests
         DetectorModel model = new("Test model");
         var screenshotForAsset = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var asset = model.MakeAssetFromScreenshot(screenshotForAsset); // BUG SQLite Error 19: 'FOREIGN KEY constraint failed'.
-        /*var itemClass = model.CreateItemClass("Test item class");
-        asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));*/
+        var asset = model.MakeAssetFromScreenshot(screenshotForAsset);
+        var itemClass = model.CreateItemClass("Test item class");
+        asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
         dbContext.DetectorModels.Add(model);
         dbContext.SaveChanges();
     }
