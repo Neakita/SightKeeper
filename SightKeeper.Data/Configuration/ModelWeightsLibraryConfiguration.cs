@@ -8,6 +8,9 @@ public sealed class ModelWeightsLibraryConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<ModelWeightsLibrary> builder)
     {
-        builder.HasMany(library => library.Weights).WithOne("Library").IsRequired();
+        builder.ToTable("ModelWeightsLibraries");
+        builder.HasShadowKey();
+        builder.HasMany(library => library.Weights).WithOne(weights => weights.Library).IsRequired();
+        builder.HasOne(library => library.Model).WithOne(model => model.WeightsLibrary).HasPrincipalKey<Model>();
     }
 }

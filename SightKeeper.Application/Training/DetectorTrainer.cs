@@ -26,6 +26,6 @@ public sealed class DetectorTrainer : ModelTrainer<DetectorModel>
         var baseWeights = FromScratch ? null : Model.WeightsLibrary.Weights.MaxBy(weights => weights.Date);
         var weightsData = await _darknetAdapter.RunAsync(Model, baseWeights?.Data, cancellationToken);
         if (weightsData == null) return null;
-        return new ModelWeights(Model, 0, weightsData, assets, config);
+        return Model.WeightsLibrary.CreateWeights(0, weightsData, assets, config);
     }
 }

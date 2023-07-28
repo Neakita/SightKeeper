@@ -10,20 +10,10 @@ public sealed class WeightsTests
     public void ShouldAddWeights()
     {
         DetectorModel model = new("Model");
-        ModelWeights weights = new(model, 0, Array.Empty<byte>(), Enumerable.Empty<Asset>());
-        model.WeightsLibrary.AddWeights(weights);
+        var weights = model.WeightsLibrary.CreateWeights(0, Array.Empty<byte>(), Enumerable.Empty<Asset>());
         model.WeightsLibrary.Weights.Should().Contain(weights);
     }
-    
-    [Fact]
-    public void ShouldNotAddDuplicateWeights()
-    {
-        DetectorModel model = new("Model");
-        ModelWeights weights = new(model, 0, Array.Empty<byte>(), Enumerable.Empty<Asset>());
-        model.WeightsLibrary.AddWeights(weights);
-        Assert.Throws<ArgumentException>(() => model.WeightsLibrary.AddWeights(weights));
-    }
-    
+
     [Fact]
     public void ShouldNotCreateWithAssetFromDifferentModel()
     {
@@ -33,6 +23,6 @@ public sealed class WeightsTests
         var screenshot2 = model2.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset1 = model1.MakeAssetFromScreenshot(screenshot1);
         var asset2 = model2.MakeAssetFromScreenshot(screenshot2);
-        Assert.Throws<ArgumentException>(() => new ModelWeights(model1, 0, Array.Empty<byte>(), new List<Asset> { asset1, asset2 }));
+        Assert.Throws<ArgumentException>(() => model1.WeightsLibrary.CreateWeights(0, Array.Empty<byte>(), new List<Asset> { asset1, asset2 }));
     }
 }

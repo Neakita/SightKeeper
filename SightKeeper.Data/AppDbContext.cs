@@ -66,11 +66,11 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
+		modelBuilder.ApplyConfiguration(new ModelWeightsLibraryConfiguration());
 		modelBuilder.Entity<DetectorItem>().HasShadowKey().OwnsOne(item => item.BoundingBox);
 		modelBuilder.Entity<ModelConfig>().HasShadowKey();
-		modelBuilder.Entity<ModelWeights>().HasShadowKey();
 		modelBuilder.Entity<Profile>().HasShadowKey();
+		modelBuilder.Entity<ModelWeights>().HasShadowKey();
 		modelBuilder.Entity<ModelWeights>().HasMany(weights => weights.Assets).WithMany();
-		modelBuilder.Entity<ModelWeightsLibrary>().HasShadowKey();
 	}
 }

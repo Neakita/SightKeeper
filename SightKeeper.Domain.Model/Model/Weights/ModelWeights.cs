@@ -11,9 +11,9 @@ public sealed class ModelWeights
     public byte[] Data { get; private set; }
     public ICollection<Asset> Assets { get; private set; }
     public ModelConfig? Config { get; private set; }
-    internal ModelWeightsLibrary? Library { get; set; }
+    public ModelWeightsLibrary? Library { get; internal set; }
 
-    public ModelWeights(Model model, int batch, byte[] data, IEnumerable<Asset> assets, ModelConfig? config = null)
+    internal ModelWeights(Model model, int batch, byte[] data, IEnumerable<Asset> assets, ModelConfig? config = null)
         : this(model, batch, DateTime.Now, data, assets.ToList(), config) { }
 
     private ModelWeights(Model model, int batch, DateTime date, byte[] data, ICollection<Asset> assets, ModelConfig? config)

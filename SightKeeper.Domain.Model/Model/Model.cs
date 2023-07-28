@@ -87,7 +87,7 @@ public abstract class Model
 		Description = string.Empty;
 		_resolution = resolution;
 		_itemClasses = new List<ItemClass>();
-		WeightsLibrary = new ModelWeightsLibrary();
+		WeightsLibrary = new ModelWeightsLibrary(this);
 		ScreenshotsLibrary = new ModelScreenshotsLibrary(this);
 	}
 

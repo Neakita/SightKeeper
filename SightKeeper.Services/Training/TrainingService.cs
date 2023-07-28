@@ -24,11 +24,10 @@ public sealed class TrainingService
             {
                 var dbContext = _scope.Resolve<AppDbContext>();
                 dbContext.Attach(detectorModel);
-                detectorModel.WeightsLibrary.AddWeights(weights);
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
-        throw new NotSupportedException($"Model of type {model.GetType()} is not supported yet");
+        throw new NotSupportedException($"Model of type {model.GetType()} is not supported");
     }
     
     private readonly ILifetimeScope _scope;
