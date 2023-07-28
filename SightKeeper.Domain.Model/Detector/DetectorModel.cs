@@ -25,11 +25,8 @@ public sealed class DetectorModel : Model
 	{
 		if (screenshot.Asset != null)
 			ThrowHelper.ThrowArgumentException("Asset with same screenshot already exists");
-		if (screenshot.Library is ModelScreenshotsLibrary modelLibrary)
-		{
-			if (modelLibrary.Model != this)
-				ThrowHelper.ThrowArgumentException(nameof(screenshot), $"Screenshot is owned by {modelLibrary.Model}");
-		}
+		if (screenshot.Library is ModelScreenshotsLibrary modelLibrary && modelLibrary.Model != this)
+			ThrowHelper.ThrowArgumentException(nameof(screenshot), $"Screenshot is owned by different model \"{modelLibrary.Model}\"");
 		DetectorAsset asset = new(this, screenshot);
 		_assets.Add(asset);
 		return asset;

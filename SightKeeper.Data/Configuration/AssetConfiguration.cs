@@ -10,6 +10,6 @@ public sealed class AssetConfiguration : IEntityTypeConfiguration<Asset>
     public void Configure(EntityTypeBuilder<Asset> builder)
     {
         builder.ToTable("Assets").HasShadowKey();
-        builder.HasOne(asset => asset.Screenshot).WithOne().HasPrincipalKey<Screenshot>().IsRequired(); // TODO simplify
+        builder.HasOne(asset => asset.Screenshot).WithOne(screenshot => screenshot.Asset).HasPrincipalKey<Screenshot>();
     }
 }
