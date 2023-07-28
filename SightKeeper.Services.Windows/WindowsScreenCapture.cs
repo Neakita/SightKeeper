@@ -4,7 +4,6 @@ using System.Drawing.Imaging;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
-using Image = SightKeeper.Domain.Model.Common.Image;
 
 namespace SightKeeper.Services.Windows;
 
@@ -15,11 +14,11 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		_screenBoundsProvider = screenBoundsProvider;
 	}
 	
-	public Image Capture()
+	public byte[] Capture()
 	{
 		Guard.IsNotNull(Resolution);
 		using Bitmap windowsBitmap = new(Resolution!.Width, Resolution.Height);
-		using Graphics graphics = Graphics.FromImage(windowsBitmap);
+		using var graphics = Graphics.FromImage(windowsBitmap);
 
 		Point point = new(
 			_screenBoundsProvider.MainScreenHorizontalCenter - Resolution.Width / 2 - XOffset, 
@@ -28,11 +27,11 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		graphics.CopyFromScreen(point, Point.Empty, new Size(Resolution.Width, Resolution.Height));
 		using MemoryStream stream = new();
 		windowsBitmap.Save(stream, ImageFormat.Bmp);
-		return new Image(stream.ToArray());
+		return stream.ToArray();
 	}
 
-	public Task<Image> CaptureAsync(CancellationToken cancellationToken = default) =>
-		Task.FromResult(Capture());
+	public Task<byte[]> CaptureAsync(CancellationToken cancellationToken = default) =>
+		Task.Run(Capture, cancellationToken);
 
 	public Game? Game { get; set; }
 	public Resolution? Resolution { get; set; }

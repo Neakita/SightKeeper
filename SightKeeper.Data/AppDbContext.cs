@@ -61,7 +61,6 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new DetectorModelConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotsLibraryConfiguration());
-		modelBuilder.ApplyConfiguration(new ImageConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
 		modelBuilder.ApplyConfiguration(new AssetConfiguration());
 		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());

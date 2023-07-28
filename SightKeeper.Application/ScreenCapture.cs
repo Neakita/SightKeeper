@@ -4,8 +4,8 @@ namespace SightKeeper.Application;
 
 public interface ScreenCapture
 {
-	Image Capture();
-	Task<Image> CaptureAsync(CancellationToken cancellationToken = default);
+	byte[] Capture();
+	Task<byte[]> CaptureAsync(CancellationToken cancellationToken = default);
 
 	Game? Game { get; set; }
 	public Resolution? Resolution { get; set; }

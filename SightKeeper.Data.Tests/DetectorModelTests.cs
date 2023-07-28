@@ -30,8 +30,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
 		var model = TestDetectorModel;
-		Image image = new(Array.Empty<byte>());
-		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(image);
+		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
 		var item = asset.CreateItem(itemClass, new BoundingBox());
@@ -40,7 +39,6 @@ public sealed class DetectorModelTests : DbRelatedTests
 		dbContext.SaveChanges();
 
 		dbContext.DetectorModels.Should().Contain(model);
-		dbContext.Set<Image>().Should().Contain(image);
 		dbContext.Set<Screenshot>().Should().Contain(screenshot);
 		dbContext.Set<DetectorAsset>().Should().Contain(asset);
 		dbContext.Set<DetectorItem>().Should().Contain(item);
@@ -52,8 +50,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
-		Image image = new(Array.Empty<byte>());
-		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(image);
+		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
 		asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
@@ -65,7 +62,6 @@ public sealed class DetectorModelTests : DbRelatedTests
 		dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
 		dbContext.Set<DetectorAsset>().Should().BeEmpty();
 		dbContext.Set<Screenshot>().Should().BeEmpty(); // test fails because screenshot is principal entity, and so, it is not cascade deleting when asset got deleted
-		dbContext.Set<Image>().Should().BeEmpty();
 		dbContext.Set<ItemClass>().Should().BeEmpty();
 		dbContext.Set<DetectorItem>().Should().BeEmpty();
 	}
@@ -107,7 +103,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
 			DetectorModel model = new("Test model");
-			var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+			var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 			model.MakeAssetFromScreenshot(screenshot);
 			dbContext.Add(model);
 			dbContext.SaveChanges();

@@ -1,7 +1,6 @@
 ﻿using SightKeeper.Application.Training.Images;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using Image = SixLabors.ImageSharp.Image;
 
 namespace SightKeeper.Services;
 
@@ -16,7 +15,7 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorModel>
 	{
 		var imageFilePath = Path.Combine(targetDirectoryPath, $"image{index}.png");
 		var infoFilePath = Path.Combine(targetDirectoryPath, $"image{index}.txt");
-		await Image.Load(asset.Screenshot.Image.Content).SaveAsync(imageFilePath, cancellationToken: cancellationToken);
+		await Image.Load(asset.Screenshot.Content).SaveAsync(imageFilePath, cancellationToken: cancellationToken);
 		await File.WriteAllTextAsync(infoFilePath, ItemsToString(asset.Items, itemClasses), cancellationToken);
 		return imageFilePath;
 	}

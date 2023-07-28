@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
@@ -17,13 +16,10 @@ public class ScreenshotsLibrary
         _screenshots = new List<Screenshot>();
     }
 
-    public Screenshot CreateScreenshot(Image image)
+    public Screenshot CreateScreenshot(byte[] content)
     {
-        if (image.Screenshot != null)
-            ThrowHelper.ThrowArgumentException("Image already added as screenshot");
-        Screenshot screenshot = new(this, image);
+        Screenshot screenshot = new(this, content);
         _screenshots.Add(screenshot);
-        image.Screenshot = screenshot;
         _screenshotAdded.OnNext(screenshot);
         ClearExceed();
         return screenshot;

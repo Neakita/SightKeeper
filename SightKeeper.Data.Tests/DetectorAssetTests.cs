@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
 
@@ -12,7 +11,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
     public void ShouldAddAssetWithScreenshot()
     {
         DetectorModel model = new("Model");
-        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset = model.MakeAssetFromScreenshot(screenshot);
         using var dbContext = DbContextFactory.CreateDbContext();
         dbContext.Add(model);
@@ -25,9 +24,9 @@ public sealed class DetectorAssetTests : DbRelatedTests
     public void AssetAndScreenshotShouldHaveEqualIds()
     {
         DetectorModel model = new("Model");
-        model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
-        model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
-        var screenshot3 = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+        model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+        model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+        var screenshot3 = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset = model.MakeAssetFromScreenshot(screenshot3);
         using var dbContext = DbContextFactory.CreateDbContext();
         dbContext.Add(model);
@@ -42,7 +41,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
         using (var initialDbContext = DbContextFactory.CreateDbContext())
         {
             DetectorModel newModel = new("Model");
-            var screenshot = newModel.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+            var screenshot = newModel.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
             newModel.MakeAssetFromScreenshot(screenshot);
             initialDbContext.Add(newModel);
             initialDbContext.SaveChanges();

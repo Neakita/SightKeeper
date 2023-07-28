@@ -12,7 +12,7 @@ public sealed class ItemClassesTests : DbRelatedTests
 		using var dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
 		var itemClass = model.CreateItemClass("Test item class");
-		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(new Image(Array.Empty<byte>()));
+		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 		var asset = model.MakeAssetFromScreenshot(screenshot);
 		var item = asset.CreateItem(itemClass, new BoundingBox());
 		dbContext.DetectorModels.Add(model);

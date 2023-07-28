@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;
@@ -12,7 +11,7 @@ public sealed class ScreenshotsLibraryTests : DbRelatedTests
     {
         using var dbContext = DbContextFactory.CreateDbContext();
         ScreenshotsLibrary library = new();
-        library.CreateScreenshot(new Image(Array.Empty<byte>()));
+        library.CreateScreenshot(Array.Empty<byte>());
         dbContext.Add(library);
         dbContext.SaveChanges();
         using var assertDbContext = DbContextFactory.CreateDbContext();
@@ -24,7 +23,7 @@ public sealed class ScreenshotsLibraryTests : DbRelatedTests
     {
         using var dbContext = DbContextFactory.CreateDbContext();
         ScreenshotsLibrary library = new();
-        var screenshot = library.CreateScreenshot(new Image(Array.Empty<byte>()));
+        var screenshot = library.CreateScreenshot(Array.Empty<byte>());
         dbContext.Add(library);
         dbContext.SaveChanges();
         dbContext.Set<ScreenshotsLibrary>().Should().Contain(library);

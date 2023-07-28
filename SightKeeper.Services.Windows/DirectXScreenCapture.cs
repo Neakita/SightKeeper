@@ -5,13 +5,12 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
-using Image = System.Drawing.Image;
 
 namespace SightKeeper.Services.Windows;
 
 public sealed class DirectXScreenCapture : ScreenCapture
 {
-	public Domain.Model.Common.Image Capture()
+	public byte[] Capture()
 	{
 		var factory = new Factory1();
         var adapter = factory.GetAdapter1(0);
@@ -41,11 +40,11 @@ public sealed class DirectXScreenCapture : ScreenCapture
         using OutputDuplication duplicatedOutput = output1.DuplicateOutput(device);
         Thread.Sleep(20); // захватчику экрана надо время проинициализироваться
         Bitmap bmp = new(width, height, PixelFormat.Format32bppArgb);
-        SharpDX.DXGI.Resource screenResource = null;
+        SharpDX.DXGI.Resource? screenResource = null;
         try
         {
-            if (duplicatedOutput.TryAcquireNextFrame(10, out OutputDuplicateFrameInformation _, out screenResource) != Result.Ok)
-                return new Domain.Model.Common.Image(ImageToBytes(bmp));
+            if (duplicatedOutput.TryAcquireNextFrame(10, out _, out screenResource) != Result.Ok)
+                return ImageToBytes(bmp);
 
             using (Texture2D screenTexture2D = screenResource.QueryInterface<Texture2D>())
             {
@@ -69,13 +68,11 @@ public sealed class DirectXScreenCapture : ScreenCapture
         {
             screenResource?.Dispose();
         }
-        return new Domain.Model.Common.Image(ImageToBytes(bmp));
+        return ImageToBytes(bmp);
 	}
 
-	public Task<Domain.Model.Common.Image> CaptureAsync(CancellationToken cancellationToken = default)
-	{
-		return Task.FromResult(Capture());
-	}
+	public Task<byte[]> CaptureAsync(CancellationToken cancellationToken = default) =>
+		Task.Run(Capture, cancellationToken);
 
 	public Game? Game { get; set; }
 	public Resolution? Resolution { get; set; }

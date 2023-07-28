@@ -8,6 +8,7 @@ public sealed class DetectorModelConfiguration : IEntityTypeConfiguration<Detect
 {
     public void Configure(EntityTypeBuilder<DetectorModel> builder)
     {
-        builder.ToTable("DetectorModels").HasMany(model => model.Assets).WithOne().IsRequired();
+        builder.ToTable("DetectorModels");
+        builder.HasMany(model => model.Assets).WithOne("Model").IsRequired();
     }
 }
