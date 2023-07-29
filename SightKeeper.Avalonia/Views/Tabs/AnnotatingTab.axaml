@@ -30,7 +30,7 @@
             </ListBox.Styles>
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="model:Screenshot">
-                    <Image Source="{Binding Image.Content, Converter={StaticResource BytesToBitmapConverter}}"/>
+                    <Image Source="{Binding Content, Converter={StaticResource BytesToBitmapConverter}}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
