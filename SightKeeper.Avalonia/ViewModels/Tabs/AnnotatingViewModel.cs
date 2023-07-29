@@ -29,10 +29,11 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 	public ScreenshoterViewModel Screenshoter { get; }
 	public bool CanChangeSelectedModel => !Screenshoter.IsEnabled;
 
-	public AnnotatingViewModel(ScreenshoterViewModel screenshoterViewModel, ModelsDataAccess modelsDataAccess)
+	public AnnotatingViewModel(ScreenshoterViewModel screenshoterViewModel, ModelsDataAccess modelsDataAccess, ScreenshotsDataAccess screenshotsDataAccess)
 	{
 		Screenshoter = screenshoterViewModel;
 		_modelsDataAccess = modelsDataAccess;
+		_screenshotsDataAccess = screenshotsDataAccess;
 		this.WhenActivated(HandleActivation);
 		_screenshots.Connect()
 			.Sort(SortExpressionComparer<Screenshot>.Descending(screenshot => screenshot.CreationDate))
@@ -45,7 +46,8 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 	}
 
 	private readonly ModelsDataAccess _modelsDataAccess;
-	
+	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
+
 	[ObservableProperty] private Model? _selectedModel;
 	private readonly SourceList<Screenshot> _screenshots = new();
 	private CompositeDisposable? _selectedModelDisposable;
@@ -94,8 +96,9 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 		Screenshoter.Model = value;
 		_screenshots.Clear();
 		if (value == null) return;
-		_selectedModelDisposable = new CompositeDisposable();
+		_screenshotsDataAccess.Load(value.ScreenshotsLibrary);
 		_screenshots.AddRange(value.ScreenshotsLibrary.Screenshots);
+		_selectedModelDisposable = new CompositeDisposable();
 		value.ScreenshotsLibrary.ScreenshotAdded
 			.Subscribe(newScreenshot => _screenshots.Add(newScreenshot))
 			.DisposeWith(_selectedModelDisposable);

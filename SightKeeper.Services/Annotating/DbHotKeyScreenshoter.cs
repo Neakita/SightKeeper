@@ -51,7 +51,7 @@ public sealed class DbHotKeyScreenshoter : StreamModelScreenshoter
         }
     }
 
-    public DbHotKeyScreenshoter(HotKeyManager hotKeyManager, ModelScreenshoter screenshoter, ScreenshotLibrariesDataAccess librariesDataAccess)
+    public DbHotKeyScreenshoter(HotKeyManager hotKeyManager, ModelScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess)
     {
         _hotKeyManager = hotKeyManager;
         _screenshoter = screenshoter;
@@ -61,7 +61,7 @@ public sealed class DbHotKeyScreenshoter : StreamModelScreenshoter
 
     private readonly HotKeyManager _hotKeyManager;
     private readonly ModelScreenshoter _screenshoter;
-    private readonly ScreenshotLibrariesDataAccess _librariesDataAccess;
+    private readonly ScreenshotsDataAccess _librariesDataAccess;
 
     private IDisposable? _disposable;
     private bool _isEnabled;

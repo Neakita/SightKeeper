@@ -87,7 +87,7 @@ public static class AppBootstrapper
 		builder.RegisterType<HotKeyManager>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<AvaloniaScreenBoundsProvider>().As<ScreenBoundsProvider>();
-		builder.RegisterType<DbScreenshotLibrariesDataAccess>().As<ScreenshotLibrariesDataAccess>();
+		builder.RegisterType<DbScreenshotsDataAccess>().As<ScreenshotsDataAccess>();
 		
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();

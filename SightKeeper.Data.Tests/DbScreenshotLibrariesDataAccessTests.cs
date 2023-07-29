@@ -13,7 +13,7 @@ public sealed class DbScreenshotLibrariesDataAccessTests : DbRelatedTests
         ScreenshotsLibrary library = new();
         dbContext.Add(library);
         dbContext.SaveChanges();
-        DbScreenshotLibrariesDataAccess dataAccess = new(dbContext);
+        DbScreenshotsDataAccess dataAccess = new(dbContext);
         library.MaxQuantity = 110;
         dataAccess.SaveChanges(library);
         using var assertDbContext = DbContextFactory.CreateDbContext();

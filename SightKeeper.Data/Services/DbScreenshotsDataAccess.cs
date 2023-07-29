@@ -3,13 +3,18 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class DbScreenshotLibrariesDataAccess : ScreenshotLibrariesDataAccess
+public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
 {
-    public DbScreenshotLibrariesDataAccess(AppDbContext dbContext)
+    public DbScreenshotsDataAccess(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    
+
+    public void Load(ScreenshotsLibrary library)
+    {
+        _dbContext.Entry(library).Collection(lib => lib.Screenshots).Load();
+    }
+
     public void SaveChanges(ScreenshotsLibrary library)
     {
         _dbContext.Update(library);
