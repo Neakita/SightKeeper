@@ -12,7 +12,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
     {
         DetectorModel model = new("Model");
         var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var asset = model.MakeAssetFromScreenshot(screenshot);
+        var asset = model.MakeAsset(screenshot);
         using var dbContext = DbContextFactory.CreateDbContext();
         dbContext.Add(model);
         dbContext.SaveChanges();
@@ -27,7 +27,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
         model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var screenshot3 = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var asset = model.MakeAssetFromScreenshot(screenshot3);
+        var asset = model.MakeAsset(screenshot3);
         using var dbContext = DbContextFactory.CreateDbContext();
         dbContext.Add(model);
         var screenshotId = dbContext.Entry(screenshot3).IdProperty().CurrentValue;
@@ -42,7 +42,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
         {
             DetectorModel newModel = new("Model");
             var screenshot = newModel.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-            newModel.MakeAssetFromScreenshot(screenshot);
+            newModel.MakeAsset(screenshot);
             initialDbContext.Add(newModel);
             initialDbContext.SaveChanges();
         }
@@ -59,7 +59,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
         {
             DetectorModel model = new("Test model");
             var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-            model.MakeAssetFromScreenshot(screenshot);
+            model.MakeAsset(screenshot);
             arrangeDbContext.Add(model);
             arrangeDbContext.SaveChanges();
         }

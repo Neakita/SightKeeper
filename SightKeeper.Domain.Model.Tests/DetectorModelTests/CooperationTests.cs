@@ -10,7 +10,7 @@ public sealed class CooperationTests
     {
         DetectorModel model = new("Test model");
         var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var asset = model.MakeAssetFromScreenshot(screenshot);
+        var asset = model.MakeAsset(screenshot);
         model.ScreenshotsLibrary.Screenshots.Should().Contain(screenshot);
         model.Assets.Should().Contain(asset);
     }
@@ -21,7 +21,7 @@ public sealed class CooperationTests
         DetectorModel model = new("Model");
         var itemClass = model.CreateItemClass("Item class");
         var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var asset = model.MakeAssetFromScreenshot(screenshot);
+        var asset = model.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new BoundingBox());
         Assert.Throws<InvalidOperationException>(() => model.DeleteItemClass(itemClass));
     }

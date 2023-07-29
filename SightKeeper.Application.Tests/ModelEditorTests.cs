@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using SightKeeper.Application.Model;
 using SightKeeper.Application.Model.Editing;
 using SightKeeper.Data.Services.Model;
 using SightKeeper.Domain.Model;
@@ -58,7 +57,7 @@ public sealed class ModelEditorTests : DbRelatedTests
     {
         var editor = Editor;
         DetectorModel model = new("Untitled model");
-        var newItemClasses = model.ItemClasses.Append(new ItemClass("New item class")).ToList();
+        var newItemClasses = model.ItemClasses.Select(itemClass => itemClass.Name).Append("New item class").ToList();
         ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, newItemClasses, model.Game, model.Config);
         await editor.ApplyChanges(changes);
         model.ItemClasses.Select(itemClass => itemClass.Name).Should().BeEquivalentTo(changes.ItemClasses);
@@ -71,7 +70,7 @@ public sealed class ModelEditorTests : DbRelatedTests
         var editor = Editor;
         DetectorModel model = new("Untitled model");
         model.CreateItemClass(itemClassName);
-        var newItemClasses = model.ItemClasses.Append(new ItemClass(itemClassName)).ToList();
+        var newItemClasses = model.ItemClasses.Select(itemClass => itemClass.Name).Append(itemClassName).ToList();
         ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, newItemClasses, model.Game, model.Config);
         await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(changes));
         model.ItemClasses.Should().ContainSingle(itemClass => itemClass.Name == itemClassName);
@@ -110,7 +109,7 @@ public sealed class ModelEditorTests : DbRelatedTests
         DetectorModel model = new("Untitled model");
         var itemClass = model.CreateItemClass("Item class");
         var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var asset = model.MakeAssetFromScreenshot(screenshot);
+        var asset = model.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new BoundingBox());
         ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, new List<ItemClass>(), model.Game, model.Config);
         await Assert.ThrowsAsync<InvalidOperationException>(() => editor.ApplyChanges(changes));

@@ -20,7 +20,7 @@ public sealed class DetectorAsset : Asset
 	{
 		if (!Model.ItemClasses.Contains(itemClass))
 			ThrowHelper.ThrowInvalidOperationException($"Model \"{Model}\" does not contain item class \"{itemClass}\"");
-		DetectorItem item = new(itemClass, boundingBox);
+		DetectorItem item = new(this, itemClass, boundingBox);
 		_items.Add(item);
 		itemClass.DetectorItems.Add(item);
 		return item;

@@ -21,7 +21,7 @@ public sealed class DetectorModel : Model
 		_assets = new List<DetectorAsset>();
 	}
 
-	public DetectorAsset MakeAssetFromScreenshot(Screenshot screenshot)
+	public DetectorAsset MakeAsset(Screenshot screenshot)
 	{
 		if (screenshot.Asset != null)
 			ThrowHelper.ThrowArgumentException("Asset with same screenshot already exists");

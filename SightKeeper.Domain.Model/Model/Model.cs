@@ -48,17 +48,9 @@ public abstract class Model
 	{
 		if (_itemClasses.Any(itemClass => itemClass.Name == name))
 			ThrowHelper.ThrowArgumentException($"Item class with name \"{name}\" already exists");
-		ItemClass newItemClass = new(name);
+		ItemClass newItemClass = new(this, name);
 		_itemClasses.Add(newItemClass);
 		return newItemClass;
-	}
-
-	public void AddItemClass(ItemClass itemClass)
-	{
-		if (_itemClasses.Contains(itemClass)) ThrowHelper.ThrowArgumentException($"Item class \"{itemClass}\" already added");
-		else if (_itemClasses.Any(i => i.Name == itemClass.Name))
-			ThrowHelper.ThrowArgumentException($"Item class with name \"{itemClass.Name}\" already exists");
-		_itemClasses.Add(itemClass);
 	}
 	
 	public void DeleteItemClass(ItemClass itemClass)

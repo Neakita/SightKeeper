@@ -39,7 +39,7 @@ public sealed class ResolutionTests
         Resolution secondResolution = new(128, 128);
         DetectorModel model = new("Test model", firstResolution);
         var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        model.MakeAssetFromScreenshot(screenshot);
+        model.MakeAsset(screenshot);
         model.Resolution.Should().Be(firstResolution);
         Assert.Throws<InvalidOperationException>(() =>
         {

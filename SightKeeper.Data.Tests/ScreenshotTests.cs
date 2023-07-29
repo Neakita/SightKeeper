@@ -13,7 +13,7 @@ public sealed class ScreenshotTests : DbRelatedTests
         {
             DetectorModel model = new("Test model");
             var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-            model.MakeAssetFromScreenshot(screenshot);
+            model.MakeAsset(screenshot);
             arrangeDbContext.Add(model);
             arrangeDbContext.SaveChanges();
         }

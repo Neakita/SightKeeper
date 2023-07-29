@@ -1,9 +1,8 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Application.Model.Editing;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Application.Model;
+namespace SightKeeper.Application.Model.Editing;
 
 public sealed class ModelChangesDTO : ModelChanges
 {
@@ -32,7 +31,7 @@ public sealed class ModelChangesDTO : ModelChanges
         Config = data.Config;
     }
     
-    public ModelChangesDTO(Domain.Model.Model model, string name, string description, Resolution resolution, IReadOnlyCollection<ItemClass> itemClasses, Game? game, ModelConfig? config)
+    public ModelChangesDTO(Domain.Model.Model model, string name, string description, Resolution resolution, IEnumerable<ItemClass> itemClasses, Game? game, ModelConfig? config)
     {
         Model = model;
         Name = name;
@@ -40,6 +39,18 @@ public sealed class ModelChangesDTO : ModelChanges
         ResolutionWidth = resolution.Width;
         ResolutionHeight = resolution.Height;
         ItemClasses = itemClasses.Select(itemClass => itemClass.Name).ToList();
+        Game = game;
+        Config = config;
+    }
+    
+    public ModelChangesDTO(Domain.Model.Model model, string name, string description, Resolution resolution, IEnumerable<string> itemClasses, Game? game, ModelConfig? config)
+    {
+        Model = model;
+        Name = name;
+        Description = description;
+        ResolutionWidth = resolution.Width;
+        ResolutionHeight = resolution.Height;
+        ItemClasses = itemClasses.ToList();
         Game = game;
         Config = config;
     }

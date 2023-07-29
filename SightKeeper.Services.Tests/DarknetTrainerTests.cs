@@ -19,7 +19,7 @@ public sealed class DarknetTrainerTests
         for (var i = 0; i < 200; i++)
         {
             var screenshot = model.ScreenshotsLibrary.CreateScreenshot(imageData);
-            var asset = model.MakeAssetFromScreenshot(screenshot);
+            var asset = model.MakeAsset(screenshot);
             asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
         }
         ModelConfig config = new("Yolo V3", File.ReadAllText("Samples/YoloV3.config"), ModelType.Detector);

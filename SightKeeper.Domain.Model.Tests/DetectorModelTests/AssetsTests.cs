@@ -10,7 +10,7 @@ public sealed class AssetsTests
     {
         DetectorModel model = new("Model");
         var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var asset = model.MakeAssetFromScreenshot(screenshot);
+        var asset = model.MakeAsset(screenshot);
         var itemClass = model.CreateItemClass("Item class");
         var item = asset.CreateItem(itemClass, new BoundingBox());
         asset.Items.Should().Contain(item);
@@ -24,8 +24,8 @@ public sealed class AssetsTests
         DetectorModel model = new("Model");
         var screenshot1 = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var screenshot2 =  model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var asset1 = model.MakeAssetFromScreenshot(screenshot1);
-        var asset2 = model.MakeAssetFromScreenshot(screenshot2);
+        var asset1 = model.MakeAsset(screenshot1);
+        var asset2 = model.MakeAsset(screenshot2);
         var itemClass = model.CreateItemClass("Item class");
         var item = asset1.CreateItem(itemClass, new BoundingBox());
         Assert.Throws<ArgumentException>(() => asset2.DeleteItem(item));

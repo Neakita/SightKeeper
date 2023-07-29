@@ -16,7 +16,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     public void Annotate(DetectorModel model, Screenshot screenshot, ItemClass itemClass, BoundingBox boundingBox)
     {
         _dbContext.Attach(model);
-        var asset = model.MakeAssetFromScreenshot(screenshot);
+        var asset = model.MakeAsset(screenshot);
         Annotate(asset, itemClass, boundingBox);
     }
 
@@ -30,7 +30,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     public void MakeAsset(DetectorModel model, Screenshot screenshot)
     {
         _dbContext.Attach(model);
-        model.MakeAssetFromScreenshot(screenshot);
+        model.MakeAsset(screenshot);
         _dbContext.SaveChanges();
     }
 
