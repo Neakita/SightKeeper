@@ -79,6 +79,13 @@ public sealed class BoundingBoxViewModel : ViewModel
     {
         BoundingBox = boundingBox;
     }
+    
+    public void SetFromTwoPositions(double x1, double y1, double x2, double y2)
+    {
+        OnPropertiesChanging(AllProperties);
+        BoundingBox.SetFromTwoPositions(x1, y1, x2, y2);
+        OnPropertiesChanged(AllProperties);
+    }
 
     private static readonly string[] HorizontalProperties =
     {
@@ -90,6 +97,19 @@ public sealed class BoundingBoxViewModel : ViewModel
 
     private static readonly string[] VerticalProperties =
     {
+        nameof(Y1),
+        nameof(Y2),
+        nameof(Height),
+        nameof(YCenter)
+    };
+
+    private static readonly string[] AllProperties = new[]
+    {
+        nameof(X1),
+        nameof(X2),
+        nameof(Width),
+        nameof(XCenter),
+        
         nameof(Y1),
         nameof(Y2),
         nameof(Height),
