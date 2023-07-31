@@ -16,6 +16,7 @@ using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 using SightKeeper.Avalonia.ViewModels.Windows;
+using SightKeeper.Avalonia.Views.Annotating;
 using SightKeeper.Avalonia.Views.Tabs;
 using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;

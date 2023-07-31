@@ -5,8 +5,9 @@
              xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
              xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
              xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
+             xmlns:annotating="clr-namespace:SightKeeper.Avalonia.Views.Annotating"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Views.Tabs.AnnotatingTab"
+             x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatingTab"
              x:DataType="viewModels:IAnnotatingViewModel">
     
     <Design.DataContext>
@@ -44,22 +45,8 @@
                       IsEnabled="{Binding CanChangeSelectedModel}"/>
             <Expander Header="Screenshoting"
                       HorizontalAlignment="Stretch"
-                      DataContext="{Binding Screenshoter}"
                       IsExpanded="True">
-                <StackPanel>
-                    <CheckBox Content="Enabled"
-                              IsChecked="{Binding IsEnabled}"
-                              IsEnabled="{Binding CanToggleIsEnabled}"/>
-                    <NumericUpDown Watermark="Max images"
-                                   Value="{Binding MaxScreenshotsQuantity}"
-                                   Increment="10"
-                                   IsEnabled="{Binding CanChangeMaxScreenshotsQuantity}"/>
-                    <NumericUpDown Watermark="Screenshots per second"
-                                   Value="{Binding ScreenshotsPerSecond}"
-                                   Minimum="1"
-                                   Maximum="60"
-                                   Increment="1"/>
-                </StackPanel>
+                <annotating:ScreenshoterSettings DataContext="{Binding Screenshoter}"/>
             </Expander>
         </StackPanel>
     </Grid>

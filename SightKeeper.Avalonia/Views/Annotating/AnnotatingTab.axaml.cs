@@ -1,7 +1,7 @@
 ﻿using Avalonia.ReactiveUI;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 
-namespace SightKeeper.Avalonia.Views.Tabs;
+namespace SightKeeper.Avalonia.Views.Annotating;
 
 public sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatingViewModel>
 {
