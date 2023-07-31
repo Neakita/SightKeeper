@@ -52,6 +52,7 @@ public class ScreenshotsLibrary
         if (MaxQuantity == null)
             return;
         var screenshotsToDelete = Screenshots
+            .Where(screenshot => screenshot.Asset == null)
             .OrderByDescending(screenshot => screenshot.CreationDate)
             .Skip(MaxQuantity.Value)
             .ToList();

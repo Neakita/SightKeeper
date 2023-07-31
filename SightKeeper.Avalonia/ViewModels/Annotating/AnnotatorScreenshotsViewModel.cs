@@ -14,7 +14,7 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 {
-    public IReadOnlyCollection<Screenshot> Screenshots { get; }
+    public IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
 
     public IEnumerable<SortingRule<Screenshot>> SortingRules { get; } = new[]
     {
@@ -32,6 +32,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         _screenshotsDataAccess = screenshotsDataAccess;
         _screenshots.Connect()
             .Sort(sortingRule)
+            .Transform(screenshot => new ScreenshotViewModel(screenshot))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out var screenshots)
             .Subscribe();

@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
-             xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatorScreenshots"
@@ -34,8 +33,23 @@
                 </Style>
             </ListBox.Styles>
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="model:Screenshot">
-                    <Image Source="{Binding Content, Converter={StaticResource BytesToBitmapConverter}}"/>
+                <DataTemplate>
+                    <Panel>
+                        <Image Source="{Binding Screenshot.Content, Converter={StaticResource BytesToBitmapConverter}}"
+                               Margin="1"/>
+                        <avalonia:MaterialIcon Kind="BookmarkCheck"
+                                               Width="30" Height="30"
+                                               Foreground="Green"
+                                               VerticalAlignment="Top"
+                                               HorizontalAlignment="Right"
+                                               Margin="0 -5 20 0"
+                                               ToolTip.Tip="Asset"
+                                               IsVisible="{Binding IsAsset}">
+                            <avalonia:MaterialIcon.Clip>
+                                <RectangleGeometry Rect="0, 5, 30, 30"/>
+                            </avalonia:MaterialIcon.Clip>
+                        </avalonia:MaterialIcon>
+                    </Panel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
