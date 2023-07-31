@@ -21,6 +21,14 @@ public sealed class BoundingBox
 		Y2 = yMax;
 	}
 
+	public void SetFromPointAndDimensions(double x, double y, double width, double height)
+	{
+		X1 = x;
+		Y1 = y;
+		X2 = x + width;
+		Y2 = y + height;
+	}
+
 	public double X1 { get; private set; }
 	public double Y1 { get; private set; }
 
