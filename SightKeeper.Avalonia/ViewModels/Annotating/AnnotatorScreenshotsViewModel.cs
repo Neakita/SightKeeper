@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -15,11 +16,22 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 {
     public IReadOnlyCollection<Screenshot> Screenshots { get; }
 
+    public IEnumerable<SortingRule<Screenshot>> SortingRules { get; } = new[]
+    {
+        new SortingRule<Screenshot>("Old first", SortDirection.Ascending, screenshot => screenshot.CreationDate),
+        new SortingRule<Screenshot>("New first", SortDirection.Descending, screenshot => screenshot.CreationDate)
+    };
+
+    [ObservableProperty] private SortingRule<Screenshot> _sortingRule;
+
     public AnnotatorScreenshotsViewModel(ScreenshotsDataAccess screenshotsDataAccess)
     {
+        _sortingRule = SortingRules.First();
+        var sortingRule = this.WhenAnyValue(viewModel => viewModel.SortingRule)
+            .Select(rule => rule.Comparer);
         _screenshotsDataAccess = screenshotsDataAccess;
         _screenshots.Connect()
-            .Sort(SortExpressionComparer<Screenshot>.Descending(screenshot => screenshot.CreationDate))
+            .Sort(sortingRule)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out var screenshots)
             .Subscribe();

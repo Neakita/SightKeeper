@@ -4,19 +4,41 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
              xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatorScreenshots"
              x:DataType="annotating:AnnotatorScreenshotsViewModel">
-    <ListBox ItemsSource="{Binding Screenshots}">
-        <ListBox.Styles>
-            <Style Selector="ListBoxItem">
-                <Setter Property="Padding" Value="1"/>
-            </Style>
-        </ListBox.Styles>
-        <ListBox.ItemTemplate>
-            <DataTemplate DataType="model:Screenshot">
-                <Image Source="{Binding Content, Converter={StaticResource BytesToBitmapConverter}}"/>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
+    
+    <Grid RowDefinitions="Auto *">
+        
+        <ComboBox Grid.Row="0"
+                  HorizontalAlignment="Right"
+                  ItemsSource="{Binding SortingRules}"
+                  SelectedItem="{Binding SortingRule}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="5">
+                        <TextBlock Text="{Binding Name}"/>
+                        <avalonia:MaterialIcon Kind="{Binding Direction, Converter={StaticResource SortDirectionToIconConverter}}"
+                                               ToolTip.Tip="{Binding Direction}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <ListBox Grid.Row="1" ItemsSource="{Binding Screenshots}">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="1"/>
+                </Style>
+            </ListBox.Styles>
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="model:Screenshot">
+                    <Image Source="{Binding Content, Converter={StaticResource BytesToBitmapConverter}}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+    </Grid>
 </UserControl>
