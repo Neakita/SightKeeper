@@ -2,16 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
-             xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
-             xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
              xmlns:annotating="clr-namespace:SightKeeper.Avalonia.Views.Annotating"
+             xmlns:annotating1="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatingTab"
-             x:DataType="viewModels:IAnnotatingViewModel">
+             x:DataType="annotating1:IAnnotatingViewModel">
     
     <Design.DataContext>
-        <fakes:FakeAnnotatingViewModel/>
+        <annotating1:FakeAnnotatingViewModel/>
     </Design.DataContext>
 
     <Grid>
@@ -22,19 +20,7 @@
             <ColumnDefinition Width="4"/>
             <ColumnDefinition Width="165" MinWidth="165" MaxWidth="300"/>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0"
-                 ItemsSource="{Binding Screenshots}">
-            <ListBox.Styles>
-                <Style Selector="ListBoxItem">
-                    <Setter Property="Padding" Value="1"/>
-                </Style>
-            </ListBox.Styles>
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="model:Screenshot">
-                    <Image Source="{Binding Content, Converter={StaticResource BytesToBitmapConverter}}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <annotating:AnnotatorScreenshots Grid.Column="0" DataContext="{Binding Screenshots}"/>
         <GridSplitter Grid.Column="1"/>
         <GridSplitter Grid.Column="3" Background="Gray"/>
         <StackPanel Grid.Column="4">

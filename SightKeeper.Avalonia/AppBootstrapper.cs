@@ -12,6 +12,7 @@ using SightKeeper.Application.Model;
 using SightKeeper.Application.Model.Creating;
 using SightKeeper.Application.Model.Editing;
 using SightKeeper.Avalonia.Misc;
+using SightKeeper.Avalonia.ViewModels.Annotating;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
@@ -108,6 +109,7 @@ public static class AppBootstrapper
 		builder.RegisterType<ConfigsViewModel>();
 		builder.RegisterType<ConfigEditorViewModel>();
 		builder.RegisterType<ScreenshoterViewModel>();
+		builder.RegisterType<AnnotatorScreenshotsViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)

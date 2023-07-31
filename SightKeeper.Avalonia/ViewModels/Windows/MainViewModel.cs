@@ -5,6 +5,7 @@ using Autofac;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Material.Icons;
 using ReactiveUI;
+using SightKeeper.Avalonia.ViewModels.Annotating;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 using SightKeeper.Data;

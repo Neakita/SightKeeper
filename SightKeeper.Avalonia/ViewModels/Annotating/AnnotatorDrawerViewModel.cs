@@ -2,7 +2,7 @@
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Avalonia.ViewModels.Elements;
+namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed class AnnotatorDrawerViewModel : ViewModel
 {

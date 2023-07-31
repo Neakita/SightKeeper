@@ -4,7 +4,7 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Avalonia.ViewModels.Elements;
+namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed class ScreenshoterViewModel : ViewModel
 {

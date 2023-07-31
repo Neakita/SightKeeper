@@ -9,48 +9,39 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DynamicData;
-using DynamicData.Binding;
 using ReactiveUI;
 using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
-namespace SightKeeper.Avalonia.ViewModels.Tabs;
+namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewModel, IActivatableViewModel
 {
 	public ViewModelActivator Activator { get; } = new();
 	public Task<IReadOnlyCollection<Model>> Models => _modelsDataAccess.GetModels();
 
-	public IReadOnlyCollection<Screenshot> Screenshots { get; }
+	public AnnotatorScreenshotsViewModel Screenshots { get; }
 
 	public ScreenshoterViewModel Screenshoter { get; }
 	public bool CanChangeSelectedModel => !Screenshoter.IsEnabled;
 
-	public AnnotatingViewModel(ScreenshoterViewModel screenshoterViewModel, ModelsDataAccess modelsDataAccess, ScreenshotsDataAccess screenshotsDataAccess)
+	public AnnotatingViewModel(
+		ScreenshoterViewModel screenshoterViewModel,
+		ModelsDataAccess modelsDataAccess,
+		AnnotatorScreenshotsViewModel screenshots)
 	{
 		Screenshoter = screenshoterViewModel;
 		_modelsDataAccess = modelsDataAccess;
-		_screenshotsDataAccess = screenshotsDataAccess;
-		this.WhenActivated(HandleActivation);
-		_screenshots.Connect()
-			.Sort(SortExpressionComparer<Screenshot>.Descending(screenshot => screenshot.CreationDate))
-			.ObserveOn(RxApp.MainThreadScheduler)
-			.Bind(out var screenshots)
-			.Subscribe();
 		Screenshots = screenshots;
+		this.WhenActivated(HandleActivation);
 		screenshoterViewModel.IsEnabledChanged.Subscribe(_ =>
 			OnPropertyChanged(nameof(CanChangeSelectedModel)));
 	}
 
 	private readonly ModelsDataAccess _modelsDataAccess;
-	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
 
 	[ObservableProperty] private Model? _selectedModel;
-	private readonly SourceList<Screenshot> _screenshots = new();
-	private CompositeDisposable? _selectedModelDisposable;
 	private TopLevel? _topLevel;
 
 	private IObservable<Unit> TopLevelGotFocus => Observable.FromEventPattern<GotFocusEventArgs>(
@@ -92,18 +83,7 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 
 	partial void OnSelectedModelChanged(Model? value)
 	{
-		_selectedModelDisposable?.Dispose();
 		Screenshoter.Model = value;
-		_screenshots.Clear();
-		if (value == null) return;
-		_screenshotsDataAccess.Load(value.ScreenshotsLibrary);
-		_screenshots.AddRange(value.ScreenshotsLibrary.Screenshots);
-		_selectedModelDisposable = new CompositeDisposable();
-		value.ScreenshotsLibrary.ScreenshotAdded
-			.Subscribe(newScreenshot => _screenshots.Add(newScreenshot))
-			.DisposeWith(_selectedModelDisposable);
-		value.ScreenshotsLibrary.ScreenshotRemoved
-			.Subscribe(removedScreenshot => _screenshots.Remove(removedScreenshot))
-			.DisposeWith(_selectedModelDisposable);
+		Screenshots.Model = value;
 	}
 }
