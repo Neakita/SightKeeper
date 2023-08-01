@@ -11,4 +11,5 @@ public interface IAnnotatingViewModel
     bool CanChangeSelectedModel { get; }
     AnnotatorScreenshotsViewModel Screenshots { get; }
     ScreenshoterViewModel Screenshoter { get; }
+    AnnotatorTools.AnnotatorTools? Tools { get; }
 }

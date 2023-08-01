@@ -1,0 +1,39 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:annotatorTools="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating.AnnotatorTools"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300"
+             x:Class="SightKeeper.Avalonia.Views.Annotating.DetectorAnnotatorTools"
+             x:DataType="annotatorTools:DetectorAnnotatorToolsViewModel">
+
+    <StackPanel>
+
+        <ListBox/>
+
+        <WrapPanel>
+
+            <Button Content="{icons:MaterialIconExt BookmarkCheckOutline}"
+                    ToolTip.Tip="Mark selected screenshot as asset"
+                    Command="{Binding MarkSelectedScreenshotAsAssetCommand}"/>
+
+            <Button Content="{icons:MaterialIconExt BookmarkRemoveOutline}"
+                    ToolTip.Tip="Unmark selected asset and return it to screenshots"
+                    Command="{Binding UnMarkSelectedScreenshotAsAssetCommand}"/>
+
+            <!--<Button Content="{icons:MaterialIconExt Eraser}"
+                    ToolTip.Tip="Clear annotations of selected asset"/>
+
+            <Button Content="{icons:MaterialIconExt VectorSquareRemove}"
+                    ToolTip.Tip="Delete selected annotation"/>
+
+            <Button Content="{icons:MaterialIconExt DeleteOutline}"
+                    ToolTip.Tip="Delete selected screenshot"/>-->
+
+        </WrapPanel>
+
+        <ComboBox PlaceholderText="Selected annotation class"/>
+
+    </StackPanel>
+</UserControl>

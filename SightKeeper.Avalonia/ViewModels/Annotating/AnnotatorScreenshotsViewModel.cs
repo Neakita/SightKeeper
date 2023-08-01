@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
@@ -14,6 +15,7 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 {
+    public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
     public IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
 
     public IEnumerable<SortingRule<Screenshot>> SortingRules { get; } = new[]
@@ -41,8 +43,11 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     private readonly SourceList<Screenshot> _screenshots = new();
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
+    private readonly Subject<ScreenshotViewModel?> _selectedScreenshotChanged = new();
 
     [ObservableProperty] private Model? _model;
+    [ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
+    
     private CompositeDisposable? _modelDisposable;
 
     partial void OnModelChanged(Model? value)
@@ -61,4 +66,6 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
             .Subscribe(removedScreenshot => _screenshots.Remove(removedScreenshot))
             .DisposeWith(_modelDisposable);
     }
+
+    partial void OnSelectedScreenshotChanged(ScreenshotViewModel? value) => _selectedScreenshotChanged.OnNext(value);
 }

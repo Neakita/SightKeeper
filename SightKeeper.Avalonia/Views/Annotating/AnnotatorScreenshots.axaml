@@ -26,7 +26,9 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding Screenshots}">
+        <ListBox Grid.Row="1"
+                 ItemsSource="{Binding Screenshots}"
+                 SelectedItem="{Binding SelectedScreenshot}">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="1"/>

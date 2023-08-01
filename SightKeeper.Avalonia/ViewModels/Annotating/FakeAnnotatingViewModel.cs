@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Subjects;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
@@ -19,19 +17,17 @@ public sealed class FakeAnnotatingViewModel : IAnnotatingViewModel
 
     public Model? SelectedModel { get; set; }
 
-    public bool CanChangeSelectedModel { get; } = true;
+    public bool CanChangeSelectedModel => true;
     public AnnotatorScreenshotsViewModel Screenshots => new(new MockScreenshotsDataAccess());
 
     public ScreenshoterViewModel Screenshoter => new(new MockStreamModelScreenshoter());
-    
+    public AnnotatorTools.AnnotatorTools? Tools => null;
+
     private sealed class MockStreamModelScreenshoter : StreamModelScreenshoter
     {
-        public IObservable<Screenshot> Screenshoted { get; } = new Subject<Screenshot>();
-        public IObservable<Screenshot> ScreenshotRemoved { get; } = new Subject<Screenshot>();
         public Model? Model { get; set; }
         public bool IsEnabled { get; set; }
         public byte ScreenshotsPerSecond { get; set; }
-        public ushort? MaxImages { get; set; }
     }
 
     private sealed class MockScreenshotsDataAccess : ScreenshotsDataAccess

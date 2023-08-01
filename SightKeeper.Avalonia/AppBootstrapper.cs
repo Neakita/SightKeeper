@@ -13,6 +13,7 @@ using SightKeeper.Application.Model.Creating;
 using SightKeeper.Application.Model.Editing;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Annotating;
+using SightKeeper.Avalonia.ViewModels.Annotating.AnnotatorTools;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
@@ -24,6 +25,7 @@ using SightKeeper.Data;
 using SightKeeper.Data.Services;
 using SightKeeper.Data.Services.Config;
 using SightKeeper.Data.Services.Model;
+using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 using SightKeeper.Services.Annotating;
@@ -109,7 +111,8 @@ public static class AppBootstrapper
 		builder.RegisterType<ConfigsViewModel>();
 		builder.RegisterType<ConfigEditorViewModel>();
 		builder.RegisterType<ScreenshoterViewModel>();
-		builder.RegisterType<AnnotatorScreenshotsViewModel>();
+		builder.RegisterType<AnnotatorScreenshotsViewModel>().SingleInstance();
+		builder.RegisterType<DetectorAnnotatorToolsViewModel>().As<AnnotatorTools<DetectorModel>>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -122,5 +125,6 @@ public static class AppBootstrapper
 		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
 		builder.RegisterType<Views.Dialogs.ConfigEditor>().As<IViewFor<ConfigEditorViewModel>>();
+		builder.RegisterType<DetectorAnnotatorTools>().As<IViewFor<DetectorAnnotatorToolsViewModel>>();
 	}
 }
