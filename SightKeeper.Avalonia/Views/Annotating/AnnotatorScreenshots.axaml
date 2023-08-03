@@ -37,7 +37,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Panel>
-                        <Image Source="{Binding Screenshot.Content, Converter={StaticResource BytesToBitmapConverter}}"
+                        <Image Source="{Binding Content, Converter={StaticResource BytesToBitmapConverter}}"
                                Margin="1"/>
                         <avalonia:MaterialIcon Kind="BookmarkCheck"
                                                Width="30" Height="30"

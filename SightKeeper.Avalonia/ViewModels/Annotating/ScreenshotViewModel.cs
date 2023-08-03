@@ -1,26 +1,18 @@
-﻿using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed class ScreenshotViewModel : ViewModel
 {
-    public IObservable<bool> IsAssetChanged => _isAssetChanged.AsObservable();
-    public Screenshot Screenshot { get; }
-    public bool IsAsset => Screenshot.Asset != null;
+    public Screenshot Item { get; }
 
-    public ScreenshotViewModel(Screenshot screenshot)
+    public byte[] Content => Item.Content;
+    public bool IsAsset => Item.Asset != null;
+
+    public ScreenshotViewModel(Screenshot item)
     {
-        Screenshot = screenshot;
+        Item = item;
     }
 
-    public void NotifyIsAssetChanged()
-    {
-        _isAssetChanged.OnNext(IsAsset);
-        OnPropertyChanged(nameof(IsAsset));
-    }
-
-    private readonly Subject<bool> _isAssetChanged = new();
+    public void NotifyIsAssetChanged() => OnPropertiesChanged(nameof(IsAsset));
 }

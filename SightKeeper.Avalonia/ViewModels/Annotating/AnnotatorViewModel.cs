@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Autofac;
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Avalonia.ViewModels.Annotating.AnnotatorTools;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewModel, IActivatableViewModel
+public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel, IActivatableViewModel
 {
+	public IObservable<Model?> SelectedModelChanged => _selectedModelChanged;
 	public ViewModelActivator Activator { get; } = new();
 	public Task<IReadOnlyCollection<Model>> Models => _modelsDataAccess.GetModels();
 
@@ -28,15 +27,21 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 
 	public ScreenshoterViewModel Screenshoter { get; }
 
-	public AnnotatorTools.AnnotatorTools? Tools
+	public AnnotatorTools? Tools
 	{
 		get => _tools;
 		private set => SetProperty(ref _tools, value);
 	}
 
+	public AnnotatorWorkSpace? WorkSpace
+	{
+		get => _workSpace;
+		private set => SetProperty(ref _workSpace, value);
+	}
+
 	public bool CanChangeSelectedModel => !Screenshoter.IsEnabled;
 
-	public AnnotatingViewModel(
+	public AnnotatorViewModel(
 		ILifetimeScope scope,
 		ScreenshoterViewModel screenshoterViewModel,
 		ModelsDataAccess modelsDataAccess,
@@ -53,41 +58,43 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 
 	private readonly ILifetimeScope _scope;
 	private readonly ModelsDataAccess _modelsDataAccess;
+	private readonly Subject<Model?> _selectedModelChanged = new();
 
 	[ObservableProperty] private Model? _selectedModel;
-	private TopLevel? _topLevel;
+	private Window? _window;
 	private IDisposable? _selectedModelDisposable;
-	private AnnotatorTools.AnnotatorTools? _tools;
+	private AnnotatorTools? _tools;
+	private AnnotatorWorkSpace? _workSpace;
 
-	private IObservable<Unit> TopLevelGotFocus => Observable.FromEventPattern<GotFocusEventArgs>(
+	private IObservable<Unit> WindowActivated => Observable.FromEventPattern(
 		handler =>
 		{
-			Guard.IsNotNull(_topLevel);
-			_topLevel.GotFocus += handler;
+			Guard.IsNotNull(_window);
+			_window.Activated += handler;
 		}, handler =>
 		{
-			Guard.IsNotNull(_topLevel);
-			_topLevel.GotFocus -= handler;
+			Guard.IsNotNull(_window);
+			_window.Activated -= handler;
 		}).Select(_ => Unit.Default);
 
-	private IObservable<Unit> TopLevelLostFocus => Observable.FromEventPattern<RoutedEventArgs>(
+	private IObservable<Unit> WindowDeactivated => Observable.FromEventPattern(
 		handler =>
 		{
-			Guard.IsNotNull(_topLevel);
-			_topLevel.LostFocus += handler;
+			Guard.IsNotNull(_window);
+			_window.Deactivated += handler;
 		}, handler =>
 		{
-			Guard.IsNotNull(_topLevel);
-			_topLevel.LostFocus -= handler;
+			Guard.IsNotNull(_window);
+			_window.Deactivated -= handler;
 		}).Select(_ => Unit.Default);
 
 	private void HandleActivation(CompositeDisposable disposable)
 	{
-		_topLevel = this.GetTopLevel();
+		_window = this.GetOwnerWindow();
 		Disposable.Create(HandleDeactivation).DisposeWith(disposable);
 		OnPropertyChanged(nameof(Models));
-		TopLevelGotFocus.Subscribe(_ => Screenshoter.IsSuspended = true).DisposeWith(disposable);
-		TopLevelLostFocus.Subscribe(_ => Screenshoter.IsSuspended = false).DisposeWith(disposable);
+		WindowActivated.Subscribe(_ => Screenshoter.IsSuspended = true).DisposeWith(disposable);
+		WindowDeactivated.Subscribe(_ => Screenshoter.IsSuspended = false).DisposeWith(disposable);
 	}
 
 	private void HandleDeactivation()
@@ -101,13 +108,20 @@ public sealed partial class AnnotatingViewModel : ViewModel, IAnnotatingViewMode
 		_selectedModelDisposable?.Dispose();
 		Screenshoter.Model = value;
 		Screenshots.Model = value;
-		if (value == null) return;
+		if (value == null)
+			return;
 		var selectedModelScope = _scope.BeginLifetimeScope(value);
 		_selectedModelDisposable = selectedModelScope;
-		Tools = value switch
-		{
-			DetectorModel detectorModel => selectedModelScope.Resolve<AnnotatorTools<DetectorModel>>(new PositionalParameter(0, detectorModel)),
-			_ => ThrowHelper.ThrowArgumentOutOfRangeException<AnnotatorTools.AnnotatorTools>(nameof(value), value, null)
-		};
+		if (value is DetectorModel)
+			SetupDetectorModelEnvironment(selectedModelScope);
+		else
+			ThrowHelper.ThrowArgumentOutOfRangeException(nameof(value), value, null);
+		_selectedModelChanged.OnNext(value);
+	}
+
+	private void SetupDetectorModelEnvironment(IComponentContext content)
+	{
+		Tools = content.Resolve<AnnotatorTools<DetectorModel>>();
+		WorkSpace = content.Resolve<AnnotatorWorkSpace<DetectorModel>>();
 	}
 }

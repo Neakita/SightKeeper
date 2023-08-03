@@ -24,6 +24,7 @@ internal static class Program
 		catch (Exception exception)
 		{
 			HandleUnhandledExceptions(exception, "Program.Main");
+			Log.CloseAndFlush();
 			throw;
 		}
 	}

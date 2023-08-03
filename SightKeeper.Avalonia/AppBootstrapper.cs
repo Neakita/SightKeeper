@@ -13,7 +13,6 @@ using SightKeeper.Application.Model.Creating;
 using SightKeeper.Application.Model.Editing;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Annotating;
-using SightKeeper.Avalonia.ViewModels.Annotating.AnnotatorTools;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
@@ -46,7 +45,7 @@ public static class AppBootstrapper
 		SetupViewModels(builder);
 		SetupViews(builder);
 		var container = builder.Build();
-		using var initialScope = container.BeginLifetimeScope();
+		using var initialScope = container.BeginLifetimeScope(typeof(AppBootstrapper));
 		var dbContext = initialScope.Resolve<AppDbContext>();
 		dbContext.Database.EnsureCreated();
 		return container;
@@ -73,8 +72,8 @@ public static class AppBootstrapper
 	{
 		builder.RegisterType<DbGamesDataAccess>().As<GamesDataAccess>();
 		builder.RegisterType<ProcessesAvailableGamesProvider>().As<AvailableGamesProvider>();
-		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>();
-		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerLifetimeScope();
+		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>().SingleInstance();
+		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerMatchingLifetimeScope(typeof(MainViewModel), typeof(AppBootstrapper));
 		builder.RegisterType<RegisteredGamesService>();
 		builder.RegisterType<DbModelCreator>().As<ModelCreator>();
 		builder.RegisterType<ModelDataValidator>().As<IValidator<ModelData>>();
@@ -87,11 +86,12 @@ public static class AppBootstrapper
 		builder.RegisterType<ConfigDataValidator>().As<IValidator<ConfigData>>();
 		builder.RegisterType<Screenshoter>();
 		builder.RegisterType<ModelScreenshoter>();
-		builder.RegisterType<DbHotKeyScreenshoter>().As<StreamModelScreenshoter>().SingleInstance();
+		builder.RegisterType<DbHotKeyScreenshoter>().As<StreamModelScreenshoter>();
 		builder.RegisterType<HotKeyManager>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<AvaloniaScreenBoundsProvider>().As<ScreenBoundsProvider>();
 		builder.RegisterType<DbScreenshotsDataAccess>().As<ScreenshotsDataAccess>();
+		builder.RegisterType<DbDetectorAnnotator>().As<DetectorAnnotator>();
 		
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
@@ -100,10 +100,10 @@ public static class AppBootstrapper
 
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
-		builder.RegisterType<MainViewModel>().SingleInstance();
+		builder.RegisterType<MainViewModel>();
 		builder.RegisterType<ModelEditorViewModel>();
 
-		builder.RegisterType<AnnotatingViewModel>();
+		builder.RegisterType<AnnotatorViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<ModelsViewModel>();
 		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<SettingsViewModel>();
@@ -111,8 +111,9 @@ public static class AppBootstrapper
 		builder.RegisterType<ConfigsViewModel>();
 		builder.RegisterType<ConfigEditorViewModel>();
 		builder.RegisterType<ScreenshoterViewModel>();
-		builder.RegisterType<AnnotatorScreenshotsViewModel>().SingleInstance();
-		builder.RegisterType<DetectorAnnotatorToolsViewModel>().As<AnnotatorTools<DetectorModel>>();
+		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorModel>>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<DetectorDrawerViewModel>().As<AnnotatorWorkSpace<DetectorModel>>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -120,11 +121,12 @@ public static class AppBootstrapper
 		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainViewModel>>();
 		builder.RegisterType<ModelEditor>().AsSelf().As<IViewFor<ModelEditorViewModel>>();
 		
-		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatingViewModel>>();
+		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatorViewModel>>();
 		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsViewModel>>();
 		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
 		builder.RegisterType<Views.Dialogs.ConfigEditor>().As<IViewFor<ConfigEditorViewModel>>();
 		builder.RegisterType<DetectorAnnotatorTools>().As<IViewFor<DetectorAnnotatorToolsViewModel>>();
+		builder.RegisterType<DetectorDrawer>().As<IViewFor<DetectorDrawerViewModel>>();
 	}
 }

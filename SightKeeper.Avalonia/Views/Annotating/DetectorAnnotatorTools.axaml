@@ -3,14 +3,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:annotatorTools="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating.AnnotatorTools"
+             xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300"
              x:Class="SightKeeper.Avalonia.Views.Annotating.DetectorAnnotatorTools"
-             x:DataType="annotatorTools:DetectorAnnotatorToolsViewModel">
+             x:DataType="annotating:DetectorAnnotatorToolsViewModel">
 
-    <StackPanel>
+    <StackPanel Spacing="10">
 
-        <ListBox/>
+        <ListBox ItemsSource="{Binding ItemClasses}"
+                 SelectedItem="{Binding SelectedItemClass}"/>
 
         <WrapPanel>
 
@@ -22,18 +23,7 @@
                     ToolTip.Tip="Unmark selected asset and return it to screenshots"
                     Command="{Binding UnMarkSelectedScreenshotAsAssetCommand}"/>
 
-            <!--<Button Content="{icons:MaterialIconExt Eraser}"
-                    ToolTip.Tip="Clear annotations of selected asset"/>
-
-            <Button Content="{icons:MaterialIconExt VectorSquareRemove}"
-                    ToolTip.Tip="Delete selected annotation"/>
-
-            <Button Content="{icons:MaterialIconExt DeleteOutline}"
-                    ToolTip.Tip="Delete selected screenshot"/>-->
-
         </WrapPanel>
-
-        <ComboBox PlaceholderText="Selected annotation class"/>
 
     </StackPanel>
 </UserControl>

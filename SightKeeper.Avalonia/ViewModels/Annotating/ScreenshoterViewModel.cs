@@ -13,13 +13,14 @@ public sealed class ScreenshoterViewModel : ViewModel
     public Model? Model
     {
         get => _screenshoter.Model;
-        set => SetProperty(_screenshoter.Model, value, model =>
+        set
         {
-            _screenshoter.Model = model;
+            if (!SetProperty(_screenshoter.Model, value, model => _screenshoter.Model = model))
+                return;
             OnPropertyChanged(nameof(CanToggleIsEnabled));
             OnPropertyChanged(nameof(MaxScreenshotsQuantity));
             OnPropertyChanged(nameof(CanChangeMaxScreenshotsQuantity));
-        });
+        }
     }
 
     public bool IsEnabled
