@@ -24,6 +24,7 @@ public sealed class ModelWeightsLibrary
 
     private ModelWeightsLibrary()
     {
-        
+        Model = null!;
+        _weights = null!;
     }
 }

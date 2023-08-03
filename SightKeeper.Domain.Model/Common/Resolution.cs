@@ -2,6 +2,9 @@
 
 public sealed class Resolution
 {
+	public int Width { get; private set; }
+	public int Height { get; private set; }
+	
 	public Resolution()
 	{
 		Width = 320;
@@ -13,7 +16,4 @@ public sealed class Resolution
 		Width = width;
 		Height = height;
 	}
-
-	public int Width { get; private set; }
-	public int Height { get; private set; }
 }
