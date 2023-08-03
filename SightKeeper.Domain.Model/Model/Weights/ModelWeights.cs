@@ -9,18 +9,19 @@ public sealed class ModelWeights
     public int Batch { get; private set; }
     public DateTime Date { get; private set; }
     public byte[] Data { get; private set; }
-    public ICollection<Asset> Assets { get; private set; }
+    public IReadOnlyCollection<Asset> Assets { get; private set; }
     public ModelConfig? Config { get; private set; }
     public ModelWeightsLibrary? Library { get; internal set; }
 
     internal ModelWeights(Model model, int batch, byte[] data, IEnumerable<Asset> assets, ModelConfig? config = null)
-        : this(model, batch, DateTime.Now, data, assets.ToList(), config) { }
+        : this(model, batch, DateTime.Now, data, assets, config) { }
 
-    private ModelWeights(Model model, int batch, DateTime date, byte[] data, ICollection<Asset> assets, ModelConfig? config)
+    private ModelWeights(Model model, int batch, DateTime date, byte[] data, IEnumerable<Asset> assets, ModelConfig? config)
     {
+        var assetsList = assets.ToList();
         if (model is DetectorModel detectorModel)
         {
-            if (assets.Any(asset => asset is not DetectorAsset detectorAsset || detectorAsset.Model != detectorModel))
+            if (assetsList.Any(asset => asset is not DetectorAsset detectorAsset || detectorAsset.Model != detectorModel))
                 ThrowHelper.ThrowArgumentException(nameof(assets), $"All assets must belong to the model {model}");
         }
         else
@@ -29,7 +30,7 @@ public sealed class ModelWeights
         Batch = batch;
         Date = date;
         Data = data;
-        Assets = assets;
+        Assets = assetsList;
         Config = config;
         Library = model.WeightsLibrary;
     }
