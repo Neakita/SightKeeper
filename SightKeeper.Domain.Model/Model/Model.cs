@@ -28,6 +28,8 @@ public abstract class Model
 		get => _resolution;
 		set
 		{
+			if (value.Equals(_resolution))
+				return;
 			if (!CanChangeResolution(out var message))
 				ThrowHelper.ThrowInvalidOperationException(message);
 			_resolution = value;
