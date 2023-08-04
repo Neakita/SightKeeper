@@ -8,16 +8,18 @@
              x:Class="SightKeeper.Avalonia.Views.Annotating.DetectorAnnotatorTools"
              x:DataType="annotating:DetectorAnnotatorToolsViewModel">
 
-    <StackPanel Spacing="10">
+    <Grid RowDefinitions="* Auto Auto">
 
-        <ListBox ItemsSource="{Binding ItemClasses}"
-                 SelectedItem="{Binding SelectedItemClass}"/>
+        <ListBox Grid.Row="0"
+                 ItemsSource="{Binding ItemClasses}"
+                 SelectedItem="{Binding SelectedItemClass}"
+                 MinWidth="100"/>
 
-        <WrapPanel>
-
-            <Button Content="{icons:MaterialIconExt BookmarkCheckOutline}"
-                    ToolTip.Tip="Mark selected screenshot as asset"
-                    Command="{Binding MarkSelectedScreenshotAsAssetCommand}"/>
+        <WrapPanel Grid.Row="1">
+                
+                <Button Content="{icons:MaterialIconExt BookmarkCheckOutline}"
+                        ToolTip.Tip="Mark selected screenshot as asset"
+                        Command="{Binding MarkSelectedScreenshotAsAssetCommand}"/>
 
             <Button Content="{icons:MaterialIconExt BookmarkRemoveOutline}"
                     ToolTip.Tip="Unmark selected screenshot as asset"
@@ -27,17 +29,18 @@
                     ToolTip.Tip="Delete selected screenshot"
                     Command="{Binding DeleteScreenshotCommand}"
                     HotKey="Delete"/>
-            
+
             <Button Content="{icons:MaterialIconExt VectorSquareDelete}"
                     ToolTip.Tip="Delete selected annotation"
                     Command="{Binding DeleteItemCommand}"
                     HotKey="Back"/>
-            
+
         </WrapPanel>
-        
-        <ComboBox ItemsSource="{Binding ItemClasses}"
+
+        <ComboBox Grid.Row="2"
+                  ItemsSource="{Binding ItemClasses}"
                   SelectedItem="{Binding SelectedItem.ItemClass}"
                   IsEnabled="{Binding !!SelectedItem}"/>
 
-    </StackPanel>
+    </Grid>
 </UserControl>

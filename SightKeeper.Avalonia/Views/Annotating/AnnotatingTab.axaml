@@ -24,23 +24,27 @@
         <GridSplitter Grid.Column="1"/>
         <ContentControl Grid.Column="2" Content="{Binding WorkSpace}"/>
         <GridSplitter Grid.Column="3" Background="Gray"/>
-        <StackPanel Grid.Column="4">
-            <ComboBox ItemsSource="{Binding Models^}"
+        <Grid Grid.Column="4" RowDefinitions="Auto Auto *">
+            <ComboBox Grid.Row="0"
+                      ItemsSource="{Binding Models^}"
                       SelectedItem="{Binding SelectedModel}"
                       HorizontalAlignment="Stretch"
                       PlaceholderText="Model"
                       IsEnabled="{Binding CanChangeSelectedModel}"/>
-            <Expander Header="Screenshoting"
+            <Expander Grid.Row="1"
+                      Header="Screenshoting"
                       HorizontalAlignment="Stretch"
                       IsExpanded="True">
                 <annotating:ScreenshoterSettings DataContext="{Binding Screenshoter}"/>
             </Expander>
-            <Expander Header="Annotating"
+            <Expander Grid.Row="2"
+                      Header="Annotating"
                       HorizontalAlignment="Stretch"
-                      IsExpanded="True">
+                      IsExpanded="True"
+                      VerticalAlignment="Top">
                 <ContentControl Content="{Binding Tools}"/>
             </Expander>
-        </StackPanel>
+        </Grid>
     </Grid>
 
 </UserControl>
