@@ -32,10 +32,23 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
 
     public void UnMarkAsset(Screenshot screenshot)
     {
+        DeleteAsset(screenshot);
+        _dbContext.SaveChanges();
+    }
+
+    public void DeleteScreenshot(Screenshot screenshot)
+    {
+        if (screenshot.Asset != null)
+            DeleteAsset(screenshot);
+        screenshot.Library.DeleteScreenshot(screenshot);
+        _dbContext.SaveChanges();
+    }
+
+    private static void DeleteAsset(Screenshot screenshot)
+    {
         Guard.IsNotNull(screenshot.Asset);
         var model = screenshot.Library.GetModel<DetectorModel>();
         model.DeleteAsset(screenshot.GetAsset<DetectorAsset>());
-        _dbContext.SaveChanges();
     }
 
     private readonly AppDbContext _dbContext;

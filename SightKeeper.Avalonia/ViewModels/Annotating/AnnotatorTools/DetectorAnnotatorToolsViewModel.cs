@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -57,6 +58,21 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
     private bool CanUnMarkSelectedScreenshotAsAsset() =>
         _screenshotsViewModel.SelectedScreenshot?.IsAsset == true;
 
+    [RelayCommand(CanExecute = nameof(CanDeleteScreenshot))]
+    private void DeleteScreenshot()
+    {
+        var screenshot = _screenshotsViewModel.SelectedScreenshot;
+        var screenshotIndex = _screenshotsViewModel.SelectedScreenshotIndex;
+        Guard.IsNotNull(screenshot);
+        _annotator.DeleteScreenshot(screenshot.Item);
+        var screenshots = _screenshotsViewModel.Screenshots;
+        if (!screenshots.Any())
+            return;
+        _screenshotsViewModel.SelectedScreenshotIndex = Math.Min(screenshotIndex, screenshots.Count - 1);
+    }
+
+    private bool CanDeleteScreenshot() => _screenshotsViewModel.SelectedScreenshot != null;
+
     private readonly AnnotatorViewModel _annotatorViewModel;
     private readonly AnnotatorScreenshotsViewModel _screenshotsViewModel;
     private readonly DetectorAnnotator _annotator;
@@ -71,6 +87,7 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         _selectedScreenshotDisposable?.Dispose();
         MarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
         UnMarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
+        DeleteScreenshotCommand.NotifyCanExecuteChanged();
         if (screenshot == null)
             return;
         _selectedScreenshotDisposable = screenshot.WhenAnyValue(x => x.IsAsset).Subscribe(_ =>

@@ -23,6 +23,11 @@
                     ToolTip.Tip="Unmark selected asset and return it to screenshots"
                     Command="{Binding UnMarkSelectedScreenshotAsAssetCommand}"/>
 
+            <Button Content="{icons:MaterialIconExt DeleteOutline}"
+                    ToolTip.Tip="Delete selected screenshot"
+                    Command="{Binding DeleteScreenshotCommand}"
+                    HotKey="Delete"/>
+            
         </WrapPanel>
 
     </StackPanel>

@@ -16,7 +16,7 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 {
     public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
-    public IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
+    public IReadOnlyList<ScreenshotViewModel> Screenshots { get; }
 
     public IEnumerable<SortingRule<Screenshot>> SortingRules { get; } = new[]
     {
@@ -47,6 +47,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     [ObservableProperty] private Model? _model;
     [ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
+    [ObservableProperty] private int _selectedScreenshotIndex;
     
     private CompositeDisposable? _modelDisposable;
 
