@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using Serilog;
 using Serilog.Core;
@@ -47,7 +48,7 @@ public static class AppBootstrapper
 		var container = builder.Build();
 		using var initialScope = container.BeginLifetimeScope(typeof(AppBootstrapper));
 		var dbContext = initialScope.Resolve<AppDbContext>();
-		dbContext.Database.EnsureCreated();
+		dbContext.Database.Migrate();
 		return container;
 	}
 
