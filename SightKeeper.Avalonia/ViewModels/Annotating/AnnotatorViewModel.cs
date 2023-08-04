@@ -109,7 +109,11 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 		Screenshoter.Model = value;
 		Screenshots.Model = value;
 		if (value == null)
+		{
+			ClearModelEnvironment();
 			return;
+		}
+
 		var selectedModelScope = _scope.BeginLifetimeScope(value);
 		_selectedModelDisposable = selectedModelScope;
 		if (value is DetectorModel)
@@ -124,4 +128,11 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 		Tools = content.Resolve<AnnotatorTools<DetectorModel>>();
 		WorkSpace = content.Resolve<AnnotatorWorkSpace<DetectorModel>>();
 	}
+
+	private void ClearModelEnvironment()
+	{
+		Tools = null;
+		WorkSpace = null;
+	}
+
 }
