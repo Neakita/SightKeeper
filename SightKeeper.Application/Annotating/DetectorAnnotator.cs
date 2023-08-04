@@ -7,4 +7,6 @@ namespace SightKeeper.Application.Annotating;
 public interface DetectorAnnotator
 {
     void Annotate(Screenshot screenshot, ItemClass itemClass, BoundingBox boundingBox);
+    void MarkAsset(Screenshot screenshot);
+    void UnMarkAsset(Screenshot screenshot);
 }
