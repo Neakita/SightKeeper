@@ -12,4 +12,5 @@ public interface DetectorAnnotator
     void DeleteScreenshot(Screenshot screenshot);
     void DeleteItem(DetectorItem item);
     void ChangeItemClass(DetectorItem item, ItemClass itemClass);
+    void Move(DetectorItem item, BoundingBox bounding);
 }

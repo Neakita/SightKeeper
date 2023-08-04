@@ -57,6 +57,12 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         _dbContext.SaveChanges();
     }
 
+    public void Move(DetectorItem item, BoundingBox bounding)
+    {
+        item.BoundingBox.SetFromBounding(bounding);
+        _dbContext.SaveChanges();
+    }
+
     private readonly AppDbContext _dbContext;
 
     private static void DeleteAsset(Screenshot screenshot)

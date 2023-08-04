@@ -114,6 +114,7 @@ public static class AppBootstrapper
 		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorModel>>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<DetectorDrawerViewModel>().As<AnnotatorWorkSpace<DetectorModel>>();
+		builder.RegisterType<DrawerItemResizer>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)

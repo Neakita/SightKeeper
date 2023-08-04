@@ -7,7 +7,8 @@
              x:Class="SightKeeper.Avalonia.Views.Annotating.DetectorDrawer"
              x:DataType="annotating:DetectorDrawerViewModel">
     
-    <Panel HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Panel HorizontalAlignment="Center" VerticalAlignment="Center"
+           Name="Root">
 
             <Image Name="Image" IsHitTestVisible="True" Source="{Binding Screenshot.Content, Converter={StaticResource BytesToBitmapConverter}}" />
 
@@ -69,6 +70,7 @@
                         
                         <Setter Property="BorderBrush" Value="#80FF0000"/>
                         <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="ClipToBounds" Value="False"/>
                         
                     </Style>
                     
@@ -95,12 +97,89 @@
                 </ListBox.Styles>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock TextTrimming="CharacterEllipsis"
-                                   Text="{Binding ItemClass.Name}"
-                                   FontSize="7"
-                                   Background="#30000000"
-                                   VerticalAlignment="Top"
-                                   HorizontalAlignment="Left"/>
+                        <Grid>
+                            <Grid.Styles>
+                                <Style Selector="Thumb">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Background="PaleVioletRed"
+                                                        BorderBrush="#A0000000"
+                                                        BorderThickness="1"
+                                                        CornerRadius="2"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="CornerRadius" Value="3"/>
+                                    <Setter Property="Width" Value="6"/>
+                                    <Setter Property="Height" Value="6"/>
+                                    <Setter Property="Background" Value="Gray"/>
+                                    <Setter Property="Margin" Value="-4"/>
+                                    <Setter Property="IsVisible" Value="{Binding #Root.((annotating:DetectorDrawerViewModel)DataContext).IsItemSelectionEnabled, FallbackValue=False}"/>
+                                </Style>
+                            </Grid.Styles>
+                            <Thumb VerticalAlignment="Top"
+                                   HorizontalAlignment="Left"
+                                   Cursor="TopLeftCorner"
+                                   DragStarted="OnThumbDragStarted"
+                                   DragDelta="OnThumbDragDelta"
+                                   DragCompleted="OnThumbDragCompleted"/>
+                            <Thumb VerticalAlignment="Top"
+                                   HorizontalAlignment="Center"
+                                   Cursor="SizeNorthSouth"
+                                   DragStarted="OnThumbDragStarted"
+                                   DragDelta="OnThumbDragDelta"
+                                   DragCompleted="OnThumbDragCompleted"/>
+                            <Thumb VerticalAlignment="Top"
+                                   HorizontalAlignment="Right"
+                                   Cursor="TopRightCorner"
+                                   DragStarted="OnThumbDragStarted"
+                                   DragDelta="OnThumbDragDelta"
+                                   DragCompleted="OnThumbDragCompleted"/>
+                            <Thumb VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Cursor="SizeWestEast"
+                                   DragStarted="OnThumbDragStarted"
+                                   DragDelta="OnThumbDragDelta"
+                                   DragCompleted="OnThumbDragCompleted"/>
+                            <Thumb VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Right"
+                                   Cursor="BottomRightCorner"
+                                   DragStarted="OnThumbDragStarted"
+                                   DragDelta="OnThumbDragDelta"
+                                   DragCompleted="OnThumbDragCompleted"/>
+                            <Thumb VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Center"
+                                   Cursor="SizeNorthSouth"
+                                   DragStarted="OnThumbDragStarted"
+                                   DragDelta="OnThumbDragDelta"
+                                   DragCompleted="OnThumbDragCompleted"/>
+                            <Thumb VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Left"
+                                   Cursor="BottomLeftCorner"
+                                   DragStarted="OnThumbDragStarted"
+                                   DragDelta="OnThumbDragDelta"
+                                   DragCompleted="OnThumbDragCompleted"/>
+                            <Thumb VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Cursor="SizeWestEast"
+                                   DragStarted="OnThumbDragStarted"
+                                   DragDelta="OnThumbDragDelta"
+                                   DragCompleted="OnThumbDragCompleted"/>
+                            <Thumb VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Cursor="SizeAll"
+                                   DragStarted="OnThumbDragStarted"
+                                   DragDelta="OnThumbDragDelta"
+                                   DragCompleted="OnThumbDragCompleted"/>
+                            <TextBlock TextTrimming="CharacterEllipsis"
+                                       Text="{Binding ItemClass.Name}"
+                                       FontSize="7"
+                                       Background="#30000000"
+                                       VerticalAlignment="Top"
+                                       HorizontalAlignment="Left"
+                                       Margin="10 0 0 0"/>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

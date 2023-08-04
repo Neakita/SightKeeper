@@ -19,30 +19,79 @@ public sealed class BoundingBoxViewModel : ViewModel
     };
 
     public BoundingBox Bounding { get; set; }
-    public double X1 { get; private set; }
-    public double Y1 { get; private set; }
-    public double X2 { get; private set; }
-    public double Y2 { get; private set; }
+
+    public double X1
+    {
+        get => _x1;
+        set
+        {
+            Guard.IsLessThanOrEqualTo(value, X2);
+            if (!SetProperty(ref _x1, value))
+                return;
+            OnPropertyChanged(nameof(Width));
+            OnPropertyChanged(nameof(XCenter));
+        }
+    }
+
+    public double Y1
+    {
+        get => _y1;
+        set
+        {
+            Guard.IsLessThanOrEqualTo(value, Y2);
+            if (!SetProperty(ref _y1, value))
+                return;
+            OnPropertyChanged(nameof(Height));
+            OnPropertyChanged(nameof(YCenter));
+        }
+    }
+
+    public double X2
+    {
+        get => _x2;
+        set
+        {
+            Guard.IsGreaterThanOrEqualTo(value, X1);
+            if (!SetProperty(ref _x2, value))
+                return;
+            OnPropertyChanged(nameof(Width));
+            OnPropertyChanged(nameof(XCenter));
+        }
+    }
+
+    public double Y2
+    {
+        get => _y2;
+        set
+        {
+            Guard.IsGreaterThanOrEqualTo(value, Y1);
+            if (!SetProperty(ref _y2, value))
+                return;
+            OnPropertyChanged(nameof(Height));
+            OnPropertyChanged(nameof(YCenter));
+        }
+    }
+
     public double Width => X2 - X1;
     public double Height => Y2 - Y1;
-    public double XCenter => X1 + Width / 2;
-    public double YCenter => Y1 + Height / 2;
+    public double XCenter => (X1 + X2) / 2;
+    public double YCenter => (Y1 + Y2) / 2;
 
     public BoundingBoxViewModel(Point position) : this()
     {
-        X1 = position.X;
-        X2 = position.X;
-        Y1 = position.Y;
-        Y2 = position.Y;
+        _x1 = position.X;
+        _x2 = position.X;
+        _y1 = position.Y;
+        _y2 = position.Y;
     }
 
     public BoundingBoxViewModel(BoundingBox bounding)
     {
         Bounding = bounding;
-        X1 = bounding.X1;
-        Y1 = bounding.Y1;
-        X2 = bounding.X2;
-        Y2 = bounding.Y2;
+        _x1 = bounding.X1;
+        _y1 = bounding.Y1;
+        _x2 = bounding.X2;
+        _y2 = bounding.Y2;
     }
 
     public BoundingBoxViewModel()
@@ -58,10 +107,10 @@ public sealed class BoundingBoxViewModel : ViewModel
         MinMax(x1, x2, out var xMin, out var xMax); // 🎄
         MinMax(y1, y2, out var yMin, out var yMax);
         OnPropertiesChanging(Properties);
-        X1 = xMin;
-        X2 = xMax;
-        Y1 = yMin;
-        Y2 = yMax;
+        _x1 = xMin;
+        _x2 = xMax;
+        _y1 = yMin;
+        _y2 = yMax;
         OnPropertiesChanged(Properties);
     }
 
@@ -70,6 +119,11 @@ public sealed class BoundingBoxViewModel : ViewModel
         Guard.IsNotNull(Bounding);
         Bounding.SetFromTwoPositions(X1, Y1, X2, Y2);
     }
+
+    private double _x1;
+    private double _y1;
+    private double _x2;
+    private double _y2;
 
     private static void MinMax(double value1, double value2, out double min, out double max)
     {

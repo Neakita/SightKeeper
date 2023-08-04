@@ -12,6 +12,8 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<DetectorModel>, IDisposable
 {
+    public const double MinimumDimensionSize = 0.01;
+
     private sealed class DrawingData
     {
         public DetectorItemViewModel Item { get; }
@@ -32,9 +34,11 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
     public DetectorAsset? Asset => (DetectorAsset?)Screenshot?.Item.Asset;
     public ObservableCollection<DetectorItemViewModel> Items { get; } = new();
     public bool CanBeginDrawing => _tools.SelectedItemClass != null && _screenshots.SelectedScreenshot != null;
+    public DrawerItemResizer Resizer { get; }
 
-    public DetectorDrawerViewModel(AnnotatorScreenshotsViewModel screenshots, DetectorAnnotatorToolsViewModel tools, DetectorAnnotator annotator)
+    public DetectorDrawerViewModel(AnnotatorScreenshotsViewModel screenshots, DetectorAnnotatorToolsViewModel tools, DetectorAnnotator annotator, DrawerItemResizer resizer)
     {
+        Resizer = resizer;
         _screenshots = screenshots;
         _tools = tools;
         _annotator = annotator;
@@ -83,7 +87,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
         Guard.IsNotNull(_tools.SelectedItemClass);
         _drawingData.UpdateBounding(finishPosition);
         var boundingViewModel = _drawingData.Item.Bounding;
-        if (boundingViewModel.Width < 0.01 || boundingViewModel.Height < 0.01)
+        if (boundingViewModel.Width < MinimumDimensionSize || boundingViewModel.Height < MinimumDimensionSize)
         {
             Items.Remove(_drawingData.Item);
             _drawingData = null;
