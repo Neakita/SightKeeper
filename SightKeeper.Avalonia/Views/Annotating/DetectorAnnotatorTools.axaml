@@ -20,13 +20,18 @@
                     Command="{Binding MarkSelectedScreenshotAsAssetCommand}"/>
 
             <Button Content="{icons:MaterialIconExt BookmarkRemoveOutline}"
-                    ToolTip.Tip="Unmark selected asset and return it to screenshots"
+                    ToolTip.Tip="Unmark selected screenshot as asset"
                     Command="{Binding UnMarkSelectedScreenshotAsAssetCommand}"/>
 
             <Button Content="{icons:MaterialIconExt DeleteOutline}"
                     ToolTip.Tip="Delete selected screenshot"
                     Command="{Binding DeleteScreenshotCommand}"
                     HotKey="Delete"/>
+            
+            <Button Content="{icons:MaterialIconExt VectorSquareDelete}"
+                    ToolTip.Tip="Delete selected annotation"
+                    Command="{Binding DeleteItemCommand}"
+                    HotKey="Back"/>
             
         </WrapPanel>
 

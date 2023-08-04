@@ -14,12 +14,13 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         _dbContext = dbContext;
     }
     
-    public void Annotate(Screenshot screenshot, ItemClass itemClass, BoundingBox boundingBox)
+    public DetectorItem Annotate(Screenshot screenshot, ItemClass itemClass, BoundingBox boundingBox)
     {
         var asset = screenshot.GetOptionalAsset<DetectorAsset>() ??
                     screenshot.Library.GetModel<DetectorModel>().MakeAsset(screenshot);
-        asset.CreateItem(itemClass, boundingBox);
+        var item = asset.CreateItem(itemClass, boundingBox);
         _dbContext.SaveChanges();
+        return item;
     }
 
     public void MarkAsset(Screenshot screenshot)
@@ -44,12 +45,18 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         _dbContext.SaveChanges();
     }
 
+    public void DeleteItem(DetectorItem item)
+    {
+        item.Asset.DeleteItem(item);
+        _dbContext.SaveChanges();
+    }
+
+    private readonly AppDbContext _dbContext;
+
     private static void DeleteAsset(Screenshot screenshot)
     {
         Guard.IsNotNull(screenshot.Asset);
         var model = screenshot.Library.GetModel<DetectorModel>();
         model.DeleteAsset(screenshot.GetAsset<DetectorAsset>());
     }
-
-    private readonly AppDbContext _dbContext;
 }

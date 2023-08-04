@@ -4,13 +4,30 @@ using System.Linq;
 using System.Reactive.Disposables;
 using Avalonia;
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<DetectorModel>, IDisposable
+public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<DetectorModel>, IDisposable
 {
+    private sealed class DrawingData
+    {
+        public DetectorItemViewModel Item { get; }
+
+        public DrawingData(Point startPosition, DetectorItemViewModel item)
+        {
+            _startPosition = startPosition;
+            Item = item;
+        }
+
+        public void UpdateBounding(Point currentPosition) =>
+            Item.Bounding.SetFromTwoPositions(_startPosition, currentPosition);
+        
+        private readonly Point _startPosition;
+    }
+    
     public ScreenshotViewModel? Screenshot => _screenshots.SelectedScreenshot;
     public DetectorAsset? Asset => (DetectorAsset?)Screenshot?.Item.Asset;
     public ObservableCollection<DetectorItemViewModel> Items { get; } = new();
@@ -38,6 +55,9 @@ public sealed class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<Dete
             OnPropertyChanged(nameof(Asset));
             Items.Clear();
         }).DisposeWith(disposable);
+        tools.DeleteItemExecuted
+            .Subscribe(item => Items.Remove(item))
+            .DisposeWith(disposable);
     }
     
     public void BeginDrawing(Point startPosition)
@@ -70,31 +90,23 @@ public sealed class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<Dete
             return;
         }
         boundingViewModel.Synchronize();
-        _annotator.Annotate(screenshot.Item, _tools.SelectedItemClass, boundingViewModel.Bounding);
+        _drawingData.Item.Item =  _annotator.Annotate(screenshot.Item, _tools.SelectedItemClass, boundingViewModel.Bounding);
         screenshot.NotifyIsAssetChanged();
         _drawingData = null;
     }
+
+    public void Dispose() => _disposable.Dispose();
 
     private readonly AnnotatorScreenshotsViewModel _screenshots;
     private readonly DetectorAnnotatorToolsViewModel _tools;
     private readonly DetectorAnnotator _annotator;
     private readonly IDisposable _disposable;
     private DrawingData? _drawingData;
+    [ObservableProperty] private bool _isItemSelectionEnabled;
+    [ObservableProperty] private DetectorItemViewModel? _selectedItem;
 
-    private sealed class DrawingData
+    partial void OnSelectedItemChanged(DetectorItemViewModel? value)
     {
-        public Point StartPosition { get; set; }
-        public DetectorItemViewModel Item { get; }
-
-        public DrawingData(Point startPosition, DetectorItemViewModel item)
-        {
-            StartPosition = startPosition;
-            Item = item;
-        }
-
-        public void UpdateBounding(Point currentPosition) =>
-            Item.Bounding.SetFromTwoPositions(StartPosition, currentPosition);
+        _tools.SelectedItem = value;
     }
-
-    public void Dispose() => _disposable.Dispose();
 }

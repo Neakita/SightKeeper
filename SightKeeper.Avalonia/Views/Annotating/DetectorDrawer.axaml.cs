@@ -1,7 +1,10 @@
-﻿using Avalonia;
+﻿using System.Reactive.Disposables;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.ReactiveUI;
 using CommunityToolkit.Diagnostics;
+using ReactiveUI;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -9,15 +12,18 @@ namespace SightKeeper.Avalonia.Views.Annotating;
 
 public sealed partial class DetectorDrawer : ReactiveUserControl<DetectorDrawerViewModel>
 {
-    public DetectorDrawer()
+	public DetectorDrawer()
     {
         InitializeComponent();
+        this.WhenActivated(OnActivated);
     }
 
     protected override void OnInitialized()
     {
 	    Image.PointerPressed += ImageOnPointerPressed;
     }
+    
+    private TopLevel? _topLevel;
 
     private void ImageOnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
@@ -53,5 +59,32 @@ public sealed partial class DetectorDrawer : ReactiveUserControl<DetectorDrawerV
 	    var position = e.GetPosition(Image);
 	    Point normalizedPosition = new(position.X / Image.Bounds.Width, position.Y / Image.Bounds.Height);
 	    return normalizedPosition;
+    }
+
+    private void OnActivated(CompositeDisposable disposable)
+    {
+	    Disposable.Create(OnDeactivated).DisposeWith(disposable);
+	    _topLevel = this.GetTopLevel();
+	    _topLevel.KeyDown += OnTopLevelKeyDown;
+	    _topLevel.KeyUp += OnTopLevelKeyUp;
+    }
+
+    private void OnDeactivated()
+    {
+	    Guard.IsNotNull(_topLevel);
+	    _topLevel.KeyDown -= OnTopLevelKeyDown;
+	    _topLevel.KeyUp -= OnTopLevelKeyUp;
+    }
+
+    private void OnTopLevelKeyDown(object? sender, KeyEventArgs e)
+    {
+	    if (ViewModel != null && e.Key == Key.LeftCtrl)
+		    ViewModel.IsItemSelectionEnabled = true;
+    }
+
+    private void OnTopLevelKeyUp(object? sender, KeyEventArgs e)
+    {
+	    if (ViewModel != null && e.Key == Key.LeftCtrl)
+		    ViewModel.IsItemSelectionEnabled = false;
     }
 }

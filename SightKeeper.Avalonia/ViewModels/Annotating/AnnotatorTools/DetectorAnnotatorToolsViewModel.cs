@@ -19,6 +19,8 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
 {
     public IObservable<Unit> UnMarkSelectedScreenshotAsAssetExecuted =>
         _unMarkSelectedScreenshotAsAssetExecuted.AsObservable();
+
+    public IObservable<DetectorItemViewModel> DeleteItemExecuted => _deleteItemExecuted;
     public IReadOnlyCollection<ItemClass> ItemClasses => _annotatorViewModel.SelectedModel?.ItemClasses ?? Array.Empty<ItemClass>();
 
     public DetectorAnnotatorToolsViewModel(AnnotatorViewModel annotatorViewModel, AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
@@ -32,6 +34,12 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         annotatorViewModel.SelectedModelChanged
             .Subscribe(_ => OnPropertyChanged(nameof(ItemClasses))).DisposeWith(compositeDisposable);
     }
+
+    public void Dispose()
+    {
+        _disposable.Dispose();
+        _selectedScreenshotDisposable?.Dispose();
+    }
     
     [RelayCommand(CanExecute = nameof(CanMarkSelectedScreenshotAsAsset))]
     private void MarkSelectedScreenshotAsAsset()
@@ -41,7 +49,6 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         _annotator.MarkAsset(screenshot.Item);
         screenshot.NotifyIsAssetChanged();
     }
-
     private bool CanMarkSelectedScreenshotAsAsset() =>
         _screenshotsViewModel.SelectedScreenshot?.IsAsset == false;
 
@@ -54,7 +61,6 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         _unMarkSelectedScreenshotAsAssetExecuted.OnNext(Unit.Default);
         screenshot.NotifyIsAssetChanged();
     }
-
     private bool CanUnMarkSelectedScreenshotAsAsset() =>
         _screenshotsViewModel.SelectedScreenshot?.IsAsset == true;
 
@@ -70,8 +76,19 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
             return;
         _screenshotsViewModel.SelectedScreenshotIndex = Math.Min(screenshotIndex, screenshots.Count - 1);
     }
-
     private bool CanDeleteScreenshot() => _screenshotsViewModel.SelectedScreenshot != null;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteItem))]
+    private void DeleteItem()
+    {
+        var item = SelectedItem;
+        Guard.IsNotNull(item);
+        Guard.IsNotNull(item.Item);
+        _annotator.DeleteItem(item.Item);
+        _deleteItemExecuted.OnNext(item);
+    }
+
+    private bool CanDeleteItem() => SelectedItem != null;
 
     private readonly AnnotatorViewModel _annotatorViewModel;
     private readonly AnnotatorScreenshotsViewModel _screenshotsViewModel;
@@ -81,6 +98,11 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
 
     private IDisposable? _selectedScreenshotDisposable;
     [ObservableProperty] private ItemClass? _selectedItemClass;
+
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
+    private DetectorItemViewModel? _selectedItem;
+
+    private readonly Subject<DetectorItemViewModel> _deleteItemExecuted = new();
 
     private void OnScreenshotSelected(ScreenshotViewModel? screenshot)
     {
@@ -95,11 +117,5 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
             MarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
             UnMarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
         });
-    }
-
-    public void Dispose()
-    {
-        _disposable.Dispose();
-        _selectedScreenshotDisposable?.Dispose();
     }
 }

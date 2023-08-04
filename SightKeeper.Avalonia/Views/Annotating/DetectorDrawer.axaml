@@ -12,8 +12,10 @@
             <Image Name="Image" IsHitTestVisible="True" Source="{Binding Screenshot.Content, Converter={StaticResource BytesToBitmapConverter}}" />
 
             <ListBox Name="CanvasItemsControl"
-                     ItemsSource="{Binding Path=Items}" Background="Transparent"
-                     IsHitTestVisible="False">
+                     ItemsSource="{Binding Path=Items}"
+                     SelectedItem="{Binding SelectedItem}"
+                     Background="Transparent"
+                     IsHitTestVisible="{Binding IsItemSelectionEnabled}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas />
@@ -93,7 +95,12 @@
                 </ListBox.Styles>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding ItemClass.Name}" FontSize="7"/>
+                        <TextBlock TextTrimming="CharacterEllipsis"
+                                   Text="{Binding ItemClass.Name}"
+                                   FontSize="7"
+                                   Background="#30000000"
+                                   VerticalAlignment="Top"
+                                   HorizontalAlignment="Left"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
