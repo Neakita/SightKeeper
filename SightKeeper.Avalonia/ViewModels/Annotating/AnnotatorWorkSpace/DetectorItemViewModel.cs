@@ -1,12 +1,19 @@
-﻿using Avalonia;
+﻿using System;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Avalonia;
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class DetectorItemViewModel : ViewModel
+public sealed partial class DetectorItemViewModel : ViewModel
 {
+    public static IObservable<DetectorItemViewModel> ItemClassChanged => ItemClassChangedSubject.AsObservable();
+    private static readonly Subject<DetectorItemViewModel> ItemClassChangedSubject = new();
+
     public DetectorItem? Item
     {
         get => _item;
@@ -17,22 +24,27 @@ public sealed class DetectorItemViewModel : ViewModel
             SetProperty(ref _item, value);
         }
     }
-    
-    public ItemClass ItemClass { get; set; }
+
+    [ObservableProperty] private ItemClass _itemClass;
     public BoundingBoxViewModel Bounding { get; private set; }
 
     public DetectorItemViewModel(DetectorItem item)
     {
         Item = item;
-        ItemClass = item.ItemClass;
+        _itemClass = item.ItemClass;
         Bounding = new BoundingBoxViewModel(item.BoundingBox);
     }
 
     public DetectorItemViewModel(ItemClass itemClass, Point position)
     {
-        ItemClass = itemClass;
+        _itemClass = itemClass;
         Bounding = new BoundingBoxViewModel(position);
     }
 
     private DetectorItem? _item;
+
+    partial void OnItemClassChanged(ItemClass value)
+    {
+        ItemClassChangedSubject.OnNext(this);
+    }
 }

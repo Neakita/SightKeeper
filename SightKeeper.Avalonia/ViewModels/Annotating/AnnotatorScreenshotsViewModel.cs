@@ -57,7 +57,6 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         _screenshots.Clear();
         if (value == null)
             return;
-        _screenshotsDataAccess.Load(value.ScreenshotsLibrary);
         _screenshots.AddRange(value.ScreenshotsLibrary.Screenshots);
         _modelDisposable = new CompositeDisposable();
         value.ScreenshotsLibrary.ScreenshotAdded

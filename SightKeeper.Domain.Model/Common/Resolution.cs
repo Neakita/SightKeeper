@@ -16,4 +16,18 @@ public sealed class Resolution
 		Width = width;
 		Height = height;
 	}
+
+	public override string ToString() => $"{Width}x{Height}";
+
+	private bool Equals(Resolution other)
+	{
+		return Width == other.Width && Height == other.Height;
+	}
+
+	public override bool Equals(object? obj)
+	{
+		return ReferenceEquals(this, obj) || obj is Resolution other && Equals(other);
+	}
+
+	public override int GetHashCode() => HashCode.Combine(Width, Height);
 }

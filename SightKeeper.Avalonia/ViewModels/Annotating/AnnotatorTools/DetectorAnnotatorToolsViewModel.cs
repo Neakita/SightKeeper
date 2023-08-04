@@ -28,11 +28,16 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         _annotatorViewModel = annotatorViewModel;
         _screenshotsViewModel = screenshotsViewModel;
         _annotator = annotator;
-        var compositeDisposable = new CompositeDisposable();
-        _disposable = compositeDisposable;
-        _screenshotsViewModel.SelectedScreenshotChanged.Subscribe(OnScreenshotSelected).DisposeWith(compositeDisposable);
+        CompositeDisposable disposable = new();
+        _disposable = disposable;
+        _screenshotsViewModel.SelectedScreenshotChanged.Subscribe(OnScreenshotSelected).DisposeWith(disposable);
         annotatorViewModel.SelectedModelChanged
-            .Subscribe(_ => OnPropertyChanged(nameof(ItemClasses))).DisposeWith(compositeDisposable);
+            .Subscribe(_ => OnPropertyChanged(nameof(ItemClasses))).DisposeWith(disposable);
+        DetectorItemViewModel.ItemClassChanged.Subscribe(item =>
+        {
+            Guard.IsNotNull(item.Item);
+            annotator.ChangeItemClass(item.Item, item.ItemClass);
+        }).DisposeWith(disposable);
     }
 
     public void Dispose()

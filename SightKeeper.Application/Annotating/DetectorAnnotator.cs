@@ -11,4 +11,5 @@ public interface DetectorAnnotator
     void UnMarkAsset(Screenshot screenshot);
     void DeleteScreenshot(Screenshot screenshot);
     void DeleteItem(DetectorItem item);
+    void ChangeItemClass(DetectorItem item, ItemClass itemClass);
 }

@@ -51,6 +51,12 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         _dbContext.SaveChanges();
     }
 
+    public void ChangeItemClass(DetectorItem item, ItemClass itemClass)
+    {
+        item.ItemClass = itemClass;
+        _dbContext.SaveChanges();
+    }
+
     private readonly AppDbContext _dbContext;
 
     private static void DeleteAsset(Screenshot screenshot)

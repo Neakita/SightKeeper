@@ -34,6 +34,10 @@
                     HotKey="Back"/>
             
         </WrapPanel>
+        
+        <ComboBox ItemsSource="{Binding ItemClasses}"
+                  SelectedItem="{Binding SelectedItem.ItemClass}"
+                  IsEnabled="{Binding !!SelectedItem}"/>
 
     </StackPanel>
 </UserControl>
