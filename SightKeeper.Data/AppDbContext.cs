@@ -68,7 +68,7 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelWeightsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelWeightsConfiguration());
-		modelBuilder.Entity<DetectorItem>().HasShadowKey().OwnsOne(item => item.BoundingBox);
+		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
 		modelBuilder.Entity<ModelConfig>().HasShadowKey();
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		
@@ -78,6 +78,5 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<Model>().Navigation(model => model.ScreenshotsLibrary).AutoInclude();
 		modelBuilder.Entity<DetectorModel>().Navigation(model => model.Assets).AutoInclude();
 		modelBuilder.Entity<ScreenshotsLibrary>().Navigation(library => library.Screenshots).AutoInclude();
-
 	}
 }
