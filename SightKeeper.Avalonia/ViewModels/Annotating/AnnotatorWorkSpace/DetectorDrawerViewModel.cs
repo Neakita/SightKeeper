@@ -68,6 +68,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
     {
         Guard.IsNull(_drawingData);
         Guard.IsNotNull(_tools.SelectedItemClass);
+        startPosition = Clamp(startPosition);
         DetectorItemViewModel item = new(_tools.SelectedItemClass, startPosition);
         Items.Add(item);
         _drawingData = new DrawingData(startPosition, item);
@@ -76,6 +77,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
     public void UpdateDrawing(Point intermediatePosition)
     {
         Guard.IsNotNull(_drawingData);
+        intermediatePosition = Clamp(intermediatePosition);
         _drawingData.UpdateBounding(intermediatePosition);
     }
 
@@ -85,6 +87,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
         var screenshot = _screenshots.SelectedScreenshot;
         Guard.IsNotNull(screenshot);
         Guard.IsNotNull(_tools.SelectedItemClass);
+        finishPosition = Clamp(finishPosition);
         _drawingData.UpdateBounding(finishPosition);
         var boundingViewModel = _drawingData.Item.Bounding;
         if (boundingViewModel.Width < MinimumDimensionSize || boundingViewModel.Height < MinimumDimensionSize)
@@ -98,6 +101,8 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
         screenshot.NotifyIsAssetChanged();
         _drawingData = null;
     }
+
+    private static Point Clamp(Point point) => new(Math.Clamp(point.X, 0, 1), Math.Clamp(point.Y, 0, 1));
 
     public void Dispose() => _disposable.Dispose();
 
