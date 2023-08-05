@@ -10,28 +10,6 @@ namespace SightKeeper.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Content",
-                table: "Screenshots");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "Models",
-                type: "INTEGER",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "INTEGER")
-                .OldAnnotation("Sqlite:Autoincrement", true);
-
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "DetectorItems",
-                type: "INTEGER",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "INTEGER")
-                .OldAnnotation("Sqlite:Autoincrement", true);
-
             migrationBuilder.CreateTable(
                 name: "Images",
                 columns: table => new
@@ -75,17 +53,37 @@ namespace SightKeeper.Data.Migrations
                 table: "ScreenshotImages",
                 column: "ScreenshotId",
                 unique: true);
+
+            migrationBuilder.Sql(@"CREATE TABLE temp_ScreenshotImages
+(
+    Id           INTEGER NOT NULL
+        CONSTRAINT PK_ScreenshotImages PRIMARY KEY,
+    ScreenshotId INTEGER NOT NULL
+);
+
+INSERT INTO temp_ScreenshotImages (Id, ScreenshotId)
+SELECT row_number() over (), Id
+FROM Screenshots;
+
+INSERT INTO Images (Id, Content)
+SELECT image.Id, screenshot.Content
+FROM temp_ScreenshotImages AS image
+         JOIN Screenshots screenshot ON screenshot.Id = image.ScreenshotId;
+
+INSERT INTO ScreenshotImages (Id, ScreenshotId)
+SELECT *
+FROM temp_ScreenshotImages;
+
+DROP TABLE temp_ScreenshotImages;");
+            
+            migrationBuilder.DropColumn(
+                name: "Content",
+                table: "Screenshots");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ScreenshotImages");
-
-            migrationBuilder.DropTable(
-                name: "Images");
-
             migrationBuilder.AddColumn<byte[]>(
                 name: "Content",
                 table: "Screenshots",
@@ -93,23 +91,19 @@ namespace SightKeeper.Data.Migrations
                 nullable: false,
                 defaultValue: new byte[0]);
 
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "Models",
-                type: "INTEGER",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "INTEGER")
-                .Annotation("Sqlite:Autoincrement", true);
+            migrationBuilder.Sql(@"UPDATE Screenshots
+SET Content = (
+    SELECT Images.Content
+    FROM Images
+             JOIN ScreenshotImages ON ScreenshotImages.Id = Images.Id
+    WHERE ScreenshotImages.ScreenshotId = Screenshots.Id
+);");
+            
+            migrationBuilder.DropTable(
+                name: "ScreenshotImages");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "DetectorItems",
-                type: "INTEGER",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "INTEGER")
-                .Annotation("Sqlite:Autoincrement", true);
+            migrationBuilder.DropTable(
+                name: "Images");
         }
     }
 }
