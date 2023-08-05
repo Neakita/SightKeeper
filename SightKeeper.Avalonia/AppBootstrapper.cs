@@ -38,7 +38,7 @@ namespace SightKeeper.Avalonia;
 
 public static class AppBootstrapper
 {
-	public static IContainer Setup()
+	public static void Setup()
 	{
 		ContainerBuilder builder = new();
 		SetupLogger(builder);
@@ -46,10 +46,10 @@ public static class AppBootstrapper
 		SetupViewModels(builder);
 		SetupViews(builder);
 		var container = builder.Build();
+		ServiceLocator.Setup(container);
 		using var initialScope = container.BeginLifetimeScope(typeof(AppBootstrapper));
 		var dbContext = initialScope.Resolve<AppDbContext>();
 		dbContext.Database.Migrate();
-		return container;
 	}
 
 	private static void SetupLogger(ContainerBuilder builder)
