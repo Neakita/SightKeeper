@@ -93,6 +93,7 @@ public static class AppBootstrapper
 		builder.RegisterType<AvaloniaScreenBoundsProvider>().As<ScreenBoundsProvider>();
 		builder.RegisterType<DbScreenshotsDataAccess>().As<ScreenshotsDataAccess>();
 		builder.RegisterType<DbDetectorAnnotator>().As<DetectorAnnotator>();
+		builder.RegisterType<DbScreenshotImageLoader>().As<ScreenshotImageLoader>();
 		
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();

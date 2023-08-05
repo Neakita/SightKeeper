@@ -69,6 +69,8 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ModelWeightsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelWeightsConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
+		modelBuilder.ApplyConfiguration(new ImageConfiguration());
+		modelBuilder.ApplyConfiguration(new ScreenshotImageConfiguration());
 		modelBuilder.Entity<ModelConfig>().HasShadowKey();
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		

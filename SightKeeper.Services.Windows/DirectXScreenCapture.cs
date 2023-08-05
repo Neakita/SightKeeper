@@ -5,6 +5,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
+using Image = System.Drawing.Image;
 
 namespace SightKeeper.Services.Windows;
 

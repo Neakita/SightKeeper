@@ -8,8 +8,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
+using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -26,15 +26,14 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     [ObservableProperty] private SortingRule<Screenshot> _sortingRule;
 
-    public AnnotatorScreenshotsViewModel(ScreenshotsDataAccess screenshotsDataAccess)
+    public AnnotatorScreenshotsViewModel(ScreenshotImageLoader imageLoader)
     {
         _sortingRule = SortingRules.First();
         var sortingRule = this.WhenAnyValue(viewModel => viewModel.SortingRule)
             .Select(rule => rule.Comparer);
-        _screenshotsDataAccess = screenshotsDataAccess;
         _screenshots.Connect()
             .Sort(sortingRule)
-            .Transform(screenshot => new ScreenshotViewModel(screenshot))
+            .Transform(screenshot => new ScreenshotViewModel(imageLoader, screenshot))
             .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out var screenshots)
             .Subscribe();
@@ -42,7 +41,6 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     }
 
     private readonly SourceList<Screenshot> _screenshots = new();
-    private readonly ScreenshotsDataAccess _screenshotsDataAccess;
     private readonly Subject<ScreenshotViewModel?> _selectedScreenshotChanged = new();
 
     [ObservableProperty] private Model? _model;
