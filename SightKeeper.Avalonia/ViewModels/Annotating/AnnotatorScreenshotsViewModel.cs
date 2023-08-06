@@ -23,8 +23,8 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     public IEnumerable<SortingRule<Screenshot>> SortingRules { get; } = new[]
     {
-        new SortingRule<Screenshot>("Old first", SortDirection.Ascending, screenshot => screenshot.CreationDate),
-        new SortingRule<Screenshot>("New first", SortDirection.Descending, screenshot => screenshot.CreationDate)
+        new SortingRule<Screenshot>("New first", SortDirection.Descending, screenshot => screenshot.CreationDate),
+        new SortingRule<Screenshot>("Old first", SortDirection.Ascending, screenshot => screenshot.CreationDate)
     };
 
     [ObservableProperty] private SortingRule<Screenshot> _sortingRule;

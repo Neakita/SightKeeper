@@ -4,14 +4,16 @@ using SightKeeper.Data;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services.Annotating;
 
 public sealed class DbDetectorAnnotator : DetectorAnnotator
 {
-    public DbDetectorAnnotator(AppDbContext dbContext)
+    public DbDetectorAnnotator(AppDbContext dbContext, ItemClassDataAccess itemClassDataAccess)
     {
         _dbContext = dbContext;
+        _itemClassDataAccess = itemClassDataAccess;
     }
     
     public DetectorItem Annotate(Screenshot screenshot, ItemClass itemClass, BoundingBox boundingBox)
@@ -22,6 +24,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         Guard.IsBetweenOrEqualTo(boundingBox.Y2, 0, 1);
         var asset = screenshot.GetOptionalAsset<DetectorAsset>() ??
                     screenshot.Library.GetModel<DetectorModel>().MakeAsset(screenshot);
+        _itemClassDataAccess.LoadItems(itemClass);
         var item = asset.CreateItem(itemClass, boundingBox);
         _dbContext.SaveChanges();
         return item;
@@ -68,6 +71,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     }
 
     private readonly AppDbContext _dbContext;
+    private readonly ItemClassDataAccess _itemClassDataAccess;
 
     private static void DeleteAsset(Screenshot screenshot)
     {
