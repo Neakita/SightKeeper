@@ -108,5 +108,4 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 		Tools = null;
 		WorkSpace = null;
 	}
-
 }

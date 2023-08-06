@@ -13,6 +13,7 @@
         <ListBox Grid.Row="0"
                  ItemsSource="{Binding ItemClasses}"
                  SelectedItem="{Binding SelectedItemClass}"
+                 SelectedIndex="{Binding SelectedItemClassIndex}"
                  MinWidth="100"/>
 
         <WrapPanel Grid.Row="1">

@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Commons;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
@@ -103,6 +104,7 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
 
     private IDisposable? _selectedScreenshotDisposable;
     [ObservableProperty] private ItemClass? _selectedItemClass;
+    [ObservableProperty] private int _selectedItemClassIndex;
 
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
     private DetectorItemViewModel? _selectedItem;
@@ -122,5 +124,12 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
             MarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
             UnMarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
         });
+    }
+
+    public void ScrollItemClass(bool reverse)
+    {
+        if (ItemClasses.Count <= 1)
+            return;
+        SelectedItemClassIndex = SelectedItemClassIndex.Cycle(0, ItemClasses.Count - 1, reverse);
     }
 }
