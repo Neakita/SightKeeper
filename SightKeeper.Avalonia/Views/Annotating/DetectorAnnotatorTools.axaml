@@ -10,7 +10,8 @@
 
     <Grid RowDefinitions="* Auto Auto">
 
-        <ListBox Grid.Row="0"
+        <ListBox Name="ItemClassesListBox"
+                 Grid.Row="0"
                  ItemsSource="{Binding ItemClasses}"
                  SelectedItem="{Binding SelectedItemClass}"
                  SelectedIndex="{Binding SelectedItemClassIndex}"

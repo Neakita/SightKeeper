@@ -15,7 +15,8 @@
                   ItemsSource="{Binding SortingRules}"
                   SelectedItem="{Binding SortingRule}"/>
 
-        <ListBox Grid.Row="1"
+        <ListBox Name="ScreenshotsListBox"
+                 Grid.Row="1"
                  ItemsSource="{Binding Screenshots}"
                  SelectedItem="{Binding SelectedScreenshot}"
                  SelectedIndex="{Binding SelectedScreenshotIndex}">
