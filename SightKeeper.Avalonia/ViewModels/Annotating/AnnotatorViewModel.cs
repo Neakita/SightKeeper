@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Autofac;
@@ -66,35 +64,11 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 	private AnnotatorTools? _tools;
 	private AnnotatorWorkSpace? _workSpace;
 
-	private IObservable<Unit> WindowActivated => Observable.FromEventPattern(
-		handler =>
-		{
-			Guard.IsNotNull(_window);
-			_window.Activated += handler;
-		}, handler =>
-		{
-			Guard.IsNotNull(_window);
-			_window.Activated -= handler;
-		}).Select(_ => Unit.Default);
-
-	private IObservable<Unit> WindowDeactivated => Observable.FromEventPattern(
-		handler =>
-		{
-			Guard.IsNotNull(_window);
-			_window.Deactivated += handler;
-		}, handler =>
-		{
-			Guard.IsNotNull(_window);
-			_window.Deactivated -= handler;
-		}).Select(_ => Unit.Default);
-
 	private void HandleActivation(CompositeDisposable disposable)
 	{
 		_window = this.GetOwnerWindow();
 		Disposable.Create(HandleDeactivation).DisposeWith(disposable);
 		OnPropertyChanged(nameof(Models));
-		WindowActivated.Subscribe(_ => Screenshoter.IsSuspended = true).DisposeWith(disposable);
-		WindowDeactivated.Subscribe(_ => Screenshoter.IsSuspended = false).DisposeWith(disposable);
 	}
 
 	private void HandleDeactivation()

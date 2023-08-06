@@ -12,8 +12,10 @@ public sealed class ModelScreenshoterTests
     {
         DetectorModel model = new("Test model");
         Mock<ScreenCapture> screenCaptureMock = new();
-        Screenshoter screenshoter = new(screenCaptureMock.Object);
-        ModelScreenshoter modelScreenshoter = new(screenCaptureMock.Object, screenshoter);
+        Mock<SelfActivityService> selfActivityMock = new();
+        Mock<GamesService> gamesServiceMock = new();
+        Screenshoter screenshoter = new(screenCaptureMock.Object, selfActivityMock.Object);
+        ModelScreenshoter modelScreenshoter = new(screenCaptureMock.Object, screenshoter, gamesServiceMock.Object);
         modelScreenshoter.Model = model;
         modelScreenshoter.Model.Should().Be(model);
     }
@@ -23,8 +25,10 @@ public sealed class ModelScreenshoterTests
     {
         DetectorModel model = new("Test model");
         Mock<ScreenCapture> screenCaptureMock = new();
-        Screenshoter screenshoter = new(screenCaptureMock.Object);
-        ModelScreenshoter modelScreenshoter = new(screenCaptureMock.Object, screenshoter);
+        Mock<SelfActivityService> selfActivityMock = new();
+        Mock<GamesService> gamesServiceMock = new();
+        Screenshoter screenshoter = new(screenCaptureMock.Object, selfActivityMock.Object);
+        ModelScreenshoter modelScreenshoter = new(screenCaptureMock.Object, screenshoter, gamesServiceMock.Object);
         modelScreenshoter.Model = model;
         modelScreenshoter.Model = null;
         modelScreenshoter.Model.Should().BeNull();
@@ -36,8 +40,10 @@ public sealed class ModelScreenshoterTests
         ScreenshotsLibrary library = new();
         DetectorModel model = new("Test model");
         Mock<ScreenCapture> screenCaptureMock = new();
-        Screenshoter screenshoter = new(screenCaptureMock.Object);
-        ModelScreenshoter modelScreenshoter = new(screenCaptureMock.Object, screenshoter);
+        Mock<SelfActivityService> selfActivityMock = new();
+        Mock<GamesService> gamesServiceMock = new();
+        Screenshoter screenshoter = new(screenCaptureMock.Object, selfActivityMock.Object);
+        ModelScreenshoter modelScreenshoter = new(screenCaptureMock.Object, screenshoter, gamesServiceMock.Object);
         screenshoter.Library = library;
         Assert.Throws<InvalidOperationException>(() => modelScreenshoter.Model = model);
     }

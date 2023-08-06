@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Diagnostics;
+using Serilog;
 using SharpHook.Native;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
@@ -80,14 +81,22 @@ public sealed class DbHotKeyScreenshoter : StreamModelScreenshoter
         Guard.IsNotNull(Model);
         lock (this)
         {
+            var somethingScreenshoted = false;
             while (hotKey.IsPressed)
             {
-                _screenshoter.MakeScreenshot();
+                if (!_screenshoter.GetCanMakeScreenshot(out var message))
+                    Log.Information("Can't make screenshot: {Message}", message);
+                else
+                {
+                    _screenshoter.MakeScreenshot();
+                    somethingScreenshoted = true;
+                }
                 if (_timeout == null)
                     break;
                 Thread.Sleep(_timeout.Value);
             }
-            _librariesDataAccess.SaveChanges(Model.ScreenshotsLibrary);
+            if (somethingScreenshoted)
+                _librariesDataAccess.SaveChanges(Model.ScreenshotsLibrary);
         }
     }
 }

@@ -25,26 +25,12 @@ public sealed class ScreenshoterViewModel : ViewModel
 
     public bool IsEnabled
     {
-        get => _isEnabled;
+        get => _screenshoter.IsEnabled;
         set
         {
-            _isEnabled = value;
-            _isEnabledChanged.OnNext(value);
-            UpdateScreenshoterIsEnabled();
-            OnPropertyChanged();
-        }
-    }
-
-    public bool IsSuspended
-    {
-        get => _isSuspended;
-        set
-        {
-            if (_isSuspended == value)
+            if (!SetProperty(_screenshoter.IsEnabled, value, isEnabled => _screenshoter.IsEnabled = isEnabled))
                 return;
-            _isSuspended = value;
-            UpdateScreenshoterIsEnabled();
-            OnPropertyChanged();
+            _isEnabledChanged.OnNext(value);
         }
     }
 
@@ -75,10 +61,4 @@ public sealed class ScreenshoterViewModel : ViewModel
 
     private readonly Subject<bool> _isEnabledChanged = new();
     private readonly StreamModelScreenshoter _screenshoter;
-
-    private bool _isEnabled;
-    private bool _isSuspended = true;
-
-    private void UpdateScreenshoterIsEnabled() =>
-        _screenshoter.IsEnabled = IsEnabled && !IsSuspended;
 }
