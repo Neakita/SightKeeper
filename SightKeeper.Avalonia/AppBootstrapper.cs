@@ -96,6 +96,8 @@ public static class AppBootstrapper
 		builder.RegisterType<DbScreenshotImageLoader>().As<ScreenshotImageLoader>();
 		builder.RegisterType<MainWindowActivityService>().As<SelfActivityService>();
 		builder.RegisterType<WindowsGamesService>().As<GamesService>();
+		builder.RegisterType<DbDetectorAssetsDataAccess>().As<DetectorAssetsDataAccess>();
+		builder.RegisterType<DbItemClassDataAccess>().As<ItemClassDataAccess>();
 		
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();

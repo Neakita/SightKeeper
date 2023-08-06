@@ -7,6 +7,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -36,7 +37,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
     public bool CanBeginDrawing => _tools.SelectedItemClass != null && _screenshots.SelectedScreenshot != null;
     public DrawerItemResizer Resizer { get; }
 
-    public DetectorDrawerViewModel(AnnotatorScreenshotsViewModel screenshots, DetectorAnnotatorToolsViewModel tools, DetectorAnnotator annotator, DrawerItemResizer resizer)
+    public DetectorDrawerViewModel(AnnotatorScreenshotsViewModel screenshots, DetectorAnnotatorToolsViewModel tools, DetectorAnnotator annotator, DrawerItemResizer resizer, DetectorAssetsDataAccess assetsDataAccess)
     {
         Resizer = resizer;
         _screenshots = screenshots;
@@ -50,7 +51,9 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
             OnPropertyChanged(nameof(Asset));
             Items.Clear();
             var asset = Asset;
-            if (asset == null) return;
+            if (asset == null)
+                return;
+            assetsDataAccess.LoadItems(asset);
             foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item)))
                 Items.Add(item);
         }).DisposeWith(disposable);

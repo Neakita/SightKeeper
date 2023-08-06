@@ -75,8 +75,6 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		
 		modelBuilder.Entity<Screenshot>().Navigation(screenshot => screenshot.Asset).AutoInclude();
-		modelBuilder.Entity<DetectorAsset>().Navigation(asset => asset.Items).AutoInclude();
-		modelBuilder.Entity<ItemClass>().Navigation(itemClass => itemClass.DetectorItems).AutoInclude();
 		modelBuilder.Entity<Model>().Navigation(model => model.ScreenshotsLibrary).AutoInclude();
 		modelBuilder.Entity<DetectorModel>().Navigation(model => model.Assets).AutoInclude();
 	}

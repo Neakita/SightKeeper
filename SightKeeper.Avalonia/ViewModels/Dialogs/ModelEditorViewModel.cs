@@ -14,6 +14,7 @@ using FluentValidation;
 using SightKeeper.Application.Model;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Services;
 using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
@@ -24,22 +25,10 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
     public IReadOnlyCollection<ModelConfig> Configs => new List<ModelConfig>();
 
-    public ModelEditorViewModel(IValidator<ModelData> validator, RegisteredGamesService registeredGamesService) : base(validator)
+    public ModelEditorViewModel(IValidator<ModelData> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
-    }
-
-    public void SetData(ModelData data)
-    {
-        _itemClasses.Clear();
-        foreach (var itemClass in data.ItemClasses)
-            _itemClasses.Add(itemClass);
-        Name = data.Name;
-        Description = data.Description;
-        ResolutionWidth = data.ResolutionWidth;
-        ResolutionHeight = data.ResolutionHeight;
-        Game = data.Game;
-        Config = data.Config;
+        _itemClassDataAccess = itemClassDataAccess;
     }
 
     public void SetData(Model model)
@@ -53,6 +42,14 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
         ResolutionHeight = model.Resolution.Height;
         Game = model.Game;
         Config = model.Config;
+        _deletionBlackListItemClasses = model.ItemClasses
+            .Where(itemClass =>
+            {
+                _itemClassDataAccess.LoadItems(itemClass);
+                return !model.CanDeleteItemClass(itemClass, out _);
+            })
+            .Select(itemClass => itemClass.Name)
+            .ToList();
     }
 
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))] private string _newItemClassName = string.Empty;
@@ -67,7 +64,9 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
 
     private readonly ObservableCollection<string> _itemClasses = new();
     private readonly RegisteredGamesService _registeredGamesService;
-    
+    private readonly ItemClassDataAccess _itemClassDataAccess;
+    private IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
+
     partial void OnResolutionWidthChanged(int? oldValue, int? newValue)
     {
         Debug.WriteLine($"ResolutionWidth changed from {oldValue} to {newValue}");
@@ -86,12 +85,12 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
     [RelayCommand(CanExecute = nameof(CanDeleteItemClass))]
     private void DeleteItemClass()
     {
-        Guard.IsNotNull<string>(SelectedItemClass);
+        Guard.IsNotNull(SelectedItemClass);
         if (!_itemClasses.Remove(SelectedItemClass))
             ThrowHelper.ThrowArgumentException(nameof(SelectedItemClass), $"{SelectedItemClass} not removed from {ItemClasses}");
     }
 
-    private bool CanDeleteItemClass() => SelectedItemClass != null;
+    private bool CanDeleteItemClass() => SelectedItemClass != null && !_deletionBlackListItemClasses.Contains(SelectedItemClass);
 
     [RelayCommand(CanExecute = nameof(CanApply))]
     private void Apply()

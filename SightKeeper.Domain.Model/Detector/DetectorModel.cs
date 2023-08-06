@@ -39,7 +39,7 @@ public sealed class DetectorModel : Model
 		asset.Screenshot.Asset = null;
 	}
 
-	protected override bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
+	public override bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
 	{
 		message = null;
 		if (itemClass.DetectorItems.Any())

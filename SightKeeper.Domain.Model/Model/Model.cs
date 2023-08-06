@@ -76,6 +76,8 @@ public abstract class Model
 	public ModelScreenshotsLibrary ScreenshotsLibrary { get; private set; }
 	public ModelWeightsLibrary WeightsLibrary { get; private set; }
 
+	public abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
+	
 	public override string ToString() => Name;
 
 	protected Model(string name) : this(name, new Resolution())
@@ -101,8 +103,6 @@ public abstract class Model
 		WeightsLibrary = null!;
 		ScreenshotsLibrary = null!;
 	}
-	
-	protected abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
 	
 	private ModelConfig? _config;
 }

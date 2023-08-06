@@ -8,7 +8,7 @@ namespace SightKeeper.Avalonia.ViewModels.Fakes;
 
 public sealed class FakeModelEditorViewModel : Dialogs.ModelEditorViewModel
 {
-    public FakeModelEditorViewModel() : base(new ModelDataValidator(), new RegisteredGamesService(new DbGamesDataAccess(new AppDbContext()), new ProcessesAvailableGamesProvider(new DbGamesDataAccess(new AppDbContext()))))
+    public FakeModelEditorViewModel() : base(new ModelDataValidator(), new RegisteredGamesService(new DbGamesDataAccess(new AppDbContext()), new ProcessesAvailableGamesProvider(new DbGamesDataAccess(new AppDbContext()))), new DbItemClassDataAccess(new AppDbContext()))
     {
         Name = "Some model";
     }
