@@ -1,4 +1,5 @@
-﻿using SightKeeper.Application.Annotating;
+﻿using System.Globalization;
+using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Training.Images;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -9,6 +10,13 @@ namespace SightKeeper.Services;
 
 public sealed class DetectorImagesExporter : ImagesExporter<DetectorModel>
 {
+	private const string NumberFormat = "0.######";
+
+	private static readonly NumberFormatInfo BoundingNumbersFormat = BoundingNumbersFormat = new NumberFormatInfo
+	{
+		NumberDecimalSeparator = ".",
+	};
+
 	public DetectorImagesExporter(ScreenshotImageLoader imageLoader, DetectorAssetsDataAccess assetsDataAccess)
 	{
 		_imageLoader = imageLoader;
@@ -46,11 +54,16 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorModel>
 
 	private static string ItemToString(DetectorItem item, IReadOnlyDictionary<ItemClass, byte> itemClassesIndexes)
 	{
-		var culture = (System.Globalization.CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
-		culture.NumberFormat.NumberDecimalSeparator = ".";
 		var itemClassIndex = itemClassesIndexes[item.ItemClass];
-		return $"{itemClassIndex} {item.BoundingBox.XCenter.ToString(NumberFormat, culture)} {item.BoundingBox.YCenter.ToString(NumberFormat, culture)} {item.BoundingBox.Width.ToString(NumberFormat, culture)} {item.BoundingBox.Height.ToString(NumberFormat, culture)}";
+		return string.Join(' ', GetItemParameters(itemClassIndex, item.BoundingBox));
 	}
 
-	private const string NumberFormat = "0.######";
+	private static IEnumerable<string> GetItemParameters(byte itemClassIndex, BoundingBox bounding)
+	{
+		yield return itemClassIndex.ToString();
+		yield return bounding.XCenter.ToString(NumberFormat, BoundingNumbersFormat);
+		yield return bounding.YCenter.ToString(NumberFormat, BoundingNumbersFormat);
+		yield return bounding.Width.ToString(NumberFormat, BoundingNumbersFormat);
+		yield return bounding.Height.ToString(NumberFormat, BoundingNumbersFormat);
+	}
 }
