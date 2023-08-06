@@ -13,18 +13,7 @@
         <ComboBox Grid.Row="0"
                   HorizontalAlignment="Right"
                   ItemsSource="{Binding SortingRules}"
-                  SelectedItem="{Binding SortingRule}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal"
-                                Spacing="5">
-                        <TextBlock Text="{Binding Name}"/>
-                        <avalonia:MaterialIcon Kind="{Binding Direction, Converter={StaticResource SortDirectionToIconConverter}}"
-                                               ToolTip.Tip="{Binding Direction}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+                  SelectedItem="{Binding SortingRule}"/>
 
         <ListBox Grid.Row="1"
                  ItemsSource="{Binding Screenshots}"
