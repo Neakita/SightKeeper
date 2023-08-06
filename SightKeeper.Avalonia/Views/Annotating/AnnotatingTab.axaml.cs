@@ -18,29 +18,52 @@ public sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatorViewMod
 	}
 
 	private TopLevel? _topLevel;
+	private bool _scrollScreenshotsInsteadOfItemClasses;
 
 	private void OnActivated(CompositeDisposable disposable)
 	{
 		Disposable.Create(OnDeactivated).DisposeWith(disposable);
 		_topLevel = this.GetTopLevel();
+		_topLevel.KeyDown += OnTopLevelKeyDown;
+		_topLevel.KeyUp += OnTopLevelKeyUp;
 		_topLevel.PointerWheelChanged += OnTopLevelScrolled;
-	}
-
-	private void OnTopLevelScrolled(object? sender, PointerWheelEventArgs e)
-	{
-		ScrollItemClass(e.Delta.Y);
-	}
-
-	private void ScrollItemClass(double delta)
-	{
-		if (ViewModel?.Tools == null || delta == 0)
-			return;
-		ViewModel.Tools.ScrollItemClass(delta > 0);
 	}
 
 	private void OnDeactivated()
 	{
 		Guard.IsNotNull(_topLevel);
+		_topLevel.KeyDown -= OnTopLevelKeyDown;
+		_topLevel.KeyUp -= OnTopLevelKeyUp;
 		_topLevel.PointerWheelChanged -= OnTopLevelScrolled;
 	}
+
+	private void OnTopLevelKeyDown(object? sender, KeyEventArgs e)
+	{
+		if (e.Key == Key.LeftShift)
+			_scrollScreenshotsInsteadOfItemClasses = true;
+	}
+
+	private void OnTopLevelKeyUp(object? sender, KeyEventArgs e)
+	{
+		if (e.Key == Key.LeftShift)
+			_scrollScreenshotsInsteadOfItemClasses = false;
+	}
+
+	private void OnTopLevelScrolled(object? sender, PointerWheelEventArgs e)
+	{
+		var delta = e.Delta.Y;
+		if (delta == 0)
+			return;
+		var reverse = delta > 0;
+		if (_scrollScreenshotsInsteadOfItemClasses)
+			ScrollScreenshot(reverse);
+		else
+			ScrollItemClass(reverse);
+	}
+
+	private void ScrollItemClass(bool reverse) =>
+		ViewModel?.Tools?.ScrollItemClass(reverse);
+
+	private void ScrollScreenshot(bool reverse) =>
+		ViewModel?.Screenshots.ScrollScreenshot(reverse);
 }

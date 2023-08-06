@@ -9,6 +9,7 @@ using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
@@ -38,6 +39,13 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
             .Bind(out var screenshots)
             .Subscribe();
         Screenshots = screenshots;
+    }
+
+    public void ScrollScreenshot(bool reverse)
+    {
+        if (Screenshots.Count <= 1)
+            return;
+        SelectedScreenshotIndex = SelectedScreenshotIndex.Cycle(0, Screenshots.Count - 1, reverse);
     }
 
     private readonly SourceList<Screenshot> _screenshots = new();
