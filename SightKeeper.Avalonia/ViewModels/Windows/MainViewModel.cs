@@ -27,10 +27,12 @@ public sealed partial class MainViewModel : ViewModel, IActivatableViewModel
 			var profilesViewModel = ownScope.Resolve<ProfilesViewModel>();
 			var modelsViewModel = ownScope.Resolve<ModelsViewModel>();
 			var annotatingViewModel = ownScope.Resolve<AnnotatorViewModel>();
+			var trainingViewModel = ownScope.Resolve<TrainingViewModel>();
 			var settingsViewModel = ownScope.Resolve<SettingsViewModel>();
 			Tabs.Add(new TabItem(MaterialIconKind.DotsGrid, "Profiles", profilesViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.TableEye, "Models", modelsViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.Image, "Annotating", annotatingViewModel));
+			Tabs.Add(new TabItem(MaterialIconKind.Abacus, "Training", trainingViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.Cog, "Settings", settingsViewModel));
 			SelectedTab = Tabs.First();
 			Disposable.Create(() =>

@@ -1,34 +1,58 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Application.Training;
+using SightKeeper.Application.Training.Parsing;
+using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
-public sealed partial class TrainingViewModel : ObservableObject
+public sealed partial class TrainingViewModel : ViewModel
 {
-    /*private readonly ModelTrainer<Model> _trainer;
-    public ReadOnlyObservableCollection<Model> AvailableModels { get; }
-    [ObservableProperty] private Model? _selectedModel;
-    [ObservableProperty] private bool _isTraining;
+    public IObservable<TrainingProgress> Progress => _trainer.Progress;
+    public Task<IReadOnlyCollection<Model>> AvailableModels => _modelsDataAccess.GetModels();
 
-    [RelayCommand(CanExecute = nameof(CanStartTraining))]
-    public async Task StartTraining()
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
+    private Model? _selectedModel;
+
+    public bool IsTraining
     {
-        if (SelectedModel == null) throw new NullReferenceException($"{nameof(SelectedModel)} is not set");
-        _trainer.Train(SelectedModel, true);
+        get => _isTraining;
+        private set => SetProperty(ref _isTraining, value);
     }
 
-    public bool CanStartTraining() => !IsTraining;
-
-    [RelayCommand]
-    public async Task StopTraining()
+    [RelayCommand(CanExecute = nameof(CanStartTraining), IncludeCancelCommand = true)]
+    public async Task StartTraining(CancellationToken cancellationToken)
     {
-        _trainer.StopTraining();
+        Guard.IsNotNull(SelectedModel);
+        Guard.IsOfType<DetectorModel>(SelectedModel);
+        _trainer.Model = (DetectorModel)SelectedModel;
+        IsTraining = true;
+        try
+        {
+            await _trainer.TrainAsync(cancellationToken);
+        }
+        finally
+        {
+            IsTraining = false;
+        }
     }
 
-    public bool CanStopTraining() => IsTraining;
+    public bool CanStartTraining() => SelectedModel != null;
 
-    public TrainingViewModel(Repository<Model> modelsRepository, ModelTrainer<Model> trainer)
+    public TrainingViewModel(ModelsDataAccess modelsDataAccess, ModelTrainer<DetectorModel> trainer)
     {
+        _modelsDataAccess = modelsDataAccess;
         _trainer = trainer;
-        AvailableModels = modelsRepository.Items;
-    }*/
+    }
+
+    private readonly ModelsDataAccess _modelsDataAccess;
+    private readonly ModelTrainer<DetectorModel> _trainer;
+    private bool _isTraining;
 }

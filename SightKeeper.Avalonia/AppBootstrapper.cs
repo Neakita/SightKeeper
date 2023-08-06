@@ -12,6 +12,9 @@ using SightKeeper.Application.Config;
 using SightKeeper.Application.Model;
 using SightKeeper.Application.Model.Creating;
 using SightKeeper.Application.Model.Editing;
+using SightKeeper.Application.Training;
+using SightKeeper.Application.Training.Images;
+using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Annotating;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
@@ -98,6 +101,11 @@ public static class AppBootstrapper
 		builder.RegisterType<WindowsGamesService>().As<GamesService>();
 		builder.RegisterType<DbDetectorAssetsDataAccess>().As<DetectorAssetsDataAccess>();
 		builder.RegisterType<DbItemClassDataAccess>().As<ItemClassDataAccess>();
+		builder.RegisterType<DetectorTrainer>().As<ModelTrainer<DetectorModel>>();
+		builder.RegisterType<DarknetDetectorAdapter>().As<DarknetAdapter<DetectorModel>>();
+		builder.RegisterType<DetectorImagesExporter>().As<ImagesExporter<DetectorModel>>();
+		builder.RegisterType<DarknetProcessImplementation>().As<DarknetProcess>();
+		builder.RegisterType<DarknetDetectorOutputParser>().As<DarknetOutputParser<DetectorModel>>();
 		
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
@@ -121,6 +129,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorModel>>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<DetectorDrawerViewModel>().As<AnnotatorWorkSpace<DetectorModel>>();
 		builder.RegisterType<DrawerItemResizer>();
+		builder.RegisterType<TrainingViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -135,5 +144,6 @@ public static class AppBootstrapper
 		builder.RegisterType<Views.Dialogs.ConfigEditor>().As<IViewFor<ConfigEditorViewModel>>();
 		builder.RegisterType<DetectorAnnotatorTools>().As<IViewFor<DetectorAnnotatorToolsViewModel>>();
 		builder.RegisterType<DetectorDrawer>().As<IViewFor<DetectorDrawerViewModel>>();
+		builder.RegisterType<TrainingTab>().As<IViewFor<TrainingViewModel>>();
 	}
 }

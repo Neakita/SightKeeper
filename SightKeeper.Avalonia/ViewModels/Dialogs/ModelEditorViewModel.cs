@@ -23,12 +23,13 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
 {
     public IReadOnlyCollection<string> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
-    public IReadOnlyCollection<ModelConfig> Configs => new List<ModelConfig>();
+    public Task<IReadOnlyCollection<ModelConfig>> Configs => _configsDataAccess.GetConfigs();
 
-    public ModelEditorViewModel(IValidator<ModelData> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess) : base(validator)
+    public ModelEditorViewModel(IValidator<ModelData> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess, ConfigsDataAccess configsDataAccess) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
         _itemClassDataAccess = itemClassDataAccess;
+        _configsDataAccess = configsDataAccess;
     }
 
     public void SetData(Model model)
@@ -65,6 +66,7 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
     private readonly ObservableCollection<string> _itemClasses = new();
     private readonly RegisteredGamesService _registeredGamesService;
     private readonly ItemClassDataAccess _itemClassDataAccess;
+    private readonly ConfigsDataAccess _configsDataAccess;
     private IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
 
     partial void OnResolutionWidthChanged(int? oldValue, int? newValue)

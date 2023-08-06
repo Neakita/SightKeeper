@@ -1,0 +1,28 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:tabs="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Views.Tabs.TrainingTab"
+             x:DataType="tabs:TrainingViewModel">
+    <StackPanel>
+        <ComboBox ItemsSource="{Binding AvailableModels^}"
+                  SelectedItem="{Binding SelectedModel}"
+                  IsEnabled="{Binding !IsTraining}"
+                  PlaceholderText="Model"/>
+        
+        <Button Content="{icons:MaterialIconExt Play}"
+                Command="{Binding StartTrainingCommand}"/>
+        
+        <Button Content="{icons:MaterialIconExt Stop}"
+                Command="{Binding StartTrainingCancelCommand}"/>
+        
+        <StackPanel DataContext="{Binding Progress^}">
+            <TextBlock Text="{Binding CurrentBatch, StringFormat=Current batch: {0}}"/>
+            <TextBlock Text="{Binding AverageLoss, StringFormat=Average loss: {0}}"/>
+        </StackPanel>
+        
+    </StackPanel>
+</UserControl>
