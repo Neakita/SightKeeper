@@ -39,20 +39,6 @@ public sealed class DetectorModel : Model
 		asset.Screenshot.Asset = null;
 	}
 
-	public override bool CanChangeResolution([NotNullWhen(false)] out string? message)
-	{
-		message = null;
-		var hasScreenshots = ScreenshotsLibrary.Screenshots.Any();
-		var hasAssets = Assets.Any();
-		if (hasScreenshots && hasAssets)
-			message = "Cannot change resolution of model with screenshots and assets";
-		else if (hasAssets)
-			message = "Cannot change resolution of model with assets";
-		else if (hasScreenshots)
-			message = "Cannot change resolution of model with screenshots";
-		return message == null;
-	}
-
 	protected override bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
 	{
 		message = null;

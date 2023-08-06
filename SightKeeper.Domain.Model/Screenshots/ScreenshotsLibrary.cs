@@ -10,6 +10,7 @@ public class ScreenshotsLibrary
     public IObservable<Screenshot> ScreenshotRemoved => _screenshotRemoved.AsObservable();
     public ushort? MaxQuantity { get; set; }
     public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
+    public bool HasAnyScreenshots { get; private set; }
 
     public ScreenshotsLibrary()
     {
@@ -20,26 +21,17 @@ public class ScreenshotsLibrary
     {
         Screenshot screenshot = new(this, content);
         _screenshots.Add(screenshot);
-        _screenshotAdded.OnNext(screenshot);
         ClearExceed();
+        HasAnyScreenshots = Screenshots.Any();
+        _screenshotAdded.OnNext(screenshot);
         return screenshot;
-    }
-
-    public void AddScreenshot(Screenshot screenshot)
-    {
-        if (screenshot.Library != null)
-            ThrowHelper.ThrowArgumentException("Screenshot already added to library");
-        _screenshots.Add(screenshot);
-        screenshot.Library = this;
-        _screenshotAdded.OnNext(screenshot);
-        ClearExceed();
     }
 	
     public void DeleteScreenshot(Screenshot screenshot)
     {
         if (!_screenshots.Remove(screenshot))
             ThrowHelper.ThrowInvalidOperationException("Screenshot not found");
-        screenshot.Library = null;
+        HasAnyScreenshots = Screenshots.Any();
         _screenshotRemoved.OnNext(screenshot);
     }
 	

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -17,7 +19,7 @@ public sealed class FakeAnnotatingViewModel : IAnnotatingViewModel
     public Model? SelectedModel { get; set; }
 
     public bool CanChangeSelectedModel => true;
-    public AnnotatorScreenshotsViewModel Screenshots => new(new MockScreenshotImageLoader());
+    public AnnotatorScreenshotsViewModel Screenshots => new(new MockScreenshotImageLoader(), new MockScreenshotsDataAccess());
 
     public ScreenshoterViewModel Screenshoter => new(new MockStreamModelScreenshoter());
     public AnnotatorTools? Tools => null;
@@ -34,6 +36,23 @@ public sealed class FakeAnnotatingViewModel : IAnnotatingViewModel
     {
         public void Load(Screenshot screenshot)
         {
+        }
+    }
+    
+    private sealed class MockScreenshotsDataAccess : ScreenshotsDataAccess
+    {
+        public void Load(ScreenshotsLibrary library)
+        {
+        }
+
+        public Task LoadAsync(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SaveChanges(ScreenshotsLibrary library)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

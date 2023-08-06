@@ -13,30 +13,28 @@ public sealed class ScreenshotsLibraryTests
     }
 
     [Fact]
-    public void ShouldNotAddCreatedScreenshot()
+    public void ShouldDeleteScreenshot()
     {
         ScreenshotsLibrary library = new();
         var screenshot = library.CreateScreenshot(Array.Empty<byte>());
-        Assert.Throws<ArgumentException>(() => library.AddScreenshot(screenshot));
+        library.DeleteScreenshot(screenshot);
+        library.Screenshots.Should().NotContain(screenshot);
     }
 
     [Fact]
-    public void ShouldTransferScreenshotFromDifferentLibrary()
+    public void HasAnyScreenshotsShouldBeTrueWhenAddScreenshot()
     {
-        ScreenshotsLibrary library1 = new();
-        ScreenshotsLibrary library2 = new();
-        var screenshot = library1.CreateScreenshot(Array.Empty<byte>());
-        library1.DeleteScreenshot(screenshot);
-        library2.AddScreenshot(screenshot);
-        library2.Screenshots.Should().Contain(screenshot);
+        ScreenshotsLibrary library = new();
+        library.CreateScreenshot(Array.Empty<byte>());
+        library.HasAnyScreenshots.Should().BeTrue();
     }
-    
+
     [Fact]
-    public void ShouldNotAddScreenshotFromDifferentLibrary()
+    public void HasAnyScreenshotsShouldBeFalseWhenAddThenDeleteScreenshot()
     {
-        ScreenshotsLibrary library1 = new();
-        ScreenshotsLibrary library2 = new();
-        var screenshot = library1.CreateScreenshot(Array.Empty<byte>());
-        Assert.Throws<ArgumentException>(() => library2.AddScreenshot(screenshot));
+        ScreenshotsLibrary library = new();
+        var screenshot = library.CreateScreenshot(Array.Empty<byte>());
+        library.DeleteScreenshot(screenshot);
+        library.HasAnyScreenshots.Should().BeFalse();
     }
 }

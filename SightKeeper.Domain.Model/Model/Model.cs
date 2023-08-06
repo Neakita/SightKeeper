@@ -35,8 +35,15 @@ public abstract class Model
 			_resolution = value;
 		}
 	}
-	
-	public abstract bool CanChangeResolution([NotNullWhen(false)] out string? message);
+
+	public bool CanChangeResolution([NotNullWhen(false)] out string? message)
+	{
+		if (ScreenshotsLibrary.HasAnyScreenshots)
+			message = "Can't change resolution when there are screenshots";
+		else
+			message = null;
+		return message == null;
+	}
 
 	private Resolution _resolution;
 

@@ -79,6 +79,5 @@ public class AppDbContext : DbContext
 		modelBuilder.Entity<ItemClass>().Navigation(itemClass => itemClass.DetectorItems).AutoInclude();
 		modelBuilder.Entity<Model>().Navigation(model => model.ScreenshotsLibrary).AutoInclude();
 		modelBuilder.Entity<DetectorModel>().Navigation(model => model.Assets).AutoInclude();
-		modelBuilder.Entity<ScreenshotsLibrary>().Navigation(library => library.Screenshots).AutoInclude();
 	}
 }

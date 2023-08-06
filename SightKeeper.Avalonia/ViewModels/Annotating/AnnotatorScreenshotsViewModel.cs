@@ -11,11 +11,13 @@ using ReactiveUI;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 {
+    private readonly ScreenshotsDataAccess _screenshotsDataAccess;
     public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
     public IReadOnlyList<ScreenshotViewModel> Screenshots { get; }
 
@@ -27,8 +29,9 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     [ObservableProperty] private SortingRule<Screenshot> _sortingRule;
 
-    public AnnotatorScreenshotsViewModel(ScreenshotImageLoader imageLoader)
+    public AnnotatorScreenshotsViewModel(ScreenshotImageLoader imageLoader, ScreenshotsDataAccess screenshotsDataAccess)
     {
+        _screenshotsDataAccess = screenshotsDataAccess;
         _sortingRule = SortingRules.First();
         var sortingRule = this.WhenAnyValue(viewModel => viewModel.SortingRule)
             .Select(rule => rule.Comparer);
@@ -63,6 +66,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         _screenshots.Clear();
         if (value == null)
             return;
+        _screenshotsDataAccess.Load(value.ScreenshotsLibrary);
         _screenshots.AddRange(value.ScreenshotsLibrary.Screenshots);
         _modelDisposable = new CompositeDisposable();
         value.ScreenshotsLibrary.ScreenshotAdded
