@@ -20,6 +20,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
     public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
     public IReadOnlyList<ScreenshotViewModel> Screenshots { get; }
+    public int? ScreenshotsCount => Model == null ? null : Screenshots.Count;
 
     public IEnumerable<SortingRule<Screenshot>> SortingRules { get; } = new[]
     {
@@ -54,7 +55,8 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     private readonly SourceList<Screenshot> _screenshots = new();
     private readonly Subject<ScreenshotViewModel?> _selectedScreenshotChanged = new();
 
-    [ObservableProperty] private Model? _model;
+    [ObservableProperty, NotifyPropertyChangedFor(nameof(ScreenshotsCount))]
+    private Model? _model;
     [ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
     [ObservableProperty] private int _selectedScreenshotIndex;
     
@@ -70,11 +72,23 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         _screenshots.AddRange(value.ScreenshotsLibrary.Screenshots);
         _modelDisposable = new CompositeDisposable();
         value.ScreenshotsLibrary.ScreenshotAdded
-            .Subscribe(newScreenshot => _screenshots.Add(newScreenshot))
+            .Subscribe(OnScreenshotAdded)
             .DisposeWith(_modelDisposable);
         value.ScreenshotsLibrary.ScreenshotRemoved
-            .Subscribe(removedScreenshot => _screenshots.Remove(removedScreenshot))
+            .Subscribe(OnScreenshotRemoved)
             .DisposeWith(_modelDisposable);
+    }
+
+    private void OnScreenshotAdded(Screenshot newScreenshot)
+    {
+        _screenshots.Add(newScreenshot);
+        OnPropertyChanged(nameof(ScreenshotsCount));
+    }
+
+    private void OnScreenshotRemoved(Screenshot removedScreenshot)
+    {
+        _screenshots.Remove(removedScreenshot);
+        OnPropertyChanged(nameof(ScreenshotsCount));
     }
 
     partial void OnSelectedScreenshotChanged(ScreenshotViewModel? value) => _selectedScreenshotChanged.OnNext(value);

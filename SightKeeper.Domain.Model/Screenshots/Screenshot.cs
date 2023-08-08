@@ -13,7 +13,7 @@ public sealed class Screenshot
 	{
 		Library = library;
 		Image = new ScreenshotImage(this, content);
-		CreationDate = DateTime.UtcNow;
+		CreationDate = DateTime.Now;
 	}
 
 	private Screenshot()
