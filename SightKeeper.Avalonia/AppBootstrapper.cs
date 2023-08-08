@@ -35,6 +35,7 @@ using SightKeeper.Services.Annotating;
 using SightKeeper.Services.Games;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Windows;
+using DetectorItem = SightKeeper.Avalonia.Views.Annotating.DetectorItem;
 using ModelEditor = SightKeeper.Avalonia.Views.Dialogs.ModelEditor;
 
 namespace SightKeeper.Avalonia;
@@ -128,7 +129,7 @@ public static class AppBootstrapper
 		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorModel>>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<DetectorDrawerViewModel>().As<AnnotatorWorkSpace<DetectorModel>>();
-		builder.RegisterType<DrawerItemResizer>();
+		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 	}
 	
@@ -143,7 +144,8 @@ public static class AppBootstrapper
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
 		builder.RegisterType<Views.Dialogs.ConfigEditor>().As<IViewFor<ConfigEditorViewModel>>();
 		builder.RegisterType<DetectorAnnotatorTools>().As<IViewFor<DetectorAnnotatorToolsViewModel>>();
-		builder.RegisterType<DetectorDrawer>().As<IViewFor<DetectorDrawerViewModel>>();
+		builder.RegisterType<DetectorDrawer>().AsSelf().As<IViewFor<DetectorDrawerViewModel>>().SingleInstance();
 		builder.RegisterType<TrainingTab>().As<IViewFor<TrainingViewModel>>();
+		builder.RegisterType<DetectorItem>().As<IViewFor<DetectorItemViewModel>>();
 	}
 }

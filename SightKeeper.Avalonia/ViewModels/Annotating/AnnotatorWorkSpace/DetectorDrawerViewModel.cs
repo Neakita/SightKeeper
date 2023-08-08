@@ -35,11 +35,15 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
     public DetectorAsset? Asset => (DetectorAsset?)Screenshot?.Item.Asset;
     public ObservableCollection<DetectorItemViewModel> Items { get; } = new();
     public bool CanBeginDrawing => _tools.SelectedItemClass != null && _screenshots.SelectedScreenshot != null;
-    public DrawerItemResizer Resizer { get; }
 
-    public DetectorDrawerViewModel(AnnotatorScreenshotsViewModel screenshots, DetectorAnnotatorToolsViewModel tools, DetectorAnnotator annotator, DrawerItemResizer resizer, DetectorAssetsDataAccess assetsDataAccess)
+    public DetectorDrawerViewModel(
+        AnnotatorScreenshotsViewModel screenshots,
+        DetectorAnnotatorToolsViewModel tools,
+        DetectorAnnotator annotator,
+        DetectorItemResizer resizer,
+        DetectorAssetsDataAccess assetsDataAccess)
     {
-        Resizer = resizer;
+        _resizer = resizer;
         _screenshots = screenshots;
         _tools = tools;
         _annotator = annotator;
@@ -54,7 +58,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
             if (asset == null)
                 return;
             assetsDataAccess.LoadItems(asset);
-            foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item)))
+            foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer)))
                 Items.Add(item);
         }).DisposeWith(disposable);
         tools.UnMarkSelectedScreenshotAsAssetExecuted.Subscribe(_ =>
@@ -72,7 +76,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
         Guard.IsNull(_drawingData);
         Guard.IsNotNull(_tools.SelectedItemClass);
         startPosition = Clamp(startPosition);
-        DetectorItemViewModel item = new(_tools.SelectedItemClass, startPosition);
+        DetectorItemViewModel item = new(_tools.SelectedItemClass, startPosition, _resizer);
         Items.Add(item);
         _drawingData = new DrawingData(startPosition, item);
     }
@@ -112,6 +116,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
     private readonly AnnotatorScreenshotsViewModel _screenshots;
     private readonly DetectorAnnotatorToolsViewModel _tools;
     private readonly DetectorAnnotator _annotator;
+    private readonly DetectorItemResizer _resizer;
     private readonly IDisposable _disposable;
     private DrawingData? _drawingData;
     [ObservableProperty] private bool _isItemSelectionEnabled;
@@ -120,5 +125,11 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
     partial void OnSelectedItemChanged(DetectorItemViewModel? value)
     {
         _tools.SelectedItem = value;
+    }
+
+    partial void OnIsItemSelectionEnabledChanged(bool value)
+    {
+        foreach (var item in Items)
+            item.IsThumbsVisible = value;
     }
 }

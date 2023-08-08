@@ -25,26 +25,29 @@ public sealed partial class DetectorItemViewModel : ViewModel
         }
     }
 
-    [ObservableProperty] private ItemClass _itemClass;
+    public DetectorItemResizer Resizer { get; }
+
     public BoundingBoxViewModel Bounding { get; private set; }
 
-    public DetectorItemViewModel(DetectorItem item)
+    public DetectorItemViewModel(DetectorItem item, DetectorItemResizer resizer)
     {
         Item = item;
+        Resizer = resizer;
         _itemClass = item.ItemClass;
         Bounding = new BoundingBoxViewModel(item.BoundingBox);
     }
 
-    public DetectorItemViewModel(ItemClass itemClass, Point position)
+    public DetectorItemViewModel(ItemClass itemClass, Point position, DetectorItemResizer resizer)
     {
+        Resizer = resizer;
         _itemClass = itemClass;
         Bounding = new BoundingBoxViewModel(position);
     }
 
     private DetectorItem? _item;
+    [ObservableProperty] private ItemClass _itemClass;
+    [ObservableProperty] private bool _isThumbsVisible;
 
-    partial void OnItemClassChanged(ItemClass value)
-    {
+    partial void OnItemClassChanged(ItemClass value) =>
         ItemClassChangedSubject.OnNext(this);
-    }
 }

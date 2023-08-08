@@ -38,4 +38,19 @@
       <ProjectReference Include="..\SightKeeper.Services.Windows\SightKeeper.Services.Windows.csproj" />
       <ProjectReference Include="..\SightKeeper.Services\SightKeeper.Services.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Annotating\Detector\DetectorItem.axaml.cs">
+        <DependentUpon>DetectorItem.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Annotating\Detector\DetectorDrawer.axaml.cs">
+        <DependentUpon>DetectorDrawer.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\Annotating\Detector\DetectorAnnotatorTools.axaml.cs">
+        <DependentUpon>DetectorAnnotatorTools.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 </Project>

@@ -1,0 +1,92 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
+             mc:Ignorable="d" d:DesignWidth="50" d:DesignHeight="100"
+             x:Class="SightKeeper.Avalonia.Views.Annotating.DetectorItem"
+             x:DataType="viewModels:DetectorItemViewModel"
+             ClipToBounds="False">
+    <Grid>
+        <Grid.Styles>
+            <Style Selector="Thumb">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Thumb">
+                            <Border Background="PaleVioletRed"
+                                    BorderBrush="#A0000000"
+                                    BorderThickness="1"
+                                    CornerRadius="2"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="CornerRadius" Value="3"/>
+                <Setter Property="Width" Value="6"/>
+                <Setter Property="Height" Value="6"/>
+                <Setter Property="Background" Value="Gray"/>
+                <Setter Property="Margin" Value="-4"/>
+                <Setter Property="IsVisible" Value="{Binding IsThumbsVisible}"/>
+            </Style>
+        </Grid.Styles>
+        <Thumb VerticalAlignment="Top"
+               HorizontalAlignment="Left"
+               Cursor="TopLeftCorner"
+               DragStarted="OnThumbDragStarted"
+               DragDelta="OnThumbDragDelta"
+               DragCompleted="OnThumbDragCompleted"/>
+        <Thumb VerticalAlignment="Top"
+               HorizontalAlignment="Center"
+               Cursor="SizeNorthSouth"
+               DragStarted="OnThumbDragStarted"
+               DragDelta="OnThumbDragDelta"
+               DragCompleted="OnThumbDragCompleted"/>
+        <Thumb VerticalAlignment="Top"
+               HorizontalAlignment="Right"
+               Cursor="TopRightCorner"
+               DragStarted="OnThumbDragStarted"
+               DragDelta="OnThumbDragDelta"
+               DragCompleted="OnThumbDragCompleted"/>
+        <Thumb VerticalAlignment="Center"
+               HorizontalAlignment="Right"
+               Cursor="SizeWestEast"
+               DragStarted="OnThumbDragStarted"
+               DragDelta="OnThumbDragDelta"
+               DragCompleted="OnThumbDragCompleted"/>
+        <Thumb VerticalAlignment="Bottom"
+               HorizontalAlignment="Right"
+               Cursor="BottomRightCorner"
+               DragStarted="OnThumbDragStarted"
+               DragDelta="OnThumbDragDelta"
+               DragCompleted="OnThumbDragCompleted"/>
+        <Thumb VerticalAlignment="Bottom"
+               HorizontalAlignment="Center"
+               Cursor="SizeNorthSouth"
+               DragStarted="OnThumbDragStarted"
+               DragDelta="OnThumbDragDelta"
+               DragCompleted="OnThumbDragCompleted"/>
+        <Thumb VerticalAlignment="Bottom"
+               HorizontalAlignment="Left"
+               Cursor="BottomLeftCorner"
+               DragStarted="OnThumbDragStarted"
+               DragDelta="OnThumbDragDelta"
+               DragCompleted="OnThumbDragCompleted"/>
+        <Thumb VerticalAlignment="Center"
+               HorizontalAlignment="Left"
+               Cursor="SizeWestEast"
+               DragStarted="OnThumbDragStarted"
+               DragDelta="OnThumbDragDelta"
+               DragCompleted="OnThumbDragCompleted"/>
+        <Thumb VerticalAlignment="Center"
+               HorizontalAlignment="Center"
+               Cursor="SizeAll"
+               DragStarted="OnThumbDragStarted"
+               DragDelta="OnThumbDragDelta"
+               DragCompleted="OnThumbDragCompleted"/>
+        <TextBlock TextTrimming="CharacterEllipsis"
+                   Text="{Binding ItemClass.Name}"
+                   FontSize="7"
+                   Background="#30000000"
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Left"/>
+    </Grid>
+</UserControl>

@@ -5,7 +5,7 @@ using SightKeeper.Application.Annotating;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class DrawerItemResizer
+public sealed class DetectorItemResizer
 {
     private sealed class ResizingData
     {
@@ -24,7 +24,7 @@ public sealed class DrawerItemResizer
         private readonly Action<BoundingBoxViewModel, Vector> _updateBoundingDelegate;
     }
     
-    public DrawerItemResizer(DetectorAnnotator annotator)
+    public DetectorItemResizer(DetectorAnnotator annotator)
     {
         _annotator = annotator;
     }

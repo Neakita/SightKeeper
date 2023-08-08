@@ -11,8 +11,6 @@ public sealed class ModelScreenshoter
         set
         {
             _model = value;
-            if (_screenshoter.Library != null && value != null && _screenshoter.Library != value.ScreenshotsLibrary)
-                ThrowHelper.ThrowInvalidOperationException($"{nameof(Screenshoter)} already has a different library");
             _screenshoter.Library = value?.ScreenshotsLibrary;
             _screenCapture.Resolution = _model?.Resolution;
             _screenCapture.Game = _model?.Game;
