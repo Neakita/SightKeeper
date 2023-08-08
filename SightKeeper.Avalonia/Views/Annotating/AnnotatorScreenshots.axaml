@@ -42,6 +42,12 @@
                                 <RectangleGeometry Rect="0, 5, 30, 30"/>
                             </avalonia:MaterialIcon.Clip>
                         </avalonia:MaterialIcon>
+                        <TextBlock Text="{Binding CreationDate, StringFormat=G}"
+                                   VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Left"
+                                   FontSize="10"
+                                   Background="#30000000"
+                                   TextWrapping="Wrap"/>
                     </Panel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

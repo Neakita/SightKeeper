@@ -1,4 +1,5 @@
-﻿using SightKeeper.Application.Annotating;
+﻿using System;
+using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
@@ -17,6 +18,8 @@ public sealed class ScreenshotViewModel : ViewModel
     }
 
     public bool IsAsset => Item.Asset != null;
+
+    public DateTime CreationDate => Item.CreationDate;
 
     public ScreenshotViewModel(ScreenshotImageLoader imageLoader, Screenshot item)
     {
