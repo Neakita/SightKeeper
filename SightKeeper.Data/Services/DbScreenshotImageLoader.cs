@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CommunityToolkit.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
 
@@ -11,12 +12,13 @@ public sealed class DbScreenshotImageLoader : ScreenshotImageLoader
         _dbContext = dbContext;
     }
     
-    public void Load(Screenshot screenshot)
+    public ScreenshotImage Load(Screenshot screenshot)
     {
         var entry = _dbContext.Entry(screenshot);
-        if (entry.State == EntityState.Detached)
-            return;
-        entry.Reference(s => s.Image).Load();
+        if (entry.State != EntityState.Detached)
+            entry.Reference(s => s.Image).Load();
+        Guard.IsNotNull(screenshot.Image);
+        return screenshot.Image;
     }
 
     private readonly AppDbContext _dbContext;

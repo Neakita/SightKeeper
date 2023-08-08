@@ -4,5 +4,5 @@ namespace SightKeeper.Application.Annotating;
 
 public interface ScreenshotImageLoader
 {
-    void Load(Screenshot screenshot);
+    ScreenshotImage Load(Screenshot screenshot);
 }

@@ -8,14 +8,7 @@ public sealed class ScreenshotViewModel : ViewModel
 {
     public Screenshot Item { get; }
 
-    public byte[] Content
-    {
-        get
-        {
-            _imageLoader.Load(Item);
-            return Item.Image.Content;
-        }
-    }
+    public byte[] Content => _imageLoader.Load(Item).Content;
 
     public bool IsAsset => Item.Asset != null;
 

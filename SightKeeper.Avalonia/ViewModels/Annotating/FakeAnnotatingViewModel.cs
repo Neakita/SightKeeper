@@ -34,8 +34,9 @@ public sealed class FakeAnnotatingViewModel : IAnnotatingViewModel
     
     private sealed class MockScreenshotImageLoader : ScreenshotImageLoader
     {
-        public void Load(Screenshot screenshot)
+        public ScreenshotImage Load(Screenshot screenshot)
         {
+            return null!;
         }
     }
     
