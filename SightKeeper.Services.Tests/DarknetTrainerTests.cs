@@ -1,4 +1,4 @@
-﻿using Moq;
+﻿using NSubstitute;
 using Serilog;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Training;
@@ -27,9 +27,9 @@ public sealed class DarknetTrainerTests
         }
         ModelConfig config = new("Yolo V3", await File.ReadAllTextAsync("Samples/YoloV3.config"), ModelType.Detector);
         model.Config = config;
-        Mock<ScreenshotImageLoader> imageLoader = new();
-        Mock<DetectorAssetsDataAccess> assetsDataAccess = new();
-        DetectorTrainer trainer = new(new DarknetDetectorAdapter(new DetectorImagesExporter(imageLoader.Object, assetsDataAccess.Object),
+        var imageLoader = Substitute.For<ScreenshotImageLoader>();
+        var assetsDataAccess = Substitute.For<DetectorAssetsDataAccess>();
+        DetectorTrainer trainer = new(new DarknetDetectorAdapter(new DetectorImagesExporter(imageLoader, assetsDataAccess),
             new DarknetProcessImplementation(), new DarknetDetectorOutputParser()));
         trainer.Model = model;
         CancellationTokenSource cancellationTokenSource = new();
