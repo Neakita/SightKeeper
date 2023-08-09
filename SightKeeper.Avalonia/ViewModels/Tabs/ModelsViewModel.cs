@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
-using SightKeeper.Application.Model;
 using SightKeeper.Application.Model.Creating;
 using SightKeeper.Application.Model.Editing;
 using SightKeeper.Avalonia.Extensions;
+using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
@@ -19,19 +20,11 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs;
 public sealed partial class ModelsViewModel : ViewModel, IActivatableViewModel
 {
 	public ViewModelActivator Activator { get; } = new();
-	public Task<IReadOnlyCollection<Model>> Models
-	{
-		get
-		{
-			if (_modelsDataAccess == null) return Task.FromResult((IReadOnlyCollection<Model>)new List<Model>());
-			return _modelsDataAccess.GetModels();
-		}
-	}
+	public ReadOnlyObservableCollection<ModelViewModel> Models { get; }
 
-	public Model? SelectedModel { get; set; }
-
-	public ModelsViewModel(ILifetimeScope scope)
+	public ModelsViewModel(ILifetimeScope scope, ModelsListViewModel modelsListViewModel)
 	{
+		Models = modelsListViewModel.Models;
 		this.WhenActivated(disposables =>
 		{
 			_scope = scope.BeginLifetimeScope(this);
@@ -63,10 +56,10 @@ public sealed partial class ModelsViewModel : ViewModel, IActivatableViewModel
 	[RelayCommand(CanExecute = nameof(CanEditModel))]
 	private async Task EditModel(CancellationToken cancellationToken)
 	{
-		var modelToEdit = SelectedModel;
+		Guard.IsNotNull(SelectedModel);
+		var modelToEdit = SelectedModel.Model;
 		Guard.IsNotNull(_scope);
 		Guard.IsNotNull(_modelEditor);
-		Guard.IsNotNull(modelToEdit);
 		await using var scope = _scope.BeginLifetimeScope();
 		var viewModel = scope.Resolve<Dialogs.ModelEditorViewModel>();
 		viewModel.SetData(modelToEdit);
@@ -84,11 +77,12 @@ public sealed partial class ModelsViewModel : ViewModel, IActivatableViewModel
 	{
 		Guard.IsNotNull(SelectedModel);
 		Guard.IsNotNull(_modelsDataAccess);
-		await _modelsDataAccess.RemoveModel(SelectedModel, cancellationToken);
+		await _modelsDataAccess.RemoveModel(SelectedModel.Model, cancellationToken);
 		OnPropertyChanged(nameof(Models));
 	}
 
 	private bool CanDeleteModel() => SelectedModel != null;
 
 	private ILifetimeScope? _scope;
+	[ObservableProperty] private ModelViewModel? _selectedModel;
 }

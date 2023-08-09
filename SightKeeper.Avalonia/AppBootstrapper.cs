@@ -80,10 +80,10 @@ public static class AppBootstrapper
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>().SingleInstance();
 		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerMatchingLifetimeScope(typeof(MainViewModel), typeof(AppBootstrapper));
 		builder.RegisterType<RegisteredGamesService>();
-		builder.RegisterType<DbModelCreator>().As<ModelCreator>();
+		builder.RegisterType<DbModelCreator>().As<ModelCreator>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<ModelDataValidator>().As<IValidator<ModelData>>();
-		builder.RegisterType<DbModelsDataAccess>().As<ModelsDataAccess>();
-		builder.RegisterType<DbModelEditor>().As<Application.Model.Editing.ModelEditor>();
+		builder.RegisterType<DbModelsDataAccess>().As<ModelsDataAccess>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<DbModelEditor>().As<Application.Model.Editing.ModelEditor>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<ModelChangesValidator>().As<IValidator<ModelChanges>>();
 		builder.RegisterType<DbConfigsDataAccess>().As<ConfigsDataAccess>();
 		builder.RegisterType<DbConfigCreator>().As<ConfigCreator>();
@@ -107,6 +107,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectorImagesExporter>().As<ImagesExporter<DetectorModel>>();
 		builder.RegisterType<DarknetProcessImplementation>().As<DarknetProcess>();
 		builder.RegisterType<DarknetDetectorOutputParser>().As<DarknetOutputParser<DetectorModel>>();
+		builder.RegisterType<ModelsObservableRepository>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
@@ -131,6 +132,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectorDrawerViewModel>().As<AnnotatorWorkSpace<DetectorModel>>();
 		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<ModelsListViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)

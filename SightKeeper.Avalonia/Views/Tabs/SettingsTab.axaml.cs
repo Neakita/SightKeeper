@@ -9,9 +9,4 @@ public sealed partial class SettingsTab : ReactiveUserControl<SettingsViewModel>
 	{
 		InitializeComponent();
 	}
-	
-	public SettingsTab(SettingsViewModel viewModel) : this()
-	{
-		ViewModel = viewModel;
-	}
 }

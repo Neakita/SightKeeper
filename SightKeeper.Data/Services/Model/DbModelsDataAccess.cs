@@ -1,15 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services.Model;
 
 public sealed class DbModelsDataAccess : ModelsDataAccess
 {
+    public IObservable<Domain.Model.Model> ModelRemoved => _modelRemoved.AsObservable();
+    
     public DbModelsDataAccess(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    
+
     public async Task<IReadOnlyCollection<Domain.Model.Model>> GetModels(CancellationToken cancellationToken = default) =>
         await _dbContext.Models
             .Include(model => model.ItemClasses)
@@ -26,4 +30,5 @@ public sealed class DbModelsDataAccess : ModelsDataAccess
     }
 
     private readonly AppDbContext _dbContext;
+    private readonly Subject<Domain.Model.Model> _modelRemoved = new();
 }

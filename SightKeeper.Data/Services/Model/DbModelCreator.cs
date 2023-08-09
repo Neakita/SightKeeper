@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using SightKeeper.Application.Model;
 using SightKeeper.Application.Model.Creating;
@@ -9,6 +11,8 @@ namespace SightKeeper.Data.Services.Model;
 
 public sealed class DbModelCreator : ModelCreator
 {
+    public IObservable<Domain.Model.Model> ModelCreated => _modelCreated.AsObservable();
+    
     public DbModelCreator(IValidator<ModelData> validator, AppDbContext dbContext)
     {
         _validator = validator;
@@ -31,9 +35,11 @@ public sealed class DbModelCreator : ModelCreator
         model.Game = data.Game;
         model.Config = data.Config;
         await _dbContext.SaveChangesAsync(cancellationToken);
+        _modelCreated.OnNext(model);
         return model;
     }
     
     private readonly IValidator<ModelData> _validator;
     private readonly AppDbContext _dbContext;
+    private readonly Subject<Domain.Model.Model> _modelCreated = new();
 }

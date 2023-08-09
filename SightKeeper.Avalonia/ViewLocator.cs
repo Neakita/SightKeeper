@@ -13,7 +13,8 @@ public sealed class ViewLocator : IDataTemplate
     {
         Guard.IsNotNull(param);
         Guard.IsAssignableToType<ViewModel>(param);
-        var view = (Control)ServiceLocator.Instance.Resolve(typeof(IViewFor<>).MakeGenericType(param.GetType()));
+        var type = typeof(IViewFor<>).MakeGenericType(param.GetType());
+        var view = (Control)ServiceLocator.Instance.Resolve(type);
         view.DataContext = param;
         return view;
     }

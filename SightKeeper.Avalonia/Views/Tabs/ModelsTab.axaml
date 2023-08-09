@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:tabs="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
-             xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Tabs.ModelsTab"
              x:DataType="tabs:ModelsViewModel">
@@ -17,7 +16,7 @@
         </StackPanel>
         
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Models^}"
+                  ItemsSource="{Binding Models}"
                   SelectedItem="{Binding SelectedModel}"
                   IsReadOnly="True">
             
@@ -33,14 +32,14 @@
             <DataGrid.Columns>
                 
                 <DataGridTextColumn Header="Name"
-                                    Binding="{Binding (model:Model).Name}"/>
+                                    Binding="{Binding Name}"/>
                 
                 <DataGridTextColumn Header="Game"
-                                    Binding="{Binding (model:Model).Game.Title, FallbackValue=[Not selected]}"/>
+                                    Binding="{Binding Game.Title, FallbackValue=[Not selected]}"/>
                 
                 <DataGridTemplateColumn Header="Resolution">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="model:Model">
+                        <DataTemplate>
                             <StackPanel Orientation="Horizontal"
                                         VerticalAlignment="Center"
                                         Margin="10 0">
@@ -53,7 +52,7 @@
                 </DataGridTemplateColumn>
                 
                 <DataGridTextColumn Header="Config"
-                                    Binding="{Binding (model:Model).Config.Name, FallbackValue=[Not selected]}"/>
+                                    Binding="{Binding Config.Name, FallbackValue=[Not selected]}"/>
                 
             </DataGrid.Columns>
         </DataGrid>
