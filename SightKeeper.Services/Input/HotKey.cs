@@ -1,4 +1,5 @@
 ﻿using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
@@ -14,10 +15,10 @@ public sealed class HotKey
         Gesture = gesture;
     }
     
-    internal IObservable<HotKey> Pressed => _pressed.AsObservable();
-    internal IObservable<Unit> Released => _released.AsObservable();
+    internal IObservable<HotKey> Pressed => _pressed.ObserveOn(TaskPoolScheduler.Default).AsObservable();
+    internal IObservable<Unit> Released => _released.ObserveOn(TaskPoolScheduler.Default).AsObservable();
 
-    internal void InvokeActions() => Task.Run(() => _pressed.OnNext(this));
+    internal void InvokeActions() => _pressed.OnNext(this);
 
     private readonly Subject<HotKey> _pressed = new();
     private readonly Subject<Unit> _released = new();

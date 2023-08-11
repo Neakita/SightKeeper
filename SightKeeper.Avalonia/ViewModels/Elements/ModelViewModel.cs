@@ -28,4 +28,6 @@ public sealed class ModelViewModel : ViewModel
     }
 
     public void NotifyChanges() => OnPropertiesChanged(Properties);
+
+    public override string ToString() => Name;
 }
