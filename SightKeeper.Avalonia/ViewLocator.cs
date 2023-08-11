@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using CommunityToolkit.Diagnostics;
@@ -13,14 +14,14 @@ public sealed class ViewLocator : IDataTemplate
     {
         Guard.IsNotNull(param);
         Guard.IsAssignableToType<ViewModel>(param);
-        var type = typeof(IViewFor<>).MakeGenericType(param.GetType());
+        var type = GetViewTypeFor(param);
         var view = (Control)ServiceLocator.Instance.Resolve(type);
         view.DataContext = param;
         return view;
     }
 
     public bool Match(object? data) =>
-        data is ViewModel && ServiceLocator.Instance.IsRegistered(typeof(IViewFor<>).MakeGenericType(data.GetType()));
+        data is ViewModel && ServiceLocator.Instance.IsRegistered(GetViewTypeFor(data));
 
-    public object Create(object viewModel) => Build(viewModel);
+    private static Type GetViewTypeFor(object data) => typeof(IViewFor<>).MakeGenericType(data.GetType());
 }
