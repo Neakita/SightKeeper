@@ -8,7 +8,7 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class FakeAnnotatingViewModel : IAnnotatingViewModel
+public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
 {
     public Task<IReadOnlyCollection<Model>> Models => Task.FromResult((IReadOnlyCollection<Model>)new[]
     {
