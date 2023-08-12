@@ -1,10 +1,9 @@
-﻿using System.Reactive.Disposables;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
 using CommunityToolkit.Diagnostics;
-using ReactiveUI;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -15,15 +14,41 @@ public sealed partial class DetectorDrawer : ReactiveUserControl<DetectorDrawerV
 	public DetectorDrawer()
     {
         InitializeComponent();
-        this.WhenActivated(OnActivated);
     }
 
-    protected override void OnInitialized()
-    {
-	    Image.PointerPressed += ImageOnPointerPressed;
-    }
-    
-    private TopLevel? _topLevel;
+	protected override void OnLoaded(RoutedEventArgs e)
+	{
+		base.OnLoaded(e);
+		Image.PointerPressed += ImageOnPointerPressed;
+		Image.SizeChanged += OnImageSizeChanged;
+		_topLevel = this.GetTopLevel();
+		_topLevel.KeyDown += OnTopLevelKeyDown;
+		_topLevel.KeyUp += OnTopLevelKeyUp;
+		if (ViewModel == null)
+			return;
+		ViewModel.ImageSize = Image.Bounds.Size;
+	}
+
+	private void OnImageSizeChanged(object? sender, SizeChangedEventArgs e)
+	{
+		if (ViewModel == null)
+			return;
+		ViewModel.ImageSize = e.NewSize;
+	}
+
+	protected override void OnUnloaded(RoutedEventArgs e)
+	{
+		base.OnUnloaded(e);
+		Image.SizeChanged += OnImageSizeChanged;
+		Guard.IsNotNull(_topLevel);
+		_topLevel.KeyDown -= OnTopLevelKeyDown;
+		_topLevel.KeyUp -= OnTopLevelKeyUp;
+		if (ViewModel == null)
+			return;
+		ViewModel.ImageSize = null;
+	}
+
+	private TopLevel? _topLevel;
 
     private void ImageOnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
@@ -61,21 +86,6 @@ public sealed partial class DetectorDrawer : ReactiveUserControl<DetectorDrawerV
     }
 
     private Point GetNormalizedPosition(Point position) => new(position.X / Image.Bounds.Width, position.Y / Image.Bounds.Height);
-
-    private void OnActivated(CompositeDisposable disposable)
-    {
-	    Disposable.Create(OnDeactivated).DisposeWith(disposable);
-	    _topLevel = this.GetTopLevel();
-	    _topLevel.KeyDown += OnTopLevelKeyDown;
-	    _topLevel.KeyUp += OnTopLevelKeyUp;
-    }
-
-    private void OnDeactivated()
-    {
-	    Guard.IsNotNull(_topLevel);
-	    _topLevel.KeyDown -= OnTopLevelKeyDown;
-	    _topLevel.KeyUp -= OnTopLevelKeyUp;
-    }
 
     private void OnTopLevelKeyDown(object? sender, KeyEventArgs e)
     {

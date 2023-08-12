@@ -11,13 +11,13 @@ namespace SightKeeper.Avalonia.Views.Annotating;
 
 public sealed partial class DetectorItem : ReactiveUserControl<DetectorItemViewModel>
 {
-	public DetectorItem(DetectorDrawer drawer)
+	public DetectorItem(DetectorDrawerViewModel drawer)
 	{
 		_drawer = drawer;
 		InitializeComponent();
 	}
 	
-	private readonly DetectorDrawer _drawer;
+	private readonly DetectorDrawerViewModel _drawer;
     
     private void OnThumbDragStarted(object? sender, VectorEventArgs e)
     {
@@ -41,8 +41,11 @@ public sealed partial class DetectorItem : ReactiveUserControl<DetectorItemViewM
 	    ViewModel.Resizer.EndResize();
     }
 
-    private Vector GetNormalizedVector(VectorEventArgs args) =>
-	    new(args.Vector.X / _drawer.Image.Bounds.Width, args.Vector.Y / _drawer.Image.Bounds.Height);
+    private Vector GetNormalizedVector(VectorEventArgs args)
+    {
+	    Guard.IsNotNull(_drawer.ImageSize);
+	    return new Vector(args.Vector.X / _drawer.ImageSize.Value.Width, args.Vector.Y / _drawer.ImageSize.Value.Height);
+    }
 
     private static Thumb GetThumb(object? sender)
     {

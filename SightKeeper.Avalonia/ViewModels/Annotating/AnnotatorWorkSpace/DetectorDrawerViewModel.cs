@@ -121,6 +121,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
     private DrawingData? _drawingData;
     [ObservableProperty] private bool _isItemSelectionEnabled;
     [ObservableProperty] private DetectorItemViewModel? _selectedItem;
+    [ObservableProperty] private Size? _imageSize;
 
     partial void OnSelectedItemChanged(DetectorItemViewModel? value)
     {

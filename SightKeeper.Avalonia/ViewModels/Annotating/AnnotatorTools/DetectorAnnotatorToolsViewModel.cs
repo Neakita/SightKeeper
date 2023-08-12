@@ -22,7 +22,7 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         _unMarkSelectedScreenshotAsAssetExecuted.AsObservable();
 
     public IObservable<DetectorItemViewModel> DeleteItemExecuted => _deleteItemExecuted;
-    public IReadOnlyCollection<ItemClass> ItemClasses => _annotatorViewModel.SelectedModel?.ItemClasses ?? Array.Empty<ItemClass>();
+    public IReadOnlyCollection<ItemClass> ItemClasses => _annotatorViewModel.SelectedModel?.Model.ItemClasses ?? Array.Empty<ItemClass>();
 
     public DetectorAnnotatorToolsViewModel(AnnotatorViewModel annotatorViewModel, AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
     {

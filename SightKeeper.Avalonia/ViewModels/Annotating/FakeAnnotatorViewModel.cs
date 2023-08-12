@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
@@ -10,13 +11,13 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
 {
-    public Task<IReadOnlyCollection<Model>> Models => Task.FromResult((IReadOnlyCollection<Model>)new[]
+    public ReadOnlyObservableCollection<ModelViewModel> Models => new(new ObservableCollection<ModelViewModel>
     {
-        new DetectorModel("Some model"),
-        new DetectorModel("Another model")
+        new(new DetectorModel("Some model")),
+        new(new DetectorModel("Another model"))
     });
 
-    public Model? SelectedModel { get; set; }
+    public ModelViewModel? SelectedModel { get; set; }
 
     public bool CanChangeSelectedModel => true;
     public AnnotatorScreenshotsViewModel Screenshots => new(new MockScreenshotImageLoader(), new MockScreenshotsDataAccess());

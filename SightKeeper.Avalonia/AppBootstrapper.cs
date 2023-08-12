@@ -146,7 +146,7 @@ public static class AppBootstrapper
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
 		builder.RegisterType<Views.Dialogs.ConfigEditor>().As<IViewFor<ConfigEditorViewModel>>();
 		builder.RegisterType<DetectorAnnotatorTools>().As<IViewFor<DetectorAnnotatorToolsViewModel>>();
-		builder.RegisterType<DetectorDrawer>().AsSelf().As<IViewFor<DetectorDrawerViewModel>>().SingleInstance();
+		builder.RegisterType<DetectorDrawer>().AsSelf().As<IViewFor<DetectorDrawerViewModel>>();
 		builder.RegisterType<TrainingTab>().As<IViewFor<TrainingViewModel>>();
 		builder.RegisterType<DetectorItem>().As<IViewFor<DetectorItemViewModel>>();
 	}

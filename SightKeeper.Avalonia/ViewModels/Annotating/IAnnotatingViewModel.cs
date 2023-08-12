@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using SightKeeper.Domain.Model;
+﻿using System.Collections.ObjectModel;
+using SightKeeper.Avalonia.ViewModels.Elements;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public interface IAnnotatingViewModel
 {
-    Task<IReadOnlyCollection<Model>> Models { get; }
-    Model? SelectedModel { get; set; }
+    ReadOnlyObservableCollection<ModelViewModel> Models { get; }
+    ModelViewModel? SelectedModel { get; set; }
     bool CanChangeSelectedModel { get; }
     AnnotatorScreenshotsViewModel Screenshots { get; }
     ScreenshoterViewModel Screenshoter { get; }

@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Disposables;
+using System.Collections.ObjectModel;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
 using Autofac;
-using Avalonia.Controls;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
-using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Domain.Model;
+using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel, IActivatableViewModel
+public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 {
-	public IObservable<Model?> SelectedModelChanged => _selectedModelChanged;
-	public ViewModelActivator Activator { get; } = new();
-	public Task<IReadOnlyCollection<Model>> Models => _modelsDataAccess.GetModels();
+	public IObservable<ModelViewModel?> SelectedModelChanged => _selectedModelChanged;
+	public ReadOnlyObservableCollection<ModelViewModel> Models { get; }
 
 	public AnnotatorScreenshotsViewModel Screenshots { get; }
 
@@ -42,46 +35,30 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 	public AnnotatorViewModel(
 		ILifetimeScope scope,
 		ScreenshoterViewModel screenshoterViewModel,
-		ModelsDataAccess modelsDataAccess,
-		AnnotatorScreenshotsViewModel screenshots)
+		AnnotatorScreenshotsViewModel screenshots,
+		ModelsListViewModel modelsListViewModel)
 	{
 		Screenshoter = screenshoterViewModel;
 		_scope = scope;
-		_modelsDataAccess = modelsDataAccess;
 		Screenshots = screenshots;
-		this.WhenActivated(HandleActivation);
 		screenshoterViewModel.IsEnabledChanged.Subscribe(_ =>
 			OnPropertyChanged(nameof(CanChangeSelectedModel)));
+		Models = modelsListViewModel.Models;
 	}
 
 	private readonly ILifetimeScope _scope;
-	private readonly ModelsDataAccess _modelsDataAccess;
-	private readonly Subject<Model?> _selectedModelChanged = new();
+	private readonly Subject<ModelViewModel?> _selectedModelChanged = new();
 
-	[ObservableProperty] private Model? _selectedModel;
-	private Window? _window;
+	[ObservableProperty] private ModelViewModel? _selectedModel;
 	private IDisposable? _selectedModelDisposable;
 	private AnnotatorTools? _tools;
 	private AnnotatorWorkSpace? _workSpace;
 
-	private void HandleActivation(CompositeDisposable disposable)
-	{
-		_window = this.GetOwnerWindow();
-		Disposable.Create(HandleDeactivation).DisposeWith(disposable);
-		OnPropertyChanged(nameof(Models));
-	}
-
-	private void HandleDeactivation()
-	{
-		Screenshoter.IsEnabled = false;
-		SelectedModel = null;
-	}
-
-	partial void OnSelectedModelChanged(Model? value)
+	partial void OnSelectedModelChanged(ModelViewModel? value)
 	{
 		_selectedModelDisposable?.Dispose();
-		Screenshoter.Model = value;
-		Screenshots.Model = value;
+		Screenshoter.Model = value?.Model;
+		Screenshots.Model = value?.Model;
 		if (value == null)
 		{
 			ClearModelEnvironment();
@@ -90,7 +67,7 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 
 		var selectedModelScope = _scope.BeginLifetimeScope(value);
 		_selectedModelDisposable = selectedModelScope;
-		if (value is DetectorModel)
+		if (value.Model is DetectorModel)
 			SetupDetectorModelEnvironment(selectedModelScope);
 		else
 			ThrowHelper.ThrowArgumentOutOfRangeException(nameof(value), value, null);
