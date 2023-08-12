@@ -8,10 +8,11 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Application.Training.Parsing;
 
-public class DarknetDetectorOutputParser : DarknetOutputParser<DetectorModel>
+public sealed class DarknetDetectorOutputParser : DarknetOutputParser<DetectorModel>
 {
     public bool TryParse(string output, [NotNullWhen(true)] out TrainingProgress? progress)
     {
+        throw new NotImplementedException();
         using var operation = Operation.At(LogEventLevel.Verbose).Begin("Parsing darknet output \"{Output}\"", output);
         progress = null;
         if (!TargetStringRegex.IsMatch(output))
@@ -21,7 +22,7 @@ public class DarknetDetectorOutputParser : DarknetOutputParser<DetectorModel>
         }
         var currentBatch = uint.Parse(ExtractSingleSubstringWithRegex(output, CurrentBatchRegex));
         var averageLoss = double.Parse(ExtractSingleSubstringWithRegex(output, AverageLossRegex), CultureInfo.InvariantCulture);
-        progress = new TrainingProgress(currentBatch, averageLoss);
+        // progress = new TrainingProgress(currentBatch, averageLoss);
         operation.Complete(nameof(progress), progress);
         return true;
     }

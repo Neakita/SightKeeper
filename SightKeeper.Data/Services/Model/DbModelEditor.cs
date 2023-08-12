@@ -23,7 +23,6 @@ public sealed class DbModelEditor : ModelEditor
         model.Description = changes.Description;
         model.Resolution = new Resolution(changes.ResolutionWidth, changes.ResolutionHeight);
         model.Game = changes.Game;
-        model.Config = changes.Config;
         ApplyItemClassesChanges(model, changes.ItemClasses);
         _dbContext.Models.Update(model);
         await _dbContext.SaveChangesAsync(cancellationToken);

@@ -20,6 +20,9 @@ public sealed partial class TrainingViewModel : ViewModel
 
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
     private Model? _selectedModel;
+    
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
+    private ModelConfig? _selectedConfig;
 
     public bool IsTraining
     {
@@ -31,12 +34,13 @@ public sealed partial class TrainingViewModel : ViewModel
     public async Task StartTraining(CancellationToken cancellationToken)
     {
         Guard.IsNotNull(SelectedModel);
+        Guard.IsNotNull(SelectedConfig);
         Guard.IsOfType<DetectorModel>(SelectedModel);
         _trainer.Model = (DetectorModel)SelectedModel;
         IsTraining = true;
         try
         {
-            await _trainer.TrainAsync(cancellationToken);
+            await _trainer.TrainAsync(SelectedConfig, cancellationToken);
         }
         finally
         {

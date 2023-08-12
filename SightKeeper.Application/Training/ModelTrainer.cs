@@ -10,5 +10,5 @@ public interface ModelTrainer<TModel> where TModel : Domain.Model.Model
 	int? MaxBatches { get; }
 	IObservable<TrainingProgress> Progress { get; }
 
-	Task<ModelWeights?> TrainAsync(CancellationToken cancellationToken = default);
+	Task<InternalTrainedModelWeights?> TrainAsync(ModelConfig config, CancellationToken cancellationToken = default);
 }

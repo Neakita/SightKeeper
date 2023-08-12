@@ -10,7 +10,6 @@ public sealed class ModelViewModel : ViewModel
         nameof(Name),
         nameof(Description),
         nameof(Game),
-        nameof(Config),
         nameof(Resolution)
     };
     
@@ -19,7 +18,6 @@ public sealed class ModelViewModel : ViewModel
     public string Name => Model.Name;
     public string Description => Model.Description;
     public Game? Game => Model.Game;
-    public ModelConfig? Config => Model.Config;
     public Resolution Resolution => Model.Resolution;
 
     public ModelViewModel(Model model)

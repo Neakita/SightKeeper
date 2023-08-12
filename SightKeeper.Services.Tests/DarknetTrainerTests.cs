@@ -26,7 +26,6 @@ public sealed class DarknetTrainerTests
             asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
         }
         ModelConfig config = new("Yolo V3", await File.ReadAllTextAsync("Samples/YoloV3.config"), ModelType.Detector);
-        model.Config = config;
         var imageLoader = Substitute.For<ScreenshotImageLoader>();
         var assetsDataAccess = Substitute.For<DetectorAssetsDataAccess>();
         DetectorTrainer trainer = new(new DarknetDetectorAdapter(new DetectorImagesExporter(imageLoader, assetsDataAccess),
@@ -34,6 +33,6 @@ public sealed class DarknetTrainerTests
         trainer.Model = model;
         CancellationTokenSource cancellationTokenSource = new();
         cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
-        await trainer.TrainAsync(cancellationTokenSource.Token);
+        await trainer.TrainAsync(config, cancellationTokenSource.Token);
     }
 }

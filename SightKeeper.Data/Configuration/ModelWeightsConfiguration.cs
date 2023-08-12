@@ -9,13 +9,5 @@ public sealed class ModelWeightsConfiguration : IEntityTypeConfiguration<ModelWe
     public void Configure(EntityTypeBuilder<ModelWeights> builder)
     {
         builder.HasShadowKey();
-        builder.HasMany(weights => weights.Assets)
-            .WithMany()
-            .UsingEntity(join =>
-            {
-                join.ToTable("WeightsAssets");
-                join.Property("AssetsId").HasColumnName("AssetId");
-                join.Property("ModelWeightsId").HasColumnName("WeightsId");
-            });
     }
 }

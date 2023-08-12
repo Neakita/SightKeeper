@@ -10,6 +10,7 @@ public sealed class DarknetArguments
 	public string ConfigPath { get; set; } = string.Empty;
 	public string? BaseWeightsPath { get; set; } = string.Empty;
 	public bool DoNotShow { get; set; } = true;
+	public bool Map { get; set; } = false;
 
 	public override string ToString() => string.Join(' ', GetArguments());
 
@@ -22,6 +23,8 @@ public sealed class DarknetArguments
 		if (BaseWeightsPath != null)
 			yield return BaseWeightsPath;
 		if (DoNotShow)
-			yield return "-dont_show"; 
+			yield return "-dont_show";
+		if (Map)
+			yield return "-map";
 	}
 }

@@ -36,12 +36,6 @@
                               PlaceholderText="Game"
                               HorizontalAlignment="Stretch"
                               Margin="0 0 10 10"/>
-                    <ComboBox Grid.Row="0" Grid.Column="1"
-                              SelectedItem="{Binding Config}"
-                              ItemsSource="{Binding Configs^}"
-                              PlaceholderText="Config"
-                              HorizontalAlignment="Stretch"
-                              Margin="10 0 0 10"/>
                     
                     <NumericUpDown Grid.Row="1" Grid.Column="0"
                                    Value="{Binding ResolutionWidth}"

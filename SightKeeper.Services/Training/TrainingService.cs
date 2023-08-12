@@ -13,13 +13,13 @@ public sealed class TrainingService
         _scope = scope;
     }
     
-    public async Task TrainAsync(Model model, CancellationToken cancellationToken = default)
+    public async Task TrainAsync(Model model, ModelConfig config, CancellationToken cancellationToken = default)
     {
         if (model is DetectorModel detectorModel)
         {
             var trainer = _scope.Resolve<ModelTrainer<DetectorModel>>();
             trainer.Model = detectorModel;
-            var weights = await trainer.TrainAsync(cancellationToken);
+            var weights = await trainer.TrainAsync(config, cancellationToken);
             if (weights != null)
             {
                 var dbContext = _scope.Resolve<AppDbContext>();

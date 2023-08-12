@@ -1,5 +1,4 @@
 ﻿using System.Reactive.Linq;
-using CommunityToolkit.Diagnostics;
 using Serilog;
 using SightKeeper.Application.Training.Data;
 using SightKeeper.Application.Training.Images;
@@ -25,7 +24,7 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
             .WhereNotNull();
     }
     
-    public async Task<byte[]?> RunAsync(DetectorModel model, byte[]? baseWeights = null, CancellationToken cancellationToken = default)
+    public async Task<byte[]?> RunAsync(DetectorModel model, ModelConfig config, byte[]? baseWeights = null, CancellationToken cancellationToken = default)
     {
         ClearData();
         EnsureDirectoriesCreated();
@@ -33,7 +32,7 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
         await PrepareImagesListFileAsync(images);
         await PrepareClassesListAsync(model.ItemClasses, cancellationToken);
         await PrepareDataFileAsync((byte)model.ItemClasses.Count, cancellationToken);
-        await PrepareConfigAsync(model, out var maxBatches, cancellationToken);
+        await PrepareConfigAsync(model, config, out var maxBatches, cancellationToken);
         MaxBatches = maxBatches;
         DarknetArguments arguments = new()
         {
@@ -100,13 +99,11 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
         return File.WriteAllTextAsync(DarknetPaths.DataFilePath, data.ToString(), cancellationToken);
     }
 
-    private static Task PrepareConfigAsync(Domain.Model.Model model, out int maxBatches, CancellationToken cancellationToken)
+    private static Task PrepareConfigAsync(Domain.Model.Model model, ModelConfig config, out int maxBatches, CancellationToken cancellationToken)
     {
-        if (model.Config == null)
-            ThrowHelper.ThrowArgumentNullException(nameof(model.Config), $"{nameof(model.Config)} is null");
         DetectorConfigParameters parameters = new(64, 16, (ushort)model.Resolution.Width, (ushort)model.Resolution.Height, (ushort) model.ItemClasses.Count);
         maxBatches = parameters.MaxBatches;
-        var fileContent = parameters.Deploy(model.Config);
+        var fileContent = parameters.Deploy(config);
         return File.WriteAllTextAsync(DarknetPaths.ConfigFilePath, fileContent, cancellationToken);
     }
 

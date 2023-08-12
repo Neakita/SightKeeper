@@ -67,10 +67,11 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ModelConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelWeightsLibraryConfiguration());
-		modelBuilder.ApplyConfiguration(new ModelWeightsConfiguration());
+		modelBuilder.ApplyConfiguration(new InternalTrainedModelWeightsConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
 		modelBuilder.ApplyConfiguration(new ImageConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotImageConfiguration());
+		modelBuilder.ApplyConfiguration(new ModelWeightsConfiguration());
 		modelBuilder.Entity<ModelConfig>().HasShadowKey();
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		

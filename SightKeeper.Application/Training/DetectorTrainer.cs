@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Reactive.Linq;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
@@ -18,14 +19,16 @@ public sealed class DetectorTrainer : ModelTrainer<DetectorModel>
         _darknetAdapter = darknetAdapter;
     }
     
-    public async Task<ModelWeights?> TrainAsync(CancellationToken cancellationToken = default)
+    public async Task<InternalTrainedModelWeights?> TrainAsync(ModelConfig config, CancellationToken cancellationToken = default)
     {
         Guard.IsNotNull(Model);
         var assets = Model.Assets.ToList();
-        var config = Model.Config ?? ThrowHelper.ThrowArgumentNullException<ModelConfig>(nameof(Model.Config));
-        var baseWeights = FromScratch ? null : Model.WeightsLibrary.Weights.MaxBy(weights => weights.Date);
-        var weightsData = await _darknetAdapter.RunAsync(Model, baseWeights?.Data, cancellationToken);
+        var baseWeights = FromScratch ? null : Model.WeightsLibrary.Weights.MaxBy(weights => weights.TrainedDate);
+        var weightsData = await _darknetAdapter.RunAsync(Model, config, baseWeights?.Data, cancellationToken);
         if (weightsData == null) return null;
-        return Model.WeightsLibrary.CreateWeights(0, weightsData, assets, config);
+        var lastProgress = await Progress.LastAsync();
+        Guard.IsNotNull(lastProgress.Batch);
+        Guard.IsNotNull(lastProgress.Accuracy);
+        return Model.WeightsLibrary.CreateWeights(weightsData, DateTime.Now, config, Model.WeightsLibrary, (int)lastProgress.Batch.Value, lastProgress.Accuracy.Value, assets);
     }
 }

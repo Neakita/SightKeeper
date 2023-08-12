@@ -51,9 +51,6 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 
-                <DataGridTextColumn Header="Config"
-                                    Binding="{Binding Config.Name, FallbackValue=[Not selected]}"/>
-                
             </DataGrid.Columns>
         </DataGrid>
         

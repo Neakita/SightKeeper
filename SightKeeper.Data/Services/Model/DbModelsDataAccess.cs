@@ -18,7 +18,6 @@ public sealed class DbModelsDataAccess : ModelsDataAccess
         await _dbContext.Models
             .Include(model => model.ItemClasses)
             .Include(model => model.Game)
-            .Include(model => model.Config)
             .Include(model => model.ScreenshotsLibrary)
             .ToListAsync(cancellationToken);
 

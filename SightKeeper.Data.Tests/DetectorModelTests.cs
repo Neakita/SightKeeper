@@ -67,37 +67,6 @@ public sealed class DetectorModelTests : DbRelatedTests
 	}
 
 	[Fact]
-	public void ShouldNotDeleteConfigOnModelDelete()
-	{
-		using var dbContext = DbContextFactory.CreateDbContext();
-		DetectorModel model = new("Test model");
-		ModelConfig config = new("Test config", "Test content", ModelType.Detector);
-		model.Config = config;
-		dbContext.Add(model);
-		dbContext.SaveChanges();
-		dbContext.ModelConfigs.Should().Contain(config);
-		dbContext.Remove(model);
-		dbContext.SaveChanges();
-		dbContext.ModelConfigs.Should().Contain(config);
-	}
-
-	[Fact]
-	public void ShouldSetConfigToNullOnConfigDelete()
-	{
-		using var dbContext = DbContextFactory.CreateDbContext();
-		DetectorModel model = new("Test model");
-		ModelConfig config = new("Test config", "Test content", ModelType.Detector);
-		model.Config = config;
-		dbContext.Add(model);
-		dbContext.SaveChanges();
-		dbContext.ModelConfigs.Should().Contain(config);
-		dbContext.Remove(config);
-		dbContext.SaveChanges();
-		model.Should().NotBeNull();
-		model.Config.Should().BeNull();
-	}
-
-	[Fact]
 	public void ScreenshotShouldBeRepresentedInLibraryWhenItIsAsset()
 	{
 		using (var dbContext = DbContextFactory.CreateDbContext())

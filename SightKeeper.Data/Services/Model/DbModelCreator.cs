@@ -33,7 +33,6 @@ public sealed class DbModelCreator : ModelCreator
         foreach (var itemClass in data.ItemClasses)
             model.CreateItemClass(itemClass);
         model.Game = data.Game;
-        model.Config = data.Config;
         await _dbContext.SaveChangesAsync(cancellationToken);
         _modelCreated.OnNext(model);
         return model;

@@ -23,13 +23,11 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
 {
     public IReadOnlyCollection<string> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
-    public Task<IReadOnlyCollection<ModelConfig>> Configs => _configsDataAccess.GetConfigs();
 
-    public ModelEditorViewModel(IValidator<ModelData> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess, ConfigsDataAccess configsDataAccess) : base(validator)
+    public ModelEditorViewModel(IValidator<ModelData> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
         _itemClassDataAccess = itemClassDataAccess;
-        _configsDataAccess = configsDataAccess;
     }
 
     public void SetData(Model model)
@@ -42,7 +40,6 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
         ResolutionWidth = model.Resolution.Width;
         ResolutionHeight = model.Resolution.Height;
         Game = model.Game;
-        Config = model.Config;
         _deletionBlackListItemClasses = model.ItemClasses
             .Where(itemClass =>
             {
@@ -61,12 +58,10 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private int? _resolutionWidth = 320;
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private int? _resolutionHeight = 320;
     [ObservableProperty] private Game? _game;
-    [ObservableProperty] private ModelConfig? _config;
 
     private readonly ObservableCollection<string> _itemClasses = new();
     private readonly RegisteredGamesService _registeredGamesService;
     private readonly ItemClassDataAccess _itemClassDataAccess;
-    private readonly ConfigsDataAccess _configsDataAccess;
     private IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
 
     partial void OnResolutionWidthChanged(int? oldValue, int? newValue)

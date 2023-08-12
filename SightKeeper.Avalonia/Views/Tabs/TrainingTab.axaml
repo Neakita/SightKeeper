@@ -20,8 +20,8 @@
                 Command="{Binding StartTrainingCancelCommand}"/>
         
         <StackPanel DataContext="{Binding Progress^}">
-            <TextBlock Text="{Binding CurrentBatch, StringFormat=Current batch: {0}}"/>
-            <TextBlock Text="{Binding AverageLoss, StringFormat=Average loss: {0}}"/>
+            <TextBlock Text="{Binding Batch, StringFormat=Current batch: {0}}"/>
+            <TextBlock Text="{Binding Accuracy, StringFormat=Average loss: {0}}"/>
         </StackPanel>
         
     </StackPanel>

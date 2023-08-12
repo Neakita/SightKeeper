@@ -2,14 +2,14 @@
 
 public readonly struct TrainingProgress
 {
-    public uint? CurrentBatch { get; }
-    public double? AverageLoss { get; }
+    public uint? Batch { get; }
+    public float? Accuracy { get; }
 
-    public TrainingProgress(uint? currentBatch, double? averageLoss)
+    public TrainingProgress(uint? batch, float? accuracy)
     {
-        CurrentBatch = currentBatch;
-        AverageLoss = averageLoss;
+        Batch = batch;
+        Accuracy = accuracy;
     }
 
-    public override string ToString() => $"CurrentBatch: {CurrentBatch}, AverageLoss: {AverageLoss}";
+    public override string ToString() => $"CurrentBatch: {Batch}, AverageLoss: {Accuracy}";
 }

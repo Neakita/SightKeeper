@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application.Model.Editing;
@@ -15,7 +14,6 @@ public sealed class ModelChangesDTO : ModelChanges
     int? ModelData.ResolutionHeight => ResolutionHeight;
     public IReadOnlyCollection<string> ItemClasses { get; }
     public Game? Game { get; }
-    public ModelConfig? Config { get; }
 
     public ModelChangesDTO(Domain.Model.Model model, ModelData data)
     {
@@ -28,10 +26,9 @@ public sealed class ModelChangesDTO : ModelChanges
         ResolutionHeight = data.ResolutionHeight.Value;
         ItemClasses = data.ItemClasses.ToList();
         Game = data.Game;
-        Config = data.Config;
     }
     
-    public ModelChangesDTO(Domain.Model.Model model, string name, string description, Resolution resolution, IEnumerable<ItemClass> itemClasses, Game? game, ModelConfig? config)
+    public ModelChangesDTO(Domain.Model.Model model, string name, string description, Resolution resolution, IEnumerable<ItemClass> itemClasses, Game? game)
     {
         Model = model;
         Name = name;
@@ -40,10 +37,9 @@ public sealed class ModelChangesDTO : ModelChanges
         ResolutionHeight = resolution.Height;
         ItemClasses = itemClasses.Select(itemClass => itemClass.Name).ToList();
         Game = game;
-        Config = config;
     }
     
-    public ModelChangesDTO(Domain.Model.Model model, string name, string description, Resolution resolution, IEnumerable<string> itemClasses, Game? game, ModelConfig? config)
+    public ModelChangesDTO(Domain.Model.Model model, string name, string description, Resolution resolution, IEnumerable<string> itemClasses, Game? game)
     {
         Model = model;
         Name = name;
@@ -52,10 +48,9 @@ public sealed class ModelChangesDTO : ModelChanges
         ResolutionHeight = resolution.Height;
         ItemClasses = itemClasses.ToList();
         Game = game;
-        Config = config;
     }
     
-    public ModelChangesDTO(Domain.Model.Model model, string name, string description, int resolutionWidth, int resolutionHeight, IReadOnlyCollection<string> itemClasses, Game? game, ModelConfig? config)
+    public ModelChangesDTO(Domain.Model.Model model, string name, string description, int resolutionWidth, int resolutionHeight, IReadOnlyCollection<string> itemClasses, Game? game)
     {
         Model = model;
         Name = name;
@@ -64,6 +59,5 @@ public sealed class ModelChangesDTO : ModelChanges
         ResolutionHeight = resolutionHeight;
         ItemClasses = itemClasses;
         Game = game;
-        Config = config;
     }
 }

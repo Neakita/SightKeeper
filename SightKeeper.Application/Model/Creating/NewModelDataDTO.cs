@@ -29,7 +29,6 @@ public sealed class NewModelDataDTO : NewModelData
         ResolutionHeight = data.ResolutionHeight.Value;
         ItemClasses = data.ItemClasses.ToList();
         Game = data.Game;
-        Config = data.Config;
     }
     
     public NewModelDataDTO(ModelType modelType, string name, string description, int resolutionWidth, int resolutionHeight, IReadOnlyCollection<string> itemClasses, Game? game, ModelConfig? config)

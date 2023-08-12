@@ -13,9 +13,28 @@ public sealed class ModelWeightsLibrary
         _weights = new List<ModelWeights>();
     }
 
-    public ModelWeights CreateWeights(int batch, byte[] data, IEnumerable<Asset> assets, ModelConfig? config = null)
+    public InternalTrainedModelWeights CreateWeights(
+        byte[] data,
+        DateTime trainedDate,
+        ModelConfig config,
+        ModelWeightsLibrary library,
+        int batch,
+        float accuracy,
+        IEnumerable<Asset> assets)
     {
-        ModelWeights weights = new(Model, batch, data, assets, config);
+        InternalTrainedModelWeights weights = new(data, trainedDate, config, library, batch, accuracy, assets);
+        _weights.Add(weights);
+        return weights;
+    }
+
+    public PreTrainedModelWeights CreateWeights(
+        byte[] data,
+        DateTime trainedDate,
+        ModelConfig config,
+        ModelWeightsLibrary library,
+        DateTime addedDate)
+    {
+        PreTrainedModelWeights weights = new(data, trainedDate, config, library, addedDate);
         _weights.Add(weights);
         return weights;
     }

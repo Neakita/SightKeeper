@@ -1,5 +1,4 @@
-﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application.Model;
 
@@ -11,5 +10,4 @@ public interface ModelData
     int? ResolutionHeight { get; }
     IReadOnlyCollection<string> ItemClasses { get; }
     Game? Game { get; }
-    ModelConfig? Config { get; }
 }
