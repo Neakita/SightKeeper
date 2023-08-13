@@ -129,7 +129,7 @@ public static class AppBootstrapper
 		builder.RegisterType<ScreenshoterViewModel>();
 		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorModel>>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
-		builder.RegisterType<DetectorDrawerViewModel>().As<AnnotatorWorkSpace<DetectorModel>>();
+		builder.RegisterType<DetectorDrawerViewModel>().AsSelf().As<AnnotatorWorkSpace<DetectorModel>>();
 		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 		builder.RegisterType<ModelsListViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));

@@ -26,13 +26,15 @@ public sealed partial class DetectorItemViewModel : ViewModel
     }
 
     public DetectorItemResizer Resizer { get; }
+    public DetectorDrawerViewModel Drawer { get; }
 
     public BoundingBoxViewModel Bounding { get; private set; }
 
-    public DetectorItemViewModel(DetectorItem item, DetectorItemResizer resizer)
+    public DetectorItemViewModel(DetectorItem item, DetectorItemResizer resizer, DetectorDrawerViewModel drawer)
     {
         Item = item;
         Resizer = resizer;
+        Drawer = drawer;
         _itemClass = item.ItemClass;
         Bounding = new BoundingBoxViewModel(item.BoundingBox);
     }

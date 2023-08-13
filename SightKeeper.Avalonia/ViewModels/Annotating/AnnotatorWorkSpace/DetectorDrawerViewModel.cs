@@ -58,7 +58,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
             if (asset == null)
                 return;
             assetsDataAccess.LoadItems(asset);
-            foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer)))
+            foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer, this)))
                 Items.Add(item);
         }).DisposeWith(disposable);
         tools.UnMarkSelectedScreenshotAsAssetExecuted.Subscribe(_ =>
