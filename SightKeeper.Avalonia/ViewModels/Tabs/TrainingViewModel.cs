@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
@@ -16,6 +17,7 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs;
 public sealed partial class TrainingViewModel : ViewModel
 {
     public IObservable<TrainingProgress> Progress => _trainer.Progress;
+    public IObservable<float?> Completion { get; }
     public Task<IReadOnlyCollection<Model>> AvailableModels => _modelsDataAccess.GetModels();
     public Task<IReadOnlyCollection<ModelConfig>> Configs => _configsDataAccess.GetConfigs();
 
@@ -56,6 +58,7 @@ public sealed partial class TrainingViewModel : ViewModel
         _modelsDataAccess = modelsDataAccess;
         _trainer = trainer;
         _configsDataAccess = configsDataAccess;
+        Completion = Progress.Select(progress => (float)progress.Batch / trainer.MaxBatches);
     }
 
     private readonly ModelsDataAccess _modelsDataAccess;

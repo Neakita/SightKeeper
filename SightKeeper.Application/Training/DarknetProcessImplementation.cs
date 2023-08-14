@@ -14,6 +14,7 @@ public sealed class DarknetProcessImplementation : DarknetProcess, IDisposable
 	{
 		_logger = logger.WithGlobal();
 	}
+	
 	public async Task RunAsync(DarknetArguments arguments, CancellationToken cancellationToken = default)
 	{
 		var process = RunProcess(arguments);
@@ -59,17 +60,13 @@ public sealed class DarknetProcessImplementation : DarknetProcess, IDisposable
 		_outputReceived.OnCompleted();
 	}
 
-	private void EnsureClosed(Process process)
+	private static void EnsureClosed(Process process)
 	{
 		try
 		{
-			if (!process.HasExited) return;
-			process.Close();
-			if (process.HasExited) return;
-			if (process.WaitForExit(1000)) return;
-			_logger.Warning("Process did not exit in time, terminating...");
+			if (process.HasExited)
+				return;
 			process.Kill();
-			_logger.Information("Process terminated");
 		}
 		catch (InvalidOperationException exception)
 		{

@@ -24,10 +24,12 @@
         <Button Content="{icons:MaterialIconExt Stop}"
                 Command="{Binding StartTrainingCancelCommand}"/>
         
-        <StackPanel DataContext="{Binding Progress^}">
-            <TextBlock Text="{Binding Batch, StringFormat=Current batch: {0}}"/>
-            <TextBlock Text="{Binding AverageLoss, StringFormat=Average loss: {0}}"/>
-        </StackPanel>
+        
+        <TextBlock Text="{Binding Progress^}"/>
+        
+        <ProgressBar Value="{Binding Completion^}"/>
+        
+        <TextBlock Text="{Binding Completion^, StringFormat=P}"/>
         
     </StackPanel>
 </UserControl>

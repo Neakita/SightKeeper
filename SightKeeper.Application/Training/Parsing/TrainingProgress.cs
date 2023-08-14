@@ -11,5 +11,5 @@ public readonly struct TrainingProgress
         AverageLoss = averageLoss;
     }
 
-    public override string ToString() => $"CurrentBatch: {Batch}, AverageLoss: {AverageLoss}";
+    public override string ToString() => $"CurrentBatch: {Batch}\nAverageLoss: {AverageLoss}";
 }
