@@ -92,6 +92,4 @@ public abstract class Model
 		WeightsLibrary = null!;
 		ScreenshotsLibrary = null!;
 	}
-	
-	private ModelConfig? _config;
 }

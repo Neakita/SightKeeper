@@ -12,7 +12,6 @@ public sealed class DarknetDetectorOutputParser : DarknetOutputParser<DetectorMo
 {
     public bool TryParse(string output, [NotNullWhen(true)] out TrainingProgress? progress)
     {
-        throw new NotImplementedException();
         using var operation = Operation.At(LogEventLevel.Verbose).Begin("Parsing darknet output \"{Output}\"", output);
         progress = null;
         if (!TargetStringRegex.IsMatch(output))
@@ -21,8 +20,8 @@ public sealed class DarknetDetectorOutputParser : DarknetOutputParser<DetectorMo
             return false;
         }
         var currentBatch = uint.Parse(ExtractSingleSubstringWithRegex(output, CurrentBatchRegex));
-        var averageLoss = double.Parse(ExtractSingleSubstringWithRegex(output, AverageLossRegex), CultureInfo.InvariantCulture);
-        // progress = new TrainingProgress(currentBatch, averageLoss);
+        var averageLoss = float.Parse(ExtractSingleSubstringWithRegex(output, AverageLossRegex), CultureInfo.InvariantCulture);
+        progress = new TrainingProgress(currentBatch, averageLoss);
         operation.Complete(nameof(progress), progress);
         return true;
     }

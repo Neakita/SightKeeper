@@ -19,10 +19,11 @@ public sealed class ModelWeightsLibrary
         ModelConfig config,
         ModelWeightsLibrary library,
         int batch,
-        float accuracy,
+        float averageLoss,
+        float? accuracy,
         IEnumerable<Asset> assets)
     {
-        InternalTrainedModelWeights weights = new(data, trainedDate, config, library, batch, accuracy, assets);
+        InternalTrainedModelWeights weights = new(data, trainedDate, config, library, batch, averageLoss, accuracy, assets);
         _weights.Add(weights);
         return weights;
     }

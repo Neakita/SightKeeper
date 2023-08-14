@@ -17,6 +17,7 @@ public sealed partial class TrainingViewModel : ViewModel
 {
     public IObservable<TrainingProgress> Progress => _trainer.Progress;
     public Task<IReadOnlyCollection<Model>> AvailableModels => _modelsDataAccess.GetModels();
+    public Task<IReadOnlyCollection<ModelConfig>> Configs => _configsDataAccess.GetConfigs();
 
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
     private Model? _selectedModel;
@@ -50,13 +51,15 @@ public sealed partial class TrainingViewModel : ViewModel
 
     public bool CanStartTraining() => SelectedModel != null;
 
-    public TrainingViewModel(ModelsDataAccess modelsDataAccess, ModelTrainer<DetectorModel> trainer)
+    public TrainingViewModel(ModelsDataAccess modelsDataAccess, ModelTrainer<DetectorModel> trainer, ConfigsDataAccess configsDataAccess)
     {
         _modelsDataAccess = modelsDataAccess;
         _trainer = trainer;
+        _configsDataAccess = configsDataAccess;
     }
 
     private readonly ModelsDataAccess _modelsDataAccess;
     private readonly ModelTrainer<DetectorModel> _trainer;
+    private readonly ConfigsDataAccess _configsDataAccess;
     private bool _isTraining;
 }

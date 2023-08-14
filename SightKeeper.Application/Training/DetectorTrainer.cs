@@ -27,8 +27,6 @@ public sealed class DetectorTrainer : ModelTrainer<DetectorModel>
         var weightsData = await _darknetAdapter.RunAsync(Model, config, baseWeights?.Data, cancellationToken);
         if (weightsData == null) return null;
         var lastProgress = await Progress.LastAsync();
-        Guard.IsNotNull(lastProgress.Batch);
-        Guard.IsNotNull(lastProgress.Accuracy);
-        return Model.WeightsLibrary.CreateWeights(weightsData, DateTime.Now, config, Model.WeightsLibrary, (int)lastProgress.Batch.Value, lastProgress.Accuracy.Value, assets);
+        return Model.WeightsLibrary.CreateWeights(weightsData, DateTime.Now, config, Model.WeightsLibrary, (int)lastProgress.Batch, lastProgress.AverageLoss, null, assets);
     }
 }

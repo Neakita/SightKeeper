@@ -13,6 +13,11 @@
                   IsEnabled="{Binding !IsTraining}"
                   PlaceholderText="Model"/>
         
+        <ComboBox ItemsSource="{Binding Configs^}"
+                  SelectedItem="{Binding SelectedConfig}"
+                  IsEnabled="{Binding !IsTraining}"
+                  PlaceholderText="Config"/>
+        
         <Button Content="{icons:MaterialIconExt Play}"
                 Command="{Binding StartTrainingCommand}"/>
         
@@ -21,7 +26,7 @@
         
         <StackPanel DataContext="{Binding Progress^}">
             <TextBlock Text="{Binding Batch, StringFormat=Current batch: {0}}"/>
-            <TextBlock Text="{Binding Accuracy, StringFormat=Average loss: {0}}"/>
+            <TextBlock Text="{Binding AverageLoss, StringFormat=Average loss: {0}}"/>
         </StackPanel>
         
     </StackPanel>

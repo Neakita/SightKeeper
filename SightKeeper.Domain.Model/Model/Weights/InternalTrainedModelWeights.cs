@@ -5,7 +5,8 @@ namespace SightKeeper.Domain.Model;
 public sealed class InternalTrainedModelWeights : ModelWeights
 {
     public int Batch { get; private set; }
-    public float Accuracy { get; private set; }
+    public float AverageLoss { get; private set; }
+    public float? Accuracy { get; private set; }
     public IReadOnlyCollection<Asset> Assets { get; private set; }
     
     public InternalTrainedModelWeights(
@@ -14,11 +15,13 @@ public sealed class InternalTrainedModelWeights : ModelWeights
         ModelConfig config,
         ModelWeightsLibrary library,
         int batch,
-        float accuracy,
+        float averageLoss,
+        float? accuracy,
         IEnumerable<Asset> assets)
         : base(data, trainedDate, config, library)
     {
         Batch = batch;
+        AverageLoss = averageLoss;
         Accuracy = accuracy;
         Assets = assets.ToList();
     }
