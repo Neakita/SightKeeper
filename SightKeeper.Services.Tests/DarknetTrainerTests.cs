@@ -3,6 +3,8 @@ using Serilog;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Parsing;
+using SightKeeper.Data;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
@@ -29,7 +31,7 @@ public sealed class DarknetTrainerTests
         var imageLoader = Substitute.For<ScreenshotImageLoader>();
         var assetsDataAccess = Substitute.For<DetectorAssetsDataAccess>();
         DetectorTrainer trainer = new(new DarknetDetectorAdapter(new DetectorImagesExporter(imageLoader, assetsDataAccess),
-            new DarknetProcessImplementation(), new DarknetDetectorOutputParser()));
+            new DarknetProcessImplementation(), new DarknetDetectorOutputParser()), new DbWeightsDataAccess(new AppDbContext()));
         trainer.Model = model;
         CancellationTokenSource cancellationTokenSource = new();
         cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));

@@ -9,19 +9,17 @@ public sealed class DarknetDetectorParserTests
     [Fact]
     public void ShouldProperlyParse()
     {
-        throw new NotImplementedException();
-        /*TrainingProgress expectedProgress = new(4, 1291.511230);
+        TrainingProgress expectedProgress = new(4, 1291.511230f);
         DarknetDetectorOutputParser parser = new();
         var result = parser.TryParse(Sample, out var progress);
         result.Should().BeTrue();
-        progress!.Value.Should().BeEquivalentTo(expectedProgress);*/
+        progress!.Value.Should().BeEquivalentTo(expectedProgress);
     }
 
     [Theory]
     [InlineData("Region 94 Avg IOU: -nan(ind), Class: -nan(ind), Obj: -nan(ind), No Obj: 0.505853, .5R: -nan(ind), .75R: -nan(ind), count: 0")]
     public void ShouldNotParseWithoutAnyExceptions(string sample)
     {
-        throw new NotImplementedException();
         DarknetDetectorOutputParser parser = new();
         var result = parser.TryParse(sample, out var progress);
         result.Should().BeFalse();

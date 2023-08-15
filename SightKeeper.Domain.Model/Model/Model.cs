@@ -83,10 +83,10 @@ public abstract class Model
 		ScreenshotsLibrary = new ModelScreenshotsLibrary(this);
 	}
 
-	protected Model(string name, string description)
+	protected Model()
 	{
-		Name = name;
-		Description = description;
+		Name = null!;
+		Description = null!;
 		_resolution = null!;
 		_itemClasses = null!;
 		WeightsLibrary = null!;

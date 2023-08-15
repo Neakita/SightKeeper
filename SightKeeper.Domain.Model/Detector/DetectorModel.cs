@@ -49,7 +49,7 @@ public sealed class DetectorModel : Model
 
 	private readonly List<DetectorAsset> _assets;
 
-	private DetectorModel(string name, string description) : base(name, description)
+	private DetectorModel()
 	{
 		_assets = null!;
 	}

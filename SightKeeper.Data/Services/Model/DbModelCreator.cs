@@ -25,7 +25,7 @@ public sealed class DbModelCreator : ModelCreator
         var model = data.ModelType switch
         {
             ModelType.Detector => new DetectorModel(data.Name, data.Resolution),
-            ModelType.Classifier => throw new NotImplementedException("Classifier model creation not implemented yet"),
+            ModelType.Classifier => throw new NotSupportedException("Classifier model creation not implemented yet"),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<Domain.Model.Model>(nameof(data.ModelType))
         };
         _dbContext.Models.Add(model);

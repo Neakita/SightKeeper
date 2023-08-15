@@ -8,10 +8,7 @@ using SightKeeper.Services.Input;
 
 namespace SightKeeper.Services.Annotating;
 
-/// <summary>
-/// TODO Too many responsibilities, this class should not be named "Db..." and should not use ScreenshotLibrariesDataAccess
-/// </summary>
-public sealed class DbHotKeyScreenshoter : StreamModelScreenshoter
+public sealed class HotKeyScreenshoter : StreamModelScreenshoter
 {
     public Model? Model
     {
@@ -52,7 +49,7 @@ public sealed class DbHotKeyScreenshoter : StreamModelScreenshoter
         }
     }
 
-    public DbHotKeyScreenshoter(HotKeyManager hotKeyManager, ModelScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess)
+    public HotKeyScreenshoter(HotKeyManager hotKeyManager, ModelScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess)
     {
         _hotKeyManager = hotKeyManager;
         _screenshoter = screenshoter;

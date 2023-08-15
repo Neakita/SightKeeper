@@ -91,7 +91,7 @@ public static class AppBootstrapper
 		builder.RegisterType<ConfigDataValidator>().As<IValidator<ConfigData>>();
 		builder.RegisterType<Screenshoter>();
 		builder.RegisterType<ModelScreenshoter>();
-		builder.RegisterType<DbHotKeyScreenshoter>().As<StreamModelScreenshoter>();
+		builder.RegisterType<HotKeyScreenshoter>().As<StreamModelScreenshoter>();
 		builder.RegisterType<HotKeyManager>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<AvaloniaScreenBoundsProvider>().As<ScreenBoundsProvider>();
@@ -108,6 +108,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DarknetProcessImplementation>().As<DarknetProcess>();
 		builder.RegisterType<DarknetDetectorOutputParser>().As<DarknetOutputParser<DetectorModel>>();
 		builder.RegisterType<ModelsObservableRepository>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>();
 		
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();

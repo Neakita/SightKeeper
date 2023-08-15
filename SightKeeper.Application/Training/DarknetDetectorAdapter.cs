@@ -48,12 +48,12 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
         }
 
         await _process.RunAsync(arguments, cancellationToken);
-        var weightsFileContent = await GetLastWeightsFileContentAsync(cancellationToken);
+        var weightsFileContent = await GetLastWeightsFileContentAsync();
         ClearData();
         return weightsFileContent;
     }
 
-    private static async Task<byte[]?> GetLastWeightsFileContentAsync(CancellationToken cancellationToken)
+    private static async Task<byte[]?> GetLastWeightsFileContentAsync(CancellationToken cancellationToken = default)
     {
         var weightsFilePath = GetLastWeightsFilePath();
         if (weightsFilePath == null) return null;
@@ -113,10 +113,10 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
 
     private static void ClearData()
     {
-        if (Directory.Exists(DarknetPaths.DataDirectoryPath))
-            Directory.Delete(DarknetPaths.DataDirectoryPath, true);
+        if (Directory.Exists(DarknetPaths.DarknetDataDirectoryPath))
+            Directory.Delete(DarknetPaths.DarknetDataDirectoryPath, true);
     }
 
     private static async Task ExportBaseWeightsAsync(byte[] weights, CancellationToken cancellationToken) =>
-        await File.WriteAllBytesAsync(DarknetPaths.BaseWeightsPath, weights, cancellationToken);
+        await File.WriteAllBytesAsync(DarknetPaths.DarknetBaseWeightsPath, weights, cancellationToken);
 }

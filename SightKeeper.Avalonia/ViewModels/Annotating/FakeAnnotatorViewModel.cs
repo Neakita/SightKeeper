@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using SightKeeper.Application.Annotating;
@@ -49,12 +50,12 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
 
         public Task LoadAsync(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public void SaveChanges(ScreenshotsLibrary library)
         {
-            throw new System.NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }
