@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Parsing;
+using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
@@ -18,11 +19,11 @@ public sealed partial class TrainingViewModel : ViewModel
 {
     public IObservable<TrainingProgress> Progress => _trainer.Progress;
     public IObservable<float?> Completion { get; }
-    public Task<IReadOnlyCollection<Model>> AvailableModels => _modelsDataAccess.GetModels();
+    public IReadOnlyCollection<ModelViewModel> AvailableModels { get; }
     public Task<IReadOnlyCollection<ModelConfig>> Configs => _configsDataAccess.GetConfigs();
 
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
-    private Model? _selectedModel;
+    private ModelViewModel? _selectedModel;
     
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
     private ModelConfig? _selectedConfig;
@@ -38,8 +39,8 @@ public sealed partial class TrainingViewModel : ViewModel
     {
         Guard.IsNotNull(SelectedModel);
         Guard.IsNotNull(SelectedConfig);
-        Guard.IsOfType<DetectorModel>(SelectedModel);
-        _trainer.Model = (DetectorModel)SelectedModel;
+        Guard.IsOfType<DetectorModel>(SelectedModel.Model);
+        _trainer.Model = (DetectorModel)SelectedModel.Model;
         IsTraining = true;
         try
         {
@@ -51,17 +52,16 @@ public sealed partial class TrainingViewModel : ViewModel
         }
     }
 
-    public bool CanStartTraining() => SelectedModel != null;
+    public bool CanStartTraining() => SelectedModel != null && SelectedConfig != null;
 
-    public TrainingViewModel(ModelsDataAccess modelsDataAccess, ModelTrainer<DetectorModel> trainer, ConfigsDataAccess configsDataAccess)
+    public TrainingViewModel(ModelTrainer<DetectorModel> trainer, ConfigsDataAccess configsDataAccess, ModelsListViewModel modelsListViewModel)
     {
-        _modelsDataAccess = modelsDataAccess;
         _trainer = trainer;
         _configsDataAccess = configsDataAccess;
         Completion = Progress.Select(progress => (float)progress.Batch / trainer.MaxBatches);
+        AvailableModels = modelsListViewModel.Models;
     }
 
-    private readonly ModelsDataAccess _modelsDataAccess;
     private readonly ModelTrainer<DetectorModel> _trainer;
     private readonly ConfigsDataAccess _configsDataAccess;
     private bool _isTraining;
