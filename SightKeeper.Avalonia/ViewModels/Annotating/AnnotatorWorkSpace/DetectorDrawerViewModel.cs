@@ -76,7 +76,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
         Guard.IsNull(_drawingData);
         Guard.IsNotNull(_tools.SelectedItemClass);
         startPosition = Clamp(startPosition);
-        DetectorItemViewModel item = new(_tools.SelectedItemClass, startPosition, _resizer);
+        DetectorItemViewModel item = new(_tools.SelectedItemClass, startPosition, _resizer, this);
         Items.Add(item);
         _drawingData = new DrawingData(startPosition, item);
     }
