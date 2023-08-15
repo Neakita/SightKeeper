@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
 public interface IConfigsViewModel
 {
-    Task<IReadOnlyCollection<ModelConfig>> Configs { get; }
-    ModelConfig? SelectedConfig { get; set; }
+    ReadOnlyCollection<ConfigViewModel> Configs { get; }
+    ConfigViewModel? SelectedConfig { get; set; }
     
     IAsyncRelayCommand AddConfigCommand { get; }
     IAsyncRelayCommand EditConfigCommand { get; }

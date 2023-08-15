@@ -7,33 +7,31 @@ namespace SightKeeper.Services;
 
 public sealed class ModelsObservableRepository : IDisposable
 {
-    public IObservableList<Domain.Model.Model> ModelsObservableList => _modelsSource;
+    public IObservableList<Domain.Model.Model> Models => _source;
 
     public ModelsObservableRepository(ModelCreator modelCreator, ModelsDataAccess modelsDataAccess)
     {
-        _modelsDataAccess = modelsDataAccess;
         _disposable = new CompositeDisposable(
             modelCreator.ModelCreated.Subscribe(OnModelCreated),
             modelsDataAccess.ModelRemoved.Subscribe(OnModelRemoved));
-        _ = AddInitialModels();
+        AddInitialModels(modelsDataAccess);
     }
 
     public void Dispose()
     {
-        _modelsSource.Dispose();
+        _source.Dispose();
         _disposable.Dispose();
     }
 
-    private readonly SourceList<Domain.Model.Model> _modelsSource = new();
+    private readonly SourceList<Domain.Model.Model> _source = new();
     private readonly IDisposable _disposable;
-    private readonly ModelsDataAccess _modelsDataAccess;
 
-    private void OnModelCreated(Domain.Model.Model model) => _modelsSource.Add(model);
-    private void OnModelRemoved(Domain.Model.Model model) => _modelsSource.Remove(model);
+    private void OnModelCreated(Domain.Model.Model model) => _source.Add(model);
+    private void OnModelRemoved(Domain.Model.Model model) => _source.Remove(model);
 
-    private async Task AddInitialModels()
+    private async void AddInitialModels(ModelsDataAccess modelsDataAccess)
     {
-        var models = await _modelsDataAccess.GetModels();
-        _modelsSource.AddRange(models);
+        var models = await modelsDataAccess.GetModels();
+        _source.AddRange(models);
     }
 }

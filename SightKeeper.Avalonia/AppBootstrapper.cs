@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Builder;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
@@ -80,14 +81,14 @@ public static class AppBootstrapper
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>().SingleInstance();
 		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerMatchingLifetimeScope(typeof(MainViewModel), typeof(AppBootstrapper));
 		builder.RegisterType<RegisteredGamesService>();
-		builder.RegisterType<DbModelCreator>().As<ModelCreator>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<DbModelCreator>().As<ModelCreator>().InstancePerMainViewModel();
 		builder.RegisterType<ModelDataValidator>().As<IValidator<ModelData>>();
-		builder.RegisterType<DbModelsDataAccess>().As<ModelsDataAccess>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
-		builder.RegisterType<DbModelEditor>().As<Application.Model.Editing.ModelEditor>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<DbModelsDataAccess>().As<ModelsDataAccess>().InstancePerMainViewModel();
+		builder.RegisterType<DbModelEditor>().As<Application.Model.Editing.ModelEditor>().InstancePerMainViewModel();
 		builder.RegisterType<ModelChangesValidator>().As<IValidator<ModelChanges>>();
-		builder.RegisterType<DbConfigsDataAccess>().As<ConfigsDataAccess>();
+		builder.RegisterType<DbConfigsDataAccess>().As<ConfigsDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<DbConfigCreator>().As<ConfigCreator>();
-		builder.RegisterType<DbConfigEditor>().As<ConfigEditor>();
+		builder.RegisterType<DbConfigEditor>().As<ConfigEditor>().InstancePerMainViewModel();
 		builder.RegisterType<ConfigDataValidator>().As<IValidator<ConfigData>>();
 		builder.RegisterType<Screenshoter>();
 		builder.RegisterType<ModelScreenshoter>();
@@ -107,20 +108,25 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectorImagesExporter>().As<ImagesExporter<DetectorModel>>();
 		builder.RegisterType<DarknetProcessImplementation>().As<DarknetProcess>();
 		builder.RegisterType<DarknetDetectorOutputParser>().As<DarknetOutputParser<DetectorModel>>();
-		builder.RegisterType<ModelsObservableRepository>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<ModelsObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>();
-		
+		builder.RegisterType<ConfigsObservableRepository>().InstancePerMainViewModel();
+
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
 		hook.RunAsync();
 	}
+
+	private static void InstancePerMainViewModel<TLimit, TActivatorData, TRegistrationStyle>(
+		this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> builder) =>
+		builder.InstancePerMatchingLifetimeScope(typeof(MainViewModel));
 
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainViewModel>();
 		builder.RegisterType<ModelEditorViewModel>();
 
-		builder.RegisterType<AnnotatorViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<AnnotatorViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<ModelsViewModel>();
 		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<SettingsViewModel>();
@@ -128,12 +134,13 @@ public static class AppBootstrapper
 		builder.RegisterType<ConfigsViewModel>();
 		builder.RegisterType<ConfigEditorViewModel>();
 		builder.RegisterType<ScreenshoterViewModel>();
-		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
-		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorModel>>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorModel>>().InstancePerMainViewModel();
 		builder.RegisterType<DetectorDrawerViewModel>().AsSelf().As<AnnotatorWorkSpace<DetectorModel>>();
 		builder.RegisterType<DetectorItemResizer>();
-		builder.RegisterType<TrainingViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
-		builder.RegisterType<ModelsListViewModel>().InstancePerMatchingLifetimeScope(typeof(MainViewModel));
+		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<ModelsListViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<ConfigsListViewModel>().InstancePerMainViewModel();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)

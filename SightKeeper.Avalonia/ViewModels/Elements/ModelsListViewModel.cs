@@ -15,7 +15,7 @@ public sealed class ModelsListViewModel : ViewModel, IDisposable
     public ModelsListViewModel(ModelsObservableRepository modelsObservableRepository, ModelEditor editor)
     {
         _disposable = new CompositeDisposable(
-            modelsObservableRepository.ModelsObservableList.Connect()
+            modelsObservableRepository.Models.Connect()
                 .Transform(model => new ModelViewModel(model))
                 .AddKey(viewModel => viewModel.Model)
                 .Bind(out var models)

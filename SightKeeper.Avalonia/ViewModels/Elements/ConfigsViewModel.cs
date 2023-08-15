@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -8,28 +8,28 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Config;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
 public sealed partial class ConfigsViewModel : ViewModel, IConfigsViewModel
 {
-    public Task<IReadOnlyCollection<ModelConfig>> Configs => _dataAccess.GetConfigs();
+    public ReadOnlyCollection<ConfigViewModel> Configs { get; }
     
-    public ConfigsViewModel(ILifetimeScope scope, ConfigsDataAccess dataAccess, ConfigCreator configCreator, ConfigEditor configEditor)
+    public ConfigsViewModel(ILifetimeScope scope, ConfigsDataAccess dataAccess, ConfigCreator configCreator, ConfigEditor configEditor, ConfigsListViewModel configsListViewModel)
     {
         _scope = scope;
         _dataAccess = dataAccess;
         _configCreator = configCreator;
         _configEditor = configEditor;
+        Configs = configsListViewModel.Configs;
     }
 
     private readonly ILifetimeScope _scope;
     private readonly ConfigsDataAccess _dataAccess;
     private readonly ConfigCreator _configCreator;
     private readonly ConfigEditor _configEditor;
-    [ObservableProperty] private ModelConfig? _selectedConfig;
+    [ObservableProperty] private ConfigViewModel? _selectedConfig;
 
     [RelayCommand]
     private async Task AddConfig(CancellationToken cancellationToken)
@@ -48,10 +48,10 @@ public sealed partial class ConfigsViewModel : ViewModel, IConfigsViewModel
         Guard.IsNotNull(SelectedConfig);
         await using var scope = _scope.BeginLifetimeScope(this);
         var viewModel = scope.Resolve<ConfigEditorViewModel>();
-        viewModel.SetValues(SelectedConfig);
+        viewModel.SetValues(SelectedConfig.Config);
         await viewModel.ShowDialog(this);
         if (viewModel.DialogResult != true) return;
-        await _configEditor.ApplyChanges(new ConfigChangeDTO(SelectedConfig, viewModel), cancellationToken);
+        await _configEditor.ApplyChanges(new ConfigChangeDTO(SelectedConfig.Config, viewModel), cancellationToken);
         OnPropertyChanged(nameof(Configs));
     }
 
@@ -59,7 +59,7 @@ public sealed partial class ConfigsViewModel : ViewModel, IConfigsViewModel
     private async Task DeleteConfig(CancellationToken cancellationToken)
     {
         Guard.IsNotNull(SelectedConfig);
-        await _dataAccess.RemoveConfig(SelectedConfig, cancellationToken);
+        await _dataAccess.RemoveConfig(SelectedConfig.Config, cancellationToken);
         OnPropertyChanged(nameof(Configs));
     }
 }

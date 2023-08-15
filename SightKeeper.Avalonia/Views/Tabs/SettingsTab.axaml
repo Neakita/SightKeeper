@@ -16,7 +16,7 @@
     </Design.DataContext>
     
     <ScrollViewer Margin="50" MaxWidth="800">
-        <StackPanel>
+        <StackPanel Orientation="Horizontal">
             <StackPanel.Styles>
                 <Style Selector="Expander">
                     <Setter Property="MaxWidth" Value="800"/>
@@ -74,8 +74,13 @@
                             Content="{icons:MaterialIconExt Plus}"
                             Command="{Binding AddConfigCommand}"/>
                     <ListBox Grid.Row="1"
-                             ItemsSource="{Binding Configs^}"
+                             ItemsSource="{Binding Configs}"
                              SelectedItem="{Binding SelectedConfig}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                         <ListBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Edit"

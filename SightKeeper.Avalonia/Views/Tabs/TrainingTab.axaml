@@ -19,10 +19,16 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         
-        <ComboBox ItemsSource="{Binding Configs^}"
+        <ComboBox ItemsSource="{Binding Configs}"
                   SelectedItem="{Binding SelectedConfig}"
                   IsEnabled="{Binding !IsTraining}"
-                  PlaceholderText="Config"/>
+                  PlaceholderText="Config">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
         
         <Button Content="{icons:MaterialIconExt Play}"
                 Command="{Binding StartTrainingCommand}"/>
