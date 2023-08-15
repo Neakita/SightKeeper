@@ -41,12 +41,37 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         }).DisposeWith(disposable);
     }
 
+    public void ScrollItemClass(bool reverse)
+    {
+        if (ItemClasses.Count <= 1)
+            return;
+        SelectedItemClassIndex = SelectedItemClassIndex.Cycle(0, ItemClasses.Count - 1, reverse);
+    }
+
     public void Dispose()
     {
         _disposable.Dispose();
         _selectedScreenshotDisposable?.Dispose();
     }
     
+    
+    private readonly AnnotatorViewModel _annotatorViewModel;
+    private readonly AnnotatorScreenshotsViewModel _screenshotsViewModel;
+    private readonly DetectorAnnotator _annotator;
+    private readonly IDisposable _disposable;
+    private readonly Subject<Unit> _unMarkSelectedScreenshotAsAssetExecuted = new();
+    private readonly Subject<DetectorItemViewModel> _deleteItemExecuted = new();
+
+    private IDisposable? _selectedScreenshotDisposable;
+
+    
+    [ObservableProperty] private ItemClass? _selectedItemClass;
+    [ObservableProperty] private int _selectedItemClassIndex;
+    
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
+    private DetectorItemViewModel? _selectedItem;
+    
+
     [RelayCommand(CanExecute = nameof(CanMarkSelectedScreenshotAsAsset))]
     private void MarkSelectedScreenshotAsAsset()
     {
@@ -96,21 +121,6 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
 
     private bool CanDeleteItem() => SelectedItem != null;
 
-    private readonly AnnotatorViewModel _annotatorViewModel;
-    private readonly AnnotatorScreenshotsViewModel _screenshotsViewModel;
-    private readonly DetectorAnnotator _annotator;
-    private readonly IDisposable _disposable;
-    private readonly Subject<Unit> _unMarkSelectedScreenshotAsAssetExecuted = new();
-
-    private IDisposable? _selectedScreenshotDisposable;
-    [ObservableProperty] private ItemClass? _selectedItemClass;
-    [ObservableProperty] private int _selectedItemClassIndex;
-
-    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
-    private DetectorItemViewModel? _selectedItem;
-
-    private readonly Subject<DetectorItemViewModel> _deleteItemExecuted = new();
-
     private void OnScreenshotSelected(ScreenshotViewModel? screenshot)
     {
         _selectedScreenshotDisposable?.Dispose();
@@ -124,12 +134,5 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
             MarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
             UnMarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
         });
-    }
-
-    public void ScrollItemClass(bool reverse)
-    {
-        if (ItemClasses.Count <= 1)
-            return;
-        SelectedItemClassIndex = SelectedItemClassIndex.Cycle(0, ItemClasses.Count - 1, reverse);
     }
 }
