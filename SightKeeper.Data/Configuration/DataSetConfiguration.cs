@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Data.Configuration;
 
-public sealed class ModelConfiguration : IEntityTypeConfiguration<DataSet>
+public sealed class DataSetConfiguration : IEntityTypeConfiguration<DataSet>
 {
     public void Configure(EntityTypeBuilder<DataSet> builder)
     {

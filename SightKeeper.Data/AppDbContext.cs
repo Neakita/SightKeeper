@@ -58,13 +58,13 @@ public class AppDbContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.ApplyConfiguration(new DetectorAssetConfiguration());
-		modelBuilder.ApplyConfiguration(new DetectorModelConfiguration());
+		modelBuilder.ApplyConfiguration(new DetectorDataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
 		modelBuilder.ApplyConfiguration(new AssetConfiguration());
 		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());
-		modelBuilder.ApplyConfiguration(new ModelConfiguration());
+		modelBuilder.ApplyConfiguration(new DataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new InternalTrainedModelWeightsConfiguration());

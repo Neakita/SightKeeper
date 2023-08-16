@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Data.Configuration;
 
-public sealed class DetectorModelConfiguration : IEntityTypeConfiguration<DetectorDataSet>
+public sealed class DetectorDataSetConfiguration : IEntityTypeConfiguration<DetectorDataSet>
 {
     public void Configure(EntityTypeBuilder<DetectorDataSet> builder)
     {
