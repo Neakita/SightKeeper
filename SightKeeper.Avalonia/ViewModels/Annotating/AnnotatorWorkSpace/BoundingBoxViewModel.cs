@@ -8,10 +8,10 @@ public sealed class BoundingBoxViewModel : ViewModel
 {
     private static readonly string[] Properties =
     {
-        nameof(X1),
-        nameof(X2),
-        nameof(Y1),
-        nameof(Y2),
+        nameof(Left),
+        nameof(Right),
+        nameof(Top),
+        nameof(Bottom),
         nameof(Width),
         nameof(Height),
         nameof(XCenter),
@@ -20,78 +20,78 @@ public sealed class BoundingBoxViewModel : ViewModel
 
     public BoundingBox Bounding { get; set; }
 
-    public double X1
+    public double Left
     {
-        get => _x1;
+        get => _left;
         set
         {
-            Guard.IsLessThanOrEqualTo(value, X2);
-            if (!SetProperty(ref _x1, value))
+            Guard.IsLessThanOrEqualTo(value, Right);
+            if (!SetProperty(ref _left, value))
                 return;
             OnPropertyChanged(nameof(Width));
             OnPropertyChanged(nameof(XCenter));
         }
     }
 
-    public double Y1
+    public double Top
     {
-        get => _y1;
+        get => _top;
         set
         {
-            Guard.IsLessThanOrEqualTo(value, Y2);
-            if (!SetProperty(ref _y1, value))
+            Guard.IsLessThanOrEqualTo(value, Bottom);
+            if (!SetProperty(ref _top, value))
                 return;
             OnPropertyChanged(nameof(Height));
             OnPropertyChanged(nameof(YCenter));
         }
     }
 
-    public double X2
+    public double Right
     {
-        get => _x2;
+        get => _right;
         set
         {
-            Guard.IsGreaterThanOrEqualTo(value, X1);
-            if (!SetProperty(ref _x2, value))
+            Guard.IsGreaterThanOrEqualTo(value, Left);
+            if (!SetProperty(ref _right, value))
                 return;
             OnPropertyChanged(nameof(Width));
             OnPropertyChanged(nameof(XCenter));
         }
     }
 
-    public double Y2
+    public double Bottom
     {
-        get => _y2;
+        get => _bottom;
         set
         {
-            Guard.IsGreaterThanOrEqualTo(value, Y1);
-            if (!SetProperty(ref _y2, value))
+            Guard.IsGreaterThanOrEqualTo(value, Top);
+            if (!SetProperty(ref _bottom, value))
                 return;
             OnPropertyChanged(nameof(Height));
             OnPropertyChanged(nameof(YCenter));
         }
     }
 
-    public double Width => X2 - X1;
-    public double Height => Y2 - Y1;
-    public double XCenter => (X1 + X2) / 2;
-    public double YCenter => (Y1 + Y2) / 2;
+    public double Width => Right - Left;
+    public double Height => Bottom - Top;
+    public double XCenter => (Left + Right) / 2;
+    public double YCenter => (Top + Bottom) / 2;
 
     public BoundingBoxViewModel(Point position) : this()
     {
-        _x1 = position.X;
-        _x2 = position.X;
-        _y1 = position.Y;
-        _y2 = position.Y;
+        _left = position.X;
+        _right = position.X;
+        _top = position.Y;
+        _bottom = position.Y;
     }
 
     public BoundingBoxViewModel(BoundingBox bounding)
     {
         Bounding = bounding;
-        _x1 = bounding.Left;
-        _y1 = bounding.Top;
-        _x2 = bounding.Right;
-        _y2 = bounding.Bottom;
+        _left = bounding.Left;
+        _top = bounding.Top;
+        _right = bounding.Right;
+        _bottom = bounding.Bottom;
     }
 
     public BoundingBoxViewModel()
@@ -107,23 +107,23 @@ public sealed class BoundingBoxViewModel : ViewModel
         MinMax(x1, x2, out var xMin, out var xMax); // 🎄
         MinMax(y1, y2, out var yMin, out var yMax);
         OnPropertiesChanging(Properties);
-        _x1 = xMin;
-        _x2 = xMax;
-        _y1 = yMin;
-        _y2 = yMax;
+        _left = xMin;
+        _right = xMax;
+        _top = yMin;
+        _bottom = yMax;
         OnPropertiesChanged(Properties);
     }
 
     public void Synchronize()
     {
         Guard.IsNotNull(Bounding);
-        Bounding.SetFromTwoPositions(X1, Y1, X2, Y2);
+        Bounding.SetFromTwoPositions(Left, Top, Right, Bottom);
     }
 
-    private double _x1;
-    private double _y1;
-    private double _x2;
-    private double _y2;
+    private double _left;
+    private double _top;
+    private double _right;
+    private double _bottom;
 
     private static void MinMax(double value1, double value2, out double min, out double max)
     {

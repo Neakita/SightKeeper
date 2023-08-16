@@ -31,7 +31,7 @@
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
                                     <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DetectorItemViewModel).Bounding.X1" />
+                                        <Binding Path="(annotating:DetectorItemViewModel).Bounding.Left" />
                                         <Binding ElementName="CanvasItemsControl" Path="Bounds.Width" />
                                     </MultiBinding.Bindings>
                                 </MultiBinding>
@@ -41,7 +41,7 @@
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
                                     <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DetectorItemViewModel).Bounding.Y1" />
+                                        <Binding Path="(annotating:DetectorItemViewModel).Bounding.Top" />
                                         <Binding ElementName="CanvasItemsControl" Path="Bounds.Height" />
                                     </MultiBinding.Bindings>
                                 </MultiBinding>

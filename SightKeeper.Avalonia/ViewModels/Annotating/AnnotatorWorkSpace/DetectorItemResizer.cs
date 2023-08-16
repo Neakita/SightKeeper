@@ -70,26 +70,26 @@ public sealed class DetectorItemResizer
 
     private static void UpdateLeft(BoundingBoxViewModel bounding, Vector delta)
     {
-        var maximum = Math.Max(0, bounding.X2 - DetectorDrawerViewModel.MinimumDimensionSize);
-        bounding.X1 = Math.Clamp(bounding.X1 + delta.X, 0, maximum);
+        var maximum = Math.Max(0, bounding.Right - DetectorDrawerViewModel.MinimumDimensionSize);
+        bounding.Left = Math.Clamp(bounding.Left + delta.X, 0, maximum);
     }
 
     private static void UpdateTop(BoundingBoxViewModel bounding, Vector delta)
     {
-        var maximum = Math.Max(0, bounding.Y2 - DetectorDrawerViewModel.MinimumDimensionSize);
-        bounding.Y1 = Math.Clamp(bounding.Y1 + delta.Y, 0, maximum);
+        var maximum = Math.Max(0, bounding.Bottom - DetectorDrawerViewModel.MinimumDimensionSize);
+        bounding.Top = Math.Clamp(bounding.Top + delta.Y, 0, maximum);
     }
 
     private static void UpdateRight(BoundingBoxViewModel bounding, Vector delta)
     {
-        var minimum = Math.Min(1, bounding.X1 + DetectorDrawerViewModel.MinimumDimensionSize);
-        bounding.X2 = Math.Clamp(bounding.X2 + delta.X, minimum, 1);
+        var minimum = Math.Min(1, bounding.Left + DetectorDrawerViewModel.MinimumDimensionSize);
+        bounding.Right = Math.Clamp(bounding.Right + delta.X, minimum, 1);
     }
 
     private static void UpdateBottom(BoundingBoxViewModel bounding, Vector delta)
     {
-        var minimum = Math.Min(1, bounding.Y1 + DetectorDrawerViewModel.MinimumDimensionSize);
-        bounding.Y2 = Math.Clamp(bounding.Y2 + delta.Y, minimum, 1);
+        var minimum = Math.Min(1, bounding.Top + DetectorDrawerViewModel.MinimumDimensionSize);
+        bounding.Bottom = Math.Clamp(bounding.Bottom + delta.Y, minimum, 1);
     }
 
     private static void UpdateTopLeft(BoundingBoxViewModel bounding, Vector delta)
@@ -120,9 +120,9 @@ public sealed class DetectorItemResizer
     {
 
         bounding.SetFromTwoPositions(
-            Math.Clamp(bounding.X1 + delta.X, 0, 1 - bounding.Width),
-            Math.Clamp(bounding.Y1 + delta.Y, 0, 1 - bounding.Height),
-            Math.Clamp(bounding.X2 + delta.X, bounding.Width, 1),
-            Math.Clamp(bounding.Y2 + delta.Y, bounding.Height, 1));
+            Math.Clamp(bounding.Left + delta.X, 0, 1 - bounding.Width),
+            Math.Clamp(bounding.Top + delta.Y, 0, 1 - bounding.Height),
+            Math.Clamp(bounding.Right + delta.X, bounding.Width, 1),
+            Math.Clamp(bounding.Bottom + delta.Y, bounding.Height, 1));
     }
 }
