@@ -5,7 +5,7 @@ namespace SightKeeper.Application.Model.Editing;
 
 public sealed class ModelChangesDTO : ModelChanges
 {
-    public Domain.Model.Model Model { get; }
+    public Domain.Model.DataSet DataSet { get; }
     public string Name { get; }
     public string Description { get; }
     public int ResolutionWidth { get; }
@@ -15,11 +15,11 @@ public sealed class ModelChangesDTO : ModelChanges
     public IReadOnlyCollection<string> ItemClasses { get; }
     public Game? Game { get; }
 
-    public ModelChangesDTO(Domain.Model.Model model, ModelData data)
+    public ModelChangesDTO(Domain.Model.DataSet dataSet, ModelData data)
     {
         Guard.IsNotNull(data.ResolutionWidth);
         Guard.IsNotNull(data.ResolutionHeight);
-        Model = model;
+        DataSet = dataSet;
         Name = data.Name;
         Description = data.Description;
         ResolutionWidth = data.ResolutionWidth.Value;
@@ -28,9 +28,9 @@ public sealed class ModelChangesDTO : ModelChanges
         Game = data.Game;
     }
     
-    public ModelChangesDTO(Domain.Model.Model model, string name, string description, Resolution resolution, IEnumerable<ItemClass> itemClasses, Game? game)
+    public ModelChangesDTO(Domain.Model.DataSet dataSet, string name, string description, Resolution resolution, IEnumerable<ItemClass> itemClasses, Game? game)
     {
-        Model = model;
+        DataSet = dataSet;
         Name = name;
         Description = description;
         ResolutionWidth = resolution.Width;
@@ -39,9 +39,9 @@ public sealed class ModelChangesDTO : ModelChanges
         Game = game;
     }
     
-    public ModelChangesDTO(Domain.Model.Model model, string name, string description, Resolution resolution, IEnumerable<string> itemClasses, Game? game)
+    public ModelChangesDTO(Domain.Model.DataSet dataSet, string name, string description, Resolution resolution, IEnumerable<string> itemClasses, Game? game)
     {
-        Model = model;
+        DataSet = dataSet;
         Name = name;
         Description = description;
         ResolutionWidth = resolution.Width;
@@ -50,9 +50,9 @@ public sealed class ModelChangesDTO : ModelChanges
         Game = game;
     }
     
-    public ModelChangesDTO(Domain.Model.Model model, string name, string description, int resolutionWidth, int resolutionHeight, IReadOnlyCollection<string> itemClasses, Game? game)
+    public ModelChangesDTO(Domain.Model.DataSet dataSet, string name, string description, int resolutionWidth, int resolutionHeight, IReadOnlyCollection<string> itemClasses, Game? game)
     {
-        Model = model;
+        DataSet = dataSet;
         Name = name;
         Description = description;
         ResolutionWidth = resolutionWidth;

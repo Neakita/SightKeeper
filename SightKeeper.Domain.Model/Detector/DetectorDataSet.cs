@@ -4,19 +4,19 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
 
-public sealed class DetectorModel : Model
+public sealed class DetectorDataSet : DataSet
 {
 	public IReadOnlyCollection<DetectorAsset> Assets => _assets;
 
-	public DetectorModel(string name) : this(name, new Resolution())
+	public DetectorDataSet(string name) : this(name, new Resolution())
 	{
 	}
 
-	public DetectorModel(string name, ushort width, ushort height) : this(name, new Resolution(width, height))
+	public DetectorDataSet(string name, ushort width, ushort height) : this(name, new Resolution(width, height))
 	{
 	}
 
-	public DetectorModel(string name, Resolution resolution) : base(name, resolution)
+	public DetectorDataSet(string name, Resolution resolution) : base(name, resolution)
 	{
 		_assets = new List<DetectorAsset>();
 	}
@@ -25,8 +25,8 @@ public sealed class DetectorModel : Model
 	{
 		if (screenshot.Asset != null)
 			ThrowHelper.ThrowArgumentException("Asset with same screenshot already exists");
-		if (screenshot.Library is ModelScreenshotsLibrary modelLibrary && modelLibrary.Model != this)
-			ThrowHelper.ThrowArgumentException(nameof(screenshot), $"Screenshot is owned by different model \"{modelLibrary.Model}\"");
+		if (screenshot.Library is ModelScreenshotsLibrary modelLibrary && modelLibrary.DataSet != this)
+			ThrowHelper.ThrowArgumentException(nameof(screenshot), $"Screenshot is owned by different model \"{modelLibrary.DataSet}\"");
 		DetectorAsset asset = new(this, screenshot);
 		_assets.Add(asset);
 		return asset;
@@ -49,7 +49,7 @@ public sealed class DetectorModel : Model
 
 	private readonly List<DetectorAsset> _assets;
 
-	private DetectorModel()
+	private DetectorDataSet()
 	{
 		_assets = null!;
 	}

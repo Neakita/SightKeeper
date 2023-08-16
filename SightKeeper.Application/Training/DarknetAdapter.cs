@@ -3,7 +3,7 @@ using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Training;
 
-public interface DarknetAdapter<TModel> where TModel : Domain.Model.Model
+public interface DarknetAdapter<TModel> where TModel : Domain.Model.DataSet
 {
     IObservable<TrainingProgress> Progress { get; }
     int? MaxBatches { get; }

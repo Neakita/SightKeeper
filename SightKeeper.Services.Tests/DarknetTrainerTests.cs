@@ -19,13 +19,13 @@ public sealed class DarknetTrainerTests
     {
         Skip.If(true);
         Log.Logger = new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.Seq("http://localhost:5341").CreateLogger();
-        DetectorModel model = new("Test model");
-        var itemClass = model.CreateItemClass("Test item class");
+        DetectorDataSet dataSet = new("Test model");
+        var itemClass = dataSet.CreateItemClass("Test item class");
         var imageData = await File.ReadAllBytesAsync("Samples/320screenshot.png");
         for (var i = 0; i < 200; i++)
         {
-            var screenshot = model.ScreenshotsLibrary.CreateScreenshot(imageData, new Resolution());
-            var asset = model.MakeAsset(screenshot);
+            var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(imageData, new Resolution());
+            var asset = dataSet.MakeAsset(screenshot);
             asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
         }
         ModelConfig config = new("Yolo V3", await File.ReadAllTextAsync("Samples/YoloV3.config"), ModelType.Detector);
@@ -33,7 +33,7 @@ public sealed class DarknetTrainerTests
         var assetsDataAccess = Substitute.For<DetectorAssetsDataAccess>();
         DetectorTrainer trainer = new(new DarknetDetectorAdapter(new DetectorImagesExporter(imageLoader, assetsDataAccess),
             new DarknetProcessImplementation(), new DarknetDetectorOutputParser()), new DbWeightsDataAccess(new AppDbContext()));
-        trainer.Model = model;
+        trainer.Model = dataSet;
         CancellationTokenSource cancellationTokenSource = new();
         cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
         await trainer.TrainAsync(config, cancellationTokenSource.Token);

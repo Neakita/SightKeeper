@@ -33,7 +33,7 @@ public sealed partial class TrainingViewModel : ViewModel
         private set => SetProperty(ref _isTraining, value);
     }
 
-    public TrainingViewModel(ModelTrainer<DetectorModel> trainer, ModelsListViewModel modelsListViewModel, ConfigsListViewModel configsListViewModel)
+    public TrainingViewModel(ModelTrainer<DetectorDataSet> trainer, ModelsListViewModel modelsListViewModel, ConfigsListViewModel configsListViewModel)
     {
         _trainer = trainer;
         Completion = Progress.Select(progress => (float)progress.Batch / trainer.MaxBatches);
@@ -46,8 +46,8 @@ public sealed partial class TrainingViewModel : ViewModel
     {
         Guard.IsNotNull(SelectedModel);
         Guard.IsNotNull(SelectedConfig);
-        Guard.IsOfType<DetectorModel>(SelectedModel.Model);
-        _trainer.Model = (DetectorModel)SelectedModel.Model;
+        Guard.IsOfType<DetectorDataSet>(SelectedModel.DataSet);
+        _trainer.Model = (DetectorDataSet)SelectedModel.DataSet;
         IsTraining = true;
         try
         {
@@ -61,6 +61,6 @@ public sealed partial class TrainingViewModel : ViewModel
 
     public bool CanStartTraining() => SelectedModel != null && SelectedConfig != null;
 
-    private readonly ModelTrainer<DetectorModel> _trainer;
+    private readonly ModelTrainer<DetectorDataSet> _trainer;
     private bool _isTraining;
 }

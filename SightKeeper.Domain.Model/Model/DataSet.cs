@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public abstract class Model
+public abstract class DataSet
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
@@ -69,11 +69,11 @@ public abstract class Model
 	
 	public override string ToString() => Name;
 
-	protected Model(string name) : this(name, new Resolution())
+	protected DataSet(string name) : this(name, new Resolution())
 	{
 	}
 
-	protected Model(string name, Resolution resolution)
+	protected DataSet(string name, Resolution resolution)
 	{
 		Name = name;
 		Description = string.Empty;
@@ -83,7 +83,7 @@ public abstract class Model
 		ScreenshotsLibrary = new ModelScreenshotsLibrary(this);
 	}
 
-	protected Model()
+	protected DataSet()
 	{
 		Name = null!;
 		Description = null!;

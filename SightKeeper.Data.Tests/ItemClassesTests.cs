@@ -11,12 +11,12 @@ public sealed class ItemClassesTests : DbRelatedTests
 	public void ShouldNotDeleteItemClassesOnItemDelete()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		DetectorModel model = new("Test model");
-		var itemClass = model.CreateItemClass("Test item class");
-		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-		var asset = model.MakeAsset(screenshot);
+		DetectorDataSet dataSet = new("Test model");
+		var itemClass = dataSet.CreateItemClass("Test item class");
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+		var asset = dataSet.MakeAsset(screenshot);
 		var item = asset.CreateItem(itemClass, new BoundingBox());
-		dbContext.DetectorModels.Add(model);
+		dbContext.DetectorModels.Add(dataSet);
 		dbContext.SaveChanges();
 
 		dbContext.Set<ItemClass>().Should().Contain(itemClass);
@@ -34,12 +34,12 @@ public sealed class ItemClassesTests : DbRelatedTests
 	{
 		using (var arrangeDbContext = DbContextFactory.CreateDbContext())
 		{
-			DetectorModel model = new("Test model");
-			var itemClass = model.CreateItemClass("Item class");
-			var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-			var asset = model.MakeAsset(screenshot);
+			DetectorDataSet dataSet = new("Test model");
+			var itemClass = dataSet.CreateItemClass("Item class");
+			var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+			var asset = dataSet.MakeAsset(screenshot);
 			asset.CreateItem(itemClass, new BoundingBox());
-			arrangeDbContext.Add(model);
+			arrangeDbContext.Add(dataSet);
 			arrangeDbContext.SaveChanges();
 		}
 		using (var assertDbContext = DbContextFactory.CreateDbContext())

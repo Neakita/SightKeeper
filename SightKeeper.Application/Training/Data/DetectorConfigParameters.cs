@@ -16,8 +16,8 @@ public sealed class DetectorConfigParameters
     public ushort Filters => (ushort) ((ClassesCount + 5) * 3);
     public ushort GaussianFilters => (ushort) ((ClassesCount + 9) * 3);
 
-    public DetectorConfigParameters(DetectorModel model)
-        : this((ushort)model.Resolution.Width, (ushort)model.Resolution.Height, (ushort)model.ItemClasses.Count)
+    public DetectorConfigParameters(DetectorDataSet dataSet)
+        : this((ushort)dataSet.Resolution.Width, (ushort)dataSet.Resolution.Height, (ushort)dataSet.ItemClasses.Count)
     {
     }
 

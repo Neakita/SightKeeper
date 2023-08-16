@@ -30,21 +30,21 @@ public partial class ModelEditorViewModel : ValidatableViewModel<ModelData>, Dia
         _itemClassDataAccess = itemClassDataAccess;
     }
 
-    public void SetData(Model model)
+    public void SetData(DataSet dataSet)
     {
         _itemClasses.Clear();
-        foreach (var itemClass in model.ItemClasses)
+        foreach (var itemClass in dataSet.ItemClasses)
             _itemClasses.Add(itemClass.Name);
-        Name = model.Name;
-        Description = model.Description;
-        ResolutionWidth = model.Resolution.Width;
-        ResolutionHeight = model.Resolution.Height;
-        Game = model.Game;
-        _deletionBlackListItemClasses = model.ItemClasses
+        Name = dataSet.Name;
+        Description = dataSet.Description;
+        ResolutionWidth = dataSet.Resolution.Width;
+        ResolutionHeight = dataSet.Resolution.Height;
+        Game = dataSet.Game;
+        _deletionBlackListItemClasses = dataSet.ItemClasses
             .Where(itemClass =>
             {
                 _itemClassDataAccess.LoadItems(itemClass);
-                return !model.CanDeleteItemClass(itemClass, out _);
+                return !dataSet.CanDeleteItemClass(itemClass, out _);
             })
             .Select(itemClass => itemClass.Name)
             .ToList();

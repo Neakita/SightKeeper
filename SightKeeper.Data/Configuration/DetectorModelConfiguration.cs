@@ -4,9 +4,9 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Data.Configuration;
 
-public sealed class DetectorModelConfiguration : IEntityTypeConfiguration<DetectorModel>
+public sealed class DetectorModelConfiguration : IEntityTypeConfiguration<DetectorDataSet>
 {
-    public void Configure(EntityTypeBuilder<DetectorModel> builder)
+    public void Configure(EntityTypeBuilder<DetectorDataSet> builder)
     {
         builder.ToTable("DetectorModels");
         builder.HasMany(model => model.Assets).WithOne("Model").IsRequired();

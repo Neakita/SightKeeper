@@ -11,11 +11,11 @@ public sealed class DetectorAssetTests : DbRelatedTests
     [Fact]
     public void ShouldAddAssetWithScreenshot()
     {
-        DetectorModel model = new("Model");
-        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        var asset = model.MakeAsset(screenshot);
+        DetectorDataSet dataSet = new("Model");
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var asset = dataSet.MakeAsset(screenshot);
         using var dbContext = DbContextFactory.CreateDbContext();
-        dbContext.Add(model);
+        dbContext.Add(dataSet);
         dbContext.SaveChanges();
         dbContext.Set<Screenshot>().Should().Contain(screenshot);
         dbContext.Set<DetectorAsset>().Should().Contain(asset);
@@ -24,13 +24,13 @@ public sealed class DetectorAssetTests : DbRelatedTests
     [Fact]
     public void AssetAndScreenshotShouldHaveEqualIds()
     {
-        DetectorModel model = new("Model");
-        model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        var screenshot3 = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        var asset = model.MakeAsset(screenshot3);
+        DetectorDataSet dataSet = new("Model");
+        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var screenshot3 = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var asset = dataSet.MakeAsset(screenshot3);
         using var dbContext = DbContextFactory.CreateDbContext();
-        dbContext.Add(model);
+        dbContext.Add(dataSet);
         var screenshotId = dbContext.Entry(screenshot3).IdProperty().CurrentValue;
         var assetId = dbContext.Entry(asset).IdProperty().CurrentValue;
         screenshotId.Should().Be(assetId);
@@ -41,10 +41,10 @@ public sealed class DetectorAssetTests : DbRelatedTests
     {
         using (var initialDbContext = DbContextFactory.CreateDbContext())
         {
-            DetectorModel newModel = new("Model");
-            var screenshot = newModel.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-            newModel.MakeAsset(screenshot);
-            initialDbContext.Add(newModel);
+            DetectorDataSet newDataSet = new("Model");
+            var screenshot = newDataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+            newDataSet.MakeAsset(screenshot);
+            initialDbContext.Add(newDataSet);
             initialDbContext.SaveChanges();
         }
         using var dbContext = DbContextFactory.CreateDbContext();
@@ -58,16 +58,16 @@ public sealed class DetectorAssetTests : DbRelatedTests
     {
         using (var arrangeDbContext = DbContextFactory.CreateDbContext())
         {
-            DetectorModel model = new("Test model");
-            var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-            model.MakeAsset(screenshot);
-            arrangeDbContext.Add(model);
+            DetectorDataSet dataSet = new("Test model");
+            var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+            dataSet.MakeAsset(screenshot);
+            arrangeDbContext.Add(dataSet);
             arrangeDbContext.SaveChanges();
         }
         using (var assertDbContext = DbContextFactory.CreateDbContext())
         {
-            var asset = assertDbContext.Set<DetectorAsset>().Include(asset => asset.Model).Single();
-            asset.Model.Should().NotBeNull();
+            var asset = assertDbContext.Set<DetectorAsset>().Include(asset => asset.DataSet).Single();
+            asset.DataSet.Should().NotBeNull();
         }
     }
 }

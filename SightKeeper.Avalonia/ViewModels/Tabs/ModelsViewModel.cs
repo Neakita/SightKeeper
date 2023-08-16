@@ -57,7 +57,7 @@ public sealed partial class ModelsViewModel : ViewModel, IActivatableViewModel
 	private async Task EditModel(CancellationToken cancellationToken)
 	{
 		Guard.IsNotNull(SelectedModel);
-		var modelToEdit = SelectedModel.Model;
+		var modelToEdit = SelectedModel.DataSet;
 		Guard.IsNotNull(_scope);
 		Guard.IsNotNull(_modelEditor);
 		await using var scope = _scope.BeginLifetimeScope();
@@ -77,7 +77,7 @@ public sealed partial class ModelsViewModel : ViewModel, IActivatableViewModel
 	{
 		Guard.IsNotNull(SelectedModel);
 		Guard.IsNotNull(_modelsDataAccess);
-		await _modelsDataAccess.RemoveModel(SelectedModel.Model, cancellationToken);
+		await _modelsDataAccess.RemoveModel(SelectedModel.DataSet, cancellationToken);
 		OnPropertyChanged(nameof(Models));
 	}
 

@@ -16,13 +16,13 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, AnnotatorTools<DetectorModel>, IDisposable
+public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, AnnotatorTools<DetectorDataSet>, IDisposable
 {
     public IObservable<Unit> UnMarkSelectedScreenshotAsAssetExecuted =>
         _unMarkSelectedScreenshotAsAssetExecuted.AsObservable();
 
     public IObservable<DetectorItemViewModel> DeleteItemExecuted => _deleteItemExecuted;
-    public IReadOnlyCollection<ItemClass> ItemClasses => _annotatorViewModel.SelectedModel?.Model.ItemClasses ?? Array.Empty<ItemClass>();
+    public IReadOnlyCollection<ItemClass> ItemClasses => _annotatorViewModel.SelectedModel?.DataSet.ItemClasses ?? Array.Empty<ItemClass>();
 
     public DetectorAnnotatorToolsViewModel(AnnotatorViewModel annotatorViewModel, AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
     {

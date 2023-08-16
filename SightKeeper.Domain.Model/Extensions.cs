@@ -6,20 +6,20 @@ namespace SightKeeper.Domain.Model;
 
 public static class Extensions
 {
-    public static ModelType GetDomainType(this Model model) => model switch
+    public static ModelType GetDomainType(this DataSet dataSet) => dataSet switch
     {
-        DetectorModel => ModelType.Detector,
-        _ => ThrowHelper.ThrowArgumentOutOfRangeException<ModelType>(nameof(model), $"Unexpected model type: {model.GetType()}")
+        DetectorDataSet => ModelType.Detector,
+        _ => ThrowHelper.ThrowArgumentOutOfRangeException<ModelType>(nameof(dataSet), $"Unexpected model type: {dataSet.GetType()}")
     };
 
-    public static Model GetModel(this ScreenshotsLibrary library)
+    public static DataSet GetModel(this ScreenshotsLibrary library)
     {
         Guard.IsOfType<ModelScreenshotsLibrary>(library);
         var modelLibrary = (ModelScreenshotsLibrary)library;
-        return modelLibrary.Model;
+        return modelLibrary.DataSet;
     }
 
-    public static TModel GetModel<TModel>(this ScreenshotsLibrary library) where TModel : Model
+    public static TModel GetModel<TModel>(this ScreenshotsLibrary library) where TModel : DataSet
     {
         var model = library.GetModel();
         Guard.IsOfType<TModel>(model);

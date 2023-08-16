@@ -6,14 +6,14 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Training;
 
-public sealed class DetectorTrainer : ModelTrainer<DetectorModel>
+public sealed class DetectorTrainer : ModelTrainer<DetectorDataSet>
 {
-    public DetectorModel? Model { get; set; }
+    public DetectorDataSet? Model { get; set; }
     public bool FromScratch { get; set; }
     public int? MaxBatches => _darknetAdapter.MaxBatches;
     public IObservable<TrainingProgress> Progress => _darknetAdapter.Progress;
 
-    public DetectorTrainer(DarknetAdapter<DetectorModel> darknetAdapter, WeightsDataAccess weightsDataAccess)
+    public DetectorTrainer(DarknetAdapter<DetectorDataSet> darknetAdapter, WeightsDataAccess weightsDataAccess)
     {
         _darknetAdapter = darknetAdapter;
         _weightsDataAccess = weightsDataAccess;
@@ -43,7 +43,7 @@ public sealed class DetectorTrainer : ModelTrainer<DetectorModel>
         return weights;
     }
 
-    private readonly DarknetAdapter<DetectorModel> _darknetAdapter;
+    private readonly DarknetAdapter<DetectorDataSet> _darknetAdapter;
     private readonly WeightsDataAccess _weightsDataAccess;
     private TrainingProgress? _lastProgress;
 }

@@ -11,7 +11,7 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<DetectorModel>, IDisposable
+public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<DetectorDataSet>, IDisposable
 {
     public const double MinimumDimensionSize = 0.01;
 

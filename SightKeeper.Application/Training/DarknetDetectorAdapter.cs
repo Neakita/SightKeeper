@@ -9,12 +9,12 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Application.Training;
 
-public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
+public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorDataSet>
 {
     public IObservable<TrainingProgress> Progress { get; }
     public int? MaxBatches { get; private set; }
 
-    public DarknetDetectorAdapter(ImagesExporter<DetectorModel> imagesExporter, DarknetProcess process, DarknetOutputParser<DetectorModel> parser, ILogger? logger = null)
+    public DarknetDetectorAdapter(ImagesExporter<DetectorDataSet> imagesExporter, DarknetProcess process, DarknetOutputParser<DetectorDataSet> parser, ILogger? logger = null)
     {
         _logger = logger.WithGlobal();
         _imagesExporter = imagesExporter;
@@ -24,15 +24,15 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
             .WhereNotNull();
     }
     
-    public async Task<byte[]?> RunAsync(DetectorModel model, ModelConfig config, byte[]? baseWeights = null, CancellationToken cancellationToken = default)
+    public async Task<byte[]?> RunAsync(DetectorDataSet dataSet, ModelConfig config, byte[]? baseWeights = null, CancellationToken cancellationToken = default)
     {
         ClearData();
         EnsureDirectoriesCreated();
-        var images = await PrepareImagesAsync(model, cancellationToken);
+        var images = await PrepareImagesAsync(dataSet, cancellationToken);
         await PrepareImagesListFileAsync(images);
-        await PrepareClassesListAsync(model.ItemClasses, cancellationToken);
-        await PrepareDataFileAsync((byte)model.ItemClasses.Count, cancellationToken);
-        await PrepareConfigAsync(model, config, out var maxBatches, cancellationToken);
+        await PrepareClassesListAsync(dataSet.ItemClasses, cancellationToken);
+        await PrepareDataFileAsync((byte)dataSet.ItemClasses.Count, cancellationToken);
+        await PrepareConfigAsync(dataSet, config, out var maxBatches, cancellationToken);
         MaxBatches = maxBatches;
         DarknetArguments arguments = new()
         {
@@ -61,14 +61,14 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
         return weightsFileContent;
     }
 
-    private async Task<IReadOnlyCollection<string>> PrepareImagesAsync(DetectorModel model, CancellationToken cancellationToken = default)
+    private async Task<IReadOnlyCollection<string>> PrepareImagesAsync(DetectorDataSet dataSet, CancellationToken cancellationToken = default)
     {
-        var images = await _imagesExporter.ExportAsync(DarknetPaths.ImagesDirectoryPath, model, cancellationToken);
+        var images = await _imagesExporter.ExportAsync(DarknetPaths.ImagesDirectoryPath, dataSet, cancellationToken);
         _logger.Information("Exported {Count} images", images.Count);
         return images;
     }
 
-    private readonly ImagesExporter<DetectorModel> _imagesExporter;
+    private readonly ImagesExporter<DetectorDataSet> _imagesExporter;
     private readonly DarknetProcess _process;
     private readonly ILogger _logger;
 
@@ -99,9 +99,9 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorModel>
         return File.WriteAllTextAsync(DarknetPaths.DataFilePath, data.ToString(), cancellationToken);
     }
 
-    private static Task PrepareConfigAsync(Domain.Model.Model model, ModelConfig config, out int maxBatches, CancellationToken cancellationToken)
+    private static Task PrepareConfigAsync(Domain.Model.DataSet dataSet, ModelConfig config, out int maxBatches, CancellationToken cancellationToken)
     {
-        DetectorConfigParameters parameters = new(64, 16, (ushort)model.Resolution.Width, (ushort)model.Resolution.Height, (ushort) model.ItemClasses.Count);
+        DetectorConfigParameters parameters = new(64, 16, (ushort)dataSet.Resolution.Width, (ushort)dataSet.Resolution.Height, (ushort) dataSet.ItemClasses.Count);
         maxBatches = parameters.MaxBatches;
         var fileContent = parameters.Deploy(config);
         return File.WriteAllTextAsync(DarknetPaths.ConfigFilePath, fileContent, cancellationToken);

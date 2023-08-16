@@ -57,8 +57,8 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 	partial void OnSelectedModelChanged(ModelViewModel? value)
 	{
 		_selectedModelDisposable?.Dispose();
-		Screenshoter.Model = value?.Model;
-		Screenshots.Model = value?.Model;
+		Screenshoter.Model = value?.DataSet;
+		Screenshots.Model = value?.DataSet;
 		if (value == null)
 		{
 			ClearModelEnvironment();
@@ -67,7 +67,7 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 
 		var selectedModelScope = _scope.BeginLifetimeScope(value);
 		_selectedModelDisposable = selectedModelScope;
-		if (value.Model is DetectorModel)
+		if (value.DataSet is DetectorDataSet)
 			SetupDetectorModelEnvironment(selectedModelScope);
 		else
 			ThrowHelper.ThrowArgumentOutOfRangeException(nameof(value), value, null);
@@ -76,8 +76,8 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 
 	private void SetupDetectorModelEnvironment(IComponentContext content)
 	{
-		Tools = content.Resolve<AnnotatorTools<DetectorModel>>();
-		WorkSpace = content.Resolve<AnnotatorWorkSpace<DetectorModel>>();
+		Tools = content.Resolve<AnnotatorTools<DetectorDataSet>>();
+		WorkSpace = content.Resolve<AnnotatorWorkSpace<DetectorDataSet>>();
 	}
 
 	private void ClearModelEnvironment()

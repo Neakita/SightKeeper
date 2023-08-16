@@ -2,5 +2,5 @@
 
 public interface ModelChanges : ModelData
 {
-    Domain.Model.Model Model { get; }
+    Domain.Model.DataSet DataSet { get; }
 }

@@ -13,13 +13,13 @@ namespace SightKeeper.Services.Scoring;
 
 public sealed class FastYoloDetector : Detector, IDisposable
 {
-    public FastYoloDetector(DetectorModel model, ModelConfig config)
+    public FastYoloDetector(DetectorDataSet dataSet, ModelConfig config)
     {
         _exporter = new TempExporter();
-        _itemClasses = model.ItemClasses.ToDictionary(itemClass => itemClass.Name);
-        var configPath = _exporter.Export(config, new DetectorConfigParameters(model));
-        var weightsPath = _exporter.Export(model.WeightsLibrary.Weights.Last());
-        var namesPath = _exporter.Export(model.ItemClasses);
+        _itemClasses = dataSet.ItemClasses.ToDictionary(itemClass => itemClass.Name);
+        var configPath = _exporter.Export(config, new DetectorConfigParameters(dataSet));
+        var weightsPath = _exporter.Export(dataSet.WeightsLibrary.Weights.Last());
+        var namesPath = _exporter.Export(dataSet.ItemClasses);
         _yoloWrapper = new YoloWrapper(configPath, weightsPath, namesPath);
     }
     

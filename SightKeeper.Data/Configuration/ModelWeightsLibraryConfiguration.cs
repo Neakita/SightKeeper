@@ -11,6 +11,6 @@ public sealed class ModelWeightsLibraryConfiguration : IEntityTypeConfiguration<
         builder.ToTable("ModelWeightsLibraries");
         builder.HasShadowKey();
         builder.HasMany(library => library.Weights).WithOne(weights => weights.Library).IsRequired();
-        builder.HasOne(library => library.Model).WithOne(model => model.WeightsLibrary).HasPrincipalKey<Model>();
+        builder.HasOne(library => library.DataSet).WithOne(model => model.WeightsLibrary).HasPrincipalKey<DataSet>();
     }
 }

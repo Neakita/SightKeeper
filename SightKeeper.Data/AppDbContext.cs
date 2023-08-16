@@ -22,8 +22,8 @@ public class AppDbContext : DbContext
 	}
 
 	public DbSet<Profile> Profiles { get; set; } = null!;
-	public DbSet<Model> Models { get; set; } = null!;
-	public DbSet<DetectorModel> DetectorModels { get; set; } = null!;
+	public DbSet<DataSet> Models { get; set; } = null!;
+	public DbSet<DetectorDataSet> DetectorModels { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 	public DbSet<ModelConfig> ModelConfigs { get; set; } = null!;
 
@@ -77,8 +77,8 @@ public class AppDbContext : DbContext
 		
 		modelBuilder.Entity<Screenshot>().Navigation(screenshot => screenshot.Asset).AutoInclude();
 		modelBuilder.Entity<Asset>().Navigation(asset => asset.Screenshot).AutoInclude();
-		modelBuilder.Entity<Model>().Navigation(model => model.ScreenshotsLibrary).AutoInclude();
-		modelBuilder.Entity<DetectorModel>().Navigation(model => model.Assets).AutoInclude();
-		modelBuilder.Entity<Model>().Navigation(model => model.WeightsLibrary).AutoInclude();
+		modelBuilder.Entity<DataSet>().Navigation(model => model.ScreenshotsLibrary).AutoInclude();
+		modelBuilder.Entity<DetectorDataSet>().Navigation(model => model.Assets).AutoInclude();
+		modelBuilder.Entity<DataSet>().Navigation(model => model.WeightsLibrary).AutoInclude();
 	}
 }

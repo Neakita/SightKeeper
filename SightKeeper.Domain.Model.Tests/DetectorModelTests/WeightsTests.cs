@@ -9,17 +9,17 @@ public sealed class WeightsTests
     [Fact]
     public void ShouldAddWeights()
     {
-        DetectorModel model = new("Model");
-        var weights = model.WeightsLibrary.CreateWeights(Array.Empty<byte>(), DateTime.Now,
+        DetectorDataSet dataSet = new("Model");
+        var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), DateTime.Now,
             new ModelConfig(string.Empty, string.Empty, ModelType.Detector), DateTime.Now);
-        model.WeightsLibrary.Weights.Should().Contain(weights);
+        dataSet.WeightsLibrary.Weights.Should().Contain(weights);
     }
 
     [Fact]
     public void ShouldNotCreateWithAssetFromDifferentModel()
     {
-        DetectorModel model1 = new("Model 1");
-        DetectorModel model2 = new("Model 2");
+        DetectorDataSet model1 = new("Model 1");
+        DetectorDataSet model2 = new("Model 2");
         var screenshot1 = model1.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var screenshot2 = model2.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset1 = model1.MakeAsset(screenshot1);

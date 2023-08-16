@@ -8,14 +8,14 @@ namespace SightKeeper.Data.Tests;
 
 public sealed class DetectorModelTests : DbRelatedTests
 {
-	private static DetectorModel TestDetectorModel => new("TestDetectorModel");
+	private static DetectorDataSet TestDetectorDataSet => new("TestDetectorModel");
 
 	[Fact]
 	public void ShouldAddDetectorModel()
 	{
 		// arrange
 		using var dbContext = DbContextFactory.CreateDbContext();
-		var testModel = TestDetectorModel;
+		var testModel = TestDetectorDataSet;
 
 		// act
 		dbContext.Add(testModel);
@@ -29,7 +29,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	public void AddingModelWithAssetShouldAddImageScreenshotAndAsset()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		var model = TestDetectorModel;
+		var model = TestDetectorDataSet;
 		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 		var asset = model.MakeAsset(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
@@ -49,14 +49,14 @@ public sealed class DetectorModelTests : DbRelatedTests
 	public void ShouldCascadeDelete()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		DetectorModel model = new("Test model");
-		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-		var asset = model.MakeAsset(screenshot);
-		var itemClass = model.CreateItemClass("Test item class");
+		DetectorDataSet dataSet = new("Test model");
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+		var asset = dataSet.MakeAsset(screenshot);
+		var itemClass = dataSet.CreateItemClass("Test item class");
 		asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
-		dbContext.DetectorModels.Add(model);
+		dbContext.DetectorModels.Add(dataSet);
 		dbContext.SaveChanges();
-		dbContext.DetectorModels.Remove(model);
+		dbContext.DetectorModels.Remove(dataSet);
 		dbContext.SaveChanges();
 		dbContext.DetectorModels.Should().BeEmpty();
 		dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
@@ -71,10 +71,10 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
-			DetectorModel model = new("Test model");
-			var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-			model.MakeAsset(screenshot);
-			dbContext.Add(model);
+			DetectorDataSet dataSet = new("Test model");
+			var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+			dataSet.MakeAsset(screenshot);
+			dbContext.Add(dataSet);
 			dbContext.SaveChanges();
 		}
 		using (var dbContext = DbContextFactory.CreateDbContext())
@@ -91,7 +91,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	[Fact]
 	public void ShouldSetGameToNullWhenDeletingGame()
 	{
-		var model = TestDetectorModel;
+		var model = TestDetectorDataSet;
 		Game game = new("Test game", "game.exe");
 		model.Game = game;
 		using var dbContext = DbContextFactory.CreateDbContext();

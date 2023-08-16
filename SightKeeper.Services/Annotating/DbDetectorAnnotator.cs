@@ -23,7 +23,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         Guard.IsBetweenOrEqualTo(boundingBox.Top, 0, 1);
         Guard.IsBetweenOrEqualTo(boundingBox.Bottom, 0, 1);
         var asset = screenshot.GetOptionalAsset<DetectorAsset>() ??
-                    screenshot.Library.GetModel<DetectorModel>().MakeAsset(screenshot);
+                    screenshot.Library.GetModel<DetectorDataSet>().MakeAsset(screenshot);
         _itemClassDataAccess.LoadItems(itemClass);
         var item = asset.CreateItem(itemClass, boundingBox);
         _dbContext.SaveChanges();
@@ -33,7 +33,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     public void MarkAsset(Screenshot screenshot)
     {
         Guard.IsNull(screenshot.Asset);
-        var model = screenshot.Library.GetModel<DetectorModel>();
+        var model = screenshot.Library.GetModel<DetectorDataSet>();
         model.MakeAsset(screenshot);
         _dbContext.SaveChanges();
     }
@@ -76,7 +76,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     private static void DeleteAsset(Screenshot screenshot)
     {
         Guard.IsNotNull(screenshot.Asset);
-        var model = screenshot.Library.GetModel<DetectorModel>();
+        var model = screenshot.Library.GetModel<DetectorDataSet>();
         model.DeleteAsset(screenshot.GetAsset<DetectorAsset>());
     }
 }

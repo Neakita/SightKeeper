@@ -8,7 +8,7 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Application.Training.Parsing;
 
-public sealed class DarknetDetectorOutputParser : DarknetOutputParser<DetectorModel>
+public sealed class DarknetDetectorOutputParser : DarknetOutputParser<DetectorDataSet>
 {
     public bool TryParse(string output, [NotNullWhen(true)] out TrainingProgress? progress)
     {

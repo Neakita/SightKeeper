@@ -8,7 +8,7 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace SightKeeper.Services;
 
-public sealed class DetectorImagesExporter : ImagesExporter<DetectorModel>
+public sealed class DetectorImagesExporter : ImagesExporter<DetectorDataSet>
 {
 	private const string NumberFormat = "0.######";
 
@@ -23,10 +23,10 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorModel>
 		_assetsDataAccess = assetsDataAccess;
 	}
 	
-	public async Task<IReadOnlyCollection<string>> ExportAsync(string targetDirectoryPath, DetectorModel model,
+	public async Task<IReadOnlyCollection<string>> ExportAsync(string targetDirectoryPath, DetectorDataSet dataSet,
 		CancellationToken cancellationToken = default) =>
-		await Task.WhenAll(model.Assets.Select(async (asset, index) =>
-			await ExportAsync(targetDirectoryPath, index, asset, model.ItemClasses, cancellationToken)));
+		await Task.WhenAll(dataSet.Assets.Select(async (asset, index) =>
+			await ExportAsync(targetDirectoryPath, index, asset, dataSet.ItemClasses, cancellationToken)));
 	
 	private readonly ScreenshotImageLoader _imageLoader;
 	private readonly DetectorAssetsDataAccess _assetsDataAccess;

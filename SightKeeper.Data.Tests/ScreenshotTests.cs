@@ -12,10 +12,10 @@ public sealed class ScreenshotTests : DbRelatedTests
     {
         using (var arrangeDbContext = DbContextFactory.CreateDbContext())
         {
-            DetectorModel model = new("Test model");
-            var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-            model.MakeAsset(screenshot);
-            arrangeDbContext.Add(model);
+            DetectorDataSet dataSet = new("Test model");
+            var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+            dataSet.MakeAsset(screenshot);
+            arrangeDbContext.Add(dataSet);
             arrangeDbContext.SaveChanges();
         }
         using (var assertDbContext = DbContextFactory.CreateDbContext())

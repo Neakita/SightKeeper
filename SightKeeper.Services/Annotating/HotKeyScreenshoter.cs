@@ -10,7 +10,7 @@ namespace SightKeeper.Services.Annotating;
 
 public sealed class HotKeyScreenshoter : StreamModelScreenshoter
 {
-    public Model? Model
+    public DataSet? Model
     {
         get => _screenshoter.Model;
         set

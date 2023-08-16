@@ -8,18 +8,18 @@ public sealed class Profile
 	public string Name { get; set; }
 	public string Description { get; set; } = string.Empty;
 	public Game? Game { get; set; }
-	public DetectorModel DetectorModel { get; set; }
+	public DetectorDataSet DetectorDataSet { get; set; }
 	
-	public Profile(string name, DetectorModel detectorModel)
+	public Profile(string name, DetectorDataSet detectorDataSet)
 	{
 		Name = name;
-		DetectorModel = detectorModel;
+		DetectorDataSet = detectorDataSet;
 	}
 	
 	private Profile(string name, string description)
 	{
 		Name = name;
 		Description = description;
-		DetectorModel = null!;
+		DetectorDataSet = null!;
 	}
 }

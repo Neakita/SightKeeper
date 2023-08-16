@@ -103,11 +103,11 @@ public static class AppBootstrapper
 		builder.RegisterType<WindowsGamesService>().As<GamesService>();
 		builder.RegisterType<DbDetectorAssetsDataAccess>().As<DetectorAssetsDataAccess>();
 		builder.RegisterType<DbItemClassDataAccess>().As<ItemClassDataAccess>();
-		builder.RegisterType<DetectorTrainer>().As<ModelTrainer<DetectorModel>>();
-		builder.RegisterType<DarknetDetectorAdapter>().As<DarknetAdapter<DetectorModel>>();
-		builder.RegisterType<DetectorImagesExporter>().As<ImagesExporter<DetectorModel>>();
+		builder.RegisterType<DetectorTrainer>().As<ModelTrainer<DetectorDataSet>>();
+		builder.RegisterType<DarknetDetectorAdapter>().As<DarknetAdapter<DetectorDataSet>>();
+		builder.RegisterType<DetectorImagesExporter>().As<ImagesExporter<DetectorDataSet>>();
 		builder.RegisterType<DarknetProcessImplementation>().As<DarknetProcess>();
-		builder.RegisterType<DarknetDetectorOutputParser>().As<DarknetOutputParser<DetectorModel>>();
+		builder.RegisterType<DarknetDetectorOutputParser>().As<DarknetOutputParser<DetectorDataSet>>();
 		builder.RegisterType<ModelsObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>();
 		builder.RegisterType<ConfigsObservableRepository>().InstancePerMainViewModel();
@@ -135,8 +135,8 @@ public static class AppBootstrapper
 		builder.RegisterType<ConfigEditorViewModel>();
 		builder.RegisterType<ScreenshoterViewModel>();
 		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorModel>>().InstancePerMainViewModel();
-		builder.RegisterType<DetectorDrawerViewModel>().AsSelf().As<AnnotatorWorkSpace<DetectorModel>>();
+		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorDataSet>>().InstancePerMainViewModel();
+		builder.RegisterType<DetectorDrawerViewModel>().AsSelf().As<AnnotatorWorkSpace<DetectorDataSet>>();
 		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<ModelsListViewModel>().InstancePerMainViewModel();

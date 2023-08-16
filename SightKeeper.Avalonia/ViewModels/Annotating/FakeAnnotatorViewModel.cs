@@ -14,8 +14,8 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
 {
     public ReadOnlyObservableCollection<ModelViewModel> Models => new(new ObservableCollection<ModelViewModel>
     {
-        new(new DetectorModel("Some model")),
-        new(new DetectorModel("Another model"))
+        new(new DetectorDataSet("Some model")),
+        new(new DetectorDataSet("Another model"))
     });
 
     public ModelViewModel? SelectedModel { get; set; }
@@ -29,7 +29,7 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
 
     private sealed class MockStreamModelScreenshoter : StreamModelScreenshoter
     {
-        public Model? Model { get; set; }
+        public DataSet? Model { get; set; }
         public bool IsEnabled { get; set; }
         public byte ScreenshotsPerSecond { get; set; }
     }

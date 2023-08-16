@@ -7,19 +7,19 @@ public sealed class DetectorAsset : Asset
 {
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 
-	public DetectorModel Model { get; private set; }
+	public DetectorDataSet DataSet { get; private set; }
 	
-	internal DetectorAsset(DetectorModel model, Screenshot screenshot) : base(screenshot)
+	internal DetectorAsset(DetectorDataSet dataSet, Screenshot screenshot) : base(screenshot)
 	{
-		Model = model;
+		DataSet = dataSet;
 		screenshot.Asset = this;
 		_items = new List<DetectorItem>();
 	}
 
 	public DetectorItem CreateItem(ItemClass itemClass, BoundingBox boundingBox)
 	{
-		if (!Model.ItemClasses.Contains(itemClass))
-			ThrowHelper.ThrowInvalidOperationException($"Model \"{Model}\" does not contain item class \"{itemClass}\"");
+		if (!DataSet.ItemClasses.Contains(itemClass))
+			ThrowHelper.ThrowInvalidOperationException($"Model \"{DataSet}\" does not contain item class \"{itemClass}\"");
 		DetectorItem item = new(this, itemClass, boundingBox);
 		_items.Add(item);
 		itemClass.AddDetectorItem(item);
@@ -54,7 +54,7 @@ public sealed class DetectorAsset : Asset
 
 	private DetectorAsset()
 	{
-		Model = null!;
+		DataSet = null!;
 		_items = null!;
 	}
 }

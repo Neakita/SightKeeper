@@ -5,7 +5,7 @@ namespace SightKeeper.Application.Annotating;
 
 public sealed class ModelScreenshoter
 {
-    public Domain.Model.Model? Model
+    public Domain.Model.DataSet? Model
     {
         get => _model;
         set
@@ -47,5 +47,5 @@ public sealed class ModelScreenshoter
     private readonly ScreenCapture _screenCapture;
     private readonly Screenshoter _screenshoter;
     private readonly GamesService _gamesService;
-    private Domain.Model.Model? _model;
+    private Domain.Model.DataSet? _model;
 }

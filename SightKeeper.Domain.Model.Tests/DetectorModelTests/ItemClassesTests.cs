@@ -8,8 +8,8 @@ public sealed class ItemClassesTests
     public void ShouldNotBeAbleCreateTwoItemClassesWithTheSameName()
     {
         const string itemClassName = "Test item class";
-        DetectorModel model = new("Dummy model");
-        model.CreateItemClass(itemClassName);
-        Assert.Throws<ArgumentException>(() => model.CreateItemClass(itemClassName));
+        DetectorDataSet dataSet = new("Dummy model");
+        dataSet.CreateItemClass(itemClassName);
+        Assert.Throws<ArgumentException>(() => dataSet.CreateItemClass(itemClassName));
     }
 }

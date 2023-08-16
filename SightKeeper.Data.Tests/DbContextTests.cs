@@ -13,13 +13,13 @@ public sealed class DbContextTests
         var database = dbContext.Database;
         database.EnsureDeleted();
         database.EnsureCreated();
-        DetectorModel model = new("Test model");
-        var screenshotForAsset = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        var asset = model.MakeAsset(screenshotForAsset);
-        var itemClass = model.CreateItemClass("Test item class");
+        DetectorDataSet dataSet = new("Test model");
+        var screenshotForAsset = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var asset = dataSet.MakeAsset(screenshotForAsset);
+        var itemClass = dataSet.CreateItemClass("Test item class");
         asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
-        dbContext.DetectorModels.Add(model);
+        dbContext.DetectorModels.Add(dataSet);
         dbContext.SaveChanges();
     }
 }

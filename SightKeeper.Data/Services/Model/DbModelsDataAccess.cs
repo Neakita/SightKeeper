@@ -7,27 +7,27 @@ namespace SightKeeper.Data.Services.Model;
 
 public sealed class DbModelsDataAccess : ModelsDataAccess
 {
-    public IObservable<Domain.Model.Model> ModelRemoved => _modelRemoved.AsObservable();
+    public IObservable<Domain.Model.DataSet> ModelRemoved => _modelRemoved.AsObservable();
     
     public DbModelsDataAccess(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyCollection<Domain.Model.Model>> GetModels(CancellationToken cancellationToken = default) =>
+    public async Task<IReadOnlyCollection<Domain.Model.DataSet>> GetModels(CancellationToken cancellationToken = default) =>
         await _dbContext.Models
             .Include(model => model.ItemClasses)
             .Include(model => model.Game)
             .Include(model => model.ScreenshotsLibrary)
             .ToListAsync(cancellationToken);
 
-    public Task RemoveModel(Domain.Model.Model model, CancellationToken cancellationToken = default)
+    public Task RemoveModel(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        _dbContext.Models.Remove(model);
+        _dbContext.Models.Remove(dataSet);
         return _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     private readonly AppDbContext _dbContext;
-    private readonly Subject<Domain.Model.Model> _modelRemoved = new();
+    private readonly Subject<Domain.Model.DataSet> _modelRemoved = new();
 }

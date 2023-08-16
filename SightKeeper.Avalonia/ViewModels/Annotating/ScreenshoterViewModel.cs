@@ -10,7 +10,7 @@ public sealed class ScreenshoterViewModel : ViewModel
 {
     public IObservable<bool> IsEnabledChanged => _isEnabledChanged;
 
-    public Model? Model
+    public DataSet? Model
     {
         get => _screenshoter.Model;
         set

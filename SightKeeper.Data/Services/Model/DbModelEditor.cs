@@ -7,7 +7,7 @@ namespace SightKeeper.Data.Services.Model;
 
 public sealed class DbModelEditor : ModelEditor
 {
-    public IObservable<Domain.Model.Model> ModelEdited => _modelEdited;
+    public IObservable<Domain.Model.DataSet> ModelEdited => _modelEdited;
     
     public DbModelEditor(IValidator<ModelChanges> changesValidator, AppDbContext dbContext)
     {
@@ -18,7 +18,7 @@ public sealed class DbModelEditor : ModelEditor
     public async Task ApplyChanges(ModelChangesDTO changes, CancellationToken cancellationToken = default)
     {
         await _changesValidator.ValidateAndThrowAsync(changes, cancellationToken);
-        var model = changes.Model;
+        var model = changes.DataSet;
         model.Name = changes.Name;
         model.Description = changes.Description;
         model.Resolution = new Resolution(changes.ResolutionWidth, changes.ResolutionHeight);
@@ -29,23 +29,23 @@ public sealed class DbModelEditor : ModelEditor
         _modelEdited.OnNext(model);
     }
 
-    private static void ApplyItemClassesChanges(Domain.Model.Model model, IReadOnlyCollection<string> itemClasses)
+    private static void ApplyItemClassesChanges(Domain.Model.DataSet dataSet, IReadOnlyCollection<string> itemClasses)
     {
-        var deletedItemClasses = GetDeletedItemClasses(model, itemClasses);
-        var addedItemClasses = GetAddedItemClasses(model, itemClasses);
+        var deletedItemClasses = GetDeletedItemClasses(dataSet, itemClasses);
+        var addedItemClasses = GetAddedItemClasses(dataSet, itemClasses);
         foreach (var deletedItemClass in deletedItemClasses)
-            model.DeleteItemClass(deletedItemClass);
+            dataSet.DeleteItemClass(deletedItemClass);
         foreach (var addedItemClass in addedItemClasses)
-            model.CreateItemClass(addedItemClass);
+            dataSet.CreateItemClass(addedItemClass);
     }
 
-    private static IEnumerable<ItemClass> GetDeletedItemClasses(Domain.Model.Model model, IReadOnlyCollection<string> itemClasses) =>
-        model.ItemClasses.Where(existingItemClass => !itemClasses.Contains(existingItemClass.Name)).ToList();
+    private static IEnumerable<ItemClass> GetDeletedItemClasses(Domain.Model.DataSet dataSet, IReadOnlyCollection<string> itemClasses) =>
+        dataSet.ItemClasses.Where(existingItemClass => !itemClasses.Contains(existingItemClass.Name)).ToList();
 
-    private static IEnumerable<string> GetAddedItemClasses(Domain.Model.Model model, IReadOnlyCollection<string> itemClasses) =>
-        itemClasses.Where(newItemClass => model.ItemClasses.All(existingItemClass => existingItemClass.Name != newItemClass)).ToList();
+    private static IEnumerable<string> GetAddedItemClasses(Domain.Model.DataSet dataSet, IReadOnlyCollection<string> itemClasses) =>
+        itemClasses.Where(newItemClass => dataSet.ItemClasses.All(existingItemClass => existingItemClass.Name != newItemClass)).ToList();
 
-    private readonly Subject<Domain.Model.Model> _modelEdited = new();
+    private readonly Subject<Domain.Model.DataSet> _modelEdited = new();
     private readonly IValidator<ModelChanges> _changesValidator;
     private readonly AppDbContext _dbContext;
 }

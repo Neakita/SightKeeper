@@ -2,15 +2,15 @@
 
 public sealed class ModelScreenshotsLibrary : ScreenshotsLibrary
 {
-    public Model Model { get; private set; }
+    public DataSet DataSet { get; private set; }
     
-    internal ModelScreenshotsLibrary(Model model)
+    internal ModelScreenshotsLibrary(DataSet dataSet)
     {
-        Model = model;
+        DataSet = dataSet;
     }
 
     private ModelScreenshotsLibrary()
     {
-        Model = null!;
+        DataSet = null!;
     }
 }

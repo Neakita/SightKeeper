@@ -4,14 +4,14 @@ using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Data.Configuration;
 
-public sealed class ModelConfiguration : IEntityTypeConfiguration<Model>
+public sealed class ModelConfiguration : IEntityTypeConfiguration<DataSet>
 {
-    public void Configure(EntityTypeBuilder<Model> builder)
+    public void Configure(EntityTypeBuilder<DataSet> builder)
     {
         builder.HasShadowKey();
         builder.OwnsOne(model => model.Resolution);
-        builder.HasMany(model => model.ItemClasses).WithOne(itemClass => itemClass.Model).IsRequired();
-        builder.HasOne(model => model.ScreenshotsLibrary).WithOne(library => library.Model).HasPrincipalKey<Model>().IsRequired();
+        builder.HasMany(model => model.ItemClasses).WithOne(itemClass => itemClass.DataSet).IsRequired();
+        builder.HasOne(model => model.ScreenshotsLibrary).WithOne(library => library.DataSet).HasPrincipalKey<DataSet>().IsRequired();
         builder.HasIndex(model => model.Name).IsUnique();
     }
 }

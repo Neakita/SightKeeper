@@ -2,6 +2,6 @@
 
 public interface ModelEditor
 {
-    IObservable<Domain.Model.Model> ModelEdited { get; }
+    IObservable<Domain.Model.DataSet> ModelEdited { get; }
     Task ApplyChanges(ModelChangesDTO changes, CancellationToken cancellationToken = default);
 }

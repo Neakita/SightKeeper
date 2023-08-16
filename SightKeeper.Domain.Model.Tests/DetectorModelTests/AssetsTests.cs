@@ -9,10 +9,10 @@ public sealed class AssetsTests
     [Fact]
     public void ShouldDeleteItems()
     {
-        DetectorModel model = new("Model");
-        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        var asset = model.MakeAsset(screenshot);
-        var itemClass = model.CreateItemClass("Item class");
+        DetectorDataSet dataSet = new("Model");
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var asset = dataSet.MakeAsset(screenshot);
+        var itemClass = dataSet.CreateItemClass("Item class");
         var item = asset.CreateItem(itemClass, new BoundingBox());
         asset.Items.Should().Contain(item);
         asset.DeleteItem(item);
@@ -22,12 +22,12 @@ public sealed class AssetsTests
     [Fact]
     public void ShouldNotDeleteItemWhichIsNotInAsset()
     {
-        DetectorModel model = new("Model");
-        var screenshot1 = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        var screenshot2 =  model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        var asset1 = model.MakeAsset(screenshot1);
-        var asset2 = model.MakeAsset(screenshot2);
-        var itemClass = model.CreateItemClass("Item class");
+        DetectorDataSet dataSet = new("Model");
+        var screenshot1 = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var screenshot2 =  dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var asset1 = dataSet.MakeAsset(screenshot1);
+        var asset2 = dataSet.MakeAsset(screenshot2);
+        var itemClass = dataSet.CreateItemClass("Item class");
         var item = asset1.CreateItem(itemClass, new BoundingBox());
         Assert.Throws<ArgumentException>(() => asset2.DeleteItem(item));
     }

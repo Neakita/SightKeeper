@@ -10,7 +10,7 @@ public sealed class ProfilesTests : DbRelatedTests
 	public void ShouldCreateProfile()
 	{
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
-		Profile profile = new("Test profile", new DetectorModel("Detector"));
+		Profile profile = new("Test profile", new DetectorDataSet("Detector"));
 
 		dbContext.Profiles.Add(profile);
 		dbContext.SaveChanges();
@@ -22,18 +22,18 @@ public sealed class ProfilesTests : DbRelatedTests
 	public void ShouldNotDeleteModelOnProfileDelete()
 	{
 		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
-		DetectorModel model = new("Test model");
-		Profile profile = new("Test profile", model);
+		DetectorDataSet dataSet = new("Test model");
+		Profile profile = new("Test profile", dataSet);
 		dbContext.Profiles.Add(profile);
 		dbContext.SaveChanges();
 
 		dbContext.Profiles.Should().Contain(profile);
-		dbContext.DetectorModels.Should().Contain(model);
+		dbContext.DetectorModels.Should().Contain(dataSet);
 
 		dbContext.Profiles.Remove(profile);
 		dbContext.SaveChanges(); 
 
 		dbContext.Profiles.Should().BeEmpty();
-		dbContext.DetectorModels.Should().Contain(model);
+		dbContext.DetectorModels.Should().Contain(dataSet);
 	}
 }

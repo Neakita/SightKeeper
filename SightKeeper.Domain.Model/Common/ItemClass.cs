@@ -4,13 +4,13 @@ namespace SightKeeper.Domain.Model.Common;
 
 public sealed class ItemClass
 {
-	public Model Model { get; private set; }
+	public DataSet DataSet { get; private set; }
 	public string Name { get; set; }
 	public IReadOnlyCollection<DetectorItem> DetectorItems => _detectorItems;
 
-	internal ItemClass(Model model, string name)
+	internal ItemClass(DataSet dataSet, string name)
 	{
-		Model = model;
+		DataSet = dataSet;
 		Name = name;
 		_detectorItems = new List<DetectorItem>();
 	}
@@ -24,7 +24,7 @@ public sealed class ItemClass
 
 	private ItemClass(string name)
 	{
-		Model = null!;
+		DataSet = null!;
 		Name = name;
 		_detectorItems = null!;
 	}

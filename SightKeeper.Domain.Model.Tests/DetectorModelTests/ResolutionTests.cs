@@ -11,10 +11,10 @@ public sealed class ResolutionTests
     {
         Resolution firstResolution = new(64, 64);
         Resolution secondResolution = new(128, 128);
-        DetectorModel model = new("Test model", firstResolution);
-        model.Resolution.Should().Be(firstResolution);
-        model.Resolution = secondResolution;
-        model.Resolution.Should().Be(secondResolution);
+        DetectorDataSet dataSet = new("Test model", firstResolution);
+        dataSet.Resolution.Should().Be(firstResolution);
+        dataSet.Resolution = secondResolution;
+        dataSet.Resolution.Should().Be(secondResolution);
     }
     
     [Fact]
@@ -22,14 +22,14 @@ public sealed class ResolutionTests
     {
         Resolution firstResolution = new(64, 64);
         Resolution secondResolution = new(128, 128);
-        DetectorModel model = new("Test model", firstResolution);
-        model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        model.Resolution.Should().Be(firstResolution);
+        DetectorDataSet dataSet = new("Test model", firstResolution);
+        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dataSet.Resolution.Should().Be(firstResolution);
         Assert.Throws<InvalidOperationException>(() =>
         {
-            model.Resolution = secondResolution;
+            dataSet.Resolution = secondResolution;
         });
-        model.Resolution.Should().Be(firstResolution);
+        dataSet.Resolution.Should().Be(firstResolution);
     }
     
     [Fact]
@@ -37,14 +37,14 @@ public sealed class ResolutionTests
     {
         Resolution firstResolution = new(64, 64);
         Resolution secondResolution = new(128, 128);
-        DetectorModel model = new("Test model", firstResolution);
-        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        model.MakeAsset(screenshot);
-        model.Resolution.Should().Be(firstResolution);
+        DetectorDataSet dataSet = new("Test model", firstResolution);
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dataSet.MakeAsset(screenshot);
+        dataSet.Resolution.Should().Be(firstResolution);
         Assert.Throws<InvalidOperationException>(() =>
         {
-            model.Resolution = secondResolution;
+            dataSet.Resolution = secondResolution;
         });
-        model.Resolution.Should().Be(firstResolution);
+        dataSet.Resolution.Should().Be(firstResolution);
     }
 }

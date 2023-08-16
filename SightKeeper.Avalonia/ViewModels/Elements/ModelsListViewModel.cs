@@ -17,7 +17,7 @@ public sealed class ModelsListViewModel : ViewModel, IDisposable
         _disposable = new CompositeDisposable(
             modelsObservableRepository.Models.Connect()
                 .Transform(model => new ModelViewModel(model))
-                .AddKey(viewModel => viewModel.Model)
+                .AddKey(viewModel => viewModel.DataSet)
                 .Bind(out var models)
                 .PopulateInto(_cache),
             editor.ModelEdited.Subscribe(OnModelEdited));
@@ -27,7 +27,7 @@ public sealed class ModelsListViewModel : ViewModel, IDisposable
     public void Dispose() => _disposable.Dispose();
 
     private readonly IDisposable _disposable;
-    private readonly SourceCache<ModelViewModel, Model> _cache = new(viewModel => viewModel.Model);
+    private readonly SourceCache<ModelViewModel, DataSet> _cache = new(viewModel => viewModel.DataSet);
 
-    private void OnModelEdited(Model model) => _cache.Lookup(model).Value.NotifyChanges();
+    private void OnModelEdited(DataSet dataSet) => _cache.Lookup(dataSet).Value.NotifyChanges();
 }

@@ -6,12 +6,12 @@ namespace SightKeeper.Domain.Model;
 
 public sealed class ModelWeightsLibrary
 {
-    public Model Model { get; private set; }
+    public DataSet DataSet { get; private set; }
     public IReadOnlyCollection<ModelWeights> Weights => _weights;
 
-    internal ModelWeightsLibrary(Model model)
+    internal ModelWeightsLibrary(DataSet dataSet)
     {
-        Model = model;
+        DataSet = dataSet;
         _weights = new List<ModelWeights>();
     }
 
@@ -25,9 +25,9 @@ public sealed class ModelWeightsLibrary
         IEnumerable<Asset> assets)
     {
         var assetsList = assets.ToList();
-        if (Model is DetectorModel detectorModel)
+        if (DataSet is DetectorDataSet detectorModel)
         {
-            if (assetsList.Any(asset => asset is not DetectorAsset detectorAsset || detectorAsset.Model != detectorModel))
+            if (assetsList.Any(asset => asset is not DetectorAsset detectorAsset || detectorAsset.DataSet != detectorModel))
                 ThrowHelper.ThrowArgumentException(nameof(assets), $"Some assets do not belong to the \"{detectorModel}\" model");
         }
         else
@@ -52,7 +52,7 @@ public sealed class ModelWeightsLibrary
 
     private ModelWeightsLibrary()
     {
-        Model = null!;
+        DataSet = null!;
         _weights = null!;
     }
 }

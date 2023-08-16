@@ -56,13 +56,13 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     private readonly Subject<ScreenshotViewModel?> _selectedScreenshotChanged = new();
 
     [ObservableProperty, NotifyPropertyChangedFor(nameof(ScreenshotsCount))]
-    private Model? _model;
+    private DataSet? _model;
     [ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
     [ObservableProperty] private int _selectedScreenshotIndex;
     
     private CompositeDisposable? _modelDisposable;
 
-    partial void OnModelChanged(Model? value)
+    partial void OnModelChanged(DataSet? value)
     {
         _modelDisposable?.Dispose();
         _screenshots.Clear();

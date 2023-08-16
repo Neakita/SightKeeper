@@ -13,16 +13,16 @@ public sealed class ModelViewModel : ViewModel
         nameof(Resolution)
     };
     
-    public Model Model { get; }
+    public DataSet DataSet { get; }
 
-    public string Name => Model.Name;
-    public string Description => Model.Description;
-    public Game? Game => Model.Game;
-    public Resolution Resolution => Model.Resolution;
+    public string Name => DataSet.Name;
+    public string Description => DataSet.Description;
+    public Game? Game => DataSet.Game;
+    public Resolution Resolution => DataSet.Resolution;
 
-    public ModelViewModel(Model model)
+    public ModelViewModel(DataSet dataSet)
     {
-        Model = model;
+        DataSet = dataSet;
     }
 
     public void NotifyChanges() => OnPropertiesChanged(Properties);

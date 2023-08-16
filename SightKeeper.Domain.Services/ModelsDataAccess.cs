@@ -2,7 +2,7 @@
 
 public interface ModelsDataAccess
 {
-    IObservable<Model.Model> ModelRemoved { get; }
-    Task<IReadOnlyCollection<Model.Model>> GetModels(CancellationToken cancellationToken = default);
-    Task RemoveModel(Model.Model model, CancellationToken cancellationToken = default);
+    IObservable<Model.DataSet> ModelRemoved { get; }
+    Task<IReadOnlyCollection<Model.DataSet>> GetModels(CancellationToken cancellationToken = default);
+    Task RemoveModel(Model.DataSet dataSet, CancellationToken cancellationToken = default);
 }
