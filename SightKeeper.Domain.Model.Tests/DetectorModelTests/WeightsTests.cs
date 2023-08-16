@@ -11,7 +11,7 @@ public sealed class WeightsTests
     {
         DetectorDataSet dataSet = new("Model");
         var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), DateTime.Now,
-            new ModelConfig(string.Empty, string.Empty, ModelType.Detector), DateTime.Now);
+            new ModelConfig(string.Empty, Array.Empty<byte>(), ModelType.Detector), DateTime.Now);
         dataSet.WeightsLibrary.Weights.Should().Contain(weights);
     }
 
@@ -25,6 +25,6 @@ public sealed class WeightsTests
         var asset1 = model1.MakeAsset(screenshot1);
         var asset2 = model2.MakeAsset(screenshot2);
         Assert.Throws<ArgumentException>(() => model1.WeightsLibrary.CreateWeights(Array.Empty<byte>(), DateTime.Now,
-            new ModelConfig(string.Empty, string.Empty, ModelType.Detector), 0, 0, null, new[] { asset1, asset2 }));
+            new ModelConfig(string.Empty, Array.Empty<byte>(), ModelType.Detector), 0, 0, null, new[] { asset1, asset2 }));
     }
 }

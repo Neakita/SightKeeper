@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
@@ -11,8 +12,8 @@ public sealed class FakeConfigsViewModel : IConfigsViewModel
 {
     public ReadOnlyCollection<ConfigViewModel> Configs { get; } = new(new List<ConfigViewModel>
     {
-        new(new ModelConfig("Test config 1", string.Empty, ModelType.Detector)),
-        new(new ModelConfig("Test config 2", string.Empty, ModelType.Classifier))
+        new(new ModelConfig("Test config 1", Array.Empty<byte>(), ModelType.Detector)),
+        new(new ModelConfig("Test config 2", Array.Empty<byte>(), ModelType.Classifier))
     });
 
     public ConfigViewModel? SelectedConfig { get; set; }

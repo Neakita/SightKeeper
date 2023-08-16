@@ -7,7 +7,7 @@ public sealed class ConfigViewModel : ViewModel
     public ModelConfig Config { get; }
 
     public string Name => Config.Name;
-    public string Content => Config.Content;
+    public byte[] Content => Config.Content;
     public ModelType ModelType => Config.ModelType;
     
 

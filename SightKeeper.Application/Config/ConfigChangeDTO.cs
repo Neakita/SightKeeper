@@ -6,10 +6,10 @@ public sealed class ConfigChangeDTO : ConfigChange
 {
     public ModelConfig Config { get; }
     public string Name { get; }
-    public string Content { get; }
+    public byte[] Content { get; }
     public ModelType ModelType { get; }
 
-    public ConfigChangeDTO(ModelConfig config, string name, string content, ModelType modelType)
+    public ConfigChangeDTO(ModelConfig config, string name, byte[] content, ModelType modelType)
     {
         Name = name;
         Content = content;

@@ -38,7 +38,7 @@ public partial class ConfigEditorViewModel : ValidatableViewModel<ConfigData>, C
     private readonly Subject<Unit> _closeRequested = new();
     
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private string _name = string.Empty;
-    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private string _content = string.Empty;
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private byte[] _content = Array.Empty<byte>();
     [ObservableProperty] private ModelType _modelType = ModelType.Detector;
 
     [RelayCommand]
@@ -49,7 +49,7 @@ public partial class ConfigEditorViewModel : ValidatableViewModel<ConfigData>, C
         if (file == null) return;
         var filePath = file.Path.LocalPath;
         Name = Path.GetFileNameWithoutExtension(filePath);
-        Content = await File.ReadAllTextAsync(filePath, cancellationToken);
+        Content = await File.ReadAllBytesAsync(filePath, cancellationToken);
     }
 
     [RelayCommand(CanExecute = nameof(CanApply))]

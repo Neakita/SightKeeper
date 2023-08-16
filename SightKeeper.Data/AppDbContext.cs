@@ -72,7 +72,7 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ImageConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotImageConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
-		modelBuilder.Entity<ModelConfig>().HasShadowKey();
+		modelBuilder.ApplyConfiguration(new ModelConfigConfiguration());
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		
 		modelBuilder.Entity<Screenshot>().Navigation(screenshot => screenshot.Asset).AutoInclude();

@@ -99,12 +99,13 @@ public sealed class DarknetDetectorAdapter : DarknetAdapter<DetectorDataSet>
         return File.WriteAllTextAsync(DarknetPaths.DataFilePath, data.ToString(), cancellationToken);
     }
 
-    private static Task PrepareConfigAsync(Domain.Model.DataSet dataSet, ModelConfig config, out int maxBatches, CancellationToken cancellationToken)
+    private static Task PrepareConfigAsync(DataSet dataSet, ModelConfig config, out int maxBatches, CancellationToken cancellationToken)
     {
-        DetectorConfigParameters parameters = new(64, 16, (ushort)dataSet.Resolution.Width, (ushort)dataSet.Resolution.Height, (ushort) dataSet.ItemClasses.Count);
+        throw new NotImplementedException();
+        /*DetectorConfigParameters parameters = new(64, 16, (ushort)dataSet.Resolution.Width, (ushort)dataSet.Resolution.Height, (ushort) dataSet.ItemClasses.Count);
         maxBatches = parameters.MaxBatches;
         var fileContent = parameters.Deploy(config);
-        return File.WriteAllTextAsync(DarknetPaths.ConfigFilePath, fileContent, cancellationToken);
+        return File.WriteAllTextAsync(DarknetPaths.ConfigFilePath, fileContent, cancellationToken);*/
     }
 
     private static Task PrepareImagesListFileAsync(IEnumerable<string> paths) => File.WriteAllLinesAsync(

@@ -5,6 +5,6 @@ namespace SightKeeper.Application.Config;
 public interface ConfigData
 {
     string Name { get; }
-    string Content { get; }
+    byte[] Content { get; }
     ModelType ModelType { get; }
 }

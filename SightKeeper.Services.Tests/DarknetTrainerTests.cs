@@ -5,7 +5,6 @@ using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
@@ -17,6 +16,7 @@ public sealed class DarknetTrainerTests
     [SkippableFact]
     public async Task ShouldRunTrainer()
     {
+        throw new NotImplementedException();
         Skip.If(true);
         Log.Logger = new LoggerConfiguration().MinimumLevel.Verbose().WriteTo.Seq("http://localhost:5341").CreateLogger();
         DetectorDataSet dataSet = new("Test model");
@@ -28,7 +28,7 @@ public sealed class DarknetTrainerTests
             var asset = dataSet.MakeAsset(screenshot);
             asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
         }
-        ModelConfig config = new("Yolo V3", await File.ReadAllTextAsync("Samples/YoloV3.config"), ModelType.Detector);
+        //ModelConfig config = new("Yolo V3", await File.ReadAllTextAsync("Samples/YoloV3.config"), ModelType.Detector);
         var imageLoader = Substitute.For<ScreenshotImageLoader>();
         var assetsDataAccess = Substitute.For<DetectorAssetsDataAccess>();
         DetectorTrainer trainer = new(new DarknetDetectorAdapter(new DetectorImagesExporter(imageLoader, assetsDataAccess),
@@ -36,6 +36,6 @@ public sealed class DarknetTrainerTests
         trainer.Model = dataSet;
         CancellationTokenSource cancellationTokenSource = new();
         cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
-        await trainer.TrainAsync(config, cancellationTokenSource.Token);
+        //await trainer.TrainAsync(config, cancellationTokenSource.Token);
     }
 }

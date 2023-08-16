@@ -2,7 +2,6 @@
 using FastYolo;
 using FastYolo.Model;
 using SightKeeper.Application.Scoring;
-using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -15,12 +14,13 @@ public sealed class FastYoloDetector : Detector, IDisposable
 {
     public FastYoloDetector(DetectorDataSet dataSet, ModelConfig config)
     {
+        throw new NotImplementedException();
         _exporter = new TempExporter();
         _itemClasses = dataSet.ItemClasses.ToDictionary(itemClass => itemClass.Name);
-        var configPath = _exporter.Export(config, new DetectorConfigParameters(dataSet));
+        //var configPath = _exporter.Export(config, new DetectorConfigParameters(dataSet));
         var weightsPath = _exporter.Export(dataSet.WeightsLibrary.Weights.Last());
         var namesPath = _exporter.Export(dataSet.ItemClasses);
-        _yoloWrapper = new YoloWrapper(configPath, weightsPath, namesPath);
+        //_yoloWrapper = new YoloWrapper(configPath, weightsPath, namesPath);
     }
     
     public IReadOnlyCollection<DetectionItem> Detect(byte[] image) => ToDetectionItems(_yoloWrapper.Detect(image)).ToList();
