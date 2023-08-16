@@ -12,16 +12,16 @@ public static class Extensions
         _ => ThrowHelper.ThrowArgumentOutOfRangeException<ModelType>(nameof(dataSet), $"Unexpected model type: {dataSet.GetType()}")
     };
 
-    public static DataSet GetModel(this ScreenshotsLibrary library)
+    public static DataSet GetDataSet(this ScreenshotsLibrary library)
     {
         Guard.IsOfType<ModelScreenshotsLibrary>(library);
         var modelLibrary = (ModelScreenshotsLibrary)library;
         return modelLibrary.DataSet;
     }
 
-    public static TModel GetModel<TModel>(this ScreenshotsLibrary library) where TModel : DataSet
+    public static TModel GetDataSet<TModel>(this ScreenshotsLibrary library) where TModel : DataSet
     {
-        var model = library.GetModel();
+        var model = library.GetDataSet();
         Guard.IsOfType<TModel>(model);
         return (TModel)model;
     }
