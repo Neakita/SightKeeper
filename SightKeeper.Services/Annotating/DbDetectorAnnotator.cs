@@ -66,7 +66,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
 
     public void Move(DetectorItem item, BoundingBox bounding)
     {
-        item.BoundingBox.SetFromBounding(bounding);
+        item.Bounding.SetFromBounding(bounding);
         _dbContext.SaveChanges();
     }
 

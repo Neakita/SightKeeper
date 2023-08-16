@@ -36,7 +36,7 @@ public sealed partial class DetectorItemViewModel : ViewModel
         Resizer = resizer;
         Drawer = drawer;
         _itemClass = item.ItemClass;
-        Bounding = new BoundingBoxViewModel(item.BoundingBox);
+        Bounding = new BoundingBoxViewModel(item.Bounding);
     }
 
     public DetectorItemViewModel(ItemClass itemClass, Point position, DetectorItemResizer resizer, DetectorDrawerViewModel drawer)

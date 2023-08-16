@@ -55,7 +55,7 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorDataSet>
 	private static string ItemToString(DetectorItem item, IReadOnlyDictionary<ItemClass, byte> itemClassesIndexes)
 	{
 		var itemClassIndex = itemClassesIndexes[item.ItemClass];
-		return string.Join(' ', GetItemParameters(itemClassIndex, item.BoundingBox));
+		return string.Join(' ', GetItemParameters(itemClassIndex, item.Bounding));
 	}
 
 	private static IEnumerable<string> GetItemParameters(byte itemClassIndex, BoundingBox bounding)

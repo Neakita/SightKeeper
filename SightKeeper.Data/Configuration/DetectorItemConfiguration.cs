@@ -10,6 +10,6 @@ public sealed class DetectorItemConfiguration : IEntityTypeConfiguration<Detecto
     {
         builder.ToTable("DetectorItems");
         builder.HasShadowKey();
-        builder.OwnsOne(item => item.BoundingBox);
+        builder.OwnsOne(item => item.Bounding);
     }
 }
