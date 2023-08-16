@@ -18,10 +18,10 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     
     public DetectorItem Annotate(Screenshot screenshot, ItemClass itemClass, BoundingBox boundingBox)
     {
-        Guard.IsBetweenOrEqualTo(boundingBox.X1, 0, 1);
-        Guard.IsBetweenOrEqualTo(boundingBox.X2, 0, 1);
-        Guard.IsBetweenOrEqualTo(boundingBox.Y1, 0, 1);
-        Guard.IsBetweenOrEqualTo(boundingBox.Y2, 0, 1);
+        Guard.IsBetweenOrEqualTo(boundingBox.Left, 0, 1);
+        Guard.IsBetweenOrEqualTo(boundingBox.Right, 0, 1);
+        Guard.IsBetweenOrEqualTo(boundingBox.Top, 0, 1);
+        Guard.IsBetweenOrEqualTo(boundingBox.Bottom, 0, 1);
         var asset = screenshot.GetOptionalAsset<DetectorAsset>() ??
                     screenshot.Library.GetModel<DetectorModel>().MakeAsset(screenshot);
         _itemClassDataAccess.LoadItems(itemClass);

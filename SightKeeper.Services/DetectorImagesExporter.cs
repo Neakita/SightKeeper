@@ -61,8 +61,8 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorModel>
 	private static IEnumerable<string> GetItemParameters(byte itemClassIndex, BoundingBox bounding)
 	{
 		yield return itemClassIndex.ToString();
-		yield return bounding.XCenter.ToString(NumberFormat, BoundingNumbersFormat);
-		yield return bounding.YCenter.ToString(NumberFormat, BoundingNumbersFormat);
+		yield return bounding.HorizontalCenter.ToString(NumberFormat, BoundingNumbersFormat);
+		yield return bounding.VerticalCenter.ToString(NumberFormat, BoundingNumbersFormat);
 		yield return bounding.Width.ToString(NumberFormat, BoundingNumbersFormat);
 		yield return bounding.Height.ToString(NumberFormat, BoundingNumbersFormat);
 	}

@@ -88,10 +88,10 @@ public sealed class BoundingBoxViewModel : ViewModel
     public BoundingBoxViewModel(BoundingBox bounding)
     {
         Bounding = bounding;
-        _x1 = bounding.X1;
-        _y1 = bounding.Y1;
-        _x2 = bounding.X2;
-        _y2 = bounding.Y2;
+        _x1 = bounding.Left;
+        _y1 = bounding.Top;
+        _x2 = bounding.Right;
+        _y2 = bounding.Bottom;
     }
 
     public BoundingBoxViewModel()
