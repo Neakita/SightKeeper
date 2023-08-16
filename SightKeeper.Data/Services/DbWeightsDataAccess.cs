@@ -19,11 +19,11 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         DateTime trainedDate,
         ModelConfig config,
         int batch,
-        float averageLoss,
-        float? accuracy,
+        float boundingLoss,
+        float classificationLoss,
         IEnumerable<Asset> assets)
     {
-        var weights = library.CreateWeights(data, trainedDate, config, batch, averageLoss, accuracy, assets);
+        var weights = library.CreateWeights(data, trainedDate, config, batch, boundingLoss, classificationLoss, assets);
         _dbContext.SaveChanges();
         return weights;
     }

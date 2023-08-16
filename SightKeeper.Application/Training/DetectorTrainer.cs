@@ -22,6 +22,7 @@ public sealed class DetectorTrainer : ModelTrainer<DetectorDataSet>
     
     public async Task<InternalTrainedWeights?> TrainAsync(ModelConfig config, CancellationToken cancellationToken = default)
     {
+        throw new NotImplementedException();
         Guard.IsNotNull(Model);
         var assets = Model.Assets.ToList();
         _weightsDataAccess.LoadWeights(Model.WeightsLibrary);
@@ -37,7 +38,7 @@ public sealed class DetectorTrainer : ModelTrainer<DetectorDataSet>
             config,
             (int)_lastProgress.Value.Batch,
             _lastProgress.Value.AverageLoss,
-            null,
+            -1,
             assets);
         _lastProgress = null;
         return weights;

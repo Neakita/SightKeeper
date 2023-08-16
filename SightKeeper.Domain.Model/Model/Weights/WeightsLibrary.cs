@@ -20,8 +20,8 @@ public sealed class WeightsLibrary
         DateTime trainedDate,
         ModelConfig config,
         int batch,
-        float averageLoss,
-        float? accuracy,
+        float boundingLoss,
+        float classificationLoss,
         IEnumerable<Asset> assets)
     {
         var assetsList = assets.ToList();
@@ -32,7 +32,7 @@ public sealed class WeightsLibrary
         }
         else
             ThrowHelper.ThrowNotSupportedException("Validation of assets for the classifier model is not implemented");
-        InternalTrainedWeights weights = new(data, trainedDate, config, this, batch, averageLoss, accuracy, assetsList);
+        InternalTrainedWeights weights = new(data, trainedDate, config, this, batch, boundingLoss, classificationLoss, assetsList);
         _weights.Add(weights);
         return weights;
     }

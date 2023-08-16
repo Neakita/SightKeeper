@@ -13,8 +13,8 @@ public interface WeightsDataAccess
         DateTime trainedDate,
         ModelConfig config,
         int batch,
-        float averageLoss,
-        float? accuracy,
+        float boundingLoss,
+        float classificationLoss,
         IEnumerable<Asset> assets);
 
     PreTrainedWeights CreateWeights(
