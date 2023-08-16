@@ -13,7 +13,7 @@ public sealed class ModelsObservableRepository : IDisposable
     {
         _disposable = new CompositeDisposable(
             dataSetCreator.ModelCreated.Subscribe(OnModelCreated),
-            dataSetsDataAccess.ModelRemoved.Subscribe(OnModelRemoved));
+            dataSetsDataAccess.DataSetRemoved.Subscribe(OnModelRemoved));
         AddInitialModels(dataSetsDataAccess);
     }
 
@@ -31,7 +31,7 @@ public sealed class ModelsObservableRepository : IDisposable
 
     private async void AddInitialModels(DataSetsDataAccess dataSetsDataAccess)
     {
-        var models = await dataSetsDataAccess.GetModels();
+        var models = await dataSetsDataAccess.GetDataSets();
         _source.AddRange(models);
     }
 }
