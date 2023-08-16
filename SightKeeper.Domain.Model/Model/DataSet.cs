@@ -63,7 +63,7 @@ public abstract class DataSet
 	#endregion
 
 	public ModelScreenshotsLibrary ScreenshotsLibrary { get; private set; }
-	public ModelWeightsLibrary WeightsLibrary { get; private set; }
+	public WeightsLibrary WeightsLibrary { get; private set; }
 
 	public abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
 	
@@ -79,7 +79,7 @@ public abstract class DataSet
 		Description = string.Empty;
 		_resolution = resolution;
 		_itemClasses = new List<ItemClass>();
-		WeightsLibrary = new ModelWeightsLibrary(this);
+		WeightsLibrary = new WeightsLibrary(this);
 		ScreenshotsLibrary = new ModelScreenshotsLibrary(this);
 	}
 

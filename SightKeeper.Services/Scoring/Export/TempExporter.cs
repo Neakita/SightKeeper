@@ -9,7 +9,7 @@ public sealed class TempExporter : IDisposable
     private const string TempDirectory = "Temp";
     
     public string Export(ModelConfig config, DetectorConfigParameters parameters) => Export(parameters.Deploy(config));
-    public string Export(ModelWeights weights) => Export(weights.Data);
+    public string Export(Weights weights) => Export(weights.Data);
     public string Export(IEnumerable<ItemClass> itemClasses)
     {
         var itemClassesNames = itemClasses.Select(itemClass => itemClass.Name);

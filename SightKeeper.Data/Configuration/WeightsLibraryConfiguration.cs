@@ -4,9 +4,9 @@ using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Data.Configuration;
 
-public sealed class ModelWeightsLibraryConfiguration : IEntityTypeConfiguration<ModelWeightsLibrary>
+public sealed class WeightsLibraryConfiguration : IEntityTypeConfiguration<WeightsLibrary>
 {
-    public void Configure(EntityTypeBuilder<ModelWeightsLibrary> builder)
+    public void Configure(EntityTypeBuilder<WeightsLibrary> builder)
     {
         builder.ToTable("ModelWeightsLibraries");
         builder.HasShadowKey();

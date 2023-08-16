@@ -20,7 +20,7 @@ public sealed class DetectorTrainer : ModelTrainer<DetectorDataSet>
         Progress.Subscribe(progress => _lastProgress = progress);
     }
     
-    public async Task<InternalTrainedModelWeights?> TrainAsync(ModelConfig config, CancellationToken cancellationToken = default)
+    public async Task<InternalTrainedWeights?> TrainAsync(ModelConfig config, CancellationToken cancellationToken = default)
     {
         Guard.IsNotNull(Model);
         var assets = Model.Assets.ToList();

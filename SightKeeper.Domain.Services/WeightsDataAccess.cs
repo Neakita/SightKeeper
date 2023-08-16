@@ -5,10 +5,10 @@ namespace SightKeeper.Domain.Services;
 
 public interface WeightsDataAccess
 {
-    void LoadWeights(ModelWeightsLibrary library);
+    void LoadWeights(WeightsLibrary library);
     
-    InternalTrainedModelWeights CreateWeights(
-        ModelWeightsLibrary library,
+    InternalTrainedWeights CreateWeights(
+        WeightsLibrary library,
         byte[] data,
         DateTime trainedDate,
         ModelConfig config,
@@ -17,8 +17,8 @@ public interface WeightsDataAccess
         float? accuracy,
         IEnumerable<Asset> assets);
 
-    PreTrainedModelWeights CreateWeights(
-        ModelWeightsLibrary library,
+    PreTrainedWeights CreateWeights(
+        WeightsLibrary library,
         byte[] data,
         DateTime trainedDate,
         ModelConfig config,

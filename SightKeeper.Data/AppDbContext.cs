@@ -66,19 +66,19 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());
 		modelBuilder.ApplyConfiguration(new ModelConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
-		modelBuilder.ApplyConfiguration(new ModelWeightsLibraryConfiguration());
+		modelBuilder.ApplyConfiguration(new WeightsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new InternalTrainedModelWeightsConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
 		modelBuilder.ApplyConfiguration(new ImageConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotImageConfiguration());
-		modelBuilder.ApplyConfiguration(new ModelWeightsConfiguration());
+		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
 		modelBuilder.Entity<ModelConfig>().HasShadowKey();
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		
 		modelBuilder.Entity<Screenshot>().Navigation(screenshot => screenshot.Asset).AutoInclude();
 		modelBuilder.Entity<Asset>().Navigation(asset => asset.Screenshot).AutoInclude();
 		modelBuilder.Entity<DataSet>().Navigation(model => model.ScreenshotsLibrary).AutoInclude();
-		modelBuilder.Entity<DetectorDataSet>().Navigation(model => model.Assets).AutoInclude();
 		modelBuilder.Entity<DataSet>().Navigation(model => model.WeightsLibrary).AutoInclude();
+		modelBuilder.Entity<DetectorDataSet>().Navigation(model => model.Assets).AutoInclude();
 	}
 }

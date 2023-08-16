@@ -11,10 +11,10 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         _dbContext = dbContext;
     }
 
-    public void LoadWeights(ModelWeightsLibrary library) => _dbContext.Entry(library).Collection(lib => lib.Weights).Load();
+    public void LoadWeights(WeightsLibrary library) => _dbContext.Entry(library).Collection(lib => lib.Weights).Load();
 
-    public InternalTrainedModelWeights CreateWeights(
-        ModelWeightsLibrary library,
+    public InternalTrainedWeights CreateWeights(
+        WeightsLibrary library,
         byte[] data,
         DateTime trainedDate,
         ModelConfig config,
@@ -28,8 +28,8 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         return weights;
     }
 
-    public PreTrainedModelWeights CreateWeights(
-        ModelWeightsLibrary library,
+    public PreTrainedWeights CreateWeights(
+        WeightsLibrary library,
         byte[] data,
         DateTime trainedDate,
         ModelConfig config,

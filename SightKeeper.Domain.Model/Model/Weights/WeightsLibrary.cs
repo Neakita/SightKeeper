@@ -4,18 +4,18 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class ModelWeightsLibrary
+public sealed class WeightsLibrary
 {
     public DataSet DataSet { get; private set; }
-    public IReadOnlyCollection<ModelWeights> Weights => _weights;
+    public IReadOnlyCollection<Weights> Weights => _weights;
 
-    internal ModelWeightsLibrary(DataSet dataSet)
+    internal WeightsLibrary(DataSet dataSet)
     {
         DataSet = dataSet;
-        _weights = new List<ModelWeights>();
+        _weights = new List<Weights>();
     }
 
-    public InternalTrainedModelWeights CreateWeights(
+    public InternalTrainedWeights CreateWeights(
         byte[] data,
         DateTime trainedDate,
         ModelConfig config,
@@ -32,25 +32,25 @@ public sealed class ModelWeightsLibrary
         }
         else
             ThrowHelper.ThrowNotSupportedException("Validation of assets for the classifier model is not implemented");
-        InternalTrainedModelWeights weights = new(data, trainedDate, config, this, batch, averageLoss, accuracy, assetsList);
+        InternalTrainedWeights weights = new(data, trainedDate, config, this, batch, averageLoss, accuracy, assetsList);
         _weights.Add(weights);
         return weights;
     }
 
-    public PreTrainedModelWeights CreateWeights(
+    public PreTrainedWeights CreateWeights(
         byte[] data,
         DateTime trainedDate,
         ModelConfig config,
         DateTime addedDate)
     {
-        PreTrainedModelWeights weights = new(data, trainedDate, config, this, addedDate);
+        PreTrainedWeights weights = new(data, trainedDate, config, this, addedDate);
         _weights.Add(weights);
         return weights;
     }
 	
-    private readonly List<ModelWeights> _weights;
+    private readonly List<Weights> _weights;
 
-    private ModelWeightsLibrary()
+    private WeightsLibrary()
     {
         DataSet = null!;
         _weights = null!;

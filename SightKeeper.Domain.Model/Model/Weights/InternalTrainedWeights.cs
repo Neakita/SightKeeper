@@ -2,18 +2,18 @@
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class InternalTrainedModelWeights : ModelWeights
+public sealed class InternalTrainedWeights : Weights
 {
     public int Batch { get; private set; }
     public float AverageLoss { get; private set; }
     public float? Accuracy { get; private set; }
     public IReadOnlyCollection<Asset> Assets { get; private set; }
     
-    public InternalTrainedModelWeights(
+    public InternalTrainedWeights(
         byte[] data,
         DateTime trainedDate,
         ModelConfig config,
-        ModelWeightsLibrary library,
+        WeightsLibrary library,
         int batch,
         float averageLoss,
         float? accuracy,
@@ -26,7 +26,7 @@ public sealed class InternalTrainedModelWeights : ModelWeights
         Assets = assets.ToList();
     }
 
-    private InternalTrainedModelWeights()
+    private InternalTrainedWeights()
     {
         Assets = null!;
     }
