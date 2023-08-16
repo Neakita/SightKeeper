@@ -13,5 +13,7 @@ public sealed class DataSetConfiguration : IEntityTypeConfiguration<DataSet>
         builder.HasMany(model => model.ItemClasses).WithOne(itemClass => itemClass.DataSet).IsRequired();
         builder.HasOne(model => model.ScreenshotsLibrary).WithOne(library => library.DataSet).HasPrincipalKey<DataSet>().IsRequired();
         builder.HasIndex(model => model.Name).IsUnique();
+        builder.Navigation(model => model.ScreenshotsLibrary).AutoInclude();
+        builder.Navigation(model => model.WeightsLibrary).AutoInclude();
     }
 }
