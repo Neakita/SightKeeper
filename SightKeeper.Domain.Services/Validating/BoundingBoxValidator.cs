@@ -3,7 +3,7 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Domain.Services.Validating;
 
-public sealed class BoundingBoxValidator : AbstractValidator<BoundingBox>
+public sealed class BoundingBoxValidator : AbstractValidator<Bounding>
 {
     public BoundingBoxValidator()
     {

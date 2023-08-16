@@ -58,7 +58,7 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorDataSet>
 		return string.Join(' ', GetItemParameters(itemClassIndex, item.Bounding));
 	}
 
-	private static IEnumerable<string> GetItemParameters(byte itemClassIndex, BoundingBox bounding)
+	private static IEnumerable<string> GetItemParameters(byte itemClassIndex, Bounding bounding)
 	{
 		yield return itemClassIndex.ToString();
 		yield return bounding.HorizontalCenter.ToString(NumberFormat, BoundingNumbersFormat);

@@ -23,7 +23,7 @@ public sealed class CooperationTests
         var itemClass = dataSet.CreateItemClass("Item class");
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshot);
-        asset.CreateItem(itemClass, new BoundingBox());
+        asset.CreateItem(itemClass, new Bounding());
         Assert.Throws<InvalidOperationException>(() => dataSet.DeleteItemClass(itemClass));
     }
 }

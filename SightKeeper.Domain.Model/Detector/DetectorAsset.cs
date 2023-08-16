@@ -16,11 +16,11 @@ public sealed class DetectorAsset : Asset
 		_items = new List<DetectorItem>();
 	}
 
-	public DetectorItem CreateItem(ItemClass itemClass, BoundingBox boundingBox)
+	public DetectorItem CreateItem(ItemClass itemClass, Bounding bounding)
 	{
 		if (!DataSet.ItemClasses.Contains(itemClass))
 			ThrowHelper.ThrowInvalidOperationException($"Model \"{DataSet}\" does not contain item class \"{itemClass}\"");
-		DetectorItem item = new(this, itemClass, boundingBox);
+		DetectorItem item = new(this, itemClass, bounding);
 		_items.Add(item);
 		itemClass.AddDetectorItem(item);
 		return item;

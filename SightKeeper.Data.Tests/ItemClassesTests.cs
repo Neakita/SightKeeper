@@ -15,7 +15,7 @@ public sealed class ItemClassesTests : DbRelatedTests
 		var itemClass = dataSet.CreateItemClass("Test item class");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 		var asset = dataSet.MakeAsset(screenshot);
-		var item = asset.CreateItem(itemClass, new BoundingBox());
+		var item = asset.CreateItem(itemClass, new Bounding());
 		dbContext.DetectorModels.Add(dataSet);
 		dbContext.SaveChanges();
 
@@ -38,7 +38,7 @@ public sealed class ItemClassesTests : DbRelatedTests
 			var itemClass = dataSet.CreateItemClass("Item class");
 			var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 			var asset = dataSet.MakeAsset(screenshot);
-			asset.CreateItem(itemClass, new BoundingBox());
+			asset.CreateItem(itemClass, new Bounding());
 			arrangeDbContext.Add(dataSet);
 			arrangeDbContext.SaveChanges();
 		}

@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class BoundingBoxViewModel : ViewModel
+public sealed class BoundingViewModel : ViewModel
 {
     private static readonly string[] Properties =
     {
@@ -18,7 +18,7 @@ public sealed class BoundingBoxViewModel : ViewModel
         nameof(YCenter)
     };
 
-    public BoundingBox Bounding { get; set; }
+    public Bounding Bounding { get; set; }
 
     public double Left
     {
@@ -77,7 +77,7 @@ public sealed class BoundingBoxViewModel : ViewModel
     public double XCenter => (Left + Right) / 2;
     public double YCenter => (Top + Bottom) / 2;
 
-    public BoundingBoxViewModel(Point position) : this()
+    public BoundingViewModel(Point position) : this()
     {
         _left = position.X;
         _right = position.X;
@@ -85,7 +85,7 @@ public sealed class BoundingBoxViewModel : ViewModel
         _bottom = position.Y;
     }
 
-    public BoundingBoxViewModel(BoundingBox bounding)
+    public BoundingViewModel(Bounding bounding)
     {
         Bounding = bounding;
         _left = bounding.Left;
@@ -94,9 +94,9 @@ public sealed class BoundingBoxViewModel : ViewModel
         _bottom = bounding.Bottom;
     }
 
-    public BoundingBoxViewModel()
+    public BoundingViewModel()
     {
-        Bounding = new BoundingBox();
+        Bounding = new Bounding();
     }
 
     public void SetFromTwoPositions(Point position1, Point position2) =>

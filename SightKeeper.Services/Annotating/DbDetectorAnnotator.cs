@@ -16,16 +16,16 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         _itemClassDataAccess = itemClassDataAccess;
     }
     
-    public DetectorItem Annotate(Screenshot screenshot, ItemClass itemClass, BoundingBox boundingBox)
+    public DetectorItem Annotate(Screenshot screenshot, ItemClass itemClass, Bounding bounding)
     {
-        Guard.IsBetweenOrEqualTo(boundingBox.Left, 0, 1);
-        Guard.IsBetweenOrEqualTo(boundingBox.Right, 0, 1);
-        Guard.IsBetweenOrEqualTo(boundingBox.Top, 0, 1);
-        Guard.IsBetweenOrEqualTo(boundingBox.Bottom, 0, 1);
+        Guard.IsBetweenOrEqualTo(bounding.Left, 0, 1);
+        Guard.IsBetweenOrEqualTo(bounding.Right, 0, 1);
+        Guard.IsBetweenOrEqualTo(bounding.Top, 0, 1);
+        Guard.IsBetweenOrEqualTo(bounding.Bottom, 0, 1);
         var asset = screenshot.GetOptionalAsset<DetectorAsset>() ??
                     screenshot.Library.GetModel<DetectorDataSet>().MakeAsset(screenshot);
         _itemClassDataAccess.LoadItems(itemClass);
-        var item = asset.CreateItem(itemClass, boundingBox);
+        var item = asset.CreateItem(itemClass, bounding);
         _dbContext.SaveChanges();
         return item;
     }
@@ -64,7 +64,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         _dbContext.SaveChanges();
     }
 
-    public void Move(DetectorItem item, BoundingBox bounding)
+    public void Move(DetectorItem item, Bounding bounding)
     {
         item.Bounding.SetFromBounding(bounding);
         _dbContext.SaveChanges();

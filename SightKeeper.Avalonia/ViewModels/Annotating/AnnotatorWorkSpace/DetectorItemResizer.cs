@@ -12,7 +12,7 @@ public sealed class DetectorItemResizer
         public DetectorItemViewModel Item { get; }
         public ResizeDirection Direction { get; }
         
-        public ResizingData(DetectorItemViewModel item, ResizeDirection direction, Action<BoundingBoxViewModel, Vector> updateBoundingDelegate)
+        public ResizingData(DetectorItemViewModel item, ResizeDirection direction, Action<BoundingViewModel, Vector> updateBoundingDelegate)
         {
             _updateBoundingDelegate = updateBoundingDelegate;
             Item = item;
@@ -21,7 +21,7 @@ public sealed class DetectorItemResizer
 
         public void UpdateBounding(Vector delta) => _updateBoundingDelegate(Item.Bounding, delta);
 
-        private readonly Action<BoundingBoxViewModel, Vector> _updateBoundingDelegate;
+        private readonly Action<BoundingViewModel, Vector> _updateBoundingDelegate;
     }
     
     public DetectorItemResizer(DetectorAnnotator annotator)
@@ -54,7 +54,7 @@ public sealed class DetectorItemResizer
     private readonly DetectorAnnotator _annotator;
     private ResizingData? _data;
 
-    private Action<BoundingBoxViewModel, Vector> GetBoundingUpdateDelegate(ResizeDirection direction) => direction switch
+    private Action<BoundingViewModel, Vector> GetBoundingUpdateDelegate(ResizeDirection direction) => direction switch
     {
         ResizeDirection.Left => UpdateLeft,
         ResizeDirection.Top => UpdateTop,
@@ -65,58 +65,58 @@ public sealed class DetectorItemResizer
         ResizeDirection.BottomRight => UpdateBottomRight,
         ResizeDirection.BottomLeft => UpdateBottomLeft,
         ResizeDirection.All => UpdateAll,
-        _ => ThrowHelper.ThrowArgumentOutOfRangeException<Action<BoundingBoxViewModel, Vector>>(nameof(direction), direction, null)
+        _ => ThrowHelper.ThrowArgumentOutOfRangeException<Action<BoundingViewModel, Vector>>(nameof(direction), direction, null)
     };
 
-    private static void UpdateLeft(BoundingBoxViewModel bounding, Vector delta)
+    private static void UpdateLeft(BoundingViewModel bounding, Vector delta)
     {
         var maximum = Math.Max(0, bounding.Right - DetectorDrawerViewModel.MinimumDimensionSize);
         bounding.Left = Math.Clamp(bounding.Left + delta.X, 0, maximum);
     }
 
-    private static void UpdateTop(BoundingBoxViewModel bounding, Vector delta)
+    private static void UpdateTop(BoundingViewModel bounding, Vector delta)
     {
         var maximum = Math.Max(0, bounding.Bottom - DetectorDrawerViewModel.MinimumDimensionSize);
         bounding.Top = Math.Clamp(bounding.Top + delta.Y, 0, maximum);
     }
 
-    private static void UpdateRight(BoundingBoxViewModel bounding, Vector delta)
+    private static void UpdateRight(BoundingViewModel bounding, Vector delta)
     {
         var minimum = Math.Min(1, bounding.Left + DetectorDrawerViewModel.MinimumDimensionSize);
         bounding.Right = Math.Clamp(bounding.Right + delta.X, minimum, 1);
     }
 
-    private static void UpdateBottom(BoundingBoxViewModel bounding, Vector delta)
+    private static void UpdateBottom(BoundingViewModel bounding, Vector delta)
     {
         var minimum = Math.Min(1, bounding.Top + DetectorDrawerViewModel.MinimumDimensionSize);
         bounding.Bottom = Math.Clamp(bounding.Bottom + delta.Y, minimum, 1);
     }
 
-    private static void UpdateTopLeft(BoundingBoxViewModel bounding, Vector delta)
+    private static void UpdateTopLeft(BoundingViewModel bounding, Vector delta)
     {
         UpdateTop(bounding, delta);
         UpdateLeft(bounding, delta);
     }
 
-    private static void UpdateTopRight(BoundingBoxViewModel bounding, Vector delta)
+    private static void UpdateTopRight(BoundingViewModel bounding, Vector delta)
     {
         UpdateTop(bounding, delta);
         UpdateRight(bounding, delta);
     }
 
-    private static void UpdateBottomLeft(BoundingBoxViewModel bounding, Vector delta)
+    private static void UpdateBottomLeft(BoundingViewModel bounding, Vector delta)
     {
         UpdateBottom(bounding, delta);
         UpdateLeft(bounding, delta);
     }
 
-    private static void UpdateBottomRight(BoundingBoxViewModel bounding, Vector delta)
+    private static void UpdateBottomRight(BoundingViewModel bounding, Vector delta)
     {
         UpdateBottom(bounding, delta);
         UpdateRight(bounding, delta);
     }
 
-    private static void UpdateAll(BoundingBoxViewModel bounding, Vector delta)
+    private static void UpdateAll(BoundingViewModel bounding, Vector delta)
     {
 
         bounding.SetFromTwoPositions(

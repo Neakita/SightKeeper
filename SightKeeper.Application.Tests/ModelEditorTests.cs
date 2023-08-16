@@ -109,7 +109,7 @@ public sealed class ModelEditorTests : DbRelatedTests
         var itemClass = dataSet.CreateItemClass("Item class");
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshot);
-        asset.CreateItem(itemClass, new BoundingBox());
+        asset.CreateItem(itemClass, new Bounding());
         DataSetChangesDTO changes = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
         await Assert.ThrowsAsync<InvalidOperationException>(() => editor.ApplyChanges(changes));
         dataSet.ItemClasses.Should().Contain(itemClass);

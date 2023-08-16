@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.Model.Detector;
 
-public sealed class BoundingBox
+public sealed class Bounding
 {
 	public double Left { get; private set; }
 	public double Top { get; private set; }
@@ -11,10 +11,10 @@ public sealed class BoundingBox
 	public double HorizontalCenter => Left + Width / 2;
 	public double VerticalCenter => Top + Height / 2;
 	
-	public BoundingBox(double x1, double y1, double x2, double y2) =>
+	public Bounding(double x1, double y1, double x2, double y2) =>
 		SetFromTwoPositions(x1, y1, x2, y2);
 
-	public BoundingBox()
+	public Bounding()
 	{
 	}
 
@@ -28,7 +28,7 @@ public sealed class BoundingBox
 		Bottom = yMax;
 	}
 
-	public void SetFromBounding(BoundingBox bounding)
+	public void SetFromBounding(Bounding bounding)
 	{
 		Left = bounding.Left;
 		Right = bounding.Right;
