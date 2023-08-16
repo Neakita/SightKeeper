@@ -6,7 +6,7 @@ public sealed class ScreenshotImage : Image
 {
     public Screenshot Screenshot { get; private set; }
     
-    internal ScreenshotImage(Screenshot screenshot, byte[] content, Resolution resolution) : base(content, resolution)
+    internal ScreenshotImage(Screenshot screenshot, byte[] content, Resolution resolution) : base(content, new Resolution(resolution.Width, resolution.Height))
     {
         Screenshot = screenshot;
     }

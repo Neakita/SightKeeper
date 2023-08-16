@@ -26,11 +26,11 @@
         <GridSplitter Grid.Column="3" Background="Gray"/>
         <Grid Grid.Column="4" RowDefinitions="Auto Auto *">
             <ComboBox Grid.Row="0"
-                      ItemsSource="{Binding Models}"
-                      SelectedItem="{Binding SelectedModel}"
+                      ItemsSource="{Binding DataSets}"
+                      SelectedItem="{Binding SelectedDataSet}"
                       HorizontalAlignment="Stretch"
                       PlaceholderText="Model"
-                      IsEnabled="{Binding CanChangeSelectedModel}">
+                      IsEnabled="{Binding CanChangeSelectedDataSet}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>

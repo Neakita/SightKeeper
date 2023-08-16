@@ -12,15 +12,15 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
 {
-    public ReadOnlyObservableCollection<DataSetViewModel> Models => new(new ObservableCollection<DataSetViewModel>
+    public ReadOnlyObservableCollection<DataSetViewModel> DataSets => new(new ObservableCollection<DataSetViewModel>
     {
         new(new DetectorDataSet("Some model")),
         new(new DetectorDataSet("Another model"))
     });
 
-    public DataSetViewModel? SelectedModel { get; set; }
+    public DataSetViewModel? SelectedDataSet { get; set; }
 
-    public bool CanChangeSelectedModel => true;
+    public bool CanChangeSelectedDataSet => true;
     public AnnotatorScreenshotsViewModel Screenshots => new(new MockScreenshotImageLoader(), new MockScreenshotsDataAccess());
 
     public ScreenshoterViewModel Screenshoter => new(new MockStreamModelScreenshoter());

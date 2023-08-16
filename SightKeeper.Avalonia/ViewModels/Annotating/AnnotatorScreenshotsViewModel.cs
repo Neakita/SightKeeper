@@ -20,7 +20,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
     public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
     public IReadOnlyList<ScreenshotViewModel> Screenshots { get; }
-    public int? ScreenshotsCount => Model == null ? null : Screenshots.Count;
+    public int? ScreenshotsCount => DataSet == null ? null : Screenshots.Count;
 
     public IEnumerable<SortingRule<Screenshot>> SortingRules { get; } = new[]
     {
@@ -56,27 +56,27 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     private readonly Subject<ScreenshotViewModel?> _selectedScreenshotChanged = new();
 
     [ObservableProperty, NotifyPropertyChangedFor(nameof(ScreenshotsCount))]
-    private DataSet? _model;
+    private DataSet? _dataSet;
     [ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
     [ObservableProperty] private int _selectedScreenshotIndex;
     
-    private CompositeDisposable? _modelDisposable;
+    private CompositeDisposable? _dataSetDisposable;
 
-    partial void OnModelChanged(DataSet? value)
+    partial void OnDataSetChanged(DataSet? value)
     {
-        _modelDisposable?.Dispose();
+        _dataSetDisposable?.Dispose();
         _screenshots.Clear();
         if (value == null)
             return;
         _screenshotsDataAccess.Load(value.ScreenshotsLibrary);
         _screenshots.AddRange(value.ScreenshotsLibrary.Screenshots);
-        _modelDisposable = new CompositeDisposable();
+        _dataSetDisposable = new CompositeDisposable();
         value.ScreenshotsLibrary.ScreenshotAdded
             .Subscribe(OnScreenshotAdded)
-            .DisposeWith(_modelDisposable);
+            .DisposeWith(_dataSetDisposable);
         value.ScreenshotsLibrary.ScreenshotRemoved
             .Subscribe(OnScreenshotRemoved)
-            .DisposeWith(_modelDisposable);
+            .DisposeWith(_dataSetDisposable);
     }
 
     private void OnScreenshotAdded(Screenshot newScreenshot)

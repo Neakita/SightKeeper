@@ -22,7 +22,7 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         _unMarkSelectedScreenshotAsAssetExecuted.AsObservable();
 
     public IObservable<DetectorItemViewModel> DeleteItemExecuted => _deleteItemExecuted;
-    public IReadOnlyCollection<ItemClass> ItemClasses => _annotatorViewModel.SelectedModel?.DataSet.ItemClasses ?? Array.Empty<ItemClass>();
+    public IReadOnlyCollection<ItemClass> ItemClasses => _annotatorViewModel.SelectedDataSet?.DataSet.ItemClasses ?? Array.Empty<ItemClass>();
 
     public DetectorAnnotatorToolsViewModel(AnnotatorViewModel annotatorViewModel, AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
     {
@@ -32,7 +32,7 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         CompositeDisposable disposable = new();
         _disposable = disposable;
         _screenshotsViewModel.SelectedScreenshotChanged.Subscribe(OnScreenshotSelected).DisposeWith(disposable);
-        annotatorViewModel.SelectedModelChanged
+        annotatorViewModel.SelectedDataSetChanged
             .Subscribe(_ => OnPropertyChanged(nameof(ItemClasses))).DisposeWith(disposable);
         DetectorItemViewModel.ItemClassChanged.Subscribe(item =>
         {

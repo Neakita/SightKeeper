@@ -11,8 +11,8 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 {
-	public IObservable<DataSetViewModel?> SelectedModelChanged => _selectedModelChanged;
-	public ReadOnlyObservableCollection<DataSetViewModel> Models { get; }
+	public IObservable<DataSetViewModel?> SelectedDataSetChanged => _selectedDataSetChanged;
+	public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 
 	public AnnotatorScreenshotsViewModel Screenshots { get; }
 
@@ -30,7 +30,7 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 		private set => SetProperty(ref _workSpace, value);
 	}
 
-	public bool CanChangeSelectedModel => !Screenshoter.IsEnabled;
+	public bool CanChangeSelectedDataSet => !Screenshoter.IsEnabled;
 
 	public AnnotatorViewModel(
 		ILifetimeScope scope,
@@ -42,45 +42,45 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 		_scope = scope;
 		Screenshots = screenshots;
 		screenshoterViewModel.IsEnabledChanged.Subscribe(_ =>
-			OnPropertyChanged(nameof(CanChangeSelectedModel)));
-		Models = dataSetsListViewModel.DataSets;
+			OnPropertyChanged(nameof(CanChangeSelectedDataSet)));
+		DataSets = dataSetsListViewModel.DataSets;
 	}
 
 	private readonly ILifetimeScope _scope;
-	private readonly Subject<DataSetViewModel?> _selectedModelChanged = new();
+	private readonly Subject<DataSetViewModel?> _selectedDataSetChanged = new();
 
-	[ObservableProperty] private DataSetViewModel? _selectedModel;
-	private IDisposable? _selectedModelDisposable;
+	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
+	private IDisposable? _selectedDataSetDisposable;
 	private AnnotatorTools? _tools;
 	private AnnotatorWorkSpace? _workSpace;
 
-	partial void OnSelectedModelChanged(DataSetViewModel? value)
+	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
-		_selectedModelDisposable?.Dispose();
-		Screenshoter.Model = value?.DataSet;
-		Screenshots.Model = value?.DataSet;
+		_selectedDataSetDisposable?.Dispose();
+		Screenshoter.DataSet = value?.DataSet;
+		Screenshots.DataSet = value?.DataSet;
 		if (value == null)
 		{
-			ClearModelEnvironment();
+			ClearDataSetEnvironment();
 			return;
 		}
 
-		var selectedModelScope = _scope.BeginLifetimeScope(value);
-		_selectedModelDisposable = selectedModelScope;
+		var selectedDataSetScope = _scope.BeginLifetimeScope(value);
+		_selectedDataSetDisposable = selectedDataSetScope;
 		if (value.DataSet is DetectorDataSet)
-			SetupDetectorModelEnvironment(selectedModelScope);
+			SetupDetectorDataSetEnvironment(selectedDataSetScope);
 		else
 			ThrowHelper.ThrowArgumentOutOfRangeException(nameof(value), value, null);
-		_selectedModelChanged.OnNext(value);
+		_selectedDataSetChanged.OnNext(value);
 	}
 
-	private void SetupDetectorModelEnvironment(IComponentContext content)
+	private void SetupDetectorDataSetEnvironment(IComponentContext content)
 	{
 		Tools = content.Resolve<AnnotatorTools<DetectorDataSet>>();
 		WorkSpace = content.Resolve<AnnotatorWorkSpace<DetectorDataSet>>();
 	}
 
-	private void ClearModelEnvironment()
+	private void ClearDataSetEnvironment()
 	{
 		Tools = null;
 		WorkSpace = null;

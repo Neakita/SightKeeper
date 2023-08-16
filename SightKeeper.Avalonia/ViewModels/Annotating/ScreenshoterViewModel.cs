@@ -10,7 +10,7 @@ public sealed class ScreenshoterViewModel : ViewModel
 {
     public IObservable<bool> IsEnabledChanged => _isEnabledChanged;
 
-    public DataSet? Model
+    public DataSet? DataSet
     {
         get => _screenshoter.Model;
         set
@@ -34,7 +34,7 @@ public sealed class ScreenshoterViewModel : ViewModel
         }
     }
 
-    public bool CanToggleIsEnabled => Model != null;
+    public bool CanToggleIsEnabled => DataSet != null;
 
     public byte? ScreenshotsPerSecond
     {
@@ -44,15 +44,15 @@ public sealed class ScreenshoterViewModel : ViewModel
 
     public ushort? MaxScreenshotsQuantity
     {
-        get => Model?.ScreenshotsLibrary.MaxQuantity;
-        set => SetProperty(Model?.ScreenshotsLibrary.MaxQuantity, value, maxImages =>
+        get => DataSet?.ScreenshotsLibrary.MaxQuantity;
+        set => SetProperty(DataSet?.ScreenshotsLibrary.MaxQuantity, value, maxImages =>
         {
-            Guard.IsNotNull(Model);
-            Model.ScreenshotsLibrary.MaxQuantity = maxImages;
+            Guard.IsNotNull(DataSet);
+            DataSet.ScreenshotsLibrary.MaxQuantity = maxImages;
         });
     }
 
-    public bool CanChangeMaxScreenshotsQuantity => Model != null;
+    public bool CanChangeMaxScreenshotsQuantity => DataSet != null;
 
     public ScreenshoterViewModel(StreamModelScreenshoter screenshoter)
     {
