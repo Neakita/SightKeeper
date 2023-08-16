@@ -56,6 +56,7 @@ public static class AppBootstrapper
 		using var initialScope = container.BeginLifetimeScope(typeof(AppBootstrapper));
 		var dbContext = initialScope.Resolve<AppDbContext>();
 		dbContext.Database.Migrate();
+		DbInitializer.SeedData(dbContext);
 	}
 
 	private static void SetupLogger(ContainerBuilder builder)

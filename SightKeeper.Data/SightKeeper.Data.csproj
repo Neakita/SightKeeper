@@ -32,19 +32,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Defaults\v8l.pt">
+      <None Update="Defaults\v8l">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Defaults\v8m.pt">
+      <None Update="Defaults\v8m">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Defaults\v8n.pt">
+      <None Update="Defaults\v8n">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Defaults\v8s.pt">
+      <None Update="Defaults\v8s">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Defaults\v8x.pt">
+      <None Update="Defaults\v8x">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

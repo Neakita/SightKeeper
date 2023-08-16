@@ -17,19 +17,19 @@ namespace SightKeeper.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0-preview.6.23329.4");
 
-            modelBuilder.Entity("AssetInternalTrainedModelWeights", b =>
+            modelBuilder.Entity("AssetInternalTrainedWeights", b =>
                 {
                     b.Property<int>("AssetsId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("InternalTrainedModelWeightsId")
+                    b.Property<int>("InternalTrainedWeightsId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("AssetsId", "InternalTrainedModelWeightsId");
+                    b.HasKey("AssetsId", "InternalTrainedWeightsId");
 
-                    b.HasIndex("InternalTrainedModelWeightsId");
+                    b.HasIndex("InternalTrainedWeightsId");
 
-                    b.ToTable("AssetInternalTrainedModelWeights");
+                    b.ToTable("AssetInternalTrainedWeights");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.Asset", b =>
@@ -86,7 +86,7 @@ namespace SightKeeper.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ModelId")
+                    b.Property<int>("DataSetId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -95,33 +95,12 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ModelId");
+                    b.HasIndex("DataSetId");
 
                     b.ToTable("ItemClasses", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AssetId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ItemClassId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetId");
-
-                    b.HasIndex("ItemClassId");
-
-                    b.ToTable("DetectorItems", (string)null);
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.Model", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSet", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,15 +129,36 @@ namespace SightKeeper.Data.Migrations
                     b.UseTptMappingStrategy();
                 });
 
+            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AssetId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ItemClassId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("ItemClassId");
+
+                    b.ToTable("DetectorItems", (string)null);
+                });
+
             modelBuilder.Entity("SightKeeper.Domain.Model.ModelConfig", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Content")
+                    b.Property<byte[]>("Content")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("BLOB");
 
                     b.Property<int>("ModelType")
                         .HasColumnType("INTEGER");
@@ -172,53 +172,6 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("ModelConfigs");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.ModelWeights", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ConfigId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte[]>("Data")
-                        .IsRequired()
-                        .HasColumnType("BLOB");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("LibraryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("TrainedDate")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConfigId");
-
-                    b.HasIndex("LibraryId");
-
-                    b.ToTable("ModelWeights");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("ModelWeights");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.ModelWeightsLibrary", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ModelWeightsLibraries", (string)null);
-                });
-
             modelBuilder.Entity("SightKeeper.Domain.Model.Profile", b =>
                 {
                     b.Property<int>("Id")
@@ -229,7 +182,7 @@ namespace SightKeeper.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DetectorModelId")
+                    b.Property<int>("DetectorDataSetId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("GameId")
@@ -241,7 +194,7 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DetectorModelId");
+                    b.HasIndex("DetectorDataSetId");
 
                     b.HasIndex("GameId");
 
@@ -286,14 +239,61 @@ namespace SightKeeper.Data.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorAsset", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Weights", b =>
                 {
-                    b.HasBaseType("SightKeeper.Domain.Model.Common.Asset");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(34)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LibraryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ModelId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("TrainedDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LibraryId");
+
                     b.HasIndex("ModelId");
+
+                    b.ToTable("Weights");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Weights");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("SightKeeper.Domain.Model.WeightsLibrary", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ModelWeightsLibraries", (string)null);
+                });
+
+            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorAsset", b =>
+                {
+                    b.HasBaseType("SightKeeper.Domain.Model.Common.Asset");
+
+                    b.Property<int>("DataSetId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasIndex("DataSetId");
 
                     b.ToTable("DetectorAssets", (string)null);
                 });
@@ -311,43 +311,43 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("ScreenshotImages", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorModel", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorDataSet", b =>
                 {
-                    b.HasBaseType("SightKeeper.Domain.Model.Model");
+                    b.HasBaseType("SightKeeper.Domain.Model.DataSet");
 
                     b.ToTable("DetectorModels", (string)null);
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.InternalTrainedModelWeights", b =>
-                {
-                    b.HasBaseType("SightKeeper.Domain.Model.ModelWeights");
-
-                    b.Property<float?>("Accuracy")
-                        .HasColumnType("REAL");
-
-                    b.Property<float>("AverageLoss")
-                        .HasColumnType("REAL");
-
-                    b.Property<int>("Batch")
-                        .HasColumnType("INTEGER");
-
-                    b.HasDiscriminator().HasValue("InternalTrainedModelWeights");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.ModelScreenshotsLibrary", b =>
                 {
                     b.HasBaseType("SightKeeper.Domain.Model.ScreenshotsLibrary");
 
-                    b.Property<int>("ModelId")
+                    b.Property<int>("DataSetId")
                         .HasColumnType("INTEGER");
 
-                    b.HasIndex("ModelId")
+                    b.HasIndex("DataSetId")
                         .IsUnique();
 
                     b.ToTable("ModelScreenshotsLibraries", (string)null);
                 });
 
-            modelBuilder.Entity("AssetInternalTrainedModelWeights", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.InternalTrainedWeights", b =>
+                {
+                    b.HasBaseType("SightKeeper.Domain.Model.Weights");
+
+                    b.Property<int>("Batch")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("BoundingLoss")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("ClassificationLoss")
+                        .HasColumnType("REAL");
+
+                    b.HasDiscriminator().HasValue("InternalTrainedWeights");
+                });
+
+            modelBuilder.Entity("AssetInternalTrainedWeights", b =>
                 {
                     b.HasOne("SightKeeper.Domain.Model.Common.Asset", null)
                         .WithMany()
@@ -355,9 +355,9 @@ namespace SightKeeper.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SightKeeper.Domain.Model.InternalTrainedModelWeights", null)
+                    b.HasOne("SightKeeper.Domain.Model.InternalTrainedWeights", null)
                         .WithMany()
-                        .HasForeignKey("InternalTrainedModelWeightsId")
+                        .HasForeignKey("InternalTrainedWeightsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -373,15 +373,71 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("Screenshot");
                 });
 
+            modelBuilder.Entity("SightKeeper.Domain.Model.Common.Image", b =>
+                {
+                    b.OwnsOne("SightKeeper.Domain.Model.Common.Resolution", "Resolution", b1 =>
+                        {
+                            b1.Property<int>("ImageId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("Height")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("Width")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("ImageId");
+
+                            b1.ToTable("Images");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ImageId");
+                        });
+
+                    b.Navigation("Resolution")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.ItemClass", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.Model", "Model")
+                    b.HasOne("SightKeeper.Domain.Model.DataSet", "DataSet")
                         .WithMany("ItemClasses")
-                        .HasForeignKey("ModelId")
+                        .HasForeignKey("DataSetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Model");
+                    b.Navigation("DataSet");
+                });
+
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSet", b =>
+                {
+                    b.HasOne("SightKeeper.Domain.Model.Common.Game", "Game")
+                        .WithMany()
+                        .HasForeignKey("GameId");
+
+                    b.OwnsOne("SightKeeper.Domain.Model.Common.Resolution", "Resolution", b1 =>
+                        {
+                            b1.Property<int>("DataSetId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("Height")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("Width")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("DataSetId");
+
+                            b1.ToTable("Models");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DataSetId");
+                        });
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Resolution")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorItem", b =>
@@ -398,21 +454,21 @@ namespace SightKeeper.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("SightKeeper.Domain.Model.Detector.BoundingBox", "BoundingBox", b1 =>
+                    b.OwnsOne("SightKeeper.Domain.Model.Detector.BoundingBox", "Bounding", b1 =>
                         {
                             b1.Property<int>("DetectorItemId")
                                 .HasColumnType("INTEGER");
 
-                            b1.Property<double>("X1")
+                            b1.Property<double>("Bottom")
                                 .HasColumnType("REAL");
 
-                            b1.Property<double>("X2")
+                            b1.Property<double>("Left")
                                 .HasColumnType("REAL");
 
-                            b1.Property<double>("Y1")
+                            b1.Property<double>("Right")
                                 .HasColumnType("REAL");
 
-                            b1.Property<double>("Y2")
+                            b1.Property<double>("Top")
                                 .HasColumnType("REAL");
 
                             b1.HasKey("DetectorItemId");
@@ -425,78 +481,17 @@ namespace SightKeeper.Data.Migrations
 
                     b.Navigation("Asset");
 
-                    b.Navigation("BoundingBox")
+                    b.Navigation("Bounding")
                         .IsRequired();
 
                     b.Navigation("ItemClass");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Model", b =>
-                {
-                    b.HasOne("SightKeeper.Domain.Model.Common.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId");
-
-                    b.OwnsOne("SightKeeper.Domain.Model.Common.Resolution", "Resolution", b1 =>
-                        {
-                            b1.Property<int>("ModelId")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("Height")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("Width")
-                                .HasColumnType("INTEGER");
-
-                            b1.HasKey("ModelId");
-
-                            b1.ToTable("Models");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ModelId");
-                        });
-
-                    b.Navigation("Game");
-
-                    b.Navigation("Resolution")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.ModelWeights", b =>
-                {
-                    b.HasOne("SightKeeper.Domain.Model.ModelConfig", "Config")
-                        .WithMany()
-                        .HasForeignKey("ConfigId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SightKeeper.Domain.Model.ModelWeightsLibrary", "Library")
-                        .WithMany("Weights")
-                        .HasForeignKey("LibraryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Config");
-
-                    b.Navigation("Library");
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.ModelWeightsLibrary", b =>
-                {
-                    b.HasOne("SightKeeper.Domain.Model.Model", "Model")
-                        .WithOne("WeightsLibrary")
-                        .HasForeignKey("SightKeeper.Domain.Model.ModelWeightsLibrary", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Model");
-                });
-
             modelBuilder.Entity("SightKeeper.Domain.Model.Profile", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.Detector.DetectorModel", "DetectorModel")
+                    b.HasOne("SightKeeper.Domain.Model.Detector.DetectorDataSet", "DetectorDataSet")
                         .WithMany()
-                        .HasForeignKey("DetectorModelId")
+                        .HasForeignKey("DetectorDataSetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -504,7 +499,7 @@ namespace SightKeeper.Data.Migrations
                         .WithMany()
                         .HasForeignKey("GameId");
 
-                    b.Navigation("DetectorModel");
+                    b.Navigation("DetectorDataSet");
 
                     b.Navigation("Game");
                 });
@@ -520,21 +515,51 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("Library");
                 });
 
+            modelBuilder.Entity("SightKeeper.Domain.Model.Weights", b =>
+                {
+                    b.HasOne("SightKeeper.Domain.Model.WeightsLibrary", "Library")
+                        .WithMany("Weights")
+                        .HasForeignKey("LibraryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SightKeeper.Domain.Model.ModelConfig", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Library");
+
+                    b.Navigation("Model");
+                });
+
+            modelBuilder.Entity("SightKeeper.Domain.Model.WeightsLibrary", b =>
+                {
+                    b.HasOne("SightKeeper.Domain.Model.DataSet", "DataSet")
+                        .WithOne("WeightsLibrary")
+                        .HasForeignKey("SightKeeper.Domain.Model.WeightsLibrary", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DataSet");
+                });
+
             modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorAsset", b =>
                 {
+                    b.HasOne("SightKeeper.Domain.Model.Detector.DetectorDataSet", "DataSet")
+                        .WithMany("Assets")
+                        .HasForeignKey("DataSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SightKeeper.Domain.Model.Common.Asset", null)
                         .WithOne()
                         .HasForeignKey("SightKeeper.Domain.Model.Detector.DetectorAsset", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SightKeeper.Domain.Model.Detector.DetectorModel", "Model")
-                        .WithMany("Assets")
-                        .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Model");
+                    b.Navigation("DataSet");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.ScreenshotImage", b =>
@@ -554,30 +579,30 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("Screenshot");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorModel", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorDataSet", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.Model", null)
+                    b.HasOne("SightKeeper.Domain.Model.DataSet", null)
                         .WithOne()
-                        .HasForeignKey("SightKeeper.Domain.Model.Detector.DetectorModel", "Id")
+                        .HasForeignKey("SightKeeper.Domain.Model.Detector.DetectorDataSet", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.ModelScreenshotsLibrary", b =>
                 {
+                    b.HasOne("SightKeeper.Domain.Model.DataSet", "DataSet")
+                        .WithOne("ScreenshotsLibrary")
+                        .HasForeignKey("SightKeeper.Domain.Model.ModelScreenshotsLibrary", "DataSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SightKeeper.Domain.Model.ScreenshotsLibrary", null)
                         .WithOne()
                         .HasForeignKey("SightKeeper.Domain.Model.ModelScreenshotsLibrary", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SightKeeper.Domain.Model.Model", "Model")
-                        .WithOne("ScreenshotsLibrary")
-                        .HasForeignKey("SightKeeper.Domain.Model.ModelScreenshotsLibrary", "ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Model");
+                    b.Navigation("DataSet");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.ItemClass", b =>
@@ -585,7 +610,7 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("DetectorItems");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Model", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSet", b =>
                 {
                     b.Navigation("ItemClasses");
 
@@ -594,11 +619,6 @@ namespace SightKeeper.Data.Migrations
 
                     b.Navigation("WeightsLibrary")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.ModelWeightsLibrary", b =>
-                {
-                    b.Navigation("Weights");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Screenshot", b =>
@@ -614,12 +634,17 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("Screenshots");
                 });
 
+            modelBuilder.Entity("SightKeeper.Domain.Model.WeightsLibrary", b =>
+                {
+                    b.Navigation("Weights");
+                });
+
             modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorAsset", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorModel", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorDataSet", b =>
                 {
                     b.Navigation("Assets");
                 });

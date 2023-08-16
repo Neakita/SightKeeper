@@ -10,4 +10,10 @@ public abstract class Image
         Content = content;
         Resolution = resolution;
     }
+
+    protected Image(byte[] content)
+    {
+        Content = content;
+        Resolution = null!;
+    }
 }

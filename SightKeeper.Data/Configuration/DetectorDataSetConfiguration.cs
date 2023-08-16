@@ -9,6 +9,6 @@ public sealed class DetectorDataSetConfiguration : IEntityTypeConfiguration<Dete
     public void Configure(EntityTypeBuilder<DetectorDataSet> builder)
     {
         builder.ToTable("DetectorModels");
-        builder.HasMany(model => model.Assets).WithOne("Model").IsRequired();
+        builder.HasMany(model => model.Assets).WithOne(asset => asset.DataSet).IsRequired();
     }
 }

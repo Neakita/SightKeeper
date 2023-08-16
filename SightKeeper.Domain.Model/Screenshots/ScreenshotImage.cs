@@ -11,7 +11,7 @@ public sealed class ScreenshotImage : Image
         Screenshot = screenshot;
     }
 
-    private ScreenshotImage(byte[] content, Resolution resolution) : base(content, resolution)
+    private ScreenshotImage(byte[] content) : base(content)
     {
         Screenshot = null!;
     }

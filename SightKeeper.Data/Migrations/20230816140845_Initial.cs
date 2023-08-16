@@ -26,13 +26,28 @@ namespace SightKeeper.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Content = table.Column<byte[]>(type: "BLOB", nullable: false),
+                    Resolution_Width = table.Column<int>(type: "INTEGER", nullable: false),
+                    Resolution_Height = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ModelConfigs",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Content = table.Column<string>(type: "TEXT", nullable: false),
+                    Content = table.Column<byte[]>(type: "BLOB", nullable: false),
                     ModelType = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -46,7 +61,8 @@ namespace SightKeeper.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    MaxQuantity = table.Column<ushort>(type: "INTEGER", nullable: true)
+                    MaxQuantity = table.Column<ushort>(type: "INTEGER", nullable: true),
+                    HasAnyScreenshots = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,11 +73,11 @@ namespace SightKeeper.Data.Migrations
                 name: "Models",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     GameId = table.Column<int>(type: "INTEGER", nullable: true),
-                    ConfigId = table.Column<int>(type: "INTEGER", nullable: true),
                     Resolution_Width = table.Column<int>(type: "INTEGER", nullable: false),
                     Resolution_Height = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -73,11 +89,6 @@ namespace SightKeeper.Data.Migrations
                         column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Models_ModelConfigs_ConfigId",
-                        column: x => x.ConfigId,
-                        principalTable: "ModelConfigs",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -86,7 +97,6 @@ namespace SightKeeper.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Content = table.Column<byte[]>(type: "BLOB", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     LibraryId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -125,15 +135,15 @@ namespace SightKeeper.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ModelId = table.Column<int>(type: "INTEGER", nullable: false),
+                    DataSetId = table.Column<int>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ItemClasses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ItemClasses_Models_ModelId",
-                        column: x => x.ModelId,
+                        name: "FK_ItemClasses_Models_DataSetId",
+                        column: x => x.DataSetId,
                         principalTable: "Models",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -145,14 +155,14 @@ namespace SightKeeper.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ModelId = table.Column<int>(type: "INTEGER", nullable: false)
+                    DataSetId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ModelScreenshotsLibraries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ModelScreenshotsLibraries_Models_ModelId",
-                        column: x => x.ModelId,
+                        name: "FK_ModelScreenshotsLibraries_Models_DataSetId",
+                        column: x => x.DataSetId,
                         principalTable: "Models",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -199,6 +209,31 @@ namespace SightKeeper.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ScreenshotImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ScreenshotId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScreenshotImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ScreenshotImages_Images_Id",
+                        column: x => x.Id,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ScreenshotImages_Screenshots_ScreenshotId",
+                        column: x => x.ScreenshotId,
+                        principalTable: "Screenshots",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Profiles",
                 columns: table => new
                 {
@@ -207,14 +242,14 @@ namespace SightKeeper.Data.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     GameId = table.Column<int>(type: "INTEGER", nullable: true),
-                    DetectorModelId = table.Column<int>(type: "INTEGER", nullable: false)
+                    DetectorDataSetId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Profiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Profiles_DetectorModels_DetectorModelId",
-                        column: x => x.DetectorModelId,
+                        name: "FK_Profiles_DetectorModels_DetectorDataSetId",
+                        column: x => x.DetectorDataSetId,
                         principalTable: "DetectorModels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -226,27 +261,31 @@ namespace SightKeeper.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ModelWeights",
+                name: "Weights",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Batch = table.Column<int>(type: "INTEGER", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Data = table.Column<byte[]>(type: "BLOB", nullable: false),
-                    ConfigId = table.Column<int>(type: "INTEGER", nullable: true),
-                    LibraryId = table.Column<int>(type: "INTEGER", nullable: false)
+                    TrainedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModelId = table.Column<int>(type: "INTEGER", nullable: false),
+                    LibraryId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Discriminator = table.Column<string>(type: "TEXT", maxLength: 34, nullable: false),
+                    Batch = table.Column<int>(type: "INTEGER", nullable: true),
+                    BoundingLoss = table.Column<float>(type: "REAL", nullable: true),
+                    ClassificationLoss = table.Column<float>(type: "REAL", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ModelWeights", x => x.Id);
+                    table.PrimaryKey("PK_Weights", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ModelWeights_ModelConfigs_ConfigId",
-                        column: x => x.ConfigId,
+                        name: "FK_Weights_ModelConfigs_ModelId",
+                        column: x => x.ModelId,
                         principalTable: "ModelConfigs",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ModelWeights_ModelWeightsLibraries_LibraryId",
+                        name: "FK_Weights_ModelWeightsLibraries_LibraryId",
                         column: x => x.LibraryId,
                         principalTable: "ModelWeightsLibraries",
                         principalColumn: "Id",
@@ -258,7 +297,7 @@ namespace SightKeeper.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    ModelId = table.Column<int>(type: "INTEGER", nullable: false)
+                    DataSetId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -270,33 +309,33 @@ namespace SightKeeper.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DetectorAssets_DetectorModels_ModelId",
-                        column: x => x.ModelId,
+                        name: "FK_DetectorAssets_DetectorModels_DataSetId",
+                        column: x => x.DataSetId,
                         principalTable: "DetectorModels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "WeightsAssets",
+                name: "AssetInternalTrainedWeights",
                 columns: table => new
                 {
-                    AssetId = table.Column<int>(type: "INTEGER", nullable: false),
-                    WeightsId = table.Column<int>(type: "INTEGER", nullable: false)
+                    AssetsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    InternalTrainedWeightsId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeightsAssets", x => new { x.AssetId, x.WeightsId });
+                    table.PrimaryKey("PK_AssetInternalTrainedWeights", x => new { x.AssetsId, x.InternalTrainedWeightsId });
                     table.ForeignKey(
-                        name: "FK_WeightsAssets_Assets_AssetId",
-                        column: x => x.AssetId,
+                        name: "FK_AssetInternalTrainedWeights_Assets_AssetsId",
+                        column: x => x.AssetsId,
                         principalTable: "Assets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WeightsAssets_ModelWeights_WeightsId",
-                        column: x => x.WeightsId,
-                        principalTable: "ModelWeights",
+                        name: "FK_AssetInternalTrainedWeights_Weights_InternalTrainedWeightsId",
+                        column: x => x.InternalTrainedWeightsId,
+                        principalTable: "Weights",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -308,10 +347,10 @@ namespace SightKeeper.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
                     AssetId = table.Column<int>(type: "INTEGER", nullable: false),
                     ItemClassId = table.Column<int>(type: "INTEGER", nullable: false),
-                    BoundingBox_X1 = table.Column<double>(type: "REAL", nullable: false),
-                    BoundingBox_Y1 = table.Column<double>(type: "REAL", nullable: false),
-                    BoundingBox_X2 = table.Column<double>(type: "REAL", nullable: false),
-                    BoundingBox_Y2 = table.Column<double>(type: "REAL", nullable: false)
+                    Bounding_Left = table.Column<double>(type: "REAL", nullable: false),
+                    Bounding_Top = table.Column<double>(type: "REAL", nullable: false),
+                    Bounding_Right = table.Column<double>(type: "REAL", nullable: false),
+                    Bounding_Bottom = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -331,9 +370,14 @@ namespace SightKeeper.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DetectorAssets_ModelId",
+                name: "IX_AssetInternalTrainedWeights_InternalTrainedWeightsId",
+                table: "AssetInternalTrainedWeights",
+                column: "InternalTrainedWeightsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetectorAssets_DataSetId",
                 table: "DetectorAssets",
-                column: "ModelId");
+                column: "DataSetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DetectorItems_AssetId",
@@ -346,14 +390,9 @@ namespace SightKeeper.Data.Migrations
                 column: "ItemClassId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemClasses_ModelId",
+                name: "IX_ItemClasses_DataSetId",
                 table: "ItemClasses",
-                column: "ModelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Models_ConfigId",
-                table: "Models",
-                column: "ConfigId");
+                column: "DataSetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Models_GameId",
@@ -367,25 +406,15 @@ namespace SightKeeper.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ModelScreenshotsLibraries_ModelId",
+                name: "IX_ModelScreenshotsLibraries_DataSetId",
                 table: "ModelScreenshotsLibraries",
-                column: "ModelId",
+                column: "DataSetId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ModelWeights_ConfigId",
-                table: "ModelWeights",
-                column: "ConfigId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ModelWeights_LibraryId",
-                table: "ModelWeights",
-                column: "LibraryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Profiles_DetectorModelId",
+                name: "IX_Profiles_DetectorDataSetId",
                 table: "Profiles",
-                column: "DetectorModelId");
+                column: "DetectorDataSetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Profiles_GameId",
@@ -393,19 +422,33 @@ namespace SightKeeper.Data.Migrations
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ScreenshotImages_ScreenshotId",
+                table: "ScreenshotImages",
+                column: "ScreenshotId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Screenshots_LibraryId",
                 table: "Screenshots",
                 column: "LibraryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WeightsAssets_WeightsId",
-                table: "WeightsAssets",
-                column: "WeightsId");
+                name: "IX_Weights_LibraryId",
+                table: "Weights",
+                column: "LibraryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Weights_ModelId",
+                table: "Weights",
+                column: "ModelId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AssetInternalTrainedWeights");
+
             migrationBuilder.DropTable(
                 name: "DetectorItems");
 
@@ -416,7 +459,10 @@ namespace SightKeeper.Data.Migrations
                 name: "Profiles");
 
             migrationBuilder.DropTable(
-                name: "WeightsAssets");
+                name: "ScreenshotImages");
+
+            migrationBuilder.DropTable(
+                name: "Weights");
 
             migrationBuilder.DropTable(
                 name: "DetectorAssets");
@@ -425,16 +471,19 @@ namespace SightKeeper.Data.Migrations
                 name: "ItemClasses");
 
             migrationBuilder.DropTable(
-                name: "ModelWeights");
+                name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "ModelConfigs");
+
+            migrationBuilder.DropTable(
+                name: "ModelWeightsLibraries");
 
             migrationBuilder.DropTable(
                 name: "Assets");
 
             migrationBuilder.DropTable(
                 name: "DetectorModels");
-
-            migrationBuilder.DropTable(
-                name: "ModelWeightsLibraries");
 
             migrationBuilder.DropTable(
                 name: "Screenshots");
@@ -447,9 +496,6 @@ namespace SightKeeper.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Games");
-
-            migrationBuilder.DropTable(
-                name: "ModelConfigs");
         }
     }
 }
