@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application.Model.Creating;
 
-public sealed class NewModelDataDTO : NewModelData
+public sealed class NewDataSetDataDTO : NewModelData
 {
     public ModelType ModelType { get; }
     public string Name { get; }
@@ -18,7 +18,7 @@ public sealed class NewModelDataDTO : NewModelData
     int? ModelData.ResolutionHeight => ResolutionHeight;
     public Resolution Resolution => new(ResolutionWidth, ResolutionHeight);
 
-    public NewModelDataDTO(ModelType type, ModelData data)
+    public NewDataSetDataDTO(ModelType type, ModelData data)
     {
         Guard.IsNotNull(data.ResolutionWidth);
         Guard.IsNotNull(data.ResolutionHeight);
@@ -31,7 +31,7 @@ public sealed class NewModelDataDTO : NewModelData
         Game = data.Game;
     }
     
-    public NewModelDataDTO(ModelType modelType, string name, string description, int resolutionWidth, int resolutionHeight, IReadOnlyCollection<string> itemClasses, Game? game, ModelConfig? config)
+    public NewDataSetDataDTO(ModelType modelType, string name, string description, int resolutionWidth, int resolutionHeight, IReadOnlyCollection<string> itemClasses, Game? game, ModelConfig? config)
     {
         ModelType = modelType;
         Name = name;

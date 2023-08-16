@@ -7,11 +7,11 @@
              xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Views.Dialogs.ModelEditor"
-             x:DataType="dialogs:ModelEditorViewModel"
+             x:DataType="dialogs:DataSetEditorViewModel"
              Width="450" Height="450">
     
     <Design.DataContext>
-        <fakes:FakeModelEditorViewModel/>
+        <fakes:FakeDataSetEditorViewModel/>
     </Design.DataContext>
     
     <Grid RowDefinitions="*, 50">

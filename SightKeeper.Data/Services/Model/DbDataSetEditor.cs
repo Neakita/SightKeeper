@@ -5,17 +5,17 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Data.Services.Model;
 
-public sealed class DbModelEditor : ModelEditor
+public sealed class DbDataSetEditor : DataSetEditor
 {
     public IObservable<Domain.Model.DataSet> ModelEdited => _modelEdited;
     
-    public DbModelEditor(IValidator<ModelChanges> changesValidator, AppDbContext dbContext)
+    public DbDataSetEditor(IValidator<ModelChanges> changesValidator, AppDbContext dbContext)
     {
         _changesValidator = changesValidator;
         _dbContext = dbContext;
     }
 
-    public async Task ApplyChanges(ModelChangesDTO changes, CancellationToken cancellationToken = default)
+    public async Task ApplyChanges(DataSetChangesDTO changes, CancellationToken cancellationToken = default)
     {
         await _changesValidator.ValidateAndThrowAsync(changes, cancellationToken);
         var model = changes.DataSet;

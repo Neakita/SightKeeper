@@ -3,9 +3,9 @@ using SightKeeper.Avalonia.ViewModels.Tabs;
 
 namespace SightKeeper.Avalonia.Views.Tabs;
 
-public sealed partial class ModelsTab : ReactiveUserControl<ModelsViewModel>
+public sealed partial class DataSetsTab : ReactiveUserControl<DataSetsViewModel>
 {
-	public ModelsTab()
+	public DataSetsTab()
 	{
 		InitializeComponent();
 	}

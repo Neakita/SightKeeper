@@ -5,11 +5,11 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services.Model;
 
-public sealed class DbModelsDataAccess : ModelsDataAccess
+public sealed class DbDataSetsDataAccess : DataSetsDataAccess
 {
     public IObservable<Domain.Model.DataSet> ModelRemoved => _modelRemoved.AsObservable();
     
-    public DbModelsDataAccess(AppDbContext dbContext)
+    public DbDataSetsDataAccess(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -21,7 +21,7 @@ public sealed class DbModelsDataAccess : ModelsDataAccess
             .Include(model => model.ScreenshotsLibrary)
             .ToListAsync(cancellationToken);
 
-    public Task RemoveModel(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
+    public Task RemoveDataSet(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         _dbContext.Models.Remove(dataSet);

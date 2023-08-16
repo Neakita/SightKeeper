@@ -9,12 +9,12 @@ public sealed class ModelsObservableRepository : IDisposable
 {
     public IObservableList<Domain.Model.DataSet> Models => _source;
 
-    public ModelsObservableRepository(ModelCreator modelCreator, ModelsDataAccess modelsDataAccess)
+    public ModelsObservableRepository(DataSetCreator dataSetCreator, DataSetsDataAccess dataSetsDataAccess)
     {
         _disposable = new CompositeDisposable(
-            modelCreator.ModelCreated.Subscribe(OnModelCreated),
-            modelsDataAccess.ModelRemoved.Subscribe(OnModelRemoved));
-        AddInitialModels(modelsDataAccess);
+            dataSetCreator.ModelCreated.Subscribe(OnModelCreated),
+            dataSetsDataAccess.ModelRemoved.Subscribe(OnModelRemoved));
+        AddInitialModels(dataSetsDataAccess);
     }
 
     public void Dispose()
@@ -29,9 +29,9 @@ public sealed class ModelsObservableRepository : IDisposable
     private void OnModelCreated(Domain.Model.DataSet dataSet) => _source.Add(dataSet);
     private void OnModelRemoved(Domain.Model.DataSet dataSet) => _source.Remove(dataSet);
 
-    private async void AddInitialModels(ModelsDataAccess modelsDataAccess)
+    private async void AddInitialModels(DataSetsDataAccess dataSetsDataAccess)
     {
-        var models = await modelsDataAccess.GetModels();
+        var models = await dataSetsDataAccess.GetModels();
         _source.AddRange(models);
     }
 }

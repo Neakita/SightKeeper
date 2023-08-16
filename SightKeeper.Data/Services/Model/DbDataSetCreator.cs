@@ -9,30 +9,30 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Data.Services.Model;
 
-public sealed class DbModelCreator : ModelCreator
+public sealed class DbDataSetCreator : DataSetCreator
 {
     public IObservable<Domain.Model.DataSet> ModelCreated => _modelCreated.AsObservable();
     
-    public DbModelCreator(IValidator<ModelData> validator, AppDbContext dbContext)
+    public DbDataSetCreator(IValidator<ModelData> validator, AppDbContext dbContext)
     {
         _validator = validator;
         _dbContext = dbContext;
     }
 
-    public async Task<Domain.Model.DataSet> CreateModel(NewModelDataDTO data, CancellationToken cancellationToken = default)
+    public async Task<Domain.Model.DataSet> CreateDataSet(NewDataSetDataDTO dataSetData, CancellationToken cancellationToken = default)
     {
-        await _validator.ValidateAndThrowAsync(data, cancellationToken);
-        var model = data.ModelType switch
+        await _validator.ValidateAndThrowAsync(dataSetData, cancellationToken);
+        var model = dataSetData.ModelType switch
         {
-            ModelType.Detector => new DetectorDataSet(data.Name, data.Resolution),
+            ModelType.Detector => new DetectorDataSet(dataSetData.Name, dataSetData.Resolution),
             ModelType.Classifier => throw new NotSupportedException("Classifier model creation not implemented yet"),
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Domain.Model.DataSet>(nameof(data.ModelType))
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Domain.Model.DataSet>(nameof(dataSetData.ModelType))
         };
         _dbContext.Models.Add(model);
-        model.Description = data.Description;
-        foreach (var itemClass in data.ItemClasses)
+        model.Description = dataSetData.Description;
+        foreach (var itemClass in dataSetData.ItemClasses)
             model.CreateItemClass(itemClass);
-        model.Game = data.Game;
+        model.Game = dataSetData.Game;
         await _dbContext.SaveChangesAsync(cancellationToken);
         _modelCreated.OnNext(model);
         return model;

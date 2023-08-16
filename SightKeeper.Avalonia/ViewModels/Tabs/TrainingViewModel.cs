@@ -18,11 +18,11 @@ public sealed partial class TrainingViewModel : ViewModel
 {
     public IObservable<TrainingProgress> Progress => _trainer.Progress;
     public IObservable<float?> Completion { get; }
-    public IReadOnlyCollection<ModelViewModel> AvailableModels { get; }
+    public IReadOnlyCollection<DataSetViewModel> AvailableModels { get; }
     public ReadOnlyCollection<ConfigViewModel> Configs { get; }
 
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
-    private ModelViewModel? _selectedModel;
+    private DataSetViewModel? _selectedModel;
     
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
     private ConfigViewModel? _selectedConfig;
@@ -33,11 +33,11 @@ public sealed partial class TrainingViewModel : ViewModel
         private set => SetProperty(ref _isTraining, value);
     }
 
-    public TrainingViewModel(ModelTrainer<DetectorDataSet> trainer, ModelsListViewModel modelsListViewModel, ConfigsListViewModel configsListViewModel)
+    public TrainingViewModel(ModelTrainer<DetectorDataSet> trainer, DataSetsListViewModel dataSetsListViewModel, ConfigsListViewModel configsListViewModel)
     {
         _trainer = trainer;
         Completion = Progress.Select(progress => (float)progress.Batch / trainer.MaxBatches);
-        AvailableModels = modelsListViewModel.Models;
+        AvailableModels = dataSetsListViewModel.DataSets;
         Configs = configsListViewModel.Configs;
     }
 

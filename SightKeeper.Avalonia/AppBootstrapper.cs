@@ -23,6 +23,7 @@ using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 using SightKeeper.Avalonia.ViewModels.Windows;
 using SightKeeper.Avalonia.Views.Annotating;
+using SightKeeper.Avalonia.Views.Dialogs;
 using SightKeeper.Avalonia.Views.Tabs;
 using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;
@@ -36,8 +37,8 @@ using SightKeeper.Services.Annotating;
 using SightKeeper.Services.Games;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Windows;
+using ConfigEditor = SightKeeper.Application.Config.ConfigEditor;
 using DetectorItem = SightKeeper.Avalonia.Views.Annotating.DetectorItem;
-using ModelEditor = SightKeeper.Avalonia.Views.Dialogs.ModelEditor;
 
 namespace SightKeeper.Avalonia;
 
@@ -81,10 +82,10 @@ public static class AppBootstrapper
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>().SingleInstance();
 		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerMatchingLifetimeScope(typeof(MainViewModel), typeof(AppBootstrapper));
 		builder.RegisterType<RegisteredGamesService>();
-		builder.RegisterType<DbModelCreator>().As<ModelCreator>().InstancePerMainViewModel();
+		builder.RegisterType<DbDataSetCreator>().As<DataSetCreator>().InstancePerMainViewModel();
 		builder.RegisterType<ModelDataValidator>().As<IValidator<ModelData>>();
-		builder.RegisterType<DbModelsDataAccess>().As<ModelsDataAccess>().InstancePerMainViewModel();
-		builder.RegisterType<DbModelEditor>().As<Application.Model.Editing.ModelEditor>().InstancePerMainViewModel();
+		builder.RegisterType<DbDataSetsDataAccess>().As<DataSetsDataAccess>().InstancePerMainViewModel();
+		builder.RegisterType<DbDataSetEditor>().As<Application.Model.Editing.DataSetEditor>().InstancePerMainViewModel();
 		builder.RegisterType<ModelChangesValidator>().As<IValidator<ModelChanges>>();
 		builder.RegisterType<DbConfigsDataAccess>().As<ConfigsDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<DbConfigCreator>().As<ConfigCreator>();
@@ -124,10 +125,10 @@ public static class AppBootstrapper
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainViewModel>();
-		builder.RegisterType<ModelEditorViewModel>();
+		builder.RegisterType<DataSetEditorViewModel>();
 
 		builder.RegisterType<AnnotatorViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<ModelsViewModel>();
+		builder.RegisterType<DataSetsViewModel>();
 		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<SettingsViewModel>();
 		builder.RegisterType<RegisteredGamesViewModel>();
@@ -139,17 +140,17 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectorDrawerViewModel>().AsSelf().As<AnnotatorWorkSpace<DetectorDataSet>>();
 		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<ModelsListViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<ConfigsListViewModel>().InstancePerMainViewModel();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainViewModel>>();
-		builder.RegisterType<ModelEditor>().AsSelf().As<IViewFor<ModelEditorViewModel>>();
+		builder.RegisterType<ModelEditor>().AsSelf().As<IViewFor<DataSetEditorViewModel>>();
 		
 		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatorViewModel>>();
-		builder.RegisterType<ModelsTab>().AsSelf().As<IViewFor<ModelsViewModel>>();
+		builder.RegisterType<DataSetsTab>().AsSelf().As<IViewFor<DataSetsViewModel>>();
 		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
 		builder.RegisterType<Views.Dialogs.ConfigEditor>().As<IViewFor<ConfigEditorViewModel>>();

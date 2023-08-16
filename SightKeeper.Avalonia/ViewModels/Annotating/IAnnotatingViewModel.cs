@@ -5,8 +5,8 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public interface IAnnotatingViewModel
 {
-    ReadOnlyObservableCollection<ModelViewModel> Models { get; }
-    ModelViewModel? SelectedModel { get; set; }
+    ReadOnlyObservableCollection<DataSetViewModel> Models { get; }
+    DataSetViewModel? SelectedModel { get; set; }
     bool CanChangeSelectedModel { get; }
     AnnotatorScreenshotsViewModel Screenshots { get; }
     ScreenshoterViewModel Screenshoter { get; }

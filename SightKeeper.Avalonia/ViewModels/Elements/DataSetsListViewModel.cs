@@ -8,26 +8,26 @@ using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
-public sealed class ModelsListViewModel : ViewModel, IDisposable
+public sealed class DataSetsListViewModel : ViewModel, IDisposable
 {
-    public ReadOnlyObservableCollection<ModelViewModel> Models { get; }
+    public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 
-    public ModelsListViewModel(ModelsObservableRepository modelsObservableRepository, ModelEditor editor)
+    public DataSetsListViewModel(ModelsObservableRepository modelsObservableRepository, DataSetEditor editor)
     {
         _disposable = new CompositeDisposable(
             modelsObservableRepository.Models.Connect()
-                .Transform(model => new ModelViewModel(model))
+                .Transform(model => new DataSetViewModel(model))
                 .AddKey(viewModel => viewModel.DataSet)
                 .Bind(out var models)
                 .PopulateInto(_cache),
             editor.ModelEdited.Subscribe(OnModelEdited));
-        Models = models;
+        DataSets = models;
     }
 
     public void Dispose() => _disposable.Dispose();
 
     private readonly IDisposable _disposable;
-    private readonly SourceCache<ModelViewModel, DataSet> _cache = new(viewModel => viewModel.DataSet);
+    private readonly SourceCache<DataSetViewModel, DataSet> _cache = new(viewModel => viewModel.DataSet);
 
     private void OnModelEdited(DataSet dataSet) => _cache.Lookup(dataSet).Value.NotifyChanges();
 }

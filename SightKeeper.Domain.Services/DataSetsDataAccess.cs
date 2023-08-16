@@ -1,8 +1,8 @@
 ﻿namespace SightKeeper.Domain.Services;
 
-public interface ModelsDataAccess
+public interface DataSetsDataAccess
 {
     IObservable<Model.DataSet> ModelRemoved { get; }
     Task<IReadOnlyCollection<Model.DataSet>> GetModels(CancellationToken cancellationToken = default);
-    Task RemoveModel(Model.DataSet dataSet, CancellationToken cancellationToken = default);
+    Task RemoveDataSet(Model.DataSet dataSet, CancellationToken cancellationToken = default);
 }

@@ -3,7 +3,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
-public sealed class ModelViewModel : ViewModel
+public sealed class DataSetViewModel : ViewModel
 {
     private static readonly string[] Properties =
     {
@@ -20,7 +20,7 @@ public sealed class ModelViewModel : ViewModel
     public Game? Game => DataSet.Game;
     public Resolution Resolution => DataSet.Resolution;
 
-    public ModelViewModel(DataSet dataSet)
+    public DataSetViewModel(DataSet dataSet)
     {
         DataSet = dataSet;
     }

@@ -25,7 +25,7 @@ public sealed partial class MainViewModel : ViewModel, IActivatableViewModel
 			var ownScope = scope.BeginLifetimeScope(typeof(MainViewModel));
 			ownScope.DisposeWith(disposables);
 			var profilesViewModel = ownScope.Resolve<ProfilesViewModel>();
-			var modelsViewModel = ownScope.Resolve<ModelsViewModel>();
+			var modelsViewModel = ownScope.Resolve<DataSetsViewModel>();
 			var annotatingViewModel = ownScope.Resolve<AnnotatorViewModel>();
 			var trainingViewModel = ownScope.Resolve<TrainingViewModel>();
 			var settingsViewModel = ownScope.Resolve<SettingsViewModel>();

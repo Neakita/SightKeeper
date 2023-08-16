@@ -5,27 +5,27 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:tabs="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Views.Tabs.ModelsTab"
-             x:DataType="tabs:ModelsViewModel">
+             x:Class="SightKeeper.Avalonia.Views.Tabs.DataSetsTab"
+             x:DataType="tabs:DataSetsViewModel">
     
     <Grid RowDefinitions="50, *">
         
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 0">
-            <Button Command="{Binding CreateNewModelCommand}"
+            <Button Command="{Binding CreateNewDataSetCommand}"
                     Content="{icons:MaterialIconExt Plus}"/>
         </StackPanel>
         
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Models}"
-                  SelectedItem="{Binding SelectedModel}"
+                  ItemsSource="{Binding DataSetsViewModels}"
+                  SelectedItem="{Binding SelectedDataSetViewModel}"
                   IsReadOnly="True">
             
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Edit"
-                              Command="{Binding EditModelCommand}"/>
+                              Command="{Binding EditDataSetCommand}"/>
                     <MenuItem Header="Delete"
-                              Command="{Binding DeleteModelCommand}"/>
+                              Command="{Binding DeleteDataSetCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             

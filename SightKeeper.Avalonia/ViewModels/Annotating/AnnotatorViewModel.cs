@@ -11,8 +11,8 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 {
-	public IObservable<ModelViewModel?> SelectedModelChanged => _selectedModelChanged;
-	public ReadOnlyObservableCollection<ModelViewModel> Models { get; }
+	public IObservable<DataSetViewModel?> SelectedModelChanged => _selectedModelChanged;
+	public ReadOnlyObservableCollection<DataSetViewModel> Models { get; }
 
 	public AnnotatorScreenshotsViewModel Screenshots { get; }
 
@@ -36,25 +36,25 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 		ILifetimeScope scope,
 		ScreenshoterViewModel screenshoterViewModel,
 		AnnotatorScreenshotsViewModel screenshots,
-		ModelsListViewModel modelsListViewModel)
+		DataSetsListViewModel dataSetsListViewModel)
 	{
 		Screenshoter = screenshoterViewModel;
 		_scope = scope;
 		Screenshots = screenshots;
 		screenshoterViewModel.IsEnabledChanged.Subscribe(_ =>
 			OnPropertyChanged(nameof(CanChangeSelectedModel)));
-		Models = modelsListViewModel.Models;
+		Models = dataSetsListViewModel.DataSets;
 	}
 
 	private readonly ILifetimeScope _scope;
-	private readonly Subject<ModelViewModel?> _selectedModelChanged = new();
+	private readonly Subject<DataSetViewModel?> _selectedModelChanged = new();
 
-	[ObservableProperty] private ModelViewModel? _selectedModel;
+	[ObservableProperty] private DataSetViewModel? _selectedModel;
 	private IDisposable? _selectedModelDisposable;
 	private AnnotatorTools? _tools;
 	private AnnotatorWorkSpace? _workSpace;
 
-	partial void OnSelectedModelChanged(ModelViewModel? value)
+	partial void OnSelectedModelChanged(DataSetViewModel? value)
 	{
 		_selectedModelDisposable?.Dispose();
 		Screenshoter.Model = value?.DataSet;
