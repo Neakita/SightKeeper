@@ -9,10 +9,10 @@ public sealed class Screenshot
 	public ScreenshotsLibrary Library { get; internal set; }
 	public Asset? Asset { get; internal set; }
 	
-	internal Screenshot(ScreenshotsLibrary library, byte[] content)
+	internal Screenshot(ScreenshotsLibrary library, byte[] content, Resolution resolution)
 	{
 		Library = library;
-		Image = new ScreenshotImage(this, content);
+		Image = new ScreenshotImage(this, content, resolution);
 		CreationDate = DateTime.Now;
 	}
 

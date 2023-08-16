@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Domain.Model.Tests.DetectorModelTests;
@@ -19,8 +20,8 @@ public sealed class WeightsTests
     {
         DetectorModel model1 = new("Model 1");
         DetectorModel model2 = new("Model 2");
-        var screenshot1 = model1.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var screenshot2 = model2.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+        var screenshot1 = model1.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var screenshot2 = model2.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset1 = model1.MakeAsset(screenshot1);
         var asset2 = model2.MakeAsset(screenshot2);
         Assert.Throws<ArgumentException>(() => model1.WeightsLibrary.CreateWeights(Array.Empty<byte>(), DateTime.Now,

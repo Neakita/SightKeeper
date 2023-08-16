@@ -10,5 +10,6 @@ public sealed class ImageConfiguration : IEntityTypeConfiguration<Image>
     {
         builder.HasShadowKey();
         builder.ToTable("Images");
+        builder.OwnsOne(image => image.Resolution);
     }
 }

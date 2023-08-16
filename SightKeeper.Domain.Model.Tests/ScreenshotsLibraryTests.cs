@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Tests;
 
@@ -8,7 +9,7 @@ public sealed class ScreenshotsLibraryTests
     public void ShouldCreateScreenshot()
     {
         ScreenshotsLibrary library = new();
-        var screenshot = library.CreateScreenshot(Array.Empty<byte>());
+        var screenshot = library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         library.Screenshots.Should().Contain(screenshot);
     }
 
@@ -16,7 +17,7 @@ public sealed class ScreenshotsLibraryTests
     public void ShouldDeleteScreenshot()
     {
         ScreenshotsLibrary library = new();
-        var screenshot = library.CreateScreenshot(Array.Empty<byte>());
+        var screenshot = library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         library.DeleteScreenshot(screenshot);
         library.Screenshots.Should().NotContain(screenshot);
     }
@@ -25,7 +26,7 @@ public sealed class ScreenshotsLibraryTests
     public void HasAnyScreenshotsShouldBeTrueWhenAddScreenshot()
     {
         ScreenshotsLibrary library = new();
-        library.CreateScreenshot(Array.Empty<byte>());
+        library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         library.HasAnyScreenshots.Should().BeTrue();
     }
 
@@ -33,7 +34,7 @@ public sealed class ScreenshotsLibraryTests
     public void HasAnyScreenshotsShouldBeFalseWhenAddThenDeleteScreenshot()
     {
         ScreenshotsLibrary library = new();
-        var screenshot = library.CreateScreenshot(Array.Empty<byte>());
+        var screenshot = library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         library.DeleteScreenshot(screenshot);
         library.HasAnyScreenshots.Should().BeFalse();
     }

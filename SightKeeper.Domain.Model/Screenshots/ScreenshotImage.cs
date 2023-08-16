@@ -6,12 +6,12 @@ public sealed class ScreenshotImage : Image
 {
     public Screenshot Screenshot { get; private set; }
     
-    internal ScreenshotImage(Screenshot screenshot, byte[] content) : base(content)
+    internal ScreenshotImage(Screenshot screenshot, byte[] content, Resolution resolution) : base(content, resolution)
     {
         Screenshot = screenshot;
     }
 
-    private ScreenshotImage(byte[] content) : base(content)
+    private ScreenshotImage(byte[] content, Resolution resolution) : base(content, resolution)
     {
         Screenshot = null!;
     }

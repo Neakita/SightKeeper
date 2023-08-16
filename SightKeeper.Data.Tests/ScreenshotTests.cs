@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
 
@@ -12,7 +13,7 @@ public sealed class ScreenshotTests : DbRelatedTests
         using (var arrangeDbContext = DbContextFactory.CreateDbContext())
         {
             DetectorModel model = new("Test model");
-            var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+            var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
             model.MakeAsset(screenshot);
             arrangeDbContext.Add(model);
             arrangeDbContext.SaveChanges();

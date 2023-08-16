@@ -30,7 +30,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
 		var model = TestDetectorModel;
-		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 		var asset = model.MakeAsset(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
 		var item = asset.CreateItem(itemClass, new BoundingBox());
@@ -50,7 +50,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
 		DetectorModel model = new("Test model");
-		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 		var asset = model.MakeAsset(screenshot);
 		var itemClass = model.CreateItemClass("Test item class");
 		asset.CreateItem(itemClass, new BoundingBox(0, 0, 1, 1));
@@ -61,7 +61,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		dbContext.DetectorModels.Should().BeEmpty();
 		dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
 		dbContext.Set<DetectorAsset>().Should().BeEmpty();
-		dbContext.Set<Screenshot>().Should().BeEmpty(); // test fails because screenshot is principal entity, and so, it is not cascade deleting when asset got deleted
+		dbContext.Set<Screenshot>().Should().BeEmpty();
 		dbContext.Set<ItemClass>().Should().BeEmpty();
 		dbContext.Set<DetectorItem>().Should().BeEmpty();
 	}
@@ -72,7 +72,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
 			DetectorModel model = new("Test model");
-			var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+			var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 			model.MakeAsset(screenshot);
 			dbContext.Add(model);
 			dbContext.SaveChanges();

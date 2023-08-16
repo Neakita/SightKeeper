@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
@@ -17,9 +18,9 @@ public class ScreenshotsLibrary
         _screenshots = new List<Screenshot>();
     }
 
-    public Screenshot CreateScreenshot(byte[] content)
+    public Screenshot CreateScreenshot(byte[] content, Resolution resolution)
     {
-        Screenshot screenshot = new(this, content);
+        Screenshot screenshot = new(this, content, resolution);
         _screenshots.Add(screenshot);
         ClearExceed();
         HasAnyScreenshots = Screenshots.Any();

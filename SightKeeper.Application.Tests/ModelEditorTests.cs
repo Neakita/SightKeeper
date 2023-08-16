@@ -107,7 +107,7 @@ public sealed class ModelEditorTests : DbRelatedTests
         var editor = Editor;
         DetectorModel model = new("Untitled model");
         var itemClass = model.CreateItemClass("Item class");
-        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+        var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = model.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new BoundingBox());
         ModelChangesDTO changes = new(model, model.Name, model.Description, model.Resolution, new List<ItemClass>(), model.Game);
