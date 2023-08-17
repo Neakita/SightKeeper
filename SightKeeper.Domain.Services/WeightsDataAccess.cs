@@ -12,7 +12,7 @@ public interface WeightsDataAccess
         byte[] data,
         DateTime trainedDate,
         ModelConfig config,
-        int batch,
+        int epoch,
         float boundingLoss,
         float classificationLoss,
         IEnumerable<Asset> assets);

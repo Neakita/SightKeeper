@@ -18,12 +18,12 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         byte[] data,
         DateTime trainedDate,
         ModelConfig config,
-        int batch,
+        int epoch,
         float boundingLoss,
         float classificationLoss,
         IEnumerable<Asset> assets)
     {
-        var weights = library.CreateWeights(data, trainedDate, config, batch, boundingLoss, classificationLoss, assets);
+        var weights = library.CreateWeights(data, trainedDate, config, epoch, boundingLoss, classificationLoss, assets);
         _dbContext.SaveChanges();
         return weights;
     }
