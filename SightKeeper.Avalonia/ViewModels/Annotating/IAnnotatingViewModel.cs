@@ -10,6 +10,5 @@ public interface IAnnotatingViewModel
     bool CanChangeSelectedDataSet { get; }
     AnnotatorScreenshotsViewModel Screenshots { get; }
     ScreenshoterViewModel Screenshoter { get; }
-    AnnotatorTools? Tools { get; }
-    AnnotatorWorkSpace? WorkSpace { get; }
+    AnnotatorEnvironment? Environment { get; }
 }

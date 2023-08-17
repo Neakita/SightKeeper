@@ -6,6 +6,6 @@ public interface AnnotatorWorkSpace
 {
 }
 
-public interface AnnotatorWorkSpace<TModel> : AnnotatorWorkSpace where TModel : DataSet
+public interface AnnotatorWorkSpace<TDataSet> : AnnotatorWorkSpace where TDataSet : DataSet
 {
 }

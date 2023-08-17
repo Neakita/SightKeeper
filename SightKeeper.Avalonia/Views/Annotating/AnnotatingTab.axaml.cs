@@ -62,7 +62,7 @@ public sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatorViewMod
 	}
 
 	private void ScrollItemClass(bool reverse) =>
-		ViewModel?.Tools?.ScrollItemClass(reverse);
+		ViewModel?.Environment?.Tools.ScrollItemClass(reverse);
 
 	private void ScrollScreenshot(bool reverse) =>
 		ViewModel?.Screenshots.ScrollScreenshot(reverse);

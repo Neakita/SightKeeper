@@ -18,16 +18,10 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 
 	public ScreenshoterViewModel Screenshoter { get; }
 
-	public AnnotatorTools? Tools
+	public AnnotatorEnvironment? Environment
 	{
-		get => _tools;
-		private set => SetProperty(ref _tools, value);
-	}
-
-	public AnnotatorWorkSpace? WorkSpace
-	{
-		get => _workSpace;
-		private set => SetProperty(ref _workSpace, value);
+		get => _environment;
+		private set => SetProperty(ref _environment, value);
 	}
 
 	public bool CanChangeSelectedDataSet => !Screenshoter.IsEnabled;
@@ -51,8 +45,7 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
 	private IDisposable? _selectedDataSetDisposable;
-	private AnnotatorTools? _tools;
-	private AnnotatorWorkSpace? _workSpace;
+	private AnnotatorEnvironment? _environment;
 
 	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
@@ -74,15 +67,13 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 		_selectedDataSetChanged.OnNext(value);
 	}
 
-	private void SetupDetectorDataSetEnvironment(IComponentContext content)
+	private void SetupDetectorDataSetEnvironment(IComponentContext context)
 	{
-		Tools = content.Resolve<AnnotatorTools<DetectorDataSet>>();
-		WorkSpace = content.Resolve<AnnotatorWorkSpace<DetectorDataSet>>();
+		Environment = context.Resolve<AnnotatorEnvironment<DetectorDataSet>>();
 	}
 
 	private void ClearDataSetEnvironment()
 	{
-		Tools = null;
-		WorkSpace = null;
+		Environment = null;
 	}
 }

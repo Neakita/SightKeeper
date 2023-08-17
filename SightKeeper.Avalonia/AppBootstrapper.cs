@@ -86,7 +86,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DbDataSetCreator>().As<DataSetCreator>().InstancePerMainViewModel();
 		builder.RegisterType<ModelDataValidator>().As<IValidator<ModelData>>();
 		builder.RegisterType<DbDataSetsDataAccess>().As<DataSetsDataAccess>().InstancePerMainViewModel();
-		builder.RegisterType<DbDataSetEditor>().As<Application.Model.Editing.DataSetEditor>().InstancePerMainViewModel();
+		builder.RegisterType<DbDataSetEditor>().As<DataSetEditor>().InstancePerMainViewModel();
 		builder.RegisterType<ModelChangesValidator>().As<IValidator<ModelChanges>>();
 		builder.RegisterType<DbConfigsDataAccess>().As<ConfigsDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<DbConfigCreator>().As<ConfigCreator>();
@@ -143,6 +143,7 @@ public static class AppBootstrapper
 		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<ConfigsListViewModel>().InstancePerMainViewModel();
+		builder.RegisterGeneric(typeof(GenericAnnotatorEnvironment<>)).As(typeof(AnnotatorEnvironment<>)).InstancePerMainViewModel();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)

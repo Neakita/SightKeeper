@@ -24,8 +24,7 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
     public AnnotatorScreenshotsViewModel Screenshots => new(new MockScreenshotImageLoader(), new MockScreenshotsDataAccess());
 
     public ScreenshoterViewModel Screenshoter => new(new MockStreamModelScreenshoter());
-    public AnnotatorTools? Tools => null;
-    public AnnotatorWorkSpace? WorkSpace => null;
+    public AnnotatorEnvironment? Environment => null;
 
     private sealed class MockStreamModelScreenshoter : StreamModelScreenshoter
     {

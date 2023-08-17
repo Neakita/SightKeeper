@@ -7,6 +7,6 @@ public interface AnnotatorTools
     void ScrollItemClass(bool reverse);
 }
 
-public interface AnnotatorTools<TModel> : AnnotatorTools where TModel : DataSet
+public interface AnnotatorTools<TDataSet> : AnnotatorTools where TDataSet : DataSet
 {
 }
