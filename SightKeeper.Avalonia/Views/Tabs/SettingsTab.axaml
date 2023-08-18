@@ -6,7 +6,6 @@
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
-             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Tabs.SettingsTab"
              x:DataType="viewModels:ISettingsViewModel">
@@ -65,31 +64,6 @@
                             <DataGridTextColumn Header="Process" Binding="{Binding ProcessName}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                </Grid>
-            </Expander>
-            <Expander Header="Configs"
-                      DataContext="{Binding ConfigsViewModel}">
-                <Grid RowDefinitions="Auto *">
-                    <Button Grid.Row="0"
-                            Content="{icons:MaterialIconExt Plus}"
-                            Command="{Binding AddConfigCommand}"/>
-                    <ListBox Grid.Row="1"
-                             ItemsSource="{Binding Configs}"
-                             SelectedItem="{Binding SelectedConfig}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Edit"
-                                          Command="{Binding EditConfigCommand}"/>
-                                <MenuItem Header="Delete"
-                                          Command="{Binding DeleteConfigCommand}"/>
-                            </ContextMenu>
-                        </ListBox.ContextMenu>
-                    </ListBox>
                 </Grid>
             </Expander>
         </StackPanel>
