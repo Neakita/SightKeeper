@@ -19,7 +19,7 @@ public sealed class WeightsLibrary
         byte[] data,
         DateTime trainedDate,
         ModelSize size,
-        int epoch,
+        uint epoch,
         float boundingLoss,
         float classificationLoss,
         IEnumerable<Asset> assets)

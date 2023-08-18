@@ -2,32 +2,29 @@
 
 public sealed class Resolution
 {
-	public int Width { get; private set; }
-	public int Height { get; private set; }
+	public ushort Width => _width;
+	public ushort Height => _height;
 	
 	public Resolution()
 	{
-		Width = 320;
-		Height = 320;
+		_width = 320;
+		_height = 320;
 	}
 	
-	public Resolution(int width, int height)
+	public Resolution(ushort width, ushort height)
 	{
-		Width = width;
-		Height = height;
+		_width = width;
+		_height = height;
 	}
 
 	public override string ToString() => $"{Width}x{Height}";
 
-	private bool Equals(Resolution other)
-	{
-		return Width == other.Width && Height == other.Height;
-	}
+	public override bool Equals(object? obj) => ReferenceEquals(this, obj) || obj is Resolution other && Equals(other);
 
-	public override bool Equals(object? obj)
-	{
-		return ReferenceEquals(this, obj) || obj is Resolution other && Equals(other);
-	}
+	private bool Equals(Resolution other) => Width == other.Width && Height == other.Height;
 
-	public override int GetHashCode() => HashCode.Combine(Width, Height);
+	public override int GetHashCode() => HashCode.Combine(_width, _height);
+
+	private readonly ushort _width;
+	private readonly ushort _height;
 }

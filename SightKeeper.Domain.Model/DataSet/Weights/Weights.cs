@@ -7,13 +7,13 @@ public sealed class Weights
     public byte[] Data { get; private set; }
     public DateTime TrainedDate { get; private set; }
     public ModelSize Size { get; private set; }
-    public WeightsLibrary? Library { get; internal set; }
-    public int Epoch { get; private set; }
+    public WeightsLibrary Library { get; private set; }
+    public uint Epoch { get; private set; }
     public float BoundingLoss { get; private set; }
     public float ClassificationLoss { get; private set; }
     public IReadOnlyCollection<Asset> Assets { get; private set; }
     
-    public Weights(byte[] data, DateTime trainedDate, ModelSize size, WeightsLibrary? library, int epoch, float boundingLoss, float classificationLoss, IReadOnlyCollection<Asset> assets)
+    internal Weights(byte[] data, DateTime trainedDate, ModelSize size, WeightsLibrary library, uint epoch, float boundingLoss, float classificationLoss, IReadOnlyCollection<Asset> assets)
     {
         Data = data;
         TrainedDate = trainedDate;
