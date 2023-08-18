@@ -7,7 +7,7 @@ public interface WeightsDataAccess
 {
     void LoadWeights(WeightsLibrary library);
     
-    InternalTrainedWeights CreateWeights(
+    Weights CreateWeights(
         WeightsLibrary library,
         byte[] data,
         DateTime trainedDate,
@@ -16,11 +16,4 @@ public interface WeightsDataAccess
         float boundingLoss,
         float classificationLoss,
         IEnumerable<Asset> assets);
-
-    PreTrainedWeights CreateWeights(
-        WeightsLibrary library,
-        byte[] data,
-        DateTime trainedDate,
-        ModelConfig config,
-        DateTime addedDate);
 }

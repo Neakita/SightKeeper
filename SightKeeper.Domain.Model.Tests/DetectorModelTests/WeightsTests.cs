@@ -11,7 +11,7 @@ public sealed class WeightsTests
     {
         DetectorDataSet dataSet = new("Model");
         var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), DateTime.Now,
-            new ModelConfig(string.Empty, Array.Empty<byte>(), ModelType.Detector), DateTime.Now);
+            new ModelConfig(string.Empty, Array.Empty<byte>(), ModelType.Detector), 0, 0, 0, new List<Asset>());
         dataSet.WeightsLibrary.Weights.Should().Contain(weights);
     }
 

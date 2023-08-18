@@ -67,7 +67,6 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new DataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsLibraryConfiguration());
-		modelBuilder.ApplyConfiguration(new InternalTrainedModelWeightsConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
 		modelBuilder.ApplyConfiguration(new ImageConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotImageConfiguration());

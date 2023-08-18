@@ -13,7 +13,7 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
 
     public void LoadWeights(WeightsLibrary library) => _dbContext.Entry(library).Collection(lib => lib.Weights).Load();
 
-    public InternalTrainedWeights CreateWeights(
+    public Weights CreateWeights(
         WeightsLibrary library,
         byte[] data,
         DateTime trainedDate,
@@ -24,18 +24,6 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         IEnumerable<Asset> assets)
     {
         var weights = library.CreateWeights(data, trainedDate, config, epoch, boundingLoss, classificationLoss, assets);
-        _dbContext.SaveChanges();
-        return weights;
-    }
-
-    public PreTrainedWeights CreateWeights(
-        WeightsLibrary library,
-        byte[] data,
-        DateTime trainedDate,
-        ModelConfig config,
-        DateTime addedDate)
-    {
-        var weights = library.CreateWeights(data, trainedDate, config, addedDate);
         _dbContext.SaveChanges();
         return weights;
     }
