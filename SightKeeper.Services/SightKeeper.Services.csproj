@@ -14,7 +14,6 @@
 
     <ItemGroup>
       <PackageReference Include="Autofac" Version="7.0.0" />
-      <PackageReference Include="FastYolo" Version="12.1.0" />
       <PackageReference Include="SerilogTimings" Version="3.0.1" />
       <PackageReference Include="SharpHook" Version="4.2.1" />
       <PackageReference Include="SharpHook.Reactive" Version="4.2.1" />
