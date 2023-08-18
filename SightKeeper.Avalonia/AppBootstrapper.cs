@@ -9,13 +9,10 @@ using Serilog.Events;
 using SharpHook.Reactive;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Application.Config;
 using SightKeeper.Application.Model;
 using SightKeeper.Application.Model.Creating;
 using SightKeeper.Application.Model.Editing;
-using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Images;
-using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Annotating;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
@@ -28,7 +25,6 @@ using SightKeeper.Avalonia.Views.Tabs;
 using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
-using SightKeeper.Data.Services.Config;
 using SightKeeper.Data.Services.Model;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
@@ -37,7 +33,6 @@ using SightKeeper.Services.Annotating;
 using SightKeeper.Services.Games;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Windows;
-using ConfigEditor = SightKeeper.Application.Config.ConfigEditor;
 using DetectorItem = SightKeeper.Avalonia.Views.Annotating.DetectorItem;
 
 namespace SightKeeper.Avalonia;
@@ -56,7 +51,6 @@ public static class AppBootstrapper
 		using var initialScope = container.BeginLifetimeScope(typeof(AppBootstrapper));
 		var dbContext = initialScope.Resolve<AppDbContext>();
 		dbContext.Database.Migrate();
-		DbInitializer.SeedData(dbContext);
 	}
 
 	private static void SetupLogger(ContainerBuilder builder)
@@ -84,14 +78,10 @@ public static class AppBootstrapper
 		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerMatchingLifetimeScope(typeof(MainViewModel), typeof(AppBootstrapper));
 		builder.RegisterType<RegisteredGamesService>();
 		builder.RegisterType<DbDataSetCreator>().As<DataSetCreator>().InstancePerMainViewModel();
-		builder.RegisterType<ModelDataValidator>().As<IValidator<ModelData>>();
+		builder.RegisterType<DataSetDataValidator>().As<IValidator<DataSetData>>();
 		builder.RegisterType<DbDataSetsDataAccess>().As<DataSetsDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<DbDataSetEditor>().As<DataSetEditor>().InstancePerMainViewModel();
-		builder.RegisterType<ModelChangesValidator>().As<IValidator<ModelChanges>>();
-		builder.RegisterType<DbConfigsDataAccess>().As<ConfigsDataAccess>().InstancePerMainViewModel();
-		builder.RegisterType<DbConfigCreator>().As<ConfigCreator>();
-		builder.RegisterType<DbConfigEditor>().As<ConfigEditor>().InstancePerMainViewModel();
-		builder.RegisterType<ConfigDataValidator>().As<IValidator<ConfigData>>();
+		builder.RegisterType<ModelChangesValidator>().As<IValidator<DataSetDataChanges>>();
 		builder.RegisterType<Screenshoter>();
 		builder.RegisterType<ModelScreenshoter>();
 		builder.RegisterType<HotKeyScreenshoter>().As<StreamModelScreenshoter>();
@@ -105,14 +95,9 @@ public static class AppBootstrapper
 		builder.RegisterType<WindowsGamesService>().As<GamesService>();
 		builder.RegisterType<DbDetectorAssetsDataAccess>().As<DetectorAssetsDataAccess>();
 		builder.RegisterType<DbItemClassDataAccess>().As<ItemClassDataAccess>();
-		builder.RegisterType<DetectorTrainer>().As<ModelTrainer<DetectorDataSet>>();
-		builder.RegisterType<DarknetDetectorAdapter>().As<DarknetAdapter<DetectorDataSet>>();
 		builder.RegisterType<DetectorImagesExporter>().As<ImagesExporter<DetectorDataSet>>();
-		builder.RegisterType<DarknetProcessImplementation>().As<DarknetProcess>();
-		builder.RegisterType<DarknetDetectorOutputParser>().As<DarknetOutputParser<DetectorDataSet>>();
 		builder.RegisterType<ModelsObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>();
-		builder.RegisterType<ConfigsObservableRepository>().InstancePerMainViewModel();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
@@ -126,7 +111,7 @@ public static class AppBootstrapper
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainViewModel>();
-		builder.RegisterType<DataSetEditorViewModel>();
+		builder.RegisterType<DataSetDataSetEditorView>();
 
 		builder.RegisterType<AnnotatorViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetsViewModel>();
@@ -149,7 +134,7 @@ public static class AppBootstrapper
 	private static void SetupViews(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainViewModel>>();
-		builder.RegisterType<ModelEditor>().AsSelf().As<IViewFor<DataSetEditorViewModel>>();
+		builder.RegisterType<ModelEditor>().AsSelf().As<IViewFor<DataSetDataSetEditorView>>();
 		
 		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatorViewModel>>();
 		builder.RegisterType<DataSetsTab>().AsSelf().As<IViewFor<DataSetsViewModel>>();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Avalonia.ViewModels.Elements;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
@@ -19,13 +19,21 @@ public sealed partial class TrainingViewModel : ViewModel
     public IObservable<TrainingProgress> Progress => _trainer.Progress;
     public IObservable<float?> Completion { get; }
     public IReadOnlyCollection<DataSetViewModel> AvailableModels { get; }
-    public ReadOnlyCollection<ConfigViewModel> Configs { get; }
+
+    public IReadOnlyCollection<ModelSize> ModelsSizes { get; } = new[]
+    {
+        ModelSize.Nano,
+        ModelSize.Small,
+        ModelSize.Medium,
+        ModelSize.Large,
+        ModelSize.XLarge
+    };
 
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
-    private DataSetViewModel? _selectedModel;
+    private DataSetViewModel? _selectedDataSet;
     
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
-    private ConfigViewModel? _selectedConfig;
+    private ModelSize? _selectedModelSize;
 
     public bool IsTraining
     {
@@ -33,12 +41,11 @@ public sealed partial class TrainingViewModel : ViewModel
         private set => SetProperty(ref _isTraining, value);
     }
 
-    public TrainingViewModel(ModelTrainer<DetectorDataSet> trainer, DataSetsListViewModel dataSetsListViewModel, ConfigsListViewModel configsListViewModel)
+    public TrainingViewModel(ModelTrainer<DetectorDataSet> trainer, DataSetsListViewModel dataSetsListViewModel)
     {
         _trainer = trainer;
         Completion = Progress.Select(progress => (float)progress.Batch / trainer.MaxBatches);
         AvailableModels = dataSetsListViewModel.DataSets;
-        Configs = configsListViewModel.Configs;
     }
 
     [RelayCommand(CanExecute = nameof(CanStartTraining), IncludeCancelCommand = true)]
@@ -51,7 +58,7 @@ public sealed partial class TrainingViewModel : ViewModel
         IsTraining = true;
         try
         {
-            await _trainer.TrainAsync(SelectedConfig.Config, cancellationToken);
+            await _trainer.TrainFromScratchAsync(SelectedConfig.Config, cancellationToken);
         }
         finally
         {

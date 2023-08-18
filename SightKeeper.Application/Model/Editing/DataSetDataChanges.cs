@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Application.Model.Editing;
 
-public interface ModelChanges : ModelData
+public interface DataSetDataChanges : DataSetData
 {
     Domain.Model.DataSet DataSet { get; }
 }

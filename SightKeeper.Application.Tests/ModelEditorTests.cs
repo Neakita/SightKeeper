@@ -14,9 +14,9 @@ public sealed class ModelEditorTests : DbRelatedTests
     {
         var editor = Editor;
         DetectorDataSet dataSet = new("Untitled model");
-        DataSetChangesDTO changes = new(dataSet, "New name", dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
-        await editor.ApplyChanges(changes);
-        dataSet.Name.Should().Be(changes.Name);
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, "New name", dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
+        await editor.ApplyChanges(dataSetDataChanges);
+        dataSet.Name.Should().Be(dataSetDataChanges.Name);
     }
 
     [Fact]
@@ -24,9 +24,9 @@ public sealed class ModelEditorTests : DbRelatedTests
     {
         var editor = Editor;
         DetectorDataSet dataSet = new("Untitled model");
-        DataSetChangesDTO changes = new(dataSet, dataSet.Name, "New description", dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
-        await editor.ApplyChanges(changes);
-        dataSet.Description.Should().Be(changes.Description);
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, "New description", dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
+        await editor.ApplyChanges(dataSetDataChanges);
+        dataSet.Description.Should().Be(dataSetDataChanges.Description);
     }
 
     [Fact]
@@ -35,8 +35,8 @@ public sealed class ModelEditorTests : DbRelatedTests
         var editor = Editor;
         DetectorDataSet dataSet = new("Untitled model");
         Resolution changedResolution = new(640, 640);
-        DataSetChangesDTO changes = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
-        await editor.ApplyChanges(changes);
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
+        await editor.ApplyChanges(dataSetDataChanges);
         dataSet.Resolution.Should().BeEquivalentTo(changedResolution);
     }
 
@@ -46,8 +46,8 @@ public sealed class ModelEditorTests : DbRelatedTests
         var editor = Editor;
         DetectorDataSet dataSet = new("Untitled model");
         Resolution changedResolution = new(636, 636);
-        DataSetChangesDTO changes = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
-        await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(changes));
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
+        await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetDataChanges));
         dataSet.Resolution.Should().NotBe(changedResolution);
     }
 
@@ -57,9 +57,9 @@ public sealed class ModelEditorTests : DbRelatedTests
         var editor = Editor;
         DetectorDataSet dataSet = new("Untitled model");
         var newItemClasses = dataSet.ItemClasses.Select(itemClass => itemClass.Name).Append("New item class").ToList();
-        DataSetChangesDTO changes = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
-        await editor.ApplyChanges(changes);
-        dataSet.ItemClasses.Select(itemClass => itemClass.Name).Should().BeEquivalentTo(changes.ItemClasses);
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
+        await editor.ApplyChanges(dataSetDataChanges);
+        dataSet.ItemClasses.Select(itemClass => itemClass.Name).Should().BeEquivalentTo(dataSetDataChanges.ItemClasses);
     }
 
     [Fact]
@@ -70,8 +70,8 @@ public sealed class ModelEditorTests : DbRelatedTests
         DetectorDataSet dataSet = new("Untitled model");
         dataSet.CreateItemClass(itemClassName);
         var newItemClasses = dataSet.ItemClasses.Select(itemClass => itemClass.Name).Append(itemClassName).ToList();
-        DataSetChangesDTO changes = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
-        await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(changes));
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
+        await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetDataChanges));
         dataSet.ItemClasses.Should().ContainSingle(itemClass => itemClass.Name == itemClassName);
     }
 
@@ -82,8 +82,8 @@ public sealed class ModelEditorTests : DbRelatedTests
         DetectorDataSet dataSet = new("Untitled model");
         const string itemClassName = "Item class";
         dataSet.CreateItemClass(itemClassName);
-        DataSetChangesDTO changes = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
-        await editor.ApplyChanges(changes);
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
+        await editor.ApplyChanges(dataSetDataChanges);
         dataSet.ItemClasses.Should().BeEmpty();
     }
 
@@ -96,8 +96,8 @@ public sealed class ModelEditorTests : DbRelatedTests
         const string itemClassName2 = "Item class 2";
         var itemClass1 = dataSet.CreateItemClass(itemClassName1);
         dataSet.CreateItemClass(itemClassName2);
-        DataSetChangesDTO changes = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass> { itemClass1 }, dataSet.Game);
-        await editor.ApplyChanges(changes);
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass> { itemClass1 }, dataSet.Game);
+        await editor.ApplyChanges(dataSetDataChanges);
         dataSet.ItemClasses.Should().ContainSingle(itemClass => itemClass == itemClass1);
     }
 
@@ -110,8 +110,8 @@ public sealed class ModelEditorTests : DbRelatedTests
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new Bounding());
-        DataSetChangesDTO changes = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
-        await Assert.ThrowsAsync<InvalidOperationException>(() => editor.ApplyChanges(changes));
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
+        await Assert.ThrowsAsync<InvalidOperationException>(() => editor.ApplyChanges(dataSetDataChanges));
         dataSet.ItemClasses.Should().Contain(itemClass);
     }
 
@@ -121,8 +121,8 @@ public sealed class ModelEditorTests : DbRelatedTests
         var editor = Editor;
         DetectorDataSet dataSet = new("Untitled model");
         Game newGame = new("New game", "game.exe");
-        DataSetChangesDTO changes = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, newGame);
-        await editor.ApplyChanges(changes);
+        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, newGame);
+        await editor.ApplyChanges(dataSetDataChanges);
         dataSet.Game.Should().Be(newGame);
     }
 

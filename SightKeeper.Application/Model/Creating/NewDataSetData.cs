@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.Model.Creating;
 
-public interface NewModelData : ModelData
+public interface NewDataSetData : DataSetData
 {
     ModelType ModelType { get; }
 }

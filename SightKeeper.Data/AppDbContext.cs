@@ -25,7 +25,6 @@ public class AppDbContext : DbContext
 	public DbSet<DataSet> Models { get; set; } = null!;
 	public DbSet<DetectorDataSet> DetectorModels { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
-	public DbSet<ModelConfig> ModelConfigs { get; set; } = null!;
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
@@ -71,7 +70,6 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ImageConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotImageConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
-		modelBuilder.ApplyConfiguration(new ModelConfigConfiguration());
 		modelBuilder.Entity<Profile>().HasShadowKey();
 		
 		modelBuilder.Entity<Screenshot>().Navigation(screenshot => screenshot.Asset).AutoInclude();

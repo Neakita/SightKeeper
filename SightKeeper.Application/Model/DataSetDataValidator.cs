@@ -3,9 +3,9 @@ using SightKeeper.Commons.Validation;
 
 namespace SightKeeper.Application.Model;
 
-public sealed class ModelDataValidator : AbstractValidator<ModelData>
+public sealed class DataSetDataValidator : AbstractValidator<DataSetData>
 {
-    public ModelDataValidator()
+    public DataSetDataValidator()
     {
         RuleFor(data => data.ResolutionWidth)
             .NotNull()

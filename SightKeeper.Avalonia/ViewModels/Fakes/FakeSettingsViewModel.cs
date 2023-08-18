@@ -6,5 +6,4 @@ namespace SightKeeper.Avalonia.ViewModels.Fakes;
 public sealed class FakeSettingsViewModel : ISettingsViewModel
 {
     public IRegisteredGamesViewModel RegisteredGamesViewModel => new FakeRegisteredGamesViewModel();
-    public IConfigsViewModel ConfigsViewModel => new FakeConfigsViewModel();
 }

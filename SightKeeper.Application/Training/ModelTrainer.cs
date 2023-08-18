@@ -3,12 +3,17 @@ using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Training;
 
-public interface ModelTrainer<TModel> where TModel : Domain.Model.DataSet
+public interface ModelTrainer<TDataSet> where TDataSet : DataSet
 {
-	TModel? Model { get; set; }
-	bool FromScratch { get; set; }
-	int? MaxBatches { get; }
 	IObservable<TrainingProgress> Progress { get; }
 
-	Task<Weights?> TrainAsync(ModelConfig config, CancellationToken cancellationToken = default);
+	Task<Weights?> TrainFromScratchAsync(
+		TDataSet dataSet,
+		ModelSize size,
+		ushort epochs,
+		CancellationToken cancellationToken = default);
+
+	Task<Weights?> ResumeTrainingAsync(
+		TDataSet dataSet,
+		CancellationToken cancellationToken = default);
 }

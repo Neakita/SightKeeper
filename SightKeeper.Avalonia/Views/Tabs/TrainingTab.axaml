@@ -19,7 +19,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         
-        <ComboBox ItemsSource="{Binding Configs}"
+        <ComboBox ItemsSource="{Binding ModelsSizes}"
                   SelectedItem="{Binding SelectedConfig}"
                   IsEnabled="{Binding !IsTraining}"
                   PlaceholderText="Config">

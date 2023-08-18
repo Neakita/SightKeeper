@@ -7,7 +7,6 @@ public sealed class TempExporter : IDisposable
 {
     private const string TempDirectory = "Temp";
 
-    public string Export(ModelConfig config) => throw new NotImplementedException();
     public string Export(Weights weights) => Export(weights.Data);
     public string Export(IEnumerable<ItemClass> itemClasses)
     {

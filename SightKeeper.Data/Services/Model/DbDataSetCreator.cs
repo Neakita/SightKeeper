@@ -13,32 +13,32 @@ public sealed class DbDataSetCreator : DataSetCreator
 {
     public IObservable<Domain.Model.DataSet> ModelCreated => _modelCreated.AsObservable();
     
-    public DbDataSetCreator(IValidator<ModelData> validator, AppDbContext dbContext)
+    public DbDataSetCreator(IValidator<DataSetData> validator, AppDbContext dbContext)
     {
         _validator = validator;
         _dbContext = dbContext;
     }
 
-    public async Task<Domain.Model.DataSet> CreateDataSet(NewDataSetDataDTO dataSetData, CancellationToken cancellationToken = default)
+    public async Task<Domain.Model.DataSet> CreateDataSet(NewDataSetDataSetDataSetDataDTO dataSetDataSetDataSetData, CancellationToken cancellationToken = default)
     {
-        await _validator.ValidateAndThrowAsync(dataSetData, cancellationToken);
-        var model = dataSetData.ModelType switch
+        await _validator.ValidateAndThrowAsync(dataSetDataSetDataSetData, cancellationToken);
+        var model = dataSetDataSetDataSetData.ModelType switch
         {
-            ModelType.Detector => new DetectorDataSet(dataSetData.Name, dataSetData.Resolution),
+            ModelType.Detector => new DetectorDataSet(dataSetDataSetDataSetData.Name, dataSetDataSetDataSetData.Resolution),
             ModelType.Classifier => throw new NotSupportedException("Classifier model creation not implemented yet"),
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Domain.Model.DataSet>(nameof(dataSetData.ModelType))
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Domain.Model.DataSet>(nameof(dataSetDataSetDataSetData.ModelType))
         };
         _dbContext.Models.Add(model);
-        model.Description = dataSetData.Description;
-        foreach (var itemClass in dataSetData.ItemClasses)
+        model.Description = dataSetDataSetDataSetData.Description;
+        foreach (var itemClass in dataSetDataSetDataSetData.ItemClasses)
             model.CreateItemClass(itemClass);
-        model.Game = dataSetData.Game;
+        model.Game = dataSetDataSetDataSetData.Game;
         await _dbContext.SaveChangesAsync(cancellationToken);
         _modelCreated.OnNext(model);
         return model;
     }
     
-    private readonly IValidator<ModelData> _validator;
+    private readonly IValidator<DataSetData> _validator;
     private readonly AppDbContext _dbContext;
     private readonly Subject<Domain.Model.DataSet> _modelCreated = new();
 }

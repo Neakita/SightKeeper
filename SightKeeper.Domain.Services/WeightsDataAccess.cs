@@ -11,7 +11,7 @@ public interface WeightsDataAccess
         WeightsLibrary library,
         byte[] data,
         DateTime trainedDate,
-        ModelConfig config,
+        ModelSize size,
         int epoch,
         float boundingLoss,
         float classificationLoss,

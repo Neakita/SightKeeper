@@ -10,7 +10,6 @@ public sealed partial class SettingsViewModel : ViewModel, IActivatableViewModel
 {
 	public ViewModelActivator Activator { get; } = new();
 	[ObservableProperty] private IRegisteredGamesViewModel? _registeredGamesViewModel;
-	[ObservableProperty] private IConfigsViewModel? _configsViewModel;
 	
 	public SettingsViewModel(ILifetimeScope scope)
 	{
@@ -23,7 +22,6 @@ public sealed partial class SettingsViewModel : ViewModel, IActivatableViewModel
 		var scope = _scope.BeginLifetimeScope(this);
 		scope.DisposeWith(disposables);
 		RegisteredGamesViewModel = scope.Resolve<RegisteredGamesViewModel>();
-		ConfigsViewModel = scope.Resolve<ConfigsViewModel>();
 	}
 	
 	private readonly ILifetimeScope _scope;

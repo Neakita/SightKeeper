@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.Model;
 
-public interface ModelData
+public interface DataSetData
 {
     string Name { get; }
     string Description { get; }

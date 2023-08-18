@@ -2,11 +2,11 @@
 
 namespace SightKeeper.Application.Model.Editing;
 
-public sealed class ModelChangesValidator : AbstractValidator<ModelChanges>
+public sealed class ModelChangesValidator : AbstractValidator<DataSetDataChanges>
 {
     public ModelChangesValidator()
     {
-        Include(new ModelDataValidator());
+        Include(new DataSetDataValidator());
         RuleFor(changes => changes.ResolutionWidth)
             .Must((changes, resolutionWidth) => resolutionWidth == changes.DataSet.Resolution.Width)
             .Unless(changes => changes.DataSet.CanChangeResolution(out _), ApplyConditionTo.CurrentValidator)

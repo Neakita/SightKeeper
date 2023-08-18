@@ -19,12 +19,12 @@ using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
-public partial class DataSetEditorViewModel : ValidatableViewModel<ModelData>, DialogViewModel, ModelData
+public partial class DataSetDataSetEditorView : ValidatableViewModel<DataSetData>, DialogViewModel, DataSetData
 {
     public IReadOnlyCollection<string> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
 
-    public DataSetEditorViewModel(IValidator<ModelData> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess) : base(validator)
+    public DataSetDataSetEditorView(IValidator<DataSetData> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
         _itemClassDataAccess = itemClassDataAccess;

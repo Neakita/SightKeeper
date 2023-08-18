@@ -9,21 +9,21 @@ public sealed class DbDataSetEditor : DataSetEditor
 {
     public IObservable<Domain.Model.DataSet> ModelEdited => _modelEdited;
     
-    public DbDataSetEditor(IValidator<ModelChanges> changesValidator, AppDbContext dbContext)
+    public DbDataSetEditor(IValidator<DataSetDataChanges> changesValidator, AppDbContext dbContext)
     {
         _changesValidator = changesValidator;
         _dbContext = dbContext;
     }
 
-    public async Task ApplyChanges(DataSetChangesDTO changes, CancellationToken cancellationToken = default)
+    public async Task ApplyChanges(DataSetDataSetDataChangesDTO dataSetDataChanges, CancellationToken cancellationToken = default)
     {
-        await _changesValidator.ValidateAndThrowAsync(changes, cancellationToken);
-        var model = changes.DataSet;
-        model.Name = changes.Name;
-        model.Description = changes.Description;
-        model.Resolution = new Resolution(changes.ResolutionWidth, changes.ResolutionHeight);
-        model.Game = changes.Game;
-        ApplyItemClassesChanges(model, changes.ItemClasses);
+        await _changesValidator.ValidateAndThrowAsync(dataSetDataChanges, cancellationToken);
+        var model = dataSetDataChanges.DataSet;
+        model.Name = dataSetDataChanges.Name;
+        model.Description = dataSetDataChanges.Description;
+        model.Resolution = new Resolution(dataSetDataChanges.ResolutionWidth, dataSetDataChanges.ResolutionHeight);
+        model.Game = dataSetDataChanges.Game;
+        ApplyItemClassesChanges(model, dataSetDataChanges.ItemClasses);
         _dbContext.Models.Update(model);
         await _dbContext.SaveChangesAsync(cancellationToken);
         _modelEdited.OnNext(model);
@@ -46,6 +46,6 @@ public sealed class DbDataSetEditor : DataSetEditor
         itemClasses.Where(newItemClass => dataSet.ItemClasses.All(existingItemClass => existingItemClass.Name != newItemClass)).ToList();
 
     private readonly Subject<Domain.Model.DataSet> _modelEdited = new();
-    private readonly IValidator<ModelChanges> _changesValidator;
+    private readonly IValidator<DataSetDataChanges> _changesValidator;
     private readonly AppDbContext _dbContext;
 }
