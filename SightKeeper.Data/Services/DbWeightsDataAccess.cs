@@ -18,7 +18,7 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         byte[] data,
         DateTime trainedDate,
         ModelSize size,
-        int epoch,
+        uint epoch,
         float boundingLoss,
         float classificationLoss,
         IEnumerable<Asset> assets)

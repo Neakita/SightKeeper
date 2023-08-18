@@ -7,7 +7,7 @@ using SightKeeper.Application.Model.Creating;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Data.Services.Model;
+namespace SightKeeper.Data.Services.DataSet;
 
 public sealed class DbDataSetCreator : DataSetCreator
 {

@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Services;
 
-namespace SightKeeper.Data.Services.Model;
+namespace SightKeeper.Data.Services.DataSet;
 
 public sealed class DbDataSetsDataAccess : DataSetsDataAccess
 {

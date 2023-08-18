@@ -15,7 +15,7 @@ public sealed class NewDataSetDataSetDataSetDataDTO : NewDataSetData
     public Game? Game { get; }
     int? DataSetData.ResolutionWidth => ResolutionWidth;
     int? DataSetData.ResolutionHeight => ResolutionHeight;
-    public Resolution Resolution => new(ResolutionWidth, ResolutionHeight);
+    public Resolution Resolution => new((ushort)ResolutionWidth, (ushort)ResolutionHeight);
 
     public NewDataSetDataSetDataSetDataDTO(ModelType type, DataSetData dataSetData)
     {

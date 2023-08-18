@@ -3,7 +3,7 @@ using FluentValidation;
 using SightKeeper.Application.Model.Editing;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Data.Services.Model;
+namespace SightKeeper.Data.Services.DataSet;
 
 public sealed class DbDataSetEditor : DataSetEditor
 {
@@ -21,7 +21,7 @@ public sealed class DbDataSetEditor : DataSetEditor
         var model = dataSetDataChanges.DataSet;
         model.Name = dataSetDataChanges.Name;
         model.Description = dataSetDataChanges.Description;
-        model.Resolution = new Resolution(dataSetDataChanges.ResolutionWidth, dataSetDataChanges.ResolutionHeight);
+        model.Resolution = new Resolution((ushort)dataSetDataChanges.ResolutionWidth, (ushort)dataSetDataChanges.ResolutionHeight);
         model.Game = dataSetDataChanges.Game;
         ApplyItemClassesChanges(model, dataSetDataChanges.ItemClasses);
         _dbContext.Models.Update(model);

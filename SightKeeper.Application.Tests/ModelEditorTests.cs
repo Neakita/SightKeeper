@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using SightKeeper.Application.Model.Editing;
-using SightKeeper.Data.Services.Model;
+using SightKeeper.Data.Services.DataSet;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;

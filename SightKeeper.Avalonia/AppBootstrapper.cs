@@ -25,7 +25,7 @@ using SightKeeper.Avalonia.Views.Tabs;
 using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
-using SightKeeper.Data.Services.Model;
+using SightKeeper.Data.Services.DataSet;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services;
@@ -118,8 +118,6 @@ public static class AppBootstrapper
 		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<SettingsViewModel>();
 		builder.RegisterType<RegisteredGamesViewModel>();
-		builder.RegisterType<ConfigsViewModel>();
-		builder.RegisterType<ConfigEditorViewModel>();
 		builder.RegisterType<ScreenshoterViewModel>();
 		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorDataSet>>().InstancePerMainViewModel();
@@ -127,7 +125,6 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<ConfigsListViewModel>().InstancePerMainViewModel();
 		builder.RegisterGeneric(typeof(GenericAnnotatorEnvironment<>)).As(typeof(AnnotatorEnvironment<>)).InstancePerMainViewModel();
 	}
 	
@@ -140,7 +137,6 @@ public static class AppBootstrapper
 		builder.RegisterType<DataSetsTab>().AsSelf().As<IViewFor<DataSetsViewModel>>();
 		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
-		builder.RegisterType<Views.Dialogs.ConfigEditor>().As<IViewFor<ConfigEditorViewModel>>();
 		builder.RegisterType<DetectorAnnotatorTools>().As<IViewFor<DetectorAnnotatorToolsViewModel>>();
 		builder.RegisterType<DetectorDrawer>().AsSelf().As<IViewFor<DetectorDrawerViewModel>>();
 		builder.RegisterType<TrainingTab>().As<IViewFor<TrainingViewModel>>();
