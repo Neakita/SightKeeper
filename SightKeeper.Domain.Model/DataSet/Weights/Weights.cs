@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class Weights<TAsset> where TAsset : Asset
+public abstract class Weights
 {
     public byte[] Data { get; private set; }
     public DateTime TrainedDate { get; private set; }
@@ -10,9 +10,8 @@ public sealed class Weights<TAsset> where TAsset : Asset
     public uint Epoch { get; private set; }
     public float BoundingLoss { get; private set; }
     public float ClassificationLoss { get; private set; }
-    public IReadOnlyCollection<TAsset> Assets { get; private set; }
     
-    internal Weights(byte[] data, DateTime trainedDate, ModelSize size, uint epoch, float boundingLoss, float classificationLoss, IReadOnlyCollection<TAsset> assets)
+    protected Weights(byte[] data, DateTime trainedDate, ModelSize size, uint epoch, float boundingLoss, float classificationLoss)
     {
         Data = data;
         TrainedDate = trainedDate;
@@ -20,12 +19,34 @@ public sealed class Weights<TAsset> where TAsset : Asset
         Epoch = epoch;
         BoundingLoss = boundingLoss;
         ClassificationLoss = classificationLoss;
+    }
+
+    protected Weights()
+    {
+        Data = null!;
+    }
+}
+
+public sealed class Weights<TAsset> : Weights
+    where TAsset : Asset
+{
+    public IReadOnlyCollection<TAsset> Assets { get; private set; }
+    
+    internal Weights(
+        byte[] data,
+        DateTime trainedDate,
+        ModelSize size,
+        uint epoch,
+        float boundingLoss,
+        float classificationLoss,
+        IReadOnlyCollection<TAsset> assets) 
+        : base(data, trainedDate, size, epoch, boundingLoss, classificationLoss)
+    {
         Assets = assets;
     }
 
     private Weights()
     {
-        Data = null!;
         Assets = null!;
     }
 }

@@ -5,15 +5,16 @@ namespace SightKeeper.Domain.Services;
 
 public interface WeightsDataAccess
 {
-    void LoadWeights(WeightsLibrary library);
+    void LoadWeights<TAsset>(WeightsLibrary<TAsset> library) where TAsset : Asset;
     
-    Weights CreateWeights(
-        WeightsLibrary library,
+    Weights CreateWeights<TAsset>(
+        WeightsLibrary<TAsset> library,
         byte[] data,
         DateTime trainedDate,
         ModelSize size,
         uint epoch,
         float boundingLoss,
         float classificationLoss,
-        IEnumerable<Asset> assets);
+        IEnumerable<TAsset> assets)
+        where TAsset : Asset;
 }

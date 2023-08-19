@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Data.Configuration;
 
@@ -8,6 +10,5 @@ public sealed class WeightsLibraryConfiguration : IEntityTypeConfiguration<Weigh
     {
         builder.ToTable("ModelWeightsLibraries");
         builder.HasShadowKey();
-        builder.HasMany(library => library.Weights).WithOne(weights => weights.Library).IsRequired();
     }
 }

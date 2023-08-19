@@ -9,6 +9,5 @@ public sealed class ItemClassConfiguration : IEntityTypeConfiguration<ItemClass>
     public void Configure(EntityTypeBuilder<ItemClass> builder)
     {
         builder.ToTable("ItemClasses").HasShadowKey();
-        builder.HasMany(itemClass => itemClass.DetectorItems).WithOne(item => item.ItemClass);
     }
 }

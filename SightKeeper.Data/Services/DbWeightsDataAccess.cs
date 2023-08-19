@@ -11,17 +11,20 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         _dbContext = dbContext;
     }
 
-    public void LoadWeights(WeightsLibrary library) => _dbContext.Entry(library).Collection(lib => lib.Weights).Load();
+    public void LoadWeights<TAsset>(WeightsLibrary<TAsset> library)
+        where TAsset : Asset =>
+        _dbContext.Entry(library).Collection(lib => lib.Weights).Load();
 
-    public Weights CreateWeights(
-        WeightsLibrary library,
+    public Weights CreateWeights<TAsset>(
+        WeightsLibrary<TAsset> library,
         byte[] data,
         DateTime trainedDate,
         ModelSize size,
         uint epoch,
         float boundingLoss,
         float classificationLoss,
-        IEnumerable<Asset> assets)
+        IEnumerable<TAsset> assets)
+        where TAsset : Asset
     {
         var weights = library.CreateWeights(data, trainedDate, size, epoch, boundingLoss, classificationLoss, assets);
         _dbContext.SaveChanges();

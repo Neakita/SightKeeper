@@ -2,7 +2,12 @@
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class WeightsLibrary<TAsset> where TAsset : Asset
+public abstract class WeightsLibrary
+{
+}
+
+public sealed class WeightsLibrary<TAsset> : WeightsLibrary
+    where TAsset : Asset
 {
     public IReadOnlyCollection<Weights<TAsset>> Weights => _weights;
 
