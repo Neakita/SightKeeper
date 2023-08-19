@@ -13,6 +13,7 @@ public abstract class Asset
     }
     
     public Screenshot Screenshot { get; private set; }
+    public AssetUsage Usage { get; set; }
 
     internal abstract bool IsUsesItemClass(ItemClass itemClass);
     
