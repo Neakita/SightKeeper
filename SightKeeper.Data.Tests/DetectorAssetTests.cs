@@ -11,7 +11,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
     [Fact]
     public void ShouldAddAssetWithScreenshot()
     {
-        DetectorDataSet dataSet = new("Model");
+        DataSet<DetectorAsset> dataSet = new("Model");
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshot);
         using var dbContext = DbContextFactory.CreateDbContext();
@@ -24,7 +24,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
     [Fact]
     public void AssetAndScreenshotShouldHaveEqualIds()
     {
-        DetectorDataSet dataSet = new("Model");
+        DataSet<DetectorAsset> dataSet = new("Model");
         dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var screenshot3 = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
@@ -41,33 +41,15 @@ public sealed class DetectorAssetTests : DbRelatedTests
     {
         using (var initialDbContext = DbContextFactory.CreateDbContext())
         {
-            DetectorDataSet newDataSet = new("Model");
+            DataSet<DetectorAsset> newDataSet = new("Model");
             var screenshot = newDataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
             newDataSet.MakeAsset(screenshot);
             initialDbContext.Add(newDataSet);
             initialDbContext.SaveChanges();
         }
         using var dbContext = DbContextFactory.CreateDbContext();
-        var model = dbContext.DetectorModels.Include(model => model.ScreenshotsLibrary.Screenshots).Include(model => model.Assets).Single();
+        var model = dbContext.DetectorDataSets.Include(model => model.ScreenshotsLibrary.Screenshots).Include(model => model.Assets).Single();
         model.ScreenshotsLibrary.Screenshots.Should().NotBeEmpty();
         model.Assets.Should().NotBeEmpty();
-    }
-
-    [Fact]
-    public void ShouldLoadModelOfAsset()
-    {
-        using (var arrangeDbContext = DbContextFactory.CreateDbContext())
-        {
-            DetectorDataSet dataSet = new("Test model");
-            var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-            dataSet.MakeAsset(screenshot);
-            arrangeDbContext.Add(dataSet);
-            arrangeDbContext.SaveChanges();
-        }
-        using (var assertDbContext = DbContextFactory.CreateDbContext())
-        {
-            var asset = assertDbContext.Set<DetectorAsset>().Include(asset => asset.DataSet).Single();
-            asset.DataSet.Should().NotBeNull();
-        }
     }
 }

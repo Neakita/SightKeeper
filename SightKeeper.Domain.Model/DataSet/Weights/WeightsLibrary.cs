@@ -1,47 +1,30 @@
-﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
+﻿using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class WeightsLibrary
+public sealed class WeightsLibrary<TAsset> where TAsset : Asset
 {
-    public DataSet DataSet { get; private set; }
-    public IReadOnlyCollection<Weights> Weights => _weights;
+    public IReadOnlyCollection<Weights<TAsset>> Weights => _weights;
 
-    internal WeightsLibrary(DataSet dataSet)
+    internal WeightsLibrary()
     {
-        DataSet = dataSet;
-        _weights = new List<Weights>();
+        _weights = new List<Weights<TAsset>>();
     }
 
-    public Weights CreateWeights(
+    public Weights<TAsset> CreateWeights(
         byte[] data,
         DateTime trainedDate,
         ModelSize size,
         uint epoch,
         float boundingLoss,
         float classificationLoss,
-        IEnumerable<Asset> assets)
+        IEnumerable<TAsset> assets)
     {
         var assetsList = assets.ToList();
-        if (DataSet is DetectorDataSet detectorModel)
-        {
-            if (assetsList.Any(asset => asset is not DetectorAsset detectorAsset || detectorAsset.DataSet != detectorModel))
-                ThrowHelper.ThrowArgumentException(nameof(assets), $"Some assets do not belong to the \"{detectorModel}\" model");
-        }
-        else
-            ThrowHelper.ThrowNotSupportedException("Validation of assets for the classifier model is not implemented");
-        Weights weights = new(data, trainedDate, size, this, epoch, boundingLoss, classificationLoss, assetsList);
+        Weights<TAsset> weights = new(data, trainedDate, size, epoch, boundingLoss, classificationLoss, assetsList);
         _weights.Add(weights);
         return weights;
     }
 	
-    private readonly List<Weights> _weights;
-
-    private WeightsLibrary()
-    {
-        DataSet = null!;
-        _weights = null!;
-    }
+    private readonly List<Weights<TAsset>> _weights;
 }

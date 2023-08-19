@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public abstract class DataSet
+public sealed class DataSet<TAsset> where TAsset : Asset
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
@@ -46,7 +46,7 @@ public abstract class DataSet
 	{
 		if (_itemClasses.Any(itemClass => itemClass.Name == name))
 			ThrowHelper.ThrowArgumentException($"Item class with name \"{name}\" already exists");
-		ItemClass newItemClass = new(this, name);
+		ItemClass newItemClass = new(name);
 		_itemClasses.Add(newItemClass);
 		return newItemClass;
 	}
@@ -62,28 +62,59 @@ public abstract class DataSet
 
 	#endregion
 
-	public ModelScreenshotsLibrary ScreenshotsLibrary { get; private set; }
-	public WeightsLibrary WeightsLibrary { get; private set; }
+	#region Assets
 
-	public abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
+	public IReadOnlyCollection<TAsset> Assets => _assets;
+
+	public TAsset MakeAsset(Screenshot screenshot)
+	{
+		if (screenshot.Asset != null)
+			ThrowHelper.ThrowArgumentException("Asset with same screenshot already exists");
+		var asset = Asset.Create<TAsset>(screenshot);
+		_assets.Add(asset);
+		return asset;
+	}
+
+	public void DeleteAsset(TAsset asset)
+	{
+		if (!_assets.Remove(asset))
+			ThrowHelper.ThrowArgumentException(nameof(asset), "Asset not found");
+		asset.Screenshot.Asset = null;
+	}
+
+	private readonly List<TAsset> _assets;
+
+	#endregion
+
+	public ScreenshotsLibrary ScreenshotsLibrary { get; private set; }
+	public WeightsLibrary<TAsset> WeightsLibrary { get; private set; }
+
+	public bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		if (_assets.Any(asset => asset.IsUsesItemClass(itemClass)))
+			message = $"Cannot delete item class {itemClass} because he is used in some asset";
+		return message == null;
+	}
 	
 	public override string ToString() => Name;
 
-	protected DataSet(string name) : this(name, new Resolution())
+	public DataSet(string name) : this(name, new Resolution())
 	{
 	}
 
-	protected DataSet(string name, Resolution resolution)
+	public DataSet(string name, Resolution resolution)
 	{
 		Name = name;
 		Description = string.Empty;
 		_resolution = resolution;
 		_itemClasses = new List<ItemClass>();
-		WeightsLibrary = new WeightsLibrary(this);
-		ScreenshotsLibrary = new ModelScreenshotsLibrary(this);
+		WeightsLibrary = new WeightsLibrary<TAsset>();
+		ScreenshotsLibrary = new ScreenshotsLibrary();
+		_assets = new List<TAsset>();
 	}
 
-	protected DataSet()
+	private DataSet()
 	{
 		Name = null!;
 		Description = null!;
@@ -91,5 +122,6 @@ public abstract class DataSet
 		_itemClasses = null!;
 		WeightsLibrary = null!;
 		ScreenshotsLibrary = null!;
+		_assets = null!;
 	}
 }

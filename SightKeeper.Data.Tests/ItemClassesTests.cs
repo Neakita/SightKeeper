@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
@@ -11,12 +12,12 @@ public sealed class ItemClassesTests : DbRelatedTests
 	public void ShouldNotDeleteItemClassesOnItemDelete()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		DetectorDataSet dataSet = new("Test model");
+		DataSet<DetectorAsset> dataSet = new("Test model");
 		var itemClass = dataSet.CreateItemClass("Test item class");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 		var asset = dataSet.MakeAsset(screenshot);
 		var item = asset.CreateItem(itemClass, new Bounding());
-		dbContext.DetectorModels.Add(dataSet);
+		dbContext.DetectorDataSets.Add(dataSet);
 		dbContext.SaveChanges();
 
 		dbContext.Set<ItemClass>().Should().Contain(itemClass);
@@ -34,7 +35,7 @@ public sealed class ItemClassesTests : DbRelatedTests
 	{
 		using (var arrangeDbContext = DbContextFactory.CreateDbContext())
 		{
-			DetectorDataSet dataSet = new("Test model");
+			DataSet<DetectorAsset> dataSet = new("Test model");
 			var itemClass = dataSet.CreateItemClass("Item class");
 			var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 			var asset = dataSet.MakeAsset(screenshot);
@@ -44,7 +45,7 @@ public sealed class ItemClassesTests : DbRelatedTests
 		}
 		using (var assertDbContext = DbContextFactory.CreateDbContext())
 		{
-			var model = assertDbContext.DetectorModels.Include(model => model.ItemClasses).ThenInclude(itemClass => itemClass.DetectorItems).Single();
+			var model = assertDbContext.DetectorDataSets.Include(model => model.ItemClasses).ThenInclude(itemClass => itemClass.DetectorItems).Single();
 			model.ItemClasses.Single().DetectorItems.Should().NotBeEmpty();
 		}
 	}

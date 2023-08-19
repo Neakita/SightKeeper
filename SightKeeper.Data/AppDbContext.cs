@@ -22,8 +22,7 @@ public class AppDbContext : DbContext
 	}
 
 	public DbSet<Profile> Profiles { get; set; } = null!;
-	public DbSet<DataSet> Models { get; set; } = null!;
-	public DbSet<DetectorDataSet> DetectorModels { get; set; } = null!;
+	public DbSet<DataSet<DetectorAsset>> DetectorDataSets { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -58,12 +57,10 @@ public class AppDbContext : DbContext
 	{
 		modelBuilder.ApplyConfiguration(new DetectorAssetConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorDataSetConfiguration());
-		modelBuilder.ApplyConfiguration(new ModelScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
 		modelBuilder.ApplyConfiguration(new AssetConfiguration());
 		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());
-		modelBuilder.ApplyConfiguration(new DataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
@@ -74,6 +71,5 @@ public class AppDbContext : DbContext
 		
 		modelBuilder.Entity<Screenshot>().Navigation(screenshot => screenshot.Asset).AutoInclude();
 		modelBuilder.Entity<Asset>().Navigation(asset => asset.Screenshot).AutoInclude();
-		modelBuilder.Entity<DetectorDataSet>().Navigation(model => model.Assets).AutoInclude();
 	}
 }

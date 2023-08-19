@@ -8,7 +8,7 @@ namespace SightKeeper.Data.Tests;
 
 public sealed class DetectorModelTests : DbRelatedTests
 {
-	private static DetectorDataSet TestDetectorDataSet => new("TestDetectorModel");
+	private static DataSet<DetectorAsset> TestDetectorDataSet => new("TestDetectorModel");
 
 	[Fact]
 	public void ShouldAddDetectorModel()
@@ -22,7 +22,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		dbContext.SaveChanges();
 
 		// assert
-		dbContext.DetectorModels.Should().Contain(testModel);
+		dbContext.DetectorDataSets.Should().Contain(testModel);
 	}
 
 	[Fact]
@@ -35,10 +35,10 @@ public sealed class DetectorModelTests : DbRelatedTests
 		var itemClass = model.CreateItemClass("Test item class");
 		var item = asset.CreateItem(itemClass, new Bounding());
 		
-		dbContext.DetectorModels.Add(model);
+		dbContext.DetectorDataSets.Add(model);
 		dbContext.SaveChanges();
 
-		dbContext.DetectorModels.Should().Contain(model);
+		dbContext.DetectorDataSets.Should().Contain(model);
 		dbContext.Set<Screenshot>().Should().Contain(screenshot);
 		dbContext.Set<DetectorAsset>().Should().Contain(asset);
 		dbContext.Set<DetectorItem>().Should().Contain(item);
@@ -49,16 +49,16 @@ public sealed class DetectorModelTests : DbRelatedTests
 	public void ShouldCascadeDelete()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		DetectorDataSet dataSet = new("Test model");
+		DataSet<DetectorAsset> dataSet = new("Test model");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 		var asset = dataSet.MakeAsset(screenshot);
 		var itemClass = dataSet.CreateItemClass("Test item class");
 		asset.CreateItem(itemClass, new Bounding(0, 0, 1, 1));
-		dbContext.DetectorModels.Add(dataSet);
+		dbContext.DetectorDataSets.Add(dataSet);
 		dbContext.SaveChanges();
-		dbContext.DetectorModels.Remove(dataSet);
+		dbContext.DetectorDataSets.Remove(dataSet);
 		dbContext.SaveChanges();
-		dbContext.DetectorModels.Should().BeEmpty();
+		dbContext.DetectorDataSets.Should().BeEmpty();
 		dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
 		dbContext.Set<DetectorAsset>().Should().BeEmpty();
 		dbContext.Set<Screenshot>().Should().BeEmpty();
@@ -71,7 +71,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	{
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
-			DetectorDataSet dataSet = new("Test model");
+			DataSet<DetectorAsset> dataSet = new("Test model");
 			var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 			dataSet.MakeAsset(screenshot);
 			dbContext.Add(dataSet);
@@ -79,7 +79,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		}
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
-			var model = dbContext.DetectorModels
+			var model = dbContext.DetectorDataSets
 				.Include(m => m.Assets)
 				.Include(m => m.ScreenshotsLibrary.Screenshots)
 				.Single();

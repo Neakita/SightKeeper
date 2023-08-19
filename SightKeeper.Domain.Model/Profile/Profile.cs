@@ -8,9 +8,9 @@ public sealed class Profile
 	public string Name { get; set; }
 	public string Description { get; set; } = string.Empty;
 	public Game? Game { get; set; }
-	public DetectorDataSet DetectorDataSet { get; set; }
+	public DataSet<DetectorAsset> DetectorDataSet { get; set; }
 	
-	public Profile(string name, DetectorDataSet detectorDataSet)
+	public Profile(string name, DataSet<DetectorAsset> detectorDataSet)
 	{
 		Name = name;
 		DetectorDataSet = detectorDataSet;

@@ -1,14 +1,10 @@
-﻿using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
 public class ScreenshotsLibrary
 {
-    public IObservable<Screenshot> ScreenshotAdded => _screenshotAdded.AsObservable();
-    public IObservable<Screenshot> ScreenshotRemoved => _screenshotRemoved.AsObservable();
     public ushort? MaxQuantity { get; set; }
     public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
     public bool HasAnyScreenshots { get; private set; }
@@ -24,7 +20,6 @@ public class ScreenshotsLibrary
         _screenshots.Add(screenshot);
         ClearExceed();
         HasAnyScreenshots = Screenshots.Any();
-        _screenshotAdded.OnNext(screenshot);
         return screenshot;
     }
 	
@@ -33,12 +28,9 @@ public class ScreenshotsLibrary
         if (!_screenshots.Remove(screenshot))
             ThrowHelper.ThrowInvalidOperationException("Screenshot not found");
         HasAnyScreenshots = Screenshots.Any();
-        _screenshotRemoved.OnNext(screenshot);
     }
 	
     private readonly List<Screenshot> _screenshots;
-    private readonly Subject<Screenshot> _screenshotAdded = new();
-    private readonly Subject<Screenshot> _screenshotRemoved = new();
 
     private void ClearExceed()
     {
