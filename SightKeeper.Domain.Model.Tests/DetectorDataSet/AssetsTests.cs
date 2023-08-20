@@ -1,15 +1,16 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Tests.Common;
 
-namespace SightKeeper.Domain.Model.Tests.DetectorModelTests;
+namespace SightKeeper.Domain.Model.Tests.DetectorDataSet;
 
 public sealed class AssetsTests
 {
     [Fact]
     public void ShouldDeleteItems()
     {
-        DetectorDataSet dataSet = new("Model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshot);
         var itemClass = dataSet.CreateItemClass("Item class");
@@ -22,7 +23,7 @@ public sealed class AssetsTests
     [Fact]
     public void ShouldNotDeleteItemWhichIsNotInAsset()
     {
-        DetectorDataSet dataSet = new("Model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var screenshot1 = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var screenshot2 =  dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset1 = dataSet.MakeAsset(screenshot1);

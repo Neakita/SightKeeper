@@ -8,7 +8,7 @@ public sealed class WeightsLibraryConfiguration : IEntityTypeConfiguration<Weigh
 {
     public void Configure(EntityTypeBuilder<WeightsLibrary> builder)
     {
-        builder.ToTable("ModelWeightsLibraries");
+        builder.ToTable("WeightsLibraries");
         builder.HasShadowKey();
     }
 }

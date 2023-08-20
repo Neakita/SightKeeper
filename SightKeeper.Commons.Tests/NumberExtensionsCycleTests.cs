@@ -1,6 +1,4 @@
-using SightKeeper.Commons;
-
-namespace SightKeeper.Common.Tests;
+namespace SightKeeper.Commons.Tests;
 
 public sealed class NumberExtensionsCycleTests
 {

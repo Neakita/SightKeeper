@@ -1,6 +1,6 @@
-﻿using SightKeeper.Domain.Model.Detector;
+﻿using SightKeeper.Tests.Common;
 
-namespace SightKeeper.Domain.Model.Tests.DetectorModelTests;
+namespace SightKeeper.Domain.Model.Tests.DetectorDataSet;
 
 public sealed class ItemClassesTests
 {
@@ -8,7 +8,7 @@ public sealed class ItemClassesTests
     public void ShouldNotBeAbleCreateTwoItemClassesWithTheSameName()
     {
         const string itemClassName = "Test item class";
-        DetectorDataSet dataSet = new("Dummy model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         dataSet.CreateItemClass(itemClassName);
         Assert.Throws<ArgumentException>(() => dataSet.CreateItemClass(itemClassName));
     }

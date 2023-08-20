@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Commons", "SightKeeper.Commons\SightKeeper.Commons.csproj", "{39D867DC-04B7-4620-9028-8D346BD4C37F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Common.Tests", "SightKeeper.Common.Tests\SightKeeper.Common.Tests.csproj", "{67383D1D-4122-4203-913A-CF05EEE0B9C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Commons.Tests", "SightKeeper.Commons.Tests\SightKeeper.Commons.Tests.csproj", "{67383D1D-4122-4203-913A-CF05EEE0B9C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

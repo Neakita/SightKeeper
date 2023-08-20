@@ -1,15 +1,16 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Tests.Common;
 
-namespace SightKeeper.Domain.Model.Tests.DetectorModelTests;
+namespace SightKeeper.Domain.Model.Tests.DetectorDataSet;
 
 public sealed class CooperationTests
 {
     [Fact]
     public void ShouldMakeAssetAndKeepItInScreenshots()
     {
-        DetectorDataSet dataSet = new("Test model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshot);
         dataSet.ScreenshotsLibrary.Screenshots.Should().Contain(screenshot);
@@ -19,7 +20,7 @@ public sealed class CooperationTests
     [Fact]
     public void ShouldNotDeleteItemClassWithAssetItems()
     {
-        DetectorDataSet dataSet = new("Model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var itemClass = dataSet.CreateItemClass("Item class");
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshot);

@@ -10,12 +10,12 @@ public sealed class DbScreenshotLibrariesDataAccessTests : DbRelatedTests
     public void ShouldSaveMaxQuantityChange()
     {
         using var dbContext = DbContextFactory.CreateDbContext();
-        ScreenshotsLibrary library = new();
-        dbContext.Add(library);
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        dbContext.Add(dataSet);
         dbContext.SaveChanges();
         DbScreenshotsDataAccess dataAccess = new(dbContext);
-        library.MaxQuantity = 110;
-        dataAccess.SaveChanges(library);
+        dataSet.ScreenshotsLibrary.MaxQuantity = 110;
+        dataAccess.SaveChanges(dataSet.ScreenshotsLibrary);
         using var assertDbContext = DbContextFactory.CreateDbContext();
         assertDbContext.Set<ScreenshotsLibrary>().Should().Contain(lib => lib.MaxQuantity == 110);
     }

@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SightKeeper.Domain.Model\SightKeeper.Domain.Model.csproj" />
+      <ProjectReference Include="..\SightKeeper.Tests.Common\SightKeeper.Tests.Common.csproj" />
     </ItemGroup>
 
 </Project>

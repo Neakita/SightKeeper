@@ -8,7 +8,8 @@ public sealed class ScreenshotsLibraryConfiguration : IEntityTypeConfiguration<S
 {
     public void Configure(EntityTypeBuilder<ScreenshotsLibrary> builder)
     {
-        builder.ToTable("ScreenshotsLibraries").HasShadowKey();
-        builder.HasMany(screenshotsLibrary => screenshotsLibrary.Screenshots).WithOne(screenshot => screenshot.Library).IsRequired();
+        builder.HasShadowKey();
+        builder.ToTable("ScreenshotsLibraries");
+        builder.HasMany(library => library.Screenshots).WithOne().IsRequired();
     }
 }

@@ -9,10 +9,6 @@ public sealed class DetectorDataSetConfiguration : IEntityTypeConfiguration<Data
 {
     public void Configure(EntityTypeBuilder<DataSet<DetectorAsset>> builder)
     {
-        builder.HasShadowKey();
-        builder.OwnsOne(model => model.Resolution);
-        builder.HasIndex(model => model.Name).IsUnique();
-        builder.Navigation(model => model.ScreenshotsLibrary).AutoInclude();
-        builder.Navigation(model => model.WeightsLibrary).AutoInclude();
+        builder.Navigation(dataSet => dataSet.WeightsLibrary).AutoInclude();
     }
 }

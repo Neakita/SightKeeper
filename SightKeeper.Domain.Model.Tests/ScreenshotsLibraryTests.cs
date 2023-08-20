@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Domain.Model.Tests;
 
@@ -8,34 +9,34 @@ public sealed class ScreenshotsLibraryTests
     [Fact]
     public void ShouldCreateScreenshot()
     {
-        ScreenshotsLibrary library = new();
-        var screenshot = library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        library.Screenshots.Should().Contain(screenshot);
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dataSet.ScreenshotsLibrary.Screenshots.Should().Contain(screenshot);
     }
 
     [Fact]
     public void ShouldDeleteScreenshot()
     {
-        ScreenshotsLibrary library = new();
-        var screenshot = library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        library.DeleteScreenshot(screenshot);
-        library.Screenshots.Should().NotContain(screenshot);
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dataSet.ScreenshotsLibrary.DeleteScreenshot(screenshot);
+        dataSet.ScreenshotsLibrary.Screenshots.Should().NotContain(screenshot);
     }
 
     [Fact]
     public void HasAnyScreenshotsShouldBeTrueWhenAddScreenshot()
     {
-        ScreenshotsLibrary library = new();
-        library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        library.HasAnyScreenshots.Should().BeTrue();
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dataSet.ScreenshotsLibrary.HasAnyScreenshots.Should().BeTrue();
     }
 
     [Fact]
     public void HasAnyScreenshotsShouldBeFalseWhenAddThenDeleteScreenshot()
     {
-        ScreenshotsLibrary library = new();
-        var screenshot = library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        library.DeleteScreenshot(screenshot);
-        library.HasAnyScreenshots.Should().BeFalse();
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dataSet.ScreenshotsLibrary.DeleteScreenshot(screenshot);
+        dataSet.ScreenshotsLibrary.HasAnyScreenshots.Should().BeFalse();
     }
 }

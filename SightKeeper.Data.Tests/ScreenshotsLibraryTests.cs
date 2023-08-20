@@ -11,9 +11,9 @@ public sealed class ScreenshotsLibraryTests : DbRelatedTests
     public void ShouldAddWithScreenshot()
     {
         using var dbContext = DbContextFactory.CreateDbContext();
-        ScreenshotsLibrary library = new();
-        library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        dbContext.Add(library);
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dbContext.Add(dataSet);
         dbContext.SaveChanges();
         using var assertDbContext = DbContextFactory.CreateDbContext();
         assertDbContext.Set<ScreenshotsLibrary>().Include(lib => lib.Screenshots).Should().Contain(lib => lib.Screenshots.Any());
@@ -23,13 +23,13 @@ public sealed class ScreenshotsLibraryTests : DbRelatedTests
     public void ShouldCascadeDeleteScreenshot()
     {
         using var dbContext = DbContextFactory.CreateDbContext();
-        ScreenshotsLibrary library = new();
-        var screenshot = library.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-        dbContext.Add(library);
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        dbContext.Add(dataSet);
         dbContext.SaveChanges();
-        dbContext.Set<ScreenshotsLibrary>().Should().Contain(library);
+        dbContext.Set<ScreenshotsLibrary>().Should().Contain(dataSet.ScreenshotsLibrary);
         dbContext.Set<Screenshot>().Should().Contain(screenshot);
-        dbContext.Remove(library);
+        dbContext.Remove(dataSet);
         dbContext.SaveChanges();
         dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
         dbContext.Set<Screenshot>().Should().BeEmpty();

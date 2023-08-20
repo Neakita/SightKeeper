@@ -7,7 +7,7 @@ public sealed class DetectorAsset : Asset
 {
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 	
-	internal DetectorAsset(Screenshot screenshot) : base(screenshot)
+	internal DetectorAsset(DataSet dataSet, Screenshot screenshot) : base(dataSet, screenshot)
 	{
 		screenshot.Asset = this;
 		_items = new List<DetectorItem>();

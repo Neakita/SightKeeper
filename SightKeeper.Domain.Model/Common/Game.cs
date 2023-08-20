@@ -3,7 +3,7 @@
 public sealed class Game
 {
 	public string Title { get; set; }
-	public string ProcessName { get; private set; }
+	public string ProcessName { get; set; }
 	
 	public Game(string title, string processName)
 	{
