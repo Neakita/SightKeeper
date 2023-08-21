@@ -7,7 +7,7 @@
              xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Views.Dialogs.ModelEditor"
-             x:DataType="dialogs:DataSetDataSetEditorView"
+             x:DataType="dialogs:DataSetInfoSetEditorView"
              Width="450" Height="450">
     
     <Design.DataContext>

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
@@ -23,12 +22,12 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
     public bool CanChangeSelectedDataSet => true;
     public AnnotatorScreenshotsViewModel Screenshots => new(new MockScreenshotImageLoader(), new MockScreenshotsDataAccess());
 
-    public ScreenshoterViewModel Screenshoter => new(new MockStreamModelScreenshoter());
+    public ScreenshoterViewModel Screenshoter => new(new MockStreamDataSetScreenshoter());
     public AnnotatorEnvironment? Environment => null;
 
-    private sealed class MockStreamModelScreenshoter : StreamModelScreenshoter
+    private sealed class MockStreamDataSetScreenshoter : StreamDataSetScreenshoter
     {
-        public DataSet? Model { get; set; }
+        public DataSet? DataSet { get; set; }
         public bool IsEnabled { get; set; }
         public byte ScreenshotsPerSecond { get; set; }
     }

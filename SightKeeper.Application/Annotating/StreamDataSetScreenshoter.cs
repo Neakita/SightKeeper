@@ -1,8 +1,8 @@
 ﻿namespace SightKeeper.Application.Annotating;
 
-public interface StreamModelScreenshoter
+public interface StreamDataSetScreenshoter
 {
-    Domain.Model.DataSet? Model { get; set; }
+    Domain.Model.DataSet? DataSet { get; set; }
     bool IsEnabled { get; set; }
     byte ScreenshotsPerSecond { get; set; }
 }

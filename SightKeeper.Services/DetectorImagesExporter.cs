@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.Training.Images;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
@@ -8,7 +9,7 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace SightKeeper.Services;
 
-public sealed class DetectorImagesExporter : ImagesExporter<DetectorDataSet>
+public sealed class DetectorImagesExporter : ImagesExporter<DetectorAsset>
 {
 	private const string NumberFormat = "0.######";
 
@@ -22,12 +23,21 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorDataSet>
 		_imageLoader = imageLoader;
 		_assetsDataAccess = assetsDataAccess;
 	}
-	
-	public async Task<IReadOnlyCollection<string>> ExportAsync(string targetDirectoryPath, DetectorDataSet dataSet,
+
+	public Task<IReadOnlyCollection<string>> ExportAsync(
+		string targetDirectoryPath,
+		DataSet<DetectorAsset> dataSet,
 		CancellationToken cancellationToken = default) =>
-		await Task.WhenAll(dataSet.Assets.Select(async (asset, index) =>
-			await ExportAsync(targetDirectoryPath, index, asset, dataSet.ItemClasses, cancellationToken)));
-	
+		ExportAsync(targetDirectoryPath, dataSet.Assets, dataSet.ItemClasses, cancellationToken);
+
+	public async Task<IReadOnlyCollection<string>> ExportAsync(
+		string targetDirectoryPath,
+		IReadOnlyCollection<DetectorAsset> assets,
+		IReadOnlyCollection<ItemClass> itemClasses,
+		CancellationToken cancellationToken = default) =>
+		await Task.WhenAll(assets.Select(async (asset, index) =>
+			await ExportAsync(targetDirectoryPath, index, asset, itemClasses, cancellationToken)));
+
 	private readonly ScreenshotImageLoader _imageLoader;
 	private readonly DetectorAssetsDataAccess _assetsDataAccess;
 

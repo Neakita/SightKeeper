@@ -26,15 +26,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
-      <ProjectReference Include="..\SightKeeper.Domain.Model\SightKeeper.Domain.Model.csproj" />
-      <ProjectReference Include="..\SightKeeper.Tests.Common\SightKeeper.Tests.Common.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="Samples\YoloV3ValidConfig">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj" />
+      <ProjectReference Include="..\SightKeeper.Tests.Common\SightKeeper.Tests.Common.csproj" />
     </ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@ public sealed class DbContextTests
         var asset = dataSet.MakeAsset(screenshotForAsset);
         var itemClass = dataSet.CreateItemClass("Test item class");
         asset.CreateItem(itemClass, new Bounding(0, 0, 1, 1));
-        dbContext.DetectorDataSets.Add(dataSet);
+        dbContext.DataSets.Add(dataSet);
         dbContext.SaveChanges();
     }
 }

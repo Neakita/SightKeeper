@@ -1,8 +1,8 @@
 ﻿using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Application.Model;
+namespace SightKeeper.Application.DataSet;
 
-public interface DataSetData
+public interface DataSetInfo
 {
     string Name { get; }
     string Description { get; }

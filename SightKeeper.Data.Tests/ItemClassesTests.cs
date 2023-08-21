@@ -16,7 +16,7 @@ public sealed class ItemClassesTests : DbRelatedTests
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 		var asset = dataSet.MakeAsset(screenshot);
 		var item = asset.CreateItem(itemClass, new Bounding());
-		dbContext.DetectorDataSets.Add(dataSet);
+		dbContext.DataSets.Add(dataSet);
 		dbContext.SaveChanges();
 
 		dbContext.Set<ItemClass>().Should().Contain(itemClass);

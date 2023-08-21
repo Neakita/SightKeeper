@@ -1,18 +1,18 @@
 ﻿using System.Reactive.Disposables;
 using DynamicData;
-using SightKeeper.Application.Model.Creating;
+using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services;
 
-public sealed class ModelsObservableRepository : IDisposable
+public sealed class DataSetsObservableRepository : IDisposable
 {
     public IObservableList<Domain.Model.DataSet> Models => _source;
 
-    public ModelsObservableRepository(DataSetCreator dataSetCreator, DataSetsDataAccess dataSetsDataAccess)
+    public DataSetsObservableRepository(DataSetCreator dataSetCreator, DataSetsDataAccess dataSetsDataAccess)
     {
         _disposable = new CompositeDisposable(
-            dataSetCreator.ModelCreated.Subscribe(OnModelCreated),
+            dataSetCreator.DataSetCreated.Subscribe(OnModelCreated),
             dataSetsDataAccess.DataSetRemoved.Subscribe(OnModelRemoved));
         AddInitialModels(dataSetsDataAccess);
     }

@@ -78,7 +78,7 @@ public abstract class DataSet
 		Description = string.Empty;
 		_resolution = resolution;
 		_itemClasses = new List<ItemClass>();
-		ScreenshotsLibrary = new ScreenshotsLibrary();
+		ScreenshotsLibrary = new ScreenshotsLibrary(this);
 		WeightsLibrary = new WeightsLibrary();
 	}
 

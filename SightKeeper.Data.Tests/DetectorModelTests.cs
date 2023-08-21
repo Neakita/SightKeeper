@@ -8,37 +8,35 @@ namespace SightKeeper.Data.Tests;
 
 public sealed class DetectorModelTests : DbRelatedTests
 {
-	private static DataSet<DetectorAsset> TestDetectorDataSet => new("TestDetectorModel");
-
 	[Fact]
 	public void ShouldAddDetectorModel()
 	{
 		// arrange
 		using var dbContext = DbContextFactory.CreateDbContext();
-		var testModel = TestDetectorDataSet;
+		var dataSet = DomainTestsHelper.NewDetectorDataSet;
 
 		// act
-		dbContext.Add(testModel);
+		dbContext.Add(dataSet);
 		dbContext.SaveChanges();
 
 		// assert
-		dbContext.DetectorDataSets.Should().Contain(testModel);
+		dbContext.DataSets.Should().Contain(dataSet);
 	}
 
 	[Fact]
 	public void AddingModelWithAssetShouldAddImageScreenshotAndAsset()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		var model = TestDetectorDataSet;
-		var screenshot = model.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
-		var asset = model.MakeAsset(screenshot);
-		var itemClass = model.CreateItemClass("Test item class");
+		var dataSet = DomainTestsHelper.NewDetectorDataSet;
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+		var asset = dataSet.MakeAsset(screenshot);
+		var itemClass = dataSet.CreateItemClass("Test item class");
 		var item = asset.CreateItem(itemClass, new Bounding());
 		
-		dbContext.DetectorDataSets.Add(model);
+		dbContext.DataSets.Add(dataSet);
 		dbContext.SaveChanges();
 
-		dbContext.DetectorDataSets.Should().Contain(model);
+		dbContext.DataSets.Should().Contain(dataSet);
 		dbContext.Set<Screenshot>().Should().Contain(screenshot);
 		dbContext.Set<DetectorAsset>().Should().Contain(asset);
 		dbContext.Set<DetectorItem>().Should().Contain(item);
@@ -54,11 +52,11 @@ public sealed class DetectorModelTests : DbRelatedTests
 		var asset = dataSet.MakeAsset(screenshot);
 		var itemClass = dataSet.CreateItemClass("Test item class");
 		asset.CreateItem(itemClass, new Bounding(0, 0, 1, 1));
-		dbContext.DetectorDataSets.Add(dataSet);
+		dbContext.DataSets.Add(dataSet);
 		dbContext.SaveChanges();
-		dbContext.DetectorDataSets.Remove(dataSet);
+		dbContext.DataSets.Remove(dataSet);
 		dbContext.SaveChanges();
-		dbContext.DetectorDataSets.Should().BeEmpty();
+		dbContext.DataSets.Should().BeEmpty();
 		dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
 		dbContext.Set<DetectorAsset>().Should().BeEmpty();
 		dbContext.Set<Screenshot>().Should().BeEmpty();
@@ -79,7 +77,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 		}
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
-			var model = dbContext.DetectorDataSets
+			var model = dbContext.Set<DataSet<DetectorAsset>>()
 				.Include(m => m.Assets)
 				.Include(m => m.ScreenshotsLibrary.Screenshots)
 				.Single();
@@ -91,11 +89,11 @@ public sealed class DetectorModelTests : DbRelatedTests
 	[Fact]
 	public void ShouldSetGameToNullWhenDeletingGame()
 	{
-		var model = TestDetectorDataSet;
+		var dataSet = DomainTestsHelper.NewDetectorDataSet;
 		Game game = new("Test game", "game.exe");
-		model.Game = game;
+		dataSet.Game = game;
 		using var dbContext = DbContextFactory.CreateDbContext();
-		dbContext.Add(model);
+		dbContext.Add(dataSet);
 		dbContext.SaveChanges();
 		dbContext.Remove(game);
 		dbContext.SaveChanges();

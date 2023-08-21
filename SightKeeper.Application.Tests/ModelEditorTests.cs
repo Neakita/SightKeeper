@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SightKeeper.Application.Model.Editing;
+using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Data.Services.DataSet;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -13,30 +13,30 @@ public sealed class ModelEditorTests : DbRelatedTests
     public async Task ShouldApplyNameChange()
     {
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, "New name", dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
-        await editor.ApplyChanges(dataSetDataChanges);
-        dataSet.Name.Should().Be(dataSetDataChanges.Name);
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        DataSetChangesDTO dataSetChanges = new(dataSet, "New name", dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
+        await editor.ApplyChanges(dataSetChanges);
+        dataSet.Name.Should().Be(dataSetChanges.Name);
     }
 
     [Fact]
     public async Task ShouldApplyDescriptionChange()
     {
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, "New description", dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
-        await editor.ApplyChanges(dataSetDataChanges);
-        dataSet.Description.Should().Be(dataSetDataChanges.Description);
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, "New description", dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
+        await editor.ApplyChanges(dataSetChanges);
+        dataSet.Description.Should().Be(dataSetChanges.Description);
     }
 
     [Fact]
     public async Task ShouldApplyResolutionChange()
     {
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         Resolution changedResolution = new(640, 640);
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
-        await editor.ApplyChanges(dataSetDataChanges);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
+        await editor.ApplyChanges(dataSetChanges);
         dataSet.Resolution.Should().BeEquivalentTo(changedResolution);
     }
 
@@ -44,10 +44,10 @@ public sealed class ModelEditorTests : DbRelatedTests
     public async Task ShouldNotApplyResolutionChange()
     {
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         Resolution changedResolution = new(636, 636);
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
-        await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetDataChanges));
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
+        await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetChanges));
         dataSet.Resolution.Should().NotBe(changedResolution);
     }
 
@@ -55,11 +55,11 @@ public sealed class ModelEditorTests : DbRelatedTests
     public async Task ShouldAddNewItemClass()
     {
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var newItemClasses = dataSet.ItemClasses.Select(itemClass => itemClass.Name).Append("New item class").ToList();
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
-        await editor.ApplyChanges(dataSetDataChanges);
-        dataSet.ItemClasses.Select(itemClass => itemClass.Name).Should().BeEquivalentTo(dataSetDataChanges.ItemClasses);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
+        await editor.ApplyChanges(dataSetChanges);
+        dataSet.ItemClasses.Select(itemClass => itemClass.Name).Should().BeEquivalentTo(dataSetChanges.ItemClasses);
     }
 
     [Fact]
@@ -67,11 +67,11 @@ public sealed class ModelEditorTests : DbRelatedTests
     {
         const string itemClassName = "Item class";
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         dataSet.CreateItemClass(itemClassName);
         var newItemClasses = dataSet.ItemClasses.Select(itemClass => itemClass.Name).Append(itemClassName).ToList();
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
-        await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetDataChanges));
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
+        await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetChanges));
         dataSet.ItemClasses.Should().ContainSingle(itemClass => itemClass.Name == itemClassName);
     }
 
@@ -79,11 +79,11 @@ public sealed class ModelEditorTests : DbRelatedTests
     public async Task ShouldDeleteItemClass()
     {
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         const string itemClassName = "Item class";
         dataSet.CreateItemClass(itemClassName);
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
-        await editor.ApplyChanges(dataSetDataChanges);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
+        await editor.ApplyChanges(dataSetChanges);
         dataSet.ItemClasses.Should().BeEmpty();
     }
 
@@ -91,13 +91,13 @@ public sealed class ModelEditorTests : DbRelatedTests
     public async Task ShouldDeleteOnlyOneItemClass()
     {
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         const string itemClassName1 = "Item class 1";
         const string itemClassName2 = "Item class 2";
         var itemClass1 = dataSet.CreateItemClass(itemClassName1);
         dataSet.CreateItemClass(itemClassName2);
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass> { itemClass1 }, dataSet.Game);
-        await editor.ApplyChanges(dataSetDataChanges);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass> { itemClass1 }, dataSet.Game);
+        await editor.ApplyChanges(dataSetChanges);
         dataSet.ItemClasses.Should().ContainSingle(itemClass => itemClass == itemClass1);
     }
 
@@ -105,13 +105,13 @@ public sealed class ModelEditorTests : DbRelatedTests
     public async Task ShouldNotDeleteItemClassWithAsset()
     {
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var itemClass = dataSet.CreateItemClass("Item class");
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new Bounding());
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
-        await Assert.ThrowsAsync<InvalidOperationException>(() => editor.ApplyChanges(dataSetDataChanges));
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
+        await Assert.ThrowsAsync<InvalidOperationException>(() => editor.ApplyChanges(dataSetChanges));
         dataSet.ItemClasses.Should().Contain(itemClass);
     }
 
@@ -119,12 +119,12 @@ public sealed class ModelEditorTests : DbRelatedTests
     public async Task ShouldChangeGame()
     {
         var editor = Editor;
-        DetectorDataSet dataSet = new("Untitled model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         Game newGame = new("New game", "game.exe");
-        DataSetDataSetDataChangesDTO dataSetDataChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, newGame);
-        await editor.ApplyChanges(dataSetDataChanges);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, newGame);
+        await editor.ApplyChanges(dataSetChanges);
         dataSet.Game.Should().Be(newGame);
     }
 
-    private DbDataSetEditor Editor => new(new ModelChangesValidator(), DbContextFactory.CreateDbContext());
+    private DbDataSetEditor Editor => new(new DataSetChangesValidator(), DbContextFactory.CreateDbContext());
 }

@@ -10,7 +10,6 @@ using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
@@ -41,7 +40,7 @@ public sealed partial class TrainingViewModel : ViewModel
         private set => SetProperty(ref _isTraining, value);
     }
 
-    public TrainingViewModel(ModelTrainer<DetectorDataSet> trainer, DataSetsListViewModel dataSetsListViewModel)
+    public TrainingViewModel(Trainer<DetectorDataSet> trainer, DataSetsListViewModel dataSetsListViewModel)
     {
         _trainer = trainer;
         Completion = Progress.Select(progress => (float)progress.Batch / trainer.MaxBatches);
@@ -68,6 +67,6 @@ public sealed partial class TrainingViewModel : ViewModel
 
     public bool CanStartTraining() => SelectedModel != null && SelectedConfig != null;
 
-    private readonly ModelTrainer<DetectorDataSet> _trainer;
+    private readonly Trainer<DetectorDataSet> _trainer;
     private bool _isTraining;
 }

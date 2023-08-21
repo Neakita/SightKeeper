@@ -4,16 +4,15 @@ using SightKeeper.Data;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.Extensions;
 
 namespace SightKeeper.Services.Annotating;
 
 public sealed class DbDetectorAnnotator : DetectorAnnotator
 {
-    public DbDetectorAnnotator(AppDbContext dbContext, ItemClassDataAccess itemClassDataAccess)
+    public DbDetectorAnnotator(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _itemClassDataAccess = itemClassDataAccess;
     }
     
     public DetectorItem Annotate(Screenshot screenshot, ItemClass itemClass, Bounding bounding)
@@ -23,8 +22,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         Guard.IsBetweenOrEqualTo(bounding.Top, 0, 1);
         Guard.IsBetweenOrEqualTo(bounding.Bottom, 0, 1);
         var asset = screenshot.GetOptionalAsset<DetectorAsset>() ??
-                    screenshot.Library.GetDataSet<DetectorDataSet>().MakeAsset(screenshot);
-        _itemClassDataAccess.LoadItems(itemClass);
+                    screenshot.Library.GetDataSet<DetectorAsset>().MakeAsset(screenshot);
         var item = asset.CreateItem(itemClass, bounding);
         _dbContext.SaveChanges();
         return item;
@@ -33,7 +31,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     public void MarkAsset(Screenshot screenshot)
     {
         Guard.IsNull(screenshot.Asset);
-        var model = screenshot.Library.GetDataSet<DetectorDataSet>();
+        var model = screenshot.Library.GetDataSet<DetectorAsset>();
         model.MakeAsset(screenshot);
         _dbContext.SaveChanges();
     }
@@ -71,12 +69,11 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     }
 
     private readonly AppDbContext _dbContext;
-    private readonly ItemClassDataAccess _itemClassDataAccess;
 
     private static void DeleteAsset(Screenshot screenshot)
     {
         Guard.IsNotNull(screenshot.Asset);
-        var model = screenshot.Library.GetDataSet<DetectorDataSet>();
+        var model = screenshot.Library.GetDataSet<DetectorAsset>();
         model.DeleteAsset(screenshot.GetAsset<DetectorAsset>());
     }
 }

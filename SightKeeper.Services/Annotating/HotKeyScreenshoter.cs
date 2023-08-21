@@ -8,15 +8,15 @@ using SightKeeper.Services.Input;
 
 namespace SightKeeper.Services.Annotating;
 
-public sealed class HotKeyScreenshoter : StreamModelScreenshoter
+public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
 {
-    public DataSet? Model
+    public DataSet? DataSet
     {
-        get => _screenshoter.Model;
+        get => _screenshoter.DataSet;
         set
         {
             Guard.IsFalse(IsEnabled);
-            _screenshoter.Model = value;
+            _screenshoter.DataSet = value;
         }
     }
 
@@ -27,7 +27,7 @@ public sealed class HotKeyScreenshoter : StreamModelScreenshoter
         {
             if (_isEnabled == value)
                 return;
-            Guard.IsNotNull(Model);
+            Guard.IsNotNull(DataSet);
             _isEnabled = value;
             if (value)
                 Enable();
@@ -49,7 +49,7 @@ public sealed class HotKeyScreenshoter : StreamModelScreenshoter
         }
     }
 
-    public HotKeyScreenshoter(HotKeyManager hotKeyManager, ModelScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess)
+    public HotKeyScreenshoter(HotKeyManager hotKeyManager, DataSetScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess)
     {
         _hotKeyManager = hotKeyManager;
         _screenshoter = screenshoter;
@@ -58,7 +58,7 @@ public sealed class HotKeyScreenshoter : StreamModelScreenshoter
     }
 
     private readonly HotKeyManager _hotKeyManager;
-    private readonly ModelScreenshoter _screenshoter;
+    private readonly DataSetScreenshoter _screenshoter;
     private readonly ScreenshotsDataAccess _librariesDataAccess;
 
     private IDisposable? _disposable;
@@ -75,13 +75,13 @@ public sealed class HotKeyScreenshoter : StreamModelScreenshoter
 
     private void OnHotKeyPressed(HotKey hotKey)
     {
-        Guard.IsNotNull(Model);
+        Guard.IsNotNull(DataSet);
         lock (this)
         {
             var somethingScreenshoted = false;
             while (hotKey.IsPressed)
             {
-                if (!_screenshoter.GetCanMakeScreenshot(out var message))
+                if (!_screenshoter.CanMakeScreenshot(out var message))
                     Log.Information("Can't make screenshot: {Message}", message);
                 else
                 {
@@ -93,7 +93,7 @@ public sealed class HotKeyScreenshoter : StreamModelScreenshoter
                 Thread.Sleep(_timeout.Value);
             }
             if (somethingScreenshoted)
-                _librariesDataAccess.SaveChanges(Model.ScreenshotsLibrary);
+                _librariesDataAccess.SaveChanges(DataSet.ScreenshotsLibrary);
         }
     }
 }

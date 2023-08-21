@@ -4,6 +4,6 @@ public enum ModelType
 {
 	Detector,
 	Classifier,
-	Segmenter,
-	Poser
+	Poser,
+	Segmenter
 }

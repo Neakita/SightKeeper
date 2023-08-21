@@ -2,9 +2,9 @@
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Application.Model.Creating;
+namespace SightKeeper.Application.DataSet.Creating;
 
-public sealed class NewDataSetDataSetDataSetDataDTO : NewDataSetData
+public sealed class NewDataSetInfoDTO : NewDataSetInfo
 {
     public ModelType ModelType { get; }
     public string Name { get; }
@@ -13,24 +13,24 @@ public sealed class NewDataSetDataSetDataSetDataDTO : NewDataSetData
     public int ResolutionHeight { get; }
     public IReadOnlyCollection<string> ItemClasses { get; }
     public Game? Game { get; }
-    int? DataSetData.ResolutionWidth => ResolutionWidth;
-    int? DataSetData.ResolutionHeight => ResolutionHeight;
+    int? DataSetInfo.ResolutionWidth => ResolutionWidth;
+    int? DataSetInfo.ResolutionHeight => ResolutionHeight;
     public Resolution Resolution => new((ushort)ResolutionWidth, (ushort)ResolutionHeight);
 
-    public NewDataSetDataSetDataSetDataDTO(ModelType type, DataSetData dataSetData)
+    public NewDataSetInfoDTO(ModelType type, DataSetInfo dataSetInfo)
     {
-        Guard.IsNotNull(dataSetData.ResolutionWidth);
-        Guard.IsNotNull(dataSetData.ResolutionHeight);
+        Guard.IsNotNull(dataSetInfo.ResolutionWidth);
+        Guard.IsNotNull(dataSetInfo.ResolutionHeight);
         ModelType = type;
-        Name = dataSetData.Name;
-        Description = dataSetData.Description;
-        ResolutionWidth = dataSetData.ResolutionWidth.Value;
-        ResolutionHeight = dataSetData.ResolutionHeight.Value;
-        ItemClasses = dataSetData.ItemClasses.ToList();
-        Game = dataSetData.Game;
+        Name = dataSetInfo.Name;
+        Description = dataSetInfo.Description;
+        ResolutionWidth = dataSetInfo.ResolutionWidth.Value;
+        ResolutionHeight = dataSetInfo.ResolutionHeight.Value;
+        ItemClasses = dataSetInfo.ItemClasses.ToList();
+        Game = dataSetInfo.Game;
     }
     
-    public NewDataSetDataSetDataSetDataDTO(
+    public NewDataSetInfoDTO(
         ModelType modelType,
         string name,
         string description,

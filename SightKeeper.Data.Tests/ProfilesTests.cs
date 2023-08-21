@@ -28,12 +28,12 @@ public sealed class ProfilesTests : DbRelatedTests
 		dbContext.SaveChanges();
 
 		dbContext.Profiles.Should().Contain(profile);
-		dbContext.DetectorDataSets.Should().Contain(dataSet);
+		dbContext.DataSets.Should().Contain(dataSet);
 
 		dbContext.Profiles.Remove(profile);
 		dbContext.SaveChanges(); 
 
 		dbContext.Profiles.Should().BeEmpty();
-		dbContext.DetectorDataSets.Should().Contain(dataSet);
+		dbContext.DataSets.Should().Contain(dataSet);
 	}
 }

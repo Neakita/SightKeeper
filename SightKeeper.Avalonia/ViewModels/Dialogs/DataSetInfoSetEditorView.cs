@@ -11,20 +11,19 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
-using SightKeeper.Application.Model;
+using SightKeeper.Application.DataSet;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Services;
 using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
-public partial class DataSetDataSetEditorView : ValidatableViewModel<DataSetData>, DialogViewModel, DataSetData
+public partial class DataSetInfoSetEditorView : ValidatableViewModel<DataSetInfo>, DialogViewModel, DataSetInfo
 {
     public IReadOnlyCollection<string> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
 
-    public DataSetDataSetEditorView(IValidator<DataSetData> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess) : base(validator)
+    public DataSetInfoSetEditorView(IValidator<DataSetInfo> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
         _itemClassDataAccess = itemClassDataAccess;

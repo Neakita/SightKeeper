@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 
-namespace SightKeeper.Application.Model.Editing;
+namespace SightKeeper.Application.DataSet.Editing;
 
-public sealed class ModelChangesValidator : AbstractValidator<DataSetDataChanges>
+public sealed class DataSetChangesValidator : AbstractValidator<DataSetChanges>
 {
-    public ModelChangesValidator()
+    public DataSetChangesValidator()
     {
-        Include(new DataSetDataValidator());
+        Include(new DataSetInfoValidator());
         RuleFor(changes => changes.ResolutionWidth)
             .Must((changes, resolutionWidth) => resolutionWidth == changes.DataSet.Resolution.Width)
             .Unless(changes => changes.DataSet.CanChangeResolution(out _), ApplyConditionTo.CurrentValidator)

@@ -5,9 +5,9 @@ using SightKeeper.Avalonia.ViewModels.Dialogs;
 
 namespace SightKeeper.Avalonia.Views.Dialogs;
 
-public sealed partial class ModelEditor : UserControl, IViewFor<DataSetDataSetEditorView>
+public sealed partial class ModelEditor : UserControl, IViewFor<DataSetInfoSetEditorView>
 {
-    public DataSetDataSetEditorView? ViewModel { get; set; }
+    public DataSetInfoSetEditorView? ViewModel { get; set; }
     
     public ModelEditor()
     {
@@ -22,6 +22,6 @@ public sealed partial class ModelEditor : UserControl, IViewFor<DataSetDataSetEd
     object? IViewFor.ViewModel
     {
         get => ViewModel;
-        set => ViewModel = (DataSetDataSetEditorView?)value;
+        set => ViewModel = (DataSetInfoSetEditorView?)value;
     }
 }

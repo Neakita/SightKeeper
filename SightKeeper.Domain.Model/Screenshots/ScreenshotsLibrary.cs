@@ -5,18 +5,20 @@ namespace SightKeeper.Domain.Model;
 
 public sealed class ScreenshotsLibrary
 {
+    public DataSet DataSet { get; private set; }
     public ushort? MaxQuantity { get; set; }
     public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
     public bool HasAnyScreenshots { get; private set; }
 
-    internal ScreenshotsLibrary()
+    internal ScreenshotsLibrary(DataSet dataSet)
     {
+        DataSet = dataSet;
         _screenshots = new List<Screenshot>();
     }
 
     public Screenshot CreateScreenshot(byte[] content, Resolution resolution)
     {
-        Screenshot screenshot = new(content, resolution);
+        Screenshot screenshot = new(this, content, resolution);
         _screenshots.Add(screenshot);
         ClearExceed();
         HasAnyScreenshots = Screenshots.Any();

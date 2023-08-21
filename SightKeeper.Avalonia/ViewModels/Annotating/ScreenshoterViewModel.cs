@@ -12,10 +12,10 @@ public sealed class ScreenshoterViewModel : ViewModel
 
     public DataSet? DataSet
     {
-        get => _screenshoter.Model;
+        get => _screenshoter.DataSet;
         set
         {
-            if (!SetProperty(_screenshoter.Model, value, model => _screenshoter.Model = model))
+            if (!SetProperty(_screenshoter.DataSet, value, model => _screenshoter.DataSet = model))
                 return;
             OnPropertyChanged(nameof(CanToggleIsEnabled));
             OnPropertyChanged(nameof(MaxScreenshotsQuantity));
@@ -54,11 +54,11 @@ public sealed class ScreenshoterViewModel : ViewModel
 
     public bool CanChangeMaxScreenshotsQuantity => DataSet != null;
 
-    public ScreenshoterViewModel(StreamModelScreenshoter screenshoter)
+    public ScreenshoterViewModel(StreamDataSetScreenshoter screenshoter)
     {
         _screenshoter = screenshoter;
     }
 
     private readonly Subject<bool> _isEnabledChanged = new();
-    private readonly StreamModelScreenshoter _screenshoter;
+    private readonly StreamDataSetScreenshoter _screenshoter;
 }

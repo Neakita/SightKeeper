@@ -5,7 +5,6 @@ using Serilog;
 using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Data;
 
@@ -22,7 +21,7 @@ public class AppDbContext : DbContext
 	}
 
 	public DbSet<Profile> Profiles { get; set; } = null!;
-	public DbSet<DataSet<DetectorAsset>> DetectorDataSets { get; set; } = null!;
+	public DbSet<DataSet> DataSets { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

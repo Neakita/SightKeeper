@@ -21,7 +21,7 @@ public sealed class ScreenshotTests : DbRelatedTests
         }
         using (var assertDbContext = DbContextFactory.CreateDbContext())
         {
-            var modelFromDb = assertDbContext.DetectorDataSets.Include(model => model.ScreenshotsLibrary.Screenshots).ThenInclude(screenshot => screenshot.Asset).Single();
+            var modelFromDb = assertDbContext.DataSets.Include(model => model.ScreenshotsLibrary.Screenshots).ThenInclude(screenshot => screenshot.Asset).Single();
             var screenshot = modelFromDb.ScreenshotsLibrary.Screenshots.Single();
             screenshot.Asset.Should().NotBeNull();
         }

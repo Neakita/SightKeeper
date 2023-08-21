@@ -48,7 +48,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
             initialDbContext.SaveChanges();
         }
         using var dbContext = DbContextFactory.CreateDbContext();
-        var model = dbContext.DetectorDataSets.Include(model => model.ScreenshotsLibrary.Screenshots).Include(model => model.Assets).Single();
+        var model = dbContext.Set<DataSet<DetectorAsset>>().Include(model => model.ScreenshotsLibrary.Screenshots).Include(model => model.Assets).Single();
         model.ScreenshotsLibrary.Screenshots.Should().NotBeEmpty();
         model.Assets.Should().NotBeEmpty();
     }
