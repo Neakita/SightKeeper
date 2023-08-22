@@ -18,15 +18,14 @@ using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
-public partial class DataSetInfoSetEditorView : ValidatableViewModel<DataSetInfo>, DialogViewModel, DataSetInfo
+public partial class DataSetEditorViewModel : ValidatableViewModel<DataSetInfo>, DialogViewModel, DataSetInfo
 {
     public IReadOnlyCollection<string> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
 
-    public DataSetInfoSetEditorView(IValidator<DataSetInfo> validator, RegisteredGamesService registeredGamesService, ItemClassDataAccess itemClassDataAccess) : base(validator)
+    public DataSetEditorViewModel(IValidator<DataSetInfo> validator, RegisteredGamesService registeredGamesService) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
-        _itemClassDataAccess = itemClassDataAccess;
     }
 
     public void SetData(DataSet dataSet)
@@ -40,11 +39,7 @@ public partial class DataSetInfoSetEditorView : ValidatableViewModel<DataSetInfo
         ResolutionHeight = dataSet.Resolution.Height;
         Game = dataSet.Game;
         _deletionBlackListItemClasses = dataSet.ItemClasses
-            .Where(itemClass =>
-            {
-                _itemClassDataAccess.LoadItems(itemClass);
-                return !dataSet.CanDeleteItemClass(itemClass, out _);
-            })
+            .Where(itemClass => !dataSet.CanDeleteItemClass(itemClass, out _))
             .Select(itemClass => itemClass.Name)
             .ToList();
     }
@@ -60,7 +55,6 @@ public partial class DataSetInfoSetEditorView : ValidatableViewModel<DataSetInfo
 
     private readonly ObservableCollection<string> _itemClasses = new();
     private readonly RegisteredGamesService _registeredGamesService;
-    private readonly ItemClassDataAccess _itemClassDataAccess;
     private IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
 
     partial void OnResolutionWidthChanged(int? oldValue, int? newValue)

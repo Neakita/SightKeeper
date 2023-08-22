@@ -6,14 +6,17 @@ using Avalonia;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<DetectorDataSet>, IDisposable
+public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<DetectorAsset>, IDisposable
 {
     public const double MinimumDimensionSize = 0.01;
+
+    public DataSetViewModel<DetectorAsset>? DataSetViewModel { get; set; }
 
     private sealed class DrawingData
     {

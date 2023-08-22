@@ -10,19 +10,37 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, AnnotatorTools<DetectorDataSet>, IDisposable
+public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, AnnotatorTools<DetectorAsset>, IDisposable
 {
+    public DataSetViewModel<DetectorAsset>? DataSetViewModel
+    {
+        get => _dataSetViewModel;
+        set
+        {
+            if (_dataSetViewModel == value)
+                return;
+            _dataSetViewModel = value;
+            ItemClasses = _dataSetViewModel?.ItemClasses ?? Array.Empty<ItemClass>();
+        }
+    }
+
     public IObservable<Unit> UnMarkSelectedScreenshotAsAssetExecuted =>
         _unMarkSelectedScreenshotAsAssetExecuted.AsObservable();
 
     public IObservable<DetectorItemViewModel> DeleteItemExecuted => _deleteItemExecuted;
-    public IReadOnlyCollection<ItemClass> ItemClasses => _annotatorViewModel.SelectedDataSet?.DataSet.ItemClasses ?? Array.Empty<ItemClass>();
+
+    public IReadOnlyCollection<ItemClass> ItemClasses
+    {
+        get => _itemClasses;
+        private set => SetProperty(ref _itemClasses, value);
+    }
 
     public DetectorAnnotatorToolsViewModel(AnnotatorViewModel annotatorViewModel, AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
     {
@@ -70,7 +88,10 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
     
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
     private DetectorItemViewModel? _selectedItem;
-    
+
+    private DataSetViewModel<DetectorAsset>? _dataSetViewModel;
+    private IReadOnlyCollection<ItemClass> _itemClasses = Array.Empty<ItemClass>();
+
 
     [RelayCommand(CanExecute = nameof(CanMarkSelectedScreenshotAsAsset))]
     private void MarkSelectedScreenshotAsAsset()

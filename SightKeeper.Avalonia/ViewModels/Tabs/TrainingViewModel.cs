@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Parsing;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
@@ -15,9 +12,9 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
 public sealed partial class TrainingViewModel : ViewModel
 {
-    public IObservable<TrainingProgress> Progress => _trainer.Progress;
+    public IObservable<TrainingProgress> Progress /*=> _trainer.Progress*/ { get; }
     public IObservable<float?> Completion { get; }
-    public IReadOnlyCollection<DataSetViewModel> AvailableModels { get; }
+    public IReadOnlyCollection<DataSetViewModel> AvailableDataSets { get; }
 
     public IReadOnlyCollection<ModelSize> ModelsSizes { get; } = new[]
     {
@@ -40,17 +37,17 @@ public sealed partial class TrainingViewModel : ViewModel
         private set => SetProperty(ref _isTraining, value);
     }
 
-    public TrainingViewModel(Trainer<DetectorDataSet> trainer, DataSetsListViewModel dataSetsListViewModel)
+    public TrainingViewModel(/*Trainer<DetectorDataSet> trainer, DataSetsListViewModel dataSetsListViewModel*/)
     {
-        _trainer = trainer;
+        /*_trainer = trainer;
         Completion = Progress.Select(progress => (float)progress.Batch / trainer.MaxBatches);
-        AvailableModels = dataSetsListViewModel.DataSets;
+        AvailableModels = dataSetsListViewModel.DataSets;*/
     }
 
     [RelayCommand(CanExecute = nameof(CanStartTraining), IncludeCancelCommand = true)]
     public async Task StartTraining(CancellationToken cancellationToken)
     {
-        Guard.IsNotNull(SelectedModel);
+        /*Guard.IsNotNull(SelectedModel);
         Guard.IsNotNull(SelectedConfig);
         Guard.IsOfType<DetectorDataSet>(SelectedModel.DataSet);
         _trainer.Model = (DetectorDataSet)SelectedModel.DataSet;
@@ -62,11 +59,11 @@ public sealed partial class TrainingViewModel : ViewModel
         finally
         {
             IsTraining = false;
-        }
+        }*/
     }
 
-    public bool CanStartTraining() => SelectedModel != null && SelectedConfig != null;
+    public bool CanStartTraining() => /*SelectedModel != null && SelectedConfig != null*/ false;
 
-    private readonly Trainer<DetectorDataSet> _trainer;
+    /*private readonly Trainer<DetectorDataSet> _trainer;*/
     private bool _isTraining;
 }

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Subjects;
-using Autofac;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -18,62 +15,34 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 
 	public ScreenshoterViewModel Screenshoter { get; }
 
-	public AnnotatorEnvironment? Environment
-	{
-		get => _environment;
-		private set => SetProperty(ref _environment, value);
-	}
+	public AnnotatorEnvironmentHolder EnvironmentHolder { get; }
 
 	public bool CanChangeSelectedDataSet => !Screenshoter.IsEnabled;
 
 	public AnnotatorViewModel(
-		ILifetimeScope scope,
 		ScreenshoterViewModel screenshoterViewModel,
 		AnnotatorScreenshotsViewModel screenshots,
-		DataSetsListViewModel dataSetsListViewModel)
+		DataSetsListViewModel dataSetsListViewModel,
+		AnnotatorEnvironmentHolder environmentHolder,
+		AnnotatorSelectedDataSetHolder selectedDataSetHolder)
 	{
 		Screenshoter = screenshoterViewModel;
-		_scope = scope;
+		_selectedDataSetHolder = selectedDataSetHolder;
 		Screenshots = screenshots;
+		EnvironmentHolder = environmentHolder;
 		screenshoterViewModel.IsEnabledChanged.Subscribe(_ =>
 			OnPropertyChanged(nameof(CanChangeSelectedDataSet)));
 		DataSets = dataSetsListViewModel.DataSets;
 	}
 
-	private readonly ILifetimeScope _scope;
+	private readonly AnnotatorSelectedDataSetHolder _selectedDataSetHolder;
 	private readonly Subject<DataSetViewModel?> _selectedDataSetChanged = new();
 
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
-	private IDisposable? _selectedDataSetDisposable;
-	private AnnotatorEnvironment? _environment;
 
 	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
-		_selectedDataSetDisposable?.Dispose();
-		Screenshoter.DataSet = value?.DataSet;
-		Screenshots.DataSet = value?.DataSet;
-		if (value == null)
-		{
-			ClearDataSetEnvironment();
-			return;
-		}
-
-		var selectedDataSetScope = _scope.BeginLifetimeScope(value);
-		_selectedDataSetDisposable = selectedDataSetScope;
-		if (value.DataSet is DetectorDataSet)
-			SetupDetectorDataSetEnvironment(selectedDataSetScope);
-		else
-			ThrowHelper.ThrowArgumentOutOfRangeException(nameof(value), value, null);
+		_selectedDataSetHolder.SelectedDataSetViewModel = value;
 		_selectedDataSetChanged.OnNext(value);
-	}
-
-	private void SetupDetectorDataSetEnvironment(IComponentContext context)
-	{
-		Environment = context.Resolve<AnnotatorEnvironment<DetectorDataSet>>();
-	}
-
-	private void ClearDataSetEnvironment()
-	{
-		Environment = null;
 	}
 }

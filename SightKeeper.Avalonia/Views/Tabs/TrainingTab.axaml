@@ -8,8 +8,8 @@
              x:Class="SightKeeper.Avalonia.Views.Tabs.TrainingTab"
              x:DataType="tabs:TrainingViewModel">
     <StackPanel>
-        <ComboBox ItemsSource="{Binding AvailableModels}"
-                  SelectedItem="{Binding SelectedModel}"
+        <ComboBox ItemsSource="{Binding AvailableDataSets}"
+                  SelectedItem="{Binding SelectedDataSet}"
                   IsEnabled="{Binding !IsTraining}"
                   PlaceholderText="Model">
             <ComboBox.ItemTemplate>
@@ -20,15 +20,9 @@
         </ComboBox>
         
         <ComboBox ItemsSource="{Binding ModelsSizes}"
-                  SelectedItem="{Binding SelectedConfig}"
+                  SelectedItem="{Binding SelectedModelSize}"
                   IsEnabled="{Binding !IsTraining}"
-                  PlaceholderText="Config">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+                  PlaceholderText="Config"/>
         
         <Button Content="{icons:MaterialIconExt Play}"
                 Command="{Binding StartTrainingCommand}"/>

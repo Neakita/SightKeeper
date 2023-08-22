@@ -16,11 +16,12 @@ public sealed class DataSetsListViewModel : ViewModel, IDisposable
     {
         _disposable = new CompositeDisposable(
             dataSetsObservableRepository.Models.Connect()
-                .Transform(model => new DataSetViewModel(model))
+                .Transform(DataSetViewModel.Create)
+                .DisposeMany()
                 .AddKey(viewModel => viewModel.DataSet)
                 .Bind(out var models)
                 .PopulateInto(_cache),
-            editor.DataSetEdited.Subscribe(OnModelEdited));
+            editor.DataSetEdited.Subscribe(OnDataSetEdited));
         DataSets = models;
     }
 
@@ -29,5 +30,5 @@ public sealed class DataSetsListViewModel : ViewModel, IDisposable
     private readonly IDisposable _disposable;
     private readonly SourceCache<DataSetViewModel, DataSet> _cache = new(viewModel => viewModel.DataSet);
 
-    private void OnModelEdited(DataSet dataSet) => _cache.Lookup(dataSet).Value.NotifyChanges();
+    private void OnDataSetEdited(DataSet dataSet) => _cache.Lookup(dataSet).Value.NotifyDataSetEdited();
 }

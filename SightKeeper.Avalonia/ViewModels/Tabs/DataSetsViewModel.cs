@@ -36,7 +36,7 @@ public sealed partial class DataSetsViewModel : ViewModel
 	private async Task CreateNewDataSet(CancellationToken cancellationToken)
 	{
 		await using var scope = _scope.BeginLifetimeScope(this);
-		var viewModel = scope.Resolve<Dialogs.DataSetInfoSetEditorView>();
+		var viewModel = scope.Resolve<Dialogs.DataSetEditorViewModel>();
 		await viewModel.ShowDialog(this);
 		if (viewModel.DialogResult != true) return;
 		await _dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(ModelType.Detector, viewModel), cancellationToken);
@@ -48,7 +48,7 @@ public sealed partial class DataSetsViewModel : ViewModel
 		Guard.IsNotNull(SelectedDataSetViewModel);
 		var dataSetToEdit = SelectedDataSetViewModel.DataSet;
 		await using var scope = _scope.BeginLifetimeScope(this);
-		var viewModel = scope.Resolve<Dialogs.DataSetInfoSetEditorView>();
+		var viewModel = scope.Resolve<Dialogs.DataSetEditorViewModel>();
 		viewModel.SetData(dataSetToEdit);
 		await viewModel.ShowDialog(this);
 		if (viewModel.DialogResult != true)
