@@ -126,6 +126,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();
 		builder.RegisterGeneric(typeof(AnnotatorEnvironment<>)).InstancePerMainViewModel();
 		builder.RegisterType<AnnotatorEnvironmentHolder>().InstancePerMainViewModel();
+		builder.RegisterType<AnnotatorSelectedDataSetHolder>().InstancePerMainViewModel();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)

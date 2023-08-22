@@ -43,6 +43,12 @@ public sealed class ScreenshotsLibrary
 	
     private readonly List<Screenshot> _screenshots;
 
+    private ScreenshotsLibrary()
+    {
+        DataSet = null!;
+        _screenshots = null!;
+    }
+
     private void ClearExceed()
     {
         if (MaxQuantity == null)
