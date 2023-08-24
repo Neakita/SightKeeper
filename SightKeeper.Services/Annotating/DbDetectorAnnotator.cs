@@ -31,8 +31,9 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     public void MarkAsset(Screenshot screenshot)
     {
         Guard.IsNull(screenshot.Asset);
-        var model = screenshot.Library.GetDataSet<DetectorAsset>();
-        model.MakeAsset(screenshot);
+        var screenshotDataSet = screenshot.Library.GetDataSet<DetectorAsset>();
+        _dbContext.Entry(screenshotDataSet).Collection(dataSet => dataSet.Assets).Load();
+        screenshotDataSet.MakeAsset(screenshot);
         _dbContext.SaveChanges();
     }
 

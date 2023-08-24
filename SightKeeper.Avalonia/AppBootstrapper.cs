@@ -118,10 +118,10 @@ public static class AppBootstrapper
 		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<SettingsViewModel>();
 		builder.RegisterType<RegisteredGamesViewModel>();
-		builder.RegisterType<ScreenshoterViewModel>();
+		builder.RegisterType<ScreenshoterViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorAsset>>().InstancePerMainViewModel();
-		builder.RegisterType<DetectorDrawerViewModel>().AsSelf().As<AnnotatorWorkSpace<DetectorAsset>>();
+		builder.RegisterType<DetectorDrawerViewModel>().AsSelf().As<AnnotatorWorkSpace<DetectorAsset>>().InstancePerMainViewModel();;
 		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();
