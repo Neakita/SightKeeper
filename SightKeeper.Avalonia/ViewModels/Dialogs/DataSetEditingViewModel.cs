@@ -9,6 +9,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -32,6 +33,11 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
         _registeredGamesService = registeredGamesService;
         ErrorsChanged += OnErrorsChanged;
     }
+    
+    ICommand IDataSetEditorViewModel.AddItemClassCommand => AddItemClassCommand;
+    ICommand IDataSetEditorViewModel.DeleteItemClassCommand => DeleteItemClassCommand;
+    ICommand IDataSetEditorViewModel.ApplyCommand => ApplyCommand;
+    ICommand IDataSetEditorViewModel.CancelCommand => CancelCommand;
 
     private void OnErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
     {
@@ -95,10 +101,10 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
     private bool CanDeleteItemClass() => SelectedItemClass != null && !_deletionBlackListItemClasses.Contains(SelectedItemClass);
 
     [RelayCommand(CanExecute = nameof(CanApply))]
-    private void Apply()
+    private async Task Apply()
     {
-        OnPropertiesChanged(nameof(Name));
-        if (!ValidationResult.IsValid)
+        var isValid = await Validate();
+        if (!isValid)
             return;
         DialogResult = true;
         _closeRequested.OnNext(Unit.Default);

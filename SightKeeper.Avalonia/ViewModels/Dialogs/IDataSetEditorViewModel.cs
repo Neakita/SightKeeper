@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Input;
+using System.Windows.Input;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
@@ -18,8 +18,8 @@ public interface IDataSetEditorViewModel : INotifyPropertyChanging, INotifyPrope
     Game? Game { get; set; }
     Task<IReadOnlyCollection<Game>> Games { get; }
     
-    IRelayCommand AddItemClassCommand { get; }
-    IRelayCommand DeleteItemClassCommand { get; }
-    IRelayCommand ApplyCommand { get; }
-    IRelayCommand CancelCommand { get; }
+    ICommand AddItemClassCommand { get; }
+    ICommand DeleteItemClassCommand { get; }
+    ICommand ApplyCommand { get; }
+    ICommand CancelCommand { get; }
 }

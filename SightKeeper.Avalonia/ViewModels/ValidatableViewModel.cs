@@ -2,6 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using FluentValidation.Results;
@@ -26,25 +27,31 @@ public abstract class ValidatableViewModel<TValidatable> : ViewModel, INotifyDat
             .Select(error => error.ErrorMessage);
     }
 
-    public void SetValidationResult(ValidationResult validationResult)
+    public bool HasErrors => !ValidationResult.IsValid;
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+    
+    protected ValidationResult ValidationResult = new();
+
+    protected async Task<bool> Validate()
+    {
+        var validatable = this as TValidatable;
+        Guard.IsNotNull(validatable);
+        var validationResult = await Validator.ValidateAsync(validatable) ;
+        UpdateValidationResult(validationResult);
+        return validationResult.IsValid;
+    }
+
+    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        _ = Validate();
+    }
+
+    private void UpdateValidationResult(ValidationResult validationResult)
     {
         var propertiesToValidate = ValidationResult.Errors.Select(error => error.PropertyName)
             .Union(validationResult.Errors.Select(error => error.PropertyName)).ToList();
         ValidationResult = validationResult;
         foreach (var property in propertiesToValidate)
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
-    }
-
-    public bool HasErrors => !ValidationResult.IsValid;
-    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-    
-    protected ValidationResult ValidationResult = new();
-
-    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        var validatable = this as TValidatable;
-        Guard.IsNotNull(validatable);
-        var validationResult = Validator.ValidateAsync(validatable).GetAwaiter().GetResult();
-        SetValidationResult(validationResult);
     }
 }

@@ -1,14 +1,16 @@
 ﻿using FluentValidation;
+using NSubstitute;
+using SightKeeper.Application.DataSet;
 using SightKeeper.Application.DataSet.Editing;
-using SightKeeper.Data;
 using SightKeeper.Data.Services.DataSet;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Services;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Application.Tests;
 
-public sealed class ModelEditorTests : DbRelatedTests
+public sealed class DataSetEditorTests : DbRelatedTests
 {
     [Fact]
     public async Task ShouldApplyNameChange()
@@ -127,5 +129,13 @@ public sealed class ModelEditorTests : DbRelatedTests
         dataSet.Game.Should().Be(newGame);
     }
 
-    private DbDataSetEditor Editor => new(new DataSetChangesValidator(new DbDataSetsDataAccess(new AppDbContext())), DbContextFactory.CreateDbContext());
+    private DbDataSetEditor Editor
+    {
+        get
+        {
+            var dataSetsDataAccessSubstitute = Substitute.For<DataSetsDataAccess>();
+            IValidator<DataSetChanges> validator = new DataSetChangesValidator(new DataSetInfoValidator(), dataSetsDataAccessSubstitute);
+            return new DbDataSetEditor(validator, DbContextFactory.CreateDbContext());
+        }
+    }
 }

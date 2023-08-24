@@ -8,6 +8,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -49,6 +50,11 @@ public partial class DataSetCreatingViewModel : ValidatableViewModel<NewDataSetI
     private readonly ObservableCollection<string> _itemClasses = new();
     private readonly RegisteredGamesService _registeredGamesService;
     private readonly IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
+    
+    ICommand IDataSetEditorViewModel.AddItemClassCommand => AddItemClassCommand;
+    ICommand IDataSetEditorViewModel.DeleteItemClassCommand => DeleteItemClassCommand;
+    ICommand IDataSetEditorViewModel.ApplyCommand => ApplyCommand;
+    ICommand IDataSetEditorViewModel.CancelCommand => CancelCommand;
 
     partial void OnResolutionWidthChanged(int? oldValue, int? newValue)
     {
@@ -76,14 +82,11 @@ public partial class DataSetCreatingViewModel : ValidatableViewModel<NewDataSetI
     private bool CanDeleteItemClass() => SelectedItemClass != null && !_deletionBlackListItemClasses.Contains(SelectedItemClass);
 
     [RelayCommand(CanExecute = nameof(CanApply))]
-    private void Apply()
+    private async Task Apply()
     {
-        var validationResult = Validator.ValidateAsync(this).GetAwaiter().GetResult();
-        if (!validationResult.IsValid)
-        {
-            SetValidationResult(validationResult);
+        var isValid = await Validate();
+        if (!isValid)
             return;
-        }
         DialogResult = true;
         _closeRequested.OnNext(Unit.Default);
     }
