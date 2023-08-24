@@ -4,10 +4,10 @@ using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Application.Tests;
 
-public sealed class ModelScreenshoterTests
+public sealed class DataSetScreenshoterTests
 {
     [Fact]
-    public void ShouldSetModel()
+    public void ShouldSetDataSet()
     {
         var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var screenCapture = Substitute.For<ScreenCapture>();
@@ -18,7 +18,7 @@ public sealed class ModelScreenshoterTests
     }
     
     [Fact]
-    public void ShouldSetModelToNull()
+    public void ShouldSetDataSetToNull()
     {
         var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var screenCapture = Substitute.For<ScreenCapture>();

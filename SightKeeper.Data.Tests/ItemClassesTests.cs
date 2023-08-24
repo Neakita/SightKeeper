@@ -1,5 +1,4 @@
-﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
 
@@ -11,7 +10,7 @@ public sealed class ItemClassesTests : DbRelatedTests
 	public void ShouldNotDeleteItemClassesOnItemDelete()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		DataSet<DetectorAsset> dataSet = new("Test model");
+		var dataSet = DomainTestsHelper.NewDetectorDataSet;
 		var itemClass = dataSet.CreateItemClass("Test item class");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 		var asset = dataSet.MakeAsset(screenshot);

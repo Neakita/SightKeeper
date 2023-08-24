@@ -11,7 +11,7 @@ public sealed class ResolutionTests
     {
         Resolution firstResolution = new(64, 64);
         Resolution secondResolution = new(128, 128);
-        DataSet<DetectorAsset> dataSet = new("Test model", firstResolution);
+        DataSet<DetectorAsset> dataSet = new("Test data set", firstResolution);
         dataSet.Resolution.Should().Be(firstResolution);
         dataSet.Resolution = secondResolution;
         dataSet.Resolution.Should().Be(secondResolution);
@@ -22,7 +22,7 @@ public sealed class ResolutionTests
     {
         Resolution firstResolution = new(64, 64);
         Resolution secondResolution = new(128, 128);
-        DataSet<DetectorAsset> dataSet = new("Test model", firstResolution);
+        DataSet<DetectorAsset> dataSet = new("Test data set", firstResolution);
         dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         dataSet.Resolution.Should().Be(firstResolution);
         Assert.Throws<InvalidOperationException>(() =>

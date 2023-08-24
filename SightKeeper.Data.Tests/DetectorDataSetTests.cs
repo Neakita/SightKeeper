@@ -6,10 +6,10 @@ using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;
 
-public sealed class DetectorModelTests : DbRelatedTests
+public sealed class DetectorDataSetTests : DbRelatedTests
 {
 	[Fact]
-	public void ShouldAddDetectorModel()
+	public void ShouldAddDetectorDataSet()
 	{
 		// arrange
 		using var dbContext = DbContextFactory.CreateDbContext();
@@ -24,7 +24,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	}
 
 	[Fact]
-	public void AddingModelWithAssetShouldAddImageScreenshotAndAsset()
+	public void AddingDataSetWithAssetShouldAddImageScreenshotAndAsset()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
 		var dataSet = DomainTestsHelper.NewDetectorDataSet;
@@ -47,7 +47,7 @@ public sealed class DetectorModelTests : DbRelatedTests
 	public void ShouldCascadeDelete()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		DataSet<DetectorAsset> dataSet = new("Test model");
+		var dataSet = DomainTestsHelper.NewDetectorDataSet;
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
 		var asset = dataSet.MakeAsset(screenshot);
 		var itemClass = dataSet.CreateItemClass("Test item class");
@@ -77,12 +77,12 @@ public sealed class DetectorModelTests : DbRelatedTests
 		}
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
-			var model = dbContext.Set<DataSet<DetectorAsset>>()
+			var dataSet = dbContext.Set<DataSet<DetectorAsset>>()
 				.Include(m => m.Assets)
 				.Include(m => m.ScreenshotsLibrary.Screenshots)
 				.Single();
-			model.Assets.Should().NotBeEmpty();
-			model.ScreenshotsLibrary.Screenshots.Should().NotBeEmpty();
+			dataSet.Assets.Should().NotBeEmpty();
+			dataSet.ScreenshotsLibrary.Screenshots.Should().NotBeEmpty();
 		}
 	}
 

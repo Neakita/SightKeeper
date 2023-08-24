@@ -11,7 +11,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
     [Fact]
     public void ShouldAddAssetWithScreenshot()
     {
-        DataSet<DetectorAsset> dataSet = new("Model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshot);
         using var dbContext = DbContextFactory.CreateDbContext();
@@ -41,15 +41,15 @@ public sealed class DetectorAssetTests : DbRelatedTests
     {
         using (var initialDbContext = DbContextFactory.CreateDbContext())
         {
-            DataSet<DetectorAsset> newDataSet = new("Model");
+            var newDataSet = DomainTestsHelper.NewDetectorDataSet;
             var screenshot = newDataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
             newDataSet.MakeAsset(screenshot);
             initialDbContext.Add(newDataSet);
             initialDbContext.SaveChanges();
         }
         using var dbContext = DbContextFactory.CreateDbContext();
-        var model = dbContext.Set<DataSet<DetectorAsset>>().Include(model => model.ScreenshotsLibrary.Screenshots).Include(model => model.Assets).Single();
-        model.ScreenshotsLibrary.Screenshots.Should().NotBeEmpty();
-        model.Assets.Should().NotBeEmpty();
+        var dataSet = dbContext.Set<DataSet<DetectorAsset>>().Include(model => model.ScreenshotsLibrary.Screenshots).Include(model => model.Assets).Single();
+        dataSet.ScreenshotsLibrary.Screenshots.Should().NotBeEmpty();
+        dataSet.Assets.Should().NotBeEmpty();
     }
 }

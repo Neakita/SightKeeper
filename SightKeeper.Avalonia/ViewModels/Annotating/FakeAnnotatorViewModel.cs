@@ -14,8 +14,8 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
 {
     public ReadOnlyObservableCollection<DataSetViewModel> DataSets => new(new ObservableCollection<DataSetViewModel>
     {
-        new DataSetViewModel<DetectorAsset>(new DataSet<DetectorAsset>("Some model")),
-        new DataSetViewModel<DetectorAsset>(new DataSet<DetectorAsset>("Another model"))
+        new DataSetViewModel<DetectorAsset>(new DataSet<DetectorAsset>("Some data set")),
+        new DataSetViewModel<DetectorAsset>(new DataSet<DetectorAsset>("Another data set"))
     });
 
     public DataSetViewModel? SelectedDataSet { get; set; }

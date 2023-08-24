@@ -4,6 +4,6 @@ public sealed class FakeDataSetCreatingViewModel : Dialogs.DataSetCreatingViewMo
 {
     public FakeDataSetCreatingViewModel() : base(null, null)
     {
-        Name = "Some model";
+        Name = "Some data set";
     }
 }

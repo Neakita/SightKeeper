@@ -15,14 +15,14 @@ public sealed class DataSetsListViewModel : ViewModel, IDisposable
     public DataSetsListViewModel(DataSetsObservableRepository dataSetsObservableRepository, DataSetEditor editor)
     {
         _disposable = new CompositeDisposable(
-            dataSetsObservableRepository.Models.Connect()
+            dataSetsObservableRepository.DataSets.Connect()
                 .Transform(DataSetViewModel.Create)
                 .DisposeMany()
                 .AddKey(viewModel => viewModel.DataSet)
-                .Bind(out var models)
+                .Bind(out var dataSets)
                 .PopulateInto(_cache),
             editor.DataSetEdited.Subscribe(OnDataSetEdited));
-        DataSets = models;
+        DataSets = dataSets;
     }
 
     public void Dispose() => _disposable.Dispose();

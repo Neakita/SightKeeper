@@ -7,14 +7,14 @@ namespace SightKeeper.Services;
 
 public sealed class DataSetsObservableRepository : IDisposable
 {
-    public IObservableList<Domain.Model.DataSet> Models => _source;
+    public IObservableList<Domain.Model.DataSet> DataSets => _source;
 
     public DataSetsObservableRepository(DataSetCreator dataSetCreator, DataSetsDataAccess dataSetsDataAccess)
     {
         _disposable = new CompositeDisposable(
-            dataSetCreator.DataSetCreated.Subscribe(OnModelCreated),
-            dataSetsDataAccess.DataSetRemoved.Subscribe(OnModelRemoved));
-        AddInitialModels(dataSetsDataAccess);
+            dataSetCreator.DataSetCreated.Subscribe(OnDataSetCreated),
+            dataSetsDataAccess.DataSetRemoved.Subscribe(OnDataSetRemoved));
+        AddInitialDataSets(dataSetsDataAccess);
     }
 
     public void Dispose()
@@ -26,12 +26,12 @@ public sealed class DataSetsObservableRepository : IDisposable
     private readonly SourceList<Domain.Model.DataSet> _source = new();
     private readonly IDisposable _disposable;
 
-    private void OnModelCreated(Domain.Model.DataSet dataSet) => _source.Add(dataSet);
-    private void OnModelRemoved(Domain.Model.DataSet dataSet) => _source.Remove(dataSet);
+    private void OnDataSetCreated(Domain.Model.DataSet dataSet) => _source.Add(dataSet);
+    private void OnDataSetRemoved(Domain.Model.DataSet dataSet) => _source.Remove(dataSet);
 
-    private async void AddInitialModels(DataSetsDataAccess dataSetsDataAccess)
+    private async void AddInitialDataSets(DataSetsDataAccess dataSetsDataAccess)
     {
-        var models = await dataSetsDataAccess.GetDataSets();
-        _source.AddRange(models);
+        var dataSets = await dataSetsDataAccess.GetDataSets();
+        _source.AddRange(dataSets);
     }
 }

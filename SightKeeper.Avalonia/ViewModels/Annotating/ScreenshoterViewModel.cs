@@ -15,7 +15,7 @@ public sealed class ScreenshoterViewModel : ViewModel
         get => _screenshoter.DataSet;
         set
         {
-            if (!SetProperty(_screenshoter.DataSet, value, model => _screenshoter.DataSet = model))
+            if (!SetProperty(_screenshoter.DataSet, value, dataSet => _screenshoter.DataSet = dataSet))
                 return;
             OnPropertyChanged(nameof(CanToggleIsEnabled));
             OnPropertyChanged(nameof(MaxScreenshotsQuantity));

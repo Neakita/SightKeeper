@@ -19,10 +19,10 @@ public sealed class ProfilesTests : DbRelatedTests
 	}
 
 	[Fact]
-	public void ShouldNotDeleteModelOnProfileDelete()
+	public void ShouldNotDeleteDataSetOnProfileDelete()
 	{
-		using AppDbContext dbContext = DbContextFactory.CreateDbContext();
-		DataSet<DetectorAsset> dataSet = new("Test model");
+		using var dbContext = DbContextFactory.CreateDbContext();
+		var dataSet = DomainTestsHelper.NewDetectorDataSet;
 		Profile profile = new("Test profile", dataSet);
 		dbContext.Profiles.Add(profile);
 		dbContext.SaveChanges();

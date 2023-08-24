@@ -29,7 +29,7 @@
                       ItemsSource="{Binding DataSets}"
                       SelectedItem="{Binding SelectedDataSet}"
                       HorizontalAlignment="Stretch"
-                      PlaceholderText="Model"
+                      PlaceholderText="Dataset"
                       IsEnabled="{Binding CanChangeSelectedDataSet}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>

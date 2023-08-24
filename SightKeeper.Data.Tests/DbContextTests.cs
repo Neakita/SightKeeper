@@ -1,6 +1,6 @@
-﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;
 
@@ -14,7 +14,7 @@ public sealed class DbContextTests
         var database = dbContext.Database;
         database.EnsureDeleted();
         database.EnsureCreated();
-        DataSet<DetectorAsset> dataSet = new("Test model");
+        var dataSet = DomainTestsHelper.NewDetectorDataSet;
         var screenshotForAsset = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
         var asset = dataSet.MakeAsset(screenshotForAsset);

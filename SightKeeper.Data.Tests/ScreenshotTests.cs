@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;
@@ -13,7 +11,7 @@ public sealed class ScreenshotTests : DbRelatedTests
     {
         using (var arrangeDbContext = DbContextFactory.CreateDbContext())
         {
-            DataSet<DetectorAsset> dataSet = new("Test model");
+            var dataSet = DomainTestsHelper.NewDetectorDataSet;
             var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
             dataSet.MakeAsset(screenshot);
             arrangeDbContext.Add(dataSet);
@@ -21,8 +19,8 @@ public sealed class ScreenshotTests : DbRelatedTests
         }
         using (var assertDbContext = DbContextFactory.CreateDbContext())
         {
-            var modelFromDb = assertDbContext.DataSets.Include(model => model.ScreenshotsLibrary.Screenshots).ThenInclude(screenshot => screenshot.Asset).Single();
-            var screenshot = modelFromDb.ScreenshotsLibrary.Screenshots.Single();
+            var dataSet = assertDbContext.DataSets.Include(model => model.ScreenshotsLibrary.Screenshots).ThenInclude(screenshot => screenshot.Asset).Single();
+            var screenshot = dataSet.ScreenshotsLibrary.Screenshots.Single();
             screenshot.Asset.Should().NotBeNull();
         }
     }
