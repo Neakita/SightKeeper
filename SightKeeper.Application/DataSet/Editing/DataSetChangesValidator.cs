@@ -1,32 +1,19 @@
 ﻿using FluentValidation;
-using SightKeeper.Commons.Validation;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.DataSet.Editing;
 
 public sealed class DataSetChangesValidator : AbstractValidator<DataSetChanges>
 {
-    public DataSetChangesValidator(DataSetsDataAccess dataSetsDataAccess)
+    public DataSetChangesValidator(IValidator<DataSetInfo> dataSetInfoValidator, DataSetsDataAccess dataSetsDataAccess)
     {
         _dataSetsDataAccess = dataSetsDataAccess;
+        
+        Include(dataSetInfoValidator);
         
         RuleFor(data => data.Name)
             .NotEmpty()
             .MustAsync((dataSet, _, cancellationToken) => NameIsUnique(dataSet, cancellationToken)).WithMessage("Name must be unique");
-        
-        RuleFor(data => data.ResolutionWidth)
-            .NotNull()
-            .GreaterThan(0)
-            .LessThanOrEqualTo(ushort.MaxValue)
-            .MultiplierOf(32);
-
-        RuleFor(changes => changes.ResolutionHeight)
-            .NotNull()
-            .GreaterThan(0)
-            .LessThanOrEqualTo(ushort.MaxValue)
-            .MultiplierOf(32);
-        
-        RuleFor(changes => changes.ItemClasses).NoDuplicates();
         
         RuleFor(changes => changes.ResolutionWidth)
             .Must((changes, resolutionWidth) => resolutionWidth == changes.DataSet.Resolution.Width)

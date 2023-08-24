@@ -10,9 +10,11 @@ namespace SightKeeper.Avalonia.ViewModels;
 
 public abstract class ValidatableViewModel<TValidatable> : ViewModel, INotifyDataErrorInfo where TValidatable : class
 {
+    public IValidator<TValidatable> Validator { get; }
+    
     public ValidatableViewModel(IValidator<TValidatable> validator)
     {
-        _validator = validator;
+        Validator = validator;
         PropertyChanged += OnPropertyChanged;
     }
 
@@ -24,10 +26,17 @@ public abstract class ValidatableViewModel<TValidatable> : ViewModel, INotifyDat
             .Select(error => error.ErrorMessage);
     }
 
+    public void SetValidationResult(ValidationResult validationResult)
+    {
+        var propertiesToValidate = ValidationResult.Errors.Select(error => error.PropertyName)
+            .Union(validationResult.Errors.Select(error => error.PropertyName)).ToList();
+        ValidationResult = validationResult;
+        foreach (var property in propertiesToValidate)
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
+    }
+
     public bool HasErrors => !ValidationResult.IsValid;
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-    
-    private readonly IValidator<TValidatable> _validator;
     
     protected ValidationResult ValidationResult = new();
 
@@ -35,11 +44,7 @@ public abstract class ValidatableViewModel<TValidatable> : ViewModel, INotifyDat
     {
         var validatable = this as TValidatable;
         Guard.IsNotNull(validatable);
-        var validationResult = _validator.ValidateAsync(validatable).GetAwaiter().GetResult();
-        var propertiesToValidate = ValidationResult.Errors.Select(error => error.PropertyName)
-            .Union(validationResult.Errors.Select(error => error.PropertyName)).ToList();
-        ValidationResult = validationResult;
-        foreach (var property in propertiesToValidate)
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
+        var validationResult = Validator.ValidateAsync(validatable).GetAwaiter().GetResult();
+        SetValidationResult(validationResult);
     }
 }

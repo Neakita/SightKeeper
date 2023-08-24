@@ -12,18 +12,21 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
-using SightKeeper.Application.DataSet;
+using SightKeeper.Application.DataSet.Creating;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
-public partial class DataSetCreatingViewModel : ValidatableViewModel<DataSetInfo>, IDataSetEditorViewModel, DialogViewModel, DataSetInfo
+public partial class DataSetCreatingViewModel : ValidatableViewModel<NewDataSetInfo>, IDataSetEditorViewModel, DialogViewModel, NewDataSetInfo
 {
     public IReadOnlyCollection<string> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
 
-    public DataSetCreatingViewModel(IValidator<DataSetInfo> validator, RegisteredGamesService registeredGamesService) : base(validator)
+    public ModelType ModelType => ModelType.Detector;
+
+    public DataSetCreatingViewModel(IValidator<NewDataSetInfo> validator, RegisteredGamesService registeredGamesService) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
         ErrorsChanged += OnErrorsChanged;
@@ -45,7 +48,7 @@ public partial class DataSetCreatingViewModel : ValidatableViewModel<DataSetInfo
 
     private readonly ObservableCollection<string> _itemClasses = new();
     private readonly RegisteredGamesService _registeredGamesService;
-    private IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
+    private readonly IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
 
     partial void OnResolutionWidthChanged(int? oldValue, int? newValue)
     {
@@ -75,9 +78,12 @@ public partial class DataSetCreatingViewModel : ValidatableViewModel<DataSetInfo
     [RelayCommand(CanExecute = nameof(CanApply))]
     private void Apply()
     {
-        OnPropertiesChanged(nameof(Name));
-        if (!ValidationResult.IsValid)
+        var validationResult = Validator.ValidateAsync(this).GetAwaiter().GetResult();
+        if (!validationResult.IsValid)
+        {
+            SetValidationResult(validationResult);
             return;
+        }
         DialogResult = true;
         _closeRequested.OnNext(Unit.Default);
     }

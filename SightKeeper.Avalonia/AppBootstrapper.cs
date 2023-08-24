@@ -78,6 +78,7 @@ public static class AppBootstrapper
 		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerMatchingLifetimeScope(typeof(MainViewModel), typeof(AppBootstrapper));
 		builder.RegisterType<RegisteredGamesService>();
 		builder.RegisterType<DbDataSetCreator>().As<DataSetCreator>().InstancePerMainViewModel();
+		builder.RegisterType<NewDataSetInfoValidator>().As<IValidator<NewDataSetInfo>>();
 		builder.RegisterType<DataSetInfoValidator>().As<IValidator<DataSetInfo>>();
 		builder.RegisterType<DbDataSetsDataAccess>().As<DataSetsDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<DbDataSetEditor>().As<Application.DataSet.Editing.DataSetEditor>().InstancePerMainViewModel();
