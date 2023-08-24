@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using SightKeeper.Application.DataSet.Editing;
+using SightKeeper.Data;
 using SightKeeper.Data.Services.DataSet;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -126,5 +127,5 @@ public sealed class ModelEditorTests : DbRelatedTests
         dataSet.Game.Should().Be(newGame);
     }
 
-    private DbDataSetEditor Editor => new(new DataSetChangesValidator(), DbContextFactory.CreateDbContext());
+    private DbDataSetEditor Editor => new(new DataSetChangesValidator(new DbDataSetsDataAccess(new AppDbContext())), DbContextFactory.CreateDbContext());
 }

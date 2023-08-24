@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -11,25 +13,35 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
-using SightKeeper.Application.DataSet;
+using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
-public partial class DataSetEditorViewModel : ValidatableViewModel<DataSetInfo>, DialogViewModel, DataSetInfo
+public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataSetChanges>, IDataSetEditorViewModel, DialogViewModel, DataSetChanges
 {
     public IReadOnlyCollection<string> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
+    public DataSet DataSet { get; private set; }
 
-    public DataSetEditorViewModel(IValidator<DataSetInfo> validator, RegisteredGamesService registeredGamesService) : base(validator)
+    public DataSetEditingViewModel(DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService) : base(validator)
     {
+        SetData(dataSet);
         _registeredGamesService = registeredGamesService;
+        ErrorsChanged += OnErrorsChanged;
     }
 
-    public void SetData(DataSet dataSet)
+    private void OnErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
     {
+        ApplyCommand.NotifyCanExecuteChanged();
+    }
+
+    [MemberNotNull(nameof(DataSet))]
+    private void SetData(DataSet dataSet)
+    {
+        DataSet = dataSet;
         _itemClasses.Clear();
         foreach (var itemClass in dataSet.ItemClasses)
             _itemClasses.Add(itemClass.Name);
@@ -85,6 +97,9 @@ public partial class DataSetEditorViewModel : ValidatableViewModel<DataSetInfo>,
     [RelayCommand(CanExecute = nameof(CanApply))]
     private void Apply()
     {
+        OnPropertiesChanged(nameof(Name));
+        if (!ValidationResult.IsValid)
+            return;
         DialogResult = true;
         _closeRequested.OnNext(Unit.Default);
     }

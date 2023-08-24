@@ -20,7 +20,6 @@ using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 using SightKeeper.Avalonia.ViewModels.Windows;
 using SightKeeper.Avalonia.Views.Annotating;
-using SightKeeper.Avalonia.Views.Dialogs;
 using SightKeeper.Avalonia.Views.Tabs;
 using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;
@@ -33,6 +32,7 @@ using SightKeeper.Services.Annotating;
 using SightKeeper.Services.Games;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Windows;
+using DataSetEditor = SightKeeper.Avalonia.Views.Dialogs.DataSetEditor;
 using DetectorItem = SightKeeper.Avalonia.Views.Annotating.DetectorItem;
 
 namespace SightKeeper.Avalonia;
@@ -80,7 +80,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DbDataSetCreator>().As<DataSetCreator>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetInfoValidator>().As<IValidator<DataSetInfo>>();
 		builder.RegisterType<DbDataSetsDataAccess>().As<DataSetsDataAccess>().InstancePerMainViewModel();
-		builder.RegisterType<DbDataSetEditor>().As<DataSetEditor>().InstancePerMainViewModel();
+		builder.RegisterType<DbDataSetEditor>().As<Application.DataSet.Editing.DataSetEditor>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetChangesValidator>().As<IValidator<DataSetChanges>>();
 		builder.RegisterType<Screenshoter>();
 		builder.RegisterType<DataSetScreenshoter>();
@@ -110,7 +110,7 @@ public static class AppBootstrapper
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainViewModel>();
-		builder.RegisterType<DataSetEditorViewModel>();
+		builder.RegisterType<DataSetCreatingViewModel>();
 
 		builder.RegisterType<AnnotatorViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetsViewModel>();
@@ -127,12 +127,13 @@ public static class AppBootstrapper
 		builder.RegisterGeneric(typeof(AnnotatorEnvironment<>)).InstancePerMainViewModel();
 		builder.RegisterType<AnnotatorEnvironmentHolder>().InstancePerMainViewModel();
 		builder.RegisterType<AnnotatorSelectedDataSetHolder>().InstancePerMainViewModel();
+		builder.RegisterType<DataSetEditingViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainWindow>().AsSelf().As<IViewFor<MainViewModel>>();
-		builder.RegisterType<ModelEditor>().AsSelf().As<IViewFor<DataSetEditorViewModel>>();
+		builder.RegisterType<DataSetEditor>().AsSelf().As<IViewFor<DataSetCreatingViewModel>>().As<IViewFor<DataSetEditingViewModel>>();
 		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatorViewModel>>();
 		builder.RegisterType<DataSetsTab>().AsSelf().As<IViewFor<DataSetsViewModel>>();
 		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();

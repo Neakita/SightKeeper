@@ -6,12 +6,12 @@
              xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
              xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs"
              mc:Ignorable="d"
-             x:Class="SightKeeper.Avalonia.Views.Dialogs.ModelEditor"
-             x:DataType="dialogs:DataSetEditorViewModel"
+             x:Class="SightKeeper.Avalonia.Views.Dialogs.DataSetEditor"
+             x:DataType="dialogs:IDataSetEditorViewModel"
              Width="450" Height="450">
     
     <Design.DataContext>
-        <fakes:FakeDataSetEditorViewModel/>
+        <fakes:FakeDataSetCreatingViewModel/>
     </Design.DataContext>
     
     <Grid RowDefinitions="*, 50">

@@ -35,7 +35,7 @@ public abstract class ValidatableViewModel<TValidatable> : ViewModel, INotifyDat
     {
         var validatable = this as TValidatable;
         Guard.IsNotNull(validatable);
-        var validationResult = _validator.Validate(validatable);
+        var validationResult = _validator.ValidateAsync(validatable).GetAwaiter().GetResult();
         var propertiesToValidate = ValidationResult.Errors.Select(error => error.PropertyName)
             .Union(validationResult.Errors.Select(error => error.PropertyName)).ToList();
         ValidationResult = validationResult;
