@@ -10,5 +10,6 @@ public sealed class DetectorDataSetConfiguration : IEntityTypeConfiguration<Data
     public void Configure(EntityTypeBuilder<DataSet<DetectorAsset>> builder)
     {
         builder.Navigation(dataSet => dataSet.WeightsLibrary).AutoInclude();
+        builder.HasMany(dataSet => dataSet.Assets).WithOne().IsRequired().HasForeignKey("DataSetId");
     }
 }
