@@ -5,6 +5,7 @@ using Serilog;
 using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Data;
 
@@ -54,7 +55,7 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.ApplyConfiguration(new DetectorAssetConfiguration());
+		modelBuilder.ApplyConfiguration(new GenericAssetConfiguration<DetectorAsset>());
 		modelBuilder.ApplyConfiguration(new DetectorDataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());

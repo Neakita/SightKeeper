@@ -44,7 +44,6 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
 
     public DetectorAnnotatorToolsViewModel(AnnotatorViewModel annotatorViewModel, AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
     {
-        _annotatorViewModel = annotatorViewModel;
         _screenshotsViewModel = screenshotsViewModel;
         _annotator = annotator;
         CompositeDisposable disposable = new();
@@ -73,7 +72,6 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
     }
     
     
-    private readonly AnnotatorViewModel _annotatorViewModel;
     private readonly AnnotatorScreenshotsViewModel _screenshotsViewModel;
     private readonly DetectorAnnotator _annotator;
     private readonly IDisposable _disposable;
