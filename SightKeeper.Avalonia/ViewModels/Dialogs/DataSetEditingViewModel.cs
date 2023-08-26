@@ -30,9 +30,9 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
 
     public DataSetEditingViewModel(DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService, AssetsDataAccess assetsDataAccess) : base(validator)
     {
-        SetData(dataSet);
         _registeredGamesService = registeredGamesService;
         _assetsDataAccess = assetsDataAccess;
+        SetData(dataSet);
         ErrorsChanged += OnErrorsChanged;
     }
     
@@ -58,6 +58,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
         ResolutionWidth = dataSet.Resolution.Width;
         ResolutionHeight = dataSet.Resolution.Height;
         Game = dataSet.Game;
+        _assetsDataAccess.LoadAssets(dataSet);
         _deletionBlackListItemClasses = dataSet.ItemClasses
             .Where(itemClass => !dataSet.CanDeleteItemClass(itemClass, out _))
             .Select(itemClass => itemClass.Name)

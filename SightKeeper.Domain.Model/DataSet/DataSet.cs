@@ -29,7 +29,7 @@ public sealed class DataSet
 
 	public bool CanChangeResolution([NotNullWhen(false)] out string? message)
 	{
-		if (ScreenshotsLibrary.Screenshots.Any())
+		if (ScreenshotsLibrary.HasAnyScreenshots)
 			message = "Can't change resolution when there are screenshots";
 		else
 			message = null;

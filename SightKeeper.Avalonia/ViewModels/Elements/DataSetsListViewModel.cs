@@ -30,5 +30,5 @@ public sealed class DataSetsListViewModel : ViewModel, IDisposable
     private readonly IDisposable _disposable;
     private readonly SourceCache<DataSetViewModel, DataSet> _cache = new(viewModel => viewModel.DataSet);
 
-    private void OnDataSetEdited(DataSet dataSet) => _cache.Lookup(dataSet).Value.NotifyDataSetEdited();
+    private void OnDataSetEdited(DataSet dataSet) => _cache.Lookup(dataSet).Value.NotifyChanges();
 }

@@ -27,7 +27,6 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
                 return;
             _dataSetViewModel = value;
             ItemClasses = _dataSetViewModel?.ItemClasses ?? Array.Empty<ItemClass>();
-            OnPropertyChanged(nameof(ItemClasses));
         }
     }
 

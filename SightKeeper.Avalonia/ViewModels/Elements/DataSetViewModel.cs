@@ -27,12 +27,13 @@ public sealed class DataSetViewModel : ViewModel, IDisposable
     {
         DataSet = dataSet;
         _itemClasses.Connect().Bind(out var itemClasses).Subscribe();
+        _itemClasses.AddOrUpdate(dataSet.ItemClasses);
         ItemClasses = itemClasses;
     }
 
-    public void NotifyDataSetEdited()
+    public void NotifyChanges()
     {
-        OnPropertiesChanged(DataSetViewModel.Properties);
+        OnPropertiesChanged(Properties);
         UpdateItemClasses();
     }
 
