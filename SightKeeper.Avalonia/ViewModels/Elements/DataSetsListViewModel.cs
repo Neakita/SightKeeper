@@ -16,7 +16,7 @@ public sealed class DataSetsListViewModel : ViewModel, IDisposable
     {
         _disposable = new CompositeDisposable(
             dataSetsObservableRepository.DataSets.Connect()
-                .Transform(DataSetViewModel.Create)
+                .Transform(dataSet => new DataSetViewModel(dataSet))
                 .DisposeMany()
                 .AddKey(viewModel => viewModel.DataSet)
                 .Bind(out var dataSets)

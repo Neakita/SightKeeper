@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Application.Training.Images;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -9,7 +8,7 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace SightKeeper.Services;
 
-public sealed class DetectorImagesExporter : ImagesExporter
+public sealed class ImagesExporter
 {
 	private const string NumberFormat = "0.######";
 
@@ -18,7 +17,7 @@ public sealed class DetectorImagesExporter : ImagesExporter
 		NumberDecimalSeparator = "."
 	};
 
-	public DetectorImagesExporter(ScreenshotImageLoader imageLoader, DetectorAssetsDataAccess assetsDataAccess)
+	public ImagesExporter(ScreenshotImageLoader imageLoader, DetectorAssetsDataAccess assetsDataAccess)
 	{
 		_imageLoader = imageLoader;
 		_assetsDataAccess = assetsDataAccess;

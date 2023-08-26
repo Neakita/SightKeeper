@@ -12,7 +12,6 @@ using SightKeeper.Application.Annotating;
 using SightKeeper.Application.DataSet;
 using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Application.DataSet.Editing;
-using SightKeeper.Application.Training.Images;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Annotating;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
@@ -25,7 +24,6 @@ using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
 using SightKeeper.Data.Services.DataSet;
-using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 using SightKeeper.Services.Annotating;
@@ -33,7 +31,6 @@ using SightKeeper.Services.Games;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Windows;
 using DataSetEditor = SightKeeper.Avalonia.Views.Dialogs.DataSetEditor;
-using DetectorItem = SightKeeper.Avalonia.Views.Annotating.DetectorItem;
 
 namespace SightKeeper.Avalonia;
 
@@ -95,7 +92,7 @@ public static class AppBootstrapper
 		builder.RegisterType<MainWindowActivityService>().As<SelfActivityService>();
 		builder.RegisterType<WindowsGamesService>().As<GamesService>();
 		builder.RegisterType<DbDetectorAssetsDataAccess>().As<DetectorAssetsDataAccess>();
-		builder.RegisterType<DetectorImagesExporter>().As<ImagesExporter<DetectorAsset>>();
+		builder.RegisterType<ImagesExporter>();
 		builder.RegisterType<DataSetsObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>();
 
@@ -120,14 +117,11 @@ public static class AppBootstrapper
 		builder.RegisterType<RegisteredGamesViewModel>();
 		builder.RegisterType<ScreenshoterViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<AnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorAsset>>().InstancePerMainViewModel();
-		builder.RegisterType<DetectorDrawerViewModel>().AsSelf().As<AnnotatorWorkSpace<DetectorAsset>>().InstancePerMainViewModel();;
+		builder.RegisterType<AnnotatorToolsViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<DrawerViewModel>().InstancePerMainViewModel();;
 		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();
-		builder.RegisterGeneric(typeof(AnnotatorEnvironment<>)).InstancePerMainViewModel();
-		builder.RegisterType<AnnotatorEnvironmentHolder>().InstancePerMainViewModel();
-		builder.RegisterType<AnnotatorSelectedDataSetHolder>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetEditingViewModel>();
 	}
 	
@@ -139,8 +133,8 @@ public static class AppBootstrapper
 		builder.RegisterType<DataSetsTab>().AsSelf().As<IViewFor<DataSetsViewModel>>();
 		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
-		builder.RegisterType<DetectorAnnotatorTools>().As<IViewFor<AnnotatorToolsViewModel>>();
-		builder.RegisterType<DetectorDrawer>().AsSelf().As<IViewFor<DetectorDrawerViewModel>>();
+		builder.RegisterType<AnnotatorTools>().As<IViewFor<AnnotatorToolsViewModel>>();
+		builder.RegisterType<DetectorDrawer>().AsSelf().As<IViewFor<DrawerViewModel>>();
 		builder.RegisterType<TrainingTab>().As<IViewFor<TrainingViewModel>>();
 		builder.RegisterType<DetectorItem>().As<IViewFor<DetectorItemViewModel>>();
 	}

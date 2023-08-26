@@ -7,9 +7,9 @@ using SightKeeper.Avalonia.ViewModels.Annotating;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-public sealed partial class DetectorAnnotatorTools : ReactiveUserControl<AnnotatorToolsViewModel>, IDisposable
+public sealed partial class AnnotatorTools : ReactiveUserControl<AnnotatorToolsViewModel>, IDisposable
 {
-    public DetectorAnnotatorTools()
+    public AnnotatorTools()
     {
         _disposable = this.WhenActivated(OnActivated);
         InitializeComponent();

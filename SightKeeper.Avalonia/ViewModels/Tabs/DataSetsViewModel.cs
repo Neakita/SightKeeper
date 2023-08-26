@@ -9,7 +9,6 @@ using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
@@ -39,7 +38,7 @@ public sealed partial class DataSetsViewModel : ViewModel
 		var viewModel = scope.Resolve<Dialogs.DataSetCreatingViewModel>();
 		await viewModel.ShowDialog(this);
 		if (viewModel.DialogResult != true) return;
-		await _dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(ModelType.Detector, viewModel), cancellationToken);
+		await _dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(viewModel), cancellationToken);
 	}
 
 	[RelayCommand(CanExecute = nameof(CanEditDataSet))]

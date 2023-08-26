@@ -7,39 +7,39 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSpace<DetectorAsset>, IDisposable
+public sealed partial class DrawerViewModel : ViewModel, IDisposable
 {
     public const double MinimumDimensionSize = 0.01;
 
-    public DataSetViewModel<DetectorAsset>? DataSetViewModel { get; set; }
+    public DataSetViewModel? DataSetViewModel { get; set; }
 
     private sealed class DrawingData
     {
-        public DetectorItemViewModel Item { get; }
+        public DetectorItemViewModel ItemViewModel { get; }
 
-        public DrawingData(Point startPosition, DetectorItemViewModel item)
+        public DrawingData(Point startPosition, DetectorItemViewModel itemViewModel)
         {
             _startPosition = startPosition;
-            Item = item;
+            ItemViewModel = itemViewModel;
         }
 
         public void UpdateBounding(Point currentPosition) =>
-            Item.Bounding.SetFromTwoPositions(_startPosition, currentPosition);
+            ItemViewModel.Bounding.SetFromTwoPositions(_startPosition, currentPosition);
         
         private readonly Point _startPosition;
     }
     
     public ScreenshotViewModel? Screenshot => _screenshots.SelectedScreenshot;
-    public DetectorAsset? Asset => (DetectorAsset?)Screenshot?.Item.Asset;
+    public Asset? Asset => Screenshot?.Item.Asset;
     public ObservableCollection<DetectorItemViewModel> Items { get; } = new();
     public bool CanBeginDrawing => _tools.SelectedItemClass != null && _screenshots.SelectedScreenshot != null;
 
-    public DetectorDrawerViewModel(
+    public DrawerViewModel(
         AnnotatorScreenshotsViewModel screenshots,
         AnnotatorToolsViewModel tools,
         DetectorAnnotator annotator,
@@ -91,7 +91,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
         _drawingData.UpdateBounding(intermediatePosition);
     }
 
-    public void EndDrawing(Point finishPosition)
+    public async void EndDrawing(Point finishPosition)
     {
         Guard.IsNotNull(_drawingData);
         var screenshot = _screenshots.SelectedScreenshot;
@@ -99,15 +99,15 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
         Guard.IsNotNull(_tools.SelectedItemClass);
         finishPosition = Clamp(finishPosition);
         _drawingData.UpdateBounding(finishPosition);
-        var boundingViewModel = _drawingData.Item.Bounding;
+        var boundingViewModel = _drawingData.ItemViewModel.Bounding;
         if (boundingViewModel.Width < MinimumDimensionSize || boundingViewModel.Height < MinimumDimensionSize)
         {
-            Items.Remove(_drawingData.Item);
+            Items.Remove(_drawingData.ItemViewModel);
             _drawingData = null;
             return;
         }
         boundingViewModel.Synchronize();
-        _drawingData.Item.Item =  _annotator.Annotate(screenshot.Item, _tools.SelectedItemClass, boundingViewModel.Bounding);
+        _drawingData.ItemViewModel.Item = await _annotator.Annotate(screenshot.Item, _tools.SelectedItemClass, boundingViewModel.Bounding);
         screenshot.NotifyIsAssetChanged();
         _drawingData = null;
     }

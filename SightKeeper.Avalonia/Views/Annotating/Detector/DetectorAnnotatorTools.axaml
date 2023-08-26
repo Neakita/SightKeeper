@@ -5,7 +5,7 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300"
-             x:Class="SightKeeper.Avalonia.Views.Annotating.DetectorAnnotatorTools"
+             x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatorTools"
              x:DataType="annotating:AnnotatorToolsViewModel">
 
     <Grid RowDefinitions="* Auto Auto">

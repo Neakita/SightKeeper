@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Avalonia.ViewModels.Elements;
 
@@ -8,14 +7,13 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 {
-	public IObservable<DataSetViewModel?> SelectedDataSetChanged => _selectedDataSetChanged;
 	public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 
 	public AnnotatorScreenshotsViewModel Screenshots { get; }
 
 	public ScreenshoterViewModel Screenshoter { get; }
-
-	public AnnotatorEnvironmentHolder EnvironmentHolder { get; }
+	public AnnotatorToolsViewModel ToolsViewModel { get; }
+	public DrawerViewModel DrawerViewModel { get; }
 
 	public bool CanChangeSelectedDataSet => !Screenshoter.IsEnabled;
 
@@ -23,26 +21,25 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 		ScreenshoterViewModel screenshoterViewModel,
 		AnnotatorScreenshotsViewModel screenshots,
 		DataSetsListViewModel dataSetsListViewModel,
-		AnnotatorEnvironmentHolder environmentHolder,
-		AnnotatorSelectedDataSetHolder selectedDataSetHolder)
+		AnnotatorToolsViewModel toolsViewModel,
+		DrawerViewModel drawerViewModel)
 	{
 		Screenshoter = screenshoterViewModel;
-		_selectedDataSetHolder = selectedDataSetHolder;
 		Screenshots = screenshots;
-		EnvironmentHolder = environmentHolder;
+		ToolsViewModel = toolsViewModel;
+		DrawerViewModel = drawerViewModel;
 		screenshoterViewModel.IsEnabledChanged.Subscribe(_ =>
 			OnPropertyChanged(nameof(CanChangeSelectedDataSet)));
 		DataSets = dataSetsListViewModel.DataSets;
 	}
 
-	private readonly AnnotatorSelectedDataSetHolder _selectedDataSetHolder;
-	private readonly Subject<DataSetViewModel?> _selectedDataSetChanged = new();
-
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
 
 	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
-		_selectedDataSetHolder.SelectedDataSetViewModel = value;
-		_selectedDataSetChanged.OnNext(value);
+		ToolsViewModel.DataSetViewModel = value;
+		DrawerViewModel.DataSetViewModel = value;
+		Screenshoter.DataSet = value?.DataSet;
+		Screenshots.DataSet = value?.DataSet;
 	}
 }

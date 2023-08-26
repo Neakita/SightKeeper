@@ -13,7 +13,6 @@ using SightKeeper.Application.Annotating;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -28,6 +27,7 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
                 return;
             _dataSetViewModel = value;
             ItemClasses = _dataSetViewModel?.ItemClasses ?? Array.Empty<ItemClass>();
+            OnPropertyChanged(nameof(ItemClasses));
         }
     }
 
@@ -42,15 +42,13 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
         private set => SetProperty(ref _itemClasses, value);
     }
 
-    public AnnotatorToolsViewModel(AnnotatorViewModel annotatorViewModel, AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
+    public AnnotatorToolsViewModel(AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
     {
         _screenshotsViewModel = screenshotsViewModel;
         _annotator = annotator;
         CompositeDisposable disposable = new();
         _disposable = disposable;
         _screenshotsViewModel.SelectedScreenshotChanged.Subscribe(OnScreenshotSelected).DisposeWith(disposable);
-        annotatorViewModel.SelectedDataSetChanged
-            .Subscribe(_ => OnPropertyChanged(nameof(ItemClasses))).DisposeWith(disposable);
         DetectorItemViewModel.ItemClassChanged.Subscribe(item =>
         {
             Guard.IsNotNull(item.Item);

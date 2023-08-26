@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
@@ -14,8 +14,8 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
 {
     public ReadOnlyObservableCollection<DataSetViewModel> DataSets => new(new ObservableCollection<DataSetViewModel>
     {
-        new DataSetViewModel<DetectorAsset>(new DataSet<DetectorAsset>("Some data set")),
-        new DataSetViewModel<DetectorAsset>(new DataSet<DetectorAsset>("Another data set"))
+        new(new DataSet("Some data set")),
+        new(new DataSet("Another data set"))
     });
 
     public DataSetViewModel? SelectedDataSet { get; set; }
@@ -24,8 +24,8 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
     public AnnotatorScreenshotsViewModel Screenshots => new(new MockScreenshotImageLoader(), new MockScreenshotsDataAccess());
 
     public ScreenshoterViewModel Screenshoter => new(new MockStreamDataSetScreenshoter());
-    public AnnotatorEnvironmentHolder EnvironmentHolder { get; } = new(null);
-    public AnnotatorEnvironment? Environment => null;
+    public AnnotatorToolsViewModel ToolsViewModel { get; } = null;
+    public DrawerViewModel DrawerViewModel { get; } = null;
 
     private sealed class MockStreamDataSetScreenshoter : StreamDataSetScreenshoter
     {
@@ -36,16 +36,17 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
     
     private sealed class MockScreenshotImageLoader : ScreenshotImageLoader
     {
-        public ScreenshotImage Load(Screenshot screenshot)
+        public Image Load(Screenshot screenshot)
         {
-            return null!;
+            return null;
         }
     }
     
     private sealed class MockScreenshotsDataAccess : ScreenshotsDataAccess
     {
-        public void Load(ScreenshotsLibrary library)
+        public Task Load(ScreenshotsLibrary library, CancellationToken cancellationToken)
         {
+            return Task.CompletedTask;
         }
 
         public Task LoadAsync(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
@@ -53,7 +54,7 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
             throw new NotSupportedException();
         }
 
-        public void SaveChanges(ScreenshotsLibrary library)
+        public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken)
         {
             throw new NotSupportedException();
         }

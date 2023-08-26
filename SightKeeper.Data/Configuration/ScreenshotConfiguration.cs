@@ -12,5 +12,6 @@ public sealed class ScreenshotConfiguration : IEntityTypeConfiguration<Screensho
         builder.HasShadowKey();
         builder.HasOne(screenshot => screenshot.Asset).WithOne(asset => asset.Screenshot).HasPrincipalKey<Screenshot>();
         builder.HasOne(screenshot => screenshot.Image).WithOne().HasPrincipalKey<Screenshot>().IsRequired();
+        builder.Navigation(screenshot => screenshot.Asset).AutoInclude();
     }
 }

@@ -22,7 +22,7 @@
         </Grid.ColumnDefinitions>
         <views:AnnotatorScreenshots Grid.Column="0" DataContext="{Binding Screenshots}"/>
         <GridSplitter Grid.Column="1"/>
-        <ContentControl Grid.Column="2" Content="{Binding EnvironmentHolder.CurrentEnvironment.WorkSpace}"/>
+        <ContentControl Grid.Column="2" Content="{Binding DrawerViewModel}"/>
         <GridSplitter Grid.Column="3" Background="Gray"/>
         <Grid Grid.Column="4" RowDefinitions="Auto Auto *">
             <ComboBox Grid.Row="0"
@@ -48,7 +48,7 @@
                       HorizontalAlignment="Stretch"
                       IsExpanded="True"
                       VerticalAlignment="Top">
-                <ContentControl Content="{Binding EnvironmentHolder.CurrentEnvironment.Tools}"/>
+                <ContentControl Content="{Binding ToolsViewModel}"/>
             </Expander>
         </Grid>
     </Grid>

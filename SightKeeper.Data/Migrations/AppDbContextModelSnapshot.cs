@@ -17,12 +17,27 @@ namespace SightKeeper.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0-preview.6.23329.4");
 
+            modelBuilder.Entity("AssetWeights", b =>
+                {
+                    b.Property<int>("AssetId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WeightsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AssetId", "WeightsId");
+
+                    b.HasIndex("WeightsId");
+
+                    b.ToTable("WeightsAssets", (string)null);
+                });
+
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.Asset", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DataSetId1")
+                    b.Property<int>("DataSetId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Usage")
@@ -30,11 +45,9 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DataSetId1");
+                    b.HasIndex("DataSetId");
 
                     b.ToTable("Assets", (string)null);
-
-                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.Game", b =>
@@ -59,7 +72,6 @@ namespace SightKeeper.Data.Migrations
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.Image", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<byte[]>("Content")
@@ -69,8 +81,6 @@ namespace SightKeeper.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Images", (string)null);
-
-                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.ItemClass", b =>
@@ -103,11 +113,6 @@ namespace SightKeeper.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("TEXT");
-
                     b.Property<int?>("GameId")
                         .HasColumnType("INTEGER");
 
@@ -123,10 +128,6 @@ namespace SightKeeper.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("DataSets");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("DataSet");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorItem", b =>
@@ -150,35 +151,6 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("DetectorItems", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Profile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("DetectorDataSetId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("GameId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DetectorDataSetId");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("Profiles");
-                });
-
             modelBuilder.Entity("SightKeeper.Domain.Model.Screenshot", b =>
                 {
                     b.Property<int>("Id")
@@ -191,14 +163,9 @@ namespace SightKeeper.Data.Migrations
                     b.Property<int>("LibraryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ScreenshotsLibraryId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LibraryId");
-
-                    b.HasIndex("ScreenshotsLibraryId");
 
                     b.ToTable("Screenshots", (string)null);
                 });
@@ -225,15 +192,21 @@ namespace SightKeeper.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<float>("BoundingLoss")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("ClassificationLoss")
+                        .HasColumnType("REAL");
+
                     b.Property<byte[]>("Data")
                         .IsRequired()
                         .HasColumnType("BLOB");
 
+                    b.Property<float>("DeformationLoss")
+                        .HasColumnType("REAL");
+
                     b.Property<uint>("Epoch")
                         .HasColumnType("INTEGER");
-
-                    b.Property<float>("Loss")
-                        .HasColumnType("REAL");
 
                     b.Property<int>("Size")
                         .HasColumnType("INTEGER");
@@ -258,43 +231,26 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("WeightsLibraries", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorAsset", b =>
+            modelBuilder.Entity("AssetWeights", b =>
                 {
-                    b.HasBaseType("SightKeeper.Domain.Model.Common.Asset");
+                    b.HasOne("SightKeeper.Domain.Model.Common.Asset", null)
+                        .WithMany()
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int?>("DataSetId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasIndex("DataSetId");
-
-                    b.ToTable("DetectorAssets", (string)null);
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.ScreenshotImage", b =>
-                {
-                    b.HasBaseType("SightKeeper.Domain.Model.Common.Image");
-
-                    b.Property<int>("ScreenshotId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasIndex("ScreenshotId")
-                        .IsUnique();
-
-                    b.ToTable("ScreenshotImages", (string)null);
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.DataSet<SightKeeper.Domain.Model.Detector.DetectorAsset>", b =>
-                {
-                    b.HasBaseType("SightKeeper.Domain.Model.DataSet");
-
-                    b.HasDiscriminator().HasValue("DataSet<DetectorAsset>");
+                    b.HasOne("SightKeeper.Domain.Model.Weights", null)
+                        .WithMany()
+                        .HasForeignKey("WeightsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.Asset", b =>
                 {
                     b.HasOne("SightKeeper.Domain.Model.DataSet", "DataSet")
-                        .WithMany()
-                        .HasForeignKey("DataSetId1")
+                        .WithMany("Assets")
+                        .HasForeignKey("DataSetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -311,30 +267,22 @@ namespace SightKeeper.Data.Migrations
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.Image", b =>
                 {
-                    b.OwnsOne("SightKeeper.Domain.Model.Common.Resolution", "Resolution", b1 =>
-                        {
-                            b1.Property<int>("ImageId")
-                                .HasColumnType("INTEGER");
-
-                            b1.HasKey("ImageId");
-
-                            b1.ToTable("Images");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ImageId");
-                        });
-
-                    b.Navigation("Resolution")
+                    b.HasOne("SightKeeper.Domain.Model.Screenshot", null)
+                        .WithOne("Image")
+                        .HasForeignKey("SightKeeper.Domain.Model.Common.Image", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.ItemClass", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.DataSet", null)
+                    b.HasOne("SightKeeper.Domain.Model.DataSet", "DataSet")
                         .WithMany("ItemClasses")
                         .HasForeignKey("DataSetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("DataSet");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.DataSet", b =>
@@ -364,14 +312,14 @@ namespace SightKeeper.Data.Migrations
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorItem", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.Detector.DetectorAsset", "Asset")
+                    b.HasOne("SightKeeper.Domain.Model.Common.Asset", "Asset")
                         .WithMany("Items")
                         .HasForeignKey("AssetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SightKeeper.Domain.Model.Common.ItemClass", "ItemClass")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("ItemClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -382,16 +330,20 @@ namespace SightKeeper.Data.Migrations
                                 .HasColumnType("INTEGER");
 
                             b1.Property<double>("Bottom")
-                                .HasColumnType("REAL");
+                                .HasColumnType("REAL")
+                                .HasColumnName("BoundingBottom");
 
                             b1.Property<double>("Left")
-                                .HasColumnType("REAL");
+                                .HasColumnType("REAL")
+                                .HasColumnName("BoundingLeft");
 
                             b1.Property<double>("Right")
-                                .HasColumnType("REAL");
+                                .HasColumnType("REAL")
+                                .HasColumnName("BoundingRight");
 
                             b1.Property<double>("Top")
-                                .HasColumnType("REAL");
+                                .HasColumnType("REAL")
+                                .HasColumnName("BoundingTop");
 
                             b1.HasKey("DetectorItemId");
 
@@ -409,34 +361,11 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("ItemClass");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Profile", b =>
-                {
-                    b.HasOne("SightKeeper.Domain.Model.DataSet<SightKeeper.Domain.Model.Detector.DetectorAsset>", "DetectorDataSet")
-                        .WithMany()
-                        .HasForeignKey("DetectorDataSetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SightKeeper.Domain.Model.Common.Game", "Game")
-                        .WithMany()
-                        .HasForeignKey("GameId");
-
-                    b.Navigation("DetectorDataSet");
-
-                    b.Navigation("Game");
-                });
-
             modelBuilder.Entity("SightKeeper.Domain.Model.Screenshot", b =>
                 {
                     b.HasOne("SightKeeper.Domain.Model.ScreenshotsLibrary", "Library")
-                        .WithMany()
-                        .HasForeignKey("LibraryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SightKeeper.Domain.Model.ScreenshotsLibrary", null)
                         .WithMany("Screenshots")
-                        .HasForeignKey("ScreenshotsLibraryId")
+                        .HasForeignKey("LibraryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -463,45 +392,29 @@ namespace SightKeeper.Data.Migrations
 
             modelBuilder.Entity("SightKeeper.Domain.Model.WeightsLibrary", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.DataSet", null)
+                    b.HasOne("SightKeeper.Domain.Model.DataSet", "DataSet")
                         .WithOne("WeightsLibrary")
                         .HasForeignKey("SightKeeper.Domain.Model.WeightsLibrary", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("DataSet");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorAsset", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Common.Asset", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.DataSet<SightKeeper.Domain.Model.Detector.DetectorAsset>", null)
-                        .WithMany("Assets")
-                        .HasForeignKey("DataSetId");
-
-                    b.HasOne("SightKeeper.Domain.Model.Common.Asset", null)
-                        .WithOne()
-                        .HasForeignKey("SightKeeper.Domain.Model.Detector.DetectorAsset", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Model.ScreenshotImage", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Common.ItemClass", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.Common.Image", null)
-                        .WithOne()
-                        .HasForeignKey("SightKeeper.Domain.Model.ScreenshotImage", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SightKeeper.Domain.Model.Screenshot", "Screenshot")
-                        .WithOne("Image")
-                        .HasForeignKey("SightKeeper.Domain.Model.ScreenshotImage", "ScreenshotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Screenshot");
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.DataSet", b =>
                 {
+                    b.Navigation("Assets");
+
                     b.Navigation("ItemClasses");
 
                     b.Navigation("ScreenshotsLibrary")
@@ -527,16 +440,6 @@ namespace SightKeeper.Data.Migrations
             modelBuilder.Entity("SightKeeper.Domain.Model.WeightsLibrary", b =>
                 {
                     b.Navigation("Weights");
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorAsset", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("SightKeeper.Domain.Model.DataSet<SightKeeper.Domain.Model.Detector.DetectorAsset>", b =>
-                {
-                    b.Navigation("Assets");
                 });
 #pragma warning restore 612, 618
         }

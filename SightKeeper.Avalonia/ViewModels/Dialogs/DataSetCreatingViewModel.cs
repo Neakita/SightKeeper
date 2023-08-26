@@ -14,7 +14,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
 using SightKeeper.Application.DataSet.Creating;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Services.Games;
 
@@ -24,8 +23,6 @@ public partial class DataSetCreatingViewModel : ValidatableViewModel<NewDataSetI
 {
     public IReadOnlyCollection<string> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
-
-    public ModelType ModelType => ModelType.Detector;
 
     public DataSetCreatingViewModel(IValidator<NewDataSetInfo> validator, RegisteredGamesService registeredGamesService) : base(validator)
     {

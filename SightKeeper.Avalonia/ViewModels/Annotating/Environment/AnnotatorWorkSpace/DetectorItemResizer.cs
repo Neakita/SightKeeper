@@ -47,7 +47,7 @@ public sealed class DetectorItemResizer
         var item = _data.Item.Item;
         Guard.IsNotNull(item);
         _data.Item.Bounding.Synchronize();
-        _annotator.Move(item, _data.Item.Bounding.Bounding);
+        _annotator.Move(item, _data.Item.Bounding.Bounding); // ISSUE: async operation in sync context
         _data = null;
     }
     
@@ -70,25 +70,25 @@ public sealed class DetectorItemResizer
 
     private static void UpdateLeft(BoundingViewModel bounding, Vector delta)
     {
-        var maximum = Math.Max(0, bounding.Right - DetectorDrawerViewModel.MinimumDimensionSize);
+        var maximum = Math.Max(0, bounding.Right - DrawerViewModel.MinimumDimensionSize);
         bounding.Left = Math.Clamp(bounding.Left + delta.X, 0, maximum);
     }
 
     private static void UpdateTop(BoundingViewModel bounding, Vector delta)
     {
-        var maximum = Math.Max(0, bounding.Bottom - DetectorDrawerViewModel.MinimumDimensionSize);
+        var maximum = Math.Max(0, bounding.Bottom - DrawerViewModel.MinimumDimensionSize);
         bounding.Top = Math.Clamp(bounding.Top + delta.Y, 0, maximum);
     }
 
     private static void UpdateRight(BoundingViewModel bounding, Vector delta)
     {
-        var minimum = Math.Min(1, bounding.Left + DetectorDrawerViewModel.MinimumDimensionSize);
+        var minimum = Math.Min(1, bounding.Left + DrawerViewModel.MinimumDimensionSize);
         bounding.Right = Math.Clamp(bounding.Right + delta.X, minimum, 1);
     }
 
     private static void UpdateBottom(BoundingViewModel bounding, Vector delta)
     {
-        var minimum = Math.Min(1, bounding.Top + DetectorDrawerViewModel.MinimumDimensionSize);
+        var minimum = Math.Min(1, bounding.Top + DrawerViewModel.MinimumDimensionSize);
         bounding.Bottom = Math.Clamp(bounding.Bottom + delta.Y, minimum, 1);
     }
 
