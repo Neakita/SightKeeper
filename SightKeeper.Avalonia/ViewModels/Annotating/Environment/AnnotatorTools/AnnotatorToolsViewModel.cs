@@ -17,9 +17,9 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, AnnotatorTools<DetectorAsset>, IDisposable
+public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
 {
-    public DataSetViewModel<DetectorAsset>? DataSetViewModel
+    public DataSetViewModel? DataSetViewModel
     {
         get => _dataSetViewModel;
         set
@@ -42,7 +42,7 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
         private set => SetProperty(ref _itemClasses, value);
     }
 
-    public DetectorAnnotatorToolsViewModel(AnnotatorViewModel annotatorViewModel, AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
+    public AnnotatorToolsViewModel(AnnotatorViewModel annotatorViewModel, AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
     {
         _screenshotsViewModel = screenshotsViewModel;
         _annotator = annotator;
@@ -87,7 +87,7 @@ public sealed partial class DetectorAnnotatorToolsViewModel : ViewModel, Annotat
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
     private DetectorItemViewModel? _selectedItem;
 
-    private DataSetViewModel<DetectorAsset>? _dataSetViewModel;
+    private DataSetViewModel? _dataSetViewModel;
     private IReadOnlyCollection<ItemClass> _itemClasses = Array.Empty<ItemClass>();
 
 

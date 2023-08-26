@@ -1,18 +1,17 @@
-﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application.Training.Images;
 
-public interface ImagesExporter<TAsset> where TAsset : Asset
+public interface ImagesExporter
 {
-	Task<IReadOnlyCollection<string>> ExportAsync(
+	Task<IReadOnlyCollection<string>> Export(
 		string targetDirectoryPath,
-		DataSet<TAsset> dataSet,
+		Domain.Model.DataSet dataSet,
 		CancellationToken cancellationToken = default);
 	
-	Task<IReadOnlyCollection<string>> ExportAsync(
+	Task<IReadOnlyCollection<string>> Export(
 		string targetDirectoryPath,
-		IReadOnlyCollection<TAsset> assets,
+		IReadOnlyCollection<Asset> assets,
 		IReadOnlyCollection<ItemClass> itemClasses,
 		CancellationToken cancellationToken = default);
 	

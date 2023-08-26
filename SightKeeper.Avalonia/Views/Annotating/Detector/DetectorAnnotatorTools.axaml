@@ -6,7 +6,7 @@
              xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300"
              x:Class="SightKeeper.Avalonia.Views.Annotating.DetectorAnnotatorTools"
-             x:DataType="annotating:DetectorAnnotatorToolsViewModel">
+             x:DataType="annotating:AnnotatorToolsViewModel">
 
     <Grid RowDefinitions="* Auto Auto">
 

@@ -12,15 +12,7 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         _dbContext = dbContext;
     }
 
-    public void Load(ScreenshotsLibrary library)
-    {
-        var entry = _dbContext.Entry(library);
-        if (entry.State == EntityState.Detached)
-            return;
-        entry.Collection(lib => lib.Screenshots).Load();
-    }
-
-    public Task LoadAsync(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
+    public Task Load(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
     {
         var entry = _dbContext.Entry(library);
         if (entry.State == EntityState.Detached)
@@ -29,10 +21,10 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
             .LoadAsync(LoadOptions.None, cancellationToken);
     }
 
-    public void SaveChanges(ScreenshotsLibrary library)
+    public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
     {
         _dbContext.Update(library);
-        _dbContext.SaveChanges();
+        return _dbContext.SaveChangesAsync(cancellationToken);
     }
     
     private readonly AppDbContext _dbContext;

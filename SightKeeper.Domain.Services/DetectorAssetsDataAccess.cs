@@ -1,8 +1,8 @@
-﻿using SightKeeper.Domain.Model.Detector;
+﻿using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Services;
 
 public interface DetectorAssetsDataAccess
 {
-    void LoadItems(DetectorAsset asset);
+    void LoadItems(Asset asset);
 }

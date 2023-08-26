@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Model.Common;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Domain.Model.Tests;
@@ -9,16 +8,16 @@ public sealed class ScreenshotsLibraryTests
     [Fact]
     public void ShouldCreateScreenshot()
     {
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
-        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var dataSet = DomainTestsHelper.NewDataSet;
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dataSet.ScreenshotsLibrary.Screenshots.Should().Contain(screenshot);
     }
 
     [Fact]
     public void ShouldDeleteScreenshot()
     {
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
-        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var dataSet = DomainTestsHelper.NewDataSet;
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dataSet.ScreenshotsLibrary.DeleteScreenshot(screenshot);
         dataSet.ScreenshotsLibrary.Screenshots.Should().NotContain(screenshot);
     }
@@ -26,16 +25,16 @@ public sealed class ScreenshotsLibraryTests
     [Fact]
     public void HasAnyScreenshotsShouldBeTrueWhenAddScreenshot()
     {
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
-        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var dataSet = DomainTestsHelper.NewDataSet;
+        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dataSet.ScreenshotsLibrary.HasAnyScreenshots.Should().BeTrue();
     }
 
     [Fact]
     public void HasAnyScreenshotsShouldBeFalseWhenAddThenDeleteScreenshot()
     {
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
-        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var dataSet = DomainTestsHelper.NewDataSet;
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dataSet.ScreenshotsLibrary.DeleteScreenshot(screenshot);
         dataSet.ScreenshotsLibrary.HasAnyScreenshots.Should().BeFalse();
     }

@@ -5,7 +5,6 @@ using Serilog;
 using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Data;
 
@@ -21,7 +20,6 @@ public class AppDbContext : DbContext
 		Log.Debug("Instantiated {Name} with options {@Options}", nameof(AppDbContext), options);
 	}
 
-	public DbSet<Profile> Profiles { get; set; } = null!;
 	public DbSet<DataSet> DataSets { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 
@@ -55,8 +53,6 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.ApplyConfiguration(new GenericAssetConfiguration<DetectorAsset>());
-		modelBuilder.ApplyConfiguration(new DetectorDataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
 		modelBuilder.ApplyConfiguration(new AssetConfiguration());
@@ -64,13 +60,10 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
 		modelBuilder.ApplyConfiguration(new ImageConfiguration());
-		modelBuilder.ApplyConfiguration(new ScreenshotImageConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
 		modelBuilder.ApplyConfiguration(new DataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsLibraryConfiguration());
-		modelBuilder.Entity<Profile>().HasShadowKey();
 		
-		modelBuilder.Entity<Screenshot>().Navigation(screenshot => screenshot.Asset).AutoInclude();
 		modelBuilder.Entity<Asset>().Navigation(asset => asset.Screenshot).AutoInclude();
 	}
 }

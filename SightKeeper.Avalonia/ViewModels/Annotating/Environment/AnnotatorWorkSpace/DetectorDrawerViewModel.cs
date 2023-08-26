@@ -41,7 +41,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
 
     public DetectorDrawerViewModel(
         AnnotatorScreenshotsViewModel screenshots,
-        DetectorAnnotatorToolsViewModel tools,
+        AnnotatorToolsViewModel tools,
         DetectorAnnotator annotator,
         DetectorItemResizer resizer,
         DetectorAssetsDataAccess assetsDataAccess)
@@ -117,7 +117,7 @@ public sealed partial class DetectorDrawerViewModel : ViewModel, AnnotatorWorkSp
     public void Dispose() => _disposable.Dispose();
 
     private readonly AnnotatorScreenshotsViewModel _screenshots;
-    private readonly DetectorAnnotatorToolsViewModel _tools;
+    private readonly AnnotatorToolsViewModel _tools;
     private readonly DetectorAnnotator _annotator;
     private readonly DetectorItemResizer _resizer;
     private readonly IDisposable _disposable;

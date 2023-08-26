@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
@@ -11,7 +11,7 @@ public sealed class DbDetectorAssetsDataAccess : DetectorAssetsDataAccess
         _dbContext = dbContext;
     }
     
-    public void LoadItems(DetectorAsset asset)
+    public void LoadItems(Asset asset)
     {
         var entry = _dbContext.Entry(asset);
         if (entry.State == EntityState.Detached)

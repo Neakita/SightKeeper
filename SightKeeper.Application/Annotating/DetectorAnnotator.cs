@@ -6,11 +6,11 @@ namespace SightKeeper.Application.Annotating;
 
 public interface DetectorAnnotator
 {
-    DetectorItem Annotate(Screenshot screenshot, ItemClass itemClass, Bounding bounding);
-    void MarkAsset(Screenshot screenshot);
-    void UnMarkAsset(Screenshot screenshot);
-    void DeleteScreenshot(Screenshot screenshot);
-    void DeleteItem(DetectorItem item);
-    void ChangeItemClass(DetectorItem item, ItemClass itemClass);
-    void Move(DetectorItem item, Bounding bounding);
+    Task<DetectorItem> Annotate(Screenshot screenshot, ItemClass itemClass, Bounding bounding, CancellationToken cancellationToken = default); 
+    Task MarkAsset(Screenshot screenshot, CancellationToken cancellationToken);
+    Task UnMarkAsset(Screenshot screenshot, CancellationToken cancellationToken);
+    Task DeleteScreenshot(Screenshot screenshot, CancellationToken cancellationToken);
+    Task DeleteItem(DetectorItem item, CancellationToken cancellationToken);
+    Task ChangeItemClass(DetectorItem item, ItemClass itemClass, CancellationToken cancellationToken);
+    Task Move(DetectorItem item, Bounding bounding, CancellationToken cancellationToken);
 }

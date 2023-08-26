@@ -9,7 +9,7 @@ public sealed class DataSetScreenshoterTests
     [Fact]
     public void ShouldSetDataSet()
     {
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        var dataSet = DomainTestsHelper.NewDataSet;
         var screenCapture = Substitute.For<ScreenCapture>();
         Screenshoter screenshoter = new(screenCapture, Substitute.For<SelfActivityService>());
         DataSetScreenshoter dataSetScreenshoter = new(screenCapture, screenshoter, Substitute.For<GamesService>());
@@ -20,7 +20,7 @@ public sealed class DataSetScreenshoterTests
     [Fact]
     public void ShouldSetDataSetToNull()
     {
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        var dataSet = DomainTestsHelper.NewDataSet;
         var screenCapture = Substitute.For<ScreenCapture>();
         var selfActivity = Substitute.For<SelfActivityService>();
         var gamesService = Substitute.For<GamesService>();

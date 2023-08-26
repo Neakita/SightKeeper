@@ -10,7 +10,7 @@ public sealed class DbScreenshotLibrariesDataAccessTests : DbRelatedTests
     public void ShouldSaveMaxQuantityChange()
     {
         using var dbContext = DbContextFactory.CreateDbContext();
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        var dataSet = DomainTestsHelper.NewDataSet;
         dbContext.Add(dataSet);
         dbContext.SaveChanges();
         DbScreenshotsDataAccess dataAccess = new(dbContext);

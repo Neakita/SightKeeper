@@ -8,7 +8,7 @@ public sealed class ItemClassesTests
     public void ShouldNotBeAbleCreateTwoItemClassesWithTheSameName()
     {
         const string itemClassName = "Test item class";
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
+        var dataSet = DomainTestsHelper.NewDataSet;
         dataSet.CreateItemClass(itemClassName);
         Assert.Throws<ArgumentException>(() => dataSet.CreateItemClass(itemClassName));
     }

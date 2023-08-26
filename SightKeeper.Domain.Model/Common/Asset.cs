@@ -1,32 +1,54 @@
-﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.Detector;
+﻿using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Model.Exceptions;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public abstract class Asset
+public sealed class Asset
 {
-    internal static TAsset Create<TAsset>(DataSet<TAsset> dataSet, Screenshot screenshot) where TAsset : Asset
-    {
-        if (typeof(TAsset) == typeof(DetectorAsset))
-            return (new DetectorAsset(dataSet, screenshot) as TAsset)!;
-        return ThrowHelper.ThrowInvalidOperationException<TAsset>();
-    }
-    
-    public Screenshot Screenshot { get; private set; }
     public DataSet DataSet { get; private set; }
+    public Screenshot Screenshot { get; private set; }
     public AssetUsage Usage { get; set; }
-
-    internal abstract bool IsUsesItemClass(ItemClass itemClass);
+    public IReadOnlyList<DetectorItem> Items => _items;
     
-    protected Asset(DataSet dataSet, Screenshot screenshot)
+    internal Asset(DataSet dataSet, Screenshot screenshot)
     {
         DataSet = dataSet;
         Screenshot = screenshot;
+        screenshot.Asset = this;
+        _items = new List<DetectorItem>();
     }
-    
-    protected Asset()
+
+    public DetectorItem CreateItem(ItemClass itemClass, Bounding bounding)
+    {
+        DetectorItem item = new(this, itemClass, bounding);
+        _items.Add(item);
+        return item;
+    }
+
+    public void DeleteItem(DetectorItem item)
+    {
+        if (!_items.Remove(item))
+            DomainThrowHelper.ThrowDetectorItemException(item, $"{item} from asset of \"{DataSet}\" dataset not deleted");
+    }
+
+    public void DeleteItems(IEnumerable<DetectorItem> items)
+    {
+        var notDeletedItems = items.Where(item => !_items.Remove(item)).ToList();
+        if (notDeletedItems.Any())
+            DomainThrowHelper.ThrowDetectorItemsException(notDeletedItems, $"{notDeletedItems.Count} items from asset of \"{DataSet}\" dataset not deleted");
+    }
+
+    public void ClearItems()
+    {
+        _items.Clear();
+    }
+
+    private readonly List<DetectorItem> _items;
+
+    private Asset()
     {
         DataSet = null!;
         Screenshot = null!;
+        _items = null!;
     }
 }

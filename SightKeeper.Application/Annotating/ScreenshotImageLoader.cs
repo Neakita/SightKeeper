@@ -1,8 +1,9 @@
 ﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application.Annotating;
 
 public interface ScreenshotImageLoader
 {
-    ScreenshotImage Load(Screenshot screenshot);
+    Image Load(Screenshot screenshot);
 }

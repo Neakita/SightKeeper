@@ -1,12 +1,10 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application.DataSet.Creating;
 
 public sealed class NewDataSetInfoDTO : NewDataSetInfo
 {
-    public ModelType ModelType { get; }
     public string Name { get; }
     public string Description { get; }
     public int ResolutionWidth { get; }
@@ -17,11 +15,10 @@ public sealed class NewDataSetInfoDTO : NewDataSetInfo
     int? DataSetInfo.ResolutionHeight => ResolutionHeight;
     public Resolution Resolution => new((ushort)ResolutionWidth, (ushort)ResolutionHeight);
 
-    public NewDataSetInfoDTO(ModelType type, DataSetInfo dataSetInfo)
+    public NewDataSetInfoDTO(DataSetInfo dataSetInfo)
     {
         Guard.IsNotNull(dataSetInfo.ResolutionWidth);
         Guard.IsNotNull(dataSetInfo.ResolutionHeight);
-        ModelType = type;
         Name = dataSetInfo.Name;
         Description = dataSetInfo.Description;
         ResolutionWidth = dataSetInfo.ResolutionWidth.Value;
@@ -31,7 +28,6 @@ public sealed class NewDataSetInfoDTO : NewDataSetInfo
     }
     
     public NewDataSetInfoDTO(
-        ModelType modelType,
         string name,
         string description,
         int resolutionWidth,
@@ -39,7 +35,6 @@ public sealed class NewDataSetInfoDTO : NewDataSetInfo
         IReadOnlyCollection<string> itemClasses,
         Game? game)
     {
-        ModelType = modelType;
         Name = name;
         Description = description;
         ResolutionWidth = resolutionWidth;

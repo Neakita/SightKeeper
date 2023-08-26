@@ -20,7 +20,7 @@ public sealed class Screenshoter
 			ThrowHelper.ThrowInvalidOperationException($"Can't make screenshot: {message}");
 		Guard.IsNotNull(_screenCapture.Resolution);
 		var image = _screenCapture.Capture();
-		Library.CreateScreenshot(image, _screenCapture.Resolution);
+		Library.CreateScreenshot(image);
 	}
 
 	[MemberNotNullWhen(true, nameof(Library))]

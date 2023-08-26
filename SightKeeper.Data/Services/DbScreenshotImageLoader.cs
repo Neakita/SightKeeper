@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Data.Services;
 
@@ -12,7 +13,7 @@ public sealed class DbScreenshotImageLoader : ScreenshotImageLoader
         _dbContext = dbContext;
     }
     
-    public ScreenshotImage Load(Screenshot screenshot)
+    public Image Load(Screenshot screenshot)
     {
         var entry = _dbContext.Entry(screenshot);
         if (entry.State != EntityState.Detached)

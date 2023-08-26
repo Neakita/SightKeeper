@@ -120,7 +120,7 @@ public static class AppBootstrapper
 		builder.RegisterType<RegisteredGamesViewModel>();
 		builder.RegisterType<ScreenshoterViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<DetectorAnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorAsset>>().InstancePerMainViewModel();
+		builder.RegisterType<AnnotatorToolsViewModel>().AsSelf().As<AnnotatorTools<DetectorAsset>>().InstancePerMainViewModel();
 		builder.RegisterType<DetectorDrawerViewModel>().AsSelf().As<AnnotatorWorkSpace<DetectorAsset>>().InstancePerMainViewModel();;
 		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
@@ -139,7 +139,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DataSetsTab>().AsSelf().As<IViewFor<DataSetsViewModel>>();
 		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
-		builder.RegisterType<DetectorAnnotatorTools>().As<IViewFor<DetectorAnnotatorToolsViewModel>>();
+		builder.RegisterType<DetectorAnnotatorTools>().As<IViewFor<AnnotatorToolsViewModel>>();
 		builder.RegisterType<DetectorDrawer>().AsSelf().As<IViewFor<DetectorDrawerViewModel>>();
 		builder.RegisterType<TrainingTab>().As<IViewFor<TrainingViewModel>>();
 		builder.RegisterType<DetectorItem>().As<IViewFor<DetectorItemViewModel>>();

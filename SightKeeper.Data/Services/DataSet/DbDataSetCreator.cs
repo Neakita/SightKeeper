@@ -1,11 +1,8 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using SightKeeper.Application.DataSet;
 using SightKeeper.Application.DataSet.Creating;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Data.Services.DataSet;
 
@@ -22,12 +19,7 @@ public sealed class DbDataSetCreator : DataSetCreator
     public async Task<Domain.Model.DataSet> CreateDataSet(NewDataSetInfoDTO newDataSetInfo, CancellationToken cancellationToken = default)
     {
         await _validator.ValidateAndThrowAsync(newDataSetInfo, cancellationToken);
-        var dataSet = newDataSetInfo.ModelType switch
-        {
-            ModelType.Detector => new DataSet<DetectorAsset>(newDataSetInfo.Name, newDataSetInfo.Resolution),
-            ModelType.Classifier => throw new NotSupportedException("Classifier data set creation not implemented yet"),
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Domain.Model.DataSet>(nameof(newDataSetInfo.ModelType))
-        };
+        var dataSet = new Domain.Model.DataSet(newDataSetInfo.Name, newDataSetInfo.Resolution);
         dataSet.Description = newDataSetInfo.Description;
         foreach (var itemClass in newDataSetInfo.ItemClasses)
             dataSet.CreateItemClass(itemClass);

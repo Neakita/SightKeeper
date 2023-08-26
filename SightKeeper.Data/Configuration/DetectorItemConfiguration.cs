@@ -10,6 +10,12 @@ public sealed class DetectorItemConfiguration : IEntityTypeConfiguration<Detecto
     {
         builder.ToTable("DetectorItems");
         builder.HasShadowKey();
-        builder.OwnsOne(item => item.Bounding);
+        builder.OwnsOne(item => item.Bounding, boundingBuilder =>
+        {
+            boundingBuilder.Property(bounding => bounding.Left).HasColumnName("BoundingLeft");
+            boundingBuilder.Property(bounding => bounding.Top).HasColumnName("BoundingTop");
+            boundingBuilder.Property(bounding => bounding.Right).HasColumnName("BoundingRight");
+            boundingBuilder.Property(bounding => bounding.Bottom).HasColumnName("BoundingBottom");
+        });
     }
 }

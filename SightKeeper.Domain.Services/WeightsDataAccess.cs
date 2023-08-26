@@ -1,15 +1,20 @@
 ﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Services;
 
 public interface WeightsDataAccess
 {
-    void LoadWeights(WeightsLibrary library);
+    Task LoadWeights(WeightsLibrary library, CancellationToken cancellationToken = default);
 
-    Weights CreateWeights(
+    Task<Weights> CreateWeights(
         WeightsLibrary library,
         byte[] data,
         ModelSize size,
         uint epoch,
-        float loss);
+        float boundingLoss,
+        float classificationLoss,
+        float deformationLoss,
+        IEnumerable<Asset> assets,
+        CancellationToken cancellationToken = default);
 }

@@ -9,13 +9,13 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace SightKeeper.Services;
 
-public sealed class DetectorImagesExporter : ImagesExporter<DetectorAsset>
+public sealed class DetectorImagesExporter : ImagesExporter
 {
 	private const string NumberFormat = "0.######";
 
 	private static readonly NumberFormatInfo BoundingNumbersFormat = BoundingNumbersFormat = new NumberFormatInfo
 	{
-		NumberDecimalSeparator = ".",
+		NumberDecimalSeparator = "."
 	};
 
 	public DetectorImagesExporter(ScreenshotImageLoader imageLoader, DetectorAssetsDataAccess assetsDataAccess)
@@ -24,15 +24,15 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorAsset>
 		_assetsDataAccess = assetsDataAccess;
 	}
 
-	public Task<IReadOnlyCollection<string>> ExportAsync(
+	public Task<IReadOnlyCollection<string>> Export(
 		string targetDirectoryPath,
-		DataSet<DetectorAsset> dataSet,
+		DataSet dataSet,
 		CancellationToken cancellationToken = default) =>
-		ExportAsync(targetDirectoryPath, dataSet.Assets, dataSet.ItemClasses, cancellationToken);
+		Export(targetDirectoryPath, dataSet.Assets, dataSet.ItemClasses, cancellationToken);
 
-	public async Task<IReadOnlyCollection<string>> ExportAsync(
+	public async Task<IReadOnlyCollection<string>> Export(
 		string targetDirectoryPath,
-		IReadOnlyCollection<DetectorAsset> assets,
+		IReadOnlyCollection<Asset> assets,
 		IReadOnlyCollection<ItemClass> itemClasses,
 		CancellationToken cancellationToken = default) =>
 		await Task.WhenAll(assets.Select(async (asset, index) =>
@@ -41,7 +41,7 @@ public sealed class DetectorImagesExporter : ImagesExporter<DetectorAsset>
 	private readonly ScreenshotImageLoader _imageLoader;
 	private readonly DetectorAssetsDataAccess _assetsDataAccess;
 
-	private async Task<string> ExportAsync(string targetDirectoryPath, int index, DetectorAsset asset, IEnumerable<ItemClass> itemClasses, CancellationToken cancellationToken = default)
+	private async Task<string> ExportAsync(string targetDirectoryPath, int index, Asset asset, IEnumerable<ItemClass> itemClasses, CancellationToken cancellationToken = default)
 	{
 		var imageFilePath = Path.Combine(targetDirectoryPath, $"image{index}.png");
 		var infoFilePath = Path.Combine(targetDirectoryPath, $"image{index}.txt");

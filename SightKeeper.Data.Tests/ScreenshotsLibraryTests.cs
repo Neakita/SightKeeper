@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;
@@ -11,8 +10,8 @@ public sealed class ScreenshotsLibraryTests : DbRelatedTests
     public void ShouldAddWithScreenshot()
     {
         using var dbContext = DbContextFactory.CreateDbContext();
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
-        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var dataSet = DomainTestsHelper.NewDataSet;
+        dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dbContext.Add(dataSet);
         dbContext.SaveChanges();
         using var assertDbContext = DbContextFactory.CreateDbContext();
@@ -23,8 +22,8 @@ public sealed class ScreenshotsLibraryTests : DbRelatedTests
     public void ShouldCascadeDeleteScreenshot()
     {
         using var dbContext = DbContextFactory.CreateDbContext();
-        var dataSet = DomainTestsHelper.NewDetectorDataSet;
-        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+        var dataSet = DomainTestsHelper.NewDataSet;
+        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dbContext.Add(dataSet);
         dbContext.SaveChanges();
         dbContext.Set<ScreenshotsLibrary>().Should().Contain(dataSet.ScreenshotsLibrary);

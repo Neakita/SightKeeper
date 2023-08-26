@@ -13,7 +13,7 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 	{
 		// arrange
 		using var dbContext = DbContextFactory.CreateDbContext();
-		var dataSet = DomainTestsHelper.NewDetectorDataSet;
+		var dataSet = DomainTestsHelper.NewDataSet;
 
 		// act
 		dbContext.Add(dataSet);
@@ -27,8 +27,8 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 	public void AddingDataSetWithAssetShouldAddImageScreenshotAndAsset()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		var dataSet = DomainTestsHelper.NewDetectorDataSet;
-		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+		var dataSet = DomainTestsHelper.NewDataSet;
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 		var asset = dataSet.MakeAsset(screenshot);
 		var itemClass = dataSet.CreateItemClass("Test item class");
 		var item = asset.CreateItem(itemClass, new Bounding());
@@ -38,7 +38,7 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 
 		dbContext.DataSets.Should().Contain(dataSet);
 		dbContext.Set<Screenshot>().Should().Contain(screenshot);
-		dbContext.Set<DetectorAsset>().Should().Contain(asset);
+		dbContext.Set<Asset>().Should().Contain(asset);
 		dbContext.Set<DetectorItem>().Should().Contain(item);
 		dbContext.Set<ItemClass>().Should().Contain(itemClass);
 	}
@@ -47,8 +47,8 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 	public void ShouldCascadeDelete()
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
-		var dataSet = DomainTestsHelper.NewDetectorDataSet;
-		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+		var dataSet = DomainTestsHelper.NewDataSet;
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 		var asset = dataSet.MakeAsset(screenshot);
 		var itemClass = dataSet.CreateItemClass("Test item class");
 		asset.CreateItem(itemClass, new Bounding(0, 0, 1, 1));
@@ -58,7 +58,7 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 		dbContext.SaveChanges();
 		dbContext.DataSets.Should().BeEmpty();
 		dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
-		dbContext.Set<DetectorAsset>().Should().BeEmpty();
+		dbContext.Set<Asset>().Should().BeEmpty();
 		dbContext.Set<Screenshot>().Should().BeEmpty();
 		dbContext.Set<ItemClass>().Should().BeEmpty();
 		dbContext.Set<DetectorItem>().Should().BeEmpty();
@@ -69,15 +69,15 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 	{
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
-			DataSet<DetectorAsset> dataSet = new("Test model");
-			var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>(), new Resolution());
+			var dataSet = DomainTestsHelper.NewDataSet;
+			var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 			dataSet.MakeAsset(screenshot);
 			dbContext.Add(dataSet);
 			dbContext.SaveChanges();
 		}
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
-			var dataSet = dbContext.Set<DataSet<DetectorAsset>>()
+			var dataSet = dbContext.Set<DataSet>()
 				.Include(m => m.Assets)
 				.Include(m => m.ScreenshotsLibrary.Screenshots)
 				.Single();
@@ -89,7 +89,7 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 	[Fact]
 	public void ShouldSetGameToNullWhenDeletingGame()
 	{
-		var dataSet = DomainTestsHelper.NewDetectorDataSet;
+		var dataSet = DomainTestsHelper.NewDataSet;
 		Game game = new("Test game", "game.exe");
 		dataSet.Game = game;
 		using var dbContext = DbContextFactory.CreateDbContext();

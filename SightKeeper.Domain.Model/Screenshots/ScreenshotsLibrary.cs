@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
@@ -23,16 +22,16 @@ public sealed class ScreenshotsLibrary
         _screenshots = new List<Screenshot>();
     }
 
-    public Screenshot CreateScreenshot(byte[] content, Resolution resolution)
+    public Screenshot CreateScreenshot(byte[] content)
     {
-        Screenshot screenshot = new(this, content, resolution);
+        Screenshot screenshot = new(content, this);
         _screenshots.Add(screenshot);
         ClearExceed();
         HasAnyScreenshots = Screenshots.Any();
         _screenshotAdded.OnNext(screenshot);
         return screenshot;
     }
-	
+
     public void DeleteScreenshot(Screenshot screenshot)
     {
         if (!_screenshots.Remove(screenshot))

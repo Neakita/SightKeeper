@@ -4,7 +4,6 @@ using SightKeeper.Data;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
-using SightKeeper.Domain.Model.Extensions;
 
 namespace SightKeeper.Services.Annotating;
 
@@ -15,58 +14,58 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         _dbContext = dbContext;
     }
     
-    public DetectorItem Annotate(Screenshot screenshot, ItemClass itemClass, Bounding bounding)
+    public async Task<DetectorItem> Annotate(Screenshot screenshot, ItemClass itemClass, Bounding bounding, CancellationToken cancellationToken = default)
     {
         Guard.IsBetweenOrEqualTo(bounding.Left, 0, 1);
         Guard.IsBetweenOrEqualTo(bounding.Right, 0, 1);
         Guard.IsBetweenOrEqualTo(bounding.Top, 0, 1);
         Guard.IsBetweenOrEqualTo(bounding.Bottom, 0, 1);
-        var asset = screenshot.GetOptionalAsset<DetectorAsset>() ??
-                    screenshot.Library.GetDataSet<DetectorAsset>().MakeAsset(screenshot);
+        var asset = screenshot.Asset ??
+                    screenshot.Library.DataSet.MakeAsset(screenshot);
         var item = asset.CreateItem(itemClass, bounding);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return item;
     }
 
-    public void MarkAsset(Screenshot screenshot)
+    public async Task MarkAsset(Screenshot screenshot, CancellationToken cancellationToken = default)
     {
         Guard.IsNull(screenshot.Asset);
-        var screenshotDataSet = screenshot.Library.GetDataSet<DetectorAsset>();
-        _dbContext.Entry(screenshotDataSet).Collection(dataSet => dataSet.Assets).Load();
+        var screenshotDataSet = screenshot.Library.DataSet;
+        await _dbContext.Entry(screenshotDataSet).Collection(dataSet => dataSet.Assets).LoadAsync(cancellationToken: cancellationToken);
         screenshotDataSet.MakeAsset(screenshot);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public void UnMarkAsset(Screenshot screenshot)
+    public Task UnMarkAsset(Screenshot screenshot, CancellationToken cancellationToken = default)
     {
         DeleteAsset(screenshot);
-        _dbContext.SaveChanges();
+        return _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public void DeleteScreenshot(Screenshot screenshot)
+    public Task DeleteScreenshot(Screenshot screenshot, CancellationToken cancellationToken = default)
     {
         if (screenshot.Asset != null)
             DeleteAsset(screenshot);
         screenshot.Library.DeleteScreenshot(screenshot);
-        _dbContext.SaveChanges();
+        return _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public void DeleteItem(DetectorItem item)
+    public Task DeleteItem(DetectorItem item, CancellationToken cancellationToken = default)
     {
         item.Asset.DeleteItem(item);
-        _dbContext.SaveChanges();
+        return _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public void ChangeItemClass(DetectorItem item, ItemClass itemClass)
+    public Task ChangeItemClass(DetectorItem item, ItemClass itemClass, CancellationToken cancellationToken = default)
     {
         item.ItemClass = itemClass;
-        _dbContext.SaveChanges();
+        return _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public void Move(DetectorItem item, Bounding bounding)
+    public Task Move(DetectorItem item, Bounding bounding, CancellationToken cancellationToken = default)
     {
         item.Bounding.SetFromBounding(bounding);
-        _dbContext.SaveChanges();
+        return _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     private readonly AppDbContext _dbContext;
@@ -74,7 +73,7 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     private static void DeleteAsset(Screenshot screenshot)
     {
         Guard.IsNotNull(screenshot.Asset);
-        var model = screenshot.Library.GetDataSet<DetectorAsset>();
-        model.DeleteAsset(screenshot.GetAsset<DetectorAsset>());
+        var dataSet = screenshot.Library.DataSet;
+        dataSet.DeleteAsset(screenshot.Asset);
     }
 }

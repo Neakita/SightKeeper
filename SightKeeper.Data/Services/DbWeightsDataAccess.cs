@@ -1,4 +1,5 @@
 ﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
@@ -10,18 +11,22 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         _dbContext = dbContext;
     }
 
-    public void LoadWeights(WeightsLibrary library) =>
-        _dbContext.Entry(library).Collection(lib => lib.Weights).Load();
+    public Task LoadWeights(WeightsLibrary library, CancellationToken cancellationToken = default) =>
+        _dbContext.Entry(library).Collection(lib => lib.Weights).LoadAsync(cancellationToken: cancellationToken);
 
-    public Weights CreateWeights(
+    public async Task<Weights> CreateWeights(
         WeightsLibrary library,
         byte[] data,
         ModelSize size,
         uint epoch,
-        float loss)
+        float boundingLoss,
+        float classificationLoss,
+        float deformationLoss,
+        IEnumerable<Asset> assets,
+        CancellationToken cancellationToken = default)
     {
-        var weights = library.CreateWeights(data, size, epoch, loss);
-        _dbContext.SaveChanges();
+        var weights = library.CreateWeights(data, size, epoch, boundingLoss, classificationLoss, deformationLoss, assets);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return weights;
     }
     

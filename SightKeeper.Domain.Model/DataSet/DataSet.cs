@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public abstract class DataSet
+public sealed class DataSet
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
@@ -29,7 +29,7 @@ public abstract class DataSet
 
 	public bool CanChangeResolution([NotNullWhen(false)] out string? message)
 	{
-		if (ScreenshotsLibrary.HasAnyScreenshots)
+		if (ScreenshotsLibrary.Screenshots.Any())
 			message = "Can't change resolution when there are screenshots";
 		else
 			message = null;
@@ -48,7 +48,7 @@ public abstract class DataSet
 	{
 		if (_itemClasses.Any(itemClass => itemClass.Name == name))
 			ThrowHelper.ThrowArgumentException($"Item class with name \"{name}\" already exists");
-		ItemClass newItemClass = new(name);
+		ItemClass newItemClass = new(this, name);
 		_itemClasses.Add(newItemClass);
 		return newItemClass;
 	}
@@ -59,81 +59,64 @@ public abstract class DataSet
 			ThrowHelper.ThrowInvalidOperationException(message);
 		_itemClasses.Remove(itemClass);
 	}
-
-	public abstract bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message);
+	
+	public bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
+	{
+		message = null;
+		if (_assets.Any(asset => asset.Items.Any(item => item.ItemClass == itemClass)))
+			message = $"Cannot delete item class {itemClass} because he is used in some asset";
+		return message == null;
+	}
 	
 	private readonly List<ItemClass> _itemClasses;
+	private readonly List<Asset> _assets;
 
 	#endregion
 	
 	public override string ToString() => Name;
 
-	protected DataSet(string name) : this(name, new Resolution())
+	public DataSet(string name) : this(name, new Resolution())
 	{
 	}
 
-	protected DataSet(string name, Resolution resolution)
+	public DataSet(string name, Resolution resolution)
 	{
 		Name = name;
 		Description = string.Empty;
 		_resolution = resolution;
 		_itemClasses = new List<ItemClass>();
 		ScreenshotsLibrary = new ScreenshotsLibrary(this);
-		WeightsLibrary = new WeightsLibrary();
+		WeightsLibrary = new WeightsLibrary(this);
+		_assets = new List<Asset>();
 	}
 
-	protected DataSet()
+	private DataSet()
 	{
 		Name = null!;
 		Description = null!;
 		_resolution = null!;
 		_itemClasses = null!;
 		ScreenshotsLibrary = null!;
+		WeightsLibrary = null!;
+		_assets = null!;
 	}
-}
-
-public sealed class DataSet<TAsset> : DataSet where TAsset : Asset
-{
+	
 	#region Assets
 
-	public IReadOnlyCollection<TAsset> Assets => _assets;
+	public IReadOnlyCollection<Asset> Assets => _assets;
 
-	public TAsset MakeAsset(Screenshot screenshot)
+	public Asset MakeAsset(Screenshot screenshot)
 	{
-		var asset = Asset.Create(this, screenshot);
+		var asset = new Asset(this, screenshot);
 		_assets.Add(asset);
 		return asset;
 	}
 
-	public void DeleteAsset(TAsset asset)
+	public void DeleteAsset(Asset asset)
 	{
 		if (!_assets.Remove(asset))
 			ThrowHelper.ThrowArgumentException(nameof(asset), "Asset not found");
 	}
 
-	private readonly List<TAsset> _assets;
-
 	#endregion
-
-	public override bool CanDeleteItemClass(ItemClass itemClass, [NotNullWhen(false)] out string? message)
-	{
-		message = null;
-		if (_assets.Any(asset => asset.IsUsesItemClass(itemClass)))
-			message = $"Cannot delete item class {itemClass} because he is used in some asset";
-		return message == null;
-	}
-
-	public DataSet(string name) : this(name, new Resolution())
-	{
-	}
-
-	public DataSet(string name, Resolution resolution) : base(name, resolution)
-	{
-		_assets = new List<TAsset>();
-	}
-
-	private DataSet()
-	{
-		_assets = null!;
-	}
 }

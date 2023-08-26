@@ -4,11 +4,11 @@ namespace SightKeeper.Domain.Model.Detector;
 
 public sealed class DetectorItem
 {
-	public DetectorAsset Asset { get; private set; }
+	public Asset Asset { get; private set; }
 	public ItemClass ItemClass { get; set; }
 	public Bounding Bounding { get; private set; }
 	
-	internal DetectorItem(DetectorAsset asset, ItemClass itemClass, Bounding bounding)
+	internal DetectorItem(Asset asset, ItemClass itemClass, Bounding bounding)
 	{
 		Asset = asset;
 		ItemClass = itemClass;
