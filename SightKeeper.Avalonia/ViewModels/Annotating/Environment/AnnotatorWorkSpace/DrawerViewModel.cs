@@ -44,7 +44,7 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
         AnnotatorToolsViewModel tools,
         DetectorAnnotator annotator,
         DetectorItemResizer resizer,
-        DetectorAssetsDataAccess assetsDataAccess)
+        AssetsDataAccess assetsDataAccess)
     {
         _resizer = resizer;
         _screenshots = screenshots;

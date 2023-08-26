@@ -17,7 +17,7 @@ public sealed class ImagesExporter
 		NumberDecimalSeparator = "."
 	};
 
-	public ImagesExporter(ScreenshotImageLoader imageLoader, DetectorAssetsDataAccess assetsDataAccess)
+	public ImagesExporter(ScreenshotImageLoader imageLoader, AssetsDataAccess assetsDataAccess)
 	{
 		_imageLoader = imageLoader;
 		_assetsDataAccess = assetsDataAccess;
@@ -38,7 +38,7 @@ public sealed class ImagesExporter
 			await ExportAsync(targetDirectoryPath, index, asset, itemClasses, cancellationToken)));
 
 	private readonly ScreenshotImageLoader _imageLoader;
-	private readonly DetectorAssetsDataAccess _assetsDataAccess;
+	private readonly AssetsDataAccess _assetsDataAccess;
 
 	private async Task<string> ExportAsync(string targetDirectoryPath, int index, Asset asset, IEnumerable<ItemClass> itemClasses, CancellationToken cancellationToken = default)
 	{

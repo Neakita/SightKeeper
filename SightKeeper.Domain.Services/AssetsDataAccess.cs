@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.Services;
 
-public interface DetectorAssetsDataAccess
+public interface AssetsDataAccess
 {
     void LoadItems(Asset asset);
 }

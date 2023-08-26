@@ -91,7 +91,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DbScreenshotImageLoader>().As<ScreenshotImageLoader>();
 		builder.RegisterType<MainWindowActivityService>().As<SelfActivityService>();
 		builder.RegisterType<WindowsGamesService>().As<GamesService>();
-		builder.RegisterType<DbDetectorAssetsDataAccess>().As<DetectorAssetsDataAccess>();
+		builder.RegisterType<DbAssetsDataAccess>().As<AssetsDataAccess>();
 		builder.RegisterType<ImagesExporter>();
 		builder.RegisterType<DataSetsObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>();

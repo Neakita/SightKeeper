@@ -4,9 +4,9 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class DbDetectorAssetsDataAccess : DetectorAssetsDataAccess
+public sealed class DbAssetsDataAccess : AssetsDataAccess
 {
-    public DbDetectorAssetsDataAccess(AppDbContext dbContext)
+    public DbAssetsDataAccess(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }

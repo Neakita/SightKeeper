@@ -17,6 +17,7 @@ using FluentValidation;
 using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Services;
 using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
@@ -27,10 +28,11 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
     public DataSet DataSet { get; private set; }
 
-    public DataSetEditingViewModel(DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService) : base(validator)
+    public DataSetEditingViewModel(DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService, AssetsDataAccess assetsDataAccess) : base(validator)
     {
         SetData(dataSet);
         _registeredGamesService = registeredGamesService;
+        _assetsDataAccess = assetsDataAccess;
         ErrorsChanged += OnErrorsChanged;
     }
     
@@ -73,6 +75,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
 
     private readonly ObservableCollection<string> _itemClasses = new();
     private readonly RegisteredGamesService _registeredGamesService;
+    private readonly AssetsDataAccess _assetsDataAccess;
     private IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
 
     partial void OnResolutionWidthChanged(int? oldValue, int? newValue)
