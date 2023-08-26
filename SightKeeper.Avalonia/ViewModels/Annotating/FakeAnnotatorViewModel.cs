@@ -40,6 +40,11 @@ public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
         {
             return null;
         }
+
+        public Task<Image> LoadAsync(Screenshot screenshot, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
     }
     
     private sealed class MockScreenshotsDataAccess : ScreenshotsDataAccess

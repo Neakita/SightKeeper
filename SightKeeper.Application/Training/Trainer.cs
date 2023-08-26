@@ -1,5 +1,4 @@
-﻿using SightKeeper.Application.Training.Parsing;
-using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Training;
 

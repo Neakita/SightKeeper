@@ -22,5 +22,14 @@ public sealed class DbScreenshotImageLoader : ScreenshotImageLoader
         return screenshot.Image;
     }
 
+    public async Task<Image> LoadAsync(Screenshot screenshot, CancellationToken cancellationToken = default)
+    {
+        var entry = _dbContext.Entry(screenshot);
+        if (entry.State != EntityState.Detached)
+            await entry.Reference(s => s.Image).LoadAsync(cancellationToken: cancellationToken);
+        Guard.IsNotNull(screenshot.Image);
+        return screenshot.Image;
+    }
+
     private readonly AppDbContext _dbContext;
 }

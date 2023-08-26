@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application.Training.Parsing;
+using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
 
@@ -12,7 +13,8 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
 public sealed partial class TrainingViewModel : ViewModel
 {
-    public IObservable<TrainingProgress> Progress /*=> _trainer.Progress*/ { get; }
+    private readonly ImagesExporter _imagesExporter;
+    public IObservable<TrainingProgress> Progress /*=> _trainer.Progress*/ { get; } = new Subject<TrainingProgress>();
     public IObservable<float?> Completion { get; }
     public IReadOnlyCollection<DataSetViewModel> AvailableDataSets { get; }
 
@@ -37,32 +39,19 @@ public sealed partial class TrainingViewModel : ViewModel
         private set => SetProperty(ref _isTraining, value);
     }
 
-    public TrainingViewModel(/*Trainer<DetectorDataSet> trainer, DataSetsListViewModel dataSetsListViewModel*/)
+    public TrainingViewModel(DataSetsListViewModel dataSetsListViewModel, ImagesExporter imagesExporter)
     {
-        /*_trainer = trainer;
-        Completion = Progress.Select(progress => (float)progress.Batch / trainer.MaxBatches);
-        AvailableModels = dataSetsListViewModel.DataSets;*/
+        _imagesExporter = imagesExporter;
+        AvailableDataSets = dataSetsListViewModel.DataSets;
     }
 
     [RelayCommand(CanExecute = nameof(CanStartTraining), IncludeCancelCommand = true)]
-    public async Task StartTraining(CancellationToken cancellationToken)
+    public Task StartTraining(CancellationToken cancellationToken)
     {
-        /*Guard.IsNotNull(SelectedModel);
-        Guard.IsNotNull(SelectedConfig);
-        Guard.IsOfType<DetectorDataSet>(SelectedModel.DataSet);
-        _trainer.Model = (DetectorDataSet)SelectedModel.DataSet;
-        IsTraining = true;
-        try
-        {
-            await _trainer.TrainFromScratchAsync(SelectedConfig.Config, cancellationToken);
-        }
-        finally
-        {
-            IsTraining = false;
-        }*/
+        return _imagesExporter.Export(@"C:\Users\narca\Downloads\Test", SelectedDataSet.DataSet, cancellationToken);
     }
 
-    public bool CanStartTraining() => /*SelectedModel != null && SelectedConfig != null*/ false;
+    public bool CanStartTraining() => /*SelectedModel != null && SelectedConfig != null*/ true;
 
     /*private readonly Trainer<DetectorDataSet> _trainer;*/
     private bool _isTraining;

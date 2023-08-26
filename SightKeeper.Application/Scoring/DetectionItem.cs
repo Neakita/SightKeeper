@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model.Common;
+using RectangleF = System.Drawing.RectangleF;
 
 namespace SightKeeper.Application.Scoring;
 

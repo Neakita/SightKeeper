@@ -12,6 +12,7 @@ using SightKeeper.Application.Annotating;
 using SightKeeper.Application.DataSet;
 using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Application.DataSet.Editing;
+using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Annotating;
 using SightKeeper.Avalonia.ViewModels.Dialogs;

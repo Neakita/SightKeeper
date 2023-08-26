@@ -31,22 +31,4 @@
       <ProjectReference Include="..\SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="Defaults\v8l">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Defaults\v8m">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Defaults\v8n">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Defaults\v8s">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Defaults\v8x">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
 </Project>
