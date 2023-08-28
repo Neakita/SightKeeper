@@ -14,7 +14,7 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class DrawerViewModel : ViewModel, IDisposable
 {
-    public const double MinimumDimensionSize = 0.01;
+    public const double MinimumDimensionSize = 0.005;
 
     public DataSetViewModel? DataSetViewModel { get; set; }
 

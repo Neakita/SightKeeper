@@ -31,7 +31,7 @@ public sealed class Trainer
 		var runsDirectory = Path.GetFullPath(Path.Combine(dataPath, "Runs"));
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(runsDirectory);
 		CLITrainerArguments arguments = new(dataSetPath, size, epochs);
-		var outputStream = CLIExtensions.RunCLICommand(arguments.ToString());
+		var outputStream = CLIExtensions.RunCLICommand(arguments.ToString(), cancellationToken);
 		TrainerParser.Parse(outputStream.WhereNotNull(), out var outputDirectoryName, out var trainingProgress);
 		trainingProgress.Subscribe(progress => Log.Debug("Training progress: {TrainingProgress}", progress), () => Log.Debug("Output completed"));
 		await runsDirectoryReplacement.DisposeAsync();
@@ -40,9 +40,9 @@ public sealed class Trainer
 		var runDirectory = Directory.GetDirectories(runsDirectory).Single();
 		var modelPath = Path.Combine(runDirectory, "train", "weights", "last.pt");
 		var onnxModelPath = await YoloCLIExtensions.ExportToONNX(modelPath, dataSet.Resolution);
-		var bytes = await File.ReadAllBytesAsync(onnxModelPath, cancellationToken);
+		var bytes = await File.ReadAllBytesAsync(onnxModelPath, CancellationToken.None);
 		return await _weightsDataAccess.CreateWeights(dataSet.WeightsLibrary, bytes, size, lastProgress.CurrentEpoch,
-			lastProgress.BoundingLoss, lastProgress.ClassificationLoss, lastProgress.DeformationLoss, dataSet.Assets, cancellationToken);
+			lastProgress.BoundingLoss, lastProgress.ClassificationLoss, lastProgress.DeformationLoss, dataSet.Assets, CancellationToken.None);
 	}
 
 	public Task<Weights?> ResumeTrainingAsync(

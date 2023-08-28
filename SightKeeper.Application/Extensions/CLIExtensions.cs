@@ -13,12 +13,13 @@ public static class CLIExtensions
         UseShellExecute = false,
     };
     
-    public static IObservable<string?> RunCLICommand(string arguments)
+    public static IObservable<string?> RunCLICommand(string arguments, CancellationToken cancellationToken = default)
     {
         Process process = new();
         process.EnableRaisingEvents = true;
         process.StartInfo = StartInfo;
         process.Start();
+        cancellationToken.Register(() => process.Close());
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
         _ = process.PassArguments(arguments);

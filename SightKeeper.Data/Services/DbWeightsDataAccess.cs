@@ -25,6 +25,7 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         IEnumerable<Asset> assets,
         CancellationToken cancellationToken = default)
     {
+        await LoadWeights(library, cancellationToken);
         var weights = library.CreateWeights(data, size, epoch, boundingLoss, classificationLoss, deformationLoss, assets);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return weights;
