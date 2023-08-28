@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Avalonia.Extensions;
+using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Services;
 
@@ -47,7 +48,7 @@ public sealed partial class DataSetsViewModel : ViewModel
 		Guard.IsNotNull(SelectedDataSetViewModel);
 		var dataSetToEdit = SelectedDataSetViewModel.DataSet;
 		await using var scope = _scope.BeginLifetimeScope(this);
-		var viewModel = scope.Resolve<Dialogs.DataSetEditingViewModel>(new PositionalParameter(0, dataSetToEdit));
+		var viewModel = scope.Resolve<DataSetEditingViewModel>(new PositionalParameter(0, dataSetToEdit));
 		await viewModel.ShowDialog(this);
 		if (viewModel.DialogResult != true)
 			return;
@@ -66,6 +67,17 @@ public sealed partial class DataSetsViewModel : ViewModel
 	}
 
 	private bool CanDeleteDataSet() => SelectedDataSetViewModel != null;
+
+	[RelayCommand(CanExecute = nameof(CanEditWeights))]
+	private async Task EditWeights()
+	{
+		Guard.IsNotNull(SelectedDataSetViewModel);
+		var dialogViewModel = _scope.Resolve<WeightsEditorViewModel>();
+		await dialogViewModel.SetLibrary(SelectedDataSetViewModel.DataSet.WeightsLibrary);
+		await dialogViewModel.ShowDialog(this);
+	}
+
+	private bool CanEditWeights() => SelectedDataSetViewModel != null;
 
 	[ObservableProperty] private DataSetViewModel? _selectedDataSetViewModel;
 }

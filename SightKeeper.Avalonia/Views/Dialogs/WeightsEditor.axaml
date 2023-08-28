@@ -1,0 +1,42 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs"
+             xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Views.Dialogs.WeightsEditor"
+             x:DataType="dialogs:IWeightsEditorViewModel"
+             MinHeight="300">
+    
+    <Design.DataContext>
+        <fakes:FakeWeightsEditorViewModel/>
+    </Design.DataContext>
+    
+    <Grid RowDefinitions="Auto *">
+        <Button Grid.Row="0"
+                Content="{avalonia:MaterialIconExt FilePlus}"
+                Command="{Binding AddWeightsFromFileCommand}"/>
+        <Button Grid.Row="0"
+                Content="{avalonia:MaterialIconExt Close}"
+                HorizontalAlignment="Right"
+                Command="{Binding CloseCommand}"/>
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Weights}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Size"
+                                    Binding="{Binding Size}"/>
+                <DataGridTextColumn Header="Epoch"
+                                    Binding="{Binding Epoch}"/>
+                <DataGridTextColumn Header="Bounding loss"
+                                    Binding="{Binding BoundingLoss}"/>
+                <DataGridTextColumn Header="Classification loss"
+                                    Binding="{Binding ClassificationLoss}"/>
+                <DataGridTextColumn Header="Deformation loss"
+                                    Binding="{Binding DeformationLoss}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+    
+</UserControl>

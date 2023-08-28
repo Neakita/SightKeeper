@@ -26,6 +26,8 @@
                               Command="{Binding EditDataSetCommand}"/>
                     <MenuItem Header="Delete"
                               Command="{Binding DeleteDataSetCommand}"/>
+                    <MenuItem Header="Edit weights"
+                              Command="{Binding EditWeightsCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             

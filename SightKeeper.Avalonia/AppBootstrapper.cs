@@ -20,6 +20,7 @@ using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 using SightKeeper.Avalonia.ViewModels.Windows;
 using SightKeeper.Avalonia.Views.Annotating;
+using SightKeeper.Avalonia.Views.Dialogs;
 using SightKeeper.Avalonia.Views.Tabs;
 using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;
@@ -126,6 +127,7 @@ public static class AppBootstrapper
 		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetEditingViewModel>();
+		builder.RegisterType<WeightsEditorViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -140,5 +142,6 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectorDrawer>().AsSelf().As<IViewFor<DrawerViewModel>>();
 		builder.RegisterType<TrainingTab>().As<IViewFor<TrainingViewModel>>();
 		builder.RegisterType<DetectorItem>().As<IViewFor<DetectorItemViewModel>>();
+		builder.RegisterType<WeightsEditor>().As<IViewFor<WeightsEditorViewModel>>();
 	}
 }

@@ -54,7 +54,7 @@ public sealed partial class TrainingViewModel : ViewModel
     {
         if (SelectedDataSet == null)
             return;
-        await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, ModelSize.Nano, 2, cancellationToken);
+        await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, ModelSize.Nano, 10000, cancellationToken);
     }
 
     public bool CanStartTraining() => /*SelectedModel != null && SelectedConfig != null*/ true;
