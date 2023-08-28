@@ -96,6 +96,8 @@ public static class AppBootstrapper
 		builder.RegisterType<ImagesExporter>();
 		builder.RegisterType<DataSetsObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>();
+		builder.RegisterType<DataSetConfigurationExporter>();
+		builder.RegisterType<Trainer>();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();

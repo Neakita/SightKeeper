@@ -14,6 +14,8 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs;
 public sealed partial class TrainingViewModel : ViewModel
 {
     private readonly ImagesExporter _imagesExporter;
+    private readonly DataSetConfigurationExporter _dataSetConfigurationExporter;
+    private readonly Trainer _trainer;
     public IObservable<TrainingProgress> Progress /*=> _trainer.Progress*/ { get; } = new Subject<TrainingProgress>();
     public IObservable<float?> Completion { get; }
     public IReadOnlyCollection<DataSetViewModel> AvailableDataSets { get; }
@@ -39,16 +41,20 @@ public sealed partial class TrainingViewModel : ViewModel
         private set => SetProperty(ref _isTraining, value);
     }
 
-    public TrainingViewModel(DataSetsListViewModel dataSetsListViewModel, ImagesExporter imagesExporter)
+    public TrainingViewModel(DataSetsListViewModel dataSetsListViewModel, ImagesExporter imagesExporter, DataSetConfigurationExporter dataSetConfigurationExporter, Trainer trainer)
     {
         _imagesExporter = imagesExporter;
+        _dataSetConfigurationExporter = dataSetConfigurationExporter;
+        _trainer = trainer;
         AvailableDataSets = dataSetsListViewModel.DataSets;
     }
 
     [RelayCommand(CanExecute = nameof(CanStartTraining), IncludeCancelCommand = true)]
-    public Task StartTraining(CancellationToken cancellationToken)
+    public async Task StartTraining(CancellationToken cancellationToken)
     {
-        return _imagesExporter.Export(@"C:\Users\narca\Downloads\Test", SelectedDataSet.DataSet, cancellationToken);
+        if (SelectedDataSet == null)
+            return;
+        await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, ModelSize.Nano, 2, cancellationToken);
     }
 
     public bool CanStartTraining() => /*SelectedModel != null && SelectedConfig != null*/ true;
