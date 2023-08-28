@@ -15,17 +15,8 @@ public sealed class DataSetChangesValidator : AbstractValidator<DataSetChanges>
             .NotEmpty()
             .MustAsync((dataSet, _, cancellationToken) => NameIsUnique(dataSet, cancellationToken)).WithMessage("Name must be unique");
         
-        RuleFor(changes => changes.ResolutionWidth)
-            .Must((changes, resolutionWidth) => resolutionWidth == changes.DataSet.Resolution.Width)
-            .Unless(changes => changes.DataSet.CanChangeResolution(out _), ApplyConditionTo.CurrentValidator)
-            .WithMessage(changes =>
-            {
-                changes.DataSet.CanChangeResolution(out var message);
-                return $"Resolution can't be changed: {message}";
-            });
-            
-        RuleFor(changes => changes.ResolutionHeight)
-            .Must((changes, resolutionWidth) => resolutionWidth == changes.DataSet.Resolution.Width)
+        RuleFor(changes => changes.Resolution)
+            .Must((changes, resolution) => resolution == changes.DataSet.Resolution)
             .Unless(changes => changes.DataSet.CanChangeResolution(out _), ApplyConditionTo.CurrentValidator)
             .WithMessage(changes =>
             {

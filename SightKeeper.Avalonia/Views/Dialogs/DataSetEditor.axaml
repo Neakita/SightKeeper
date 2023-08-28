@@ -38,11 +38,8 @@
                               Margin="0 0 10 10"/>
                     
                     <NumericUpDown Grid.Row="1" Grid.Column="0"
-                                   Value="{Binding ResolutionWidth}"
+                                   Value="{Binding Resolution}"
                                    Margin="0 10 10 0"/>
-                    <NumericUpDown Grid.Row="1" Grid.Column="1"
-                                   Value="{Binding ResolutionHeight}"
-                                   Margin="10 10 0 0"/>
                 </Grid>
 
                 <Border BorderBrush="Gray" BorderThickness="1">

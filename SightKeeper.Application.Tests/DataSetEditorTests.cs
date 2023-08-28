@@ -37,10 +37,10 @@ public sealed class DataSetEditorTests : DbRelatedTests
     {
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
-        Resolution changedResolution = new(640, 640);
+        const ushort changedResolution = 640;
         DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
         await editor.ApplyChanges(dataSetChanges);
-        dataSet.Resolution.Should().BeEquivalentTo(changedResolution);
+        dataSet.Resolution.Should().Be(changedResolution);
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
     {
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
-        Resolution changedResolution = new(636, 636);
+        const ushort changedResolution = 636;
         DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
         await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetChanges));
         dataSet.Resolution.Should().NotBe(changedResolution);

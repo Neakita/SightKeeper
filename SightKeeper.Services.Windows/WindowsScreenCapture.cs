@@ -17,14 +17,14 @@ public sealed class WindowsScreenCapture : ScreenCapture
 	public byte[] Capture()
 	{
 		Guard.IsNotNull(Resolution);
-		using Bitmap windowsBitmap = new(Resolution!.Width, Resolution.Height);
+		using Bitmap windowsBitmap = new(Resolution.Value, Resolution.Value);
 		using var graphics = Graphics.FromImage(windowsBitmap);
 
 		Point point = new(
-			_screenBoundsProvider.MainScreenHorizontalCenter - Resolution.Width / 2 - XOffset, 
-			_screenBoundsProvider.MainScreenVerticalCenter - Resolution.Height / 2 - YOffset);
+			_screenBoundsProvider.MainScreenHorizontalCenter - Resolution.Value / 2 - XOffset, 
+			_screenBoundsProvider.MainScreenVerticalCenter - Resolution.Value / 2 - YOffset);
 
-		graphics.CopyFromScreen(point, Point.Empty, new Size(Resolution.Width, Resolution.Height));
+		graphics.CopyFromScreen(point, Point.Empty, new Size(Resolution.Value, Resolution.Value));
 		using MemoryStream stream = new();
 		windowsBitmap.Save(stream, ImageFormat.Bmp);
 		return stream.ToArray();
@@ -34,7 +34,7 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		Task.Run(Capture, cancellationToken);
 
 	public Game? Game { get; set; }
-	public Resolution? Resolution { get; set; }
+	public ushort? Resolution { get; set; }
 	public ushort XOffset { get; set; }
 	public ushort YOffset { get; set; }
 

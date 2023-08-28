@@ -21,7 +21,7 @@ public sealed class DbDataSetEditor : DataSetEditor
         var dataSet = dataSetChanges.DataSet;
         dataSet.Name = dataSetChanges.Name;
         dataSet.Description = dataSetChanges.Description;
-        dataSet.Resolution = new Resolution((ushort)dataSetChanges.ResolutionWidth, (ushort)dataSetChanges.ResolutionHeight);
+        dataSet.Resolution = dataSetChanges.Resolution;
         dataSet.Game = dataSetChanges.Game;
         ApplyItemClassesChanges(dataSet, dataSetChanges.ItemClasses);
         _dbContext.DataSets.Update(dataSet);

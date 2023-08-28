@@ -14,7 +14,7 @@ public sealed class DataSet
 
 	#region Resolution
 
-	public Resolution Resolution
+	public ushort Resolution
 	{
 		get => _resolution;
 		set
@@ -36,7 +36,7 @@ public sealed class DataSet
 		return message == null;
 	}
 
-	private Resolution _resolution;
+	private ushort _resolution;
 
 	#endregion
 
@@ -75,11 +75,7 @@ public sealed class DataSet
 	
 	public override string ToString() => Name;
 
-	public DataSet(string name) : this(name, new Resolution())
-	{
-	}
-
-	public DataSet(string name, Resolution resolution)
+	public DataSet(string name, ushort resolution = 320)
 	{
 		Name = name;
 		Description = string.Empty;
@@ -94,7 +90,6 @@ public sealed class DataSet
 	{
 		Name = null!;
 		Description = null!;
-		_resolution = null!;
 		_itemClasses = null!;
 		ScreenshotsLibrary = null!;
 		WeightsLibrary = null!;

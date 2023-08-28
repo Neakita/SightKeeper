@@ -29,10 +29,12 @@ namespace SightKeeper.Data.Migrations
                 name: "DataSets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    GameId = table.Column<int>(type: "INTEGER", nullable: true)
+                    GameId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Resolution = table.Column<ushort>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

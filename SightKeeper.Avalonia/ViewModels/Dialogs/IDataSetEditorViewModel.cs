@@ -10,8 +10,7 @@ public interface IDataSetEditorViewModel : INotifyPropertyChanging, INotifyPrope
 {
     string Name { get; set; }
     string Description { get; set; }
-    int? ResolutionWidth { get; set; }
-    int? ResolutionHeight { get; set; }
+    int? Resolution { get; set; }
     IReadOnlyCollection<string> ItemClasses { get; }
     string? SelectedItemClass { get; set; }
     string NewItemClassName { get; set; }

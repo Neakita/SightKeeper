@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Tests.DetectorDataSet;
 
@@ -8,8 +7,8 @@ public sealed class ResolutionTests
     [Fact]
     public void ShouldChangeResolutionWhenNoScreenshotsAndAssets()
     {
-        Resolution firstResolution = new(64, 64);
-        Resolution secondResolution = new(128, 128);
+        const ushort firstResolution = 64;
+        const ushort secondResolution = 128;
         DataSet dataSet = new("Test data set", firstResolution);
         dataSet.Resolution.Should().Be(firstResolution);
         dataSet.Resolution = secondResolution;
@@ -19,8 +18,8 @@ public sealed class ResolutionTests
     [Fact]
     public void ShouldThrowExceptionOnResolutionChangeWhenHaveScreenshots()
     {
-        Resolution firstResolution = new(64, 64);
-        Resolution secondResolution = new(128, 128);
+        const ushort firstResolution = 64;
+        const ushort secondResolution = 128;
         DataSet dataSet = new("Test data set", firstResolution);
         dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dataSet.Resolution.Should().Be(firstResolution);
@@ -34,8 +33,8 @@ public sealed class ResolutionTests
     [Fact]
     public void ShouldThrowExceptionOnResolutionChangeWhenHaveAssets()
     {
-        Resolution firstResolution = new(64, 64);
-        Resolution secondResolution = new(128, 128);
+        const ushort firstResolution = 64;
+        const ushort secondResolution = 128;
         DataSet dataSet = new("Test data set", firstResolution);
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dataSet.MakeAsset(screenshot);

@@ -11,7 +11,7 @@ using SightKeeper.Data;
 namespace SightKeeper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230826050526_Initial")]
+    [Migration("20230828105842_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -122,6 +122,9 @@ namespace SightKeeper.Data.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<ushort>("Resolution")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -294,23 +297,7 @@ namespace SightKeeper.Data.Migrations
                         .WithMany()
                         .HasForeignKey("GameId");
 
-                    b.OwnsOne("SightKeeper.Domain.Model.Common.Resolution", "Resolution", b1 =>
-                        {
-                            b1.Property<int>("DataSetId")
-                                .HasColumnType("INTEGER");
-
-                            b1.HasKey("DataSetId");
-
-                            b1.ToTable("DataSets");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DataSetId");
-                        });
-
                     b.Navigation("Game");
-
-                    b.Navigation("Resolution")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorItem", b =>

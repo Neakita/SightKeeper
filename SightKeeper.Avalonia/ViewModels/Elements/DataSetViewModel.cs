@@ -20,7 +20,7 @@ public sealed class DataSetViewModel : ViewModel, IDisposable
     public string Name => DataSet.Name;
     public string Description => DataSet.Description;
     public Game? Game => DataSet.Game;
-    public Resolution Resolution => DataSet.Resolution;
+    public ushort Resolution => DataSet.Resolution;
     public IReadOnlyCollection<ItemClass> ItemClasses { get; }
 
     public DataSetViewModel(DataSet dataSet)

@@ -55,8 +55,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
             _itemClasses.Add(itemClass.Name);
         Name = dataSet.Name;
         Description = dataSet.Description;
-        ResolutionWidth = dataSet.Resolution.Width;
-        ResolutionHeight = dataSet.Resolution.Height;
+        Resolution = dataSet.Resolution;
         Game = dataSet.Game;
         _assetsDataAccess.LoadAssets(dataSet);
         _deletionBlackListItemClasses = dataSet.ItemClasses
@@ -70,8 +69,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
 
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _description = string.Empty;
-    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private int? _resolutionWidth = 320;
-    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private int? _resolutionHeight = 320;
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private int? _resolution = 320;
     [ObservableProperty] private Game? _game;
 
     private readonly ObservableCollection<string> _itemClasses = new();
@@ -79,9 +77,9 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
     private readonly AssetsDataAccess _assetsDataAccess;
     private IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
 
-    partial void OnResolutionWidthChanged(int? oldValue, int? newValue)
+    partial void OnResolutionChanged(int? oldValue, int? newValue)
     {
-        Debug.WriteLine($"ResolutionWidth changed from {oldValue} to {newValue}");
+        Debug.WriteLine($"Resolution changed from {oldValue} to {newValue}");
     }
 
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]

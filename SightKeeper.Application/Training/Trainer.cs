@@ -39,7 +39,7 @@ public sealed class Trainer
 		Log.Debug("Last progress: {Progress}", lastProgress);
 		var runDirectory = Directory.GetDirectories(runsDirectory).Single();
 		var modelPath = Path.Combine(runDirectory, "train", "weights", "last.pt");
-		var onnxModelPath = await YoloCLIExtensions.ExportToONNX(modelPath, dataSet.Resolution.Width);
+		var onnxModelPath = await YoloCLIExtensions.ExportToONNX(modelPath, dataSet.Resolution);
 		var bytes = await File.ReadAllBytesAsync(onnxModelPath, cancellationToken);
 		return await _weightsDataAccess.CreateWeights(dataSet.WeightsLibrary, bytes, size, lastProgress.CurrentEpoch,
 			lastProgress.BoundingLoss, lastProgress.ClassificationLoss, lastProgress.DeformationLoss, dataSet.Assets, cancellationToken);

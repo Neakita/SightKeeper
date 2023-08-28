@@ -76,7 +76,7 @@ public sealed class DirectXScreenCapture : ScreenCapture
 		Task.Run(Capture, cancellationToken);
 
 	public Game? Game { get; set; }
-	public Resolution? Resolution { get; set; }
+	public ushort? Resolution { get; set; }
 	public ushort XOffset { get; set; }
 	public ushort YOffset { get; set; }
 	public bool CanCapture => true;
