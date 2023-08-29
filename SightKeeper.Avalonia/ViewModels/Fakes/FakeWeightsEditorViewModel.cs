@@ -13,7 +13,6 @@ namespace SightKeeper.Avalonia.ViewModels.Fakes;
 public sealed class FakeWeightsEditorViewModel : IWeightsEditorViewModel
 {
     public IReadOnlyCollection<Weights> Weights { get; }
-    public ICommand AddWeightsFromFileCommand { get; } = Substitute.For<ICommand>();
     public ICommand CloseCommand { get; } = Substitute.For<ICommand>();
 
     public FakeWeightsEditorViewModel()

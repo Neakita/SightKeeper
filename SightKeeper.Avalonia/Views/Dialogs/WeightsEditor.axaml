@@ -16,9 +16,6 @@
     
     <Grid RowDefinitions="Auto *">
         <Button Grid.Row="0"
-                Content="{avalonia:MaterialIconExt FilePlus}"
-                Command="{Binding AddWeightsFromFileCommand}"/>
-        <Button Grid.Row="0"
                 Content="{avalonia:MaterialIconExt Close}"
                 HorizontalAlignment="Right"
                 Command="{Binding CloseCommand}"/>
