@@ -128,22 +128,23 @@ namespace SightKeeper.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    LibraryId = table.Column<int>(type: "INTEGER", nullable: false),
                     Data = table.Column<byte[]>(type: "BLOB", nullable: false),
                     Size = table.Column<int>(type: "INTEGER", nullable: false),
                     Epoch = table.Column<uint>(type: "INTEGER", nullable: false),
                     BoundingLoss = table.Column<float>(type: "REAL", nullable: false),
                     ClassificationLoss = table.Column<float>(type: "REAL", nullable: false),
-                    DeformationLoss = table.Column<float>(type: "REAL", nullable: false),
-                    WeightsLibraryId = table.Column<int>(type: "INTEGER", nullable: true)
+                    DeformationLoss = table.Column<float>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Weights", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Weights_WeightsLibraries_WeightsLibraryId",
-                        column: x => x.WeightsLibraryId,
+                        name: "FK_Weights_WeightsLibraries_LibraryId",
+                        column: x => x.LibraryId,
                         principalTable: "WeightsLibraries",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -279,9 +280,9 @@ namespace SightKeeper.Data.Migrations
                 column: "LibraryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Weights_WeightsLibraryId",
+                name: "IX_Weights_LibraryId",
                 table: "Weights",
-                column: "WeightsLibraryId");
+                column: "LibraryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WeightsAssets_WeightsId",

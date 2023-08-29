@@ -211,15 +211,15 @@ namespace SightKeeper.Data.Migrations
                     b.Property<uint>("Epoch")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Size")
+                    b.Property<int>("LibraryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("WeightsLibraryId")
+                    b.Property<int>("Size")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WeightsLibraryId");
+                    b.HasIndex("LibraryId");
 
                     b.ToTable("Weights");
                 });
@@ -372,9 +372,13 @@ namespace SightKeeper.Data.Migrations
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Weights", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.WeightsLibrary", null)
+                    b.HasOne("SightKeeper.Domain.Model.WeightsLibrary", "Library")
                         .WithMany("Weights")
-                        .HasForeignKey("WeightsLibraryId");
+                        .HasForeignKey("LibraryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Library");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.WeightsLibrary", b =>

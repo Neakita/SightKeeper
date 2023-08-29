@@ -18,11 +18,10 @@ public sealed class FakeWeightsEditorViewModel : IWeightsEditorViewModel
 
     public FakeWeightsEditorViewModel()
     {
-        Weights = new[]
-        {
-            new Weights(Array.Empty<byte>(), ModelSize.Nano, 100, 1.234f, 0.123f, 2.43f, Array.Empty<Asset>()),
-            new Weights(Array.Empty<byte>(), ModelSize.Medium, 1000, 1.2234f, 0.1123f, 2.433f, Array.Empty<Asset>())
-        };
+        DataSet dataSet = new("Mock data set");
+        dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), ModelSize.Nano, 100, 1.234f, 0.123f, 2.43f, Array.Empty<Asset>());
+        dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), ModelSize.Medium, 1000, 1.2234f, 0.1123f, 2.433f, Array.Empty<Asset>());
+        Weights = dataSet.WeightsLibrary.Weights;
     }
     
     public Task SetLibrary(WeightsLibrary library, CancellationToken cancellationToken = default)
