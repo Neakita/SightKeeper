@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Input;
+using System.Windows.Input;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
@@ -13,7 +13,7 @@ public interface IRegisteredGamesViewModel
     Game? SelectedToAddGame { get; set; }
     Game? SelectedExistingGame { get; set; }
     
-    IAsyncRelayCommand AddGameCommand { get; }
-    IAsyncRelayCommand DeleteGameCommand { get; }
-    IRelayCommand RefreshAvailableToAddGamesCommand { get; }
+    ICommand AddGameCommand { get; }
+    ICommand DeleteGameCommand { get; }
+    ICommand RefreshAvailableToAddGamesCommand { get; }
 }

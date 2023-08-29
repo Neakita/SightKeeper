@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Avalonia.ViewModels.Elements;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
+public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatorViewModel
 {
-	public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
+	public IReadOnlyCollection<DataSetViewModel> DataSetViewModels { get; }
 
 	public AnnotatorScreenshotsViewModel Screenshots { get; }
 
@@ -30,7 +30,7 @@ public sealed partial class AnnotatorViewModel : ViewModel, IAnnotatingViewModel
 		DrawerViewModel = drawerViewModel;
 		screenshoterViewModel.IsEnabledChanged.Subscribe(_ =>
 			OnPropertyChanged(nameof(CanChangeSelectedDataSet)));
-		DataSets = dataSetsListViewModel.DataSets;
+		DataSetViewModels = dataSetsListViewModel.DataSets;
 	}
 
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;

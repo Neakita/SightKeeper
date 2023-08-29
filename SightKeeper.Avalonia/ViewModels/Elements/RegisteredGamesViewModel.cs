@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -37,6 +38,7 @@ public sealed partial class RegisteredGamesViewModel : ViewModel, IRegisteredGam
 		Debug.WriteLine($"Changed from {oldValue} to {newValue}");
 	}
 
+	ICommand IRegisteredGamesViewModel.AddGameCommand => AddGameCommand;
 	[RelayCommand(CanExecute = nameof(CanAddGame))]
 	private async Task AddGame(CancellationToken cancellationToken)
 	{
@@ -46,6 +48,7 @@ public sealed partial class RegisteredGamesViewModel : ViewModel, IRegisteredGam
 		OnPropertyChanged(nameof(AvailableToAddGames));
 	}
 
+	ICommand IRegisteredGamesViewModel.DeleteGameCommand => DeleteGameCommand;
 	[RelayCommand(CanExecute = nameof(CanDeleteGame))]
 	private async Task DeleteGame(CancellationToken cancellationToken)
 	{
@@ -55,6 +58,7 @@ public sealed partial class RegisteredGamesViewModel : ViewModel, IRegisteredGam
 		OnPropertyChanged(nameof(AvailableToAddGames));
 	}
 
+	ICommand IRegisteredGamesViewModel.RefreshAvailableToAddGamesCommand => RefreshAvailableToAddGamesCommand;
 	[RelayCommand]
 	private void RefreshAvailableToAddGames()
 	{

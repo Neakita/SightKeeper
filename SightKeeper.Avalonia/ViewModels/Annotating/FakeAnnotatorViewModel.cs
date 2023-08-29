@@ -1,67 +1,63 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
-using SightKeeper.Application.Annotating;
+using System.Linq;
+using NSubstitute;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class FakeAnnotatorViewModel : IAnnotatingViewModel
+public sealed class FakeAnnotatorViewModel : IAnnotatorViewModel
 {
-    public ReadOnlyObservableCollection<DataSetViewModel> DataSets => new(new ObservableCollection<DataSetViewModel>
+    public IReadOnlyCollection<DataSetViewModel> DataSetViewModels
     {
-        new(new DataSet("Some data set")),
-        new(new DataSet("Another data set"))
-    });
+        get
+        {
+            var dataSet = new DataSet("Some data set");
+            dataSet.CreateItemClass("Class 1");
+            dataSet.CreateItemClass("Class 2");
+            return new DataSetViewModel[]
+            {
+                new(dataSet),
+                new(new DataSet("Another data set"))
+            };
+        }
+    }
 
     public DataSetViewModel? SelectedDataSet { get; set; }
 
     public bool CanChangeSelectedDataSet => true;
-    public AnnotatorScreenshotsViewModel Screenshots => new(new MockScreenshotImageLoader(), new MockScreenshotsDataAccess());
+    public AnnotatorScreenshotsViewModel Screenshots => Substitute.For<AnnotatorScreenshotsViewModel>();
 
-    public ScreenshoterViewModel Screenshoter => new(new MockStreamDataSetScreenshoter());
-    public AnnotatorToolsViewModel ToolsViewModel { get; } = null;
-    public DrawerViewModel DrawerViewModel { get; } = null;
+    public ScreenshoterViewModel Screenshoter => Substitute.For<ScreenshoterViewModel>();
 
-    private sealed class MockStreamDataSetScreenshoter : StreamDataSetScreenshoter
+    public AnnotatorToolsViewModel ToolsViewModel
     {
-        public DataSet? DataSet { get; set; }
-        public bool IsEnabled { get; set; }
-        public byte ScreenshotsPerSecond { get; set; }
-    }
-    
-    private sealed class MockScreenshotImageLoader : ScreenshotImageLoader
-    {
-        public Image Load(Screenshot screenshot)
+        get
         {
-            return null;
-        }
-
-        public Task<Image> LoadAsync(Screenshot screenshot, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
+            var substitute = Substitute.For<AnnotatorToolsViewModel>();
+            substitute.ItemClasses.Returns(DataSetViewModels.First().ItemClasses);
+            return substitute;
         }
     }
-    
-    private sealed class MockScreenshotsDataAccess : ScreenshotsDataAccess
+
+    public DrawerViewModel DrawerViewModel
     {
-        public Task Load(ScreenshotsLibrary library, CancellationToken cancellationToken)
+        get
         {
-            return Task.CompletedTask;
-        }
-
-        public Task LoadAsync(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
-        {
-            throw new NotSupportedException();
-        }
-
-        public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken)
-        {
-            throw new NotSupportedException();
+            var dataSet = DataSetViewModels.First().DataSet;
+            var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+            var asset = dataSet.MakeAsset(screenshot);
+            var itemClass = dataSet.CreateItemClass("Class 1");
+            var item = asset.CreateItem(itemClass, new Bounding(0.1f, 0.1f, 0.5f, 0.3f));
+            var substitute = Substitute.For<DrawerViewModel>();
+            substitute.Items.Returns(new ObservableCollection<DetectorItemViewModel>()
+            {
+                new(item, Substitute.For<DetectorItemResizer>(), substitute)
+            });
+            return substitute;
         }
     }
 }

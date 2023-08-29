@@ -20,12 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="System.Windows.Forms">
-        <HintPath>C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\6.0.11\System.Windows.Forms.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
       <ProjectReference Include="..\SightKeeper.Domain.Model\SightKeeper.Domain.Model.csproj" />
       <ProjectReference Include="..\SightKeeper.Domain.Services\SightKeeper.Domain.Services.csproj" />

@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.Detector;
+﻿using System.Diagnostics.CodeAnalysis;
+using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Domain.Model.Common;
 
@@ -19,8 +20,11 @@ public sealed class ItemClass
 
 	private readonly List<DetectorItem> _items;
 
+	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	private ItemClass()
 	{
-		_items = new List<DetectorItem>();
+		DataSet = null!;
+		Name = null!;
+		_items = null!;
 	}
 }
