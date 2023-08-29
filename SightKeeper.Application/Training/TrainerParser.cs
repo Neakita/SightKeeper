@@ -8,14 +8,9 @@ public static class TrainerParser
 {
     public static void Parse(
         IObservable<string> stream,
-        out IObservable<string> outputDirectoryName,
-        out IObservable<TrainingProgress> trainingProgress)
-    {
-        outputDirectoryName = stream.Select(content => TrainDirectoryNameRegex.Match(content)).FirstAsync(match => match.Success).Select(match => match.Value);
+        out IObservable<TrainingProgress> trainingProgress) =>
         trainingProgress = stream.Where(content => TrainingProgressLineRegex.IsMatch(content)).Select(ParseTrainingProgress);
-    }
 
-    private static readonly Regex TrainDirectoryNameRegex = new(@"(?<=Runs\\detect\\)train\d*", RegexOptions.Compiled);
     private static readonly Regex TrainingProgressLineRegex = new(@" *\d+/\d+ *.*G *\d+(\.\d+) * \d+(\.\d+) * \d+(\.\d+) * \d* * \d*:.*", RegexOptions.Compiled);
     private static readonly Regex CurrentEpochRegex = new(@"(?<=^ *)\d+(?=/)", RegexOptions.Compiled);
     private static readonly Regex FloatingPointNumbersRegex = new(@"\d+(\.\d+)", RegexOptions.Compiled);
