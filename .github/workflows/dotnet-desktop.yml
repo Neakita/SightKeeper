@@ -24,5 +24,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: buildresult-${{ matrix.configuration }}
-          path: SightKeeper.Avalonia/bin/${{ matrix.configuration }}
+          name: SightKeeper-${{ matrix.configuration }}
+          path: SightKeeper.Avalonia/bin/${{ matrix.configuration }}/net7.0-windows
