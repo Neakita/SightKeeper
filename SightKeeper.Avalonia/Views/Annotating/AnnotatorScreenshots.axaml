@@ -23,8 +23,8 @@
         <ListBox Name="ScreenshotsListBox"
                  Grid.Row="2"
                  ItemsSource="{Binding Screenshots}"
-                 SelectedItem="{Binding SelectedScreenshot}"
-                 SelectedIndex="{Binding SelectedScreenshotIndex}">
+                 SelectedItem="{Binding SelectedScreenshotViewModel.Value}"
+                 SelectedIndex="{Binding SelectedScreenshotViewModel.SelectedScreenshotIndex}">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="1"/>

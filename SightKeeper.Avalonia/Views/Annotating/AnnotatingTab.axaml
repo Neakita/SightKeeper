@@ -27,7 +27,7 @@
         <Grid Grid.Column="4" RowDefinitions="Auto Auto *">
             <ComboBox Grid.Row="0"
                       ItemsSource="{Binding DataSetViewModels}"
-                      SelectedItem="{Binding SelectedDataSet}"
+                      SelectedItem="{Binding SelectedDataSet.Value}"
                       HorizontalAlignment="Stretch"
                       PlaceholderText="Dataset"
                       IsEnabled="{Binding CanChangeSelectedDataSet}">

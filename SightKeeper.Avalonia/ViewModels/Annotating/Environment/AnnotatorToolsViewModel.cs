@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model.Common;
 
@@ -18,41 +14,36 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
 {
-    public DataSetViewModel? DataSetViewModel
-    {
-        get => _dataSetViewModel;
-        set
-        {
-            if (_dataSetViewModel == value)
-                return;
-            _dataSetViewModel = value;
-            ItemClasses = _dataSetViewModel?.ItemClasses ?? Array.Empty<ItemClass>();
-        }
-    }
-
-    public IObservable<Unit> UnMarkSelectedScreenshotAsAssetExecuted =>
-        _unMarkSelectedScreenshotAsAssetExecuted.AsObservable();
-
-    public IObservable<DetectorItemViewModel> DeleteItemExecuted => _deleteItemExecuted;
-
     public IReadOnlyCollection<ItemClass> ItemClasses
     {
         get => _itemClasses;
         private set => SetProperty(ref _itemClasses, value);
     }
 
-    public AnnotatorToolsViewModel(AnnotatorScreenshotsViewModel screenshotsViewModel, DetectorAnnotator annotator)
+    public AnnotatorToolsViewModel(
+        DetectorAnnotator annotator,
+        SelectedDataSetViewModel selectedDataSetViewModel,
+        SelectedScreenshotViewModel selectedScreenshotViewModel,
+        AnnotatorScreenshotsViewModel screenshotsViewModel)
     {
-        _screenshotsViewModel = screenshotsViewModel;
         _annotator = annotator;
-        CompositeDisposable disposable = new();
-        _disposable = disposable;
-        _screenshotsViewModel.SelectedScreenshotChanged.Subscribe(OnScreenshotSelected).DisposeWith(disposable);
+        _selectedScreenshotViewModel = selectedScreenshotViewModel;
+        _screenshotsViewModel = screenshotsViewModel;
+        selectedScreenshotViewModel.ObservableValue
+            .Subscribe(OnScreenshotSelected)
+            .DisposeWith(_disposable);
+        selectedDataSetViewModel.ObservableValue
+            .Subscribe(newValue => ItemClasses = newValue?.ItemClasses ?? Array.Empty<ItemClass>())
+            .DisposeWithEx(_disposable);
         DetectorItemViewModel.ItemClassChanged.Subscribe(item =>
         {
             Guard.IsNotNull(item.Item);
             annotator.ChangeItemClass(item.Item, item.ItemClass);
-        }).DisposeWith(disposable);
+        }).DisposeWith(_disposable);
+        _selectedScreenshotViewModel.NotifyCanExecuteChanged(
+            MarkSelectedScreenshotAsAssetCommand,
+            UnMarkSelectedScreenshotAsAssetCommand,
+            DeleteScreenshotCommand);
     }
 
     public void ScrollItemClass(bool reverse)
@@ -69,11 +60,10 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     }
     
     
-    private readonly AnnotatorScreenshotsViewModel _screenshotsViewModel;
     private readonly DetectorAnnotator _annotator;
-    private readonly IDisposable _disposable;
-    private readonly Subject<Unit> _unMarkSelectedScreenshotAsAssetExecuted = new();
-    private readonly Subject<DetectorItemViewModel> _deleteItemExecuted = new();
+    private readonly SelectedScreenshotViewModel _selectedScreenshotViewModel;
+    private readonly AnnotatorScreenshotsViewModel _screenshotsViewModel;
+    private readonly CompositeDisposable _disposable = new();
 
     private IDisposable? _selectedScreenshotDisposable;
 
@@ -84,46 +74,46 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
     private DetectorItemViewModel? _selectedItem;
 
-    private DataSetViewModel? _dataSetViewModel;
     private IReadOnlyCollection<ItemClass> _itemClasses = Array.Empty<ItemClass>();
 
 
     [RelayCommand(CanExecute = nameof(CanMarkSelectedScreenshotAsAsset))]
     private void MarkSelectedScreenshotAsAsset()
     {
-        var screenshot = _screenshotsViewModel.SelectedScreenshot;
+        var screenshot = _selectedScreenshotViewModel.Value;
         Guard.IsNotNull(screenshot);
         _annotator.MarkAsset(screenshot.Item);
         screenshot.NotifyIsAssetChanged();
     }
     private bool CanMarkSelectedScreenshotAsAsset() =>
-        _screenshotsViewModel.SelectedScreenshot?.IsAsset == false;
+        _selectedScreenshotViewModel.Value?.IsAsset == false;
 
     [RelayCommand(CanExecute = nameof(CanUnMarkSelectedScreenshotAsAsset))]
     private void UnMarkSelectedScreenshotAsAsset()
     {
-        var screenshot = _screenshotsViewModel.SelectedScreenshot;
+        var screenshot = _selectedScreenshotViewModel.Value;
         Guard.IsNotNull(screenshot);
         _annotator.UnMarkAsset(screenshot.Item);
-        _unMarkSelectedScreenshotAsAssetExecuted.OnNext(Unit.Default);
         screenshot.NotifyIsAssetChanged();
+        _selectedScreenshotViewModel.Items.Clear();
     }
     private bool CanUnMarkSelectedScreenshotAsAsset() =>
-        _screenshotsViewModel.SelectedScreenshot?.IsAsset == true;
+        _selectedScreenshotViewModel.Value?.IsAsset == true;
 
     [RelayCommand(CanExecute = nameof(CanDeleteScreenshot))]
     private void DeleteScreenshot()
     {
-        var screenshot = _screenshotsViewModel.SelectedScreenshot;
-        var screenshotIndex = _screenshotsViewModel.SelectedScreenshotIndex;
+        var screenshot = _selectedScreenshotViewModel.Value;
+        Guard.IsNotNull(_selectedScreenshotViewModel.SelectedScreenshotIndex);
+        var screenshotIndex = _selectedScreenshotViewModel.SelectedScreenshotIndex.Value;
         Guard.IsNotNull(screenshot);
         _annotator.DeleteScreenshot(screenshot.Item);
         var screenshots = _screenshotsViewModel.Screenshots;
         if (!screenshots.Any())
             return;
-        _screenshotsViewModel.SelectedScreenshotIndex = Math.Min(screenshotIndex, screenshots.Count - 1);
+        _selectedScreenshotViewModel.SelectedScreenshotIndex = Math.Min(screenshotIndex, screenshots.Count - 1);
     }
-    private bool CanDeleteScreenshot() => _screenshotsViewModel.SelectedScreenshot != null;
+    private bool CanDeleteScreenshot() => _selectedScreenshotViewModel.Value != null;
 
     [RelayCommand(CanExecute = nameof(CanDeleteItem))]
     private void DeleteItem()
@@ -132,7 +122,7 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
         Guard.IsNotNull(item);
         Guard.IsNotNull(item.Item);
         _annotator.DeleteItem(item.Item);
-        _deleteItemExecuted.OnNext(item);
+        _selectedScreenshotViewModel.Items.Remove(item);
     }
 
     private bool CanDeleteItem() => SelectedItem != null;
@@ -140,9 +130,6 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     private void OnScreenshotSelected(ScreenshotViewModel? screenshot)
     {
         _selectedScreenshotDisposable?.Dispose();
-        MarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
-        UnMarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
-        DeleteScreenshotCommand.NotifyCanExecuteChanged();
         if (screenshot == null)
             return;
         _selectedScreenshotDisposable = screenshot.WhenAnyValue(x => x.IsAsset).Subscribe(_ =>

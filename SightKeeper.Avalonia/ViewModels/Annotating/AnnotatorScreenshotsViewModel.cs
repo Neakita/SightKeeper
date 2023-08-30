@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
@@ -17,8 +16,8 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 {
+    public SelectedScreenshotViewModel SelectedScreenshotViewModel { get; }
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
-    public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
     public IReadOnlyList<ScreenshotViewModel> Screenshots { get; }
     public int? ScreenshotsCount => DataSet == null ? null : Screenshots.Count;
 
@@ -30,8 +29,9 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     [ObservableProperty] private SortingRule<Screenshot> _sortingRule;
 
-    public AnnotatorScreenshotsViewModel(ScreenshotImageLoader imageLoader, ScreenshotsDataAccess screenshotsDataAccess)
+    public AnnotatorScreenshotsViewModel(ScreenshotImageLoader imageLoader, ScreenshotsDataAccess screenshotsDataAccess, SelectedScreenshotViewModel selectedScreenshotViewModel)
     {
+        SelectedScreenshotViewModel = selectedScreenshotViewModel;
         _screenshotsDataAccess = screenshotsDataAccess;
         _sortingRule = SortingRules.First();
         var sortingRule = this.WhenAnyValue(viewModel => viewModel.SortingRule)
@@ -47,19 +47,16 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     public void ScrollScreenshot(bool reverse)
     {
-        if (Screenshots.Count <= 1)
+        if (Screenshots.Count <= 1 || SelectedScreenshotViewModel.SelectedScreenshotIndex == null)
             return;
-        SelectedScreenshotIndex = SelectedScreenshotIndex.Cycle(0, Screenshots.Count - 1, reverse);
+        SelectedScreenshotViewModel.SelectedScreenshotIndex = SelectedScreenshotViewModel.SelectedScreenshotIndex.Value.Cycle(0, Screenshots.Count - 1, reverse);
     }
 
     private readonly SourceList<Screenshot> _screenshots = new();
-    private readonly Subject<ScreenshotViewModel?> _selectedScreenshotChanged = new();
 
     [ObservableProperty, NotifyPropertyChangedFor(nameof(ScreenshotsCount))]
     private DataSet? _dataSet;
-    [ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
-    [ObservableProperty] private int _selectedScreenshotIndex;
-    
+
     private CompositeDisposable? _dataSetDisposable;
 
     partial void OnDataSetChanged(DataSet? value)
@@ -90,6 +87,4 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         _screenshots.Remove(removedScreenshot);
         OnPropertyChanged(nameof(ScreenshotsCount));
     }
-
-    partial void OnSelectedScreenshotChanged(ScreenshotViewModel? value) => _selectedScreenshotChanged.OnNext(value);
 }

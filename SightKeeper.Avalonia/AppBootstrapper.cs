@@ -128,6 +128,8 @@ public static class AppBootstrapper
 		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetEditingViewModel>();
 		builder.RegisterType<WeightsEditorViewModel>();
+		builder.RegisterType<SelectedDataSetViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<SelectedScreenshotViewModel>().InstancePerMainViewModel();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
