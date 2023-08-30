@@ -22,7 +22,8 @@ public sealed class Trainer
 	public async Task<Weights?> TrainFromScratchAsync(
 		Domain.Model.DataSet dataSet,
 		ModelSize size,
-		ushort epochs,
+		uint epochs,
+		IObserver<TrainingProgress> trainingProgressObserver,
 		CancellationToken cancellationToken = default)
 	{
 		PrepareDataDirectory();
@@ -32,6 +33,7 @@ public sealed class Trainer
 		CLITrainerArguments arguments = new(DataSetPath, size, epochs);
 		var outputStream = CLIExtensions.RunCLICommand(arguments.ToString(), cancellationToken);
 		TrainerParser.Parse(outputStream.WhereNotNull(), out var trainingProgress);
+		using var trainingProgressObserverDisposable = trainingProgress.Subscribe(trainingProgressObserver);
 		await runsDirectoryReplacement.DisposeAsync();
 		var lastProgress = await trainingProgress.LastAsync();
 		Log.Debug("Last progress: {Progress}", lastProgress);

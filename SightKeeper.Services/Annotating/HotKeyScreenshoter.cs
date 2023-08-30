@@ -82,7 +82,7 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
             while (hotKey.IsPressed)
             {
                 if (!_screenshoter.CanMakeScreenshot(out var message))
-                    Log.Information("Can't make screenshot: {Message}", message);
+                    Log.Verbose("Can't make screenshot: {Message}", message);
                 else
                 {
                     _screenshoter.MakeScreenshot();

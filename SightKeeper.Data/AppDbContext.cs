@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using SerilogTimings;
 using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
@@ -10,6 +11,9 @@ namespace SightKeeper.Data;
 
 public class AppDbContext : DbContext
 {
+	public DbSet<DataSet> DataSets { get; set; } = null!;
+	public DbSet<Game> Games { get; set; } = null!;
+	
 	public AppDbContext()
 	{
 		Log.Debug("Instantiated {Name}", nameof(AppDbContext));
@@ -20,20 +24,25 @@ public class AppDbContext : DbContext
 		Log.Debug("Instantiated {Name} with options {@Options}", nameof(AppDbContext), options);
 	}
 
-	public DbSet<DataSet> DataSets { get; set; } = null!;
-	public DbSet<Game> Games { get; set; } = null!;
+	public override void Dispose()
+	{
+		Log.Debug("Disposing {Name}", nameof(AppDbContext));
+		base.Dispose();
+	}
+
+	public override int SaveChanges(bool acceptAllChangesOnSuccess)
+	{
+		using var operation = Operation.Begin("Saving changes");
+		var result = base.SaveChanges(acceptAllChangesOnSuccess);
+		operation.Complete();
+		return result;
+	}
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		if (optionsBuilder.IsConfigured) return;
 		SetupLogging(optionsBuilder);
 		SetupSqlite(optionsBuilder);
-	}
-
-	public override void Dispose()
-	{
-		Log.Debug("Disposing {Name}", nameof(AppDbContext));
-		base.Dispose();
 	}
 
 	private static void SetupLogging(DbContextOptionsBuilder optionsBuilder)

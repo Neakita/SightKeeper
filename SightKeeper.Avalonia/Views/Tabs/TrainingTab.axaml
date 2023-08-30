@@ -24,6 +24,11 @@
                   IsEnabled="{Binding !IsTraining}"
                   PlaceholderText="Config"/>
         
+        <NumericUpDown Value="{Binding Epochs}"
+                       Minimum="100"
+                       Maximum="1000000"
+                       Increment="100"/>
+        
         <Button Content="{icons:MaterialIconExt Play}"
                 Command="{Binding StartTrainingCommand}"/>
         
@@ -33,7 +38,7 @@
         
         <TextBlock Text="{Binding Progress^}"/>
         
-        <ProgressBar Value="{Binding Completion^}"/>
+        <ProgressBar Value="{Binding Completion^}" Maximum="1"/>
         
         <TextBlock Text="{Binding Completion^, StringFormat=P}"/>
         
