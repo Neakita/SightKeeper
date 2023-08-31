@@ -14,25 +14,28 @@ public sealed class CLITrainerArguments
         { ModelSize.XLarge, "yolov8x" }
     };
     
-    public string Data { get; set; } = string.Empty;
-    public string Model { get; set; } = string.Empty;
-    public uint Epochs { get; set; } = 100;
+    public string Data { get; set; }
+    public string Model { get; set; }
+    public uint Epochs { get; set; }
+    public ushort ImageSize { get; set; }
     public bool Resume { get; set; }
-    public bool AMP { get; set; } = true;
+    public bool AMP { get; set; }
 
-    public CLITrainerArguments(string data, string model, uint epochs, bool resume = false, bool amp = true)
+    public CLITrainerArguments(string data, string model, uint epochs, ushort imageSize, bool resume = false, bool amp = true)
     {
         Data = data;
         Model = model;
         Epochs = epochs;
+        ImageSize = imageSize;
         Resume = resume;
         AMP = amp;
     }
 
-    public CLITrainerArguments(string data, ModelSize modelSize, uint epochs, bool resume = false, bool amp = true)
+    public CLITrainerArguments(string data, ModelSize modelSize, uint epochs, ushort imageSize, bool resume = false, bool amp = true)
     {
         Data = data;
         Model = ModelSizes[modelSize];
+        ImageSize = imageSize;
         Epochs = epochs;
         Resume = resume;
         AMP = amp;
@@ -47,6 +50,7 @@ public sealed class CLITrainerArguments
         yield return "yolo detect train";
         yield return $"data={Data}";
         yield return $"model={Model}";
+        yield return $"imgsz={ImageSize}";
         yield return $"epochs={Epochs}";
         if (Resume)
             yield return "resume=true";

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls.Documents;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,9 +18,10 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs;
 public sealed partial class TrainingViewModel : ViewModel
 {
     private readonly Trainer _trainer;
-    public IObservable<TrainingProgress> Progress => _trainingProgress;
-    public IObservable<float> Completion => Progress.Select(progress => (float)progress.CurrentEpoch / Epochs);
+    public IObservable<TrainingProgress?> Progress => _progress;
+    public IObservable<float?> Completion => Progress.Select(progress => (float?)progress?.CurrentEpoch / Epochs);
     public IReadOnlyCollection<DataSetViewModel> AvailableDataSets { get; }
+    public InlineCollection InlineCollection { get; } = new();
 
     public uint Epochs
     {
@@ -58,13 +61,17 @@ public sealed partial class TrainingViewModel : ViewModel
     {
         Guard.IsNotNull(SelectedDataSet);
         Guard.IsNotNull(SelectedModelSize);
-        await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs, _trainingProgress, cancellationToken);
+        IsTraining = true;
+        await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs, Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+        _progress.OnNext(null);
+        IsTraining = false;
+        InlineCollection.Clear();
     }
 
     public bool CanStartTraining() => SelectedDataSet != null && SelectedModelSize != null;
 
     
-    private readonly Subject<TrainingProgress> _trainingProgress = new();
+    private readonly BehaviorSubject<TrainingProgress?> _progress = new(null);
     private bool _isTraining;
-    private uint _epochs;
+    private uint _epochs = 100;
 }

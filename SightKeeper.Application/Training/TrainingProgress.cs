@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Application.Training;
 
-public readonly struct TrainingProgress
+public sealed class TrainingProgress
 {
     public uint CurrentEpoch { get; }
     public float BoundingLoss { get; }

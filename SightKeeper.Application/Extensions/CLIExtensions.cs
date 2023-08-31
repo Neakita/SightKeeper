@@ -19,7 +19,7 @@ public static class CLIExtensions
         process.EnableRaisingEvents = true;
         process.StartInfo = StartInfo;
         process.Start();
-        cancellationToken.Register(() => process.Close());
+        cancellationToken.Register(() => process.Kill());
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
         _ = process.PassArguments(arguments);

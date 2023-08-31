@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System.Reactive;
+using System.Reactive.Linq;
 using Serilog;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model;
@@ -30,12 +31,18 @@ public sealed class Trainer
 		await _imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
 		await ExportDataSet(dataSet, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath));
-		CLITrainerArguments arguments = new(DataSetPath, size, epochs);
+		CLITrainerArguments arguments = new(DataSetPath, size, epochs, dataSet.Resolution);
 		var outputStream = CLIExtensions.RunCLICommand(arguments.ToString(), cancellationToken);
 		TrainerParser.Parse(outputStream.WhereNotNull(), out var trainingProgress);
-		using var trainingProgressObserverDisposable = trainingProgress.Subscribe(trainingProgressObserver);
+		using var trainingProgressObserverDisposable = trainingProgress
+			.Materialize()
+			.Where(notification => notification.Kind != NotificationKind.OnCompleted)
+			.Dematerialize()
+			.Subscribe(trainingProgressObserver);
 		await runsDirectoryReplacement.DisposeAsync();
-		var lastProgress = await trainingProgress.LastAsync();
+		var lastProgress = await trainingProgress.LastOrDefaultAsync();
+		if (lastProgress == null)
+			return null;
 		Log.Debug("Last progress: {Progress}", lastProgress);
 		return await SaveWeights(dataSet, lastProgress, size);
 	}
@@ -50,7 +57,7 @@ public sealed class Trainer
 	private readonly ImagesExporter _imagesExporter;
 	private readonly DataSetConfigurationExporter _dataSetConfigurationExporter;
 	private readonly WeightsDataAccess _weightsDataAccess;
-
+	
 	private void PrepareDataDirectory()
 	{
 		Directory.Delete(DataDirectoryPath, true);

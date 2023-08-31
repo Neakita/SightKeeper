@@ -35,12 +35,19 @@
         <Button Content="{icons:MaterialIconExt Stop}"
                 Command="{Binding StartTrainingCancelCommand}"/>
         
+        <StackPanel IsVisible="{Binding IsTraining}">
         
-        <TextBlock Text="{Binding Progress^}"/>
+            <TextBlock Text="{Binding Progress^}"/>
         
-        <ProgressBar Value="{Binding Completion^}" Maximum="1"/>
+            <ProgressBar Value="{Binding Completion^}"
+                         Maximum="1"
+                         IsIndeterminate="{Binding !Completion^}"/>
         
-        <TextBlock Text="{Binding Completion^, StringFormat=P}"/>
+            <TextBlock Text="{Binding Completion^, StringFormat=P}"/>
+            
+            <TextBlock Inlines="{Binding InlineCollection}"/>
+
+        </StackPanel>
         
     </StackPanel>
 </UserControl>
