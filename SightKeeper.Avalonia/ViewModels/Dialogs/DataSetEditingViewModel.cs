@@ -58,6 +58,8 @@ public sealed partial class DataSetEditingViewModel : ValidatableViewModel<DataS
         Resolution = dataSet.Resolution;
         Game = dataSet.Game;
         _assetsDataAccess.LoadAssets(dataSet);
+        foreach (var asset in dataSet.Assets)
+            _assetsDataAccess.LoadItems(asset);
         _deletionBlackListItemClasses = dataSet.ItemClasses
             .Where(itemClass => !dataSet.CanDeleteItemClass(itemClass, out _))
             .Select(itemClass => itemClass.Name)
