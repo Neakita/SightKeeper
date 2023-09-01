@@ -1,5 +1,4 @@
-﻿using System.Reactive;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using Serilog;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model;
@@ -36,9 +35,7 @@ public sealed class Trainer
 		var outputStream = CLIExtensions.RunCLICommand(arguments.ToString(), _logger, cancellationToken);
 		TrainerParser.Parse(outputStream.WhereNotNull(), out var trainingProgress);
 		using var trainingProgressObserverDisposable = trainingProgress
-			.Materialize()
-			.Where(notification => notification.Kind != NotificationKind.OnCompleted)
-			.Dematerialize()
+			.IgnoreCompletion()
 			.Subscribe(trainingProgressObserver);
 		await runsDirectoryReplacement.DisposeAsync();
 		var lastProgress = await trainingProgress.LastOrDefaultAsync();
