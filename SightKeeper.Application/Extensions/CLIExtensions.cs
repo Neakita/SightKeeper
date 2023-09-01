@@ -13,6 +13,7 @@ public static class CLIExtensions
         RedirectStandardOutput = true,
         RedirectStandardError = true,
         UseShellExecute = false,
+        CreateNoWindow = true
     };
     
     public static IObservable<string?> RunCLICommand(string arguments, ILogger? logger = null, CancellationToken cancellationToken = default)
