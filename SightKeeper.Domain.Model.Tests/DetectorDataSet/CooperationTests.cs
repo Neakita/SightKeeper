@@ -20,7 +20,7 @@ public sealed class CooperationTests
     public void ShouldNotDeleteItemClassWithAssetItems()
     {
         var dataSet = DomainTestsHelper.NewDataSet;
-        var itemClass = dataSet.CreateItemClass("Item class");
+        var itemClass = dataSet.CreateItemClass("Item class", 0);
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset = dataSet.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new Bounding());

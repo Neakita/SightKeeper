@@ -71,7 +71,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
         const string itemClassName = "Item class";
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
-        dataSet.CreateItemClass(itemClassName);
+        dataSet.CreateItemClass(itemClassName, 0);
         var newItemClasses = dataSet.ItemClasses.Select(itemClass => itemClass.Name).Append(itemClassName).ToList();
         DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
         await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetChanges));
@@ -84,7 +84,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
         const string itemClassName = "Item class";
-        dataSet.CreateItemClass(itemClassName);
+        dataSet.CreateItemClass(itemClassName, 0);
         DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
         await editor.ApplyChanges(dataSetChanges);
         dataSet.ItemClasses.Should().BeEmpty();
@@ -97,8 +97,8 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var dataSet = DomainTestsHelper.NewDataSet;
         const string itemClassName1 = "Item class 1";
         const string itemClassName2 = "Item class 2";
-        var itemClass1 = dataSet.CreateItemClass(itemClassName1);
-        dataSet.CreateItemClass(itemClassName2);
+        var itemClass1 = dataSet.CreateItemClass(itemClassName1, 0);
+        dataSet.CreateItemClass(itemClassName2, 0);
         DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass> { itemClass1 }, dataSet.Game);
         await editor.ApplyChanges(dataSetChanges);
         dataSet.ItemClasses.Should().ContainSingle(itemClass => itemClass == itemClass1);
@@ -109,7 +109,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
     {
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
-        var itemClass = dataSet.CreateItemClass("Item class");
+        var itemClass = dataSet.CreateItemClass("Item class", 0);
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset = dataSet.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new Bounding());

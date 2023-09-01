@@ -22,7 +22,7 @@ public sealed class DbDataSetCreator : DataSetCreator
         var dataSet = new Domain.Model.DataSet(newDataSetInfo.Name, newDataSetInfo.Resolution);
         dataSet.Description = newDataSetInfo.Description;
         foreach (var itemClass in newDataSetInfo.ItemClasses)
-            dataSet.CreateItemClass(itemClass);
+            dataSet.CreateItemClass(itemClass, 0);
         dataSet.Game = newDataSetInfo.Game;
         _dbContext.DataSets.Add(dataSet);
         await _dbContext.SaveChangesAsync(cancellationToken);

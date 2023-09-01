@@ -36,7 +36,7 @@ public sealed class DbDataSetEditor : DataSetEditor
         foreach (var deletedItemClass in deletedItemClasses)
             dataSet.DeleteItemClass(deletedItemClass);
         foreach (var addedItemClass in addedItemClasses)
-            dataSet.CreateItemClass(addedItemClass);
+            dataSet.CreateItemClass(addedItemClass, 0);
     }
 
     private static IEnumerable<ItemClass> GetDeletedItemClasses(Domain.Model.DataSet dataSet, IReadOnlyCollection<string> itemClasses) =>

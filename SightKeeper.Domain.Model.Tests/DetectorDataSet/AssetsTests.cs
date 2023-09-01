@@ -13,7 +13,7 @@ public sealed class AssetsTests
         var dataSet = DomainTestsHelper.NewDataSet;
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset = dataSet.MakeAsset(screenshot);
-        var itemClass = dataSet.CreateItemClass("Item class");
+        var itemClass = dataSet.CreateItemClass("Item class", 0);
         var item = asset.CreateItem(itemClass, new Bounding());
         asset.Items.Should().Contain(item);
         asset.DeleteItem(item);
@@ -28,7 +28,7 @@ public sealed class AssetsTests
         var screenshot2 =  dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset1 = dataSet.MakeAsset(screenshot1);
         var asset2 = dataSet.MakeAsset(screenshot2);
-        var itemClass = dataSet.CreateItemClass("Item class");
+        var itemClass = dataSet.CreateItemClass("Item class", 0);
         var item = asset1.CreateItem(itemClass, new Bounding());
         Assert.Throws<DetectorItemException>(() => asset2.DeleteItem(item));
     }

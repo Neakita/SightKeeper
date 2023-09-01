@@ -13,8 +13,8 @@ public sealed class FakeAnnotatorViewModel : IAnnotatorViewModel
         get
         {
             var dataSet = new DataSet("Some data set");
-            dataSet.CreateItemClass("Class 1");
-            dataSet.CreateItemClass("Class 2");
+            dataSet.CreateItemClass("Class 1", 0);
+            dataSet.CreateItemClass("Class 2", 0);
             return new DataSetViewModel[]
             {
                 new(dataSet),

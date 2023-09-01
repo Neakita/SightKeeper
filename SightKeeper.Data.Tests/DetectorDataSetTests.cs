@@ -30,7 +30,7 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 		var dataSet = DomainTestsHelper.NewDataSet;
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 		var asset = dataSet.MakeAsset(screenshot);
-		var itemClass = dataSet.CreateItemClass("Test item class");
+		var itemClass = dataSet.CreateItemClass("Test item class", 0);
 		var item = asset.CreateItem(itemClass, new Bounding());
 		
 		dbContext.DataSets.Add(dataSet);
@@ -50,7 +50,7 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 		var dataSet = DomainTestsHelper.NewDataSet;
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 		var asset = dataSet.MakeAsset(screenshot);
-		var itemClass = dataSet.CreateItemClass("Test item class");
+		var itemClass = dataSet.CreateItemClass("Test item class", 0);
 		asset.CreateItem(itemClass, new Bounding(0, 0, 1, 1));
 		dbContext.DataSets.Add(dataSet);
 		dbContext.SaveChanges();

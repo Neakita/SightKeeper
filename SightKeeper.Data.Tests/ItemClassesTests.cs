@@ -11,7 +11,7 @@ public sealed class ItemClassesTests : DbRelatedTests
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
 		var dataSet = DomainTestsHelper.NewDataSet;
-		var itemClass = dataSet.CreateItemClass("Test item class");
+		var itemClass = dataSet.CreateItemClass("Test item class", 0);
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
 		var asset = dataSet.MakeAsset(screenshot);
 		var item = asset.CreateItem(itemClass, new Bounding());

@@ -9,7 +9,7 @@ public sealed class ItemClassesTests
     {
         const string itemClassName = "Test item class";
         var dataSet = DomainTestsHelper.NewDataSet;
-        dataSet.CreateItemClass(itemClassName);
-        Assert.Throws<ArgumentException>(() => dataSet.CreateItemClass(itemClassName));
+        dataSet.CreateItemClass(itemClassName, 0);
+        Assert.Throws<ArgumentException>(() => dataSet.CreateItemClass(itemClassName, 0));
     }
 }

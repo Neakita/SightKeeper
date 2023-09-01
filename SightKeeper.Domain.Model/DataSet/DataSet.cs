@@ -44,11 +44,11 @@ public sealed class DataSet
 	
 	public IReadOnlyCollection<ItemClass> ItemClasses => _itemClasses;
 	
-	public ItemClass CreateItemClass(string name)
+	public ItemClass CreateItemClass(string name, uint color)
 	{
 		if (_itemClasses.Any(itemClass => itemClass.Name == name))
 			ThrowHelper.ThrowArgumentException($"Item class with name \"{name}\" already exists");
-		ItemClass newItemClass = new(this, name);
+		ItemClass newItemClass = new(this, name, color);
 		_itemClasses.Add(newItemClass);
 		return newItemClass;
 	}

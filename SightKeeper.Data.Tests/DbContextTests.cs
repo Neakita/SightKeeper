@@ -17,7 +17,7 @@ public sealed class DbContextTests
         var screenshotForAsset = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset = dataSet.MakeAsset(screenshotForAsset);
-        var itemClass = dataSet.CreateItemClass("Test item class");
+        var itemClass = dataSet.CreateItemClass("Test item class", 0);
         asset.CreateItem(itemClass, new Bounding(0, 0, 1, 1));
         dbContext.DataSets.Add(dataSet);
         dbContext.SaveChanges();

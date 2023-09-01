@@ -7,12 +7,14 @@ public sealed class ItemClass
 {
 	public DataSet DataSet { get; private set; }
 	public string Name { get; set; }
+	public uint Color { get; set; }
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 
-	internal ItemClass(DataSet dataSet, string name)
+	internal ItemClass(DataSet dataSet, string name, uint color)
 	{
 		DataSet = dataSet;
 		Name = name;
+		Color = color;
 		_items = new List<DetectorItem>();
 	}
 
