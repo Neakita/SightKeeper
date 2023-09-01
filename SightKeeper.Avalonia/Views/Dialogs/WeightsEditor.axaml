@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs"
              xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Dialogs.WeightsEditor"
              x:DataType="dialogs:IWeightsEditorViewModel"
@@ -16,11 +16,12 @@
     
     <Grid RowDefinitions="Auto *">
         <Button Grid.Row="0"
-                Content="{avalonia:MaterialIconExt Close}"
+                Content="{icons:MaterialIconExt TrashCan}"
                 HorizontalAlignment="Right"
-                Command="{Binding CloseCommand}"/>
+                Command="{Binding DeleteSelectedWeightsCommand}"/>
         <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Weights}">
+                  ItemsSource="{Binding Weights}"
+                  SelectedItem="{Binding SelectedWeights}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Size"
                                     Binding="{Binding Size}"/>

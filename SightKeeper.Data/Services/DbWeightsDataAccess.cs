@@ -30,6 +30,12 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         await _dbContext.SaveChangesAsync(cancellationToken);
         return weights;
     }
-    
+
+    public Task DeleteWeights(Weights weights, CancellationToken cancellationToken)
+    {
+        weights.Library.RemoveWeights(weights);
+        return _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
     private readonly AppDbContext _dbContext;
 }

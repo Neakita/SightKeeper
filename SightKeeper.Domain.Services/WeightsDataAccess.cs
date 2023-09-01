@@ -17,4 +17,6 @@ public interface WeightsDataAccess
         float deformationLoss,
         IEnumerable<Asset> assets,
         CancellationToken cancellationToken = default);
+
+    Task DeleteWeights(Weights weights, CancellationToken cancellationToken);
 }

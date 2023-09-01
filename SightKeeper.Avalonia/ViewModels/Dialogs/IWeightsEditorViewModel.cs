@@ -9,6 +9,7 @@ namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 public interface IWeightsEditorViewModel
 {
     IReadOnlyCollection<Weights> Weights { get; }
-    ICommand CloseCommand { get; }
+    Weights? SelectedWeights { get; set; }
+    ICommand DeleteSelectedWeightsCommand { get; }
     Task SetLibrary(WeightsLibrary library, CancellationToken cancellationToken = default);
 }

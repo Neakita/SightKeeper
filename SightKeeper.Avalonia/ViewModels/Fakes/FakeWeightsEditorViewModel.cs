@@ -13,7 +13,8 @@ namespace SightKeeper.Avalonia.ViewModels.Fakes;
 public sealed class FakeWeightsEditorViewModel : IWeightsEditorViewModel
 {
     public IReadOnlyCollection<Weights> Weights { get; }
-    public ICommand CloseCommand { get; } = Substitute.For<ICommand>();
+    public Weights? SelectedWeights { get; set; }
+    public ICommand DeleteSelectedWeightsCommand { get; } = Substitute.For<ICommand>();
 
     public FakeWeightsEditorViewModel()
     {
@@ -22,7 +23,7 @@ public sealed class FakeWeightsEditorViewModel : IWeightsEditorViewModel
         dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), ModelSize.Medium, 1000, 1.2234f, 0.1123f, 2.433f, Array.Empty<Asset>());
         Weights = dataSet.WeightsLibrary.Weights;
     }
-    
+
     public Task SetLibrary(WeightsLibrary library, CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;

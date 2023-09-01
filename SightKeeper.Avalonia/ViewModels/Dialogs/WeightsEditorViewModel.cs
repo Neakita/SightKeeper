@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using SightKeeper.Domain.Model;
@@ -15,7 +16,6 @@ namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
 public sealed partial class WeightsEditorViewModel : ViewModel, IWeightsEditorViewModel, DialogViewModel
 {
-    public IObservable<Unit> CloseRequested => _closeRequested.AsObservable();
     public IReadOnlyCollection<Weights> Weights { get; }
 
     public WeightsEditorViewModel(WeightsDataAccess weightsDataAccess)
@@ -34,11 +34,19 @@ public sealed partial class WeightsEditorViewModel : ViewModel, IWeightsEditorVi
         _weightsSource.AddRange(library.Weights);
     }
 
-    private readonly Subject<Unit> _closeRequested = new();
     private readonly WeightsDataAccess _weightsDataAccess;
     private readonly SourceList<Weights> _weightsSource = new();
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteSelectedWeightsCommand))] private Weights? _selectedWeights;
 
-    ICommand IWeightsEditorViewModel.CloseCommand => CloseCommand;
-    [RelayCommand]
-    private void Close() => _closeRequested.OnNext(Unit.Default);
+    ICommand IWeightsEditorViewModel.DeleteSelectedWeightsCommand => DeleteSelectedWeightsCommand;
+    [RelayCommand(CanExecute = nameof(CanDeleteSelectedWeights))]
+    private async Task DeleteSelectedWeights(CancellationToken cancellationToken)
+    {
+        Guard.IsNotNull(SelectedWeights);
+        await _weightsDataAccess.DeleteWeights(SelectedWeights, cancellationToken);
+        _weightsSource.Remove(SelectedWeights);
+    }
+
+    private bool CanDeleteSelectedWeights() => SelectedWeights != null;
+    public IObservable<Unit> CloseRequested { get; } = Observable.Empty<Unit>();
 }

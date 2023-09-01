@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
@@ -26,7 +27,9 @@ public sealed class WeightsLibrary
         _weights.Add(weights);
         return weights;
     }
-	
+
+    public void RemoveWeights(Weights weights) => Guard.IsTrue(_weights.Remove(weights));
+
     private readonly List<Weights> _weights;
 
     private WeightsLibrary()
