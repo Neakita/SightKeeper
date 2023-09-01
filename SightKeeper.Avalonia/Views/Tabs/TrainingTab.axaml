@@ -30,6 +30,8 @@
                            Minimum="100"
                            Maximum="1000000"
                            Increment="100"/>
+            
+            <CheckBox Content="AMP" IsChecked="{Binding AMP}"/>
         
             <Button Content="{icons:MaterialIconExt Play}"
                     Command="{Binding StartTrainingCommand}"/>

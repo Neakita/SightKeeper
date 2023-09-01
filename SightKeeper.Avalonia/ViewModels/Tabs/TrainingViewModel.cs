@@ -32,6 +32,12 @@ public sealed partial class TrainingViewModel : ViewModel
         set => SetProperty(ref _epochs, value);
     }
 
+    public bool AMP
+    {
+        get => _trainer.AMP;
+        set => SetProperty(_trainer.AMP, value, newValue => _trainer.AMP = newValue);
+    }
+
     public IReadOnlyCollection<ModelSize> ModelsSizes { get; } = new[]
     {
         ModelSize.Nano,

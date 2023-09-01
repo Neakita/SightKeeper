@@ -12,6 +12,8 @@ public sealed class Trainer
 	private const string DataSetPath = DataDirectoryPath + "data.yaml";
 	private const string RunsDirectoryPath = DataDirectoryPath + "Runs/";
 
+	public bool AMP { get; set; } = true;
+
 	public Trainer(ImagesExporter imagesExporter, DataSetConfigurationExporter dataSetConfigurationExporter, WeightsDataAccess weightsDataAccess, ILogger logger)
 	{
 		_imagesExporter = imagesExporter;
@@ -31,7 +33,7 @@ public sealed class Trainer
 		await _imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
 		await ExportDataSet(dataSet, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), _logger);
-		CLITrainerArguments arguments = new(DataSetPath, size, epochs, dataSet.Resolution);
+		CLITrainerArguments arguments = new(DataSetPath, size, epochs, dataSet.Resolution, false, AMP);
 		var outputStream = CLIExtensions.RunCLICommand(arguments.ToString(), _logger, cancellationToken);
 		TrainerParser.Parse(outputStream.WhereNotNull(), out var trainingProgress);
 		using var trainingProgressObserverDisposable = trainingProgress
