@@ -24,12 +24,10 @@ public sealed partial class MainViewModel : ViewModel, IActivatableViewModel
 		{
 			var ownScope = scope.BeginLifetimeScope(typeof(MainViewModel));
 			ownScope.DisposeWith(disposables);
-			var profilesViewModel = ownScope.Resolve<ProfilesViewModel>();
 			var dataSetsViewModel = ownScope.Resolve<DataSetsViewModel>();
 			var annotatingViewModel = ownScope.Resolve<AnnotatorViewModel>();
 			var trainingViewModel = ownScope.Resolve<TrainingViewModel>();
 			var settingsViewModel = ownScope.Resolve<SettingsViewModel>();
-			Tabs.Add(new TabItem(MaterialIconKind.DotsGrid, "Profiles", profilesViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.TableEye, "Datasets", dataSetsViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.Image, "Annotating", annotatingViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.Abacus, "Training", trainingViewModel));

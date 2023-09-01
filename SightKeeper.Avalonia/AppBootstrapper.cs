@@ -116,7 +116,6 @@ public static class AppBootstrapper
 
 		builder.RegisterType<AnnotatorViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetsViewModel>();
-		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<SettingsViewModel>();
 		builder.RegisterType<RegisteredGamesViewModel>();
 		builder.RegisterType<ScreenshoterViewModel>().InstancePerMainViewModel();
@@ -138,7 +137,6 @@ public static class AppBootstrapper
 		builder.RegisterType<DataSetEditor>().AsSelf().As<IViewFor<DataSetCreatingViewModel>>().As<IViewFor<DataSetEditingViewModel>>();
 		builder.RegisterType<AnnotatingTab>().AsSelf().As<IViewFor<AnnotatorViewModel>>();
 		builder.RegisterType<DataSetsTab>().AsSelf().As<IViewFor<DataSetsViewModel>>();
-		builder.RegisterType<ProfilesTab>().AsSelf().As<IViewFor<ProfilesViewModel>>();
 		builder.RegisterType<SettingsTab>().AsSelf().As<IViewFor<SettingsViewModel>>();
 		builder.RegisterType<AnnotatorTools>().As<IViewFor<AnnotatorToolsViewModel>>();
 		builder.RegisterType<DetectorDrawer>().AsSelf().As<IViewFor<DrawerViewModel>>();
