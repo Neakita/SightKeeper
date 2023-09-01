@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Linq;
-using System.Text.RegularExpressions;
 using CommunityToolkit.Diagnostics;
 using Serilog;
+using Serilog.Core;
 
 namespace SightKeeper.Application.Extensions;
 
@@ -29,18 +29,27 @@ public static class YoloCLIExtensions
         private bool _disposed;
     }
     
-    public static async Task<IAsyncDisposable> TemporarilyReplaceRunsDirectory(string directory)
+    public static async Task<IAsyncDisposable> TemporarilyReplaceRunsDirectory(string directory, ILogger? logger = null)
     {
-        var backupValue = await GetRunsDirectory();
+        logger ??= Logger.None;
+        var backupValue = await GetRunsDirectory(logger);
         if (backupValue == directory)
+        {
+            logger.Debug("The runs directory is already set to {Directory}, no operations are performed", directory);
             return new AsyncDisposable();
-        await SetRunsDirectory(directory);
-        return new AsyncDisposable(() => SetRunsDirectory(backupValue));
+        }
+        await SetRunsDirectory(directory, logger);
+        logger.Debug("Runs directory temporarily set to {Directory}", directory);
+        return new AsyncDisposable(async () =>
+        {
+            await SetRunsDirectory(backupValue, logger);
+            logger.Debug("Runs directory restored to {Directory}", backupValue);
+        });
     }
 
-    private static async Task<string> GetRunsDirectory()
+    private static async Task<string> GetRunsDirectory(ILogger logger)
     {
-        var runsDirectoryParameter = await CLIExtensions.RunCLICommand("yolo settings")
+        var runsDirectoryParameter = await CLIExtensions.RunCLICommand("yolo settings", logger)
             .WhereNotNull()
             .FirstAsync(output => output.StartsWith("runs_dir"));
         var runsDirectory = runsDirectoryParameter.Replace("runs_dir: ", string.Empty);
@@ -48,9 +57,9 @@ public static class YoloCLIExtensions
         return runsDirectory;
     }
 
-    private static async Task SetRunsDirectory(string directory)
+    private static async Task SetRunsDirectory(string directory, ILogger logger)
     {
-        var runsDirectoryParameter = await CLIExtensions.RunCLICommand($"yolo settings runs_dir={directory}")
+        var runsDirectoryParameter = await CLIExtensions.RunCLICommand($"yolo settings runs_dir={directory}", logger)
             .WhereNotNull()
             .FirstAsync(output => output.StartsWith("runs_dir"));
         var runsDirectory = runsDirectoryParameter.Replace("runs_dir: ", string.Empty);
@@ -59,18 +68,12 @@ public static class YoloCLIExtensions
         Log.Debug("The path to the runs directory \"{Directory}\" is set", directory);
     }
 
-    public static async Task<string> ExportToONNX(string modelPath, ushort imagesSize)
+    public static async Task<string> ExportToONNX(string modelPath, ushort imagesSize, ILogger logger)
     {
-        var outputStream = CLIExtensions.RunCLICommand($"yolo export model=\"{modelPath}\" format=onnx imgsz={imagesSize} opset=15");
-        await outputStream.WhereNotNull().Where(content =>
-        {
-            Log.Debug("Content: {Content}", content);
-            return content.Contains("export success");
-        }).FirstAsync();
+        var outputStream = CLIExtensions.RunCLICommand($"yolo export model=\"{modelPath}\" format=onnx imgsz={imagesSize} opset=15", logger);
+        await outputStream.WhereNotNull().Where(content => content.Contains("export success")).FirstAsync();
         var onnxModelPath = modelPath.Replace(".pt", ".onnx");
         Guard.IsTrue(File.Exists(onnxModelPath));
         return onnxModelPath;
     }
-
-    private static readonly Regex ONNXModelPathRegex = new(@"(?<=ONNX: export success  .*s, saved as ').*(?=\' \(.* MB\))");
 }

@@ -5,11 +5,14 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using Avalonia.Controls.Documents;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Serilog;
 using SightKeeper.Application.Training;
+using SightKeeper.Avalonia.Misc.Logging;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
 
@@ -50,9 +53,14 @@ public sealed partial class TrainingViewModel : ViewModel
         private set => SetProperty(ref _isTraining, value);
     }
 
-    public TrainingViewModel(DataSetsListViewModel dataSetsListViewModel, Trainer trainer)
+    public TrainingViewModel(DataSetsListViewModel dataSetsListViewModel, ILifetimeScope scope)
     {
-        _trainer = trainer;
+        var logger = new LoggerConfiguration()
+            .WriteTo.TextBlockInlines(InlineCollection)
+            .MinimumLevel.Verbose()
+            .CreateLogger();
+        var ownScope = scope.BeginLifetimeScope(this, builder => builder.RegisterInstance(logger).As<ILogger>().SingleInstance());
+        _trainer = ownScope.Resolve<Trainer>();
         AvailableDataSets = dataSetsListViewModel.DataSets;
     }
 

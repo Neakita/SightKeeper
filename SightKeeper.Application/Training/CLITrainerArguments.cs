@@ -50,7 +50,7 @@ public sealed class CLITrainerArguments
         yield return "yolo detect train";
         yield return $"data={Data}";
         yield return $"model={Model}";
-        yield return $"imgsz={ImageSize}";
+        //yield return $"imgsz={ImageSize}";
         yield return $"epochs={Epochs}";
         if (Resume)
             yield return "resume=true";

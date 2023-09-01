@@ -40,8 +40,11 @@ public class AppDbContext : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		if (optionsBuilder.IsConfigured) return;
+		if (optionsBuilder.IsConfigured)
+			return;
+#if DEBUG
 		SetupLogging(optionsBuilder);
+#endif
 		SetupSqlite(optionsBuilder);
 	}
 

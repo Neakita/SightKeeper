@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
+using Avalonia.Threading;
 using Serilog.Core;
 using Serilog.Events;
 
@@ -16,7 +17,12 @@ public sealed class TextBlockInlinesSink : ILogEventSink
     
     public void Emit(LogEvent logEvent)
     {
-        _inlineCollection.Add(LogEventToInline(logEvent));
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            _inlineCollection.Add(LogEventToInline(logEvent));
+            if (_inlineCollection.Count > 200)
+                _inlineCollection.RemoveAt(0);
+        });
     }
 
     private readonly IFormatProvider? _formatProvider;
@@ -25,10 +31,10 @@ public sealed class TextBlockInlinesSink : ILogEventSink
     private Inline LogEventToInline(LogEvent logEvent)
     {
         var message = logEvent.RenderMessage(_formatProvider);
-        Run run = new(message)
-        {
-            Foreground = LevelToBrush(logEvent.Level)
-        };
+        Run run = new(message + '\n');
+        var brush = LevelToBrush(logEvent.Level);
+        if (brush != null)
+            run.Foreground = brush;
         return run;
     }
 
