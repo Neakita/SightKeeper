@@ -73,7 +73,6 @@ public sealed partial class TrainingViewModel : ViewModel
         await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs, Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
         _progress.OnNext(null);
         IsTraining = false;
-        InlineCollection.Clear();
     }
 
     public bool CanStartTraining() => SelectedDataSet != null && SelectedModelSize != null;

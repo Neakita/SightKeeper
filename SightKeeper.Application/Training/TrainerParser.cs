@@ -19,7 +19,9 @@ public static class TrainerParser
     private static TrainingProgress ParseTrainingProgress(string content)
     {
         var currentEpoch = uint.Parse(CurrentEpochRegex.Match(content).Value);
-        var floatingPointNumbers = FloatingPointNumbersRegex.Matches(content)
+        var floatingPointNumberMatches = FloatingPointNumbersRegex.Matches(content);
+        var floatingPointNumbers = floatingPointNumberMatches
+            .Skip(1)
             .Take(3)
             .Select(match => float.Parse(match.Value, NumberFormatInfo))
             .ToList();
