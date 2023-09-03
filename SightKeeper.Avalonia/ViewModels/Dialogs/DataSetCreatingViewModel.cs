@@ -4,9 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
@@ -14,12 +11,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
 using SightKeeper.Application.DataSet.Creating;
+using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
-public partial class DataSetCreatingViewModel : ValidatableViewModel<NewDataSetInfo>, IDataSetEditorViewModel, DialogViewModel, NewDataSetInfo
+public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewModel<NewDataSetInfo, bool>, IDataSetEditorViewModel, NewDataSetInfo
 {
     public IReadOnlyCollection<string> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
@@ -83,8 +81,7 @@ public partial class DataSetCreatingViewModel : ValidatableViewModel<NewDataSetI
         var isValid = await Validate();
         if (!isValid)
             return;
-        DialogResult = true;
-        _closeRequested.OnNext(Unit.Default);
+        Return(true);
     }
 
     private bool CanApply() => ValidationResult.IsValid;
@@ -92,15 +89,6 @@ public partial class DataSetCreatingViewModel : ValidatableViewModel<NewDataSetI
     [RelayCommand]
     private void Cancel()
     {
-        DialogResult = false;
-        _closeRequested.OnNext(Unit.Default);
+        Return(false);
     }
-
-    #region Dialog
-
-    public bool? DialogResult { get; private set; }
-    public IObservable<Unit> CloseRequested => _closeRequested.AsObservable();
-    private readonly Subject<Unit> _closeRequested = new();
-
-    #endregion
 }

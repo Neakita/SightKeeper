@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,12 +7,13 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
-public sealed partial class WeightsEditorViewModel : ViewModel, IWeightsEditorViewModel, DialogViewModel
+public sealed partial class WeightsEditorViewModel : DialogViewModel, IWeightsEditorViewModel
 {
     public IReadOnlyCollection<Weights> Weights { get; }
 
@@ -48,5 +47,4 @@ public sealed partial class WeightsEditorViewModel : ViewModel, IWeightsEditorVi
     }
 
     private bool CanDeleteSelectedWeights() => SelectedWeights != null;
-    public IObservable<Unit> CloseRequested { get; } = Observable.Empty<Unit>();
 }

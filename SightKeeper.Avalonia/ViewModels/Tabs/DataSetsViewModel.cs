@@ -36,10 +36,10 @@ public sealed partial class DataSetsViewModel : ViewModel
 	private async Task CreateNewDataSet(CancellationToken cancellationToken)
 	{
 		await using var scope = _scope.BeginLifetimeScope(this);
-		var viewModel = scope.Resolve<Dialogs.DataSetCreatingViewModel>();
-		await viewModel.ShowDialog(this);
-		if (viewModel.DialogResult != true) return;
-		await _dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(viewModel), cancellationToken);
+		var viewModel = scope.Resolve<DataSetCreatingViewModel>();
+		var applied = await viewModel.ShowDialog(this);
+		if (applied)
+			await _dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(viewModel), cancellationToken);
 	}
 
 	[RelayCommand(CanExecute = nameof(CanEditDataSet))]
@@ -49,10 +49,9 @@ public sealed partial class DataSetsViewModel : ViewModel
 		var dataSetToEdit = SelectedDataSetViewModel.DataSet;
 		await using var scope = _scope.BeginLifetimeScope(this);
 		var viewModel = scope.Resolve<DataSetEditingViewModel>(new PositionalParameter(0, dataSetToEdit));
-		await viewModel.ShowDialog(this);
-		if (viewModel.DialogResult != true)
-			return;
-		await _dataSetEditor.ApplyChanges(new DataSetChangesDTO(dataSetToEdit, viewModel), cancellationToken);
+		var applied = await viewModel.ShowDialog(this);
+		if (applied)
+			await _dataSetEditor.ApplyChanges(new DataSetChangesDTO(dataSetToEdit, viewModel), cancellationToken);
 	}
 
 	private bool CanEditDataSet() => SelectedDataSetViewModel != null;
