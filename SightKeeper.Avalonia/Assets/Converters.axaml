@@ -5,4 +5,5 @@
     <converters:CanvasNormalizeConverter x:Key="CanvasNormalizeConverter"/>
     <converters:WidthToZIndexConverter x:Key="WidthToZIndexConverter"/>
     <converters:StringToNullableIntConverter x:Key="StringToNullableIntConverter"/>
+    <converters:ToBrushConverter x:Key="ToBrushConverter"/>
 </ResourceDictionary>

@@ -68,32 +68,30 @@
                             </Setter.Value>
                         </Setter>
                         
-                        <Setter Property="BorderBrush" Value="#80FF0000"/>
+                        <Setter Property="BorderBrush" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.5}"/>
                         <Setter Property="BorderThickness" Value="1"/>
                         <Setter Property="ClipToBounds" Value="False"/>
                         
                     </Style>
                     
                     <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Background" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.1}" />
+                    </Style>
+                    
+                    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                        <Setter Property="BorderBrush" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.8}"/>
+                        <Setter Property="Background" Value="Transparent"/>
                     </Style>
                     
                     <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="#10000000" />
+                        <Setter Property="BorderBrush" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.8}"/>
+                        <Setter Property="Background" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.1}"/>
                     </Style>
                     
-                    <Style Selector="ListBoxItem:selected">
-                        <Setter Property="BorderBrush" Value="#80FF0080"/>
-                    </Style>
-                    
-                    <Style Selector="ListBoxItem:pointerover">
-                        <Setter Property="BorderBrush" Value="#A0FF0000"/>
-                    </Style>
-                    
-                    <Style Selector="ListBoxItem:pointerover:selected">
-                        <Setter Property="BorderBrush" Value="#A0FF00A0"/>
-                    </Style>
-                    
+                    <Style Selector="ListBoxItem:selected"/>
+
+                    <Style Selector="ListBoxItem:pointerover"/>
+
                 </ListBox.Styles>
             </ListBox>
 
