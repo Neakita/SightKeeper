@@ -56,11 +56,17 @@
 
                         <ItemsControl ItemsSource="{Binding ItemClasses}"
                                       IsVisible="{Binding !!ItemClasses.Count}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <ColorPicker Color="{Binding Color}"
-                                                     IsAlphaEnabled="False">
+                                                     IsAlphaEnabled="False"
+                                                     IsAlphaVisible="False">
                                             <ColorPicker.Palette>
                                                 <FluentColorPalette/>
                                             </ColorPicker.Palette>
@@ -68,7 +74,8 @@
                                         <TextBlock Text="{Binding Name}"/>
                                         <Button Content="{icons:MaterialIconExt Close}"
                                                 Command="{Binding #Root.((dataSet:IDataSetEditorViewModel)DataContext).DeleteItemClassCommand}"
-                                                CommandParameter="{Binding}"/>
+                                                CommandParameter="{Binding}"
+                                                Padding="2"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
