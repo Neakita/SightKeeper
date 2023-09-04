@@ -4,14 +4,17 @@ using SightKeeper.Data;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services.Annotating;
 
 public sealed class DbDetectorAnnotator : DetectorAnnotator
 {
-    public DbDetectorAnnotator(AppDbContext dbContext)
+    public DbDetectorAnnotator(AppDbContext dbContext, ItemClassDataAccess itemClassDataAccess, AssetsDataAccess assetsDataAccess)
     {
         _dbContext = dbContext;
+        _itemClassDataAccess = itemClassDataAccess;
+        _assetsDataAccess = assetsDataAccess;
     }
     
     public async Task<DetectorItem> Annotate(Screenshot screenshot, ItemClass itemClass, Bounding bounding, CancellationToken cancellationToken = default)
@@ -20,8 +23,10 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
         Guard.IsBetweenOrEqualTo(bounding.Right, 0, 1);
         Guard.IsBetweenOrEqualTo(bounding.Top, 0, 1);
         Guard.IsBetweenOrEqualTo(bounding.Bottom, 0, 1);
+        await _assetsDataAccess.LoadAssets(screenshot.Library.DataSet, cancellationToken);
         var asset = screenshot.Asset ??
                     screenshot.Library.DataSet.MakeAsset(screenshot);
+        await _itemClassDataAccess.LoadItems(itemClass, cancellationToken);
         var item = asset.CreateItem(itemClass, bounding);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return item;
@@ -69,6 +74,8 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
     }
 
     private readonly AppDbContext _dbContext;
+    private readonly ItemClassDataAccess _itemClassDataAccess;
+    private readonly AssetsDataAccess _assetsDataAccess;
 
     private static void DeleteAsset(Screenshot screenshot)
     {

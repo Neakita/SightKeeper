@@ -13,7 +13,7 @@ public abstract class ValidatableDialogViewModel<TValidatable> : ValidatableView
     {
         _result.OnNext(null);
         _result.OnCompleted();
-        _result.Dispose(); // ISSUE is it needed?
+        _result.Dispose();
     }
     private readonly Subject<object?> _result = new();
 }
@@ -27,7 +27,7 @@ public abstract class ValidatableDialogViewModel<TValidatable, TResult> : Valida
     {
         _result.OnNext(result);
         _result.OnCompleted();
-        _result.Dispose(); // ISSUE is it needed?
+        _result.Dispose();
     }
     private readonly Subject<TResult> _result = new();
 }

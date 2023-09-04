@@ -73,12 +73,12 @@ public sealed class DbDataSetEditor : DataSetEditor
     }
     private static void DeleteAssets(ItemClass itemClass)
     {
-        foreach (var asset in itemClass.Items.Select(item => item.Asset).Distinct())
+        foreach (var asset in itemClass.Items.Select(item => item.Asset).Distinct().ToList())
             asset.DataSet.DeleteAsset(asset);
     }
     private static void DeleteScreenshots(ItemClass itemClass)
     {
-        foreach (var screenshot in itemClass.Items.Select(item => item.Asset.Screenshot).Distinct())
+        foreach (var screenshot in itemClass.Items.Select(item => item.Asset.Screenshot).Distinct().ToList())
             screenshot.Library.DeleteScreenshot(screenshot);
     }
 

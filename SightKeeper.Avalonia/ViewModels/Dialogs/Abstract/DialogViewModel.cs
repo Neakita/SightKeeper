@@ -10,7 +10,7 @@ public abstract class DialogViewModel : ViewModel, IDialogViewModel
     {
         _result.OnNext(null);
         _result.OnCompleted();
-        _result.Dispose(); // ISSUE is it needed?
+        _result.Dispose();
     }
     private readonly Subject<object?> _result = new();
 }
@@ -22,7 +22,7 @@ public abstract class DialogViewModel<TResult> : ViewModel, IDialogViewModel<TRe
     {
         _result.OnNext(result);
         _result.OnCompleted();
-        _result.Dispose(); // ISSUE is it needed?
+        _result.Dispose();
     }
     private readonly Subject<TResult> _result = new();
 }

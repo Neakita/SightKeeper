@@ -14,6 +14,5 @@ public sealed class DataSetConfiguration : IEntityTypeConfiguration<DataSet>
         builder.HasOne(dataSet => dataSet.WeightsLibrary).WithOne(library => library.DataSet).HasPrincipalKey<DataSet>();
         builder.Navigation(dataSet => dataSet.ScreenshotsLibrary).AutoInclude();
         builder.Navigation(dataSet => dataSet.WeightsLibrary).AutoInclude();
-        builder.Navigation(dataSet => dataSet.Assets).AutoInclude(); // ISSUE long loading
     }
 }

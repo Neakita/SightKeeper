@@ -100,6 +100,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>();
 		builder.RegisterType<DataSetConfigurationExporter>();
 		builder.RegisterType<Trainer>();
+		builder.RegisterType<DbItemClassDataAccess>().As<ItemClassDataAccess>();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
