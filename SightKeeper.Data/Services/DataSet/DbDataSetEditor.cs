@@ -68,7 +68,7 @@ public sealed class DbDataSetEditor : DataSetEditor
     }
     private static void DeleteItems(ItemClass itemClass)
     {
-        foreach (var item in itemClass.Items)
+        foreach (var item in itemClass.Items.ToList())
             item.Asset.DeleteItem(item);
     }
     private static void DeleteAssets(ItemClass itemClass)

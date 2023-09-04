@@ -10,5 +10,6 @@ public sealed class ItemClassConfiguration : IEntityTypeConfiguration<ItemClass>
     {
         builder.ToTable("ItemClasses");
         builder.HasShadowKey();
+        builder.Navigation(itemClass => itemClass.Items).AutoInclude();
     }
 }
