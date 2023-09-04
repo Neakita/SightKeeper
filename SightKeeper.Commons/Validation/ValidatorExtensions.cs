@@ -6,8 +6,11 @@ namespace SightKeeper.Commons.Validation;
 
 public static class ValidatorExtensions
 {
-    public static IRuleBuilderOptions<T, IEnumerable<TItem>> NoDuplicates<T, TItem>(this IRuleBuilder<T, IEnumerable<TItem>> ruleBuilder) =>
-        ruleBuilder.SetValidator(new NoDuplicatesValidator<T, TItem>());
+    public static IRuleBuilderOptions<TValidatable, IEnumerable<TProperty>> NoDuplicates<TValidatable, TProperty>(this IRuleBuilder<TValidatable, IEnumerable<TProperty>> ruleBuilder) =>
+        ruleBuilder.SetValidator(new NoDuplicatesValidator<TValidatable, TProperty, TProperty>(property => property));
+    
+    public static IRuleBuilderOptions<TValidatable, IEnumerable<TProperty>> NoDuplicates<TValidatable, TProperty, TPropertyPredicate>(this IRuleBuilder<TValidatable, IEnumerable<TProperty>> ruleBuilder, Func<TProperty, TPropertyPredicate> predicate) =>
+        ruleBuilder.SetValidator(new NoDuplicatesValidator<TValidatable, TProperty, TPropertyPredicate>(predicate));
     
     public static IRuleBuilderOptions<T, TProperty> MultiplierOf<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, TProperty multiplier) where TProperty : IModulusOperators<TProperty, TProperty, TProperty>, IEqualityOperators<TProperty, int, bool> =>
         ruleBuilder.SetValidator(new MultiplierOfValidator<T, TProperty>(multiplier));

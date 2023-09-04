@@ -111,6 +111,7 @@ public sealed class DataSet
 	{
 		if (!_assets.Remove(asset))
 			ThrowHelper.ThrowArgumentException(nameof(asset), "Asset not found");
+		asset.ClearItems();
 	}
 
 	#endregion

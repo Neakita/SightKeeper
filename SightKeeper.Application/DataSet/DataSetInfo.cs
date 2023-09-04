@@ -7,6 +7,6 @@ public interface DataSetInfo
     string Name { get; }
     string Description { get; }
     int? Resolution { get; }
-    IReadOnlyCollection<string> ItemClasses { get; }
+    IReadOnlyCollection<ItemClassInfo> ItemClasses { get; }
     Game? Game { get; }
 }

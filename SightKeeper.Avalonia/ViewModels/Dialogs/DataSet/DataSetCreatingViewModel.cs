@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,16 +9,18 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
+using SightKeeper.Application.DataSet;
 using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
+using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Services.Games;
 
-namespace SightKeeper.Avalonia.ViewModels.Dialogs;
+namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 
 public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewModel<NewDataSetInfo, bool>, IDataSetEditorViewModel, NewDataSetInfo
 {
-    public IReadOnlyCollection<string> ItemClasses => _itemClasses;
+    public IReadOnlyCollection<EditableItemClass> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
 
     public DataSetCreatingViewModel(IValidator<NewDataSetInfo> validator, RegisteredGamesService registeredGamesService) : base(validator)
@@ -33,18 +34,17 @@ public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewMode
         ApplyCommand.NotifyCanExecuteChanged();
     }
 
-    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))] private string _newItemClassName = string.Empty;
-    [ObservableProperty] private string? _selectedItemClass;
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
+    private string _newItemClassName = string.Empty;
 
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private int? _resolution = 320;
     [ObservableProperty] private Game? _game;
 
-    private readonly ObservableCollection<string> _itemClasses = new();
+    private readonly ObservableCollection<EditableItemClass> _itemClasses = new();
     private readonly RegisteredGamesService _registeredGamesService;
-    private readonly IReadOnlyCollection<string> _deletionBlackListItemClasses = Array.Empty<string>();
-    
+
     ICommand IDataSetEditorViewModel.AddItemClassCommand => AddItemClassCommand;
     ICommand IDataSetEditorViewModel.DeleteItemClassCommand => DeleteItemClassCommand;
     ICommand IDataSetEditorViewModel.ApplyCommand => ApplyCommand;
@@ -58,22 +58,18 @@ public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewMode
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]
     private void AddItemClass()
     {
-        _itemClasses.Add(NewItemClassName);
+        _itemClasses.Add(new NewItemClassViewModel(NewItemClassName, (byte)ItemClasses.Count));
         NewItemClassName = string.Empty;
     }
 
     private bool CanAddItemClass() =>
-        !string.IsNullOrWhiteSpace(NewItemClassName) && !ItemClasses.Contains(NewItemClassName);
+        !string.IsNullOrWhiteSpace(NewItemClassName) && ItemClasses.All(existingItemClass => existingItemClass.Name != NewItemClassName);
 
-    [RelayCommand(CanExecute = nameof(CanDeleteItemClass))]
-    private void DeleteItemClass()
+    [RelayCommand]
+    private void DeleteItemClass(EditableItemClass editableItemClass)
     {
-        Guard.IsNotNull(SelectedItemClass);
-        if (!_itemClasses.Remove(SelectedItemClass))
-            ThrowHelper.ThrowArgumentException(nameof(SelectedItemClass), $"{SelectedItemClass} not removed from {ItemClasses}");
+        Guard.IsTrue(_itemClasses.Remove(editableItemClass));
     }
-
-    private bool CanDeleteItemClass() => SelectedItemClass != null && !_deletionBlackListItemClasses.Contains(SelectedItemClass);
 
     [RelayCommand(CanExecute = nameof(CanApply))]
     private async Task Apply()
@@ -84,11 +80,14 @@ public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewMode
         Return(true);
     }
 
-    private bool CanApply() => ValidationResult.IsValid;
+    private bool CanApply() => !HasErrors;
 
     [RelayCommand]
     private void Cancel()
     {
         Return(false);
     }
+
+    IReadOnlyCollection<ItemClassInfo> DataSetInfo.ItemClasses =>
+        ItemClasses.Select(itemClass => itemClass.ToItemClassInfo()).ToList();
 }

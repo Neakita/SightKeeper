@@ -10,47 +10,45 @@ public sealed class DataSetChangesDTO : DataSetChanges
     public string Description { get; }
     public ushort Resolution { get; }
     int? DataSetInfo.Resolution => Resolution;
-    public IReadOnlyCollection<string> ItemClasses { get; }
     public Game? Game { get; }
+    public IReadOnlyCollection<ItemClassInfo> ItemClasses { get; }
+    public IReadOnlyCollection<ItemClassInfo> NewItemClasses { get; }
+    public IReadOnlyCollection<EditedItemClass> EditedItemClasses { get; }
+    public IReadOnlyCollection<DeletedItemClass> DeletedItemClasses { get; }
 
-    public DataSetChangesDTO(Domain.Model.DataSet dataSet, DataSetInfo dataSetInfo)
+    public DataSetChangesDTO(Domain.Model.DataSet dataSet, DataSetChanges changes)
     {
-        Guard.IsNotNull(dataSetInfo.Resolution);
+        Guard.IsNotNull(changes.Resolution);
         DataSet = dataSet;
-        Name = dataSetInfo.Name;
-        Description = dataSetInfo.Description;
-        Resolution = (ushort)dataSetInfo.Resolution.Value;
-        ItemClasses = dataSetInfo.ItemClasses.ToList();
-        Game = dataSetInfo.Game;
+        Name = changes.Name;
+        Description = changes.Description;
+        Resolution = (ushort)changes.Resolution.Value;
+        ItemClasses = changes.ItemClasses.ToList();
+        Game = changes.Game;
+        NewItemClasses = changes.NewItemClasses.ToList();
+        EditedItemClasses = changes.EditedItemClasses.ToList();
+        DeletedItemClasses = changes.DeletedItemClasses.ToList();
     }
     
-    public DataSetChangesDTO(Domain.Model.DataSet dataSet, string name, string description, ushort resolution, IEnumerable<ItemClass> itemClasses, Game? game)
+    public DataSetChangesDTO(
+        Domain.Model.DataSet dataSet,
+        string name, string description, ushort resolution, Game? game,
+        IEnumerable<ItemClassInfo> newItemClasses,
+        IEnumerable<EditedItemClass> editedItemClasses,
+        IEnumerable<DeletedItemClass> deletedItemClasses)
     {
         DataSet = dataSet;
         Name = name;
         Description = description;
         Resolution = resolution;
-        ItemClasses = itemClasses.Select(itemClass => itemClass.Name).ToList();
-        Game = game;
-    }
-    
-    public DataSetChangesDTO(Domain.Model.DataSet dataSet, string name, string description, ushort resolution, IEnumerable<string> itemClasses, Game? game)
-    {
-        DataSet = dataSet;
-        Name = name;
-        Description = description;
-        Resolution = resolution;
-        ItemClasses = itemClasses.ToList();
-        Game = game;
-    }
-    
-    public DataSetChangesDTO(Domain.Model.DataSet dataSet, string name, string description, ushort resolution, IReadOnlyCollection<string> itemClasses, Game? game)
-    {
-        DataSet = dataSet;
-        Name = name;
-        Description = description;
-        Resolution = resolution;
-        ItemClasses = itemClasses;
+        NewItemClasses = newItemClasses.ToList();
+        EditedItemClasses = editedItemClasses.ToList();
+        DeletedItemClasses = deletedItemClasses.ToList();
+        ItemClasses = DataSet.ItemClasses
+            .Except(DeletedItemClasses.Select(deletedItemClass => deletedItemClass.ItemClass))
+            .Select(existingItemClass => new ItemClassInfo(existingItemClass))
+            .Concat(NewItemClasses)
+            .ToList();
         Game = game;
     }
 }

@@ -8,7 +8,7 @@ public sealed class NewDataSetInfoDTO : NewDataSetInfo
     public string Name { get; }
     public string Description { get; }
     public ushort Resolution { get; }
-    public IReadOnlyCollection<string> ItemClasses { get; }
+    public IReadOnlyCollection<ItemClassInfo> ItemClasses { get; }
     public Game? Game { get; }
     int? DataSetInfo.Resolution => Resolution;
 
@@ -26,7 +26,7 @@ public sealed class NewDataSetInfoDTO : NewDataSetInfo
         string name,
         string description,
         ushort resolution,
-        IReadOnlyCollection<string> itemClasses,
+        IReadOnlyCollection<ItemClassInfo> itemClasses,
         Game? game)
     {
         Name = name;

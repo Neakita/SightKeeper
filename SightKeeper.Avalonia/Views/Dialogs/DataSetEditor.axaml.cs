@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Dialogs;
+using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 
 namespace SightKeeper.Avalonia.Views.Dialogs;
 

@@ -17,7 +17,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
     {
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
-        DataSetChangesDTO dataSetChanges = new(dataSet, "New name", dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
+        DataSetChangesDTO dataSetChanges = new(dataSet, "New name", dataSet.Description, dataSet.Resolution, dataSet.Game, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), Enumerable.Empty<DeletedItemClass>());
         await editor.ApplyChanges(dataSetChanges);
         dataSet.Name.Should().Be(dataSetChanges.Name);
     }
@@ -27,7 +27,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
     {
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
-        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, "New description", dataSet.Resolution, dataSet.ItemClasses, dataSet.Game);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, "New description", dataSet.Resolution, dataSet.Game, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), Enumerable.Empty<DeletedItemClass>());
         await editor.ApplyChanges(dataSetChanges);
         dataSet.Description.Should().Be(dataSetChanges.Description);
     }
@@ -38,7 +38,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
         const ushort changedResolution = 640;
-        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.Game, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), Enumerable.Empty<DeletedItemClass>());
         await editor.ApplyChanges(dataSetChanges);
         dataSet.Resolution.Should().Be(changedResolution);
     }
@@ -49,7 +49,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
         const ushort changedResolution = 636;
-        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.ItemClasses, dataSet.Game);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, changedResolution, dataSet.Game, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), Enumerable.Empty<DeletedItemClass>());
         await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetChanges));
         dataSet.Resolution.Should().NotBe(changedResolution);
     }
@@ -59,10 +59,11 @@ public sealed class DataSetEditorTests : DbRelatedTests
     {
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
-        var newItemClasses = dataSet.ItemClasses.Select(itemClass => itemClass.Name).Append("New item class").ToList();
-        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
+        const string newItemClassName = "New item class";
+        var newItemClasses = new[] { new ItemClassInfo(newItemClassName, 0) };
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.Game, newItemClasses, Enumerable.Empty<EditedItemClass>(), Enumerable.Empty<DeletedItemClass>());
         await editor.ApplyChanges(dataSetChanges);
-        dataSet.ItemClasses.Select(itemClass => itemClass.Name).Should().BeEquivalentTo(dataSetChanges.ItemClasses);
+        dataSet.ItemClasses.Should().ContainSingle(itemClass => itemClass.Name == newItemClassName && itemClass.Color == 0);
     }
 
     [Fact]
@@ -72,8 +73,8 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
         dataSet.CreateItemClass(itemClassName, 0);
-        var newItemClasses = dataSet.ItemClasses.Select(itemClass => itemClass.Name).Append(itemClassName).ToList();
-        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newItemClasses, dataSet.Game);
+        var newItemClasses = new[] { new ItemClassInfo(itemClassName, 0) };
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.Game, newItemClasses, Enumerable.Empty<EditedItemClass>(), Enumerable.Empty<DeletedItemClass>());
         await Assert.ThrowsAsync<ValidationException>(() => editor.ApplyChanges(dataSetChanges));
         dataSet.ItemClasses.Should().ContainSingle(itemClass => itemClass.Name == itemClassName);
     }
@@ -84,8 +85,8 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
         const string itemClassName = "Item class";
-        dataSet.CreateItemClass(itemClassName, 0);
-        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
+        var itemClass = dataSet.CreateItemClass(itemClassName, 0);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.Game, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), new []{new DeletedItemClass(itemClass)});
         await editor.ApplyChanges(dataSetChanges);
         dataSet.ItemClasses.Should().BeEmpty();
     }
@@ -97,15 +98,15 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var dataSet = DomainTestsHelper.NewDataSet;
         const string itemClassName1 = "Item class 1";
         const string itemClassName2 = "Item class 2";
-        var itemClass1 = dataSet.CreateItemClass(itemClassName1, 0);
-        dataSet.CreateItemClass(itemClassName2, 0);
-        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass> { itemClass1 }, dataSet.Game);
+        var itemClassToKeep = dataSet.CreateItemClass(itemClassName1, 0);
+        var itemClassToDelete = dataSet.CreateItemClass(itemClassName2, 0);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.Game, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), new []{new DeletedItemClass(itemClassToDelete)});
         await editor.ApplyChanges(dataSetChanges);
-        dataSet.ItemClasses.Should().ContainSingle(itemClass => itemClass == itemClass1);
+        dataSet.ItemClasses.Should().ContainSingle(itemClass => itemClass == itemClassToKeep);
     }
 
     [Fact]
-    public async Task ShouldNotDeleteItemClassWithAsset()
+    public async Task ShouldNotDeleteItemClassWithAssetAndNoActionProvided()
     {
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
@@ -113,8 +114,8 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         var asset = dataSet.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new Bounding());
-        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, new List<ItemClass>(), dataSet.Game);
-        await Assert.ThrowsAsync<InvalidOperationException>(() => editor.ApplyChanges(dataSetChanges));
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.Game, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), new []{new DeletedItemClass(itemClass)});
+        await Assert.ThrowsAsync<ArgumentException>(() => editor.ApplyChanges(dataSetChanges));
         dataSet.ItemClasses.Should().Contain(itemClass);
     }
 
@@ -124,7 +125,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
         Game newGame = new("New game", "game.exe");
-        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.ItemClasses, newGame);
+        DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, newGame, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), Enumerable.Empty<DeletedItemClass>());
         await editor.ApplyChanges(dataSetChanges);
         dataSet.Game.Should().Be(newGame);
     }

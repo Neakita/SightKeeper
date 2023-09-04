@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Subjects;
+using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Domain.Model.Common;
@@ -23,27 +24,81 @@ public sealed class DbDataSetEditor : DataSetEditor
         dataSet.Description = dataSetChanges.Description;
         dataSet.Resolution = dataSetChanges.Resolution;
         dataSet.Game = dataSetChanges.Game;
-        ApplyItemClassesChanges(dataSet, dataSetChanges.ItemClasses);
+        ApplyItemClassesChanges(dataSetChanges);
         _dbContext.DataSets.Update(dataSet);
         await _dbContext.SaveChangesAsync(cancellationToken);
         _dataSetEdited.OnNext(dataSet);
     }
 
-    private static void ApplyItemClassesChanges(Domain.Model.DataSet dataSet, IReadOnlyCollection<string> itemClasses)
+    private static void ApplyItemClassesChanges(DataSetChangesDTO changes)
     {
-        var deletedItemClasses = GetDeletedItemClasses(dataSet, itemClasses);
-        var addedItemClasses = GetAddedItemClasses(dataSet, itemClasses);
-        foreach (var deletedItemClass in deletedItemClasses)
-            dataSet.DeleteItemClass(deletedItemClass);
-        foreach (var addedItemClass in addedItemClasses)
-            dataSet.CreateItemClass(addedItemClass, 0);
+        DeleteItemClasses(changes);
+        ApplyItemClassesEditions(changes);
+        AddNewItemClasses(changes);
     }
 
-    private static IEnumerable<ItemClass> GetDeletedItemClasses(Domain.Model.DataSet dataSet, IReadOnlyCollection<string> itemClasses) =>
-        dataSet.ItemClasses.Where(existingItemClass => !itemClasses.Contains(existingItemClass.Name)).ToList();
+    private static void DeleteItemClasses(DataSetChangesDTO changes)
+    {
+        var deletedItemClasses = changes.DeletedItemClasses;
+        var itemClassesWithItemsAndNoActionSpecified = deletedItemClasses
+            .Where(deletedItemClass => deletedItemClass.ItemClass.Items.Any() && deletedItemClass.Action == null)
+            .ToList();
+        if (itemClassesWithItemsAndNoActionSpecified.Any())
+            ThrowHelper.ThrowArgumentException($"Item classes must have an action specified when they have items, but no action was specified for: {string.Join(", ", itemClassesWithItemsAndNoActionSpecified.Select(itemClass => itemClass.ItemClass.Name))}");
+        foreach (var deletedItemClass in deletedItemClasses)
+        {
+            ExecuteActionIfNecessary(deletedItemClass);
+            var itemClass = deletedItemClass.ItemClass;
+            itemClass.DataSet.DeleteItemClass(itemClass);
+        }
+    }
+    private static void ExecuteActionIfNecessary(DeletedItemClass deletedItemClass)
+    {
+        if (!deletedItemClass.ItemClass.Items.Any())
+            return;
+        Guard.IsNotNull(deletedItemClass.Action);
+        var action = deletedItemClass.Action switch
+        {
+            DeletedItemClassAction.DeleteItems => DeleteItems,
+            DeletedItemClassAction.DeleteAssets => DeleteAssets,
+            DeletedItemClassAction.DeleteScreenshots => DeleteScreenshots,
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Action<ItemClass>>(nameof(deletedItemClass.Action), deletedItemClass.Action, $"Expected one of {nameof(DeletedItemClassAction.DeleteItems)}, {nameof(DeletedItemClassAction.DeleteAssets)}, {nameof(DeletedItemClassAction.DeleteScreenshots)}")
+        };
+        action(deletedItemClass.ItemClass);
+    }
+    private static void DeleteItems(ItemClass itemClass)
+    {
+        foreach (var item in itemClass.Items)
+            item.Asset.DeleteItem(item);
+    }
+    private static void DeleteAssets(ItemClass itemClass)
+    {
+        foreach (var asset in itemClass.Items.Select(item => item.Asset).Distinct())
+            asset.DataSet.DeleteAsset(asset);
+    }
+    private static void DeleteScreenshots(ItemClass itemClass)
+    {
+        foreach (var screenshot in itemClass.Items.Select(item => item.Asset.Screenshot).Distinct())
+            screenshot.Library.DeleteScreenshot(screenshot);
+    }
 
-    private static IEnumerable<string> GetAddedItemClasses(Domain.Model.DataSet dataSet, IReadOnlyCollection<string> itemClasses) =>
-        itemClasses.Where(newItemClass => dataSet.ItemClasses.All(existingItemClass => existingItemClass.Name != newItemClass)).ToList();
+    private static void ApplyItemClassesEditions(DataSetChangesDTO changes)
+    {
+        var editedItemClasses = changes.EditedItemClasses;
+        foreach (var editedItemClass in editedItemClasses)
+        {
+            var itemClass = editedItemClass.ItemClass;
+            itemClass.Name = editedItemClass.Name;
+            itemClass.Color = editedItemClass.Color;
+        }
+    }
+
+    private static void AddNewItemClasses(DataSetChangesDTO changes)
+    {
+        var newItemClasses = changes.NewItemClasses;
+        foreach (var newItemClass in newItemClasses)
+            changes.DataSet.CreateItemClass(newItemClass.Name, newItemClass.Color);
+    }
 
     private readonly Subject<Domain.Model.DataSet> _dataSetEdited = new();
     private readonly IValidator<DataSetChangesDTO> _changesValidator;

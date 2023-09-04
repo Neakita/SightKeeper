@@ -16,6 +16,7 @@
     <Application.Styles>
         <FluentTheme DensityStyle="Normal"/>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml"/>
         <materialIcons:MaterialIconStyles />
         <StyleInclude Source="avares://SightKeeper.Avalonia/Assets/Styles.axaml"/>
     </Application.Styles>

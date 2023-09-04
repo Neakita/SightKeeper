@@ -37,6 +37,7 @@ public sealed class ScreenshotsLibrary
         if (!_screenshots.Remove(screenshot))
             ThrowHelper.ThrowInvalidOperationException("Screenshot not found");
         HasAnyScreenshots = Screenshots.Any();
+        screenshot.Asset?.ClearItems();
         _screenshotRemoved.OnNext(screenshot);
     }
 	

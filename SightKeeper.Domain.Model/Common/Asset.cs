@@ -22,6 +22,7 @@ public sealed class Asset
     {
         DetectorItem item = new(this, itemClass, bounding);
         _items.Add(item);
+        itemClass.AddItem(item);
         return item;
     }
 
@@ -29,17 +30,26 @@ public sealed class Asset
     {
         if (!_items.Remove(item))
             DomainThrowHelper.ThrowDetectorItemException(item, $"{item} from asset of \"{DataSet}\" dataset not deleted");
+        item.ItemClass.RemoveItem(item);
     }
 
     public void DeleteItems(IEnumerable<DetectorItem> items)
     {
-        var notDeletedItems = items.Where(item => !_items.Remove(item)).ToList();
+        var notDeletedItems = items.Where(item =>
+        {
+            var removed = _items.Remove(item);
+            if (removed)
+                item.ItemClass.RemoveItem(item);
+            return !removed;
+        }).ToList();
         if (notDeletedItems.Any())
             DomainThrowHelper.ThrowDetectorItemsException(notDeletedItems, $"{notDeletedItems.Count} items from asset of \"{DataSet}\" dataset not deleted");
     }
 
     public void ClearItems()
     {
+        foreach (var item in _items)
+            item.ItemClass.RemoveItem(item);
         _items.Clear();
     }
 

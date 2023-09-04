@@ -9,6 +9,7 @@ using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
+using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Services;
 

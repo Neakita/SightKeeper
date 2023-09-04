@@ -4,17 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
-             xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs"
+             xmlns:dataSet="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs.DataSet"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Views.Dialogs.DataSetEditor"
-             x:DataType="dialogs:IDataSetEditorViewModel"
+             x:DataType="dataSet:IDataSetEditorViewModel"
              Width="450" Height="450">
     
     <Design.DataContext>
         <fakes:FakeDataSetCreatingViewModel/>
     </Design.DataContext>
     
-    <Grid RowDefinitions="*, 50">
+    <Grid RowDefinitions="*, 50" Name="Root">
 
         <ScrollViewer Grid.Row="0" Grid.Column="0">
             <StackPanel Margin="20" Spacing="20">
@@ -54,16 +54,25 @@
                                     Command="{Binding AddItemClassCommand}" />
                         </StackPanel>
 
-                        <ListBox ItemsSource="{Binding ItemClasses}"
-                                 SelectedItem="{Binding SelectedItemClass}"
-                                 IsVisible="{Binding !!ItemClasses.Count}">
-                            <ListBox.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Delete"
-                                              Command="{Binding DeleteItemClassCommand}"/>
-                                </ContextMenu>
-                            </ListBox.ContextMenu>
-                        </ListBox>
+                        <ItemsControl ItemsSource="{Binding ItemClasses}"
+                                      IsVisible="{Binding !!ItemClasses.Count}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ColorPicker Color="{Binding Color}"
+                                                     IsAlphaEnabled="False">
+                                            <ColorPicker.Palette>
+                                                <FluentColorPalette/>
+                                            </ColorPicker.Palette>
+                                        </ColorPicker>
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <Button Content="{icons:MaterialIconExt Close}"
+                                                Command="{Binding #Root.((dataSet:IDataSetEditorViewModel)DataContext).DeleteItemClassCommand}"
+                                                CommandParameter="{Binding}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
                         <TextBlock Text="No items yet" IsVisible="{Binding !ItemClasses.Count}" />
 

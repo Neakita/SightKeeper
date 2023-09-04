@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Domain.Model.Common;
@@ -17,6 +18,9 @@ public sealed class ItemClass
 		Color = color;
 		_items = new List<DetectorItem>();
 	}
+
+	internal void AddItem(DetectorItem item) => _items.Add(item);
+	internal void RemoveItem(DetectorItem item) => Guard.IsTrue(_items.Remove(item));
 
 	public override string ToString() => Name;
 

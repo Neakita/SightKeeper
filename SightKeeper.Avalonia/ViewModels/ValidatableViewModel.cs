@@ -2,6 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
 using FluentValidation;
@@ -11,35 +12,39 @@ namespace SightKeeper.Avalonia.ViewModels;
 
 public abstract class ValidatableViewModel<TValidatable> : ViewModel, INotifyDataErrorInfo where TValidatable : class
 {
-    public IValidator<TValidatable> Validator { get; }
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+    public IObservable<DataErrorsChangedEventArgs> ErrorsChangedObservable =>
+        Observable.FromEventPattern<DataErrorsChangedEventArgs>(
+                handler => ErrorsChanged += handler,
+                handler => ErrorsChanged -= handler)
+            .Select(data => data.EventArgs);
+    public bool HasErrors => !_validationResult.IsValid;
     
     public ValidatableViewModel(IValidator<TValidatable> validator)
     {
-        Validator = validator;
+        _validator = validator;
         PropertyChanged += OnPropertyChanged;
     }
 
     public IEnumerable GetErrors(string? propertyName)
     {
         if (string.IsNullOrWhiteSpace(propertyName))
-            return ValidationResult.Errors.Select(error => error.ErrorMessage);
-        return ValidationResult.Errors.Where(error => error.PropertyName == propertyName)
+            return _validationResult.Errors.Select(error => error.ErrorMessage);
+        return _validationResult.Errors.Where(error => error.PropertyName == propertyName)
             .Select(error => error.ErrorMessage);
     }
-
-    public bool HasErrors => !ValidationResult.IsValid;
-    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-    
-    protected ValidationResult ValidationResult = new();
 
     protected async Task<bool> Validate()
     {
         var validatable = this as TValidatable;
         Guard.IsNotNull(validatable);
-        var validationResult = await Validator.ValidateAsync(validatable) ;
+        var validationResult = await _validator.ValidateAsync(validatable) ;
         UpdateValidationResult(validationResult);
         return validationResult.IsValid;
     }
+    
+    private readonly IValidator<TValidatable> _validator;
+    private ValidationResult _validationResult = new();
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -48,9 +53,9 @@ public abstract class ValidatableViewModel<TValidatable> : ViewModel, INotifyDat
 
     private void UpdateValidationResult(ValidationResult validationResult)
     {
-        var propertiesToValidate = ValidationResult.Errors.Select(error => error.PropertyName)
+        var propertiesToValidate = _validationResult.Errors.Select(error => error.PropertyName)
             .Union(validationResult.Errors.Select(error => error.PropertyName)).ToList();
-        ValidationResult = validationResult;
+        _validationResult = validationResult;
         foreach (var property in propertiesToValidate)
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
     }

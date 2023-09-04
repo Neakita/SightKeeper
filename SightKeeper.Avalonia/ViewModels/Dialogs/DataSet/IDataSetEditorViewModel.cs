@@ -2,17 +2,17 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Avalonia.ViewModels.Dialogs;
+namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 
 public interface IDataSetEditorViewModel : INotifyPropertyChanging, INotifyPropertyChanged
 {
     string Name { get; set; }
     string Description { get; set; }
     int? Resolution { get; set; }
-    IReadOnlyCollection<string> ItemClasses { get; }
-    string? SelectedItemClass { get; set; }
+    IReadOnlyCollection<EditableItemClass> ItemClasses { get; }
     string NewItemClassName { get; set; }
     Game? Game { get; set; }
     Task<IReadOnlyCollection<Game>> Games { get; }

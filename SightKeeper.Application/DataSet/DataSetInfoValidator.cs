@@ -13,6 +13,6 @@ public sealed class DataSetInfoValidator : AbstractValidator<DataSetInfo>
             .LessThanOrEqualTo(ushort.MaxValue)
             .MultiplierOf(32);
         
-        RuleFor(changes => changes.ItemClasses).NoDuplicates();
+        RuleFor(changes => changes.ItemClasses).NoDuplicates(itemClass => itemClass.Name);
     }
 }
