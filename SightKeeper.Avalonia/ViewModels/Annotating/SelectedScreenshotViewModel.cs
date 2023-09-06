@@ -10,7 +10,7 @@ public sealed class SelectedScreenshotViewModel : ValueViewModel<ScreenshotViewM
         set => SetProperty(ref _selectedScreenshotIndex, value);
     }
 
-    public ObservableCollection<DetectorItemViewModel> Items { get; } = new();
+    public ObservableCollection<DrawerItem> Items { get; } = new();
 
     public SelectedScreenshotViewModel() : base(null)
     {

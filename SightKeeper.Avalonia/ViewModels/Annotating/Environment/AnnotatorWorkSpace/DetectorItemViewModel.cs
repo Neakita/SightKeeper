@@ -9,7 +9,7 @@ using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DetectorItemViewModel : ViewModel
+public sealed partial class DetectorItemViewModel : ViewModel, DrawerItem
 {
     public static IObservable<DetectorItemViewModel> ItemClassChanged => ItemClassChangedSubject.AsObservable();
     private static readonly Subject<DetectorItemViewModel> ItemClassChangedSubject = new();
@@ -28,6 +28,7 @@ public sealed partial class DetectorItemViewModel : ViewModel
     public DetectorItemResizer Resizer { get; }
     public DrawerViewModel Drawer { get; }
 
+    public bool IsDashed => false;
     public BoundingViewModel Bounding { get; private set; }
 
     public DetectorItemViewModel(DetectorItem item, DetectorItemResizer resizer, DrawerViewModel drawer)

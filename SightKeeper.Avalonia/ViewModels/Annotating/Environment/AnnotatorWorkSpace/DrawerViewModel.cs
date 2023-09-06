@@ -115,7 +115,7 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
 
     partial void OnIsItemSelectionEnabledChanged(bool value)
     {
-        foreach (var item in SelectedScreenshotViewModel.Items)
+        foreach (var item in SelectedScreenshotViewModel.Items.OfType<DetectorItemViewModel>())
             item.IsThumbsVisible = value;
     }
 }

@@ -25,13 +25,13 @@
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem">
                         <Setter Property="ZIndex"
-                                Value="{Binding (annotating:DetectorItemViewModel).Bounding.Width, Converter={StaticResource WidthToZIndexConverter}}"/>
+                                Value="{Binding (annotating:DrawerItem).Bounding.Width, Converter={StaticResource WidthToZIndexConverter}}"/>
                         <Setter Property="Padding" Value="0"/>
                         <Setter Property="Canvas.Left">
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
                                     <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DetectorItemViewModel).Bounding.Left" />
+                                        <Binding Path="(annotating:DrawerItem).Bounding.Left" />
                                         <Binding ElementName="CanvasItemsControl" Path="Bounds.Width" />
                                     </MultiBinding.Bindings>
                                 </MultiBinding>
@@ -41,7 +41,7 @@
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
                                     <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DetectorItemViewModel).Bounding.Top" />
+                                        <Binding Path="(annotating:DrawerItem).Bounding.Top" />
                                         <Binding ElementName="CanvasItemsControl" Path="Bounds.Height" />
                                     </MultiBinding.Bindings>
                                 </MultiBinding>
@@ -51,7 +51,7 @@
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
                                     <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DetectorItemViewModel).Bounding.Width" />
+                                        <Binding Path="(annotating:DrawerItem).Bounding.Width" />
                                         <Binding ElementName="CanvasItemsControl" Path="Bounds.Width" />
                                     </MultiBinding.Bindings>
                                 </MultiBinding>
@@ -61,31 +61,31 @@
                             <Setter.Value>
                                 <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
                                     <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DetectorItemViewModel).Bounding.Height" />
+                                        <Binding Path="(annotating:DrawerItem).Bounding.Height" />
                                         <Binding ElementName="CanvasItemsControl" Path="Bounds.Height" />
                                     </MultiBinding.Bindings>
                                 </MultiBinding>
                             </Setter.Value>
                         </Setter>
                         
-                        <Setter Property="BorderBrush" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.5}"/>
+                        <Setter Property="BorderBrush" Value="{Binding (annotating:DrawerItem).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.5}"/>
                         <Setter Property="BorderThickness" Value="1"/>
                         <Setter Property="ClipToBounds" Value="False"/>
                         
                     </Style>
                     
                     <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.1}" />
+                        <Setter Property="Background" Value="{Binding (annotating:DrawerItem).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.1}" />
                     </Style>
                     
                     <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="BorderBrush" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.8}"/>
+                        <Setter Property="BorderBrush" Value="{Binding (annotating:DrawerItem).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.8}"/>
                         <Setter Property="Background" Value="Transparent"/>
                     </Style>
                     
                     <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="BorderBrush" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.8}"/>
-                        <Setter Property="Background" Value="{Binding (annotating:DetectorItemViewModel).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.1}"/>
+                        <Setter Property="BorderBrush" Value="{Binding (annotating:DrawerItem).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.8}"/>
+                        <Setter Property="Background" Value="{Binding (annotating:DrawerItem).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.1}"/>
                     </Style>
                     
                     <Style Selector="ListBoxItem:selected"/>
