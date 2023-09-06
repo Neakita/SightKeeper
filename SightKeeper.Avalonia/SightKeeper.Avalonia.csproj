@@ -42,16 +42,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\Annotating\Detector\DetectorItem.axaml.cs">
-        <DependentUpon>DetectorItem.axaml</DependentUpon>
+      <Compile Update="Views\Annotating\DetectorAnnotatorTools.axaml.cs">
+        <DependentUpon>DetectorAnnotatorTools.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="Views\Annotating\Detector\DetectorDrawer.axaml.cs">
+      <Compile Update="Views\Annotating\DetectorDrawer.axaml.cs">
         <DependentUpon>DetectorDrawer.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="Views\Annotating\Detector\DetectorAnnotatorTools.axaml.cs">
-        <DependentUpon>DetectorAnnotatorTools.axaml</DependentUpon>
+      <Compile Update="Views\Annotating\DetectorItem.axaml.cs">
+        <DependentUpon>DetectorItem.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
     </ItemGroup>
