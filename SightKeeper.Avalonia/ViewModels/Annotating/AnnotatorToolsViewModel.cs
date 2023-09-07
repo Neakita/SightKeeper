@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
 using ReactiveUI;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Commons;
@@ -95,7 +96,7 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
         Guard.IsNotNull(screenshot);
         _annotator.UnMarkAsset(screenshot.Item);
         screenshot.NotifyIsAssetChanged();
-        _selectedScreenshotViewModel.Items.Clear();
+        _selectedScreenshotViewModel.DetectorItems.Clear();
     }
     private bool CanUnMarkSelectedScreenshotAsAsset() =>
         _selectedScreenshotViewModel.Value?.IsAsset == true;
@@ -122,7 +123,7 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
         Guard.IsNotNull(item);
         Guard.IsNotNull(item.Item);
         _annotator.DeleteItem(item.Item);
-        _selectedScreenshotViewModel.Items.Remove(item);
+        _selectedScreenshotViewModel.DetectorItems.Remove(item);
     }
 
     private bool CanDeleteItem() => SelectedItem != null;

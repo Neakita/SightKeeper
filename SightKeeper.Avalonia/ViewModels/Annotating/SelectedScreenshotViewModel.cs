@@ -1,4 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Reactive.Disposables;
+using DynamicData;
+using SightKeeper.Commons;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -10,16 +14,34 @@ public sealed class SelectedScreenshotViewModel : ValueViewModel<ScreenshotViewM
         set => SetProperty(ref _selectedScreenshotIndex, value);
     }
 
-    public ObservableCollection<DrawerItem> Items { get; } = new();
+    public ReadOnlyObservableCollection<DrawerItem> Items { get; }
+    
+    public SourceList<DetectorItemViewModel> DetectorItems { get; } = new();
+    public SourceList<DetectedItemViewModel> DetectedItems { get; } = new();
 
     public SelectedScreenshotViewModel() : base(null)
     {
+        DetectorItems.Connect()
+            .Transform(detectorItem => (DrawerItem)detectorItem)
+            .PopulateInto(_items)
+            .DisposeWithEx(_disposable);
+        DetectedItems.Connect()
+            .Transform(detectedItem => (DrawerItem)detectedItem)
+            .PopulateInto(_items)
+            .DisposeWithEx(_disposable);
+        _items.Connect()
+            .Bind(out var items)
+            .Subscribe()
+            .DisposeWithEx(_disposable);
+        Items = items;
     }
 
     protected override void OnValueChanged(ScreenshotViewModel? newValue)
     {
-        Items.Clear();
+        DetectorItems.Clear();
     }
     
+    private readonly CompositeDisposable _disposable = new();
+    private readonly SourceList<DrawerItem> _items = new();
     private int? _selectedScreenshotIndex;
 }

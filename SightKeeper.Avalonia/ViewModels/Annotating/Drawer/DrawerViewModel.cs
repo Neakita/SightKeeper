@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using Avalonia;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Services;
 
@@ -53,7 +54,7 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
                 return;
             assetsDataAccess.LoadItems(asset);
             foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer, this)))
-                SelectedScreenshotViewModel.Items.Add(item);
+                SelectedScreenshotViewModel.DetectorItems.Add(item);
         }).DisposeWith(disposable);
     }
     
@@ -63,7 +64,7 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
         Guard.IsNotNull(_tools.SelectedItemClass);
         startPosition = Clamp(startPosition);
         DetectorItemViewModel item = new(_tools.SelectedItemClass, startPosition, _resizer, this);
-        SelectedScreenshotViewModel.Items.Add(item);
+        SelectedScreenshotViewModel.DetectorItems.Add(item);
         _drawingData = new DrawingData(startPosition, item);
     }
 
@@ -85,7 +86,7 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
         var boundingViewModel = _drawingData.ItemViewModel.Bounding;
         if (boundingViewModel.Width < MinimumDimensionSize || boundingViewModel.Height < MinimumDimensionSize)
         {
-            SelectedScreenshotViewModel.Items.Remove(_drawingData.ItemViewModel);
+            SelectedScreenshotViewModel.DetectorItems.Remove(_drawingData.ItemViewModel);
             _drawingData = null;
             return;
         }
