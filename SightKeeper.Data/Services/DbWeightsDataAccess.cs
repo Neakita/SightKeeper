@@ -16,8 +16,16 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         _dbContext = dbContext;
     }
 
-    public Task LoadWeights(WeightsLibrary library, CancellationToken cancellationToken = default) =>
-        _dbContext.Entry(library).Collection(lib => lib.Weights).LoadAsync(cancellationToken: cancellationToken);
+    public Task LoadWeights(WeightsLibrary library, CancellationToken cancellationToken = default)
+    {
+        return Task.Run(() =>
+        {
+            lock (_dbContext)
+            {
+                _dbContext.Entry(library).Collection(lib => lib.Weights).Load();
+            }
+        }, cancellationToken);
+    }
 
     public async Task<Weights> CreateWeights(
         WeightsLibrary library,

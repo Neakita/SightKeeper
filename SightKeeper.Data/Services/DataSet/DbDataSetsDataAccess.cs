@@ -14,12 +14,15 @@ public sealed class DbDataSetsDataAccess : DataSetsDataAccess
         _dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyCollection<Domain.Model.DataSet>> GetDataSets(CancellationToken cancellationToken = default) =>
-        await _dbContext.DataSets
+    public Task<IReadOnlyCollection<Domain.Model.DataSet>> GetDataSets(CancellationToken cancellationToken) =>
+        Task.Run(GetDataSets, cancellationToken);
+
+    private IReadOnlyCollection<Domain.Model.DataSet> GetDataSets() =>
+        _dbContext.DataSets
             .Include(dataSet => dataSet.ItemClasses)
             .Include(dataSet => dataSet.Game)
             .Include(dataSet => dataSet.ScreenshotsLibrary)
-            .ToListAsync(cancellationToken);
+            .ToList();
 
     public async Task RemoveDataSet(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
     {

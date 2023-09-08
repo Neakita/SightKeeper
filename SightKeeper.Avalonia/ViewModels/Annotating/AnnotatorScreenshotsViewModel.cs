@@ -65,8 +65,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         _screenshots.Clear();
         if (value == null)
             return;
-        _screenshotsDataAccess.Load(value.ScreenshotsLibrary);
-        _screenshots.AddRange(value.ScreenshotsLibrary.Screenshots);
+        LoadScreenshots(value);
         _dataSetDisposable = new CompositeDisposable();
         value.ScreenshotsLibrary.ScreenshotAdded
             .Subscribe(OnScreenshotAdded)
@@ -74,6 +73,12 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         value.ScreenshotsLibrary.ScreenshotRemoved
             .Subscribe(OnScreenshotRemoved)
             .DisposeWith(_dataSetDisposable);
+    }
+
+    private async void LoadScreenshots(DataSet dataSet)
+    {
+        await _screenshotsDataAccess.Load(dataSet.ScreenshotsLibrary);
+        _screenshots.AddRange(dataSet.ScreenshotsLibrary.Screenshots);
     }
 
     private void OnScreenshotAdded(Screenshot newScreenshot)

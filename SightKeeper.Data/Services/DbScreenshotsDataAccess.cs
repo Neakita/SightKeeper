@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
@@ -17,8 +16,13 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         var entry = _dbContext.Entry(library);
         if (entry.State == EntityState.Detached)
             return Task.CompletedTask;
-        return entry.Collection(lib => lib.Screenshots)
-            .LoadAsync(LoadOptions.None, cancellationToken);
+        return Task.Run(() =>
+        {
+            lock (_dbContext)
+            {
+                entry.Collection(lib => lib.Screenshots).Load();
+            }
+        }, cancellationToken);
     }
 
     public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken = default)

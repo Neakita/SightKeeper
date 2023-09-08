@@ -37,12 +37,12 @@ public sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
         base.Dispose();
     }
 
-    protected override void OnValueChanged(DataSetViewModel? newValue)
+    protected override async void OnValueChanged(DataSetViewModel? newValue)
     {
         _weights.Clear();
         if (newValue == null)
             return;
-        _weightsDataAccess.LoadWeights(newValue.DataSet.WeightsLibrary);
+        await _weightsDataAccess.LoadWeights(newValue.DataSet.WeightsLibrary);
         _weights.AddRange(newValue.DataSet.WeightsLibrary.Weights);
     }
 
