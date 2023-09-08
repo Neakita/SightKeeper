@@ -17,7 +17,7 @@
                   IsEnabled="{Binding !!SelectedWeights}"/>
         <Slider ToolTip.Tip="Probability threshold"
                 Value="{Binding ProbabilityThreshold}"
-                Minimum="0"
+                Minimum="0.01"
                 Maximum="0.99"
                 IsEnabled="{Binding !!SelectedWeights}"/>
         <Slider ToolTip.Tip="IoU"

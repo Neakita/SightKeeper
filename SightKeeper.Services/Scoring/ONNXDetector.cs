@@ -33,7 +33,7 @@ public sealed class ONNXDetector : Detector
 
     public float? ProbabilityThreshold
     {
-        get => _predictor?.Parameters.Confidence;
+        get => _predictor?.Parameters.Confidence ?? 0.5f;
         set
         {
             Guard.IsNotNull(_predictor);
