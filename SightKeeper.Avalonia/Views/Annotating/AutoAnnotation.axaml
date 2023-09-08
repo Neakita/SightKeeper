@@ -15,12 +15,12 @@
         <CheckBox Content="Auto detect"
                   IsChecked="{Binding AutoAnnotatingEnabled}"
                   IsEnabled="{Binding !!SelectedWeights}"/>
-        <Slider ToolTip.Tip="Probability threshold"
+        <Slider ToolTip.Tip="{Binding ProbabilityThreshold, StringFormat=ProbabilityThreshold {0:P0}}"
                 Value="{Binding ProbabilityThreshold}"
                 Minimum="0.01"
                 Maximum="0.99"
                 IsEnabled="{Binding !!SelectedWeights}"/>
-        <Slider ToolTip.Tip="IoU"
+        <Slider ToolTip.Tip="{Binding IoU, StringFormat=IoU {0:0.#}}"
                 Value="{Binding IoU}"
                 Minimum="0"
                 Maximum="2"
