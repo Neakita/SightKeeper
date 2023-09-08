@@ -29,9 +29,12 @@
             <NumericUpDown Value="{Binding Epochs}"
                            Minimum="100"
                            Maximum="1000000"
-                           Increment="100"/>
+                           Increment="100"
+                           IsEnabled="{Binding !IsTraining}"/>
             
-            <CheckBox Content="AMP" IsChecked="{Binding AMP}"/>
+            <CheckBox Content="AMP"
+                      IsChecked="{Binding AMP}"
+                      IsEnabled="{Binding !IsTraining}"/>
         
             <Button Content="{icons:MaterialIconExt Play}"
                     Command="{Binding StartTrainingCommand}"/>

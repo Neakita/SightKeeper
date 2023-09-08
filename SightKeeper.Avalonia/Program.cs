@@ -18,8 +18,7 @@ internal static class Program
 		try
 		{
 			AppBootstrapper.Setup();
-			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-			BuildAvaloniaApp()
+			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException; BuildAvaloniaApp()
 				.StartWithClassicDesktopLifetime(args);
 		}
 		catch (Exception exception)

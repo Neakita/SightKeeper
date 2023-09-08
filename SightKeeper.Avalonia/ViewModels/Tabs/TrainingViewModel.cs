@@ -26,10 +26,15 @@ public sealed partial class TrainingViewModel : ViewModel
     public IReadOnlyCollection<DataSetViewModel> AvailableDataSets { get; }
     public InlineCollection InlineCollection { get; } = new();
 
-    public uint Epochs
+    public uint? Epochs
     {
         get => _epochs;
-        set => SetProperty(ref _epochs, value);
+        set
+        {
+            if (!SetProperty(ref _epochs, value))
+                return;
+            StartTrainingCommand.NotifyCanExecuteChanged();
+        }
     }
 
     public bool AMP
@@ -75,16 +80,17 @@ public sealed partial class TrainingViewModel : ViewModel
     {
         Guard.IsNotNull(SelectedDataSet);
         Guard.IsNotNull(SelectedModelSize);
+        Guard.IsNotNull(Epochs);
         IsTraining = true;
-        await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs, Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+        await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs.Value, Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
         _progress.OnNext(null);
         IsTraining = false;
     }
 
-    public bool CanStartTraining() => SelectedDataSet != null && SelectedModelSize != null;
+    public bool CanStartTraining() => SelectedDataSet != null && SelectedModelSize != null && Epochs != null;
 
     
     private readonly BehaviorSubject<TrainingProgress?> _progress = new(null);
     private bool _isTraining;
-    private uint _epochs = 100;
+    private uint? _epochs = 100;
 }
