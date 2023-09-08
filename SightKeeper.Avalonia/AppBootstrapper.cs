@@ -126,7 +126,7 @@ public static class AppBootstrapper
 		builder.RegisterType<ScreenshoterViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<AnnotatorToolsViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<DrawerViewModel>().InstancePerMainViewModel();;
+		builder.RegisterType<DrawerViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DetectorItemResizer>();
 		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();

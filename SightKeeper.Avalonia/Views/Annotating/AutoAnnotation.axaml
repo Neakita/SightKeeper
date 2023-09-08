@@ -13,7 +13,7 @@
         <Button Content="{icons:MaterialIconExt AutoFix}"
                 Command="{Binding AnnotateCommand}"/>
         <CheckBox Content="Auto detect"
-                  IsChecked="{Binding AnnotateWhenScreenshotChanged}"
+                  IsChecked="{Binding AutoAnnotatingEnabled}"
                   IsEnabled="{Binding !!SelectedWeights}"/>
         <Slider ToolTip.Tip="Probability threshold"
                 Value="{Binding ProbabilityThreshold}"

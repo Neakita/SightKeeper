@@ -23,13 +23,8 @@ public sealed class SelectedScreenshotViewModel : ValueViewModel<ScreenshotViewM
     {
         DetectorItems.Connect()
             .Transform(detectorItem => (DrawerItem)detectorItem)
-            .PopulateInto(_items)
-            .DisposeWithEx(_disposable);
-        DetectedItems.Connect()
-            .Transform(detectedItem => (DrawerItem)detectedItem)
-            .PopulateInto(_items)
-            .DisposeWithEx(_disposable);
-        _items.Connect()
+            .Or(DetectedItems.Connect()
+                .Transform(detectedItem => (DrawerItem)detectedItem))
             .Bind(out var items)
             .Subscribe()
             .DisposeWithEx(_disposable);
@@ -43,6 +38,5 @@ public sealed class SelectedScreenshotViewModel : ValueViewModel<ScreenshotViewM
     }
     
     private readonly CompositeDisposable _disposable = new();
-    private readonly SourceList<DrawerItem> _items = new();
     private int? _selectedScreenshotIndex;
 }

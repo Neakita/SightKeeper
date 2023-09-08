@@ -5,7 +5,16 @@
              xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Annotating.DetectedItem"
-             x:DataType="annotating:DetectedItemViewModel">
+             x:DataType="annotating:DetectedItemViewModel"
+             Background="Transparent">
+    
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Make annotation"
+                      Command="{Binding MakeAnnotationCommand}"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    
     <TextBlock TextTrimming="CharacterEllipsis"
                FontSize="7"
                Background="#30000000"

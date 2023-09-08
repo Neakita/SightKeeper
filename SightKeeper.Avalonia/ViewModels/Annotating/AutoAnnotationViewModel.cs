@@ -23,15 +23,17 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(AnnotateCommand))]
-    private bool _annotateWhenScreenshotChanged;
+    private bool _autoAnnotatingEnabled;
 
     public float ProbabilityThreshold
     {
         get => _detector.ProbabilityThreshold ?? 0;
         set
         {
-            if (SetProperty(_detector.ProbabilityThreshold, value, newValue => _detector.ProbabilityThreshold = newValue))
-                OnScreenshotChangedWhenAutoDetectEnabled();
+            if (!SetProperty(_detector.ProbabilityThreshold, value, newValue => _detector.ProbabilityThreshold = newValue))
+                return;
+            if (AutoAnnotatingEnabled)
+                BeginAnnotationAndForget();
         }
     }
 
@@ -40,8 +42,10 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
         get => _detector.IoU ?? 0;
         set
         {
-            if (SetProperty(_detector.IoU, value, newValue => _detector.IoU = newValue))
-                OnScreenshotChangedWhenAutoDetectEnabled();
+            if (!SetProperty(_detector.IoU, value, newValue => _detector.IoU = newValue))
+                return;
+            if (AutoAnnotatingEnabled)
+                BeginAnnotationAndForget();
         }
     }
 
@@ -66,7 +70,7 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
         _selectedScreenshotViewModel.DetectedItems.Clear();
         _selectedScreenshotViewModel.DetectedItems.AddRange(items.Select(CreateDetectedItemViewModel));
     }
-    private bool CanAnnotate() => SelectedWeights != null && _selectedScreenshotViewModel.Value != null && !AnnotateWhenScreenshotChanged;
+    private bool CanAnnotate() => SelectedWeights != null && _selectedScreenshotViewModel.Value != null && !AutoAnnotatingEnabled;
 
     private static DetectedItemViewModel CreateDetectedItemViewModel(DetectionItem detectionItem)
     {
@@ -79,7 +83,7 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
     partial void OnSelectedWeightsChanged(Weights? value)
     {
         if (value == null)
-            AnnotateWhenScreenshotChanged = false;
+            AutoAnnotatingEnabled = false;
         _detector.Weights = value;
         OnPropertyChanged(nameof(ProbabilityThreshold));
         OnPropertyChanged(nameof(IoU));
@@ -87,14 +91,14 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
 
     private IDisposable? _isAutoDetectedEnabledChangedSubscription;
     private CancellationTokenSource? _autoDetectCancellationTokenSource;
-    partial void OnAnnotateWhenScreenshotChangedChanged(bool value)
+    partial void OnAutoAnnotatingEnabledChanged(bool value)
     {
         if (value)
         {
             Guard.IsNull(_isAutoDetectedEnabledChangedSubscription);
             _isAutoDetectedEnabledChangedSubscription =
-                _selectedScreenshotViewModel.ObservableValue.Subscribe(_ => OnScreenshotChangedWhenAutoDetectEnabled());
-            OnScreenshotChangedWhenAutoDetectEnabled();
+                _selectedScreenshotViewModel.ObservableValue.Subscribe(_ => BeginAnnotationAndForget());
+            BeginAnnotationAndForget();
         }
         else
         {
@@ -104,7 +108,7 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
         }
     }
 
-    private void OnScreenshotChangedWhenAutoDetectEnabled()
+    private void BeginAnnotationAndForget()
     {
         _autoDetectCancellationTokenSource?.Cancel();
         _autoDetectCancellationTokenSource = new CancellationTokenSource();

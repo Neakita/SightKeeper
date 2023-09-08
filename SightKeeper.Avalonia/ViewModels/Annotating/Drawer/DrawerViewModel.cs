@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Threading;
 using Avalonia;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Commons;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
@@ -45,8 +47,6 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
         _resizer = resizer;
         _tools = tools;
         _annotator = annotator;
-        CompositeDisposable disposable = new();
-        _disposable = disposable;
         selectedScreenshotViewModel.ObservableValue.Subscribe(_ =>
         {
             var asset = SelectedScreenshotViewModel.Value?.Item.Asset;
@@ -55,7 +55,16 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
             assetsDataAccess.LoadItems(asset);
             foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer, this)))
                 SelectedScreenshotViewModel.DetectorItems.Add(item);
-        }).DisposeWith(disposable);
+        }).DisposeWith(_disposable);
+
+        DetectedItemViewModel.MakeAnnotationRequested.Subscribe(async item =>
+        {
+            Guard.IsNotNull(SelectedScreenshotViewModel.Value);
+            SelectedScreenshotViewModel.DetectedItems.Remove(item);
+            var detectorItem = await _annotator.Annotate(SelectedScreenshotViewModel.Value.Item, item.ItemClass, item.Bounding.Bounding, CancellationToken.None);
+            SelectedScreenshotViewModel.DetectorItems.Add(new DetectorItemViewModel(detectorItem, resizer, this));
+            SelectedScreenshotViewModel.Value.NotifyIsAssetChanged();
+        }).DisposeWithEx(_disposable);
     }
     
     public void BeginDrawing(Point startPosition)
@@ -103,7 +112,7 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
     private readonly AnnotatorToolsViewModel _tools;
     private readonly DetectorAnnotator _annotator;
     private readonly DetectorItemResizer _resizer;
-    private readonly IDisposable _disposable;
+    private readonly CompositeDisposable _disposable = new();
     private DrawingData? _drawingData;
     [ObservableProperty] private bool _isItemSelectionEnabled;
     [ObservableProperty] private DetectorItemViewModel? _selectedItem;
