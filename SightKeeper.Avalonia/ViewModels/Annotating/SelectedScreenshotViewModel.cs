@@ -39,6 +39,7 @@ public sealed class SelectedScreenshotViewModel : ValueViewModel<ScreenshotViewM
     protected override void OnValueChanged(ScreenshotViewModel? newValue)
     {
         DetectorItems.Clear();
+        DetectedItems.Clear();
     }
     
     private readonly CompositeDisposable _disposable = new();

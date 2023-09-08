@@ -1,0 +1,18 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Views.Annotating.DetectedItem"
+             x:DataType="annotating:DetectedItemViewModel">
+    <TextBlock TextTrimming="CharacterEllipsis"
+               FontSize="7"
+               Background="#30000000"
+               VerticalAlignment="Top"
+               HorizontalAlignment="Left">
+        <Run Text="{Binding ItemClass.Name}"/>
+        <LineBreak/>
+        <Run Text="{Binding Probability, StringFormat=P0}"/>
+    </TextBlock>
+</UserControl>

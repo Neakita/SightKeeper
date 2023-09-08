@@ -1,0 +1,29 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:annotatingViewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Views.Annotating.AutoAnnotation"
+             x:DataType="annotatingViewModels:AutoAnnotationViewModel">
+    <StackPanel>
+        <ComboBox ItemsSource="{Binding Weights}"
+                  SelectedItem="{Binding SelectedWeights}"/>
+        <Button Content="{icons:MaterialIconExt AutoFix}"
+                Command="{Binding AnnotateCommand}"/>
+        <CheckBox Content="Auto detect"
+                  IsChecked="{Binding AnnotateWhenScreenshotChanged}"
+                  IsEnabled="{Binding !!SelectedWeights}"/>
+        <Slider ToolTip.Tip="Probability threshold"
+                Value="{Binding ProbabilityThreshold}"
+                Minimum="0"
+                Maximum="0.99"
+                IsEnabled="{Binding !!SelectedWeights}"/>
+        <Slider ToolTip.Tip="IoU"
+                Value="{Binding IoU}"
+                Minimum="0"
+                Maximum="2"
+                IsEnabled="{Binding !!SelectedWeights}"/>
+    </StackPanel>
+</UserControl>

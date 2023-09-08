@@ -24,7 +24,7 @@
         <GridSplitter Grid.Column="1"/>
         <ContentControl Grid.Column="2" Content="{Binding DrawerViewModel}"/>
         <GridSplitter Grid.Column="3" Background="Gray"/>
-        <Grid Grid.Column="4" RowDefinitions="Auto Auto *">
+        <Grid Grid.Column="4" RowDefinitions="Auto Auto Auto Auto">
             <ComboBox Grid.Row="0"
                       ItemsSource="{Binding DataSetViewModels}"
                       SelectedItem="{Binding SelectedDataSet.Value}"
@@ -49,6 +49,13 @@
                       IsExpanded="True"
                       VerticalAlignment="Top">
                 <ContentControl Content="{Binding ToolsViewModel}"/>
+            </Expander>
+            <Expander Grid.Row="3"
+                      Header="Auto annotating"
+                      HorizontalAlignment="Stretch"
+                      IsExpanded="True"
+                      VerticalAlignment="Top">
+                <ContentControl Content="{Binding AutoAnnotationViewModel}"/>
             </Expander>
         </Grid>
     </Grid>

@@ -12,6 +12,7 @@ using SightKeeper.Application.Annotating;
 using SightKeeper.Application.DataSet;
 using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Application.DataSet.Editing;
+using SightKeeper.Application.Scoring;
 using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Annotating;
@@ -32,6 +33,7 @@ using SightKeeper.Services;
 using SightKeeper.Services.Annotating;
 using SightKeeper.Services.Games;
 using SightKeeper.Services.Input;
+using SightKeeper.Services.Scoring;
 using SightKeeper.Services.Windows;
 using DataSetEditor = SightKeeper.Avalonia.Views.Dialogs.DataSetEditor;
 
@@ -62,9 +64,9 @@ public static class AppBootstrapper
 		builder.RegisterInstance(levelSwitch);
 		Log.Logger = new LoggerConfiguration()
 			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-			#if DEBUG
+			/*#if DEBUG
 			.WriteTo.Debug()
-			#endif
+			#endif*/
 			.WriteTo.Seq("http://localhost:5341/")
 			.MinimumLevel.ControlledBy(levelSwitch)
 			.CreateLogger();
@@ -97,10 +99,11 @@ public static class AppBootstrapper
 		builder.RegisterType<DbAssetsDataAccess>().As<AssetsDataAccess>();
 		builder.RegisterType<ImagesExporter>();
 		builder.RegisterType<DataSetsObservableRepository>().InstancePerMainViewModel();
-		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>();
+		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetConfigurationExporter>();
 		builder.RegisterType<Trainer>();
 		builder.RegisterType<DbItemClassDataAccess>().As<ItemClassDataAccess>();
+		builder.RegisterType<ONNXDetector>().As<Detector>();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
@@ -131,6 +134,7 @@ public static class AppBootstrapper
 		builder.RegisterType<WeightsEditorViewModel>();
 		builder.RegisterType<SelectedDataSetViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<SelectedScreenshotViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<AutoAnnotationViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -145,5 +149,7 @@ public static class AppBootstrapper
 		builder.RegisterType<TrainingTab>().As<IViewFor<TrainingViewModel>>();
 		builder.RegisterType<DetectorItem>().As<IViewFor<DetectorItemViewModel>>();
 		builder.RegisterType<WeightsEditor>().As<IViewFor<WeightsEditorViewModel>>();
+		builder.RegisterType<AutoAnnotation>().As<IViewFor<AutoAnnotationViewModel>>();
+		builder.RegisterType<DetectedItem>().As<IViewFor<DetectedItemViewModel>>();
 	}
 }

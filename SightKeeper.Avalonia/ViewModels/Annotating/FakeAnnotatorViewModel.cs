@@ -41,5 +41,6 @@ public sealed class FakeAnnotatorViewModel : IAnnotatorViewModel
     }
 
     public DrawerViewModel DrawerViewModel => Substitute.For<DrawerViewModel>();
+    public AutoAnnotationViewModel AutoAnnotationViewModel { get; }
 }
 

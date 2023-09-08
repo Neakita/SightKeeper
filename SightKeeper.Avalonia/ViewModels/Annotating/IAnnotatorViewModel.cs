@@ -12,4 +12,5 @@ public interface IAnnotatorViewModel
     ScreenshoterViewModel Screenshoter { get; }
     AnnotatorToolsViewModel ToolsViewModel { get; }
     DrawerViewModel DrawerViewModel { get; }
+    AutoAnnotationViewModel AutoAnnotationViewModel { get; }
 }

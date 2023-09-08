@@ -46,12 +46,10 @@ public sealed class DataSetViewModel : ViewModel, IDisposable
 
     private readonly SourceCache<ItemClass, string> _itemClasses = new(itemClass => itemClass.Name);
 
-    private void UpdateItemClasses()
-    {
+    private void UpdateItemClasses() =>
         _itemClasses.Edit(items =>
         {
             items.Clear();
             items.AddOrUpdate(DataSet.ItemClasses);
         });
-    }
 }

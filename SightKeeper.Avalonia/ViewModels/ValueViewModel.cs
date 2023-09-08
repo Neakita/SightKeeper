@@ -28,7 +28,7 @@ public abstract class ValueViewModel<T> : ViewModel, IDisposable
     public void NotifyCanExecuteChanged(params IRelayCommand[] commands) =>
         _commandsToNotify.AddRange(commands.Select(command => new WeakReference<IRelayCommand>(command)));
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         _valueSubject.Dispose();
     }

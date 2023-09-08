@@ -15,4 +15,6 @@ public readonly struct DetectionItem
         Bounding = bounding;
         Probability = probability;
     }
+
+    public override string ToString() => $"{nameof(ItemClass)}: {ItemClass}, {nameof(Bounding)}: {Bounding}, {nameof(Probability)}: {Probability}";
 }
