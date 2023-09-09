@@ -11,7 +11,8 @@ public interface WeightsDataAccess
 
     Task<Weights> CreateWeights(
         WeightsLibrary library,
-        byte[] data,
+        byte[] onnxData,
+        byte[] ptData,
         ModelSize size,
         uint epoch,
         float boundingLoss,

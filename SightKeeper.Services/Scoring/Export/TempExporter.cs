@@ -7,7 +7,7 @@ public sealed class TempExporter : IDisposable
 {
     private const string TempDirectory = "Temp";
 
-    public string Export(Weights weights) => Export(weights.Data);
+    public string Export(Weights weights) => Export(weights.ONNXData);
     public string Export(IEnumerable<ItemClass> itemClasses)
     {
         var itemClassesNames = itemClasses.Select(itemClass => itemClass.Name);

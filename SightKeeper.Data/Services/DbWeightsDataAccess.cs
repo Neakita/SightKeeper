@@ -29,7 +29,8 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
 
     public async Task<Weights> CreateWeights(
         WeightsLibrary library,
-        byte[] data,
+        byte[] onnxData,
+        byte[] ptData,
         ModelSize size,
         uint epoch,
         float boundingLoss,
@@ -39,7 +40,7 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         CancellationToken cancellationToken = default)
     {
         await LoadWeights(library, cancellationToken);
-        var weights = library.CreateWeights(data, size, epoch, boundingLoss, classificationLoss, deformationLoss, assets);
+        var weights = library.CreateWeights(onnxData, ptData, size, epoch, boundingLoss, classificationLoss, deformationLoss, assets);
         await _dbContext.SaveChangesAsync(cancellationToken);
         _weightsCreated.OnNext(weights);
         return weights;

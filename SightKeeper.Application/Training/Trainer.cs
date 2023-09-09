@@ -47,7 +47,7 @@ public sealed class Trainer
 			return null;
 		}
 		_logger.Debug("Last progress: {Progress}", lastProgress);
-		return await SaveWeights(dataSet, lastProgress, size);
+		return await SaveWeights(dataSet, lastProgress, size, CancellationToken.None); // TODO ability to abort saving
 	}
 
 	public Task<Weights?> ResumeTrainingAsync(
@@ -76,14 +76,15 @@ public sealed class Trainer
 		_logger.Information("Exported dataset parameters: {Parameters}", dataSetParameters);
 	}
 	
-	private async Task<Weights> SaveWeights(Domain.Model.DataSet dataSet, TrainingProgress lastProgress, ModelSize size)
+	private async Task<Weights> SaveWeights(Domain.Model.DataSet dataSet, TrainingProgress lastProgress, ModelSize size, CancellationToken cancellationToken)
 	{
 		var runDirectory = Directory.GetDirectories(RunsDirectoryPath).Single();
-		var modelPath = Path.Combine(runDirectory, "train", "weights", "last.pt");
-		var onnxModelPath = await YoloCLIExtensions.ExportToONNX(modelPath, dataSet.Resolution, _logger);
-		var bytes = await File.ReadAllBytesAsync(onnxModelPath, CancellationToken.None);
-		var weights = await _weightsDataAccess.CreateWeights(dataSet.WeightsLibrary, bytes, size, lastProgress.CurrentEpoch,
-			lastProgress.BoundingLoss, lastProgress.ClassificationLoss, lastProgress.DeformationLoss, dataSet.Assets, CancellationToken.None);
+		var ptModelPath = Path.Combine(runDirectory, "train", "weights", "last.pt");
+		var onnxModelPath = await YoloCLIExtensions.ExportToONNX(ptModelPath, dataSet.Resolution, _logger);
+		var onnxData = await File.ReadAllBytesAsync(onnxModelPath, cancellationToken);
+		var ptData = await File.ReadAllBytesAsync(ptModelPath, cancellationToken);
+		var weights = await _weightsDataAccess.CreateWeights(dataSet.WeightsLibrary, onnxData, ptData, size, lastProgress.CurrentEpoch,
+			lastProgress.BoundingLoss, lastProgress.ClassificationLoss, lastProgress.DeformationLoss, dataSet.Assets, cancellationToken);
 		_logger.Information("Saved weights: {Weights}", weights);
 		return weights;
 	}

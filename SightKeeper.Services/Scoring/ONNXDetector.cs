@@ -24,7 +24,7 @@ public sealed class ONNXDetector : Detector
             _itemClasses = null;
             if (value == null)
                 return;
-            _predictor = new YoloV8(new ModelSelector(value.Data), CreateMetadata(value.Library.DataSet));
+            _predictor = new YoloV8(new ModelSelector(value.ONNXData), CreateMetadata(value.Library.DataSet));
             _itemClasses = value.Library.DataSet.ItemClasses
                 .Select((itemClass, itemClassIndex) => (itemClass, itemClassIndex))
                 .ToDictionary(t => t.itemClassIndex, t => t.itemClass);

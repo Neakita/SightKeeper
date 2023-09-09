@@ -15,7 +15,8 @@ public sealed class WeightsLibrary
     }
 
     public Weights CreateWeights(
-        byte[] data,
+        byte[] onnxData,
+        byte[] ptData,
         ModelSize size,
         uint epoch,
         float boundingLoss,
@@ -23,7 +24,7 @@ public sealed class WeightsLibrary
         float deformationLoss,
         IEnumerable<Asset> assets)
     {
-        Weights weights = new(this, data, size, epoch, boundingLoss, classificationLoss, deformationLoss, assets);
+        Weights weights = new(this, onnxData, ptData, size, epoch, boundingLoss, classificationLoss, deformationLoss, assets);
         _weights.Add(weights);
         return weights;
     }
