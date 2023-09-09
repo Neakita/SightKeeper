@@ -24,16 +24,18 @@
                  Grid.Row="2"
                  ItemsSource="{Binding Screenshots}"
                  SelectedItem="{Binding SelectedScreenshotViewModel.Value}"
-                 SelectedIndex="{Binding SelectedScreenshotViewModel.SelectedScreenshotIndex}">
+                 SelectedIndex="{Binding SelectedScreenshotViewModel.SelectedScreenshotIndex}"
+                 HorizontalAlignment="Stretch">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="1"/>
+                    <Setter Property="Height" Value="{Binding #ScreenshotsListBox.Bounds.Width}"/>
                 </Style>
             </ListBox.Styles>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Panel>
-                        <Image Source="{Binding Content, Converter={StaticResource BytesToBitmapConverter}}"
+                    <Panel Name="Panel">
+                        <Image Source="{Binding Content^, Converter={StaticResource BytesToBitmapConverter}}"
                                Margin="1"/>
                         <avalonia:MaterialIcon Kind="BookmarkCheck"
                                                Width="30" Height="30"
