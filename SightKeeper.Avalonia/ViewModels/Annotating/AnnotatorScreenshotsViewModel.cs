@@ -39,9 +39,8 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         _screenshots.Connect()
             .Sort(sortingRule)
             .Transform(screenshot => new ScreenshotViewModel(imageLoader, screenshot))
-            .ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out var screenshots)
-            .Subscribe();
+            .Subscribe(_ => OnPropertyChanged(nameof(ScreenshotsCount)));
         Screenshots = screenshots;
     }
 
@@ -73,6 +72,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         value.ScreenshotsLibrary.ScreenshotRemoved
             .Subscribe(OnScreenshotRemoved)
             .DisposeWith(_dataSetDisposable);
+        OnPropertyChanged(nameof(ScreenshotsCount));
     }
 
     private async void LoadScreenshots(DataSet dataSet)
@@ -83,15 +83,6 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         await screenshotsPartitionsObservable;
     }
 
-    private void OnScreenshotAdded(Screenshot newScreenshot)
-    {
-        _screenshots.Add(newScreenshot);
-        OnPropertyChanged(nameof(ScreenshotsCount));
-    }
-
-    private void OnScreenshotRemoved(Screenshot removedScreenshot)
-    {
-        _screenshots.Remove(removedScreenshot);
-        OnPropertyChanged(nameof(ScreenshotsCount));
-    }
+    private void OnScreenshotAdded(Screenshot newScreenshot) => _screenshots.Add(newScreenshot);
+    private void OnScreenshotRemoved(Screenshot removedScreenshot) => _screenshots.Remove(removedScreenshot);
 }
