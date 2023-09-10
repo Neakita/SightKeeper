@@ -15,12 +15,17 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         _dbContext = dbContext;
     }
 
-    public IObservable<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library)
+    public IObservable<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library, out IObservable<int?> screenshotsCountObservable)
     {
         var entry = _dbContext.Entry(library);
         if (entry.State == EntityState.Detached)
+        {
             Observable.Return(library.Screenshots);
-        var subject = new Subject<IReadOnlyCollection<Screenshot>>();
+            screenshotsCountObservable = Observable.Return<int?>(null);
+        }
+        Subject<IReadOnlyCollection<Screenshot>> screenshotsSubject = new();
+        Subject<int?> screenshotsCountSubject = new();
+        screenshotsCountObservable = screenshotsCountSubject;
         Task.Run(() =>
         {
             var collectionEntry = entry.Collection(lib => lib.Screenshots);
@@ -29,6 +34,9 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
             {
                 screenshotsCount = collectionEntry.Query().Count();
             }
+            screenshotsCountSubject.OnNext(screenshotsCount);
+            screenshotsCountSubject.OnCompleted();
+            screenshotsCountSubject.Dispose();
             Log.Debug("Screenshots to load: {Count}", screenshotsCount);
             const int partitionSize = 100;
             Log.Debug("Partition size: {Size}", partitionSize);
@@ -46,12 +54,12 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
                         .ToImmutableList();
                 }
                 Log.Debug("Partition #{PartitionIndex} with {PartitionSize} screenshots loaded", partitionIndex, screenshotsPartition.Count);
-                subject.OnNext(screenshotsPartition);
+                screenshotsSubject.OnNext(screenshotsPartition);
             }
-            subject.OnCompleted();
-            subject.Dispose();
+            screenshotsSubject.OnCompleted();
+            screenshotsSubject.Dispose();
         });
-        return subject.AsObservable();
+        return screenshotsSubject.AsObservable();
     }
 
     public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken = default)

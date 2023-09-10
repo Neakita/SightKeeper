@@ -10,10 +10,24 @@
     
     <Grid RowDefinitions="Auto Auto *">
         
-        <TextBlock Grid.Row="0"
-                   Text="{Binding ScreenshotsCount, StringFormat=Screenshots count: {0}}"
-                   IsVisible="{Binding !!ScreenshotsCount}"
-                   TextWrapping="Wrap"/>
+        <Panel Grid.Row="0"
+               IsVisible="{Binding !!ScreenshotsCount}">
+            <TextBlock Text="{Binding ScreenshotsCount, StringFormat=Screenshots count: {0}}"
+                       TextWrapping="Wrap"
+                       IsVisible="{Binding !ScreenshotsToLoadCount}"/>
+            <TextBlock TextWrapping="Wrap"
+                       IsVisible="{Binding !!ScreenshotsToLoadCount}">
+                <ToolTip.Tip>
+                    <TextBlock>
+                        <Run Text="{Binding ScreenshotsToLoadCount, StringFormat={}{0} screenshots are pending to load}"/>
+                        <LineBreak/>
+                        <Run Text="{Binding ScreenshotsCount, StringFormat={}{0} screenshots already loaded}"/>
+                    </TextBlock>
+                </ToolTip.Tip>
+                <Run Text="{Binding ScreenshotsToLoadCount, StringFormat=Screenshots count: {0}}"/>
+                <Run Text="{Binding ScreenshotsCount, StringFormat=({0})}"/>
+            </TextBlock>
+        </Panel>
         
         <ComboBox Grid.Row="1"
                   HorizontalAlignment="Right"

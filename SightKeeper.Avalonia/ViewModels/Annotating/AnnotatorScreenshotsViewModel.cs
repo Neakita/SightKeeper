@@ -21,6 +21,12 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     public IReadOnlyList<ScreenshotViewModel> Screenshots { get; }
     public int? ScreenshotsCount => DataSet == null ? null : Screenshots.Count;
 
+    public int? ScreenshotsToLoadCount
+    {
+        get => _screenshotsToLoadCount;
+        private set => SetProperty(ref _screenshotsToLoadCount, value);
+    }
+
     public IEnumerable<SortingRule<Screenshot>> SortingRules { get; } = new[]
     {
         new SortingRule<Screenshot>("New first", SortDirection.Descending, screenshot => screenshot.CreationDate),
@@ -57,6 +63,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     private DataSet? _dataSet;
 
     private CompositeDisposable? _dataSetDisposable;
+    private int? _screenshotsToLoadCount;
 
     partial void OnDataSetChanged(DataSet? value)
     {
@@ -77,10 +84,12 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     private async void LoadScreenshots(DataSet dataSet)
     {
-        var screenshotsPartitionsObservable = _screenshotsDataAccess.Load(dataSet.ScreenshotsLibrary);
+        var screenshotsPartitionsObservable = _screenshotsDataAccess.Load(dataSet.ScreenshotsLibrary, out var screenshotsCountObservable);
         screenshotsPartitionsObservable
             .Subscribe(screenshotsPartition => _screenshots.AddRange(screenshotsPartition));
+        ScreenshotsToLoadCount = await screenshotsCountObservable;
         await screenshotsPartitionsObservable;
+        ScreenshotsToLoadCount = null;
     }
 
     private void OnScreenshotAdded(Screenshot newScreenshot) => _screenshots.Add(newScreenshot);
