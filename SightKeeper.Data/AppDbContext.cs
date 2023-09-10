@@ -42,9 +42,6 @@ public class AppDbContext : DbContext
 	{
 		if (optionsBuilder.IsConfigured)
 			return;
-#if DEBUG
-		SetupLogging(optionsBuilder);
-#endif
 		SetupSqlite(optionsBuilder);
 	}
 

@@ -77,8 +77,10 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     private async void LoadScreenshots(DataSet dataSet)
     {
-        await _screenshotsDataAccess.Load(dataSet.ScreenshotsLibrary);
-        _screenshots.AddRange(dataSet.ScreenshotsLibrary.Screenshots);
+        var screenshotsPartitionsObservable = _screenshotsDataAccess.Load(dataSet.ScreenshotsLibrary);
+        screenshotsPartitionsObservable
+            .Subscribe(screenshotsPartition => _screenshots.AddRange(screenshotsPartition));
+        await screenshotsPartitionsObservable;
     }
 
     private void OnScreenshotAdded(Screenshot newScreenshot)
