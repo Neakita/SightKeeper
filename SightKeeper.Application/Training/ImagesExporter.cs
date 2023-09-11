@@ -57,11 +57,14 @@ public sealed class ImagesExporter
 		_logger.Information("Exported image #{AssetIndex} to {Path}", assetIndex, imagePath);
 	}
 
-	private static async Task ExportImage(string path, byte[] content, CancellationToken cancellationToken)
+	private static Task ExportImage(string path, byte[] content, CancellationToken cancellationToken)
 	{
-		using MemoryStream stream = new(content);
-		using var image = await Image.LoadAsync(stream, cancellationToken);
-		await image.SaveAsync(path, cancellationToken);
+		return Task.Run(() =>
+		{
+			using MemoryStream stream = new(content);
+			using var image = Image.Load(stream);
+			image.Save(path);
+		}, cancellationToken);
 	}
 
 	private Task ExportLabels(

@@ -16,7 +16,10 @@ public sealed class DbAssetsDataAccess : AssetsDataAccess
         var entry = _dbContext.Entry(asset);
         if (entry.State == EntityState.Detached)
             return Task.CompletedTask;
-        return entry.Collection(x => x.Items).LoadAsync(cancellationToken: cancellationToken);
+        lock (_dbContext)
+        {
+            return entry.Collection(x => x.Items).LoadAsync(cancellationToken: cancellationToken);
+        }
     }
 
     public Task LoadAssets(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
@@ -24,7 +27,10 @@ public sealed class DbAssetsDataAccess : AssetsDataAccess
         var entry = _dbContext.Entry(dataSet);
         if (entry.State == EntityState.Detached)
             return Task.CompletedTask;
-        return entry.Collection(x => x.Assets).LoadAsync(cancellationToken: cancellationToken);
+        lock (_dbContext)
+        {
+            return entry.Collection(x => x.Assets).LoadAsync(cancellationToken: cancellationToken);
+        }
     }
 
     private readonly AppDbContext _dbContext;
