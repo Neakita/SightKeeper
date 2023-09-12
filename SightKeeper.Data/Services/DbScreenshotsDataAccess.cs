@@ -34,6 +34,11 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
             {
                 screenshotsCount = collectionEntry.Query().Count();
             }
+            if (screenshotsCount == 0)
+            {
+                collectionEntry.Load();
+                return;
+            }
             screenshotsCountSubject.OnNext(screenshotsCount);
             screenshotsCountSubject.OnCompleted();
             screenshotsCountSubject.Dispose();
