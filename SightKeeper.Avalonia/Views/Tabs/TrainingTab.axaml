@@ -25,6 +25,14 @@
                       SelectedItem="{Binding SelectedModelSize}"
                       IsEnabled="{Binding !IsTraining}"
                       PlaceholderText="Config"/>
+            
+            <ComboBox ItemsSource="{Binding AvailableWeights^}"
+                      SelectedItem="{Binding SelectedWeights}"
+                      PlaceholderText="Weights"
+                      IsEnabled="{Binding !IsTraining}"/>
+            
+            <CheckBox Content="Resume"
+                      IsChecked="{Binding Resume}"/>
         
             <NumericUpDown Value="{Binding Epochs}"
                            Minimum="100"

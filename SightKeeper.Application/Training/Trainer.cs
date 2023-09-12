@@ -11,6 +11,7 @@ public sealed class Trainer
 	private const string DataDirectoryPath = "Data/Training/";
 	private const string DataSetPath = DataDirectoryPath + "data.yaml";
 	private const string RunsDirectoryPath = DataDirectoryPath + "Runs/";
+	private const string WeightsToResumeTrainingOnPath = DataDirectoryPath + "weights.pt";
 
 	public bool AMP { get; set; } = true;
 
@@ -50,11 +51,33 @@ public sealed class Trainer
 		return await SaveWeights(dataSet, lastProgress, size, CancellationToken.None); // TODO ability to abort saving
 	}
 
-	public Task<Weights?> ResumeTrainingAsync(
+	public async Task<Weights?> ResumeTrainingAsync(
 		Weights weights,
+		uint epochs,
+		IObserver<TrainingProgress> trainingProgressObserver,
 		CancellationToken cancellationToken = default)
 	{
-		throw new NotImplementedException();
+		PrepareDataDirectory();
+		var dataSet = weights.Library.DataSet;
+		await _imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
+		await ExportDataSet(dataSet, cancellationToken);
+		await ExportWeights(weights, cancellationToken);
+		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), _logger);
+		CLITrainerArguments arguments = new(DataSetPath, Path.GetFullPath(WeightsToResumeTrainingOnPath), epochs, dataSet.Resolution, false, AMP);
+		var outputStream = CLIExtensions.RunCLICommand(arguments.ToString(), _logger, cancellationToken);
+		TrainerParser.Parse(outputStream.WhereNotNull(), out var trainingProgress);
+		using var trainingProgressObserverDisposable = trainingProgress
+			.IgnoreCompletion()
+			.Subscribe(trainingProgressObserver);
+		await runsDirectoryReplacement.DisposeAsync();
+		var lastProgress = await trainingProgress.LastOrDefaultAsync();
+		if (lastProgress == null)
+		{
+			_logger.Information("No training progress found");
+			return null;
+		}
+		_logger.Debug("Last progress: {Progress}", lastProgress);
+		return await SaveWeights(dataSet, lastProgress, weights.Size, CancellationToken.None); // TODO ability to abort saving
 	}
 	
 	private readonly ImagesExporter _imagesExporter;
@@ -74,6 +97,11 @@ public sealed class Trainer
 		DataSetConfigurationParameters dataSetParameters = new(Path.GetFullPath(DataDirectoryPath), dataSet.ItemClasses);
 		await _dataSetConfigurationExporter.Export(DataSetPath, dataSetParameters, cancellationToken);
 		_logger.Information("Exported dataset parameters: {Parameters}", dataSetParameters);
+	}
+	
+	private Task ExportWeights(Weights weights, CancellationToken cancellationToken)
+	{
+		return File.WriteAllBytesAsync(WeightsToResumeTrainingOnPath, weights.PTData, cancellationToken);
 	}
 	
 	private async Task<Weights> SaveWeights(Domain.Model.DataSet dataSet, TrainingProgress lastProgress, ModelSize size, CancellationToken cancellationToken)

@@ -70,7 +70,13 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
     public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
     {
         _dbContext.Update(library);
-        return _dbContext.SaveChangesAsync(cancellationToken);
+        return Task.Run(() =>
+        {
+            lock (_dbContext)
+            {
+                _dbContext.SaveChanges();
+            }
+        }, cancellationToken);
     }
     
     private readonly AppDbContext _dbContext;

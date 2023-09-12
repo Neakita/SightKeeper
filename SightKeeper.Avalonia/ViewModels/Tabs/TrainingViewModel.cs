@@ -15,16 +15,32 @@ using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc.Logging;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
 public sealed partial class TrainingViewModel : ViewModel
 {
+    private readonly WeightsDataAccess _weightsDataAccess;
     private readonly Trainer _trainer;
     public IObservable<TrainingProgress?> Progress => _progress;
     public IObservable<float?> Completion => Progress.Select(progress => (float?)progress?.CurrentEpoch / Epochs);
     public IReadOnlyCollection<DataSetViewModel> AvailableDataSets { get; }
     public InlineCollection InlineCollection { get; } = new();
+
+    public Task<IReadOnlyCollection<Weights>> AvailableWeights
+    {
+        get
+        {
+            if (SelectedDataSet == null)
+                return Task.FromResult((IReadOnlyCollection<Weights>)Array.Empty<Weights>());
+            return Task.Run(async () =>
+            {
+                await _weightsDataAccess.LoadWeights(SelectedDataSet.DataSet.WeightsLibrary);
+                return SelectedDataSet.DataSet.WeightsLibrary.Weights;
+            });
+        }
+    }
 
     public uint? Epochs
     {
@@ -52,11 +68,19 @@ public sealed partial class TrainingViewModel : ViewModel
         ModelSize.XLarge
     };
 
-    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
+    [NotifyPropertyChangedFor(nameof(AvailableWeights))]
     private DataSetViewModel? _selectedDataSet;
     
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
     private ModelSize? _selectedModelSize;
+
+    [ObservableProperty]
+    private Weights? _selectedWeights;
+
+    [ObservableProperty]
+    private bool _resume;
 
     public bool IsTraining
     {
@@ -64,8 +88,9 @@ public sealed partial class TrainingViewModel : ViewModel
         private set => SetProperty(ref _isTraining, value);
     }
 
-    public TrainingViewModel(DataSetsListViewModel dataSetsListViewModel, ILifetimeScope scope)
+    public TrainingViewModel(DataSetsListViewModel dataSetsListViewModel, ILifetimeScope scope, WeightsDataAccess weightsDataAccess)
     {
+        _weightsDataAccess = weightsDataAccess;
         var logger = new LoggerConfiguration()
             .WriteTo.TextBlockInlines(InlineCollection)
             .MinimumLevel.Verbose()
@@ -82,7 +107,12 @@ public sealed partial class TrainingViewModel : ViewModel
         Guard.IsNotNull(SelectedModelSize);
         Guard.IsNotNull(Epochs);
         IsTraining = true;
-        await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs.Value, Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+        if (SelectedWeights != null && Resume)
+            await _trainer.ResumeTrainingAsync(SelectedWeights, Epochs.Value,
+                Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+        else
+            await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs.Value,
+                Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
         _progress.OnNext(null);
         IsTraining = false;
     }
