@@ -32,10 +32,11 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
     public Domain.Model.DataSet DataSet { get; private set; }
 
-    public DataSetEditingViewModel(Domain.Model.DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService, AssetsDataAccess assetsDataAccess) : base(validator)
+    public DataSetEditingViewModel(Domain.Model.DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService, AssetsDataAccess assetsDataAccess, ItemClassDataAccess itemClassDataAccess) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
         _assetsDataAccess = assetsDataAccess;
+        _itemClassDataAccess = itemClassDataAccess;
         SetData(dataSet);
         _disposable = ErrorsChangedObservable.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
     }
@@ -70,6 +71,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
     private readonly List<DeletedItemClass> _deletedItemClasses = new();
     private readonly RegisteredGamesService _registeredGamesService;
     private readonly AssetsDataAccess _assetsDataAccess;
+    private readonly ItemClassDataAccess _itemClassDataAccess;
 
     ICommand IDataSetEditorViewModel.AddItemClassCommand => AddItemClassCommand;
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]
@@ -106,10 +108,11 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
     [RelayCommand]
     private async Task DeleteItemClass(EditableItemClass itemClass)
     {
-        // HUGE mess!
+        // ISSUE HUGE mess!
         if (itemClass is ExistingItemClass existingItemClass)
         {
             DeletedItemClassAction? action = null;
+            await _itemClassDataAccess.LoadItems(existingItemClass.ItemClass);
             if (existingItemClass.ItemClass.Items.Any())
             {
                 const string deleteItems = "Delete items";
