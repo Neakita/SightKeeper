@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using DynamicData;
 using SightKeeper.Commons;
 
@@ -22,9 +21,9 @@ public sealed class SelectedScreenshotViewModel : ValueViewModel<ScreenshotViewM
 
     public SelectedScreenshotViewModel() : base(null)
     {
-        Observable.Merge(
-                DetectorItems.Connect().Transform(detectorItem => (DrawerItem)detectorItem),
-                DetectedItems.Connect().Transform(detectedItem => (DrawerItem)detectedItem))
+        DetectorItems.Connect()
+            .Transform(detectorItem => (DrawerItem)detectorItem)
+            .Or(DetectedItems.Connect().Transform(detectedItem => (DrawerItem)detectedItem))
             .Bind(out var items)
             .Subscribe()
             .DisposeWithEx(_disposable);
