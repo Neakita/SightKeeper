@@ -55,6 +55,7 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
         _selectedScreenshotViewModel = selectedScreenshotViewModel;
         _selectedDataSetViewModel = selectedDataSetViewModel;
         selectedScreenshotViewModel.NotifyCanExecuteChanged(AnnotateCommand);
+        selectedScreenshotViewModel.NotifyCanExecuteChanged(ClearCommand);
     }
     
     private readonly Detector _detector;
@@ -70,8 +71,17 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
         var items = await _detector.Detect(content, cancellationToken);
         _selectedScreenshotViewModel.DetectedItems.Clear();
         _selectedScreenshotViewModel.DetectedItems.AddRange(items.Select(CreateDetectedItemViewModel));
+        ClearCommand.NotifyCanExecuteChanged();
     }
     private bool CanAnnotate() => SelectedWeights != null && _selectedScreenshotViewModel.Value != null && !AutoAnnotatingEnabled;
+    
+    [RelayCommand(CanExecute = nameof(CanClear))]
+    private void Clear()
+    {
+        _selectedScreenshotViewModel.DetectedItems.Clear();
+        ClearCommand.NotifyCanExecuteChanged();
+    }
+    private bool CanClear() => _selectedScreenshotViewModel.DetectedItems.Count > 0;
 
     private static DetectedItemViewModel CreateDetectedItemViewModel(DetectionItem detectionItem)
     {

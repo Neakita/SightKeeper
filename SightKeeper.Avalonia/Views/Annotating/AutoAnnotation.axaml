@@ -10,8 +10,12 @@
     <StackPanel>
         <ComboBox ItemsSource="{Binding Weights}"
                   SelectedItem="{Binding SelectedWeights}"/>
-        <Button Content="{icons:MaterialIconExt AutoFix}"
-                Command="{Binding AnnotateCommand}"/>
+        <WrapPanel>
+            <Button Content="{icons:MaterialIconExt AutoFix}"
+                    Command="{Binding AnnotateCommand}"/>
+            <Button Content="{icons:MaterialIconExt Eraser}"
+                    Command="{Binding ClearCommand}"/>
+        </WrapPanel>
         <CheckBox Content="Auto detect"
                   IsChecked="{Binding AutoAnnotatingEnabled}"
                   IsEnabled="{Binding !!SelectedWeights}"/>
