@@ -2,6 +2,7 @@
 using Serilog;
 using SharpHook.Native;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Data;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services.Input;
@@ -49,17 +50,19 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
         }
     }
 
-    public HotKeyScreenshoter(HotKeyManager hotKeyManager, DataSetScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess)
+    public HotKeyScreenshoter(HotKeyManager hotKeyManager, DataSetScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess, AppDbContext dbContext)
     {
         _hotKeyManager = hotKeyManager;
         _screenshoter = screenshoter;
         _librariesDataAccess = librariesDataAccess;
+        _dbContext = dbContext;
         ScreenshotsPerSecond = 1;
     }
 
     private readonly HotKeyManager _hotKeyManager;
     private readonly DataSetScreenshoter _screenshoter;
     private readonly ScreenshotsDataAccess _librariesDataAccess;
+    private readonly AppDbContext _dbContext;
 
     private IDisposable? _disposable;
     private bool _isEnabled;
@@ -76,7 +79,7 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
     private void OnHotKeyPressed(HotKey hotKey)
     {
         Guard.IsNotNull(DataSet);
-        lock (this)
+        lock (_dbContext)
         {
             var somethingScreenshoted = false;
             while (hotKey.IsPressed)
