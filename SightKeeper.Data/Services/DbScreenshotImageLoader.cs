@@ -15,6 +15,9 @@ public sealed class DbScreenshotImageLoader : ScreenshotImageLoader
     
     public Image Load(Screenshot screenshot)
     {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (screenshot.Image != null)
+            return screenshot.Image;
         lock (_dbContext)
         {
             var entry = _dbContext.Entry(screenshot);
