@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Diagnostics;
-using Microsoft.EntityFrameworkCore;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
@@ -21,21 +20,28 @@ public sealed class DbScreenshotImageLoader : ScreenshotImageLoader
         lock (_dbContext)
         {
             var entry = _dbContext.Entry(screenshot);
-            if (entry.State != EntityState.Detached)
-                entry.Reference(s => s.Image).Load();
+            entry.Reference(s => s.Image).Load();
             Guard.IsNotNull(screenshot.Image);
             return screenshot.Image;
         }
     }
 
-    public Task<Image> LoadAsync(Screenshot screenshot, CancellationToken cancellationToken = default) =>
-        Task.Run(() =>
+    public Task<Image> LoadAsync(Screenshot screenshot, CancellationToken cancellationToken = default)
+    {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (screenshot.Image != null)
+            return Task.FromResult(screenshot.Image);
+        return Task.Run(() =>
         {
             lock (_dbContext)
             {
-                return Load(screenshot);
+                var entry = _dbContext.Entry(screenshot);
+                entry.Reference(s => s.Image).Load();
+                Guard.IsNotNull(screenshot.Image);
+                return screenshot.Image;
             }
         }, cancellationToken);
+    }
 
     private readonly AppDbContext _dbContext;
 }

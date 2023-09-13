@@ -66,9 +66,9 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
     private async Task Annotate(CancellationToken cancellationToken)
     {
         Guard.IsNotNull(_selectedScreenshotViewModel.Value);
-        var screenshotContent = _selectedScreenshotViewModel.Value.Content;
-        var content = await screenshotContent;
-        var items = await _detector.Detect(content, cancellationToken);
+        var screenshotContent = _selectedScreenshotViewModel.Value.Image;
+        var image = await screenshotContent;
+        var items = await _detector.Detect(image.Content, cancellationToken);
         _selectedScreenshotViewModel.DetectedItems.Clear();
         _selectedScreenshotViewModel.DetectedItems.AddRange(items.Select(CreateDetectedItemViewModel));
         ClearCommand.NotifyCanExecuteChanged();

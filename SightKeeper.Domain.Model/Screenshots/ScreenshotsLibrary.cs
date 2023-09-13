@@ -40,6 +40,15 @@ public sealed class ScreenshotsLibrary
         screenshot.Asset?.ClearItems();
         _screenshotRemoved.OnNext(screenshot);
     }
+
+    public void DeleteScreenshot(int screenshotIndex)
+    {
+        var screenshot = _screenshots[screenshotIndex];
+        _screenshots.RemoveAt(screenshotIndex);
+        HasAnyScreenshots = Screenshots.Any();
+        screenshot.Asset?.ClearItems();
+        _screenshotRemoved.OnNext(screenshot);
+    }
 	
     private readonly List<Screenshot> _screenshots;
 
@@ -54,11 +63,12 @@ public sealed class ScreenshotsLibrary
         if (MaxQuantity == null)
             return;
         var screenshotsToDelete = Screenshots
-            .Where(screenshot => screenshot.Asset == null)
-            .OrderByDescending(screenshot => screenshot.CreationDate)
+            .Select((item, index) => (item, index))
+            .Where(screenshot => screenshot.item.Asset == null)
+            .OrderByDescending(screenshot => screenshot.item.CreationDate)
             .Skip(MaxQuantity.Value)
             .ToList();
         foreach (var screenshot in screenshotsToDelete)
-            DeleteScreenshot(screenshot);
+            DeleteScreenshot(screenshot.index);
     }
 }
