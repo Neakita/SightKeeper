@@ -21,7 +21,7 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (library.Screenshots != null)
-            Observable.Return(library.Screenshots);
+            return Observable.Return(library.Screenshots);
         Subject<IReadOnlyCollection<Screenshot>> screenshotsPartitionsSubject = new();
         Task.Run(() =>
         {
