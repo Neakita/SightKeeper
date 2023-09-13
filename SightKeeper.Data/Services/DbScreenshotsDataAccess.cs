@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
@@ -10,70 +10,65 @@ namespace SightKeeper.Data.Services;
 
 public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
 {
+    private const int PartitionSize = 100;
+    
     public DbScreenshotsDataAccess(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public IObservable<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library, out IObservable<int?> screenshotsCountObservable)
+    public IObservable<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library)
     {
-        var entry = _dbContext.Entry(library);
-        if (entry.State == EntityState.Detached)
-        {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (library.Screenshots != null)
             Observable.Return(library.Screenshots);
-            screenshotsCountObservable = Observable.Return<int?>(null);
-        }
-        Subject<IReadOnlyCollection<Screenshot>> screenshotsSubject = new();
-        Subject<int?> screenshotsCountSubject = new();
-        screenshotsCountObservable = screenshotsCountSubject;
+        Subject<IReadOnlyCollection<Screenshot>> screenshotsPartitionsSubject = new();
         Task.Run(() =>
         {
-            var collectionEntry = entry.Collection(lib => lib.Screenshots);
-            int screenshotsCount;
             lock (_dbContext)
             {
-                screenshotsCount = collectionEntry.Query().Count();
+                var libraryEntry = _dbContext.Entry(library);
+                var screenshotsCollectionEntry = libraryEntry.Collection(lib => lib.Screenshots);
+                foreach (var screenshotsPartition in LoadScreenshotsPartitions(screenshotsCollectionEntry))
+                    screenshotsPartitionsSubject.OnNext(screenshotsPartition);
+                screenshotsPartitionsSubject.OnCompleted();
             }
-            if (screenshotsCount == 0)
-            {
-                collectionEntry.Load();
-                return;
-            }
-            screenshotsCountSubject.OnNext(screenshotsCount);
-            screenshotsCountSubject.OnCompleted();
-            screenshotsCountSubject.Dispose();
-            Log.Debug("Screenshots to load: {Count}", screenshotsCount);
-            const int partitionSize = 100;
-            Log.Debug("Partition size: {Size}", partitionSize);
-            var partitionsCount = (screenshotsCount + partitionSize - 1) / partitionSize;
-            Log.Debug("Partitions count: {Count}", partitionsCount);
-            for (var partitionIndex = 0; partitionIndex < partitionsCount; partitionIndex++)
-            {
-                ImmutableList<Screenshot> screenshotsPartition;
-                lock (_dbContext)
-                {
-                    screenshotsPartition = collectionEntry.Query()
-                        .OrderBy(screenshot => EF.Property<int>(screenshot, "Id"))
-                        .Skip(partitionIndex * partitionSize)
-                        .Take(partitionSize)
-                        .ToImmutableList();
-                }
-                Log.Debug("Partition #{PartitionIndex} with {PartitionSize} screenshots loaded", partitionIndex, screenshotsPartition.Count);
-                screenshotsSubject.OnNext(screenshotsPartition);
-            }
-            screenshotsSubject.OnCompleted();
-            screenshotsSubject.Dispose();
         });
-        return screenshotsSubject.AsObservable();
+        return screenshotsPartitionsSubject.AsObservable();
     }
+
+    private static IEnumerable<ImmutableList<Screenshot>> LoadScreenshotsPartitions(
+        CollectionEntry<ScreenshotsLibrary, Screenshot> collectionEntry)
+    {
+        ushort partitionIndex = 0;
+        while (true)
+        {
+            var screenshotsPartition = LoadScreenshotsPartition(collectionEntry, PartitionSize, partitionIndex++);
+            if (screenshotsPartition.Count == 0)
+                break;
+            yield return screenshotsPartition;
+            if (screenshotsPartition.Count < PartitionSize)
+                break;
+        }
+    }
+
+    private static ImmutableList<Screenshot> LoadScreenshotsPartition(
+        CollectionEntry<ScreenshotsLibrary, Screenshot> collectionEntry,
+        ushort partitionSize,
+        ushort partitionIndex) =>
+        collectionEntry.Query()
+            .OrderBy(screenshot => EF.Property<int>(screenshot, "Id"))
+            .Skip(partitionIndex * partitionSize)
+            .Take(partitionSize)
+            .ToImmutableList();
 
     public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
     {
-        _dbContext.Update(library);
         return Task.Run(() =>
         {
             lock (_dbContext)
             {
+                _dbContext.Update(library);
                 _dbContext.SaveChanges();
             }
         }, cancellationToken);

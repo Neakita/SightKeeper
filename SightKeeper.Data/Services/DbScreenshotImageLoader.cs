@@ -15,11 +15,14 @@ public sealed class DbScreenshotImageLoader : ScreenshotImageLoader
     
     public Image Load(Screenshot screenshot)
     {
-        var entry = _dbContext.Entry(screenshot);
-        if (entry.State != EntityState.Detached)
-            entry.Reference(s => s.Image).Load();
-        Guard.IsNotNull(screenshot.Image);
-        return screenshot.Image;
+        lock (_dbContext)
+        {
+            var entry = _dbContext.Entry(screenshot);
+            if (entry.State != EntityState.Detached)
+                entry.Reference(s => s.Image).Load();
+            Guard.IsNotNull(screenshot.Image);
+            return screenshot.Image;
+        }
     }
 
     public Task<Image> LoadAsync(Screenshot screenshot, CancellationToken cancellationToken = default) =>

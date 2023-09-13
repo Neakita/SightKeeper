@@ -13,8 +13,11 @@ public abstract class DbDataAccess<TEntity> where TEntity : class
         TEntity entity,
         Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
         CancellationToken cancellationToken)
-        where TProperty : class =>
-        _dbContext.Entry(entity).Collection(propertyExpression).LoadAsync(cancellationToken: cancellationToken);
+        where TProperty : class
+    {
+        lock (_dbContext)
+            return _dbContext.Entry(entity).Collection(propertyExpression).LoadAsync(cancellationToken: cancellationToken);
+    }
 
     private readonly AppDbContext _dbContext;
 }
