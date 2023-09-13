@@ -18,7 +18,8 @@
         <ComboBox Grid.Row="1"
                   HorizontalAlignment="Right"
                   ItemsSource="{Binding SortingRules}"
-                  SelectedItem="{Binding SortingRule}"/>
+                  SelectedItem="{Binding SortingRule}"
+                  IsEnabled="{Binding !IsLoading}"/>
 
         <ListBox Name="ScreenshotsListBox"
                  Grid.Row="2"

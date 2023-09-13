@@ -27,6 +27,12 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         new SortingRule<Screenshot>("Old first", SortDirection.Ascending, screenshot => screenshot.CreationDate)
     };
 
+    public bool IsLoading
+    {
+        get => _isLoading;
+        private set => SetProperty(ref _isLoading, value);
+    }
+
     [ObservableProperty] private SortingRule<Screenshot> _sortingRule;
 
     public AnnotatorScreenshotsViewModel(ScreenshotImageLoader imageLoader, ScreenshotsDataAccess screenshotsDataAccess, SelectedScreenshotViewModel selectedScreenshotViewModel)
@@ -57,6 +63,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     private DataSet? _dataSet;
 
     private CompositeDisposable? _dataSetDisposable;
+    private bool _isLoading;
 
     partial void OnDataSetChanged(DataSet? value)
     {
@@ -77,12 +84,14 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     private async void LoadScreenshots(DataSet dataSet)
     {
+        IsLoading = true;
         var screenshotsPartitionsObservable = _screenshotsDataAccess.Load(
             dataSet.ScreenshotsLibrary,
             SortingRule.Direction == SortDirection.Descending);
         screenshotsPartitionsObservable
             .Subscribe(screenshotsPartition => _screenshots.AddRange(screenshotsPartition));
         await screenshotsPartitionsObservable;
+        IsLoading = false;
     }
 
     private void OnScreenshotAdded(Screenshot newScreenshot) => _screenshots.Add(newScreenshot);
