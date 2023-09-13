@@ -67,6 +67,7 @@ public sealed class ScreenshotsLibrary
             .Where(screenshot => screenshot.item.Asset == null)
             .OrderByDescending(screenshot => screenshot.item.CreationDate)
             .Skip(MaxQuantity.Value)
+            .OrderByDescending(screenshot => screenshot.index)
             .ToList();
         foreach (var screenshot in screenshotsToDelete)
             DeleteScreenshot(screenshot.index);
