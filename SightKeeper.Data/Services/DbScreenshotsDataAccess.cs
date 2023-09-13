@@ -25,19 +25,20 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         Subject<IReadOnlyCollection<Screenshot>> screenshotsPartitionsSubject = new();
         Task.Run(() =>
         {
+            CollectionEntry<ScreenshotsLibrary, Screenshot> screenshotsCollectionEntry;
             lock (_dbContext)
             {
                 var libraryEntry = _dbContext.Entry(library);
-                var screenshotsCollectionEntry = libraryEntry.Collection(lib => lib.Screenshots);
-                foreach (var screenshotsPartition in LoadScreenshotsPartitions(screenshotsCollectionEntry))
-                    screenshotsPartitionsSubject.OnNext(screenshotsPartition);
-                screenshotsPartitionsSubject.OnCompleted();
+                screenshotsCollectionEntry = libraryEntry.Collection(lib => lib.Screenshots);
             }
+            foreach (var screenshotsPartition in LoadScreenshotsPartitions(screenshotsCollectionEntry))
+                screenshotsPartitionsSubject.OnNext(screenshotsPartition);
+            screenshotsPartitionsSubject.OnCompleted();
         });
         return screenshotsPartitionsSubject.AsObservable();
     }
 
-    private static IEnumerable<ImmutableList<Screenshot>> LoadScreenshotsPartitions(
+    private IEnumerable<ImmutableList<Screenshot>> LoadScreenshotsPartitions(
         CollectionEntry<ScreenshotsLibrary, Screenshot> collectionEntry)
     {
         ushort partitionIndex = 0;
@@ -52,15 +53,20 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         }
     }
 
-    private static ImmutableList<Screenshot> LoadScreenshotsPartition(
+    private ImmutableList<Screenshot> LoadScreenshotsPartition(
         CollectionEntry<ScreenshotsLibrary, Screenshot> collectionEntry,
         ushort partitionSize,
-        ushort partitionIndex) =>
-        collectionEntry.Query()
-            .OrderBy(screenshot => EF.Property<int>(screenshot, "Id"))
-            .Skip(partitionIndex * partitionSize)
-            .Take(partitionSize)
-            .ToImmutableList();
+        ushort partitionIndex)
+    {
+        lock (_dbContext)
+        {
+            return collectionEntry.Query()
+                .OrderBy(screenshot => EF.Property<int>(screenshot, "Id"))
+                .Skip(partitionIndex * partitionSize)
+                .Take(partitionSize)
+                .ToImmutableList();
+        }
+    }
 
     public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
     {
