@@ -17,7 +17,7 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         _dbContext = dbContext;
     }
 
-    public IObservable<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library)
+    public IObservable<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library, bool byDescending)
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (library.Screenshots != null)
@@ -31,7 +31,7 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
                 var libraryEntry = _dbContext.Entry(library);
                 screenshotsCollectionEntry = libraryEntry.Collection(lib => lib.Screenshots);
             }
-            foreach (var screenshotsPartition in LoadScreenshotsPartitions(screenshotsCollectionEntry))
+            foreach (var screenshotsPartition in LoadScreenshotsPartitions(screenshotsCollectionEntry, byDescending))
                 screenshotsPartitionsSubject.OnNext(screenshotsPartition);
             screenshotsPartitionsSubject.OnCompleted();
         });
@@ -39,12 +39,12 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
     }
 
     private IEnumerable<ImmutableList<Screenshot>> LoadScreenshotsPartitions(
-        CollectionEntry<ScreenshotsLibrary, Screenshot> collectionEntry)
+        CollectionEntry<ScreenshotsLibrary, Screenshot> collectionEntry, bool byDescending)
     {
         ushort partitionIndex = 0;
         while (true)
         {
-            var screenshotsPartition = LoadScreenshotsPartition(collectionEntry, PartitionSize, partitionIndex++);
+            var screenshotsPartition = LoadScreenshotsPartition(collectionEntry, PartitionSize, partitionIndex++, byDescending);
             if (screenshotsPartition.Count == 0)
                 break;
             yield return screenshotsPartition;
@@ -56,16 +56,18 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
     private ImmutableList<Screenshot> LoadScreenshotsPartition(
         CollectionEntry<ScreenshotsLibrary, Screenshot> collectionEntry,
         ushort partitionSize,
-        ushort partitionIndex)
+        ushort partitionIndex,
+        bool byDescending)
     {
+        var query = collectionEntry.Query();
+        query = byDescending
+            ? query.OrderByDescending(screenshot => EF.Property<int>(screenshot, "Id"))
+            : query.OrderBy(screenshot => EF.Property<int>(screenshot, "Id"));
+        query = query
+            .Skip(partitionIndex * partitionSize)
+            .Take(partitionSize);
         lock (_dbContext)
-        {
-            return collectionEntry.Query()
-                .OrderBy(screenshot => EF.Property<int>(screenshot, "Id"))
-                .Skip(partitionIndex * partitionSize)
-                .Take(partitionSize)
-                .ToImmutableList();
-        }
+            return query.ToImmutableList();
     }
 
     public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken = default)

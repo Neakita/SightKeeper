@@ -4,6 +4,6 @@ namespace SightKeeper.Domain.Services;
 
 public interface ScreenshotsDataAccess
 {
-    IObservable<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library);
+    IObservable<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library, bool byDescending);
     Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken = default);
 }
