@@ -6,7 +6,6 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using ReactiveUI;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model.Common;
@@ -133,7 +132,7 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
         _selectedScreenshotDisposable?.Dispose();
         if (screenshot == null)
             return;
-        _selectedScreenshotDisposable = screenshot.WhenAnyValue(x => x.IsAsset).Subscribe(_ =>
+        _selectedScreenshotDisposable = screenshot.IsAssetObservable.Subscribe(_ =>
         {
             MarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();
             UnMarkSelectedScreenshotAsAssetCommand.NotifyCanExecuteChanged();

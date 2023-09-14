@@ -9,12 +9,25 @@
              x:DataType="annotating:AnnotatorScreenshotsViewModel">
     
     <Grid RowDefinitions="Auto Auto *">
-        
-        <TextBlock Grid.Row="0"
-                   IsVisible="{Binding !!ScreenshotsCount}"
-                   Text="{Binding ScreenshotsCount, StringFormat=Screenshots count: {0}}"
-                   TextWrapping="Wrap"/>
-        
+        <WrapPanel Grid.Row="0">
+            <TextBlock IsVisible="{Binding !!DataSet}"
+                       TextWrapping="Wrap">
+                <Run Text="{Binding ScreenshotsWithoutAssetsCount^}"/>
+                /
+                <Run Text="{Binding ScreenshotsWithAssetsCount^}"/>
+                /
+                <Run Text="{Binding TotalScreenshotsCount^}"/>
+                <ToolTip.Tip>
+                    <TextBlock>
+                        <Run Text="{Binding ScreenshotsWithoutAssetsCount^, StringFormat={}{0} screenshots without assets}"/>
+                        <LineBreak/>
+                        <Run Text="{Binding ScreenshotsWithAssetsCount^, StringFormat={}{0} screenshots with assets}"/>
+                        <LineBreak/>
+                        <Run Text="{Binding TotalScreenshotsCount^, StringFormat={}{0} total screenshots}"/>
+                    </TextBlock>
+                </ToolTip.Tip>
+            </TextBlock>
+
         <ComboBox Grid.Row="1"
                   HorizontalAlignment="Right"
                   ItemsSource="{Binding SortingRules}"
@@ -45,7 +58,7 @@
                                                HorizontalAlignment="Right"
                                                Margin="0 -5 20 0"
                                                ToolTip.Tip="Asset"
-                                               IsVisible="{Binding IsAsset}">
+                                               IsVisible="{Binding IsAssetObservable^}">
                             <avalonia:MaterialIcon.Clip>
                                 <RectangleGeometry Rect="0, 5, 30, 30"/>
                             </avalonia:MaterialIcon.Clip>
