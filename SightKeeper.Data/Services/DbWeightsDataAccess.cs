@@ -1,6 +1,8 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using SerilogTimings;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
@@ -88,6 +90,8 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
 
     private Weights? LoadWeights(IQueryable<Weights> weightsQuery, int index)
     {
+        using var operation = Operation.Begin("Loading weights #{Index}", index);
+        Log.Debug("Waiting for database context locking to load weights #{Index}...", index);
         lock (_dbContext)
             return weightsQuery
                 .OrderBy(weights => EF.Property<int>(weights, "Id"))

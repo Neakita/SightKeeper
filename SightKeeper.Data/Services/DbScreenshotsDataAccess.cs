@@ -2,8 +2,8 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Serilog;
+using SerilogTimings;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
@@ -30,31 +30,25 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         Subject<IReadOnlyCollection<Screenshot>> screenshotsPartitionsSubject = new();
         Task.Run(() =>
         {
-            CollectionEntry<ScreenshotsLibrary, Screenshot> screenshotsCollectionEntry;
             Log.Debug("Screenshots aren't loaded yet, waiting for database context locking...");
+            IQueryable<Screenshot> screenshotsQuery;
             lock (_dbContext)
-            {
-                var libraryEntry = _dbContext.Entry(library);
-                screenshotsCollectionEntry = libraryEntry.Collection(lib => lib.Screenshots);
-            }
+                screenshotsQuery = _dbContext.Entry(library).Collection(lib => lib.Screenshots).Query();
             Log.Debug("Screenshots collection entry retrieved");
-            foreach (var screenshotsPartition in LoadScreenshotsPartitions(screenshotsCollectionEntry, byDescending))
-                screenshotsPartitionsSubject.OnNext(screenshotsPartition);
-            screenshotsPartitionsSubject.OnCompleted();
+            LoadScreenshotsPartitions(screenshotsQuery, byDescending).ToObservable().Subscribe(screenshotsPartitionsSubject);
         });
         return screenshotsPartitionsSubject.AsObservable();
     }
 
     private IEnumerable<ImmutableList<Screenshot>> LoadScreenshotsPartitions(
-        CollectionEntry<ScreenshotsLibrary, Screenshot> collectionEntry, bool byDescending)
+        IQueryable<Screenshot> screenshotsQuery, bool byDescending)
     {
         ushort partitionIndex = 0;
         while (true)
         {
-            var screenshotsPartition = LoadScreenshotsPartition(collectionEntry, PartitionSize, partitionIndex++, byDescending);
+            var screenshotsPartition = LoadScreenshotsPartition(screenshotsQuery, PartitionSize, partitionIndex++, byDescending);
             if (screenshotsPartition.Count == 0)
                 break;
-            Log.Debug("Screenshots partition #{PartitionIndex} with {Count} screenshots loaded", partitionIndex, screenshotsPartition.Count);
             yield return screenshotsPartition;
             if (screenshotsPartition.Count < PartitionSize)
                 break;
@@ -62,20 +56,24 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
     }
 
     private ImmutableList<Screenshot> LoadScreenshotsPartition(
-        CollectionEntry<ScreenshotsLibrary, Screenshot> collectionEntry,
+        IQueryable<Screenshot> query,
         ushort partitionSize,
         ushort partitionIndex,
         bool byDescending)
     {
-        var query = collectionEntry.Query();
+        using var operation = Operation.Begin("Loading screenshots partition #{PartitionIndex}", partitionIndex);
         query = byDescending
             ? query.OrderByDescending(screenshot => EF.Property<int>(screenshot, "Id"))
             : query.OrderBy(screenshot => EF.Property<int>(screenshot, "Id"));
         query = query
             .Skip(partitionIndex * partitionSize)
             .Take(partitionSize);
+        Log.Debug("Query for screenshots partition #{PartitionIndex} prepared, waiting for database context locking...", partitionIndex);
+        ImmutableList<Screenshot> screenshotsPartition;
         lock (_dbContext)
-            return query.ToImmutableList();
+            screenshotsPartition = query.ToImmutableList();
+        operation.Complete(nameof(screenshotsPartition.Count), screenshotsPartition.Count);
+        return screenshotsPartition;
     }
 
     public Task SaveChanges(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
