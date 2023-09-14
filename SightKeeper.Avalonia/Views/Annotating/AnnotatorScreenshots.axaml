@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatorScreenshots"
              x:DataType="annotating:AnnotatorScreenshotsViewModel">
@@ -27,6 +27,22 @@
                     </TextBlock>
                 </ToolTip.Tip>
             </TextBlock>
+            <Button Content="{icons:MaterialIconExt Cog}">
+                <Button.Flyout>
+                    <Flyout>
+                        <StackPanel>
+                            <CheckBox Content="Show screenshots without assets"
+                                      IsChecked="{Binding ShowScreenshotsWithoutAssets}"/>
+                            <CheckBox Content="Show screenshots with assets"
+                                      IsChecked="{Binding ShowScreenshotsWithAssets}"/>
+                            <Button Content="{icons:MaterialIconExt Refresh}"
+                                    Command="{Binding ActualizeFilteringCommand}"
+                                    ToolTip.Tip="Actualize filtering"/>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+        </WrapPanel>
 
         <ComboBox Grid.Row="1"
                   HorizontalAlignment="Right"
@@ -51,7 +67,7 @@
                     <Panel Name="Panel">
                         <Image Source="{Binding Image^.Content, Converter={StaticResource BytesToBitmapConverter}}"
                                Margin="1"/>
-                        <avalonia:MaterialIcon Kind="BookmarkCheck"
+                        <icons:MaterialIcon Kind="BookmarkCheck"
                                                Width="30" Height="30"
                                                Foreground="Green"
                                                VerticalAlignment="Top"
@@ -59,10 +75,10 @@
                                                Margin="0 -5 20 0"
                                                ToolTip.Tip="Asset"
                                                IsVisible="{Binding IsAssetObservable^}">
-                            <avalonia:MaterialIcon.Clip>
+                            <icons:MaterialIcon.Clip>
                                 <RectangleGeometry Rect="0, 5, 30, 30"/>
-                            </avalonia:MaterialIcon.Clip>
-                        </avalonia:MaterialIcon>
+                            </icons:MaterialIcon.Clip>
+                        </icons:MaterialIcon>
                         <TextBlock Text="{Binding CreationDate, StringFormat=G}"
                                    VerticalAlignment="Bottom"
                                    HorizontalAlignment="Left"

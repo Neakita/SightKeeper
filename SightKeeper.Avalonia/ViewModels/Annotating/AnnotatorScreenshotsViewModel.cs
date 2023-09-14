@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
+using ReactiveUI;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
@@ -17,10 +23,35 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 {
     public SelectedScreenshotViewModel SelectedScreenshotViewModel { get; }
-    public IReadOnlyList<ScreenshotViewModel> Screenshots { get; }
+
+    public IReadOnlyList<ScreenshotViewModel> Screenshots
+    {
+        get => _screenshots;
+        private set => SetProperty(ref _screenshots, value);
+    }
+
     public IObservable<int> TotalScreenshotsCount { get; }
     public IObservable<int> ScreenshotsWithoutAssetsCount { get; }
     public IObservable<int> ScreenshotsWithAssetsCount { get; }
+    public bool ShowScreenshotsWithAssets
+    {
+        get => _showScreenshotsWithAssets;
+        set
+        {
+            if (SetProperty(ref _showScreenshotsWithAssets, value))
+                SetScreenshots();
+        }
+    }
+
+    public bool ShowScreenshotsWithoutAssets
+    {
+        get => _showScreenshotsWithoutAssets;
+        set
+        {
+            if (SetProperty(ref _showScreenshotsWithoutAssets, value))
+                SetScreenshots();
+        }
+    }
 
     public IEnumerable<SortingRule<Screenshot>> SortingRules { get; } = new[]
     {
@@ -43,19 +74,32 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         _sortingRule = SortingRules.First();
         var sortingRule = this.WhenAnyValue(viewModel => viewModel.SortingRule)
             .Select(rule => rule.Comparer);
-        _screenshots.Connect()
+        _screenshotsSource.Connect()
             .Sort(sortingRule)
             .Transform(screenshot => new ScreenshotViewModel(imageLoader, screenshot))
             .Bind(out var screenshots)
             .PopulateInto(_screenshotViewModels);
-        TotalScreenshotsCount = _screenshots.Connect().Count();
-        Screenshots = screenshots;
+        TotalScreenshotsCount = _screenshotsSource.Connect().Count();
+        _allScreenshots = screenshots;
         ScreenshotsWithAssetsCount = _screenshotViewModels.Connect()
             .FilterOnObservable(screenshot => screenshot.IsAssetObservable)
             .Count();
         ScreenshotsWithoutAssetsCount = _screenshotViewModels.Connect()
             .FilterOnObservable(screenshot => screenshot.IsAssetObservable.Select(isAsset => !isAsset))
             .Count();
+        _screenshotViewModels.Connect()
+            .AutoRefreshOnObservable(_ => _actualizeFilterSubject)
+            .Filter(screenshot => screenshot.IsAsset)
+            .Bind(out var screenshotsWithAssets)
+            .Subscribe();
+        _screenshotsWithAssetsAndSelected = screenshotsWithAssets;
+        _screenshotViewModels.Connect()
+            .AutoRefreshOnObservable(_ => _actualizeFilterSubject)
+            .Filter(screenshot => !screenshot.IsAsset)
+            .Bind(out var screenshotsWithoutAssets)
+            .Subscribe();
+        _screenshotsWithoutAssets = screenshotsWithoutAssets;
+        SetScreenshots();
     }
 
     public void ScrollScreenshot(bool reverse)
@@ -66,7 +110,10 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     }
 
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
-    private readonly SourceList<Screenshot> _screenshots = new();
+    private readonly SourceList<Screenshot> _screenshotsSource = new();
+    private readonly ReadOnlyObservableCollection<ScreenshotViewModel> _allScreenshots;
+    private readonly ReadOnlyObservableCollection<ScreenshotViewModel> _screenshotsWithAssetsAndSelected;
+    private readonly ReadOnlyObservableCollection<ScreenshotViewModel> _screenshotsWithoutAssets;
     private readonly SourceList<ScreenshotViewModel> _screenshotViewModels = new();
 
     [ObservableProperty, NotifyPropertyChangedFor(nameof(TotalScreenshotsCount))]
@@ -74,13 +121,15 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     private CompositeDisposable? _dataSetDisposable;
     private bool _isLoading;
-    private int? _screenshotsWithAssetsCount;
-    private int? _screenshotsWithoutAssetsCount;
+    private bool _showScreenshotsWithAssets = true;
+    private bool _showScreenshotsWithoutAssets = true;
+    private IReadOnlyList<ScreenshotViewModel> _screenshots;
+    private readonly Subject<Unit> _actualizeFilterSubject = new();
 
     partial void OnDataSetChanged(DataSet? value)
     {
         _dataSetDisposable?.Dispose();
-        _screenshots.Clear();
+        _screenshotsSource.Clear();
         if (value == null)
             return;
         LoadScreenshots(value);
@@ -94,15 +143,32 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         OnPropertyChanged(nameof(TotalScreenshotsCount));
     }
 
-    private async void LoadScreenshots(DataSet dataSet)
+    private void LoadScreenshots(DataSet dataSet)
     {
         IsLoading = true;
         _screenshotsDataAccess.Load(
             dataSet.ScreenshotsLibrary,
             SortingRule.Direction == SortDirection.Descending)
-            .Subscribe(screenshotsPartition => _screenshots.AddRange(screenshotsPartition), () => IsLoading = false);
+            .Subscribe(screenshotsPartition => _screenshotsSource.AddRange(screenshotsPartition), () => IsLoading = false);
     }
 
-    private void OnScreenshotAdded(Screenshot newScreenshot) => _screenshots.Add(newScreenshot);
-    private void OnScreenshotRemoved(Screenshot removedScreenshot) => _screenshots.Remove(removedScreenshot);
+    private void OnScreenshotAdded(Screenshot newScreenshot) => _screenshotsSource.Add(newScreenshot);
+    private void OnScreenshotRemoved(Screenshot removedScreenshot) => _screenshotsSource.Remove(removedScreenshot);
+
+    [MemberNotNull(nameof(_screenshots))]
+    private void SetScreenshots()
+    {
+        _screenshots = null!;
+        if (ShowScreenshotsWithAssets && ShowScreenshotsWithoutAssets)
+            Screenshots = _allScreenshots;
+        else if (ShowScreenshotsWithAssets)
+            Screenshots = _screenshotsWithAssetsAndSelected;
+        else if (ShowScreenshotsWithoutAssets)
+            Screenshots = _screenshotsWithoutAssets;
+        else
+            Screenshots = Array.Empty<ScreenshotViewModel>();
+    }
+
+    [RelayCommand]
+    private void ActualizeFiltering() => _actualizeFilterSubject.OnNext(Unit.Default);
 }
