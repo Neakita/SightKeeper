@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
@@ -16,7 +17,7 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         _dbContext = dbContext;
     }
 
-    public Task LoadWeights(WeightsLibrary library, CancellationToken cancellationToken = default)
+    public Task LoadAllWeights(WeightsLibrary library, CancellationToken cancellationToken = default)
     {
         return Task.Run(() =>
         {
@@ -25,6 +26,22 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
                 _dbContext.Entry(library).Collection(lib => lib.Weights).Load();
             }
         }, cancellationToken);
+    }
+
+    public IObservable<Weights> LoadWeights(WeightsLibrary library, CancellationToken cancellationToken = default)
+    {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (library.Weights != null)
+            return library.Weights.ToObservable();
+        Subject<Weights> weightsSubject = new();
+        Task.Run(() =>
+        {
+            IQueryable<Weights> weightsQuery;
+            lock (_dbContext)
+                weightsQuery = _dbContext.Entry(library).Collection(weights => weights.Weights).Query();
+            return LoadWeights(weightsQuery).ToObservable().Subscribe(weightsSubject);
+        }, cancellationToken);
+        return weightsSubject;
     }
 
     public async Task<Weights> CreateWeights(
@@ -39,7 +56,7 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         IEnumerable<Asset> assets,
         CancellationToken cancellationToken = default)
     {
-        await LoadWeights(library, cancellationToken);
+        await LoadAllWeights(library, cancellationToken);
         var weights = library.CreateWeights(onnxData, ptData, size, epoch, boundingLoss, classificationLoss, deformationLoss, assets);
         await _dbContext.SaveChangesAsync(cancellationToken);
         _weightsCreated.OnNext(weights);
@@ -56,4 +73,25 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
     private readonly AppDbContext _dbContext;
     private readonly Subject<Weights> _weightsCreated = new();
     private readonly Subject<Weights> _weightsDeleted = new();
+
+    private IEnumerable<Weights> LoadWeights(IQueryable<Weights> weightsQuery)
+    {
+        var index = 0;
+        while (true)
+        {
+            var weights = LoadWeights(weightsQuery, index++);
+            if (weights == null)
+                break;
+            yield return weights;
+        }
+    }
+
+    private Weights? LoadWeights(IQueryable<Weights> weightsQuery, int index)
+    {
+        lock (_dbContext)
+            return weightsQuery
+                .OrderBy(weights => EF.Property<int>(weights, "Id"))
+                .Skip(index)
+                .FirstOrDefault();
+    }
 }

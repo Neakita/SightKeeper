@@ -16,8 +16,8 @@ public abstract class ValueViewModel<T> : ViewModel, IDisposable
         get => _valueSubject.Value;
         set => SetProperty(Value, value, newValue =>
         {
-            OnValueChanged(newValue);
             _valueSubject.OnNext(newValue);
+            OnValueChanged(newValue);
             NotifyCommandsCanExecuteChanged();
         });
     }

@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Serilog;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
@@ -21,16 +22,22 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (library.Screenshots != null)
+        {
+            Log.Debug("Screenshots already loaded, returning {Count} screenshots", library.Screenshots.Count);
             return Observable.Return(library.Screenshots);
+        }
+
         Subject<IReadOnlyCollection<Screenshot>> screenshotsPartitionsSubject = new();
         Task.Run(() =>
         {
             CollectionEntry<ScreenshotsLibrary, Screenshot> screenshotsCollectionEntry;
+            Log.Debug("Screenshots aren't loaded yet, waiting for database context locking...");
             lock (_dbContext)
             {
                 var libraryEntry = _dbContext.Entry(library);
                 screenshotsCollectionEntry = libraryEntry.Collection(lib => lib.Screenshots);
             }
+            Log.Debug("Screenshots collection entry retrieved");
             foreach (var screenshotsPartition in LoadScreenshotsPartitions(screenshotsCollectionEntry, byDescending))
                 screenshotsPartitionsSubject.OnNext(screenshotsPartition);
             screenshotsPartitionsSubject.OnCompleted();
@@ -47,6 +54,7 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
             var screenshotsPartition = LoadScreenshotsPartition(collectionEntry, PartitionSize, partitionIndex++, byDescending);
             if (screenshotsPartition.Count == 0)
                 break;
+            Log.Debug("Screenshots partition #{PartitionIndex} with {Count} screenshots loaded", partitionIndex, screenshotsPartition.Count);
             yield return screenshotsPartition;
             if (screenshotsPartition.Count < PartitionSize)
                 break;

@@ -11,7 +11,6 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
 {
-    private readonly WeightsDataAccess _weightsDataAccess;
     public IReadOnlyCollection<Weights> Weights { get; }
 
     public SelectedDataSetViewModel(WeightsDataAccess weightsDataAccess) : base(null)
@@ -37,15 +36,15 @@ public sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
         base.Dispose();
     }
 
-    protected override async void OnValueChanged(DataSetViewModel? newValue)
+    protected override void OnValueChanged(DataSetViewModel? newValue)
     {
         _weights.Clear();
         if (newValue == null)
             return;
-        await _weightsDataAccess.LoadWeights(newValue.DataSet.WeightsLibrary);
-        _weights.AddRange(newValue.DataSet.WeightsLibrary.Weights);
+        _weightsDataAccess.LoadWeights(newValue.DataSet.WeightsLibrary).Subscribe(weights => _weights.Add(weights));
     }
 
+    private readonly WeightsDataAccess _weightsDataAccess;
     private readonly SourceList<Weights> _weights = new();
     private readonly CompositeDisposable _disposable = new();
 }
