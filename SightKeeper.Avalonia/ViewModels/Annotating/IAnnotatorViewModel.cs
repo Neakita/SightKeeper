@@ -13,4 +13,5 @@ public interface IAnnotatorViewModel
     AnnotatorToolsViewModel ToolsViewModel { get; }
     DrawerViewModel DrawerViewModel { get; }
     AutoAnnotationViewModel AutoAnnotationViewModel { get; }
+    ViewSettingsViewModel ViewSettingsViewModel { get; }
 }

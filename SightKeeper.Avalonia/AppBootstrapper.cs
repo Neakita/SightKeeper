@@ -135,6 +135,7 @@ public static class AppBootstrapper
 		builder.RegisterType<SelectedDataSetViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<SelectedScreenshotViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<AutoAnnotationViewModel>();
+		builder.RegisterType<ViewSettingsViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -151,5 +152,6 @@ public static class AppBootstrapper
 		builder.RegisterType<WeightsEditor>().As<IViewFor<WeightsEditorViewModel>>();
 		builder.RegisterType<AutoAnnotation>().As<IViewFor<AutoAnnotationViewModel>>();
 		builder.RegisterType<DetectedItem>().As<IViewFor<DetectedItemViewModel>>();
+		builder.RegisterType<ViewSettings>().As<IViewFor<ViewSettingsViewModel>>();
 	}
 }

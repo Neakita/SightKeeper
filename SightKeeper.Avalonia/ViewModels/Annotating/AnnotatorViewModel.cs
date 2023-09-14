@@ -17,6 +17,7 @@ public sealed class AnnotatorViewModel : ViewModel, IAnnotatorViewModel, IDispos
 	public DrawerViewModel DrawerViewModel { get; }
 	public SelectedDataSetViewModel SelectedDataSet { get; }
 	public AutoAnnotationViewModel AutoAnnotationViewModel { get; }
+	public ViewSettingsViewModel ViewSettingsViewModel { get; }
 
 	public bool CanChangeSelectedDataSet => !Screenshoter.IsEnabled;
 
@@ -27,7 +28,8 @@ public sealed class AnnotatorViewModel : ViewModel, IAnnotatorViewModel, IDispos
 		AnnotatorToolsViewModel toolsViewModel,
 		DrawerViewModel drawerViewModel,
 		SelectedDataSetViewModel selectedDataSet,
-		AutoAnnotationViewModel autoAnnotationViewModel)
+		AutoAnnotationViewModel autoAnnotationViewModel,
+		ViewSettingsViewModel viewSettingsViewModel)
 	{
 		Screenshoter = screenshoterViewModel;
 		Screenshots = screenshots;
@@ -35,6 +37,7 @@ public sealed class AnnotatorViewModel : ViewModel, IAnnotatorViewModel, IDispos
 		DrawerViewModel = drawerViewModel;
 		SelectedDataSet = selectedDataSet;
 		AutoAnnotationViewModel = autoAnnotationViewModel;
+		ViewSettingsViewModel = viewSettingsViewModel;
 		screenshoterViewModel.IsEnabledChanged.Subscribe(_ =>
 			OnPropertyChanged(nameof(CanChangeSelectedDataSet)));
 		DataSetViewModels = dataSetsListViewModel.DataSets;

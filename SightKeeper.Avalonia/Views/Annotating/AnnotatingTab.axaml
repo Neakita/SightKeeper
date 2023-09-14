@@ -7,11 +7,9 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatingTab"
              x:DataType="viewModels:IAnnotatorViewModel">
-    
     <Design.DataContext>
         <viewModels:FakeAnnotatorViewModel/>
     </Design.DataContext>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="50" Width="150"/>
@@ -24,9 +22,8 @@
         <GridSplitter Grid.Column="1"/>
         <ContentControl Grid.Column="2" Content="{Binding DrawerViewModel}"/>
         <GridSplitter Grid.Column="3" Background="Gray"/>
-        <Grid Grid.Column="4" RowDefinitions="Auto Auto Auto Auto">
-            <ComboBox Grid.Row="0"
-                      ItemsSource="{Binding DataSetViewModels}"
+        <StackPanel Grid.Column="4">
+            <ComboBox ItemsSource="{Binding DataSetViewModels}"
                       SelectedItem="{Binding SelectedDataSet.Value}"
                       HorizontalAlignment="Stretch"
                       PlaceholderText="Dataset"
@@ -37,27 +34,27 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <Expander Grid.Row="1"
-                      Header="Screenshoting"
+            <Expander Header="Screenshoting"
                       HorizontalAlignment="Stretch"
                       IsExpanded="True">
                 <views:ScreenshoterSettings DataContext="{Binding Screenshoter}"/>
             </Expander>
-            <Expander Grid.Row="2"
-                      Header="Annotating"
+            <Expander Header="Annotating"
                       HorizontalAlignment="Stretch"
-                      IsExpanded="True"
-                      VerticalAlignment="Top">
+                      IsExpanded="True">
                 <ContentControl Content="{Binding ToolsViewModel}"/>
             </Expander>
-            <Expander Grid.Row="3"
-                      Header="Auto annotating"
+            <Expander Header="View"
                       HorizontalAlignment="Stretch"
-                      IsExpanded="True"
-                      VerticalAlignment="Top">
+                      IsExpanded="True">
+                <ContentControl Content="{Binding ViewSettingsViewModel}"/>
+            </Expander>
+            <Expander Header="Auto annotating"
+                      HorizontalAlignment="Stretch"
+                      IsExpanded="True">
                 <ContentControl Content="{Binding AutoAnnotationViewModel}"/>
             </Expander>
-        </Grid>
+        </StackPanel>
     </Grid>
 
 </UserControl>

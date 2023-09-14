@@ -36,7 +36,7 @@ public sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
         base.Dispose();
     }
 
-    protected override void OnValueChanged(DataSetViewModel? newValue)
+    protected override void OnValueNotified(DataSetViewModel? newValue)
     {
         _weights.Clear();
         if (newValue == null)
