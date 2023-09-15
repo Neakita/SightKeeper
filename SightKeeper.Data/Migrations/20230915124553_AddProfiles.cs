@@ -5,7 +5,7 @@
 namespace SightKeeper.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddProfile : Migration
+    public partial class AddProfiles : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,7 +49,7 @@ namespace SightKeeper.Data.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ItemClassId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Index = table.Column<int>(type: "INTEGER", nullable: false),
+                    Index = table.Column<byte>(type: "INTEGER", nullable: false),
                     ProfileId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

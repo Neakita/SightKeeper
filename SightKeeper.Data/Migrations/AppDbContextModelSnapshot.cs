@@ -193,7 +193,7 @@ namespace SightKeeper.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Index")
+                    b.Property<byte>("Index")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ItemClassId")

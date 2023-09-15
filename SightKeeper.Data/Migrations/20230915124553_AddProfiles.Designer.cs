@@ -11,8 +11,8 @@ using SightKeeper.Data;
 namespace SightKeeper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230915123940_AddProfile")]
-    partial class AddProfile
+    [Migration("20230915124553_AddProfiles")]
+    partial class AddProfiles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,7 +196,7 @@ namespace SightKeeper.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Index")
+                    b.Property<byte>("Index")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ItemClassId")

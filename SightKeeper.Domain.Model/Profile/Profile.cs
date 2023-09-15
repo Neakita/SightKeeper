@@ -58,7 +58,7 @@ public sealed class Profile
             ThrowHelper.ThrowArgumentException(nameof(itemClass), $"Item class \"{itemClass}\" not found in dataset \"{Weights}\"");
         if (_itemClasses.Any(orderedItemClass => orderedItemClass.ItemClass == itemClass))
             ThrowHelper.ThrowArgumentException($"Item class {itemClass} already added to profile {this}");
-        _itemClasses.Add(new ProfileItemClass(itemClass, _itemClasses.Count));
+        _itemClasses.Add(new ProfileItemClass(itemClass, (byte)_itemClasses.Count));
     }
 
     public void RemoveItemClass(ItemClass itemClass)
