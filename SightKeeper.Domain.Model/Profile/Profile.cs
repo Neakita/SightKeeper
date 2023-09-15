@@ -35,8 +35,9 @@ public sealed class Profile
         {
             if (_weights == value)
                 return;
+            if (_weights.Library != value.Library)
+                _itemClasses.Clear();
             _weights = value;
-            _itemClasses.Clear();
         }
     }
 
@@ -79,6 +80,9 @@ public sealed class Profile
         foreach (var profileItemClass in _itemClasses)
             profileItemClass.Index = order[profileItemClass.ItemClass];
     }
+
+    public override string ToString() =>
+        string.IsNullOrEmpty(Name) ? base.ToString()! : Name;
 
     private Weights _weights;
     private readonly List<ProfileItemClass> _itemClasses;
