@@ -28,34 +28,34 @@ public sealed class Profile
         }
     }
 
-    public DataSet DataSet
+    public Weights Weights
     {
-        get => _dataSet;
+        get => _weights;
         set
         {
-            if (_dataSet == value)
+            if (_weights == value)
                 return;
-            _dataSet = value;
+            _weights = value;
             _itemClasses.Clear();
         }
     }
 
     public IReadOnlyList<ProfileItemClass> ItemClasses => _itemClasses;
 
-    public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, DataSet dataSet)
+    public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, Weights weights)
     {
         Name = name;
         Description = description;
         DetectionThreshold = detectionThreshold;
         MouseSensitivity = mouseSensitivity;
-        _dataSet = dataSet;
+        _weights = weights;
         _itemClasses = new List<ProfileItemClass>();
     }
 
     public void AddItemClass(ItemClass itemClass)
     {
-        if (!DataSet.ItemClasses.Contains(itemClass))
-            ThrowHelper.ThrowArgumentException(nameof(itemClass), $"Item class \"{itemClass}\" not found in dataset \"{DataSet}\"");
+        if (!Weights.Library.DataSet.ItemClasses.Contains(itemClass))
+            ThrowHelper.ThrowArgumentException(nameof(itemClass), $"Item class \"{itemClass}\" not found in dataset \"{Weights}\"");
         if (_itemClasses.Any(orderedItemClass => orderedItemClass.ItemClass == itemClass))
             ThrowHelper.ThrowArgumentException($"Item class {itemClass} already added to profile {this}");
         _itemClasses.Add(new ProfileItemClass(itemClass, _itemClasses.Count));
@@ -80,7 +80,7 @@ public sealed class Profile
             profileItemClass.Index = order[profileItemClass.ItemClass];
     }
 
-    private DataSet _dataSet;
+    private Weights _weights;
     private readonly List<ProfileItemClass> _itemClasses;
     private float _detectionThreshold;
     private float _mouseSensitivity;
@@ -89,7 +89,7 @@ public sealed class Profile
     {
         Name = null!;
         Description = null!;
-        _dataSet = null!;
+        _weights = null!;
         _itemClasses = null!;
     }
 }

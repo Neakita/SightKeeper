@@ -163,9 +163,6 @@ namespace SightKeeper.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DataSetId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -180,9 +177,12 @@ namespace SightKeeper.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("WeightsId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DataSetId");
+                    b.HasIndex("WeightsId");
 
                     b.ToTable("Profiles");
                 });
@@ -199,7 +199,7 @@ namespace SightKeeper.Data.Migrations
                     b.Property<int>("ItemClassId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ProfileId")
+                    b.Property<int>("ProfileId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -415,13 +415,13 @@ namespace SightKeeper.Data.Migrations
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Profile", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Model.DataSet", "DataSet")
+                    b.HasOne("SightKeeper.Domain.Model.Weights", "Weights")
                         .WithMany()
-                        .HasForeignKey("DataSetId")
+                        .HasForeignKey("WeightsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DataSet");
+                    b.Navigation("Weights");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.ProfileItemClass", b =>
@@ -434,7 +434,9 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasOne("SightKeeper.Domain.Model.Profile", null)
                         .WithMany("ItemClasses")
-                        .HasForeignKey("ProfileId");
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ItemClass");
                 });

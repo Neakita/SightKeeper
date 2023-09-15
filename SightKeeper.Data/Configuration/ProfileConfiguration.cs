@@ -9,6 +9,6 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
     public void Configure(EntityTypeBuilder<Profile> builder)
     {
         builder.HasShadowKey();
-        builder.HasMany(profile => profile.ItemClasses).WithOne();
+        builder.HasMany(profile => profile.ItemClasses).WithOne().IsRequired();
     }
 }

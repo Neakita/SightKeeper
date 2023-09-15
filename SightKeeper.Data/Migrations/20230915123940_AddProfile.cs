@@ -10,6 +10,15 @@ namespace SightKeeper.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<int>(
+                name: "Id",
+                table: "DetectorItems",
+                type: "INTEGER",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "INTEGER")
+                .OldAnnotation("Sqlite:Autoincrement", true);
+
             migrationBuilder.CreateTable(
                 name: "Profiles",
                 columns: table => new
@@ -20,15 +29,15 @@ namespace SightKeeper.Data.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     DetectionThreshold = table.Column<float>(type: "REAL", nullable: false),
                     MouseSensitivity = table.Column<float>(type: "REAL", nullable: false),
-                    DataSetId = table.Column<int>(type: "INTEGER", nullable: false)
+                    WeightsId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Profiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Profiles_DataSets_DataSetId",
-                        column: x => x.DataSetId,
-                        principalTable: "DataSets",
+                        name: "FK_Profiles_Weights_WeightsId",
+                        column: x => x.WeightsId,
+                        principalTable: "Weights",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -41,7 +50,7 @@ namespace SightKeeper.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     ItemClassId = table.Column<int>(type: "INTEGER", nullable: false),
                     Index = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProfileId = table.Column<int>(type: "INTEGER", nullable: true)
+                    ProfileId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,7 +65,8 @@ namespace SightKeeper.Data.Migrations
                         name: "FK_ProfileItemClasses_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "Profiles",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -77,9 +87,9 @@ namespace SightKeeper.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Profiles_DataSetId",
+                name: "IX_Profiles_WeightsId",
                 table: "Profiles",
-                column: "DataSetId");
+                column: "WeightsId");
         }
 
         /// <inheritdoc />
@@ -90,6 +100,15 @@ namespace SightKeeper.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Profiles");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "Id",
+                table: "DetectorItems",
+                type: "INTEGER",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "INTEGER")
+                .Annotation("Sqlite:Autoincrement", true);
         }
     }
 }
