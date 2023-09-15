@@ -16,61 +16,56 @@ public sealed class Profile
             if (_dataSet == value)
                 return;
             _dataSet = value;
-            ClearGroups();
+            _itemClasses.Clear();
         }
     }
 
-    public IReadOnlyList<ItemClassesGroup> ItemClassesGroups => _itemClassesGroups;
+    public IReadOnlyList<ProfileItemClass> ItemClasses => _itemClasses;
 
     public Profile(string name, string description, DataSet dataSet)
     {
         Name = name;
         Description = description;
         _dataSet = dataSet;
-        _itemClassesGroups = new List<ItemClassesGroup>();
+        _itemClasses = new List<ProfileItemClass>();
     }
 
-    public ItemClassesGroup CreateGroup(string name)
-    {
-        ItemClassesGroup group = new(name);
-        _itemClassesGroups.Add(group);
-        return group;
-    }
-
-    public void AssignItemClassToGroup(ItemClass itemClass, ItemClassesGroup group)
+    public void AddItemClass(ItemClass itemClass)
     {
         if (!DataSet.ItemClasses.Contains(itemClass))
-            ThrowHelper.ThrowArgumentException($"Item class \"{itemClass}\" not found in dataset \"{DataSet}\"");
-        if (!ItemClassesGroups.Contains(group))
-            ThrowHelper.ThrowArgumentException($"Group \"{group}\" not found");
-        group.AddItemClass(itemClass);
-    }
-    
-    public void UnAssignItemClassFromGroup(ItemClass itemClass, ItemClassesGroup group)
-    {
-        if (!DataSet.ItemClasses.Contains(itemClass))
-            ThrowHelper.ThrowArgumentException($"Item class \"{itemClass}\" not found in dataset \"{DataSet}\"");
-        if (!ItemClassesGroups.Contains(group))
-            ThrowHelper.ThrowArgumentException($"Group \"{group}\" not found");
-        group.RemoveItemClass(itemClass);
+            ThrowHelper.ThrowArgumentException(nameof(itemClass), $"Item class \"{itemClass}\" not found in dataset \"{DataSet}\"");
+        if (_itemClasses.Any(orderedItemClass => orderedItemClass.ItemClass == itemClass))
+            ThrowHelper.ThrowArgumentException($"Item class {itemClass} already added to profile {this}");
+        _itemClasses.Add(new ProfileItemClass(itemClass, _itemClasses.Count));
     }
 
-    public void DeleteGroup(ItemClassesGroup group) => Guard.IsTrue(_itemClassesGroups.Remove(group));
+    public void RemoveItemClass(ItemClass itemClass)
+    {
+        var removedItemClassesCount = _itemClasses.RemoveAll(profileItemClass => profileItemClass.ItemClass == itemClass);
+        Guard.IsEqualTo(removedItemClassesCount, 1);
+    }
+
+    public void RemoveItemClass(ProfileItemClass itemClass)
+    {
+        var removed = _itemClasses.Remove(itemClass);
+        Guard.IsTrue(removed);
+    }
+
+    public void ApplyItemClassesOrder(IDictionary<ItemClass, byte> order)
+    {
+        Guard.IsEqualTo(order.Count, _itemClasses.Count);
+        foreach (var profileItemClass in _itemClasses)
+            profileItemClass.Index = order[profileItemClass.ItemClass];
+    }
 
     private DataSet _dataSet;
-    private readonly List<ItemClassesGroup> _itemClassesGroups;
+    private readonly List<ProfileItemClass> _itemClasses;
 
     private Profile()
     {
         Name = null!;
         Description = null!;
         _dataSet = null!;
-        _itemClassesGroups = null!;
-    }
-
-    private void ClearGroups()
-    {
-        foreach (var group in ItemClassesGroups)
-            group.Clear();
+        _itemClasses = null!;
     }
 }
