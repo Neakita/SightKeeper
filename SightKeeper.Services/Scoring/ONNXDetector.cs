@@ -53,16 +53,9 @@ public sealed class ONNXDetector : Detector
         }
     }
 
-    public IReadOnlyCollection<DetectionItem> Detect(byte[] image)
-    {
-        Guard.IsNotNull(_predictor);
-        var result = _predictor.Detect(new ImageSelector(image));
-        return result.Boxes.Select(CreateDetectionItem).ToList();
-    }
-
     public async Task<IReadOnlyCollection<DetectionItem>> Detect(byte[] image, CancellationToken cancellationToken)
     {
-        using Operation operation = Operation.Begin("Detecting on image");
+        using var operation = Operation.Begin("Detecting on image");
         Guard.IsNotNull(_predictor);
         var detectionResult = await Task.Run(() => _predictor.Detect(new ImageSelector(image)), cancellationToken);
         var result = detectionResult.Boxes.Select(CreateDetectionItem).ToList();
