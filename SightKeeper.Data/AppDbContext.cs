@@ -13,7 +13,8 @@ public class AppDbContext : DbContext
 {
 	public DbSet<DataSet> DataSets { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
-	
+	public DbSet<Profile> Profiles { get; set; } = null!;
+
 	public AppDbContext()
 	{
 		Log.Debug("Instantiated {Name}", nameof(AppDbContext));
@@ -72,6 +73,8 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
 		modelBuilder.ApplyConfiguration(new DataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsLibraryConfiguration());
+		modelBuilder.ApplyConfiguration(new ProfileConfiguration());
+		modelBuilder.ApplyConfiguration(new ProfileItemClassConfiguration());
 		
 		modelBuilder.Entity<Asset>().Navigation(asset => asset.Screenshot).AutoInclude();
 	}
