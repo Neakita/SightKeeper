@@ -7,6 +7,8 @@ public sealed class Profile
 {
     public string Name { get; set; }
     public string Description { get; set; }
+    public float DetectionThreshold { get; set; }
+    public float MouseSensitivity { get; set; }
 
     public DataSet DataSet
     {
