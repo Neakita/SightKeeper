@@ -7,8 +7,26 @@ public sealed class Profile
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public float DetectionThreshold { get; set; }
-    public float MouseSensitivity { get; set; }
+
+    public float DetectionThreshold
+    {
+        get => _detectionThreshold;
+        set
+        {
+            Guard.IsBetween(value, 0, 1);
+            _detectionThreshold = value;
+        }
+    }
+
+    public float MouseSensitivity
+    {
+        get => _mouseSensitivity;
+        set
+        {
+            Guard.IsGreaterThan(value, 0);
+            _mouseSensitivity = value;
+        }
+    }
 
     public DataSet DataSet
     {
@@ -64,6 +82,8 @@ public sealed class Profile
 
     private DataSet _dataSet;
     private readonly List<ProfileItemClass> _itemClasses;
+    private float _detectionThreshold;
+    private float _mouseSensitivity;
 
     private Profile()
     {
