@@ -12,4 +12,9 @@ public sealed class ProfileItemClass
         ItemClass = itemClass;
         Index = index;
     }
+
+    private ProfileItemClass()
+    {
+        ItemClass = null!;
+    }
 }
