@@ -24,10 +24,12 @@ public sealed class Profile
 
     public IReadOnlyList<ProfileItemClass> ItemClasses => _itemClasses;
 
-    public Profile(string name, string description, DataSet dataSet)
+    public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, DataSet dataSet)
     {
         Name = name;
         Description = description;
+        DetectionThreshold = detectionThreshold;
+        MouseSensitivity = mouseSensitivity;
         _dataSet = dataSet;
         _itemClasses = new List<ProfileItemClass>();
     }
