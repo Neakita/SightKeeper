@@ -19,7 +19,8 @@ public sealed class ItemClassesGroup
         if (_itemClasses.Any(itemClass => orderList.Count(t => t.item == itemClass.ItemClass) != 1))
             ThrowHelper.ThrowArgumentException("Order items classes mismatch");
         var orderDictionary = orderList.ToDictionary(t => t.item, t => t.index);
-        _itemClasses.Sort((x, y) => orderDictionary[x.ItemClass] - orderDictionary[y.ItemClass]);
+        foreach (var orderedItemClass in _itemClasses)
+            orderedItemClass.Index = orderDictionary[orderedItemClass.ItemClass];
     }
 
     internal ItemClassesGroup(string name)
