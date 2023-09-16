@@ -11,7 +11,14 @@ public sealed class WindowsScreenCapture : ScreenCapture
 {
 	public WindowsScreenCapture(ScreenBoundsProvider screenBoundsProvider)
 	{
-		_screenBoundsProvider = screenBoundsProvider;
+		_screenCenter = new Point(
+			screenBoundsProvider.MainScreenHorizontalCenter,
+			screenBoundsProvider.MainScreenVerticalCenter);
+	}
+
+	public WindowsScreenCapture(Point screenCenter)
+	{
+		_screenCenter = screenCenter;
 	}
 	
 	public byte[] Capture()
@@ -21,8 +28,8 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		using var graphics = Graphics.FromImage(windowsBitmap);
 
 		Point point = new(
-			_screenBoundsProvider.MainScreenHorizontalCenter - Resolution.Value / 2 - XOffset, 
-			_screenBoundsProvider.MainScreenVerticalCenter - Resolution.Value / 2 - YOffset);
+			_screenCenter.X - Resolution.Value / 2 - XOffset, 
+			_screenCenter.Y - Resolution.Value / 2 - YOffset);
 
 		graphics.CopyFromScreen(point, Point.Empty, new Size(Resolution.Value, Resolution.Value));
 		using MemoryStream stream = new();
@@ -43,12 +50,12 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		get
 		{
 			if (Game == null) return true;
-			Process? process = Process.GetProcessesByName(Game.ProcessName)
+			var process = Process.GetProcessesByName(Game.ProcessName)
 				.FirstOrDefault(process => process.MainWindowHandle > 0);
 			if (process == null) return false;
 			return User32.GetForegroundWindow() == process.MainWindowHandle;
 		}
 	}
 
-	private readonly ScreenBoundsProvider _screenBoundsProvider;
+	private readonly Point _screenCenter;
 }
