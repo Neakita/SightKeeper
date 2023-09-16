@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
+using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Common;
+
+namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
+
+public sealed class FakeProfilesViewModel : IProfilesViewModel
+{
+    public IReadOnlyCollection<ProfileViewModel> Profiles { get; }
+    public ICommand CreateProfileCommand => FakeViewModel.CommandSubstitute;
+
+    public FakeProfilesViewModel()
+    {
+        DataSet dataSet = new("Dataset 1");
+        Game game = new("Game 1", "game1");
+        dataSet.Game = game;
+        var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), Array.Empty<byte>(), ModelSize.Small,
+            100, 0.5f, 0.4f, 0.3f, Enumerable.Empty<Asset>());
+        Profile profile1 = new("Profile", string.Empty, 0.5f, 2f, weights);
+        Profile profile2 = new("Profile with long name!", string.Empty, 0.3f, 3f, weights);
+        Profiles = new ProfileViewModel[]
+        {
+            new(profile1),
+            new(profile2)
+        };
+    }
+}
