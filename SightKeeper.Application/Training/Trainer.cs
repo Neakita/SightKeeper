@@ -8,10 +8,10 @@ namespace SightKeeper.Application.Training;
 
 public sealed class Trainer
 {
-	private const string DataDirectoryPath = "Data/Training/";
-	private const string DataSetPath = DataDirectoryPath + "data.yaml";
-	private const string RunsDirectoryPath = DataDirectoryPath + "Runs/";
-	private const string WeightsToResumeTrainingOnPath = DataDirectoryPath + "weights.pt";
+	private static readonly string DataDirectoryPath = Path.Combine("Data", "Training");
+	private static readonly string DataSetPath = Path.Combine(DataDirectoryPath, "data.yaml");
+	private static readonly string RunsDirectoryPath = Path.Combine(DataDirectoryPath, "Runs");
+	private static readonly string WeightsToResumeTrainingOnPath = Path.Combine(DataDirectoryPath, "weights.pt");
 
 	public bool AMP { get; set; } = true;
 

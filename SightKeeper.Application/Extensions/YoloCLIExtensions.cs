@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 using CommunityToolkit.Diagnostics;
 using Serilog;
 using Serilog.Core;
@@ -59,18 +60,20 @@ public static class YoloCLIExtensions
 
     private static async Task SetRunsDirectory(string directory, ILogger logger)
     {
-        var runsDirectoryParameter = await CLIExtensions.RunCLICommand($"yolo settings runs_dir={directory}", logger)
+        directory = new Regex(@"\\").Replace(directory, "/");
+        var arguments = $"yolo settings runs_dir=\'{directory}\'";
+        var runsDirectoryParameter = await CLIExtensions.RunCLICommand(arguments, logger)
             .WhereNotNull()
             .FirstAsync(output => output.StartsWith("runs_dir"));
         var runsDirectory = runsDirectoryParameter.Replace("runs_dir: ", string.Empty);
         if (runsDirectory != directory)
-            ThrowHelper.ThrowInvalidOperationException($"Failed to set runs directory, current value: {runsDirectory}");
+            ThrowHelper.ThrowInvalidOperationException($"Failed to set runs directory to \"{directory}\", current value: {runsDirectory}");
         Log.Debug("The path to the runs directory \"{Directory}\" is set", directory);
     }
 
     public static async Task<string> ExportToONNX(string modelPath, ushort imagesSize, ILogger logger)
     {
-        var outputStream = CLIExtensions.RunCLICommand($"yolo export model=\"{modelPath}\" format=onnx imgsz={imagesSize} opset=15", logger);
+        var outputStream = CLIExtensions.RunCLICommand($"yolo export model=\'{modelPath}\' format=onnx imgsz={imagesSize} opset=15", logger);
         await outputStream.WhereNotNull().Where(content => content.Contains("export success")).FirstAsync();
         var onnxModelPath = modelPath.Replace(".pt", ".onnx");
         Guard.IsTrue(File.Exists(onnxModelPath));
