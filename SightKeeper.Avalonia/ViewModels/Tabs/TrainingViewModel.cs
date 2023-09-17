@@ -11,6 +11,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Serilog;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc.Logging;
 using SightKeeper.Avalonia.ViewModels.Elements;
@@ -94,7 +95,8 @@ public sealed partial class TrainingViewModel : ViewModel
         var logger = new LoggerConfiguration()
             .WriteTo.TextBlockInlines(InlineCollection)
             .MinimumLevel.Verbose()
-            .CreateLogger();
+            .CreateLogger()
+            .WithGlobal();
         var ownScope = scope.BeginLifetimeScope(this, builder => builder.RegisterInstance(logger).As<ILogger>().SingleInstance());
         _trainer = ownScope.Resolve<Trainer>();
         AvailableDataSets = dataSetsListViewModel.DataSets;
