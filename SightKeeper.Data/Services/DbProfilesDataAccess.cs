@@ -43,6 +43,12 @@ public sealed class DbProfilesDataAccess : ProfilesDataAccess
         }, cancellationToken);
     }
 
+    public Task<IReadOnlyCollection<Profile>> LoadAllProfiles(CancellationToken cancellationToken) => Task.Run(() =>
+    {
+        lock (_dbContext)
+            return (IReadOnlyCollection<Profile>)_dbContext.Profiles.ToList();
+    }, cancellationToken);
+
     public IObservable<Profile> LoadProfiles()
     {
         return Observable.Create<Profile>(observer =>
