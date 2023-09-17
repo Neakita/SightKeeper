@@ -13,7 +13,7 @@ public static class TrainerParser
 
     private static readonly Regex TrainingProgressLineRegex = new(@" *\d+/\d+ *.*G *\d+(\.\d+) * \d+(\.\d+) * \d+(\.\d+) * \d* * \d*:.*", RegexOptions.Compiled);
     private static readonly Regex CurrentEpochRegex = new(@"(?<=^ *)\d+(?=/)", RegexOptions.Compiled);
-    private static readonly Regex FloatingPointNumbersRegex = new(@"\d+(\.\d+)", RegexOptions.Compiled);
+    private static readonly Regex FloatingPointNumbersRegex = new(@"\d+(\.\d+)?", RegexOptions.Compiled);
     private static readonly NumberFormatInfo NumberFormatInfo = new() { NumberDecimalSeparator = "." };
 
     private static TrainingProgress ParseTrainingProgress(string content)
@@ -21,7 +21,7 @@ public static class TrainerParser
         var currentEpoch = uint.Parse(CurrentEpochRegex.Match(content).Value);
         var floatingPointNumberMatches = FloatingPointNumbersRegex.Matches(content);
         var floatingPointNumbers = floatingPointNumberMatches
-            .Skip(1)
+            .Skip(3)
             .Take(3)
             .Select(match => float.Parse(match.Value, NumberFormatInfo))
             .ToList();
