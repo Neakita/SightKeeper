@@ -60,7 +60,7 @@ public static class YoloCLIExtensions
 
     private static async Task SetRunsDirectory(string directory, ILogger logger)
     {
-        directory = new Regex(@"\\").Replace(directory, "/");
+        directory = ReplaceBackSlashes(directory);
         var arguments = $"yolo settings runs_dir=\'{directory}\'";
         var runsDirectoryParameter = await CLIExtensions.RunCLICommand(arguments, logger)
             .WhereNotNull()
@@ -73,10 +73,16 @@ public static class YoloCLIExtensions
 
     public static async Task<string> ExportToONNX(string modelPath, ushort imagesSize, ILogger logger)
     {
+        modelPath = ReplaceBackSlashes(modelPath);
         var outputStream = CLIExtensions.RunCLICommand($"yolo export model=\'{modelPath}\' format=onnx imgsz={imagesSize} opset=15", logger);
         await outputStream.WhereNotNull().Where(content => content.Contains("export success")).FirstAsync();
         var onnxModelPath = modelPath.Replace(".pt", ".onnx");
         Guard.IsTrue(File.Exists(onnxModelPath));
         return onnxModelPath;
     }
+
+    private static string ReplaceBackSlashes(string path) =>
+        BackSlashRegex.Replace(path, @"/");
+
+    private static readonly Regex BackSlashRegex = new(@"\\");
 }
