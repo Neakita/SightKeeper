@@ -7,4 +7,5 @@ public interface IProfilesViewModel
 {
     IReadOnlyCollection<ProfileViewModel> Profiles { get; }
     ICommand CreateProfileCommand { get; }
+    ICommand EditProfileCommand { get; }
 }

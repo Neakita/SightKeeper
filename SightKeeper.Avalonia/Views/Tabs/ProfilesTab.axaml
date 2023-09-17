@@ -10,11 +10,14 @@
     <Design.DataContext>
         <profilesViewModels:FakeProfilesViewModel/>
     </Design.DataContext>
-    <Grid RowDefinitions="Auto *">
+    <Grid RowDefinitions="Auto *"
+          Name="Root">
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal"
                     Margin="5">
-            <Button Content="{icons:MaterialIconExt Plus}"/>
+            <Button Content="{icons:MaterialIconExt Plus}"
+                    Command="{Binding CreateProfileCommand}"
+                    ToolTip.Tip="Create new profile"/>
         </StackPanel>
         <ScrollViewer Grid.Row="1">
             <ItemsControl ItemsSource="{Binding Profiles}">
@@ -47,7 +50,10 @@
                                            Margin="0 0 5 0"/>
                                 <Button Grid.Row="1" Grid.Column="1"
                                         Content="{icons:MaterialIconExt Cog}"
-                                        Padding="5"/>
+                                        Padding="5"
+                                        Command="{Binding #Root.((profilesViewModels:IProfilesViewModel)DataContext).EditProfileCommand}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip.Tip="Edit profile"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

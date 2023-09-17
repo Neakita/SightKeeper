@@ -11,6 +11,7 @@ public sealed class FakeProfilesViewModel : IProfilesViewModel
 {
     public IReadOnlyCollection<ProfileViewModel> Profiles { get; }
     public ICommand CreateProfileCommand => FakeViewModel.CommandSubstitute;
+    public ICommand EditProfileCommand => FakeViewModel.CommandSubstitute;
 
     public FakeProfilesViewModel()
     {
