@@ -1,18 +1,19 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SightKeeper.Avalonia.ViewModels;
 
 public class ViewModel : ObservableObject
 {
-    protected void OnPropertiesChanging(params string[] properties)
+    protected void OnPropertiesChanging(IEnumerable<string> otherProperties)
     {
-        foreach (var property in properties)
+        foreach (var property in otherProperties)
             OnPropertyChanging(property);
     }
     
-    protected void OnPropertiesChanged(params string[] properties)
+    protected void OnPropertiesChanged(IEnumerable<string> otherProperties)
     {
-        foreach (var property in properties)
+        foreach (var property in otherProperties)
             OnPropertyChanged(property);
     }
 }
