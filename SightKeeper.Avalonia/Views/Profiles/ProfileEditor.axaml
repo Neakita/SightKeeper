@@ -1,0 +1,104 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:profilesEditorViewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Views.ProfileEditor"
+             x:DataType="profilesEditorViewModels:ProfileEditorViewModel">
+    <Design.DataContext>
+        <profilesEditorViewModels:FakeProfileEditorViewModel/>
+    </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="Slider">
+            <Setter Property="TickPlacement" Value="Outside"/>
+            <Setter Property="IsSnapToTickEnabled" Value="True"/>
+            <Setter Property="TickFrequency" Value="0.1"/>
+            <Setter Property="Minimum" Value="0.1"/>
+        </Style>
+        <Style Selector="NumericUpDown">
+            <Setter Property="MinWidth" Value="130"/>
+            <Setter Property="FormatString" Value="P0"/>
+            <Setter Property="Increment" Value="0.1"/>
+            <Setter Property="Minimum" Value="0.1"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Styles>
+    <Grid RowDefinitions="* Auto">
+    <StackPanel Grid.Row="0" Name="Root">
+        <TextBox Text="{Binding Name}"
+                 Watermark="Name"/>
+        <ComboBox ItemsSource="{Binding AvailableDataSets}"
+                  SelectedItem="{Binding DataSet}"
+                  PlaceholderText="Dataset"/>
+        <ComboBox ItemsSource="{Binding AvailableWeights}"
+                  SelectedItem="{Binding Weights}"
+                  PlaceholderText="Weights"/>
+        <Grid ColumnDefinitions="Auto *">
+            <NumericUpDown Grid.Column="0"
+                           Watermark="Detection threshold"
+                           Value="{Binding DetectionThreshold}"
+                           Maximum="0.9"/>
+            <Slider Grid.Column="1"
+                    Maximum="0.9"
+                    Value="{Binding DetectionThreshold}"/>
+        </Grid>
+        <Grid ColumnDefinitions="Auto *">
+            <NumericUpDown Grid.Column="0"
+                           Watermark="Mouse sensitivity"
+                           Value="{Binding MouseSensitivity}"
+                           Maximum="5"/>
+            <Slider Grid.Column="1"
+                    Maximum="5"
+                    Value="{Binding MouseSensitivity}"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal">
+            <ComboBox ItemsSource="{Binding AvailableItemClasses}"
+                      SelectedItem="{Binding ItemClassToAdd}"/>
+            <Button Content="{icons:MaterialIconExt Plus}"
+                    Command="{Binding AddItemClassCommand}"/>
+        </StackPanel>
+        <ItemsControl ItemsSource="{Binding ItemClasses}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Gray"
+                            BorderThickness="1"
+                            CornerRadius="5"
+                            Margin="5"
+                            Padding="5">
+                        <Grid RowDefinitions="* *"
+                              ColumnDefinitions="Auto * Auto">
+                            <Button Grid.Row="0" Grid.Column="0"
+                                    Content="{icons:MaterialIconExt ChevronUp}"
+                                    Padding="5 0"
+                                    Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).MoveItemClassUpCommand}"
+                                    CommandParameter="{Binding}"/>
+                            <Button Grid.Row="1" Grid.Column="0"
+                                    Content="{icons:MaterialIconExt ChevronDown}"
+                                    Padding="5 0"
+                                    Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).MoveItemClassDownCommand}"
+                                    CommandParameter="{Binding}"/>
+                            <TextBlock Grid.Row="0" Grid.RowSpan="2"
+                                       Grid.Column="1"
+                                       Text="{Binding Name}"
+                                       VerticalAlignment="Center"
+                                       Margin="5 0 0 0"/>
+                            <Button Grid.Row="0" Grid.RowSpan="2"
+                                    Grid.Column="2"
+                                    Content="{icons:MaterialIconExt Close}"
+                                    Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).RemoveItemClassCommand}"
+                                    CommandParameter="{Binding}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+        <Button Grid.Row="1"
+                Content="Apply"
+                Command="{Binding ApplyCommand}"
+                HorizontalAlignment="Right"
+                Margin="5"/>
+    </Grid>
+</UserControl>

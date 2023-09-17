@@ -54,5 +54,9 @@
         <DependentUpon>DetectorItem.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Views\Profiles\ProfilesTab.axaml.cs">
+        <DependentUpon>ProfilesTab.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>
