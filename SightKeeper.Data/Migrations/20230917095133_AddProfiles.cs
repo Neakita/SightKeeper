@@ -10,15 +10,6 @@ namespace SightKeeper.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "DetectorItems",
-                type: "INTEGER",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "INTEGER")
-                .OldAnnotation("Sqlite:Autoincrement", true);
-
             migrationBuilder.CreateTable(
                 name: "Profiles",
                 columns: table => new
@@ -87,6 +78,12 @@ namespace SightKeeper.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Profiles_Name",
+                table: "Profiles",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Profiles_WeightsId",
                 table: "Profiles",
                 column: "WeightsId");
@@ -100,15 +97,6 @@ namespace SightKeeper.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Profiles");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "DetectorItems",
-                type: "INTEGER",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "INTEGER")
-                .Annotation("Sqlite:Autoincrement", true);
         }
     }
 }

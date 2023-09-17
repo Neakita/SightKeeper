@@ -11,7 +11,7 @@ using SightKeeper.Data;
 namespace SightKeeper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230915124553_AddProfiles")]
+    [Migration("20230917095133_AddProfiles")]
     partial class AddProfiles
     {
         /// <inheritdoc />
@@ -184,6 +184,9 @@ namespace SightKeeper.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex("WeightsId");
 

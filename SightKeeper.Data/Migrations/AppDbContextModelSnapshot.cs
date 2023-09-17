@@ -182,6 +182,9 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.HasIndex("WeightsId");
 
                     b.ToTable("Profiles");
