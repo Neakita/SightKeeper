@@ -15,7 +15,7 @@ public sealed class DataSetsListViewModel : ViewModel, IDisposable
 
     public DataSetsListViewModel(DataSetsObservableRepository dataSetsObservableRepository, DataSetEditor editor)
     {
-        dataSetsObservableRepository.DataSets.Connect()
+        dataSetsObservableRepository.DataSetsSource.Connect()
             .Transform(dataSet => new DataSetViewModel(dataSet))
             .DisposeMany()
             .AddKey(viewModel => viewModel.DataSet)

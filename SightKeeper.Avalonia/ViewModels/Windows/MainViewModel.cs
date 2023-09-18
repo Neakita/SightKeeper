@@ -8,6 +8,7 @@ using ReactiveUI;
 using SightKeeper.Avalonia.ViewModels.Annotating;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
+using SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Windows;
 
@@ -24,10 +25,12 @@ public sealed partial class MainViewModel : ViewModel, IActivatableViewModel
 		{
 			var ownScope = scope.BeginLifetimeScope(typeof(MainViewModel));
 			ownScope.DisposeWith(disposables);
+			var profilesViewModel = ownScope.Resolve<ProfilesViewModel>();
 			var dataSetsViewModel = ownScope.Resolve<DataSetsViewModel>();
 			var annotatingViewModel = ownScope.Resolve<AnnotatorViewModel>();
 			var trainingViewModel = ownScope.Resolve<TrainingViewModel>();
 			var settingsViewModel = ownScope.Resolve<SettingsViewModel>();
+			Tabs.Add(new TabItem(MaterialIconKind.Puzzle, "Profiles", profilesViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.TableEye, "Datasets", dataSetsViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.Image, "Annotating", annotatingViewModel));
 			Tabs.Add(new TabItem(MaterialIconKind.Abacus, "Training", trainingViewModel));

@@ -1,33 +1,45 @@
-﻿using System.Reactive.Disposables;
+﻿using System.Collections.ObjectModel;
+using System.Reactive.Disposables;
 using DynamicData;
 using SightKeeper.Application.DataSet.Creating;
+using SightKeeper.Commons;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services;
 
 public sealed class DataSetsObservableRepository : IDisposable
 {
-    public IObservableList<Domain.Model.DataSet> DataSets => _source;
+    public ReadOnlyCollection<DataSet> DataSets { get; }
+    public IObservableList<DataSet> DataSetsSource => _source;
 
     public DataSetsObservableRepository(DataSetCreator dataSetCreator, DataSetsDataAccess dataSetsDataAccess)
     {
-        _disposable = new CompositeDisposable(
-            dataSetCreator.DataSetCreated.Subscribe(OnDataSetCreated),
-            dataSetsDataAccess.DataSetRemoved.Subscribe(OnDataSetRemoved));
+        dataSetCreator.DataSetCreated
+            .Subscribe(OnDataSetCreated)
+            .DisposeWithEx(_constructorDisposables);
+        dataSetsDataAccess.DataSetRemoved
+            .Subscribe(OnDataSetRemoved)
+            .DisposeWithEx(_constructorDisposables);
+        _source.Connect()
+            .Bind(out var dataSets)
+            .Subscribe()
+            .DisposeWithEx(_constructorDisposables);
+        DataSets = dataSets;
         AddInitialDataSets(dataSetsDataAccess);
     }
 
     public void Dispose()
     {
         _source.Dispose();
-        _disposable.Dispose();
+        _constructorDisposables.Dispose();
     }
 
-    private readonly SourceList<Domain.Model.DataSet> _source = new();
-    private readonly IDisposable _disposable;
+    private readonly SourceList<DataSet> _source = new();
+    private readonly CompositeDisposable _constructorDisposables = new();
 
-    private void OnDataSetCreated(Domain.Model.DataSet dataSet) => _source.Add(dataSet);
-    private void OnDataSetRemoved(Domain.Model.DataSet dataSet) => _source.Remove(dataSet);
+    private void OnDataSetCreated(DataSet dataSet) => _source.Add(dataSet);
+    private void OnDataSetRemoved(DataSet dataSet) => _source.Remove(dataSet);
 
     private async void AddInitialDataSets(DataSetsDataAccess dataSetsDataAccess)
     {

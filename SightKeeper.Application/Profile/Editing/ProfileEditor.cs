@@ -1,8 +1,9 @@
-﻿using SightKeeper.Domain.Model;
+﻿using System.Reactive.Linq;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application;
 
-public interface ProfileEditor
+public sealed class ProfileEditor
 {
-    IObservable<Profile> ProfileEdited { get; }
+    public IObservable<Profile> ProfileEdited { get; } = Observable.Empty<Profile>();
 }

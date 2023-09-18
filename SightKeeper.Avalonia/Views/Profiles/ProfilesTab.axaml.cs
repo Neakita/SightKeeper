@@ -1,17 +1,12 @@
-﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.ReactiveUI;
+using SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
-namespace SightKeeper.Avalonia.Views.Tabs;
+namespace SightKeeper.Avalonia.Views;
 
-public partial class ProfilesTab : UserControl
+public sealed partial class ProfilesTab : ReactiveUserControl<ProfilesViewModel>
 {
     public ProfilesTab()
     {
         InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
     }
 }

@@ -20,7 +20,10 @@ using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
+using SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
+using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 using SightKeeper.Avalonia.ViewModels.Windows;
+using SightKeeper.Avalonia.Views;
 using SightKeeper.Avalonia.Views.Annotating;
 using SightKeeper.Avalonia.Views.Dialogs;
 using SightKeeper.Avalonia.Views.Tabs;
@@ -36,6 +39,7 @@ using SightKeeper.Services.Input;
 using SightKeeper.Services.Scoring;
 using SightKeeper.Services.Windows;
 using DataSetEditor = SightKeeper.Avalonia.Views.Dialogs.DataSetEditor;
+using ProfileEditor = SightKeeper.Avalonia.Views.ProfileEditor;
 
 namespace SightKeeper.Avalonia;
 
@@ -104,6 +108,12 @@ public static class AppBootstrapper
 		builder.RegisterType<Trainer>();
 		builder.RegisterType<DbItemClassDataAccess>().As<ItemClassDataAccess>();
 		builder.RegisterType<ONNXDetector>().As<Detector>();
+		builder.RegisterType<DbProfilesDataAccess>().As<ProfilesDataAccess>().InstancePerMainViewModel();
+		builder.RegisterType<ProfileCreator>();
+		builder.RegisterType<ProfileDataValidator>().As<IValidator<ProfileData>>();
+		builder.RegisterType<NewProfileDataValidator>().As<IValidator<NewProfileData>>();
+		builder.RegisterType<ProfilesObservableRepository>().InstancePerMainViewModel();
+		builder.RegisterType<SightKeeper.Application.ProfileEditor>().InstancePerMainViewModel();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
@@ -136,6 +146,9 @@ public static class AppBootstrapper
 		builder.RegisterType<SelectedScreenshotViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<AutoAnnotationViewModel>();
 		builder.RegisterType<ViewSettingsViewModel>();
+		builder.RegisterType<ProfilesListViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<ProfilesViewModel>();
+		builder.RegisterType<NewProfileEditorViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -153,5 +166,7 @@ public static class AppBootstrapper
 		builder.RegisterType<AutoAnnotation>().As<IViewFor<AutoAnnotationViewModel>>();
 		builder.RegisterType<DetectedItem>().As<IViewFor<DetectedItemViewModel>>();
 		builder.RegisterType<ViewSettings>().As<IViewFor<ViewSettingsViewModel>>();
+		builder.RegisterType<ProfilesTab>().As<IViewFor<ProfilesViewModel>>();
+		builder.RegisterType<ProfileEditor>().As<IViewFor<NewProfileEditorViewModel>>();
 	}
 }

@@ -6,7 +6,8 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.ProfileEditor"
-             x:DataType="profilesEditorViewModels:ProfileEditorViewModel">
+             x:DataType="profilesEditorViewModels:ProfileEditorViewModel"
+             MinWidth="400">
     <Design.DataContext>
         <profilesEditorViewModels:FakeProfileEditorViewModel/>
     </Design.DataContext>

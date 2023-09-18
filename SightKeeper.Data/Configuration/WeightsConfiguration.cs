@@ -17,5 +17,6 @@ public sealed class WeightsConfiguration : IEntityTypeConfiguration<Weights>
             left => left.HasOne(typeof(Asset)).WithMany().HasForeignKey("AssetId"),
             right => right.HasOne(typeof(Weights)).WithMany().HasForeignKey("WeightsId"),
             join => join.ToTable("WeightsAssets"));
+        builder.Navigation(weights => weights.Library).AutoInclude();
     }
 }

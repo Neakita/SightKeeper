@@ -1,17 +1,21 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+using ReactiveUI;
+using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
 namespace SightKeeper.Avalonia.Views;
 
-public partial class ProfileEditor : UserControl
+public sealed partial class ProfileEditor : UserControl, IViewFor<NewProfileEditorViewModel>
 {
+    public NewProfileEditorViewModel? ViewModel { get; set; }
+    
     public ProfileEditor()
     {
         InitializeComponent();
     }
 
-    private void InitializeComponent()
+    object? IViewFor.ViewModel
     {
-        AvaloniaXamlLoader.Load(this);
+        get => ViewModel;
+        set => ViewModel = (NewProfileEditorViewModel?)value;
     }
 }

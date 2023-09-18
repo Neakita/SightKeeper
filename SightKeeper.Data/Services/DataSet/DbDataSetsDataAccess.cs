@@ -17,18 +17,27 @@ public sealed class DbDataSetsDataAccess : DataSetsDataAccess
     public Task<IReadOnlyCollection<Domain.Model.DataSet>> GetDataSets(CancellationToken cancellationToken) =>
         Task.Run(GetDataSets, cancellationToken);
 
-    private IReadOnlyCollection<Domain.Model.DataSet> GetDataSets() =>
-        _dbContext.DataSets
-            .Include(dataSet => dataSet.ItemClasses)
-            .Include(dataSet => dataSet.Game)
-            .Include(dataSet => dataSet.ScreenshotsLibrary)
-            .ToList();
+    private IReadOnlyCollection<Domain.Model.DataSet> GetDataSets()
+    {
+        lock (_dbContext)
+            return _dbContext.DataSets
+                .Include(dataSet => dataSet.ItemClasses)
+                .Include(dataSet => dataSet.Game)
+                .Include(dataSet => dataSet.ScreenshotsLibrary)
+                .ToList();
+    }
 
     public async Task RemoveDataSet(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        _dbContext.DataSets.Remove(dataSet);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await Task.Run(() =>
+        {
+            lock (_dbContext)
+            {
+                _dbContext.DataSets.Remove(dataSet);
+                _dbContext.SaveChanges();
+            }
+        }, cancellationToken);
         _dataSetRemoved.OnNext(dataSet);
     }
 
