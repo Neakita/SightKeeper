@@ -101,7 +101,7 @@ public sealed class Trainer
 	
 	private Task ExportWeights(Weights weights, CancellationToken cancellationToken)
 	{
-		return File.WriteAllBytesAsync(WeightsToResumeTrainingOnPath, weights.PTData, cancellationToken);
+		return File.WriteAllBytesAsync(WeightsToResumeTrainingOnPath, weights.PTData.Content, cancellationToken);
 	}
 	
 	private async Task<Weights> SaveWeights(Domain.Model.DataSet dataSet, TrainingProgress lastProgress, ModelSize size, CancellationToken cancellationToken)

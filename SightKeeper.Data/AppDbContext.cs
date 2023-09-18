@@ -70,12 +70,14 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
 		modelBuilder.ApplyConfiguration(new ImageConfiguration());
-		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
 		modelBuilder.ApplyConfiguration(new DataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ProfileConfiguration());
 		modelBuilder.ApplyConfiguration(new ProfileItemClassConfiguration());
-		
+		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
 		modelBuilder.Entity<Asset>().Navigation(asset => asset.Screenshot).AutoInclude();
+		modelBuilder.Entity<WeightsData>().HasShadowKey();
+		modelBuilder.Entity<PTData>().ToTable("PTData");
+		modelBuilder.Entity<ONNXData>().ToTable("ONNXData");
 	}
 }
