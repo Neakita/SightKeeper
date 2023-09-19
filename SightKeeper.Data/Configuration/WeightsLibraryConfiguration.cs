@@ -11,5 +11,6 @@ public sealed class WeightsLibraryConfiguration : IEntityTypeConfiguration<Weigh
         builder.ToTable("WeightsLibraries");
         builder.HasShadowKey();
         builder.Navigation(library => library.DataSet).AutoInclude();
+        builder.Navigation(library => library.Weights).AutoInclude();
     }
 }

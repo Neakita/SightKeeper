@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using DynamicData;
+using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
@@ -22,13 +26,31 @@ public sealed class DataSetViewModel : ViewModel, IDisposable
     public Game? Game => DataSet.Game;
     public ushort Resolution => DataSet.Resolution;
     public IReadOnlyCollection<ItemClass> ItemClasses { get; }
+    public IReadOnlyCollection<Weights> Weights { get; }
 
-    public DataSetViewModel(DataSet dataSet)
+    public DataSetViewModel(DataSet dataSet, WeightsDataAccess weightsDataAccess)
     {
         DataSet = dataSet;
-        _itemClasses.Connect().Bind(out var itemClasses).Subscribe();
+        _itemClasses.Connect()
+            .Bind(out var itemClasses)
+            .Subscribe()
+            .DisposeWithEx(_constructorDisposables);
         _itemClasses.AddOrUpdate(dataSet.ItemClasses);
         ItemClasses = itemClasses;
+        _weights.AddRange(DataSet.WeightsLibrary.Weights);
+        _weights.Connect()
+            .Bind(out var weights)
+            .Subscribe()
+            .DisposeWithEx(_constructorDisposables);
+        Weights = weights;
+        weightsDataAccess.WeightsCreated
+            .Where(w => w.Library.DataSet == DataSet)
+            .Subscribe(w => _weights.Add(w))
+            .DisposeWithEx(_constructorDisposables);
+        weightsDataAccess.WeightsDeleted
+            .Where(w => w.Library.DataSet == DataSet)
+            .Subscribe(w => _weights.Remove(w))
+            .DisposeWithEx(_constructorDisposables);
     }
 
     public void NotifyChanges()
@@ -44,7 +66,9 @@ public sealed class DataSetViewModel : ViewModel, IDisposable
 
     public override string ToString() => Name;
 
+    private readonly CompositeDisposable _constructorDisposables = new();
     private readonly SourceCache<ItemClass, string> _itemClasses = new(itemClass => itemClass.Name);
+    private readonly SourceList<Weights> _weights = new();
 
     private void UpdateItemClasses() =>
         _itemClasses.Edit(items =>

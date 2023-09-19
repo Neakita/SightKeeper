@@ -1,6 +1,9 @@
-﻿using System.Reactive.Linq;
+﻿using System.Linq.Expressions;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using CommunityToolkit.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Serilog;
 using SerilogTimings;
 using SightKeeper.Domain.Model;
@@ -70,6 +73,23 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         weights.Library.RemoveWeights(weights);
         await _dbContext.SaveChangesAsync(cancellationToken);
         _weightsDeleted.OnNext(weights);
+    }
+
+    public async Task<WeightsData> LoadWeightsData(Weights weights, WeightsFormat format, CancellationToken cancellationToken = default)
+    {
+        var weightsEntry = _dbContext.Entry(weights);
+        return format switch
+        {
+            WeightsFormat.PT => await LoadWeightsData(weightsEntry, w => w.PTData, cancellationToken),
+            WeightsFormat.ONNX => await LoadWeightsData(weightsEntry, w => w.ONNXData, cancellationToken),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<WeightsData>(nameof(format), format, null)
+        };
+    }
+    
+    private static Task<TData> LoadWeightsData<TData>(EntityEntry<Weights> weightsEntry, Expression<Func<Weights, TData?>> propertyExpression, CancellationToken cancellationToken) where TData : WeightsData
+    {
+        var query = weightsEntry.Reference(propertyExpression).Query();
+        return query.AsNoTracking().SingleAsync(cancellationToken: cancellationToken);
     }
 
     private readonly AppDbContext _dbContext;

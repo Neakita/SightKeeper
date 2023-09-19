@@ -99,9 +99,10 @@ public sealed class Trainer
 		_logger.Information("Exported dataset parameters: {Parameters}", dataSetParameters);
 	}
 	
-	private Task ExportWeights(Weights weights, CancellationToken cancellationToken)
+	private async Task ExportWeights(Weights weights, CancellationToken cancellationToken)
 	{
-		return File.WriteAllBytesAsync(WeightsToResumeTrainingOnPath, weights.PTData.Content, cancellationToken);
+		var data = await _weightsDataAccess.LoadWeightsData(weights, WeightsFormat.PT, cancellationToken);
+		await File.WriteAllBytesAsync(WeightsToResumeTrainingOnPath, data.Content, cancellationToken);
 	}
 	
 	private async Task<Weights> SaveWeights(Domain.Model.DataSet dataSet, TrainingProgress lastProgress, ModelSize size, CancellationToken cancellationToken)

@@ -3,6 +3,7 @@ using System.Linq;
 using NSubstitute;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -17,8 +18,8 @@ public sealed class FakeAnnotatorViewModel : IAnnotatorViewModel
             dataSet.CreateItemClass("Class 2", 0);
             return new DataSetViewModel[]
             {
-                new(dataSet),
-                new(new DataSet("Another data set"))
+                new(dataSet, Substitute.For<WeightsDataAccess>()),
+                new(new DataSet("Another data set"), Substitute.For<WeightsDataAccess>())
             };
         }
     }

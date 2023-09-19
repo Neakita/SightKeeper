@@ -84,5 +84,5 @@ public static class YoloCLIExtensions
     private static string ReplaceBackSlashes(string path) =>
         BackSlashRegex.Replace(path, @"/");
 
-    private static readonly Regex BackSlashRegex = new(@"\\");
+    private static readonly Regex BackSlashRegex = new(@"\\", RegexOptions.Compiled);
 }

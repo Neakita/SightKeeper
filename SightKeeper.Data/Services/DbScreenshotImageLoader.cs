@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
@@ -34,12 +35,7 @@ public sealed class DbScreenshotImageLoader : ScreenshotImageLoader
         return Task.Run(() =>
         {
             lock (_dbContext)
-            {
-                var entry = _dbContext.Entry(screenshot);
-                entry.Reference(s => s.Image).Load();
-                Guard.IsNotNull(screenshot.Image);
-                return screenshot.Image;
-            }
+                return _dbContext.Entry(screenshot).Reference(s => s.Image).Query().AsNoTracking().Single();
         }, cancellationToken);
     }
 

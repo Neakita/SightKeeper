@@ -5,6 +5,7 @@ using DynamicData;
 using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
@@ -13,10 +14,10 @@ public sealed class DataSetsListViewModel : ViewModel, IDisposable
 {
     public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 
-    public DataSetsListViewModel(DataSetsObservableRepository dataSetsObservableRepository, DataSetEditor editor)
+    public DataSetsListViewModel(DataSetsObservableRepository dataSetsObservableRepository, DataSetEditor editor, WeightsDataAccess weightsDataAccess)
     {
         dataSetsObservableRepository.DataSetsSource.Connect()
-            .Transform(dataSet => new DataSetViewModel(dataSet))
+            .Transform(dataSet => new DataSetViewModel(dataSet, weightsDataAccess))
             .DisposeMany()
             .AddKey(viewModel => viewModel.DataSet)
             .Bind(out var dataSets)

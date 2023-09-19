@@ -23,4 +23,6 @@ public interface WeightsDataAccess
         CancellationToken cancellationToken = default);
 
     Task DeleteWeights(Weights weights, CancellationToken cancellationToken);
+
+    Task<WeightsData> LoadWeightsData(Weights weights, WeightsFormat format, CancellationToken cancellationToken = default);
 }
