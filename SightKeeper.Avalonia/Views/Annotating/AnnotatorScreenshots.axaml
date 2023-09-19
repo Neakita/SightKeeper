@@ -11,7 +11,8 @@
     <Grid RowDefinitions="Auto Auto *">
         <WrapPanel Grid.Row="0">
             <TextBlock IsVisible="{Binding !!DataSet}"
-                       TextWrapping="Wrap">
+                       TextWrapping="Wrap"
+                       Background="Transparent">
                 <Run Text="{Binding ScreenshotsWithoutAssetsCount^}"/>
                 /
                 <Run Text="{Binding ScreenshotsWithAssetsCount^}"/>
