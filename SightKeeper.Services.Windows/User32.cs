@@ -75,4 +75,12 @@ public static class User32
 		WHITENESS = 0x00FF0062,
 		CAPTUREBLT = 0x40000000
 	}
+	
+	[DllImport("user32.dll")]
+	private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
+
+	public static void MouseMove(int xDelta, int yDelta)
+	{
+		mouse_event(0x0001, xDelta, yDelta, 0, 0);
+	}
 }
