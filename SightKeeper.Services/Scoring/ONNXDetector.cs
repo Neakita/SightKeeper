@@ -31,25 +31,25 @@ public sealed class ONNXDetector : Detector
         }
     }
 
-    public float? ProbabilityThreshold
+    public float ProbabilityThreshold
     {
         get => _predictor?.Parameters.Confidence ?? 0.5f;
         set
         {
             Guard.IsNotNull(_predictor);
             Guard.IsNotNull(value);
-            _predictor.Parameters.Confidence = value.Value;
+            _predictor.Parameters.Confidence = value;
         }
     }
 
-    public float? IoU
+    public float IoU
     {
-        get => _predictor?.Parameters.IoU;
+        get => _predictor?.Parameters.IoU ?? 0.4f;
         set
         {
             Guard.IsNotNull(_predictor);
             Guard.IsNotNull(value);
-            _predictor.Parameters.IoU = value.Value;
+            _predictor.Parameters.IoU = value;
         }
     }
 

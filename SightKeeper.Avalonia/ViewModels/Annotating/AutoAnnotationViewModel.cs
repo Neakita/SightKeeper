@@ -27,7 +27,7 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
 
     public float ProbabilityThreshold
     {
-        get => _detector.ProbabilityThreshold ?? 0;
+        get => _detector.ProbabilityThreshold;
         set
         {
             if (!SetProperty(_detector.ProbabilityThreshold, value, newValue => _detector.ProbabilityThreshold = newValue))
@@ -39,7 +39,7 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
 
     public float IoU
     {
-        get => _detector.IoU ?? 0;
+        get => _detector.IoU;
         set
         {
             if (!SetProperty(_detector.IoU, value, newValue => _detector.IoU = newValue))
