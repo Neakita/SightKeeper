@@ -21,7 +21,7 @@ public sealed class DbDataSetsDataAccess : DataSetsDataAccess
     {
         lock (_dbContext)
             return _dbContext.DataSets
-                .Include(dataSet => dataSet.ItemClasses)
+                .Include(dataSet => dataSet.ItemClasses.OrderBy(itemClass => EF.Property<int>(itemClass, "Id")))
                 .Include(dataSet => dataSet.Game)
                 .Include(dataSet => dataSet.ScreenshotsLibrary)
                 .ToList();
