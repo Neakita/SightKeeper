@@ -5,9 +5,9 @@ using SharpHook.Reactive;
 
 namespace SightKeeper.Services.Input;
 
-public sealed class HotKeyManager
+public sealed class SharpHookHotKeyManager
 {
-    public HotKeyManager(IReactiveGlobalHook hook)
+    public SharpHookHotKeyManager(IReactiveGlobalHook hook)
     {
         hook.KeyPressed.Subscribe(OnKeyPressed);
         hook.KeyReleased.Subscribe(OnKeyReleased);
@@ -31,6 +31,7 @@ public sealed class HotKeyManager
         {
             disposable.Add(existingHotKey.Pressed.Subscribe(_ => onPressedAction()));
             disposable.Add(existingHotKey.Released.Subscribe(_ => onReleasedAction()));
+            return disposable;
         }
         HotKey hotKey = new(new KeyGesture(key));
         _keyboardHotKeys.Add(key, hotKey);
@@ -55,6 +56,7 @@ public sealed class HotKeyManager
         {
             disposable.Add(existingHotKey.Pressed.Subscribe(_ => onPressedAction()));
             disposable.Add(existingHotKey.Released.Subscribe(_ => onReleasedAction()));
+            return disposable;
         }
         HotKey hotKey = new(new MouseGesture(button));
         _mouseButtonHotKeys.Add(button, hotKey);
@@ -70,25 +72,27 @@ public sealed class HotKeyManager
     {
         if (!_keyboardHotKeys.TryGetValue(args.Data.KeyCode, out var hotKey)) return;
         hotKey.IsPressed = true;
-        hotKey.InvokeActions();
+        hotKey.NotifyPressed();
     }
 
     private void OnKeyReleased(KeyboardHookEventArgs args)
     {
-        if (_keyboardHotKeys.TryGetValue(args.Data.KeyCode, out var hotKey))
-            hotKey.IsPressed = false;
+        if (!_keyboardHotKeys.TryGetValue(args.Data.KeyCode, out var hotKey)) return;
+        hotKey.IsPressed = false;
+        hotKey.NotifyReleased();
     }
 
     private void OnMousePressed(MouseHookEventArgs args)
     {
         if (!_mouseButtonHotKeys.TryGetValue(args.Data.Button, out var hotKey)) return;
         hotKey.IsPressed = true;
-        hotKey.InvokeActions();
+        hotKey.NotifyPressed();
     }
 
     private void OnMouseReleased(MouseHookEventArgs args)
     {
-        if (_mouseButtonHotKeys.TryGetValue(args.Data.Button, out var hotKey))
-            hotKey.IsPressed = false;
+        if (!_mouseButtonHotKeys.TryGetValue(args.Data.Button, out var hotKey)) return;
+        hotKey.IsPressed = false;
+        hotKey.NotifyReleased();
     }
 }

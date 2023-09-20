@@ -18,7 +18,8 @@ public sealed class HotKey
     internal IObservable<HotKey> Pressed => _pressed.ObserveOn(TaskPoolScheduler.Default).AsObservable();
     internal IObservable<Unit> Released => _released.ObserveOn(TaskPoolScheduler.Default).AsObservable();
 
-    internal void InvokeActions() => _pressed.OnNext(this);
+    internal void NotifyPressed() => _pressed.OnNext(this);
+    internal void NotifyReleased() => _released.OnNext(Unit.Default);
 
     private readonly Subject<HotKey> _pressed = new();
     private readonly Subject<Unit> _released = new();
