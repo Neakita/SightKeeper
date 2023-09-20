@@ -135,6 +135,8 @@ public sealed partial class ExistingProfileEditorViewModel : ValidatableDialogVi
     {
         Guard.IsNotNull(ItemClassToAdd);
         _itemClasses.Add(ItemClassToAdd);
+        MoveItemClassUpCommand.NotifyCanExecuteChanged();
+        MoveItemClassDownCommand.NotifyCanExecuteChanged();
     }
     private bool CanAddItemClass() => ItemClassToAdd != null;
 
@@ -143,6 +145,8 @@ public sealed partial class ExistingProfileEditorViewModel : ValidatableDialogVi
     private void RemoveItemClass(ItemClass itemClass)
     {
         Guard.IsTrue(_itemClasses.Remove(itemClass));
+        MoveItemClassUpCommand.NotifyCanExecuteChanged();
+        MoveItemClassDownCommand.NotifyCanExecuteChanged();
     }
 
     ICommand ProfileEditorViewModel.MoveItemClassUpCommand => MoveItemClassUpCommand;
