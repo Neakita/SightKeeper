@@ -13,7 +13,6 @@ namespace SightKeeper.Application.Scoring;
 public sealed class StreamDetector
 {
     public IObservable<ImmutableList<DetectionItem>> ObservableDetection => _detection;
-    public TimeSpan InterCycleSleepTime { get; set; } = TimeSpan.Zero;
     public bool CheckImagesEquality { get; set; } = true;
 
     public bool IsEnabled
@@ -52,8 +51,6 @@ public sealed class StreamDetector
 
                             var result = await _detector.Detect(image, CancellationToken.None);
                             observer.OnNext(result.ToImmutableList());
-                            if (InterCycleSleepTime != TimeSpan.Zero)
-                                BurnTime(InterCycleSleepTime);
                             operation.Complete();
                         }
                     });
@@ -67,14 +64,6 @@ public sealed class StreamDetector
                 _isEnabledDisposable = null;
             }
         }
-    }
-    
-    private static void BurnTime(TimeSpan time)
-    {
-        var operation = Operation.At(LogEventLevel.Verbose).Begin("Sleeping (Expected time: {Time})", time);
-        var end = DateTime.UtcNow + time;
-        while (DateTime.UtcNow < end) { }
-        operation.Complete();
     }
 
     public Weights? Weights

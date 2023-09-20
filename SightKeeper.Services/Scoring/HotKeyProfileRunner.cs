@@ -22,7 +22,6 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         _mouseMover = mouseMover;
         _hotKeyManager = hotKeyManager;
         _streamDetector.ObservableDetection.Subscribe(HandleDetection).DisposeWithEx(_constructorDisposables);
-        _streamDetector.InterCycleSleepTime = TimeSpan.FromMilliseconds(10);
     }
     
     public void Run(Profile profile)
