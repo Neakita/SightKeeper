@@ -70,9 +70,9 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
 
     public async Task DeleteWeights(Weights weights, CancellationToken cancellationToken)
     {
+        _weightsDeleted.OnNext(weights);
         weights.Library.RemoveWeights(weights);
         await _dbContext.SaveChangesAsync(cancellationToken);
-        _weightsDeleted.OnNext(weights);
     }
 
     public async Task<WeightsData> LoadWeightsData(Weights weights, WeightsFormat format, CancellationToken cancellationToken = default)
