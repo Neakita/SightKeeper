@@ -73,8 +73,9 @@ public static class YoloCLIExtensions
 
     public static async Task<string> ExportToONNX(string modelPath, ushort imagesSize, ILogger logger)
     {
-        modelPath = ReplaceBackSlashes(modelPath);
-        var outputStream = CLIExtensions.RunCLICommand($"yolo export model=\'{modelPath}\' format=onnx imgsz={imagesSize} opset=15", logger);
+        var fullModelPath = Path.GetFullPath(modelPath);
+        var fullModelPathWithReplacedSlashes = ReplaceBackSlashes(fullModelPath);
+        var outputStream = CLIExtensions.RunCLICommand($"yolo export model=\'{fullModelPathWithReplacedSlashes}\' format=onnx imgsz={imagesSize} opset=15", logger);
         await outputStream.WhereNotNull().Where(content => content.Contains("export success")).FirstAsync();
         var onnxModelPath = modelPath.Replace(".pt", ".onnx");
         Guard.IsTrue(File.Exists(onnxModelPath));
