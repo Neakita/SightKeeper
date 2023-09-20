@@ -11,37 +11,39 @@ public sealed class DbProfilesDataAccess : ProfilesDataAccess
 {
     public IObservable<Profile> ProfileAdded => _profileAdded;
     public IObservable<Profile> ProfileRemoved => _profileRemoved;
-    
-    public DbProfilesDataAccess(AppDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
-    
-    public Task AddProfile(Profile profile, CancellationToken cancellationToken)
-    {
-        return Task.Run(() =>
-        {
-            lock (_dbContext)
-            {
-                _dbContext.Profiles.Add(profile);
-                _dbContext.SaveChanges();
-            }
-            _profileAdded.OnNext(profile);
-        }, cancellationToken);
-    }
+    public IObservable<Profile> ProfileUpdated => _profileUpdated;
 
-    public Task RemoveProfile(Profile profile, CancellationToken cancellationToken = default)
+    public DbProfilesDataAccess(AppDbContext dbContext) => _dbContext = dbContext;
+
+    public Task AddProfile(Profile profile, CancellationToken cancellationToken) => Task.Run(() =>
     {
-        return Task.Run(() =>
+        lock (_dbContext)
         {
-            lock (_dbContext)
-            {
-                _dbContext.Profiles.Remove(profile);
-                _dbContext.SaveChanges();
-            }
-            _profileRemoved.OnNext(profile);
-        }, cancellationToken);
-    }
+            _dbContext.Profiles.Add(profile);
+            _dbContext.SaveChanges();
+        }
+        _profileAdded.OnNext(profile);
+    }, cancellationToken);
+
+    public Task RemoveProfile(Profile profile, CancellationToken cancellationToken = default) => Task.Run(() =>
+    {
+        lock (_dbContext)
+        {
+            _dbContext.Profiles.Remove(profile);
+            _dbContext.SaveChanges();
+        }
+        _profileRemoved.OnNext(profile);
+    }, cancellationToken);
+
+    public Task UpdateProfile(Profile profile, CancellationToken cancellationToken = default) => Task.Run(() =>
+    {
+        lock (_dbContext)
+        {
+            _dbContext.Profiles.Update(profile);
+            _dbContext.SaveChanges();
+        }
+        _profileUpdated.OnNext(profile);
+    }, cancellationToken);
 
     public Task<IReadOnlyCollection<Profile>> LoadAllProfiles(CancellationToken cancellationToken) => Task.Run(() =>
     {
@@ -65,6 +67,7 @@ public sealed class DbProfilesDataAccess : ProfilesDataAccess
     private readonly AppDbContext _dbContext;
     private readonly Subject<Profile> _profileAdded = new();
     private readonly Subject<Profile> _profileRemoved = new();
+    private readonly Subject<Profile> _profileUpdated = new();
 
     private IEnumerable<Profile> LoadProfilesFromDb(CancellationToken cancellationToken)
     {

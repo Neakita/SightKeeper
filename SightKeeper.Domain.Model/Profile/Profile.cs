@@ -83,6 +83,11 @@ public sealed class Profile
             profileItemClass.Index = order[profileItemClass.ItemClass];
     }
 
+    public void ClearItemClasses()
+    {
+        _itemClasses.Clear();
+    }
+
     public override string ToString() =>
         string.IsNullOrEmpty(Name) ? base.ToString()! : Name;
 
