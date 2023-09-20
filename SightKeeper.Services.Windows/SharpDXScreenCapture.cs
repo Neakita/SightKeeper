@@ -1,29 +1,42 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using CommunityToolkit.Diagnostics;
+using Serilog;
+using SerilogTimings;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
+using Device = SharpDX.Direct3D11.Device;
 using Image = System.Drawing.Image;
 
 namespace SightKeeper.Services.Windows;
 
-public sealed class DirectXScreenCapture : ScreenCapture
+public sealed class SharpDXScreenCapture : ScreenCapture
 {
-	public byte[] Capture()
+	private readonly Adapter1 _adapter;
+	private Device _device;
+	private Output _output;
+	private Output1 _output1;
+
+	public SharpDXScreenCapture()
 	{
 		var factory = new Factory1();
-        var adapter = factory.GetAdapter1(0);
-        Console.WriteLine(adapter.Description1.Description);
-        var device = new SharpDX.Direct3D11.Device(adapter);
-        Output output = adapter.GetOutput(0);
-        Console.WriteLine(output.Description.DeviceName);
-        Output1 output1 = output.QueryInterface<Output1>();
-
-        int width = output.Description.DesktopBounds.Right;
-        int height = output.Description.DesktopBounds.Bottom;
-
+		_adapter = factory.GetAdapter1(0);
+		Log.Debug("Adapter description: {Description}", _adapter.Description1.Description);
+		_device = new Device(_adapter);
+		_output = _adapter.GetOutput(0);
+		Log.Debug("Device name: {Description}", _output.Description.DeviceName);
+		_output1 = _output.QueryInterface<Output1>();
+	}
+	
+	public byte[] Capture()
+	{
+		Guard.IsNotNull(Resolution);
+		using Operation operation = Operation.Begin("Screen capturing via DirectX");
+		int width = _output.Description.DesktopBounds.Right;
+        int height = _output.Description.DesktopBounds.Bottom;
         Texture2DDescription textureDesc = new()
         {
             CpuAccessFlags = CpuAccessFlags.Read,
@@ -37,39 +50,45 @@ public sealed class DirectXScreenCapture : ScreenCapture
             SampleDescription = { Count = 1, Quality = 0 },
             Usage = ResourceUsage.Staging
         };
-        using Texture2D screenTexture = new(device, textureDesc);
-        using OutputDuplication duplicatedOutput = output1.DuplicateOutput(device);
+        using Texture2D screenTexture = new(_device, textureDesc);
+        using OutputDuplication duplicatedOutput = _output1.DuplicateOutput(_device);
         Thread.Sleep(20); // захватчику экрана надо время проинициализироваться
         Bitmap bmp = new(width, height, PixelFormat.Format32bppArgb);
         SharpDX.DXGI.Resource? screenResource = null;
         try
         {
             if (duplicatedOutput.TryAcquireNextFrame(10, out _, out screenResource) != Result.Ok)
-                return ImageToBytes(bmp);
+            {
+	            operation.Complete();
+	            return ImageToBytes(bmp);
+            }
 
             using (Texture2D screenTexture2D = screenResource.QueryInterface<Texture2D>())
             {
-                device.ImmediateContext.CopyResource(screenTexture2D, screenTexture);
+                _device.ImmediateContext.CopyResource(screenTexture2D, screenTexture);
             }
 
-            DataBox mapSource = device.ImmediateContext.MapSubresource(screenTexture, 0, MapMode.Read, SharpDX.Direct3D11.MapFlags.None);
+            DataBox mapSource = _device.ImmediateContext.MapSubresource(screenTexture, 0, MapMode.Read, SharpDX.Direct3D11.MapFlags.None);
             BitmapData bmpData = bmp.LockBits(new Rectangle(Point.Empty, bmp.Size), ImageLockMode.WriteOnly, bmp.PixelFormat);
             nint sourcePtr = mapSource.DataPointer;
             nint destPtr = bmpData.Scan0;
             Utilities.CopyMemory(destPtr, sourcePtr, mapSource.RowPitch * height);
             bmp.UnlockBits(bmpData);
-            device.ImmediateContext.UnmapSubresource(screenTexture, 0);
+            _device.ImmediateContext.UnmapSubresource(screenTexture, 0);
             duplicatedOutput.ReleaseFrame();
         }
         catch (SharpDXException ex)
         {
-            Console.WriteLine(ex.Message);
+            Log.Error(ex, "Exception occurred while capturing screen");
         }
         finally
         {
             screenResource?.Dispose();
         }
-        return ImageToBytes(bmp);
+
+        var imageBytes = ImageToBytes(bmp);
+        operation.Complete();
+        return imageBytes;
 	}
 
 	public Task<byte[]> CaptureAsync(CancellationToken cancellationToken = default) =>

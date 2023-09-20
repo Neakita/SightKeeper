@@ -6,6 +6,7 @@ using SerilogTimings;
 using SightKeeper.Application.Scoring;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using RectangleF = System.Drawing.RectangleF;
 
@@ -13,6 +14,14 @@ namespace SightKeeper.Services.Scoring;
 
 public sealed class ONNXDetector : Detector
 {
+    private readonly WeightsDataAccess _weightsDataAccess;
+
+
+    private async void SetWeights(Weights weights)
+    {
+        var weightsData = await _weightsDataAccess.LoadWeightsData(weights, WeightsFormat.ONNX);
+        _predictor = new YoloV8(new ModelSelector(weightsData.Content), CreateMetadata(weights.Library.DataSet));
+    }
     public Weights? Weights
     {
         get => _weights;
@@ -24,7 +33,7 @@ public sealed class ONNXDetector : Detector
             _itemClasses = null;
             if (value == null)
                 return;
-            _predictor = new YoloV8(new ModelSelector(value.ONNXData.Content), CreateMetadata(value.Library.DataSet));
+            SetWeights(value);
             _itemClasses = value.Library.DataSet.ItemClasses
                 .Select((itemClass, itemClassIndex) => (itemClass, itemClassIndex))
                 .ToDictionary(t => t.itemClassIndex, t => t.itemClass);
@@ -51,6 +60,11 @@ public sealed class ONNXDetector : Detector
             Guard.IsNotNull(value);
             _predictor.Parameters.IoU = value;
         }
+    }
+
+    public ONNXDetector(WeightsDataAccess weightsDataAccess)
+    {
+        _weightsDataAccess = weightsDataAccess;
     }
 
     public async Task<IReadOnlyCollection<DetectionItem>> Detect(byte[] image, CancellationToken cancellationToken)

@@ -92,7 +92,7 @@ public static class AppBootstrapper
 		builder.RegisterType<Screenshoter>();
 		builder.RegisterType<DataSetScreenshoter>();
 		builder.RegisterType<HotKeyScreenshoter>().As<StreamDataSetScreenshoter>();
-		builder.RegisterType<HotKeyManager>().SingleInstance();
+		builder.RegisterType<SharpHookHotKeyManager>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<AvaloniaScreenBoundsProvider>().As<ScreenBoundsProvider>();
 		builder.RegisterType<DbScreenshotsDataAccess>().As<ScreenshotsDataAccess>();
@@ -115,6 +115,9 @@ public static class AppBootstrapper
 		builder.RegisterType<ProfilesObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<SightKeeper.Application.ProfileEditor>().InstancePerMainViewModel();
 		builder.RegisterType<EditedProfileDataValidator>().As<IValidator<EditedProfileData>>();
+		builder.RegisterType<HotKeyProfileRunner>().As<ProfileRunner>();
+		builder.RegisterType<StreamDetector>();
+		builder.RegisterType<WindowsMouseMover>().As<MouseMover>();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();

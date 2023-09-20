@@ -50,16 +50,16 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
         }
     }
 
-    public HotKeyScreenshoter(HotKeyManager hotKeyManager, DataSetScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess, AppDbContext dbContext)
+    public HotKeyScreenshoter(SharpHookHotKeyManager sharpHookHotKeyManager, DataSetScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess, AppDbContext dbContext)
     {
-        _hotKeyManager = hotKeyManager;
+        _sharpHookHotKeyManager = sharpHookHotKeyManager;
         _screenshoter = screenshoter;
         _librariesDataAccess = librariesDataAccess;
         _dbContext = dbContext;
         ScreenshotsPerSecond = 1;
     }
 
-    private readonly HotKeyManager _hotKeyManager;
+    private readonly SharpHookHotKeyManager _sharpHookHotKeyManager;
     private readonly DataSetScreenshoter _screenshoter;
     private readonly ScreenshotsDataAccess _librariesDataAccess;
     private readonly AppDbContext _dbContext;
@@ -69,7 +69,7 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
     private byte _framesPerSecond;
     private int? _timeout;
 
-    private void Enable() => _disposable = _hotKeyManager.Register(MouseButton.Button1, OnHotKeyPressed);
+    private void Enable() => _disposable = _sharpHookHotKeyManager.Register(MouseButton.Button1, OnHotKeyPressed);
     private void Disable()
     {
         Guard.IsNotNull(_disposable);
