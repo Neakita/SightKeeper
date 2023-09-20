@@ -13,14 +13,12 @@ using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
 public sealed partial class NewProfileEditorViewModel : ValidatableDialogViewModel<NewProfileData, bool>, ProfileEditorViewModel, NewProfileData
 {
-    private readonly WeightsDataAccess _weightsDataAccess;
     public IReadOnlyCollection<DataSet> AvailableDataSets { get; }
 
     public IReadOnlyCollection<Weights> AvailableWeights
@@ -68,17 +66,10 @@ public sealed partial class NewProfileEditorViewModel : ValidatableDialogViewMod
                 AvailableWeights = Array.Empty<Weights>();
             else
             {
-                LoadWeights(value);
                 AvailableWeights = value.WeightsLibrary.Weights;
                 _availableItemClasses.AddRange(value.ItemClasses);
             }
         }
-    }
-
-    private async void LoadWeights(DataSet dataSet)
-    {
-        await _weightsDataAccess.LoadAllWeights(dataSet.WeightsLibrary);
-        AvailableWeights = dataSet.WeightsLibrary.Weights;
     }
 
     public Weights? Weights
@@ -89,9 +80,8 @@ public sealed partial class NewProfileEditorViewModel : ValidatableDialogViewMod
 
     public IReadOnlyList<ItemClass> ItemClasses { get; }
 
-    public NewProfileEditorViewModel(IValidator<NewProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository, WeightsDataAccess weightsDataAccess) : base(validator)
+    public NewProfileEditorViewModel(IValidator<NewProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository) : base(validator)
     {
-        _weightsDataAccess = weightsDataAccess;
         AvailableDataSets = dataSetsObservableRepository.DataSets;
         _itemClasses.Connect()
             .Bind(out var itemClasses)

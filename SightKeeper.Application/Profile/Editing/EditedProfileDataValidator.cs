@@ -9,6 +9,7 @@ public sealed class EditedProfileDataValidator : AbstractValidator<EditedProfile
     {
         _profilesDataAccess = profilesDataAccess;
         Include(profileDataValidator);
+        RuleFor(data => data.Profile).NotNull();
         RuleFor(data => data.Name)
             .MustAsync((data, _, cancellationToken) => NameIsUnique(data, cancellationToken));
     }

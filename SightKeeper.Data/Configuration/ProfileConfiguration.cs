@@ -12,5 +12,6 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
         builder.HasMany(profile => profile.ItemClasses).WithOne().IsRequired();
         builder.HasIndex(profile => profile.Name).IsUnique();
         builder.Navigation(profile => profile.Weights).AutoInclude();
+        builder.Navigation(profile => profile.ItemClasses).AutoInclude();
     }
 }

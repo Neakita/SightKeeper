@@ -4,8 +4,9 @@ using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
 namespace SightKeeper.Avalonia.Views;
 
-public sealed partial class ProfileEditor : UserControl, IViewFor<NewProfileEditorViewModel>
+public sealed partial class ProfileEditor : UserControl, IViewFor<NewProfileEditorViewModel>, IViewFor<ExistingProfileEditorViewModel>
 {
+    private ExistingProfileEditorViewModel? _viewModel;
     public NewProfileEditorViewModel? ViewModel { get; set; }
     
     public ProfileEditor()
@@ -17,5 +18,11 @@ public sealed partial class ProfileEditor : UserControl, IViewFor<NewProfileEdit
     {
         get => ViewModel;
         set => ViewModel = (NewProfileEditorViewModel?)value;
+    }
+
+    ExistingProfileEditorViewModel? IViewFor<ExistingProfileEditorViewModel>.ViewModel
+    {
+        get => _viewModel;
+        set => _viewModel = value;
     }
 }

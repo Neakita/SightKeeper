@@ -34,6 +34,8 @@ public abstract class ValidatableViewModel<TValidatable> : ViewModel, INotifyDat
             .Select(error => error.ErrorMessage);
     }
 
+    protected bool ValidateOnPropertyChanged { get; set; } = true;
+
     protected async Task<bool> Validate()
     {
         var validatable = this as TValidatable;
@@ -48,7 +50,8 @@ public abstract class ValidatableViewModel<TValidatable> : ViewModel, INotifyDat
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        _ = Validate();
+        if (ValidateOnPropertyChanged)
+            _ = Validate();
     }
 
     private void UpdateValidationResult(ValidationResult validationResult)

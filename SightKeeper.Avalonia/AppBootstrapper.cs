@@ -114,6 +114,7 @@ public static class AppBootstrapper
 		builder.RegisterType<NewProfileDataValidator>().As<IValidator<NewProfileData>>();
 		builder.RegisterType<ProfilesObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<SightKeeper.Application.ProfileEditor>().InstancePerMainViewModel();
+		builder.RegisterType<EditedProfileDataValidator>().As<IValidator<EditedProfileData>>();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
@@ -149,6 +150,7 @@ public static class AppBootstrapper
 		builder.RegisterType<ProfilesListViewModel>().InstancePerMainViewModel();
 		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<NewProfileEditorViewModel>();
+		builder.RegisterType<ExistingProfileEditorViewModel>();
 	}
 	
 	private static void SetupViews(ContainerBuilder builder)
@@ -167,6 +169,8 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectedItem>().As<IViewFor<DetectedItemViewModel>>();
 		builder.RegisterType<ViewSettings>().As<IViewFor<ViewSettingsViewModel>>();
 		builder.RegisterType<ProfilesTab>().As<IViewFor<ProfilesViewModel>>();
-		builder.RegisterType<ProfileEditor>().As<IViewFor<NewProfileEditorViewModel>>();
+		builder.RegisterType<ProfileEditor>()
+			.As<IViewFor<NewProfileEditorViewModel>>()
+			.As<IViewFor<ExistingProfileEditorViewModel>>();
 	}
 }
