@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using CommunityToolkit.Diagnostics;
+using Serilog.Events;
+using SerilogTimings;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Common;
 
@@ -24,6 +26,7 @@ public sealed class WindowsScreenCapture : ScreenCapture
 	public byte[] Capture()
 	{
 		Guard.IsNotNull(Resolution);
+		var operation = Operation.At(LogEventLevel.Verbose).Begin("Screen capturing");
 		using Bitmap windowsBitmap = new(Resolution.Value, Resolution.Value);
 		using var graphics = Graphics.FromImage(windowsBitmap);
 
@@ -34,6 +37,7 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		graphics.CopyFromScreen(point, Point.Empty, new Size(Resolution.Value, Resolution.Value));
 		using MemoryStream stream = new();
 		windowsBitmap.Save(stream, ImageFormat.Bmp);
+		operation.Complete();
 		return stream.ToArray();
 	}
 
