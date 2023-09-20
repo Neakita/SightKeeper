@@ -21,7 +21,8 @@
                 Command="{Binding DeleteSelectedWeightsCommand}"/>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Weights}"
-                  SelectedItem="{Binding SelectedWeights}">
+                  SelectedItem="{Binding SelectedWeights}"
+                  IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Size"
                                     Binding="{Binding Size}"/>
