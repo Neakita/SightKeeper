@@ -87,7 +87,8 @@ public sealed class Trainer
 
 	private void PrepareDataDirectory()
 	{
-		Directory.Delete(DataDirectoryPath, true);
+		if (Directory.Exists(DataDirectoryPath))
+			Directory.Delete(DataDirectoryPath, true);
 		Directory.CreateDirectory(DataDirectoryPath);
 		_logger.Information("Created data directory: {DataDirectoryPath}", DataDirectoryPath);
 	}
