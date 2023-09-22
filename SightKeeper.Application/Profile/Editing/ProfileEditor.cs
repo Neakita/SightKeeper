@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using FluentValidation;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
@@ -7,7 +8,7 @@ namespace SightKeeper.Application;
 
 public sealed class ProfileEditor
 {
-    public IObservable<Profile> ProfileEdited { get; } = Observable.Empty<Profile>();
+    public IObservable<Profile> ProfileEdited => _profileEdited.AsObservable();
 
     public ProfileEditor(IValidator<EditedProfileData> validator, ProfilesDataAccess profilesDataAccess)
     {
@@ -28,8 +29,10 @@ public sealed class ProfileEditor
         foreach (var itemClass in data.ItemClasses)
             profile.AddItemClass(itemClass);
         await _profilesDataAccess.UpdateProfile(profile);
+        _profileEdited.OnNext(profile);
     }
 
     private readonly IValidator<EditedProfileData> _validator;
     private readonly ProfilesDataAccess _profilesDataAccess;
+    private readonly Subject<Profile> _profileEdited = new();
 }
