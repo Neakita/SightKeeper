@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Numerics;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
 using Serilog;
 using SharpHook.Native;
@@ -16,11 +17,12 @@ namespace SightKeeper.Services.Scoring;
 
 public sealed class HotKeyProfileRunner : ProfileRunner
 {
-    public HotKeyProfileRunner(StreamDetector streamDetector, MouseMover mouseMover, SharpHookHotKeyManager hotKeyManager)
+    public HotKeyProfileRunner(StreamDetector streamDetector, MouseMover mouseMover, SharpHookHotKeyManager hotKeyManager, ProfileEditor profileEditor)
     {
         _streamDetector = streamDetector;
         _mouseMover = mouseMover;
         _hotKeyManager = hotKeyManager;
+        _profileEditor = profileEditor;
         _streamDetector.ObservableDetection.Subscribe(HandleDetection).DisposeWithEx(_constructorDisposables);
     }
     
@@ -37,6 +39,17 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         _currentProfileDisposables = new CompositeDisposable();
         _hotKeyManager.Register(MouseButton.Button4, () => _streamDetector.IsEnabled = true, () => _streamDetector.IsEnabled = false)
             .DisposeWithEx(_currentProfileDisposables);
+        _profileEditor.ProfileEdited.Where(editedProfile => editedProfile == profile).Subscribe(OnProfileEdited)
+            .DisposeWithEx(_currentProfileDisposables);
+    }
+
+    private void OnProfileEdited(Profile profile)
+    {
+        _itemClassesIndexes = profile.ItemClasses.ToDictionary(
+            profileItemClass => profileItemClass.ItemClass,
+            profileItemClass => profileItemClass.Index);
+        _streamDetector.Weights = profile.Weights;
+        _streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
     }
 
     private void HandleDetection(ImmutableList<DetectionItem> items)
@@ -96,6 +109,7 @@ public sealed class HotKeyProfileRunner : ProfileRunner
     private readonly StreamDetector _streamDetector;
     private readonly MouseMover _mouseMover;
     private readonly SharpHookHotKeyManager _hotKeyManager;
+    private readonly ProfileEditor _profileEditor;
     private Profile? _currentProfile;
     private CompositeDisposable? _currentProfileDisposables;
     private Dictionary<ItemClass, byte>? _itemClassesIndexes;
