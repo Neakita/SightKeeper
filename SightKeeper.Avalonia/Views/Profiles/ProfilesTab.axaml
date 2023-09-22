@@ -14,10 +14,45 @@
           Name="Root">
         <StackPanel Grid.Row="0"
                     Orientation="Horizontal"
-                    Margin="5">
+                    Margin="5"
+                    Spacing="10">
             <Button Content="{icons:MaterialIconExt Plus}"
                     Command="{Binding CreateProfileCommand}"
                     ToolTip.Tip="Create new profile"/>
+            <Border BorderBrush="DimGray"
+                    BorderThickness="1"
+                    CornerRadius="5">
+                <StackPanel Orientation="Horizontal"
+                            Spacing="10"
+                            Margin="10 0">
+                    <CheckBox Content="Make screenshots"
+                              IsChecked="{Binding MakeScreenshots}"
+                              ToolTip.Tip="Make screenshot to the associated dataset if any of detected items probability is between threshold values"/>
+                    <Slider Value="{Binding MinimumProbability}"
+                            ToolTip.Tip="{Binding MinimumProbability, StringFormat=Minimum probability: {0:P0}}"
+                            TickFrequency="0.1"
+                            Minimum="0.1"
+                            Maximum="0.8"
+                            IsSnapToTickEnabled="True"
+                            TickPlacement="Outside"
+                            Width="100"/>
+                    <Slider Value="{Binding MaximumProbability}"
+                            ToolTip.Tip="{Binding MaximumProbability, StringFormat=Maximum probability: {0:P0}}"
+                            TickFrequency="0.1"
+                            Minimum="0.2"
+                            Maximum="0.9"
+                            IsSnapToTickEnabled="True"
+                            TickPlacement="Outside"
+                            Width="100"/>
+                    <Slider Value="{Binding MaximumFPS}"
+                            ToolTip.Tip="{Binding MaximumFPS, StringFormat=Maximum FPS: {0}}"
+                            Minimum="1"
+                            Maximum="30"
+                            TickFrequency="1"
+                            IsSnapToTickEnabled="True"
+                            Width="100"/>
+                </StackPanel>
+            </Border>
         </StackPanel>
         <ScrollViewer Grid.Row="1">
             <ItemsControl ItemsSource="{Binding Profiles}">

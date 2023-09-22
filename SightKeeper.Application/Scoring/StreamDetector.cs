@@ -12,7 +12,7 @@ namespace SightKeeper.Application.Scoring;
 
 public sealed class StreamDetector
 {
-    public IObservable<ImmutableList<DetectionItem>> ObservableDetection => _detection;
+    public IObservable<(byte[] imageData, ImmutableList<DetectionItem> items)> ObservableDetection => _detection;
     public bool CheckImagesEquality { get; set; } = true;
 
     public bool IsEnabled
@@ -26,7 +26,7 @@ public sealed class StreamDetector
             {
                 Guard.IsNull(_isEnabledDisposable);
                 var previousImage = Array.Empty<byte>();
-                _isEnabledDisposable = Observable.Create<ImmutableList<DetectionItem>>(observer =>
+                _isEnabledDisposable = Observable.Create<(byte[], ImmutableList<DetectionItem>)>(observer =>
                 {
                     var work = true;
                     Task.Run(async () =>
@@ -50,7 +50,7 @@ public sealed class StreamDetector
                             }
 
                             var result = await _detector.Detect(image, CancellationToken.None);
-                            observer.OnNext(result.ToImmutableList());
+                            observer.OnNext((image, result.ToImmutableList()));
                             operation.Complete();
                         }
                     });
@@ -96,5 +96,5 @@ public sealed class StreamDetector
     private readonly Detector _detector;
     private readonly ScreenCapture _screenCapture;
     private IDisposable? _isEnabledDisposable;
-    private readonly Subject<ImmutableList<DetectionItem>> _detection = new();
+    private readonly Subject<(byte[], ImmutableList<DetectionItem>)> _detection = new();
 }

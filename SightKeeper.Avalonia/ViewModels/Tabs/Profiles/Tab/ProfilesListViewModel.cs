@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Threading;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Commons;
@@ -21,6 +23,7 @@ public sealed class ProfilesListViewModel : IDisposable
             .PopulateInto(_profileViewModels)
             .DisposeWithEx(_constructorDisposables);
         _profileViewModels.Connect()
+            .ObserveOn(SynchronizationContext.Current)
             .Bind(out var profileViewModels)
             .Subscribe()
             .DisposeWithEx(_constructorDisposables);

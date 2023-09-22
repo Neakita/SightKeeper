@@ -14,6 +14,38 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
 public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
 {
+    public bool MakeScreenshots
+    {
+        get => _profileRunner.MakeScreenshots;
+        set => SetProperty(_profileRunner.MakeScreenshots, value, newValue => _profileRunner.MakeScreenshots = newValue);
+    }
+    public float MinimumProbability
+    {
+        get => _profileRunner.MinimumProbability;
+        set => SetProperty(_profileRunner.MinimumProbability, value, newValue =>
+        {
+            if (MaximumProbability <= newValue)
+                MaximumProbability = newValue + 0.1f;
+            _profileRunner.MinimumProbability = newValue;
+        });
+    }
+    public float MaximumProbability
+    {
+        get => _profileRunner.MaximumProbability;
+        set => SetProperty(_profileRunner.MaximumProbability, value, newValue =>
+        {
+            if (MinimumProbability >= newValue)
+                MinimumProbability = newValue - 0.1f;
+            _profileRunner.MaximumProbability = newValue;
+        });
+    }
+
+    public byte MaximumFPS
+    {
+        get => _profileRunner.MaximumFPS;
+        set => SetProperty(_profileRunner.MaximumFPS, value, newValue => _profileRunner.MaximumFPS = newValue);
+    }
+
     public IReadOnlyCollection<ProfileViewModel> Profiles { get; }
 
     public ProfilesViewModel(ProfilesListViewModel profilesList, ILifetimeScope scope, ProfileCreator profileCreator, ProfileEditor profileEditor, ProfileRunner profileRunner, ProfilesDataAccess profilesDataAccess)

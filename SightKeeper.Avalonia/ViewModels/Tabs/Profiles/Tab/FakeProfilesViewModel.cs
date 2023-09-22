@@ -9,6 +9,10 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
 public sealed class FakeProfilesViewModel : IProfilesViewModel
 {
+    public bool MakeScreenshots { get; set; } = true;
+    public float MinimumProbability { get; set; } = 0.5f;
+    public float MaximumProbability { get; set; } = 0.2f;
+    public byte MaximumFPS { get; set; } = 1;
     public IReadOnlyCollection<ProfileViewModel> Profiles { get; }
     public ICommand CreateProfileCommand => FakeViewModel.CommandSubstitute;
     public ICommand EditProfileCommand => FakeViewModel.CommandSubstitute;

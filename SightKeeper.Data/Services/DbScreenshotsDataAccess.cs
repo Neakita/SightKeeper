@@ -18,6 +18,19 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         _dbContext = dbContext;
     }
 
+    public Task<IReadOnlyCollection<Screenshot>> LoadAll(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
+    {
+        return Task.Run(() =>
+        {
+            lock (_dbContext)
+            {
+                _dbContext.Entry(library).Collection(lib => lib.Screenshots).Load();
+            }
+
+            return library.Screenshots;
+        }, cancellationToken);
+    }
+
     public IObservable<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library, bool byDescending)
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract

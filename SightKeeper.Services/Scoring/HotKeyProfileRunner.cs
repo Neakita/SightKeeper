@@ -11,19 +11,62 @@ using SightKeeper.Application.Scoring;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Services;
 using SightKeeper.Services.Input;
 
 namespace SightKeeper.Services.Scoring;
 
 public sealed class HotKeyProfileRunner : ProfileRunner
 {
-    public HotKeyProfileRunner(StreamDetector streamDetector, MouseMover mouseMover, SharpHookHotKeyManager hotKeyManager, ProfileEditor profileEditor)
+    public bool MakeScreenshots { get; set; }
+
+    public float MinimumProbability
+    {
+        get => _minimumProbability;
+        set
+        {
+            Guard.IsBetween(value, 0, 1);
+            Guard.IsLessThanOrEqualTo(value, MaximumProbability);
+            _minimumProbability = value;
+        }
+    }
+
+    public float MaximumProbability
+    {
+        get => _maximumProbability;
+        set
+        {
+            Guard.IsBetween(value, 0, 1);
+            Guard.IsGreaterThanOrEqualTo(value, MinimumProbability);
+            _maximumProbability = value;
+        }
+    }
+
+    public byte MaximumFPS
+    {
+        get => _maximumFPS;
+        set
+        {
+            Guard.IsGreaterThan(value, (byte)0);
+            _maximumFPS = value;
+            _screenshotingDelay = TimeSpan.FromSeconds(1f / _maximumFPS);
+        }
+    }
+
+    private TimeSpan _screenshotingDelay = TimeSpan.FromSeconds(1f / _defaultMaximumFPS);
+    private DateTime _lastScreenshotTime = DateTime.UtcNow;
+
+
+    private const byte _defaultMaximumFPS = 1;
+
+    public HotKeyProfileRunner(StreamDetector streamDetector, MouseMover mouseMover, SharpHookHotKeyManager hotKeyManager, ProfileEditor profileEditor, ScreenshotsDataAccess screenshotsDataAccess)
     {
         _streamDetector = streamDetector;
         _mouseMover = mouseMover;
         _hotKeyManager = hotKeyManager;
         _profileEditor = profileEditor;
-        _streamDetector.ObservableDetection.Subscribe(HandleDetection).DisposeWithEx(_constructorDisposables);
+        _screenshotsDataAccess = screenshotsDataAccess;
+        _streamDetector.ObservableDetection.Subscribe(t => HandleDetection(t.imageData, t.items)).DisposeWithEx(_constructorDisposables);
     }
     
     public void Run(Profile profile)
@@ -37,7 +80,12 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         _streamDetector.Weights = profile.Weights;
         _streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
         _currentProfileDisposables = new CompositeDisposable();
-        _hotKeyManager.Register(MouseButton.Button4, () => _streamDetector.IsEnabled = true, () => _streamDetector.IsEnabled = false)
+        _hotKeyManager.Register(MouseButton.Button4, () => _streamDetector.IsEnabled = true, () =>
+            {
+                _streamDetector.IsEnabled = false;
+                Guard.IsNotNull(_currentProfile);
+                _screenshotsDataAccess.SaveChanges(_currentProfile.Weights.Library.DataSet.ScreenshotsLibrary);
+            })
             .DisposeWithEx(_currentProfileDisposables);
         _profileEditor.ProfileEdited.Where(editedProfile => editedProfile == profile).Subscribe(OnProfileEdited)
             .DisposeWithEx(_currentProfileDisposables);
@@ -52,14 +100,22 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         _streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
     }
 
-    private void HandleDetection(ImmutableList<DetectionItem> items)
+    private void HandleDetection(byte[] imageData, ImmutableList<DetectionItem> items)
     {
         Guard.IsNotNull(_itemClassesIndexes);
+        Guard.IsNotNull(_currentProfile);
         var suitableItems = items.Where(item => _itemClassesIndexes.ContainsKey(item.ItemClass)).ToImmutableList();
         if (!suitableItems.Any())
             return;
-        var item = suitableItems.MinBy(GetItemOrder);
-        MoveTo(item.Bounding);
+        var mostSuitableItem = suitableItems.MinBy(GetItemOrder);
+        MoveTo(mostSuitableItem.Bounding);
+        if (MakeScreenshots && _lastScreenshotTime + _screenshotingDelay <= DateTime.UtcNow && items.Any(item => item.Probability >= MinimumProbability && item.Probability <= MaximumProbability))
+        {
+            if (_currentProfile.Weights.Library.DataSet.ScreenshotsLibrary.Screenshots == null)
+                _screenshotsDataAccess.LoadAll(_currentProfile.Weights.Library.DataSet.ScreenshotsLibrary);
+            _lastScreenshotTime = DateTime.UtcNow;
+            _currentProfile.Weights.Library.DataSet.ScreenshotsLibrary.CreateScreenshot(imageData);
+        }
     }
 
     private float GetItemOrder(DetectionItem item)
@@ -79,10 +135,10 @@ public sealed class HotKeyProfileRunner : ProfileRunner
     {
         Guard.IsNotNull(_currentProfile);
         var moveVector = GetMoveVector(rectangle);
-        var scaledMoveVector = moveVector * _currentProfile.Weights.Library.DataSet.Resolution / 2;
-        var scaledMoveVectorWithSensitivityFactor = scaledMoveVector * _currentProfile.MouseSensitivity;
-        var moveX = (short)Math.Round(scaledMoveVectorWithSensitivityFactor.X);
-        var moveY = (short)Math.Round(scaledMoveVectorWithSensitivityFactor.Y);
+        moveVector = moveVector * _currentProfile.Weights.Library.DataSet.Resolution / 2;
+        moveVector *= _currentProfile.MouseSensitivity;
+        var moveX = (short)Math.Round(moveVector.X);
+        var moveY = (short)Math.Round(moveVector.Y);
         _mouseMover.Move(moveX, moveY);
     }
 
@@ -110,7 +166,11 @@ public sealed class HotKeyProfileRunner : ProfileRunner
     private readonly MouseMover _mouseMover;
     private readonly SharpHookHotKeyManager _hotKeyManager;
     private readonly ProfileEditor _profileEditor;
+    private readonly ScreenshotsDataAccess _screenshotsDataAccess;
     private Profile? _currentProfile;
     private CompositeDisposable? _currentProfileDisposables;
     private Dictionary<ItemClass, byte>? _itemClassesIndexes;
+    private float _minimumProbability;
+    private float _maximumProbability;
+    private byte _maximumFPS = _defaultMaximumFPS;
 }
