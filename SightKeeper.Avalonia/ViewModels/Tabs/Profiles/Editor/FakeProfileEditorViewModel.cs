@@ -26,6 +26,7 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
     public ICommand MoveItemClassUpCommand => FakeViewModel.CommandSubstitute;
     public ICommand MoveItemClassDownCommand => FakeViewModel.CommandSubstitute;
     public ICommand ApplyCommand => FakeViewModel.CommandSubstitute;
+    public ICommand DeleteCommand => FakeViewModel.CommandSubstitute;
 
     public FakeProfileEditorViewModel()
     {

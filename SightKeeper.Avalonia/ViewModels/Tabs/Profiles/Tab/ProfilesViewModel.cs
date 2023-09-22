@@ -8,6 +8,7 @@ using SightKeeper.Application;
 using SightKeeper.Application.Scoring;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
@@ -15,12 +16,13 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
 {
     public IReadOnlyCollection<ProfileViewModel> Profiles { get; }
 
-    public ProfilesViewModel(ProfilesListViewModel profilesList, ILifetimeScope scope, ProfileCreator profileCreator, ProfileEditor profileEditor, ProfileRunner profileRunner)
+    public ProfilesViewModel(ProfilesListViewModel profilesList, ILifetimeScope scope, ProfileCreator profileCreator, ProfileEditor profileEditor, ProfileRunner profileRunner, ProfilesDataAccess profilesDataAccess)
     {
         _scope = scope;
         _profileCreator = profileCreator;
         _profileEditor = profileEditor;
         _profileRunner = profileRunner;
+        _profilesDataAccess = profilesDataAccess;
         Profiles = profilesList.ProfileViewModels;
     }
 
@@ -28,6 +30,7 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
     private readonly ProfileCreator _profileCreator;
     private readonly ProfileEditor _profileEditor;
     private readonly ProfileRunner _profileRunner;
+    private readonly ProfilesDataAccess _profilesDataAccess;
 
     ICommand IProfilesViewModel.CreateProfileCommand => CreateProfileCommand;
     [RelayCommand]
@@ -35,12 +38,13 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
     {
         await using var scope = _scope.BeginLifetimeScope();
         var viewModel = scope.Resolve<NewProfileEditorViewModel>();
-        var isApplied = await viewModel.ShowDialog(this);
-        if (!isApplied)
-            return;
-        Guard.IsNotNull(viewModel.Weights);
-        NewProfileDataDTO data = new(viewModel.Name, viewModel.Description, viewModel.DetectionThreshold, viewModel.MouseSensitivity, viewModel.Weights, viewModel.ItemClasses);
-        await _profileCreator.CreateProfile(data);
+        var result = await viewModel.ShowDialog(this);
+        if (result == ProfileEditorResult.Apply)
+        {
+            Guard.IsNotNull(viewModel.Weights);
+            NewProfileDataDTO data = new(viewModel.Name, viewModel.Description, viewModel.DetectionThreshold, viewModel.MouseSensitivity, viewModel.Weights, viewModel.ItemClasses);
+            await _profileCreator.CreateProfile(data);
+        }
     }
 
     ICommand IProfilesViewModel.EditProfileCommand => EditProfileCommand;
@@ -51,12 +55,18 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
         await using var scope = _scope.BeginLifetimeScope();
         var viewModel = scope.Resolve<ExistingProfileEditorViewModel>();
         viewModel.SetData(profileViewModel.Profile);
-        var isApplied = await viewModel.ShowDialog(this);
-        if (!isApplied)
-            return;
-        Guard.IsNotNull(viewModel.Weights);
-        EditedProfileDataDTO data = new(profileViewModel.Profile, viewModel.Name, viewModel.Description, viewModel.DetectionThreshold, viewModel.MouseSensitivity, viewModel.Weights, viewModel.ItemClasses);
-        await _profileEditor.ApplyChanges(data);
+        var result = await viewModel.ShowDialog(this);
+        if (result == ProfileEditorResult.Apply)
+        {
+            Guard.IsNotNull(viewModel.Weights);
+            EditedProfileDataDTO data = new(profileViewModel.Profile, viewModel.Name, viewModel.Description, viewModel.DetectionThreshold, viewModel.MouseSensitivity, viewModel.Weights, viewModel.ItemClasses);
+            await _profileEditor.ApplyChanges(data);
+        }
+        else if (result == ProfileEditorResult.Delete)
+        {
+            Guard.IsNotNull(viewModel.Profile);
+            await _profilesDataAccess.RemoveProfile(viewModel.Profile);
+        }
     }
 
     ICommand IProfilesViewModel.LaunchProfileCommand => LaunchProfileCommand;

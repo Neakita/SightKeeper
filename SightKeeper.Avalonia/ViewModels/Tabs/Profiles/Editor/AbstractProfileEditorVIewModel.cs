@@ -17,7 +17,7 @@ using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
-public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : ValidatableDialogViewModel<TProfileData, bool>, ProfileEditorViewModel where TProfileData : class, ProfileData
+public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : ValidatableDialogViewModel<TProfileData, ProfileEditorResult>, ProfileEditorViewModel where TProfileData : class, ProfileData
 {
     public IReadOnlyCollection<DataSet> AvailableDataSets { get; }
 
@@ -82,8 +82,9 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
 
     public IReadOnlyList<ItemClass> ItemClasses { get; }
 
-    protected AbstractProfileEditorVIewModel(IValidator<TProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository) : base(validator)
+    protected AbstractProfileEditorVIewModel(IValidator<TProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository, bool canDelete) : base(validator)
     {
+        _canDelete = canDelete;
         AvailableDataSets = dataSetsObservableRepository.DataSets;
         _itemClasses.Connect()
             .Bind(out var itemClasses)
@@ -101,6 +102,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
     private readonly CompositeDisposable _constructorDisposables = new();
     protected readonly SourceList<ItemClass> _itemClasses = new();
     private readonly SourceList<ItemClass> _availableItemClasses = new();
+    private readonly bool _canDelete;
     private DataSet? _dataSet;
     private Weights? _weights;
     private float _mouseSensitivity = 1;
@@ -110,6 +112,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
     private IReadOnlyCollection<Weights> _availableWeights = Array.Empty<Weights>();
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
     private ItemClass? _itemClassToAdd;
+
 
     ICommand ProfileEditorViewModel.AddItemClassCommand => AddItemClassCommand;
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]
@@ -167,7 +170,16 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
     {
         var isValid = await Validate();
         if (isValid)
-            Return(true);
+            Return(ProfileEditorResult.Apply);
     }
     private bool CanApply() => !HasErrors;
+
+    ICommand ProfileEditorViewModel.DeleteCommand => DeleteCommand;
+
+    [RelayCommand]
+    private void Delete()
+    {
+        Return(ProfileEditorResult.Delete);
+    }
+    private bool CanDelete() => _canDelete;
 }

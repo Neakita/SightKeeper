@@ -9,7 +9,7 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
 public sealed class ExistingProfileEditorViewModel : AbstractProfileEditorVIewModel<EditedProfileData>, EditedProfileData
 {
-    public ExistingProfileEditorViewModel(IValidator<EditedProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository) : base(validator, dataSetsObservableRepository)
+    public ExistingProfileEditorViewModel(IValidator<EditedProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository) : base(validator, dataSetsObservableRepository, true)
     {
     }
     

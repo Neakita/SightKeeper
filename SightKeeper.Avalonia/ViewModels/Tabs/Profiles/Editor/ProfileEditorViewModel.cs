@@ -25,4 +25,5 @@ public interface ProfileEditorViewModel
     ICommand MoveItemClassUpCommand { get; }
     ICommand MoveItemClassDownCommand { get; }
     ICommand ApplyCommand { get; }
+    ICommand DeleteCommand { get; }
 }
