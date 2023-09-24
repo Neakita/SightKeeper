@@ -28,6 +28,7 @@ public sealed class HotKeyProfileRunner : ProfileRunner
             Guard.IsBetween(value, 0, 1);
             Guard.IsLessThanOrEqualTo(value, MaximumProbability);
             _minimumProbability = value;
+            UpdateDetectionThreshold();
         }
     }
 
@@ -89,6 +90,7 @@ public sealed class HotKeyProfileRunner : ProfileRunner
             .DisposeWithEx(_currentProfileDisposables);
         _profileEditor.ProfileEdited.Where(editedProfile => editedProfile == profile).Subscribe(OnProfileEdited)
             .DisposeWithEx(_currentProfileDisposables);
+        UpdateDetectionThreshold();
     }
 
     private void OnProfileEdited(Profile profile)
@@ -98,25 +100,38 @@ public sealed class HotKeyProfileRunner : ProfileRunner
             profileItemClass => profileItemClass.Index);
         _streamDetector.Weights = profile.Weights;
         _streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
+        UpdateDetectionThreshold();
     }
 
     private void HandleDetection(byte[] imageData, ImmutableList<DetectionItem> items)
     {
         Guard.IsNotNull(_itemClassesIndexes);
         Guard.IsNotNull(_currentProfile);
-        var suitableItems = items.Where(item => _itemClassesIndexes.ContainsKey(item.ItemClass)).ToImmutableList();
+        var suitableItems = items.Where(item => item.Probability >= _currentProfile.DetectionThreshold && _itemClassesIndexes.ContainsKey(item.ItemClass)).ToImmutableList();
         if (!suitableItems.Any())
             return;
         var mostSuitableItem = suitableItems.MinBy(GetItemOrder);
         MoveTo(mostSuitableItem.Bounding);
-        if (MakeScreenshots && _lastScreenshotTime + _screenshotingDelay <= DateTime.UtcNow && items.Any(item => item.Probability >= MinimumProbability && item.Probability <= MaximumProbability))
+        TryMakeScreenshot(imageData, items);
+    }
+
+    private async void TryMakeScreenshot(byte[] imageData, ImmutableList<DetectionItem> items)
+    {
+        Guard.IsNotNull(_currentProfile);
+        if (MakeScreenshots && !_isLoadingScreenshots && _lastScreenshotTime + _screenshotingDelay <= DateTime.UtcNow && items.Any(item => item.Probability >= MinimumProbability && item.Probability <= MaximumProbability))
         {
             if (_currentProfile.Weights.Library.DataSet.ScreenshotsLibrary.Screenshots == null)
-                _screenshotsDataAccess.LoadAll(_currentProfile.Weights.Library.DataSet.ScreenshotsLibrary);
+            {
+                _isLoadingScreenshots = true;
+                await _screenshotsDataAccess.LoadAll(_currentProfile.Weights.Library.DataSet.ScreenshotsLibrary);
+                _isLoadingScreenshots = false;
+            }
             _lastScreenshotTime = DateTime.UtcNow;
             _currentProfile.Weights.Library.DataSet.ScreenshotsLibrary.CreateScreenshot(imageData);
         }
     }
+    
+    private bool _isLoadingScreenshots;
 
     private float GetItemOrder(DetectionItem item)
     {
@@ -170,7 +185,14 @@ public sealed class HotKeyProfileRunner : ProfileRunner
     private Profile? _currentProfile;
     private CompositeDisposable? _currentProfileDisposables;
     private Dictionary<ItemClass, byte>? _itemClassesIndexes;
-    private float _minimumProbability;
-    private float _maximumProbability;
+    private float _minimumProbability = 0.2f;
+    private float _maximumProbability = 0.5f;
     private byte _maximumFPS = _defaultMaximumFPS;
+
+    private void UpdateDetectionThreshold()
+    {
+        if (_currentProfile == null)
+            return;
+        _streamDetector.ProbabilityThreshold = Math.Min(MinimumProbability, _currentProfile.DetectionThreshold);
+    }
 }

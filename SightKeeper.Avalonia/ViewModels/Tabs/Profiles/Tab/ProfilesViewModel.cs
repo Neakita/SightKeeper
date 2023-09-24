@@ -103,7 +103,7 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
 
     ICommand IProfilesViewModel.LaunchProfileCommand => LaunchProfileCommand;
     [RelayCommand(CanExecute = nameof(CanLaunchProfile))]
-    private async Task LaunchProfile(ProfileViewModel profileViewModel)
+    private void LaunchProfile(ProfileViewModel profileViewModel)
     {
         Guard.IsFalse(_runningProfile == profileViewModel);
         if (_runningProfile != null)
@@ -117,7 +117,7 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
     
     ICommand IProfilesViewModel.StopProfileCommand => StopProfileCommand;
     [RelayCommand(CanExecute = nameof(CanStopProfile))]
-    private async Task StopProfile(ProfileViewModel profile)
+    private void StopProfile(ProfileViewModel profile)
     {
         Guard.IsNotNull(_runningProfile);
         _profileRunner.Stop();
