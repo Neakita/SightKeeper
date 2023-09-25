@@ -108,10 +108,11 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         Guard.IsNotNull(_itemClassesIndexes);
         Guard.IsNotNull(_currentProfile);
         var suitableItems = items.Where(item => item.Probability >= _currentProfile.DetectionThreshold && _itemClassesIndexes.ContainsKey(item.ItemClass)).ToImmutableList();
-        if (!suitableItems.Any())
-            return;
-        var mostSuitableItem = suitableItems.MinBy(GetItemOrder);
-        MoveTo(mostSuitableItem.Bounding);
+        if (suitableItems.Any())
+        {
+            var mostSuitableItem = suitableItems.MinBy(GetItemOrder);
+            MoveTo(mostSuitableItem.Bounding);
+        }
         TryMakeScreenshot(imageData, items);
     }
 
