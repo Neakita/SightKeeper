@@ -14,7 +14,6 @@ using DynamicData.Aggregation;
 using DynamicData.Binding;
 using ReactiveUI;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
@@ -106,7 +105,9 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     {
         if (Screenshots.Count <= 1 || SelectedScreenshotViewModel.SelectedScreenshotIndex == null)
             return;
-        SelectedScreenshotViewModel.SelectedScreenshotIndex = SelectedScreenshotViewModel.SelectedScreenshotIndex.Value.Cycle(0, Screenshots.Count - 1, reverse);
+        var indexDelta = reverse ? -1 : 1;
+        var newIndex = SelectedScreenshotViewModel.SelectedScreenshotIndex.Value + indexDelta;
+        SelectedScreenshotViewModel.SelectedScreenshotIndex = Math.Clamp(newIndex, 0, Screenshots.Count - 1);
     }
 
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
