@@ -98,6 +98,8 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
         _detector.Weights = value;
         OnPropertyChanged(nameof(ProbabilityThreshold));
         OnPropertyChanged(nameof(IoU));
+        if (AutoAnnotatingEnabled)
+            BeginAnnotationAndForget();
     }
 
     private IDisposable? _isAutoDetectedEnabledChangedSubscription;
