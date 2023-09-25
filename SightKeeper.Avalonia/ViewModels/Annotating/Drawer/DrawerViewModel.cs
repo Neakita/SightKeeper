@@ -62,7 +62,11 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
             Guard.IsNotNull(SelectedScreenshotViewModel.Value);
             SelectedScreenshotViewModel.DetectedItems.Remove(item);
             var detectorItem = await _annotator.Annotate(SelectedScreenshotViewModel.Value.Item, item.ItemClass, item.Bounding.Bounding, CancellationToken.None);
-            SelectedScreenshotViewModel.DetectorItems.Add(new DetectorItemViewModel(detectorItem, resizer, this));
+            DetectorItemViewModel detectorItemViewModel = new(detectorItem, resizer, this)
+            {
+                IsThumbsVisible = IsItemSelectionEnabled
+            };
+            SelectedScreenshotViewModel.DetectorItems.Add(detectorItemViewModel);
             SelectedScreenshotViewModel.Value.NotifyIsAssetChanged();
         }).DisposeWithEx(_disposable);
     }
