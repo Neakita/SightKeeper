@@ -17,6 +17,7 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
     public string Description { get; set; } = "Some description.. lorem ipsum and all that stuff";
     [ObservableProperty] private float _detectionThreshold = 0.6f;
     [ObservableProperty] private float _mouseSensitivity = 1.5f;
+    public ushort PostProcessDelay { get; set; }
     public DataSet? DataSet { get; set; }
     public Weights? Weights { get; set; }
     public IReadOnlyList<ItemClass> ItemClasses { get; }

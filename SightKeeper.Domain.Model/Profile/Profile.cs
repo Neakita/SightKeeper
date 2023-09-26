@@ -28,6 +28,16 @@ public sealed class Profile
         }
     }
 
+    public TimeSpan PostProcessDelay
+    {
+        get => _postProcessDelay;
+        set
+        {
+            Guard.IsGreaterThanOrEqualTo(value, TimeSpan.Zero);
+            _postProcessDelay = value;
+        }
+    }
+
     public Weights Weights
     {
         get => _weights;
@@ -43,12 +53,13 @@ public sealed class Profile
 
     public IReadOnlyList<ProfileItemClass> ItemClasses => _itemClasses;
 
-    public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, Weights weights)
+    public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, Weights weights)
     {
         Name = name;
         Description = description;
         DetectionThreshold = detectionThreshold;
         MouseSensitivity = mouseSensitivity;
+        _postProcessDelay = postProcessDelay;
         _weights = weights;
         _itemClasses = new List<ProfileItemClass>();
     }
@@ -95,6 +106,7 @@ public sealed class Profile
     private readonly List<ProfileItemClass> _itemClasses;
     private float _detectionThreshold;
     private float _mouseSensitivity;
+    private TimeSpan _postProcessDelay;
 
     private Profile()
     {

@@ -24,6 +24,7 @@ public sealed class ProfileEditor
         profile.Description = data.Description;
         profile.DetectionThreshold = data.DetectionThreshold;
         profile.MouseSensitivity = data.MouseSensitivity;
+        profile.PostProcessDelay = data.PostProcessDelay;
         profile.Weights = data.Weights;
         profile.ClearItemClasses();
         foreach (var itemClass in data.ItemClasses)

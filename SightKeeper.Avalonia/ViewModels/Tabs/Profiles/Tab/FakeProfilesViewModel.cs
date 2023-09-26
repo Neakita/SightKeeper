@@ -26,8 +26,8 @@ public sealed class FakeProfilesViewModel : IProfilesViewModel
         dataSet.Game = game;
         var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), Array.Empty<byte>(), ModelSize.Small,
             100, 0.5f, 0.4f, 0.3f, Enumerable.Empty<Asset>());
-        Profile profile1 = new("Profile", string.Empty, 0.5f, 2f, weights);
-        Profile profile2 = new("Profile with long name!", string.Empty, 0.3f, 3f, weights);
+        Profile profile1 = new("Profile", string.Empty, 0.5f, 2f, TimeSpan.FromMilliseconds(10), weights);
+        Profile profile2 = new("Profile with long name!", string.Empty, 0.3f, 3f, TimeSpan.FromMilliseconds(15), weights);
         Profiles = new ProfileViewModel[]
         {
             new(profile1),

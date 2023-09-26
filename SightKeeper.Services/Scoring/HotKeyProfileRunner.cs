@@ -54,13 +54,17 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         }
     }
 
-    private TimeSpan _screenshotingDelay = TimeSpan.FromSeconds(1f / _defaultMaximumFPS);
+    private TimeSpan _screenshotingDelay = TimeSpan.FromSeconds(1f / DefaultMaximumFPS);
     private DateTime _lastScreenshotTime = DateTime.UtcNow;
 
+    private const byte DefaultMaximumFPS = 1;
 
-    private const byte _defaultMaximumFPS = 1;
-
-    public HotKeyProfileRunner(StreamDetector streamDetector, MouseMover mouseMover, SharpHookHotKeyManager hotKeyManager, ProfileEditor profileEditor, ScreenshotsDataAccess screenshotsDataAccess)
+    public HotKeyProfileRunner(
+        StreamDetector streamDetector,
+        MouseMover mouseMover,
+        SharpHookHotKeyManager hotKeyManager,
+        ProfileEditor profileEditor,
+        ScreenshotsDataAccess screenshotsDataAccess)
     {
         _streamDetector = streamDetector;
         _mouseMover = mouseMover;
@@ -114,6 +118,19 @@ public sealed class HotKeyProfileRunner : ProfileRunner
             MoveTo(mostSuitableItem.Bounding);
         }
         TryMakeScreenshot(imageData, items);
+        if (_currentProfile.PostProcessDelay != TimeSpan.Zero)
+        {
+            if (_currentProfile.PostProcessDelay.TotalMilliseconds > 20)
+                Thread.Sleep(_currentProfile.PostProcessDelay);
+            else
+                BurnTime(_currentProfile.PostProcessDelay);
+        }
+    }
+
+    private static void BurnTime(TimeSpan time)
+    {
+        var endTime = DateTime.UtcNow + time;
+        while (DateTime.UtcNow < endTime) { }
     }
 
     private async void TryMakeScreenshot(byte[] imageData, ImmutableList<DetectionItem> items)
@@ -188,7 +205,7 @@ public sealed class HotKeyProfileRunner : ProfileRunner
     private Dictionary<ItemClass, byte>? _itemClassesIndexes;
     private float _minimumProbability = 0.2f;
     private float _maximumProbability = 0.5f;
-    private byte _maximumFPS = _defaultMaximumFPS;
+    private byte _maximumFPS = DefaultMaximumFPS;
 
     private void UpdateDetectionThreshold()
     {

@@ -9,6 +9,7 @@ public interface ProfileData
     string Description { get; }
     float DetectionThreshold { get; }
     float MouseSensitivity { get; }
+    TimeSpan PostProcessDelay { get; }
     Weights? Weights { get; }
     IReadOnlyList<ItemClass> ItemClasses { get; }
 }

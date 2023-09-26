@@ -55,6 +55,18 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
         set => SetProperty(ref _mouseSensitivity, value);
     }
 
+    public TimeSpan PostProcessDelay
+    {
+        get => _postProcessDelay;
+        set => SetProperty(ref _postProcessDelay, value);
+    }
+
+    ushort ProfileEditorViewModel.PostProcessDelay
+    {
+        get => (ushort)_postProcessDelay.TotalMilliseconds;
+        set => SetProperty(PostProcessDelay.TotalMilliseconds, value, newValue => _postProcessDelay = TimeSpan.FromMilliseconds(newValue));
+    }
+
     public DataSet? DataSet
     {
         get => _dataSet;
@@ -112,7 +124,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
     private IReadOnlyCollection<Weights> _availableWeights = Array.Empty<Weights>();
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
     private ItemClass? _itemClassToAdd;
-
+    private TimeSpan _postProcessDelay;
 
     ICommand ProfileEditorViewModel.AddItemClassCommand => AddItemClassCommand;
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]

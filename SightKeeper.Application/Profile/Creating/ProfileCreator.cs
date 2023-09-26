@@ -15,7 +15,7 @@ public sealed class ProfileCreator
     public async Task<Profile> CreateProfile(NewProfileDataDTO data)
     {
         await _validator.ValidateAndThrowAsync(data);
-        Profile profile = new(data.Name, data.Description, data.DetectionThreshold, data.MouseSensitivity, data.Weights);
+        Profile profile = new(data.Name, data.Description, data.DetectionThreshold, data.MouseSensitivity, data.PostProcessDelay, data.Weights);
         foreach (var itemClass in data.ItemClasses)
             profile.AddItemClass(itemClass);
         await _profilesDataAccess.AddProfile(profile);

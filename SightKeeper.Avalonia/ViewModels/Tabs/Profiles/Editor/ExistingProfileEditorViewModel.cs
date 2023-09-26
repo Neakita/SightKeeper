@@ -21,6 +21,7 @@ public sealed class ExistingProfileEditorViewModel : AbstractProfileEditorVIewMo
         Description = profile.Description;
         DetectionThreshold = profile.DetectionThreshold;
         MouseSensitivity = profile.MouseSensitivity;
+        PostProcessDelay = profile.PostProcessDelay;
         DataSet = profile.Weights.Library.DataSet;
         Weights = profile.Weights;
         _itemClasses.Clear();

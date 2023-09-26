@@ -15,6 +15,7 @@ public interface ProfileEditorViewModel
     string Description { get; set; }
     float DetectionThreshold { get; set; }
     float MouseSensitivity { get; set; }
+    ushort PostProcessDelay { get; set; }
     DataSet? DataSet { get; set; }
     Weights? Weights { get; set; }
     IReadOnlyList<ItemClass> ItemClasses { get; }
