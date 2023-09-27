@@ -65,6 +65,20 @@ public sealed class SharpHookHotKeyManager
         return disposable;
     }
 
+    public IDisposable Register(MouseButton button, Action onPressedAction)
+    {
+        CompositeDisposable disposable = new();
+        if (_mouseButtonHotKeys.TryGetValue(button, out var existingHotKey))
+        {
+            disposable.Add(existingHotKey.Pressed.Subscribe(_ => onPressedAction()));
+            return disposable;
+        }
+        HotKey hotKey = new(new MouseGesture(button));
+        _mouseButtonHotKeys.Add(button, hotKey);
+        disposable.Add(hotKey.Pressed.Subscribe(_ => onPressedAction()));
+        return disposable;
+    }
+
     private readonly Dictionary<KeyCode, HotKey> _keyboardHotKeys = new();
     private readonly Dictionary<MouseButton, HotKey> _mouseButtonHotKeys = new();
 
