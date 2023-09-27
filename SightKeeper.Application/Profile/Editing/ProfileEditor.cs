@@ -27,8 +27,8 @@ public sealed class ProfileEditor
         profile.PostProcessDelay = data.PostProcessDelay;
         profile.Weights = data.Weights;
         profile.ClearItemClasses();
-        foreach (var itemClass in data.ItemClasses)
-            profile.AddItemClass(itemClass);
+        foreach (var itemClassData in data.ItemClasses)
+            profile.AddItemClass(itemClassData.ItemClass, itemClassData.ActivationCondition);
         await _profilesDataAccess.UpdateProfile(profile);
         _profileEdited.OnNext(profile);
     }

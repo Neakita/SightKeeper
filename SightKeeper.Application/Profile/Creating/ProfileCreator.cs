@@ -16,8 +16,8 @@ public sealed class ProfileCreator
     {
         await _validator.ValidateAndThrowAsync(data);
         Profile profile = new(data.Name, data.Description, data.DetectionThreshold, data.MouseSensitivity, data.PostProcessDelay, data.Weights);
-        foreach (var itemClass in data.ItemClasses)
-            profile.AddItemClass(itemClass);
+        foreach (var itemClassData in data.ItemClasses.OrderBy(profileItemClassData => profileItemClassData.Order))
+            profile.AddItemClass(itemClassData.ItemClass, itemClassData.ActivationCondition);
         await _profilesDataAccess.AddProfile(profile);
         return profile;
     }

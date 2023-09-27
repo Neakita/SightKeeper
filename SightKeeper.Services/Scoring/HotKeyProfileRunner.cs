@@ -73,6 +73,8 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         _screenshotsDataAccess = screenshotsDataAccess;
         _streamDetector.ObservableDetection.Subscribe(t => HandleDetection(t.imageData, t.items)).DisposeWithEx(_constructorDisposables);
     }
+
+    private bool _isFiring;
     
     public void Run(Profile profile)
     {
@@ -91,6 +93,8 @@ public sealed class HotKeyProfileRunner : ProfileRunner
                 Guard.IsNotNull(_currentProfile);
                 _screenshotsDataAccess.SaveChanges(_currentProfile.Weights.Library.DataSet.ScreenshotsLibrary);
             })
+            .DisposeWithEx(_currentProfileDisposables);
+        _hotKeyManager.Register(MouseButton.Button1, () => _isFiring = true, () => _isFiring = false)
             .DisposeWithEx(_currentProfileDisposables);
         _profileEditor.ProfileEdited.Where(editedProfile => editedProfile == profile).Subscribe(OnProfileEdited)
             .DisposeWithEx(_currentProfileDisposables);
@@ -111,7 +115,7 @@ public sealed class HotKeyProfileRunner : ProfileRunner
     {
         Guard.IsNotNull(_itemClassesIndexes);
         Guard.IsNotNull(_currentProfile);
-        var suitableItems = items.Where(item => item.Probability >= _currentProfile.DetectionThreshold && _itemClassesIndexes.ContainsKey(item.ItemClass)).ToImmutableList();
+        var suitableItems = WhereSuitable(items).ToImmutableList();
         if (suitableItems.Any())
         {
             var mostSuitableItem = suitableItems.MinBy(GetItemOrder);
@@ -125,6 +129,25 @@ public sealed class HotKeyProfileRunner : ProfileRunner
             else
                 BurnTime(_currentProfile.PostProcessDelay);
         }
+    }
+
+    private IEnumerable<DetectionItem> WhereSuitable(IEnumerable<DetectionItem> items)
+    {
+        Guard.IsNotNull(_currentProfile);
+        Guard.IsNotNull(_itemClassesIndexes);
+        return items
+            .Where(item => item.Probability >= _currentProfile.DetectionThreshold && _itemClassesIndexes.ContainsKey(item.ItemClass))
+            .Where(IsFiringModePassing);
+    }
+
+    private bool IsFiringModePassing(DetectionItem item)
+    {
+        Guard.IsNotNull(_currentProfile);
+        var profileItemClass =
+            _currentProfile.ItemClasses.First(profileItemClass => profileItemClass.ItemClass == item.ItemClass);
+        if (profileItemClass.ActivationCondition == ItemClassActivationCondition.None)
+            return true;
+        return (profileItemClass.ActivationCondition == ItemClassActivationCondition.IsShooting) == _isFiring;
     }
 
     private static void BurnTime(TimeSpan time)

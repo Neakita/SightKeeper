@@ -86,7 +86,7 @@
                             Margin="5"
                             Padding="5">
                         <Grid RowDefinitions="* *"
-                              ColumnDefinitions="Auto * Auto">
+                              ColumnDefinitions="Auto Auto * Auto">
                             <Button Grid.Row="0" Grid.Column="0"
                                     Content="{icons:MaterialIconExt ChevronUp}"
                                     Padding="5 0"
@@ -99,11 +99,19 @@
                                     CommandParameter="{Binding}"/>
                             <TextBlock Grid.Row="0" Grid.RowSpan="2"
                                        Grid.Column="1"
-                                       Text="{Binding Name}"
+                                       Text="{Binding ItemClass.Name}"
                                        VerticalAlignment="Center"
                                        Margin="5 0 0 0"/>
+                            <CheckBox Grid.Row="0" Grid.RowSpan="2"
+                                      Grid.Column="2"
+                                      IsThreeState="True"
+                                      Content="{icons:MaterialIconExt SwordCross}"
+                                      Margin="10 0"
+                                      Padding="5"
+                                      ToolTip.Tip="{Binding ActivationCondition, Converter={StaticResource EnumToDescriptionConverter}, StringFormat=Activation condition: {0}}"
+                                      IsChecked="{Binding WhenShooting}"/>
                             <Button Grid.Row="0" Grid.RowSpan="2"
-                                    Grid.Column="2"
+                                    Grid.Column="3"
                                     Content="{icons:MaterialIconExt Close}"
                                     Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).RemoveItemClassCommand}"
                                     CommandParameter="{Binding}"/>

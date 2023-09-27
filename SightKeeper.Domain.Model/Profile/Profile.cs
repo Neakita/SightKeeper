@@ -64,13 +64,13 @@ public sealed class Profile
         _itemClasses = new List<ProfileItemClass>();
     }
 
-    public ProfileItemClass AddItemClass(ItemClass itemClass)
+    public ProfileItemClass AddItemClass(ItemClass itemClass, ItemClassActivationCondition activationCondition)
     {
         if (!Weights.Library.DataSet.ItemClasses.Contains(itemClass))
             ThrowHelper.ThrowArgumentException(nameof(itemClass), $"Item class \"{itemClass}\" not found in dataset \"{Weights}\"");
         if (_itemClasses.Any(orderedItemClass => orderedItemClass.ItemClass == itemClass))
             ThrowHelper.ThrowArgumentException($"Item class {itemClass} already added to profile {this}");
-        var profileItemClass = new ProfileItemClass(itemClass, (byte)_itemClasses.Count);
+        var profileItemClass = new ProfileItemClass(itemClass, (byte)_itemClasses.Count, activationCondition);
         _itemClasses.Add(profileItemClass);
         return profileItemClass;
     }

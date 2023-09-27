@@ -1,5 +1,4 @@
 ﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application;
 
@@ -11,5 +10,5 @@ public interface ProfileData
     float MouseSensitivity { get; }
     TimeSpan PostProcessDelay { get; }
     Weights? Weights { get; }
-    IReadOnlyList<ItemClass> ItemClasses { get; }
+    IReadOnlyList<ProfileItemClassData> ItemClasses { get; }
 }

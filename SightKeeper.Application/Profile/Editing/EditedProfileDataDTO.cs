@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Application;
 
@@ -13,9 +12,9 @@ public sealed class EditedProfileDataDTO : EditedProfileData
     public float MouseSensitivity { get; }
     public TimeSpan PostProcessDelay { get; }
     public Weights Weights { get; }
-    public IReadOnlyList<ItemClass> ItemClasses { get; }
+    public IReadOnlyList<ProfileItemClassData> ItemClasses { get; }
 
-    public EditedProfileDataDTO(Profile profile, string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, Weights weights, IEnumerable<ItemClass> itemClasses)
+    public EditedProfileDataDTO(Profile profile, string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, Weights weights, IEnumerable<ProfileItemClassData> itemClasses)
     {
         Profile = profile;
         Name = name;

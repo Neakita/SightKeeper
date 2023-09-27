@@ -18,7 +18,7 @@ public interface ProfileEditorViewModel
     ushort PostProcessDelay { get; set; }
     DataSet? DataSet { get; set; }
     Weights? Weights { get; set; }
-    IReadOnlyList<ItemClass> ItemClasses { get; }
+    IReadOnlyList<ProfileItemClassViewModel> ItemClasses { get; }
     ItemClass? ItemClassToAdd { get; set; }
     
     ICommand AddItemClassCommand { get; }

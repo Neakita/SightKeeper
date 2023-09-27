@@ -27,7 +27,7 @@ public sealed class ExistingProfileEditorViewModel : AbstractProfileEditorVIewMo
         _itemClasses.Clear();
         _itemClasses.AddRange(profile.ItemClasses
             .OrderBy(profileItemClass => profileItemClass.Index)
-            .Select(profileItemClass => profileItemClass.ItemClass));
+            .Select(profileItemClass => new ProfileItemClassViewModel(profileItemClass.ItemClass, profileItemClass.Index, profileItemClass.ActivationCondition)));
         ValidateOnPropertyChanged = true;
     }
 }

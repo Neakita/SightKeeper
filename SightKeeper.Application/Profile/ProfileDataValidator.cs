@@ -16,7 +16,7 @@ public sealed class ProfileDataValidator : AbstractValidator<ProfileData>
         RuleFor(data => data.Weights)
             .NotNull();
         RuleForEach(data => data.ItemClasses)
-            .Must((data, profileItemClass) => profileItemClass.DataSet == data.Weights!.Library.DataSet)
+            .Must((data, profileItemClass) => profileItemClass.ItemClass.DataSet == data.Weights!.Library.DataSet)
             .When(data => data.Weights != null);
         RuleFor(data => data.ItemClasses).NoDuplicates();
     }

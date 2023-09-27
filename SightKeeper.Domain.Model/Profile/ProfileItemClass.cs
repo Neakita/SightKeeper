@@ -6,11 +6,13 @@ public sealed class ProfileItemClass
 {
     public ItemClass ItemClass { get; private set; }
     public byte Index { get; internal set; }
+    public ItemClassActivationCondition ActivationCondition { get; set; }
 
-    public ProfileItemClass(ItemClass itemClass, byte index)
+    public ProfileItemClass(ItemClass itemClass, byte index, ItemClassActivationCondition activationCondition)
     {
         ItemClass = itemClass;
         Index = index;
+        ActivationCondition = activationCondition;
     }
 
     private ProfileItemClass()

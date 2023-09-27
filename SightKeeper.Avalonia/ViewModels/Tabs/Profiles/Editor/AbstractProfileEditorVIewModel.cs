@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -92,7 +94,9 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
         set => SetProperty(ref _weights, value);
     }
 
-    public IReadOnlyList<ItemClass> ItemClasses { get; }
+    public IReadOnlyList<ProfileItemClassData> ItemClasses { get; }
+    IReadOnlyList<ProfileItemClassViewModel> ProfileEditorViewModel.ItemClasses => _itemClassesViewModels;
+    private readonly ReadOnlyObservableCollection<ProfileItemClassViewModel> _itemClassesViewModels;
 
     protected AbstractProfileEditorVIewModel(IValidator<TProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository, bool canDelete) : base(validator)
     {
@@ -103,8 +107,9 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
             .Subscribe()
             .DisposeWithEx(_constructorDisposables);
         ItemClasses = itemClasses;
+        _itemClassesViewModels = itemClasses;
         _availableItemClasses.Connect()
-            .Except(_itemClasses.Connect())
+            .Except(_itemClasses.Connect().Transform(itemClassData => itemClassData.ItemClass))
             .Bind(out var availableItemClasses)
             .Subscribe()
             .DisposeWithEx(_constructorDisposables);
@@ -112,7 +117,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
     }
 
     private readonly CompositeDisposable _constructorDisposables = new();
-    protected readonly SourceList<ItemClass> _itemClasses = new();
+    protected readonly SourceList<ProfileItemClassViewModel> _itemClasses = new();
     private readonly SourceList<ItemClass> _availableItemClasses = new();
     private readonly bool _canDelete;
     private DataSet? _dataSet;
@@ -131,7 +136,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
     private void AddItemClass()
     {
         Guard.IsNotNull(ItemClassToAdd);
-        _itemClasses.Add(ItemClassToAdd);
+        _itemClasses.Add(new ProfileItemClassViewModel(ItemClassToAdd, (byte)_itemClasses.Count));
         MoveItemClassUpCommand.NotifyCanExecuteChanged();
         MoveItemClassDownCommand.NotifyCanExecuteChanged();
     }
@@ -139,23 +144,25 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
 
     ICommand ProfileEditorViewModel.RemoveItemClassCommand => RemoveItemClassCommand;
     [RelayCommand]
-    private void RemoveItemClass(ItemClass itemClass)
+    private void RemoveItemClass(ProfileItemClassViewModel itemClass)
     {
         Guard.IsTrue(_itemClasses.Remove(itemClass));
+        UpdateItemClassesOrder();
         MoveItemClassUpCommand.NotifyCanExecuteChanged();
         MoveItemClassDownCommand.NotifyCanExecuteChanged();
     }
 
     ICommand ProfileEditorViewModel.MoveItemClassUpCommand => MoveItemClassUpCommand;
     [RelayCommand(CanExecute = nameof(CanMoveItemClassUp))]
-    private void MoveItemClassUp(ItemClass itemClass)
+    private void MoveItemClassUp(ProfileItemClassViewModel itemClass)
     {
         var currentIndex = ItemClasses.IndexOf(itemClass);
         _itemClasses.Move(currentIndex, currentIndex - 1);
+        UpdateItemClassesOrder();
         MoveItemClassUpCommand.NotifyCanExecuteChanged();
         MoveItemClassDownCommand.NotifyCanExecuteChanged();
     }
-    private bool CanMoveItemClassUp(ItemClass itemClass)
+    private bool CanMoveItemClassUp(ProfileItemClassViewModel itemClass)
     {
         var currentIndex = ItemClasses.IndexOf(itemClass);
         return currentIndex > 0;
@@ -163,14 +170,15 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
 
     ICommand ProfileEditorViewModel.MoveItemClassDownCommand => MoveItemClassDownCommand;
     [RelayCommand(CanExecute = nameof(CanMoveItemClassDown))]
-    private void MoveItemClassDown(ItemClass itemClass)
+    private void MoveItemClassDown(ProfileItemClassViewModel itemClass)
     {
         var currentIndex = ItemClasses.IndexOf(itemClass);
         _itemClasses.Move(currentIndex, currentIndex + 1);
+        UpdateItemClassesOrder();
         MoveItemClassUpCommand.NotifyCanExecuteChanged();
         MoveItemClassDownCommand.NotifyCanExecuteChanged();
     }
-    private bool CanMoveItemClassDown(ItemClass itemClass)
+    private bool CanMoveItemClassDown(ProfileItemClassViewModel itemClass)
     {
         var currentIndex = ItemClasses.IndexOf(itemClass);
         return currentIndex < ItemClasses.Count - 1;
@@ -194,4 +202,10 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
         Return(ProfileEditorResult.Delete);
     }
     private bool CanDelete() => _canDelete;
+
+    private void UpdateItemClassesOrder()
+    {
+        for (var i = 0; i < ItemClasses.Count; i++)
+            _itemClasses.Items.ElementAt(i).Order = (byte)i;
+    }
 }

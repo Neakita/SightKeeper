@@ -20,7 +20,7 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
     public ushort PostProcessDelay { get; set; }
     public DataSet? DataSet { get; set; }
     public Weights? Weights { get; set; }
-    public IReadOnlyList<ItemClass> ItemClasses { get; }
+    public IReadOnlyList<ProfileItemClassViewModel> ItemClasses { get; }
     public ItemClass? ItemClassToAdd { get; set; }
     public ICommand AddItemClassCommand => FakeViewModel.CommandSubstitute;
     public ICommand RemoveItemClassCommand => FakeViewModel.CommandSubstitute;
@@ -41,7 +41,7 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
         ItemClassToAdd = itemClass3;
         AvailableDataSets = new[] { dataSet };
         AvailableWeights = new[] { weights };
-        ItemClasses = new[] { itemClass1, itemClass2 };
+        ItemClasses = new[] { itemClass1, itemClass2 }.Select((itemClass, index) => new ProfileItemClassViewModel(itemClass, (byte)index)).ToList();
         AvailableItemClasses = new[] { itemClass3, itemClass4 };
         Weights = weights;
         DataSet = dataSet;
