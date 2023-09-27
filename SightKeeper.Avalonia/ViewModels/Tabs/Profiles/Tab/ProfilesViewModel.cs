@@ -48,7 +48,13 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
 
     public IReadOnlyCollection<ProfileViewModel> Profiles { get; }
 
-    public ProfilesViewModel(ProfilesListViewModel profilesList, ILifetimeScope scope, ProfileCreator profileCreator, ProfileEditor profileEditor, ProfileRunner profileRunner, ProfilesDataAccess profilesDataAccess)
+    public ProfilesViewModel(
+        ProfilesListViewModel profilesList,
+        ILifetimeScope scope,
+        ProfileCreator profileCreator,
+        ProfileEditor profileEditor,
+        ProfileRunner profileRunner,
+        ProfilesDataAccess profilesDataAccess)
     {
         _scope = scope;
         _profileCreator = profileCreator;
