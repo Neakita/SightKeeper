@@ -117,7 +117,7 @@ public static class AppBootstrapper
 		builder.RegisterType<EditedProfileDataValidator>().As<IValidator<EditedProfileData>>();
 		builder.RegisterType<HotKeyProfileRunner>().As<ProfileRunner>();
 		builder.RegisterType<StreamDetector>();
-		builder.RegisterType<WindowsMouseMover>().As<MouseMover>();
+		builder.RegisterType<WindowsMouseMover>().As<MouseMover>().SingleInstance();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
