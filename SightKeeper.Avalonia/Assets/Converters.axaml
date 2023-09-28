@@ -7,4 +7,5 @@
     <converters:StringToNullableIntConverter x:Key="StringToNullableIntConverter"/>
     <converters:ToBrushConverter x:Key="ToBrushConverter"/>
     <converters:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter"/>
+    <converters:ItemClassActivationConditionToBoolConverter x:Key="ItemClassActivationConditionToBoolConverter"/>
 </ResourceDictionary>

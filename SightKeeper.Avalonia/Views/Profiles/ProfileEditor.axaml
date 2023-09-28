@@ -109,7 +109,7 @@
                                       Margin="10 0"
                                       Padding="5"
                                       ToolTip.Tip="{Binding ActivationCondition, Converter={StaticResource EnumToDescriptionConverter}, StringFormat=Activation condition: {0}}"
-                                      IsChecked="{Binding WhenShooting}"/>
+                                      IsChecked="{Binding ActivationCondition, Converter={StaticResource ItemClassActivationConditionToBoolConverter}}"/>
                             <Button Grid.Row="0" Grid.RowSpan="2"
                                     Grid.Column="3"
                                     Content="{icons:MaterialIconExt Close}"
