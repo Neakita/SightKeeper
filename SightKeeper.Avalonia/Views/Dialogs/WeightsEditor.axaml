@@ -24,6 +24,17 @@
                   SelectedItem="{Binding SelectedWeights}"
                   IsReadOnly="True">
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Date">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Panel ToolTip.Tip="{Binding CreationDate, StringFormat=F}"
+                                   Background="Transparent"> <!--Transparent background allows to point over non text area and see tooltip, it is impossible with null background which is default-->
+                                <TextBlock Text="{Binding CreationDate, StringFormat=d}"
+                                           VerticalAlignment="Center"/>
+                            </Panel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Size"
                                     Binding="{Binding Size}"/>
                 <DataGridTextColumn Header="Epoch"

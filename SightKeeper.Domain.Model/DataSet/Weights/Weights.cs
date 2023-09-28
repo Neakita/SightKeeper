@@ -4,6 +4,7 @@ namespace SightKeeper.Domain.Model;
 
 public sealed class Weights
 {
+    public DateTime CreationDate { get; private set; }
     public WeightsLibrary Library { get; private set; }
     public ONNXData ONNXData { get; private set; }
     public PTData PTData { get; private set; }
@@ -14,8 +15,18 @@ public sealed class Weights
     public float DeformationLoss { get; private set; }
     public IReadOnlyCollection<Asset> Assets { get; private set; }
 
-    internal Weights(WeightsLibrary library, byte[] onnxData, byte[] ptData, ModelSize size, uint epoch, float boundingLoss, float classificationLoss, float deformationLoss, IEnumerable<Asset> assets)
+    internal Weights(
+        WeightsLibrary library,
+        byte[] onnxData,
+        byte[] ptData,
+        ModelSize size,
+        uint epoch,
+        float boundingLoss,
+        float classificationLoss,
+        float deformationLoss,
+        IEnumerable<Asset> assets)
     {
+        CreationDate = DateTime.Now;
         Library = library;
         ONNXData = new ONNXData(onnxData);
         PTData = new PTData(ptData);
