@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 using SightKeeper.Avalonia.ViewModels.Elements;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;

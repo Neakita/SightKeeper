@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,9 +12,9 @@ using SightKeeper.Application.Scoring;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
 
-namespace SightKeeper.Avalonia.ViewModels.Annotating;
+namespace SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 
-public sealed partial class AutoAnnotationViewModel : ViewModel
+public sealed partial class AutoAnnotationViewModel : ViewModel, IAutoAnnotationViewModel
 {
     public IReadOnlyCollection<Weights> Weights => _selectedDataSetViewModel.Weights;
 
@@ -62,6 +63,7 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
     private readonly SelectedScreenshotViewModel _selectedScreenshotViewModel;
     private readonly SelectedDataSetViewModel _selectedDataSetViewModel;
 
+    ICommand IAutoAnnotationViewModel.AnnotateCommand => AnnotateCommand;
     [RelayCommand(CanExecute = nameof(CanAnnotate))]
     private async Task Annotate(CancellationToken cancellationToken)
     {
@@ -74,7 +76,8 @@ public sealed partial class AutoAnnotationViewModel : ViewModel
         ClearCommand.NotifyCanExecuteChanged();
     }
     private bool CanAnnotate() => SelectedWeights != null && _selectedScreenshotViewModel.Value != null && !AutoAnnotatingEnabled;
-    
+
+    ICommand IAutoAnnotationViewModel.ClearCommand => ClearCommand;
     [RelayCommand(CanExecute = nameof(CanClear))]
     private void Clear()
     {

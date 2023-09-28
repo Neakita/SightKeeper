@@ -2,11 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:annotatingViewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:autoAnnotatingViewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating"
+             mc:Ignorable="d" d:DesignWidth="250"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AutoAnnotation"
-             x:DataType="annotatingViewModels:AutoAnnotationViewModel">
+             x:DataType="autoAnnotatingViewModels:IAutoAnnotationViewModel">
+    <Design.DataContext>
+        <autoAnnotatingViewModels:FakeAutoAnnotationViewModel/>
+    </Design.DataContext>
     <StackPanel>
         <ComboBox ItemsSource="{Binding Weights}"
                   SelectedItem="{Binding SelectedWeights}"/>

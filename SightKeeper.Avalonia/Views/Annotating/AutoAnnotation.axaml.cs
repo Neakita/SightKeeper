@@ -1,5 +1,5 @@
 ﻿using Avalonia.ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Annotating;
+using SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 

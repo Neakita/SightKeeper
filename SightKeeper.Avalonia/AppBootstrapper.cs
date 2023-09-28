@@ -16,6 +16,7 @@ using SightKeeper.Application.Scoring;
 using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Annotating;
+using SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 using SightKeeper.Avalonia.ViewModels.Elements;

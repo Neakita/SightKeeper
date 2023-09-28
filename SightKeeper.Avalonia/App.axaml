@@ -3,6 +3,7 @@
              x:Class="SightKeeper.Avalonia.App"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:local="clr-namespace:SightKeeper.Avalonia"
+             xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
              RequestedThemeVariant="Dark">
 
     <Application.Resources>
@@ -20,9 +21,63 @@
         <materialIcons:MaterialIconStyles />
         <StyleInclude Source="avares://SightKeeper.Avalonia/Assets/Styles.axaml"/>
     </Application.Styles>
-    
+
     <Application.DataTemplates>
         <local:ViewLocator/>
+        <DataTemplate DataType="model:Weights">
+            <Panel Background="Transparent">
+                <TextBlock>
+                    <Run Text="{Binding CreationDate, StringFormat=d}"/>
+                    <Run Text="|"
+                         Foreground="DarkGray"/>
+                    <Run Text="{Binding Size}"/>
+                    <Run Text="|"
+                         Foreground="DarkGray"/>
+                    <Run Text="{Binding Epoch}"/>
+                    <LineBreak/>
+                    <Run Text="{Binding BoundingLoss, StringFormat=0.##}"/>
+                    <Run Text="|"
+                         Foreground="DarkGray"/>
+                    <Run Text="{Binding ClassificationLoss, StringFormat=0.##}"/>
+                    <Run Text="|"
+                         Foreground="DarkGray"/>
+                    <Run Text="{Binding DeformationLoss, StringFormat=0.##}"/>
+                </TextBlock>
+                <ToolTip.Tip>
+                    <TextBlock>
+                        <Run Text="Creation date:"
+                             Foreground="DarkGray"/>
+                        <Run Text="{Binding CreationDate, StringFormat=F}"/>
+                        <LineBreak/>
+                        <Run Text="Size:"
+                             Foreground="DarkGray"/>
+                        <Run Text="{Binding Size}"/>
+                        <LineBreak/>
+                        <Run Text="Epoch:"
+                             Foreground="DarkGray"/>
+                        <Run Text="{Binding Epoch}"/>
+                        <LineBreak/>
+                        <Run Text="Losses:"
+                             Foreground="DarkGray"/>
+                        <LineBreak/>
+                        <Run Text="  "/>
+                        <Run Text="Bounding"
+                             Foreground="DarkGray"/>
+                        <Run Text="{Binding BoundingLoss, StringFormat=0.##}"/>
+                        <LineBreak/>
+                        <Run Text="  "/>
+                        <Run Text="Classification"
+                             Foreground="DarkGray"/>
+                        <Run Text="{Binding ClassificationLoss, StringFormat=0.##}"/>
+                        <LineBreak/>
+                        <Run Text="  "/>
+                        <Run Text="Deformation"
+                             Foreground="DarkGray"/>
+                        <Run Text="{Binding DeformationLoss, StringFormat=0.##}"/>
+                    </TextBlock>
+                </ToolTip.Tip>
+            </Panel>
+        </DataTemplate>
     </Application.DataTemplates>
     
 </Application>
