@@ -129,7 +129,7 @@
             <Button Content="Delete"
                     Command="{Binding DeleteCommand}"
                     Foreground="IndianRed"
-                    IsVisible="{Binding $self.IsEnabled}"/>
+                    IsVisible="{Binding $self.IsEffectivelyEnabled}"/>
             <Button Content="Apply"
                     Command="{Binding ApplyCommand}"
                     Foreground="SeaGreen"/>

@@ -196,7 +196,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
 
     ICommand ProfileEditorViewModel.DeleteCommand => DeleteCommand;
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanDelete))]
     private void Delete()
     {
         Return(ProfileEditorResult.Delete);
