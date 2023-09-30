@@ -24,12 +24,14 @@
             <ComboBox ItemsSource="{Binding ModelsSizes}"
                       SelectedItem="{Binding SelectedModelSize}"
                       IsEnabled="{Binding !IsTraining}"
-                      PlaceholderText="Config"/>
+                      PlaceholderText="Size"
+                      IsVisible="{Binding !Resume}"/>
             
             <ComboBox ItemsSource="{Binding AvailableWeights^}"
                       SelectedItem="{Binding SelectedWeights}"
                       PlaceholderText="Weights"
-                      IsEnabled="{Binding !IsTraining}"/>
+                      IsEnabled="{Binding !IsTraining}"
+                      IsVisible="{Binding Resume}"/>
             
             <CheckBox Content="Resume"
                       IsChecked="{Binding Resume}"/>
