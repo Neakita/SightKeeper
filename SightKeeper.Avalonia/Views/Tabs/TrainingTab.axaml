@@ -59,9 +59,9 @@
         
                 <ProgressBar Value="{Binding Completion^}"
                              Maximum="1"
-                             IsIndeterminate="{Binding !Completion^}"/>
-        
-                <TextBlock Text="{Binding Completion^, StringFormat=P}"/>
+                             IsIndeterminate="{Binding !Completion^}"
+                             ShowProgressText="{Binding !!Completion^}"
+                             ProgressTextFormat="{}{0:P}"/> <!--ProgressTextFormat="P" displays not expected percent number, but just "P" symbol-->
 
             </StackPanel>
         </StackPanel>
