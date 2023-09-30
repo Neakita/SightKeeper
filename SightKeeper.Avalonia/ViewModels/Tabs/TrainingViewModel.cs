@@ -77,10 +77,10 @@ public sealed partial class TrainingViewModel : ViewModel
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
     private ModelSize? _selectedModelSize;
 
-    [ObservableProperty]
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
     private Weights? _selectedWeights;
 
-    [ObservableProperty]
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
     private bool _resume;
 
     public bool IsTraining
@@ -119,8 +119,13 @@ public sealed partial class TrainingViewModel : ViewModel
         IsTraining = false;
     }
 
-    public bool CanStartTraining() => SelectedDataSet != null && SelectedModelSize != null && Epochs != null;
-
+    public bool CanStartTraining()
+    {
+        var canBasicallyStart = SelectedDataSet != null && Epochs != null;
+        var canBeginFromScratch = !Resume && SelectedModelSize != null;
+        var canResume = Resume && SelectedWeights != null;
+        return canBasicallyStart && (canBeginFromScratch || canResume);
+    }
     
     private readonly BehaviorSubject<TrainingProgress?> _progress = new(null);
     private bool _isTraining;
