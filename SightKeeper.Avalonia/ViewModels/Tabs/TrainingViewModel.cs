@@ -109,12 +109,18 @@ public sealed partial class TrainingViewModel : ViewModel
         Guard.IsNotNull(SelectedModelSize);
         Guard.IsNotNull(Epochs);
         IsTraining = true;
-        if (SelectedWeights != null && Resume)
-            await _trainer.ResumeTrainingAsync(SelectedWeights, Epochs.Value,
-                Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
-        else
-            await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs.Value,
-                Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+        try
+        {
+            if (SelectedWeights != null && Resume)
+                await _trainer.ResumeTrainingAsync(SelectedWeights, Epochs.Value,
+                    Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+            else
+                await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs.Value,
+                    Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+        }
+        catch (TaskCanceledException)
+        {
+        }
         _progress.OnNext(null);
         IsTraining = false;
     }
