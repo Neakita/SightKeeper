@@ -97,7 +97,6 @@ public sealed class Trainer
 	{
 		DataSetConfigurationParameters dataSetParameters = new(Path.GetFullPath(DataDirectoryPath), dataSet.ItemClasses);
 		await _dataSetConfigurationExporter.Export(DataSetPath, dataSetParameters, cancellationToken);
-		_logger.Information("Exported dataset parameters: {Parameters}", dataSetParameters);
 	}
 	
 	private async Task ExportWeights(Weights weights, CancellationToken cancellationToken)

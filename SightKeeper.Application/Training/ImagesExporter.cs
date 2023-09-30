@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Serilog;
+using SerilogTimings.Extensions;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
@@ -46,15 +47,19 @@ public sealed class ImagesExporter
 	private readonly ScreenshotImageLoader _imageLoader;
 	private readonly ILogger _logger;
 
-	private Task ExportImages(string directoryPath, IReadOnlyCollection<Asset> assets, CancellationToken cancellationToken) =>
-		Task.WhenAll(assets.Select((asset, assetIndex) => ExportImage(directoryPath, asset, assetIndex, cancellationToken)));
+	private async Task ExportImages(string directoryPath, IReadOnlyCollection<Asset> assets, CancellationToken cancellationToken)
+	{
+		var operation = _logger.BeginOperation("Exporting images for {AssetsCount} assets", assets.Count);
+		await Task.WhenAll(assets.Select((asset, assetIndex) =>
+			ExportImage(directoryPath, asset, assetIndex, cancellationToken)));
+		operation.Complete();
+	}
 
 	private async Task ExportImage(string directoryPath, Asset asset, int assetIndex, CancellationToken cancellationToken)
 	{
 		var imagePath = Path.Combine(directoryPath, $"{assetIndex}.png");
 		var image = await _imageLoader.LoadAsync(asset.Screenshot, cancellationToken);
 		await ExportImage(imagePath, image.Content, cancellationToken);
-		_logger.Information("Exported image #{AssetIndex} to {Path}", assetIndex, imagePath);
 	}
 
 	private static Task ExportImage(string path, byte[] content, CancellationToken cancellationToken)
@@ -67,31 +72,39 @@ public sealed class ImagesExporter
 		}, cancellationToken);
 	}
 
-	private Task ExportLabels(
+	private async Task ExportLabels(
 		string directoryPath,
-		IEnumerable<Asset> assets,
+		IReadOnlyCollection<Asset> assets,
 		IReadOnlyCollection<ItemClass> itemClasses,
 		CancellationToken cancellationToken)
 	{
+		await LoadItems(assets, cancellationToken);
+		var operation = _logger.BeginOperation("Exporting labels for {AssetsCount} assets ({AssetsWithoutItems} without items) with {ItemsCount} items",
+			assets.Count,
+			assets.Count(asset => !asset.Items.Any()),
+			assets.SelectMany(asset => asset.Items).Count());
 		var itemClassesWithIndexes = itemClasses
 			.Select((itemClass, itemClassIndex) => (itemClass, itemClassIndex))
 			.ToDictionary(tuple => tuple.itemClass, tuple => (byte)tuple.itemClassIndex);
 		_logger.Debug("Item classes by indexes: {ItemClasses}", itemClassesWithIndexes);
-		return Task.WhenAll(assets.Select((asset, assetIndex) => ExportLabels(directoryPath, asset, assetIndex, itemClassesWithIndexes, cancellationToken)));
+		await Task.WhenAll(assets.Select((asset, assetIndex) => ExportLabels(directoryPath, asset, assetIndex, itemClassesWithIndexes, cancellationToken)));
+		operation.Complete();
+	}
+
+	private async Task LoadItems(IReadOnlyCollection<Asset> assets, CancellationToken cancellationToken)
+	{
+		var operation = _logger.BeginOperation("Loading items for {AssetsCount} assets", assets.Count);
+		foreach (var asset in assets)
+			await _assetsDataAccess.LoadItems(asset, cancellationToken);
+		operation.Complete();
 	}
 
 	private async Task ExportLabels(string directoryPath, Asset asset, int assetIndex, Dictionary<ItemClass, byte> itemClasses, CancellationToken cancellationToken)
 	{
-		await _assetsDataAccess.LoadItems(asset, cancellationToken);
 		if (!asset.Items.Any())
 			return;
 		var labelPath = Path.Combine(directoryPath, $"{assetIndex}.txt");
 		await ExportLabels(labelPath, asset, itemClasses, cancellationToken);
-		_logger.Information("Exported labels #{AssetIndex} to {Path} with {ItemsCount} annotations ({AnnotationClasses})",
-			assetIndex,
-			labelPath,
-			asset.Items.Count,
-			asset.Items.Select(item => item.ItemClass).Distinct());
 	}
 
 	private async Task ExportLabels(
