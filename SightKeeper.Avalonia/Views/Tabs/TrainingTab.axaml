@@ -34,7 +34,8 @@
                       IsVisible="{Binding Resume}"/>
             
             <CheckBox Content="Resume"
-                      IsChecked="{Binding Resume}"/>
+                      IsChecked="{Binding Resume}"
+                      IsEnabled="{Binding !IsTraining}"/>
         
             <NumericUpDown Value="{Binding Epochs}"
                            Minimum="100"
