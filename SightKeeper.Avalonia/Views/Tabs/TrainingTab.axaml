@@ -20,6 +20,10 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            
+            <CheckBox Content="Resume"
+                      IsChecked="{Binding Resume}"
+                      IsEnabled="{Binding !IsTraining}"/>
         
             <ComboBox ItemsSource="{Binding ModelsSizes}"
                       SelectedItem="{Binding SelectedModelSize}"
@@ -32,10 +36,6 @@
                       PlaceholderText="Weights"
                       IsEnabled="{Binding !IsTraining}"
                       IsVisible="{Binding Resume}"/>
-            
-            <CheckBox Content="Resume"
-                      IsChecked="{Binding Resume}"
-                      IsEnabled="{Binding !IsTraining}"/>
         
             <NumericUpDown Value="{Binding Epochs}"
                            Minimum="100"
