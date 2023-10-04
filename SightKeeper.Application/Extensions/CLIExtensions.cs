@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using Serilog;
-using Serilog.Core;
 
 namespace SightKeeper.Application.Extensions;
 
@@ -18,7 +17,6 @@ public static class CLIExtensions
     
     public static IObservable<string?> RunCLICommand(string arguments, ILogger? logger = null, CancellationToken cancellationToken = default)
     {
-        logger ??= Logger.None;
         Process process = new();
         process.EnableRaisingEvents = true;
         process.StartInfo = StartInfo;
@@ -26,13 +24,13 @@ public static class CLIExtensions
         cancellationToken.Register(() =>
         {
             process.Kill();
-            logger.Debug("Process terminated");
+            logger?.Debug("Process terminated");
         });
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
-        _ = process.PassArguments(arguments);
+        _ = process.PassArguments(arguments, logger);
         var outputDataStream = process.ObserveDataReceived();
-        outputDataStream.WhereNotNull().Subscribe(data => logger.Verbose("[CLI] {Data}", data));
+        outputDataStream.WhereNotNull().Subscribe(data => logger?.Verbose("[CLI] {Data}", data));
         return outputDataStream;
     }
     
