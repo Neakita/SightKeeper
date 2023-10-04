@@ -27,6 +27,7 @@ public sealed class Trainer
 		Domain.Model.DataSet dataSet,
 		ModelSize size,
 		uint epochs,
+		ushort patience,
 		IObserver<TrainingProgress> trainingProgressObserver,
 		CancellationToken cancellationToken = default)
 	{
@@ -34,7 +35,7 @@ public sealed class Trainer
 		await _imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
 		await ExportDataSet(dataSet, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), _logger);
-		CLITrainerArguments arguments = new(DataSetPath, size, epochs, dataSet.Resolution, false, AMP);
+		CLITrainerArguments arguments = new(DataSetPath, size, epochs, patience, dataSet.Resolution, false, AMP);
 		var outputStream = CLIExtensions.RunCLICommand(arguments.ToString(), _logger, cancellationToken);
 		TrainerParser.Parse(outputStream.WhereNotNull(), out var trainingProgress);
 		using var trainingProgressObserverDisposable = trainingProgress
@@ -54,6 +55,7 @@ public sealed class Trainer
 	public async Task<Weights?> ResumeTrainingAsync(
 		Weights weights,
 		uint epochs,
+		ushort patience,
 		IObserver<TrainingProgress> trainingProgressObserver,
 		CancellationToken cancellationToken = default)
 	{
@@ -63,7 +65,7 @@ public sealed class Trainer
 		await ExportDataSet(dataSet, cancellationToken);
 		await ExportWeights(weights, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), _logger);
-		CLITrainerArguments arguments = new(DataSetPath, Path.GetFullPath(WeightsToResumeTrainingOnPath), epochs, dataSet.Resolution, false, AMP);
+		CLITrainerArguments arguments = new(DataSetPath, Path.GetFullPath(WeightsToResumeTrainingOnPath), epochs, patience, dataSet.Resolution, false, AMP);
 		var outputStream = CLIExtensions.RunCLICommand(arguments.ToString(), _logger, cancellationToken);
 		TrainerParser.Parse(outputStream.WhereNotNull(), out var trainingProgress);
 		using var trainingProgressObserverDisposable = trainingProgress

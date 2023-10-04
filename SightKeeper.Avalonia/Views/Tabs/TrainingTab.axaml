@@ -43,6 +43,14 @@
                            Increment="100"
                            IsEnabled="{Binding !IsTraining}"/>
             
+            <NumericUpDown Value="{Binding Patience}"
+                           Minimum="10"
+                           Maximum="10000"
+                           Increment="10"
+                           IsEnabled="{Binding !IsTraining}"
+                           Watermark="Patience"
+                           ToolTip.Tip="Epochs to wait for no observable improvement for early stopping of training"/>
+            
             <CheckBox Content="AMP"
                       IsChecked="{Binding AMP}"
                       IsEnabled="{Binding !IsTraining}"/>

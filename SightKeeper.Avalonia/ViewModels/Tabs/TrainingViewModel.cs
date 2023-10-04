@@ -53,6 +53,17 @@ public sealed partial class TrainingViewModel : ViewModel
             StartTrainingCommand.NotifyCanExecuteChanged();
         }
     }
+    
+    public ushort Patience
+    {
+        get => _patience;
+        set
+        {
+            if (!SetProperty(ref _patience, value))
+                return;
+            StartTrainingCommand.NotifyCanExecuteChanged();
+        }
+    }
 
     public bool AMP
     {
@@ -106,17 +117,19 @@ public sealed partial class TrainingViewModel : ViewModel
     public async Task StartTraining(CancellationToken cancellationToken)
     {
         Guard.IsNotNull(SelectedDataSet);
-        Guard.IsNotNull(SelectedModelSize);
         Guard.IsNotNull(Epochs);
         IsTraining = true;
         try
         {
             if (SelectedWeights != null && Resume)
-                await _trainer.ResumeTrainingAsync(SelectedWeights, Epochs.Value,
+                await _trainer.ResumeTrainingAsync(SelectedWeights, Epochs.Value, Patience,
                     Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
             else
-                await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs.Value,
+            {
+                Guard.IsNotNull(SelectedModelSize);
+                await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs.Value, Patience,
                     Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+            }
         }
         catch (TaskCanceledException)
         {
@@ -136,4 +149,5 @@ public sealed partial class TrainingViewModel : ViewModel
     private readonly BehaviorSubject<TrainingProgress?> _progress = new(null);
     private bool _isTraining;
     private uint? _epochs = 100;
+    private ushort _patience = 50;
 }

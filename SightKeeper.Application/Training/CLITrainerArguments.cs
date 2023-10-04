@@ -17,26 +17,29 @@ public sealed class CLITrainerArguments
     public string Data { get; set; }
     public string Model { get; set; }
     public uint Epochs { get; set; }
+    public ushort Patience { get; set; }
     public ushort ImageSize { get; set; }
     public bool Resume { get; set; }
     public bool AMP { get; set; }
 
-    public CLITrainerArguments(string data, string model, uint epochs, ushort imageSize, bool resume = false, bool amp = true)
+    public CLITrainerArguments(string data, string model, uint epochs, ushort patience, ushort imageSize, bool resume = false, bool amp = true)
     {
         Data = data;
         Model = model;
         Epochs = epochs;
+        Patience = patience;
         ImageSize = imageSize;
         Resume = resume;
         AMP = amp;
     }
 
-    public CLITrainerArguments(string data, ModelSize modelSize, uint epochs, ushort imageSize, bool resume = false, bool amp = true)
+    public CLITrainerArguments(string data, ModelSize modelSize, uint epochs, ushort patience, ushort imageSize, bool resume = false, bool amp = true)
     {
         Data = data;
         Model = ModelSizes[modelSize];
         ImageSize = imageSize;
         Epochs = epochs;
+        Patience = patience;
         Resume = resume;
         AMP = amp;
     }
@@ -52,6 +55,7 @@ public sealed class CLITrainerArguments
         yield return $"model={Model}";
         yield return $"imgsz={ImageSize}";
         yield return $"epochs={Epochs}";
+        yield return $"patience={Patience}";
         if (Resume)
             yield return "resume=true";
         if (!AMP)
