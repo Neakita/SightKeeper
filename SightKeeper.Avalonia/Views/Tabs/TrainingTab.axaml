@@ -53,7 +53,8 @@
             
             <CheckBox Content="AMP"
                       IsChecked="{Binding AMP}"
-                      IsEnabled="{Binding !IsTraining}"/>
+                      IsEnabled="{Binding !IsTraining}"
+                      ToolTip.Tip="Automatic Mixed Precision (AMP) training (May help with issues with some GPUs)"/>
         
             <Button Content="{icons:MaterialIconExt Play}"
                     Command="{Binding StartTrainingCommand}"/>
