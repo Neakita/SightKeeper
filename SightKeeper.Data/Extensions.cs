@@ -9,11 +9,11 @@ public static class Extensions
 
     public static EntityTypeBuilder<TEntity> HasShadowKey<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class
     {
-        builder.Property<int>(IdPropertyName);
+        builder.Property<long>(IdPropertyName);
         builder.HasKey(IdPropertyName);
         return builder;
     }
 
-    public static PropertyEntry<TEntity, int> IdProperty<TEntity>(this EntityEntry<TEntity> entry) where TEntity : class =>
-        entry.Property<int>(IdPropertyName);
+    public static PropertyEntry<TEntity, long> IdProperty<TEntity>(this EntityEntry<TEntity> entry) where TEntity : class =>
+        entry.Property<long>(IdPropertyName);
 }
