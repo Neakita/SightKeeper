@@ -9,7 +9,8 @@ public sealed class WeightsConfiguration : IEntityTypeConfiguration<Weights>
 {
     public void Configure(EntityTypeBuilder<Weights> builder)
     {
-        builder.HasShadowKey();
+        builder.HasKey(weights => weights.Id);
+        builder.HasFlakeId(weights => weights.Id);
         builder
             .HasMany(weights => weights.Assets)
             .WithMany()

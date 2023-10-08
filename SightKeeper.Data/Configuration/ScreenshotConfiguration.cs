@@ -8,8 +8,9 @@ public sealed class ScreenshotConfiguration : IEntityTypeConfiguration<Screensho
 {
     public void Configure(EntityTypeBuilder<Screenshot> builder)
     {
+        builder.HasKey(screenshot => screenshot.Id);
+        builder.HasFlakeId(screenshot => screenshot.Id);
         builder.ToTable("Screenshots");
-        builder.HasShadowKey();
         builder.HasOne(screenshot => screenshot.Asset).WithOne(asset => asset.Screenshot).HasPrincipalKey<Screenshot>();
         builder.HasOne(screenshot => screenshot.Image).WithOne().HasPrincipalKey<Screenshot>().IsRequired();
         builder.Navigation(screenshot => screenshot.Asset).AutoInclude();

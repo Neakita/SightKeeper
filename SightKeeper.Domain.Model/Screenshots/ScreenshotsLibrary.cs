@@ -1,11 +1,13 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
+using FlakeId;
 
 namespace SightKeeper.Domain.Model;
 
 public sealed class ScreenshotsLibrary
 {
+    public Id Id { get; private set; }
     public IObservable<Screenshot> ScreenshotAdded => _screenshotAdded.AsObservable();
     private readonly Subject<Screenshot> _screenshotAdded = new();
     public IObservable<Screenshot> ScreenshotRemoved => _screenshotRemoved.AsObservable();

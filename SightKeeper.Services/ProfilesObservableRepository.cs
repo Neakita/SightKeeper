@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using CommunityToolkit.Diagnostics;
 using DynamicData;
+using Serilog;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
@@ -35,6 +36,11 @@ public sealed class ProfilesObservableRepository : IDisposable
     {
         profilesDataAccess.LoadProfiles().Subscribe(AddProfile);
     }
-    private void AddProfile(Profile profile) => _profiles.Add(profile);
+    private void AddProfile(Profile profile)
+    {
+        Log.Debug("Profile Id: {Id}", profile.Id);
+        _profiles.Add(profile);
+    }
+
     private void RemoveProfile(Profile profile) => Guard.IsTrue(_profiles.Remove(profile));
 }

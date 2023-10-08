@@ -8,8 +8,9 @@ public sealed class DetectorItemConfiguration : IEntityTypeConfiguration<Detecto
 {
     public void Configure(EntityTypeBuilder<DetectorItem> builder)
     {
+        builder.HasKey(item => item.Id);
+        builder.HasFlakeId(item => item.Id);
         builder.ToTable("DetectorItems");
-        builder.HasShadowKey();
         builder.OwnsOne(item => item.Bounding, boundingBuilder =>
         {
             boundingBuilder.Property(bounding => bounding.Left).HasColumnName("BoundingLeft");

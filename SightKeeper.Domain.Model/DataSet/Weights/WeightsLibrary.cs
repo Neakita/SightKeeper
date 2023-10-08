@@ -1,10 +1,12 @@
 ﻿using CommunityToolkit.Diagnostics;
+using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
 public sealed class WeightsLibrary
 {
+    public Id Id { get; private set; }
     public DataSet DataSet { get; private set; }
     public IReadOnlyCollection<Weights> Weights => _weights;
 

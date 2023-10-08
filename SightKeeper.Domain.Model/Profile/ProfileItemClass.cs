@@ -1,9 +1,11 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using FlakeId;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
 public sealed class ProfileItemClass
 {
+    public Id Id { get; private set; }
     public ItemClass ItemClass { get; private set; }
     public byte Index { get; internal set; }
     public ItemClassActivationCondition ActivationCondition { get; set; }

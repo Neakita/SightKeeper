@@ -8,7 +8,8 @@ public sealed class ItemClassConfiguration : IEntityTypeConfiguration<ItemClass>
 {
     public void Configure(EntityTypeBuilder<ItemClass> builder)
     {
+        builder.HasKey(itemClass => itemClass.Id);
+        builder.HasFlakeId(itemClass => itemClass.Id);
         builder.ToTable("ItemClasses");
-        builder.HasShadowKey();
     }
 }

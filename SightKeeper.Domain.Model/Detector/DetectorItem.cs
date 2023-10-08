@@ -1,9 +1,11 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using FlakeId;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
 
 public sealed class DetectorItem
 {
+	public Id Id { get; private set; }
 	public Asset Asset { get; private set; }
 	public ItemClass ItemClass { get; set; }
 	public Bounding Bounding { get; private set; }

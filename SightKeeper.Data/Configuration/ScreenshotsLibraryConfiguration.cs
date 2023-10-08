@@ -8,7 +8,8 @@ public sealed class ScreenshotsLibraryConfiguration : IEntityTypeConfiguration<S
 {
     public void Configure(EntityTypeBuilder<ScreenshotsLibrary> builder)
     {
-        builder.HasShadowKey();
+        builder.HasKey(library => library.Id);
+        builder.HasFlakeId(library => library.Id);
         builder.ToTable("ScreenshotsLibraries");
     }
 }

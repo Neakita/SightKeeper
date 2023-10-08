@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using System.Linq.Expressions;
+using FlakeId;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SightKeeper.Data;
@@ -6,11 +8,12 @@ namespace SightKeeper.Data;
 public static class Extensions
 {
     private const string IdPropertyName = "Id";
-
-    public static EntityTypeBuilder<TEntity> HasShadowKey<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class
+    
+    public static EntityTypeBuilder<TEntity> HasFlakeId<TEntity>(this EntityTypeBuilder<TEntity> builder, Expression<Func<TEntity, Id>> propertyExpression) where TEntity : class
     {
-        builder.Property<long>(IdPropertyName);
-        builder.HasKey(IdPropertyName);
+        builder.Property(propertyExpression)
+            .HasValueGenerator<FlakeIdGenerator>()
+            .HasConversion<long>(id => id, number => new Id(number));
         return builder;
     }
 

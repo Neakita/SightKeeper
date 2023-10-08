@@ -1,7 +1,10 @@
-﻿namespace SightKeeper.Domain.Model.Common;
+﻿using FlakeId;
+
+namespace SightKeeper.Domain.Model.Common;
 
 public sealed class Game
 {
+	public Id Id { get; private set; }
 	public string Title { get; set; }
 	public string ProcessName { get; set; }
 	

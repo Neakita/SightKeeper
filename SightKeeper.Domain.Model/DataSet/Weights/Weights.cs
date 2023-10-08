@@ -1,9 +1,11 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using FlakeId;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
 public sealed class Weights
 {
+    public Id Id { get; private set; }
     public DateTime CreationDate { get; private set; }
     public WeightsLibrary Library { get; private set; }
     public ONNXData ONNXData { get; private set; }

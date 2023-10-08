@@ -1,9 +1,11 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using FlakeId;
+using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
 public sealed class Screenshot
 {
+	public Id Id { get; private set; }
 	public Image Image { get; private set; }
 	public DateTime CreationDate { get; private set; }
 	public Asset? Asset { get; internal set; }

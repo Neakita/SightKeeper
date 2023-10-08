@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Diagnostics;
+using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
 public sealed class DataSet
 {
+	public Id Id { get; private set; }
 	public string Name { get; set; }
 	public string Description { get; set; }
 	public Game? Game { get; set; }

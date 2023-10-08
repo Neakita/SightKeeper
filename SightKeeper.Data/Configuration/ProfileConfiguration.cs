@@ -8,7 +8,8 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
 {
     public void Configure(EntityTypeBuilder<Profile> builder)
     {
-        builder.HasShadowKey();
+        builder.HasKey(profile => profile.Id);
+        builder.HasFlakeId(profile => profile.Id);
         builder.HasMany(profile => profile.ItemClasses).WithOne().IsRequired();
         builder.HasIndex(profile => profile.Name).IsUnique();
         builder.Navigation(profile => profile.Weights).AutoInclude();

@@ -1,10 +1,12 @@
-﻿using SightKeeper.Domain.Model.Detector;
+﻿using FlakeId;
+using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Model.Exceptions;
 
 namespace SightKeeper.Domain.Model.Common;
 
 public sealed class Asset
 {
+    public Id Id { get; private set; }
     public DataSet DataSet { get; private set; }
     public Screenshot Screenshot { get; private set; }
     public AssetUsage Usage { get; set; }

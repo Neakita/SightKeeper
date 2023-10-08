@@ -76,7 +76,8 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ProfileItemClassConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
 		modelBuilder.Entity<Asset>().Navigation(asset => asset.Screenshot).AutoInclude();
-		modelBuilder.Entity<WeightsData>().HasShadowKey();
+		modelBuilder.Entity<WeightsData>().HasKey(weightsData => weightsData.Id);
+		modelBuilder.Entity<WeightsData>().HasFlakeId(weightsData => weightsData.Id);
 		modelBuilder.Entity<PTData>().ToTable("PTData");
 		modelBuilder.Entity<ONNXData>().ToTable("ONNXData");
 	}
