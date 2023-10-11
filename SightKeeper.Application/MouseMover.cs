@@ -2,7 +2,7 @@
 
 public interface MouseMover
 {
-    IObservable<(short xDelta, short yDelta)> Moved { get; }
-    void Move(short xDelta, short yDelta);
-    void SetPosition(short x, short y);
+    IObservable<(int xDelta, int yDelta)> Moved { get; }
+    void Move(int xDelta, int yDelta);
+    void SetPosition(int x, int y);
 }

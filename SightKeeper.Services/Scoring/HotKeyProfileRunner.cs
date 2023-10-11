@@ -193,8 +193,8 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         var moveVector = GetMoveVector(rectangle);
         moveVector = moveVector * _currentProfile.Weights.Library.DataSet.Resolution / 2;
         moveVector *= _currentProfile.MouseSensitivity;
-        var moveX = (short)Math.Round(moveVector.X);
-        var moveY = (short)Math.Round(moveVector.Y);
+        var moveX = (int)Math.Round(moveVector.X);
+        var moveY = (int)Math.Round(moveVector.Y);
         _mouseMover.Move(moveX, moveY);
     }
 
