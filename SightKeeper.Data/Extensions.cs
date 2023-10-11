@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using FlakeId;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SightKeeper.Data;
@@ -16,7 +15,4 @@ public static class Extensions
             .HasConversion<long>(id => id, number => new Id(number));
         return builder;
     }
-
-    public static PropertyEntry<TEntity, long> IdProperty<TEntity>(this EntityEntry<TEntity> entry) where TEntity : class =>
-        entry.Property<long>(IdPropertyName);
 }

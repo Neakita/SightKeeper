@@ -30,9 +30,7 @@ public sealed class DetectorAssetTests : DbRelatedTests
         var asset = dataSet.MakeAsset(screenshot3);
         using var dbContext = DbContextFactory.CreateDbContext();
         dbContext.Add(dataSet);
-        var screenshotId = dbContext.Entry(screenshot3).IdProperty().CurrentValue;
-        var assetId = dbContext.Entry(asset).IdProperty().CurrentValue;
-        screenshotId.Should().Be(assetId);
+        screenshot3.Id.Should().Be(asset.Id);
     }
 
     [Fact]
