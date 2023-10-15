@@ -7,14 +7,14 @@ using CommunityToolkit.Diagnostics;
 using Serilog;
 using SharpHook.Native;
 using SightKeeper.Application;
-using SightKeeper.Application.Scoring;
+using SightKeeper.Application.Prediction;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services.Input;
 
-namespace SightKeeper.Services.Scoring;
+namespace SightKeeper.Services.Prediction;
 
 public sealed class HotKeyProfileRunner : ProfileRunner
 {

@@ -8,7 +8,7 @@ using Serilog.Events;
 using SerilogTimings;
 using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Application.Scoring;
+namespace SightKeeper.Application.Prediction;
 
 public sealed class StreamDetector
 {

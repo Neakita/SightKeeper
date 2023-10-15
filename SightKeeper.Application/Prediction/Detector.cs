@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Application.Scoring;
+namespace SightKeeper.Application.Prediction;
 
 public interface Detector
 {

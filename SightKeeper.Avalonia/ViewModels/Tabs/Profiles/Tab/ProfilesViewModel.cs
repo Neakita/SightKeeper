@@ -5,7 +5,7 @@ using Autofac;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
-using SightKeeper.Application.Scoring;
+using SightKeeper.Application.Prediction;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 using SightKeeper.Domain.Services;

@@ -8,7 +8,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using SightKeeper.Application.Scoring;
+using SightKeeper.Application.Prediction;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Detector;
 

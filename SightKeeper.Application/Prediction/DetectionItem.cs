@@ -1,7 +1,7 @@
 ﻿using SightKeeper.Domain.Model.Common;
 using RectangleF = System.Drawing.RectangleF;
 
-namespace SightKeeper.Application.Scoring;
+namespace SightKeeper.Application.Prediction;
 
 public readonly struct DetectionItem
 {

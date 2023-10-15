@@ -3,14 +3,14 @@ using Compunet.YoloV8;
 using Compunet.YoloV8.Data;
 using Compunet.YoloV8.Metadata;
 using SerilogTimings;
-using SightKeeper.Application.Scoring;
+using SightKeeper.Application.Prediction;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using RectangleF = System.Drawing.RectangleF;
 
-namespace SightKeeper.Services.Scoring;
+namespace SightKeeper.Services.Prediction;
 
 public sealed class ONNXDetector : Detector
 {
