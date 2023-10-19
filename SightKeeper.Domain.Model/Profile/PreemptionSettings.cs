@@ -6,7 +6,7 @@ public sealed class PreemptionSettings
 {
 	public float HorizontalFactor { get; private set; }
 	public float VerticalFactor { get; private set; }
-	public PreemptionStabilizationSettings StabilizationSettings { get; private set; }
+	public PreemptionStabilizationSettings? StabilizationSettings { get; private set; }
 
 	public PreemptionSettings(float horizontalFactor, float verticalFactor, byte bufferSize, PreemptionStabilizationMethod method)
 	{
