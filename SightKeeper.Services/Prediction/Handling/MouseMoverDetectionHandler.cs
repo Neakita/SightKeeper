@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Serilog;
 using SharpHook.Native;
+using SightKeeper.Application;
 using SightKeeper.Application.Prediction;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
@@ -15,9 +16,9 @@ namespace SightKeeper.Services.Prediction.Handling;
 
 public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
 {
-    public IObservable<float?> RequestedProbabilityThreshold => Observable.Return<float?>(_profile.DetectionThreshold);
+    public IObservable<float?> RequestedProbabilityThreshold { get; }
     
-    public MouseMoverDetectionHandler(Profile profile, Application.MouseMover mouseMover, SharpHookHotKeyManager hotKeyManager)
+    public MouseMoverDetectionHandler(Profile profile, MouseMover mouseMover, SharpHookHotKeyManager hotKeyManager, ProfileEditor profileEditor)
     {
         _profile = profile;
         _mouseMover = mouseMover;
@@ -34,6 +35,10 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
                     () => _isFiring = false)
                 .DisposeWithEx(_constructorDisposables);
         }
+        
+        RequestedProbabilityThreshold = profileEditor.ProfileEdited
+            .Where(editedProfile => editedProfile == profile)
+            .Select(editedProfile => (float?)editedProfile.DetectionThreshold);
     }
 
     public void OnNext(DetectionData data)
@@ -58,7 +63,7 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     private readonly Profile _profile;
     private readonly Dictionary<ItemClass, byte> _itemClassesIndexes;
     private readonly Dictionary<ItemClass, ProfileItemClass> _profileItemClasses;
-    private readonly Application.MouseMover _mouseMover;
+    private readonly MouseMover _mouseMover;
     private readonly CompositeDisposable _constructorDisposables = new();
     private bool _isFiring;
     private bool _disposed;

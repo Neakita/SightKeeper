@@ -1,6 +1,5 @@
 ﻿using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Autofac;
 using CommunityToolkit.Diagnostics;
 using SharpHook.Native;
@@ -61,20 +60,17 @@ public sealed class HotKeyProfileRunner : ProfileRunner
             .Subscribe(OnProfileEdited)
             .DisposeWithEx(_session.Disposables);
 
-        _session.Handler.RequestedProbabilityThreshold.CombineLatest(_profileDetectionThreshold).Subscribe(t =>
+        _session.Handler.RequestedProbabilityThreshold.Subscribe(threshold =>
         {
-            var lowest = Math.Min(t.First ?? 1, t.Second ?? 1);
-            _streamDetector.ProbabilityThreshold = lowest;
+            if (threshold != null)
+                _streamDetector.ProbabilityThreshold = threshold.Value;
         });
-        
-        _profileDetectionThreshold.OnNext(profile.DetectionThreshold);
     }
 
     private void OnProfileEdited(Profile profile)
     {
         _streamDetector.Weights = profile.Weights;
         _streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
-        _profileDetectionThreshold.OnNext(profile.DetectionThreshold);
         if (_session == null)
             return;
         _session.Scope.Dispose();
@@ -129,6 +125,5 @@ public sealed class HotKeyProfileRunner : ProfileRunner
     private readonly SharpHookHotKeyManager _hotKeyManager;
     private readonly ProfileEditor _profileEditor;
     private readonly ILifetimeScope _scope;
-    private readonly BehaviorSubject<float?> _profileDetectionThreshold = new(null);
     private Session? _session;
 }
