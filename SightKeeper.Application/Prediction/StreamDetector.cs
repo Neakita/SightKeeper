@@ -50,7 +50,11 @@ public sealed class StreamDetector
 
                             var result = await _detector.Detect(image, CancellationToken.None);
                             if (IsEnabled)
+                            {
+                                using var handlingOperation = Operation.Begin("Detection handling");
                                 observer.OnNext(new DetectionData(image, result.ToImmutableList()));
+                                handlingOperation.Complete();
+                            }
                             operation.Complete();
                         }
                     });
