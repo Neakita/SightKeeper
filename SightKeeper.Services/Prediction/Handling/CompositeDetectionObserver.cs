@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Reactive.Linq;
+using Serilog;
 using SightKeeper.Application.Prediction;
 
 namespace SightKeeper.Services.Prediction.Handling;
@@ -24,6 +25,9 @@ public sealed class CompositeDetectionObserver : DetectionObserver
     public CompositeDetectionObserver(IEnumerable<DetectionObserver> observers)
     {
         _observers = observers.ToImmutableList();
+        Log.ForContext<CompositeDetectionObserver>().Debug("Composite detection observer created with {Count} observers:\n{Observers}",
+            _observers.Count,
+            string.Join("\n", _observers.Select((observer, index) => $"#{index} {observer.GetType().Name}")));
     }
     
     public void OnNext(DetectionData data)

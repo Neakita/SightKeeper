@@ -91,7 +91,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DbDataSetsDataAccess>().As<DataSetsDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<DbDataSetEditor>().As<Application.DataSet.Editing.DataSetEditor>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetChangesValidator>().As<IValidator<DataSetChanges>>();
-		builder.RegisterType<Application.Annotating.Screenshoter>();
+		builder.RegisterType<Screenshoter>();
 		builder.RegisterType<DataSetScreenshoter>();
 		builder.RegisterType<HotKeyScreenshoter>().As<StreamDataSetScreenshoter>();
 		builder.RegisterType<SharpHookHotKeyManager>().SingleInstance();
@@ -119,10 +119,10 @@ public static class AppBootstrapper
 		builder.RegisterType<EditedProfileDataValidator>().As<IValidator<EditedProfileData>>();
 		builder.RegisterType<HotKeyProfileRunner>().As<ProfileRunner>();
 		builder.RegisterType<StreamDetector>();
-		builder.RegisterType<WindowsMouseMover>().As<Application.MouseMover>().SingleInstance();
+		builder.RegisterType<WindowsMouseMover>().As<MouseMover>().SingleInstance();
 		builder.RegisterType<DetectionScreenshotingParameters>().SingleInstance();
-		builder.RegisterType<ScreenshoterDetectionHandler>().As<DetectionObserver>();
 		builder.RegisterType<MouseMoverDetectionHandler>().As<DetectionObserver>();
+		builder.RegisterType<ScreenshoterDetectionHandler>().As<DetectionObserver>();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
