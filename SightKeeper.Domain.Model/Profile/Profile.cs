@@ -39,6 +39,8 @@ public sealed class Profile
             _postProcessDelay = value;
         }
     }
+    
+    public PreemptionSettings? PreemptionSettings { get; set; }
 
     public Weights Weights
     {
