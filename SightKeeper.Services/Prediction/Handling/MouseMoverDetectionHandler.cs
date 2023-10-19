@@ -22,9 +22,6 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     {
         _profile = profile;
         _mouseMover = mouseMover;
-        _itemClassesIndexes = profile.ItemClasses.ToDictionary(
-            profileItemClass => profileItemClass.ItemClass,
-            profileItemClass => profileItemClass.Index);
         _profileItemClasses = profile.ItemClasses.ToDictionary(
             profileItemClass => profileItemClass.ItemClass,
             profileItemClass => profileItemClass);
@@ -61,7 +58,6 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     }
 
     private readonly Profile _profile;
-    private readonly Dictionary<ItemClass, byte> _itemClassesIndexes;
     private readonly Dictionary<ItemClass, ProfileItemClass> _profileItemClasses;
     private readonly MouseMover _mouseMover;
     private readonly CompositeDisposable _constructorDisposables = new();
@@ -71,7 +67,7 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     private IEnumerable<DetectionItem> WhereSuitable(IEnumerable<DetectionItem> items)
     {
         return items
-            .Where(item => item.Probability >= _profile.DetectionThreshold && _itemClassesIndexes.ContainsKey(item.ItemClass))
+            .Where(item => item.Probability >= _profile.DetectionThreshold && _profileItemClasses.ContainsKey(item.ItemClass))
             .Where(IsFiringModePassing);
     }
     
@@ -86,7 +82,7 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     private float GetItemOrder(DetectionItem item)
     {
         var distance = GetNormalizedDistanceTo(item.Bounding);
-        var itemClassIndex = _itemClassesIndexes[item.ItemClass];
+        var itemClassIndex = _profileItemClasses[item.ItemClass].Index;
         var order = distance + itemClassIndex;
         Log.Debug("Order of item {Item} is {Order} (Distance: {Distance}, Item class index: {ItemClassIndex})",
             item, order, distance, itemClassIndex);
