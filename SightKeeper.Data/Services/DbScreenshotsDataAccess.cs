@@ -53,6 +53,15 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         return screenshotsPartitionsSubject.AsObservable();
     }
 
+    public Task<bool> IsLoaded(ScreenshotsLibrary library)
+    {
+        return Task.Run(() =>
+        {
+            lock (_dbContext)
+                return _dbContext.Entry(library).Collection(lib => lib.Screenshots).IsLoaded;
+        }); 
+    }
+
     private IEnumerable<ImmutableList<Screenshot>> LoadScreenshotsPartitions(
         IQueryable<Screenshot> screenshotsQuery, bool byDescending)
     {

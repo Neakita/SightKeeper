@@ -9,6 +9,7 @@ using SightKeeper.Application.Prediction;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 using SightKeeper.Domain.Services;
+using SightKeeper.Services.Prediction.Handling;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
@@ -16,34 +17,34 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
 {
     public bool MakeScreenshots
     {
-        get => _profileRunner.MakeScreenshots;
-        set => SetProperty(_profileRunner.MakeScreenshots, value, newValue => _profileRunner.MakeScreenshots = newValue);
+        get => _screenshotingParameters.MakeScreenshots;
+        set => SetProperty(_screenshotingParameters.MakeScreenshots, value, newValue => _screenshotingParameters.MakeScreenshots = newValue);
     }
     public float MinimumProbability
     {
-        get => _profileRunner.MinimumProbability;
-        set => SetProperty(_profileRunner.MinimumProbability, value, newValue =>
+        get => _screenshotingParameters.MinimumProbability;
+        set => SetProperty(_screenshotingParameters.MinimumProbability, value, newValue =>
         {
             if (MaximumProbability <= newValue)
                 MaximumProbability = newValue + 0.1f;
-            _profileRunner.MinimumProbability = newValue;
+            _screenshotingParameters.MinimumProbability = newValue;
         });
     }
     public float MaximumProbability
     {
-        get => _profileRunner.MaximumProbability;
-        set => SetProperty(_profileRunner.MaximumProbability, value, newValue =>
+        get => _screenshotingParameters.MaximumProbability;
+        set => SetProperty(_screenshotingParameters.MaximumProbability, value, newValue =>
         {
             if (MinimumProbability >= newValue)
                 MinimumProbability = newValue - 0.1f;
-            _profileRunner.MaximumProbability = newValue;
+            _screenshotingParameters.MaximumProbability = newValue;
         });
     }
 
     public byte MaximumFPS
     {
-        get => _profileRunner.MaximumFPS;
-        set => SetProperty(_profileRunner.MaximumFPS, value, newValue => _profileRunner.MaximumFPS = newValue);
+        get => _screenshotingParameters.MaximumFPS;
+        set => SetProperty(_screenshotingParameters.MaximumFPS, value, newValue => _screenshotingParameters.MaximumFPS = newValue);
     }
 
     public IReadOnlyCollection<ProfileViewModel> Profiles { get; }
@@ -54,13 +55,15 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
         ProfileCreator profileCreator,
         ProfileEditor profileEditor,
         ProfileRunner profileRunner,
-        ProfilesDataAccess profilesDataAccess)
+        ProfilesDataAccess profilesDataAccess,
+        DetectionScreenshotingParameters screenshotingParameters)
     {
         _scope = scope;
         _profileCreator = profileCreator;
         _profileEditor = profileEditor;
         _profileRunner = profileRunner;
         _profilesDataAccess = profilesDataAccess;
+        _screenshotingParameters = screenshotingParameters;
         Profiles = profilesList.ProfileViewModels;
     }
 
@@ -69,6 +72,7 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
     private readonly ProfileEditor _profileEditor;
     private readonly ProfileRunner _profileRunner;
     private readonly ProfilesDataAccess _profilesDataAccess;
+    private readonly DetectionScreenshotingParameters _screenshotingParameters;
 
     ICommand IProfilesViewModel.CreateProfileCommand => CreateProfileCommand;
     [RelayCommand]
