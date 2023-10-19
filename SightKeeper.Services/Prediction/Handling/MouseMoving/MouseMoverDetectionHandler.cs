@@ -49,6 +49,11 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
         MoveTo(data, mostSuitableItem);
     }
 
+    public void OnPaused()
+    {
+        _mouseMover.OnPaused();
+    }
+
     public void Dispose()
     {
         if (_disposed)

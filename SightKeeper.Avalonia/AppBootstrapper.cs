@@ -128,6 +128,7 @@ public static class AppBootstrapper
 
 		builder.RegisterType<DetectionMouseMoverImplementation>().As<DetectionMouseMover>();
 		builder.RegisterDecorator<AccumulationDecorator, DetectionMouseMover>();
+		builder.RegisterDecorator<PreemptionDecorator, DetectionMouseMover>();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
