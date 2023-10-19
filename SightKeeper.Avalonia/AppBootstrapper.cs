@@ -39,6 +39,8 @@ using SightKeeper.Services.Games;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Prediction;
 using SightKeeper.Services.Prediction.Handling;
+using SightKeeper.Services.Prediction.Handling.MouseMoving;
+using SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators;
 using SightKeeper.Services.Windows;
 using DataSetEditor = SightKeeper.Avalonia.Views.Dialogs.DataSetEditor;
 using ProfileEditor = SightKeeper.Avalonia.Views.ProfileEditor;
@@ -123,6 +125,9 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectionScreenshotingParameters>().SingleInstance();
 		builder.RegisterType<MouseMoverDetectionHandler>().As<DetectionObserver>();
 		builder.RegisterType<ScreenshoterDetectionHandler>().As<DetectionObserver>();
+
+		builder.RegisterType<DetectionMouseMoverImplementation>().As<DetectionMouseMover>();
+		builder.RegisterDecorator<AccumulationDecorator, DetectionMouseMover>();
 
 		SimpleReactiveGlobalHook hook = new();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();

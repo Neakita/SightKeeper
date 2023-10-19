@@ -2,4 +2,4 @@
 
 namespace SightKeeper.Application.Prediction;
 
-public sealed record DetectionData(byte[] Image, ImmutableList<DetectionItem> Items);
+public record DetectionData(byte[] Image, ImmutableList<DetectionItem> Items);

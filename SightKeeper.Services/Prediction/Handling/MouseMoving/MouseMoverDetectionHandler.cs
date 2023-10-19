@@ -12,13 +12,13 @@ using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Services.Input;
 
-namespace SightKeeper.Services.Prediction.Handling;
+namespace SightKeeper.Services.Prediction.Handling.MouseMoving;
 
 public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
 {
     public IObservable<float?> RequestedProbabilityThreshold { get; }
     
-    public MouseMoverDetectionHandler(Profile profile, MouseMover mouseMover, SharpHookHotKeyManager hotKeyManager, ProfileEditor profileEditor)
+    public MouseMoverDetectionHandler(Profile profile, DetectionMouseMover mouseMover, SharpHookHotKeyManager hotKeyManager, ProfileEditor profileEditor)
     {
         _profile = profile;
         _mouseMover = mouseMover;
@@ -46,7 +46,7 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
         if (!suitableItems.Any())
             return;
         var mostSuitableItem = suitableItems.MinBy(GetItemOrder);
-        MoveTo(mostSuitableItem.Bounding);
+        MoveTo(data, mostSuitableItem);
     }
 
     public void Dispose()
@@ -59,7 +59,7 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
 
     private readonly Profile _profile;
     private readonly Dictionary<ItemClass, ProfileItemClass> _profileItemClasses;
-    private readonly MouseMover _mouseMover;
+    private readonly DetectionMouseMover _mouseMover;
     private readonly CompositeDisposable _constructorDisposables = new();
     private bool _isFiring;
     private bool _disposed;
@@ -91,14 +91,12 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     
     private static float GetNormalizedDistanceTo(RectangleF rectangle) => GetMoveVector(rectangle).Length();
 
-    private void MoveTo(RectangleF rectangle)
+    private void MoveTo(DetectionData data, DetectionItem item)
     {
-        var moveVector = GetMoveVector(rectangle);
+        var moveVector = GetMoveVector(item.Bounding);
         moveVector = moveVector * _profile.Weights.Library.DataSet.Resolution / 2;
         moveVector *= _profile.MouseSensitivity;
-        var moveX = (int)Math.Round(moveVector.X);
-        var moveY = (int)Math.Round(moveVector.Y);
-        _mouseMover.Move(moveX, moveY);
+        _mouseMover.Move(new MouseMovingContext(data, item), moveVector);
     }
 
     private static Vector2 GetMoveVector(RectangleF rectangle)
