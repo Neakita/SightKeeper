@@ -74,7 +74,7 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         if (_session == null)
             return;
         _session.Scope.Dispose();
-        _session.Scope = _scope.BeginLifetimeScope();
+        _session.Scope = _scope.BeginLifetimeScope(profile, builder => BuildScope(builder, profile));
         _session.Handler = ResolveObserver(_session.Scope);
     }
 
