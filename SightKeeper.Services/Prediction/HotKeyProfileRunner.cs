@@ -9,6 +9,8 @@ using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Prediction.Handling;
+using SightKeeper.Services.Prediction.Handling.MouseMoving;
+using SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators;
 
 namespace SightKeeper.Services.Prediction;
 
@@ -82,6 +84,8 @@ public sealed class HotKeyProfileRunner : ProfileRunner
     {
         builder.RegisterInstance(profile);
         builder.RegisterInstance(profile.Weights.Library.DataSet);
+        if (profile.PreemptionSettings != null)
+            builder.RegisterDecorator<PreemptionDecorator, DetectionMouseMover>();
         builder.RegisterComposite<CompositeDetectionObserver, DetectionObserver>();
     }
 
