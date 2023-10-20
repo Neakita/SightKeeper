@@ -8,5 +8,6 @@ public sealed class NewProfileEditorViewModel : AbstractProfileEditorVIewModel<N
 {
     public NewProfileEditorViewModel(IValidator<NewProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository) : base(validator, dataSetsObservableRepository, false)
     {
+        PreemptionFactorsLink = true;
     }
 }

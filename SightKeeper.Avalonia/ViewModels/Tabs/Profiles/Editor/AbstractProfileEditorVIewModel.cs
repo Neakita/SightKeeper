@@ -63,6 +63,68 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
         set => SetProperty(ref _postProcessDelay, value);
     }
 
+    public bool IsPreemptionEnabled
+    {
+        get => _isPreemptionEnabled;
+        set => SetProperty(ref _isPreemptionEnabled, value);
+    }
+
+    public float? PreemptionHorizontalFactor
+    {
+        get => _preemptionHorizontalFactor;
+        set
+        {
+            if (SetProperty(ref _preemptionHorizontalFactor, value) && PreemptionFactorsLink)
+            {
+                OnPropertyChanging(nameof(PreemptionVerticalFactor));
+                _preemptionVerticalFactor = value;
+                OnPropertyChanged(nameof(PreemptionVerticalFactor));
+            }
+        }
+    }
+
+    public float? PreemptionVerticalFactor
+    {
+        get => _preemptionVerticalFactor;
+        set
+        {
+            if (SetProperty(ref _preemptionVerticalFactor, value) && PreemptionFactorsLink)
+            {
+                OnPropertyChanging(nameof(PreemptionHorizontalFactor));
+                _preemptionHorizontalFactor = value;
+                OnPropertyChanged(nameof(PreemptionHorizontalFactor));
+            }
+        }
+    }
+
+    public bool PreemptionFactorsLink
+    {
+        get => _preemptionFactorsLink;
+        set
+        {
+            if (SetProperty(ref _preemptionFactorsLink, value) && value)
+                PreemptionVerticalFactor = PreemptionHorizontalFactor;
+        }
+    }
+
+    public bool IsPreemptionStabilizationEnabled
+    {
+        get => _isPreemptionStabilizationEnabled;
+        set => SetProperty(ref _isPreemptionStabilizationEnabled, value);
+    }
+
+    public byte? PreemptionStabilizationBufferSize
+    {
+        get => _preemptionStabilizationBufferSize;
+        set => SetProperty(ref _preemptionStabilizationBufferSize, value);
+    }
+
+    public PreemptionStabilizationMethod? PreemptionStabilizationMethod
+    {
+        get => _preemptionStabilizationMethod;
+        set => SetProperty(ref _preemptionStabilizationMethod, value);
+    }
+
     ushort ProfileEditorViewModel.PostProcessDelay
     {
         get => (ushort)_postProcessDelay.TotalMilliseconds;
@@ -130,6 +192,13 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
     private ItemClass? _itemClassToAdd;
     private TimeSpan _postProcessDelay;
+    private bool _isPreemptionEnabled;
+    private float? _preemptionHorizontalFactor;
+    private float? _preemptionVerticalFactor;
+    private bool _isPreemptionStabilizationEnabled;
+    private byte? _preemptionStabilizationBufferSize;
+    private PreemptionStabilizationMethod? _preemptionStabilizationMethod;
+    private bool _preemptionFactorsLink;
 
     ICommand ProfileEditorViewModel.AddItemClassCommand => AddItemClassCommand;
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]

@@ -20,7 +20,6 @@
         </Style>
         <Style Selector="NumericUpDown">
             <Setter Property="MinWidth" Value="130"/>
-            <Setter Property="FormatString" Value="P0"/>
             <Setter Property="Increment" Value="0.1"/>
             <Setter Property="Minimum" Value="0.1"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -40,7 +39,8 @@
             <NumericUpDown Grid.Column="0"
                            Watermark="Detection threshold"
                            Value="{Binding DetectionThreshold}"
-                           Maximum="0.9"/>
+                           Maximum="0.9"
+                           FormatString="P0"/>
             <Slider Grid.Column="1"
                     Maximum="0.9"
                     Value="{Binding DetectionThreshold}"/>
@@ -49,7 +49,8 @@
             <NumericUpDown Grid.Column="0"
                            Watermark="Mouse sensitivity"
                            Value="{Binding MouseSensitivity}"
-                           Maximum="5"/>
+                           Maximum="5"
+                           FormatString="P0"/>
             <Slider Grid.Column="1"
                     Maximum="5"
                     Value="{Binding MouseSensitivity}"/>
@@ -71,6 +72,39 @@
                     Value="{Binding PostProcessDelay}"
                     ToolTip.Tip="{Binding PostProcessDelay, StringFormat=Post-process delay: {0} milliseconds}"/>
         </Grid>
+        
+        <CheckBox Content="Preemption"
+                  IsChecked="{Binding IsPreemptionEnabled}"/>
+        
+        <StackPanel Orientation="Horizontal"
+                    IsVisible="{Binding IsPreemptionEnabled}">
+            <NumericUpDown Watermark="Horizontal factor"
+                           Value="{Binding PreemptionHorizontalFactor}"
+                           Minimum="0"
+                           Increment="0.1"/>
+            <ToggleButton Content="{icons:MaterialIconExt Link}"
+                          IsChecked="{Binding PreemptionFactorsLink}"/>
+            <NumericUpDown Watermark="Vertical factor"
+                           Value="{Binding PreemptionVerticalFactor}"
+                           Minimum="0"
+                           Increment="0.1"/>
+        </StackPanel>
+        
+        <CheckBox Content="Preemption stabilization"
+                  IsChecked="{Binding IsPreemptionStabilizationEnabled}"/>
+        
+        <NumericUpDown Watermark="Buffer size"
+                       Value="{Binding PreemptionStabilizationBufferSize}"
+                       IsVisible="{Binding IsPreemptionStabilizationEnabled}"
+                       Increment="1"
+                       Minimum="2"
+                       Maximum="100"/>
+        
+        <ComboBox PlaceholderText="Method"
+                  ItemsSource="{Binding PreemptionStabilizationMethods, Mode=OneTime}"
+                  SelectedItem="{Binding PreemptionStabilizationMethod}"
+                  IsVisible="{Binding IsPreemptionStabilizationEnabled}"/>
+        
         <StackPanel Orientation="Horizontal">
             <ComboBox ItemsSource="{Binding AvailableItemClasses}"
                       SelectedItem="{Binding ItemClassToAdd}"/>

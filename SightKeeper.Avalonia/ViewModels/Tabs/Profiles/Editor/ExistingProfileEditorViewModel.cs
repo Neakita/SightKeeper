@@ -28,6 +28,21 @@ public sealed class ExistingProfileEditorViewModel : AbstractProfileEditorVIewMo
         _itemClasses.AddRange(profile.ItemClasses
             .OrderBy(profileItemClass => profileItemClass.Index)
             .Select(profileItemClass => new ProfileItemClassViewModel(profileItemClass.ItemClass, profileItemClass.Index, profileItemClass.ActivationCondition)));
+        
+
+        if (profile.PreemptionSettings != null)
+        {
+            IsPreemptionEnabled = true;
+            PreemptionHorizontalFactor = profile.PreemptionSettings.HorizontalFactor;
+            PreemptionVerticalFactor = profile.PreemptionSettings.VerticalFactor;
+            if (profile.PreemptionSettings.StabilizationSettings != null)
+            {
+                IsPreemptionStabilizationEnabled = true;
+                PreemptionStabilizationBufferSize = profile.PreemptionSettings.StabilizationSettings.BufferSize;
+                PreemptionStabilizationMethod = profile.PreemptionSettings.StabilizationSettings.Method;
+            }
+            PreemptionFactorsLink = PreemptionHorizontalFactor == PreemptionVerticalFactor;
+        }
         ValidateOnPropertyChanged = true;
     }
 }

@@ -18,6 +18,13 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
     [ObservableProperty] private float _detectionThreshold = 0.6f;
     [ObservableProperty] private float _mouseSensitivity = 1.5f;
     public ushort PostProcessDelay { get; set; }
+    public bool IsPreemptionEnabled { get; set; }
+    public float? PreemptionHorizontalFactor { get; set; }
+    public float? PreemptionVerticalFactor { get; set; }
+    public bool PreemptionFactorsLink { get; set; }
+    public bool IsPreemptionStabilizationEnabled { get; set; }
+    public byte? PreemptionStabilizationBufferSize { get; set; }
+    public PreemptionStabilizationMethod? PreemptionStabilizationMethod { get; set; }
     public DataSet? DataSet { get; set; }
     public Weights? Weights { get; set; }
     public IReadOnlyList<ProfileItemClassViewModel> ItemClasses { get; }

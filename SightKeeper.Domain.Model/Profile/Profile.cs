@@ -57,12 +57,13 @@ public sealed class Profile
 
     public IReadOnlyList<ProfileItemClass> ItemClasses => _itemClasses;
 
-    public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, Weights weights)
+    public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, PreemptionSettings? preemptionSettings, Weights weights)
     {
         Name = name;
         Description = description;
         DetectionThreshold = detectionThreshold;
         MouseSensitivity = mouseSensitivity;
+        PreemptionSettings = preemptionSettings;
         _postProcessDelay = postProcessDelay;
         _weights = weights;
         _itemClasses = new List<ProfileItemClass>();

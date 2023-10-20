@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
@@ -24,6 +25,20 @@ public sealed class ProfileEditor
         profile.Description = data.Description;
         profile.DetectionThreshold = data.DetectionThreshold;
         profile.MouseSensitivity = data.MouseSensitivity;
+        if (data.IsPreemptionEnabled)
+        {
+            Guard.IsNotNull(data.PreemptionHorizontalFactor);
+            Guard.IsNotNull(data.PreemptionVerticalFactor);
+            if (data.IsPreemptionStabilizationEnabled)
+            {
+                Guard.IsNotNull(data.PreemptionStabilizationBufferSize);
+                Guard.IsNotNull(data.PreemptionStabilizationMethod);
+                profile.PreemptionSettings = new PreemptionSettings(data.PreemptionHorizontalFactor.Value, data.PreemptionVerticalFactor.Value, data.PreemptionStabilizationBufferSize.Value, data.PreemptionStabilizationMethod.Value);
+            }
+            else profile.PreemptionSettings = new PreemptionSettings(data.PreemptionHorizontalFactor.Value, data.PreemptionVerticalFactor.Value);
+        }
+        else profile.PreemptionSettings = null;
+
         profile.PostProcessDelay = data.PostProcessDelay;
         profile.Weights = data.Weights;
         profile.ClearItemClasses();

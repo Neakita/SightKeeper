@@ -8,12 +8,16 @@ public sealed class PreemptionSettings
 	public float VerticalFactor { get; private set; }
 	public PreemptionStabilizationSettings? StabilizationSettings { get; private set; }
 
-	public PreemptionSettings(float horizontalFactor, float verticalFactor, byte bufferSize, PreemptionStabilizationMethod method)
+	public PreemptionSettings(float horizontalFactor, float verticalFactor)
 	{
-		Guard.IsGreaterThan(horizontalFactor, 0);
-		Guard.IsGreaterThan(verticalFactor, 0);
+		Guard.IsGreaterThanOrEqualTo(horizontalFactor, 0);
+		Guard.IsGreaterThanOrEqualTo(verticalFactor, 0);
 		HorizontalFactor = horizontalFactor;
 		VerticalFactor = verticalFactor;
+	}
+
+	public PreemptionSettings(float horizontalFactor, float verticalFactor, byte bufferSize, PreemptionStabilizationMethod method) : this(horizontalFactor, verticalFactor)
+	{
 		StabilizationSettings = new PreemptionStabilizationSettings(bufferSize, method);
 	}
 

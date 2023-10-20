@@ -84,7 +84,20 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
         if (result == ProfileEditorResult.Apply)
         {
             Guard.IsNotNull(viewModel.Weights);
-            NewProfileDataDTO data = new(viewModel.Name, viewModel.Description, viewModel.DetectionThreshold, viewModel.MouseSensitivity, viewModel.PostProcessDelay, viewModel.Weights, viewModel.ItemClasses);
+            NewProfileDataDTO data = new(
+                viewModel.Name,
+                viewModel.Description,
+                viewModel.DetectionThreshold,
+                viewModel.MouseSensitivity,
+                viewModel.PostProcessDelay,
+                viewModel.IsPreemptionEnabled,
+                viewModel.PreemptionHorizontalFactor,
+                viewModel.PreemptionVerticalFactor,
+                viewModel.IsPreemptionStabilizationEnabled,
+                viewModel.PreemptionStabilizationBufferSize,
+                viewModel.PreemptionStabilizationMethod,
+                viewModel.Weights,
+                viewModel.ItemClasses);
             await _profileCreator.CreateProfile(data);
         }
     }
@@ -101,7 +114,19 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
         if (result == ProfileEditorResult.Apply)
         {
             Guard.IsNotNull(viewModel.Weights);
-            EditedProfileDataDTO data = new(profileViewModel.Profile, viewModel.Name, viewModel.Description, viewModel.DetectionThreshold, viewModel.MouseSensitivity, viewModel.PostProcessDelay, viewModel.Weights, viewModel.ItemClasses);
+            EditedProfileDataDTO data = new(
+                profileViewModel.Profile,
+                viewModel.Name,
+                viewModel.Description,
+                viewModel.DetectionThreshold,
+                viewModel.MouseSensitivity,
+                viewModel.PostProcessDelay,
+                viewModel.IsPreemptionEnabled,
+                viewModel.PreemptionHorizontalFactor,
+                viewModel.PreemptionVerticalFactor,
+                viewModel.IsPreemptionStabilizationEnabled,
+                viewModel.PreemptionStabilizationBufferSize,
+                viewModel.PreemptionStabilizationMethod, viewModel.Weights, viewModel.ItemClasses);
             await _profileEditor.ApplyChanges(data);
         }
         else if (result == ProfileEditorResult.Delete)
