@@ -21,6 +21,7 @@ public sealed class ONNXDetector : Detector
     {
         var weightsData = await _weightsDataAccess.LoadWeightsData(weights, WeightsFormat.ONNX);
         _predictor = new YoloV8(new ModelSelector(weightsData.Content), CreateMetadata(weights.Library.DataSet));
+        _predictor.Parameters.Confidence = ProbabilityThreshold;
     }
     public Weights? Weights
     {
@@ -53,12 +54,12 @@ public sealed class ONNXDetector : Detector
 
     public float IoU
     {
-        get => _predictor?.Parameters.IoU ?? 0.4f;
+        get => _probabilityThreshold;
         set
         {
-            Guard.IsNotNull(_predictor);
-            Guard.IsNotNull(value);
-            _predictor.Parameters.IoU = value;
+            _probabilityThreshold = value;
+            if (_predictor != null)
+                _predictor.Parameters.Confidence = value;
         }
     }
 
@@ -77,6 +78,7 @@ public sealed class ONNXDetector : Detector
         return result;
     }
 
+    private float _probabilityThreshold = 0.5f;
     private YoloV8? _predictor;
     private Weights? _weights;
     private Dictionary<int, ItemClass>? _itemClasses;
