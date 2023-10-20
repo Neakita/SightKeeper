@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Serilog;
+using SightKeeper.Domain.Model.Common;
 using SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators.Preemption;
 
 namespace SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators;
@@ -17,24 +18,24 @@ public sealed class PreemptionDecorator : DetectionMouseMover
 		var now = DateTime.UtcNow;
 		var timeDelta = now - _previousMoveTime;
 		var preemption = Vector2.Zero;
-		if (!_isFirstMove)
+		if (_previousItemClass == context.TargetItem.ItemClass)
 			preemption = _preemptionComputer.ComputePreemption(vector, timeDelta);
 		else
-			_isFirstMove = false;
-
+			_preemptionComputer.Reset();
 		_mouseMover.Move(context, vector + preemption);
 		_previousMoveTime = now;
+		_previousItemClass = context.TargetItem.ItemClass;
 	}
 
 	public void OnPaused()
 	{
-		_isFirstMove = true;
+		_previousItemClass = null;
 		_preemptionComputer.Reset();
 		Log.ForContext<PreemptionDecorator>().Debug("State cleared");
 	}
 
 	private readonly DetectionMouseMover _mouseMover;
 	private readonly PreemptionComputer _preemptionComputer;
-	private bool _isFirstMove = true;
 	private DateTime _previousMoveTime;
+	private ItemClass? _previousItemClass;
 }
