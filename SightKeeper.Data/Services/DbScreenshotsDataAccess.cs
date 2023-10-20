@@ -62,6 +62,18 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
         }); 
     }
 
+    public Task CreateScreenshot(ScreenshotsLibrary library, byte[] content, CancellationToken cancellationToken = default)
+    {
+        return Task.Run(() =>
+        {
+            lock (_dbContext)
+            {
+                var screenshot = library.CreateScreenshot(content);
+                _dbContext.Attach(screenshot);
+            }
+        }, cancellationToken);
+    }
+
     private IEnumerable<ImmutableList<Screenshot>> LoadScreenshotsPartitions(
         IQueryable<Screenshot> screenshotsQuery, bool byDescending)
     {

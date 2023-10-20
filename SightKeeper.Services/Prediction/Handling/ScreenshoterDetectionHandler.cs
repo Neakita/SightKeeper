@@ -46,7 +46,7 @@ public sealed class ScreenshoterDetectionHandler : DetectionObserver
         if (!await EnsureScreenshotLoaded())
             return;
         _lastScreenshotTime = DateTime.UtcNow;
-        _dataSet.ScreenshotsLibrary.CreateScreenshot(data.Image);
+        await _screenshotsDataAccess.CreateScreenshot(_dataSet.ScreenshotsLibrary, data.Image);
     }
 
     private async Task<bool> EnsureScreenshotLoaded()
