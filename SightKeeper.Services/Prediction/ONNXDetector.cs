@@ -14,15 +14,6 @@ namespace SightKeeper.Services.Prediction;
 
 public sealed class ONNXDetector : Detector
 {
-    private readonly WeightsDataAccess _weightsDataAccess;
-
-
-    private async void SetWeights(Weights weights)
-    {
-        var weightsData = await _weightsDataAccess.LoadWeightsData(weights, WeightsFormat.ONNX);
-        _predictor = new YoloV8(new ModelSelector(weightsData.Content), CreateMetadata(weights.Library.DataSet));
-        _predictor.Parameters.Confidence = ProbabilityThreshold;
-    }
     public Weights? Weights
     {
         get => _weights;
@@ -40,19 +31,16 @@ public sealed class ONNXDetector : Detector
                 .ToDictionary(t => t.itemClassIndex, t => t.itemClass);
         }
     }
-
-    public float ProbabilityThreshold
+    
+    private async void SetWeights(Weights weights)
     {
-        get => _predictor?.Parameters.Confidence ?? 0.5f;
-        set
-        {
-            Guard.IsNotNull(_predictor);
-            Guard.IsNotNull(value);
-            _predictor.Parameters.Confidence = value;
-        }
+        var weightsData = await _weightsDataAccess.LoadWeightsData(weights, WeightsFormat.ONNX);
+        _predictor = new YoloV8(new ModelSelector(weightsData.Content), CreateMetadata(weights.Library.DataSet));
+        _predictor.Parameters.Confidence = ProbabilityThreshold;
+        _predictor.Parameters.IoU = IoU;
     }
 
-    public float IoU
+    public float ProbabilityThreshold
     {
         get => _probabilityThreshold;
         set
@@ -60,6 +48,17 @@ public sealed class ONNXDetector : Detector
             _probabilityThreshold = value;
             if (_predictor != null)
                 _predictor.Parameters.Confidence = value;
+        }
+    }
+
+    public float IoU
+    {
+        get => _iou;
+        set
+        {
+            _iou = value;
+            if (_predictor != null)
+                _predictor.Parameters.IoU = value;
         }
     }
 
@@ -78,7 +77,9 @@ public sealed class ONNXDetector : Detector
         return result;
     }
 
-    private float _probabilityThreshold = 0.5f;
+    private readonly WeightsDataAccess _weightsDataAccess;
+    private float _probabilityThreshold = YoloV8Parameters.Default.Confidence;
+    private float _iou = YoloV8Parameters.Default.IoU;
     private YoloV8? _predictor;
     private Weights? _weights;
     private Dictionary<int, ItemClass>? _itemClasses;
