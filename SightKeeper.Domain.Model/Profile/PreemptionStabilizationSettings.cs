@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class PreemptionStabilizationSettings
+public sealed class PreemptionStabilizationSettings : ObservableObject
 {
 	public byte BufferSize { get; private set; }
 	public PreemptionStabilizationMethod Method { get; private set; }

@@ -1,10 +1,12 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class WeightsLibrary
+public sealed class WeightsLibrary : ObservableObject
 {
     public Id Id { get; private set; }
     public DataSet DataSet { get; private set; }
@@ -13,7 +15,7 @@ public sealed class WeightsLibrary
     internal WeightsLibrary(DataSet dataSet)
     {
         DataSet = dataSet;
-        _weights = new List<Weights>();
+        _weights = new ObservableCollection<Weights>();
     }
 
     public Weights CreateWeights(
@@ -33,7 +35,7 @@ public sealed class WeightsLibrary
 
     public void RemoveWeights(Weights weights) => Guard.IsTrue(_weights.Remove(weights));
 
-    private readonly List<Weights> _weights;
+    private readonly ObservableCollection<Weights> _weights;
 
     private WeightsLibrary()
     {

@@ -1,14 +1,21 @@
-﻿using FlakeId;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class Screenshot
+public sealed class Screenshot : ObservableObject
 {
 	public Id Id { get; private set; }
 	public Image Image { get; private set; }
 	public DateTime CreationDate { get; private set; }
-	public Asset? Asset { get; internal set; }
+
+	public Asset? Asset
+	{
+		get => _asset;
+		internal set => SetProperty(ref _asset, value);
+	}
+
 	public ScreenshotsLibrary Library { get; private set; }
 
 	internal Screenshot(byte[] content, ScreenshotsLibrary library)
@@ -17,6 +24,8 @@ public sealed class Screenshot
 		Image = new Image(content);
 		CreationDate = DateTime.Now;
 	}
+	
+	private Asset? _asset;
 
 	private Screenshot()
 	{

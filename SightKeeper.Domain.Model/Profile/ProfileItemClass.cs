@@ -1,14 +1,25 @@
-﻿using FlakeId;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class ProfileItemClass
+public sealed class ProfileItemClass : ObservableObject
 {
     public Id Id { get; private set; }
     public ItemClass ItemClass { get; private set; }
-    public byte Index { get; internal set; }
-    public ItemClassActivationCondition ActivationCondition { get; set; }
+
+    public byte Index
+    {
+        get => _index;
+        internal set => SetProperty(ref _index, value);
+    }
+
+    public ItemClassActivationCondition ActivationCondition
+    {
+        get => _activationCondition;
+        set => SetProperty(ref _activationCondition, value);
+    }
 
     public ProfileItemClass(ItemClass itemClass, byte index, ItemClassActivationCondition activationCondition)
     {
@@ -21,4 +32,7 @@ public sealed class ProfileItemClass
     {
         ItemClass = null!;
     }
+    
+    private byte _index;
+    private ItemClassActivationCondition _activationCondition;
 }

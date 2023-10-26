@@ -1,14 +1,27 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
+using SightKeeper.Commons;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class Profile
+public sealed class Profile : ObservableObject
 {
     public Id Id { get; private set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
+    }
+
+    public string Description
+    {
+        get => _description;
+        set => SetProperty(ref _description, value);
+    }
 
     public float DetectionThreshold
     {
@@ -16,7 +29,7 @@ public sealed class Profile
         set
         {
             Guard.IsBetween(value, 0, 1);
-            _detectionThreshold = value;
+            SetProperty(ref _detectionThreshold, value);
         }
     }
 
@@ -26,7 +39,7 @@ public sealed class Profile
         set
         {
             Guard.IsGreaterThan(value, 0);
-            _mouseSensitivity = value;
+            SetProperty(ref _mouseSensitivity, value);
         }
     }
 
@@ -36,11 +49,15 @@ public sealed class Profile
         set
         {
             Guard.IsGreaterThanOrEqualTo(value, TimeSpan.Zero);
-            _postProcessDelay = value;
+            SetProperty(ref _postProcessDelay, value);
         }
     }
-    
-    public PreemptionSettings? PreemptionSettings { get; set; }
+
+    public PreemptionSettings? PreemptionSettings
+    {
+        get => _preemptionSettings;
+        set => SetProperty(ref _preemptionSettings, value);
+    }
 
     public Weights Weights
     {
@@ -51,7 +68,7 @@ public sealed class Profile
                 return;
             if (_weights.Library != value.Library)
                 _itemClasses.Clear();
-            _weights = value;
+            SetProperty(ref _weights, value);
         }
     }
 
@@ -59,14 +76,14 @@ public sealed class Profile
 
     public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, PreemptionSettings? preemptionSettings, Weights weights)
     {
-        Name = name;
-        Description = description;
-        DetectionThreshold = detectionThreshold;
-        MouseSensitivity = mouseSensitivity;
-        PreemptionSettings = preemptionSettings;
+        _name = name;
+        _description = description;
+        _detectionThreshold = detectionThreshold;
+        _mouseSensitivity = mouseSensitivity;
+        _preemptionSettings = preemptionSettings;
         _postProcessDelay = postProcessDelay;
         _weights = weights;
-        _itemClasses = new List<ProfileItemClass>();
+        _itemClasses = new ObservableCollection<ProfileItemClass>();
     }
 
     public ProfileItemClass AddItemClass(ItemClass itemClass, ItemClassActivationCondition activationCondition)
@@ -108,15 +125,18 @@ public sealed class Profile
         string.IsNullOrEmpty(Name) ? base.ToString()! : Name;
 
     private Weights _weights;
-    private readonly List<ProfileItemClass> _itemClasses;
+    private readonly ObservableCollection<ProfileItemClass> _itemClasses;
     private float _detectionThreshold;
     private float _mouseSensitivity;
     private TimeSpan _postProcessDelay;
+    private string _name;
+    private string _description;
+    private PreemptionSettings? _preemptionSettings;
 
     private Profile()
     {
-        Name = null!;
-        Description = null!;
+        _name = null!;
+        _description = null!;
         _weights = null!;
         _itemClasses = null!;
     }

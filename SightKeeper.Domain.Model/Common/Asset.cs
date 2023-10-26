@@ -1,15 +1,23 @@
-﻿using FlakeId;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using FlakeId;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Model.Exceptions;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public sealed class Asset
+public sealed class Asset : ObservableObject
 {
     public Id Id { get; private set; }
     public DataSet DataSet { get; private set; }
     public Screenshot Screenshot { get; private set; }
-    public AssetUsage Usage { get; set; }
+
+    public AssetUsage Usage
+    {
+        get => _usage;
+        set => SetProperty(ref _usage, value);
+    }
+
     public IReadOnlyList<DetectorItem> Items => _items;
     
     internal Asset(DataSet dataSet, Screenshot screenshot)
@@ -17,7 +25,7 @@ public sealed class Asset
         DataSet = dataSet;
         Screenshot = screenshot;
         screenshot.Asset = this;
-        _items = new List<DetectorItem>();
+        _items = new ObservableCollection<DetectorItem>();
     }
 
     public DetectorItem CreateItem(ItemClass itemClass, Bounding bounding)
@@ -55,7 +63,8 @@ public sealed class Asset
         _items.Clear();
     }
 
-    private readonly List<DetectorItem> _items;
+    private readonly ObservableCollection<DetectorItem> _items;
+    private AssetUsage _usage;
 
     private Asset()
     {

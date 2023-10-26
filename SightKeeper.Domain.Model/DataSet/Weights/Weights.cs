@@ -1,9 +1,10 @@
-﻿using FlakeId;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class Weights
+public sealed class Weights : ObservableObject
 {
     public Id Id { get; private set; }
     public DateTime CreationDate { get; private set; }

@@ -1,7 +1,21 @@
-﻿namespace SightKeeper.Domain.Model.Detector;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public sealed class Bounding
+namespace SightKeeper.Domain.Model.Detector;
+
+public sealed class Bounding : ObservableObject
 {
+	private static readonly string[] Properties = new[]
+	{
+		nameof(Left),
+		nameof(Top),
+		nameof(Right),
+		nameof(Bottom),
+		nameof(Width),
+		nameof(Height),
+		nameof(HorizontalCenter),
+		nameof(VerticalCenter)
+	};
+	
 	public double Left { get; private set; }
 	public double Top { get; private set; }
 	public double Right { get; private set; }
@@ -20,20 +34,28 @@ public sealed class Bounding
 
 	public void SetFromTwoPositions(double x1, double y1, double x2, double y2)
 	{
+		foreach (var property in Properties)
+			OnPropertyChanging(property);
 		MinMax(x1, x2, out var xMin, out var xMax); // 🎄
 		MinMax(y1, y2, out var yMin, out var yMax);
 		Left = xMin;
 		Right = xMax;
 		Top = yMin;
 		Bottom = yMax;
+		foreach (var property in Properties)
+			OnPropertyChanged(property);
 	}
 
 	public void SetFromBounding(Bounding bounding)
 	{
+		foreach (var property in Properties)
+			OnPropertyChanging(property);
 		Left = bounding.Left;
 		Right = bounding.Right;
 		Top = bounding.Top;
 		Bottom = bounding.Bottom;
+		foreach (var property in Properties)
+			OnPropertyChanged(property);
 	}
 
 	private static void MinMax(double value1, double value2, out double min, out double max)

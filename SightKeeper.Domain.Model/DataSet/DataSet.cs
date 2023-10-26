@@ -1,18 +1,36 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class DataSet
+public sealed class DataSet : ObservableObject
 {
 	public Id Id { get; private set; }
-	public string Name { get; set; }
-	public string Description { get; set; }
-	public Game? Game { get; set; }
+
+	public string Name
+	{
+		get => _name;
+		set => SetProperty(ref _name, value);
+	}
+
+	public string Description
+	{
+		get => _description;
+		set => SetProperty(ref _description, value);
+	}
+
+	public Game? Game
+	{
+		get => _game;
+		set => SetProperty(ref _game, value);
+	}
+
 	public ScreenshotsLibrary ScreenshotsLibrary { get; private set; }
-	public WeightsLibrary WeightsLibrary { get; set; }
+	public WeightsLibrary WeightsLibrary { get; private set; }
 
 	#region Resolution
 
@@ -25,7 +43,7 @@ public sealed class DataSet
 				return;
 			if (!CanChangeResolution(out var message))
 				ThrowHelper.ThrowInvalidOperationException(message);
-			_resolution = value;
+			SetProperty(ref _resolution, value);
 		}
 	}
 
@@ -70,8 +88,11 @@ public sealed class DataSet
 		return message == null;
 	}
 	
-	private readonly List<ItemClass> _itemClasses;
-	private readonly List<Asset> _assets;
+	private readonly ObservableCollection<ItemClass> _itemClasses;
+	private readonly ObservableCollection<Asset> _assets;
+	private string _name;
+	private string _description;
+	private Game? _game;
 
 	#endregion
 	
@@ -79,19 +100,19 @@ public sealed class DataSet
 
 	public DataSet(string name, ushort resolution = 320)
 	{
-		Name = name;
-		Description = string.Empty;
+		_name = name;
+		_description = string.Empty;
 		_resolution = resolution;
-		_itemClasses = new List<ItemClass>();
+		_itemClasses = new ObservableCollection<ItemClass>();
 		ScreenshotsLibrary = new ScreenshotsLibrary(this);
 		WeightsLibrary = new WeightsLibrary(this);
-		_assets = new List<Asset>();
+		_assets = new ObservableCollection<Asset>();
 	}
 
 	private DataSet()
 	{
-		Name = null!;
-		Description = null!;
+		_name = null!;
+		_description = null!;
 		_itemClasses = null!;
 		ScreenshotsLibrary = null!;
 		WeightsLibrary = null!;

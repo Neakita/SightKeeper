@@ -1,26 +1,35 @@
-﻿using FlakeId;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.Detector;
 
-public sealed class DetectorItem
+public sealed class DetectorItem : ObservableObject
 {
 	public Id Id { get; private set; }
 	public Asset Asset { get; private set; }
-	public ItemClass ItemClass { get; set; }
+
+	public ItemClass ItemClass
+	{
+		get => _itemClass;
+		set => SetProperty(ref _itemClass, value);
+	}
+
 	public Bounding Bounding { get; private set; }
 	
 	internal DetectorItem(Asset asset, ItemClass itemClass, Bounding bounding)
 	{
 		Asset = asset;
-		ItemClass = itemClass;
+		_itemClass = itemClass;
 		Bounding = bounding;
 	}
 	
 	private DetectorItem()
 	{
 		Asset = null!;
-		ItemClass = null!;
+		_itemClass = null!;
 		Bounding = null!;
 	}
+	
+	private ItemClass _itemClass;
 }

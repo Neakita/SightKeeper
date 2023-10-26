@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class PreemptionSettings
+public sealed class PreemptionSettings : ObservableObject
 {
 	public float HorizontalFactor { get; private set; }
 	public float VerticalFactor { get; private set; }

@@ -1,11 +1,13 @@
-﻿using System.Reactive.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class ScreenshotsLibrary
+public sealed class ScreenshotsLibrary : ObservableObject
 {
     public Id Id { get; private set; }
     public IObservable<Screenshot> ScreenshotAdded => _screenshotAdded.AsObservable();
@@ -14,14 +16,25 @@ public sealed class ScreenshotsLibrary
     private readonly Subject<Screenshot> _screenshotRemoved = new();
 
     public DataSet DataSet { get; private set; }
-    public ushort? MaxQuantity { get; set; }
+
+    public ushort? MaxQuantity
+    {
+        get => _maxQuantity;
+        set => SetProperty(ref _maxQuantity, value);
+    }
+
     public IReadOnlyCollection<Screenshot> Screenshots => _screenshots;
-    public bool HasAnyScreenshots { get; private set; }
+
+    public bool HasAnyScreenshots
+    {
+        get => _hasAnyScreenshots;
+        private set => SetProperty(ref _hasAnyScreenshots, value);
+    }
 
     internal ScreenshotsLibrary(DataSet dataSet)
     {
         DataSet = dataSet;
-        _screenshots = new List<Screenshot>();
+        _screenshots = new ObservableCollection<Screenshot>();
     }
 
     public Screenshot CreateScreenshot(byte[] content)
@@ -52,7 +65,9 @@ public sealed class ScreenshotsLibrary
         _screenshotRemoved.OnNext(screenshot);
     }
 	
-    private readonly List<Screenshot> _screenshots;
+    private readonly ObservableCollection<Screenshot> _screenshots;
+    private ushort? _maxQuantity;
+    private bool _hasAnyScreenshots;
 
     private ScreenshotsLibrary()
     {
