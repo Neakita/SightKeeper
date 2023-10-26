@@ -13,13 +13,15 @@ using DynamicData;
 using DynamicData.Aggregation;
 using DynamicData.Binding;
 using ReactiveUI;
+using Serilog;
 using SightKeeper.Application.Annotating;
+using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
+public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivatableViewModel
 {
     public SelectedScreenshotViewModel SelectedScreenshotViewModel { get; }
 
@@ -38,7 +40,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         set
         {
             if (SetProperty(ref _showScreenshotsWithAssets, value))
-                SetScreenshots();
+                UpdateVisibleScreenshotsCategory();
         }
     }
 
@@ -48,7 +50,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
         set
         {
             if (SetProperty(ref _showScreenshotsWithoutAssets, value))
-                SetScreenshots();
+                UpdateVisibleScreenshotsCategory();
         }
     }
 
@@ -98,7 +100,21 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
             .Bind(out var screenshotsWithoutAssets)
             .Subscribe();
         _screenshotsWithoutAssets = screenshotsWithoutAssets;
-        SetScreenshots();
+        UpdateVisibleScreenshotsCategory();
+        this.WhenActivated(OnActivated);
+    }
+
+    private void OnActivated(CompositeDisposable disposable)
+    {
+        _logger.Debug("Activated");
+        Disposable.Create(OnDeactivated).DisposeWithEx(disposable);
+        UpdateVisibleScreenshotsCategory();
+    }
+    
+    private void OnDeactivated()
+    {
+        _logger.Debug("Deactivated");
+        UpdateVisibleScreenshotsCategory(true);
     }
 
     public void ScrollScreenshot(bool reverse)
@@ -126,6 +142,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     private bool _showScreenshotsWithoutAssets = true;
     private IReadOnlyList<ScreenshotViewModel> _screenshots;
     private readonly Subject<Unit> _actualizeFilterSubject = new();
+    private readonly ILogger _logger = Log.ForContext<AnnotatorScreenshotsViewModel>();
 
     partial void OnDataSetChanged(DataSet? value)
     {
@@ -156,9 +173,14 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
     private void OnScreenshotRemoved(Screenshot removedScreenshot) => _screenshotsSource.Remove(removedScreenshot);
 
     [MemberNotNull(nameof(_screenshots))]
-    private void SetScreenshots()
+    private void UpdateVisibleScreenshotsCategory(bool hideAnyway = false)
     {
         _screenshots = null!;
+        if (hideAnyway)
+        {
+            Screenshots = Array.Empty<ScreenshotViewModel>();
+            return;
+        }
         if (ShowScreenshotsWithAssets && ShowScreenshotsWithoutAssets)
             Screenshots = _allScreenshots;
         else if (ShowScreenshotsWithAssets)
@@ -171,4 +193,6 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 
     [RelayCommand]
     private void ActualizeFiltering() => _actualizeFilterSubject.OnNext(Unit.Default);
+
+    public ViewModelActivator Activator { get; } = new();
 }
