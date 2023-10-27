@@ -5,7 +5,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using Serilog;
 using Serilog.Events;
-using SerilogTimings;
+using SerilogTimings.Extensions;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Prediction;
@@ -33,11 +33,13 @@ public sealed class StreamDetector
                     {
                         while (work)
                         {
-                            using var operation = Operation.At(LogEventLevel.Verbose).Begin("Detection cycle");
+                            using var operation = _logger.OperationAt(LogEventLevel.Debug).Begin("Detection cycle");
+                            using var screenCaptureOperation = _logger.OperationAt(LogEventLevel.Debug).Begin("Screen capture");
                             var image = await _screenCapture.CaptureAsync();
+                            screenCaptureOperation.Complete(nameof(image), image.Length);
                             if (CheckImagesEquality)
                             {
-                                using var imagesComparisonOperation = Operation.Begin("Comparing images");
+                                using var imagesComparisonOperation = _logger.OperationAt(LogEventLevel.Debug).Begin("Comparing images");
                                 var imagesAreEqual = image.SequenceEqual(previousImage);
                                 imagesComparisonOperation.Complete(nameof(imagesAreEqual), imagesAreEqual);
                                 if (imagesAreEqual)
@@ -47,11 +49,12 @@ public sealed class StreamDetector
                                 }
                                 previousImage = image;
                             }
-
+                            using var detectOperation = _logger.OperationAt(LogEventLevel.Debug).Begin("Detection");
                             var result = await _detector.Detect(image, CancellationToken.None);
+                            detectOperation.Complete(nameof(result), result);
                             if (IsEnabled)
                             {
-                                using var handlingOperation = Operation.Begin("Detection handling");
+                                using var handlingOperation = _logger.OperationAt(LogEventLevel.Debug).Begin("Detection handling");
                                 observer.OnNext(new DetectionData(image, result.ToImmutableList()));
                                 handlingOperation.Complete();
                             }
@@ -101,4 +104,5 @@ public sealed class StreamDetector
     private readonly ScreenCapture _screenCapture;
     private IDisposable? _isEnabledDisposable;
     private readonly Subject<DetectionData> _detection = new();
+    private readonly ILogger _logger = Log.ForContext<StreamDetector>();
 }
