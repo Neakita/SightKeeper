@@ -118,7 +118,8 @@ public sealed class Profile : ObservableObject
 
     public void ClearItemClasses()
     {
-        _itemClasses.Clear();
+        while (_itemClasses.Count > 0)
+            _itemClasses.RemoveAt(_itemClasses.Count - 1);
     }
 
     public override string ToString() =>
