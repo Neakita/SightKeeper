@@ -60,7 +60,8 @@ public sealed class Asset : ObservableObject
     {
         foreach (var item in _items)
             item.ItemClass.RemoveItem(item);
-        _items.Clear();
+        for (var i = _items.Count - 1; i >= 0; i--)
+            _items.RemoveAt(i);
     }
 
     private readonly ObservableCollection<DetectorItem> _items;
