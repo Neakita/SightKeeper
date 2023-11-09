@@ -63,7 +63,7 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotifications);
+		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
 		
 		modelBuilder.ApplyConfiguration(new ScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
