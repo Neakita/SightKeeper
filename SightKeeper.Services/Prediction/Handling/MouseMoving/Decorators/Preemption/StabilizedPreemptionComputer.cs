@@ -49,6 +49,7 @@ public sealed class StabilizedPreemptionComputer : PreemptionComputer
 	public void Reset()
 	{
 		_previousPreemption = Vector2.Zero;
+		_velocities.Clear();
 	}
 	
 	private const float BasePreemptionFactor = 100;
