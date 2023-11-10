@@ -16,7 +16,6 @@ public sealed class Weights : ObservableObject
     public float BoundingLoss { get; private set; }
     public float ClassificationLoss { get; private set; }
     public float DeformationLoss { get; private set; }
-    public IReadOnlyCollection<Asset> Assets { get; private set; }
 
     internal Weights(
         WeightsLibrary library,
@@ -38,7 +37,6 @@ public sealed class Weights : ObservableObject
         BoundingLoss = boundingLoss;
         ClassificationLoss = classificationLoss;
         DeformationLoss = deformationLoss;
-        Assets = assets.ToList();
     }
 
     private Weights()
@@ -46,7 +44,6 @@ public sealed class Weights : ObservableObject
         Library = null!;
         ONNXData = null!;
         PTData = null!;
-        Assets = null!;
     }
 
     public override string ToString() => $"{nameof(Size)}: {Size}, {nameof(Epoch)}: {Epoch}, {nameof(BoundingLoss)}: {BoundingLoss}, {nameof(ClassificationLoss)}: {ClassificationLoss}, {nameof(DeformationLoss)}: {DeformationLoss}";
