@@ -11,5 +11,4 @@ public interface ScreenCapture
 	public ushort? Resolution { get; set; }
 	public ushort XOffset { get; set; }
 	public ushort YOffset { get; set; }
-	public bool CanCapture { get; }
 }

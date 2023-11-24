@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 using CommunityToolkit.Diagnostics;
 using Serilog.Events;
 using SerilogTimings;
@@ -48,18 +46,6 @@ public sealed class WindowsScreenCapture : ScreenCapture
 	public ushort? Resolution { get; set; }
 	public ushort XOffset { get; set; }
 	public ushort YOffset { get; set; }
-
-	public bool CanCapture
-	{
-		get
-		{
-			if (Game == null) return true;
-			var process = Process.GetProcessesByName(Game.ProcessName)
-				.FirstOrDefault(process => process.MainWindowHandle > 0);
-			if (process == null) return false;
-			return User32.GetForegroundWindow() == process.MainWindowHandle;
-		}
-	}
 
 	private readonly Point _screenCenter;
 }

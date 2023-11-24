@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 using CommunityToolkit.Diagnostics;
 using Serilog;
 using SerilogTimings;
@@ -98,7 +97,6 @@ public sealed class SharpDXScreenCapture : ScreenCapture
 	public ushort? Resolution { get; set; }
 	public ushort XOffset { get; set; }
 	public ushort YOffset { get; set; }
-	public bool CanCapture => true;
 	
 	private static byte[] ImageToBytes(Image bitmap)
 	{
