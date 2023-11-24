@@ -28,7 +28,7 @@ public sealed partial class WeightsEditorViewModel : DialogViewModel, IWeightsEd
 
     public async Task SetLibrary(WeightsLibrary library, CancellationToken cancellationToken = default)
     {
-        await _weightsDataAccess.LoadAllWeights(library, cancellationToken);
+        await _weightsDataAccess.LoadWeightsAsync(library, cancellationToken);
         _weightsSource.Clear();
         _weightsSource.AddRange(library.Weights);
     }

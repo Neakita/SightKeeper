@@ -34,8 +34,9 @@ public sealed class ProfilesObservableRepository : IDisposable
 
     private void LoadProfiles(ProfilesDataAccess profilesDataAccess)
     {
-        profilesDataAccess.LoadProfiles().Subscribe(AddProfile);
+        _profiles.AddRange(profilesDataAccess.LoadProfiles());
     }
+    
     private void AddProfile(Profile profile)
     {
         Log.Debug("Profile Id: {Id}", profile.Id);

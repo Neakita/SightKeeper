@@ -37,7 +37,7 @@ public sealed partial class TrainingViewModel : ViewModel
                 return Task.FromResult((IReadOnlyCollection<Weights>)Array.Empty<Weights>());
             return Task.Run(async () =>
             {
-                await _weightsDataAccess.LoadAllWeights(SelectedDataSet.DataSet.WeightsLibrary);
+                await _weightsDataAccess.LoadWeightsAsync(SelectedDataSet.DataSet.WeightsLibrary);
                 return SelectedDataSet.DataSet.WeightsLibrary.Weights;
             });
         }

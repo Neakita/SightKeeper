@@ -15,8 +15,7 @@ public abstract class DbDataAccess<TEntity> where TEntity : class
         CancellationToken cancellationToken)
         where TProperty : class
     {
-        lock (_dbContext)
-            return _dbContext.Entry(entity).Collection(propertyExpression).LoadAsync(cancellationToken: cancellationToken);
+        return _dbContext.Entry(entity).Collection(propertyExpression).LoadAsync(cancellationToken);
     }
 
     private readonly AppDbContext _dbContext;

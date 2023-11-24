@@ -79,24 +79,21 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
     private void OnHotKeyPressed(HotKey hotKey)
     {
         Guard.IsNotNull(DataSet);
-        lock (_dbContext)
+        var somethingScreenshoted = false;
+        while (hotKey.IsPressed)
         {
-            var somethingScreenshoted = false;
-            while (hotKey.IsPressed)
+            if (!_screenshoter.CanMakeScreenshot(out var message))
+                Log.Verbose("Can't make screenshot: {Message}", message);
+            else
             {
-                if (!_screenshoter.CanMakeScreenshot(out var message))
-                    Log.Verbose("Can't make screenshot: {Message}", message);
-                else
-                {
-                    _screenshoter.MakeScreenshot();
-                    somethingScreenshoted = true;
-                }
-                if (_timeout == null)
-                    break;
-                Thread.Sleep(_timeout.Value);
+                _screenshoter.MakeScreenshot();
+                somethingScreenshoted = true;
             }
-            if (somethingScreenshoted)
-                _librariesDataAccess.SaveChanges(DataSet.ScreenshotsLibrary);
+            if (_timeout == null)
+                break;
+            Thread.Sleep(_timeout.Value);
         }
+        if (somethingScreenshoted)
+            _librariesDataAccess.SaveChanges(DataSet.ScreenshotsLibrary);
     }
 }

@@ -16,7 +16,7 @@ public sealed class EditedProfileDataValidator : AbstractValidator<EditedProfile
 
     private async Task<bool> NameIsUnique(EditedProfileData data, CancellationToken cancellationToken)
     {
-        var profiles = await _profilesDataAccess.LoadAllProfiles(cancellationToken);
+        var profiles = await _profilesDataAccess.LoadProfilesAsync(cancellationToken);
         return profiles.Where(profile => profile != data.Profile).All(profile => profile.Name != data.Name);
     }
     

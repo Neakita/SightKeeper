@@ -1,7 +1,5 @@
-﻿using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Serilog;
+﻿using System.Reactive.Subjects;
+using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
@@ -15,78 +13,39 @@ public sealed class DbProfilesDataAccess : ProfilesDataAccess
 
     public DbProfilesDataAccess(AppDbContext dbContext) => _dbContext = dbContext;
 
-    public Task AddProfile(Profile profile, CancellationToken cancellationToken) => Task.Run(() =>
+    public async Task AddProfile(Profile profile, CancellationToken cancellationToken)
     {
-        lock (_dbContext)
-        {
-            _dbContext.Profiles.Add(profile);
-            _dbContext.SaveChanges();
-        }
+        await _dbContext.Profiles.AddAsync(profile, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         _profileAdded.OnNext(profile);
-    }, cancellationToken);
-
-    public Task RemoveProfile(Profile profile, CancellationToken cancellationToken = default) => Task.Run(() =>
-    {
-        lock (_dbContext)
-        {
-            _dbContext.Profiles.Remove(profile);
-            _dbContext.SaveChanges();
-        }
-        _profileRemoved.OnNext(profile);
-    }, cancellationToken);
-
-    public Task UpdateProfile(Profile profile, CancellationToken cancellationToken = default) => Task.Run(() =>
-    {
-        lock (_dbContext)
-        {
-            _dbContext.Profiles.Update(profile);
-            _dbContext.SaveChanges();
-        }
-        _profileUpdated.OnNext(profile);
-    }, cancellationToken);
-
-    public Task<IReadOnlyCollection<Profile>> LoadAllProfiles(CancellationToken cancellationToken) => Task.Run(() =>
-    {
-        lock (_dbContext)
-            return (IReadOnlyCollection<Profile>)_dbContext.Profiles.ToList();
-    }, cancellationToken);
-
-    public IObservable<Profile> LoadProfiles()
-    {
-        return Observable.Create<Profile>(observer =>
-        {
-            CancellationTokenSource cancellationTokenSource = new();
-            Task.Run(() =>
-            {
-                LoadProfilesFromDb(cancellationTokenSource.Token).ToObservable().Subscribe(observer);
-            }, cancellationTokenSource.Token);
-            return Disposable.Create(() => cancellationTokenSource.Cancel());
-        });
     }
-    
+
+    public async Task RemoveProfile(Profile profile, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Profiles.Remove(profile);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        _profileRemoved.OnNext(profile);
+    }
+
+    public async Task UpdateProfile(Profile profile, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Profiles.Update(profile);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        _profileUpdated.OnNext(profile);
+    }
+
+    public List<Profile> LoadProfiles()
+    {
+        return _dbContext.Profiles.ToList();
+    }
+
+    public Task<List<Profile>> LoadProfilesAsync(CancellationToken cancellationToken)
+    {
+        return _dbContext.Profiles.ToListAsync(cancellationToken);
+    }
+
     private readonly AppDbContext _dbContext;
     private readonly Subject<Profile> _profileAdded = new();
-    private readonly Subject<Profile> _profileRemoved = new();
     private readonly Subject<Profile> _profileUpdated = new();
-
-    private IEnumerable<Profile> LoadProfilesFromDb(CancellationToken cancellationToken)
-    {
-        var profileIndex = 0;
-        while (true)
-        {
-            var profile = GetProfile(profileIndex);
-            if (profile == null)
-                break;
-            Log.Debug("Loaded profile #{ProfileIndex} \"{Profile}\"", profileIndex, profile);
-            yield return profile;
-            cancellationToken.ThrowIfCancellationRequested();
-            profileIndex++;
-        }
-    }
-
-    private Profile? GetProfile(int index)
-    {
-        lock (_dbContext)
-            return _dbContext.Profiles.Skip(index).FirstOrDefault();
-    }
+    private readonly Subject<Profile> _profileRemoved = new();
 }

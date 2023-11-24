@@ -164,7 +164,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivata
     private async void LoadScreenshots(DataSet dataSet)
     {
         IsLoading = true;
-        var screenshots = await _screenshotsDataAccess.LoadAll(dataSet.ScreenshotsLibrary);
+        var screenshots = await _screenshotsDataAccess.Load(dataSet.ScreenshotsLibrary);
         _screenshotsSource.AddRange(screenshots);
         IsLoading = false;
     }

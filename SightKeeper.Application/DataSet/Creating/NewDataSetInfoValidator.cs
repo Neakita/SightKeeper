@@ -11,14 +11,13 @@ public sealed class NewDataSetInfoValidator : AbstractValidator<NewDataSetInfo>
         Include(dataSetInfoValidator);
         RuleFor(data => data.Name)
             .NotEmpty()
-            .MustAsync((dataSet, _, cancellationToken) => NameIsUnique(dataSet, cancellationToken)).WithMessage("Name must be unique");
-    }
-
-    private async Task<bool> NameIsUnique(DataSetInfo info, CancellationToken cancellationToken)
-    {
-        var dataSets = await _dataSetsDataAccess.GetDataSets(cancellationToken);
-        return dataSets.All(dataSet => dataSet.Name != info.Name);
+            .MustAsync((_, dataSetName, cancellationToken) => IsNameFree(dataSetName, cancellationToken)).WithMessage("Name must be unique");
     }
     
     private readonly DataSetsDataAccess _dataSetsDataAccess;
+
+    private Task<bool> IsNameFree(string name, CancellationToken cancellationToken)
+    {
+        return _dataSetsDataAccess.IsNameFree(name, cancellationToken);
+    }
 }

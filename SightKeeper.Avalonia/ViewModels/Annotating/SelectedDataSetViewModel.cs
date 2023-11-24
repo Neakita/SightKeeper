@@ -41,7 +41,9 @@ public sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
         _weights.Clear();
         if (newValue == null)
             return;
-        _weightsDataAccess.LoadWeights(newValue.DataSet.WeightsLibrary).Subscribe(weights => _weights.Add(weights));
+        // TODO do it asynchronously somehow
+        _weightsDataAccess.LoadWeights(newValue.DataSet.WeightsLibrary);
+        _weights.AddRange(newValue.DataSet.WeightsLibrary.Weights);
     }
 
     private readonly WeightsDataAccess _weightsDataAccess;

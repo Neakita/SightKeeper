@@ -51,10 +51,10 @@ public sealed class ScreenshoterDetectionHandler : DetectionObserver
 
     private async Task<bool> EnsureScreenshotLoaded()
     {
-        if (await _screenshotsDataAccess.IsLoaded(_dataSet.ScreenshotsLibrary))
+        if (_screenshotsDataAccess.IsLoaded(_dataSet.ScreenshotsLibrary))
             return true;
         _isLoadingScreenshots = true;
-        await _screenshotsDataAccess.LoadAll(_dataSet.ScreenshotsLibrary);
+        await _screenshotsDataAccess.Load(_dataSet.ScreenshotsLibrary);
         _isLoadingScreenshots = false;
         return false;
     }

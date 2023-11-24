@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Services;
 
@@ -15,23 +16,24 @@ public sealed class DbAssetsDataAccess : AssetsDataAccess
     {
         var entry = _dbContext.Entry(asset);
         if (entry.State == EntityState.Detached)
-            return Task.CompletedTask;
-        lock (_dbContext)
         {
-            return entry.Collection(x => x.Items).LoadAsync(cancellationToken: cancellationToken);
+            _logger.Warning("Asset {AssetId} was detached from DbContext, items were not loaded", asset.Id);
+            return Task.CompletedTask;
         }
+        return entry.Collection(x => x.Items).LoadAsync(cancellationToken);
     }
 
     public Task LoadAssets(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
     {
         var entry = _dbContext.Entry(dataSet);
         if (entry.State == EntityState.Detached)
-            return Task.CompletedTask;
-        lock (_dbContext)
         {
-            return entry.Collection(x => x.Assets).LoadAsync(cancellationToken: cancellationToken);
+            _logger.Warning("DataSet {DataSetId} was detached from DbContext, assets were not loaded", dataSet.Id);
+            return Task.CompletedTask;
         }
+        return entry.Collection(x => x.Assets).LoadAsync(cancellationToken);
     }
 
     private readonly AppDbContext _dbContext;
+    private readonly ILogger _logger = Log.ForContext<DbAssetsDataAccess>();
 }

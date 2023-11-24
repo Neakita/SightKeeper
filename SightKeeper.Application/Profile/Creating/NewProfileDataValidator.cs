@@ -17,7 +17,7 @@ public sealed class NewProfileDataValidator : AbstractValidator<NewProfileData>
 
     private async Task<bool> NameIsUnique(string name, CancellationToken cancellationToken)
     {
-        var profiles = await _profilesDataAccess.LoadAllProfiles(cancellationToken);
+        var profiles = await _profilesDataAccess.LoadProfilesAsync(cancellationToken);
         return profiles.All(profile => profile.Name != name);
     }
 }

@@ -7,8 +7,8 @@ public interface WeightsDataAccess
 {
     IObservable<Weights> WeightsCreated { get; }
     IObservable<Weights> WeightsDeleted { get; }
-    Task LoadAllWeights(WeightsLibrary library, CancellationToken cancellationToken = default);
-    IObservable<Weights> LoadWeights(WeightsLibrary library, CancellationToken cancellationToken = default);
+    void LoadWeights(WeightsLibrary library);
+    Task LoadWeightsAsync(WeightsLibrary library, CancellationToken cancellationToken = default);
 
     Task<Weights> CreateWeights(
         WeightsLibrary library,

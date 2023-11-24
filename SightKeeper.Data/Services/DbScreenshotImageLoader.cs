@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
@@ -12,31 +11,12 @@ public sealed class DbScreenshotImageLoader : ScreenshotImageLoader
     {
         _dbContext = dbContext;
     }
-    
-    public Image Load(Screenshot screenshot)
-    {
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        if (screenshot.Image != null)
-            return screenshot.Image;
-        lock (_dbContext)
-        {
-            var entry = _dbContext.Entry(screenshot);
-            entry.Reference(s => s.Image).Load();
-            Guard.IsNotNull(screenshot.Image);
-            return screenshot.Image;
-        }
-    }
 
     public Task<Image> LoadAsync(Screenshot screenshot, CancellationToken cancellationToken = default)
     {
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (screenshot.Image != null)
             return Task.FromResult(screenshot.Image);
-        return Task.Run(() =>
-        {
-            lock (_dbContext)
-                return _dbContext.Entry(screenshot).Reference(s => s.Image).Query().AsNoTracking().Single();
-        }, cancellationToken);
+        return _dbContext.Entry(screenshot).Reference(s => s.Image).Query().AsNoTracking().SingleAsync(cancellationToken);
     }
 
     private readonly AppDbContext _dbContext;
