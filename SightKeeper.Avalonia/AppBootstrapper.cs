@@ -75,7 +75,7 @@ public static class AppBootstrapper
 			#if DEBUG
 			.WriteTo.Debug()
 			#endif
-			.WriteTo.Seq("http://localhost:5341/")
+			.WriteTo.Seq("http://localhost:5341/", apiKey: "YKxpWEmlEG0TwTHJIYuX")
 			.MinimumLevel.ControlledBy(levelSwitch)
 			.CreateLogger();
 	}
