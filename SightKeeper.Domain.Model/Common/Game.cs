@@ -3,30 +3,21 @@ using FlakeId;
 
 namespace SightKeeper.Domain.Model.Common;
 
-public sealed class Game : ObservableObject
+public sealed class Game(string title, string processName) : ObservableObject
 {
 	public Id Id { get; private set; }
 
 	public string Title
 	{
-		get => _title;
-		set => SetProperty(ref _title, value);
+		get => title;
+		set => SetProperty(ref title, value);
 	}
 
 	public string ProcessName
 	{
-		get => _processName;
-		set => SetProperty(ref _processName, value);
-	}
-
-	public Game(string title, string processName)
-	{
-		_title = title;
-		_processName = processName;
+		get => processName;
+		set => SetProperty(ref processName, value);
 	}
 
 	public override string ToString() => Title;
-	
-	private string _title;
-	private string _processName;
 }

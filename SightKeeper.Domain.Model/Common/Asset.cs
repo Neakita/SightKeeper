@@ -52,14 +52,17 @@ public sealed class Asset : ObservableObject
                 item.ItemClass.RemoveItem(item);
             return !removed;
         }).ToList();
-        if (notDeletedItems.Any())
-            DomainThrowHelper.ThrowDetectorItemsException(notDeletedItems, $"{notDeletedItems.Count} items from asset of \"{DataSet}\" dataset not deleted");
+        if (notDeletedItems.Count == 0)
+            return;
+        var message = $"{notDeletedItems.Count} items from asset of \"{DataSet}\" dataset not deleted";
+        DomainThrowHelper.ThrowDetectorItemsException(notDeletedItems, message);
     }
 
     public void ClearItems()
     {
         foreach (var item in _items)
             item.ItemClass.RemoveItem(item);
+        // we cant use _items.Clear() because EF Core can't track changes with it, so we have to use RemoveAt in reverse order for good performance
         for (var i = _items.Count - 1; i >= 0; i--)
             _items.RemoveAt(i);
     }
@@ -67,6 +70,7 @@ public sealed class Asset : ObservableObject
     private readonly ObservableCollection<DetectorItem> _items;
     private AssetUsage _usage;
 
+    // for EF
     private Asset()
     {
         DataSet = null!;
