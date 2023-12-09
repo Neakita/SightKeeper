@@ -1,26 +1,50 @@
 ﻿using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
+using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Services.Input;
 
-public sealed class HotKey
+public sealed class HotKey(Gesture gesture)
 {
-    public Gesture Gesture { get; }
+    public Gesture Gesture { get; } = gesture;
     public bool IsPressed { get; internal set; }
 
-    public HotKey(Gesture gesture)
+    public void WaitForRelease()
     {
-        Gesture = gesture;
+        Guard.IsNotNull(_releaseCompletionSource);
+        _releaseCompletionSource.Task.Wait();
     }
-    
+
+    public Task WaitForReleaseAsync(CancellationToken cancellationToken = default)
+    {
+        Guard.IsNotNull(_releaseCompletionSource);
+        return _releaseCompletionSource.Task;
+    }
+
     internal IObservable<HotKey> Pressed => _pressed.ObserveOn(TaskPoolScheduler.Default).AsObservable();
     internal IObservable<Unit> Released => _released.ObserveOn(TaskPoolScheduler.Default).AsObservable();
 
-    internal void NotifyPressed() => _pressed.OnNext(this);
-    internal void NotifyReleased() => _released.OnNext(Unit.Default);
+    internal IObservable<bool> HasObserversObservable => _pressed.HasObserversObservable
+        .CombineLatest(_released.HasObserversObservable, (a, b) => a || b).DistinctUntilChanged();
 
-    private readonly Subject<HotKey> _pressed = new();
-    private readonly Subject<Unit> _released = new();
+    internal void NotifyPressed()
+    {
+        Guard.IsNull(_releaseCompletionSource);
+        _releaseCompletionSource = new TaskCompletionSource();
+        _pressed.OnNext(this);
+    }
+
+    internal void NotifyReleased()
+    {
+        Guard.IsNotNull(_releaseCompletionSource);
+        _releaseCompletionSource.SetResult();
+        _releaseCompletionSource = null;
+        _released.OnNext(Unit.Default);
+    }
+
+    private readonly ObservableSubject<HotKey> _pressed = new();
+    private readonly ObservableSubject<Unit> _released = new();
+
+    private TaskCompletionSource? _releaseCompletionSource;
 }

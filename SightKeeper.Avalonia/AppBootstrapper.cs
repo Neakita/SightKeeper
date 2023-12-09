@@ -6,7 +6,6 @@ using ReactiveUI;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
-using SharpHook.Reactive;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Application.DataSet;
@@ -129,9 +128,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectionMouseMoverImplementation>().As<DetectionMouseMover>();
 		builder.RegisterDecorator<AccumulationDecorator, DetectionMouseMover>();
 
-		SimpleReactiveGlobalHook hook = new();
-		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
-		hook.RunAsync();
+		builder.RegisterType<ReactiveGlobalHookFacade>().SingleInstance();
 	}
 
 	private static void InstancePerMainViewModel<TLimit, TActivatorData, TRegistrationStyle>(

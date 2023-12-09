@@ -15,50 +15,37 @@ using SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators.Preemption
 
 namespace SightKeeper.Services.Prediction;
 
-public sealed class HotKeyProfileRunner : ProfileRunner
-{
-    private sealed class Session
-    {
-        public CompositeDisposable Disposables { get; } = new();
-        public Profile Profile { get; }
-        public DetectionObserver Handler { get; set; }
-        public ILifetimeScope Scope { get; set; }
-
-        public Session(Profile profile, DetectionObserver handler, ILifetimeScope scope)
-        {
-            Profile = profile;
-            Handler = handler;
-            Scope = scope;
-        }
-    }
-
-    public HotKeyProfileRunner(
+public sealed class HotKeyProfileRunner(
         StreamDetector streamDetector,
         SharpHookHotKeyManager hotKeyManager,
         ProfileEditor profileEditor,
         ILifetimeScope scope)
+    : ProfileRunner
+{
+    private sealed class Session(Profile profile, DetectionObserver handler, ILifetimeScope scope)
     {
-        _streamDetector = streamDetector;
-        _hotKeyManager = hotKeyManager;
-        _profileEditor = profileEditor;
-        _scope = scope;
-        _streamDetector.Detection.Subscribe(HandleDetection).DisposeWithEx(_constructorDisposables);
+        public CompositeDisposable Disposables { get; } = new();
+        public Profile Profile { get; } = profile;
+        public DetectionObserver Handler { get; set; } = handler;
+        public ILifetimeScope Scope { get; set; } = scope;
     }
-    
+
     public void Run(Profile profile)
     {
         Guard.IsNull(_session);
-        var scope = _scope.BeginLifetimeScope(profile, builder => BuildScope(builder, profile));
-        _session = new Session(profile, ResolveObserver(scope), scope);
-        _streamDetector.Weights = profile.Weights;
-        _streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
-        _hotKeyManager.Register(MouseButton.Button4, () => _streamDetector.IsEnabled = true, () =>
+        var sessionScope = scope.BeginLifetimeScope(profile, builder => BuildScope(builder, profile));
+        _session = new Session(profile, ResolveObserver(sessionScope), sessionScope);
+        streamDetector.Weights = profile.Weights;
+        streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
+        hotKeyManager.Register(MouseButton.Button4, hotkey =>
             {
-                _streamDetector.IsEnabled = false;
+                var detectionDisposable = streamDetector.RunObservable().Subscribe(HandleDetection);
+                hotkey.WaitForRelease();
+                detectionDisposable.Dispose();
                 _session.Handler.OnPaused();
             })
             .DisposeWithEx(_session.Disposables);
-        _profileEditor.ProfileEdited
+        profileEditor.ProfileEdited
             .Where(editedProfile => editedProfile == profile)
             .Subscribe(OnProfileEdited)
             .DisposeWithEx(_session.Disposables);
@@ -66,18 +53,18 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         _session.Handler.RequestedProbabilityThreshold.Subscribe(threshold =>
         {
             if (threshold != null)
-                _streamDetector.ProbabilityThreshold = threshold.Value;
+                streamDetector.ProbabilityThreshold = threshold.Value;
         });
     }
 
     private void OnProfileEdited(Profile profile)
     {
-        _streamDetector.Weights = profile.Weights;
-        _streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
+        streamDetector.Weights = profile.Weights;
+        streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
         if (_session == null)
             return;
         _session.Scope.Dispose();
-        _session.Scope = _scope.BeginLifetimeScope(profile, builder => BuildScope(builder, profile));
+        _session.Scope = scope.BeginLifetimeScope(profile, builder => BuildScope(builder, profile));
         _session.Handler = ResolveObserver(_session.Scope);
     }
 
@@ -127,14 +114,8 @@ public sealed class HotKeyProfileRunner : ProfileRunner
         _session.Disposables.Dispose();
         _session.Scope.Dispose();
         _session = null;
-        _streamDetector.IsEnabled = false;
-        _streamDetector.Weights = null;
+        streamDetector.Weights = null;
     }
 
-    private readonly CompositeDisposable _constructorDisposables = new();
-    private readonly StreamDetector _streamDetector;
-    private readonly SharpHookHotKeyManager _hotKeyManager;
-    private readonly ProfileEditor _profileEditor;
-    private readonly ILifetimeScope _scope;
     private Session? _session;
 }
