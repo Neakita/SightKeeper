@@ -10,7 +10,7 @@ public sealed class WeightsTests
     public void ShouldAddWeights()
     {
         var dataSet = DomainTestsHelper.NewDataSet;
-        var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), Array.Empty<byte>(), ModelSize.Nano, 0, 0, 0, 0, new List<Asset>());
+        var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), Array.Empty<byte>(), ModelSize.Nano, 0, 0, 0, 0, dataSet.ItemClasses);
         dataSet.WeightsLibrary.Weights.Should().Contain(weights);
     }
 }

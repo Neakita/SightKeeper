@@ -39,12 +39,12 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
     public FakeProfileEditorViewModel()
     {
         DataSet dataSet = new("Dataset 1");
-        var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), Array.Empty<byte>(), ModelSize.Nano, 100, 1.1f, 1.0f,
-            0.9f, Enumerable.Empty<Asset>());
         var itemClass1 = dataSet.CreateItemClass("Item class 1", 0);
         var itemClass2 = dataSet.CreateItemClass("Item class 2", 0);
         var itemClass3 = dataSet.CreateItemClass("Item class 3", 0);
         var itemClass4 = dataSet.CreateItemClass("Item class 4", 0);
+        var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), Array.Empty<byte>(), ModelSize.Nano, 100, 1.1f, 1.0f,
+            0.9f, dataSet.ItemClasses);
         ItemClassToAdd = itemClass3;
         AvailableDataSets = new[] { dataSet };
         AvailableWeights = new[] { weights };

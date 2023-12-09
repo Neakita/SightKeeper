@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.Immutable;
+using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
@@ -16,6 +18,7 @@ public sealed class Weights : ObservableObject
     public float BoundingLoss { get; private set; }
     public float ClassificationLoss { get; private set; }
     public float DeformationLoss { get; private set; }
+    public IReadOnlyList<ItemClass> ItemClasses { get; private set; }
 
     internal Weights(
         WeightsLibrary library,
@@ -26,7 +29,7 @@ public sealed class Weights : ObservableObject
         float boundingLoss,
         float classificationLoss,
         float deformationLoss,
-        IEnumerable<Asset> assets)
+        IEnumerable<ItemClass> itemClasses)
     {
         CreationDate = DateTime.Now;
         Library = library;
@@ -37,6 +40,8 @@ public sealed class Weights : ObservableObject
         BoundingLoss = boundingLoss;
         ClassificationLoss = classificationLoss;
         DeformationLoss = deformationLoss;
+        ItemClasses = itemClasses.ToImmutableList();
+        Guard.IsTrue(ItemClasses.All(itemClass => itemClass.DataSet == library.DataSet));
     }
 
     private Weights()
@@ -44,6 +49,7 @@ public sealed class Weights : ObservableObject
         Library = null!;
         ONNXData = null!;
         PTData = null!;
+        ItemClasses = null!;
     }
 
     public override string ToString() => $"{nameof(Size)}: {Size}, {nameof(Epoch)}: {Epoch}, {nameof(BoundingLoss)}: {BoundingLoss}, {nameof(ClassificationLoss)}: {ClassificationLoss}, {nameof(DeformationLoss)}: {DeformationLoss}";

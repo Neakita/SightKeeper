@@ -26,9 +26,9 @@ public sealed class WeightsLibrary : ObservableObject
         float boundingLoss,
         float classificationLoss,
         float deformationLoss,
-        IEnumerable<Asset> assets)
+        IEnumerable<ItemClass> itemClasses)
     {
-        Weights weights = new(this, onnxData, ptData, size, epoch, boundingLoss, classificationLoss, deformationLoss, assets);
+        Weights weights = new(this, onnxData, ptData, size, epoch, boundingLoss, classificationLoss, deformationLoss, itemClasses);
         _weights.Add(weights);
         return weights;
     }

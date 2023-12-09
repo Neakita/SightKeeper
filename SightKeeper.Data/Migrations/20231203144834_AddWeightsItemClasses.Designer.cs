@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SightKeeper.Data;
 
@@ -10,9 +11,11 @@ using SightKeeper.Data;
 namespace SightKeeper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231203144834_AddWeightsItemClasses")]
+    partial class AddWeightsItemClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -50,7 +53,7 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Games", (string)null);
+                    b.ToTable("Games");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Common.Image", b =>
@@ -115,7 +118,7 @@ namespace SightKeeper.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("DataSets", (string)null);
+                    b.ToTable("DataSets");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.Detector.DetectorItem", b =>
@@ -170,7 +173,7 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasIndex("WeightsId");
 
-                    b.ToTable("Profiles", (string)null);
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.ProfileItemClass", b =>
@@ -267,7 +270,7 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasIndex("LibraryId");
 
-                    b.ToTable("Weights", (string)null);
+                    b.ToTable("Weights");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.WeightsData", b =>
@@ -281,7 +284,7 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WeightsData", (string)null);
+                    b.ToTable("WeightsData");
 
                     b.UseTptMappingStrategy();
                 });
@@ -308,7 +311,7 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasIndex("ItemClassId");
 
-                    b.ToTable("WeightsItemClasses", (string)null);
+                    b.ToTable("WeightsItemClasses");
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.ONNXData", b =>
@@ -399,7 +402,7 @@ namespace SightKeeper.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("SightKeeper.Domain.Model.Detector.DetectorItem.Bounding#SightKeeper.Domain.Model.Detector.Bounding", "Bounding", b1 =>
+                    b.OwnsOne("SightKeeper.Domain.Model.Detector.Bounding", "Bounding", b1 =>
                         {
                             b1.Property<long>("DetectorItemId")
                                 .HasColumnType("INTEGER");
@@ -422,7 +425,7 @@ namespace SightKeeper.Data.Migrations
 
                             b1.HasKey("DetectorItemId");
 
-                            b1.ToTable("DetectorItems", (string)null);
+                            b1.ToTable("DetectorItems");
 
                             b1.WithOwner()
                                 .HasForeignKey("DetectorItemId");
@@ -444,7 +447,7 @@ namespace SightKeeper.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("SightKeeper.Domain.Model.Profile.PreemptionSettings#SightKeeper.Domain.Model.PreemptionSettings", "PreemptionSettings", b1 =>
+                    b.OwnsOne("SightKeeper.Domain.Model.PreemptionSettings", "PreemptionSettings", b1 =>
                         {
                             b1.Property<long>("ProfileId")
                                 .HasColumnType("INTEGER");
@@ -459,12 +462,12 @@ namespace SightKeeper.Data.Migrations
 
                             b1.HasKey("ProfileId");
 
-                            b1.ToTable("Profiles", (string)null);
+                            b1.ToTable("Profiles");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProfileId");
 
-                            b1.OwnsOne("SightKeeper.Domain.Model.Profile.PreemptionSettings#SightKeeper.Domain.Model.PreemptionSettings.StabilizationSettings#SightKeeper.Domain.Model.PreemptionStabilizationSettings", "StabilizationSettings", b2 =>
+                            b1.OwnsOne("SightKeeper.Domain.Model.PreemptionStabilizationSettings", "StabilizationSettings", b2 =>
                                 {
                                     b2.Property<long>("PreemptionSettingsProfileId")
                                         .HasColumnType("INTEGER");
@@ -479,7 +482,7 @@ namespace SightKeeper.Data.Migrations
 
                                     b2.HasKey("PreemptionSettingsProfileId");
 
-                                    b2.ToTable("Profiles", (string)null);
+                                    b2.ToTable("Profiles");
 
                                     b2.WithOwner()
                                         .HasForeignKey("PreemptionSettingsProfileId");
