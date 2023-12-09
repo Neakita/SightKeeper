@@ -70,7 +70,7 @@ public sealed partial class AutoAnnotationViewModel : ViewModel, IAutoAnnotation
         Guard.IsNotNull(_selectedScreenshotViewModel.Value);
         var screenshotContent = _selectedScreenshotViewModel.Value.Image;
         var image = await screenshotContent;
-        var items = await _detector.Detect(image.Content, cancellationToken);
+        var items = await _detector.DetectAsync(image.Content, cancellationToken);
         _selectedScreenshotViewModel.DetectedItems.Clear();
         _selectedScreenshotViewModel.DetectedItems.AddRange(items.Select(CreateDetectedItemViewModel));
         ClearCommand.NotifyCanExecuteChanged();

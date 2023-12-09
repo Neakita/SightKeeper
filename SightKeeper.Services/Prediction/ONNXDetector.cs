@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Collections.Immutable;
+using CommunityToolkit.Diagnostics;
 using Compunet.YoloV8;
 using Compunet.YoloV8.Data;
 using Compunet.YoloV8.Metadata;
@@ -12,7 +13,7 @@ using RectangleF = System.Drawing.RectangleF;
 
 namespace SightKeeper.Services.Prediction;
 
-public sealed class ONNXDetector : Detector
+public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
 {
     public Weights? Weights
     {
@@ -34,7 +35,7 @@ public sealed class ONNXDetector : Detector
     
     private async void SetWeights(Weights weights)
     {
-        var weightsData = await _weightsDataAccess.LoadWeightsData(weights, WeightsFormat.ONNX);
+        var weightsData = await weightsDataAccess.LoadWeightsData(weights, WeightsFormat.ONNX);
         _predictor = new YoloV8(new ModelSelector(weightsData.Content), CreateMetadata(weights.Library.DataSet));
         _predictor.Parameters.Confidence = ProbabilityThreshold;
         _predictor.Parameters.IoU = IoU;
@@ -62,22 +63,26 @@ public sealed class ONNXDetector : Detector
         }
     }
 
-    public ONNXDetector(WeightsDataAccess weightsDataAccess)
+    public ImmutableList<DetectionItem> Detect(byte[] image)
     {
-        _weightsDataAccess = weightsDataAccess;
+        using var operation = Operation.Begin("Detecting on image");
+        Guard.IsNotNull(_predictor);
+        var detectionResult = _predictor.Detect(new ImageSelector(image));
+        var result = detectionResult.Boxes.Select(CreateDetectionItem).ToImmutableList();
+        operation.Complete("count", result.Count);
+        return result;
     }
 
-    public async Task<IReadOnlyCollection<DetectionItem>> Detect(byte[] image, CancellationToken cancellationToken)
+    public async Task<ImmutableList<DetectionItem>> DetectAsync(byte[] image, CancellationToken cancellationToken = default)
     {
         using var operation = Operation.Begin("Detecting on image");
         Guard.IsNotNull(_predictor);
         var detectionResult = await Task.Run(() => _predictor.Detect(new ImageSelector(image)), cancellationToken);
-        var result = detectionResult.Boxes.Select(CreateDetectionItem).ToList();
-        operation.Complete(nameof(result), result);
+        var result = detectionResult.Boxes.Select(CreateDetectionItem).ToImmutableList();
+        operation.Complete("count", result.Count);
         return result;
     }
 
-    private readonly WeightsDataAccess _weightsDataAccess;
     private float _probabilityThreshold = YoloV8Parameters.Default.Confidence;
     private float _iou = YoloV8Parameters.Default.IoU;
     private YoloV8? _predictor;
