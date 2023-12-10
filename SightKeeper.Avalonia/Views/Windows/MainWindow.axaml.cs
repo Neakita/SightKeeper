@@ -1,5 +1,5 @@
 using Avalonia.ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Windows;
+using MainViewModel = SightKeeper.Avalonia.ViewModels.MainViewModel;
 
 namespace SightKeeper.Avalonia.Views.Windows;
 

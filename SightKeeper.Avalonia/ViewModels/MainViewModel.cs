@@ -10,7 +10,7 @@ using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
-namespace SightKeeper.Avalonia.ViewModels.Windows;
+namespace SightKeeper.Avalonia.ViewModels;
 
 public sealed partial class MainViewModel : ViewModel, IActivatableViewModel
 {

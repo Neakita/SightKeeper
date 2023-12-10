@@ -42,6 +42,7 @@ using SightKeeper.Services.Prediction.Handling.MouseMoving;
 using SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators;
 using SightKeeper.Services.Windows;
 using DataSetEditor = SightKeeper.Avalonia.Views.Dialogs.DataSetEditor;
+using MainViewModel = SightKeeper.Avalonia.ViewModels.MainViewModel;
 using ProfileEditor = SightKeeper.Avalonia.Views.ProfileEditor;
 
 namespace SightKeeper.Avalonia;
