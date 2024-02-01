@@ -31,6 +31,7 @@ internal static class Program
 
 	private static void TaskSchedulerOnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
 	{
+		e.SetObserved();
 		Dispatcher.UIThread.InvokeAsync(() => HandleUnhandledExceptions(e.Exception, "TaskScheduler"), DispatcherPriority.Normal);
 	}
 
