@@ -5,6 +5,7 @@ using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Services;
+using SixLabors.ImageSharp;
 using Image = SixLabors.ImageSharp.Image;
 
 namespace SightKeeper.Application.Training;

@@ -92,10 +92,11 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
     private static YoloV8Metadata CreateMetadata(DataSet dataSet) => new(
         string.Empty, string.Empty, string.Empty,
         YoloV8Task.Detect,
+        1,
         new Size(dataSet.Resolution),
         dataSet.ItemClasses.Select((itemClass, index) => new YoloV8Class(index, itemClass.Name)).ToList());
 
-    private DetectionItem CreateDetectionItem(IBoundingBox bounding)
+    private DetectionItem CreateDetectionItem(BoundingBox bounding)
     {
         Guard.IsNotNull(_itemClasses);
         Guard.IsNotNull(_weights);
