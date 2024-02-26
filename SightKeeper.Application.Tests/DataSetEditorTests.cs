@@ -134,9 +134,10 @@ public sealed class DataSetEditorTests : DbRelatedTests
     {
         get
         {
-            var dataSetsDataAccessSubstitute = Substitute.For<DataSetsDataAccess>();
+	        var dbContext = DbContextFactory.CreateDbContext();
+	        DbDataSetsDataAccess dataSetsDataAccessSubstitute = new(dbContext);
             IValidator<DataSetChanges> validator = new DataSetChangesValidator(new DataSetInfoValidator(), dataSetsDataAccessSubstitute);
-            return new DbDataSetEditor(validator, DbContextFactory.CreateDbContext());
+            return new DbDataSetEditor(validator, dbContext);
         }
     }
 }
