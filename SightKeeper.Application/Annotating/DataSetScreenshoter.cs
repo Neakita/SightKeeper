@@ -31,6 +31,7 @@ public sealed class DataSetScreenshoter
         _screenshoter.MakeScreenshot();
     }
 
+    // ISSUE SRP violation
     [MemberNotNullWhen(true, nameof(DataSet))]
     public bool CanMakeScreenshot([NotNullWhen(false)] out string? message)
     {

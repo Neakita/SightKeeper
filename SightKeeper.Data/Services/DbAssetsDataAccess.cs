@@ -12,7 +12,7 @@ public sealed class DbAssetsDataAccess : AssetsDataAccess
         _dbContext = dbContext;
     }
     
-    public Task LoadItems(Asset asset, CancellationToken cancellationToken)
+    public Task LoadItemsAsync(Asset asset, CancellationToken cancellationToken)
     {
         var entry = _dbContext.Entry(asset);
         if (entry.State == EntityState.Detached)
@@ -23,7 +23,18 @@ public sealed class DbAssetsDataAccess : AssetsDataAccess
         return entry.Collection(x => x.Items).LoadAsync(cancellationToken);
     }
 
-    public Task LoadAssets(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
+    public void LoadAssets(Domain.Model.DataSet dataSet)
+    {
+	    var entry = _dbContext.Entry(dataSet);
+	    if (entry.State == EntityState.Detached)
+	    {
+		    _logger.Warning("DataSet {DataSetId} was detached from DbContext, assets were not loaded", dataSet.Id);
+		    return;
+	    }
+	    entry.Collection(x => x.Assets).Load();
+    }
+
+    public Task LoadAssetsAsync(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
     {
         var entry = _dbContext.Entry(dataSet);
         if (entry.State == EntityState.Detached)

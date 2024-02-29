@@ -54,9 +54,9 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
         Description = dataSet.Description;
         Resolution = dataSet.Resolution;
         Game = dataSet.Game;
-        _assetsDataAccess.LoadAssets(dataSet);
+        _assetsDataAccess.LoadAssetsAsync(dataSet);
         foreach (var asset in dataSet.Assets)
-            _assetsDataAccess.LoadItems(asset);
+            _assetsDataAccess.LoadItemsAsync(asset);
     }
 
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
@@ -112,7 +112,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
         if (itemClass is ExistingItemClass existingItemClass)
         {
             DeletedItemClassAction? action = null;
-            await _itemClassDataAccess.LoadItems(existingItemClass.ItemClass);
+            await _itemClassDataAccess.LoadItemsAsync(existingItemClass.ItemClass);
             if (existingItemClass.ItemClass.Items.Any())
             {
                 const string deleteItems = "Delete items";

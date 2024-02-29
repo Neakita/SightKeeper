@@ -104,7 +104,7 @@ public sealed class BoundingViewModel : ViewModel
 
     public void SetFromTwoPositions(double x1, double y1, double x2, double y2)
     {
-        MinMax(x1, x2, out var xMin, out var xMax); // 🎄
+        MinMax(x1, x2, out var xMin, out var xMax);
         MinMax(y1, y2, out var yMin, out var yMax);
         OnPropertiesChanging(Properties);
         _left = xMin;

@@ -5,6 +5,7 @@ namespace SightKeeper.Domain.Services;
 
 public interface AssetsDataAccess
 {
-    Task LoadItems(Asset asset, CancellationToken cancellationToken = default);
-    Task LoadAssets(DataSet dataSet, CancellationToken cancellationToken = default);
+    Task LoadItemsAsync(Asset asset, CancellationToken cancellationToken = default);
+    void LoadAssets(DataSet dataSet);
+    Task LoadAssetsAsync(DataSet dataSet, CancellationToken cancellationToken = default);
 }

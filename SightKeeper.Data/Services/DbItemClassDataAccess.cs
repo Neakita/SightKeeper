@@ -8,7 +8,12 @@ public sealed class DbItemClassDataAccess : DbDataAccess<ItemClass>, ItemClassDa
     public DbItemClassDataAccess(AppDbContext dbContext) : base(dbContext)
     {
     }
-    
-    public Task LoadItems(ItemClass itemClass, CancellationToken cancellationToken) =>
-        EnsureCollectionLoaded(itemClass, x => x.Items, cancellationToken);
+
+    public void LoadItems(ItemClass itemClass)
+    {
+	    EnsureCollectionLoaded(itemClass, x => x.Items);
+    }
+
+    public Task LoadItemsAsync(ItemClass itemClass, CancellationToken cancellationToken) =>
+        EnsureCollectionLoadedAsync(itemClass, x => x.Items, cancellationToken);
 }

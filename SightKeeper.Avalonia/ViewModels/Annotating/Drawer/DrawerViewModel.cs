@@ -52,16 +52,16 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
             var asset = SelectedScreenshotViewModel.Value?.Item.Asset;
             if (asset == null)
                 return;
-            assetsDataAccess.LoadItems(asset);
+            assetsDataAccess.LoadItemsAsync(asset);
             foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer, this)))
                 SelectedScreenshotViewModel.DetectorItems.Add(item);
         }).DisposeWith(_disposable);
 
-        DetectedItemViewModel.MakeAnnotationRequested.Subscribe(async item =>
+        DetectedItemViewModel.MakeAnnotationRequested.Subscribe(item =>
         {
             Guard.IsNotNull(SelectedScreenshotViewModel.Value);
             SelectedScreenshotViewModel.DetectedItems.Remove(item);
-            var detectorItem = await _annotator.Annotate(SelectedScreenshotViewModel.Value.Item, item.ItemClass, item.Bounding.Bounding, CancellationToken.None);
+            var detectorItem = _annotator.Annotate(SelectedScreenshotViewModel.Value.Item, item.ItemClass, item.Bounding.Bounding);
             DetectorItemViewModel detectorItemViewModel = new(detectorItem, resizer, this)
             {
                 IsThumbsVisible = IsItemSelectionEnabled
@@ -88,7 +88,7 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
         _drawingData.UpdateBounding(intermediatePosition);
     }
 
-    public async void EndDrawing(Point finishPosition)
+    public void EndDrawing(Point finishPosition)
     {
         Guard.IsNotNull(_drawingData);
         var screenshot = SelectedScreenshotViewModel.Value;
@@ -104,7 +104,7 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
             return;
         }
         boundingViewModel.Synchronize();
-        _drawingData.ItemViewModel.Item = await _annotator.Annotate(screenshot.Item, _tools.SelectedItemClass, boundingViewModel.Bounding);
+        _drawingData.ItemViewModel.Item = _annotator.Annotate(screenshot.Item, _tools.SelectedItemClass, boundingViewModel.Bounding);
         screenshot.NotifyIsAssetChanged();
         _drawingData = null;
     }

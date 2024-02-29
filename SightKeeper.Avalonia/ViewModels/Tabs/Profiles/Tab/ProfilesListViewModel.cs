@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
+using CommunityToolkit.Diagnostics;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Commons;
@@ -22,6 +23,7 @@ public sealed class ProfilesListViewModel : IDisposable
             .AddKey(profile => profile.Profile)
             .PopulateInto(_profileViewModels)
             .DisposeWithEx(_constructorDisposables);
+        Guard.IsNotNull(SynchronizationContext.Current);
         _profileViewModels.Connect()
             .ObserveOn(SynchronizationContext.Current)
             .Bind(out var profileViewModels)

@@ -24,7 +24,7 @@ public sealed class ImagesExporter
 		Domain.Model.DataSet dataSet,
 		CancellationToken cancellationToken = default)
 	{
-		await _assetsDataAccess.LoadAssets(dataSet, cancellationToken);
+		await _assetsDataAccess.LoadAssetsAsync(dataSet, cancellationToken);
 		await Export(targetDirectoryPath, dataSet.Assets, dataSet.ItemClasses, cancellationToken);
 	}
 
@@ -96,7 +96,7 @@ public sealed class ImagesExporter
 	{
 		var operation = _logger.BeginOperation("Loading items for {AssetsCount} assets", assets.Count);
 		foreach (var asset in assets)
-			await _assetsDataAccess.LoadItems(asset, cancellationToken);
+			await _assetsDataAccess.LoadItemsAsync(asset, cancellationToken);
 		operation.Complete();
 	}
 

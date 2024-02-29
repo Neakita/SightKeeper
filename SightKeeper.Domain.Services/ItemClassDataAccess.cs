@@ -4,5 +4,6 @@ namespace SightKeeper.Domain.Services;
 
 public interface ItemClassDataAccess
 {
-    Task LoadItems(ItemClass itemClass, CancellationToken cancellationToken = default);
+	void LoadItems(ItemClass itemClass);
+    Task LoadItemsAsync(ItemClass itemClass, CancellationToken cancellationToken = default);
 }

@@ -29,8 +29,8 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		using var graphics = Graphics.FromImage(windowsBitmap);
 
 		Point point = new(
-			_screenCenter.X - Resolution.Value / 2 - XOffset, 
-			_screenCenter.Y - Resolution.Value / 2 - YOffset);
+			_screenCenter.X - Resolution.Value / 2, 
+			_screenCenter.Y - Resolution.Value / 2);
 
 		graphics.CopyFromScreen(point, Point.Empty, new Size(Resolution.Value, Resolution.Value));
 		using MemoryStream stream = new();
@@ -39,13 +39,8 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		return stream.ToArray();
 	}
 
-	public Task<byte[]> CaptureAsync(CancellationToken cancellationToken = default) =>
-		Task.Run(Capture, cancellationToken);
-
 	public Game? Game { get; set; }
 	public ushort? Resolution { get; set; }
-	public ushort XOffset { get; set; }
-	public ushort YOffset { get; set; }
 
 	private readonly Point _screenCenter;
 }

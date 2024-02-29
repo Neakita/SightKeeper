@@ -22,7 +22,6 @@ using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Avalonia.ViewModels.Tabs;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
-using SightKeeper.Avalonia.ViewModels.Windows;
 using SightKeeper.Avalonia.Views;
 using SightKeeper.Avalonia.Views.Annotating;
 using SightKeeper.Avalonia.Views.Dialogs;

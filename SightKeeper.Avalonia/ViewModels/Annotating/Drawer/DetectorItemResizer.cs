@@ -47,7 +47,7 @@ public sealed class DetectorItemResizer
         var item = _data.Item.Item;
         Guard.IsNotNull(item);
         _data.Item.Bounding.Synchronize();
-        _annotator.Move(item, _data.Item.Bounding.Bounding); // ISSUE: async operation in sync context
+        _annotator.Move(item, _data.Item.Bounding.Bounding);
         _data = null;
     }
     

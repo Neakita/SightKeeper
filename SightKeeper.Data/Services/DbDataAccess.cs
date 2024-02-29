@@ -9,7 +9,15 @@ public abstract class DbDataAccess<TEntity> where TEntity : class
         _dbContext = dbContext;
     }
 
-    protected Task EnsureCollectionLoaded<TProperty>(
+    protected void EnsureCollectionLoaded<TProperty>(
+	    TEntity entity,
+	    Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression)
+	    where TProperty : class
+    {
+	    _dbContext.Entry(entity).Collection(propertyExpression).Load();
+    }
+
+    protected Task EnsureCollectionLoadedAsync<TProperty>(
         TEntity entity,
         Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression,
         CancellationToken cancellationToken)

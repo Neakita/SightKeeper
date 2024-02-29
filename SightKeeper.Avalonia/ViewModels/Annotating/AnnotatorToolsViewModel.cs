@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -78,22 +79,22 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
 
 
     [RelayCommand(CanExecute = nameof(CanMarkSelectedScreenshotAsAsset))]
-    private void MarkSelectedScreenshotAsAsset()
+    private async Task MarkSelectedScreenshotAsAsset()
     {
         var screenshot = _selectedScreenshotViewModel.Value;
         Guard.IsNotNull(screenshot);
-        _annotator.MarkAsset(screenshot.Item);
+        await _annotator.MarkAssetAsync(screenshot.Item);
         screenshot.NotifyIsAssetChanged();
     }
     private bool CanMarkSelectedScreenshotAsAsset() =>
         _selectedScreenshotViewModel.Value?.IsAsset == false;
 
     [RelayCommand(CanExecute = nameof(CanUnMarkSelectedScreenshotAsAsset))]
-    private void UnMarkSelectedScreenshotAsAsset()
+    private async Task UnMarkSelectedScreenshotAsAsset()
     {
         var screenshot = _selectedScreenshotViewModel.Value;
         Guard.IsNotNull(screenshot);
-        _annotator.UnMarkAsset(screenshot.Item);
+        await _annotator.UnMarkAssetAsync(screenshot.Item);
         screenshot.NotifyIsAssetChanged();
         _selectedScreenshotViewModel.DetectorItems.Clear();
     }
@@ -101,13 +102,13 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
         _selectedScreenshotViewModel.Value?.IsAsset == true;
 
     [RelayCommand(CanExecute = nameof(CanDeleteScreenshot))]
-    private void DeleteScreenshot()
+    private async Task DeleteScreenshot()
     {
         var screenshot = _selectedScreenshotViewModel.Value;
         Guard.IsNotNull(_selectedScreenshotViewModel.SelectedScreenshotIndex);
         var screenshotIndex = _selectedScreenshotViewModel.SelectedScreenshotIndex.Value;
         Guard.IsNotNull(screenshot);
-        _annotator.DeleteScreenshot(screenshot.Item);
+        await _annotator.DeleteScreenshotAsync(screenshot.Item);
         var screenshots = _screenshotsViewModel.Screenshots;
         if (!screenshots.Any())
             return;
@@ -116,12 +117,12 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     private bool CanDeleteScreenshot() => _selectedScreenshotViewModel.Value != null;
 
     [RelayCommand(CanExecute = nameof(CanDeleteItem))]
-    private void DeleteItem()
+    private async Task DeleteItem()
     {
         var item = SelectedItem;
         Guard.IsNotNull(item);
         Guard.IsNotNull(item.Item);
-        _annotator.DeleteItem(item.Item);
+        await _annotator.DeleteItemAsync(item.Item);
         _selectedScreenshotViewModel.DetectorItems.Remove(item);
     }
 
