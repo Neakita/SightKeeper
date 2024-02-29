@@ -10,7 +10,7 @@ namespace SightKeeper.Services.Windows;
 public static class User32
 {
 	[DllImport("user32.dll")]
-	public static extern IntPtr GetForegroundWindow();
+	internal static extern IntPtr GetForegroundWindow();
 
 	[DllImport("user32.dll")]
 	private static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
@@ -19,19 +19,19 @@ public static class User32
 	{
 		mouse_event(0x0001, xDelta, yDelta, 0, 0);
 	}
-	
-	public const int WS_EX_TRANSPARENT = 0x00000020;
+
+	private const int WS_EX_TRANSPARENT = 0x00000020;
 	// ReSharper disable once IdentifierTypo
-	public const int GWL_EXSTYLE = -20;
+	private const int GWL_EXSTYLE = -20;
 	[DllImport("user32.dll")]
-	public static extern int GetWindowLong(IntPtr handle, int index);
+	private static extern int GetWindowLong(IntPtr handle, int index);
 	[DllImport("user32.dll")]
-	public static extern int SetWindowLong(IntPtr handle, int index, int newStyle);
+	private static extern int SetWindowLong(IntPtr handle, int index, int newStyle);
 	
 	[DllImport("user32.dll", SetLastError = true)]
-	public static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
-	
-	public const int WS_EX_LAYERED = 0x80000;
+	private static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
+
+	private const int WS_EX_LAYERED = 0x80000;
 
 	public static void MakeWindowClickThrough(IntPtr windowHandle)
 	{
