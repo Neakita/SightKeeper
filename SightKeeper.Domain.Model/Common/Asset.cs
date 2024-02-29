@@ -19,14 +19,6 @@ public sealed class Asset : ObservableObject
     }
 
     public IReadOnlyList<DetectorItem> Items => _items;
-    
-    internal Asset(DataSet dataSet, Screenshot screenshot)
-    {
-        DataSet = dataSet;
-        Screenshot = screenshot;
-        screenshot.Asset = this;
-        _items = new ObservableCollection<DetectorItem>();
-    }
 
     public DetectorItem CreateItem(ItemClass itemClass, Bounding bounding)
     {
@@ -65,6 +57,15 @@ public sealed class Asset : ObservableObject
         // we cant use _items.Clear() because EF Core can't track changes with it, so we have to use RemoveAt in reverse order for good performance
         for (var i = _items.Count - 1; i >= 0; i--)
             _items.RemoveAt(i);
+    }
+    
+    internal Asset(DataSet dataSet, Screenshot screenshot)
+    {
+	    DataSet = dataSet;
+	    Screenshot = screenshot;
+	    screenshot.Asset = this;
+	    _items = new ObservableCollection<DetectorItem>();
+	    _usage = AssetUsage.Any;
     }
 
     private readonly ObservableCollection<DetectorItem> _items;
