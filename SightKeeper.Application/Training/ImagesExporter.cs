@@ -21,7 +21,7 @@ public sealed class ImagesExporter
 	
 	public async Task Export(
 		string targetDirectoryPath,
-		Domain.Model.DataSet dataSet,
+		Domain.Model.DataSet.DataSet dataSet,
 		CancellationToken cancellationToken = default)
 	{
 		await _assetsDataAccess.LoadAssetsAsync(dataSet, cancellationToken);

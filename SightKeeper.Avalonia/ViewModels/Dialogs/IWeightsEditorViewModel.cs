@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSet.Weights;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 

@@ -1,4 +1,5 @@
 ﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Screenshots;
 using Image = SightKeeper.Domain.Model.Common.Image;
 
 namespace SightKeeper.Application.Annotating;

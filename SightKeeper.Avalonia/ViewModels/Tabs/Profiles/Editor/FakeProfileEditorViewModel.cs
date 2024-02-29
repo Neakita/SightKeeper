@@ -5,6 +5,9 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet;
+using SightKeeper.Domain.Model.DataSet.Weights;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 

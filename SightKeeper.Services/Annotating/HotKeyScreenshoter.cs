@@ -4,6 +4,7 @@ using SharpHook.Native;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Data;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSet;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services.Input;
 

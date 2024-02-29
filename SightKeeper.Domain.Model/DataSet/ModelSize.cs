@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model;
+﻿namespace SightKeeper.Domain.Model.DataSet;
 
 public enum ModelSize
 {

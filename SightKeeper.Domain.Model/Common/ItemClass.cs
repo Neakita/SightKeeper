@@ -10,7 +10,7 @@ namespace SightKeeper.Domain.Model.Common;
 public sealed class ItemClass : ObservableObject
 {
 	public Id Id { get; private set; }
-	public DataSet DataSet { get; private set; }
+	public DataSet.DataSet DataSet { get; private set; }
 
 	public string Name
 	{
@@ -26,7 +26,7 @@ public sealed class ItemClass : ObservableObject
 
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 
-	internal ItemClass(DataSet dataSet, string name, uint color)
+	internal ItemClass(DataSet.DataSet dataSet, string name, uint color)
 	{
 		DataSet = dataSet;
 		_name = name;

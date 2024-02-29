@@ -10,6 +10,7 @@ using SightKeeper.Application.Prediction;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Services.Input;
 
 namespace SightKeeper.Services.Prediction.Handling.MouseMoving;

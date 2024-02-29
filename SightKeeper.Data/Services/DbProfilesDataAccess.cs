@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Subjects;
 using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;

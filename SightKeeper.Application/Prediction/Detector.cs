@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSet.Weights;
 
 namespace SightKeeper.Application.Prediction;
 

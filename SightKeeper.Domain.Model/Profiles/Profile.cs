@@ -4,8 +4,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet.Weights;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.Profiles;
 
 public sealed class Profile : ObservableObject
 {

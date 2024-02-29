@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application;

@@ -4,6 +4,7 @@ using DynamicData;
 using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSet;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services;

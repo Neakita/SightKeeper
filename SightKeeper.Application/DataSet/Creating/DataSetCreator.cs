@@ -2,6 +2,6 @@
 
 public interface DataSetCreator
 {
-    IObservable<SightKeeper.Domain.Model.DataSet> DataSetCreated { get; }
-    Task<Domain.Model.DataSet> CreateDataSet(NewDataSetInfoDTO newDataSetInfo, CancellationToken cancellationToken = default);
+    IObservable<Domain.Model.DataSet.DataSet> DataSetCreated { get; }
+    Task<Domain.Model.DataSet.DataSet> CreateDataSet(NewDataSetInfoDTO newDataSetInfo, CancellationToken cancellationToken = default);
 }

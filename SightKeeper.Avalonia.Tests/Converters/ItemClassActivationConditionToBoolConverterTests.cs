@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using SightKeeper.Avalonia.Misc.Converters;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.Tests.Converters;
 

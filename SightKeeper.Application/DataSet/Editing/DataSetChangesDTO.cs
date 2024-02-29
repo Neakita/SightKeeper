@@ -5,7 +5,7 @@ namespace SightKeeper.Application.DataSet.Editing;
 
 public sealed class DataSetChangesDTO : DataSetChanges
 {
-    public Domain.Model.DataSet DataSet { get; }
+    public Domain.Model.DataSet.DataSet DataSet { get; }
     public string Name { get; }
     public string Description { get; }
     public ushort Resolution { get; }
@@ -16,7 +16,7 @@ public sealed class DataSetChangesDTO : DataSetChanges
     public IReadOnlyCollection<EditedItemClass> EditedItemClasses { get; }
     public IReadOnlyCollection<DeletedItemClass> DeletedItemClasses { get; }
 
-    public DataSetChangesDTO(Domain.Model.DataSet dataSet, DataSetChanges changes)
+    public DataSetChangesDTO(Domain.Model.DataSet.DataSet dataSet, DataSetChanges changes)
     {
         Guard.IsNotNull(changes.Resolution);
         DataSet = dataSet;
@@ -31,7 +31,7 @@ public sealed class DataSetChangesDTO : DataSetChanges
     }
     
     public DataSetChangesDTO(
-        Domain.Model.DataSet dataSet,
+        Domain.Model.DataSet.DataSet dataSet,
         string name, string description, ushort resolution, Game? game,
         IEnumerable<ItemClassInfo> newItemClasses,
         IEnumerable<EditedItemClass> editedItemClasses,

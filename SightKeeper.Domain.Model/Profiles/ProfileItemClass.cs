@@ -2,7 +2,7 @@
 using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.Profiles;
 
 public sealed class ProfileItemClass : ObservableObject
 {

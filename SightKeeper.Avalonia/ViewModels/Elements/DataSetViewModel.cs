@@ -6,6 +6,8 @@ using DynamicData;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet;
+using SightKeeper.Domain.Model.DataSet.Weights;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;

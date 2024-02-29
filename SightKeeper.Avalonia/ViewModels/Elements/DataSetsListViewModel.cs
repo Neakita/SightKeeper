@@ -5,6 +5,7 @@ using DynamicData;
 using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSet;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 

@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.DataSet.Weights;
 
 public sealed class Weights : ObservableObject
 {

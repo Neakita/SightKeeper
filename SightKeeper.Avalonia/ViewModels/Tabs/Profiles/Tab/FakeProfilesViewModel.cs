@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows.Input;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 

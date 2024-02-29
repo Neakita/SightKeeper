@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Domain.Model.Tests.DetectorDataSet;

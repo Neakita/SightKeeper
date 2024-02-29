@@ -3,6 +3,7 @@ using CommunityToolkit.Diagnostics;
 using Serilog;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators.Preemption;
 

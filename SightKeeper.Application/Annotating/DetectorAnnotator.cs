@@ -1,6 +1,7 @@
 ﻿using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Model.Screenshots;
 
 namespace SightKeeper.Application.Annotating;
 

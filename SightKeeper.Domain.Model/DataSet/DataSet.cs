@@ -4,8 +4,10 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet.Weights;
+using SightKeeper.Domain.Model.Screenshots;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.DataSet;
 
 public sealed class DataSet : ObservableObject
 {

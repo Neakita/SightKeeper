@@ -5,7 +5,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.Screenshots;
 
 public sealed class ScreenshotsLibrary : ObservableObject
 {
@@ -15,7 +15,7 @@ public sealed class ScreenshotsLibrary : ObservableObject
     public IObservable<Screenshot> ScreenshotRemoved => _screenshotRemoved.AsObservable();
     private readonly Subject<Screenshot> _screenshotRemoved = new();
 
-    public DataSet DataSet { get; private set; }
+    public DataSet.DataSet DataSet { get; private set; }
 
     public ushort? MaxQuantity
     {
@@ -31,7 +31,7 @@ public sealed class ScreenshotsLibrary : ObservableObject
         private set => SetProperty(ref _hasAnyScreenshots, value);
     }
 
-    internal ScreenshotsLibrary(DataSet dataSet)
+    internal ScreenshotsLibrary(DataSet.DataSet dataSet)
     {
         DataSet = dataSet;
         _screenshots = new ObservableCollection<Screenshot>();

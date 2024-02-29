@@ -9,7 +9,7 @@ public sealed class ResolutionTests
     {
         const ushort firstResolution = 64;
         const ushort secondResolution = 128;
-        DataSet dataSet = new("Test data set", firstResolution);
+        DataSet.DataSet dataSet = new("Test data set", firstResolution);
         dataSet.Resolution.Should().Be(firstResolution);
         dataSet.Resolution = secondResolution;
         dataSet.Resolution.Should().Be(secondResolution);
@@ -20,7 +20,7 @@ public sealed class ResolutionTests
     {
         const ushort firstResolution = 64;
         const ushort secondResolution = 128;
-        DataSet dataSet = new("Test data set", firstResolution);
+        DataSet.DataSet dataSet = new("Test data set", firstResolution);
         dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dataSet.Resolution.Should().Be(firstResolution);
         Assert.Throws<InvalidOperationException>(() =>
@@ -35,7 +35,7 @@ public sealed class ResolutionTests
     {
         const ushort firstResolution = 64;
         const ushort secondResolution = 128;
-        DataSet dataSet = new("Test data set", firstResolution);
+        DataSet.DataSet dataSet = new("Test data set", firstResolution);
         var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
         dataSet.MakeAsset(screenshot);
         dataSet.Resolution.Should().Be(firstResolution);

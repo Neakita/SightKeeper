@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.Profiles;
 
 public enum ItemClassActivationCondition
 {

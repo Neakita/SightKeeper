@@ -3,13 +3,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 using SightKeeper.Domain.Model.Detector;
 using SightKeeper.Domain.Model.Exceptions;
+using SightKeeper.Domain.Model.Screenshots;
 
 namespace SightKeeper.Domain.Model.Common;
 
 public sealed class Asset : ObservableObject
 {
     public Id Id { get; private set; }
-    public DataSet DataSet { get; private set; }
+    public DataSet.DataSet DataSet { get; private set; }
     public Screenshot Screenshot { get; private set; }
 
     public AssetUsage Usage
@@ -59,7 +60,7 @@ public sealed class Asset : ObservableObject
             _items.RemoveAt(i);
     }
     
-    internal Asset(DataSet dataSet, Screenshot screenshot)
+    internal Asset(DataSet.DataSet dataSet, Screenshot screenshot)
     {
 	    DataSet = dataSet;
 	    Screenshot = screenshot;

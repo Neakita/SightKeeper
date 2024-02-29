@@ -4,6 +4,7 @@ using DynamicData;
 using Serilog;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services;
