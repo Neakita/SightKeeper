@@ -2,6 +2,7 @@
 using FluentValidation;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model.Profiles.Configuration.Preemption;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application;

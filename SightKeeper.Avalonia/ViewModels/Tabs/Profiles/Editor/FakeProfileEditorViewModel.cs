@@ -8,6 +8,7 @@ using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.DataSet;
 using SightKeeper.Domain.Model.DataSet.Weights;
 using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model.Profiles.Configuration.Preemption;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 

@@ -5,6 +5,7 @@ using FlakeId;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.DataSet.Weights;
+using SightKeeper.Domain.Model.Profiles.Configuration.Preemption;
 
 namespace SightKeeper.Domain.Model.Profiles;
 

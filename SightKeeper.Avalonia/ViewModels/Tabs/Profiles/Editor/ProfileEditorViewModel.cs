@@ -5,6 +5,7 @@ using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.DataSet;
 using SightKeeper.Domain.Model.DataSet.Weights;
 using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model.Profiles.Configuration.Preemption;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
@@ -12,8 +13,8 @@ public interface ProfileEditorViewModel
 {
     public static PreemptionStabilizationMethod[] PreemptionStabilizationMethods => new[]
     {
-        Domain.Model.Profiles.PreemptionStabilizationMethod.Median,
-        Domain.Model.Profiles.PreemptionStabilizationMethod.Mean
+        Domain.Model.Profiles.Configuration.Preemption.PreemptionStabilizationMethod.Median,
+        Domain.Model.Profiles.Configuration.Preemption.PreemptionStabilizationMethod.Mean
     };
 
     IReadOnlyCollection<DataSet> AvailableDataSets { get; }
