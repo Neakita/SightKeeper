@@ -1,6 +1,5 @@
-﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet.Screenshots;
-using Image = SightKeeper.Domain.Model.DataSet.Screenshots.Image;
+﻿using SightKeeper.Domain.Model.DataSets.Screenshots;
+using Image = SightKeeper.Domain.Model.DataSets.Screenshots.Image;
 
 namespace SightKeeper.Application.Annotating;
 

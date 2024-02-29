@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Configuration;
 

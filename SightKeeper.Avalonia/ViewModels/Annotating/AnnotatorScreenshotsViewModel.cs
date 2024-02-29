@@ -16,8 +16,8 @@ using ReactiveUI;
 using Serilog;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model.DataSet;
-using SightKeeper.Domain.Model.DataSet.Screenshots;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;

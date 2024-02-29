@@ -3,7 +3,6 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using CommunityToolkit.Diagnostics;
 using Serilog;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.Misc.Converters;

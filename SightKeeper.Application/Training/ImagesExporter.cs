@@ -2,9 +2,9 @@
 using Serilog;
 using SerilogTimings.Extensions;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Domain.Model.DataSet;
-using SightKeeper.Domain.Model.DataSet.Screenshots.Assets;
-using SightKeeper.Domain.Model.DataSet.Screenshots.Assets.Detector;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots.Assets;
+using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
 using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using Image = SixLabors.ImageSharp.Image;
@@ -22,7 +22,7 @@ public sealed class ImagesExporter
 	
 	public async Task Export(
 		string targetDirectoryPath,
-		Domain.Model.DataSet.DataSet dataSet,
+		DataSet dataSet,
 		CancellationToken cancellationToken = default)
 	{
 		await _assetsDataAccess.LoadAssetsAsync(dataSet, cancellationToken);

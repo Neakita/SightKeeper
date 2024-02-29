@@ -2,7 +2,6 @@
 using CommunityToolkit.Diagnostics;
 using Serilog;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Configuration.Preemption;
 

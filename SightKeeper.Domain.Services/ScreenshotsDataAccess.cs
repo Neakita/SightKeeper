@@ -1,5 +1,4 @@
-﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet.Screenshots;
+﻿using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Services;
 

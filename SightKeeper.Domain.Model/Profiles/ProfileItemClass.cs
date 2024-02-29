@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
-using SightKeeper.Domain.Model.DataSet;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Domain.Model.Profiles;
 

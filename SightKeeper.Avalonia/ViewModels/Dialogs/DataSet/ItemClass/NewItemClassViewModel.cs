@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using Avalonia.Controls;
 using Avalonia.Media;
-using SightKeeper.Application.DataSet;
+using SightKeeper.Application.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 

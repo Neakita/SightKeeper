@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;

@@ -2,7 +2,6 @@
 using DynamicData;
 using FluentValidation;
 using SightKeeper.Application;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Services;
 

@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using NSubstitute;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet;
-using SightKeeper.Domain.Model.DataSet.Weights;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Avalonia.ViewModels.Fakes;
 

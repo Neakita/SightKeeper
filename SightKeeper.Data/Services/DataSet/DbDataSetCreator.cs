@@ -1,14 +1,14 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using FluentValidation;
-using SightKeeper.Application.DataSet;
-using SightKeeper.Application.DataSet.Creating;
+using SightKeeper.Application.DataSets;
+using SightKeeper.Application.DataSets.Creating;
 
 namespace SightKeeper.Data.Services.DataSet;
 
 public sealed class DbDataSetCreator : DataSetCreator
 {
-    public IObservable<Domain.Model.DataSet.DataSet> DataSetCreated => _dataSetCreated.AsObservable();
+    public IObservable<Domain.Model.DataSets.DataSet> DataSetCreated => _dataSetCreated.AsObservable();
     
     public DbDataSetCreator(IValidator<DataSetInfo> validator, AppDbContext dbContext)
     {
@@ -16,10 +16,10 @@ public sealed class DbDataSetCreator : DataSetCreator
         _dbContext = dbContext;
     }
 
-    public async Task<Domain.Model.DataSet.DataSet> CreateDataSet(NewDataSetInfoDTO newDataSetInfo, CancellationToken cancellationToken = default)
+    public async Task<Domain.Model.DataSets.DataSet> CreateDataSet(NewDataSetInfoDTO newDataSetInfo, CancellationToken cancellationToken = default)
     {
         await _validator.ValidateAndThrowAsync(newDataSetInfo, cancellationToken);
-        var dataSet = new Domain.Model.DataSet.DataSet(newDataSetInfo.Name, newDataSetInfo.Resolution);
+        var dataSet = new Domain.Model.DataSets.DataSet(newDataSetInfo.Name, newDataSetInfo.Resolution);
         dataSet.Description = newDataSetInfo.Description;
         foreach (var itemClass in newDataSetInfo.ItemClasses)
             dataSet.CreateItemClass(itemClass.Name, itemClass.Color);
@@ -32,6 +32,6 @@ public sealed class DbDataSetCreator : DataSetCreator
     
     private readonly IValidator<NewDataSetInfo> _validator;
     private readonly AppDbContext _dbContext;
-    private readonly Subject<Domain.Model.DataSet.DataSet> _dataSetCreated = new();
+    private readonly Subject<Domain.Model.DataSets.DataSet> _dataSetCreated = new();
 }
 

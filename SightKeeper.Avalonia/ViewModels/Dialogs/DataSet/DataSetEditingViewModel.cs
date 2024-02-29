@@ -13,8 +13,8 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using MsBox.Avalonia.Models;
-using SightKeeper.Application.DataSet;
-using SightKeeper.Application.DataSet.Editing;
+using SightKeeper.Application.DataSets;
+using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
@@ -30,9 +30,9 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
         _itemClasses.Select(itemClass => itemClass.ToItemClassInfo()).ToList();
     public IReadOnlyCollection<EditableItemClass> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
-    public Domain.Model.DataSet.DataSet DataSet { get; private set; }
+    public Domain.Model.DataSets.DataSet DataSet { get; private set; }
 
-    public DataSetEditingViewModel(Domain.Model.DataSet.DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService, AssetsDataAccess assetsDataAccess, ItemClassDataAccess itemClassDataAccess) : base(validator)
+    public DataSetEditingViewModel(Domain.Model.DataSets.DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService, AssetsDataAccess assetsDataAccess, ItemClassDataAccess itemClassDataAccess) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
         _assetsDataAccess = assetsDataAccess;
@@ -44,7 +44,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
     private readonly IDisposable _disposable;
 
     [MemberNotNull(nameof(DataSet))]
-    private void SetData(Domain.Model.DataSet.DataSet dataSet)
+    private void SetData(Domain.Model.DataSets.DataSet dataSet)
     {
         DataSet = dataSet;
         _itemClasses.Clear();

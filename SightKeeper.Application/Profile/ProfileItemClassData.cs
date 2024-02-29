@@ -1,5 +1,4 @@
-﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet;
+﻿using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Application;

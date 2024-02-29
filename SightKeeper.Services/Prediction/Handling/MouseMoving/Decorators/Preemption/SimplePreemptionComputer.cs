@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
 using CommunityToolkit.Diagnostics;
 using Serilog;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators.Preemption;

@@ -9,9 +9,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using SightKeeper.Application.Prediction;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet.Screenshots.Assets.Detector;
-using SightKeeper.Domain.Model.DataSet.Weights;
+using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 

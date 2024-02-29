@@ -1,9 +1,8 @@
 ﻿using System.Reactive.Linq;
 using Serilog;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet;
-using SightKeeper.Domain.Model.DataSet.Weights;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Training;
@@ -22,7 +21,7 @@ public sealed class Trainer(
 	public bool AMP { get; set; } = true;
 
 	public async Task<Weights?> TrainFromScratchAsync(
-		Domain.Model.DataSet.DataSet dataSet,
+		DataSet dataSet,
 		ModelSize size,
 		uint epochs,
 		ushort patience,
@@ -88,7 +87,7 @@ public sealed class Trainer(
 		Logger.Information("Created data directory: {DataDirectoryPath}", DataDirectoryPath);
 	}
 
-	private async Task ExportDataSet(Domain.Model.DataSet.DataSet dataSet, CancellationToken cancellationToken)
+	private async Task ExportDataSet(DataSet dataSet, CancellationToken cancellationToken)
 	{
 		DataSetConfigurationParameters dataSetParameters = new(Path.GetFullPath(DataDirectoryPath), dataSet.ItemClasses);
 		await dataSetConfigurationExporter.Export(DataSetPath, dataSetParameters, cancellationToken);
@@ -100,7 +99,7 @@ public sealed class Trainer(
 		await File.WriteAllBytesAsync(WeightsToResumeTrainingOnPath, data.Content, cancellationToken);
 	}
 	
-	private async Task<Weights> SaveWeights(Domain.Model.DataSet.DataSet dataSet, TrainingProgress lastProgress, ModelSize size, CancellationToken cancellationToken)
+	private async Task<Weights> SaveWeights(DataSet dataSet, TrainingProgress lastProgress, ModelSize size, CancellationToken cancellationToken)
 	{
 		var runDirectory = Directory.GetDirectories(RunsDirectoryPath).Single();
 		var ptModelPath = Path.Combine(runDirectory, "train", "weights", "last.pt");

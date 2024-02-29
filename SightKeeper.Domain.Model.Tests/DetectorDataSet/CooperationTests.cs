@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Model.DataSet.Screenshots.Assets.Detector;
+using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Domain.Model.Tests.DetectorDataSet;

@@ -4,7 +4,7 @@
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:local="clr-namespace:SightKeeper.Avalonia"
              xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
-             xmlns:weights="clr-namespace:SightKeeper.Domain.Model.DataSet.Weights;assembly=SightKeeper.Domain.Model"
+             xmlns:weights="clr-namespace:SightKeeper.Domain.Model.DataSets.Weights;assembly=SightKeeper.Domain.Model"
              RequestedThemeVariant="Dark">
 
     <Application.Resources>

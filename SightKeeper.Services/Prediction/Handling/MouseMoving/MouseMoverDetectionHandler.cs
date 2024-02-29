@@ -8,8 +8,7 @@ using SharpHook.Native;
 using SightKeeper.Application;
 using SightKeeper.Application.Prediction;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Services.Input;
 

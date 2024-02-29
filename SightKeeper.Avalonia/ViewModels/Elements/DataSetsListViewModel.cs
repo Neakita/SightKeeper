@@ -2,10 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using DynamicData;
-using SightKeeper.Application.DataSet.Editing;
+using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 

@@ -1,6 +1,5 @@
-﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet;
-using SightKeeper.Domain.Model.DataSet.Screenshots.Assets;
+﻿using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots.Assets;
 
 namespace SightKeeper.Domain.Services;
 

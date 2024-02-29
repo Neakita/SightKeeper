@@ -3,7 +3,6 @@ using CommunityToolkit.Diagnostics;
 using DynamicData;
 using Serilog;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Services;
 

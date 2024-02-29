@@ -1,11 +1,9 @@
 ﻿using FluentValidation;
-using NSubstitute;
-using SightKeeper.Application.DataSet;
-using SightKeeper.Application.DataSet.Editing;
+using SightKeeper.Application.DataSets;
+using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Data.Services.DataSet;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet.Screenshots.Assets.Detector;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Application.Tests;

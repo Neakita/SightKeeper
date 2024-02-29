@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.Annotating;
 
 public sealed class DataSetScreenshoter
 {
-    public Domain.Model.DataSet.DataSet? DataSet
+    public DataSet? DataSet
     {
         get => _dataSet;
         set
@@ -48,5 +49,5 @@ public sealed class DataSetScreenshoter
     private readonly ScreenCapture _screenCapture;
     private readonly Screenshoter _screenshoter;
     private readonly GamesService _gamesService;
-    private Domain.Model.DataSet.DataSet? _dataSet;
+    private DataSet? _dataSet;
 }

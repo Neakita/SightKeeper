@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSet;
-using SightKeeper.Domain.Model.DataSet.Weights;
-using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles.Configuration.Preemption;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
