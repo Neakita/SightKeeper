@@ -4,8 +4,8 @@ namespace SightKeeper.Domain.Model.DataSet.Screenshots.Assets.Detector;
 
 public sealed class Bounding : ObservableObject
 {
-	private static readonly string[] Properties = new[]
-	{
+	private static readonly string[] Properties =
+	[
 		nameof(Left),
 		nameof(Top),
 		nameof(Right),
@@ -14,7 +14,7 @@ public sealed class Bounding : ObservableObject
 		nameof(Height),
 		nameof(HorizontalCenter),
 		nameof(VerticalCenter)
-	};
+	];
 	
 	public double Left { get; private set; }
 	public double Top { get; private set; }
