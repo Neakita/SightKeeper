@@ -2,7 +2,6 @@
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
-using SightKeeper.Domain.Model.Common;
 
 namespace SightKeeper.Domain.Model.DataSet.Weights;
 

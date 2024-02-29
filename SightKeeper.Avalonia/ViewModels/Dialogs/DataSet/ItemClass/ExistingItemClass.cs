@@ -6,13 +6,13 @@ namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 
 public sealed class ExistingItemClass : ViewModel, EditableItemClass
 {
-    public Domain.Model.Common.ItemClass ItemClass { get; }
+    public Domain.Model.DataSet.ItemClass ItemClass { get; }
     public string Name { get; set; }
     public Color Color { get; set; }
 
     public bool IsEdited => Name != ItemClass.Name || Color.ToUInt32() != ItemClass.Color;
 
-    public ExistingItemClass(Domain.Model.Common.ItemClass itemClass)
+    public ExistingItemClass(Domain.Model.DataSet.ItemClass itemClass)
     {
         ItemClass = itemClass;
         Name = itemClass.Name;

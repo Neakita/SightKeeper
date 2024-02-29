@@ -2,7 +2,7 @@
 using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using SightKeeper.Application.DataSet.Editing;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet;
 
 namespace SightKeeper.Data.Services.DataSet;
 

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Model.DataSet.Screenshots.Assets.Detector;
 
 namespace SightKeeper.Domain.Model.Exceptions;
 

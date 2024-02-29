@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 

@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet;
 
 namespace SightKeeper.Application.Training;
 

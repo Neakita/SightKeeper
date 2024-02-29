@@ -4,8 +4,7 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Screenshots;
+using SightKeeper.Domain.Model.DataSet.Screenshots;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 

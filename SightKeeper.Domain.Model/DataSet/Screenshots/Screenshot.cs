@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet.Screenshots.Assets;
 
-namespace SightKeeper.Domain.Model.Screenshots;
+namespace SightKeeper.Domain.Model.DataSet.Screenshots;
 
 public sealed class Screenshot : ObservableObject
 {

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 
-namespace SightKeeper.Domain.Model.Common;
+namespace SightKeeper.Domain.Model.DataSet.Screenshots;
 
 public sealed class Image : ObservableObject
 {

@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Model.Common;
+﻿using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services.Games;

@@ -3,8 +3,8 @@ using NSubstitute;
 using SightKeeper.Application.DataSet;
 using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Data.Services.DataSet;
-using SightKeeper.Domain.Model.Common;
-using SightKeeper.Domain.Model.Detector;
+using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSet.Screenshots.Assets.Detector;
 using SightKeeper.Domain.Services;
 using SightKeeper.Tests.Common;
 

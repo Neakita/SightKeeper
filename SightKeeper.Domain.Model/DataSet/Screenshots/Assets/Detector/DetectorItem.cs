@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
-using SightKeeper.Domain.Model.Common;
 
-namespace SightKeeper.Domain.Model.Detector;
+namespace SightKeeper.Domain.Model.DataSet.Screenshots.Assets.Detector;
 
 public sealed class DetectorItem : ObservableObject
 {

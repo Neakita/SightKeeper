@@ -6,7 +6,6 @@ using Compunet.YoloV8.Metadata;
 using SerilogTimings;
 using SightKeeper.Application.Prediction;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Common;
 using SightKeeper.Domain.Model.DataSet;
 using SightKeeper.Domain.Model.DataSet.Weights;
 using SightKeeper.Domain.Services;

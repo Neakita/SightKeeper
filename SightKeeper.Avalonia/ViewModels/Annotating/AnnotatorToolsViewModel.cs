@@ -9,7 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 

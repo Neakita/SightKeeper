@@ -13,7 +13,7 @@ using SightKeeper.Application.DataSet;
 using SightKeeper.Application.DataSet.Creating;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model;
 using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;

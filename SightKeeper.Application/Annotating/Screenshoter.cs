@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.Screenshots;
+using SightKeeper.Domain.Model.DataSet.Screenshots;
 
 namespace SightKeeper.Application.Annotating;
 

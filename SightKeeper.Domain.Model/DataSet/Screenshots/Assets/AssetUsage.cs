@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model.Common;
+﻿namespace SightKeeper.Domain.Model.DataSet.Screenshots.Assets;
 
 [Flags]
 public enum AssetUsage

@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;

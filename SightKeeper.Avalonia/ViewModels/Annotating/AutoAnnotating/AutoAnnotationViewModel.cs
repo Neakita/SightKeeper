@@ -10,8 +10,8 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using SightKeeper.Application.Prediction;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSet.Screenshots.Assets.Detector;
 using SightKeeper.Domain.Model.DataSet.Weights;
-using SightKeeper.Domain.Model.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 

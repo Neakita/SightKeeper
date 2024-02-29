@@ -3,9 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model.DataSet.Screenshots;
+using SightKeeper.Domain.Model.DataSet.Screenshots.Assets;
 using SightKeeper.Domain.Model.DataSet.Weights;
-using SightKeeper.Domain.Model.Screenshots;
 
 namespace SightKeeper.Domain.Model.DataSet;
 

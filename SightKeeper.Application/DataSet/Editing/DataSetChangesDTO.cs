@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.DataSet.Editing;
 

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
 
-namespace SightKeeper.Domain.Model.Common;
+namespace SightKeeper.Domain.Model;
 
 public sealed class Game(string title, string processName) : ObservableObject
 {

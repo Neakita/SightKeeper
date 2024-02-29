@@ -18,7 +18,7 @@ using SightKeeper.Application.DataSet.Editing;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
-using SightKeeper.Domain.Model.Common;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services.Games;
 
