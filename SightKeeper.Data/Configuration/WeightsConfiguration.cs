@@ -22,6 +22,10 @@ public sealed class WeightsConfiguration : IEntityTypeConfiguration<Weights>
             join => join.HasKey("WeightsId", "ItemClassId"));
         builder.HasChangeTrackingStrategy(ChangeTrackingStrategy.Snapshot);
         builder.Navigation(weights => weights.ItemClasses).AutoInclude();
+        builder.Property(weights => weights.Metrics.Epoch).HasColumnName(nameof(WeightsMetrics.Epoch));
+        builder.Property(weights => weights.Metrics.BoundingLoss).HasColumnName(nameof(WeightsMetrics.BoundingLoss));
+        builder.Property(weights => weights.Metrics.ClassificationLoss).HasColumnName(nameof(WeightsMetrics.ClassificationLoss));
+        builder.Property(weights => weights.Metrics.DeformationLoss).HasColumnName(nameof(WeightsMetrics.DeformationLoss));
     }
 
     public sealed class WeightsItemClass : ObservableObject

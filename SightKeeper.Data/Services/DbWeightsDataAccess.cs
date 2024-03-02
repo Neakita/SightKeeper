@@ -35,15 +35,12 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         byte[] onnxData,
         byte[] ptData,
         ModelSize size,
-        uint epoch,
-        float boundingLoss,
-        float classificationLoss,
-        float deformationLoss,
+        WeightsMetrics metrics,
         IEnumerable<ItemClass> itemClasses,
         CancellationToken cancellationToken = default)
     {
         await LoadWeightsAsync(library, cancellationToken);
-        var weights = library.CreateWeights(onnxData, ptData, size, epoch, boundingLoss, classificationLoss, deformationLoss, itemClasses);
+        var weights = library.CreateWeights(onnxData, ptData, size, metrics, itemClasses);
         await _dbContext.SaveChangesAsync(cancellationToken);
         _weightsCreated.OnNext(weights);
         return weights;

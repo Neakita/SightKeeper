@@ -46,7 +46,7 @@ public sealed class Trainer(
 			return null;
 		}
 		Logger.Debug("Last progress: {Progress}", lastProgress);
-		return await SaveWeights(dataSet, lastProgress, size, CancellationToken.None); // TODO ability to abort saving
+		return await SaveWeights(dataSet, lastProgress.Metrics, size, CancellationToken.None); // TODO ability to abort saving
 	}
 
 	public async Task<Weights?> ResumeTrainingAsync(
@@ -76,7 +76,7 @@ public sealed class Trainer(
 			return null;
 		}
 		Logger.Debug("Last progress: {Progress}", lastProgress);
-		return await SaveWeights(dataSet, lastProgress, weights.Size, CancellationToken.None); // TODO ability to abort saving
+		return await SaveWeights(dataSet, lastProgress.Metrics, weights.Size, CancellationToken.None); // TODO ability to abort saving
 	}
 
 	private void PrepareDataDirectory()
@@ -99,15 +99,14 @@ public sealed class Trainer(
 		await File.WriteAllBytesAsync(WeightsToResumeTrainingOnPath, data.Content, cancellationToken);
 	}
 	
-	private async Task<Weights> SaveWeights(DataSet dataSet, TrainingProgress lastProgress, ModelSize size, CancellationToken cancellationToken)
+	private async Task<Weights> SaveWeights(DataSet dataSet, WeightsMetrics lastMetrics, ModelSize size, CancellationToken cancellationToken)
 	{
 		var runDirectory = Directory.GetDirectories(RunsDirectoryPath).Single();
 		var ptModelPath = Path.Combine(runDirectory, "train", "weights", "last.pt");
 		var onnxModelPath = await YoloCLIExtensions.ExportToONNX(ptModelPath, dataSet.Resolution, Logger);
 		var onnxData = await File.ReadAllBytesAsync(onnxModelPath, cancellationToken);
 		var ptData = await File.ReadAllBytesAsync(ptModelPath, cancellationToken);
-		var weights = await weightsDataAccess.CreateWeights(dataSet.WeightsLibrary, onnxData, ptData, size, lastProgress.CurrentEpoch,
-			lastProgress.BoundingLoss, lastProgress.ClassificationLoss, lastProgress.DeformationLoss, dataSet.ItemClasses, cancellationToken);
+		var weights = await weightsDataAccess.CreateWeights(dataSet.WeightsLibrary, onnxData, ptData, size, lastMetrics, dataSet.ItemClasses, cancellationToken);
 		Logger.Information("Saved weights: {Weights}", weights);
 		return weights;
 	}

@@ -26,7 +26,7 @@ public sealed partial class TrainingViewModel : ViewModel
     private readonly WeightsDataAccess _weightsDataAccess;
     private readonly Trainer _trainer;
     public IObservable<TrainingProgress?> Progress => _progress;
-    public IObservable<float?> Completion => Progress.Select(progress => (float?)progress?.CurrentEpoch / Epochs);
+    public IObservable<float?> Completion => Progress.Select(progress => (float?)progress?.Metrics.Epoch / Epochs);
     public IReadOnlyCollection<DataSetViewModel> AvailableDataSets { get; }
     public InlineCollection InlineCollection { get; } = new();
 

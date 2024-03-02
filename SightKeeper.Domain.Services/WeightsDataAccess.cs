@@ -15,10 +15,7 @@ public interface WeightsDataAccess
         byte[] onnxData,
         byte[] ptData,
         ModelSize size,
-        uint epoch,
-        float boundingLoss,
-        float classificationLoss,
-        float deformationLoss,
+        WeightsMetrics metrics,
         IEnumerable<ItemClass> itemClasses,
         CancellationToken cancellationToken = default);
 

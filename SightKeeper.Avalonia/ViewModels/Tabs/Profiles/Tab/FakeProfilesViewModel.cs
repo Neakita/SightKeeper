@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
@@ -25,7 +26,7 @@ public sealed class FakeProfilesViewModel : IProfilesViewModel
         Game game = new("Game 1", "game1");
         dataSet.Game = game;
         var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), Array.Empty<byte>(), ModelSize.Small,
-            100, 0.5f, 0.4f, 0.3f, dataSet.ItemClasses);
+            new WeightsMetrics(100, 0.5f, 0.4f, 0.3f), dataSet.ItemClasses);
         Profile profile1 = new("Profile", string.Empty, 0.5f, 2f, TimeSpan.FromMilliseconds(10), null, weights);
         Profile profile2 = new("Profile with long name!", string.Empty, 0.3f, 3f, TimeSpan.FromMilliseconds(15), null, weights);
         Profiles = new ProfileViewModel[]

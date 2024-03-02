@@ -38,13 +38,13 @@
                 <DataGridTextColumn Header="Size"
                                     Binding="{Binding Size}"/>
                 <DataGridTextColumn Header="Epoch"
-                                    Binding="{Binding Epoch}"/>
+                                    Binding="{Binding Metrics.Epoch}"/>
                 <DataGridTextColumn Header="Bounding loss"
-                                    Binding="{Binding BoundingLoss}"/>
+                                    Binding="{Binding Metrics.BoundingLoss}"/>
                 <DataGridTextColumn Header="Classification loss"
-                                    Binding="{Binding ClassificationLoss}"/>
+                                    Binding="{Binding Metrics.ClassificationLoss}"/>
                 <DataGridTextColumn Header="Deformation loss"
-                                    Binding="{Binding DeformationLoss}"/>
+                                    Binding="{Binding Metrics.DeformationLoss}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -21,13 +21,10 @@ public sealed class WeightsLibrary : ObservableObject
         byte[] onnxData,
         byte[] ptData,
         ModelSize size,
-        uint epoch,
-        float boundingLoss,
-        float classificationLoss,
-        float deformationLoss,
+        WeightsMetrics metrics,
         IEnumerable<ItemClass> itemClasses)
     {
-        Weights weights = new(this, onnxData, ptData, size, epoch, boundingLoss, classificationLoss, deformationLoss, itemClasses);
+        Weights weights = new(this, onnxData, ptData, size, metrics, itemClasses);
         _weights.Add(weights);
         return weights;
     }

@@ -13,10 +13,7 @@ public sealed class Weights : ObservableObject
     public ONNXData ONNXData { get; private set; }
     public PTData PTData { get; private set; }
     public ModelSize Size { get; private set; }
-    public uint Epoch { get; private set; }
-    public float BoundingLoss { get; private set; }
-    public float ClassificationLoss { get; private set; }
-    public float DeformationLoss { get; private set; }
+    public WeightsMetrics Metrics { get; private set; }
     public IReadOnlyList<ItemClass> ItemClasses { get; private set; }
 
     internal Weights(
@@ -24,10 +21,7 @@ public sealed class Weights : ObservableObject
         byte[] onnxData,
         byte[] ptData,
         ModelSize size,
-        uint epoch,
-        float boundingLoss,
-        float classificationLoss,
-        float deformationLoss,
+        WeightsMetrics metrics,
         IEnumerable<ItemClass> itemClasses)
     {
         CreationDate = DateTime.Now;
@@ -35,10 +29,7 @@ public sealed class Weights : ObservableObject
         ONNXData = new ONNXData(onnxData);
         PTData = new PTData(ptData);
         Size = size;
-        Epoch = epoch;
-        BoundingLoss = boundingLoss;
-        ClassificationLoss = classificationLoss;
-        DeformationLoss = deformationLoss;
+        Metrics = metrics;
         ItemClasses = itemClasses.ToImmutableList();
         Guard.IsTrue(ItemClasses.All(itemClass => itemClass.DataSet == library.DataSet));
     }
@@ -51,5 +42,5 @@ public sealed class Weights : ObservableObject
         ItemClasses = null!;
     }
 
-    public override string ToString() => $"{nameof(Size)}: {Size}, {nameof(Epoch)}: {Epoch}, {nameof(BoundingLoss)}: {BoundingLoss}, {nameof(ClassificationLoss)}: {ClassificationLoss}, {nameof(DeformationLoss)}: {DeformationLoss}";
+    public override string ToString() => $"{nameof(Size)}: {Size}, {nameof(Metrics.Epoch)}: {Metrics.Epoch}, {nameof(Metrics.BoundingLoss)}: {Metrics.BoundingLoss}, {nameof(Metrics.ClassificationLoss)}: {Metrics.ClassificationLoss}, {nameof(Metrics.DeformationLoss)}: {Metrics.DeformationLoss}";
 }
