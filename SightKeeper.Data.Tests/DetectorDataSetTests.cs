@@ -2,8 +2,6 @@
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SightKeeper.Domain.Model.DataSets.Screenshots.Assets;
-using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;

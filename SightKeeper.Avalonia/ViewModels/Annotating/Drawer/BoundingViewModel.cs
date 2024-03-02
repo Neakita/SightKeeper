@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 

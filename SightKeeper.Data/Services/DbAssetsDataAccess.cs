@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Serilog;
-using SightKeeper.Domain.Model.DataSets.Screenshots.Assets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;

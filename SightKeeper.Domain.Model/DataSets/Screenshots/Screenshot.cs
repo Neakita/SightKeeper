@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
-using SightKeeper.Domain.Model.DataSets.Screenshots.Assets;
 
 namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 

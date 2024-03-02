@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Model.Profiles.Configuration.Preemption;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Application;
 

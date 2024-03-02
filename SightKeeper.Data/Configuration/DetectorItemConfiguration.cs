@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Data.Configuration;
 

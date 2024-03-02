@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Services.Validating;
 

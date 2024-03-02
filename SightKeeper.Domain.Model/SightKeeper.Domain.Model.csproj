@@ -17,8 +17,4 @@
       <ProjectReference Include="..\SightKeeper.Commons\SightKeeper.Commons.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Profiles\Configuration\" />
-    </ItemGroup>
-
 </Project>

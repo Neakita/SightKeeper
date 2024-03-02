@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SightKeeper.Domain.Model.Profiles.Configuration.Preemption;
+namespace SightKeeper.Domain.Model.Profiles;
 
 public sealed class PreemptionSettings : ObservableObject
 {

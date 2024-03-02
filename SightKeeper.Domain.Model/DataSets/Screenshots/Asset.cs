@@ -1,10 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
-using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
 using SightKeeper.Domain.Model.Exceptions;
 
-namespace SightKeeper.Domain.Model.DataSets.Screenshots.Assets;
+namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 
 public sealed class Asset : ObservableObject
 {

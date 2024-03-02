@@ -1,6 +1,5 @@
 ﻿using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
 
 namespace SightKeeper.Application.Annotating;
 

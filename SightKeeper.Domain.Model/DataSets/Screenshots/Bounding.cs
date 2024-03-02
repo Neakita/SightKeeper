@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SightKeeper.Domain.Model.DataSets.Screenshots.Assets.Detector;
+namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 
 public sealed class Bounding : ObservableObject
 {
