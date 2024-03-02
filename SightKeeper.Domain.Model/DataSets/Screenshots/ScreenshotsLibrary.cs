@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FlakeId;
@@ -10,10 +8,6 @@ namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 public sealed class ScreenshotsLibrary : ObservableObject
 {
     public Id Id { get; private set; }
-    public IObservable<Screenshot> ScreenshotAdded => _screenshotAdded.AsObservable();
-    private readonly Subject<Screenshot> _screenshotAdded = new();
-    public IObservable<Screenshot> ScreenshotRemoved => _screenshotRemoved.AsObservable();
-    private readonly Subject<Screenshot> _screenshotRemoved = new();
 
     public DataSet DataSet { get; private set; }
 
@@ -43,7 +37,6 @@ public sealed class ScreenshotsLibrary : ObservableObject
         _screenshots.Add(screenshot);
         ClearExceed();
         HasAnyScreenshots = Screenshots.Any();
-        _screenshotAdded.OnNext(screenshot);
         return screenshot;
     }
 
@@ -53,7 +46,6 @@ public sealed class ScreenshotsLibrary : ObservableObject
             ThrowHelper.ThrowInvalidOperationException("Screenshot not found");
         HasAnyScreenshots = Screenshots.Any();
         screenshot.Asset?.ClearItems();
-        _screenshotRemoved.OnNext(screenshot);
     }
 
     public void DeleteScreenshot(int screenshotIndex)
@@ -62,7 +54,6 @@ public sealed class ScreenshotsLibrary : ObservableObject
         _screenshots.RemoveAt(screenshotIndex);
         HasAnyScreenshots = Screenshots.Any();
         screenshot.Asset?.ClearItems();
-        _screenshotRemoved.OnNext(screenshot);
     }
 	
     private readonly ObservableCollection<Screenshot> _screenshots;

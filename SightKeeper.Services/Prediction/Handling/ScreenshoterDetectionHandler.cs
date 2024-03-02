@@ -24,7 +24,7 @@ public sealed class ScreenshoterDetectionHandler : DetectionObserver
 
     public void OnPaused()
     {
-        _screenshotsDataAccess.SaveChanges(_dataSet.ScreenshotsLibrary);
+        _screenshotsDataAccess.SaveChangesAsync(_dataSet.ScreenshotsLibrary);
     }
 
     private readonly DataSet _dataSet;

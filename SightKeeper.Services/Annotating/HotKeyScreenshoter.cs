@@ -94,6 +94,6 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
             Thread.Sleep(_timeout.Value);
         }
         if (somethingScreenshoted)
-            _librariesDataAccess.SaveChanges(DataSet.ScreenshotsLibrary);
+            _librariesDataAccess.SaveChangesAsync(DataSet.ScreenshotsLibrary);
     }
 }

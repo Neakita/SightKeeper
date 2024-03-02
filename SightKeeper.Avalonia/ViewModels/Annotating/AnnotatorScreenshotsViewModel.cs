@@ -153,10 +153,12 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivata
             return;
         LoadScreenshots(value);
         _dataSetDisposable = new CompositeDisposable();
-        value.ScreenshotsLibrary.ScreenshotAdded
+        _screenshotsDataAccess.ScreenshotAdded
+	        .Where(screenshot => screenshot.Library == value.ScreenshotsLibrary)
             .Subscribe(OnScreenshotAdded)
             .DisposeWith(_dataSetDisposable);
-        value.ScreenshotsLibrary.ScreenshotRemoved
+        _screenshotsDataAccess.ScreenshotRemoved
+	        .Where(screenshot => screenshot.Library == value.ScreenshotsLibrary)
             .Subscribe(OnScreenshotRemoved)
             .DisposeWith(_dataSetDisposable);
         OnPropertyChanged(nameof(TotalScreenshotsCount));

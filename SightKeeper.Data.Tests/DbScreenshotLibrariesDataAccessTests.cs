@@ -15,7 +15,7 @@ public sealed class DbScreenshotLibrariesDataAccessTests : DbRelatedTests
         dbContext.SaveChanges();
         DbScreenshotsDataAccess dataAccess = new(dbContext);
         dataSet.ScreenshotsLibrary.MaxQuantity = 110;
-        dataAccess.SaveChanges(dataSet.ScreenshotsLibrary);
+        dataAccess.SaveChangesAsync(dataSet.ScreenshotsLibrary);
         using var assertDbContext = DbContextFactory.CreateDbContext();
         assertDbContext.Set<ScreenshotsLibrary>().Should().Contain(lib => lib.MaxQuantity == 110);
     }
