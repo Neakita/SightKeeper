@@ -15,5 +15,20 @@ public readonly struct WeightsMetrics
 		DeformationLoss = deformationLoss;
 	}
 	
+	public bool Equals(WeightsMetrics other)
+	{
+		return Epoch == other.Epoch && BoundingLoss.Equals(other.BoundingLoss) && ClassificationLoss.Equals(other.ClassificationLoss) && DeformationLoss.Equals(other.DeformationLoss);
+	}
+
+	public override bool Equals(object? obj)
+	{
+		return obj is WeightsMetrics other && Equals(other);
+	}
+
+	public override int GetHashCode()
+	{
+		return HashCode.Combine(Epoch, BoundingLoss, ClassificationLoss, DeformationLoss);
+	}
+	
 	public override string ToString() => $"{nameof(Epoch)}: {Epoch}, {nameof(BoundingLoss)}: {BoundingLoss}, {nameof(ClassificationLoss)}: {ClassificationLoss}, {nameof(DeformationLoss)}: {DeformationLoss}";
 }
