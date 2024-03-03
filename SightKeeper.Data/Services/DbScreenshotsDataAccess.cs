@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
@@ -15,18 +15,18 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess, IDisposable
         _dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyCollection<Screenshot>> Load(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyCollection<Screenshot>> Load(Library library, CancellationToken cancellationToken = default)
     {
         await _dbContext.Entry(library).Collection(lib => lib.Screenshots).LoadAsync(cancellationToken);
         return library.Screenshots;
     }
 
-    public bool IsLoaded(ScreenshotsLibrary library)
+    public bool IsLoaded(Library library)
     {
         return _dbContext.Entry(library).Collection(lib => lib.Screenshots).IsLoaded;
     }
 
-    public void CreateScreenshot(ScreenshotsLibrary library, byte[] content)
+    public void CreateScreenshot(Library library, byte[] content)
     {
         var screenshot = library.CreateScreenshot(content);
         _dbContext.Attach(screenshot);
@@ -40,13 +40,13 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess, IDisposable
 	    _screenshotRemoved.OnNext(screenshot);
     }
 
-    public void SaveChanges(ScreenshotsLibrary library)
+    public void SaveChanges(Library library)
     {
 	    _dbContext.Update(library);
 	    _dbContext.SaveChanges();
     }
 
-    public Task SaveChangesAsync(ScreenshotsLibrary library, CancellationToken cancellationToken = default)
+    public Task SaveChangesAsync(Library library, CancellationToken cancellationToken = default)
     {
 	    // is Update necessary?
         _dbContext.Update(library);

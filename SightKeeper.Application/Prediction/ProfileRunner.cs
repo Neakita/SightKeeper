@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Model.Profiles;
+﻿using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Prediction;
 

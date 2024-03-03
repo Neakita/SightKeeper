@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Data.Services;
 

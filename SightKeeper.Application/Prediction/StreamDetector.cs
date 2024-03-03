@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Prediction;
 

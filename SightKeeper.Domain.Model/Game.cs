@@ -1,22 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using FlakeId;
+﻿namespace SightKeeper.Domain.Model;
 
-namespace SightKeeper.Domain.Model;
-
-public sealed class Game(string title, string processName) : ObservableObject
+public sealed class Game : Entity
 {
-	public Id Id { get; private set; }
+	public string Title { get; set; }
+	public string ProcessName { get; set; }
+	public string? ExecutablePath { get; set; }
 
-	public string Title
+	public Game(string title, string processName, string? executablePath)
 	{
-		get => title;
-		set => SetProperty(ref title, value);
-	}
-
-	public string ProcessName
-	{
-		get => processName;
-		set => SetProperty(ref processName, value);
+		Title = title;
+		ProcessName = processName;
+		ExecutablePath = executablePath;
 	}
 
 	public override string ToString() => Title;

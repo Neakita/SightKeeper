@@ -2,7 +2,7 @@
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using FluentValidation;
-using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application;

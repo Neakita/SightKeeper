@@ -16,8 +16,7 @@ using ReactiveUI;
 using Serilog;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
@@ -154,11 +153,11 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivata
         LoadScreenshots(value);
         _dataSetDisposable = new CompositeDisposable();
         _screenshotsDataAccess.ScreenshotAdded
-	        .Where(screenshot => screenshot.Library == value.ScreenshotsLibrary)
+	        .Where(screenshot => screenshot.Library == value.Screenshots)
             .Subscribe(OnScreenshotAdded)
             .DisposeWith(_dataSetDisposable);
         _screenshotsDataAccess.ScreenshotRemoved
-	        .Where(screenshot => screenshot.Library == value.ScreenshotsLibrary)
+	        .Where(screenshot => screenshot.Library == value.Screenshots)
             .Subscribe(OnScreenshotRemoved)
             .DisposeWith(_dataSetDisposable);
         OnPropertyChanged(nameof(TotalScreenshotsCount));
@@ -167,7 +166,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivata
     private async void LoadScreenshots(DataSet dataSet)
     {
         IsLoading = true;
-        var screenshots = await _screenshotsDataAccess.Load(dataSet.ScreenshotsLibrary);
+        var screenshots = await _screenshotsDataAccess.Load(dataSet.Screenshots);
         _screenshotsSource.AddRange(screenshots);
         IsLoading = false;
     }

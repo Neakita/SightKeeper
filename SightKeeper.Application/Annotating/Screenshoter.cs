@@ -1,12 +1,12 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Annotating;
 
 public sealed class Screenshoter
 {
-	public ScreenshotsLibrary? Library { get; set; }
+	public Library? Library { get; set; }
 
 	public Screenshoter(ScreenCapture screenCapture, SelfActivityService selfActivityService)
 	{

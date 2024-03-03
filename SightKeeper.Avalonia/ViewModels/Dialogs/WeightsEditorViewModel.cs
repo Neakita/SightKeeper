@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
@@ -26,11 +26,11 @@ public sealed partial class WeightsEditorViewModel : DialogViewModel, IWeightsEd
         Weights = weights;
     }
 
-    public async Task SetLibrary(WeightsLibrary library, CancellationToken cancellationToken = default)
+    public async Task SetLibrary(WeightsLibrary weightsLibrary, CancellationToken cancellationToken = default)
     {
-        await _weightsDataAccess.LoadWeightsAsync(library, cancellationToken);
+        await _weightsDataAccess.LoadWeightsAsync(weightsLibrary, cancellationToken);
         _weightsSource.Clear();
-        _weightsSource.AddRange(library.Weights);
+        _weightsSource.AddRange(weightsLibrary.Records);
     }
 
     private readonly WeightsDataAccess _weightsDataAccess;

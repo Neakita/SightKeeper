@@ -1,15 +1,15 @@
-﻿using SightKeeper.Domain.Model.DataSets.Weights;
+﻿using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Training;
 
 public sealed class TrainingProgress
 {
-    public WeightsMetrics Metrics { get; }
+    public WeightsMetrics WeightsMetrics { get; }
 
-    public TrainingProgress(WeightsMetrics metrics)
+    public TrainingProgress(WeightsMetrics weightsMetrics)
     {
-	    Metrics = metrics;
+	    WeightsMetrics = weightsMetrics;
     }
 
-    public override string ToString() => Metrics.ToString();
+    public override string ToString() => WeightsMetrics.ToString();
 }

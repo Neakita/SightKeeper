@@ -1,5 +1,4 @@
-﻿using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Model.Profiles;
+﻿using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application;
 

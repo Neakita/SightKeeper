@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -117,7 +117,7 @@ public sealed class BoundingViewModel : ViewModel
     public void Synchronize()
     {
         Guard.IsNotNull(Bounding);
-        Bounding.SetFromTwoPositions(Left, Top, Right, Bottom);
+        Bounding.Set(Left, Top, Right, Bottom);
     }
 
     private double _left;

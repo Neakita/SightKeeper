@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Tests.Common;
 

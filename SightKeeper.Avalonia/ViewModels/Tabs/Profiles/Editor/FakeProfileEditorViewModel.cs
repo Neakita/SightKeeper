@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
@@ -44,7 +42,7 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
         var itemClass2 = dataSet.CreateItemClass("Item class 2", 0);
         var itemClass3 = dataSet.CreateItemClass("Item class 3", 0);
         var itemClass4 = dataSet.CreateItemClass("Item class 4", 0);
-        var weights = dataSet.WeightsLibrary.CreateWeights(Array.Empty<byte>(), Array.Empty<byte>(), ModelSize.Nano, new WeightsMetrics(100, 1.1f, 1.0f, 0.9f), dataSet.ItemClasses);
+        var weights = dataSet.Weights.CreateWeights(Array.Empty<byte>(), Array.Empty<byte>(), ModelSize.Nano, new WeightsMetrics(100, 1.1f, 1.0f, 0.9f), dataSet.ItemClasses);
         ItemClassToAdd = itemClass3;
         AvailableDataSets = new[] { dataSet };
         AvailableWeights = new[] { weights };

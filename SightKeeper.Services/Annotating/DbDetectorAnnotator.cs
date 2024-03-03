@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Data;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services.Annotating;
@@ -89,13 +88,13 @@ public sealed class DbDetectorAnnotator : DetectorAnnotator
 
     public void Move(DetectorItem item, Bounding bounding)
     {
-	    item.Bounding.SetFromBounding(bounding);
+	    item.Bounding.Set(bounding);
 	    _dbContext.SaveChanges();
     }
 
     public Task MoveAsync(DetectorItem item, Bounding bounding, CancellationToken cancellationToken = default)
     {
-        item.Bounding.SetFromBounding(bounding);
+        item.Bounding.Set(bounding);
         return _dbContext.SaveChangesAsync(cancellationToken);
     }
 

@@ -3,7 +3,7 @@ using System.Reactive.Disposables;
 using DynamicData;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services;

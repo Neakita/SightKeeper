@@ -3,7 +3,7 @@ using System.Linq;
 using NSubstitute;
 using SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;

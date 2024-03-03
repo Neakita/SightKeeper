@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Annotating;
 
@@ -12,7 +12,7 @@ public sealed class DataSetScreenshoter
         set
         {
             _dataSet = value;
-            _screenshoter.Library = value?.ScreenshotsLibrary;
+            _screenshoter.Library = value?.Screenshots;
             _screenCapture.Resolution = _dataSet?.Resolution;
             _screenCapture.Game = _dataSet?.Game;
         }

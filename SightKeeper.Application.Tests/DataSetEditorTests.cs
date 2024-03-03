@@ -3,7 +3,6 @@ using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Data.Services.DataSet;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Application.Tests;
@@ -109,7 +108,7 @@ public sealed class DataSetEditorTests : DbRelatedTests
         var editor = Editor;
         var dataSet = DomainTestsHelper.NewDataSet;
         var itemClass = dataSet.CreateItemClass("Item class", 0);
-        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+        var screenshot = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
         var asset = dataSet.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new Bounding());
         DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Resolution, dataSet.Game, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), new []{new DeletedItemClass(itemClass)});

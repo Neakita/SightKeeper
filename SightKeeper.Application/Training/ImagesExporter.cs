@@ -2,8 +2,7 @@
 using Serilog;
 using SerilogTimings.Extensions;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using Image = SixLabors.ImageSharp.Image;

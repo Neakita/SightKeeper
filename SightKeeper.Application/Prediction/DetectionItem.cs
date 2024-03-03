@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model;
 using RectangleF = System.Drawing.RectangleF;
 
 namespace SightKeeper.Application.Prediction;

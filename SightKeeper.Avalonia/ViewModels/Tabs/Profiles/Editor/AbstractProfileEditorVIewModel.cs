@@ -13,9 +13,7 @@ using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
@@ -145,7 +143,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
                 AvailableWeights = Array.Empty<Weights>();
             else
             {
-                AvailableWeights = value.WeightsLibrary.Weights;
+                AvailableWeights = value.Weights.Records;
                 _availableItemClasses.AddRange(value.ItemClasses);
             }
         }

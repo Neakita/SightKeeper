@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Serilog;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
@@ -23,7 +23,7 @@ public sealed class DbAssetsDataAccess : AssetsDataAccess
         return entry.Collection(x => x.Items).LoadAsync(cancellationToken);
     }
 
-    public void LoadAssets(Domain.Model.DataSets.DataSet dataSet)
+    public void LoadAssets(Domain.Model.DataSet dataSet)
     {
 	    var entry = _dbContext.Entry(dataSet);
 	    if (entry.State == EntityState.Detached)
@@ -34,7 +34,7 @@ public sealed class DbAssetsDataAccess : AssetsDataAccess
 	    entry.Collection(x => x.Assets).Load();
     }
 
-    public Task LoadAssetsAsync(Domain.Model.DataSets.DataSet dataSet, CancellationToken cancellationToken = default)
+    public Task LoadAssetsAsync(Domain.Model.DataSet dataSet, CancellationToken cancellationToken = default)
     {
         var entry = _dbContext.Entry(dataSet);
         if (entry.State == EntityState.Detached)

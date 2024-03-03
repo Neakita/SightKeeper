@@ -1,10 +1,8 @@
-﻿using System.Collections.ObjectModel;
-
-namespace SightKeeper.Commons;
+﻿namespace SightKeeper.Commons;
 
 public static class ObservableCollectionExtensions
 {
-	public static int RemoveAll<T>(this ObservableCollection<T> collection, Func<T, bool> predicate)
+	public static int RemoveAll<T>(this IList<T> collection, Func<T, bool> predicate)
 	{
 		var indexes = collection
 			.WithIndexes()

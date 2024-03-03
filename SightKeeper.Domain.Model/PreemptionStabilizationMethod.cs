@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model.Profiles;
+﻿namespace SightKeeper.Domain.Model;
 
 public enum PreemptionStabilizationMethod
 {

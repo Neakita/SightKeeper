@@ -73,7 +73,7 @@ public sealed partial class DataSetsViewModel : ViewModel
 	{
 		Guard.IsNotNull(SelectedDataSetViewModel);
 		var dialogViewModel = _scope.Resolve<WeightsEditorViewModel>();
-		await dialogViewModel.SetLibrary(SelectedDataSetViewModel.DataSet.WeightsLibrary);
+		await dialogViewModel.SetLibrary(SelectedDataSetViewModel.DataSet.Weights);
 		await dialogViewModel.ShowDialog(this);
 	}
 

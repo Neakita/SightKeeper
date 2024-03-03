@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Weights;
+﻿namespace SightKeeper.Domain.Model;
 
 public readonly struct WeightsMetrics
 {

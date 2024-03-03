@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Linq;
 using SightKeeper.Application.Prediction;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services.Prediction.Handling;
@@ -24,7 +24,7 @@ public sealed class ScreenshoterDetectionHandler : DetectionObserver
 
     public void OnPaused()
     {
-        _screenshotsDataAccess.SaveChangesAsync(_dataSet.ScreenshotsLibrary);
+        _screenshotsDataAccess.SaveChangesAsync(_dataSet.Screenshots);
     }
 
     private readonly DataSet _dataSet;
@@ -46,15 +46,15 @@ public sealed class ScreenshoterDetectionHandler : DetectionObserver
         if (!await EnsureScreenshotLoaded())
             return;
         _lastScreenshotTime = DateTime.UtcNow;
-        _dataSet.ScreenshotsLibrary.CreateScreenshot(data.Image);
+        _dataSet.Screenshots.CreateScreenshot(data.Image);
     }
 
     private async Task<bool> EnsureScreenshotLoaded()
     {
-        if (_screenshotsDataAccess.IsLoaded(_dataSet.ScreenshotsLibrary))
+        if (_screenshotsDataAccess.IsLoaded(_dataSet.Screenshots))
             return true;
         _isLoadingScreenshots = true;
-        await _screenshotsDataAccess.Load(_dataSet.ScreenshotsLibrary);
+        await _screenshotsDataAccess.Load(_dataSet.Screenshots);
         _isLoadingScreenshots = false;
         return false;
     }

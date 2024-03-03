@@ -5,10 +5,6 @@ using Serilog;
 using SerilogTimings;
 using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Data;
 

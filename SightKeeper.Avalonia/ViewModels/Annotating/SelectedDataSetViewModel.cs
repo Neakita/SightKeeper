@@ -4,7 +4,7 @@ using System.Reactive.Disposables;
 using DynamicData;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
@@ -42,8 +42,8 @@ public sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
         if (newValue == null)
             return;
         // TODO do it asynchronously somehow
-        _weightsDataAccess.LoadWeights(newValue.DataSet.WeightsLibrary);
-        _weights.AddRange(newValue.DataSet.WeightsLibrary.Weights);
+        _weightsDataAccess.LoadWeights(newValue.DataSet.Weights);
+        _weights.AddRange(newValue.DataSet.Weights.Records);
     }
 
     private readonly WeightsDataAccess _weightsDataAccess;

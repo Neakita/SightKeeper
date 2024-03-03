@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Data.Configuration;
 
@@ -12,6 +12,6 @@ public sealed class WeightsLibraryConfiguration : IEntityTypeConfiguration<Weigh
         builder.HasFlakeId(library => library.Id);
         builder.ToTable("WeightsLibraries");
         builder.Navigation(library => library.DataSet).AutoInclude();
-        builder.Navigation(library => library.Weights).AutoInclude();
+        builder.Navigation(library => library.Records).AutoInclude();
     }
 }

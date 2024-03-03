@@ -1,5 +1,4 @@
-﻿using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+﻿using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Annotating;
 

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.Exceptions;
 using SightKeeper.Tests.Common;
 
@@ -11,7 +10,7 @@ public sealed class AssetsTests
     public void ShouldDeleteItems()
     {
         var dataSet = DomainTestsHelper.NewDataSet;
-        var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+        var screenshot = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
         var asset = dataSet.MakeAsset(screenshot);
         var itemClass = dataSet.CreateItemClass("Item class", 0);
         var item = asset.CreateItem(itemClass, new Bounding());
@@ -24,8 +23,8 @@ public sealed class AssetsTests
     public void ShouldNotDeleteItemWhichIsNotInAsset()
     {
         var dataSet = DomainTestsHelper.NewDataSet;
-        var screenshot1 = dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
-        var screenshot2 =  dataSet.ScreenshotsLibrary.CreateScreenshot(Array.Empty<byte>());
+        var screenshot1 = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
+        var screenshot2 =  dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
         var asset1 = dataSet.MakeAsset(screenshot1);
         var asset2 = dataSet.MakeAsset(screenshot2);
         var itemClass = dataSet.CreateItemClass("Item class", 0);

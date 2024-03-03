@@ -6,7 +6,7 @@ using SharpHook.Native;
 using SightKeeper.Application;
 using SightKeeper.Application.Prediction;
 using SightKeeper.Commons;
-using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Prediction.Handling;
 using SightKeeper.Services.Prediction.Handling.MouseMoving;

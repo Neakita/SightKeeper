@@ -30,9 +30,9 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
         _itemClasses.Select(itemClass => itemClass.ToItemClassInfo()).ToList();
     public IReadOnlyCollection<EditableItemClass> ItemClasses => _itemClasses;
     public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
-    public Domain.Model.DataSets.DataSet DataSet { get; private set; }
+    public Domain.Model.DataSet DataSet { get; private set; }
 
-    public DataSetEditingViewModel(Domain.Model.DataSets.DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService, AssetsDataAccess assetsDataAccess, ItemClassDataAccess itemClassDataAccess) : base(validator)
+    public DataSetEditingViewModel(Domain.Model.DataSet dataSet, IValidator<DataSetChanges> validator, RegisteredGamesService registeredGamesService, AssetsDataAccess assetsDataAccess, ItemClassDataAccess itemClassDataAccess) : base(validator)
     {
         _registeredGamesService = registeredGamesService;
         _assetsDataAccess = assetsDataAccess;
@@ -44,7 +44,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
     private readonly IDisposable _disposable;
 
     [MemberNotNull(nameof(DataSet))]
-    private void SetData(Domain.Model.DataSets.DataSet dataSet)
+    private void SetData(Domain.Model.DataSet dataSet)
     {
         DataSet = dataSet;
         _itemClasses.Clear();

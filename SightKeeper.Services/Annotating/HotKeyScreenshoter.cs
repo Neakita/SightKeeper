@@ -3,7 +3,7 @@ using Serilog;
 using SharpHook.Native;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Data;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 using SightKeeper.Services.Input;
 
@@ -94,6 +94,6 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
             Thread.Sleep(_timeout.Value);
         }
         if (somethingScreenshoted)
-            _librariesDataAccess.SaveChangesAsync(DataSet.ScreenshotsLibrary);
+            _librariesDataAccess.SaveChangesAsync(DataSet.Screenshots);
     }
 }

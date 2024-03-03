@@ -2,7 +2,7 @@
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -44,11 +44,11 @@ public sealed class ScreenshoterViewModel : ViewModel
 
     public ushort? MaxScreenshotsQuantity
     {
-        get => DataSet?.ScreenshotsLibrary.MaxQuantity;
-        set => SetProperty(DataSet?.ScreenshotsLibrary.MaxQuantity, value, maxImages =>
+        get => DataSet?.Screenshots.MaxQuantity;
+        set => SetProperty(DataSet?.Screenshots.MaxQuantity, value, maxImages =>
         {
             Guard.IsNotNull(DataSet);
-            DataSet.ScreenshotsLibrary.MaxQuantity = maxImages;
+            DataSet.Screenshots.MaxQuantity = maxImages;
         });
     }
 

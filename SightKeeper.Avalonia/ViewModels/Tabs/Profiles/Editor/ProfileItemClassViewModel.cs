@@ -1,6 +1,5 @@
 ﻿using SightKeeper.Application;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 

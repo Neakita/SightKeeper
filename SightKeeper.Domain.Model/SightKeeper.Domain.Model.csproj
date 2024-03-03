@@ -6,15 +6,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
-      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-      <PackageReference Include="FlakeId" Version="1.1.2" />
-      <PackageReference Include="System.Reactive" Version="6.0.0" />
-    </ItemGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.Commons\SightKeeper.Commons.csproj" />
+      <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
+      <PackageReference Include="FlakeId" Version="1.1.2" />
+      <PackageReference Include="System.Reactive" Version="6.0.0" />
     </ItemGroup>
 
 </Project>

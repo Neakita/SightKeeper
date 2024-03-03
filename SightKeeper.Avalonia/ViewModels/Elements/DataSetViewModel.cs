@@ -5,8 +5,6 @@ using System.Reactive.Linq;
 using DynamicData;
 using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
@@ -38,7 +36,7 @@ public sealed class DataSetViewModel : ViewModel, IDisposable
             .DisposeWithEx(_constructorDisposables);
         _itemClasses.AddOrUpdate(dataSet.ItemClasses);
         ItemClasses = itemClasses;
-        _weights.AddRange(DataSet.WeightsLibrary.Weights);
+        _weights.AddRange(DataSet.Weights.Records);
         _weights.Connect()
             .Bind(out var weights)
             .Subscribe()

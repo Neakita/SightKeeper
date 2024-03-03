@@ -15,8 +15,7 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc.Logging;
 using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
@@ -26,7 +25,7 @@ public sealed partial class TrainingViewModel : ViewModel
     private readonly WeightsDataAccess _weightsDataAccess;
     private readonly Trainer _trainer;
     public IObservable<TrainingProgress?> Progress => _progress;
-    public IObservable<float?> Completion => Progress.Select(progress => (float?)progress?.Metrics.Epoch / Epochs);
+    public IObservable<float?> Completion => Progress.Select(progress => (float?)progress?.WeightsMetrics.Epoch / Epochs);
     public IReadOnlyCollection<DataSetViewModel> AvailableDataSets { get; }
     public InlineCollection InlineCollection { get; } = new();
 
@@ -38,8 +37,8 @@ public sealed partial class TrainingViewModel : ViewModel
                 return Task.FromResult((IReadOnlyCollection<Weights>)Array.Empty<Weights>());
             return Task.Run(async () =>
             {
-                await _weightsDataAccess.LoadWeightsAsync(SelectedDataSet.DataSet.WeightsLibrary);
-                return SelectedDataSet.DataSet.WeightsLibrary.Weights;
+                await _weightsDataAccess.LoadWeightsAsync(SelectedDataSet.DataSet.Weights);
+                return SelectedDataSet.DataSet.Weights.Records;
             });
         }
     }

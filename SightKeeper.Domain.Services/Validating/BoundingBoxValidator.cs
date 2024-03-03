@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Domain.Services.Validating;
 

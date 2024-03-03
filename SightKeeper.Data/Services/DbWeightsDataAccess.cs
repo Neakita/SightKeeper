@@ -4,8 +4,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
@@ -20,27 +19,27 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         _dbContext = dbContext;
     }
 
-    public void LoadWeights(WeightsLibrary library)
+    public void LoadWeights(WeightsLibrary weightsLibrary)
     {
-        _dbContext.Entry(library).Collection(lib => lib.Weights).Load();
+        _dbContext.Entry(weightsLibrary).Collection(lib => lib.Records).Load();
     }
 
-    public Task LoadWeightsAsync(WeightsLibrary library, CancellationToken cancellationToken = default)
+    public Task LoadWeightsAsync(WeightsLibrary weightsLibrary, CancellationToken cancellationToken = default)
     {
-        return _dbContext.Entry(library).Collection(lib => lib.Weights).LoadAsync(cancellationToken);
+        return _dbContext.Entry(weightsLibrary).Collection(lib => lib.Records).LoadAsync(cancellationToken);
     }
 
     public async Task<Weights> CreateWeights(
-        WeightsLibrary library,
+        WeightsLibrary weightsLibrary,
         byte[] onnxData,
         byte[] ptData,
         ModelSize size,
-        WeightsMetrics metrics,
+        WeightsMetrics weightsMetrics,
         IEnumerable<ItemClass> itemClasses,
         CancellationToken cancellationToken = default)
     {
-        await LoadWeightsAsync(library, cancellationToken);
-        var weights = library.CreateWeights(onnxData, ptData, size, metrics, itemClasses);
+        await LoadWeightsAsync(weightsLibrary, cancellationToken);
+        var weights = weightsLibrary.CreateWeights(onnxData, ptData, size, weightsMetrics, itemClasses);
         await _dbContext.SaveChangesAsync(cancellationToken);
         _weightsCreated.OnNext(weights);
         return weights;
@@ -53,14 +52,14 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<WeightsData> LoadWeightsData(Weights weights, WeightsFormat format, CancellationToken cancellationToken = default)
+    public async Task<WeightsData> LoadWeightsData(Weights weights, WeightsFormat weightsFormat, CancellationToken cancellationToken = default)
     {
         var weightsEntry = _dbContext.Entry(weights);
-        return format switch
+        return weightsFormat switch
         {
-            WeightsFormat.PT => await LoadWeightsData(weightsEntry, w => w.PTData, cancellationToken),
-            WeightsFormat.ONNX => await LoadWeightsData(weightsEntry, w => w.ONNXData, cancellationToken),
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<WeightsData>(nameof(format), format, null)
+            WeightsFormat.PT => await LoadWeightsData(weightsEntry, w => w.PTWeightsData, cancellationToken),
+            WeightsFormat.ONNX => await LoadWeightsData(weightsEntry, w => w.ONNXWeightsData, cancellationToken),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<WeightsData>(nameof(weightsFormat), weightsFormat, null)
         };
     }
     
