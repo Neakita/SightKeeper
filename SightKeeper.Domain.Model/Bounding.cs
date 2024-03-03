@@ -18,8 +18,8 @@ public readonly struct Bounding
 
 	public Bounding(double x1, double y1, double x2, double y2)
 	{
-		MinMax(ref x1, ref x2);
-		MinMax(ref y1, ref y2);
+		Sort(ref x1, ref x2);
+		Sort(ref y1, ref y2);
 		Position = new Vector2<double>(x1, y1);
 		Size = new Vector2<double>(x2 - x1, y2 - y1);
 	}
@@ -39,9 +39,9 @@ public readonly struct Bounding
 		return HashCode.Combine(Position, Size);
 	}
 
-	private static void MinMax(scoped ref double x, scoped ref double y)
+	private static void Sort(scoped ref double lesser, scoped ref double greater)
 	{
-		if (x > y)
-			(x, y) = (y, x);
+		if (lesser > greater)
+			(lesser, greater) = (greater, lesser);
 	}
 }
