@@ -9,7 +9,7 @@ public sealed class DataSet : Entity
 	public Game? Game { get; set; }
 	public ushort Resolution { get; }
 
-	public Library Screenshots { get; }
+	public ScreenshotsLibrary Screenshots { get; }
 	public WeightsLibrary Weights { get; }
 	public IReadOnlyCollection<Asset> Assets => _assets;
 	public IReadOnlyCollection<ItemClass> ItemClasses => _itemClasses;
@@ -35,7 +35,7 @@ public sealed class DataSet : Entity
 		Name = name;
 		Description = string.Empty;
 		Resolution = resolution;
-		Screenshots = new Library();
+		Screenshots = new ScreenshotsLibrary();
 		Weights = new WeightsLibrary();
 		_assets = new ObservableCollection<Asset>();
 	}

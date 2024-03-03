@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.Model;
 
-public sealed class Library : Entity
+public sealed class ScreenshotsLibrary : Entity
 {
     public ushort? MaxQuantity { get; set; }
     public IReadOnlySet<Screenshot> Screenshots => _screenshots;
