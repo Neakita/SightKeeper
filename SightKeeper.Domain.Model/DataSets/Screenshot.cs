@@ -1,6 +1,6 @@
-﻿namespace SightKeeper.Domain.Model;
+﻿namespace SightKeeper.Domain.Model.DataSets;
 
-public sealed class Screenshot : Entity
+public sealed class Screenshot
 {
 	public Image Image { get; }
 	public DateTime CreationDate { get; }

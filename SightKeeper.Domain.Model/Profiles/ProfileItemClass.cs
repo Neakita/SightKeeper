@@ -1,6 +1,6 @@
-﻿namespace SightKeeper.Domain.Model;
+﻿namespace SightKeeper.Domain.Model.Profiles;
 
-public sealed class ProfileItemClass : Entity
+public sealed class ProfileItemClass
 {
     public ItemClass ItemClass { get; private set; }
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using SightKeeper.Domain.Model.Weights;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.DataSets;
 
-public sealed class DataSet : Entity
+public sealed class DataSet
 {
 	public string Name { get; set; }
 	public string Description { get; set; }

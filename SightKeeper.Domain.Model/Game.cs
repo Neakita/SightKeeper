@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.Model;
 
-public sealed class Game : Entity
+public sealed class Game
 {
 	public string Title { get; set; }
 	public string ProcessName { get; set; }

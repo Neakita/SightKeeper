@@ -1,6 +1,6 @@
-﻿namespace SightKeeper.Domain.Model;
+﻿namespace SightKeeper.Domain.Model.Weights;
 
-public sealed class WeightsData : Entity
+public sealed class WeightsData
 {
     public byte[] Content { get; }
 

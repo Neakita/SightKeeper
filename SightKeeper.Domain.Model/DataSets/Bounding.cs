@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model;
+﻿namespace SightKeeper.Domain.Model.DataSets;
 
 public readonly struct Bounding
 {

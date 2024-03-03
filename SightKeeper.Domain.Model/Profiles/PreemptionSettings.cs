@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.Profiles;
 
 public readonly struct PreemptionSettings
 {

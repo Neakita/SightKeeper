@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.DataSets;
 
-public sealed class ScreenshotsLibrary : Entity
+public sealed class ScreenshotsLibrary
 {
     public ushort? MaxQuantity { get; set; }
     public IReadOnlySet<Screenshot> Screenshots => _screenshots;

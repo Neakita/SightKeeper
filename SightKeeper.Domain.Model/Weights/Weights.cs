@@ -1,8 +1,8 @@
 ﻿using System.Collections.Immutable;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.Weights;
 
-public sealed class Weights : Entity
+public sealed class Weights
 {
     public DateTime CreationDate { get; }
     public WeightsData ONNXWeightsData { get; }

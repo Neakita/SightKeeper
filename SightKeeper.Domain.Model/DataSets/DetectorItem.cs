@@ -1,6 +1,6 @@
-﻿namespace SightKeeper.Domain.Model;
+﻿namespace SightKeeper.Domain.Model.DataSets;
 
-public sealed class DetectorItem : Entity
+public sealed class DetectorItem
 {
 	public ItemClass ItemClass { get; set; }
 	public Bounding Bounding { get; set; }

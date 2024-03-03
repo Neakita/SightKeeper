@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.Model;
 
-public sealed class ItemClass : Entity
+public sealed class ItemClass
 {
 	public string Name { get; set; }
 	public uint Color { get; set; }

@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.Weights;
 
-public sealed class WeightsLibrary : Entity
+public sealed class WeightsLibrary
 {
     public IReadOnlySet<Weights> Records => _records;
 

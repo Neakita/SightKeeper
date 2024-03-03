@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace SightKeeper.Domain.Model;
+namespace SightKeeper.Domain.Model.DataSets;
 
-public sealed class Asset : Entity
+public sealed class Asset
 {
     public AssetUsage Usage { get; set; } = AssetUsage.Any;
     public ReadOnlyCollection<DetectorItem> Items => _items.AsReadOnly();
