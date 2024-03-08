@@ -6,9 +6,9 @@ public sealed class ProfileItemClass
 
     public byte Index { get; set; }
 
-    public ItemClassActivationCondition ActivationCondition { get; set; }
+    public ActivationCondition ActivationCondition { get; set; }
 
-    public ProfileItemClass(ItemClass itemClass, byte index, ItemClassActivationCondition activationCondition)
+    public ProfileItemClass(ItemClass itemClass, byte index, ActivationCondition activationCondition)
     {
         ItemClass = itemClass;
         Index = index;

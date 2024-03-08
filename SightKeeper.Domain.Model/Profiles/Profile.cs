@@ -59,7 +59,7 @@ public sealed class Profile
         _itemClasses = new();
     }
 
-    public void AddItemClass(ItemClass itemClass, ItemClassActivationCondition activationCondition)
+    public void AddItemClass(ItemClass itemClass, ActivationCondition activationCondition)
     {
         if (!Weights.ItemClasses.Contains(itemClass))
             ThrowHelper.ThrowArgumentException(nameof(itemClass), $"Item class \"{itemClass}\" not owned by provided weights");

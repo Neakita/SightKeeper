@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.Model.Profiles;
 
-public enum PreemptionStabilizationMethod
+public enum StabilizationMethod
 {
 	Median,
 	Mean
