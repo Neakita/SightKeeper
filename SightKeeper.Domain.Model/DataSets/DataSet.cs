@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using SightKeeper.Domain.Model.Weights;
 
 namespace SightKeeper.Domain.Model.DataSets;
 

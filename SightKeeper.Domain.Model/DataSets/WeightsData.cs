@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model.Weights;
+﻿namespace SightKeeper.Domain.Model.DataSets;
 
 public sealed class WeightsData
 {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Domain.Model.Profiles;
 
@@ -35,7 +36,7 @@ public sealed class Profile
         }
     }
     public PreemptionSettings? PreemptionSettings { get; set; }
-    public Weights.Weights Weights
+    public Weights Weights
     {
         get => _weights;
         set
@@ -46,7 +47,7 @@ public sealed class Profile
     }
     public ReadOnlyCollection<ProfileItemClass> ItemClasses => _itemClasses.AsReadOnly();
 
-    public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, PreemptionSettings? preemptionSettings, Weights.Weights weights)
+    public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, PreemptionSettings? preemptionSettings, Weights weights)
     {
         Name = name;
         Description = description;
@@ -75,7 +76,7 @@ public sealed class Profile
 
     public override string ToString() => string.IsNullOrEmpty(Name) ? base.ToString()! : Name;
 
-    private Weights.Weights _weights;
+    private Weights _weights;
     private readonly List<ProfileItemClass> _itemClasses;
     private float _detectionThreshold;
     private float _mouseSensitivity;

@@ -1,20 +1,20 @@
 ﻿using System.Collections.Immutable;
 
-namespace SightKeeper.Domain.Model.Weights;
+namespace SightKeeper.Domain.Model.DataSets;
 
 public sealed class Weights
 {
     public DateTime CreationDate { get; }
     public WeightsData ONNXWeightsData { get; }
     public WeightsData PTWeightsData { get; }
-    public ModelSize Size { get; }
+    public Size Size { get; }
     public WeightsMetrics WeightsMetrics { get; }
     public ImmutableList<ItemClass> ItemClasses { get; }
 
     internal Weights(
         byte[] onnxData,
         byte[] ptData,
-        ModelSize size,
+        Size size,
         WeightsMetrics weightsMetrics,
         IEnumerable<ItemClass> itemClasses)
     {
@@ -33,5 +33,5 @@ public sealed class Weights
         ItemClasses = null!;
     }
 
-    public override string ToString() => $"{nameof(Size)}: {Size}, {nameof(WeightsMetrics.Epoch)}: {WeightsMetrics.Epoch}, {nameof(WeightsMetrics.BoundingLoss)}: {WeightsMetrics.BoundingLoss}, {nameof(WeightsMetrics.ClassificationLoss)}: {WeightsMetrics.ClassificationLoss}, {nameof(WeightsMetrics.DeformationLoss)}: {WeightsMetrics.DeformationLoss}";
+    public override string ToString() => $"{nameof(Size)}: {Size}, {WeightsMetrics}";
 }

@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Model.Weights;
+namespace SightKeeper.Domain.Model.DataSets;
 
 public sealed class WeightsLibrary
 {
@@ -9,7 +9,7 @@ public sealed class WeightsLibrary
     public Weights CreateWeights(
         byte[] onnxData,
         byte[] ptData,
-        ModelSize size,
+        Size size,
         WeightsMetrics weightsMetrics,
         IEnumerable<ItemClass> itemClasses)
     {
