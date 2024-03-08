@@ -15,6 +15,10 @@ public readonly struct Bounding
 	public Vector2<double> Position { get; }
 	public Vector2<double> Size { get; }
 	public Vector2<double> Center => Position + Size / 2;
+	public double Left => Position.X;
+	public double Right => Position.X + Size.X;
+	public double Top => Position.Y;
+	public double Bottom => Position.Y + Size.Y;
 
 	public Bounding(double x1, double y1, double x2, double y2)
 	{
