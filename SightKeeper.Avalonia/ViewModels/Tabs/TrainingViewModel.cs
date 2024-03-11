@@ -15,8 +15,7 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc.Logging;
 using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
@@ -38,7 +37,7 @@ public sealed partial class TrainingViewModel : ViewModel
             return Task.Run(async () =>
             {
                 await _weightsDataAccess.LoadWeightsAsync(SelectedDataSet.DataSet.Weights);
-                return SelectedDataSet.DataSet.Weights.Records;
+                return SelectedDataSet.DataSet.Weights.Weights;
             });
         }
     }

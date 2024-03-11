@@ -1,39 +1,27 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.Annotating;
 
 public sealed class Screenshoter
 {
-	public Library? Library { get; set; }
-
-	public Screenshoter(ScreenCapture screenCapture, SelfActivityService selfActivityService)
+	public Screenshoter(ScreenCapture screenCapture, ScreenshotsDataAccess screenshotsDataAccess)
 	{
 		_screenCapture = screenCapture;
-		_selfActivityService = selfActivityService;
-	}
-	
-	public void MakeScreenshot()
-	{
-		if (!GetCanMakeScreenshot(out var message))
-			ThrowHelper.ThrowInvalidOperationException($"Can't make screenshot: {message}");
-		Guard.IsNotNull(_screenCapture.Resolution);
-		var image = _screenCapture.Capture();
-		Library.CreateScreenshot(image);
+		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	[MemberNotNullWhen(true, nameof(Library))]
-	public bool GetCanMakeScreenshot([NotNullWhen(false)] out string? message)
+	public Screenshot MakeScreenshot(DataSet dataSet)
 	{
-		if (Library == null)
-			message = "Screenshots library is not set";
-		else if (_selfActivityService.IsOwnWindowActive)
-			message = "Own window is active";
-		else message = null;
-		return message == null;
+		return MakeScreenshot(dataSet.Screenshots, dataSet.Resolution, dataSet.Game);
 	}
-	
+
 	private readonly ScreenCapture _screenCapture;
-	private readonly SelfActivityService _selfActivityService;
+	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
+
+	private Screenshot MakeScreenshot(ScreenshotsLibrary library, ushort resolution, Game? game = null)
+	{
+		var image = _screenCapture.Capture(resolution, game);
+		return _screenshotsDataAccess.CreateScreenshot(library, image);
+	}
 }

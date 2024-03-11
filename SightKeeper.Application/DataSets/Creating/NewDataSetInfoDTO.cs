@@ -10,9 +10,9 @@ public sealed class NewDataSetInfoDTO : NewDataSetInfo
     public ushort Resolution { get; }
     public IReadOnlyCollection<ItemClassInfo> ItemClasses { get; }
     public Game? Game { get; }
-    int? DataSetInfo.Resolution => Resolution;
+    int? NewDataSetInfo.Resolution => Resolution;
 
-    public NewDataSetInfoDTO(DataSetInfo dataSetInfo)
+    public NewDataSetInfoDTO(NewDataSetInfo dataSetInfo)
     {
         Guard.IsNotNull(dataSetInfo.Resolution);
         Name = dataSetInfo.Name;

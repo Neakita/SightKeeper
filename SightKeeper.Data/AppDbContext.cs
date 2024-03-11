@@ -5,6 +5,8 @@ using Serilog;
 using SerilogTimings;
 using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Data;
 
@@ -13,6 +15,7 @@ public class AppDbContext : DbContext
 	public DbSet<DataSet> DataSets { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 	public DbSet<Profile> Profiles { get; set; } = null!;
+	public DbSet<Image> Images { get; set; } = null!;
 
 	public AppDbContext()
 	{
@@ -77,9 +80,6 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ProfileItemClassConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
 		modelBuilder.Entity<Asset>().Navigation(asset => asset.Screenshot).AutoInclude();
-		modelBuilder.Entity<WeightsData>().HasKey(weightsData => weightsData.Id);
-		modelBuilder.Entity<WeightsData>().HasFlakeId(weightsData => weightsData.Id);
-		modelBuilder.Entity<PTData>().ToTable("PTData");
-		modelBuilder.Entity<ONNXData>().ToTable("ONNXData");
+		modelBuilder.Entity<WeightsData>().HasFlakeIdKey();
 	}
 }

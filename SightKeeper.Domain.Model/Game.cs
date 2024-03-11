@@ -6,7 +6,7 @@ public sealed class Game
 	public string ProcessName { get; set; }
 	public string? ExecutablePath { get; set; }
 
-	public Game(string title, string processName, string? executablePath)
+	public Game(string title, string processName, string? executablePath = null)
 	{
 		Title = title;
 		ProcessName = processName;

@@ -2,7 +2,6 @@
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -54,11 +53,11 @@ public sealed class ScreenshoterViewModel : ViewModel
 
     public bool CanChangeMaxScreenshotsQuantity => DataSet != null;
 
-    public ScreenshoterViewModel(StreamDataSetScreenshoter screenshoter)
+    public ScreenshoterViewModel(StreamScreenshoter screenshoter)
     {
         _screenshoter = screenshoter;
     }
 
     private readonly Subject<bool> _isEnabledChanged = new();
-    private readonly StreamDataSetScreenshoter _screenshoter;
+    private readonly StreamScreenshoter _screenshoter;
 }

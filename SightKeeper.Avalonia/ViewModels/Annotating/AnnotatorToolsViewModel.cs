@@ -7,15 +7,12 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using SightKeeper.Application.Annotating;
-using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
 {
-    public IReadOnlyCollection<ItemClass> ItemClasses
+    public IReadOnlyCollection<Tag> ItemClasses
     {
         get => _itemClasses;
         private set => SetProperty(ref _itemClasses, value);
@@ -34,12 +31,12 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
             .Subscribe(OnScreenshotSelected)
             .DisposeWith(_disposable);
         selectedDataSetViewModel.ObservableValue
-            .Subscribe(newValue => ItemClasses = newValue?.ItemClasses ?? Array.Empty<ItemClass>())
+            .Subscribe(newValue => ItemClasses = newValue?.ItemClasses ?? Array.Empty<Tag>())
             .DisposeWithEx(_disposable);
         DetectorItemViewModel.ItemClassChanged.Subscribe(item =>
         {
             Guard.IsNotNull(item.Item);
-            annotator.ChangeItemClass(item.Item, item.ItemClass);
+            annotator.ChangeItemClass(item.Item, item.Tag);
         }).DisposeWith(_disposable);
         _selectedScreenshotViewModel.NotifyCanExecuteChanged(
             MarkSelectedScreenshotAsAssetCommand,
@@ -69,13 +66,13 @@ public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     private IDisposable? _selectedScreenshotDisposable;
 
     
-    [ObservableProperty] private ItemClass? _selectedItemClass;
+    [ObservableProperty] private Tag? _selectedItemClass;
     [ObservableProperty] private int _selectedItemClassIndex;
     
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
     private DetectorItemViewModel? _selectedItem;
 
-    private IReadOnlyCollection<ItemClass> _itemClasses = Array.Empty<ItemClass>();
+    private IReadOnlyCollection<Tag> _itemClasses = Array.Empty<Tag>();
 
 
     [RelayCommand(CanExecute = nameof(CanMarkSelectedScreenshotAsAsset))]

@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Application;
 
@@ -11,15 +11,14 @@ public sealed class ProfileEditor
 {
     public IObservable<Profile> ProfileEdited => _profileEdited.AsObservable();
 
-    public ProfileEditor(IValidator<EditedProfileData> validator, ProfilesDataAccess profilesDataAccess)
+    public ProfileEditor(IValidator<EditedProfileData> validator)
     {
         _validator = validator;
-        _profilesDataAccess = profilesDataAccess;
     }
 
-    public async Task ApplyChanges(EditedProfileDataDTO data)
+    public void ApplyChanges(EditedProfileDataDTO data)
     {
-        await _validator.ValidateAndThrowAsync(data);
+        _validator.ValidateAndThrow(data);
         var profile = data.Profile;
         profile.Name = data.Name;
         profile.Description = data.Description;
@@ -29,13 +28,16 @@ public sealed class ProfileEditor
         {
             Guard.IsNotNull(data.PreemptionHorizontalFactor);
             Guard.IsNotNull(data.PreemptionVerticalFactor);
+            Vector2<float> preemptionFactors = new(data.PreemptionHorizontalFactor.Value, data.PreemptionVerticalFactor.Value);
             if (data.IsPreemptionStabilizationEnabled)
             {
                 Guard.IsNotNull(data.PreemptionStabilizationBufferSize);
                 Guard.IsNotNull(data.PreemptionStabilizationMethod);
-                profile.PreemptionSettings = new PreemptionSettings(data.PreemptionHorizontalFactor.Value, data.PreemptionVerticalFactor.Value, data.PreemptionStabilizationBufferSize.Value, data.PreemptionStabilizationMethod.Value);
+                StabilizationSettings stabilizationSettings = new(data.PreemptionStabilizationBufferSize.Value,
+	                data.PreemptionStabilizationMethod.Value);
+                profile.PreemptionSettings = new PreemptionSettings(preemptionFactors, stabilizationSettings);
             }
-            else profile.PreemptionSettings = new PreemptionSettings(data.PreemptionHorizontalFactor.Value, data.PreemptionVerticalFactor.Value);
+            else profile.PreemptionSettings = new PreemptionSettings(preemptionFactors);
         }
         else profile.PreemptionSettings = null;
 
@@ -44,11 +46,9 @@ public sealed class ProfileEditor
         profile.ClearItemClasses();
         foreach (var itemClassData in data.ItemClasses)
             profile.AddItemClass(itemClassData.ItemClass, itemClassData.ActivationCondition);
-        await _profilesDataAccess.UpdateProfile(profile);
         _profileEdited.OnNext(profile);
     }
 
     private readonly IValidator<EditedProfileData> _validator;
-    private readonly ProfilesDataAccess _profilesDataAccess;
     private readonly Subject<Profile> _profileEdited = new();
 }

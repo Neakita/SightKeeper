@@ -1,17 +1,17 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.Training;
 
 public sealed class CLITrainerArguments
 {
-    public static readonly Dictionary<ModelSize, string> ModelSizes = new()
+    public static readonly Dictionary<Size, string> ModelSizes = new()
     {
-        { ModelSize.Nano, "yolov8n" },
-        { ModelSize.Small, "yolov8s" },
-        { ModelSize.Medium, "yolov8m" },
-        { ModelSize.Large, "yolov8l" },
-        { ModelSize.XLarge, "yolov8x" }
+        { Size.Nano, "yolov8n" },
+        { Size.Small, "yolov8s" },
+        { Size.Medium, "yolov8m" },
+        { Size.Large, "yolov8l" },
+        { Size.XLarge, "yolov8x" }
     };
     
     public string Data { get; set; }
@@ -33,10 +33,10 @@ public sealed class CLITrainerArguments
         AMP = amp;
     }
 
-    public CLITrainerArguments(string data, ModelSize modelSize, uint epochs, ushort patience, ushort imageSize, bool resume = false, bool amp = true)
+    public CLITrainerArguments(string data, Size size, uint epochs, ushort patience, ushort imageSize, bool resume = false, bool amp = true)
     {
         Data = data;
-        Model = ModelSizes[modelSize];
+        Model = ModelSizes[size];
         ImageSize = imageSize;
         Epochs = epochs;
         Patience = patience;

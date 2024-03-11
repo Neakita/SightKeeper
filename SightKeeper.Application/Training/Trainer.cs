@@ -1,15 +1,11 @@
 ﻿using System.Reactive.Linq;
 using Serilog;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.Training;
 
-public sealed class Trainer(
-	ImagesExporter imagesExporter,
-	DataSetConfigurationExporter dataSetConfigurationExporter,
-	WeightsDataAccess weightsDataAccess)
+public sealed class Trainer
 {
 	private static readonly string DataDirectoryPath = Path.Combine("Data", "Training");
 	private static readonly string DataSetPath = Path.Combine(DataDirectoryPath, "data.yaml");
@@ -17,18 +13,28 @@ public sealed class Trainer(
 	private static readonly string WeightsToResumeTrainingOnPath = Path.Combine(DataDirectoryPath, "weights.pt");
 	private static readonly ILogger Logger = Log.ForContext<Trainer>();
 
+	public Trainer(
+		ImagesExporter imagesExporter,
+		DataSetConfigurationExporter dataSetConfigurationExporter,
+		WeightsDataAccess weightsDataAccess)
+	{
+		_imagesExporter = imagesExporter;
+		_dataSetConfigurationExporter = dataSetConfigurationExporter;
+		_weightsDataAccess = weightsDataAccess;
+	}
+
 	public bool AMP { get; set; } = true;
 
 	public async Task<Weights?> TrainFromScratchAsync(
 		DataSet dataSet,
-		ModelSize size,
+		Size size,
 		uint epochs,
 		ushort patience,
 		IObserver<TrainingProgress> trainingProgressObserver,
 		CancellationToken cancellationToken = default)
 	{
 		PrepareDataDirectory();
-		await imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
+		await _imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
 		await ExportDataSet(dataSet, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);
 		CLITrainerArguments arguments = new(DataSetPath, size, epochs, patience, dataSet.Resolution, false, AMP);
@@ -57,7 +63,7 @@ public sealed class Trainer(
 	{
 		PrepareDataDirectory();
 		var dataSet = weights.Library.DataSet;
-		await imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
+		await _imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
 		await ExportDataSet(dataSet, cancellationToken);
 		await ExportWeights(weights, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);
@@ -78,6 +84,10 @@ public sealed class Trainer(
 		return await SaveWeights(dataSet, lastProgress.WeightsMetrics, weights.Size, CancellationToken.None); // TODO ability to abort saving
 	}
 
+	private readonly ImagesExporter _imagesExporter;
+	private readonly DataSetConfigurationExporter _dataSetConfigurationExporter;
+	private readonly WeightsDataAccess _weightsDataAccess;
+
 	private void PrepareDataDirectory()
 	{
 		if (Directory.Exists(DataDirectoryPath))
@@ -89,23 +99,23 @@ public sealed class Trainer(
 	private async Task ExportDataSet(DataSet dataSet, CancellationToken cancellationToken)
 	{
 		DataSetConfigurationParameters dataSetParameters = new(Path.GetFullPath(DataDirectoryPath), dataSet.ItemClasses);
-		await dataSetConfigurationExporter.Export(DataSetPath, dataSetParameters, cancellationToken);
+		await _dataSetConfigurationExporter.Export(DataSetPath, dataSetParameters, cancellationToken);
 	}
 	
 	private async Task ExportWeights(Weights weights, CancellationToken cancellationToken)
 	{
-		var data = await weightsDataAccess.LoadWeightsData(weights, WeightsFormat.PT, cancellationToken);
+		var data = _weightsDataAccess.LoadWeightsPTData(weights);
 		await File.WriteAllBytesAsync(WeightsToResumeTrainingOnPath, data.Content, cancellationToken);
 	}
 	
-	private async Task<Weights> SaveWeights(DataSet dataSet, WeightsMetrics lastWeightsMetrics, ModelSize size, CancellationToken cancellationToken)
+	private async Task<Weights> SaveWeights(DataSet dataSet, WeightsMetrics lastWeightsMetrics, Size size, CancellationToken cancellationToken)
 	{
 		var runDirectory = Directory.GetDirectories(RunsDirectoryPath).Single();
 		var ptModelPath = Path.Combine(runDirectory, "train", "weights", "last.pt");
 		var onnxModelPath = await YoloCLIExtensions.ExportToONNX(ptModelPath, dataSet.Resolution, Logger);
 		var onnxData = await File.ReadAllBytesAsync(onnxModelPath, cancellationToken);
 		var ptData = await File.ReadAllBytesAsync(ptModelPath, cancellationToken);
-		var weights = await weightsDataAccess.CreateWeights(dataSet.Weights, onnxData, ptData, size, lastWeightsMetrics, dataSet.ItemClasses, cancellationToken);
+		var weights = _weightsDataAccess.CreateWeights(dataSet.Weights, onnxData, ptData, size, lastWeightsMetrics, dataSet.ItemClasses);
 		Logger.Information("Saved weights: {Weights}", weights);
 		return weights;
 	}

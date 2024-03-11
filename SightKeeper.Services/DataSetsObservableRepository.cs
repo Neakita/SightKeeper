@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using DynamicData;
+using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
-using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Services.Extensions;
 
 namespace SightKeeper.Services;
 
@@ -17,16 +17,16 @@ public sealed class DataSetsObservableRepository : IDisposable
     {
         dataSetCreator.DataSetCreated
             .Subscribe(OnDataSetCreated)
-            .DisposeWithEx(_constructorDisposables);
+            .DisposeWith(_constructorDisposables);
         dataSetsDataAccess.DataSetRemoved
             .Subscribe(OnDataSetRemoved)
-            .DisposeWithEx(_constructorDisposables);
+            .DisposeWith(_constructorDisposables);
         _source.Connect()
             .Bind(out var dataSets)
             .Subscribe()
-            .DisposeWithEx(_constructorDisposables);
+            .DisposeWith(_constructorDisposables);
         DataSets = dataSets;
-        AddInitialDataSets(dataSetsDataAccess);
+        _source.AddRange(dataSetsDataAccess.DataSets);
     }
 
     public void Dispose()
@@ -40,10 +40,4 @@ public sealed class DataSetsObservableRepository : IDisposable
 
     private void OnDataSetCreated(DataSet dataSet) => _source.Add(dataSet);
     private void OnDataSetRemoved(DataSet dataSet) => _source.Remove(dataSet);
-
-    private async void AddInitialDataSets(DataSetsDataAccess dataSetsDataAccess)
-    {
-        var dataSets = await dataSetsDataAccess.GetDataSets();
-        _source.AddRange(dataSets);
-    }
 }

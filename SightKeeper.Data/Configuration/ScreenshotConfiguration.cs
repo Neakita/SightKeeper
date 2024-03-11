@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Configuration;
 
@@ -8,11 +8,10 @@ public sealed class ScreenshotConfiguration : IEntityTypeConfiguration<Screensho
 {
     public void Configure(EntityTypeBuilder<Screenshot> builder)
     {
-        builder.HasKey(screenshot => screenshot.Id);
-        builder.HasFlakeId(screenshot => screenshot.Id);
+        builder.HasFlakeIdKey();
         builder.ToTable("Screenshots");
         builder.HasOne(screenshot => screenshot.Asset).WithOne(asset => asset.Screenshot).HasPrincipalKey<Screenshot>();
-        builder.HasOne(screenshot => screenshot.Image).WithOne().HasPrincipalKey<Screenshot>().IsRequired();
+        builder.HasOne<Image>().WithOne().HasPrincipalKey<Screenshot>().IsRequired();
         builder.Navigation(screenshot => screenshot.Asset).AutoInclude();
     }
 }

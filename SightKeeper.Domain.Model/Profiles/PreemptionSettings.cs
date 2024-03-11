@@ -24,9 +24,9 @@ public readonly struct PreemptionSettings
 		Factor = factor;
 	}
 
-	public PreemptionSettings(Vector2<float> factor, byte bufferSize, StabilizationMethod method) : this(factor)
+	public PreemptionSettings(Vector2<float> factor, StabilizationSettings stabilizationSettings) : this(factor)
 	{
-		StabilizationSettings = new StabilizationSettings(bufferSize, method);
+		StabilizationSettings = stabilizationSettings;
 	}
 
 	public bool Equals(PreemptionSettings other)

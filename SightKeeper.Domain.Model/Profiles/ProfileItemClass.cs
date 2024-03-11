@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.Profiles;
+﻿using SightKeeper.Domain.Model.DataSets;
+
+namespace SightKeeper.Domain.Model.Profiles;
 
 public sealed class ProfileItemClass
 {

@@ -14,10 +14,6 @@ using DynamicData.Aggregation;
 using DynamicData.Binding;
 using ReactiveUI;
 using Serilog;
-using SightKeeper.Application.Annotating;
-using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 

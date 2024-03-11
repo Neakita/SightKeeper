@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
@@ -11,7 +11,7 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
 {
     public IReadOnlyCollection<DataSet> AvailableDataSets { get; }
     public IReadOnlyCollection<Weights> AvailableWeights { get; }
-    public IReadOnlyCollection<ItemClass> AvailableItemClasses { get; }
+    public IReadOnlyCollection<Tag> AvailableItemClasses { get; }
     public string Name { get; set; } = "Profile 1";
     public string Description { get; set; } = "Some description.. lorem ipsum and all that stuff";
     [ObservableProperty] private float _detectionThreshold = 0.6f;
@@ -27,7 +27,7 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
     public DataSet? DataSet { get; set; }
     public Weights? Weights { get; set; }
     public IReadOnlyList<ProfileItemClassViewModel> ItemClasses { get; }
-    public ItemClass? ItemClassToAdd { get; set; }
+    public Tag? ItemClassToAdd { get; set; }
     public ICommand AddItemClassCommand => FakeViewModel.CommandSubstitute;
     public ICommand RemoveItemClassCommand => FakeViewModel.CommandSubstitute;
     public ICommand MoveItemClassUpCommand => FakeViewModel.CommandSubstitute;

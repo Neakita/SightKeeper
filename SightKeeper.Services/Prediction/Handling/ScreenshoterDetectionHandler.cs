@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Linq;
 using SightKeeper.Application.Prediction;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Services.Prediction.Handling;
 
@@ -22,41 +21,22 @@ public sealed class ScreenshoterDetectionHandler : DetectionObserver
             MakeScreenshot(data);
     }
 
-    public void OnPaused()
-    {
-        _screenshotsDataAccess.SaveChangesAsync(_dataSet.Screenshots);
-    }
-
     private readonly DataSet _dataSet;
     private readonly DetectionScreenshotingParameters _parameters;
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
-    private bool _isLoadingScreenshots;
     private DateTime _lastScreenshotTime = DateTime.UtcNow;
     
     private bool ShouldMakeScreenshot(DetectionData data)
     {
         return _parameters.MakeScreenshots &&
-               !_isLoadingScreenshots &&
                IsDelayElapsed &&
                data.Items.Any(ShouldMakeScreenshot);
     }
     
-    private async void MakeScreenshot(DetectionData data)
+    private void MakeScreenshot(DetectionData data)
     {
-        if (!await EnsureScreenshotLoaded())
-            return;
         _lastScreenshotTime = DateTime.UtcNow;
-        _dataSet.Screenshots.CreateScreenshot(data.Image);
-    }
-
-    private async Task<bool> EnsureScreenshotLoaded()
-    {
-        if (_screenshotsDataAccess.IsLoaded(_dataSet.Screenshots))
-            return true;
-        _isLoadingScreenshots = true;
-        await _screenshotsDataAccess.Load(_dataSet.Screenshots);
-        _isLoadingScreenshots = false;
-        return false;
+        _screenshotsDataAccess.CreateScreenshot(_dataSet.Screenshots, data.Image);
     }
 
     private bool IsDelayElapsed => _lastScreenshotTime + _parameters.ScreenshotingDelay <= DateTime.UtcNow;

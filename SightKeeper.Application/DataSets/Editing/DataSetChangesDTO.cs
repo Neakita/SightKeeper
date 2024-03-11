@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
@@ -8,8 +8,6 @@ public sealed class DataSetChangesDTO : DataSetChanges
     public DataSet DataSet { get; }
     public string Name { get; }
     public string Description { get; }
-    public ushort Resolution { get; }
-    int? DataSetInfo.Resolution => Resolution;
     public Game? Game { get; }
     public IReadOnlyCollection<ItemClassInfo> ItemClasses { get; }
     public IReadOnlyCollection<ItemClassInfo> NewItemClasses { get; }
@@ -18,11 +16,9 @@ public sealed class DataSetChangesDTO : DataSetChanges
 
     public DataSetChangesDTO(DataSet dataSet, DataSetChanges changes)
     {
-        Guard.IsNotNull(changes.Resolution);
         DataSet = dataSet;
         Name = changes.Name;
         Description = changes.Description;
-        Resolution = (ushort)changes.Resolution.Value;
         ItemClasses = changes.ItemClasses.ToList();
         Game = changes.Game;
         NewItemClasses = changes.NewItemClasses.ToList();
@@ -32,7 +28,7 @@ public sealed class DataSetChangesDTO : DataSetChanges
     
     public DataSetChangesDTO(
         DataSet dataSet,
-        string name, string description, ushort resolution, Game? game,
+        string name, string description, Game? game,
         IEnumerable<ItemClassInfo> newItemClasses,
         IEnumerable<EditedItemClass> editedItemClasses,
         IEnumerable<DeletedItemClass> deletedItemClasses)
@@ -40,7 +36,6 @@ public sealed class DataSetChangesDTO : DataSetChanges
         DataSet = dataSet;
         Name = name;
         Description = description;
-        Resolution = resolution;
         NewItemClasses = newItemClasses.ToList();
         EditedItemClasses = editedItemClasses.ToList();
         DeletedItemClasses = deletedItemClasses.ToList();

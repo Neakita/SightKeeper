@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using DynamicData;
-using SightKeeper.Commons;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 

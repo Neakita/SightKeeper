@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using SharpHook;
 using SharpHook.Native;
-using SightKeeper.Commons;
+using SightKeeper.Services.Extensions;
 
 namespace SightKeeper.Services.Input;
 
@@ -91,10 +91,10 @@ public sealed class SharpHookHotKeyManager(ReactiveGlobalHookFacade hook)
         if (_sessionDisposables != null)
             return;
         CompositeDisposable disposables = new();
-        hook.KeyPressed.Subscribe(OnKeyPressed).DisposeWithEx(disposables);
-        hook.KeyReleased.Subscribe(OnKeyReleased).DisposeWithEx(disposables);
-        hook.MousePressed.Subscribe(OnMousePressed).DisposeWithEx(disposables);
-        hook.MouseReleased.Subscribe(OnMouseReleased).DisposeWithEx(disposables);
+        hook.KeyPressed.Subscribe(OnKeyPressed).DisposeWith(disposables);
+        hook.KeyReleased.Subscribe(OnKeyReleased).DisposeWith(disposables);
+        hook.MousePressed.Subscribe(OnMousePressed).DisposeWith(disposables);
+        hook.MouseReleased.Subscribe(OnMouseReleased).DisposeWith(disposables);
         _sessionDisposables = disposables;
     }
 

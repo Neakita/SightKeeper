@@ -29,8 +29,7 @@ using SightKeeper.Avalonia.Views.Tabs;
 using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
-using SightKeeper.Data.Services.DataSet;
-using SightKeeper.Domain.Services;
+using SightKeeper.Data.Services.DataSets;
 using SightKeeper.Services;
 using SightKeeper.Services.Annotating;
 using SightKeeper.Services.Games;
@@ -94,7 +93,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DataSetChangesValidator>().As<IValidator<DataSetChanges>>();
 		builder.RegisterType<Screenshoter>();
 		builder.RegisterType<DataSetScreenshoter>();
-		builder.RegisterType<HotKeyScreenshoter>().As<StreamDataSetScreenshoter>();
+		builder.RegisterType<HotKeyScreenshoter>().As<StreamScreenshoter>();
 		builder.RegisterType<SharpHookHotKeyManager>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<AvaloniaScreenBoundsProvider>().As<ScreenBoundsProvider>();

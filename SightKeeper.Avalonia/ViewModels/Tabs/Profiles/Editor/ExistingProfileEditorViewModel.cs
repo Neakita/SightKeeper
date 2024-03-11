@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using DynamicData;
+﻿using DynamicData;
 using FluentValidation;
 using SightKeeper.Application;
-using SightKeeper.Domain.Model;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;

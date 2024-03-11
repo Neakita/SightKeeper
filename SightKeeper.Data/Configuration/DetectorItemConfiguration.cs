@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Configuration;
 
@@ -8,15 +8,14 @@ public sealed class DetectorItemConfiguration : IEntityTypeConfiguration<Detecto
 {
     public void Configure(EntityTypeBuilder<DetectorItem> builder)
     {
-        builder.HasKey(item => item.Id);
-        builder.HasFlakeId(item => item.Id);
+        builder.HasFlakeIdKey();
         builder.ToTable("DetectorItems");
-        builder.OwnsOne(item => item.Bounding, boundingBuilder =>
+        builder.ComplexProperty(item => item.Bounding, boundingBuilder =>
         {
-            boundingBuilder.Property(bounding => bounding.Left).HasColumnName("BoundingLeft");
-            boundingBuilder.Property(bounding => bounding.Top).HasColumnName("BoundingTop");
-            boundingBuilder.Property(bounding => bounding.Right).HasColumnName("BoundingRight");
-            boundingBuilder.Property(bounding => bounding.Bottom).HasColumnName("BoundingBottom");
+	        boundingBuilder.Property(bounding => bounding.Position.X).HasColumnName("BoundingXPosition");
+	        boundingBuilder.Property(bounding => bounding.Position.Y).HasColumnName("BoundingYPosition");
+            boundingBuilder.Property(bounding => bounding.Size.X).HasColumnName("BoundingXSize");
+            boundingBuilder.Property(bounding => bounding.Size.Y).HasColumnName("BoundingYSize");
         });
     }
 }

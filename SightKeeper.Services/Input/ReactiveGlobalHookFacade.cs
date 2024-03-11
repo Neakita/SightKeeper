@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using SharpHook;
 using SharpHook.Reactive;
-using SightKeeper.Commons;
+using SightKeeper.Services.Extensions;
 
 namespace SightKeeper.Services.Input;
 
@@ -115,17 +115,17 @@ public sealed class ReactiveGlobalHookFacade : IDisposable
     private CompositeDisposable SubscribeToEvents(SimpleReactiveGlobalHook hook)
     {
 	    CompositeDisposable compositeDisposable = new();
-	    hook.HookEnabled.Subscribe(_hookEnabled).DisposeWithEx(compositeDisposable);
-	    hook.HookDisabled.Subscribe(_hookDisabled).DisposeWithEx(compositeDisposable);
-	    hook.KeyTyped.Subscribe(_keyTyped).DisposeWithEx(compositeDisposable);
-	    hook.KeyPressed.Subscribe(_keyPressed).DisposeWithEx(compositeDisposable);
-	    hook.KeyReleased.Subscribe(_keyReleased).DisposeWithEx(compositeDisposable);
-	    hook.MouseClicked.Subscribe(_mouseClicked).DisposeWithEx(compositeDisposable);
-	    hook.MousePressed.Subscribe(_mousePressed).DisposeWithEx(compositeDisposable);
-	    hook.MouseReleased.Subscribe(_mouseReleased).DisposeWithEx(compositeDisposable);
-	    hook.MouseMoved.Subscribe(_mouseMoved).DisposeWithEx(compositeDisposable);
-	    hook.MouseDragged.Subscribe(_mouseDragged).DisposeWithEx(compositeDisposable);
-	    hook.MouseWheel.Subscribe(_mouseWheel).DisposeWithEx(compositeDisposable);
+	    hook.HookEnabled.Subscribe(_hookEnabled).DisposeWith(compositeDisposable);
+	    hook.HookDisabled.Subscribe(_hookDisabled).DisposeWith(compositeDisposable);
+	    hook.KeyTyped.Subscribe(_keyTyped).DisposeWith(compositeDisposable);
+	    hook.KeyPressed.Subscribe(_keyPressed).DisposeWith(compositeDisposable);
+	    hook.KeyReleased.Subscribe(_keyReleased).DisposeWith(compositeDisposable);
+	    hook.MouseClicked.Subscribe(_mouseClicked).DisposeWith(compositeDisposable);
+	    hook.MousePressed.Subscribe(_mousePressed).DisposeWith(compositeDisposable);
+	    hook.MouseReleased.Subscribe(_mouseReleased).DisposeWith(compositeDisposable);
+	    hook.MouseMoved.Subscribe(_mouseMoved).DisposeWith(compositeDisposable);
+	    hook.MouseDragged.Subscribe(_mouseDragged).DisposeWith(compositeDisposable);
+	    hook.MouseWheel.Subscribe(_mouseWheel).DisposeWith(compositeDisposable);
 	    return compositeDisposable;
     }
 }

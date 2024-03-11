@@ -1,65 +1,33 @@
-﻿using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+﻿using FlakeId;
+using Microsoft.EntityFrameworkCore;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess, IDisposable
+public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
 {
-	public IObservable<Screenshot> ScreenshotAdded => _screenshotAdded.AsObservable();
-	public IObservable<Screenshot> ScreenshotRemoved => _screenshotRemoved.AsObservable();
-	
-    public DbScreenshotsDataAccess(AppDbContext dbContext)
+	public DbScreenshotsDataAccess(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyCollection<Screenshot>> Load(Library library, CancellationToken cancellationToken = default)
-    {
-        await _dbContext.Entry(library).Collection(lib => lib.Screenshots).LoadAsync(cancellationToken);
-        return library.Screenshots;
-    }
+	public override Image LoadImage(Screenshot screenshot)
+	{
+		return _dbContext.Images.AsNoTracking().Single(image => EF.Property<Id>(image, "Id") == EF.Property<Id>(screenshot, "Id"));
+	}
+	public override IEnumerable<Image> LoadImages(IEnumerable<Screenshot> screenshots)
+	{
+		throw new NotImplementedException();
+	}
+	public override IEnumerable<Image> LoadImages(DataSet dataSet)
+	{
+		throw new NotImplementedException();
+	}
 
-    public bool IsLoaded(Library library)
-    {
-        return _dbContext.Entry(library).Collection(lib => lib.Screenshots).IsLoaded;
-    }
+	protected override void SaveScreenshot(Screenshot screenshot, Image image)
+	{
+		throw new NotImplementedException();
+	}
 
-    public void CreateScreenshot(Library library, byte[] content)
-    {
-        var screenshot = library.CreateScreenshot(content);
-        _dbContext.Attach(screenshot);
-        _screenshotAdded.OnNext(screenshot);
-    }
-
-    public void DeleteScreenshot(Screenshot screenshot)
-    {
-	    _dbContext.Attach(screenshot.Library);
-	    screenshot.Library.DeleteScreenshot(screenshot);
-	    _screenshotRemoved.OnNext(screenshot);
-    }
-
-    public void SaveChanges(Library library)
-    {
-	    _dbContext.Update(library);
-	    _dbContext.SaveChanges();
-    }
-
-    public Task SaveChangesAsync(Library library, CancellationToken cancellationToken = default)
-    {
-	    // is Update necessary?
-        _dbContext.Update(library);
-        return _dbContext.SaveChangesAsync(cancellationToken);
-    }
-
-    private readonly Subject<Screenshot> _screenshotAdded = new();
-    private readonly Subject<Screenshot> _screenshotRemoved = new();
-    private readonly AppDbContext _dbContext;
-
-    public void Dispose()
-    {
-	    _screenshotAdded.Dispose();
-	    _screenshotRemoved.Dispose();
-    }
+	private readonly AppDbContext _dbContext;
 }

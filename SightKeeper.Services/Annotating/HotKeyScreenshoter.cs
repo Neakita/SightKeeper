@@ -1,23 +1,20 @@
 ﻿using CommunityToolkit.Diagnostics;
-using Serilog;
 using SharpHook.Native;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Data;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Services.Input;
 
 namespace SightKeeper.Services.Annotating;
 
-public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
+public sealed class HotKeyScreenshoter : StreamScreenshoter
 {
     public DataSet? DataSet
     {
-        get => _screenshoter.DataSet;
+	    get => _dataSet;
         set
         {
             Guard.IsFalse(IsEnabled);
-            _screenshoter.DataSet = value;
+            _dataSet = value;
         }
     }
 
@@ -44,30 +41,27 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
         {
             _framesPerSecond = value;
             if (value == 0)
-                _timeout = null;
+                _delay = null;
             else
-                _timeout = 1000 / value;
+                _delay = 1000 / value;
         }
     }
 
-    public HotKeyScreenshoter(SharpHookHotKeyManager sharpHookHotKeyManager, DataSetScreenshoter screenshoter, ScreenshotsDataAccess librariesDataAccess, AppDbContext dbContext)
+    public HotKeyScreenshoter(SharpHookHotKeyManager sharpHookHotKeyManager, Screenshoter screenshoter)
     {
         _sharpHookHotKeyManager = sharpHookHotKeyManager;
         _screenshoter = screenshoter;
-        _librariesDataAccess = librariesDataAccess;
-        _dbContext = dbContext;
         ScreenshotsPerSecond = 1;
     }
 
     private readonly SharpHookHotKeyManager _sharpHookHotKeyManager;
-    private readonly DataSetScreenshoter _screenshoter;
-    private readonly ScreenshotsDataAccess _librariesDataAccess;
-    private readonly AppDbContext _dbContext;
+    private readonly Screenshoter _screenshoter;
 
+    private DataSet? _dataSet;
     private IDisposable? _disposable;
     private bool _isEnabled;
     private byte _framesPerSecond;
-    private int? _timeout;
+    private int? _delay;
 
     private void Enable() => _disposable = _sharpHookHotKeyManager.Register(MouseButton.Button1, OnHotKeyPressed);
     private void Disable()
@@ -79,21 +73,11 @@ public sealed class HotKeyScreenshoter : StreamDataSetScreenshoter
     private void OnHotKeyPressed(HotKey hotKey)
     {
         Guard.IsNotNull(DataSet);
-        var somethingScreenshoted = false;
         while (hotKey.IsPressed)
         {
-            if (!_screenshoter.CanMakeScreenshot(out var message))
-                Log.Verbose("Can't make screenshot: {Message}", message);
-            else
-            {
-                _screenshoter.MakeScreenshot();
-                somethingScreenshoted = true;
-            }
-            if (_timeout == null)
-                break;
-            Thread.Sleep(_timeout.Value);
+	        _screenshoter.MakeScreenshot(DataSet);
+            if (_delay != null)
+				Thread.Sleep(_delay.Value);
         }
-        if (somethingScreenshoted)
-            _librariesDataAccess.SaveChangesAsync(DataSet.Screenshots);
     }
 }

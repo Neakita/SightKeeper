@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 

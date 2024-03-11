@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model;
+using SightKeeper.Data.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;
@@ -11,11 +12,12 @@ public sealed class WeightsLibraryTests : DbRelatedTests
     {
         using var dbContext = DbContextFactory.CreateDbContext();
         var dataSet = DomainTestsHelper.NewDataSet;
-        dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
+        DbScreenshotsDataAccess screenshotsDataAccess = new(dbContext);
+        screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
         dbContext.Add(dataSet);
         dbContext.SaveChanges();
         using var assertDbContext = DbContextFactory.CreateDbContext();
-        assertDbContext.Set<Library>().Include(lib => lib.Screenshots).Should().Contain(lib => lib.Screenshots.Any());
+        assertDbContext.Set<ScreenshotsLibrary>().Should().Contain(lib => lib.Any());
     }
 
     [Fact]
@@ -23,14 +25,15 @@ public sealed class WeightsLibraryTests : DbRelatedTests
     {
         using var dbContext = DbContextFactory.CreateDbContext();
         var dataSet = DomainTestsHelper.NewDataSet;
-        var screenshot = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
+        DbScreenshotsDataAccess screenshotsDataAccess = new(dbContext);
+        var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
         dbContext.Add(dataSet);
         dbContext.SaveChanges();
-        dbContext.Set<Library>().Should().Contain(dataSet.Screenshots);
+        dbContext.Set<ScreenshotsLibrary>().Should().Contain(dataSet.Screenshots);
         dbContext.Set<Screenshot>().Should().Contain(screenshot);
         dbContext.Remove(dataSet);
         dbContext.SaveChanges();
-        dbContext.Set<Library>().Should().BeEmpty();
+        dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
         dbContext.Set<Screenshot>().Should().BeEmpty();
     }
 }

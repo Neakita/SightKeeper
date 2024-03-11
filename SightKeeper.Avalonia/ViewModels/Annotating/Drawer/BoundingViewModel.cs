@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 

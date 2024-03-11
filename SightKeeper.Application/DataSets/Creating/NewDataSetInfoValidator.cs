@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SightKeeper.Domain.Services;
+using SightKeeper.Application.Extensions;
 
 namespace SightKeeper.Application.DataSets.Creating;
 
@@ -9,15 +9,20 @@ public sealed class NewDataSetInfoValidator : AbstractValidator<NewDataSetInfo>
     {
         _dataSetsDataAccess = dataSetsDataAccess;
         Include(dataSetInfoValidator);
+        RuleFor(data => data.Resolution)
+	        .NotNull()
+	        .GreaterThan(0)
+	        .LessThanOrEqualTo(ushort.MaxValue)
+	        .MultiplierOf(32);
         RuleFor(data => data.Name)
             .NotEmpty()
-            .MustAsync((_, dataSetName, cancellationToken) => IsNameFree(dataSetName, cancellationToken)).WithMessage("Name must be unique");
+            .Must((_, dataSetName) => IsNameFree(dataSetName)).WithMessage("Name must be unique");
     }
     
     private readonly DataSetsDataAccess _dataSetsDataAccess;
 
-    private Task<bool> IsNameFree(string name, CancellationToken cancellationToken)
+    private bool IsNameFree(string name)
     {
-        return _dataSetsDataAccess.IsNameFree(name, cancellationToken);
+	    return _dataSetsDataAccess.DataSets.All(dataSet => dataSet.Name != name);
     }
 }

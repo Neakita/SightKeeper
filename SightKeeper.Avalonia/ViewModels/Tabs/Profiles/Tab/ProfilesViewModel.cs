@@ -8,7 +8,6 @@ using SightKeeper.Application;
 using SightKeeper.Application.Prediction;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
-using SightKeeper.Domain.Services;
 using SightKeeper.Services.Prediction.Handling;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;

@@ -5,10 +5,10 @@ using Compunet.YoloV8.Data;
 using Compunet.YoloV8.Metadata;
 using SerilogTimings;
 using SightKeeper.Application.Prediction;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SixLabors.ImageSharp;
 using RectangleF = System.Drawing.RectangleF;
+using Size = SixLabors.ImageSharp.Size;
 
 namespace SightKeeper.Services.Prediction;
 
@@ -32,9 +32,9 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
         }
     }
     
-    private async void SetWeights(Weights weights)
+    private void SetWeights(Weights weights)
     {
-        var weightsData = await weightsDataAccess.LoadWeightsData(weights, WeightsFormat.ONNX);
+        var weightsData = weightsDataAccess.LoadWeightsONNXData(weights);
         _predictor = new YoloV8(new ModelSelector(weightsData.Content), CreateMetadata(weights.Library.DataSet));
         _predictor.Parameters.Confidence = ProbabilityThreshold;
         _predictor.Parameters.IoU = IoU;

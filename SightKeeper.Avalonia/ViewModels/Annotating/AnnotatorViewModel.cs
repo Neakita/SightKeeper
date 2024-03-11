@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reactive.Disposables;
 using SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Commons;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 

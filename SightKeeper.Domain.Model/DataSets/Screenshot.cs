@@ -1,19 +1,23 @@
-﻿namespace SightKeeper.Domain.Model.DataSets;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace SightKeeper.Domain.Model.DataSets;
 
 public sealed class Screenshot
 {
-	public Image Image { get; }
-	public DateTime CreationDate { get; }
+	public DateTime CreationDate { get; } = DateTime.Now;
 	public Asset? Asset { get; internal set; }
+	public ScreenshotsLibrary Library { get; }
 
-	internal Screenshot(byte[] content)
+	public Screenshot(ScreenshotsLibrary library)
 	{
-		Image = new Image(content);
-		CreationDate = DateTime.Now;
+		Library = library;
 	}
 
-	private Screenshot()
+	public Asset MakeAsset()
 	{
-		Image = null!;
+		Guard.IsNull(Asset);
+		Asset = new Asset(this);
+		Library.DataSet.Assets.AddAsset(Asset);
+		return Asset;
 	}
 }

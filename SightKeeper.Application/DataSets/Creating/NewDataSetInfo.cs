@@ -2,4 +2,5 @@
 
 public interface NewDataSetInfo : DataSetInfo
 {
+	int? Resolution { get; }
 }

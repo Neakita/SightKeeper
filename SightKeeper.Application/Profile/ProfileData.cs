@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Application;
 
@@ -14,7 +15,7 @@ public interface ProfileData
     float? PreemptionVerticalFactor { get; }
     bool IsPreemptionStabilizationEnabled { get; }
     byte? PreemptionStabilizationBufferSize { get; }
-    PreemptionStabilizationMethod? PreemptionStabilizationMethod { get; }
+    StabilizationMethod? PreemptionStabilizationMethod { get; }
     Weights? Weights { get; }
     IReadOnlyList<ProfileItemClassData> ItemClasses { get; }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;
@@ -26,8 +28,9 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
 		var dataSet = DomainTestsHelper.NewDataSet;
-		var screenshot = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
-		var asset = dataSet.MakeAsset(screenshot);
+		DbScreenshotsDataAccess screenshotsDataAccess = new(dbContext);
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+		var asset = dataSet.Assets.MakeAsset(screenshot);
 		var itemClass = dataSet.CreateItemClass("Test item class", 0);
 		var item = asset.CreateItem(itemClass, new Bounding());
 		
@@ -46,8 +49,9 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 	{
 		using var dbContext = DbContextFactory.CreateDbContext();
 		var dataSet = DomainTestsHelper.NewDataSet;
-		var screenshot = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
-		var asset = dataSet.MakeAsset(screenshot);
+		DbScreenshotsDataAccess screenshotsDataAccess = new(dbContext);
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+		var asset = dataSet.Assets.MakeAsset(screenshot);
 		var itemClass = dataSet.CreateItemClass("Test item class", 0);
 		asset.CreateItem(itemClass, new Bounding(0, 0, 1, 1));
 		dbContext.DataSets.Add(dataSet);
@@ -55,7 +59,7 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 		dbContext.DataSets.Remove(dataSet);
 		dbContext.SaveChanges();
 		dbContext.DataSets.Should().BeEmpty();
-		dbContext.Set<Library>().Should().BeEmpty();
+		dbContext.Set<ScreenshotsLibrary>().Should().BeEmpty();
 		dbContext.Set<Asset>().Should().BeEmpty();
 		dbContext.Set<Screenshot>().Should().BeEmpty();
 		dbContext.Set<ItemClass>().Should().BeEmpty();
@@ -68,19 +72,17 @@ public sealed class DetectorDataSetTests : DbRelatedTests
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
 			var dataSet = DomainTestsHelper.NewDataSet;
-			var screenshot = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
-			dataSet.MakeAsset(screenshot);
+			DbScreenshotsDataAccess screenshotsDataAccess = new(dbContext);
+			var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+			dataSet.Assets.MakeAsset(screenshot);
 			dbContext.Add(dataSet);
 			dbContext.SaveChanges();
 		}
 		using (var dbContext = DbContextFactory.CreateDbContext())
 		{
-			var dataSet = dbContext.Set<DataSet>()
-				.Include(m => m.Assets)
-				.Include(m => m.Screenshots.Screenshots)
-				.Single();
+			var dataSet = dbContext.Set<DataSet>().Single();
 			dataSet.Assets.Should().NotBeEmpty();
-			dataSet.Screenshots.Screenshots.Should().NotBeEmpty();
+			dataSet.Screenshots.Should().NotBeEmpty();
 		}
 	}
 

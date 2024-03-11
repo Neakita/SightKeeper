@@ -8,7 +8,6 @@ public sealed class GameConfiguration : IEntityTypeConfiguration<Game>
 {
     public void Configure(EntityTypeBuilder<Game> builder)
     {
-        builder.HasKey(game => game.Id);
-        builder.HasFlakeId(game => game.Id);
+        builder.HasFlakeIdKey();
     }
 }

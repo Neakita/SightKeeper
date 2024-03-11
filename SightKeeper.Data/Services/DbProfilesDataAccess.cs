@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Subjects;
-using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using CommunityToolkit.Diagnostics;
+using SightKeeper.Application;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Data.Services;
 
@@ -9,43 +9,32 @@ public sealed class DbProfilesDataAccess : ProfilesDataAccess
 {
     public IObservable<Profile> ProfileAdded => _profileAdded;
     public IObservable<Profile> ProfileRemoved => _profileRemoved;
-    public IObservable<Profile> ProfileUpdated => _profileUpdated;
+    public IReadOnlyCollection<Profile> Profiles => _profiles;
 
-    public DbProfilesDataAccess(AppDbContext dbContext) => _dbContext = dbContext;
-
-    public async Task AddProfile(Profile profile, CancellationToken cancellationToken)
+    public DbProfilesDataAccess(AppDbContext dbContext)
     {
-        await _dbContext.Profiles.AddAsync(profile, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+	    _profiles = new HashSet<Profile>(dbContext.Profiles);
+	    _dbContext = dbContext;
+    }
+
+    public void AddProfile(Profile profile)
+    {
+	    bool isAdded = _profiles.Add(profile);
+	    Guard.IsTrue(isAdded);
+        _dbContext.Profiles.Add(profile);
         _profileAdded.OnNext(profile);
     }
 
-    public async Task RemoveProfile(Profile profile, CancellationToken cancellationToken = default)
+    public void RemoveProfile(Profile profile)
     {
+	    bool isRemoved = _profiles.Remove(profile);
+	    Guard.IsTrue(isRemoved);
         _dbContext.Profiles.Remove(profile);
-        await _dbContext.SaveChangesAsync(cancellationToken);
         _profileRemoved.OnNext(profile);
     }
 
-    public async Task UpdateProfile(Profile profile, CancellationToken cancellationToken = default)
-    {
-        _dbContext.Profiles.Update(profile);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        _profileUpdated.OnNext(profile);
-    }
-
-    public List<Profile> LoadProfiles()
-    {
-        return _dbContext.Profiles.ToList();
-    }
-
-    public Task<List<Profile>> LoadProfilesAsync(CancellationToken cancellationToken)
-    {
-        return _dbContext.Profiles.ToListAsync(cancellationToken);
-    }
-
+    private readonly HashSet<Profile> _profiles;
     private readonly AppDbContext _dbContext;
     private readonly Subject<Profile> _profileAdded = new();
-    private readonly Subject<Profile> _profileUpdated = new();
     private readonly Subject<Profile> _profileRemoved = new();
 }

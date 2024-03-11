@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Domain.Model.Profiles;
@@ -41,11 +40,11 @@ public sealed class Profile
         get => _weights;
         set
         {
-	        _itemClasses.RemoveAll(itemClass => !_weights.ItemClasses.Contains(itemClass.ItemClass));
+	        _itemClasses.RemoveAll(profileItemClass => !_weights.ItemClasses.Contains(profileItemClass.ItemClass));
             _weights = value;
         }
     }
-    public ReadOnlyCollection<ProfileItemClass> ItemClasses => _itemClasses.AsReadOnly();
+    public IReadOnlyList<ProfileItemClass> ItemClasses => _itemClasses;
 
     public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, PreemptionSettings? preemptionSettings, Weights weights)
     {

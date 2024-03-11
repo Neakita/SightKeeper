@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
@@ -14,7 +14,7 @@ public interface ProfileEditorViewModel
 
     IReadOnlyCollection<DataSet> AvailableDataSets { get; }
     IReadOnlyCollection<Weights> AvailableWeights { get; }
-    IReadOnlyCollection<ItemClass> AvailableItemClasses { get; }
+    IReadOnlyCollection<Tag> AvailableItemClasses { get; }
 
     string Name { get; set; }
     string Description { get; set; }
@@ -31,7 +31,7 @@ public interface ProfileEditorViewModel
     DataSet? DataSet { get; set; }
     Weights? Weights { get; set; }
     IReadOnlyList<ProfileItemClassViewModel> ItemClasses { get; }
-    ItemClass? ItemClassToAdd { get; set; }
+    Tag? ItemClassToAdd { get; set; }
     
     ICommand AddItemClassCommand { get; }
     ICommand RemoveItemClassCommand { get; }

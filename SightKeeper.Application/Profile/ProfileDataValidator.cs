@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SightKeeper.Commons.Validation;
+using SightKeeper.Application.Extensions;
 
 namespace SightKeeper.Application;
 

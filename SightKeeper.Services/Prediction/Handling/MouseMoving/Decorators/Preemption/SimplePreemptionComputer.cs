@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using CommunityToolkit.Diagnostics;
 using Serilog;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators.Preemption;
 
@@ -10,7 +10,7 @@ public sealed class SimplePreemptionComputer : PreemptionComputer
 	public SimplePreemptionComputer(Profile profile)
 	{
 		Guard.IsNotNull(profile.PreemptionSettings);
-		_preemptionFactor = new Vector2(profile.PreemptionSettings.HorizontalFactor, profile.PreemptionSettings.VerticalFactor);
+		_preemptionFactor = new Vector2(profile.PreemptionSettings.Value.Factor.X, profile.PreemptionSettings.Value.Factor.Y);
 	}
 	
 	public Vector2 ComputePreemption(Vector2 moveVector, TimeSpan timeDelta)

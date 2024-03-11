@@ -1,38 +1,40 @@
-﻿using CommunityToolkit.Diagnostics;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Reactive.Subjects;
+using CommunityToolkit.Diagnostics;
+using SightKeeper.Application;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
 
 public sealed class DbGamesDataAccess : GamesDataAccess
 {
-    public DbGamesDataAccess(AppDbContext dbContext) =>
-        _dbContext = dbContext;
+	public IObservable<Game> GameAdded => _gameAdded;
+	public IObservable<Game> GameRemoved => _gameRemoved;
+	public IReadOnlyCollection<Game> Games => _games;
 
-    public async Task<IReadOnlyCollection<Game>> GetGames(CancellationToken cancellationToken = default) =>
-        await _dbContext.Games.ToListAsync(cancellationToken);
- 
-    public async Task AddGame(Game game, CancellationToken cancellationToken = default)
+    public DbGamesDataAccess(AppDbContext dbContext)
     {
-        if (await ContainsGameAsync(game, cancellationToken))
-            ThrowHelper.ThrowArgumentException($"Game \"{game}\" already added");
-        await _dbContext.Games.AddAsync(game, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+	    _games = new HashSet<Game>(dbContext.Games);
+	    _dbContext = dbContext;
     }
 
-    public async Task RemoveGame(Game game, CancellationToken cancellationToken = default)
+    public void AddGame(Game game)
     {
-        if (!await ContainsGameAsync(game, cancellationToken))
-            ThrowHelper.ThrowArgumentException($"Game {game} not found");
+	    bool isAdded = _games.Add(game);
+	    Guard.IsTrue(isAdded);
+        _dbContext.Games.Add(game);
+        _gameAdded.OnNext(game);
+    }
+
+    public void RemoveGame(Game game)
+    {
+	    bool isRemoved = _games.Remove(game);
+	    Guard.IsTrue(isRemoved);
         _dbContext.Remove(game);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        _gameRemoved.OnNext(game);
     }
 
-    public bool ContainsGame(Game game) => _dbContext.Games.Any(dbGame => dbGame.ProcessName == game.ProcessName);
-
+    private readonly HashSet<Game> _games;
     private readonly AppDbContext _dbContext;
-
-    private Task<bool> ContainsGameAsync(Game game, CancellationToken cancellationToken) =>
-        _dbContext.Games.AnyAsync(dbGame => dbGame.ProcessName == game.ProcessName, cancellationToken);
+    private readonly Subject<Game> _gameAdded = new();
+    private readonly Subject<Game> _gameRemoved = new();
 }

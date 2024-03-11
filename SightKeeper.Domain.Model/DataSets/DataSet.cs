@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace SightKeeper.Domain.Model.DataSets;
+﻿namespace SightKeeper.Domain.Model.DataSets;
 
 public sealed class DataSet
 {
@@ -8,51 +6,33 @@ public sealed class DataSet
 	public string Description { get; set; }
 	public Game? Game { get; set; }
 	public ushort Resolution { get; }
-
-	public ScreenshotsLibrary Screenshots { get; }
-	public WeightsLibrary Weights { get; }
-	public IReadOnlyCollection<Asset> Assets => _assets;
 	public IReadOnlyCollection<ItemClass> ItemClasses => _itemClasses;
-	
-	public ItemClass CreateItemClass(string name, uint color)
-	{
-		ItemClass newItemClass = new(name, color);
-		_itemClasses.Add(newItemClass);
-		return newItemClass;
-	}
-	
-	public bool DeleteItemClass(ItemClass itemClass)
-	{
-		if (_assets.SelectMany(asset => asset.Items).Any(item => item.ItemClass == itemClass))
-			throw new InvalidOperationException($"Item class {itemClass} is in use");
-		return _itemClasses.Remove(itemClass);
-	}
-	
-	public override string ToString() => Name;
+	public ScreenshotsLibrary Screenshots { get; }
+	public AssetsLibrary Assets { get; }
+	public WeightsLibrary Weights { get; }
 
 	public DataSet(string name, ushort resolution = 320)
 	{
 		Name = name;
 		Description = string.Empty;
 		Resolution = resolution;
-		Screenshots = new ScreenshotsLibrary();
-		Weights = new WeightsLibrary();
-		_assets = new ObservableCollection<Asset>();
+		Screenshots = new ScreenshotsLibrary(this);
+		Weights = new WeightsLibrary(this);
+		Assets = new AssetsLibrary(this);
 	}
-
-	public Asset MakeAsset(Screenshot screenshot)
+	public ItemClass CreateItemClass(string name, uint color)
 	{
-		var asset = new Asset();
-		screenshot.Asset = asset;
-		_assets.Add(asset);
-		return asset;
+		ItemClass newItemClass = new(name, color, this);
+		_itemClasses.Add(newItemClass);
+		return newItemClass;
 	}
-
-	public bool DeleteAsset(Asset asset)
+	public bool DeleteItemClass(ItemClass itemClass)
 	{
-		return _assets.Remove(asset);
+		if (Screenshots.Where(screenshot => screenshot.Asset != null).Select(screenshot => screenshot.Asset!).SelectMany(asset => asset.Items).Any(item => item.ItemClass == itemClass))
+			throw new InvalidOperationException($"Item class {itemClass} is in use");
+		return _itemClasses.Remove(itemClass);
 	}
+	public override string ToString() => Name;
 
 	private readonly SortedSet<ItemClass> _itemClasses = new(ItemClassNameComparer.Instance);
-	private readonly ObservableCollection<Asset> _assets;
 }

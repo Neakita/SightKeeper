@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.Prediction;
 

@@ -1,9 +1,7 @@
 ﻿using System.Globalization;
 using Serilog;
 using SerilogTimings.Extensions;
-using SightKeeper.Application.Annotating;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SixLabors.ImageSharp;
 using Image = SixLabors.ImageSharp.Image;
 
@@ -11,10 +9,9 @@ namespace SightKeeper.Application.Training;
 
 public sealed class ImagesExporter
 {
-	public ImagesExporter(AssetsDataAccess assetsDataAccess, ScreenshotImageLoader imageLoader, ILogger logger)
+	public ImagesExporter(ScreenshotsDataAccess screenshotsDataAccess, ILogger logger)
 	{
-		_assetsDataAccess = assetsDataAccess;
-		_imageLoader = imageLoader;
+		_screenshotsDataAccess = screenshotsDataAccess;
 		_logger = logger;
 	}
 	
@@ -23,7 +20,6 @@ public sealed class ImagesExporter
 		DataSet dataSet,
 		CancellationToken cancellationToken = default)
 	{
-		await _assetsDataAccess.LoadAssetsAsync(dataSet, cancellationToken);
 		await Export(targetDirectoryPath, dataSet.Assets, dataSet.ItemClasses, cancellationToken);
 	}
 
@@ -43,22 +39,22 @@ public sealed class ImagesExporter
 	}
 	
 	private static readonly NumberFormatInfo NumberFormat = new() { NumberDecimalSeparator = "." };
-	private readonly AssetsDataAccess _assetsDataAccess;
-	private readonly ScreenshotImageLoader _imageLoader;
+	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly ILogger _logger;
 
 	private async Task ExportImages(string directoryPath, IReadOnlyCollection<Asset> assets, CancellationToken cancellationToken)
 	{
 		var operation = _logger.BeginOperation("Exporting images for {AssetsCount} assets", assets.Count);
-		await Task.WhenAll(assets.Select((asset, assetIndex) =>
-			ExportImage(directoryPath, asset, assetIndex, cancellationToken)));
+		var screenshots = assets.Select(asset => asset.Screenshot);
+		var images = _screenshotsDataAccess.LoadImages(screenshots);
+		await Task.WhenAll(images.Select((image, imageIndex) =>
+			ExportImage(directoryPath, image, imageIndex, cancellationToken)));
 		operation.Complete();
 	}
 
-	private async Task ExportImage(string directoryPath, Asset asset, int assetIndex, CancellationToken cancellationToken)
+	private async Task ExportImage(string directoryPath, Domain.Model.DataSets.Image image, int assetIndex, CancellationToken cancellationToken)
 	{
 		var imagePath = Path.Combine(directoryPath, $"{assetIndex}.png");
-		var image = await _imageLoader.LoadAsync(asset.Screenshot, cancellationToken);
 		await ExportImage(imagePath, image.Content, cancellationToken);
 	}
 
@@ -78,7 +74,6 @@ public sealed class ImagesExporter
 		IReadOnlyCollection<ItemClass> itemClasses,
 		CancellationToken cancellationToken)
 	{
-		await LoadItems(assets, cancellationToken);
 		var operation = _logger.BeginOperation("Exporting labels for {AssetsCount} assets ({AssetsWithoutItems} without items) with {ItemsCount} items",
 			assets.Count,
 			assets.Count(asset => !asset.Items.Any()),
@@ -88,14 +83,6 @@ public sealed class ImagesExporter
 			.ToDictionary(tuple => tuple.itemClass, tuple => (byte)tuple.itemClassIndex);
 		_logger.Debug("Item classes by indexes: {ItemClasses}", itemClassesWithIndexes);
 		await Task.WhenAll(assets.Select((asset, assetIndex) => ExportLabels(directoryPath, asset, assetIndex, itemClassesWithIndexes, cancellationToken)));
-		operation.Complete();
-	}
-
-	private async Task LoadItems(IReadOnlyCollection<Asset> assets, CancellationToken cancellationToken)
-	{
-		var operation = _logger.BeginOperation("Loading items for {AssetsCount} assets", assets.Count);
-		foreach (var asset in assets)
-			await _assetsDataAccess.LoadItemsAsync(asset, cancellationToken);
 		operation.Complete();
 	}
 
@@ -126,9 +113,9 @@ public sealed class ImagesExporter
 	{
 		yield return itemClasses[item.ItemClass].ToString();
 		var bounding = item.Bounding;
-		yield return bounding.HorizontalCenter.ToString(NumberFormat);
-		yield return bounding.VerticalCenter.ToString(NumberFormat);
-		yield return bounding.Width.ToString(NumberFormat);
-		yield return bounding.Height.ToString(NumberFormat);
+		yield return bounding.Center.X.ToString(NumberFormat);
+		yield return bounding.Center.Y.ToString(NumberFormat);
+		yield return bounding.Size.X.ToString(NumberFormat);
+		yield return bounding.Size.Y.ToString(NumberFormat);
 	}
 }

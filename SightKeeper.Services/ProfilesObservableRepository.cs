@@ -1,10 +1,9 @@
 ﻿using System.Reactive.Disposables;
 using CommunityToolkit.Diagnostics;
 using DynamicData;
-using Serilog;
-using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Application;
+using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Services.Extensions;
 
 namespace SightKeeper.Services;
 
@@ -17,10 +16,10 @@ public sealed class ProfilesObservableRepository : IDisposable
         LoadProfiles(profilesDataAccess);
         profilesDataAccess.ProfileAdded
             .Subscribe(AddProfile)
-            .DisposeWithEx(_disposable);
+            .DisposeWith(_disposable);
         profilesDataAccess.ProfileRemoved
             .Subscribe(RemoveProfile)
-            .DisposeWithEx(_disposable);
+            .DisposeWith(_disposable);
     }
 
     public void Dispose()
@@ -34,14 +33,17 @@ public sealed class ProfilesObservableRepository : IDisposable
 
     private void LoadProfiles(ProfilesDataAccess profilesDataAccess)
     {
-        _profiles.AddRange(profilesDataAccess.LoadProfiles());
+        _profiles.AddRange(profilesDataAccess.Profiles);
     }
     
     private void AddProfile(Profile profile)
     {
-        Log.Debug("Profile Id: {Id}", profile.Id);
         _profiles.Add(profile);
     }
 
-    private void RemoveProfile(Profile profile) => Guard.IsTrue(_profiles.Remove(profile));
+    private void RemoveProfile(Profile profile)
+    {
+	    bool isRemoved = _profiles.Remove(profile);
+	    Guard.IsTrue(isRemoved);
+    }
 }

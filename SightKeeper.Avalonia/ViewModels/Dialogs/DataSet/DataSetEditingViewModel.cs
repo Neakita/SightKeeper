@@ -19,7 +19,6 @@ using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
 using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
@@ -77,7 +76,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]
     private async Task AddItemClass()
     {
-        var deletedItemClassWithTheSameName = _deletedItemClasses.FirstOrDefault(deletedItemClass => deletedItemClass.ItemClass.Name == NewItemClassName);
+        var deletedItemClassWithTheSameName = _deletedItemClasses.FirstOrDefault(deletedItemClass => deletedItemClass.Tag.Name == NewItemClassName);
         if (deletedItemClassWithTheSameName != null)
         {
             var messageBox = MessageBoxManager.GetMessageBoxStandard(new MessageBoxStandardParams()
@@ -90,7 +89,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
             if (result == ButtonResult.No)
                 return;
             Guard.IsTrue(_deletedItemClasses.Remove(deletedItemClassWithTheSameName));
-            _itemClasses.Add(new ExistingItemClass(deletedItemClassWithTheSameName.ItemClass));
+            _itemClasses.Add(new ExistingItemClass(deletedItemClassWithTheSameName.Tag));
         }
         else
         {
@@ -112,15 +111,15 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
         if (itemClass is ExistingItemClass existingItemClass)
         {
             DeletedItemClassAction? action = null;
-            await _itemClassDataAccess.LoadItemsAsync(existingItemClass.ItemClass);
-            if (existingItemClass.ItemClass.Items.Any())
+            await _itemClassDataAccess.LoadItemsAsync(existingItemClass.Tag);
+            if (existingItemClass.Tag.Items.Any())
             {
                 const string deleteItems = "Delete items";
                 const string deleteAssets = "Delete assets";
                 const string deleteScreenshots = "Delete screenshots";
                 var messageBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
                 {
-                    ContentMessage = $"Item class {itemClass.Name} has some items ({existingItemClass.ItemClass.Items.Count}). Are you sure you want to delete it? Choose action",
+                    ContentMessage = $"Item class {itemClass.Name} has some items ({existingItemClass.Tag.Items.Count}). Are you sure you want to delete it? Choose action",
                     ButtonDefinitions = new[]
                     {
                         new ButtonDefinition { Name = "Cancel", IsCancel = true },
@@ -140,7 +139,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
                     _ => ThrowHelper.ThrowArgumentOutOfRangeException<DeletedItemClassAction>(nameof(result))
                 };
             }
-            _deletedItemClasses.Add(new DeletedItemClass(existingItemClass.ItemClass, action));
+            _deletedItemClasses.Add(new DeletedItemClass(existingItemClass.Tag, action));
         }
         Guard.IsTrue(_itemClasses.Remove(itemClass));
     }

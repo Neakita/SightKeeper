@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application;
 
@@ -11,13 +10,12 @@ public sealed class EditedProfileDataValidator : AbstractValidator<EditedProfile
         Include(profileDataValidator);
         RuleFor(data => data.Profile).NotNull();
         RuleFor(data => data.Name)
-            .MustAsync((data, _, cancellationToken) => NameIsUnique(data, cancellationToken));
+            .Must((data, _) => IsNameFree(data));
     }
 
-    private async Task<bool> NameIsUnique(EditedProfileData data, CancellationToken cancellationToken)
+    private bool IsNameFree(EditedProfileData data)
     {
-        var profiles = await _profilesDataAccess.LoadProfilesAsync(cancellationToken);
-        return profiles.Where(profile => profile != data.Profile).All(profile => profile.Name != data.Name);
+        return _profilesDataAccess.Profiles.Where(profile => profile != data.Profile).All(profile => profile.Name != data.Name);
     }
     
     private readonly ProfilesDataAccess _profilesDataAccess;

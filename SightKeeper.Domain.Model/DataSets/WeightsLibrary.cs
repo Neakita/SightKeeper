@@ -1,25 +1,38 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Collections;
+using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
-public sealed class WeightsLibrary
+public sealed class WeightsLibrary : IEnumerable<Weights>
 {
-    public IReadOnlySet<Weights> Records => _records;
+    public DataSet DataSet { get; }
 
-    public Weights CreateWeights(
-        byte[] onnxData,
-        byte[] ptData,
-        Size size,
-        WeightsMetrics weightsMetrics,
-        IEnumerable<ItemClass> itemClasses)
+    public WeightsLibrary(DataSet dataSet)
     {
-	    Weights weights = new(onnxData, ptData, size, weightsMetrics, itemClasses);
-        var isAdded = _records.Add(weights);
-        Guard.IsTrue(isAdded);
-        return weights;
+	    DataSet = dataSet;
     }
 
-    public bool RemoveWeights(Weights weights) => _records.Remove(weights);
+    public bool RemoveWeights(Weights weights) => _weights.Remove(weights);
+    public IEnumerator<Weights> GetEnumerator()
+    {
+	    return _weights.GetEnumerator();
+    }
 
-    private readonly SortedSet<Weights> _records = new(WeightsDateComparer.Instance);
+    internal Weights CreateWeights(
+	    Size size,
+	    WeightsMetrics metrics,
+	    IEnumerable<ItemClass> itemClasses)
+    {
+	    Weights weights = new(size, metrics, itemClasses, this);
+	    var isAdded = _weights.Add(weights);
+	    Guard.IsTrue(isAdded);
+	    return weights;
+    }
+
+    private readonly SortedSet<Weights> _weights = new(WeightsDateComparer.Instance);
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+	    return GetEnumerator();
+    }
 }

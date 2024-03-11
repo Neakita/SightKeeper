@@ -5,8 +5,8 @@ using CommunityToolkit.Diagnostics;
 using SharpHook.Native;
 using SightKeeper.Application;
 using SightKeeper.Application.Prediction;
-using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Services.Extensions;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Prediction.Handling;
 using SightKeeper.Services.Prediction.Handling.MouseMoving;
@@ -44,11 +44,11 @@ public sealed class HotKeyProfileRunner(
                 detectionDisposable.Dispose();
                 _session.Handler.OnPaused();
             })
-            .DisposeWithEx(_session.Disposables);
+            .DisposeWith(_session.Disposables);
         profileEditor.ProfileEdited
             .Where(editedProfile => editedProfile == profile)
             .Subscribe(OnProfileEdited)
-            .DisposeWithEx(_session.Disposables);
+            .DisposeWith(_session.Disposables);
 
         _session.Handler.RequestedProbabilityThreshold.Subscribe(threshold =>
         {
@@ -75,7 +75,7 @@ public sealed class HotKeyProfileRunner(
         if (profile.PreemptionSettings != null)
         {
             builder.RegisterDecorator<PreemptionDecorator, DetectionMouseMover>();
-            if (profile.PreemptionSettings.StabilizationSettings == null)
+            if (profile.PreemptionSettings.Value.StabilizationSettings == null)
                 builder.RegisterType<SimplePreemptionComputer>().As<PreemptionComputer>();
             else
                 builder.RegisterType<StabilizedPreemptionComputer>().As<PreemptionComputer>();

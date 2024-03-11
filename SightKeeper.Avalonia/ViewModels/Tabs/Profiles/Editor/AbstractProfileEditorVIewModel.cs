@@ -12,8 +12,7 @@ using DynamicData;
 using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
-using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
@@ -28,7 +27,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
         private set => SetProperty(ref _availableWeights, value);
     }
 
-    public IReadOnlyCollection<ItemClass> AvailableItemClasses { get; }
+    public IReadOnlyCollection<Tag> AvailableItemClasses { get; }
     
     public Profile? Profile { get; protected set; }
 
@@ -179,7 +178,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
 
     private readonly CompositeDisposable _constructorDisposables = new();
     protected readonly SourceList<ProfileItemClassViewModel> _itemClasses = new();
-    private readonly SourceList<ItemClass> _availableItemClasses = new();
+    private readonly SourceList<Tag> _availableItemClasses = new();
     private readonly bool _canDelete;
     private DataSet? _dataSet;
     private Weights? _weights;
@@ -189,7 +188,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
     private string _name = string.Empty;
     private IReadOnlyCollection<Weights> _availableWeights = Array.Empty<Weights>();
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
-    private ItemClass? _itemClassToAdd;
+    private Tag? _itemClassToAdd;
     private TimeSpan _postProcessDelay;
     private bool _isPreemptionEnabled;
     private float? _preemptionHorizontalFactor;

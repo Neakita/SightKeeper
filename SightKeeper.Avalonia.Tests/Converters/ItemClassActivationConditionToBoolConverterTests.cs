@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using SightKeeper.Avalonia.Misc.Converters;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.Tests.Converters;
 
@@ -12,10 +12,10 @@ namespace SightKeeper.Avalonia.Tests.Converters;
 public sealed class ItemClassActivationConditionToBoolConverterTests
 {
     [Theory]
-    [InlineData(ItemClassActivationCondition.None, false)]
-    [InlineData(ItemClassActivationCondition.IsShooting, true)]
-    [InlineData(ItemClassActivationCondition.IsNotShooting, null)]
-    public void ShouldProperlyConvert(ItemClassActivationCondition itemClassActivationCondition, bool? expected)
+    [InlineData(ActivationCondition.None, false)]
+    [InlineData(ActivationCondition.IsShooting, true)]
+    [InlineData(ActivationCondition.IsNotShooting, null)]
+    public void ShouldProperlyConvert(ActivationCondition itemClassActivationCondition, bool? expected)
     {
         ItemClassActivationConditionToBoolConverter converter = new();
         var convertResult = converter.Convert(itemClassActivationCondition, typeof(bool?), null, CultureInfo.InvariantCulture);
@@ -23,19 +23,19 @@ public sealed class ItemClassActivationConditionToBoolConverterTests
     }
 
     [Theory]
-    [InlineData(true, ItemClassActivationCondition.IsShooting)]
-    [InlineData(false, ItemClassActivationCondition.None)]
-    [InlineData(null, ItemClassActivationCondition.IsNotShooting)]
-    public void ShouldProperlyConvertBack(bool? value, ItemClassActivationCondition expected)
+    [InlineData(true, ActivationCondition.IsShooting)]
+    [InlineData(false, ActivationCondition.None)]
+    [InlineData(null, ActivationCondition.IsNotShooting)]
+    public void ShouldProperlyConvertBack(bool? value, ActivationCondition expected)
     {
         ItemClassActivationConditionToBoolConverter converter = new();
-        var convertResult = converter.ConvertBack(value, typeof(ItemClassActivationCondition), null, CultureInfo.InvariantCulture);
+        var convertResult = converter.ConvertBack(value, typeof(ActivationCondition), null, CultureInfo.InvariantCulture);
         convertResult.Should().Be(expected);
     }
 
     [Theory]
     [InlineData("None, lol", typeof(bool?))]
-    [InlineData(ItemClassActivationCondition.None, typeof(int))]
+    [InlineData(ActivationCondition.None, typeof(int))]
     public void ShouldThrowArgumentExceptionWhenConverting(object value, Type targetType)
     {
         ItemClassActivationConditionToBoolConverter converter = new();
@@ -44,7 +44,7 @@ public sealed class ItemClassActivationConditionToBoolConverterTests
     }
 
     [Theory]
-    [InlineData("None, lol", typeof(ItemClassActivationCondition))]
+    [InlineData("None, lol", typeof(ActivationCondition))]
     [InlineData(true, typeof(int))]
     public void ShouldThrowArgumentExceptionWhenConvertingBack(object value, Type targetType)
     {

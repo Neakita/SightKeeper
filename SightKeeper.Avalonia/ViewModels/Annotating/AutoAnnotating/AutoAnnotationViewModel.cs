@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using SightKeeper.Application.Prediction;
-using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 

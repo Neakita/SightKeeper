@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
@@ -9,7 +9,7 @@ public sealed class DeletedItemClass
 
     public DeletedItemClass(ItemClass itemClass, DeletedItemClassAction? action = null)
     {
-        ItemClass = itemClass;
+	    ItemClass = itemClass;
         Action = action;
     }
 }

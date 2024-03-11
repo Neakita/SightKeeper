@@ -3,9 +3,7 @@ using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using DynamicData;
 using SightKeeper.Application.DataSets.Editing;
-using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;

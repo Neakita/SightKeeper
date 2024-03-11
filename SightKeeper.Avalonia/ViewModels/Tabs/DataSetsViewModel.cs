@@ -11,7 +11,6 @@ using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
@@ -40,7 +39,7 @@ public sealed partial class DataSetsViewModel : ViewModel
 		var viewModel = scope.Resolve<DataSetCreatingViewModel>();
 		var applied = await viewModel.ShowDialog(this);
 		if (applied)
-			await _dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(viewModel), cancellationToken);
+			await _dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(viewModel));
 	}
 
 	[RelayCommand(CanExecute = nameof(CanEditDataSet))]

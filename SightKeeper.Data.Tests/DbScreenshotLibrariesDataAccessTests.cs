@@ -1,5 +1,5 @@
 ﻿using SightKeeper.Data.Services;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;
@@ -13,10 +13,9 @@ public sealed class DbScreenshotLibrariesDataAccessTests : DbRelatedTests
         var dataSet = DomainTestsHelper.NewDataSet;
         dbContext.Add(dataSet);
         dbContext.SaveChanges();
-        DbScreenshotsDataAccess dataAccess = new(dbContext);
         dataSet.Screenshots.MaxQuantity = 110;
-        dataAccess.SaveChangesAsync(dataSet.Screenshots);
+        dbContext.SaveChanges();
         using var assertDbContext = DbContextFactory.CreateDbContext();
-        assertDbContext.Set<Library>().Should().Contain(lib => lib.MaxQuantity == 110);
+        assertDbContext.Set<ScreenshotsLibrary>().Should().Contain(library => library.MaxQuantity == 110);
     }
 }

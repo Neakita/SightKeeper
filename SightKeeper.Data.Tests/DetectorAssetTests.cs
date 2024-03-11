@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Domain.Model;
+using SightKeeper.Data.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;
@@ -10,9 +11,10 @@ public sealed class DetectorAssetTests : DbRelatedTests
     public void ShouldAddAssetWithScreenshot()
     {
         var dataSet = DomainTestsHelper.NewDataSet;
-        var screenshot = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
-        var asset = dataSet.MakeAsset(screenshot);
         using var dbContext = DbContextFactory.CreateDbContext();
+        DbScreenshotsDataAccess screenshotsDataAccess = new(dbContext);
+        var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+        var asset = dataSet.Assets.MakeAsset(screenshot);
         dbContext.Add(dataSet);
         dbContext.SaveChanges();
         dbContext.Set<Screenshot>().Should().Contain(screenshot);
@@ -23,13 +25,14 @@ public sealed class DetectorAssetTests : DbRelatedTests
     public void AssetAndScreenshotShouldHaveEqualIds()
     {
         DataSet dataSet = new("Model");
-        dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
-        dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
-        var screenshot3 = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
-        var asset = dataSet.MakeAsset(screenshot3);
         using var dbContext = DbContextFactory.CreateDbContext();
+        DbScreenshotsDataAccess screenshotsDataAccess = new(dbContext);
+        screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+        screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+        var screenshot3 = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+        var asset = dataSet.Assets.MakeAsset(screenshot3);
         dbContext.Add(dataSet);
-        screenshot3.Id.Should().Be(asset.Id);
+        screenshot3.GetId(dbContext).Should().Be(asset.GetId(dbContext));
     }
 
     [Fact]
@@ -38,14 +41,15 @@ public sealed class DetectorAssetTests : DbRelatedTests
         using (var initialDbContext = DbContextFactory.CreateDbContext())
         {
             var newDataSet = DomainTestsHelper.NewDataSet;
-            var screenshot = newDataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
-            newDataSet.MakeAsset(screenshot);
+            DbScreenshotsDataAccess screenshotsDataAccess = new(initialDbContext);
+            var screenshot = screenshotsDataAccess.CreateScreenshot(newDataSet.Screenshots, Array.Empty<byte>());
+            newDataSet.Assets.MakeAsset(screenshot);
             initialDbContext.Add(newDataSet);
             initialDbContext.SaveChanges();
         }
         using var dbContext = DbContextFactory.CreateDbContext();
-        var dataSet = dbContext.Set<DataSet>().Include(model => model.Screenshots.Screenshots).Include(model => model.Assets).Single();
-        dataSet.Screenshots.Screenshots.Should().NotBeEmpty();
+        var dataSet = dbContext.Set<DataSet>().Single();
+        dataSet.Screenshots.Should().NotBeEmpty();
         dataSet.Assets.Should().NotBeEmpty();
     }
 }

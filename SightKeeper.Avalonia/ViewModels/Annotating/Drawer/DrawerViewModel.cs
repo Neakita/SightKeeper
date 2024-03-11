@@ -5,9 +5,6 @@ using Avalonia;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
-using SightKeeper.Application.Annotating;
-using SightKeeper.Commons;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -60,7 +57,7 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
         {
             Guard.IsNotNull(SelectedScreenshotViewModel.Value);
             SelectedScreenshotViewModel.DetectedItems.Remove(item);
-            var detectorItem = _annotator.Annotate(SelectedScreenshotViewModel.Value.Item, item.ItemClass, item.Bounding.Bounding);
+            var detectorItem = _annotator.Annotate(SelectedScreenshotViewModel.Value.Item, item.Tag, item.Bounding.Bounding);
             DetectorItemViewModel detectorItemViewModel = new(detectorItem, resizer, this)
             {
                 IsThumbsVisible = IsItemSelectionEnabled

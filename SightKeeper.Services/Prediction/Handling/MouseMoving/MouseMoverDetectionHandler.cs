@@ -7,8 +7,9 @@ using Serilog;
 using SharpHook.Native;
 using SightKeeper.Application;
 using SightKeeper.Application.Prediction;
-using SightKeeper.Commons;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Services.Extensions;
 using SightKeeper.Services.Input;
 
 namespace SightKeeper.Services.Prediction.Handling.MouseMoving;
@@ -24,12 +25,12 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
         _profileItemClasses = profile.ItemClasses.ToDictionary(
             profileItemClass => profileItemClass.ItemClass,
             profileItemClass => profileItemClass);
-        if (profile.ItemClasses.Any(itemClass => itemClass.ActivationCondition != ItemClassActivationCondition.None))
+        if (profile.ItemClasses.Any(itemClass => itemClass.ActivationCondition != ActivationCondition.None))
         {
             hotKeyManager.Register(MouseButton.Button1, 
                     () => _isFiring = true,
                     () => _isFiring = false)
-                .DisposeWithEx(_constructorDisposables);
+                .DisposeWith(_constructorDisposables);
         }
         
         RequestedProbabilityThreshold = profileEditor.ProfileEdited
@@ -78,9 +79,9 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     private bool IsFiringModePassing(DetectionItem item)
     {
         var profileItemClass = _profileItemClasses[item.ItemClass];
-        if (profileItemClass.ActivationCondition == ItemClassActivationCondition.None)
+        if (profileItemClass.ActivationCondition == ActivationCondition.None)
             return true;
-        return (profileItemClass.ActivationCondition == ItemClassActivationCondition.IsShooting) == _isFiring;
+        return (profileItemClass.ActivationCondition == ActivationCondition.IsShooting) == _isFiring;
     }
     
     private float GetItemOrder(DetectionItem item)

@@ -21,26 +21,20 @@ public sealed class WindowsScreenCapture : ScreenCapture
 		_screenCenter = screenCenter;
 	}
 	
-	public byte[] Capture()
+	public byte[] Capture(ushort resolution, Game? game)
 	{
-		Guard.IsNotNull(Resolution);
 		var operation = Operation.At(LogEventLevel.Verbose).Begin("Screen capturing");
-		using Bitmap windowsBitmap = new(Resolution.Value, Resolution.Value);
+		using Bitmap windowsBitmap = new(resolution, resolution);
 		using var graphics = Graphics.FromImage(windowsBitmap);
-
-		Point point = new(
-			_screenCenter.X - Resolution.Value / 2, 
-			_screenCenter.Y - Resolution.Value / 2);
-
-		graphics.CopyFromScreen(point, Point.Empty, new Size(Resolution.Value, Resolution.Value));
+		var halfResolution = resolution / 2;
+		Point position = new(_screenCenter.X - halfResolution, _screenCenter.Y - halfResolution);
+		Size size = new(resolution, resolution);
+		graphics.CopyFromScreen(position, Point.Empty, size);
 		using MemoryStream stream = new();
 		windowsBitmap.Save(stream, ImageFormat.Bmp);
 		operation.Complete();
 		return stream.ToArray();
 	}
-
-	public Game? Game { get; set; }
-	public ushort? Resolution { get; set; }
 
 	private readonly Point _screenCenter;
 }

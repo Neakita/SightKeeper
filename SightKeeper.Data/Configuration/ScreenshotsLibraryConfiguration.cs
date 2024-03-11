@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SightKeeper.Domain.Model;
+using Microsoft.Extensions.DependencyModel;
 
 namespace SightKeeper.Data.Configuration;
 
@@ -8,8 +8,7 @@ public sealed class ScreenshotsLibraryConfiguration : IEntityTypeConfiguration<L
 {
     public void Configure(EntityTypeBuilder<Library> builder)
     {
-        builder.HasKey(library => library.Id);
-        builder.HasFlakeId(library => library.Id);
+        builder.HasFlakeIdKey();
         builder.ToTable("ScreenshotsLibraries");
     }
 }

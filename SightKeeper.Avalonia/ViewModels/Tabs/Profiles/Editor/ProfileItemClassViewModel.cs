@@ -1,11 +1,10 @@
 ﻿using SightKeeper.Application;
-using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
 public sealed class ProfileItemClassViewModel : ViewModel, ProfileItemClassData
 {
-    public ItemClass ItemClass { get; }
+    public Tag ItemClass { get; }
     public byte Order { get; set; }
 
     public ItemClassActivationCondition ActivationCondition
@@ -14,9 +13,9 @@ public sealed class ProfileItemClassViewModel : ViewModel, ProfileItemClassData
         set => SetProperty(ref _activationCondition, value);
     }
 
-    public ProfileItemClassViewModel(ItemClass itemClass, byte order, ItemClassActivationCondition activationCondition = ItemClassActivationCondition.None)
+    public ProfileItemClassViewModel(Tag tag, byte order, ItemClassActivationCondition activationCondition = ItemClassActivationCondition.None)
     {
-        ItemClass = itemClass;
+        ItemClass = tag;
         Order = order;
         _activationCondition = activationCondition;
     }

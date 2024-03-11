@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
-using SightKeeper.Commons;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Services;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
@@ -24,7 +23,7 @@ public sealed class DataSetViewModel : ViewModel, IDisposable
     public string Description => DataSet.Description;
     public Game? Game => DataSet.Game;
     public ushort Resolution => DataSet.Resolution;
-    public IReadOnlyCollection<ItemClass> ItemClasses { get; }
+    public IReadOnlyCollection<Tag> ItemClasses { get; }
     public IReadOnlyCollection<Weights> Weights { get; }
 
     public DataSetViewModel(DataSet dataSet, WeightsDataAccess weightsDataAccess)
@@ -36,7 +35,7 @@ public sealed class DataSetViewModel : ViewModel, IDisposable
             .DisposeWithEx(_constructorDisposables);
         _itemClasses.AddOrUpdate(dataSet.ItemClasses);
         ItemClasses = itemClasses;
-        _weights.AddRange(DataSet.Weights.Records);
+        _weights.AddRange(DataSet.Weights.Weights);
         _weights.Connect()
             .Bind(out var weights)
             .Subscribe()
@@ -66,7 +65,7 @@ public sealed class DataSetViewModel : ViewModel, IDisposable
     public override string ToString() => Name;
 
     private readonly CompositeDisposable _constructorDisposables = new();
-    private readonly SourceCache<ItemClass, string> _itemClasses = new(itemClass => itemClass.Name);
+    private readonly SourceCache<Tag, string> _itemClasses = new(itemClass => itemClass.Name);
     private readonly SourceList<Weights> _weights = new();
 
     private void UpdateItemClasses() =>

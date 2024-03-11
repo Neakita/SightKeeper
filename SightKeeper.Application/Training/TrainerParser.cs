@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.Training;
 
@@ -29,7 +29,8 @@ public static class TrainerParser
         var boundingLoss = floatingPointNumbers[0];
         var classificationLoss = floatingPointNumbers[1];
         var deformationLoss = floatingPointNumbers[2];
-        WeightsMetrics weightsMetrics = new(currentEpoch, boundingLoss, classificationLoss, deformationLoss);
+        LossMetrics lossMetrics = new(boundingLoss, classificationLoss, deformationLoss);
+        WeightsMetrics weightsMetrics = new(currentEpoch, lossMetrics);
         return new TrainingProgress(weightsMetrics);
     }
 }
