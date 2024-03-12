@@ -11,9 +11,9 @@ public sealed class StabilizedPreemptionComputer : PreemptionComputer
 	public StabilizedPreemptionComputer(Profile profile)
 	{
 		Guard.IsNotNull(profile.PreemptionSettings?.StabilizationSettings);
-		_preemptionFactor = new Vector2(profile.PreemptionSettings.Value.Factor.X, profile.PreemptionSettings.Value.Factor.Y);
-		_velocities = new List<Vector2>(profile.PreemptionSettings.Value.StabilizationSettings.Value.BufferSize);
-		_method = profile.PreemptionSettings.Value.StabilizationSettings.Value.Method switch
+		_preemptionFactor = new Vector2(profile.PreemptionSettings.Factor.X, profile.PreemptionSettings.Factor.Y);
+		_velocities = new List<Vector2>(profile.PreemptionSettings.StabilizationSettings.BufferSize);
+		_method = profile.PreemptionSettings.StabilizationSettings.Method switch
 		{
 			StabilizationMethod.Median => EnumerableExtensions.Median,
 			StabilizationMethod.Mean => Enumerable.Average,

@@ -6,7 +6,6 @@ public readonly struct Bounding
 	{
 		return left.Equals(right);
 	}
-
 	public static bool operator !=(Bounding left, Bounding right)
 	{
 		return !left.Equals(right);
@@ -20,6 +19,9 @@ public readonly struct Bounding
 	public double Top => Position.Y;
 	public double Bottom => Position.Y + Size.Y;
 
+	public Bounding()
+	{
+	}
 	public Bounding(double x1, double y1, double x2, double y2)
 	{
 		Sort(ref x1, ref x2);
@@ -27,17 +29,19 @@ public readonly struct Bounding
 		Position = new Vector2<double>(x1, y1);
 		Size = new Vector2<double>(x2 - x1, y2 - y1);
 	}
-
+	public Bounding(Vector2<double> position, Vector2<double> size)
+	{
+		Position = position;
+		Size = size;
+	}
 	public bool Equals(Bounding other)
 	{
 		return Position.Equals(other.Position) && Size.Equals(other.Size);
 	}
-
 	public override bool Equals(object? obj)
 	{
 		return obj is Bounding other && Equals(other);
 	}
-
 	public override int GetHashCode()
 	{
 		return HashCode.Combine(Position, Size);

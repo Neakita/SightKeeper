@@ -10,7 +10,7 @@ public sealed class SimplePreemptionComputer : PreemptionComputer
 	public SimplePreemptionComputer(Profile profile)
 	{
 		Guard.IsNotNull(profile.PreemptionSettings);
-		_preemptionFactor = new Vector2(profile.PreemptionSettings.Value.Factor.X, profile.PreemptionSettings.Value.Factor.Y);
+		_preemptionFactor = new Vector2(profile.PreemptionSettings.Factor.X, profile.PreemptionSettings.Factor.Y);
 	}
 	
 	public Vector2 ComputePreemption(Vector2 moveVector, TimeSpan timeDelta)

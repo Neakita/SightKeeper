@@ -14,26 +14,25 @@ public readonly struct WeightsMetrics
 	public uint Epoch { get; }
 	public LossMetrics LossMetrics { get; }
 
+	public WeightsMetrics()
+	{
+	}
 	public WeightsMetrics(uint epoch, LossMetrics lossMetrics)
 	{
 		Epoch = epoch;
 		LossMetrics = lossMetrics;
 	}
-
 	public bool Equals(WeightsMetrics other)
 	{
 		return Epoch == other.Epoch && LossMetrics == other.LossMetrics;
 	}
-
 	public override bool Equals(object? obj)
 	{
 		return obj is WeightsMetrics other && Equals(other);
 	}
-
 	public override int GetHashCode()
 	{
 		return HashCode.Combine(Epoch, LossMetrics);
 	}
-
 	public override string ToString() => $"{nameof(Epoch)}: {Epoch}, {LossMetrics}";
 }

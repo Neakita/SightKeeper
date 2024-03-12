@@ -11,5 +11,6 @@ public sealed class AssetConfiguration : IEntityTypeConfiguration<Asset>
         builder.HasFlakeIdKey();
         builder.ToTable("Assets");
         builder.HasMany(asset => asset.Items).WithOne(item => item.Asset);
+        builder.Navigation(asset => asset.Screenshot).AutoInclude();
     }
 }

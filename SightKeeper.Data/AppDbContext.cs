@@ -65,8 +65,6 @@ public class AppDbContext : DbContext
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
-		
 		modelBuilder.ApplyConfiguration(new ScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
 		modelBuilder.ApplyConfiguration(new AssetConfiguration());
@@ -79,7 +77,8 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ProfileConfiguration());
 		modelBuilder.ApplyConfiguration(new ProfileItemClassConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
-		modelBuilder.Entity<Asset>().Navigation(asset => asset.Screenshot).AutoInclude();
-		modelBuilder.Entity<WeightsData>().HasFlakeIdKey();
+		modelBuilder.ApplyConfiguration(new AssetsLibraryConfiguration());
+		modelBuilder.ApplyConfiguration(new PreemptionSettingsConfiguration());
+		modelBuilder.ApplyConfiguration(new WeightsDataConfiguration());
 	}
 }

@@ -75,7 +75,7 @@ public sealed class HotKeyProfileRunner(
         if (profile.PreemptionSettings != null)
         {
             builder.RegisterDecorator<PreemptionDecorator, DetectionMouseMover>();
-            if (profile.PreemptionSettings.Value.StabilizationSettings == null)
+            if (profile.PreemptionSettings.StabilizationSettings == null)
                 builder.RegisterType<SimplePreemptionComputer>().As<PreemptionComputer>();
             else
                 builder.RegisterType<StabilizedPreemptionComputer>().As<PreemptionComputer>();

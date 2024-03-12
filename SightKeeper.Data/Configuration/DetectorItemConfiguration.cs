@@ -12,10 +12,16 @@ public sealed class DetectorItemConfiguration : IEntityTypeConfiguration<Detecto
         builder.ToTable("DetectorItems");
         builder.ComplexProperty(item => item.Bounding, boundingBuilder =>
         {
-	        boundingBuilder.Property(bounding => bounding.Position.X).HasColumnName("BoundingXPosition");
-	        boundingBuilder.Property(bounding => bounding.Position.Y).HasColumnName("BoundingYPosition");
-            boundingBuilder.Property(bounding => bounding.Size.X).HasColumnName("BoundingXSize");
-            boundingBuilder.Property(bounding => bounding.Size.Y).HasColumnName("BoundingYSize");
+	        boundingBuilder.ComplexProperty(bounding => bounding.Position, positionBuilder =>
+	        {
+		        positionBuilder.Property(position => position.X).HasColumnName("BoundingXPosition");
+		        positionBuilder.Property(position => position.Y).HasColumnName("BoundingYPosition");
+	        });
+	        boundingBuilder.ComplexProperty(bounding => bounding.Size, sizeBuilder =>
+	        {
+		        sizeBuilder.Property(size => size.X).HasColumnName("BoundingXSize");
+		        sizeBuilder.Property(size => size.Y).HasColumnName("BoundingYSize");
+	        });
         });
     }
 }

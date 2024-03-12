@@ -15,13 +15,15 @@ public readonly struct LossMetrics
 	public float ClassificationLoss { get; }
 	public float DeformationLoss { get; }
 
+	public LossMetrics()
+	{
+	}
 	public LossMetrics(float boundingLoss, float classificationLoss, float deformationLoss)
 	{
 		BoundingLoss = boundingLoss;
 		ClassificationLoss = classificationLoss;
 		DeformationLoss = deformationLoss;
 	}
-
 	public bool Equals(LossMetrics other)
 	{
 		return BoundingLoss.Equals(other.BoundingLoss) &&

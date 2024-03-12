@@ -10,8 +10,8 @@ public sealed class WeightsConfiguration : IEntityTypeConfiguration<Weights>
     {
         builder.HasFlakeIdKey();
         builder.Navigation(weights => weights.Library).AutoInclude();
-        builder.HasOne<WeightsData>("PTData").WithOne().HasPrincipalKey<Weights>().IsRequired();
-        builder.HasOne<WeightsData>("ONNXData").WithOne().HasPrincipalKey<Weights>().IsRequired();
+        builder.HasOne<WeightsData>().WithOne().HasPrincipalKey<Weights>().IsRequired();
+        builder.HasOne<WeightsData>().WithOne().HasPrincipalKey<Weights>().IsRequired();
         builder.HasMany(weights => weights.ItemClasses).WithMany().UsingEntity<WeightsItemClass>(
             "WeightsItemClasses",
             left => left.HasOne(l => l.ItemClass).WithMany().HasForeignKey("ItemClassId").HasPrincipalKey("Id"),
@@ -19,10 +19,16 @@ public sealed class WeightsConfiguration : IEntityTypeConfiguration<Weights>
             join => join.HasKey("WeightsId", "ItemClassId"));
         builder.HasChangeTrackingStrategy(ChangeTrackingStrategy.Snapshot);
         builder.Navigation(weights => weights.ItemClasses).AutoInclude();
-        builder.Property(weights => weights.WeightsMetrics.Epoch).HasColumnName(nameof(WeightsMetrics.Epoch));
-        builder.Property(weights => weights.WeightsMetrics.LossMetrics.BoundingLoss).HasColumnName(nameof(LossMetrics.BoundingLoss));
-        builder.Property(weights => weights.WeightsMetrics.LossMetrics.ClassificationLoss).HasColumnName(nameof(LossMetrics.ClassificationLoss));
-        builder.Property(weights => weights.WeightsMetrics.LossMetrics.DeformationLoss).HasColumnName(nameof(LossMetrics.DeformationLoss));
+        builder.ComplexProperty(weights => weights.WeightsMetrics, weightsMetricsBuilder =>
+        {
+	        weightsMetricsBuilder.Property(weightsMetrics => weightsMetrics.Epoch).HasColumnName(nameof(WeightsMetrics.Epoch));
+	        weightsMetricsBuilder.ComplexProperty(weightsMetrics => weightsMetrics.LossMetrics, lossMetricsBuilder =>
+	        {
+		        lossMetricsBuilder.Property(lossMetrics => lossMetrics.BoundingLoss).HasColumnName(nameof(LossMetrics.BoundingLoss));
+		        lossMetricsBuilder.Property(lossMetrics => lossMetrics.ClassificationLoss).HasColumnName(nameof(LossMetrics.ClassificationLoss));
+		        lossMetricsBuilder.Property(lossMetrics => lossMetrics.DeformationLoss).HasColumnName(nameof(LossMetrics.DeformationLoss));
+	        });
+        });
     }
 
     public sealed class WeightsItemClass

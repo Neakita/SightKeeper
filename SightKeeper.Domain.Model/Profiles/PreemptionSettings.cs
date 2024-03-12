@@ -2,18 +2,8 @@
 
 namespace SightKeeper.Domain.Model.Profiles;
 
-public readonly struct PreemptionSettings
+public sealed class PreemptionSettings
 {
-	public static bool operator ==(PreemptionSettings left, PreemptionSettings right)
-	{
-		return left.Equals(right);
-	}
-
-	public static bool operator !=(PreemptionSettings left, PreemptionSettings right)
-	{
-		return !left.Equals(right);
-	}
-
 	public Vector2<float> Factor { get; }
 	public StabilizationSettings? StabilizationSettings { get; }
 
@@ -27,20 +17,5 @@ public readonly struct PreemptionSettings
 	public PreemptionSettings(Vector2<float> factor, StabilizationSettings stabilizationSettings) : this(factor)
 	{
 		StabilizationSettings = stabilizationSettings;
-	}
-
-	public bool Equals(PreemptionSettings other)
-	{
-		return Factor.Equals(other.Factor) && Nullable.Equals(StabilizationSettings, other.StabilizationSettings);
-	}
-
-	public override bool Equals(object? obj)
-	{
-		return obj is PreemptionSettings other && Equals(other);
-	}
-
-	public override int GetHashCode()
-	{
-		return HashCode.Combine(Factor, StabilizationSettings);
 	}
 }

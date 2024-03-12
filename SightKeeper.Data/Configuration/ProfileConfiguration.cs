@@ -9,18 +9,7 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
     public void Configure(EntityTypeBuilder<Profile> builder)
     {
         builder.HasFlakeIdKey();
-        builder.ComplexProperty(profile => profile.PreemptionSettings,
-	        settingsBuilder =>
-	        {
-		        settingsBuilder.Property(preemptionSettings => preemptionSettings.Value.Factor.X).HasColumnName("PreemptionHorizontalFactor");
-		        settingsBuilder.Property(preemptionSettings => preemptionSettings.Value.Factor.Y).HasColumnName("PreemptionVerticalFactor");
-		        settingsBuilder.ComplexProperty(preemptionSettings => preemptionSettings.Value.StabilizationSettings,
-			        stabilizationSettingsBuilder =>
-			        {
-				        stabilizationSettingsBuilder.Property(settings => settings.Value.Method).HasColumnName("PreemptionStabilizationMethod");
-				        stabilizationSettingsBuilder.Property(settings => settings.Value.BufferSize).HasColumnName("PreemptionStabilizationBufferSize");
-			        });
-	        });
+        builder.HasOne(profile => profile.PreemptionSettings).WithOne().HasPrincipalKey<Profile>();
         builder.HasMany(profile => profile.ItemClasses).WithOne().IsRequired();
         builder.HasIndex(profile => profile.Name).IsUnique();
         builder.Navigation(profile => profile.Weights).AutoInclude();
