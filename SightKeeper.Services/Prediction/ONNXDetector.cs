@@ -35,9 +35,15 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
     private void SetWeights(Weights weights)
     {
         var weightsData = weightsDataAccess.LoadWeightsONNXData(weights);
-        _predictor = new YoloV8(new ModelSelector(weightsData.Content), CreateMetadata(weights.Library.DataSet));
-        _predictor.Parameters.Confidence = ProbabilityThreshold;
-        _predictor.Parameters.IoU = IoU;
+        YoloV8Builder builder = new();
+        builder.UseOnnxModel(new BinarySelector(weightsData.Content));
+        builder.WithMetadata(CreateMetadata(weights.Library.DataSet));
+        builder.WithConfiguration(configuration =>
+        {
+	        configuration.Confidence = ProbabilityThreshold;
+	        configuration.IoU = IoU;
+        });
+        _predictor = builder.Build();
     }
 
     public float ProbabilityThreshold
@@ -47,7 +53,7 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
         {
             _probabilityThreshold = value;
             if (_predictor != null)
-                _predictor.Parameters.Confidence = value;
+                _predictor.Configuration.Confidence = value;
         }
     }
 
@@ -58,7 +64,7 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
         {
             _iou = value;
             if (_predictor != null)
-                _predictor.Parameters.IoU = value;
+                _predictor.Configuration.IoU = value;
         }
     }
 
@@ -82,9 +88,9 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
         return result;
     }
 
-    private float _probabilityThreshold = YoloV8Parameters.Default.Confidence;
-    private float _iou = YoloV8Parameters.Default.IoU;
-    private YoloV8? _predictor;
+    private float _probabilityThreshold = YoloV8Configuration.Default.Confidence;
+    private float _iou = YoloV8Configuration.Default.IoU;
+    private YoloV8Predictor? _predictor;
     private Weights? _weights;
     private Dictionary<int, ItemClass>? _itemClasses;
 

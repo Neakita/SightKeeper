@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
-public abstract class WeightsDataAccess
+public abstract class WeightsDataAccess : IDisposable
 {
 	public IObservable<Weights> WeightsCreated => _weightsCreated.AsObservable();
 	public IObservable<Weights> WeightsRemoved => _weightsRemoved.AsObservable();
@@ -29,6 +29,12 @@ public abstract class WeightsDataAccess
 		weights.Library.RemoveWeights(weights);
 		RemoveWeightsData(weights);
 		_weightsRemoved.OnNext(weights);
+	}
+	public void Dispose()
+	{
+		_weightsCreated.Dispose();
+		_weightsRemoved.Dispose();
+		GC.SuppressFinalize(this);
 	}
 
 	protected abstract void SaveWeightsData(Weights weights, WeightsData onnxData, WeightsData ptData);
