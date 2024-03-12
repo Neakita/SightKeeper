@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.DataSets;
+﻿using FlakeId;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Services;
 
@@ -19,7 +20,10 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
 
     protected override void SaveWeightsData(Weights weights, WeightsData onnxData, WeightsData ptData)
     {
-	    throw new NotImplementedException();
+	    ONNXWeightsData onnxWeightsData = new(onnxData, weights);
+	    PTWeightsData ptWeightsData = new(ptData, weights);
+	    _dbContext.Add(onnxWeightsData);
+	    _dbContext.Add(ptWeightsData);
     }
     protected override void RemoveWeightsData(Weights weights)
     {

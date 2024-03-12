@@ -25,23 +25,6 @@ namespace SightKeeper.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Screenshots",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false),
-                    ScreenshotId = table.Column<long>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Screenshots", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Screenshots_Screenshots_ScreenshotId",
-                        column: x => x.ScreenshotId,
-                        principalTable: "Screenshots",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "DataSets",
                 columns: table => new
                 {
@@ -59,23 +42,6 @@ namespace SightKeeper.Data.Migrations
                         column: x => x.GameId,
                         principalTable: "Games",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Images_Screenshots_Id",
-                        column: x => x.Id,
-                        principalTable: "Screenshots",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,27 +117,20 @@ namespace SightKeeper.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Assets",
+                name: "Screenshots",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false),
-                    Usage = table.Column<int>(type: "INTEGER", nullable: false),
                     LibraryId = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Assets", x => x.Id);
+                    table.PrimaryKey("PK_Screenshots", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Assets_AssetsLibraries_LibraryId",
+                        name: "FK_Screenshots_ScreenshotsLibraries_LibraryId",
                         column: x => x.LibraryId,
-                        principalTable: "AssetsLibraries",
+                        principalTable: "ScreenshotsLibraries",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Assets_Screenshots_Id",
-                        column: x => x.Id,
-                        principalTable: "Screenshots",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -196,30 +155,43 @@ namespace SightKeeper.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DetectorItems",
+                name: "Assets",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false),
-                    ItemClassId = table.Column<long>(type: "INTEGER", nullable: false),
-                    AssetId = table.Column<long>(type: "INTEGER", nullable: false),
-                    BoundingXPosition = table.Column<double>(type: "REAL", nullable: false),
-                    BoundingYPosition = table.Column<double>(type: "REAL", nullable: false),
-                    BoundingXSize = table.Column<double>(type: "REAL", nullable: false),
-                    BoundingYSize = table.Column<double>(type: "REAL", nullable: false)
+                    Usage = table.Column<int>(type: "INTEGER", nullable: false),
+                    LibraryId = table.Column<long>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DetectorItems", x => x.Id);
+                    table.PrimaryKey("PK_Assets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DetectorItems_Assets_AssetId",
-                        column: x => x.AssetId,
-                        principalTable: "Assets",
+                        name: "FK_Assets_AssetsLibraries_LibraryId",
+                        column: x => x.LibraryId,
+                        principalTable: "AssetsLibraries",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Assets_Screenshots_Id",
+                        column: x => x.Id,
+                        principalTable: "Screenshots",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false),
+                    Content = table.Column<byte[]>(type: "BLOB", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DetectorItems_ItemClasses_ItemClassId",
-                        column: x => x.ItemClassId,
-                        principalTable: "ItemClasses",
+                        name: "FK_Images_Screenshots_Id",
+                        column: x => x.Id,
+                        principalTable: "Screenshots",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -252,17 +224,13 @@ namespace SightKeeper.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false),
-                    WeightsId = table.Column<long>(type: "INTEGER", nullable: false)
+                    WeightsId = table.Column<long>(type: "INTEGER", nullable: false),
+                    Type = table.Column<byte>(type: "INTEGER", nullable: false),
+                    Content = table.Column<byte[]>(type: "BLOB", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WeightsData", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_WeightsData_Weights_Id",
-                        column: x => x.Id,
-                        principalTable: "Weights",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_WeightsData_Weights_WeightsId",
                         column: x => x.WeightsId,
@@ -291,6 +259,35 @@ namespace SightKeeper.Data.Migrations
                         name: "FK_WeightsItemClasses_Weights_WeightsId",
                         column: x => x.WeightsId,
                         principalTable: "Weights",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DetectorItems",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false),
+                    ItemClassId = table.Column<long>(type: "INTEGER", nullable: false),
+                    AssetId = table.Column<long>(type: "INTEGER", nullable: false),
+                    BoundingXPosition = table.Column<double>(type: "REAL", nullable: false),
+                    BoundingYPosition = table.Column<double>(type: "REAL", nullable: false),
+                    BoundingXSize = table.Column<double>(type: "REAL", nullable: false),
+                    BoundingYSize = table.Column<double>(type: "REAL", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetectorItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DetectorItems_Assets_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "Assets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DetectorItems_ItemClasses_ItemClassId",
+                        column: x => x.ItemClassId,
+                        principalTable: "ItemClasses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -397,9 +394,9 @@ namespace SightKeeper.Data.Migrations
                 column: "WeightsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Screenshots_ScreenshotId",
+                name: "IX_Screenshots_LibraryId",
                 table: "Screenshots",
-                column: "ScreenshotId");
+                column: "LibraryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Weights_LibraryId",
@@ -407,10 +404,15 @@ namespace SightKeeper.Data.Migrations
                 column: "LibraryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_WeightsData_Type_WeightsId",
+                table: "WeightsData",
+                columns: new[] { "Type", "WeightsId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WeightsData_WeightsId",
                 table: "WeightsData",
-                column: "WeightsId",
-                unique: true);
+                column: "WeightsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WeightsItemClasses_ItemClassId",
@@ -432,9 +434,6 @@ namespace SightKeeper.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProfileItemClasses");
-
-            migrationBuilder.DropTable(
-                name: "ScreenshotsLibraries");
 
             migrationBuilder.DropTable(
                 name: "WeightsData");
@@ -459,6 +458,9 @@ namespace SightKeeper.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Weights");
+
+            migrationBuilder.DropTable(
+                name: "ScreenshotsLibraries");
 
             migrationBuilder.DropTable(
                 name: "WeightsLibraries");

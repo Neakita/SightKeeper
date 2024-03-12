@@ -10,5 +10,6 @@ public sealed class ImageConfiguration : IEntityTypeConfiguration<Image>
     {
         builder.HasFlakeIdKey();
         builder.ToTable("Images");
+        builder.Property(image => image.Content);
     }
 }

@@ -26,7 +26,6 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
 
 	protected override void SaveScreenshot(Screenshot screenshot, Image image)
 	{
-		throw new NotImplementedException();
 	}
 
 	private readonly AppDbContext _dbContext;
