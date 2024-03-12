@@ -10,7 +10,7 @@ internal sealed class WeightsDataConfiguration : IEntityTypeConfiguration<DbWeig
 		builder.HasFlakeIdKey();
 		builder.ToTable("WeightsData");
 		builder.ComplexProperty(weightsData => weightsData.Data, subBuilder => subBuilder.Property(weights => weights.Content).HasColumnName("Content"));
-		builder.HasDiscriminator<byte>("Type").HasValue<ONNXWeightsData>(0).HasValue<PTWeightsData>(1);
-		builder.HasIndex("Type", "WeightsId").IsUnique();
+		builder.Property(weightsData => weightsData.Format);
+		builder.HasIndex("WeightsId", "Format").IsUnique();
 	}
 }

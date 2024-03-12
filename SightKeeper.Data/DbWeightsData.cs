@@ -2,18 +2,26 @@
 
 namespace SightKeeper.Data;
 
-internal abstract class DbWeightsData
+internal sealed class DbWeightsData
 {
+	public enum DataFormat
+	{
+		ONNX,
+		PT
+	}
+	
 	public WeightsData Data { get; }
 	public Weights Weights { get; }
+	public DataFormat Format { get; }
 
-	protected DbWeightsData(WeightsData data, Weights weights)
+	public DbWeightsData(WeightsData data, Weights weights, DataFormat format)
 	{
 		Data = data;
 		Weights = weights;
+		Format = format;
 	}
 
-	protected DbWeightsData()
+	private DbWeightsData()
 	{
 		Data = null!;
 		Weights = null!;

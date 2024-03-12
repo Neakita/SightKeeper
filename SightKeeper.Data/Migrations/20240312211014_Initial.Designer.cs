@@ -12,7 +12,7 @@ using SightKeeper.Data;
 namespace SightKeeper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240312210313_Initial")]
+    [Migration("20240312211014_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace SightKeeper.Data.Migrations
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte>("Type")
+                    b.Property<int>("Format")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("WeightsId")
@@ -44,16 +44,10 @@ namespace SightKeeper.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WeightsId");
-
-                    b.HasIndex("Type", "WeightsId")
+                    b.HasIndex("WeightsId", "Format")
                         .IsUnique();
 
                     b.ToTable("WeightsData", (string)null);
-
-                    b.HasDiscriminator<byte>("Type");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Asset", b =>
@@ -386,20 +380,6 @@ namespace SightKeeper.Data.Migrations
                     b.HasIndex("ItemClassId");
 
                     b.ToTable("WeightsItemClasses");
-                });
-
-            modelBuilder.Entity("SightKeeper.Data.ONNXWeightsData", b =>
-                {
-                    b.HasBaseType("SightKeeper.Data.DbWeightsData");
-
-                    b.HasDiscriminator().HasValue((byte)0);
-                });
-
-            modelBuilder.Entity("SightKeeper.Data.PTWeightsData", b =>
-                {
-                    b.HasBaseType("SightKeeper.Data.DbWeightsData");
-
-                    b.HasDiscriminator().HasValue((byte)1);
                 });
 
             modelBuilder.Entity("SightKeeper.Data.DbWeightsData", b =>

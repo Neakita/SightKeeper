@@ -20,10 +20,8 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
 
     protected override void SaveWeightsData(Weights weights, WeightsData onnxData, WeightsData ptData)
     {
-	    ONNXWeightsData onnxWeightsData = new(onnxData, weights);
-	    PTWeightsData ptWeightsData = new(ptData, weights);
-	    _dbContext.Add(onnxWeightsData);
-	    _dbContext.Add(ptWeightsData);
+	    _dbContext.Add(new DbWeightsData(onnxData, weights, DbWeightsData.DataFormat.ONNX));
+	    _dbContext.Add(new DbWeightsData(ptData, weights, DbWeightsData.DataFormat.PT));
     }
     protected override void RemoveWeightsData(Weights weights)
     {

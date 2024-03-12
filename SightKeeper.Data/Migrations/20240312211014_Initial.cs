@@ -225,7 +225,7 @@ namespace SightKeeper.Data.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false),
                     WeightsId = table.Column<long>(type: "INTEGER", nullable: false),
-                    Type = table.Column<byte>(type: "INTEGER", nullable: false),
+                    Format = table.Column<int>(type: "INTEGER", nullable: false),
                     Content = table.Column<byte[]>(type: "BLOB", nullable: false)
                 },
                 constraints: table =>
@@ -404,15 +404,10 @@ namespace SightKeeper.Data.Migrations
                 column: "LibraryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WeightsData_Type_WeightsId",
+                name: "IX_WeightsData_WeightsId_Format",
                 table: "WeightsData",
-                columns: new[] { "Type", "WeightsId" },
+                columns: new[] { "WeightsId", "Format" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WeightsData_WeightsId",
-                table: "WeightsData",
-                column: "WeightsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WeightsItemClasses_ItemClassId",
