@@ -24,7 +24,7 @@ public sealed class DbContextTests
         asset.CreateItem(itemClass, new Bounding(0, 0, 1, 1));
         
         DbWeightsDataAccess weightsDataAccessTests = new(dbContext);
-        var weights = weightsDataAccessTests.CreateWeights(dataSet.Weights, [0], [1], Size.Medium,
+        var weights = weightsDataAccessTests.CreateWeights(dataSet.Weights, [0], [1], ModelSize.Medium,
 	        new WeightsMetrics(11, new LossMetrics(12, 13, 14)), Array.Empty<ItemClass>());
         
         dbContext.DataSets.Add(dataSet);

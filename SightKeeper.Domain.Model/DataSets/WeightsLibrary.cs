@@ -19,11 +19,11 @@ public sealed class WeightsLibrary : IEnumerable<Weights>
     }
 
     internal Weights CreateWeights(
-	    Size size,
+	    ModelSize modelSize,
 	    WeightsMetrics metrics,
 	    IEnumerable<ItemClass> itemClasses)
     {
-	    Weights weights = new(size, metrics, itemClasses, this);
+	    Weights weights = new(modelSize, metrics, itemClasses, this);
 	    var isAdded = _weights.Add(weights);
 	    Guard.IsTrue(isAdded);
 	    return weights;

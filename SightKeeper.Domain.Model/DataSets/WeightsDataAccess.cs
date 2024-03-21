@@ -15,11 +15,11 @@ public abstract class WeightsDataAccess : IDisposable
 		WeightsLibrary library,
 		byte[] onnxData,
 		byte[] ptData,
-		Size size,
+		ModelSize modelSize,
 		WeightsMetrics metrics,
 		IReadOnlyCollection<ItemClass> itemClasses)
 	{
-		var weights = library.CreateWeights(size, metrics, itemClasses);
+		var weights = library.CreateWeights(modelSize, metrics, itemClasses);
 		SaveWeightsData(weights, new WeightsData(onnxData), new WeightsData(ptData));
 		_weightsCreated.OnNext(weights);
 		return weights;
