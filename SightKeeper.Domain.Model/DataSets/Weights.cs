@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
@@ -21,12 +22,14 @@ public sealed class Weights
         WeightsMetrics = weightsMetrics;
         ItemClasses = itemClasses.ToImmutableList();
         Library = library;
-    }
-
-    private Weights()
-    {
-        ItemClasses = null!;
+        ValidateItemClasses();
     }
 
     public override string ToString() => $"{nameof(Size)}: {Size}, {WeightsMetrics}";
+
+    private void ValidateItemClasses()
+    {
+	    var isAllItemClassesBelongsToGivenLibrary = ItemClasses.All(itemClass => Library.DataSet.ItemClasses.Contains(itemClass));
+	    Guard.IsTrue(isAllItemClassesBelongsToGivenLibrary);
+    }
 }

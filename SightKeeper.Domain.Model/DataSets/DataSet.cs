@@ -8,7 +8,7 @@ public sealed class DataSet
 	public string Description { get; set; }
 	public Game? Game { get; set; }
 	public ushort Resolution { get; }
-	public IReadOnlyCollection<ItemClass> ItemClasses => _itemClasses;
+	public IReadOnlySet<ItemClass> ItemClasses => _itemClasses;
 	public ScreenshotsLibrary Screenshots { get; }
 	public AssetsLibrary Assets { get; }
 	public WeightsLibrary Weights { get; }
