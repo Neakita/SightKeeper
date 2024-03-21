@@ -25,6 +25,15 @@ public sealed class Profile
             _mouseSensitivity = value;
         }
     }
+    public float MouseSmoothing
+    {
+	    get => _mouseSmoothing;
+	    set
+	    {
+		    Guard.IsGreaterThanOrEqualTo(value, 0);
+		    _mouseSmoothing = value;
+	    }
+    }
     public TimeSpan PostProcessDelay
     {
         get => _postProcessDelay;
@@ -80,4 +89,5 @@ public sealed class Profile
     private float _detectionThreshold;
     private float _mouseSensitivity;
     private TimeSpan _postProcessDelay;
+    private float _mouseSmoothing;
 }

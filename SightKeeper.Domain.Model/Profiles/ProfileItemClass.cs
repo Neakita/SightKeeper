@@ -6,6 +6,7 @@ public sealed class ProfileItemClass
 {
     public ItemClass ItemClass { get; }
     public ActivationCondition ActivationCondition { get; set; }
+    public Vector2<float> Offset { get; set; }
 
     public ProfileItemClass(ItemClass itemClass, ActivationCondition activationCondition)
     {
