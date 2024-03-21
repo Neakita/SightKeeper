@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.DataSets;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace SightKeeper.Domain.Model.DataSets;
 
 public sealed class DataSet
 {
@@ -26,11 +28,12 @@ public sealed class DataSet
 		_itemClasses.Add(newItemClass);
 		return newItemClass;
 	}
-	public bool DeleteItemClass(ItemClass itemClass)
+	public void DeleteItemClass(ItemClass itemClass)
 	{
-		if (Screenshots.Where(screenshot => screenshot.Asset != null).Select(screenshot => screenshot.Asset!).SelectMany(asset => asset.Items).Any(item => item.ItemClass == itemClass))
-			throw new InvalidOperationException($"Item class {itemClass} is in use");
-		return _itemClasses.Remove(itemClass);
+		if (Assets.SelectMany(asset => asset.Items).Any(item => item.ItemClass == itemClass))
+			throw new InvalidOperationException($"Item class \"{itemClass}\" is in use");
+		bool isRemoved = _itemClasses.Remove(itemClass);
+		Guard.IsTrue(isRemoved);
 	}
 	public override string ToString() => Name;
 

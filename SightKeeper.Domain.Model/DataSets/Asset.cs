@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.DataSets;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace SightKeeper.Domain.Model.DataSets;
 
 public sealed class Asset
 {
@@ -15,12 +17,11 @@ public sealed class Asset
         return item;
     }
 
-    public bool DeleteItem(DetectorItem item)
+    public void DeleteItem(DetectorItem item)
     {
 	    var isRemoved = _items.Remove(item);
-	    if (isRemoved)
-		    item.ItemClass.RemoveItem(item);
-	    return isRemoved;
+	    Guard.IsTrue(isRemoved);
+	    item.ItemClass.RemoveItem(item);
     }
 
     public void DeleteItem(int index)

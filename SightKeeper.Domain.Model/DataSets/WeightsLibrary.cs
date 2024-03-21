@@ -12,7 +12,12 @@ public sealed class WeightsLibrary : IEnumerable<Weights>
 	    DataSet = dataSet;
     }
 
-    public bool RemoveWeights(Weights weights) => _weights.Remove(weights);
+    public void RemoveWeights(Weights weights)
+    {
+	    var isRemoved = _weights.Remove(weights);
+	    Guard.IsTrue(isRemoved);
+    }
+
     public IEnumerator<Weights> GetEnumerator()
     {
 	    return _weights.GetEnumerator();

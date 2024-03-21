@@ -16,9 +16,9 @@ public sealed class ScreenshotsLibrary : IEnumerable<Screenshot>
 
     public void DeleteScreenshot(Screenshot screenshot)
     {
-        if (!_screenshots.Remove(screenshot))
-            ThrowHelper.ThrowInvalidOperationException("Screenshot not found");
-        screenshot.Asset?.ClearItems();
+	    bool isRemoved = _screenshots.Remove(screenshot);
+        Guard.IsTrue(isRemoved);
+	    screenshot.Asset?.ClearItems();
     }
 
     public IEnumerator<Screenshot> GetEnumerator() => _screenshots.GetEnumerator();
