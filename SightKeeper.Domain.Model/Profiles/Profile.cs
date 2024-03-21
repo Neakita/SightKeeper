@@ -80,12 +80,4 @@ public sealed class Profile
     private float _detectionThreshold;
     private float _mouseSensitivity;
     private TimeSpan _postProcessDelay;
-
-    private Profile()
-    {
-        Name = null!;
-        Description = null!;
-        _weights = null!;
-        _itemClasses = null!;
-    }
 }

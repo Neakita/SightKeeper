@@ -16,9 +16,4 @@ public sealed class ProfileItemClass
         Index = index;
         ActivationCondition = activationCondition;
     }
-
-    private ProfileItemClass()
-    {
-        ItemClass = null!;
-    }
 }
