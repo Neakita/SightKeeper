@@ -1,10 +1,6 @@
-﻿using Serilog;
-using Serilog.Core;
-using Serilog.Events;
-using SightKeeper.Data.Services;
+﻿using SightKeeper.Data.Services;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Tests.Common;
-using Xunit.Abstractions;
 
 namespace SightKeeper.Data.Tests;
 

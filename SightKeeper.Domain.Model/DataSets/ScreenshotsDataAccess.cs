@@ -10,8 +10,9 @@ public abstract class ScreenshotsDataAccess : IDisposable
 	public IObservable<Screenshot> ScreenshotRemoved => _screenshotRemoved.AsObservable();
 
 	public abstract Image LoadImage(Screenshot screenshot);
-	public abstract IEnumerable<Image> LoadImages(IEnumerable<Screenshot> screenshots);
-	public abstract IEnumerable<Image> LoadImages(DataSet dataSet);
+	public abstract IEnumerable<(Screenshot screenshot, Image image)> LoadImages(IEnumerable<Screenshot> screenshots, bool ordered = false);
+	public abstract IEnumerable<(Screenshot screenshot, Image image)> LoadImages(IReadOnlyCollection<Screenshot> screenshots, bool ordered = false);
+	public abstract IEnumerable<(Screenshot screenshot, Image image)> LoadImages(DataSet dataSet);
 
 	public Screenshot CreateScreenshot(ScreenshotsLibrary library, byte[] data)
 	{
@@ -22,10 +23,11 @@ public abstract class ScreenshotsDataAccess : IDisposable
 		return screenshot;
 	}
 
-	public void Dispose()
+	public virtual void Dispose()
 	{
 		_screenshotAdded.Dispose();
 		_screenshotRemoved.Dispose();
+		GC.SuppressFinalize(this);
 	}
 
 	protected abstract void SaveScreenshot(Screenshot screenshot, Image image);

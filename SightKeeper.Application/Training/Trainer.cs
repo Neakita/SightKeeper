@@ -14,11 +14,11 @@ public sealed class Trainer
 	private static readonly ILogger Logger = Log.ForContext<Trainer>();
 
 	public Trainer(
-		ImagesExporter imagesExporter,
+		AssetsExporter assetsExporter,
 		DataSetConfigurationExporter dataSetConfigurationExporter,
 		WeightsDataAccess weightsDataAccess)
 	{
-		_imagesExporter = imagesExporter;
+		_assetsExporter = assetsExporter;
 		_dataSetConfigurationExporter = dataSetConfigurationExporter;
 		_weightsDataAccess = weightsDataAccess;
 	}
@@ -34,7 +34,7 @@ public sealed class Trainer
 		CancellationToken cancellationToken = default)
 	{
 		PrepareDataDirectory();
-		await _imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
+		_assetsExporter.Export(DataDirectoryPath, dataSet.Assets, dataSet.ItemClasses);
 		await ExportDataSet(dataSet, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);
 		CLITrainerArguments arguments = new(DataSetPath, size, epochs, patience, dataSet.Resolution, false, AMP);
@@ -63,7 +63,7 @@ public sealed class Trainer
 	{
 		PrepareDataDirectory();
 		var dataSet = weights.Library.DataSet;
-		await _imagesExporter.Export(DataDirectoryPath, dataSet, cancellationToken);
+		_assetsExporter.Export(DataDirectoryPath, dataSet.Assets, dataSet.ItemClasses);
 		await ExportDataSet(dataSet, cancellationToken);
 		await ExportWeights(weights, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);
@@ -84,7 +84,7 @@ public sealed class Trainer
 		return await SaveWeights(dataSet, lastProgress.WeightsMetrics, weights.Size, CancellationToken.None); // TODO ability to abort saving
 	}
 
-	private readonly ImagesExporter _imagesExporter;
+	private readonly AssetsExporter _assetsExporter;
 	private readonly DataSetConfigurationExporter _dataSetConfigurationExporter;
 	private readonly WeightsDataAccess _weightsDataAccess;
 

@@ -5,10 +5,14 @@ namespace SightKeeper.Tests.Common;
 
 public sealed class TestDbContextFactory : AppDbContextFactory
 {
-	public TestDbContextFactory() =>
+	public TestDbContextFactory()
+	{
 		_options = new DbContextOptionsBuilder<AppDbContext>()
-			.UseInMemoryDatabase(Guid.NewGuid().ToString("N")).Options;
-	
+			.UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
+			.EnableSensitiveDataLogging()
+			.Options;
+	}
+
 	public AppDbContext CreateDbContext() => new(_options);
 	
 	private readonly DbContextOptions<AppDbContext> _options;
