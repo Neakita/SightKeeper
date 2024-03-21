@@ -13,7 +13,6 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
         builder.HasMany(profile => profile.ItemClasses).WithOne().IsRequired();
         builder.HasIndex(profile => profile.Name).IsUnique();
         builder.Navigation(profile => profile.Weights).AutoInclude();
-        builder.Navigation(profile => profile.ItemClasses).AutoInclude();
         builder.Property(profile => profile.PostProcessDelay).HasConversion(
             timeSpan => (ushort)timeSpan.TotalMilliseconds,
             number => TimeSpan.FromMilliseconds(number));

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SightKeeper.Data;
 
-public static class Extensions
+public static class IdExtensions
 {
 	private const string IdPropertyName = "Id";
 

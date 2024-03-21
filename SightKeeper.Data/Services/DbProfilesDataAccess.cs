@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Profiles;
 
@@ -13,7 +14,7 @@ public sealed class DbProfilesDataAccess : ProfilesDataAccess
 
     public DbProfilesDataAccess(AppDbContext dbContext)
     {
-	    _profiles = new HashSet<Profile>(dbContext.Profiles);
+	    _profiles = new HashSet<Profile>(dbContext.Profiles.Include(profile => profile.ItemClasses.OrderBy(itemClass => EF.Property<byte>(itemClass, "Order"))));
 	    _dbContext = dbContext;
     }
 

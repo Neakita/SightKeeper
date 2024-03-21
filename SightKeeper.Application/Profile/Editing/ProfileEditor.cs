@@ -7,7 +7,7 @@ using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Application;
 
-public sealed class ProfileEditor
+public class ProfileEditor
 {
     public IObservable<Profile> ProfileEdited => _profileEdited.AsObservable();
 
@@ -16,7 +16,7 @@ public sealed class ProfileEditor
         _validator = validator;
     }
 
-    public void ApplyChanges(EditedProfileDataDTO data)
+    public virtual void ApplyChanges(EditedProfileDataDTO data)
     {
         _validator.ValidateAndThrow(data);
         var profile = data.Profile;

@@ -64,7 +64,7 @@ public sealed class Profile
             ThrowHelper.ThrowArgumentException(nameof(itemClass), $"Item class \"{itemClass}\" not owned by provided weights");
         if (_itemClasses.Any(profileItemClass => profileItemClass.ItemClass == itemClass))
             ThrowHelper.ThrowArgumentException($"Item class {itemClass} already added to profile {this}");
-        ProfileItemClass profileItemClass = new(itemClass, (byte)_itemClasses.Count, activationCondition);
+        ProfileItemClass profileItemClass = new(itemClass, activationCondition);
         _itemClasses.Add(profileItemClass);
     }
 

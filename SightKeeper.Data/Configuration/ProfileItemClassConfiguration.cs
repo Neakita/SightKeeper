@@ -10,8 +10,7 @@ public sealed class ProfileItemClassConfiguration : IEntityTypeConfiguration<Pro
     {
         builder.HasFlakeIdKey();
         builder.ToTable("ProfileItemClasses");
-        builder.HasIndex("ProfileId", nameof(ProfileItemClass.Index)).IsUnique();
-        builder.HasIndex("ProfileId", "ItemClassId").IsUnique();
         builder.HasOne(profileItemClass => profileItemClass.ItemClass).WithMany();
+        builder.HasIndex("ProfileId", "ItemClassId").IsUnique();
     }
 }

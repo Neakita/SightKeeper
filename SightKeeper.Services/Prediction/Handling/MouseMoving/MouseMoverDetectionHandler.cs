@@ -25,6 +25,9 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
         _profileItemClasses = profile.ItemClasses.ToDictionary(
             profileItemClass => profileItemClass.ItemClass,
             profileItemClass => profileItemClass);
+        _itemClassPriorities = profile.ItemClasses.Select((profileItemClass, index) => (profileItemClass.ItemClass, index)).ToDictionary(
+	        tuple => tuple.ItemClass,
+	        tuple => tuple.index);
         if (profile.ItemClasses.Any(itemClass => itemClass.ActivationCondition != ActivationCondition.None))
         {
             hotKeyManager.Register(MouseButton.Button1, 
@@ -64,6 +67,7 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
 
     private readonly Profile _profile;
     private readonly Dictionary<ItemClass, ProfileItemClass> _profileItemClasses;
+    private readonly Dictionary<ItemClass, int> _itemClassPriorities;
     private readonly DetectionMouseMover _mouseMover;
     private readonly CompositeDisposable _constructorDisposables = new();
     private bool _isFiring;
@@ -87,7 +91,7 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     private float GetItemOrder(DetectionItem item)
     {
         var distance = GetNormalizedDistanceTo(item.Bounding);
-        var itemClassIndex = _profileItemClasses[item.ItemClass].Index;
+        var itemClassIndex = _itemClassPriorities[item.ItemClass];
         var order = distance + itemClassIndex;
         Log.Debug("Order of item {Item} is {Order} (Distance: {Distance}, Item class index: {ItemClassIndex})",
             item, order, distance, itemClassIndex);
