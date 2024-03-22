@@ -94,6 +94,13 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
 
 	private void OnDbContextSavedChanges(object? sender, SavedChangesEventArgs e)
 	{
+		DetachImages();
 		_unsavedImages.Clear();
+	}
+
+	private void DetachImages()
+	{
+		foreach (var image in _unsavedImages.Values)
+			_dbContext.Entry(image).State = EntityState.Detached;
 	}
 }

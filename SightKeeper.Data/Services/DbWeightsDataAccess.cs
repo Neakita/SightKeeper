@@ -54,6 +54,12 @@ public sealed class DbWeightsDataAccess : WeightsDataAccess
     }
     private void OnDbContextSavedChanges(object? sender, SavedChangesEventArgs e)
     {
+	    DetachWeights();
 	    _unsavedWeightsData.Clear();
+    }
+    private void DetachWeights()
+    {
+	    foreach (var weightsData in _unsavedWeightsData.Values)
+		    _dbContext.Entry(weightsData).State = EntityState.Detached;
     }
 }
