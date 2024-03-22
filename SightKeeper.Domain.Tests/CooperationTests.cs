@@ -28,4 +28,16 @@ public sealed class CooperationTests
         asset.CreateItem(itemClass, new Bounding());
         Assert.Throws<InvalidOperationException>(() => dataSet.DeleteItemClass(itemClass));
     }
+
+    [Fact]
+    public void DetectorItemShouldBelongToAsset()
+    {
+	    SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+	    var dataSet = DomainTestsHelper.NewDataSet;
+	    var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+	    var asset = screenshot.MakeAsset();
+	    var itemClass = dataSet.CreateItemClass("Test item class", 0);
+	    var item = asset.CreateItem(itemClass, new Bounding());
+	    item.Asset.Should().Be(asset);
+    }
 }

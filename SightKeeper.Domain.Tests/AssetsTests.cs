@@ -34,4 +34,51 @@ public sealed class AssetsTests
         var item = asset1.CreateItem(itemClass, new Bounding());
         Assert.ThrowsAny<Exception>(() => asset2.DeleteItem(item));
     }
+
+    [Fact]
+    public void ShouldBelongToProperLibrary()
+    {
+	    SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+	    var dataSet = DomainTestsHelper.NewDataSet;
+	    var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+	    var asset = screenshot.MakeAsset();
+	    asset.Library.Should().Contain(asset);
+    }
+
+    [Fact]
+    public void ShouldDeleteItemByIndex()
+    {
+	    SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+	    var dataSet = DomainTestsHelper.NewDataSet;
+	    var itemClass = dataSet.CreateItemClass("Test item class", 0);
+	    var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+	    var asset = screenshot.MakeAsset();
+	    asset.CreateItem(itemClass, new Bounding());
+	    asset.DeleteItem(0);
+	    asset.Items.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void ShouldClearItems()
+    {
+	    SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+	    var dataSet = DomainTestsHelper.NewDataSet;
+	    var itemClass = dataSet.CreateItemClass("Test item class", 0);
+	    var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+	    var asset = screenshot.MakeAsset();
+	    asset.CreateItem(itemClass, new Bounding());
+	    asset.CreateItem(itemClass, new Bounding());
+	    asset.ClearItems();
+	    asset.Items.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void ShouldDeleteAsset()
+    {
+	    SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+	    var dataSet = DomainTestsHelper.NewDataSet;
+	    var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
+	    var asset = screenshot.MakeAsset();
+	    dataSet.Assets.DeleteAsset(asset);
+    }
 }
