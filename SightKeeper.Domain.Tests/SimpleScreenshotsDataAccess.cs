@@ -26,9 +26,14 @@ internal sealed class SimpleScreenshotsDataAccess : ScreenshotsDataAccess
 		return LoadImages(dataSet.Screenshots);
 	}
 
-	protected override void SaveScreenshot(Screenshot screenshot, Image image)
+	protected override void SaveScreenshotData(Screenshot screenshot, Image image)
 	{
 		_images.Add(screenshot, image);
+	}
+
+	protected override void DeleteScreenshotData(Screenshot screenshot)
+	{
+		_images.Remove(screenshot);
 	}
 
 	private readonly Dictionary<Screenshot, Image> _images = new();

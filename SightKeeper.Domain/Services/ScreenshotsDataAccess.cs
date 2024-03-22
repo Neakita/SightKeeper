@@ -19,9 +19,16 @@ public abstract class ScreenshotsDataAccess : IDisposable
 	{
 		var screenshot = library.CreateScreenshot();
 		ClearExceed(library);
+		SaveScreenshotData(screenshot, new Image(data));
 		_screenshotAdded.OnNext(screenshot);
-		SaveScreenshot(screenshot, new Image(data));
 		return screenshot;
+	}
+
+	public void DeleteScreenshot(Screenshot screenshot)
+	{
+		screenshot.Library.DeleteScreenshot(screenshot);
+		DeleteScreenshotData(screenshot);
+		_screenshotRemoved.OnNext(screenshot);
 	}
 
 	public virtual void Dispose()
@@ -31,7 +38,8 @@ public abstract class ScreenshotsDataAccess : IDisposable
 		GC.SuppressFinalize(this);
 	}
 
-	protected abstract void SaveScreenshot(Screenshot screenshot, Image image);
+	protected abstract void SaveScreenshotData(Screenshot screenshot, Image image);
+	protected abstract void DeleteScreenshotData(Screenshot screenshot);
 
 	private readonly Subject<Screenshot> _screenshotAdded = new();
 	private readonly Subject<Screenshot> _screenshotRemoved = new();

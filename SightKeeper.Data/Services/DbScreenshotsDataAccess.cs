@@ -75,13 +75,19 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
 		_dbContext.SavedChanges -= OnDbContextSavedChanges;
 	}
 
-	protected override void SaveScreenshot(Screenshot screenshot, Image image)
+	protected override void SaveScreenshotData(Screenshot screenshot, Image image)
 	{
 		var id = Id.Create();
 		_dbContext.Add(screenshot).SetId(id);
 		_dbContext.Add(image).SetId(id);
 		_unsavedImages.Add(screenshot, image);
 	}
+
+	protected override void DeleteScreenshotData(Screenshot screenshot)
+	{
+		_dbContext.Remove(screenshot);
+        _unsavedImages.Remove(screenshot);
+    }
 
 	private readonly AppDbContext _dbContext;
 	private readonly Dictionary<Screenshot, Image> _unsavedImages = new();
