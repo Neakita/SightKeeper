@@ -2,7 +2,7 @@
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Tests.Common;
 
-namespace SightKeeper.Domain.Model.Tests;
+namespace SightKeeper.Domain.Tests;
 
 public sealed class CooperationTests
 {

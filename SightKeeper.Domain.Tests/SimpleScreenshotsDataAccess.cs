@@ -2,7 +2,7 @@
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Services;
 
-namespace SightKeeper.Domain.Model.Tests;
+namespace SightKeeper.Domain.Tests;
 
 internal sealed class SimpleScreenshotsDataAccess : ScreenshotsDataAccess
 {

@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services", "Sig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services.Windows", "SightKeeper.Services.Windows\SightKeeper.Services.Windows.csproj", "{F2F03FC0-D639-4EF7-829E-C3174B2CD3ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Domain.Model.Tests", "SightKeeper.Domain.Model.Tests\SightKeeper.Domain.Model.Tests.csproj", "{5FCF28B0-3E77-4D7C-859A-F1F22F05FB92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Domain.Tests", "SightKeeper.Domain.Tests\SightKeeper.Domain.Tests.csproj", "{5FCF28B0-3E77-4D7C-859A-F1F22F05FB92}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services.Tests", "SightKeeper.Services.Tests\SightKeeper.Services.Tests.csproj", "{A38C9F8C-69F9-4BC2-BA50-F10B0F213F6C}"
 EndProject
