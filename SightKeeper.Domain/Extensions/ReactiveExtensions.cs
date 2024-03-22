@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model.Extensions;
+﻿namespace SightKeeper.Domain.Extensions;
 
 internal static class ReactiveExtensions
 {

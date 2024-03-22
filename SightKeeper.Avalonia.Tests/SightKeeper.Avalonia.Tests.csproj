@@ -25,7 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SightKeeper.Avalonia\SightKeeper.Avalonia.csproj" />
-      <ProjectReference Include="..\SightKeeper.Domain.Model\SightKeeper.Domain.Model.csproj" />
+      <ProjectReference Include="..\SightKeeper.Domain\SightKeeper.Domain.csproj" />
     </ItemGroup>
 
 </Project>

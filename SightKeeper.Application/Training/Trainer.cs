@@ -2,6 +2,7 @@
 using Serilog;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Training;
 

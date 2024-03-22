@@ -2,6 +2,7 @@
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using FluentValidation;
+using SightKeeper.Domain;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Profiles;
 

@@ -1,8 +1,9 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using SightKeeper.Domain.Model.Extensions;
+using SightKeeper.Domain.Extensions;
+using SightKeeper.Domain.Model.DataSets;
 
-namespace SightKeeper.Domain.Model.DataSets;
+namespace SightKeeper.Domain.Services;
 
 public abstract class ScreenshotsDataAccess : IDisposable
 {

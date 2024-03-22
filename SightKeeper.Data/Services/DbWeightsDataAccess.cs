@@ -1,6 +1,7 @@
 ﻿using FlakeId;
 using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
 

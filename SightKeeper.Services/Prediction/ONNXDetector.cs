@@ -6,6 +6,7 @@ using Compunet.YoloV8.Metadata;
 using SerilogTimings;
 using SightKeeper.Application.Prediction;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using RectangleF = System.Drawing.RectangleF;
 using Size = SixLabors.ImageSharp.Size;

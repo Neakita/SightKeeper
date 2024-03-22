@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.DataSets.Creating;

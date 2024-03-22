@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
+using SightKeeper.Domain;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Data.Services;

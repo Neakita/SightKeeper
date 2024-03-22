@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Linq;
 using SightKeeper.Application.Prediction;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Services.Prediction.Handling;
 

@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using Serilog;
 using SerilogTimings.Extensions;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using Image = SixLabors.ImageSharp.Image;
 
