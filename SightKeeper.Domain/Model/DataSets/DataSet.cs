@@ -25,7 +25,8 @@ public sealed class DataSet
 	public ItemClass CreateItemClass(string name, uint color)
 	{
 		ItemClass newItemClass = new(name, color, this);
-		_itemClasses.Add(newItemClass);
+		bool isAdded = _itemClasses.Add(newItemClass);
+		Guard.IsTrue(isAdded);
 		return newItemClass;
 	}
 	public void DeleteItemClass(ItemClass itemClass)

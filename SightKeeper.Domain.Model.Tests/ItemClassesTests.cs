@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Tests.Common;
 
-namespace SightKeeper.Domain.Model.Tests.DetectorDataSet;
+namespace SightKeeper.Domain.Model.Tests;
 
 public sealed class ItemClassesTests
 {
