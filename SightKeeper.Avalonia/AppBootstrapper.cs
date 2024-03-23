@@ -116,6 +116,7 @@ public static class AppBootstrapper
 		builder.RegisterType<DetectionScreenshotingParameters>().SingleInstance();
 		builder.RegisterType<MouseMoverDetectionHandler>().As<DetectionObserver>();
 		builder.RegisterType<ScreenshoterDetectionHandler>().As<DetectionObserver>();
+		builder.RegisterType<AssetsExporter>();
 
 		builder.RegisterType<DetectionMouseMoverImplementation>().As<DetectionMouseMover>();
 		builder.RegisterDecorator<AccumulationDecorator, DetectionMouseMover>();
