@@ -10,6 +10,7 @@ public sealed class ProfileItemClassConfiguration : IEntityTypeConfiguration<Pro
     {
         builder.HasFlakeIdKey();
         builder.ToTable("ProfileItemClasses");
+        builder.Property<byte>("Order");
         builder.HasOne(profileItemClass => profileItemClass.ItemClass).WithMany();
         builder.HasIndex("ProfileId", "ItemClassId").IsUnique();
         builder.ComplexProperty(profileItemClass => profileItemClass.Offset, offsetBuilder =>
