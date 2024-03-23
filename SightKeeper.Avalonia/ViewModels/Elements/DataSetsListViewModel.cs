@@ -2,10 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using DynamicData;
+using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Services;
-using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 

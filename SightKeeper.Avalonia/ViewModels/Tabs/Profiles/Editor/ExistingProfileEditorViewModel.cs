@@ -3,7 +3,6 @@ using DynamicData;
 using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Profiles;
-using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 

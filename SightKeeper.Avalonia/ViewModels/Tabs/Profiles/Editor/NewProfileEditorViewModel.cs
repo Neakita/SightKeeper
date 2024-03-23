@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using SightKeeper.Application;
-using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 

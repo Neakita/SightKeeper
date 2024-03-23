@@ -6,9 +6,9 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
 using SightKeeper.Application.Prediction;
+using SightKeeper.Application.Prediction.Handling;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
-using SightKeeper.Services.Prediction.Handling;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Services.Windows;
+using SightKeeper.Application.Windows;
 
 namespace SightKeeper.Avalonia.Views.Windows;
 

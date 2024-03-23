@@ -3,8 +3,8 @@ using System.Numerics;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Prediction;
-using SightKeeper.Services.Prediction.Handling.MouseMoving;
-using SightKeeper.Services.Prediction.Handling.MouseMoving.Decorators;
+using SightKeeper.Application.Prediction.Handling.MouseMoving;
+using SightKeeper.Application.Prediction.Handling.MouseMoving.Decorators;
 
 namespace SightKeeper.Services.Tests;
 

@@ -30,7 +30,6 @@
     <ItemGroup>
       <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
       <ProjectReference Include="..\SightKeeper.Domain\SightKeeper.Domain.csproj" />
-      <ProjectReference Include="..\SightKeeper.Services\SightKeeper.Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>

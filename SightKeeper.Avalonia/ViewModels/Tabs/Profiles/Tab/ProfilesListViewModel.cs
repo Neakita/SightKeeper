@@ -7,7 +7,6 @@ using CommunityToolkit.Diagnostics;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Profiles;
-using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
