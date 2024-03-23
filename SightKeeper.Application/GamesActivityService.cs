@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application;
 
-public interface GamesService
+public interface GamesActivityService
 {
     bool IsGameActive(Game game);
 }

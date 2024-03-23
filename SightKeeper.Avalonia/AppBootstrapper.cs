@@ -97,7 +97,7 @@ public static class AppBootstrapper
 		builder.RegisterType<AvaloniaScreenBoundsProvider>().As<ScreenBoundsProvider>();
 		builder.RegisterType<DbScreenshotsDataAccess>().As<ScreenshotsDataAccess>();
 		builder.RegisterType<MainWindowActivityService>().As<SelfActivityService>();
-		builder.RegisterType<WindowsGamesService>().As<GamesService>();
+		builder.RegisterType<WindowsGamesActivityService>().As<GamesActivityService>();
 		builder.RegisterType<DataSetsObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetConfigurationExporter>();

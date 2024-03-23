@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Services.Windows;
 
-public sealed class WindowsGamesService : GamesService
+public sealed class WindowsGamesActivityService : GamesActivityService
 {
     public bool IsGameActive(Game game)
     {
