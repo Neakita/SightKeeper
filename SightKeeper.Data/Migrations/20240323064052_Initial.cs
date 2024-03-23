@@ -205,6 +205,7 @@ namespace SightKeeper.Data.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     DetectionThreshold = table.Column<float>(type: "REAL", nullable: false),
                     MouseSensitivity = table.Column<float>(type: "REAL", nullable: false),
+                    MouseSmoothing = table.Column<float>(type: "REAL", nullable: false),
                     PostProcessDelay = table.Column<ushort>(type: "INTEGER", nullable: false),
                     WeightsId = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -224,9 +225,9 @@ namespace SightKeeper.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false),
+                    Content = table.Column<byte[]>(type: "BLOB", nullable: false),
                     WeightsId = table.Column<long>(type: "INTEGER", nullable: false),
-                    Format = table.Column<int>(type: "INTEGER", nullable: false),
-                    Content = table.Column<byte[]>(type: "BLOB", nullable: false)
+                    Format = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -319,9 +320,11 @@ namespace SightKeeper.Data.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false),
                     ItemClassId = table.Column<long>(type: "INTEGER", nullable: false),
-                    Index = table.Column<byte>(type: "INTEGER", nullable: false),
                     ActivationCondition = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProfileId = table.Column<long>(type: "INTEGER", nullable: false)
+                    Order = table.Column<byte>(type: "INTEGER", nullable: false),
+                    ProfileId = table.Column<long>(type: "INTEGER", nullable: false),
+                    HorizontalOffset = table.Column<float>(type: "REAL", nullable: false),
+                    VerticalOffset = table.Column<float>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -369,12 +372,6 @@ namespace SightKeeper.Data.Migrations
                 name: "IX_ProfileItemClasses_ItemClassId",
                 table: "ProfileItemClasses",
                 column: "ItemClassId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProfileItemClasses_ProfileId_Index",
-                table: "ProfileItemClasses",
-                columns: new[] { "ProfileId", "Index" },
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfileItemClasses_ProfileId_ItemClassId",

@@ -12,7 +12,7 @@ using SightKeeper.Data;
 namespace SightKeeper.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240312223758_Initial")]
+    [Migration("20240323064052_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -32,16 +32,6 @@ namespace SightKeeper.Data.Migrations
                     b.Property<long>("WeightsId")
                         .HasColumnType("INTEGER");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Data", "SightKeeper.Data.DbWeightsData.Data#WeightsData", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<byte[]>("Content")
-                                .IsRequired()
-                                .HasColumnType("BLOB")
-                                .HasColumnName("Content");
-                        });
-
                     b.HasKey("Id");
 
                     b.HasIndex("WeightsId", "Format")
@@ -50,7 +40,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("WeightsData", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Asset", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Asset", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -68,7 +58,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("Assets", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.AssetsLibrary", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.AssetsLibrary", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -78,7 +68,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("AssetsLibraries", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.DataSet", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.DataSet", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -104,7 +94,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("DataSets");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.DetectorItem", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.DetectorItem", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -115,9 +105,9 @@ namespace SightKeeper.Data.Migrations
                     b.Property<long>("ItemClassId")
                         .HasColumnType("INTEGER");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Bounding", "SightKeeper.Domain.DataSets.DetectorItem.Bounding#Bounding", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Bounding", "SightKeeper.Domain.Model.DataSets.DetectorItem.Bounding#Bounding", b1 =>
                         {
-                            b1.ComplexProperty<Dictionary<string, object>>("Position", "SightKeeper.Domain.DataSets.DetectorItem.Bounding#Bounding.Position#Vector2<double>", b2 =>
+                            b1.ComplexProperty<Dictionary<string, object>>("Position", "SightKeeper.Domain.Model.DataSets.DetectorItem.Bounding#Bounding.Position#Vector2<double>", b2 =>
                                 {
                                     b2.Property<double>("X")
                                         .HasColumnType("REAL")
@@ -128,7 +118,7 @@ namespace SightKeeper.Data.Migrations
                                         .HasColumnName("BoundingYPosition");
                                 });
 
-                            b1.ComplexProperty<Dictionary<string, object>>("Size", "SightKeeper.Domain.DataSets.DetectorItem.Bounding#Bounding.Size#Vector2<double>", b2 =>
+                            b1.ComplexProperty<Dictionary<string, object>>("Size", "SightKeeper.Domain.Model.DataSets.DetectorItem.Bounding#Bounding.Size#Vector2<double>", b2 =>
                                 {
                                     b2.Property<double>("X")
                                         .HasColumnType("REAL")
@@ -149,7 +139,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("DetectorItems", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Image", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Image", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -163,7 +153,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("Images", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.ItemClass", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.ItemClass", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -185,7 +175,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("ItemClasses", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Screenshot", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Screenshot", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -200,7 +190,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("Screenshots", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.ScreenshotsLibrary", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.ScreenshotsLibrary", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -213,7 +203,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("ScreenshotsLibraries", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Weights", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Weights", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -221,13 +211,13 @@ namespace SightKeeper.Data.Migrations
                     b.Property<long?>("LibraryId")
                         .HasColumnType("INTEGER");
 
-                    b.ComplexProperty<Dictionary<string, object>>("WeightsMetrics", "SightKeeper.Domain.DataSets.Weights.WeightsMetrics#WeightsMetrics", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("WeightsMetrics", "SightKeeper.Domain.Model.DataSets.Weights.WeightsMetrics#WeightsMetrics", b1 =>
                         {
                             b1.Property<uint>("Epoch")
                                 .HasColumnType("INTEGER")
                                 .HasColumnName("Epoch");
 
-                            b1.ComplexProperty<Dictionary<string, object>>("LossMetrics", "SightKeeper.Domain.DataSets.Weights.WeightsMetrics#WeightsMetrics.LossMetrics#LossMetrics", b2 =>
+                            b1.ComplexProperty<Dictionary<string, object>>("LossMetrics", "SightKeeper.Domain.Model.DataSets.Weights.WeightsMetrics#WeightsMetrics.LossMetrics#LossMetrics", b2 =>
                                 {
                                     b2.Property<float>("BoundingLoss")
                                         .HasColumnType("REAL")
@@ -250,7 +240,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("Weights");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.WeightsLibrary", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.WeightsLibrary", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -260,7 +250,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("WeightsLibraries", (string)null);
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Game", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Game", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -281,12 +271,12 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Profiles.PreemptionSettings", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Profiles.PreemptionSettings", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Factor", "SightKeeper.Domain.Profiles.PreemptionSettings.Factor#Vector2<float>", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Factor", "SightKeeper.Domain.Model.Profiles.PreemptionSettings.Factor#Vector2<float>", b1 =>
                         {
                             b1.Property<float>("X")
                                 .HasColumnType("REAL")
@@ -302,7 +292,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("PreemptionSettings");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Profiles.Profile", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Profiles.Profile", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -315,6 +305,9 @@ namespace SightKeeper.Data.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<float>("MouseSensitivity")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("MouseSmoothing")
                         .HasColumnType("REAL");
 
                     b.Property<string>("Name")
@@ -337,7 +330,7 @@ namespace SightKeeper.Data.Migrations
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Profiles.ProfileItemClass", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Profiles.ProfileItemClass", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("INTEGER");
@@ -345,21 +338,29 @@ namespace SightKeeper.Data.Migrations
                     b.Property<int>("ActivationCondition")
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte>("Index")
+                    b.Property<long>("ItemClassId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ItemClassId")
+                    b.Property<byte>("Order")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("ProfileId")
                         .HasColumnType("INTEGER");
 
+                    b.ComplexProperty<Dictionary<string, object>>("Offset", "SightKeeper.Domain.Model.Profiles.ProfileItemClass.Offset#Vector2<float>", b1 =>
+                        {
+                            b1.Property<float>("X")
+                                .HasColumnType("REAL")
+                                .HasColumnName("HorizontalOffset");
+
+                            b1.Property<float>("Y")
+                                .HasColumnType("REAL")
+                                .HasColumnName("VerticalOffset");
+                        });
+
                     b.HasKey("Id");
 
                     b.HasIndex("ItemClassId");
-
-                    b.HasIndex("ProfileId", "Index")
-                        .IsUnique();
 
                     b.HasIndex("ProfileId", "ItemClassId")
                         .IsUnique();
@@ -384,24 +385,45 @@ namespace SightKeeper.Data.Migrations
 
             modelBuilder.Entity("SightKeeper.Data.DbWeightsData", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.Weights", "Weights")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.Weights", "Weights")
                         .WithMany()
                         .HasForeignKey("WeightsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("SightKeeper.Domain.Model.DataSets.WeightsData", "Data", b1 =>
+                        {
+                            b1.Property<long>("DbWeightsDataId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<byte[]>("Content")
+                                .IsRequired()
+                                .HasColumnType("BLOB")
+                                .HasColumnName("Content");
+
+                            b1.HasKey("DbWeightsDataId");
+
+                            b1.ToTable("WeightsData");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DbWeightsDataId");
+                        });
+
+                    b.Navigation("Data")
+                        .IsRequired();
+
                     b.Navigation("Weights");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Asset", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Asset", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.Screenshot", "Screenshot")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.Screenshot", "Screenshot")
                         .WithOne("Asset")
-                        .HasForeignKey("SightKeeper.Domain.DataSets.Asset", "Id")
+                        .HasForeignKey("SightKeeper.Domain.Model.DataSets.Asset", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SightKeeper.Domain.DataSets.AssetsLibrary", "Library")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.AssetsLibrary", "Library")
                         .WithMany("_assets")
                         .HasForeignKey("LibraryId");
 
@@ -410,35 +432,35 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("Screenshot");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.AssetsLibrary", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.AssetsLibrary", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.DataSet", "DataSet")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.DataSet", "DataSet")
                         .WithOne("Assets")
-                        .HasForeignKey("SightKeeper.Domain.DataSets.AssetsLibrary", "Id")
+                        .HasForeignKey("SightKeeper.Domain.Model.DataSets.AssetsLibrary", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DataSet");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.DataSet", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.DataSet", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Game", "Game")
+                    b.HasOne("SightKeeper.Domain.Model.Game", "Game")
                         .WithMany()
                         .HasForeignKey("GameId");
 
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.DetectorItem", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.DetectorItem", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.Asset", "Asset")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.Asset", "Asset")
                         .WithMany("Items")
                         .HasForeignKey("AssetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SightKeeper.Domain.DataSets.ItemClass", "ItemClass")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.ItemClass", "ItemClass")
                         .WithMany("Items")
                         .HasForeignKey("ItemClassId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -449,18 +471,18 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("ItemClass");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Image", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Image", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.Screenshot", null)
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.Screenshot", null)
                         .WithOne()
-                        .HasForeignKey("SightKeeper.Domain.DataSets.Image", "Id")
+                        .HasForeignKey("SightKeeper.Domain.Model.DataSets.Image", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.ItemClass", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.ItemClass", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.DataSet", "DataSet")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.DataSet", "DataSet")
                         .WithMany("ItemClasses")
                         .HasForeignKey("DataSetId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -469,55 +491,55 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("DataSet");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Screenshot", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Screenshot", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.ScreenshotsLibrary", "Library")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.ScreenshotsLibrary", "Library")
                         .WithMany("_screenshots")
                         .HasForeignKey("LibraryId");
 
                     b.Navigation("Library");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.ScreenshotsLibrary", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.ScreenshotsLibrary", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.DataSet", "DataSet")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.DataSet", "DataSet")
                         .WithOne("Screenshots")
-                        .HasForeignKey("SightKeeper.Domain.DataSets.ScreenshotsLibrary", "Id")
+                        .HasForeignKey("SightKeeper.Domain.Model.DataSets.ScreenshotsLibrary", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DataSet");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Weights", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Weights", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.WeightsLibrary", "Library")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.WeightsLibrary", "Library")
                         .WithMany("_weights")
                         .HasForeignKey("LibraryId");
 
                     b.Navigation("Library");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.WeightsLibrary", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.WeightsLibrary", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.DataSet", "DataSet")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.DataSet", "DataSet")
                         .WithOne("Weights")
-                        .HasForeignKey("SightKeeper.Domain.DataSets.WeightsLibrary", "Id")
+                        .HasForeignKey("SightKeeper.Domain.Model.DataSets.WeightsLibrary", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("DataSet");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Profiles.PreemptionSettings", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Profiles.PreemptionSettings", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.Profiles.Profile", null)
+                    b.HasOne("SightKeeper.Domain.Model.Profiles.Profile", null)
                         .WithOne("PreemptionSettings")
-                        .HasForeignKey("SightKeeper.Domain.Profiles.PreemptionSettings", "Id")
+                        .HasForeignKey("SightKeeper.Domain.Model.Profiles.PreemptionSettings", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("SightKeeper.Domain.Profiles.StabilizationSettings", "StabilizationSettings", b1 =>
+                    b.OwnsOne("SightKeeper.Domain.Model.Profiles.StabilizationSettings", "StabilizationSettings", b1 =>
                         {
                             b1.Property<long>("PreemptionSettingsId")
                                 .HasColumnType("INTEGER");
@@ -541,9 +563,9 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("StabilizationSettings");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Profiles.Profile", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Profiles.Profile", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.Weights", "Weights")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.Weights", "Weights")
                         .WithMany()
                         .HasForeignKey("WeightsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -552,15 +574,15 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("Weights");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Profiles.ProfileItemClass", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Profiles.ProfileItemClass", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.ItemClass", "ItemClass")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.ItemClass", "ItemClass")
                         .WithMany()
                         .HasForeignKey("ItemClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SightKeeper.Domain.Profiles.Profile", null)
+                    b.HasOne("SightKeeper.Domain.Model.Profiles.Profile", null)
                         .WithMany("ItemClasses")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -571,13 +593,13 @@ namespace SightKeeper.Data.Migrations
 
             modelBuilder.Entity("WeightsItemClasses", b =>
                 {
-                    b.HasOne("SightKeeper.Domain.DataSets.ItemClass", "ItemClass")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.ItemClass", "ItemClass")
                         .WithMany()
                         .HasForeignKey("ItemClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SightKeeper.Domain.DataSets.Weights", "Weights")
+                    b.HasOne("SightKeeper.Domain.Model.DataSets.Weights", "Weights")
                         .WithMany()
                         .HasForeignKey("WeightsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -588,17 +610,17 @@ namespace SightKeeper.Data.Migrations
                     b.Navigation("Weights");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Asset", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Asset", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.AssetsLibrary", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.AssetsLibrary", b =>
                 {
                     b.Navigation("_assets");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.DataSet", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.DataSet", b =>
                 {
                     b.Navigation("Assets")
                         .IsRequired();
@@ -612,27 +634,27 @@ namespace SightKeeper.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.ItemClass", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.ItemClass", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.Screenshot", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.Screenshot", b =>
                 {
                     b.Navigation("Asset");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.ScreenshotsLibrary", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.ScreenshotsLibrary", b =>
                 {
                     b.Navigation("_screenshots");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.DataSets.WeightsLibrary", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.DataSets.WeightsLibrary", b =>
                 {
                     b.Navigation("_weights");
                 });
 
-            modelBuilder.Entity("SightKeeper.Domain.Profiles.Profile", b =>
+            modelBuilder.Entity("SightKeeper.Domain.Model.Profiles.Profile", b =>
                 {
                     b.Navigation("ItemClasses");
 
