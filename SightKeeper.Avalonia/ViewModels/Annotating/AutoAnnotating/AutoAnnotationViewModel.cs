@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using SightKeeper.Application.Prediction;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 
@@ -66,8 +67,7 @@ public sealed partial class AutoAnnotationViewModel : ViewModel, IAutoAnnotation
     private async Task Annotate(CancellationToken cancellationToken)
     {
         Guard.IsNotNull(_selectedScreenshotViewModel.Value);
-        var screenshotContent = _selectedScreenshotViewModel.Value.Image;
-        var image = await screenshotContent;
+        var image = _selectedScreenshotViewModel.Value.Image;
         var items = await _detector.DetectAsync(image.Content, cancellationToken);
         _selectedScreenshotViewModel.DetectedItems.Clear();
         _selectedScreenshotViewModel.DetectedItems.AddRange(items.Select(CreateDetectedItemViewModel));

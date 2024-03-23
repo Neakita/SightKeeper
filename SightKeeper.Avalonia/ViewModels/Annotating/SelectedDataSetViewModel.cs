@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using DynamicData;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -13,18 +14,17 @@ public sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
 
     public SelectedDataSetViewModel(WeightsDataAccess weightsDataAccess) : base(null)
     {
-        _weightsDataAccess = weightsDataAccess;
         _weights.Connect()
             .Bind(out var weights)
             .Subscribe()
-            .DisposeWithEx(_disposable);
+            .DisposeWith(_disposable);
         Weights = weights;
         weightsDataAccess.WeightsCreated
             .Subscribe(newWeights => _weights.Add(newWeights))
-            .DisposeWithEx(_disposable);
-        weightsDataAccess.WeightsDeleted
+            .DisposeWith(_disposable);
+        weightsDataAccess.WeightsRemoved
             .Subscribe(deletedWeights => _weights.Remove(deletedWeights))
-            .DisposeWithEx(_disposable);
+            .DisposeWith(_disposable);
     }
 
     public override void Dispose()
@@ -40,11 +40,9 @@ public sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
         if (newValue == null)
             return;
         // TODO do it asynchronously somehow
-        _weightsDataAccess.LoadWeights(newValue.DataSet.Weights);
-        _weights.AddRange(newValue.DataSet.Weights.Weights);
+        _weights.AddRange(newValue.DataSet.Weights);
     }
 
-    private readonly WeightsDataAccess _weightsDataAccess;
     private readonly SourceList<Weights> _weights = new();
     private readonly CompositeDisposable _disposable = new();
 }

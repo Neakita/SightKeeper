@@ -2,6 +2,8 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -9,21 +11,21 @@ public sealed class ScreenshotViewModel
 {
     public Screenshot Item { get; }
 
-    public Task<Image> Image => _imageLoader.LoadAsync(Item);
+    public Image Image => _screenshotsDataAccess.LoadImage(Item);
 
     public bool IsAsset => _isAssetSubject.Value;
     public IObservable<bool> IsAssetObservable => _isAssetSubject.AsObservable();
 
     public DateTime CreationDate => Item.CreationDate;
 
-    public ScreenshotViewModel(ScreenshotImageLoader imageLoader, Screenshot item)
+    public ScreenshotViewModel(ScreenshotsDataAccess screenshotsDataAccess, Screenshot item)
     {
-        _imageLoader = imageLoader;
+        _screenshotsDataAccess = screenshotsDataAccess;
         Item = item;
         _isAssetSubject = new BehaviorSubject<bool>(item.Asset != null);
     }
     
-    private readonly ScreenshotImageLoader _imageLoader;
+    private readonly ScreenshotsDataAccess _screenshotsDataAccess;
     private readonly BehaviorSubject<bool> _isAssetSubject;
 
     public void NotifyIsAssetChanged()

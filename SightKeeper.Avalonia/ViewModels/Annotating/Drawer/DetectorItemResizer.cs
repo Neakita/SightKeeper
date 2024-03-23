@@ -23,11 +23,6 @@ public sealed class DetectorItemResizer
         private readonly Action<BoundingViewModel, Vector> _updateBoundingDelegate;
     }
     
-    public DetectorItemResizer(DetectorAnnotator annotator)
-    {
-        _annotator = annotator;
-    }
-    
     public void BeginResize(DetectorItemViewModel item, ResizeDirection direction)
     {
         Guard.IsNull(_data);
@@ -46,11 +41,9 @@ public sealed class DetectorItemResizer
         var item = _data.Item.Item;
         Guard.IsNotNull(item);
         _data.Item.Bounding.Synchronize();
-        _annotator.Move(item, _data.Item.Bounding.Bounding);
         _data = null;
     }
-    
-    private readonly DetectorAnnotator _annotator;
+
     private ResizingData? _data;
 
     private Action<BoundingViewModel, Vector> GetBoundingUpdateDelegate(ResizeDirection direction) => direction switch
@@ -117,7 +110,6 @@ public sealed class DetectorItemResizer
 
     private static void UpdateAll(BoundingViewModel bounding, Vector delta)
     {
-
         bounding.SetFromTwoPositions(
             Math.Clamp(bounding.Left + delta.X, 0, 1 - bounding.Width),
             Math.Clamp(bounding.Top + delta.Y, 0, 1 - bounding.Height),

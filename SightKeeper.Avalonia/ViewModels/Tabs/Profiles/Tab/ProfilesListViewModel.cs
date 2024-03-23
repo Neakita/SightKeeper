@@ -6,6 +6,7 @@ using System.Threading;
 using CommunityToolkit.Diagnostics;
 using DynamicData;
 using SightKeeper.Application;
+using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
@@ -20,15 +21,15 @@ public sealed class ProfilesListViewModel : IDisposable
             .Transform(profile => new ProfileViewModel(profile))
             .AddKey(profile => profile.Profile)
             .PopulateInto(_profileViewModels)
-            .DisposeWithEx(_constructorDisposables);
+            .DisposeWith(_constructorDisposables);
         Guard.IsNotNull(SynchronizationContext.Current);
         _profileViewModels.Connect()
             .ObserveOn(SynchronizationContext.Current)
             .Bind(out var profileViewModels)
             .Subscribe()
-            .DisposeWithEx(_constructorDisposables);
+            .DisposeWith(_constructorDisposables);
         ProfileViewModels = profileViewModels;
-        profileEditor.ProfileEdited.Subscribe(OnProfileEdited).DisposeWithEx(_constructorDisposables);
+        profileEditor.ProfileEdited.Subscribe(OnProfileEdited).DisposeWith(_constructorDisposables);
     }
 
     private void OnProfileEdited(Profile editedProfile) =>

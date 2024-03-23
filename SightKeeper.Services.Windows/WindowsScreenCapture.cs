@@ -1,5 +1,4 @@
 ﻿using System.Drawing.Imaging;
-using CommunityToolkit.Diagnostics;
 using Serilog.Events;
 using SerilogTimings;
 using SightKeeper.Application;

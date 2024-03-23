@@ -3,6 +3,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using CommunityToolkit.Diagnostics;
 using Serilog;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.Misc.Converters;
 
@@ -17,15 +18,15 @@ public sealed class ItemClassActivationConditionToBoolConverter : IValueConverte
     {
         if (value == null)
             return null;
-        if (value is not ItemClassActivationCondition itemClassActivationCondition)
-            return ThrowHelper.ThrowArgumentException<object>(nameof(value), $"Expected an \"{typeof(ItemClassActivationCondition)}\", but got \"{value}\" of type \"{value.GetType()}\"");
+        if (value is not ActivationCondition itemClassActivationCondition)
+            return ThrowHelper.ThrowArgumentException<object>(nameof(value), $"Expected an \"{typeof(ActivationCondition)}\", but got \"{value}\" of type \"{value.GetType()}\"");
         if (targetType != typeof(bool?))
             return ThrowHelper.ThrowArgumentException<object>(nameof(targetType), $"Expected target type \"{typeof(bool?)}\" but got \"{targetType}\"");
         bool? result = itemClassActivationCondition switch
         {
-            ItemClassActivationCondition.None => false,
-            ItemClassActivationCondition.IsShooting => true,
-            ItemClassActivationCondition.IsNotShooting => null,
+            ActivationCondition.None => false,
+            ActivationCondition.IsShooting => true,
+            ActivationCondition.IsNotShooting => null,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>(
                 nameof(itemClassActivationCondition),
                 itemClassActivationCondition,
@@ -37,14 +38,14 @@ public sealed class ItemClassActivationConditionToBoolConverter : IValueConverte
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (targetType != typeof(ItemClassActivationCondition))
-            return ThrowHelper.ThrowArgumentException<object>(nameof(targetType), $"Expected target type \"{typeof(ItemClassActivationCondition)}\" but got \"{targetType}\"");
+        if (targetType != typeof(ActivationCondition))
+            return ThrowHelper.ThrowArgumentException<object>(nameof(targetType), $"Expected target type \"{typeof(ActivationCondition)}\" but got \"{targetType}\"");
         var result = value switch
         {
-            true => ItemClassActivationCondition.IsShooting,
-            false => ItemClassActivationCondition.None,
-            null => ItemClassActivationCondition.IsNotShooting,
-            _ => ThrowHelper.ThrowArgumentException<ItemClassActivationCondition>(
+            true => ActivationCondition.IsShooting,
+            false => ActivationCondition.None,
+            null => ActivationCondition.IsNotShooting,
+            _ => ThrowHelper.ThrowArgumentException<ActivationCondition>(
                 nameof(value), $"Expected value of type \"{typeof(bool)}\", but got \"{value}\" of type \"{value.GetType()}\"")
         };
         _logger.Debug("Converted \"{Value}\" to \"{Result}\"", value, result);

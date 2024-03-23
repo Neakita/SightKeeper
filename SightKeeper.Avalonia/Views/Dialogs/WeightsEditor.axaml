@@ -40,11 +40,11 @@
                 <DataGridTextColumn Header="Epoch"
                                     Binding="{Binding WeightsMetrics.Epoch}"/>
                 <DataGridTextColumn Header="Bounding loss"
-                                    Binding="{Binding WeightsMetrics.BoundingLoss}"/>
+                                    Binding="{Binding WeightsMetrics.LossMetrics.BoundingLoss}"/>
                 <DataGridTextColumn Header="Classification loss"
-                                    Binding="{Binding WeightsMetrics.ClassificationLoss}"/>
+                                    Binding="{Binding WeightsMetrics.LossMetrics.ClassificationLoss}"/>
                 <DataGridTextColumn Header="Deformation loss"
-                                    Binding="{Binding WeightsMetrics.DeformationLoss}"/>
+                                    Binding="{Binding WeightsMetrics.LossMetrics.DeformationLoss}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

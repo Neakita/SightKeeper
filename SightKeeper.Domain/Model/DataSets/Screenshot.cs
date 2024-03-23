@@ -20,4 +20,10 @@ public sealed class Screenshot
 		Library.DataSet.Assets.AddAsset(Asset);
 		return Asset;
 	}
+
+	public void DeleteAsset()
+	{
+		Guard.IsNotNull(Asset);
+		Library.DataSet.Assets.DeleteAsset(Asset);
+	}
 }

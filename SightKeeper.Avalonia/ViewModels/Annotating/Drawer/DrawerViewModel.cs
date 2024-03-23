@@ -34,21 +34,17 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
 
     public DrawerViewModel(
         AnnotatorToolsViewModel tools,
-        DetectorAnnotator annotator,
         DetectorItemResizer resizer,
-        AssetsDataAccess assetsDataAccess,
         SelectedScreenshotViewModel selectedScreenshotViewModel)
     {
         SelectedScreenshotViewModel = selectedScreenshotViewModel;
         _resizer = resizer;
         _tools = tools;
-        _annotator = annotator;
         selectedScreenshotViewModel.ObservableValue.Subscribe(_ =>
         {
             var asset = SelectedScreenshotViewModel.Value?.Item.Asset;
             if (asset == null)
                 return;
-            assetsDataAccess.LoadItemsAsync(asset);
             foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer, this)))
                 SelectedScreenshotViewModel.DetectorItems.Add(item);
         }).DisposeWith(_disposable);
@@ -57,14 +53,16 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
         {
             Guard.IsNotNull(SelectedScreenshotViewModel.Value);
             SelectedScreenshotViewModel.DetectedItems.Remove(item);
-            var detectorItem = _annotator.Annotate(SelectedScreenshotViewModel.Value.Item, item.Tag, item.Bounding.Bounding);
+            var asset = SelectedScreenshotViewModel.Value.Item.Asset ??
+                        SelectedScreenshotViewModel.Value.Item.MakeAsset();
+            var detectorItem = asset.CreateItem(item.ItemClass, item.Bounding.Bounding);
             DetectorItemViewModel detectorItemViewModel = new(detectorItem, resizer, this)
             {
                 IsThumbsVisible = IsItemSelectionEnabled
             };
             SelectedScreenshotViewModel.DetectorItems.Add(detectorItemViewModel);
             SelectedScreenshotViewModel.Value.NotifyIsAssetChanged();
-        }).DisposeWithEx(_disposable);
+        }).DisposeWith(_disposable);
     }
     
     public void BeginDrawing(Point startPosition)
@@ -100,7 +98,8 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
             return;
         }
         boundingViewModel.Synchronize();
-        _drawingData.ItemViewModel.Item = _annotator.Annotate(screenshot.Item, _tools.SelectedItemClass, boundingViewModel.Bounding);
+        var asset = screenshot.Item.Asset ?? screenshot.Item.MakeAsset();
+        _drawingData.ItemViewModel.Item = asset.CreateItem(_tools.SelectedItemClass, boundingViewModel.Bounding);
         screenshot.NotifyIsAssetChanged();
         _drawingData = null;
     }
@@ -110,7 +109,6 @@ public sealed partial class DrawerViewModel : ViewModel, IDisposable
     public void Dispose() => _disposable.Dispose();
 
     private readonly AnnotatorToolsViewModel _tools;
-    private readonly DetectorAnnotator _annotator;
     private readonly DetectorItemResizer _resizer;
     private readonly CompositeDisposable _disposable = new();
     private DrawingData? _drawingData;

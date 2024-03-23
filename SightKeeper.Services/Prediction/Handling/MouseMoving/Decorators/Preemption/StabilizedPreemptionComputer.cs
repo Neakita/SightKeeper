@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using CommunityToolkit.Diagnostics;
-using Serilog;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Services.Extensions;
 

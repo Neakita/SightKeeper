@@ -3,8 +3,9 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
-public sealed class WeightsLibrary : IEnumerable<Weights>
+public sealed class WeightsLibrary : IReadOnlyCollection<Weights>
 {
+	public int Count => _weights.Count;
     public DataSet DataSet { get; }
 
     public WeightsLibrary(DataSet dataSet)

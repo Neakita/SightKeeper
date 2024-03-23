@@ -14,7 +14,7 @@ public interface IDataSetEditorViewModel
     IReadOnlyCollection<EditableItemClass> ItemClasses { get; }
     string NewItemClassName { get; set; }
     Game? Game { get; set; }
-    Task<IReadOnlyCollection<Game>> Games { get; }
+    IReadOnlyCollection<Game> Games { get; }
     
     ICommand AddItemClassCommand { get; }
     ICommand DeleteItemClassCommand { get; }

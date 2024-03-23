@@ -52,7 +52,7 @@ public sealed class SelectedScreenshotViewModel : ValueViewModel<ScreenshotViewM
                 .Bind(out var detectedItems))
             .Bind(out var items)
             .Subscribe()
-            .DisposeWithEx(_disposable);
+            .DisposeWith(_disposable);
         _bothItems = items;
         _detectorItems = detectorItems;
         _detectedItems = detectedItems;

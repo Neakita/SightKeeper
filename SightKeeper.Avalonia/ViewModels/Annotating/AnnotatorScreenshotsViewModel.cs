@@ -14,6 +14,8 @@ using DynamicData.Aggregation;
 using DynamicData.Binding;
 using ReactiveUI;
 using Serilog;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -64,7 +66,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivata
 
     [ObservableProperty] private SortingRule<Screenshot> _sortingRule;
 
-    public AnnotatorScreenshotsViewModel(ScreenshotImageLoader imageLoader, ScreenshotsDataAccess screenshotsDataAccess, SelectedScreenshotViewModel selectedScreenshotViewModel)
+    public AnnotatorScreenshotsViewModel(ScreenshotsDataAccess screenshotsDataAccess, SelectedScreenshotViewModel selectedScreenshotViewModel)
     {
         SelectedScreenshotViewModel = selectedScreenshotViewModel;
         _screenshotsDataAccess = screenshotsDataAccess;
@@ -73,7 +75,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivata
             .Select(rule => rule.Comparer);
         _screenshotsSource.Connect()
             .Sort(sortingRule)
-            .Transform(screenshot => new ScreenshotViewModel(imageLoader, screenshot))
+            .Transform(screenshot => new ScreenshotViewModel(screenshotsDataAccess, screenshot))
             .Bind(out var screenshots)
             .PopulateInto(_screenshotViewModels);
         TotalScreenshotsCount = _screenshotsSource.Connect().Count();
@@ -103,7 +105,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivata
     private void OnActivated(CompositeDisposable disposable)
     {
         _logger.Debug("Activated");
-        Disposable.Create(OnDeactivated).DisposeWithEx(disposable);
+        Disposable.Create(OnDeactivated).DisposeWith(disposable);
         UpdateVisibleScreenshotsCategory();
     }
     
@@ -162,8 +164,7 @@ public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivata
     private async void LoadScreenshots(DataSet dataSet)
     {
         IsLoading = true;
-        var screenshots = await _screenshotsDataAccess.Load(dataSet.Screenshots);
-        _screenshotsSource.AddRange(screenshots);
+        _screenshotsSource.AddRange(dataSet.Screenshots);
         IsLoading = false;
     }
 

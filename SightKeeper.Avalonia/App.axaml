@@ -4,6 +4,7 @@
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:local="clr-namespace:SightKeeper.Avalonia"
              xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
+             xmlns:dataSets="clr-namespace:SightKeeper.Domain.Model.DataSets;assembly=SightKeeper.Domain"
              RequestedThemeVariant="Dark">
 
     <Application.Resources>
@@ -24,7 +25,7 @@
 
     <Application.DataTemplates>
         <local:ViewLocator/>
-        <DataTemplate DataType="model:Weights">
+        <DataTemplate DataType="dataSets:Weights">
             <Panel Background="Transparent">
                 <TextBlock>
                     <Run Text="{Binding CreationDate, StringFormat=d}"/>
@@ -35,13 +36,13 @@
                          Foreground="DarkGray"/>
                     <Run Text="{Binding WeightsMetrics.Epoch}"/>
                     <LineBreak/>
-                    <Run Text="{Binding WeightsMetrics.BoundingLoss, StringFormat=0.##}"/>
+                    <Run Text="{Binding WeightsMetrics.LossMetrics.BoundingLoss, StringFormat=0.##}"/>
                     <Run Text="|"
                          Foreground="DarkGray"/>
-                    <Run Text="{Binding WeightsMetrics.ClassificationLoss, StringFormat=0.##}"/>
+                    <Run Text="{Binding WeightsMetrics.LossMetrics.ClassificationLoss, StringFormat=0.##}"/>
                     <Run Text="|"
                          Foreground="DarkGray"/>
-                    <Run Text="{Binding WeightsMetrics.DeformationLoss, StringFormat=0.##}"/>
+                    <Run Text="{Binding WeightsMetrics.LossMetrics.DeformationLoss, StringFormat=0.##}"/>
                 </TextBlock>
                 <ToolTip.Tip>
                     <TextBlock>
@@ -63,17 +64,17 @@
                         <Run Text="  "/>
                         <Run Text="Bounding"
                              Foreground="DarkGray"/>
-                        <Run Text="{Binding WeightsMetrics.BoundingLoss, StringFormat=0.##}"/>
+                        <Run Text="{Binding WeightsMetrics.LossMetrics.BoundingLoss, StringFormat=0.##}"/>
                         <LineBreak/>
                         <Run Text="  "/>
                         <Run Text="Classification"
                              Foreground="DarkGray"/>
-                        <Run Text="{Binding WeightsMetrics.ClassificationLoss, StringFormat=0.##}"/>
+                        <Run Text="{Binding WeightsMetrics.LossMetrics.ClassificationLoss, StringFormat=0.##}"/>
                         <LineBreak/>
                         <Run Text="  "/>
                         <Run Text="Deformation"
                              Foreground="DarkGray"/>
-                        <Run Text="{Binding WeightsMetrics.DeformationLoss, StringFormat=0.##}"/>
+                        <Run Text="{Binding WeightsMetrics.LossMetrics.DeformationLoss, StringFormat=0.##}"/>
                     </TextBlock>
                 </ToolTip.Tip>
             </Panel>

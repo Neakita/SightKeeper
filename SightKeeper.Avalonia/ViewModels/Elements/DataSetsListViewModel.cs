@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using DynamicData;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
@@ -20,10 +21,10 @@ public sealed class DataSetsListViewModel : ViewModel, IDisposable
             .AddKey(viewModel => viewModel.DataSet)
             .Bind(out var dataSets)
             .PopulateInto(_cache)
-            .DisposeWithEx(_disposable);
+            .DisposeWith(_disposable);
         editor.DataSetEdited
             .Subscribe(OnDataSetEdited)
-            .DisposeWithEx(_disposable);
+            .DisposeWith(_disposable);
         DataSets = dataSets;
     }
 

@@ -5,6 +5,7 @@ using Autofac;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Avalonia.Extensions;
@@ -39,7 +40,7 @@ public sealed partial class DataSetsViewModel : ViewModel
 		var viewModel = scope.Resolve<DataSetCreatingViewModel>();
 		var applied = await viewModel.ShowDialog(this);
 		if (applied)
-			await _dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(viewModel));
+			_dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(viewModel));
 	}
 
 	[RelayCommand(CanExecute = nameof(CanEditDataSet))]
@@ -57,11 +58,11 @@ public sealed partial class DataSetsViewModel : ViewModel
 	private bool CanEditDataSet() => SelectedDataSetViewModel != null;
 
 	[RelayCommand(CanExecute = nameof(CanDeleteDataSet))]
-	private async Task DeleteDataSet(CancellationToken cancellationToken)
+	private void DeleteDataSet()
 	{
 		Guard.IsNotNull(SelectedDataSetViewModel);
 		Guard.IsNotNull(_dataSetsDataAccess);
-		await _dataSetsDataAccess.RemoveDataSet(SelectedDataSetViewModel.DataSet, cancellationToken);
+		_dataSetsDataAccess.RemoveDataSet(SelectedDataSetViewModel.DataSet);
 		OnPropertyChanged(nameof(DataSetsViewModels));
 	}
 
@@ -72,7 +73,7 @@ public sealed partial class DataSetsViewModel : ViewModel
 	{
 		Guard.IsNotNull(SelectedDataSetViewModel);
 		var dialogViewModel = _scope.Resolve<WeightsEditorViewModel>();
-		await dialogViewModel.SetLibrary(SelectedDataSetViewModel.DataSet.Weights);
+		dialogViewModel.SetLibrary(SelectedDataSetViewModel.DataSet.Weights);
 		await dialogViewModel.ShowDialog(this);
 	}
 

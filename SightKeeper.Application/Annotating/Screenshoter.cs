@@ -1,5 +1,4 @@
-﻿using SightKeeper.Domain;
-using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Services;
 

@@ -1,5 +1,4 @@
-﻿using SightKeeper.Domain;
-using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.DataSets.Editing;

@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -13,13 +14,13 @@ public sealed partial class DetectedItemViewModel : ViewModel, DrawerItem
 
     public bool IsDashed => true;
     public BoundingViewModel Bounding { get; }
-    public Tag Tag { get; }
+    public ItemClass ItemClass { get; }
     public float Probability { get; }
 
-    public DetectedItemViewModel(BoundingViewModel bounding, Tag tag,  float probability)
+    public DetectedItemViewModel(BoundingViewModel bounding, ItemClass itemClass,  float probability)
     {
         Bounding = bounding;
-        Tag = tag;
+        ItemClass = itemClass;
         Probability = probability;
     }
 

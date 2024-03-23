@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
@@ -25,11 +26,10 @@ public sealed partial class WeightsEditorViewModel : DialogViewModel, IWeightsEd
         Weights = weights;
     }
 
-    public async Task SetLibrary(WeightsLibrary weightsLibrary, CancellationToken cancellationToken = default)
+    public void SetLibrary(WeightsLibrary weightsLibrary)
     {
-        await _weightsDataAccess.LoadWeightsAsync(weightsLibrary, cancellationToken);
         _weightsSource.Clear();
-        _weightsSource.AddRange(weightsLibrary.Weights);
+        _weightsSource.AddRange(weightsLibrary);
     }
 
     private readonly WeightsDataAccess _weightsDataAccess;
@@ -38,10 +38,10 @@ public sealed partial class WeightsEditorViewModel : DialogViewModel, IWeightsEd
 
     ICommand IWeightsEditorViewModel.DeleteSelectedWeightsCommand => DeleteSelectedWeightsCommand;
     [RelayCommand(CanExecute = nameof(CanDeleteSelectedWeights))]
-    private async Task DeleteSelectedWeights(CancellationToken cancellationToken)
+    private void DeleteSelectedWeights(CancellationToken cancellationToken)
     {
         Guard.IsNotNull(SelectedWeights);
-        await _weightsDataAccess.DeleteWeights(SelectedWeights, cancellationToken);
+        _weightsDataAccess.RemoveWeights(SelectedWeights);
         _weightsSource.Remove(SelectedWeights);
     }
 

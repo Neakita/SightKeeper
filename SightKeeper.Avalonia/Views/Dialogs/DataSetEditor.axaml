@@ -32,7 +32,7 @@
                     
                     <ComboBox Grid.Row="0" Grid.Column="0"
                               SelectedItem="{Binding Game}"
-                              ItemsSource="{Binding Games^}"
+                              ItemsSource="{Binding Games}"
                               PlaceholderText="Game"
                               HorizontalAlignment="Stretch"
                               Margin="0 0 10 10"/>

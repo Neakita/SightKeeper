@@ -6,6 +6,7 @@
              xmlns:i="using:Avalonia.Xaml.Interactivity"
              xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
              xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
+             xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Tabs.SettingsTab"
              x:DataType="viewModels:ISettingsViewModel">
@@ -29,7 +30,7 @@
                       DataContext="{Binding RegisteredGamesViewModel}">
                 <Grid RowDefinitions="50, *" ColumnDefinitions="*, 80, 80">
                     <ComboBox Name="GameToAddComboBox" Grid.Row="0" Grid.Column="0"
-                              ItemsSource="{Binding AvailableToAddGames^}"
+                              ItemsSource="{Binding AvailableToAddGames}"
                               VerticalAlignment="Center"
                               HorizontalAlignment="Stretch"
                               SelectedItem="{Binding SelectedToAddGame}">
@@ -47,7 +48,7 @@
                     <Button Grid.Row="0" Grid.Column="1" Content="Add"
                             Command="{Binding AddGameCommand}"/>
                     <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
-                              ItemsSource="{Binding RegisteredGames^}"
+                              ItemsSource="{Binding RegisteredGames}"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
                               Height="300"

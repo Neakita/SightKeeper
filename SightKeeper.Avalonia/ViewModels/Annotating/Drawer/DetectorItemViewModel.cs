@@ -35,22 +35,22 @@ public sealed partial class DetectorItemViewModel : ViewModel, DrawerItem
         Item = item;
         Resizer = resizer;
         Drawer = drawer;
-        _tag = item.Tag;
+        _itemClass = item.ItemClass;
         Bounding = new BoundingViewModel(item.Bounding);
     }
 
-    public DetectorItemViewModel(Tag tag, Point position, DetectorItemResizer resizer, DrawerViewModel drawer)
+    public DetectorItemViewModel(ItemClass itemClass, Point position, DetectorItemResizer resizer, DrawerViewModel drawer)
     {
         Resizer = resizer;
         Drawer = drawer;
-        _tag = tag;
+        _itemClass = itemClass;
         Bounding = new BoundingViewModel(position);
     }
 
     private DetectorItem? _item;
-    [ObservableProperty] private Tag _tag;
+    [ObservableProperty] private ItemClass _itemClass;
     [ObservableProperty] private bool _isThumbsVisible;
 
-    partial void OnItemClassChanged(Tag value) =>
+    partial void OnItemClassChanged(ItemClass value) =>
         ItemClassChangedSubject.OnNext(this);
 }

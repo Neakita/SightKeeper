@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using SerilogTimings;
 using SightKeeper.Data.Configuration;
-using SightKeeper.Domain;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.Profiles;

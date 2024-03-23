@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
 public interface ProfileEditorViewModel
 {
-    public static PreemptionStabilizationMethod[] PreemptionStabilizationMethods => new[]
-    {
-        Domain.Model.PreemptionStabilizationMethod.Median,
-        Domain.Model.PreemptionStabilizationMethod.Mean
-    };
+    public static StabilizationMethod[] PreemptionStabilizationMethods =>
+    [
+	    StabilizationMethod.Median,
+        StabilizationMethod.Mean
+    ];
 
     IReadOnlyCollection<DataSet> AvailableDataSets { get; }
     IReadOnlyCollection<Weights> AvailableWeights { get; }
-    IReadOnlyCollection<Tag> AvailableItemClasses { get; }
+    IReadOnlyCollection<ItemClass> AvailableItemClasses { get; }
 
     string Name { get; set; }
     string Description { get; set; }
@@ -27,11 +28,11 @@ public interface ProfileEditorViewModel
     bool PreemptionFactorsLink { get; set; }
     bool IsPreemptionStabilizationEnabled { get; set; }
     byte? PreemptionStabilizationBufferSize { get; set; }
-    PreemptionStabilizationMethod? PreemptionStabilizationMethod { get; set; }
+    StabilizationMethod? PreemptionStabilizationMethod { get; set; }
     DataSet? DataSet { get; set; }
     Weights? Weights { get; set; }
     IReadOnlyList<ProfileItemClassViewModel> ItemClasses { get; }
-    Tag? ItemClassToAdd { get; set; }
+    ItemClass? ItemClassToAdd { get; set; }
     
     ICommand AddItemClassCommand { get; }
     ICommand RemoveItemClassCommand { get; }

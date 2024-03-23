@@ -31,7 +31,7 @@
                       PlaceholderText="Size"
                       IsVisible="{Binding !Resume}"/>
             
-            <ComboBox ItemsSource="{Binding AvailableWeights^}"
+            <ComboBox ItemsSource="{Binding AvailableWeights}"
                       SelectedItem="{Binding SelectedWeights}"
                       PlaceholderText="Weights"
                       IsEnabled="{Binding !IsTraining}"

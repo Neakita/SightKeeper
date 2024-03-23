@@ -13,6 +13,7 @@ using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
@@ -27,7 +28,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
         private set => SetProperty(ref _availableWeights, value);
     }
 
-    public IReadOnlyCollection<Tag> AvailableItemClasses { get; }
+    public IReadOnlyCollection<ItemClass> AvailableItemClasses { get; }
     
     public Profile? Profile { get; protected set; }
 
@@ -117,7 +118,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
         set => SetProperty(ref _preemptionStabilizationBufferSize, value);
     }
 
-    public PreemptionStabilizationMethod? PreemptionStabilizationMethod
+    public StabilizationMethod? PreemptionStabilizationMethod
     {
         get => _preemptionStabilizationMethod;
         set => SetProperty(ref _preemptionStabilizationMethod, value);
@@ -142,7 +143,7 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
                 AvailableWeights = Array.Empty<Weights>();
             else
             {
-                AvailableWeights = value.Weights.Records;
+                AvailableWeights = value.Weights;
                 _availableItemClasses.AddRange(value.ItemClasses);
             }
         }
@@ -165,20 +166,20 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
         _itemClasses.Connect()
             .Bind(out var itemClasses)
             .Subscribe()
-            .DisposeWithEx(_constructorDisposables);
+            .DisposeWith(_constructorDisposables);
         ItemClasses = itemClasses;
         _itemClassesViewModels = itemClasses;
         _availableItemClasses.Connect()
             .Except(_itemClasses.Connect().Transform(itemClassData => itemClassData.ItemClass))
             .Bind(out var availableItemClasses)
             .Subscribe()
-            .DisposeWithEx(_constructorDisposables);
+            .DisposeWith(_constructorDisposables);
         AvailableItemClasses = availableItemClasses;
     }
 
     private readonly CompositeDisposable _constructorDisposables = new();
     protected readonly SourceList<ProfileItemClassViewModel> _itemClasses = new();
-    private readonly SourceList<Tag> _availableItemClasses = new();
+    private readonly SourceList<ItemClass> _availableItemClasses = new();
     private readonly bool _canDelete;
     private DataSet? _dataSet;
     private Weights? _weights;
@@ -188,14 +189,14 @@ public abstract partial class AbstractProfileEditorVIewModel<TProfileData> : Val
     private string _name = string.Empty;
     private IReadOnlyCollection<Weights> _availableWeights = Array.Empty<Weights>();
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
-    private Tag? _itemClassToAdd;
+    private ItemClass? _itemClassToAdd;
     private TimeSpan _postProcessDelay;
     private bool _isPreemptionEnabled;
     private float? _preemptionHorizontalFactor;
     private float? _preemptionVerticalFactor;
     private bool _isPreemptionStabilizationEnabled;
     private byte? _preemptionStabilizationBufferSize;
-    private PreemptionStabilizationMethod? _preemptionStabilizationMethod;
+    private StabilizationMethod? _preemptionStabilizationMethod;
     private bool _preemptionFactorsLink;
 
     ICommand ProfileEditorViewModel.AddItemClassCommand => AddItemClassCommand;

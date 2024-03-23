@@ -23,7 +23,7 @@ public sealed class FakeDataSetCreatingViewModel : IDataSetEditorViewModel
     };
     public string NewItemClassName { get; set; } = "New item class...";
     public Game? Game { get; set; }
-    public Task<IReadOnlyCollection<Game>> Games { get; } = Task.FromResult((IReadOnlyCollection<Game>)Array.Empty<Game>());
+    public IReadOnlyCollection<Game> Games { get; } = Array.Empty<Game>();
     public ICommand AddItemClassCommand { get; } = Substitute.For<ICommand>();
     public ICommand DeleteItemClassCommand { get; } = Substitute.For<ICommand>();
     public ICommand ApplyCommand { get; } = Substitute.For<ICommand>();

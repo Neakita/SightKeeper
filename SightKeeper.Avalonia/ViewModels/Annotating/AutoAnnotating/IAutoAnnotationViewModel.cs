@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 

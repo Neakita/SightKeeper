@@ -9,23 +9,23 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
+using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model;
-using SightKeeper.Services.Games;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 
 public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewModel<NewDataSetInfo, bool>, IDataSetEditorViewModel, NewDataSetInfo
 {
     public IReadOnlyCollection<EditableItemClass> ItemClasses => _itemClasses;
-    public Task<IReadOnlyCollection<Game>> Games => _registeredGamesService.GetRegisteredGames();
+    public IReadOnlyCollection<Game> Games => _gamesDataAccess.Games;
 
-    public DataSetCreatingViewModel(IValidator<NewDataSetInfo> validator, RegisteredGamesService registeredGamesService) : base(validator)
+    public DataSetCreatingViewModel(IValidator<NewDataSetInfo> validator, GamesDataAccess gamesDataAccess) : base(validator)
     {
-        _registeredGamesService = registeredGamesService;
+        _gamesDataAccess = gamesDataAccess;
         ErrorsChanged += OnErrorsChanged;
     }
 
@@ -43,7 +43,7 @@ public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewMode
     [ObservableProperty] private Game? _game;
 
     private readonly ObservableCollection<EditableItemClass> _itemClasses = new();
-    private readonly RegisteredGamesService _registeredGamesService;
+    private readonly GamesDataAccess _gamesDataAccess;
 
     ICommand IDataSetEditorViewModel.AddItemClassCommand => AddItemClassCommand;
     ICommand IDataSetEditorViewModel.DeleteItemClassCommand => DeleteItemClassCommand;

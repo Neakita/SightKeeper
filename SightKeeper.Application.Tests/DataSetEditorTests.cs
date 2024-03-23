@@ -3,7 +3,6 @@ using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Data.Services.DataSets;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Application.Tests;

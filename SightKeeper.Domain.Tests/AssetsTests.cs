@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Services;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Domain.Tests;

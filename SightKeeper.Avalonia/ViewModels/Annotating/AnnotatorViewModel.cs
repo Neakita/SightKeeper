@@ -45,7 +45,7 @@ public sealed class AnnotatorViewModel : ViewModel, IAnnotatorViewModel, IDispos
 		{
 			Screenshoter.DataSet = newValue?.DataSet;
 			Screenshots.DataSet = newValue?.DataSet;
-		}).DisposeWithEx(_disposable);
+		}).DisposeWith(_disposable);
 	}
 
 	public void Dispose()

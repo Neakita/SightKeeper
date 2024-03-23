@@ -1,5 +1,4 @@
-﻿using SightKeeper.Data.Services;
-using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Data.Tests;

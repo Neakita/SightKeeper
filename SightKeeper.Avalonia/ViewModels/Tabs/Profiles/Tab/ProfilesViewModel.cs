@@ -97,7 +97,7 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
                 viewModel.PreemptionStabilizationMethod,
                 viewModel.Weights,
                 viewModel.ItemClasses);
-            await _profileCreator.CreateProfile(data);
+            _profileCreator.CreateProfile(data);
         }
     }
 
@@ -126,12 +126,12 @@ public sealed partial class ProfilesViewModel : ViewModel, IProfilesViewModel
                 viewModel.IsPreemptionStabilizationEnabled,
                 viewModel.PreemptionStabilizationBufferSize,
                 viewModel.PreemptionStabilizationMethod, viewModel.Weights, viewModel.ItemClasses);
-            await _profileEditor.ApplyChanges(data);
+            _profileEditor.ApplyChanges(data);
         }
         else if (result == ProfileEditorResult.Delete)
         {
             Guard.IsNotNull(viewModel.Profile);
-            await _profilesDataAccess.RemoveProfile(viewModel.Profile);
+            _profilesDataAccess.RemoveProfile(viewModel.Profile);
         }
     }
 

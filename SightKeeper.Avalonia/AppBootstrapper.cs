@@ -30,9 +30,9 @@ using SightKeeper.Avalonia.Views.Windows;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
 using SightKeeper.Data.Services.DataSets;
+using SightKeeper.Domain.Services;
 using SightKeeper.Services;
 using SightKeeper.Services.Annotating;
-using SightKeeper.Services.Games;
 using SightKeeper.Services.Input;
 using SightKeeper.Services.Prediction;
 using SightKeeper.Services.Prediction.Handling;
@@ -81,10 +81,9 @@ public static class AppBootstrapper
 	private static void SetupServices(ContainerBuilder builder)
 	{
 		builder.RegisterType<DbGamesDataAccess>().As<GamesDataAccess>();
-		builder.RegisterType<ProcessesAvailableGamesProvider>().As<AvailableGamesProvider>();
+		builder.RegisterType<ProcessesAvailableGamesProvider>();
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>().SingleInstance();
 		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerMatchingLifetimeScope(typeof(MainViewModel), typeof(AppBootstrapper));
-		builder.RegisterType<RegisteredGamesService>();
 		builder.RegisterType<DbDataSetCreator>().As<DataSetCreator>().InstancePerMainViewModel();
 		builder.RegisterType<NewDataSetInfoValidator>().As<IValidator<NewDataSetInfo>>();
 		builder.RegisterType<DataSetInfoValidator>().As<IValidator<DataSetInfo>>();
@@ -92,23 +91,17 @@ public static class AppBootstrapper
 		builder.RegisterType<DbDataSetEditor>().As<Application.DataSets.Editing.DataSetEditor>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetChangesValidator>().As<IValidator<DataSetChanges>>();
 		builder.RegisterType<Screenshoter>();
-		builder.RegisterType<DataSetScreenshoter>();
 		builder.RegisterType<HotKeyScreenshoter>().As<StreamScreenshoter>();
 		builder.RegisterType<SharpHookHotKeyManager>().SingleInstance();
 		builder.RegisterType<WindowsScreenCapture>().As<ScreenCapture>().SingleInstance();
 		builder.RegisterType<AvaloniaScreenBoundsProvider>().As<ScreenBoundsProvider>();
 		builder.RegisterType<DbScreenshotsDataAccess>().As<ScreenshotsDataAccess>();
-		builder.RegisterType<DbDetectorAnnotator>().As<DetectorAnnotator>();
-		builder.RegisterType<DbScreenshotImageLoader>().As<ScreenshotImageLoader>();
 		builder.RegisterType<MainWindowActivityService>().As<SelfActivityService>();
 		builder.RegisterType<WindowsGamesService>().As<GamesService>();
-		builder.RegisterType<DbAssetsDataAccess>().As<AssetsDataAccess>();
-		builder.RegisterType<ImagesExporter>();
 		builder.RegisterType<DataSetsObservableRepository>().InstancePerMainViewModel();
 		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<DataSetConfigurationExporter>();
 		builder.RegisterType<Trainer>();
-		builder.RegisterType<DbItemClassDataAccess>().As<ItemClassDataAccess>();
 		builder.RegisterType<ONNXDetector>().As<Detector>();
 		builder.RegisterType<DbProfilesDataAccess>().As<ProfilesDataAccess>().InstancePerMainViewModel();
 		builder.RegisterType<ProfileCreator>();

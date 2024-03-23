@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SightKeeper.Data.Services;
+﻿using SightKeeper.Data.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Tests.Common;

@@ -1,6 +1,8 @@
-﻿using DynamicData;
+﻿using System.Linq;
+using DynamicData;
 using FluentValidation;
 using SightKeeper.Application;
+using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
@@ -24,15 +26,14 @@ public sealed class ExistingProfileEditorViewModel : AbstractProfileEditorVIewMo
         Weights = profile.Weights;
         _itemClasses.Clear();
         _itemClasses.AddRange(profile.ItemClasses
-            .OrderBy(profileItemClass => profileItemClass.Index)
-            .Select(profileItemClass => new ProfileItemClassViewModel(profileItemClass.ItemClass, profileItemClass.Index, profileItemClass.ActivationCondition)));
+            .Select(profileItemClass => new ProfileItemClassViewModel(profileItemClass.ItemClass, (byte)profile.ItemClasses.IndexOf(profileItemClass), profileItemClass.ActivationCondition)));
         
 
         if (profile.PreemptionSettings != null)
         {
             IsPreemptionEnabled = true;
-            PreemptionHorizontalFactor = profile.PreemptionSettings.HorizontalFactor;
-            PreemptionVerticalFactor = profile.PreemptionSettings.VerticalFactor;
+            PreemptionHorizontalFactor = profile.PreemptionSettings.Factor.X;
+            PreemptionVerticalFactor = profile.PreemptionSettings.Factor.Y;
             if (profile.PreemptionSettings.StabilizationSettings != null)
             {
                 IsPreemptionStabilizationEnabled = true;

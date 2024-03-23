@@ -7,8 +7,8 @@ namespace SightKeeper.Avalonia.ViewModels.Elements;
 
 public interface IRegisteredGamesViewModel
 {
-    Task<IReadOnlyCollection<Game>> RegisteredGames { get; }
-    Task<IReadOnlyCollection<Game>> AvailableToAddGames { get; }
+    IReadOnlyCollection<Game> RegisteredGames { get; }
+    IReadOnlyCollection<Game> AvailableToAddGames { get; }
     
     Game? SelectedToAddGame { get; set; }
     Game? SelectedExistingGame { get; set; }
