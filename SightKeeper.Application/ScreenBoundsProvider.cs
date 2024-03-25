@@ -1,9 +1,9 @@
-﻿namespace SightKeeper.Application;
+﻿using SightKeeper.Domain.Model;
+
+namespace SightKeeper.Application;
 
 public interface ScreenBoundsProvider
 {
-	int MainScreenWidth { get; }
-	int MainScreenHeight { get; }
-	int MainScreenHorizontalCenter => MainScreenWidth / 2;
-	int MainScreenVerticalCenter => MainScreenHeight / 2;
+	Vector2<int> MainScreenSize { get; }
+	Vector2<int> MainScreenCenter => MainScreenSize / 2;
 }

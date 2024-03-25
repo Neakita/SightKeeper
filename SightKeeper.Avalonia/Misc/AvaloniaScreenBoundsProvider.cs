@@ -4,13 +4,13 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform;
 using SightKeeper.Application;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.Misc;
 
 public sealed class AvaloniaScreenBoundsProvider : ScreenBoundsProvider
 {
-	public PixelSize MainScreenSize => PrimaryScreenBounds.Size;
-	public PixelPoint MainScreenCenter => PrimaryScreenBounds.Center;
+	public Vector2<int> MainScreenSize => new(PrimaryScreenBounds.Size.Width, PrimaryScreenBounds.Size.Height);
 
 	private PixelRect PrimaryScreenBounds => _primaryScreenBounds ??= GetPrimaryScreenBounds();
 	private PixelRect? _primaryScreenBounds;
@@ -26,7 +26,4 @@ public sealed class AvaloniaScreenBoundsProvider : ScreenBoundsProvider
 		Screen primaryScreen = mainWindow.Screens.Primary ?? throw new InvalidOperationException("Primary screen not found");
 		return primaryScreen.Bounds;
 	}
-
-	public int MainScreenWidth => MainScreenSize.Width;
-	public int MainScreenHeight => MainScreenSize.Height;
 }

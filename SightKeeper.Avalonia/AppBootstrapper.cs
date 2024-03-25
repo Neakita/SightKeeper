@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Builder;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
@@ -80,12 +79,12 @@ public static class AppBootstrapper
 		builder.RegisterType<DbGamesDataAccess>().As<GamesDataAccess>();
 		builder.RegisterType<ProcessesAvailableGamesProvider>();
 		builder.RegisterType<DefaultAppDbContextFactory>().As<AppDbContextFactory>().SingleInstance();
-		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).InstancePerMatchingLifetimeScope(typeof(MainViewModel), typeof(AppBootstrapper));
-		builder.RegisterType<DbDataSetCreator>().As<DataSetCreator>().InstancePerMainViewModel();
+		builder.Register((AppDbContextFactory dbContextFactory) => dbContextFactory.CreateDbContext()).SingleInstance();
+		builder.RegisterType<DbDataSetCreator>().As<DataSetCreator>().SingleInstance();
 		builder.RegisterType<NewDataSetInfoValidator>().As<IValidator<NewDataSetInfo>>();
 		builder.RegisterType<DataSetInfoValidator>().As<IValidator<DataSetInfo>>();
-		builder.RegisterType<DbDataSetsDataAccess>().As<DataSetsDataAccess>().InstancePerMainViewModel();
-		builder.RegisterType<DbDataSetEditor>().As<Application.DataSets.Editing.DataSetEditor>().InstancePerMainViewModel();
+		builder.RegisterType<DbDataSetsDataAccess>().As<DataSetsDataAccess>().SingleInstance();
+		builder.RegisterType<DbDataSetEditor>().As<Application.DataSets.Editing.DataSetEditor>().SingleInstance();
 		builder.RegisterType<DataSetChangesValidator>().As<IValidator<DataSetChanges>>();
 		builder.RegisterType<Screenshoter>();
 		builder.RegisterType<HotKeyScreenshoter>().As<StreamScreenshoter>();
@@ -95,17 +94,17 @@ public static class AppBootstrapper
 		builder.RegisterType<DbScreenshotsDataAccess>().As<ScreenshotsDataAccess>();
 		builder.RegisterType<MainWindowActivityService>().As<SelfActivityService>();
 		builder.RegisterType<WindowsGamesActivityService>().As<GamesActivityService>();
-		builder.RegisterType<DataSetsObservableRepository>().InstancePerMainViewModel();
-		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>().InstancePerMainViewModel();
+		builder.RegisterType<DataSetsObservableRepository>().SingleInstance();
+		builder.RegisterType<DbWeightsDataAccess>().As<WeightsDataAccess>().SingleInstance();
 		builder.RegisterType<DataSetConfigurationExporter>();
 		builder.RegisterType<Trainer>();
 		builder.RegisterType<ONNXDetector>().As<Detector>();
-		builder.RegisterType<DbProfilesDataAccess>().As<ProfilesDataAccess>().InstancePerMainViewModel();
+		builder.RegisterType<DbProfilesDataAccess>().As<ProfilesDataAccess>().SingleInstance();
 		builder.RegisterType<ProfileCreator>();
 		builder.RegisterType<ProfileDataValidator>().As<IValidator<ProfileData>>();
 		builder.RegisterType<NewProfileDataValidator>().As<IValidator<NewProfileData>>();
-		builder.RegisterType<ProfilesObservableRepository>().InstancePerMainViewModel();
-		builder.RegisterType<SightKeeper.Application.ProfileEditor>().InstancePerMainViewModel();
+		builder.RegisterType<ProfilesObservableRepository>().SingleInstance();
+		builder.RegisterType<SightKeeper.Application.ProfileEditor>().SingleInstance();
 		builder.RegisterType<EditedProfileDataValidator>().As<IValidator<EditedProfileData>>();
 		builder.RegisterType<HotKeyProfileRunner>().As<ProfileRunner>();
 		builder.RegisterType<StreamDetector>();
@@ -121,33 +120,29 @@ public static class AppBootstrapper
 		builder.RegisterType<ReactiveGlobalHookFacade>().SingleInstance();
 	}
 
-	private static void InstancePerMainViewModel<TLimit, TActivatorData, TRegistrationStyle>(
-		this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> builder) =>
-		builder.InstancePerMatchingLifetimeScope(typeof(MainViewModel));
-
 	private static void SetupViewModels(ContainerBuilder builder)
 	{
 		builder.RegisterType<MainViewModel>();
 		builder.RegisterType<DataSetCreatingViewModel>();
 
-		builder.RegisterType<AnnotatorViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<AnnotatorViewModel>().SingleInstance();
 		builder.RegisterType<DataSetsViewModel>();
 		builder.RegisterType<SettingsViewModel>();
 		builder.RegisterType<RegisteredGamesViewModel>();
-		builder.RegisterType<ScreenshoterViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<AnnotatorScreenshotsViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<AnnotatorToolsViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<DrawerViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<ScreenshoterViewModel>().SingleInstance();
+		builder.RegisterType<AnnotatorScreenshotsViewModel>().SingleInstance();
+		builder.RegisterType<AnnotatorToolsViewModel>().SingleInstance();
+		builder.RegisterType<DrawerViewModel>().SingleInstance();
 		builder.RegisterType<DetectorItemResizer>();
-		builder.RegisterType<TrainingViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<DataSetsListViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<TrainingViewModel>().SingleInstance();
+		builder.RegisterType<DataSetsListViewModel>().SingleInstance();
 		builder.RegisterType<DataSetEditingViewModel>();
 		builder.RegisterType<WeightsEditorViewModel>();
-		builder.RegisterType<SelectedDataSetViewModel>().InstancePerMainViewModel();
-		builder.RegisterType<SelectedScreenshotViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<SelectedDataSetViewModel>().SingleInstance();
+		builder.RegisterType<SelectedScreenshotViewModel>().SingleInstance();
 		builder.RegisterType<AutoAnnotationViewModel>();
 		builder.RegisterType<ViewSettingsViewModel>();
-		builder.RegisterType<ProfilesListViewModel>().InstancePerMainViewModel();
+		builder.RegisterType<ProfilesListViewModel>().SingleInstance();
 		builder.RegisterType<ProfilesViewModel>();
 		builder.RegisterType<NewProfileEditorViewModel>();
 		builder.RegisterType<ExistingProfileEditorViewModel>();

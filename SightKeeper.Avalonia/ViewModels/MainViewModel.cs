@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Disposables;
 using Autofac;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Material.Icons;
@@ -12,34 +11,29 @@ using SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels;
 
-public sealed partial class MainViewModel : ViewModel, IActivatableViewModel
+public sealed partial class MainViewModel : ViewModel
 {
 	public ViewModelActivator Activator { get; } = new();
-	public ObservableCollection<TabItem> Tabs { get; } = new();
+	public ObservableCollection<TabItem> Tabs { get; }
 
 	[ObservableProperty] private TabItem? _selectedTab;
 
 	public MainViewModel(ILifetimeScope scope)
 	{
-		this.WhenActivated(disposables =>
-		{
-			var ownScope = scope.BeginLifetimeScope(typeof(MainViewModel));
-			ownScope.DisposeWith(disposables);
-			var profilesViewModel = ownScope.Resolve<ProfilesViewModel>();
-			var dataSetsViewModel = ownScope.Resolve<DataSetsViewModel>();
-			var annotatingViewModel = ownScope.Resolve<AnnotatorViewModel>();
-			var trainingViewModel = ownScope.Resolve<TrainingViewModel>();
-			var settingsViewModel = ownScope.Resolve<SettingsViewModel>();
-			Tabs.Add(new TabItem(MaterialIconKind.Puzzle, "Profiles", profilesViewModel));
-			Tabs.Add(new TabItem(MaterialIconKind.TableEye, "Datasets", dataSetsViewModel));
-			Tabs.Add(new TabItem(MaterialIconKind.Image, "Annotating", annotatingViewModel));
-			Tabs.Add(new TabItem(MaterialIconKind.Abacus, "Training", trainingViewModel));
-			Tabs.Add(new TabItem(MaterialIconKind.Cog, "Settings", settingsViewModel));
-			SelectedTab = Tabs.First();
-			Disposable.Create(() =>
-			{
-				Tabs.Clear();
-			}).DisposeWith(disposables);
-		});
+		Tabs =
+		[
+			CreateTab<ProfilesViewModel>(scope, MaterialIconKind.Puzzle, "Profiles"),
+			CreateTab<DataSetsViewModel>(scope, MaterialIconKind.TableEye, "Datasets"),
+			CreateTab<AnnotatorViewModel>(scope, MaterialIconKind.Image, "Annotating"),
+			CreateTab<TrainingViewModel>(scope, MaterialIconKind.Abacus, "Training"),
+			CreateTab<SettingsViewModel>(scope, MaterialIconKind.Cog, "Settings"),
+		];
+		SelectedTab = Tabs.First();
+	}
+
+	private static TabItem CreateTab<TViewModel>(IComponentContext context, MaterialIconKind iconKind, string header)
+		where TViewModel : ViewModel
+	{
+		return new TabItem(iconKind, header, context.Resolve<TViewModel>());
 	}
 }
