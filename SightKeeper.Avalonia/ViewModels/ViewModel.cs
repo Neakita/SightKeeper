@@ -5,15 +5,15 @@ namespace SightKeeper.Avalonia.ViewModels;
 
 public abstract class ViewModel : ObservableObject
 {
-    protected void OnPropertiesChanging(IEnumerable<string> otherProperties)
+    protected void OnPropertiesChanging(IEnumerable<string> properties)
     {
-        foreach (var property in otherProperties)
+        foreach (var property in properties)
             OnPropertyChanging(property);
     }
     
-    protected void OnPropertiesChanged(IEnumerable<string> otherProperties)
+    protected void OnPropertiesChanged(IEnumerable<string> properties)
     {
-        foreach (var property in otherProperties)
+        foreach (var property in properties)
             OnPropertyChanged(property);
     }
 }
