@@ -18,15 +18,15 @@ public sealed partial class MainViewModel : ViewModel
 
 	[ObservableProperty] private TabItem? _selectedTab;
 
-	public MainViewModel(ILifetimeScope scope)
+	public MainViewModel(IComponentContext context)
 	{
 		Tabs =
 		[
-			CreateTab<ProfilesViewModel>(scope, MaterialIconKind.Puzzle, "Profiles"),
-			CreateTab<DataSetsViewModel>(scope, MaterialIconKind.TableEye, "Datasets"),
-			CreateTab<AnnotatorViewModel>(scope, MaterialIconKind.Image, "Annotating"),
-			CreateTab<TrainingViewModel>(scope, MaterialIconKind.Abacus, "Training"),
-			CreateTab<SettingsViewModel>(scope, MaterialIconKind.Cog, "Settings"),
+			CreateTab<ProfilesViewModel>(context, MaterialIconKind.Puzzle, "Profiles"),
+			CreateTab<DataSetsViewModel>(context, MaterialIconKind.TableEye, "Datasets"),
+			CreateTab<AnnotatorViewModel>(context, MaterialIconKind.Image, "Annotating"),
+			CreateTab<TrainingViewModel>(context, MaterialIconKind.Abacus, "Training"),
+			CreateTab<SettingsViewModel>(context, MaterialIconKind.Cog, "Settings"),
 		];
 		SelectedTab = Tabs.First();
 	}
