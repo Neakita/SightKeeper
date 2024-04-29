@@ -8,11 +8,11 @@
 
     <ItemGroup>
         <PackageReference Include="FlakeId" Version="1.1.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3">
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

@@ -1,0 +1,62 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels"
+                    xmlns:local="clr-namespace:SightKeeper.Avalonia.Settings.Games">
+	<DataTemplate x:Key="GameTitleCellTemplate" DataType="viewModels:GameViewModel">
+		<StackPanel Orientation="Horizontal" Height="80">
+			<Border CornerRadius="8"
+			        ClipToBounds="True"
+			        Width="48"
+			        Height="48"
+			        Margin="16"
+			        IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}">
+				<Image Source="{Binding Icon}"/>
+			</Border>
+			<StackPanel VerticalAlignment="Center">
+				<StackPanel.Styles>
+					<Style Selector="TransitioningContentControl">
+						<Setter Property="IsTransitionReversed" Value="True"/>
+						<Setter Property="Content">
+							<Template>
+								<TextBlock Text="{Binding ProcessName}"
+								           FontSize="16"
+								           FontWeight="400"
+								           Foreground="{DynamicResource SecondaryForeground}"/>
+							</Template>
+						</Setter>
+						<Style Selector="^:pointerover">
+							<Setter Property="IsTransitionReversed" Value="False"/>
+							<Setter Property="Content">
+								<Template>
+									<TextBlock Text="{Binding ExecutablePath}"
+									           FontSize="16"
+									           FontWeight="400"
+									           Foreground="{DynamicResource SecondaryForeground}"
+									           TextTrimming="{x:Static TextTrimming.LeadingCharacterEllipsis}">
+									</TextBlock>
+								</Template>
+							</Setter>
+						</Style>
+					</Style>
+				</StackPanel.Styles>
+				<TextBlock Text="{Binding Title}"
+				           FontSize="16"
+				           FontWeight="700"/>
+				<TransitioningContentControl Background="Transparent">
+					<TransitioningContentControl.PageTransition>
+						<PageSlide Duration="0:0:0.3" Orientation="Vertical">
+							<PageSlide.SlideOutEasing>
+								<CubicEaseInOut/>
+							</PageSlide.SlideOutEasing>
+							<PageSlide.SlideInEasing>
+								<CubicEaseInOut/>
+							</PageSlide.SlideInEasing>
+						</PageSlide>
+					</TransitioningContentControl.PageTransition>
+				</TransitioningContentControl>
+			</StackPanel>
+		</StackPanel>
+	</DataTemplate>
+	<DataTemplate x:Key="GameActionsCellTemplate"/>
+	<local:TreeDataGridGamesSourceConverter x:Key="TreeDataGridGamesSourceConverter"/>
+</ResourceDictionary>

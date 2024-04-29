@@ -1,38 +1,59 @@
-﻿using SightKeeper.Domain.Model;
+﻿using System.IO;
+using Avalonia.Media.Imaging;
+using SightKeeper.Application;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels;
 
 internal sealed class GameViewModel : ViewModel
 {
+	public Game Game { get; }
 	public string Title
 	{
-		get => _game.Title;
-		set
-		{
-			SetProperty(_game.Title, value, title => _game.Title = title);
-		}
+		get => Game.Title;
+		set => SetProperty(Game.Title, value, title => Game.Title = title);
 	}
 	public string ProcessName
 	{
-		get => _game.ProcessName;
-		set
-		{
-			SetProperty(_game.ProcessName, value, processName => _game.ProcessName = processName);
-		}
+		get => Game.ProcessName;
+		set => SetProperty(Game.ProcessName, value, processName => Game.ProcessName = processName);
 	}
 	public string? ExecutablePath
 	{
-		get => _game.ExecutablePath;
+		get => Game.ExecutablePath;
 		set
 		{
-			SetProperty(_game.ExecutablePath, value, executablePath => _game.ExecutablePath = executablePath);
+			if (SetProperty(Game.ExecutablePath, value, executablePath => Game.ExecutablePath = executablePath))
+				UpdateIcon();
 		}
 	}
-
-	public GameViewModel(Game game)
+	public Bitmap? Icon
 	{
-		_game = game;
+		get => _icon;
+		private set => SetProperty(ref _icon, value);
 	}
 
-	private readonly Game _game;
+	public GameViewModel(Game game, GameIconProvider iconProvider)
+	{
+		Game = game;
+		_iconProvider = iconProvider;
+		_icon = GetIcon();
+	}
+
+	private readonly GameIconProvider _iconProvider;
+	private Bitmap? _icon;
+
+	private void UpdateIcon()
+	{
+		Icon = GetIcon();
+	}
+
+	private Bitmap? GetIcon()
+	{
+		var data = _iconProvider.GetIcon(Game);
+		if (data == null)
+			return null;
+		using MemoryStream stream = new(data);
+		return new Bitmap(stream);
+	}
 }

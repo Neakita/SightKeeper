@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
+using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 
-public sealed partial class WeightsEditorViewModel : DialogViewModel, IWeightsEditorViewModel
+internal sealed partial class WeightsEditorViewModel : DialogViewModel, IWeightsEditorViewModel
 {
     public IReadOnlyCollection<Weights> Weights { get; }
 
@@ -46,4 +45,6 @@ public sealed partial class WeightsEditorViewModel : DialogViewModel, IWeightsEd
     }
 
     private bool CanDeleteSelectedWeights() => SelectedWeights != null;
+
+    public override string Header => "Edit Weights";
 }

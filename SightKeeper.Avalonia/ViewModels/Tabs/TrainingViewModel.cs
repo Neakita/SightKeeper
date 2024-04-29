@@ -20,7 +20,7 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 
-public sealed partial class TrainingViewModel : ViewModel
+internal partial class TrainingViewModel : ViewModel
 {
     private readonly Trainer _trainer;
     public IObservable<TrainingProgress?> Progress => _progress;

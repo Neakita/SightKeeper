@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,19 +12,21 @@ using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
-using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
+using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 
-public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewModel<NewDataSetInfo, bool>, IDataSetEditorViewModel, NewDataSetInfo
+internal sealed partial class DataSetCreatingViewModel : DialogViewModel<bool>, IDataSetEditorViewModel, NewDataSetInfo, INotifyDataErrorInfo, IDisposable
 {
+	public ViewModelValidator<NewDataSetInfo> Validator { get; }
     public IReadOnlyCollection<EditableItemClass> ItemClasses => _itemClasses;
     public IReadOnlyCollection<Game> Games => _gamesDataAccess.Games;
 
-    public DataSetCreatingViewModel(IValidator<NewDataSetInfo> validator, GamesDataAccess gamesDataAccess) : base(validator)
+    public DataSetCreatingViewModel(IValidator<NewDataSetInfo> validator, GamesDataAccess gamesDataAccess)
     {
+	    Validator = new ViewModelValidator<NewDataSetInfo>(validator, this, this);
         _gamesDataAccess = gamesDataAccess;
         ErrorsChanged += OnErrorsChanged;
     }
@@ -50,11 +52,6 @@ public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewMode
     ICommand IDataSetEditorViewModel.ApplyCommand => ApplyCommand;
     ICommand IDataSetEditorViewModel.CancelCommand => CancelCommand;
 
-    partial void OnResolutionChanged(int? oldValue, int? newValue)
-    {
-        Debug.WriteLine($"Resolution changed from {oldValue} to {newValue}");
-    }
-
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]
     private void AddItemClass()
     {
@@ -72,11 +69,9 @@ public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewMode
     }
 
     [RelayCommand(CanExecute = nameof(CanApply))]
-    private async Task Apply()
+    private void Apply()
     {
-        var isValid = await Validate();
-        if (!isValid)
-            return;
+	    Guard.IsFalse(HasErrors);
         Return(true);
     }
 
@@ -90,4 +85,27 @@ public sealed partial class DataSetCreatingViewModel : ValidatableDialogViewMode
 
     IReadOnlyCollection<ItemClassInfo> DataSetInfo.ItemClasses =>
         ItemClasses.Select(itemClass => itemClass.ToItemClassInfo()).ToList();
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+	    return Validator.GetErrors(propertyName);
+    }
+
+    public bool HasErrors => Validator.HasErrors;
+
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
+    {
+	    add => Validator.ErrorsChanged += value;
+	    remove => Validator.ErrorsChanged -= value;
+    }
+
+    public void Dispose()
+    {
+	    Validator.Dispose();
+	    ErrorsChanged -= OnErrorsChanged;
+    }
+
+    public override string Header => "Create Dataset";
+
+    protected override bool DefaultResult => false;
 }

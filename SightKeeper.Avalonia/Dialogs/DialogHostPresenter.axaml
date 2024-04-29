@@ -1,0 +1,64 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Dialogs.DialogHostPresenter"
+             xmlns:root="clr-namespace:SightKeeper.Avalonia"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Dialogs"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:DataType="local:DialogHost"
+             Background="#7F000000"
+             Padding="48"
+             root:VisibilityAssist.DisableHitTestWhenOpacityIsZero="True"
+             IsHitTestVisible="False"
+             Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static root:Converters.ContentToOpacityConverter}}"
+             root:InputAssist.PointerReleasedCommand="{Binding DialogManager.CurrentDialog.CloseCommand}">
+	<UserControl.Transitions>
+		<Transitions>
+			<DoubleTransition Property="Opacity" Duration="0:0:0.5">
+				<DoubleTransition.Easing>
+					<QuadraticEaseInOut/>
+				</DoubleTransition.Easing>
+			</DoubleTransition>
+		</Transitions>
+	</UserControl.Transitions>
+	<TransitioningContentControl Content="{Binding DialogManager.CurrentDialog}">
+		<TransitioningContentControl.ContentTemplate>
+			<DataTemplate x:DataType="local:Dialog">
+				<Border Classes="outer"
+				        HorizontalAlignment="Center"
+				        VerticalAlignment="Center">
+					<DockPanel>
+						<Border DockPanel.Dock="Top"
+						        Classes="inner regular-padding"
+						        CornerRadius="12 12 0 0">
+							<Grid ColumnDefinitions="* Auto">
+								<TextBlock Grid.Column="0"
+								           Text="{Binding Header}"
+								           Classes="caption"
+								           VerticalAlignment="Center"/>
+								<Button Grid.Column="1"
+								        Content="{icons:MaterialIconExt Close}"
+								        Command="{Binding CloseCommand}"
+								        Classes="flat square"/>
+							</Grid>
+						</Border>
+						<ContentPresenter Content="{Binding}"
+						                  Classes="regular-padding"/>
+					</DockPanel>
+				</Border>
+			</DataTemplate>
+		</TransitioningContentControl.ContentTemplate>
+		<TransitioningContentControl.PageTransition>
+			<PageSlide Orientation="Vertical" Duration="0:0:0.5">
+				<PageSlide.SlideInEasing>
+					<CircularEaseInOut/>
+				</PageSlide.SlideInEasing>
+				<PageSlide.SlideOutEasing>
+					<CircularEaseInOut/>
+				</PageSlide.SlideOutEasing>
+			</PageSlide>
+		</TransitioningContentControl.PageTransition>
+	</TransitioningContentControl>
+</UserControl>

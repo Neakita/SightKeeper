@@ -1,4 +1,4 @@
-﻿using SightKeeper.Application;
+﻿using System.Drawing.Imaging;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Windows;
@@ -7,13 +7,14 @@ public sealed class WindowsGameIconProvider : GameIconProvider
 {
 	public byte[]? GetIcon(Game game)
 	{
-		if (game.ExecutablePath == null)
+		if (string.IsNullOrEmpty(game.ExecutablePath))
 			return null;
-		var icon = Icon.ExtractAssociatedIcon(game.ExecutablePath);
+		using var icon = Icon.ExtractAssociatedIcon(game.ExecutablePath);
 		if (icon == null)
 			return null;
-		MemoryStream stream = new();
-		icon.Save(stream);
+		using MemoryStream stream = new();
+		// icon.Save(stream) gives bad quality for some reason
+		icon.ToBitmap().Save(stream, ImageFormat.Png);
 		return stream.ToArray();
 	}
 }

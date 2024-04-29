@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using Serilog;
+using SightKeeper.Avalonia.Setup;
 
 namespace SightKeeper.Avalonia;
 
@@ -24,8 +25,11 @@ internal static class Program
 		catch (Exception exception)
 		{
 			HandleUnhandledExceptions(exception, "Program.Main");
-			Log.CloseAndFlush();
 			throw;
+		}
+		finally
+		{
+			Log.CloseAndFlush();
 		}
 	}
 

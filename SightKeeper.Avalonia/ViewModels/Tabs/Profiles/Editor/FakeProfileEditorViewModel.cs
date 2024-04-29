@@ -30,12 +30,12 @@ public sealed partial class FakeProfileEditorViewModel : ViewModel, ProfileEdito
     public Weights? Weights { get; set; }
     public IReadOnlyList<ProfileItemClassViewModel> ItemClasses { get; }
     public ItemClass? ItemClassToAdd { get; set; }
-    public ICommand AddItemClassCommand => FakeViewModel.CommandSubstitute;
-    public ICommand RemoveItemClassCommand => FakeViewModel.CommandSubstitute;
-    public ICommand MoveItemClassUpCommand => FakeViewModel.CommandSubstitute;
-    public ICommand MoveItemClassDownCommand => FakeViewModel.CommandSubstitute;
-    public ICommand ApplyCommand => FakeViewModel.CommandSubstitute;
-    public ICommand DeleteCommand => FakeViewModel.CommandSubstitute;
+    public ICommand AddItemClassCommand => FakeCommand.Instance;
+    public ICommand RemoveItemClassCommand => FakeCommand.Instance;
+    public ICommand MoveItemClassUpCommand => FakeCommand.Instance;
+    public ICommand MoveItemClassDownCommand => FakeCommand.Instance;
+    public ICommand ApplyCommand => FakeCommand.Instance;
+    public ICommand DeleteCommand => FakeCommand.Instance;
 
     public FakeProfileEditorViewModel()
     {

@@ -6,7 +6,7 @@ using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
-public sealed class ExistingProfileEditorViewModel : AbstractProfileEditorVIewModel<EditedProfileData>, EditedProfileData
+internal sealed class ExistingProfileEditorViewModel : AbstractProfileEditorViewModel<EditedProfileData>, EditedProfileData
 {
     public ExistingProfileEditorViewModel(IValidator<EditedProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository) : base(validator, dataSetsObservableRepository, true)
     {
@@ -14,7 +14,7 @@ public sealed class ExistingProfileEditorViewModel : AbstractProfileEditorVIewMo
     
     public void SetData(Profile profile)
     {
-        ValidateOnPropertyChanged = false;
+        Validator.ValidateOnPropertyChanged = false;
         Profile = profile;
         Name = profile.Name;
         Description = profile.Description;
@@ -41,6 +41,9 @@ public sealed class ExistingProfileEditorViewModel : AbstractProfileEditorVIewMo
             }
             PreemptionFactorsLink = PreemptionHorizontalFactor == PreemptionVerticalFactor;
         }
-        ValidateOnPropertyChanged = true;
+        Validator.ValidateOnPropertyChanged = true;
     }
+
+    public override string Header => "Edit profile";
+    protected override ProfileEditorResult DefaultResult => ProfileEditorResult.Cancel;
 }

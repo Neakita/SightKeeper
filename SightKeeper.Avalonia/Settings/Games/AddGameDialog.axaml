@@ -1,0 +1,106 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Settings.Games"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels"
+             xmlns:root="clr-namespace:SightKeeper.Avalonia"
+             mc:Ignorable="d"
+             x:Class="SightKeeper.Avalonia.Settings.Games.AddGameDialog"
+             x:DataType="local:AddGameViewModel"
+             Width="600"
+             HorizontalAlignment="Stretch">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="GamesResources.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<DataTemplate x:Key="GameTitleCellTemplate" DataType="viewModels:GameViewModel">
+				<Grid ColumnDefinitions="Auto 12 *" RowDefinitions="Auto Auto">
+					<Grid.Styles>
+						<Style Selector="TransitioningContentControl">
+							<Setter Property="IsTransitionReversed" Value="True"/>
+							<Setter Property="Content">
+								<Template>
+									<TextBlock Text="{Binding ProcessName}"
+									           FontSize="16"
+									           FontWeight="400"
+									           Foreground="{DynamicResource SecondaryForeground}"
+									           TextTrimming="{x:Static TextTrimming.PrefixCharacterEllipsis}"/>
+								</Template>
+							</Setter>
+							<Style Selector="^:pointerover">
+								<Setter Property="IsTransitionReversed" Value="False"/>
+								<Setter Property="Content">
+									<Template>
+										<TextBlock Text="{Binding ExecutablePath}"
+										           FontSize="16"
+										           FontWeight="400"
+										           Foreground="{DynamicResource SecondaryForeground}"
+										           Background="Transparent"
+										           TextTrimming="{x:Static TextTrimming.PrefixCharacterEllipsis}"
+										           root:TextBlockAssist.AutoTrimmedTextToolTip="True">
+										</TextBlock>
+									</Template>
+								</Setter>
+							</Style>
+						</Style>
+					</Grid.Styles>
+					<Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+					        CornerRadius="12"
+					        ClipToBounds="True"
+					        Width="30"
+					        Height="30"
+					        IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}">
+						<Image Source="{Binding Icon}"/>
+					</Border>
+					<TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Title}"
+					           FontSize="16"
+					           FontWeight="700"
+					           Background="Transparent"
+					           TextTrimming="{x:Static TextTrimming.PrefixCharacterEllipsis}"
+					           root:TextBlockAssist.AutoTrimmedTextToolTip="True"/>
+					<TransitioningContentControl Grid.Column="2" Grid.Row="1" Background="Transparent">
+						<TransitioningContentControl.PageTransition>
+							<PageSlide Duration="0:0:0.3" Orientation="Vertical">
+								<PageSlide.SlideOutEasing>
+									<CubicEaseInOut/>
+								</PageSlide.SlideOutEasing>
+								<PageSlide.SlideInEasing>
+									<CubicEaseInOut/>
+								</PageSlide.SlideInEasing>
+							</PageSlide>
+						</TransitioningContentControl.PageTransition>
+					</TransitioningContentControl>
+				</Grid>
+			</DataTemplate>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid RowDefinitions="* Auto">
+		<ListBox Grid.Row="0"
+		         Classes="compact"
+		         ItemsSource="{Binding AvailableGames}"
+		         ItemTemplate="{StaticResource GameTitleCellTemplate}"
+		         SelectedItem="{Binding SelectedGame}"/>
+		<StackPanel Grid.Row="1"
+		            Orientation="Horizontal"
+		            HorizontalAlignment="Right"
+		            Spacing="8"
+		            Margin="0 12 0 0">
+			<Button Command="{Binding CloseCommand}">
+				<StackPanel Orientation="Horizontal">
+					<icons:MaterialIcon Kind="Close"/>
+					<TextBlock Text="Cancel"/>
+				</StackPanel>
+			</Button>
+			<Button Classes="high-accent" Command="{Binding ApplyCommand}">
+				<StackPanel Orientation="Horizontal">
+					<icons:MaterialIcon Kind="Plus"/>
+					<TextBlock Text="Create"/>
+				</StackPanel>
+			</Button>
+		</StackPanel>
+	</Grid>
+
+</UserControl>

@@ -1,10 +1,8 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="SightKeeper.Avalonia.App"
-             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia"
-             xmlns:model="clr-namespace:SightKeeper.Domain.Model;assembly=SightKeeper.Domain.Model"
-             xmlns:dataSets="clr-namespace:SightKeeper.Domain.Model.DataSets;assembly=SightKeeper.Domain"
+             xmlns:theme="clr-namespace:Sightful.Avalonia.Theme;assembly=Sightful.Avalonia.Theme"
+             xmlns:treeDataGridTheme="clr-namespace:Sightful.Avalonia.TreeDataGrid.Theme;assembly=Sightful.Avalonia.TreeDataGrid.Theme"
              RequestedThemeVariant="Dark">
 
     <Application.Resources>
@@ -16,69 +14,10 @@
     </Application.Resources>
     
     <Application.Styles>
-        <FluentTheme DensityStyle="Normal"/>
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
-        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml"/>
-        <materialIcons:MaterialIconStyles />
-        <StyleInclude Source="avares://SightKeeper.Avalonia/Assets/Styles.axaml"/>
+	    <theme:DefaultTheme/>
+	    <treeDataGridTheme:SightfulTreeDataGridTheme/>
+	    <!--<FluentTheme/>
+	    <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>-->
     </Application.Styles>
-
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-        <DataTemplate DataType="dataSets:Weights">
-            <Panel Background="Transparent">
-                <TextBlock>
-                    <Run Text="{Binding CreationDate, StringFormat=d}"/>
-                    <Run Text="|"
-                         Foreground="DarkGray"/>
-                    <Run Text="{Binding Size}"/>
-                    <Run Text="|"
-                         Foreground="DarkGray"/>
-                    <Run Text="{Binding WeightsMetrics.Epoch}"/>
-                    <LineBreak/>
-                    <Run Text="{Binding WeightsMetrics.LossMetrics.BoundingLoss, StringFormat=0.##}"/>
-                    <Run Text="|"
-                         Foreground="DarkGray"/>
-                    <Run Text="{Binding WeightsMetrics.LossMetrics.ClassificationLoss, StringFormat=0.##}"/>
-                    <Run Text="|"
-                         Foreground="DarkGray"/>
-                    <Run Text="{Binding WeightsMetrics.LossMetrics.DeformationLoss, StringFormat=0.##}"/>
-                </TextBlock>
-                <ToolTip.Tip>
-                    <TextBlock>
-                        <Run Text="Creation date:"
-                             Foreground="DarkGray"/>
-                        <Run Text="{Binding CreationDate, StringFormat=F}"/>
-                        <LineBreak/>
-                        <Run Text="Size:"
-                             Foreground="DarkGray"/>
-                        <Run Text="{Binding Size}"/>
-                        <LineBreak/>
-                        <Run Text="Epoch:"
-                             Foreground="DarkGray"/>
-                        <Run Text="{Binding WeightsMetrics.Epoch}"/>
-                        <LineBreak/>
-                        <Run Text="Losses:"
-                             Foreground="DarkGray"/>
-                        <LineBreak/>
-                        <Run Text="  "/>
-                        <Run Text="Bounding"
-                             Foreground="DarkGray"/>
-                        <Run Text="{Binding WeightsMetrics.LossMetrics.BoundingLoss, StringFormat=0.##}"/>
-                        <LineBreak/>
-                        <Run Text="  "/>
-                        <Run Text="Classification"
-                             Foreground="DarkGray"/>
-                        <Run Text="{Binding WeightsMetrics.LossMetrics.ClassificationLoss, StringFormat=0.##}"/>
-                        <LineBreak/>
-                        <Run Text="  "/>
-                        <Run Text="Deformation"
-                             Foreground="DarkGray"/>
-                        <Run Text="{Binding WeightsMetrics.LossMetrics.DeformationLoss, StringFormat=0.##}"/>
-                    </TextBlock>
-                </ToolTip.Tip>
-            </Panel>
-        </DataTemplate>
-    </Application.DataTemplates>
     
 </Application>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using NSubstitute;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Domain.Model.DataSets;
@@ -12,7 +11,7 @@ public sealed class FakeWeightsEditorViewModel : IWeightsEditorViewModel
 {
     public IReadOnlyCollection<Weights> Weights { get; }
     public Weights? SelectedWeights { get; set; }
-    public ICommand DeleteSelectedWeightsCommand { get; } = Substitute.For<ICommand>();
+    public ICommand DeleteSelectedWeightsCommand { get; } = FakeCommand.Instance;
 
     public FakeWeightsEditorViewModel()
     {

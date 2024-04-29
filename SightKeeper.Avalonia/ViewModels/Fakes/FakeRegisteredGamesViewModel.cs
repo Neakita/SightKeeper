@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using NSubstitute;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model;
 
@@ -21,7 +19,7 @@ public sealed class FakeRegisteredGamesViewModel : IRegisteredGamesViewModel
     };
     public Game? SelectedToAddGame { get; set; }
     public Game? SelectedExistingGame { get; set; }
-    public ICommand AddGameCommand { get; } = Substitute.For<ICommand>();
-    public ICommand DeleteGameCommand { get; } = Substitute.For<ICommand>();
-    public ICommand RefreshAvailableToAddGamesCommand { get; } = Substitute.For<ICommand>();
+    public ICommand AddGameCommand { get; } = FakeCommand.Instance;
+    public ICommand DeleteGameCommand { get; } = FakeCommand.Instance;
+    public ICommand RefreshAvailableToAddGamesCommand { get; } = FakeCommand.Instance;
 }

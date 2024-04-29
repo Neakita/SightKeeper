@@ -13,8 +13,8 @@ public sealed class FakeAutoAnnotationViewModel : IAutoAnnotationViewModel
     public float IoU { get; set; }
     public Weights? SelectedWeights { get; set; }
     public bool AutoAnnotatingEnabled { get; set; }
-    public ICommand ClearCommand => FakeViewModel.CommandSubstitute;
-    public ICommand AnnotateCommand => FakeViewModel.CommandSubstitute;
+    public ICommand ClearCommand => FakeCommand.Instance;
+    public ICommand AnnotateCommand => FakeCommand.Instance;
 
     public FakeAutoAnnotationViewModel()
     {

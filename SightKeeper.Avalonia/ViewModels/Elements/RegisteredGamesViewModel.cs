@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Serilog;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model;
 
@@ -22,7 +24,7 @@ public sealed partial class RegisteredGamesViewModel : ViewModel, IRegisteredGam
 			return Process.GetProcesses().Where(process =>
 				RegisteredGames.All(registeredGame => registeredGame.ProcessName != process.ProcessName) &&
 				process.MainWindowHandle != IntPtr.Zero).Select(process =>
-				new Game(process.MainWindowTitle, process.ProcessName, process.MainModule?.FileName)).ToImmutableList();
+				new Game(process.MainWindowTitle, process.ProcessName, GetProcessExecutablePath(process))).ToImmutableList();
 		}
 	}
 
@@ -37,6 +39,19 @@ public sealed partial class RegisteredGamesViewModel : ViewModel, IRegisteredGam
 	[ObservableProperty] private Game? _selectedToAddGame;
 	[NotifyCanExecuteChangedFor(nameof(DeleteGameCommand))]
 	[ObservableProperty] private Game? _selectedExistingGame;
+
+	private static string? GetProcessExecutablePath(Process process)
+	{
+		try
+		{
+			return process.MainModule?.FileName;
+		}
+		catch (Win32Exception exception)
+		{
+			Log.Error(exception, "An exception occurred while trying to get the path to the executable file of the process {ProcessName}", process.ProcessName);
+			return null;
+		}
+	}
 
 	partial void OnSelectedToAddGameChanged(Game? oldValue, Game? newValue)
 	{

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,36 +11,37 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Dto;
-using MsBox.Avalonia.Enums;
-using MsBox.Avalonia.Models;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
-using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Avalonia.ViewModels.Dialogs.Abstract;
+using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 
-public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel<DataSetChanges, bool>, IDataSetEditorViewModel, DataSetChanges, IDisposable
+internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, INotifyDataErrorInfo, IDataSetEditorViewModel, DataSetChanges, IDisposable
 {
+	public ViewModelValidator<DataSetChanges> Validator { get; }
     IReadOnlyCollection<ItemClassInfo> DataSetInfo.ItemClasses =>
         _itemClasses.Select(itemClass => itemClass.ToItemClassInfo()).ToList();
     public IReadOnlyCollection<EditableItemClass> ItemClasses => _itemClasses;
     public IReadOnlyCollection<Game> Games => _gamesDataAccess.Games;
     public Domain.Model.DataSets.DataSet DataSet { get; private set; }
 
-    public DataSetEditingViewModel(Domain.Model.DataSets.DataSet dataSet, IValidator<DataSetChanges> validator, GamesDataAccess gamesDataAccess) : base(validator)
+    public DataSetEditingViewModel(Domain.Model.DataSets.DataSet dataSet, IValidator<DataSetChanges> validator, GamesDataAccess gamesDataAccess, DialogManager dialogManager)
     {
+	    Validator = new ViewModelValidator<DataSetChanges>(validator, this, this);
         _gamesDataAccess = gamesDataAccess;
+        _dialogManager = dialogManager;
         SetData(dataSet);
-        _disposable = ErrorsChangedObservable.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
+        ErrorsChanged += OnErrorsChanged;
     }
 
-    private readonly IDisposable _disposable;
+    private void OnErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+    {
+	    ApplyCommand.NotifyCanExecuteChanged();
+    }
 
     [MemberNotNull(nameof(DataSet))]
     private void SetData(Domain.Model.DataSets.DataSet dataSet)
@@ -64,6 +67,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
     private readonly ObservableCollection<EditableItemClass> _itemClasses = new();
     private readonly List<DeletedItemClass> _deletedItemClasses = new();
     private readonly GamesDataAccess _gamesDataAccess;
+    private readonly DialogManager _dialogManager;
 
     ICommand IDataSetEditorViewModel.AddItemClassCommand => AddItemClassCommand;
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]
@@ -72,7 +76,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
         var deletedItemClassWithTheSameName = _deletedItemClasses.FirstOrDefault(deletedItemClass => deletedItemClass.ItemClass.Name == NewItemClassName);
         if (deletedItemClassWithTheSameName != null)
         {
-            var messageBox = MessageBoxManager.GetMessageBoxStandard(new MessageBoxStandardParams()
+            /*var messageBox = MessageBoxManager.GetMessageBoxStandard(new MessageBoxStandardParams
             {
                 ContentMessage =
                     $"Item class {NewItemClassName} already exists, but it was deleted. Would you like to re-add it?",
@@ -80,7 +84,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
             });
             var result = await messageBox.ShowWindowDialogAsync(this.GetOwnerWindow());
             if (result == ButtonResult.No)
-                return;
+                return;*/
             Guard.IsTrue(_deletedItemClasses.Remove(deletedItemClassWithTheSameName));
             _itemClasses.Add(new ExistingItemClass(deletedItemClassWithTheSameName.ItemClass));
         }
@@ -109,7 +113,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
                 const string deleteItems = "Delete items";
                 const string deleteAssets = "Delete assets";
                 const string deleteScreenshots = "Delete screenshots";
-                var messageBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
+                /*var messageBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
                 {
                     ContentMessage = $"Item class {itemClass.Name} has some items ({existingItemClass.ItemClass.Items.Count}). Are you sure you want to delete it? Choose action",
                     ButtonDefinitions = new[]
@@ -129,7 +133,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
                     deleteAssets => DeletedItemClassAction.DeleteAssets,
                     deleteScreenshots => DeletedItemClassAction.DeleteScreenshots,
                     _ => ThrowHelper.ThrowArgumentOutOfRangeException<DeletedItemClassAction>(nameof(result))
-                };
+                };*/
             }
             _deletedItemClasses.Add(new DeletedItemClass(existingItemClass.ItemClass, action));
         }
@@ -138,11 +142,9 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
 
     ICommand IDataSetEditorViewModel.ApplyCommand => ApplyCommand;
     [RelayCommand(CanExecute = nameof(CanApply))]
-    private async Task Apply()
+    private void Apply()
     {
-        var isValid = await Validate();
-        if (!isValid)
-            return;
+        Guard.IsFalse(HasErrors);
         Return(true);
     }
 
@@ -154,7 +156,7 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
 
     public void Dispose()
     {
-        _disposable.Dispose();
+	    ErrorsChanged -= OnErrorsChanged;
     }
 
     IReadOnlyCollection<ItemClassInfo> DataSetChanges.NewItemClasses => ItemClasses
@@ -167,4 +169,21 @@ public sealed partial class DataSetEditingViewModel : ValidatableDialogViewModel
         .Select(existingItemClass => existingItemClass.ToEditedItemClass())
         .ToList();
     IReadOnlyCollection<DeletedItemClass> DataSetChanges.DeletedItemClasses => _deletedItemClasses;
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+	    return Validator.GetErrors(propertyName);
+    }
+
+    public bool HasErrors => Validator.HasErrors;
+
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
+    {
+	    add => Validator.ErrorsChanged += value;
+	    remove => Validator.ErrorsChanged -= value;
+    }
+
+    public override string Header => "Edit Dataset";
+
+    protected override bool DefaultResult => false;
 }

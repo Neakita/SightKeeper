@@ -1,9 +1,8 @@
-﻿using Avalonia.ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Tabs;
+﻿using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Views.Tabs;
 
-public sealed partial class DataSetsTab : ReactiveUserControl<DataSetsViewModel>
+public sealed partial class DataSetsTab : UserControl
 {
 	public DataSetsTab()
 	{

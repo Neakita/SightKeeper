@@ -4,7 +4,7 @@ using SightKeeper.Avalonia.ViewModels.Tabs;
 
 namespace SightKeeper.Avalonia.Views.Tabs;
 
-public sealed partial class TrainingTab : ReactiveUserControl<TrainingViewModel>
+public sealed partial class TrainingTab : UserControl
 {
     public TrainingTab()
     {

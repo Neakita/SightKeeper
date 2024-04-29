@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assists="clr-namespace:Sightful.Avalonia.Theme.Assists;assembly=Sightful.Avalonia.Theme"
+        xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:local="clr-namespace:SightKeeper.Avalonia"
+        xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.Dialogs"
+        mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="320"
+        x:Class="SightKeeper.Avalonia.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Sight Keeper"
+        MinWidth="480"
+        MinHeight="320"
+        x:DataType="local:IMainViewModel"
+        ExtendClientAreaToDecorationsHint="True">
+	<Design.DataContext>
+		<local:FakeMainViewModel/>
+	</Design.DataContext>
+	<assists:WindowAssist.OverlayContent>
+		<dialogs:DialogHostPresenter/>
+	</assists:WindowAssist.OverlayContent>
+	<assists:WindowAssist.LeftContent>
+		<TabStrip ItemsSource="{Binding Tabs}"
+		          SelectedItem="{Binding SelectedTab}"
+		          Theme="{DynamicResource VerticalButtonsTabStripTheme}">
+			<TabStrip.ItemTemplate>
+				<DataTemplate>
+					<icons:MaterialIcon Kind="{Binding IconKind}"/>
+				</DataTemplate>
+			</TabStrip.ItemTemplate>
+		</TabStrip>
+	</assists:WindowAssist.LeftContent>
+	<assists:WindowAssist.TopContent>
+		<TextBlock Text="{Binding SelectedTab.Header}" FontSize="16" Margin="16 8" VerticalAlignment="Center"/>
+	</assists:WindowAssist.TopContent>
+	<ContentControl Content="{Binding SelectedTab.ViewModel}"/>
+</Window>

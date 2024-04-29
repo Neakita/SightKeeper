@@ -14,13 +14,30 @@ public sealed class ProcessesAvailableGamesProvider
 
     private IEnumerable<Game> GetAvailableGames()
     {
-	    var existingGames = _gamesDataAccess.Games;
 	    return Process.GetProcesses()
-		    .Where(process => process.MainWindowHandle != 0 &&
-		                      !string.IsNullOrWhiteSpace(process.MainWindowTitle) &&
-		                      existingGames.All(game => game.ProcessName != process.ProcessName))
+		    .Where(IsValidProcess)
+		    .ExceptBy(_gamesDataAccess.Games.Select(ProcessDescription.Extract), ProcessDescription.Extract)
 		    .Select(process => new Game(process.MainWindowTitle, process.ProcessName, process.MainModule?.FileName));
     }
 
     private readonly GamesDataAccess _gamesDataAccess;
+
+    private static bool IsValidProcess(Process process) =>
+	    process.MainWindowHandle != IntPtr.Zero &&
+	    !string.IsNullOrEmpty(process.MainWindowTitle) &&
+	    process.Id != Environment.ProcessId &&
+	    CanGetMainModule(process);
+
+    private static bool CanGetMainModule(Process process)
+    {
+	    try
+	    {
+		    _ = process.MainModule;
+	    }
+	    catch
+	    {
+		    return false;
+	    }
+	    return true;
+    }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using NSubstitute;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model;
@@ -24,8 +22,8 @@ public sealed class FakeDataSetCreatingViewModel : IDataSetEditorViewModel
     public string NewItemClassName { get; set; } = "New item class...";
     public Game? Game { get; set; }
     public IReadOnlyCollection<Game> Games { get; } = Array.Empty<Game>();
-    public ICommand AddItemClassCommand { get; } = Substitute.For<ICommand>();
-    public ICommand DeleteItemClassCommand { get; } = Substitute.For<ICommand>();
-    public ICommand ApplyCommand { get; } = Substitute.For<ICommand>();
-    public ICommand CancelCommand { get; } = Substitute.For<ICommand>();
+    public ICommand AddItemClassCommand { get; } = FakeCommand.Instance;
+    public ICommand DeleteItemClassCommand { get; } = FakeCommand.Instance;
+    public ICommand ApplyCommand { get; } = FakeCommand.Instance;
+    public ICommand CancelCommand { get; } = FakeCommand.Instance;
 }

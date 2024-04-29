@@ -6,10 +6,7 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.ProfilesTab"
-             x:DataType="profilesViewModels:IProfilesViewModel">
-    <Design.DataContext>
-        <profilesViewModels:FakeProfilesViewModel/>
-    </Design.DataContext>
+             x:DataType="profilesViewModels:ProfilesViewModel">
     <Grid RowDefinitions="Auto *"
           Name="Root">
         <StackPanel Grid.Row="0"
@@ -85,7 +82,7 @@
                                 <Button Grid.Row="0" Grid.Column="1"
                                         Content="{icons:MaterialIconExt Play}"
                                         Padding="5"
-                                        Command="{Binding #Root.((profilesViewModels:IProfilesViewModel)DataContext).LaunchProfileCommand}"
+                                        Command="{Binding #Root.((profilesViewModels:ProfilesViewModel)DataContext).LaunchProfileCommand}"
                                         CommandParameter="{Binding}"
                                         ToolTip.Tip="Launch"
                                         IsVisible="{Binding $self.IsEffectivelyEnabled}"
@@ -93,7 +90,7 @@
                                 <Button Grid.Row="0" Grid.Column="1"
                                         Content="{icons:MaterialIconExt Stop}"
                                         Padding="5"
-                                        Command="{Binding #Root.((profilesViewModels:IProfilesViewModel)DataContext).StopProfileCommand}"
+                                        Command="{Binding #Root.((profilesViewModels:ProfilesViewModel)DataContext).StopProfileCommand}"
                                         CommandParameter="{Binding}"
                                         ToolTip.Tip="Stop"
                                         Name="StopButton"
@@ -102,7 +99,7 @@
                                 <Button Grid.Row="1" Grid.Column="1"
                                         Content="{icons:MaterialIconExt Cog}"
                                         Padding="5"
-                                        Command="{Binding #Root.((profilesViewModels:IProfilesViewModel)DataContext).EditProfileCommand}"
+                                        Command="{Binding #Root.((profilesViewModels:ProfilesViewModel)DataContext).EditProfileCommand}"
                                         CommandParameter="{Binding}"
                                         ToolTip.Tip="Edit"/>
                             </Grid>
