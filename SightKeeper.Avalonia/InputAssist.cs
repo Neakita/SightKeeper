@@ -41,8 +41,6 @@ internal static class InputAssist
 	
 	private static void OnPointerReleased(object? sender, PointerReleasedEventArgs pointerReleasedEventArgs)
 	{
-		if (sender != pointerReleasedEventArgs.Source)
-			return;
 		Guard.IsNotNull(sender);
 		var element = (AvaloniaObject)sender;
 		var command = GetPointerReleasedCommand(element);

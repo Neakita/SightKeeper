@@ -12,8 +12,7 @@
              Padding="48"
              root:VisibilityAssist.DisableHitTestWhenOpacityIsZero="True"
              IsHitTestVisible="False"
-             Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static root:Converters.ContentToOpacityConverter}}"
-             root:InputAssist.PointerReleasedCommand="{Binding DialogManager.CurrentDialog.CloseCommand}">
+             Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static root:Converters.ContentToOpacityConverter}}">
 	<UserControl.Transitions>
 		<Transitions>
 			<DoubleTransition Property="Opacity" Duration="0:0:0.5">
@@ -23,42 +22,46 @@
 			</DoubleTransition>
 		</Transitions>
 	</UserControl.Transitions>
-	<TransitioningContentControl Content="{Binding DialogManager.CurrentDialog}">
-		<TransitioningContentControl.ContentTemplate>
-			<DataTemplate x:DataType="local:Dialog">
-				<Border Classes="outer"
-				        HorizontalAlignment="Center"
-				        VerticalAlignment="Center">
-					<DockPanel>
-						<Border DockPanel.Dock="Top"
-						        Classes="inner regular-padding"
-						        CornerRadius="12 12 0 0">
-							<Grid ColumnDefinitions="* Auto">
-								<TextBlock Grid.Column="0"
-								           Text="{Binding Header}"
-								           Classes="caption"
-								           VerticalAlignment="Center"/>
-								<Button Grid.Column="1"
-								        Content="{icons:MaterialIconExt Close}"
-								        Command="{Binding CloseCommand}"
-								        Classes="flat square"/>
-							</Grid>
-						</Border>
-						<ContentPresenter Content="{Binding}"
-						                  Classes="regular-padding"/>
-					</DockPanel>
-				</Border>
-			</DataTemplate>
-		</TransitioningContentControl.ContentTemplate>
-		<TransitioningContentControl.PageTransition>
-			<PageSlide Orientation="Vertical" Duration="0:0:0.5">
-				<PageSlide.SlideInEasing>
-					<CircularEaseInOut/>
-				</PageSlide.SlideInEasing>
-				<PageSlide.SlideOutEasing>
-					<CircularEaseInOut/>
-				</PageSlide.SlideOutEasing>
-			</PageSlide>
-		</TransitioningContentControl.PageTransition>
-	</TransitioningContentControl>
+	<Panel>
+		<Border Background="Transparent"
+		        root:InputAssist.PointerReleasedCommand="{Binding DialogManager.CurrentDialog.CloseCommand}"/>
+		<TransitioningContentControl Content="{Binding DialogManager.CurrentDialog}">
+			<TransitioningContentControl.ContentTemplate>
+				<DataTemplate x:DataType="local:Dialog">
+					<Border Classes="outer"
+					        HorizontalAlignment="Center"
+					        VerticalAlignment="Center">
+						<DockPanel>
+							<Border DockPanel.Dock="Top"
+							        Classes="inner regular-padding"
+							        CornerRadius="12 12 0 0">
+								<Grid ColumnDefinitions="* Auto">
+									<TextBlock Grid.Column="0"
+									           Text="{Binding Header}"
+									           Classes="caption"
+									           VerticalAlignment="Center"/>
+									<Button Grid.Column="1"
+									        Content="{icons:MaterialIconExt Close}"
+									        Command="{Binding CloseCommand}"
+									        Classes="flat square"/>
+								</Grid>
+							</Border>
+							<ContentPresenter Content="{Binding}"
+							                  Classes="regular-padding"/>
+						</DockPanel>
+					</Border>
+				</DataTemplate>
+			</TransitioningContentControl.ContentTemplate>
+			<TransitioningContentControl.PageTransition>
+				<PageSlide Orientation="Vertical" Duration="0:0:0.5">
+					<PageSlide.SlideInEasing>
+						<CircularEaseInOut/>
+					</PageSlide.SlideInEasing>
+					<PageSlide.SlideOutEasing>
+						<CircularEaseInOut/>
+					</PageSlide.SlideOutEasing>
+				</PageSlide>
+			</TransitioningContentControl.PageTransition>
+		</TransitioningContentControl>
+	</Panel>
 </UserControl>
