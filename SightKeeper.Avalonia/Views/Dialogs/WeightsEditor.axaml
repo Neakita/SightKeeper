@@ -3,17 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs"
-             xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Dialogs.WeightsEditor"
              x:DataType="dialogs:IWeightsEditorViewModel"
              MinHeight="300">
-    
-    <Design.DataContext>
-        <fakes:FakeWeightsEditorViewModel/>
-    </Design.DataContext>
-    
     <Grid RowDefinitions="Auto *">
         <Button Grid.Row="0"
                 Content="{icons:MaterialIconExt TrashCan}"

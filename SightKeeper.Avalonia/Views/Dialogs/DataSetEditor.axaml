@@ -3,19 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:fakes="clr-namespace:SightKeeper.Avalonia.ViewModels.Fakes"
              xmlns:dataSet="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs.DataSet"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Views.Dialogs.DataSetEditor"
              x:DataType="dataSet:IDataSetEditorViewModel"
              Width="450" Height="450">
-    
-    <Design.DataContext>
-        <fakes:FakeDataSetCreatingViewModel/>
-    </Design.DataContext>
-    
     <Grid RowDefinitions="*, 50" Name="Root">
-
         <ScrollViewer Grid.Row="0" Grid.Column="0">
             <StackPanel Margin="20" Spacing="20">
                 <TextBox Text="{Binding Name}" Watermark="Name" />

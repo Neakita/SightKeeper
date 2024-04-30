@@ -13,7 +13,7 @@ using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 
-public sealed partial class AutoAnnotationViewModel : ViewModel, IAutoAnnotationViewModel
+public sealed partial class AutoAnnotationViewModel : ViewModel
 {
     public IReadOnlyCollection<Weights> Weights => _selectedDataSetViewModel.Weights;
 
@@ -62,7 +62,6 @@ public sealed partial class AutoAnnotationViewModel : ViewModel, IAutoAnnotation
     private readonly SelectedScreenshotViewModel _selectedScreenshotViewModel;
     private readonly SelectedDataSetViewModel _selectedDataSetViewModel;
 
-    ICommand IAutoAnnotationViewModel.AnnotateCommand => AnnotateCommand;
     [RelayCommand(CanExecute = nameof(CanAnnotate))]
     private async Task Annotate(CancellationToken cancellationToken)
     {
@@ -75,7 +74,6 @@ public sealed partial class AutoAnnotationViewModel : ViewModel, IAutoAnnotation
     }
     private bool CanAnnotate() => SelectedWeights != null && _selectedScreenshotViewModel.Value != null && !AutoAnnotatingEnabled;
 
-    ICommand IAutoAnnotationViewModel.ClearCommand => ClearCommand;
     [RelayCommand(CanExecute = nameof(CanClear))]
     private void Clear()
     {

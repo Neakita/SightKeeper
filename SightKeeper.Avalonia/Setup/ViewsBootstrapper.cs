@@ -13,7 +13,7 @@ internal static class ViewsBootstrapper
 		return
 		[
 			RegisterView<GamesSettings, BaseGamesSettingsViewModel>(),
-			RegisterView<SettingsTab, ISettingsViewModel>(),
+			RegisterView<SettingsTab, SettingsViewModel>(),
 			RegisterView<AddGameDialog, AddGameViewModel>()
 		];
 	}

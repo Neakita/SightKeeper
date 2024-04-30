@@ -10,9 +10,8 @@ using SettingsViewModel = SightKeeper.Avalonia.Settings.SettingsViewModel;
 
 namespace SightKeeper.Avalonia;
 
-internal partial class MainViewModel : ViewModel, IMainViewModel
+internal partial class MainViewModel : ViewModel
 {
-
 	public DialogManager DialogManager { get; }
 	public IReadOnlyCollection<TabItem> Tabs { get; }
 

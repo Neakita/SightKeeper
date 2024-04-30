@@ -2,15 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Settings.Games"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="320"
              x:Class="SightKeeper.Avalonia.Settings.Games.GamesSettings"
              x:DataType="local:BaseGamesSettingsViewModel">
-	<Design.DataContext>
-		<local:FakeGamesSettingsViewModel/>
-	</Design.DataContext>
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

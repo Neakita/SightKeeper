@@ -5,10 +5,7 @@
              xmlns:settings="clr-namespace:SightKeeper.Avalonia.Settings"
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
              x:Class="SightKeeper.Avalonia.Settings.SettingsTab"
-             x:DataType="settings:ISettingsViewModel">
-    <Design.DataContext>
-        <settings:FakeSettingsViewModel/>
-    </Design.DataContext>
+             x:DataType="settings:SettingsViewModel">
     <ScrollViewer Classes="regular-padding">
         <StackPanel Spacing="12">
 	        <Border Classes="outer wide-padding">

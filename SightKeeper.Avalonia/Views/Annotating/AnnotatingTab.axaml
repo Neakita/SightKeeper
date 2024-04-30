@@ -6,10 +6,7 @@
              xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatingTab"
-             x:DataType="viewModels:IAnnotatorViewModel">
-    <Design.DataContext>
-        <viewModels:FakeAnnotatorViewModel/>
-    </Design.DataContext>
+             x:DataType="viewModels:AnnotatorViewModel">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="50" Width="150"/>

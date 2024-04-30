@@ -8,9 +8,6 @@
              x:Class="SightKeeper.Avalonia.Views.ProfileEditor"
              x:DataType="profilesEditorViewModels:ProfileEditorViewModel"
              MinWidth="400">
-    <Design.DataContext>
-        <profilesEditorViewModels:FakeProfileEditorViewModel/>
-    </Design.DataContext>
     <UserControl.Styles>
         <Style Selector="Slider">
             <Setter Property="TickPlacement" Value="Outside"/>

@@ -6,7 +6,7 @@ using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.Settings;
 
-internal sealed partial class SettingsViewModel : ViewModel, ISettingsViewModel
+internal sealed partial class SettingsViewModel : ViewModel
 {
 	public IReadOnlyCollection<SettingsSection> Sections { get; }
 

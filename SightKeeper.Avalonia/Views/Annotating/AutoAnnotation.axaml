@@ -6,10 +6,7 @@
              xmlns:autoAnnotatingViewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating"
              mc:Ignorable="d" d:DesignWidth="250"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AutoAnnotation"
-             x:DataType="autoAnnotatingViewModels:IAutoAnnotationViewModel">
-    <Design.DataContext>
-        <autoAnnotatingViewModels:FakeAutoAnnotationViewModel/>
-    </Design.DataContext>
+             x:DataType="autoAnnotatingViewModels:AutoAnnotationViewModel">
     <StackPanel>
         <ComboBox ItemsSource="{Binding Weights}"
                   SelectedItem="{Binding SelectedWeights}"/>
