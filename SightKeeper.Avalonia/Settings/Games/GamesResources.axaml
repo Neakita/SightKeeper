@@ -1,62 +1,64 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels"
-                    xmlns:local="clr-namespace:SightKeeper.Avalonia.Settings.Games">
+                    xmlns:local="clr-namespace:SightKeeper.Avalonia.Settings.Games"
+                    xmlns:root="clr-namespace:SightKeeper.Avalonia"
+                    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
 	<DataTemplate x:Key="GameTitleCellTemplate" DataType="viewModels:GameViewModel">
-		<StackPanel Orientation="Horizontal" Height="80">
-			<Border CornerRadius="8"
+		<Grid ColumnDefinitions="Auto 12 *" RowDefinitions="Auto Auto">
+			<Grid.Styles>
+				<Style Selector="ContentControl#ProcessNameOrPath">
+					<Setter Property="Content">
+						<Template>
+							<TextBlock Text="{Binding ProcessName}"
+							           FontSize="16"
+							           FontWeight="400"
+							           Foreground="{DynamicResource SecondaryForeground}"
+							           TextTrimming="{x:Static TextTrimming.PrefixCharacterEllipsis}"/>
+						</Template>
+					</Setter>
+					<Style Selector="^:pointerover">
+						<Setter Property="Content">
+							<Template>
+								<TextBlock Text="{Binding ExecutablePath}"
+								           FontSize="16"
+								           FontWeight="400"
+								           Foreground="{DynamicResource SecondaryForeground}"
+								           Background="Transparent"
+								           TextTrimming="{x:Static TextTrimming.PrefixCharacterEllipsis}"
+								           root:TextBlockAssist.AutoTrimmedTextToolTip="True">
+								</TextBlock>
+							</Template>
+						</Setter>
+					</Style>
+				</Style>
+			</Grid.Styles>
+			<Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+			        CornerRadius="12"
 			        ClipToBounds="True"
-			        Width="48"
-			        Height="48"
-			        Margin="16"
+			        Width="30"
+			        Height="30"
 			        IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}">
 				<Image Source="{Binding Icon}"/>
 			</Border>
-			<StackPanel VerticalAlignment="Center">
-				<StackPanel.Styles>
-					<Style Selector="TransitioningContentControl">
-						<Setter Property="IsTransitionReversed" Value="True"/>
-						<Setter Property="Content">
-							<Template>
-								<TextBlock Text="{Binding ProcessName}"
-								           FontSize="16"
-								           FontWeight="400"
-								           Foreground="{DynamicResource SecondaryForeground}"/>
-							</Template>
-						</Setter>
-						<Style Selector="^:pointerover">
-							<Setter Property="IsTransitionReversed" Value="False"/>
-							<Setter Property="Content">
-								<Template>
-									<TextBlock Text="{Binding ExecutablePath}"
-									           FontSize="16"
-									           FontWeight="400"
-									           Foreground="{DynamicResource SecondaryForeground}"
-									           TextTrimming="{x:Static TextTrimming.LeadingCharacterEllipsis}">
-									</TextBlock>
-								</Template>
-							</Setter>
-						</Style>
-					</Style>
-				</StackPanel.Styles>
-				<TextBlock Text="{Binding Title}"
-				           FontSize="16"
-				           FontWeight="700"/>
-				<TransitioningContentControl Background="Transparent">
-					<TransitioningContentControl.PageTransition>
-						<PageSlide Duration="0:0:0.3" Orientation="Vertical">
-							<PageSlide.SlideOutEasing>
-								<CubicEaseInOut/>
-							</PageSlide.SlideOutEasing>
-							<PageSlide.SlideInEasing>
-								<CubicEaseInOut/>
-							</PageSlide.SlideInEasing>
-						</PageSlide>
-					</TransitioningContentControl.PageTransition>
-				</TransitioningContentControl>
-			</StackPanel>
+			<TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Title}"
+			           FontSize="16"
+			           FontWeight="700"
+			           Background="Transparent"
+			           TextTrimming="{x:Static TextTrimming.PrefixCharacterEllipsis}"
+			           root:TextBlockAssist.AutoTrimmedTextToolTip="True"/>
+			<ContentControl Name="ProcessNameOrPath" Grid.Column="2" Grid.Row="1" Background="Transparent"/>
+		</Grid>
+	</DataTemplate>
+	<DataTemplate x:Key="GameActionsCellTemplate" DataType="viewModels:GameViewModel">
+		<StackPanel Orientation="Horizontal">
+			<Button Classes="square"
+			        Content="{icons:MaterialIconExt TrashCanOutline}"
+			        ToolTip.Tip="Delete game"/>
+			<Button Classes="square"
+			        Content="{icons:MaterialIconExt FolderOutline}"
+			        ToolTip.Tip="Show executable in File Explorer"/>
 		</StackPanel>
 	</DataTemplate>
-	<DataTemplate x:Key="GameActionsCellTemplate"/>
 	<local:TreeDataGridGamesSourceConverter x:Key="TreeDataGridGamesSourceConverter"/>
 </ResourceDictionary>
