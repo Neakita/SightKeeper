@@ -34,8 +34,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Theme\Sightful.Avalonia.Theme.csproj" />
-      <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid.Theme\Sightful.Avalonia.TreeDataGrid.Theme.csproj" />
+      <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj" />
+      <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid\Sightful.Avalonia.TreeDataGrid.csproj" />
       <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj" />
       <ProjectReference Include="..\SightKeeper.Application.Windows\SightKeeper.Application.Windows.csproj" />
     </ItemGroup>

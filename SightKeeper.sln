@@ -24,9 +24,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Services.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Avalonia.Tests", "SightKeeper.Avalonia.Tests\SightKeeper.Avalonia.Tests.csproj", "{C50B5BF1-7E4B-4C30-8330-B86E2E1E221C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sightful.Avalonia.Theme", "..\Sightful.Theme\Sightful.Avalonia.Theme\Sightful.Avalonia.Theme.csproj", "{542EC90B-A2D0-4055-95C6-3FCD5A8CA08D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sightful.Avalonia", "..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj", "{542EC90B-A2D0-4055-95C6-3FCD5A8CA08D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sightful.Avalonia.TreeDataGrid.Theme", "..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid.Theme\Sightful.Avalonia.TreeDataGrid.Theme.csproj", "{25B85324-71B2-4011-8C8D-FDFF38668A00}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sightful.Avalonia.TreeDataGrid", "..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid\Sightful.Avalonia.TreeDataGrid.csproj", "{25B85324-71B2-4011-8C8D-FDFF38668A00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
