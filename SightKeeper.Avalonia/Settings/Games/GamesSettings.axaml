@@ -6,7 +6,7 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="320"
              x:Class="SightKeeper.Avalonia.Settings.Games.GamesSettings"
-             x:DataType="local:BaseGamesSettingsViewModel">
+             x:DataType="local:GamesSettingsViewModel">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>

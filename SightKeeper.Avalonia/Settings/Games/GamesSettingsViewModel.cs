@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Autofac;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
@@ -9,8 +8,9 @@ using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.Settings.Games;
 
-internal sealed partial class GamesSettingsViewModel : ViewModel, BaseGamesSettingsViewModel
+internal sealed partial class GamesSettingsViewModel : ViewModel, SettingsSection
 {
+	public string Header => "Games";
 	public IReadOnlyCollection<GameViewModel> Games { get; }
 
 	public GamesSettingsViewModel(
@@ -25,7 +25,6 @@ internal sealed partial class GamesSettingsViewModel : ViewModel, BaseGamesSetti
 		Games = gamesRepository.Games;
 	}
 
-	ICommand BaseGamesSettingsViewModel.AddGameCommand => AddGameCommand;
 	private readonly IComponentContext _context;
 	private readonly DialogManager _dialogManager;
 	private readonly GamesDataAccess _gamesDataAccess;
