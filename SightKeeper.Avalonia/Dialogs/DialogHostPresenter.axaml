@@ -9,7 +9,6 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              x:DataType="local:DialogHost"
              Background="#7F000000"
-             Padding="48"
              root:VisibilityAssist.DisableHitTestWhenOpacityIsZero="True"
              IsHitTestVisible="False"
              Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static root:Converters.ContentToOpacityConverter}}">
@@ -25,7 +24,9 @@
 	<Panel>
 		<Border Background="Transparent"
 		        root:InputAssist.PointerReleasedCommand="{Binding DialogManager.CurrentDialog.CloseCommand}"/>
-		<TransitioningContentControl Content="{Binding DialogManager.CurrentDialog}">
+		<TransitioningContentControl
+			Content="{Binding DialogManager.CurrentDialog}"
+			Padding="48">
 			<TransitioningContentControl.ContentTemplate>
 				<DataTemplate x:DataType="local:Dialog">
 					<Border Classes="outer"
