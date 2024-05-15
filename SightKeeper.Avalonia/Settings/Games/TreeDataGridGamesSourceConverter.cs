@@ -19,8 +19,14 @@ internal sealed class TreeDataGridGamesSourceConverter : IValueConverter
 		{
 			Columns =
 			{
-				new TemplateColumn<GameViewModel>("Title", "GameTitleCellTemplate", width: new GridLength(1, GridUnitType.Star)),
-				new TemplateColumn<GameViewModel>("Actions", "GameActionsCellTemplate", width: new GridLength(0, GridUnitType.Auto))
+				new TemplateColumn<GameViewModel>(
+					"Title",
+					"GameTitleCellTemplate",
+					width: GridLength.Star),
+				new TemplateColumn<GameViewModel>(
+					"Actions",
+					"GameActionsCellTemplate",
+					width: GridLength.Auto)
 			}
 		};
 	}
