@@ -29,7 +29,11 @@
 		</TabStrip>
 	</assists:WindowAssist.LeftContent>
 	<assists:WindowAssist.TopContent>
-		<TextBlock Text="{Binding SelectedTab.Header}" FontSize="16" Margin="16 8" VerticalAlignment="Center"/>
+		<TextBlock Text="{Binding SelectedTab.Header}"
+		           FontSize="16"
+		           Margin="16 8"
+		           VerticalAlignment="Center"
+		           IsHitTestVisible="False"/>
 	</assists:WindowAssist.TopContent>
 	<ContentControl Content="{Binding SelectedTab.ViewModel}"/>
 </Window>
