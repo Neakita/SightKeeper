@@ -45,7 +45,8 @@
 			        ToolTip.Tip="Delete game"/>
 			<Button Classes="square"
 			        Content="{icons:MaterialIconExt FolderOutline}"
-			        ToolTip.Tip="Show executable in File Explorer"/>
+			        ToolTip.Tip="Show executable in File Explorer"
+			        Command="{Binding ShowExecutableCommand}"/>
 		</StackPanel>
 	</DataTemplate>
 	<local:TreeDataGridGamesSourceConverter x:Key="TreeDataGridGamesSourceConverter"/>

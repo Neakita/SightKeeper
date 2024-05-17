@@ -23,15 +23,20 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 		private set => SetProperty(ref _availableGames, value);
 	}
 
-	public AddGameViewModel(ProcessesAvailableGamesProvider availableGamesProvider, GameIconProvider iconProvider)
+	public AddGameViewModel(
+		ProcessesAvailableGamesProvider availableGamesProvider,
+		GameIconProvider iconProvider,
+		GameExecutableDisplayer executableDisplayer)
 	{
 		_availableGamesProvider = availableGamesProvider;
 		_iconProvider = iconProvider;
+		_executableDisplayer = executableDisplayer;
 		_availableGames = GetAvailableGames();
 	}
 
 	private readonly ProcessesAvailableGamesProvider _availableGamesProvider;
 	private readonly GameIconProvider _iconProvider;
+	private readonly GameExecutableDisplayer _executableDisplayer;
 	private IReadOnlyCollection<GameViewModel> _availableGames;
 
 	[ObservableProperty]
@@ -51,7 +56,7 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 
 	private GameViewModel CreateGameViewModel(Game game)
 	{
-		return new GameViewModel(game, _iconProvider);
+		return new GameViewModel(game, _iconProvider, _executableDisplayer);
 	}
 
 	[RelayCommand(CanExecute = nameof(CanApply))]

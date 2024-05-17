@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels;
 
-internal sealed class GameViewModel : ViewModel
+internal sealed partial class GameViewModel : ViewModel
 {
 	public Game Game { get; }
 	public string Title
@@ -24,7 +25,10 @@ internal sealed class GameViewModel : ViewModel
 		set
 		{
 			if (SetProperty(Game.ExecutablePath, value, executablePath => Game.ExecutablePath = executablePath))
+			{
 				UpdateIcon();
+				ShowExecutableCommand.NotifyCanExecuteChanged();
+			}
 		}
 	}
 	public Bitmap? Icon
@@ -33,14 +37,16 @@ internal sealed class GameViewModel : ViewModel
 		private set => SetProperty(ref _icon, value);
 	}
 
-	public GameViewModel(Game game, GameIconProvider iconProvider)
+	public GameViewModel(Game game, GameIconProvider iconProvider, GameExecutableDisplayer executableDisplayer)
 	{
 		Game = game;
 		_iconProvider = iconProvider;
+		_executableDisplayer = executableDisplayer;
 		_icon = GetIcon();
 	}
 
 	private readonly GameIconProvider _iconProvider;
+	private readonly GameExecutableDisplayer _executableDisplayer;
 	private Bitmap? _icon;
 
 	private void UpdateIcon()
@@ -55,5 +61,13 @@ internal sealed class GameViewModel : ViewModel
 			return null;
 		using MemoryStream stream = new(data);
 		return new Bitmap(stream);
+	}
+
+	private bool CanShowExecutable => !string.IsNullOrEmpty(ExecutablePath);
+
+	[RelayCommand(CanExecute = nameof(CanShowExecutable))]
+	private void ShowExecutable()
+	{
+		_executableDisplayer.ShowGameExecutable(Game);
 	}
 }

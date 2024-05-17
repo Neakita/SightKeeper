@@ -12,5 +12,6 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<DbGamesDataAccess>().As<GamesDataAccess>().SingleInstance();
 		builder.RegisterType<WindowsGameIconProvider>().As<GameIconProvider>();
 		builder.RegisterType<ProcessesAvailableGamesProvider>();
+		builder.RegisterType<WindowsFileExplorerGameExecutableDisplayer>().As<GameExecutableDisplayer>();
 	}
 }
