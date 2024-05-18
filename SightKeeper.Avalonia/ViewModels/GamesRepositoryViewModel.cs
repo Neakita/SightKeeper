@@ -4,24 +4,26 @@ using System.Reactive.Disposables;
 using CommunityToolkit.Diagnostics;
 using DynamicData;
 using SightKeeper.Application;
+using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels;
 
 internal sealed class GamesRepositoryViewModel : IDisposable
 {
-	public ReadOnlyObservableCollection<GameViewModel> Games { get; }
+	public ReadOnlyObservableCollection<ExistingGameViewModel> Games { get; }
 	
 	public GamesRepositoryViewModel(
 		GamesDataAccess gamesDataAccess,
 		GameIconProvider gameIconProvider,
-		GameExecutableDisplayer gameExecutableDisplayer)
+		GameExecutableDisplayer gameExecutableDisplayer,
+		DialogManager dialogManager)
 	{
 		_games.AddRange(gamesDataAccess.Games);
 		gamesDataAccess.GameAdded.Subscribe(OnGameAdded).DisposeWith(_constructorDisposables);
 		gamesDataAccess.GameRemoved.Subscribe(OnGameRemoved).DisposeWith(_constructorDisposables);
 		_games.Connect()
-			.Transform(game => new GameViewModel(game, gameIconProvider, gameExecutableDisplayer))
+			.Transform(game => new ExistingGameViewModel(game, gameIconProvider, gameExecutableDisplayer, dialogManager, gamesDataAccess))
 			.Bind(out var games)
 			.Subscribe()
 			.DisposeWith(_constructorDisposables);

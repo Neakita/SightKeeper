@@ -22,10 +22,14 @@ internal sealed class TreeDataGridGamesSourceConverter : IValueConverter
 				new TemplateColumn<GameViewModel>(
 					"Title",
 					"GameTitleCellTemplate",
-					width: GridLength.Star),
+					width: GridLength.Star,
+					options: new TemplateColumnOptions<GameViewModel>
+					{
+						MinWidth = new GridLength(100)
+					}),
 				new TemplateColumn<GameViewModel>(
 					"Actions",
-					"GameActionsCellTemplate",
+					"ExistingGameActionsCellTemplate",
 					width: GridLength.Auto)
 			}
 		};

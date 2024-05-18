@@ -6,7 +6,7 @@ using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels;
 
-internal sealed partial class GameViewModel : ViewModel
+internal partial class GameViewModel : ViewModel
 {
 	public Game Game { get; }
 	public string Title
