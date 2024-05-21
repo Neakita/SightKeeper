@@ -10,7 +10,7 @@ internal static class TextBlockAssist
 	#region AutoTrimmedTextToolTip
 
 	public static readonly AttachedProperty<bool> AutoTrimmedTextToolTipProperty =
-		AvaloniaProperty.RegisterAttached<Control, bool>("AutoTrimmedTextToolTip", typeof(VisibilityAssist));
+		AvaloniaProperty.RegisterAttached<Control, bool>("AutoTrimmedTextToolTip", typeof(TextBlockAssist));
 
 	private static readonly ReadOnlyMemory<char> Ellipsis = "\u2026".AsMemory();
 
