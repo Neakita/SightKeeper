@@ -3,7 +3,7 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Assists;
 
 internal static class TextBlockAssist
 {

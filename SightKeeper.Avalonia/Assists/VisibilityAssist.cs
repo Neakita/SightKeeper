@@ -3,7 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Assists;
 
 internal static class VisibilityAssist
 {

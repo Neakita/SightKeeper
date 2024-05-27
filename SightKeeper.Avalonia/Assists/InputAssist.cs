@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Assists;
 
 internal static class InputAssist
 {
