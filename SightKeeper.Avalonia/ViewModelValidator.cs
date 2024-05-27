@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using FluentValidation;
 using SightKeeper.Avalonia.ViewModels;
 
@@ -13,7 +14,6 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 {
 	public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 	public bool HasErrors => _errors.Count > 0;
-	public bool ValidateOnPropertyChanged { get; set; } = true;
 
 	public ViewModelValidator(IValidator<TValidatable> validator, ViewModel viewModel, TValidatable validatable)
 	{
@@ -35,14 +35,25 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 		_viewModel.PropertyChanged -= OnViewModelPropertyChanged;
 	}
 
+	public IDisposable SuppressValidation()
+	{
+		_validateOnPropertyChanged = false;
+		return Disposable.Create(this, validator =>
+		{
+			ValidateEntireViewModel();
+			validator._validateOnPropertyChanged = true;
+		});
+	}
+
 	private readonly IValidator<TValidatable> _validator;
 	private readonly ViewModel _viewModel;
 	private readonly TValidatable _validatable;
 	private IReadOnlyDictionary<string, string[]> _errors = ImmutableDictionary<string, string[]>.Empty;
+	private bool _validateOnPropertyChanged = true;
 
 	private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
-		if (!ValidateOnPropertyChanged)
+		if (!_validateOnPropertyChanged)
 			return;
 		ValidateEntireViewModel();
 	}

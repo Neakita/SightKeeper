@@ -14,7 +14,7 @@ internal sealed class ExistingProfileEditorViewModel : AbstractProfileEditorView
     
     public void SetData(Profile profile)
     {
-        Validator.ValidateOnPropertyChanged = false;
+        using var disposable = Validator.SuppressValidation();
         Profile = profile;
         Name = profile.Name;
         Description = profile.Description;
@@ -26,8 +26,6 @@ internal sealed class ExistingProfileEditorViewModel : AbstractProfileEditorView
         _itemClasses.Clear();
         _itemClasses.AddRange(profile.ItemClasses
             .Select(profileItemClass => new ProfileItemClassViewModel(profileItemClass.ItemClass, (byte)profile.ItemClasses.IndexOf(profileItemClass), profileItemClass.ActivationCondition)));
-        
-
         if (profile.PreemptionSettings != null)
         {
             IsPreemptionEnabled = true;
@@ -41,7 +39,6 @@ internal sealed class ExistingProfileEditorViewModel : AbstractProfileEditorView
             }
             PreemptionFactorsLink = PreemptionHorizontalFactor == PreemptionVerticalFactor;
         }
-        Validator.ValidateOnPropertyChanged = true;
     }
 
     public override string Header => "Edit profile";
