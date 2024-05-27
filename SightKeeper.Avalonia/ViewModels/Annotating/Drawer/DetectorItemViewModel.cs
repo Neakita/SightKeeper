@@ -6,7 +6,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.Model.DataSets;
 
-namespace SightKeeper.Avalonia.ViewModels.Annotating;
+namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 
 internal sealed partial class DetectorItemViewModel : ViewModel, DrawerItem
 {

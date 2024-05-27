@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Domain.Model.DataSets;
 
-namespace SightKeeper.Avalonia.ViewModels.Annotating;
+namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 
 internal sealed partial class DetectedItemViewModel : ViewModel, DrawerItem
 {

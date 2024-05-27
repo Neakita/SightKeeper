@@ -2,7 +2,7 @@
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets;
 
-namespace SightKeeper.Avalonia.ViewModels.Annotating;
+namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 
 internal sealed class BoundingViewModel : ViewModel
 {

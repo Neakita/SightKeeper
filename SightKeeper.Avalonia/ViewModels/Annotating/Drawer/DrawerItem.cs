@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Model.DataSets;
 
-namespace SightKeeper.Avalonia.ViewModels.Annotating;
+namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 
 internal interface DrawerItem
 {

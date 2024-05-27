@@ -139,7 +139,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
             if (!SetProperty(ref _dataSet, value))
                 return;
             _availableItemClasses.Clear();
-            _itemClasses.Clear();
+            ItemClassesSource.Clear();
             if (value == null)
                 AvailableWeights = Array.Empty<Weights>();
             else
@@ -164,23 +164,25 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     {
         _canDelete = canDelete;
         AvailableDataSets = dataSetsObservableRepository.DataSets;
-        _itemClasses.Connect()
+        ItemClassesSource.Connect()
             .Bind(out var itemClasses)
             .Subscribe()
             .DisposeWith(_constructorDisposables);
         ItemClasses = itemClasses;
         _itemClassesViewModels = itemClasses;
         _availableItemClasses.Connect()
-            .Except(_itemClasses.Connect().Transform(itemClassData => itemClassData.ItemClass))
+            .Except(ItemClassesSource.Connect().Transform(itemClassData => itemClassData.ItemClass))
             .Bind(out var availableItemClasses)
             .Subscribe()
             .DisposeWith(_constructorDisposables);
         AvailableItemClasses = availableItemClasses;
-        Validator = new ViewModelValidator<TProfileData>(validator, this, this as TProfileData);
+        var validatable = this as TProfileData;
+        Guard.IsNotNull(validatable);
+        Validator = new ViewModelValidator<TProfileData>(validator, this, validatable);
     }
 
     private readonly CompositeDisposable _constructorDisposables = new();
-    protected readonly SourceList<ProfileItemClassViewModel> _itemClasses = new();
+    protected readonly SourceList<ProfileItemClassViewModel> ItemClassesSource = new();
     private readonly SourceList<ItemClass> _availableItemClasses = new();
     private readonly bool _canDelete;
     private DataSet? _dataSet;
@@ -206,7 +208,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     private void AddItemClass()
     {
         Guard.IsNotNull(ItemClassToAdd);
-        _itemClasses.Add(new ProfileItemClassViewModel(ItemClassToAdd, (byte)_itemClasses.Count));
+        ItemClassesSource.Add(new ProfileItemClassViewModel(ItemClassToAdd, (byte)ItemClassesSource.Count));
         MoveItemClassUpCommand.NotifyCanExecuteChanged();
         MoveItemClassDownCommand.NotifyCanExecuteChanged();
     }
@@ -216,7 +218,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     [RelayCommand]
     private void RemoveItemClass(ProfileItemClassViewModel itemClass)
     {
-        Guard.IsTrue(_itemClasses.Remove(itemClass));
+        Guard.IsTrue(ItemClassesSource.Remove(itemClass));
         UpdateItemClassesOrder();
         MoveItemClassUpCommand.NotifyCanExecuteChanged();
         MoveItemClassDownCommand.NotifyCanExecuteChanged();
@@ -227,7 +229,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     private void MoveItemClassUp(ProfileItemClassViewModel itemClass)
     {
         var currentIndex = ItemClasses.IndexOf(itemClass);
-        _itemClasses.Move(currentIndex, currentIndex - 1);
+        ItemClassesSource.Move(currentIndex, currentIndex - 1);
         UpdateItemClassesOrder();
         MoveItemClassUpCommand.NotifyCanExecuteChanged();
         MoveItemClassDownCommand.NotifyCanExecuteChanged();
@@ -243,7 +245,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     private void MoveItemClassDown(ProfileItemClassViewModel itemClass)
     {
         var currentIndex = ItemClasses.IndexOf(itemClass);
-        _itemClasses.Move(currentIndex, currentIndex + 1);
+        ItemClassesSource.Move(currentIndex, currentIndex + 1);
         UpdateItemClassesOrder();
         MoveItemClassUpCommand.NotifyCanExecuteChanged();
         MoveItemClassDownCommand.NotifyCanExecuteChanged();
@@ -275,7 +277,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     private void UpdateItemClassesOrder()
     {
         for (var i = 0; i < ItemClasses.Count; i++)
-            _itemClasses.Items.ElementAt(i).Order = (byte)i;
+            ItemClassesSource.Items.ElementAt(i).Order = (byte)i;
     }
 
     public IEnumerable GetErrors(string? propertyName)

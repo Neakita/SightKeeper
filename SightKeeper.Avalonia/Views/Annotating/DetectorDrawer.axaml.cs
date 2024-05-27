@@ -5,7 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Avalonia.ViewModels.Annotating;
+using DrawerViewModel = SightKeeper.Avalonia.ViewModels.Annotating.Drawer.DrawerViewModel;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 

@@ -2,7 +2,7 @@
 using ReactiveUI;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
-namespace SightKeeper.Avalonia.Views;
+namespace SightKeeper.Avalonia.Views.Profiles;
 
 internal sealed partial class ProfileEditor : UserControl, IViewFor<NewProfileEditorViewModel>, IViewFor<ExistingProfileEditorViewModel>
 {

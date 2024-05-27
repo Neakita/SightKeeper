@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
-using SightKeeper.Avalonia.Extensions;
+using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 using SightKeeper.Avalonia.ViewModels.Elements;
@@ -24,28 +24,31 @@ internal partial class DataSetsViewModel : ViewModel
 		DataSetsListViewModel dataSetsListViewModel,
 		DataSetsDataAccess dataSetsDataSetsDataSetsDataAccess,
 		DataSetCreator dataSetCreator,
-		DataSetEditor dataSetEditor)
+		DataSetEditor dataSetEditor,
+		DialogManager dialogManager)
 	{
 		DataSetsViewModels = dataSetsListViewModel.DataSets;
 		_scope = scope;
 		_dataSetsDataAccess = dataSetsDataSetsDataSetsDataAccess;
 		_dataSetCreator = dataSetCreator;
 		_dataSetEditor = dataSetEditor;
+		_dialogManager = dialogManager;
 	}
 
 	private readonly ILifetimeScope _scope;
 	private readonly DataSetsDataAccess _dataSetsDataAccess;
 	private readonly DataSetCreator _dataSetCreator;
 	private readonly DataSetEditor _dataSetEditor;
+	private readonly DialogManager _dialogManager;
 
 	[RelayCommand]
 	private async Task CreateNewDataSet(CancellationToken cancellationToken)
 	{
 		await using var scope = _scope.BeginLifetimeScope(this);
 		var viewModel = scope.Resolve<DataSetCreatingViewModel>();
-		/*var applied = await this.ShowDialogAsync(viewModel);
+		var applied = await _dialogManager.ShowDialogAsync(viewModel);
 		if (applied)
-			_dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(viewModel));*/
+			_dataSetCreator.CreateDataSet(new NewDataSetInfoDTO(viewModel));
 	}
 
 	[RelayCommand(CanExecute = nameof(CanEditDataSet))]
@@ -55,9 +58,9 @@ internal partial class DataSetsViewModel : ViewModel
 		var dataSetToEdit = SelectedDataSetViewModel.DataSet;
 		await using var scope = _scope.BeginLifetimeScope(this);
 		var viewModel = scope.Resolve<DataSetEditingViewModel>(new PositionalParameter(0, dataSetToEdit));
-		/*var applied = await this.ShowDialogAsync(viewModel);
+		var applied = await _dialogManager.ShowDialogAsync(viewModel);
 		if (applied)
-			await _dataSetEditor.ApplyChanges(new DataSetChangesDTO(dataSetToEdit, viewModel), cancellationToken);*/
+			await _dataSetEditor.ApplyChanges(new DataSetChangesDTO(dataSetToEdit, viewModel), cancellationToken);
 	}
 
 	private bool CanEditDataSet() => SelectedDataSetViewModel != null;
@@ -78,7 +81,7 @@ internal partial class DataSetsViewModel : ViewModel
 		Guard.IsNotNull(SelectedDataSetViewModel);
 		var dialogViewModel = _scope.Resolve<WeightsEditorViewModel>();
 		dialogViewModel.SetLibrary(SelectedDataSetViewModel.DataSet.Weights);
-		/*await this.ShowDialogAsync(dialogViewModel);*/
+		await _dialogManager.ShowDialogAsync(dialogViewModel);
 	}
 
 	private bool CanEditWeights() => SelectedDataSetViewModel != null;

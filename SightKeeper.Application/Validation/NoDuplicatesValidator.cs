@@ -15,7 +15,7 @@ internal sealed class NoDuplicatesValidator<T, TProperty, TPropertyPredicate> : 
 	public override bool IsValid(ValidationContext<T> context, IEnumerable<TProperty> value)
 	{
 		var duplicates = value
-			.GroupBy<TProperty, TPropertyPredicate>(_predicate)
+			.GroupBy(_predicate)
 			.Where(group => group.Count() > 1)
 			.Select(group => group.First())
 			.ToList();

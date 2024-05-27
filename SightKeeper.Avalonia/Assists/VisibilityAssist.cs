@@ -29,7 +29,7 @@ internal static class VisibilityAssist
 
 	public static bool GetDisableHitTestWhenOpacityIsZero(AvaloniaObject element)
 	{
-		return element.GetValue<bool>(DisableHitTestWhenOpacityIsZeroProperty);
+		return element.GetValue(DisableHitTestWhenOpacityIsZeroProperty);
 	}
 
 	public static void SetDisableHitTestWhenOpacityIsZero(AvaloniaObject element, bool value)

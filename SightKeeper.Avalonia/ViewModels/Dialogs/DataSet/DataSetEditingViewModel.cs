@@ -11,10 +11,12 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
+using Material.Icons;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Avalonia.MessageBoxDialog;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model;
 
@@ -76,16 +78,17 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
         var deletedItemClassWithTheSameName = _deletedItemClasses.FirstOrDefault(deletedItemClass => deletedItemClass.ItemClass.Name == NewItemClassName);
         if (deletedItemClassWithTheSameName != null)
         {
-            /*var messageBox = MessageBoxManager.GetMessageBoxStandard(new MessageBoxStandardParams
-            {
-                ContentMessage =
-                    $"Item class {NewItemClassName} already exists, but it was deleted. Would you like to re-add it?",
-                ButtonDefinitions = ButtonEnum.YesNo
-            });
-            var result = await messageBox.ShowWindowDialogAsync(this.GetOwnerWindow());
-            if (result == ButtonResult.No)
-                return;*/
-            Guard.IsTrue(_deletedItemClasses.Remove(deletedItemClassWithTheSameName));
+            var noButton = new MessageBoxButtonDefinition("No", MaterialIconKind.Close);
+            MessageBoxDialogViewModel messageBox = new(
+                "Item class adding",
+                $"Item class {NewItemClassName} already exists, but it was deleted. Would you like to re-add it?",
+                new MessageBoxButtonDefinition("Yes", MaterialIconKind.Check),
+                noButton);
+            var result = await _dialogManager.ShowDialogAsync(messageBox);
+            if (result == noButton)
+                return;
+            var isRemoved = _deletedItemClasses.Remove(deletedItemClassWithTheSameName);
+            Guard.IsTrue(isRemoved);
             _itemClasses.Add(new ExistingItemClass(deletedItemClassWithTheSameName.ItemClass));
         }
         else
@@ -110,30 +113,23 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
             DeletedItemClassAction? action = null;
             if (existingItemClass.ItemClass.Items.Any())
             {
-                const string deleteItems = "Delete items";
-                const string deleteAssets = "Delete assets";
-                const string deleteScreenshots = "Delete screenshots";
-                /*var messageBox = MessageBoxManager.GetMessageBoxCustom(new MessageBoxCustomParams
-                {
-                    ContentMessage = $"Item class {itemClass.Name} has some items ({existingItemClass.ItemClass.Items.Count}). Are you sure you want to delete it? Choose action",
-                    ButtonDefinitions = new[]
-                    {
-                        new ButtonDefinition { Name = "Cancel", IsCancel = true },
-                        new ButtonDefinition { Name = deleteItems },
-                        new ButtonDefinition { Name = deleteAssets },
-                        new ButtonDefinition { Name = deleteScreenshots }
-                    }
-                });
-                var result = await messageBox.ShowWindowDialogAsync(this.GetOwnerWindow());
-                if (result is null or "Cancel")
+                var cancel = new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel);
+                var deleteItems = new MessageBoxButtonDefinition("Delete items", MaterialIconKind.TrashCanOutline);
+                var deleteAssets = new MessageBoxButtonDefinition("Delete assets", MaterialIconKind.TrashCanOutline);
+                var deleteScreenshots = new MessageBoxButtonDefinition("Delete screenshots", MaterialIconKind.TrashCanOutline);
+                MessageBoxDialogViewModel messageBox = new(
+                    "Associated items",
+                    $"Item class {itemClass.Name} has some items ({existingItemClass.ItemClass.Items.Count}). Are you sure you want to delete it? Choose action",
+                    cancel, deleteItems, deleteAssets, deleteScreenshots);
+                var result = await _dialogManager.ShowDialogAsync(messageBox);
+                if (result == cancel)
                     return;
-                action = result switch
-                {
-                    deleteItems => DeletedItemClassAction.DeleteItems,
-                    deleteAssets => DeletedItemClassAction.DeleteAssets,
-                    deleteScreenshots => DeletedItemClassAction.DeleteScreenshots,
-                    _ => ThrowHelper.ThrowArgumentOutOfRangeException<DeletedItemClassAction>(nameof(result))
-                };*/
+                if (result == deleteItems)
+                    action = DeletedItemClassAction.DeleteItems;
+                else if (result == deleteAssets)
+                    action = DeletedItemClassAction.DeleteAssets;
+                else if (result == deleteScreenshots)
+                    action = DeletedItemClassAction.DeleteScreenshots;
             }
             _deletedItemClasses.Add(new DeletedItemClass(existingItemClass.ItemClass, action));
         }

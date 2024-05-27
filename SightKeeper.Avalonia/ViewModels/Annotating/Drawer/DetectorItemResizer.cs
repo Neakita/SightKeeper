@@ -2,7 +2,7 @@
 using Avalonia;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Avalonia.ViewModels.Annotating;
+namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 
 internal sealed class DetectorItemResizer
 {

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DynamicData;
 using FluentValidation;
 using SightKeeper.Application;
@@ -23,8 +24,8 @@ internal sealed class ExistingProfileEditorViewModel : AbstractProfileEditorView
         PostProcessDelay = profile.PostProcessDelay;
         DataSet = profile.Weights.Library.DataSet;
         Weights = profile.Weights;
-        _itemClasses.Clear();
-        _itemClasses.AddRange(profile.ItemClasses
+        ItemClassesSource.Clear();
+        ItemClassesSource.AddRange(profile.ItemClasses
             .Select(profileItemClass => new ProfileItemClassViewModel(profileItemClass.ItemClass, (byte)profile.ItemClasses.IndexOf(profileItemClass), profileItemClass.ActivationCondition)));
         if (profile.PreemptionSettings != null)
         {
@@ -37,7 +38,10 @@ internal sealed class ExistingProfileEditorViewModel : AbstractProfileEditorView
                 PreemptionStabilizationBufferSize = profile.PreemptionSettings.StabilizationSettings.BufferSize;
                 PreemptionStabilizationMethod = profile.PreemptionSettings.StabilizationSettings.Method;
             }
-            PreemptionFactorsLink = PreemptionHorizontalFactor == PreemptionVerticalFactor;
+
+            var factorsDifference = Math.Abs(PreemptionHorizontalFactor.Value) - Math.Abs(PreemptionVerticalFactor.Value);
+            const float factorsDifferenceTolerance = 0.01f;
+            PreemptionFactorsLink = factorsDifference < factorsDifferenceTolerance;
         }
     }
 

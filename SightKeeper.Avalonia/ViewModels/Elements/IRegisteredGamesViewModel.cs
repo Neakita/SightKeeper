@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using SightKeeper.Domain.Model;
 

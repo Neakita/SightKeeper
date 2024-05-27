@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using SightKeeper.Application;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Windows;

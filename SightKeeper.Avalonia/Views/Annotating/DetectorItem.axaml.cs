@@ -5,7 +5,8 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.ReactiveUI;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Avalonia.ViewModels.Annotating;
+using SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
+using DetectorItemViewModel = SightKeeper.Avalonia.ViewModels.Annotating.Drawer.DetectorItemViewModel;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 

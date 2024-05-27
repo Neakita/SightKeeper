@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Avalonia.ViewModels.Annotating;
+﻿namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 
 public enum ResizeDirection
 {

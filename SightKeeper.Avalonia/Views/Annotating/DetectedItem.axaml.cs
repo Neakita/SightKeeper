@@ -1,5 +1,5 @@
 ﻿using Avalonia.ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Annotating;
+using DetectedItemViewModel = SightKeeper.Avalonia.ViewModels.Annotating.Drawer.DetectedItemViewModel;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 

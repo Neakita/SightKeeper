@@ -2,114 +2,118 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
+             xmlns:drawer="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating.Drawer"
+             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Annotating.DetectorDrawer"
-             x:DataType="annotating:DrawerViewModel">
-    
-    <Panel HorizontalAlignment="Center" VerticalAlignment="Center"
-           Name="Root">
+             x:DataType="drawer:DrawerViewModel">
 
-            <Image Name="Image" IsHitTestVisible="True" Source="{Binding SelectedScreenshotViewModel.Value.Image.Content, Converter={StaticResource BytesToBitmapConverter}}" />
+	<Panel HorizontalAlignment="Center" VerticalAlignment="Center"
+	       Name="Root">
 
-            <ListBox Name="CanvasItemsControl"
-                     ItemsSource="{Binding Path=SelectedScreenshotViewModel.Items}"
-                     SelectedItem="{Binding SelectedItem}"
-                     Background="Transparent"
-                     IsHitTestVisible="{Binding IsItemSelectionEnabled}">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Panel ClipToBounds="False">
-                            <Rectangle Name="BoundingRectangle"
-                                       Classes.dashed="{Binding IsDashed}"
-                                       Stroke="{Binding ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=1}"
-                                       StrokeThickness="1"
-                                       Margin="-1"/> <!--Because rectangle should be in outer space of list box Item, like it's own border-->
-                            <ContentControl Content="{Binding}"
-                                            ClipToBounds="False"/>
-                        </Panel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <ListBox.Styles>
-                    <Style Selector="ListBoxItem">
-                        <Setter Property="ZIndex"
-                                Value="{Binding (annotating:DrawerItem).Bounding.Width, Converter={StaticResource WidthToZIndexConverter}}"/>
-                        <Setter Property="Padding" Value="0"/>
-                        <Setter Property="Canvas.Left">
-                            <Setter.Value>
-                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
-                                    <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DrawerItem).Bounding.Left" />
-                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Width" />
-                                    </MultiBinding.Bindings>
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="Canvas.Top">
-                            <Setter.Value>
-                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
-                                    <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DrawerItem).Bounding.Top" />
-                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Height" />
-                                    </MultiBinding.Bindings>
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="Width">
-                            <Setter.Value>
-                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
-                                    <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DrawerItem).Bounding.Width" />
-                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Width" />
-                                    </MultiBinding.Bindings>
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                        <Setter Property="Height">
-                            <Setter.Value>
-                                <MultiBinding Converter="{StaticResource CanvasNormalizeConverter}">
-                                    <MultiBinding.Bindings>
-                                        <Binding Path="(annotating:DrawerItem).Bounding.Height" />
-                                        <Binding ElementName="CanvasItemsControl" Path="Bounds.Height" />
-                                    </MultiBinding.Bindings>
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                        
-                        <Setter Property="ClipToBounds" Value="False"/>
-                        
-                    </Style>
-                    
-                    <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="{Binding (annotating:DrawerItem).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.1}"/>
-                    </Style>
-                    
-                    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="Transparent"/>
-                    </Style>
-                    
-                    <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                        <Setter Property="Background" Value="{Binding (annotating:DrawerItem).ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.1}"/>
-                    </Style>
-                    
-                    <Style Selector="ListBoxItem:selected"/>
+		<Image Name="Image" IsHitTestVisible="True"
+		       Source="{Binding SelectedScreenshotViewModel.Value.Image.Content, Converter={x:Static root:Converters.BytesToBitmapConverter}}"/>
 
-                    <Style Selector="ListBoxItem:not(:pointerover)">
-                        <Setter Property="Opacity" Value="0.5"/>
-                    </Style>
+		<ListBox Name="CanvasItemsControl"
+		         ItemsSource="{Binding Path=SelectedScreenshotViewModel.Items}"
+		         SelectedItem="{Binding SelectedItem}"
+		         Background="Transparent"
+		         IsHitTestVisible="{Binding IsItemSelectionEnabled}">
+			<ListBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<Canvas/>
+				</ItemsPanelTemplate>
+			</ListBox.ItemsPanel>
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Panel ClipToBounds="False">
+						<Rectangle Name="BoundingRectangle"
+						           Classes.dashed="{Binding IsDashed}"
+						           Stroke="{Binding ItemClass.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=1}"
+						           StrokeThickness="1"
+						           Margin="-1"/> <!--Because rectangle should be in outer space of list box Item, like it's own border-->
+						<ContentControl Content="{Binding}"
+						                ClipToBounds="False"/>
+					</Panel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+			<ListBox.Styles>
+				<Style Selector="ListBoxItem">
+					<Setter Property="ZIndex"
+					        Value="{Binding (drawer:DrawerItem).Bounding.Width, Converter={x:Static root:Converters.WidthToZIndexConverter}}"/>
+					<Setter Property="Padding" Value="0"/>
+					<Setter Property="Canvas.Left">
+						<Setter.Value>
+							<MultiBinding Converter="{x:Static root:Converters.CanvasNormalizeConverter}">
+								<MultiBinding.Bindings>
+									<Binding Path="(drawer:DrawerItem).Bounding.Left"/>
+									<Binding ElementName="CanvasItemsControl" Path="Bounds.Width"/>
+								</MultiBinding.Bindings>
+							</MultiBinding>
+						</Setter.Value>
+					</Setter>
+					<Setter Property="Canvas.Top">
+						<Setter.Value>
+							<MultiBinding Converter="{x:Static root:Converters.CanvasNormalizeConverter}">
+								<MultiBinding.Bindings>
+									<Binding Path="(drawer:DrawerItem).Bounding.Top"/>
+									<Binding ElementName="CanvasItemsControl" Path="Bounds.Height"/>
+								</MultiBinding.Bindings>
+							</MultiBinding>
+						</Setter.Value>
+					</Setter>
+					<Setter Property="Width">
+						<Setter.Value>
+							<MultiBinding Converter="{x:Static root:Converters.CanvasNormalizeConverter}">
+								<MultiBinding.Bindings>
+									<Binding Path="(drawer:DrawerItem).Bounding.Width"/>
+									<Binding ElementName="CanvasItemsControl" Path="Bounds.Width"/>
+								</MultiBinding.Bindings>
+							</MultiBinding>
+						</Setter.Value>
+					</Setter>
+					<Setter Property="Height">
+						<Setter.Value>
+							<MultiBinding Converter="{x:Static root:Converters.CanvasNormalizeConverter}">
+								<MultiBinding.Bindings>
+									<Binding Path="(drawer:DrawerItem).Bounding.Height"/>
+									<Binding ElementName="CanvasItemsControl" Path="Bounds.Height"/>
+								</MultiBinding.Bindings>
+							</MultiBinding>
+						</Setter.Value>
+					</Setter>
 
-                    <Style Selector="Rectangle.dashed">
-                        <Setter Property="StrokeDashArray" Value="10,10"/>
-                    </Style>
+					<Setter Property="ClipToBounds" Value="False"/>
 
-                </ListBox.Styles>
-            </ListBox>
+				</Style>
 
-        </Panel>
-    
+				<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+					<Setter Property="Background"
+					        Value="{Binding (drawer:DrawerItem).ItemClass.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=0.1}"/>
+				</Style>
+
+				<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+					<Setter Property="Background" Value="Transparent"/>
+				</Style>
+
+				<Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+					<Setter Property="Background"
+					        Value="{Binding (drawer:DrawerItem).ItemClass.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=0.1}"/>
+				</Style>
+
+				<Style Selector="ListBoxItem:selected"/>
+
+				<Style Selector="ListBoxItem:not(:pointerover)">
+					<Setter Property="Opacity" Value="0.5"/>
+				</Style>
+
+				<Style Selector="Rectangle.dashed">
+					<Setter Property="StrokeDashArray" Value="10,10"/>
+				</Style>
+
+			</ListBox.Styles>
+		</ListBox>
+
+	</Panel>
+
 </UserControl>

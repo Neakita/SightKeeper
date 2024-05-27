@@ -14,7 +14,7 @@ internal sealed class AnnotatorViewModel : ViewModel, IDisposable
 
 	public ScreenshoterViewModel Screenshoter { get; }
 	public AnnotatorToolsViewModel ToolsViewModel { get; }
-	public DrawerViewModel DrawerViewModel { get; }
+	public Drawer.DrawerViewModel DrawerViewModel { get; }
 	public SelectedDataSetViewModel SelectedDataSet { get; }
 	public AutoAnnotationViewModel AutoAnnotationViewModel { get; }
 	public ViewSettingsViewModel ViewSettingsViewModel { get; }
@@ -26,7 +26,7 @@ internal sealed class AnnotatorViewModel : ViewModel, IDisposable
 		AnnotatorScreenshotsViewModel screenshots,
 		DataSetsListViewModel dataSetsListViewModel,
 		AnnotatorToolsViewModel toolsViewModel,
-		DrawerViewModel drawerViewModel,
+		Drawer.DrawerViewModel drawerViewModel,
 		SelectedDataSetViewModel selectedDataSet,
 		AutoAnnotationViewModel autoAnnotationViewModel,
 		ViewSettingsViewModel viewSettingsViewModel)

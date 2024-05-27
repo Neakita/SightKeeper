@@ -12,5 +12,5 @@ public sealed class WidthToZIndexConverter : IValueConverter
 		return int.MaxValue - (int)(Math.Clamp(number, 0, 1) * int.MaxValue);
 	}
 
-	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
+	public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
 }

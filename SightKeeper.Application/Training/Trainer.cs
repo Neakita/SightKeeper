@@ -44,7 +44,6 @@ public sealed class Trainer
 		using var trainingProgressObserverDisposable = trainingProgress
 			.IgnoreCompletion()
 			.Subscribe(trainingProgressObserver);
-		await runsDirectoryReplacement.DisposeAsync();
 		var lastProgress = await trainingProgress.LastOrDefaultAsync();
 		if (lastProgress == null)
 		{
@@ -74,7 +73,6 @@ public sealed class Trainer
 		using var trainingProgressObserverDisposable = trainingProgress
 			.IgnoreCompletion()
 			.Subscribe(trainingProgressObserver);
-		await runsDirectoryReplacement.DisposeAsync();
 		var lastProgress = await trainingProgress.LastOrDefaultAsync();
 		if (lastProgress == null)
 		{

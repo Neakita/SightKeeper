@@ -21,10 +21,20 @@ internal static class ViewsBootstrapper
 		];
 	}
 
-	private static FuncDataTemplate<TViewModel> RegisterView<TView, TViewModel>()
+	private static FuncDataTemplate<TViewModel?> RegisterView<TView, TViewModel>()
 		where TView : Control, new()
 		where TViewModel : ViewModel
 	{
-		return new FuncDataTemplate<TViewModel>(viewModel => viewModel != null, viewModel => new TView { DataContext = viewModel });
+		return new FuncDataTemplate<TViewModel?>(Match, Build<TView, TViewModel>);
+	}
+
+	private static bool Match<TViewModel>(TViewModel? viewModel) where TViewModel : ViewModel
+	{
+		return viewModel != null;
+	}
+
+	private static TView Build<TView, TViewModel>(TViewModel? viewModel) where TView : Control, new() where TViewModel : ViewModel
+	{
+		return new TView { DataContext = viewModel };
 	}
 }

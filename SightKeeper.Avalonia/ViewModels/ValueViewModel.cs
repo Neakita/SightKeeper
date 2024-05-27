@@ -52,7 +52,7 @@ internal abstract class ValueViewModel<T> : ViewModel, IDisposable
 
     private void NotifyCommandsCanExecuteChanged()
     {
-        foreach (var commandReference in _commandsToNotify)
+        foreach (var commandReference in _commandsToNotify.ToList())
         {
             if (commandReference.TryGetTarget(out var command))
                 command.NotifyCanExecuteChanged();

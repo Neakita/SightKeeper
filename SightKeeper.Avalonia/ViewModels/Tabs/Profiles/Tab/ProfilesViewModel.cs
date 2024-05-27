@@ -6,10 +6,10 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
 using SightKeeper.Application.Prediction;
 using SightKeeper.Application.Prediction.Handling;
-using SightKeeper.Avalonia.Extensions;
+using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
-namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
+namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Tab;
 
 internal partial class ProfilesViewModel : ViewModel
 {
@@ -54,7 +54,8 @@ internal partial class ProfilesViewModel : ViewModel
         ProfileEditor profileEditor,
         ProfileRunner profileRunner,
         ProfilesDataAccess profilesDataAccess,
-        DetectionScreenshotingParameters screenshotingParameters)
+        DetectionScreenshotingParameters screenshotingParameters,
+        DialogManager dialogManager)
     {
         _scope = scope;
         _profileCreator = profileCreator;
@@ -62,6 +63,7 @@ internal partial class ProfilesViewModel : ViewModel
         _profileRunner = profileRunner;
         _profilesDataAccess = profilesDataAccess;
         _screenshotingParameters = screenshotingParameters;
+        _dialogManager = dialogManager;
         Profiles = profilesList.ProfileViewModels;
     }
 
@@ -71,13 +73,14 @@ internal partial class ProfilesViewModel : ViewModel
     private readonly ProfileRunner _profileRunner;
     private readonly ProfilesDataAccess _profilesDataAccess;
     private readonly DetectionScreenshotingParameters _screenshotingParameters;
+    private readonly DialogManager _dialogManager;
 
     [RelayCommand]
     private async Task CreateProfile()
     {
         await using var scope = _scope.BeginLifetimeScope();
         var viewModel = scope.Resolve<NewProfileEditorViewModel>();
-        /*var result = await this.ShowDialogAsync(viewModel);
+        var result = await _dialogManager.ShowDialogAsync(viewModel);
         if (result == ProfileEditorResult.Apply)
         {
             Guard.IsNotNull(viewModel.Weights);
@@ -96,7 +99,7 @@ internal partial class ProfilesViewModel : ViewModel
                 viewModel.Weights,
                 viewModel.ItemClasses);
             _profileCreator.CreateProfile(data);
-        }*/
+        }
     }
 
     [RelayCommand]
@@ -105,7 +108,7 @@ internal partial class ProfilesViewModel : ViewModel
         await using var scope = _scope.BeginLifetimeScope();
         var viewModel = scope.Resolve<ExistingProfileEditorViewModel>();
         viewModel.SetData(profileViewModel.Profile);
-        /*var result = await this.ShowDialogAsync(viewModel);
+        var result = await _dialogManager.ShowDialogAsync(viewModel);
         if (result == ProfileEditorResult.Apply)
         {
             Guard.IsNotNull(viewModel.Weights);
@@ -128,7 +131,7 @@ internal partial class ProfilesViewModel : ViewModel
         {
             Guard.IsNotNull(viewModel.Profile);
             _profilesDataAccess.RemoveProfile(viewModel.Profile);
-        }*/
+        }
     }
 
     [RelayCommand(CanExecute = nameof(CanLaunchProfile))]

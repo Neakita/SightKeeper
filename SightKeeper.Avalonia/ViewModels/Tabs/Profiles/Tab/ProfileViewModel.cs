@@ -1,7 +1,7 @@
 ﻿using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Profiles;
 
-namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
+namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Tab;
 
 internal sealed class ProfileViewModel : ViewModel
 {

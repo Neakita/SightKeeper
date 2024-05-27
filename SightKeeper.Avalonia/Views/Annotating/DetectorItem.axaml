@@ -2,10 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
+             xmlns:drawer="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating.Drawer"
+             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              mc:Ignorable="d" d:DesignWidth="50" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Views.Annotating.DetectorItem"
-             x:DataType="viewModels:DetectorItemViewModel"
+             x:DataType="drawer:DetectorItemViewModel"
              ClipToBounds="False">
     <Grid>
         <Grid.Styles>
@@ -13,7 +14,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Thumb">
-                            <Border Background="{Binding ItemClass.Color, Converter={StaticResource ToBrushConverter}, ConverterParameter=0.8}"
+                            <Border Background="{Binding ItemClass.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=0.8}"
                                     BorderThickness="0"
                                     CornerRadius="3"/>
                         </ControlTemplate>

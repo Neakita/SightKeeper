@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
+             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatorTools"
              x:DataType="annotating:AnnotatorToolsViewModel">
@@ -27,7 +28,7 @@
                                 Height="15"
                                 VerticalAlignment="Center"
                                 Margin="5 0 0 0"
-                                Background="{Binding Color, Converter={StaticResource ToBrushConverter}}"/>
+                                Background="{Binding Color, Converter={x:Static root:Converters.ToBrushConverter}}"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -70,7 +71,7 @@
                                 Height="15"
                                 VerticalAlignment="Center"
                                 Margin="5 0 0 0"
-                                Background="{Binding Color, Converter={StaticResource ToBrushConverter}}"/>
+                                Background="{Binding Color, Converter={x:Static root:Converters.ToBrushConverter}}"/>
                     </Grid>
                 </DataTemplate>
             </ComboBox.ItemTemplate>

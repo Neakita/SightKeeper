@@ -31,7 +31,7 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
         selectedDataSetViewModel.ObservableValue
             .Subscribe(newValue => ItemClasses = newValue?.ItemClasses ?? Array.Empty<ItemClass>())
             .DisposeWith(_disposable);
-        DetectorItemViewModel.ItemClassChanged.Subscribe(item =>
+        Drawer.DetectorItemViewModel.ItemClassChanged.Subscribe(item =>
         {
             Guard.IsNotNull(item.Item);
             item.Item.ItemClass = item.ItemClass;
@@ -70,7 +70,7 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     [ObservableProperty] private int _selectedItemClassIndex;
     
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
-    private DetectorItemViewModel? _selectedItem;
+    private Drawer.DetectorItemViewModel? _selectedItem;
 
     private IReadOnlyCollection<ItemClass> _itemClasses = Array.Empty<ItemClass>();
 
