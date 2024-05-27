@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Avalonia.Views;
 
-public sealed partial class ProfilesTab : UserControl
+internal sealed partial class ProfilesTab : UserControl
 {
     public ProfilesTab()
     {

@@ -4,7 +4,7 @@ using SightKeeper.Application.DataSets.Editing;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 
-public sealed class ExistingItemClass : ViewModel, EditableItemClass
+internal sealed class ExistingItemClass : ViewModel, EditableItemClass
 {
     public Domain.Model.DataSets.ItemClass ItemClass { get; }
     public string Name { get; set; }

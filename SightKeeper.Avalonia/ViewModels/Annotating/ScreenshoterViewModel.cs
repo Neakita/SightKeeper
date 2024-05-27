@@ -6,7 +6,7 @@ using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class ScreenshoterViewModel : ViewModel
+internal sealed class ScreenshoterViewModel : ViewModel
 {
     public IObservable<bool> IsEnabledChanged => _isEnabledChanged;
 

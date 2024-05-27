@@ -8,7 +8,7 @@ using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DetectorItemViewModel : ViewModel, DrawerItem
+internal sealed partial class DetectorItemViewModel : ViewModel, DrawerItem
 {
     public static IObservable<DetectorItemViewModel> ItemClassChanged => ItemClassChangedSubject.AsObservable();
     private static readonly Subject<DetectorItemViewModel> ItemClassChangedSubject = new();

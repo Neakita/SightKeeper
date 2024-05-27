@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
-public sealed class ProfileItemClassViewModel : ViewModel, ProfileItemClassData
+internal sealed class ProfileItemClassViewModel : ViewModel, ProfileItemClassData
 {
     public ItemClass ItemClass { get; }
     public byte Order { get; set; }

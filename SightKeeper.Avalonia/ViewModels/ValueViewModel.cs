@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace SightKeeper.Avalonia.ViewModels;
 
-public abstract class ValueViewModel<T> : ViewModel, IDisposable
+internal abstract class ValueViewModel<T> : ViewModel, IDisposable
 {
     public IObservable<T> ObservableValue => _valueSubject.AsObservable();
 

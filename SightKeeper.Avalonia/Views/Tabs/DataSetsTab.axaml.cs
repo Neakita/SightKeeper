@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Avalonia.Views.Tabs;
 
-public sealed partial class DataSetsTab : UserControl
+internal sealed partial class DataSetsTab : UserControl
 {
 	public DataSetsTab()
 	{

@@ -10,7 +10,7 @@ using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
-public sealed class ProfilesListViewModel : IDisposable
+internal sealed class ProfilesListViewModel : IDisposable
 {
     public ReadOnlyCollection<ProfileViewModel> ProfileViewModels { get; }
 

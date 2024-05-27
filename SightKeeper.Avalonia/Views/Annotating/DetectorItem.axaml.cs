@@ -9,7 +9,7 @@ using SightKeeper.Avalonia.ViewModels.Annotating;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-public sealed partial class DetectorItem : ReactiveUserControl<DetectorItemViewModel>
+internal sealed partial class DetectorItem : ReactiveUserControl<DetectorItemViewModel>
 {
 	public DetectorItem()
 	{

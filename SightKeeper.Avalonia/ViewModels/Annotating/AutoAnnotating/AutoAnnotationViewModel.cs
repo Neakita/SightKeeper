@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -13,7 +12,7 @@ using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 
-public sealed partial class AutoAnnotationViewModel : ViewModel
+internal sealed partial class AutoAnnotationViewModel : ViewModel
 {
     public IReadOnlyCollection<Weights> Weights => _selectedDataSetViewModel.Weights;
 

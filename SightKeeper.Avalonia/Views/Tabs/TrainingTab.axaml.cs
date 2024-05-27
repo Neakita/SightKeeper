@@ -1,10 +1,8 @@
 ﻿using Avalonia.Controls;
-using Avalonia.ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Tabs;
 
 namespace SightKeeper.Avalonia.Views.Tabs;
 
-public sealed partial class TrainingTab : UserControl
+internal sealed partial class TrainingTab : UserControl
 {
     public TrainingTab()
     {

@@ -7,7 +7,7 @@ using DynamicData;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class SelectedScreenshotViewModel : ValueViewModel<ScreenshotViewModel?>
+internal sealed class SelectedScreenshotViewModel : ValueViewModel<ScreenshotViewModel?>
 {
     public int? SelectedScreenshotIndex
     {

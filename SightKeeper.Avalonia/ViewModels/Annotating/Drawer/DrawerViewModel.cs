@@ -8,7 +8,7 @@ using DynamicData;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DrawerViewModel : ViewModel, IDisposable
+internal sealed partial class DrawerViewModel : ViewModel, IDisposable
 {
     public const double MinimumDimensionSize = 0.005;
 

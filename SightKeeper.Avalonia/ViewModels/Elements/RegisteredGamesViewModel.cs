@@ -14,7 +14,7 @@ using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
-public sealed partial class RegisteredGamesViewModel : ViewModel, IRegisteredGamesViewModel
+internal sealed partial class RegisteredGamesViewModel : ViewModel, IRegisteredGamesViewModel
 {
 	public IReadOnlyCollection<Game> RegisteredGames => _gamesDataAccess.Games;
 	public IReadOnlyCollection<Game> AvailableToAddGames

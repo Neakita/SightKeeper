@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 
-public interface ProfileEditorViewModel
+internal interface ProfileEditorViewModel
 {
     public static StabilizationMethod[] PreemptionStabilizationMethods =>
     [

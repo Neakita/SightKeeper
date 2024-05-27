@@ -4,7 +4,7 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class DetectorItemResizer
+internal sealed class DetectorItemResizer
 {
     private sealed class ResizingData
     {

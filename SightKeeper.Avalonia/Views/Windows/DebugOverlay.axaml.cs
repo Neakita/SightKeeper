@@ -4,7 +4,7 @@ using SightKeeper.Application.Windows;
 
 namespace SightKeeper.Avalonia.Views.Windows;
 
-public partial class DebugOverlay : Window
+internal partial class DebugOverlay : Window
 {
     public DebugOverlay()
     {

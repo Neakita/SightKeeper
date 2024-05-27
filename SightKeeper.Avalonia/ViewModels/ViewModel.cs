@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SightKeeper.Avalonia.ViewModels;
 
-public abstract class ViewModel : ObservableObject
+internal abstract class ViewModel : ObservableObject
 {
     protected void OnPropertiesChanging(IEnumerable<string> properties)
     {

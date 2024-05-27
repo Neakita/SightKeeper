@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class BoundingViewModel : ViewModel
+internal sealed class BoundingViewModel : ViewModel
 {
     private static readonly string[] Properties =
     {

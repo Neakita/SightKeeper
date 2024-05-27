@@ -6,7 +6,7 @@ using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class DetectedItemViewModel : ViewModel, DrawerItem
+internal sealed partial class DetectedItemViewModel : ViewModel, DrawerItem
 {
     public static IObservable<DetectedItemViewModel> MakeAnnotationRequested =>
         MakeAnnotationRequestedSubject.AsObservable();

@@ -3,7 +3,7 @@ using Material.Icons.Avalonia;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
-public sealed class TabItem : ViewModel
+internal sealed class TabItem : ViewModel
 {
 	public object Icon { get; }
 	public MaterialIconKind IconKind { get; }

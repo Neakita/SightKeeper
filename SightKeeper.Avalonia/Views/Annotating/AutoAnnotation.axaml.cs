@@ -3,7 +3,7 @@ using SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-public sealed partial class AutoAnnotation : ReactiveUserControl<AutoAnnotationViewModel>
+internal sealed partial class AutoAnnotation : ReactiveUserControl<AutoAnnotationViewModel>
 {
     public AutoAnnotation()
     {

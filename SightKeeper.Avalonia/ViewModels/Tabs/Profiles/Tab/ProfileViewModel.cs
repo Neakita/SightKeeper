@@ -3,7 +3,7 @@ using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles;
 
-public sealed class ProfileViewModel : ViewModel
+internal sealed class ProfileViewModel : ViewModel
 {
     private static readonly string[] Properties =
     {

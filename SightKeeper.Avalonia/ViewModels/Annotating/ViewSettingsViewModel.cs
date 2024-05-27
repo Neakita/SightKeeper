@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class ViewSettingsViewModel : ViewModel
+internal sealed partial class ViewSettingsViewModel : ViewModel
 {
     public bool ShowDetectorItems
     {

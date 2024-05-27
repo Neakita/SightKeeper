@@ -9,7 +9,7 @@ using SightKeeper.Avalonia.ViewModels.Annotating;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-public sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatorViewModel>
+internal sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatorViewModel>
 {
 	public AnnotatingTab()
 	{

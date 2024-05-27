@@ -3,7 +3,7 @@ using SightKeeper.Avalonia.ViewModels.Annotating;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-public partial class ViewSettings : ReactiveUserControl<ViewSettingsViewModel>
+internal partial class ViewSettings : ReactiveUserControl<ViewSettingsViewModel>
 {
     public ViewSettings()
     {

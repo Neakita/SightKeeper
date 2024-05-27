@@ -19,7 +19,7 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivatableViewModel
+internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivatableViewModel
 {
     public SelectedScreenshotViewModel SelectedScreenshotViewModel { get; }
 

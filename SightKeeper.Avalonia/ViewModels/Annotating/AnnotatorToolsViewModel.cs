@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,7 +10,7 @@ using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
+internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
 {
     public IReadOnlyCollection<ItemClass> ItemClasses
     {

@@ -7,9 +7,10 @@
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Dialogs"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assists="clr-namespace:SightKeeper.Avalonia.Assists"
              x:DataType="local:DialogHost"
              Background="#7F000000"
-             root:VisibilityAssist.DisableHitTestWhenOpacityIsZero="True"
+             assists:VisibilityAssist.DisableHitTestWhenOpacityIsZero="True"
              IsHitTestVisible="False"
              Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static root:Converters.ContentToOpacityConverter}}">
 	<UserControl.Transitions>
@@ -23,7 +24,7 @@
 	</UserControl.Transitions>
 	<Panel>
 		<Border Background="Transparent"
-		        root:InputAssist.PointerReleasedCommand="{Binding DialogManager.CurrentDialog.CloseCommand}"/>
+		        assists:InputAssist.PointerReleasedCommand="{Binding DialogManager.CurrentDialog.CloseCommand}"/>
 		<TransitioningContentControl
 			Content="{Binding DialogManager.CurrentDialog}"
 			Padding="48">

@@ -7,7 +7,7 @@ using SightKeeper.Avalonia.ViewModels.Annotating;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-public sealed partial class AnnotatorScreenshots : ReactiveUserControl<AnnotatorScreenshotsViewModel>, IDisposable
+internal sealed partial class AnnotatorScreenshots : ReactiveUserControl<AnnotatorScreenshotsViewModel>, IDisposable
 {
     public AnnotatorScreenshots()
     {

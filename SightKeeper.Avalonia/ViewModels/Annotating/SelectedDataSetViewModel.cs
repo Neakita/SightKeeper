@@ -8,7 +8,7 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
+internal sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel?>
 {
     public IReadOnlyCollection<Weights> Weights { get; }
 

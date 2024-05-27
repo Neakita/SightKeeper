@@ -6,7 +6,7 @@ using SightKeeper.Avalonia.ViewModels.Elements;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public sealed class AnnotatorViewModel : ViewModel, IDisposable
+internal sealed class AnnotatorViewModel : ViewModel, IDisposable
 {
 	public IReadOnlyCollection<DataSetViewModel> DataSetViewModels { get; }
 

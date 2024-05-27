@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-public interface DrawerItem
+internal interface DrawerItem
 {
     bool IsDashed { get; }
     BoundingViewModel Bounding { get; }

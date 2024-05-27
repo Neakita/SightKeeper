@@ -9,7 +9,7 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
-public sealed class DataSetViewModel : ViewModel, IDisposable
+internal sealed class DataSetViewModel : ViewModel, IDisposable
 {
     private static readonly string[] Properties =
     {
