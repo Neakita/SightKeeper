@@ -7,7 +7,7 @@
              x:Class="SightKeeper.Avalonia.Settings.SettingsTab"
              x:DataType="settings:SettingsViewModel">
     <ScrollViewer Classes="regular-padding">
-        <StackPanel Spacing="12">
+        <StackPanel Classes="regular-spacing">
 	        <Border Classes="outer wide-padding">
 		        <TabStrip ItemsSource="{Binding Sections}"
 		                  SelectedItem="{Binding SelectedSection}">
