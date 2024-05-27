@@ -1,0 +1,29 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Settings.Games.GameEditor"
+             x:DataType="viewModels:GameViewModel">
+	<StackPanel Spacing="8">
+		<StackPanel.Resources>
+			<ResourceDictionary>
+				<system:Boolean x:Key="IsEnabledFallbackValue">False</system:Boolean>
+			</ResourceDictionary>
+		</StackPanel.Resources>
+		<HeaderedContentControl Header="Title">
+			<TextBox Text="{Binding Title}"
+			         IsEnabled="{Binding Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue={StaticResource IsEnabledFallbackValue}}"/>
+		</HeaderedContentControl>
+		<HeaderedContentControl Header="Process name">
+			<TextBox Text="{Binding ProcessName}"
+			         IsEnabled="{Binding Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue={StaticResource IsEnabledFallbackValue}}"/>
+		</HeaderedContentControl>
+		<HeaderedContentControl Header="Executable path">
+			<TextBox Text="{Binding ExecutablePath}"
+			         IsEnabled="{Binding Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue={StaticResource IsEnabledFallbackValue}}"/>
+		</HeaderedContentControl>
+	</StackPanel>
+</UserControl>

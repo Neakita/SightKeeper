@@ -4,8 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Settings.Games"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels"
-             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Settings.Games.AddGameDialog"
              x:DataType="local:AddGameViewModel"
@@ -18,13 +16,14 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid RowDefinitions="* Auto">
+	<Grid RowDefinitions="* 16 Auto Auto">
 		<ListBox Grid.Row="0"
 		         Classes="compact"
 		         ItemsSource="{Binding AvailableGames}"
 		         ItemTemplate="{StaticResource GameTitleCellTemplate}"
 		         SelectedItem="{Binding SelectedGame}"/>
-		<StackPanel Grid.Row="1"
+		<local:GameEditor Grid.Row="2" DataContext="{Binding GameToAdd}"/>
+		<StackPanel Grid.Row="3"
 		            Orientation="Horizontal"
 		            HorizontalAlignment="Right"
 		            Spacing="8"

@@ -40,8 +40,9 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 	private IReadOnlyCollection<GameViewModel> _availableGames;
 
 	[ObservableProperty]
-	[NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
 	private GameViewModel? _selectedGame;
+	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
+	private GameViewModel? _gameToAdd;
 
 	[RelayCommand]
 	private void UpdateAvailableGames()
@@ -62,12 +63,20 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 	[RelayCommand(CanExecute = nameof(CanApply))]
 	private void Apply()
 	{
-		Guard.IsNotNull(SelectedGame);
-		Return(SelectedGame.Game);
+		Guard.IsNotNull(GameToAdd);
+		Return(GameToAdd.Game);
 	}
 
 	private bool CanApply()
 	{
-		return SelectedGame != null;
+		return GameToAdd != null;
+	}
+
+	partial void OnSelectedGameChanged(GameViewModel? value)
+	{
+		if (value == null)
+			GameToAdd = null;
+		else
+			GameToAdd = CreateGameViewModel(value.Game);
 	}
 }
