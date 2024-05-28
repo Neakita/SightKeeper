@@ -36,7 +36,7 @@ internal abstract partial class DialogViewModel<TResult> : ViewModel, Dialog<TRe
 	
 	protected abstract TResult DefaultResult { get; }
 
-	protected void Return(TResult result)
+	protected virtual void Return(TResult result)
 	{
 		_completionSource.SetResult(result);
 	}

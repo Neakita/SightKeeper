@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.ViewModels;
@@ -14,6 +16,26 @@ namespace SightKeeper.Avalonia.Settings.Games;
 internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 {
 	public override string Header => "Add game";
+
+	public ValidatableGameViewModel? GameToAdd
+	{
+		get => _gameToAdd;
+		set
+		{
+			if (_gameToAdd != null)
+				_gameToAdd.ErrorsChanged -= OnGameErrorsChanged;
+			_gameToAdd = value;
+			if (_gameToAdd != null)
+				_gameToAdd.ErrorsChanged += OnGameErrorsChanged;
+			OnPropertyChanged();
+			ApplyCommand.NotifyCanExecuteChanged();
+		}
+	}
+
+	private void OnGameErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+	{
+		ApplyCommand.NotifyCanExecuteChanged();
+	}
 
 	protected override Game? DefaultResult => null;
 
@@ -26,23 +48,25 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 	public AddGameViewModel(
 		ProcessesAvailableGamesProvider availableGamesProvider,
 		GameIconProvider iconProvider,
-		GameExecutableDisplayer executableDisplayer)
+		GameExecutableDisplayer executableDisplayer,
+		IValidator<Game> validator)
 	{
 		_availableGamesProvider = availableGamesProvider;
 		_iconProvider = iconProvider;
 		_executableDisplayer = executableDisplayer;
+		_validator = validator;
 		_availableGames = GetAvailableGames();
 	}
 
 	private readonly ProcessesAvailableGamesProvider _availableGamesProvider;
 	private readonly GameIconProvider _iconProvider;
 	private readonly GameExecutableDisplayer _executableDisplayer;
+	private readonly IValidator<Game> _validator;
 	private IReadOnlyCollection<GameViewModel> _availableGames;
 
 	[ObservableProperty]
 	private GameViewModel? _selectedGame;
-	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
-	private GameViewModel? _gameToAdd;
+	private ValidatableGameViewModel? _gameToAdd;
 
 	[RelayCommand]
 	private void UpdateAvailableGames()
@@ -60,6 +84,11 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 		return new GameViewModel(game, _iconProvider, _executableDisplayer);
 	}
 
+	private ValidatableGameViewModel CreateValidatableGameViewModel(Game game)
+	{
+		return new ValidatableGameViewModel(game, _iconProvider, _executableDisplayer, _validator);
+	}
+
 	[RelayCommand(CanExecute = nameof(CanApply))]
 	private void Apply()
 	{
@@ -69,7 +98,7 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 
 	private bool CanApply()
 	{
-		return GameToAdd != null;
+		return GameToAdd is { HasErrors: false };
 	}
 
 	partial void OnSelectedGameChanged(GameViewModel? value)
@@ -77,6 +106,12 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 		if (value == null)
 			GameToAdd = null;
 		else
-			GameToAdd = CreateGameViewModel(value.Game);
+			GameToAdd = CreateValidatableGameViewModel(value.Game);
+	}
+
+	protected override void Return(Game? result)
+	{
+		GameToAdd = null;
+		base.Return(result);
 	}
 }
