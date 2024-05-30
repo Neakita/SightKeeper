@@ -14,10 +14,8 @@ internal sealed class ContainsValidator<T> : PropertyValidator<T, string>
 
 	public override bool IsValid(ValidationContext<T> context, string value)
 	{
-		var isValid = value.Contains(_subString);
-		if (!isValid)
-			context.MessageFormatter.AppendArgument("SubString", _subString);
-		return isValid;
+		context.MessageFormatter.AppendArgument("SubString", _subString);
+		return value.Contains(_subString);
 	}
 
 	protected override string GetDefaultMessageTemplate(string errorCode) => "{PropertyName} must contain \"{SubString}\"";

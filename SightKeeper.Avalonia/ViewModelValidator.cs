@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
@@ -21,13 +20,16 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 		_viewModel = viewModel;
 		_validatable = validatable;
 		_viewModel.PropertyChanged += OnViewModelPropertyChanged;
+		ValidateEntireViewModel();
 	}
 
 	public IEnumerable GetErrors(string? propertyName)
 	{
 		if (string.IsNullOrEmpty(propertyName))
 			return _errors.SelectMany(errors => errors.Value);
-		return _errors.GetValueOrDefault(propertyName, Array.Empty<string>());
+		if (_errors.TryGetValue(propertyName, out var errors))
+			return errors;
+		return Enumerable.Empty<string>();
 	}
 
 	public void Dispose()
@@ -40,28 +42,40 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 		_validateOnPropertyChanged = false;
 		return Disposable.Create(this, validator =>
 		{
-			ValidateEntireViewModel();
 			validator._validateOnPropertyChanged = true;
+			ValidateEntireViewModel();
 		});
 	}
 
 	private readonly IValidator<TValidatable> _validator;
 	private readonly ViewModel _viewModel;
 	private readonly TValidatable _validatable;
-	private IReadOnlyDictionary<string, string[]> _errors = ImmutableDictionary<string, string[]>.Empty;
+	private System.Collections.Generic.IDictionary<string, string[]> _errors = ImmutableDictionary<string, string[]>.Empty;
 	private bool _validateOnPropertyChanged = true;
 
 	private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
 		if (!_validateOnPropertyChanged)
 			return;
-		ValidateEntireViewModel();
+		if (string.IsNullOrEmpty(e.PropertyName))
+			ValidateEntireViewModel();
+		else
+			ValidateProperty(e.PropertyName);
 	}
 
 	private void ValidateEntireViewModel()
 	{
 		var validationResult = _validator.Validate(_validatable);
-		_errors = validationResult.ToDictionary().AsReadOnly();
+		_errors = validationResult.ToDictionary();
 		ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(null));
+	}
+
+	private void ValidateProperty(string propertyName)
+	{
+		var validationResult = _validator.Validate(_validatable, strategy => strategy.IncludeProperties(propertyName));
+		if (validationResult.IsValid)
+			_errors.Remove(propertyName);
+		else
+			_errors[propertyName] = validationResult.ToDictionary().Single().Value;
 	}
 }

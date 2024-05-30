@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,31 +12,11 @@ using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.Settings.Games;
 
-internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
+internal sealed partial class AddGameViewModel : DialogViewModel<bool>, GameData, MutableGameData
 {
 	public override string Header => "Add game";
 
-	public ValidatableGameViewModel? GameToAdd
-	{
-		get => _gameToAdd;
-		set
-		{
-			if (_gameToAdd != null)
-				_gameToAdd.ErrorsChanged -= OnGameErrorsChanged;
-			_gameToAdd = value;
-			if (_gameToAdd != null)
-				_gameToAdd.ErrorsChanged += OnGameErrorsChanged;
-			OnPropertyChanged();
-			ApplyCommand.NotifyCanExecuteChanged();
-		}
-	}
-
-	private void OnGameErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
-	{
-		ApplyCommand.NotifyCanExecuteChanged();
-	}
-
-	protected override Game? DefaultResult => null;
+	protected override bool DefaultResult => false;
 
 	public IReadOnlyCollection<GameViewModel> AvailableGames
 	{
@@ -49,24 +28,32 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 		ProcessesAvailableGamesProvider availableGamesProvider,
 		GameIconProvider iconProvider,
 		GameExecutableDisplayer executableDisplayer,
-		IValidator<Game> validator)
+		IValidator<GameData> validator)
 	{
 		_availableGamesProvider = availableGamesProvider;
 		_iconProvider = iconProvider;
 		_executableDisplayer = executableDisplayer;
-		_validator = validator;
+		_validator = new ViewModelValidator<GameData>(validator, this, this);
 		_availableGames = GetAvailableGames();
 	}
 
 	private readonly ProcessesAvailableGamesProvider _availableGamesProvider;
 	private readonly GameIconProvider _iconProvider;
 	private readonly GameExecutableDisplayer _executableDisplayer;
-	private readonly IValidator<Game> _validator;
+	private readonly ViewModelValidator<GameData> _validator;
 	private IReadOnlyCollection<GameViewModel> _availableGames;
 
 	[ObservableProperty]
 	private GameViewModel? _selectedGame;
-	private ValidatableGameViewModel? _gameToAdd;
+	[ObservableProperty]
+	[NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
+	private string _title = string.Empty;
+	[ObservableProperty]
+	[NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
+	private string _processName = string.Empty;
+	[ObservableProperty]
+	[NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
+	private string? _executablePath = string.Empty;
 
 	[RelayCommand]
 	private void UpdateAvailableGames()
@@ -84,34 +71,26 @@ internal sealed partial class AddGameViewModel : DialogViewModel<Game?>
 		return new GameViewModel(game, _iconProvider, _executableDisplayer);
 	}
 
-	private ValidatableGameViewModel CreateValidatableGameViewModel(Game game)
-	{
-		return new ValidatableGameViewModel(game, _iconProvider, _executableDisplayer, _validator);
-	}
-
 	[RelayCommand(CanExecute = nameof(CanApply))]
 	private void Apply()
 	{
-		Guard.IsNotNull(GameToAdd);
-		Return(GameToAdd.Game);
+		Guard.IsFalse(_validator.HasErrors);
+		Return(true);
 	}
 
 	private bool CanApply()
 	{
-		return GameToAdd is { HasErrors: false };
+		return !_validator.HasErrors;
 	}
 
 	partial void OnSelectedGameChanged(GameViewModel? value)
 	{
-		if (value == null)
-			GameToAdd = null;
-		else
-			GameToAdd = CreateValidatableGameViewModel(value.Game);
-	}
-
-	protected override void Return(Game? result)
-	{
-		GameToAdd = null;
-		base.Return(result);
+		using (_validator.SuppressValidation())
+		{
+			Title = value?.Title ?? string.Empty;
+			ProcessName = value?.ProcessName ?? string.Empty;
+			ExecutablePath = value?.ExecutablePath;
+		}
+		ApplyCommand.NotifyCanExecuteChanged();
 	}
 }

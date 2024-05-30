@@ -4,9 +4,9 @@ public sealed class Game
 {
 	public string Title { get; set; }
 	public string ProcessName { get; set; }
-	public string? ExecutablePath { get; set; }
+	public string ExecutablePath { get; set; }
 
-	public Game(string title, string processName, string? executablePath = null)
+	public Game(string title, string processName, string executablePath = "")
 	{
 		Title = title;
 		ProcessName = processName;

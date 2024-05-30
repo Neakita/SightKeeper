@@ -22,7 +22,7 @@
 		         ItemsSource="{Binding AvailableGames}"
 		         ItemTemplate="{StaticResource GameTitleCellTemplate}"
 		         SelectedItem="{Binding SelectedGame}"/>
-		<local:GameEditor Grid.Row="2" DataContext="{Binding GameToAdd}"/>
+		<local:GameEditor Grid.Row="2"/>
 		<StackPanel Grid.Row="3"
 		            Orientation="Horizontal"
 		            HorizontalAlignment="Right"

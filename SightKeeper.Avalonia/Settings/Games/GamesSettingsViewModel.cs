@@ -15,25 +15,26 @@ internal sealed partial class GamesSettingsViewModel : ViewModel, SettingsSectio
 
 	public GamesSettingsViewModel(
 		IComponentContext context,
-		GamesDataAccess gamesDataAccess,
 		GamesRepositoryViewModel gamesRepository,
-		DialogManager dialogManager)
+		DialogManager dialogManager,
+		GameCreator gameCreator)
 	{
 		_context = context;
-		_gamesDataAccess = gamesDataAccess;
 		_dialogManager = dialogManager;
+		_gameCreator = gameCreator;
 		Games = gamesRepository.Games;
 	}
 
 	private readonly IComponentContext _context;
 	private readonly DialogManager _dialogManager;
-	private readonly GamesDataAccess _gamesDataAccess;
+	private readonly GameCreator _gameCreator;
 
 	[RelayCommand]
 	private async Task AddGame()
 	{
-		var newGame = await _dialogManager.ShowDialogAsync(_context.Resolve<AddGameViewModel>());
-		if (newGame != null)
-			_gamesDataAccess.AddGame(newGame);
+		var viewModel = _context.Resolve<AddGameViewModel>();
+		var applied = await _dialogManager.ShowDialogAsync(viewModel);
+		if (applied)
+			_gameCreator.CreateGame(viewModel);
 	}
 }
