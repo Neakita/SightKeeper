@@ -19,7 +19,7 @@ internal partial class GameViewModel : ViewModel
 		get => Game.ProcessName;
 		set => SetProperty(Game.ProcessName, value, processName => Game.ProcessName = processName);
 	}
-	public string? ExecutablePath
+	public string ExecutablePath
 	{
 		get => Game.ExecutablePath;
 		set

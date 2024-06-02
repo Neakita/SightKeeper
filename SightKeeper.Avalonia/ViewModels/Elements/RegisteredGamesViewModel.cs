@@ -24,7 +24,7 @@ internal sealed partial class RegisteredGamesViewModel : ViewModel, IRegisteredG
 			return Process.GetProcesses().Where(process =>
 				RegisteredGames.All(registeredGame => registeredGame.ProcessName != process.ProcessName) &&
 				process.MainWindowHandle != IntPtr.Zero).Select(process =>
-				new Game(process.MainWindowTitle, process.ProcessName, GetProcessExecutablePath(process))).ToImmutableList();
+				new Game(process.MainWindowTitle, process.ProcessName, GetProcessExecutablePath(process) ?? string.Empty)).ToImmutableList();
 		}
 	}
 

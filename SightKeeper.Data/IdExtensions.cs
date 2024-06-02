@@ -1,4 +1,5 @@
-﻿using FlakeId;
+﻿using CommunityToolkit.Diagnostics;
+using FlakeId;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,7 +11,9 @@ public static class IdExtensions
 
 	public static Id GetId<TEntity>(this TEntity entity, AppDbContext dbContext) where TEntity : notnull
 	{
-		return (Id)dbContext.Entry(entity).Property(IdPropertyName).CurrentValue;
+		var currentValue = dbContext.Entry(entity).Property(IdPropertyName).CurrentValue;
+		Guard.IsNotNull(currentValue);
+		return (Id)currentValue;
 	}
 
 	public static void SetId<TEntity>(this EntityEntry<TEntity> entry, Id id) where TEntity : class

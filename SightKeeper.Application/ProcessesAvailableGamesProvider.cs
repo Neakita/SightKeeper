@@ -17,7 +17,7 @@ public sealed class ProcessesAvailableGamesProvider
 	    return Process.GetProcesses()
 		    .Where(IsValidProcess)
 		    .ExceptBy(_gamesDataAccess.Games.Select(ProcessDescription.Extract), ProcessDescription.Extract)
-		    .Select(process => new Game(process.MainWindowTitle, process.ProcessName, process.MainModule?.FileName));
+		    .Select(process => new Game(process.MainWindowTitle, process.ProcessName, process.MainModule?.FileName ?? string.Empty));
     }
 
     private readonly GamesDataAccess _gamesDataAccess;
