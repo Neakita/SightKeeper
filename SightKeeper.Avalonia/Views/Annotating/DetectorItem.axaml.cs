@@ -17,8 +17,9 @@ internal sealed partial class DetectorItem : ReactiveUserControl<DetectorItemVie
 		InitializeComponent();
 	}
 
+	// ReSharper disable UnusedParameter.Local
 	private void OnThumbDragStarted(object? sender, VectorEventArgs e)
-    {
+	{
 	    if (ViewModel == null)
 		    return;
 	    var thumb = GetThumb(sender);
@@ -38,6 +39,7 @@ internal sealed partial class DetectorItem : ReactiveUserControl<DetectorItemVie
 	    Guard.IsNotNull(ViewModel);
 	    ViewModel.Resizer.EndResize();
     }
+    // ReSharper restore UnusedParameter.Local
 
     private Vector GetNormalizedVector(VectorEventArgs args)
     {

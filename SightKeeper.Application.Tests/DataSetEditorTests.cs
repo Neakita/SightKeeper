@@ -3,6 +3,8 @@ using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Data.Services.DataSets;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Tests;
 using SightKeeper.Tests.Common;
 
 namespace SightKeeper.Application.Tests;
@@ -83,15 +85,16 @@ public sealed class DataSetEditorTests : DbRelatedTests
     [Fact]
     public async Task ShouldNotDeleteItemClassWithAssetAndNoActionProvided()
     {
-        /*var editor = Editor;
+        var editor = Editor;
+        SimpleScreenshotsDataAccess screenshotsDataAccess = new();
         var dataSet = DomainTestsHelper.NewDataSet;
         var itemClass = dataSet.CreateItemClass("Item class", 0);
-        var screenshot = dataSet.Screenshots.CreateScreenshot(Array.Empty<byte>());
+        var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, Array.Empty<byte>());
         var asset = dataSet.Assets.MakeAsset(screenshot);
         asset.CreateItem(itemClass, new Bounding());
         DataSetChangesDTO dataSetChanges = new(dataSet, dataSet.Name, dataSet.Description, dataSet.Game, Enumerable.Empty<ItemClassInfo>(), Enumerable.Empty<EditedItemClass>(), new []{new DeletedItemClass(itemClass)});
         await Assert.ThrowsAsync<ArgumentException>(() => editor.ApplyChanges(dataSetChanges));
-        dataSet.ItemClasses.Should().Contain(itemClass);*/
+        dataSet.ItemClasses.Should().Contain(itemClass);
         throw new NotImplementedException();
     }
 

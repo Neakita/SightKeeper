@@ -51,6 +51,7 @@ internal sealed partial class DetectorItemViewModel : ViewModel, DrawerItem
     [ObservableProperty] private ItemClass _itemClass;
     [ObservableProperty] private bool _isThumbsVisible;
 
+    // ReSharper disable once UnusedParameterInPartialMethod
     partial void OnItemClassChanged(ItemClass value) =>
         ItemClassChangedSubject.OnNext(this);
 }

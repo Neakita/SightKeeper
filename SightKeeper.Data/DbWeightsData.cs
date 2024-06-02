@@ -21,6 +21,8 @@ internal sealed class DbWeightsData
 		Format = format;
 	}
 
+	// ReSharper disable once UnusedMember.Local
+	// EF constructor
 	private DbWeightsData()
 	{
 		Data = null!;

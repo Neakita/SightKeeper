@@ -1,7 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Serilog;
 using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
@@ -29,12 +27,6 @@ public class AppDbContext : DbContext
 		if (optionsBuilder.IsConfigured)
 			return;
 		SetupSqlite(optionsBuilder);
-	}
-
-	private static void SetupLogging(DbContextOptionsBuilder optionsBuilder)
-	{
-		optionsBuilder.LogTo(content => Log.Verbose("[EF] {Content}", content), LogLevel.Trace);
-		optionsBuilder.EnableSensitiveDataLogging();
 	}
 
 	private static void SetupSqlite(DbContextOptionsBuilder optionsBuilder)

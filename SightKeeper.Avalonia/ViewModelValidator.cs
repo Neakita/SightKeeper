@@ -27,7 +27,8 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 	{
 		if (string.IsNullOrEmpty(propertyName))
 			return _errors.SelectMany(errors => errors.Value);
-		if (_errors.TryGetValue(propertyName, out var errors))
+		string[]? errors;
+		if (_errors.TryGetValue(propertyName, out errors))
 			return errors;
 		return Enumerable.Empty<string>();
 	}

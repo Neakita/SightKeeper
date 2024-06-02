@@ -9,13 +9,11 @@ internal sealed class DetectorItemResizer
     private sealed class ResizingData
     {
         public DetectorItemViewModel Item { get; }
-        public ResizeDirection Direction { get; }
-        
-        public ResizingData(DetectorItemViewModel item, ResizeDirection direction, Action<BoundingViewModel, Vector> updateBoundingDelegate)
+
+        public ResizingData(DetectorItemViewModel item, Action<BoundingViewModel, Vector> updateBoundingDelegate)
         {
             _updateBoundingDelegate = updateBoundingDelegate;
             Item = item;
-            Direction = direction;
         }
 
         public void UpdateBounding(Vector delta) => _updateBoundingDelegate(Item.Bounding, delta);
@@ -26,7 +24,7 @@ internal sealed class DetectorItemResizer
     public void BeginResize(DetectorItemViewModel item, ResizeDirection direction)
     {
         Guard.IsNull(_data);
-        _data = new ResizingData(item, direction, GetBoundingUpdateDelegate(direction));
+        _data = new ResizingData(item, GetBoundingUpdateDelegate(direction));
     }
 
     public void UpdateResize(Vector delta)
@@ -46,7 +44,7 @@ internal sealed class DetectorItemResizer
 
     private ResizingData? _data;
 
-    private Action<BoundingViewModel, Vector> GetBoundingUpdateDelegate(ResizeDirection direction) => direction switch
+    private static Action<BoundingViewModel, Vector> GetBoundingUpdateDelegate(ResizeDirection direction) => direction switch
     {
         ResizeDirection.Left => UpdateLeft,
         ResizeDirection.Top => UpdateTop,

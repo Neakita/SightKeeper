@@ -21,17 +21,16 @@ public static class IdExtensions
 		entry.Property<Id>(IdPropertyName).CurrentValue = id;
 	}
 	
-    internal static KeyBuilder HasFlakeIdKey<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class
+    internal static void HasFlakeIdKey<TEntity>(this EntityTypeBuilder<TEntity> builder) where TEntity : class
     {
 	    builder.HasFlakeId(IdPropertyName);
-	    return builder.HasKey(IdPropertyName);
+	    builder.HasKey(IdPropertyName);
     }
 
-    private static EntityTypeBuilder<TEntity> HasFlakeId<TEntity>(this EntityTypeBuilder<TEntity> builder, string name) where TEntity : class
+    private static void HasFlakeId<TEntity>(this EntityTypeBuilder<TEntity> builder, string name) where TEntity : class
     {
 	    builder.Property<Id>(name)
 		    .HasValueGenerator<FlakeIdGenerator>()
 		    .HasConversion<long>(id => id, number => new Id(number));
-	    return builder;
     }
 }

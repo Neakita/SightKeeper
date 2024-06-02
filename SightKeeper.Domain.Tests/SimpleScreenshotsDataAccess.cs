@@ -4,7 +4,7 @@ using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Domain.Tests;
 
-internal sealed class SimpleScreenshotsDataAccess : ScreenshotsDataAccess
+public sealed class SimpleScreenshotsDataAccess : ScreenshotsDataAccess
 {
 	public override Image LoadImage(Screenshot screenshot)
 	{
