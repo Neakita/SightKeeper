@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Application.Games;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Application.Windows;

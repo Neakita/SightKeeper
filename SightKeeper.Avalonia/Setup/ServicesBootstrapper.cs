@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using FluentValidation;
-using SightKeeper.Application;
+using SightKeeper.Application.Games;
 using SightKeeper.Application.Windows;
 using SightKeeper.Data.Services;
 

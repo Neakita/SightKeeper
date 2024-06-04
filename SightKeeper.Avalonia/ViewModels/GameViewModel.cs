@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application;
+using SightKeeper.Application.Games;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels;

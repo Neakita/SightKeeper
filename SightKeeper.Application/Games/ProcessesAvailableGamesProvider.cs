@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Games;
 
 public sealed class ProcessesAvailableGamesProvider
 {

@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using CommunityToolkit.Diagnostics;
 using DynamicData;
-using SightKeeper.Application;
+using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Domain.Model;
 

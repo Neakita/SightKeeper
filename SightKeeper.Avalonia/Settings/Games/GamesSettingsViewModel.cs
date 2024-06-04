@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Autofac;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application;
+using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.ViewModels;
 

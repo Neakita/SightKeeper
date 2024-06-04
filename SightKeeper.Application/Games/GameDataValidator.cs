@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Games;
 
 public sealed class GameDataValidator : AbstractValidator<GameData>
 {

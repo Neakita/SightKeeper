@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using Material.Icons;
-using SightKeeper.Application;
+using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.MessageBoxDialog;
 using SightKeeper.Avalonia.ViewModels;

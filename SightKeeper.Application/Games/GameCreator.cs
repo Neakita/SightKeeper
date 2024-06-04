@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Games;
 
 public sealed class GameCreator
 {
