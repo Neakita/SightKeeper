@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Avalonia;
+﻿namespace SightKeeper.Avalonia.Settings.Games;
 
 internal interface MutableGameData
 {
