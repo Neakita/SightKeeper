@@ -9,9 +9,8 @@ public sealed class WeightsLibraryConfiguration : IEntityTypeConfiguration<Weigh
     public void Configure(EntityTypeBuilder<WeightsLibrary> builder)
     {
         builder.HasFlakeIdKey();
-        builder.HasMany<Weights>("_weights").WithOne(weights => weights.Library);
+        builder.HasMany<Weights>("_weights").WithOne();
         builder.ToTable("WeightsLibraries");
-        builder.Navigation(library => library.DataSet).AutoInclude();
         builder.Navigation("_weights").AutoInclude();
     }
 }

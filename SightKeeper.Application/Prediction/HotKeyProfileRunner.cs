@@ -10,17 +10,15 @@ using SightKeeper.Application.Prediction.Handling.MouseMoving;
 using SightKeeper.Application.Prediction.Handling.MouseMoving.Decorators;
 using SightKeeper.Application.Prediction.Handling.MouseMoving.Decorators.Preemption;
 using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Prediction;
 
-public sealed class HotKeyProfileRunner(
-        StreamDetector streamDetector,
-        SharpHookHotKeyManager hotKeyManager,
-        ProfileEditor profileEditor,
-        ILifetimeScope scope)
-    : ProfileRunner
+public sealed class HotKeyProfileRunner : ProfileRunner
 {
-    private sealed class Session(Profile profile, DetectionObserver handler, ILifetimeScope scope)
+	private readonly ObjectsLookupper _objectsLookupper;
+
+	private sealed class Session(Profile profile, DetectionObserver handler, ILifetimeScope scope)
     {
         public CompositeDisposable Disposables { get; } = new();
         public Profile Profile { get; } = profile;
@@ -28,22 +26,36 @@ public sealed class HotKeyProfileRunner(
         public ILifetimeScope Scope { get; set; } = scope;
     }
 
+	public HotKeyProfileRunner(
+		StreamDetector streamDetector,
+		SharpHookHotKeyManager hotKeyManager,
+		ProfileEditor profileEditor,
+		ILifetimeScope scope,
+		ObjectsLookupper objectsLookupper)
+	{
+		_streamDetector = streamDetector;
+		_hotKeyManager = hotKeyManager;
+		_profileEditor = profileEditor;
+		_scope = scope;
+		_objectsLookupper = objectsLookupper;
+	}
+
     public void Run(Profile profile)
     {
         Guard.IsNull(_session);
-        var sessionScope = scope.BeginLifetimeScope(profile, builder => BuildScope(builder, profile));
+        var sessionScope = _scope.BeginLifetimeScope(profile, builder => BuildScope(builder, profile));
         _session = new Session(profile, ResolveObserver(sessionScope), sessionScope);
-        streamDetector.Weights = profile.Weights;
-        streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
-        hotKeyManager.Register(MouseButton.Button4, hotkey =>
+        _streamDetector.Weights = profile.Weights;
+        _streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
+        _hotKeyManager.Register(MouseButton.Button4, hotkey =>
             {
-                var detectionDisposable = streamDetector.RunObservable().Subscribe(HandleDetection);
+                var detectionDisposable = _streamDetector.RunObservable().Subscribe(HandleDetection);
                 hotkey.WaitForRelease();
                 detectionDisposable.Dispose();
                 _session.Handler.OnPaused();
             })
             .DisposeWith(_session.Disposables);
-        profileEditor.ProfileEdited
+        _profileEditor.ProfileEdited
             .Where(editedProfile => editedProfile == profile)
             .Subscribe(OnProfileEdited)
             .DisposeWith(_session.Disposables);
@@ -51,25 +63,26 @@ public sealed class HotKeyProfileRunner(
         _session.Handler.RequestedProbabilityThreshold.Subscribe(threshold =>
         {
             if (threshold != null)
-                streamDetector.ProbabilityThreshold = threshold.Value;
+                _streamDetector.ProbabilityThreshold = threshold.Value;
         });
     }
 
     private void OnProfileEdited(Profile profile)
     {
-        streamDetector.Weights = profile.Weights;
-        streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
+        _streamDetector.Weights = profile.Weights;
+        _streamDetector.ProbabilityThreshold = profile.DetectionThreshold;
         if (_session == null)
             return;
         _session.Scope.Dispose();
-        _session.Scope = scope.BeginLifetimeScope(profile, builder => BuildScope(builder, profile));
+        _session.Scope = _scope.BeginLifetimeScope(profile, builder => BuildScope(builder, profile));
         _session.Handler = ResolveObserver(_session.Scope);
     }
 
-    private static void BuildScope(ContainerBuilder builder, Profile profile)
+    private void BuildScope(ContainerBuilder builder, Profile profile)
     {
         builder.RegisterInstance(profile);
-        builder.RegisterInstance(profile.Weights.Library.DataSet);
+        var dataSet = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(profile.Weights));
+        builder.RegisterInstance(dataSet);
         if (profile.PreemptionSettings != null)
         {
             builder.RegisterDecorator<PreemptionDecorator, DetectionMouseMover>();
@@ -112,8 +125,12 @@ public sealed class HotKeyProfileRunner(
         _session.Disposables.Dispose();
         _session.Scope.Dispose();
         _session = null;
-        streamDetector.Weights = null;
+        _streamDetector.Weights = null;
     }
 
     private Session? _session;
+    private readonly StreamDetector _streamDetector;
+    private readonly SharpHookHotKeyManager _hotKeyManager;
+    private readonly ProfileEditor _profileEditor;
+    private readonly ILifetimeScope _scope;
 }

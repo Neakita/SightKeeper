@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -21,10 +22,12 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     public AnnotatorToolsViewModel(
         SelectedDataSetViewModel selectedDataSetViewModel,
         SelectedScreenshotViewModel selectedScreenshotViewModel,
-        AnnotatorScreenshotsViewModel screenshotsViewModel)
+        AnnotatorScreenshotsViewModel screenshotsViewModel,
+        ObjectsLookupper objectsLookupper)
     {
         _selectedScreenshotViewModel = selectedScreenshotViewModel;
         _screenshotsViewModel = screenshotsViewModel;
+        _objectsLookupper = objectsLookupper;
         selectedScreenshotViewModel.ObservableValue
             .Subscribe(OnScreenshotSelected)
             .DisposeWith(_disposable);
@@ -61,6 +64,7 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     
     private readonly SelectedScreenshotViewModel _selectedScreenshotViewModel;
     private readonly AnnotatorScreenshotsViewModel _screenshotsViewModel;
+    private readonly ObjectsLookupper _objectsLookupper;
     private readonly CompositeDisposable _disposable = new();
 
     private IDisposable? _selectedScreenshotDisposable;
@@ -80,7 +84,7 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     {
         var screenshot = _selectedScreenshotViewModel.Value;
         Guard.IsNotNull(screenshot);
-        screenshot.Item.MakeAsset();
+        _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(screenshot.Item)).Assets.MakeAsset(screenshot.Item);
         screenshot.NotifyIsAssetChanged();
     }
     private bool CanMarkSelectedScreenshotAsAsset() =>
@@ -91,7 +95,7 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     {
         var screenshot = _selectedScreenshotViewModel.Value;
         Guard.IsNotNull(screenshot);
-        screenshot.Item.DeleteAsset();
+        _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(screenshot.Item)).Assets.DeleteAsset(_objectsLookupper.GetAsset(screenshot.Item));
         screenshot.NotifyIsAssetChanged();
         _selectedScreenshotViewModel.DetectorItems.Clear();
     }
@@ -105,7 +109,7 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
         Guard.IsNotNull(_selectedScreenshotViewModel.SelectedScreenshotIndex);
         var screenshotIndex = _selectedScreenshotViewModel.SelectedScreenshotIndex.Value;
         Guard.IsNotNull(screenshot);
-        screenshot.Item.Library.DeleteScreenshot(screenshot.Item);
+        _objectsLookupper.GetLibrary(screenshot.Item).DeleteScreenshot(screenshot.Item);
         var screenshots = _screenshotsViewModel.Screenshots;
         if (!screenshots.Any())
             return;
@@ -119,7 +123,7 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
         var item = SelectedItem;
         Guard.IsNotNull(item);
         Guard.IsNotNull(item.Item);
-        item.Item.Asset.DeleteItem(item.Item);
+        _objectsLookupper.GetAsset(item.Item).DeleteItem(item.Item);
         _selectedScreenshotViewModel.DetectorItems.Remove(item);
     }
 

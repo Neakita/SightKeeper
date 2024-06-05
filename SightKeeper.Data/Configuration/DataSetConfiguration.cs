@@ -10,10 +10,10 @@ public sealed class DataSetConfiguration : IEntityTypeConfiguration<DataSet>
     {
         builder.HasFlakeIdKey();
         builder.Property(dataSet => dataSet.Resolution);
-        builder.HasMany(dataSet => dataSet.ItemClasses).WithOne(itemClass => itemClass.DataSet);
-        builder.HasOne(dataSet => dataSet.Screenshots).WithOne(library => library.DataSet).HasPrincipalKey<DataSet>();
-        builder.HasOne(dataSet => dataSet.Assets).WithOne(library => library.DataSet).HasPrincipalKey<DataSet>();
-        builder.HasOne(dataSet => dataSet.Weights).WithOne(library => library.DataSet).HasPrincipalKey<DataSet>();
+        builder.HasMany(dataSet => dataSet.ItemClasses).WithOne();
+        builder.HasOne(dataSet => dataSet.Screenshots).WithOne().HasPrincipalKey<DataSet>();
+        builder.HasOne(dataSet => dataSet.Assets).WithOne().HasPrincipalKey<DataSet>();
+        builder.HasOne(dataSet => dataSet.Weights).WithOne().HasPrincipalKey<DataSet>();
         builder.Navigation(dataSet => dataSet.ItemClasses).AutoInclude();
         builder.Navigation(dataSet => dataSet.Game).AutoInclude();
         builder.Navigation(dataSet => dataSet.Screenshots).AutoInclude();

@@ -7,25 +7,18 @@ namespace SightKeeper.Domain.Model.DataSets;
 public sealed class ScreenshotsLibrary : IEnumerable<Screenshot>
 {
     public ushort? MaxQuantity { get; set; }
-    public DataSet DataSet { get; }
-
-    public ScreenshotsLibrary(DataSet dataSet)
-    {
-	    DataSet = dataSet;
-    }
 
     public void DeleteScreenshot(Screenshot screenshot)
     {
 	    bool isRemoved = _screenshots.Remove(screenshot);
         Guard.IsTrue(isRemoved);
-	    screenshot.Asset?.ClearItems();
     }
 
     public IEnumerator<Screenshot> GetEnumerator() => _screenshots.GetEnumerator();
 
     internal Screenshot CreateScreenshot()
     {
-	    Screenshot screenshot = new(this);
+	    Screenshot screenshot = new();
 	    _screenshots.Add(screenshot);
 	    return screenshot;
     }

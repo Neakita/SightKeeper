@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Globalization;
-using CommunityToolkit.Diagnostics;
 using Serilog;
 using SerilogTimings.Extensions;
 using SightKeeper.Domain.Model.DataSets;
@@ -12,10 +11,11 @@ namespace SightKeeper.Application.Training;
 
 public sealed class AssetsExporter
 {
-	public AssetsExporter(ScreenshotsDataAccess screenshotsDataAccess, ILogger logger)
+	public AssetsExporter(ScreenshotsDataAccess screenshotsDataAccess, ILogger logger, ObjectsLookupper objectsLookupper)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_logger = logger;
+		_objectsLookupper = objectsLookupper;
 	}
 
 	public void Export(
@@ -27,16 +27,13 @@ public sealed class AssetsExporter
 		var labelsDirectoryPath = Path.Combine(targetDirectoryPath, "labels");
 		var data = _screenshotsDataAccess.LoadImages(assets.Select(asset => asset.Screenshot)).ToImmutableList();
 		ExportImages(imagesDirectoryPath, data.Select(d => d.image).ToImmutableList());
-		ExportLabels(labelsDirectoryPath, data.Select(d =>
-		{
-			Guard.IsNotNull(d.screenshot.Asset);
-			return d.screenshot.Asset!;
-		}).ToImmutableList(), itemClasses);
+		ExportLabels(labelsDirectoryPath, data.Select(d => _objectsLookupper.GetAsset(d.screenshot)).ToImmutableList(), itemClasses);
 	}
 	
 	private static readonly NumberFormatInfo NumberFormat = new() { NumberDecimalSeparator = "." };
 	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly ILogger _logger;
+	private readonly ObjectsLookupper _objectsLookupper;
 
 	private void ExportImages(string directoryPath, IReadOnlyCollection<Domain.Model.DataSets.Image> images)
 	{

@@ -27,7 +27,7 @@ internal sealed class DataSetViewModel : ViewModel, IDisposable
     public IReadOnlyCollection<ItemClass> ItemClasses { get; }
     public IReadOnlyCollection<Weights> Weights { get; }
 
-    public DataSetViewModel(DataSet dataSet, WeightsDataAccess weightsDataAccess)
+    public DataSetViewModel(DataSet dataSet, WeightsDataAccess weightsDataAccess, ObjectsLookupper objectsLookupper)
     {
         DataSet = dataSet;
         _itemClasses.Connect()
@@ -43,11 +43,11 @@ internal sealed class DataSetViewModel : ViewModel, IDisposable
             .DisposeWith(_constructorDisposables);
         Weights = weights;
         weightsDataAccess.WeightsCreated
-            .Where(w => w.Library.DataSet == DataSet)
+            .Where(w => objectsLookupper.GetDataSet(objectsLookupper.GetLibrary(w)) == DataSet)
             .Subscribe(w => _weights.Add(w))
             .DisposeWith(_constructorDisposables);
         weightsDataAccess.WeightsRemoved
-            .Where(w => w.Library.DataSet == DataSet)
+            .Where(w => objectsLookupper.GetDataSet(objectsLookupper.GetLibrary(w)) == DataSet)
             .Subscribe(w => _weights.Remove(w))
             .DisposeWith(_constructorDisposables);
     }

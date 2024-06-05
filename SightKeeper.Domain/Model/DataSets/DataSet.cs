@@ -18,21 +18,22 @@ public sealed class DataSet
 		Name = name;
 		Description = string.Empty;
 		Resolution = resolution;
-		Screenshots = new ScreenshotsLibrary(this);
-		Weights = new WeightsLibrary(this);
-		Assets = new AssetsLibrary(this);
+		Screenshots = new ScreenshotsLibrary();
+		Weights = new WeightsLibrary();
+		Assets = new AssetsLibrary();
 	}
 	public ItemClass CreateItemClass(string name, uint color)
 	{
-		ItemClass newItemClass = new(name, color, this);
+		ItemClass newItemClass = new(name, color);
 		bool isAdded = _itemClasses.Add(newItemClass);
 		Guard.IsTrue(isAdded);
 		return newItemClass;
 	}
 	public void DeleteItemClass(ItemClass itemClass)
 	{
-		if (Assets.SelectMany(asset => asset.Items).Any(item => item.ItemClass == itemClass))
-			throw new InvalidOperationException($"Item class \"{itemClass}\" is in use");
+		// TODO
+		/*if (Assets.SelectMany(asset => asset.Items).Any(item => item.ItemClass == itemClass))
+			throw new InvalidOperationException($"Item class \"{itemClass}\" is in use");*/
 		bool isRemoved = _itemClasses.Remove(itemClass);
 		Guard.IsTrue(isRemoved);
 	}

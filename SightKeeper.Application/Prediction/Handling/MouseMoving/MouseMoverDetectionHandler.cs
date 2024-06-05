@@ -9,6 +9,7 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Input;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Prediction.Handling.MouseMoving;
 
@@ -16,10 +17,16 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
 {
     public IObservable<float?> RequestedProbabilityThreshold { get; }
     
-    public MouseMoverDetectionHandler(Profile profile, DetectionMouseMover mouseMover, SharpHookHotKeyManager hotKeyManager, ProfileEditor profileEditor)
+    public MouseMoverDetectionHandler(
+	    Profile profile,
+	    DetectionMouseMover mouseMover,
+	    SharpHookHotKeyManager hotKeyManager,
+	    ProfileEditor profileEditor,
+	    ObjectsLookupper objectsLookupper)
     {
         _profile = profile;
         _mouseMover = mouseMover;
+        _objectsLookupper = objectsLookupper;
         _profileItemClasses = profile.ItemClasses.ToDictionary(
             profileItemClass => profileItemClass.ItemClass,
             profileItemClass => profileItemClass);
@@ -67,6 +74,7 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     private readonly Dictionary<ItemClass, ProfileItemClass> _profileItemClasses;
     private readonly Dictionary<ItemClass, int> _itemClassPriorities;
     private readonly DetectionMouseMover _mouseMover;
+    private readonly ObjectsLookupper _objectsLookupper;
     private readonly CompositeDisposable _constructorDisposables = new();
     private bool _isFiring;
     private bool _disposed;
@@ -101,7 +109,8 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     private void MoveTo(DetectionData data, DetectionItem item)
     {
         var moveVector = GetMoveVector(item.Bounding);
-        moveVector = moveVector * _profile.Weights.Library.DataSet.Resolution / 2;
+        // TODO optimize (do not use GetDataSet & GetLibrary every call)
+        moveVector = moveVector * _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(_profile.Weights)).Resolution / 2;
         moveVector *= _profile.MouseSensitivity;
         _mouseMover.Move(new MouseMovingContext(data, item), moveVector);
     }

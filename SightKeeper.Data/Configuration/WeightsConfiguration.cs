@@ -9,7 +9,6 @@ public sealed class WeightsConfiguration : IEntityTypeConfiguration<Weights>
     public void Configure(EntityTypeBuilder<Weights> builder)
     {
         builder.HasFlakeIdKey();
-        builder.Navigation(weights => weights.Library).AutoInclude();
         builder.HasMany<DbWeightsData>().WithOne(weightsData => weightsData.Weights);
         builder.HasMany(weights => weights.ItemClasses).WithMany().UsingEntity<WeightsItemClass>(
             "WeightsItemClasses",

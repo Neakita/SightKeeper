@@ -19,6 +19,7 @@ using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.MessageBoxDialog;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 
@@ -31,11 +32,17 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
     public IReadOnlyCollection<Game> Games => _gamesDataAccess.Games;
     public Domain.Model.DataSets.DataSet DataSet { get; private set; }
 
-    public DataSetEditingViewModel(Domain.Model.DataSets.DataSet dataSet, IValidator<DataSetChanges> validator, GamesDataAccess gamesDataAccess, DialogManager dialogManager)
+    public DataSetEditingViewModel(
+	    Domain.Model.DataSets.DataSet dataSet,
+	    IValidator<DataSetChanges> validator,
+	    GamesDataAccess gamesDataAccess,
+	    DialogManager dialogManager,
+	    ObjectsLookupper objectsLookupper)
     {
 	    Validator = new ViewModelValidator<DataSetChanges>(validator, this, this);
         _gamesDataAccess = gamesDataAccess;
         _dialogManager = dialogManager;
+        _objectsLookupper = objectsLookupper;
         SetData(dataSet);
         ErrorsChanged += OnErrorsChanged;
     }
@@ -70,6 +77,7 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
     private readonly List<DeletedItemClass> _deletedItemClasses = new();
     private readonly GamesDataAccess _gamesDataAccess;
     private readonly DialogManager _dialogManager;
+    private readonly ObjectsLookupper _objectsLookupper;
 
     ICommand IDataSetEditorViewModel.AddItemClassCommand => AddItemClassCommand;
     [RelayCommand(CanExecute = nameof(CanAddItemClass))]
@@ -111,7 +119,7 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
         if (itemClass is ExistingItemClass existingItemClass)
         {
             DeletedItemClassAction? action = null;
-            if (existingItemClass.ItemClass.Items.Any())
+            if (_objectsLookupper.GetItems(existingItemClass.ItemClass).Any())
             {
                 var cancel = new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel);
                 var deleteItems = new MessageBoxButtonDefinition("Delete items", MaterialIconKind.TrashCanOutline);
@@ -119,7 +127,7 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
                 var deleteScreenshots = new MessageBoxButtonDefinition("Delete screenshots", MaterialIconKind.TrashCanOutline);
                 MessageBoxDialogViewModel messageBox = new(
                     "Associated items",
-                    $"Item class {itemClass.Name} has some items ({existingItemClass.ItemClass.Items.Count}). Are you sure you want to delete it? Choose action",
+                    $"Item class {itemClass.Name} has some items ({_objectsLookupper.GetItems(existingItemClass.ItemClass).Count}). Are you sure you want to delete it? Choose action",
                     cancel, deleteItems, deleteAssets, deleteScreenshots);
                 var result = await _dialogManager.ShowDialogAsync(messageBox);
                 if (result == cancel)

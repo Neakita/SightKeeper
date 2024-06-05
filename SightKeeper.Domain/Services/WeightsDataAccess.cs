@@ -12,6 +12,11 @@ public abstract class WeightsDataAccess : IDisposable
 	public abstract WeightsData LoadWeightsONNXData(Weights weights);
 	public abstract WeightsData LoadWeightsPTData(Weights weights);
 
+	public WeightsDataAccess(ObjectsLookupper objectsLookupper)
+	{
+		_objectsLookupper = objectsLookupper;
+	}
+
 	public Weights CreateWeights(
 		WeightsLibrary library,
 		byte[] onnxData,
@@ -27,7 +32,8 @@ public abstract class WeightsDataAccess : IDisposable
 	}
 	public void RemoveWeights(Weights weights)
 	{
-		weights.Library.RemoveWeights(weights);
+		var library = _objectsLookupper.GetLibrary(weights);
+		library.RemoveWeights(weights);
 		RemoveWeightsData(weights);
 		_weightsRemoved.OnNext(weights);
 	}
@@ -41,6 +47,7 @@ public abstract class WeightsDataAccess : IDisposable
 	protected abstract void SaveWeightsData(Weights weights, WeightsData onnxData, WeightsData ptData);
 	protected abstract void RemoveWeightsData(Weights weights);
 
+	private readonly ObjectsLookupper _objectsLookupper;
 	private readonly Subject<Weights> _weightsCreated = new();
 	private readonly Subject<Weights> _weightsRemoved = new();
 }

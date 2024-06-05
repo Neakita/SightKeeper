@@ -10,7 +10,8 @@ public sealed class AssetConfiguration : IEntityTypeConfiguration<Asset>
     {
         builder.HasFlakeIdKey();
         builder.ToTable("Assets");
-        builder.HasMany(asset => asset.Items).WithOne(item => item.Asset);
+        builder.HasOne(asset => asset.Screenshot).WithOne().HasPrincipalKey<Screenshot>();
+        builder.HasMany(asset => asset.Items).WithOne();
         builder.Navigation(asset => asset.Screenshot).AutoInclude();
     }
 }

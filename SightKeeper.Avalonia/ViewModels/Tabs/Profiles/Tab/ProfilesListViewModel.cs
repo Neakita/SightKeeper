@@ -7,6 +7,7 @@ using CommunityToolkit.Diagnostics;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Tab;
 
@@ -14,10 +15,13 @@ internal sealed class ProfilesListViewModel : IDisposable
 {
     public ReadOnlyCollection<ProfileViewModel> ProfileViewModels { get; }
 
-    public ProfilesListViewModel(ProfilesObservableRepository profilesObservableRepository, ProfileEditor profileEditor)
+    public ProfilesListViewModel(
+	    ProfilesObservableRepository profilesObservableRepository,
+	    ProfileEditor profileEditor,
+	    ObjectsLookupper objectsLookupper)
     {
         profilesObservableRepository.Profiles.Connect()
-            .Transform(profile => new ProfileViewModel(profile))
+            .Transform(profile => new ProfileViewModel(profile, objectsLookupper))
             .AddKey(profile => profile.Profile)
             .PopulateInto(_profileViewModels)
             .DisposeWith(_constructorDisposables);

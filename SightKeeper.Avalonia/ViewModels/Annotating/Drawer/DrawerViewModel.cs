@@ -5,6 +5,8 @@ using Avalonia;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 
@@ -35,16 +37,18 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
     public DrawerViewModel(
         AnnotatorToolsViewModel tools,
         DetectorItemResizer resizer,
-        SelectedScreenshotViewModel selectedScreenshotViewModel)
+        SelectedScreenshotViewModel selectedScreenshotViewModel,
+        ObjectsLookupper objectsLookupper)
     {
         SelectedScreenshotViewModel = selectedScreenshotViewModel;
         _resizer = resizer;
+        _objectsLookupper = objectsLookupper;
         _tools = tools;
         selectedScreenshotViewModel.ObservableValue.Subscribe(_ =>
         {
-            var asset = SelectedScreenshotViewModel.Value?.Item.Asset;
-            if (asset == null)
-                return;
+	        if (SelectedScreenshotViewModel.Value == null)
+		        return;
+            var asset = _objectsLookupper.GetAsset(SelectedScreenshotViewModel.Value.Item);
             foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer, this)))
                 SelectedScreenshotViewModel.DetectorItems.Add(item);
         }).DisposeWith(_disposable);
@@ -53,8 +57,8 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
         {
             Guard.IsNotNull(SelectedScreenshotViewModel.Value);
             SelectedScreenshotViewModel.DetectedItems.Remove(item);
-            var asset = SelectedScreenshotViewModel.Value.Item.Asset ??
-                        SelectedScreenshotViewModel.Value.Item.MakeAsset();
+            var screenshot = SelectedScreenshotViewModel.Value.Item;
+            var asset = GetOrMakeAsset(screenshot);
             var detectorItem = asset.CreateItem(item.ItemClass, item.Bounding.Bounding);
             DetectorItemViewModel detectorItemViewModel = new(detectorItem, resizer, this)
             {
@@ -64,7 +68,13 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
             SelectedScreenshotViewModel.Value.NotifyIsAssetChanged();
         }).DisposeWith(_disposable);
     }
-    
+
+    private Asset GetOrMakeAsset(Screenshot valueItem)
+    {
+	    return _objectsLookupper.GetOptionalAsset(valueItem) ??
+	           _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(valueItem)).Assets.MakeAsset(valueItem);
+    }
+
     public void BeginDrawing(Point startPosition)
     {
         Guard.IsNull(_drawingData);
@@ -98,7 +108,7 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
             return;
         }
         boundingViewModel.Synchronize();
-        var asset = screenshot.Item.Asset ?? screenshot.Item.MakeAsset();
+        var asset = GetOrMakeAsset(screenshot.Item);
         _drawingData.ItemViewModel.Item = asset.CreateItem(_tools.SelectedItemClass, boundingViewModel.Bounding);
         screenshot.NotifyIsAssetChanged();
         _drawingData = null;
@@ -110,6 +120,7 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
 
     private readonly AnnotatorToolsViewModel _tools;
     private readonly DetectorItemResizer _resizer;
+    private readonly ObjectsLookupper _objectsLookupper;
     private readonly CompositeDisposable _disposable = new();
     private DrawingData? _drawingData;
     [ObservableProperty] private bool _isItemSelectionEnabled;

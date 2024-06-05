@@ -7,7 +7,7 @@ namespace SightKeeper.Data.Services;
 
 public sealed class DbWeightsDataAccess : WeightsDataAccess
 {
-    public DbWeightsDataAccess(AppDbContext dbContext)
+    public DbWeightsDataAccess(AppDbContext dbContext, ObjectsLookupper objectsLookupper) : base(objectsLookupper)
     {
 	    _dbContext = dbContext;
 	    _dbContext.SavedChanges += OnDbContextSavedChanges;

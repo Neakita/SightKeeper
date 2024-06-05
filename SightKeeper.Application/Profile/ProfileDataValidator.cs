@@ -1,13 +1,14 @@
 ﻿using FluentValidation;
 using SightKeeper.Application.Extensions;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application;
 
 public sealed class ProfileDataValidator : AbstractValidator<ProfileData>
 {
-    public ProfileDataValidator()
+	public ProfileDataValidator(ObjectsLookupper objectsLookupper)
     {
-        RuleFor(data => data.Name)
+	    RuleFor(data => data.Name)
             .NotEmpty();
         RuleFor(data => data.DetectionThreshold)
             .ExclusiveBetween(0, 1);
@@ -16,7 +17,7 @@ public sealed class ProfileDataValidator : AbstractValidator<ProfileData>
         RuleFor(data => data.Weights)
             .NotNull();
         RuleForEach(data => data.ItemClasses)
-            .Must((data, profileItemClass) => profileItemClass.ItemClass.DataSet == data.Weights!.Library.DataSet)
+            .Must((data, profileItemClass) => objectsLookupper.GetDataSet(profileItemClass.ItemClass) == objectsLookupper.GetDataSet(objectsLookupper.GetLibrary(data.Weights!)))
             .When(data => data.Weights != null);
         RuleFor(data => data.ItemClasses).NoDuplicates();
 

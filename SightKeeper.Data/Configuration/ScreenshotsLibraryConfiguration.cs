@@ -10,6 +10,6 @@ public sealed class ScreenshotsLibraryConfiguration : IEntityTypeConfiguration<S
     {
         builder.HasFlakeIdKey();
         builder.ToTable("ScreenshotsLibraries");
-        builder.HasMany<Screenshot>("_screenshots").WithOne(screenshot => screenshot.Library);
+        builder.HasMany<Screenshot>("_screenshots").WithOne();
     }
 }

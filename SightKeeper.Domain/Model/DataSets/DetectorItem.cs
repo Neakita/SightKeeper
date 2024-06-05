@@ -4,12 +4,10 @@ public sealed class DetectorItem
 {
 	public ItemClass ItemClass { get; set; }
 	public Bounding Bounding { get; set; }
-	public Asset Asset { get; }
 	
-	internal DetectorItem(ItemClass itemClass, Bounding bounding, Asset asset)
+	internal DetectorItem(ItemClass itemClass, Bounding bounding)
 	{
 		ItemClass = itemClass;
 		Bounding = bounding;
-		Asset = asset;
 	}
 }

@@ -3,6 +3,7 @@ using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services.DataSets;
 
@@ -10,10 +11,11 @@ public sealed class DbDataSetEditor : DataSetEditor
 {
     public IObservable<DataSet> DataSetEdited => _dataSetEdited;
     
-    public DbDataSetEditor(IValidator<DataSetChanges> changesValidator, AppDbContext dbContext)
+    public DbDataSetEditor(IValidator<DataSetChanges> changesValidator, AppDbContext dbContext, ObjectsLookupper objectsLookupper)
     {
         _changesValidator = changesValidator;
         _dbContext = dbContext;
+        _objectsLookupper = objectsLookupper;
     }
 
     public async Task ApplyChanges(DataSetChangesDTO dataSetChanges, CancellationToken cancellationToken = default)
@@ -29,18 +31,18 @@ public sealed class DbDataSetEditor : DataSetEditor
         _dataSetEdited.OnNext(dataSet);
     }
 
-    private static void ApplyItemClassesChanges(DataSetChangesDTO changes)
+    private void ApplyItemClassesChanges(DataSetChangesDTO changes)
     {
         DeleteItemClasses(changes);
         ApplyItemClassesEditions(changes);
         AddNewItemClasses(changes);
     }
 
-    private static void DeleteItemClasses(DataSetChangesDTO changes)
+    private void DeleteItemClasses(DataSetChangesDTO changes)
     {
         var deletedItemClasses = changes.DeletedItemClasses;
         var itemClassesWithItemsAndNoActionSpecified = deletedItemClasses
-            .Where(deletedItemClass => deletedItemClass.ItemClass.Items.Any() && deletedItemClass.Action == null)
+            .Where(deletedItemClass => IsItemClassHaveItems(deletedItemClass.ItemClass) && deletedItemClass.Action == null)
             .ToList();
         if (itemClassesWithItemsAndNoActionSpecified.Any())
             ThrowHelper.ThrowArgumentException($"Item classes must have an action specified when they have items, but no action was specified for: {string.Join(", ", itemClassesWithItemsAndNoActionSpecified.Select(itemClass => itemClass.ItemClass.Name))}");
@@ -48,12 +50,13 @@ public sealed class DbDataSetEditor : DataSetEditor
         {
             ExecuteActionIfNecessary(deletedItemClass);
             var itemClass = deletedItemClass.ItemClass;
-            itemClass.DataSet.DeleteItemClass(itemClass);
+            var dataSet = _objectsLookupper.GetDataSet(itemClass);
+            dataSet.DeleteItemClass(itemClass);
         }
     }
-    private static void ExecuteActionIfNecessary(DeletedItemClass deletedItemClass)
+    private void ExecuteActionIfNecessary(DeletedItemClass deletedItemClass)
     {
-        if (!deletedItemClass.ItemClass.Items.Any())
+        if (!IsItemClassHaveItems(deletedItemClass.ItemClass))
             return;
         Guard.IsNotNull(deletedItemClass.Action);
         var action = deletedItemClass.Action switch
@@ -65,20 +68,20 @@ public sealed class DbDataSetEditor : DataSetEditor
         };
         action(deletedItemClass.ItemClass);
     }
-    private static void DeleteItems(ItemClass itemClass)
+    private void DeleteItems(ItemClass itemClass)
     {
-        foreach (var item in itemClass.Items.ToList())
-            item.Asset.DeleteItem(item);
+        foreach (var item in _objectsLookupper.GetItems(itemClass))
+            _objectsLookupper.GetAsset(item).DeleteItem(item);
     }
-    private static void DeleteAssets(ItemClass itemClass)
+    private void DeleteAssets(ItemClass itemClass)
     {
-        foreach (var asset in itemClass.Items.Select(item => item.Asset).Distinct().ToList())
-            asset.Library.DeleteAsset(asset);
+        foreach (var asset in _objectsLookupper.GetItems(itemClass).Select(item => _objectsLookupper.GetAsset(item)).Distinct().ToList())
+            _objectsLookupper.GetLibrary(asset).DeleteAsset(asset);
     }
-    private static void DeleteScreenshots(ItemClass itemClass)
+    private void DeleteScreenshots(ItemClass itemClass)
     {
-        foreach (var screenshot in itemClass.Items.Select(item => item.Asset.Screenshot).Distinct().ToList())
-            screenshot.Library.DeleteScreenshot(screenshot);
+        foreach (var screenshot in _objectsLookupper.GetItems(itemClass).Select(item => _objectsLookupper.GetAsset(item).Screenshot).Distinct().ToList())
+	        _objectsLookupper.GetLibrary(screenshot).DeleteScreenshot(screenshot);
     }
 
     private static void ApplyItemClassesEditions(DataSetChangesDTO changes)
@@ -102,4 +105,10 @@ public sealed class DbDataSetEditor : DataSetEditor
     private readonly Subject<DataSet> _dataSetEdited = new();
     private readonly IValidator<DataSetChangesDTO> _changesValidator;
     private readonly AppDbContext _dbContext;
+    private readonly ObjectsLookupper _objectsLookupper;
+
+    private bool IsItemClassHaveItems(ItemClass itemClass)
+    {
+	    return _objectsLookupper.GetItems(itemClass).Any();
+    }
 }

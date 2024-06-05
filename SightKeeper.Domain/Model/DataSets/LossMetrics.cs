@@ -15,9 +15,6 @@ public readonly struct LossMetrics
 	public float ClassificationLoss { get; }
 	public float DeformationLoss { get; }
 
-	public LossMetrics()
-	{
-	}
 	public LossMetrics(float boundingLoss, float classificationLoss, float deformationLoss)
 	{
 		BoundingLoss = boundingLoss;

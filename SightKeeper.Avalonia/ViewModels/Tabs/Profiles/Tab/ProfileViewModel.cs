@@ -1,11 +1,13 @@
 ﻿using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Tab;
 
 internal sealed class ProfileViewModel : ViewModel
 {
-    private static readonly string[] Properties =
+
+	private static readonly string[] Properties =
     {
         "Name",
         "Description",
@@ -15,15 +17,18 @@ internal sealed class ProfileViewModel : ViewModel
     public Profile Profile { get; }
     public string Name => Profile.Name;
     public string Description => Profile.Description;
-    public Game? Game => Profile.Weights.Library.DataSet.Game;
+    public Game? Game => _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(Profile.Weights)).Game;
 
-    public ProfileViewModel(Profile profile)
+    public ProfileViewModel(Profile profile, ObjectsLookupper objectsLookupper)
     {
-        Profile = profile;
+	    Profile = profile;
+	    _objectsLookupper = objectsLookupper;
     }
 
     public void NotifyChanges()
     {
-        OnPropertiesChanged(Properties);
+	    OnPropertiesChanged(Properties);
     }
+
+    private readonly ObjectsLookupper _objectsLookupper;
 }

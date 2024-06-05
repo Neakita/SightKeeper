@@ -17,11 +17,13 @@ public sealed class Trainer
 	public Trainer(
 		AssetsExporter assetsExporter,
 		DataSetConfigurationExporter dataSetConfigurationExporter,
-		WeightsDataAccess weightsDataAccess)
+		WeightsDataAccess weightsDataAccess,
+		ObjectsLookupper objectsLookupper)
 	{
 		_assetsExporter = assetsExporter;
 		_dataSetConfigurationExporter = dataSetConfigurationExporter;
 		_weightsDataAccess = weightsDataAccess;
+		_objectsLookupper = objectsLookupper;
 	}
 
 	public bool AMP { get; set; } = true;
@@ -62,7 +64,7 @@ public sealed class Trainer
 		CancellationToken cancellationToken = default)
 	{
 		PrepareDataDirectory();
-		var dataSet = weights.Library.DataSet;
+		var dataSet = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(weights));
 		_assetsExporter.Export(DataDirectoryPath, dataSet.Assets, dataSet.ItemClasses);
 		await ExportDataSet(dataSet, cancellationToken);
 		await ExportWeights(weights, cancellationToken);
@@ -86,6 +88,7 @@ public sealed class Trainer
 	private readonly AssetsExporter _assetsExporter;
 	private readonly DataSetConfigurationExporter _dataSetConfigurationExporter;
 	private readonly WeightsDataAccess _weightsDataAccess;
+	private readonly ObjectsLookupper _objectsLookupper;
 
 	private void PrepareDataDirectory()
 	{

@@ -66,16 +66,20 @@ internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActiva
 
     [ObservableProperty] private SortingRule<Screenshot> _sortingRule;
 
-    public AnnotatorScreenshotsViewModel(ScreenshotsDataAccess screenshotsDataAccess, SelectedScreenshotViewModel selectedScreenshotViewModel)
+    public AnnotatorScreenshotsViewModel(
+	    ScreenshotsDataAccess screenshotsDataAccess,
+	    SelectedScreenshotViewModel selectedScreenshotViewModel,
+	    ObjectsLookupper objectsLookupper)
     {
         SelectedScreenshotViewModel = selectedScreenshotViewModel;
         _screenshotsDataAccess = screenshotsDataAccess;
+        _objectsLookupper = objectsLookupper;
         _sortingRule = SortingRules.First();
         var sortingRule = this.WhenAnyValue(viewModel => viewModel.SortingRule)
             .Select(rule => rule.Comparer);
         _screenshotsSource.Connect()
             .Sort(sortingRule)
-            .Transform(screenshot => new ScreenshotViewModel(screenshotsDataAccess, screenshot))
+            .Transform(screenshot => new ScreenshotViewModel(screenshotsDataAccess, screenshot, _objectsLookupper))
             .Bind(out var screenshots)
             .PopulateInto(_screenshotViewModels);
         TotalScreenshotsCount = _screenshotsSource.Connect().Count();
@@ -125,6 +129,7 @@ internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActiva
     }
 
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
+    private readonly ObjectsLookupper _objectsLookupper;
     private readonly SourceList<Screenshot> _screenshotsSource = new();
     private readonly ReadOnlyObservableCollection<ScreenshotViewModel> _allScreenshots;
     private readonly ReadOnlyObservableCollection<ScreenshotViewModel> _screenshotsWithAssetsAndSelected;
@@ -151,11 +156,11 @@ internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActiva
         LoadScreenshots(value);
         _dataSetDisposable = new CompositeDisposable();
         _screenshotsDataAccess.ScreenshotAdded
-	        .Where(screenshot => screenshot.Library == value.Screenshots)
+	        .Where(screenshot => _objectsLookupper.GetLibrary(screenshot) == value.Screenshots)
             .Subscribe(OnScreenshotAdded)
             .DisposeWith(_dataSetDisposable);
         _screenshotsDataAccess.ScreenshotRemoved
-	        .Where(screenshot => screenshot.Library == value.Screenshots)
+	        .Where(screenshot => _objectsLookupper.GetLibrary(screenshot) == value.Screenshots)
             .Subscribe(OnScreenshotRemoved)
             .DisposeWith(_dataSetDisposable);
         OnPropertyChanged(nameof(TotalScreenshotsCount));

@@ -13,10 +13,13 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
 {
     public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 
-    public DataSetsListViewModel(DataSetsObservableRepository dataSetsObservableRepository, DataSetEditor editor, WeightsDataAccess weightsDataAccess)
+    public DataSetsListViewModel(DataSetsObservableRepository dataSetsObservableRepository,
+	    DataSetEditor editor,
+	    WeightsDataAccess weightsDataAccess,
+	    ObjectsLookupper objectsLookupper)
     {
         dataSetsObservableRepository.DataSetsSource.Connect()
-            .Transform(dataSet => new DataSetViewModel(dataSet, weightsDataAccess))
+            .Transform(dataSet => new DataSetViewModel(dataSet, weightsDataAccess, objectsLookupper))
             .DisposeMany()
             .AddKey(viewModel => viewModel.DataSet)
             .Bind(out var dataSets)

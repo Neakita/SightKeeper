@@ -12,7 +12,7 @@ using Size = SixLabors.ImageSharp.Size;
 
 namespace SightKeeper.Application.Prediction;
 
-public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
+public sealed class ONNXDetector : Detector
 {
     public Weights? Weights
     {
@@ -26,7 +26,7 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
             if (value == null)
                 return;
             SetWeights(value);
-            _itemClasses = value.Library.DataSet.ItemClasses
+            _itemClasses = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(value)).ItemClasses
                 .Select((itemClass, itemClassIndex) => (itemClass, itemClassIndex))
                 .ToDictionary(t => t.itemClassIndex, t => t.itemClass);
         }
@@ -34,10 +34,10 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
     
     private void SetWeights(Weights weights)
     {
-        var weightsData = weightsDataAccess.LoadWeightsONNXData(weights);
+        var weightsData = _weightsDataAccess.LoadWeightsONNXData(weights);
         YoloV8Builder builder = new();
         builder.UseOnnxModel(new BinarySelector(weightsData.Content));
-        builder.WithMetadata(CreateMetadata(weights.Library.DataSet));
+        builder.WithMetadata(CreateMetadata(_objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(weights))));
         builder.WithConfiguration(configuration =>
         {
 	        configuration.Confidence = ProbabilityThreshold;
@@ -88,11 +88,19 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
         return result;
     }
 
+    private readonly WeightsDataAccess _weightsDataAccess;
+    private readonly ObjectsLookupper _objectsLookupper;
     private float _probabilityThreshold = YoloV8Configuration.Default.Confidence;
     private float _iou = YoloV8Configuration.Default.IoU;
     private YoloV8Predictor? _predictor;
     private Weights? _weights;
     private Dictionary<int, ItemClass>? _itemClasses;
+
+    public ONNXDetector(WeightsDataAccess weightsDataAccess, ObjectsLookupper objectsLookupper)
+    {
+	    _weightsDataAccess = weightsDataAccess;
+	    _objectsLookupper = objectsLookupper;
+    }
 
     private static YoloV8Metadata CreateMetadata(DataSet dataSet) => new(
         string.Empty, string.Empty, string.Empty,
@@ -105,7 +113,7 @@ public sealed class ONNXDetector(WeightsDataAccess weightsDataAccess) : Detector
     {
         Guard.IsNotNull(_itemClasses);
         Guard.IsNotNull(_weights);
-        return new DetectionItem(_itemClasses[bounding.Class.Id], CreateBounding(bounding.Bounds, _weights.Library.DataSet.Resolution), bounding.Confidence);
+        return new DetectionItem(_itemClasses[bounding.Class.Id], CreateBounding(bounding.Bounds, _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(_weights)).Resolution), bounding.Confidence);
     }
 
     private static RectangleF CreateBounding(Rectangle rectangle, ushort resolution) => new(

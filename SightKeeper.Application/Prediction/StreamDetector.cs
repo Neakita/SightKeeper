@@ -5,6 +5,7 @@ using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Prediction;
 
@@ -29,10 +30,11 @@ public sealed class StreamDetector
         set => _detector.IoU = value;
     }
 
-    public StreamDetector(Detector detector, ScreenCapture screenCapture)
+    public StreamDetector(Detector detector, ScreenCapture screenCapture, ObjectsLookupper objectsLookupper)
     {
 	    _detector = detector;
 	    _screenCapture = screenCapture;
+	    _objectsLookupper = objectsLookupper;
     }
 
     public IObservable<DetectionData> RunObservable()
@@ -47,11 +49,12 @@ public sealed class StreamDetector
 
     private readonly Detector _detector;
     private readonly ScreenCapture _screenCapture;
+    private readonly ObjectsLookupper _objectsLookupper;
 
     private void RunWhileNotDisposed(ICancelable cancelable, IObserver<DetectionData> observer)
     {
 	    Guard.IsNotNull(Weights);
-	    var dataSet = Weights.Library.DataSet;
+	    var dataSet = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(Weights));
 	    var resolution = dataSet.Resolution;
 	    var game = dataSet.Game;
         while (!cancelable.IsDisposed)

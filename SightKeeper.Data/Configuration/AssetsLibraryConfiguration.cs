@@ -10,6 +10,6 @@ internal sealed class AssetsLibraryConfiguration : IEntityTypeConfiguration<Asse
 	{
 		builder.HasFlakeIdKey();
 		builder.ToTable("AssetsLibraries");
-		builder.HasMany<Asset>("_assets").WithOne(asset => asset.Library);
+		builder.HasMany<Asset>("_assets").WithOne();
 	}
 }

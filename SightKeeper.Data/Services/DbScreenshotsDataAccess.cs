@@ -8,9 +8,10 @@ namespace SightKeeper.Data.Services;
 
 public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
 {
-	public DbScreenshotsDataAccess(AppDbContext dbContext)
+	public DbScreenshotsDataAccess(AppDbContext dbContext, ObjectsLookupper objectsLookupper) : base(objectsLookupper)
     {
         _dbContext = dbContext;
+        _objectsLookupper = objectsLookupper;
         _dbContext.SavedChanges += OnDbContextSavedChanges;
     }
 
@@ -52,7 +53,7 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
 	public override IEnumerable<(Screenshot screenshot, Image image)> LoadImages(DataSet dataSet)
 	{
 		var unsavedMatchingImages = _unsavedImages
-			.Where(pair => pair.Key.Library == dataSet.Screenshots)
+			.Where(pair => _objectsLookupper.GetLibrary(pair.Key) == dataSet.Screenshots)
 			.Select(pair => (pair.Key, pair.Value));
 		var query = _dbContext
 			.Entry(dataSet.Screenshots)
@@ -90,6 +91,7 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
     }
 
 	private readonly AppDbContext _dbContext;
+	private readonly ObjectsLookupper _objectsLookupper;
 	private readonly Dictionary<Screenshot, Image> _unsavedImages = new();
 
 	private void OnDbContextSavedChanges(object? sender, SavedChangesEventArgs e)

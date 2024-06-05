@@ -6,12 +6,6 @@ namespace SightKeeper.Domain.Model.DataSets;
 public sealed class WeightsLibrary : IReadOnlyCollection<Weights>
 {
 	public int Count => _weights.Count;
-    public DataSet DataSet { get; }
-
-    public WeightsLibrary(DataSet dataSet)
-    {
-	    DataSet = dataSet;
-    }
 
     public void RemoveWeights(Weights weights)
     {
@@ -29,7 +23,7 @@ public sealed class WeightsLibrary : IReadOnlyCollection<Weights>
 	    WeightsMetrics metrics,
 	    IEnumerable<ItemClass> itemClasses)
     {
-	    Weights weights = new(modelSize, metrics, itemClasses, this);
+	    Weights weights = new(modelSize, metrics, itemClasses);
 	    var isAdded = _weights.Add(weights);
 	    Guard.IsTrue(isAdded);
 	    return weights;

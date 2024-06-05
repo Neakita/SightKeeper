@@ -6,13 +6,7 @@ namespace SightKeeper.Domain.Model.DataSets;
 public sealed class AssetsLibrary : IReadOnlyCollection<Asset>
 {
 	public int Count => _assets.Count;
-	public DataSet DataSet { get; }
 
-	public AssetsLibrary(DataSet dataSet)
-	{
-		DataSet = dataSet;
-		_assets = new HashSet<Asset>();
-	}
 	public IEnumerator<Asset> GetEnumerator()
 	{
 		return _assets.GetEnumerator();
@@ -20,28 +14,25 @@ public sealed class AssetsLibrary : IReadOnlyCollection<Asset>
 
 	public Asset MakeAsset(Screenshot screenshot)
 	{
-		Guard.IsNull(screenshot.Asset);
-		screenshot.Asset = new Asset(screenshot);
-		AddAsset(screenshot.Asset);
-		return screenshot.Asset;
+		// TODO
+		/*Guard.IsNull(screenshot.Asset);
+		screenshot.Asset = new Asset(screenshot);*/
+		Asset asset = new(screenshot);
+		bool isAdded = _assets.Add(asset);
+		Guard.IsTrue(isAdded);
+		return asset;
 	}
 
 	public void DeleteAsset(Asset asset)
 	{
+		// TODO
 		var isRemoved = _assets.Remove(asset);
 		Guard.IsTrue(isRemoved);
 		asset.ClearItems();
-		asset.Screenshot.Asset = null;
+		/*asset.Screenshot.Asset = null;*/
 	}
 
-	internal void AddAsset(Asset asset)
-	{
-		Guard.IsReferenceEqualTo(asset.Screenshot.Library.DataSet, DataSet);
-		bool isAdded = _assets.Add(asset);
-		Guard.IsTrue(isAdded);
-	}
-
-	private readonly HashSet<Asset> _assets;
+	private readonly HashSet<Asset> _assets = new();
 
 	IEnumerator IEnumerable.GetEnumerator()
 	{
