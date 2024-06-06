@@ -5,16 +5,16 @@ namespace SightKeeper.Application.Prediction;
 
 public readonly struct DetectionItem
 {
-    public readonly ItemClass ItemClass;
+    public readonly Tag Tag;
     public readonly RectangleF Bounding;
     public readonly float Probability;
 
-    public DetectionItem(ItemClass itemClass, RectangleF bounding, float probability)
+    public DetectionItem(Tag tag, RectangleF bounding, float probability)
     {
-        ItemClass = itemClass;
+        Tag = tag;
         Bounding = bounding;
         Probability = probability;
     }
 
-    public override string ToString() => $"{nameof(ItemClass)}: {ItemClass}, {nameof(Bounding)}: {Bounding}, {nameof(Probability)}: {Probability}";
+    public override string ToString() => $"{nameof(Tag)}: {Tag}, {nameof(Bounding)}: {Bounding}, {nameof(Probability)}: {Probability}";
 }

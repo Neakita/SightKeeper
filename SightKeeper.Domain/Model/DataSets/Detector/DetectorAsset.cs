@@ -8,9 +8,9 @@ public sealed class DetectorAsset
     public IReadOnlyList<DetectorItem> Items => _items;
     public Screenshot Screenshot { get; }
 
-    public DetectorItem CreateItem(ItemClass itemClass, Bounding bounding)
+    public DetectorItem CreateItem(Tag tag, Bounding bounding)
     {
-        DetectorItem item = new(itemClass, bounding);
+        DetectorItem item = new(tag, bounding);
         _items.Add(item);
         return item;
     }

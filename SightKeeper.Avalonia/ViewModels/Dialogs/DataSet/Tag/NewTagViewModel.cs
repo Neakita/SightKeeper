@@ -4,9 +4,9 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using SightKeeper.Application.DataSets;
 
-namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
+namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
 
-public sealed class NewItemClassViewModel : EditableItemClass
+public sealed class NewTagViewModel : EditableTag
 {
     private static readonly ImmutableList<Color> ColorPalette = ExtractPalette(new FluentColorPalette()).ToImmutableList();
 
@@ -20,11 +20,11 @@ public sealed class NewItemClassViewModel : EditableItemClass
     public string Name { get; set; }
     public Color Color { get; set; }
 
-    public NewItemClassViewModel(string name, byte index)
+    public NewTagViewModel(string name, byte index)
     {
         Name = name;
         Color = ColorPalette[index % ColorPalette.Count];
     }
     
-    public ItemClassInfo ToItemClassInfo() => new(Name, Color.ToUInt32());
+    public TagInfo ToTagInfo() => new(Name, Color.ToUInt32());
 }

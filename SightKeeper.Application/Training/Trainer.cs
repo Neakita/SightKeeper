@@ -38,7 +38,7 @@ public sealed class Trainer
 		CancellationToken cancellationToken = default)
 	{
 		PrepareDataDirectory();
-		_assetsExporter.Export(DataDirectoryPath, dataSet.DetectorAssets, dataSet.ItemClasses);
+		_assetsExporter.Export(DataDirectoryPath, dataSet.DetectorAssets, dataSet.Tags);
 		await ExportDataSet(dataSet, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);
 		CLITrainerArguments arguments = new(DataSetPath, modelSize, epochs, patience, dataSet.Resolution, false, AMP);
@@ -66,7 +66,7 @@ public sealed class Trainer
 	{
 		PrepareDataDirectory();
 		var dataSet = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(weights));
-		_assetsExporter.Export(DataDirectoryPath, dataSet.DetectorAssets, dataSet.ItemClasses);
+		_assetsExporter.Export(DataDirectoryPath, dataSet.DetectorAssets, dataSet.Tags);
 		await ExportDataSet(dataSet, cancellationToken);
 		await ExportWeights(weights, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);
@@ -101,7 +101,7 @@ public sealed class Trainer
 
 	private async Task ExportDataSet(DetectorDataSet dataSet, CancellationToken cancellationToken)
 	{
-		DataSetConfigurationParameters dataSetParameters = new(Path.GetFullPath(DataDirectoryPath), dataSet.ItemClasses);
+		DataSetConfigurationParameters dataSetParameters = new(Path.GetFullPath(DataDirectoryPath), dataSet.Tags);
 		await _dataSetConfigurationExporter.Export(DataSetPath, dataSetParameters, cancellationToken);
 	}
 	
@@ -118,7 +118,7 @@ public sealed class Trainer
 		var onnxModelPath = await YoloCLIExtensions.ExportToONNX(ptModelPath, dataSet.Resolution, Logger);
 		var onnxData = await File.ReadAllBytesAsync(onnxModelPath, cancellationToken);
 		var ptData = await File.ReadAllBytesAsync(ptModelPath, cancellationToken);
-		var weights = _weightsDataAccess.CreateWeights(dataSet.Weights, onnxData, ptData, modelSize, lastWeightsMetrics, dataSet.ItemClasses);
+		var weights = _weightsDataAccess.CreateWeights(dataSet.Weights, onnxData, ptData, modelSize, lastWeightsMetrics, dataSet.Tags);
 		Logger.Information("Saved weights: {Weights}", weights);
 		return weights;
 	}

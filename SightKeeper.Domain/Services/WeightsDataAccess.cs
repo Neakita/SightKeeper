@@ -23,9 +23,9 @@ public abstract class WeightsDataAccess : IDisposable
 		byte[] ptData,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IReadOnlyCollection<ItemClass> itemClasses)
+		IReadOnlyCollection<Tag> tags)
 	{
-		var weights = library.CreateWeights(modelSize, metrics, itemClasses);
+		var weights = library.CreateWeights(modelSize, metrics, tags);
 		SaveWeightsData(weights, new WeightsData(onnxData), new WeightsData(ptData));
 		_weightsCreated.OnNext((library, weights));
 		return weights;

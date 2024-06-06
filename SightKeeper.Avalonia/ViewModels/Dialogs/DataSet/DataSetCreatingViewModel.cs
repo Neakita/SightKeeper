@@ -13,7 +13,7 @@ using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
+using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
@@ -21,7 +21,7 @@ namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 internal sealed partial class DataSetCreatingViewModel : DialogViewModel<bool>, IDataSetEditorViewModel, NewDataSetInfo, INotifyDataErrorInfo, IDisposable
 {
 	public ViewModelValidator<NewDataSetInfo> Validator { get; }
-    public IReadOnlyCollection<EditableItemClass> ItemClasses => _itemClasses;
+    public IReadOnlyCollection<EditableTag> Tags => _tags;
     public IReadOnlyCollection<Game> Games => _gamesDataAccess.Games;
 
     public DataSetCreatingViewModel(IValidator<NewDataSetInfo> validator, GamesDataAccess gamesDataAccess)
@@ -36,36 +36,36 @@ internal sealed partial class DataSetCreatingViewModel : DialogViewModel<bool>, 
         ApplyCommand.NotifyCanExecuteChanged();
     }
 
-    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
-    private string _newItemClassName = string.Empty;
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddTagCommand))]
+    private string _newTagName = string.Empty;
 
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private int? _resolution = 320;
     [ObservableProperty] private Game? _game;
 
-    private readonly ObservableCollection<EditableItemClass> _itemClasses = new();
+    private readonly ObservableCollection<EditableTag> _tags = new();
     private readonly GamesDataAccess _gamesDataAccess;
 
-    ICommand IDataSetEditorViewModel.AddItemClassCommand => AddItemClassCommand;
-    ICommand IDataSetEditorViewModel.DeleteItemClassCommand => DeleteItemClassCommand;
+    ICommand IDataSetEditorViewModel.AddTagCommand => AddTagCommand;
+    ICommand IDataSetEditorViewModel.DeleteTagCommand => DeleteTagCommand;
     ICommand IDataSetEditorViewModel.ApplyCommand => ApplyCommand;
     ICommand IDataSetEditorViewModel.CancelCommand => CancelCommand;
 
-    [RelayCommand(CanExecute = nameof(CanAddItemClass))]
-    private void AddItemClass()
+    [RelayCommand(CanExecute = nameof(CanAddTag))]
+    private void AddTag()
     {
-        _itemClasses.Add(new NewItemClassViewModel(NewItemClassName, (byte)ItemClasses.Count));
-        NewItemClassName = string.Empty;
+        _tags.Add(new NewTagViewModel(NewTagName, (byte)Tags.Count));
+        NewTagName = string.Empty;
     }
 
-    private bool CanAddItemClass() =>
-        !string.IsNullOrWhiteSpace(NewItemClassName) && ItemClasses.All(existingItemClass => existingItemClass.Name != NewItemClassName);
+    private bool CanAddTag() =>
+        !string.IsNullOrWhiteSpace(NewTagName) && Tags.All(existingTag => existingTag.Name != NewTagName);
 
     [RelayCommand]
-    private void DeleteItemClass(EditableItemClass editableItemClass)
+    private void DeleteTag(EditableTag editableTag)
     {
-        Guard.IsTrue(_itemClasses.Remove(editableItemClass));
+        Guard.IsTrue(_tags.Remove(editableTag));
     }
 
     [RelayCommand(CanExecute = nameof(CanApply))]
@@ -83,8 +83,8 @@ internal sealed partial class DataSetCreatingViewModel : DialogViewModel<bool>, 
         Return(false);
     }
 
-    IReadOnlyCollection<ItemClassInfo> DataSetInfo.ItemClasses =>
-        ItemClasses.Select(itemClass => itemClass.ToItemClassInfo()).ToList();
+    IReadOnlyCollection<TagInfo> DataSetInfo.Tags =>
+        Tags.Select(tag => tag.ToTagInfo()).ToList();
 
     public IEnumerable GetErrors(string? propertyName)
     {

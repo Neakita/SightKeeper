@@ -2,15 +2,15 @@
 
 namespace SightKeeper.Application.DataSets.Editing;
 
-public sealed class EditedItemClass
+public sealed class EditedTag
 {
-    public ItemClass ItemClass { get; }
+    public Tag Tag { get; }
     public string Name { get; }
     public uint Color { get; }
 
-    public EditedItemClass(ItemClass itemClass, string name, uint color)
+    public EditedTag(Tag tag, string name, uint color)
     {
-        ItemClass = itemClass;
+        Tag = tag;
         Name = name;
         Color = color;
     }

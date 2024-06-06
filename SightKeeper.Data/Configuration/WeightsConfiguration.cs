@@ -10,13 +10,13 @@ public sealed class WeightsConfiguration : IEntityTypeConfiguration<Weights>
     {
         builder.HasFlakeIdKey();
         builder.HasMany<DbWeightsData>().WithOne(weightsData => weightsData.Weights);
-        builder.HasMany(weights => weights.ItemClasses).WithMany().UsingEntity<WeightsItemClass>(
-            "WeightsItemClasses",
-            left => left.HasOne(l => l.ItemClass).WithMany().HasForeignKey("ItemClassId").HasPrincipalKey("Id"),
+        builder.HasMany(weights => weights.Tags).WithMany().UsingEntity<WeightsTag>(
+            "WeightsTags",
+            left => left.HasOne(l => l.Tag).WithMany().HasForeignKey("TagId").HasPrincipalKey("Id"),
             right => right.HasOne(r => r.Weights).WithMany().HasForeignKey("WeightsId").HasPrincipalKey("Id"),
-            join => join.HasKey("WeightsId", "ItemClassId"));
+            join => join.HasKey("WeightsId", "TagId"));
         builder.HasChangeTrackingStrategy(ChangeTrackingStrategy.Snapshot);
-        builder.Navigation(weights => weights.ItemClasses).AutoInclude();
+        builder.Navigation(weights => weights.Tags).AutoInclude();
         builder.ComplexProperty(weights => weights.WeightsMetrics, weightsMetricsBuilder =>
         {
 	        weightsMetricsBuilder.Property(weightsMetrics => weightsMetrics.Epoch).HasColumnName(nameof(WeightsMetrics.Epoch));
@@ -29,9 +29,9 @@ public sealed class WeightsConfiguration : IEntityTypeConfiguration<Weights>
         });
     }
 
-    public sealed class WeightsItemClass
+    public sealed class WeightsTag
     {
         public Weights Weights { get; private set; } = null!;
-        public ItemClass ItemClass { get; private set; } = null!;
+        public Tag Tag { get; private set; } = null!;
     }
 }

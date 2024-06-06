@@ -20,7 +20,7 @@
                Background="#30000000"
                VerticalAlignment="Top"
                HorizontalAlignment="Left">
-        <Run Text="{Binding ItemClass.Name}"/>
+        <Run Text="{Binding Tag.Name}"/>
         <LineBreak/>
         <Run Text="{Binding Probability, StringFormat=P0}"/>
     </TextBlock>

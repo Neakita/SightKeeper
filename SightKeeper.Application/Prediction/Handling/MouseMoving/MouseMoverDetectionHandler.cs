@@ -27,13 +27,13 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
         _profile = profile;
         _mouseMover = mouseMover;
         _objectsLookupper = objectsLookupper;
-        _profileItemClasses = profile.ItemClasses.ToDictionary(
-            profileItemClass => profileItemClass.ItemClass,
-            profileItemClass => profileItemClass);
-        _itemClassPriorities = profile.ItemClasses.Select((profileItemClass, index) => (profileItemClass.ItemClass, index)).ToDictionary(
-	        tuple => tuple.ItemClass,
+        _profileTags = profile.Tags.ToDictionary(
+            profileTag => profileTag.Tag,
+            profileTag => profileTag);
+        _tagPriorities = profile.Tags.Select((profileTag, index) => (profileTag.Tag, index)).ToDictionary(
+	        tuple => tuple.Tag,
 	        tuple => tuple.index);
-        if (profile.ItemClasses.Any(itemClass => itemClass.ActivationCondition != ActivationCondition.None))
+        if (profile.Tags.Any(tag => tag.ActivationCondition != ActivationCondition.None))
         {
             hotKeyManager.Register(MouseButton.Button1, 
                     () => _isFiring = true,
@@ -71,8 +71,8 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     }
 
     private readonly Profile _profile;
-    private readonly Dictionary<ItemClass, ProfileItemClass> _profileItemClasses;
-    private readonly Dictionary<ItemClass, int> _itemClassPriorities;
+    private readonly Dictionary<Tag, ProfileTag> _profileTags;
+    private readonly Dictionary<Tag, int> _tagPriorities;
     private readonly DetectionMouseMover _mouseMover;
     private readonly ObjectsLookupper _objectsLookupper;
     private readonly CompositeDisposable _constructorDisposables = new();
@@ -82,25 +82,25 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
     private IEnumerable<DetectionItem> WhereSuitable(IEnumerable<DetectionItem> items)
     {
         return items
-            .Where(item => item.Probability >= _profile.DetectionThreshold && _profileItemClasses.ContainsKey(item.ItemClass))
+            .Where(item => item.Probability >= _profile.DetectionThreshold && _profileTags.ContainsKey(item.Tag))
             .Where(IsFiringModePassing);
     }
     
     private bool IsFiringModePassing(DetectionItem item)
     {
-        var profileItemClass = _profileItemClasses[item.ItemClass];
-        if (profileItemClass.ActivationCondition == ActivationCondition.None)
+        var profileTag = _profileTags[item.Tag];
+        if (profileTag.ActivationCondition == ActivationCondition.None)
             return true;
-        return (profileItemClass.ActivationCondition == ActivationCondition.IsShooting) == _isFiring;
+        return (profileTag.ActivationCondition == ActivationCondition.IsShooting) == _isFiring;
     }
     
     private float GetItemOrder(DetectionItem item)
     {
         var distance = GetNormalizedDistanceTo(item.Bounding);
-        var itemClassIndex = _itemClassPriorities[item.ItemClass];
-        var order = distance + itemClassIndex;
-        Log.Debug("Order of item {Item} is {Order} (Distance: {Distance}, Item class index: {ItemClassIndex})",
-            item, order, distance, itemClassIndex);
+        var tagIndex = _tagPriorities[item.Tag];
+        var order = distance + tagIndex;
+        Log.Debug("Order of item {Item} is {Order} (Distance: {Distance}, Item class index: {TagIndex})",
+            item, order, distance, tagIndex);
         return order;
     }
     

@@ -5,7 +5,7 @@ namespace SightKeeper.Application.DataSets.Editing;
 public interface DataSetChanges : DataSetInfo
 {
     DetectorDataSet DataSet { get; }
-    IReadOnlyCollection<ItemClassInfo> NewItemClasses { get; }
-    IReadOnlyCollection<EditedItemClass> EditedItemClasses { get; }
-    IReadOnlyCollection<DeletedItemClass> DeletedItemClasses { get; }
+    IReadOnlyCollection<TagInfo> NewTags { get; }
+    IReadOnlyCollection<EditedTag> EditedTags { get; }
+    IReadOnlyCollection<DeletedTag> DeletedTags { get; }
 }

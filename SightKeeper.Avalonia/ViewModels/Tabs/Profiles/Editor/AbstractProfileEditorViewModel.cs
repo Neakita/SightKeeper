@@ -30,7 +30,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
         private set => SetProperty(ref _availableWeights, value);
     }
 
-    public IReadOnlyCollection<ItemClass> AvailableItemClasses { get; }
+    public IReadOnlyCollection<Tag> AvailableTags { get; }
     
     public Profile? Profile { get; protected set; }
 
@@ -139,14 +139,14 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
         {
             if (!SetProperty(ref _dataSet, value))
                 return;
-            _availableItemClasses.Clear();
-            ItemClassesSource.Clear();
+            _availableTags.Clear();
+            TagsSource.Clear();
             if (value == null)
                 AvailableWeights = Array.Empty<Weights>();
             else
             {
                 AvailableWeights = value.Weights;
-                _availableItemClasses.AddRange(value.ItemClasses);
+                _availableTags.AddRange(value.Tags);
             }
         }
     }
@@ -157,34 +157,34 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
         set => SetProperty(ref _weights, value);
     }
 
-    public IReadOnlyList<ProfileItemClassData> ItemClasses { get; }
-    IReadOnlyList<ProfileItemClassViewModel> ProfileEditorViewModel.ItemClasses => _itemClassesViewModels;
-    private readonly ReadOnlyObservableCollection<ProfileItemClassViewModel> _itemClassesViewModels;
+    public IReadOnlyList<ProfileTagData> Tags { get; }
+    IReadOnlyList<ProfileTagViewModel> ProfileEditorViewModel.Tags => _tagsViewModels;
+    private readonly ReadOnlyObservableCollection<ProfileTagViewModel> _tagsViewModels;
 
     protected AbstractProfileEditorViewModel(IValidator<TProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository, bool canDelete)
     {
         _canDelete = canDelete;
         AvailableDataSets = dataSetsObservableRepository.DataSets;
-        ItemClassesSource.Connect()
-            .Bind(out var itemClasses)
+        TagsSource.Connect()
+            .Bind(out var tags)
             .Subscribe()
             .DisposeWith(_constructorDisposables);
-        ItemClasses = itemClasses;
-        _itemClassesViewModels = itemClasses;
-        _availableItemClasses.Connect()
-            .Except(ItemClassesSource.Connect().Transform(itemClassData => itemClassData.ItemClass))
-            .Bind(out var availableItemClasses)
+        Tags = tags;
+        _tagsViewModels = tags;
+        _availableTags.Connect()
+            .Except(TagsSource.Connect().Transform(tagData => tagData.Tag))
+            .Bind(out var availableTags)
             .Subscribe()
             .DisposeWith(_constructorDisposables);
-        AvailableItemClasses = availableItemClasses;
+        AvailableTags = availableTags;
         var validatable = this as TProfileData;
         Guard.IsNotNull(validatable);
         Validator = new ViewModelValidator<TProfileData>(validator, this, validatable);
     }
 
     private readonly CompositeDisposable _constructorDisposables = new();
-    protected readonly SourceList<ProfileItemClassViewModel> ItemClassesSource = new();
-    private readonly SourceList<ItemClass> _availableItemClasses = new();
+    protected readonly SourceList<ProfileTagViewModel> TagsSource = new();
+    private readonly SourceList<Tag> _availableTags = new();
     private readonly bool _canDelete;
     private DetectorDataSet? _dataSet;
     private Weights? _weights;
@@ -193,8 +193,8 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     private string _description = string.Empty;
     private string _name = string.Empty;
     private IReadOnlyCollection<Weights> _availableWeights = Array.Empty<Weights>();
-    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
-    private ItemClass? _itemClassToAdd;
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddTagCommand))]
+    private Tag? _tagToAdd;
     private TimeSpan _postProcessDelay;
     private bool _isPreemptionEnabled;
     private float? _preemptionHorizontalFactor;
@@ -204,57 +204,57 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     private StabilizationMethod? _preemptionStabilizationMethod;
     private bool _preemptionFactorsLink;
 
-    ICommand ProfileEditorViewModel.AddItemClassCommand => AddItemClassCommand;
-    [RelayCommand(CanExecute = nameof(CanAddItemClass))]
-    private void AddItemClass()
+    ICommand ProfileEditorViewModel.AddTagCommand => AddTagCommand;
+    [RelayCommand(CanExecute = nameof(CanAddTag))]
+    private void AddTag()
     {
-        Guard.IsNotNull(ItemClassToAdd);
-        ItemClassesSource.Add(new ProfileItemClassViewModel(ItemClassToAdd, (byte)ItemClassesSource.Count));
-        MoveItemClassUpCommand.NotifyCanExecuteChanged();
-        MoveItemClassDownCommand.NotifyCanExecuteChanged();
+        Guard.IsNotNull(TagToAdd);
+        TagsSource.Add(new ProfileTagViewModel(TagToAdd, (byte)TagsSource.Count));
+        MoveTagUpCommand.NotifyCanExecuteChanged();
+        MoveTagDownCommand.NotifyCanExecuteChanged();
     }
-    private bool CanAddItemClass() => ItemClassToAdd != null;
+    private bool CanAddTag() => TagToAdd != null;
 
-    ICommand ProfileEditorViewModel.RemoveItemClassCommand => RemoveItemClassCommand;
+    ICommand ProfileEditorViewModel.RemoveTagCommand => RemoveTagCommand;
     [RelayCommand]
-    private void RemoveItemClass(ProfileItemClassViewModel itemClass)
+    private void RemoveTag(ProfileTagViewModel tag)
     {
-        Guard.IsTrue(ItemClassesSource.Remove(itemClass));
-        UpdateItemClassesOrder();
-        MoveItemClassUpCommand.NotifyCanExecuteChanged();
-        MoveItemClassDownCommand.NotifyCanExecuteChanged();
+        Guard.IsTrue(TagsSource.Remove(tag));
+        UpdateTagsOrder();
+        MoveTagUpCommand.NotifyCanExecuteChanged();
+        MoveTagDownCommand.NotifyCanExecuteChanged();
     }
 
-    ICommand ProfileEditorViewModel.MoveItemClassUpCommand => MoveItemClassUpCommand;
-    [RelayCommand(CanExecute = nameof(CanMoveItemClassUp))]
-    private void MoveItemClassUp(ProfileItemClassViewModel itemClass)
+    ICommand ProfileEditorViewModel.MoveTagUpCommand => MoveTagUpCommand;
+    [RelayCommand(CanExecute = nameof(CanMoveTagUp))]
+    private void MoveTagUp(ProfileTagViewModel tag)
     {
-        var currentIndex = ItemClasses.IndexOf(itemClass);
-        ItemClassesSource.Move(currentIndex, currentIndex - 1);
-        UpdateItemClassesOrder();
-        MoveItemClassUpCommand.NotifyCanExecuteChanged();
-        MoveItemClassDownCommand.NotifyCanExecuteChanged();
+        var currentIndex = Tags.IndexOf(tag);
+        TagsSource.Move(currentIndex, currentIndex - 1);
+        UpdateTagsOrder();
+        MoveTagUpCommand.NotifyCanExecuteChanged();
+        MoveTagDownCommand.NotifyCanExecuteChanged();
     }
-    private bool CanMoveItemClassUp(ProfileItemClassViewModel itemClass)
+    private bool CanMoveTagUp(ProfileTagViewModel tag)
     {
-        var currentIndex = ItemClasses.IndexOf(itemClass);
+        var currentIndex = Tags.IndexOf(tag);
         return currentIndex > 0;
     }
 
-    ICommand ProfileEditorViewModel.MoveItemClassDownCommand => MoveItemClassDownCommand;
-    [RelayCommand(CanExecute = nameof(CanMoveItemClassDown))]
-    private void MoveItemClassDown(ProfileItemClassViewModel itemClass)
+    ICommand ProfileEditorViewModel.MoveTagDownCommand => MoveTagDownCommand;
+    [RelayCommand(CanExecute = nameof(CanMoveTagDown))]
+    private void MoveTagDown(ProfileTagViewModel tag)
     {
-        var currentIndex = ItemClasses.IndexOf(itemClass);
-        ItemClassesSource.Move(currentIndex, currentIndex + 1);
-        UpdateItemClassesOrder();
-        MoveItemClassUpCommand.NotifyCanExecuteChanged();
-        MoveItemClassDownCommand.NotifyCanExecuteChanged();
+        var currentIndex = Tags.IndexOf(tag);
+        TagsSource.Move(currentIndex, currentIndex + 1);
+        UpdateTagsOrder();
+        MoveTagUpCommand.NotifyCanExecuteChanged();
+        MoveTagDownCommand.NotifyCanExecuteChanged();
     }
-    private bool CanMoveItemClassDown(ProfileItemClassViewModel itemClass)
+    private bool CanMoveTagDown(ProfileTagViewModel tag)
     {
-        var currentIndex = ItemClasses.IndexOf(itemClass);
-        return currentIndex < ItemClasses.Count - 1;
+        var currentIndex = Tags.IndexOf(tag);
+        return currentIndex < Tags.Count - 1;
     }
 
     ICommand ProfileEditorViewModel.ApplyCommand => ApplyCommand;
@@ -275,10 +275,10 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     }
     private bool CanDelete() => _canDelete;
 
-    private void UpdateItemClassesOrder()
+    private void UpdateTagsOrder()
     {
-        for (var i = 0; i < ItemClasses.Count; i++)
-            ItemClassesSource.Items.ElementAt(i).Order = (byte)i;
+        for (var i = 0; i < Tags.Count; i++)
+            TagsSource.Items.ElementAt(i).Order = (byte)i;
     }
 
     public IEnumerable GetErrors(string? propertyName)

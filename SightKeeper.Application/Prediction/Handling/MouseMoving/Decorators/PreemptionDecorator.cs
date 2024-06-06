@@ -18,18 +18,18 @@ public sealed class PreemptionDecorator : DetectionMouseMover
 		var now = DateTime.UtcNow;
 		var timeDelta = now - _previousMoveTime;
 		var preemption = Vector2.Zero;
-		if (_previousItemClass == context.TargetItem.ItemClass)
+		if (_previousTag == context.TargetItem.Tag)
 			preemption = _preemptionComputer.ComputePreemption(vector, timeDelta);
 		else
 			_preemptionComputer.Reset();
 		_mouseMover.Move(context, vector + preemption);
 		_previousMoveTime = now;
-		_previousItemClass = context.TargetItem.ItemClass;
+		_previousTag = context.TargetItem.Tag;
 	}
 
 	public void OnPaused()
 	{
-		_previousItemClass = null;
+		_previousTag = null;
 		_preemptionComputer.Reset();
 		Log.ForContext<PreemptionDecorator>().Debug("State cleared");
 	}
@@ -37,5 +37,5 @@ public sealed class PreemptionDecorator : DetectionMouseMover
 	private readonly DetectionMouseMover _mouseMover;
 	private readonly PreemptionComputer _preemptionComputer;
 	private DateTime _previousMoveTime;
-	private ItemClass? _previousItemClass;
+	private Tag? _previousTag;
 }

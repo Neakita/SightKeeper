@@ -11,11 +11,11 @@
 
     <Grid RowDefinitions="* Auto Auto">
 
-        <ListBox Name="ItemClassesListBox"
+        <ListBox Name="TagsListBox"
                  Grid.Row="0"
-                 ItemsSource="{Binding ItemClasses}"
-                 SelectedItem="{Binding SelectedItemClass}"
-                 SelectedIndex="{Binding SelectedItemClassIndex}"
+                 ItemsSource="{Binding Tags}"
+                 SelectedItem="{Binding SelectedTag}"
+                 SelectedIndex="{Binding SelectedTagIndex}"
                  MinWidth="100">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -57,8 +57,8 @@
         </WrapPanel>
 
         <ComboBox Grid.Row="2"
-                  ItemsSource="{Binding ItemClasses}"
-                  SelectedItem="{Binding SelectedItem.ItemClass}"
+                  ItemsSource="{Binding Tags}"
+                  SelectedItem="{Binding SelectedItem.Tag}"
                   IsEnabled="{Binding !!SelectedItem}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>

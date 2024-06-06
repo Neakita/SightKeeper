@@ -33,7 +33,7 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
         private readonly Point _startPosition;
     }
     
-    public bool CanBeginDrawing => _tools.SelectedItemClass != null && SelectedScreenshotViewModel.Value != null;
+    public bool CanBeginDrawing => _tools.SelectedTag != null && SelectedScreenshotViewModel.Value != null;
 
     public DrawerViewModel(
         AnnotatorToolsViewModel tools,
@@ -60,7 +60,7 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
             SelectedScreenshotViewModel.DetectedItems.Remove(item);
             var screenshot = SelectedScreenshotViewModel.Value.Item;
             var asset = GetOrMakeAsset(screenshot);
-            var detectorItem = asset.CreateItem(item.ItemClass, item.Bounding.Bounding);
+            var detectorItem = asset.CreateItem(item.Tag, item.Bounding.Bounding);
             DetectorItemViewModel detectorItemViewModel = new(detectorItem, resizer, this)
             {
                 IsThumbsVisible = IsItemSelectionEnabled
@@ -79,9 +79,9 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
     public void BeginDrawing(Point startPosition)
     {
         Guard.IsNull(_drawingData);
-        Guard.IsNotNull(_tools.SelectedItemClass);
+        Guard.IsNotNull(_tools.SelectedTag);
         startPosition = Clamp(startPosition);
-        DetectorItemViewModel item = new(_tools.SelectedItemClass, startPosition, _resizer, this);
+        DetectorItemViewModel item = new(_tools.SelectedTag, startPosition, _resizer, this);
         SelectedScreenshotViewModel.DetectorItems.Add(item);
         _drawingData = new DrawingData(startPosition, item);
     }
@@ -98,7 +98,7 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
         Guard.IsNotNull(_drawingData);
         var screenshot = SelectedScreenshotViewModel.Value;
         Guard.IsNotNull(screenshot);
-        Guard.IsNotNull(_tools.SelectedItemClass);
+        Guard.IsNotNull(_tools.SelectedTag);
         finishPosition = Clamp(finishPosition);
         _drawingData.UpdateBounding(finishPosition);
         var boundingViewModel = _drawingData.ItemViewModel.Bounding;
@@ -110,7 +110,7 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
         }
         boundingViewModel.Synchronize();
         var asset = GetOrMakeAsset(screenshot.Item);
-        _drawingData.ItemViewModel.Item = asset.CreateItem(_tools.SelectedItemClass, boundingViewModel.Bounding);
+        _drawingData.ItemViewModel.Item = asset.CreateItem(_tools.SelectedTag, boundingViewModel.Bounding);
         screenshot.NotifyIsAssetChanged();
         _drawingData = null;
     }

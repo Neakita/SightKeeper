@@ -25,18 +25,18 @@ internal sealed class DataSetViewModel : ViewModel, IDisposable
     public string Description => DataSet.Description;
     public Game? Game => DataSet.Game;
     public ushort Resolution => DataSet.Resolution;
-    public IReadOnlyCollection<ItemClass> ItemClasses { get; }
+    public IReadOnlyCollection<Tag> Tags { get; }
     public IReadOnlyCollection<Weights> Weights { get; }
 
     public DataSetViewModel(DetectorDataSet dataSet, WeightsDataAccess weightsDataAccess, ObjectsLookupper objectsLookupper)
     {
         DataSet = dataSet;
-        _itemClasses.Connect()
-            .Bind(out var itemClasses)
+        _tags.Connect()
+            .Bind(out var tags)
             .Subscribe()
             .DisposeWith(_constructorDisposables);
-        _itemClasses.AddOrUpdate(dataSet.ItemClasses);
-        ItemClasses = itemClasses;
+        _tags.AddOrUpdate(dataSet.Tags);
+        Tags = tags;
         _weights.AddRange(DataSet.Weights);
         _weights.Connect()
             .Bind(out var weights)
@@ -56,24 +56,24 @@ internal sealed class DataSetViewModel : ViewModel, IDisposable
     public void NotifyChanges()
     {
         OnPropertiesChanged(Properties);
-        UpdateItemClasses();
+        UpdateTags();
     }
 
     public void Dispose()
     {
-        _itemClasses.Dispose();
+        _tags.Dispose();
     }
 
     public override string ToString() => Name;
 
     private readonly CompositeDisposable _constructorDisposables = new();
-    private readonly SourceCache<ItemClass, string> _itemClasses = new(itemClass => itemClass.Name);
+    private readonly SourceCache<Tag, string> _tags = new(tag => tag.Name);
     private readonly SourceList<Weights> _weights = new();
 
-    private void UpdateItemClasses() =>
-        _itemClasses.Edit(items =>
+    private void UpdateTags() =>
+        _tags.Edit(items =>
         {
             items.Clear();
-            items.AddOrUpdate(DataSet.ItemClasses);
+            items.AddOrUpdate(DataSet.Tags);
         });
 }

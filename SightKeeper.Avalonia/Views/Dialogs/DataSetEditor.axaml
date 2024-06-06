@@ -42,13 +42,13 @@
                         <TextBlock Text="Item classes" />
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <TextBox Watermark="New item class"
-                                     Text="{Binding NewItemClassName}" />
+                                     Text="{Binding NewTagName}" />
                             <Button Content="{icons:MaterialIconExt Plus}"
-                                    Command="{Binding AddItemClassCommand}" />
+                                    Command="{Binding AddTagCommand}" />
                         </StackPanel>
 
-                        <ItemsControl ItemsSource="{Binding ItemClasses}"
-                                      IsVisible="{Binding !!ItemClasses.Count}">
+                        <ItemsControl ItemsSource="{Binding Tags}"
+                                      IsVisible="{Binding !!Tags.Count}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel/>
@@ -66,7 +66,7 @@
                                         </ColorPicker>
                                         <TextBlock Text="{Binding Name}"/>
                                         <Button Content="{icons:MaterialIconExt Close}"
-                                                Command="{Binding #Root.((dataSet:IDataSetEditorViewModel)DataContext).DeleteItemClassCommand}"
+                                                Command="{Binding #Root.((dataSet:IDataSetEditorViewModel)DataContext).DeleteTagCommand}"
                                                 CommandParameter="{Binding}"
                                                 Padding="2"/>
                                     </StackPanel>
@@ -74,7 +74,7 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
-                        <TextBlock Text="No items yet" IsVisible="{Binding !ItemClasses.Count}" />
+                        <TextBlock Text="No items yet" IsVisible="{Binding !Tags.Count}" />
 
                     </StackPanel>
 

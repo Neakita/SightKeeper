@@ -8,8 +8,8 @@ public interface ObjectsLookupper
 	ScreenshotsLibrary GetLibrary(Screenshot screenshot);
 	WeightsLibrary GetLibrary(Weights weights);
 	DetectorAssetsLibrary GetLibrary(DetectorAsset screenshot);
-	IReadOnlyCollection<DetectorItem> GetItems(ItemClass itemClass);
-	DetectorDataSet GetDataSet(ItemClass itemClass);
+	IReadOnlyCollection<DetectorItem> GetItems(Tag tag);
+	DetectorDataSet GetDataSet(Tag tag);
 	DetectorAsset GetAsset(DetectorItem item);
 	DetectorAsset? GetOptionalAsset(Screenshot screenshot);
 	DetectorDataSet GetDataSet(WeightsLibrary weightsLibrary);

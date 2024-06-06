@@ -87,7 +87,7 @@ internal sealed partial class AutoAnnotationViewModel : ViewModel
         var rect = detectionItem.Bounding;
         Bounding bounding = new(rect.Left, rect.Top, rect.Right, rect.Bottom);
         BoundingViewModel boundingViewModel = new(bounding);
-        return new DetectedItemViewModel(boundingViewModel, detectionItem.ItemClass, detectionItem.Probability);
+        return new DetectedItemViewModel(boundingViewModel, detectionItem.Tag, detectionItem.Probability);
     }
 
     partial void OnSelectedWeightsChanged(Weights? value)

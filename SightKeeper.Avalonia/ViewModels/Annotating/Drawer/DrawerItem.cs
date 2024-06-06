@@ -6,5 +6,5 @@ internal interface DrawerItem
 {
     bool IsDashed { get; }
     BoundingViewModel Bounding { get; }
-    ItemClass ItemClass { get; }
+    Tag Tag { get; }
 }

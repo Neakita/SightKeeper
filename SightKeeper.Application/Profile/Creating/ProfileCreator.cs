@@ -35,8 +35,8 @@ public sealed class ProfileCreator
         }
         else preemptionSettings = null;
         Profile profile = new(data.Name, data.Description, data.DetectionThreshold, data.MouseSensitivity, data.PostProcessDelay, preemptionSettings, data.Weights);
-        foreach (var itemClassData in data.ItemClasses.OrderBy(profileItemClassData => profileItemClassData.Order))
-            profile.AddItemClass(itemClassData.ItemClass, itemClassData.ActivationCondition);
+        foreach (var tagData in data.Tags.OrderBy(profileTagData => profileTagData.Order))
+            profile.AddTag(tagData.Tag, tagData.ActivationCondition);
         _profilesDataAccess.AddProfile(profile);
         return profile;
     }

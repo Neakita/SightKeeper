@@ -29,7 +29,7 @@
 					<Panel ClipToBounds="False">
 						<Rectangle Name="BoundingRectangle"
 						           Classes.dashed="{Binding IsDashed}"
-						           Stroke="{Binding ItemClass.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=1}"
+						           Stroke="{Binding Tag.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=1}"
 						           StrokeThickness="1"
 						           Margin="-1"/> <!--Because rectangle should be in outer space of list box Item, like it's own border-->
 						<ContentControl Content="{Binding}"
@@ -89,7 +89,7 @@
 
 				<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
 					<Setter Property="Background"
-					        Value="{Binding (drawer:DrawerItem).ItemClass.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=0.1}"/>
+					        Value="{Binding (drawer:DrawerItem).Tag.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=0.1}"/>
 				</Style>
 
 				<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
@@ -98,7 +98,7 @@
 
 				<Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 					<Setter Property="Background"
-					        Value="{Binding (drawer:DrawerItem).ItemClass.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=0.1}"/>
+					        Value="{Binding (drawer:DrawerItem).Tag.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=0.1}"/>
 				</Style>
 
 				<Style Selector="ListBoxItem:selected"/>

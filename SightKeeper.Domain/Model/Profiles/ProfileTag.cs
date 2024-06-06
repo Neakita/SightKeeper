@@ -2,15 +2,15 @@
 
 namespace SightKeeper.Domain.Model.Profiles;
 
-public sealed class ProfileItemClass
+public sealed class ProfileTag
 {
-    public ItemClass ItemClass { get; }
+    public Tag Tag { get; }
     public ActivationCondition ActivationCondition { get; set; }
     public Vector2<float> Offset { get; set; }
 
-    public ProfileItemClass(ItemClass itemClass, ActivationCondition activationCondition)
+    public ProfileTag(Tag tag, ActivationCondition activationCondition)
     {
-        ItemClass = itemClass;
+        Tag = tag;
         ActivationCondition = activationCondition;
     }
 }

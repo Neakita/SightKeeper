@@ -12,11 +12,11 @@ public readonly struct DataSetConfigurationParameters
     public readonly string val;
     public readonly Dictionary<byte, string> names;
 
-    public DataSetConfigurationParameters(string path, IEnumerable<ItemClass> itemClasses, string train = "images", string val = "images")
+    public DataSetConfigurationParameters(string path, IEnumerable<Tag> tags, string train = "images", string val = "images")
     {
         this.path = path;
         this.train = train;
         this.val = val;
-        names = itemClasses.Select((itemClass, index) => (name: itemClass.Name, index)).ToDictionary(tuple => (byte)tuple.index, tuple => tuple.name);
+        names = tags.Select((tag, index) => (name: tag.Name, index)).ToDictionary(tuple => (byte)tuple.index, tuple => tuple.name);
     }
 }

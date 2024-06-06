@@ -49,11 +49,11 @@ public sealed class Profile
         get => _weights;
         set
         {
-	        _itemClasses.RemoveAll(profileItemClass => !_weights.ItemClasses.Contains(profileItemClass.ItemClass));
+	        _tags.RemoveAll(profileTag => !_weights.Tags.Contains(profileTag.Tag));
             _weights = value;
         }
     }
-    public IReadOnlyList<ProfileItemClass> ItemClasses => _itemClasses;
+    public IReadOnlyList<ProfileTag> Tags => _tags;
 
     public Profile(string name, string description, float detectionThreshold, float mouseSensitivity, TimeSpan postProcessDelay, PreemptionSettings? preemptionSettings, Weights weights)
     {
@@ -64,28 +64,28 @@ public sealed class Profile
         PreemptionSettings = preemptionSettings;
         _postProcessDelay = postProcessDelay;
         _weights = weights;
-        _itemClasses = new();
+        _tags = new();
     }
 
-    public void AddItemClass(ItemClass itemClass, ActivationCondition activationCondition)
+    public void AddTag(Tag tag, ActivationCondition activationCondition)
     {
-        if (!Weights.ItemClasses.Contains(itemClass))
-            ThrowHelper.ThrowArgumentException(nameof(itemClass), $"Item class \"{itemClass}\" not owned by provided weights");
-        if (_itemClasses.Any(profileItemClass => profileItemClass.ItemClass == itemClass))
-            ThrowHelper.ThrowArgumentException($"Item class {itemClass} already added to profile {this}");
-        ProfileItemClass profileItemClass = new(itemClass, activationCondition);
-        _itemClasses.Add(profileItemClass);
+        if (!Weights.Tags.Contains(tag))
+            ThrowHelper.ThrowArgumentException(nameof(tag), $"Item class \"{tag}\" not owned by provided weights");
+        if (_tags.Any(profileTag => profileTag.Tag == tag))
+            ThrowHelper.ThrowArgumentException($"Item class {tag} already added to profile {this}");
+        ProfileTag profileTag = new(tag, activationCondition);
+        _tags.Add(profileTag);
     }
 
-    public void ClearItemClasses()
+    public void ClearTags()
     {
-        _itemClasses.Clear();
+        _tags.Clear();
     }
 
     public override string ToString() => string.IsNullOrEmpty(Name) ? base.ToString()! : Name;
 
     private Weights _weights;
-    private readonly List<ProfileItemClass> _itemClasses;
+    private readonly List<ProfileTag> _tags;
     private float _detectionThreshold;
     private float _mouseSensitivity;
     private TimeSpan _postProcessDelay;

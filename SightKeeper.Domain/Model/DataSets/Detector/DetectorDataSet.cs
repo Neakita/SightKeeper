@@ -8,7 +8,7 @@ public sealed class DetectorDataSet
 	public string Description { get; set; }
 	public Game? Game { get; set; }
 	public ushort Resolution { get; }
-	public IReadOnlySet<ItemClass> ItemClasses => _itemClasses;
+	public IReadOnlySet<Tag> Tags => _tags;
 	public ScreenshotsLibrary Screenshots { get; }
 	public DetectorAssetsLibrary DetectorAssets { get; }
 	public WeightsLibrary Weights { get; }
@@ -22,22 +22,22 @@ public sealed class DetectorDataSet
 		Weights = new WeightsLibrary();
 		DetectorAssets = new DetectorAssetsLibrary();
 	}
-	public ItemClass CreateItemClass(string name, uint color)
+	public Tag CreateTag(string name, uint color)
 	{
-		ItemClass newItemClass = new(name, color);
-		bool isAdded = _itemClasses.Add(newItemClass);
+		Tag newTag = new(name, color);
+		bool isAdded = _tags.Add(newTag);
 		Guard.IsTrue(isAdded);
-		return newItemClass;
+		return newTag;
 	}
-	public void DeleteItemClass(ItemClass itemClass)
+	public void DeleteTag(Tag tag)
 	{
 		// TODO
-		/*if (Assets.SelectMany(asset => asset.Items).Any(item => item.ItemClass == itemClass))
-			throw new InvalidOperationException($"Item class \"{itemClass}\" is in use");*/
-		bool isRemoved = _itemClasses.Remove(itemClass);
+		/*if (Assets.SelectMany(asset => asset.Items).Any(item => item.Tag == tag))
+			throw new InvalidOperationException($"Item class \"{tag}\" is in use");*/
+		bool isRemoved = _tags.Remove(tag);
 		Guard.IsTrue(isRemoved);
 	}
 	public override string ToString() => Name;
 
-	private readonly SortedSet<ItemClass> _itemClasses = new(ItemClassNameComparer.Instance);
+	private readonly SortedSet<Tag> _tags = new(TagNameComparer.Instance);
 }

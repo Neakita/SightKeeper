@@ -7,26 +7,26 @@ public sealed class Weights
     public DateTime CreationDate { get; }
     public ModelSize Size { get; }
     public WeightsMetrics WeightsMetrics { get; }
-    public ImmutableList<ItemClass> ItemClasses { get; }
+    public ImmutableList<Tag> Tags { get; }
 
     internal Weights(
         ModelSize modelSize,
         WeightsMetrics weightsMetrics,
-        IEnumerable<ItemClass> itemClasses)
+        IEnumerable<Tag> tags)
     {
         CreationDate = DateTime.Now;
         Size = modelSize;
         WeightsMetrics = weightsMetrics;
-        ItemClasses = itemClasses.ToImmutableList();
-        ValidateItemClasses();
+        Tags = tags.ToImmutableList();
+        ValidateTags();
     }
 
     public override string ToString() => $"{nameof(Size)}: {Size}, {WeightsMetrics}";
 
-    private void ValidateItemClasses()
+    private void ValidateTags()
     {
 	    // TODO
-	    /*var isAllItemClassesBelongsToGivenLibrary = ItemClasses.All(itemClass => Library.DataSet.ItemClasses.Contains(itemClass));
-	    Guard.IsTrue(isAllItemClassesBelongsToGivenLibrary);*/
+	    /*var isAllTagsBelongsToGivenLibrary = Tags.All(tag => Library.DataSet.Tags.Contains(tag));
+	    Guard.IsTrue(isAllTagsBelongsToGivenLibrary);*/
     }
 }

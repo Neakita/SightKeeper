@@ -30,9 +30,9 @@ internal sealed class ExistingProfileEditorViewModel : AbstractProfileEditorView
         PostProcessDelay = profile.PostProcessDelay;
         DataSet = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(profile.Weights));
         Weights = profile.Weights;
-        ItemClassesSource.Clear();
-        ItemClassesSource.AddRange(profile.ItemClasses
-            .Select(profileItemClass => new ProfileItemClassViewModel(profileItemClass.ItemClass, (byte)profile.ItemClasses.IndexOf(profileItemClass), profileItemClass.ActivationCondition)));
+        TagsSource.Clear();
+        TagsSource.AddRange(profile.Tags
+            .Select(profileTag => new ProfileTagViewModel(profileTag.Tag, (byte)profile.Tags.IndexOf(profileTag), profileTag.ActivationCondition)));
         if (profile.PreemptionSettings != null)
         {
             IsPreemptionEnabled = true;

@@ -2,12 +2,12 @@
 
 public sealed class DetectorItem
 {
-	public ItemClass ItemClass { get; set; }
+	public Tag Tag { get; set; }
 	public Bounding Bounding { get; set; }
 	
-	internal DetectorItem(ItemClass itemClass, Bounding bounding)
+	internal DetectorItem(Tag tag, Bounding bounding)
 	{
-		ItemClass = itemClass;
+		Tag = tag;
 		Bounding = bounding;
 	}
 }

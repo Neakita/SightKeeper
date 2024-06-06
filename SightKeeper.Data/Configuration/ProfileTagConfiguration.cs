@@ -4,16 +4,16 @@ using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Data.Configuration;
 
-public sealed class ProfileItemClassConfiguration : IEntityTypeConfiguration<ProfileItemClass>
+public sealed class ProfileTagConfiguration : IEntityTypeConfiguration<ProfileTag>
 {
-    public void Configure(EntityTypeBuilder<ProfileItemClass> builder)
+    public void Configure(EntityTypeBuilder<ProfileTag> builder)
     {
         builder.HasFlakeIdKey();
-        builder.ToTable("ProfileItemClasses");
+        builder.ToTable("ProfileTags");
         builder.Property<byte>("Order");
-        builder.HasOne(profileItemClass => profileItemClass.ItemClass).WithMany();
-        builder.HasIndex("ProfileId", "ItemClassId").IsUnique();
-        builder.ComplexProperty(profileItemClass => profileItemClass.Offset, offsetBuilder =>
+        builder.HasOne(profileTag => profileTag.Tag).WithMany();
+        builder.HasIndex("ProfileId", "TagId").IsUnique();
+        builder.ComplexProperty(profileTag => profileTag.Offset, offsetBuilder =>
         {
 	        offsetBuilder.Property(offset => offset.X).HasColumnName("HorizontalOffset");
 	        offsetBuilder.Property(offset => offset.Y).HasColumnName("VerticalOffset");

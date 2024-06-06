@@ -104,12 +104,12 @@
                   IsVisible="{Binding IsPreemptionStabilizationEnabled}"/>
         
         <StackPanel Orientation="Horizontal">
-            <ComboBox ItemsSource="{Binding AvailableItemClasses}"
-                      SelectedItem="{Binding ItemClassToAdd}"/>
+            <ComboBox ItemsSource="{Binding AvailableTags}"
+                      SelectedItem="{Binding TagToAdd}"/>
             <Button Content="{icons:MaterialIconExt Plus}"
-                    Command="{Binding AddItemClassCommand}"/>
+                    Command="{Binding AddTagCommand}"/>
         </StackPanel>
-        <ItemsControl ItemsSource="{Binding ItemClasses}">
+        <ItemsControl ItemsSource="{Binding Tags}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Gray"
@@ -122,16 +122,16 @@
                             <Button Grid.Row="0" Grid.Column="0"
                                     Content="{icons:MaterialIconExt ChevronUp}"
                                     Padding="5 0"
-                                    Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).MoveItemClassUpCommand}"
+                                    Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).MoveTagUpCommand}"
                                     CommandParameter="{Binding}"/>
                             <Button Grid.Row="1" Grid.Column="0"
                                     Content="{icons:MaterialIconExt ChevronDown}"
                                     Padding="5 0"
-                                    Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).MoveItemClassDownCommand}"
+                                    Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).MoveTagDownCommand}"
                                     CommandParameter="{Binding}"/>
                             <TextBlock Grid.Row="0" Grid.RowSpan="2"
                                        Grid.Column="1"
-                                       Text="{Binding ItemClass.Name}"
+                                       Text="{Binding Tag.Name}"
                                        VerticalAlignment="Center"
                                        Margin="5 0 0 0"/>
                             <CheckBox Grid.Row="0" Grid.RowSpan="2"
@@ -141,11 +141,11 @@
                                       Margin="10 0"
                                       Padding="5"
                                       ToolTip.Tip="{Binding ActivationCondition, Converter={x:Static root:Converters.EnumToDescriptionConverter}, StringFormat=Activation condition: {0}}"
-                                      IsChecked="{Binding ActivationCondition, Converter={x:Static root:Converters.ItemClassActivationConditionToBoolConverter}}"/>
+                                      IsChecked="{Binding ActivationCondition, Converter={x:Static root:Converters.TagActivationConditionToBoolConverter}}"/>
                             <Button Grid.Row="0" Grid.RowSpan="2"
                                     Grid.Column="3"
                                     Content="{icons:MaterialIconExt Close}"
-                                    Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).RemoveItemClassCommand}"
+                                    Command="{Binding #Root.((profilesEditorViewModels:ProfileEditorViewModel)DataContext).RemoveTagCommand}"
                                     CommandParameter="{Binding}"/>
                         </Grid>
                     </Border>

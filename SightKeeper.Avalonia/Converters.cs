@@ -12,5 +12,5 @@ internal static class Converters
 	public static WidthToZIndexConverter WidthToZIndexConverter { get; } = new();
 	public static CanvasNormalizeConverter CanvasNormalizeConverter { get; } = new();
 	public static EnumToDescriptionConverter EnumToDescriptionConverter { get; } = new();
-	public static ItemClassActivationConditionToBoolConverter ItemClassActivationConditionToBoolConverter { get; } = new();
+	public static TagActivationConditionToBoolConverter TagActivationConditionToBoolConverter { get; } = new();
 }

@@ -16,7 +16,7 @@ internal interface ProfileEditorViewModel
 
     IReadOnlyCollection<DetectorDataSet> AvailableDataSets { get; }
     IReadOnlyCollection<Weights> AvailableWeights { get; }
-    IReadOnlyCollection<ItemClass> AvailableItemClasses { get; }
+    IReadOnlyCollection<Tag> AvailableTags { get; }
 
     string Name { get; set; }
     string Description { get; set; }
@@ -32,13 +32,13 @@ internal interface ProfileEditorViewModel
     StabilizationMethod? PreemptionStabilizationMethod { get; set; }
     DetectorDataSet? DataSet { get; set; }
     Weights? Weights { get; set; }
-    IReadOnlyList<ProfileItemClassViewModel> ItemClasses { get; }
-    ItemClass? ItemClassToAdd { get; set; }
+    IReadOnlyList<ProfileTagViewModel> Tags { get; }
+    Tag? TagToAdd { get; set; }
     
-    ICommand AddItemClassCommand { get; }
-    ICommand RemoveItemClassCommand { get; }
-    ICommand MoveItemClassUpCommand { get; }
-    ICommand MoveItemClassDownCommand { get; }
+    ICommand AddTagCommand { get; }
+    ICommand RemoveTagCommand { get; }
+    ICommand MoveTagUpCommand { get; }
+    ICommand MoveTagDownCommand { get; }
     ICommand ApplyCommand { get; }
     ICommand DeleteCommand { get; }
 }

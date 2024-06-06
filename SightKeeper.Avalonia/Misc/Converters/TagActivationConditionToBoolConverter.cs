@@ -7,32 +7,32 @@ using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.Misc.Converters;
 
-public sealed class ItemClassActivationConditionToBoolConverter : IValueConverter
+public sealed class TagActivationConditionToBoolConverter : IValueConverter
 {
-    public ItemClassActivationConditionToBoolConverter()
+    public TagActivationConditionToBoolConverter()
     {
-        _logger = Log.ForContext<ItemClassActivationConditionToBoolConverter>();
+        _logger = Log.ForContext<TagActivationConditionToBoolConverter>();
     }
     
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value == null)
             return null;
-        if (value is not ActivationCondition itemClassActivationCondition)
+        if (value is not ActivationCondition tagActivationCondition)
             return ThrowHelper.ThrowArgumentException<object>(nameof(value), $"Expected an \"{typeof(ActivationCondition)}\", but got \"{value}\" of type \"{value.GetType()}\"");
         if (targetType != typeof(bool?))
             return ThrowHelper.ThrowArgumentException<object>(nameof(targetType), $"Expected target type \"{typeof(bool?)}\" but got \"{targetType}\"");
-        bool? result = itemClassActivationCondition switch
+        bool? result = tagActivationCondition switch
         {
             ActivationCondition.None => false,
             ActivationCondition.IsShooting => true,
             ActivationCondition.IsNotShooting => null,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>(
-                nameof(itemClassActivationCondition),
-                itemClassActivationCondition,
+                nameof(tagActivationCondition),
+                tagActivationCondition,
                 "Unknown item class activation condition")
         };
-        _logger.Debug("Converted \"{Value}\" to \"{Result}\"", itemClassActivationCondition, result);
+        _logger.Debug("Converted \"{Value}\" to \"{Result}\"", tagActivationCondition, result);
         return result;
     }
 

@@ -2,20 +2,20 @@
 
 namespace SightKeeper.Application.DataSets;
 
-public sealed class ItemClassInfo
+public sealed class TagInfo
 {
     public string Name { get; }
     public uint Color { get; }
 
-    public ItemClassInfo(string name, uint color)
+    public TagInfo(string name, uint color)
     {
         Name = name;
         Color = color;
     }
 
-    public ItemClassInfo(ItemClass itemClass)
+    public TagInfo(Tag tag)
     {
-        Name = itemClass.Name;
-        Color = itemClass.Color;
+        Name = tag.Name;
+        Color = tag.Color;
     }
 }

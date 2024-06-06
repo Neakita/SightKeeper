@@ -21,9 +21,9 @@ public sealed class WeightsLibrary : IReadOnlyCollection<Weights>
     internal Weights CreateWeights(
 	    ModelSize modelSize,
 	    WeightsMetrics metrics,
-	    IEnumerable<ItemClass> itemClasses)
+	    IEnumerable<Tag> tags)
     {
-	    Weights weights = new(modelSize, metrics, itemClasses);
+	    Weights weights = new(modelSize, metrics, tags);
 	    var isAdded = _weights.Add(weights);
 	    Guard.IsTrue(isAdded);
 	    return weights;

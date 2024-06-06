@@ -17,7 +17,7 @@ using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.MessageBoxDialog;
-using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
+using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
@@ -27,9 +27,9 @@ namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, INotifyDataErrorInfo, IDataSetEditorViewModel, DataSetChanges, IDisposable
 {
 	public ViewModelValidator<DataSetChanges> Validator { get; }
-    IReadOnlyCollection<ItemClassInfo> DataSetInfo.ItemClasses =>
-        _itemClasses.Select(itemClass => itemClass.ToItemClassInfo()).ToList();
-    public IReadOnlyCollection<EditableItemClass> ItemClasses => _itemClasses;
+    IReadOnlyCollection<TagInfo> DataSetInfo.Tags =>
+        _tags.Select(tag => tag.ToTagInfo()).ToList();
+    public IReadOnlyCollection<EditableTag> Tags => _tags;
     public IReadOnlyCollection<Game> Games => _gamesDataAccess.Games;
     public DetectorDataSet DataSet { get; private set; }
 
@@ -57,70 +57,70 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
     private void SetData(DetectorDataSet dataSet)
     {
         DataSet = dataSet;
-        _itemClasses.Clear();
-        foreach (var itemClass in dataSet.ItemClasses)
-            _itemClasses.Add(new ExistingItemClass(itemClass));
+        _tags.Clear();
+        foreach (var tag in dataSet.Tags)
+            _tags.Add(new ExistingTag(tag));
         Name = dataSet.Name;
         Description = dataSet.Description;
         Resolution = dataSet.Resolution;
         Game = dataSet.Game;
     }
 
-    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddItemClassCommand))]
-    private string _newItemClassName = string.Empty;
+    [ObservableProperty, NotifyCanExecuteChangedFor(nameof(AddTagCommand))]
+    private string _newTagName = string.Empty;
 
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(ApplyCommand))] private int? _resolution = 320;
     [ObservableProperty] private Game? _game;
 
-    private readonly ObservableCollection<EditableItemClass> _itemClasses = new();
-    private readonly List<DeletedItemClass> _deletedItemClasses = new();
+    private readonly ObservableCollection<EditableTag> _tags = new();
+    private readonly List<DeletedTag> _deletedTags = new();
     private readonly GamesDataAccess _gamesDataAccess;
     private readonly DialogManager _dialogManager;
     private readonly ObjectsLookupper _objectsLookupper;
 
-    ICommand IDataSetEditorViewModel.AddItemClassCommand => AddItemClassCommand;
-    [RelayCommand(CanExecute = nameof(CanAddItemClass))]
-    private async Task AddItemClass()
+    ICommand IDataSetEditorViewModel.AddTagCommand => AddTagCommand;
+    [RelayCommand(CanExecute = nameof(CanAddTag))]
+    private async Task AddTag()
     {
-        var deletedItemClassWithTheSameName = _deletedItemClasses.FirstOrDefault(deletedItemClass => deletedItemClass.ItemClass.Name == NewItemClassName);
-        if (deletedItemClassWithTheSameName != null)
+        var deletedTagWithTheSameName = _deletedTags.FirstOrDefault(deletedTag => deletedTag.Tag.Name == NewTagName);
+        if (deletedTagWithTheSameName != null)
         {
             var noButton = new MessageBoxButtonDefinition("No", MaterialIconKind.Close);
             MessageBoxDialogViewModel messageBox = new(
                 "Item class adding",
-                $"Item class {NewItemClassName} already exists, but it was deleted. Would you like to re-add it?",
+                $"Item class {NewTagName} already exists, but it was deleted. Would you like to re-add it?",
                 new MessageBoxButtonDefinition("Yes", MaterialIconKind.Check),
                 noButton);
             var result = await _dialogManager.ShowDialogAsync(messageBox);
             if (result == noButton)
                 return;
-            var isRemoved = _deletedItemClasses.Remove(deletedItemClassWithTheSameName);
+            var isRemoved = _deletedTags.Remove(deletedTagWithTheSameName);
             Guard.IsTrue(isRemoved);
-            _itemClasses.Add(new ExistingItemClass(deletedItemClassWithTheSameName.ItemClass));
+            _tags.Add(new ExistingTag(deletedTagWithTheSameName.Tag));
         }
         else
         {
-            _itemClasses.Add(new NewItemClassViewModel(NewItemClassName, (byte)_itemClasses.Count));
+            _tags.Add(new NewTagViewModel(NewTagName, (byte)_tags.Count));
         }
-        NewItemClassName = string.Empty;
+        NewTagName = string.Empty;
     }
 
-    private bool CanAddItemClass() =>
-        !string.IsNullOrWhiteSpace(NewItemClassName) &&
-        ItemClasses.All(existingItemClass => existingItemClass.Name != NewItemClassName) &&
-        _itemClasses.Count < 80;
+    private bool CanAddTag() =>
+        !string.IsNullOrWhiteSpace(NewTagName) &&
+        Tags.All(existingTag => existingTag.Name != NewTagName) &&
+        _tags.Count < 80;
 
-    ICommand IDataSetEditorViewModel.DeleteItemClassCommand => DeleteItemClassCommand;
+    ICommand IDataSetEditorViewModel.DeleteTagCommand => DeleteTagCommand;
     [RelayCommand]
-    private async Task DeleteItemClass(EditableItemClass itemClass)
+    private async Task DeleteTag(EditableTag tag)
     {
         // ISSUE HUGE mess!
-        if (itemClass is ExistingItemClass existingItemClass)
+        if (tag is ExistingTag existingTag)
         {
-            DeletedItemClassAction? action = null;
-            if (_objectsLookupper.GetItems(existingItemClass.ItemClass).Any())
+            DeletedTagAction? action = null;
+            if (_objectsLookupper.GetItems(existingTag.Tag).Any())
             {
                 var cancel = new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel);
                 var deleteItems = new MessageBoxButtonDefinition("Delete items", MaterialIconKind.TrashCanOutline);
@@ -128,21 +128,21 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
                 var deleteScreenshots = new MessageBoxButtonDefinition("Delete screenshots", MaterialIconKind.TrashCanOutline);
                 MessageBoxDialogViewModel messageBox = new(
                     "Associated items",
-                    $"Item class {itemClass.Name} has some items ({_objectsLookupper.GetItems(existingItemClass.ItemClass).Count}). Are you sure you want to delete it? Choose action",
+                    $"Item class {tag.Name} has some items ({_objectsLookupper.GetItems(existingTag.Tag).Count}). Are you sure you want to delete it? Choose action",
                     cancel, deleteItems, deleteAssets, deleteScreenshots);
                 var result = await _dialogManager.ShowDialogAsync(messageBox);
                 if (result == cancel)
                     return;
                 if (result == deleteItems)
-                    action = DeletedItemClassAction.DeleteItems;
+                    action = DeletedTagAction.DeleteItems;
                 else if (result == deleteAssets)
-                    action = DeletedItemClassAction.DeleteAssets;
+                    action = DeletedTagAction.DeleteAssets;
                 else if (result == deleteScreenshots)
-                    action = DeletedItemClassAction.DeleteScreenshots;
+                    action = DeletedTagAction.DeleteScreenshots;
             }
-            _deletedItemClasses.Add(new DeletedItemClass(existingItemClass.ItemClass, action));
+            _deletedTags.Add(new DeletedTag(existingTag.Tag, action));
         }
-        Guard.IsTrue(_itemClasses.Remove(itemClass));
+        Guard.IsTrue(_tags.Remove(tag));
     }
 
     ICommand IDataSetEditorViewModel.ApplyCommand => ApplyCommand;
@@ -164,16 +164,16 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
 	    ErrorsChanged -= OnErrorsChanged;
     }
 
-    IReadOnlyCollection<ItemClassInfo> DataSetChanges.NewItemClasses => ItemClasses
-        .OfType<NewItemClassViewModel>()
-        .Select(newItemClass => newItemClass.ToItemClassInfo())
+    IReadOnlyCollection<TagInfo> DataSetChanges.NewTags => Tags
+        .OfType<NewTagViewModel>()
+        .Select(newTag => newTag.ToTagInfo())
         .ToList();
-    IReadOnlyCollection<EditedItemClass> DataSetChanges.EditedItemClasses => ItemClasses
-        .OfType<ExistingItemClass>()
-        .Where(existingItemClass => existingItemClass.IsEdited)
-        .Select(existingItemClass => existingItemClass.ToEditedItemClass())
+    IReadOnlyCollection<EditedTag> DataSetChanges.EditedTags => Tags
+        .OfType<ExistingTag>()
+        .Where(existingTag => existingTag.IsEdited)
+        .Select(existingTag => existingTag.ToEditedTag())
         .ToList();
-    IReadOnlyCollection<DeletedItemClass> DataSetChanges.DeletedItemClasses => _deletedItemClasses;
+    IReadOnlyCollection<DeletedTag> DataSetChanges.DeletedTags => _deletedTags;
 
     public IEnumerable GetErrors(string? propertyName)
     {

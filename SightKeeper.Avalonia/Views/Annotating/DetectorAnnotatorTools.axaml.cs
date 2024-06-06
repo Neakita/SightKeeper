@@ -22,15 +22,15 @@ internal sealed partial class AnnotatorTools : ReactiveUserControl<AnnotatorTool
     private void OnActivated(CompositeDisposable disposable)
     {
         Disposable.Create(OnDeactivated).DisposeWith(disposable);
-        ItemClassesListBox.PointerWheelChanged += OnItemClassesListBoxWheelScrolled;
+        TagsListBox.PointerWheelChanged += OnTagsListBoxWheelScrolled;
     }
 
     private void OnDeactivated()
     {
-        ItemClassesListBox.PointerWheelChanged -= OnItemClassesListBoxWheelScrolled;
+        TagsListBox.PointerWheelChanged -= OnTagsListBoxWheelScrolled;
     }
 
-    private static void OnItemClassesListBoxWheelScrolled(object? sender, PointerWheelEventArgs e)
+    private static void OnTagsListBoxWheelScrolled(object? sender, PointerWheelEventArgs e)
     {
         e.Handled = true;
     }

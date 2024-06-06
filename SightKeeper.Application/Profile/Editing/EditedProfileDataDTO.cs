@@ -19,7 +19,7 @@ public sealed class EditedProfileDataDTO : EditedProfileData
     public byte? PreemptionStabilizationBufferSize { get; }
     public StabilizationMethod? PreemptionStabilizationMethod { get; }
     public Weights Weights { get; }
-    public IReadOnlyList<ProfileItemClassData> ItemClasses { get; }
+    public IReadOnlyList<ProfileTagData> Tags { get; }
 
     public EditedProfileDataDTO(
         Profile profile,
@@ -35,7 +35,7 @@ public sealed class EditedProfileDataDTO : EditedProfileData
         byte? preemptionStabilizationBufferSize,
         StabilizationMethod? preemptionStabilizationMethod,
         Weights weights,
-        IEnumerable<ProfileItemClassData> itemClasses)
+        IEnumerable<ProfileTagData> tags)
     {
         Profile = profile;
         Name = name;
@@ -50,6 +50,6 @@ public sealed class EditedProfileDataDTO : EditedProfileData
         PreemptionStabilizationMethod = preemptionStabilizationMethod;
         PostProcessDelay = postProcessDelay;
         Weights = weights;
-        ItemClasses = itemClasses.ToImmutableList();
+        Tags = tags.ToImmutableList();
     }
 }

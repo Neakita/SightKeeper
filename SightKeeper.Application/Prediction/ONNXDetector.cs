@@ -23,13 +23,13 @@ public sealed class ONNXDetector : Detector
             _weights = value;
             _predictor?.Dispose();
             _predictor = null;
-            _itemClasses = null;
+            _tags = null;
             if (value == null)
                 return;
             SetWeights(value);
-            _itemClasses = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(value)).ItemClasses
-                .Select((itemClass, itemClassIndex) => (itemClass, itemClassIndex))
-                .ToDictionary(t => t.itemClassIndex, t => t.itemClass);
+            _tags = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(value)).Tags
+                .Select((tag, tagIndex) => (tag, tagIndex))
+                .ToDictionary(t => t.tagIndex, t => t.tag);
         }
     }
     
@@ -95,7 +95,7 @@ public sealed class ONNXDetector : Detector
     private float _iou = YoloV8Configuration.Default.IoU;
     private YoloV8Predictor? _predictor;
     private Weights? _weights;
-    private Dictionary<int, ItemClass>? _itemClasses;
+    private Dictionary<int, Tag>? _tags;
 
     public ONNXDetector(WeightsDataAccess weightsDataAccess, ObjectsLookupper objectsLookupper)
     {
@@ -108,13 +108,13 @@ public sealed class ONNXDetector : Detector
         YoloV8Task.Detect,
         1,
         new Size(dataSet.Resolution),
-        dataSet.ItemClasses.Select((itemClass, index) => new YoloV8Class(index, itemClass.Name)).ToList());
+        dataSet.Tags.Select((tag, index) => new YoloV8Class(index, tag.Name)).ToList());
 
     private DetectionItem CreateDetectionItem(BoundingBox bounding)
     {
-        Guard.IsNotNull(_itemClasses);
+        Guard.IsNotNull(_tags);
         Guard.IsNotNull(_weights);
-        return new DetectionItem(_itemClasses[bounding.Class.Id], CreateBounding(bounding.Bounds, _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(_weights)).Resolution), bounding.Confidence);
+        return new DetectionItem(_tags[bounding.Class.Id], CreateBounding(bounding.Bounds, _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(_weights)).Resolution), bounding.Confidence);
     }
 
     private static RectangleF CreateBounding(Rectangle rectangle, ushort resolution) => new(

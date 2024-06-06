@@ -44,14 +44,14 @@ public class AppDbContext : DbContext
 		modelBuilder.ApplyConfiguration(new ScreenshotsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ScreenshotConfiguration());
 		modelBuilder.ApplyConfiguration(new AssetConfiguration());
-		modelBuilder.ApplyConfiguration(new ItemClassConfiguration());
+		modelBuilder.ApplyConfiguration(new TagConfiguration());
 		modelBuilder.ApplyConfiguration(new GameConfiguration());
 		modelBuilder.ApplyConfiguration(new DetectorItemConfiguration());
 		modelBuilder.ApplyConfiguration(new ImageConfiguration());
 		modelBuilder.ApplyConfiguration(new DataSetConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new ProfileConfiguration());
-		modelBuilder.ApplyConfiguration(new ProfileItemClassConfiguration());
+		modelBuilder.ApplyConfiguration(new ProfileTagConfiguration());
 		modelBuilder.ApplyConfiguration(new WeightsConfiguration());
 		modelBuilder.ApplyConfiguration(new AssetsLibraryConfiguration());
 		modelBuilder.ApplyConfiguration(new PreemptionSettingsConfiguration());

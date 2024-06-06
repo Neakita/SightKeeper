@@ -14,7 +14,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Thumb">
-                            <Border Background="{Binding ItemClass.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=0.8}"
+                            <Border Background="{Binding Tag.Color, Converter={x:Static root:Converters.ToBrushConverter}, ConverterParameter=0.8}"
                                     BorderThickness="0"
                                     CornerRadius="3"/>
                         </ControlTemplate>
@@ -83,7 +83,7 @@
                DragDelta="OnThumbDragDelta"
                DragCompleted="OnThumbDragCompleted"/>
         <TextBlock TextTrimming="CharacterEllipsis"
-                   Text="{Binding ItemClass.Name}"
+                   Text="{Binding Tag.Name}"
                    FontSize="7"
                    Background="#30000000"
                    VerticalAlignment="Top"

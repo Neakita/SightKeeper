@@ -14,7 +14,7 @@ public sealed class DbProfilesDataAccess : ProfilesDataAccess
 
     public DbProfilesDataAccess(AppDbContext dbContext)
     {
-	    _profiles = new HashSet<Profile>(dbContext.Profiles.Include(profile => profile.ItemClasses.OrderBy(itemClass => EF.Property<byte>(itemClass, "Order"))));
+	    _profiles = new HashSet<Profile>(dbContext.Profiles.Include(profile => profile.Tags.OrderBy(tag => EF.Property<byte>(tag, "Order"))));
 	    _dbContext = dbContext;
     }
 

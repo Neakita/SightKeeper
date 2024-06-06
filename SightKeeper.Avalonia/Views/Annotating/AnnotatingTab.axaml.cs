@@ -18,7 +18,7 @@ internal sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatorViewM
 	}
 
 	private TopLevel? _topLevel;
-	private bool _scrollScreenshotsInsteadOfItemClasses;
+	private bool _scrollScreenshotsInsteadOfTags;
 
 	private void OnActivated(CompositeDisposable disposable)
 	{
@@ -40,13 +40,13 @@ internal sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatorViewM
 	private void OnTopLevelKeyDown(object? sender, KeyEventArgs e)
 	{
 		if (e.Key == Key.LeftShift)
-			_scrollScreenshotsInsteadOfItemClasses = true;
+			_scrollScreenshotsInsteadOfTags = true;
 	}
 
 	private void OnTopLevelKeyUp(object? sender, KeyEventArgs e)
 	{
 		if (e.Key == Key.LeftShift)
-			_scrollScreenshotsInsteadOfItemClasses = false;
+			_scrollScreenshotsInsteadOfTags = false;
 	}
 
 	private void OnTopLevelScrolled(object? sender, PointerWheelEventArgs e)
@@ -55,14 +55,14 @@ internal sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatorViewM
 		if (delta == 0)
 			return;
 		var reverse = delta > 0;
-		if (_scrollScreenshotsInsteadOfItemClasses)
+		if (_scrollScreenshotsInsteadOfTags)
 			ScrollScreenshot(reverse);
 		else
-			ScrollItemClass(reverse);
+			ScrollTag(reverse);
 	}
 
-	private void ScrollItemClass(bool reverse) =>
-		ViewModel?.ToolsViewModel.ScrollItemClass(reverse);
+	private void ScrollTag(bool reverse) =>
+		ViewModel?.ToolsViewModel.ScrollTag(reverse);
 
 	private void ScrollScreenshot(bool reverse) =>
 		ViewModel?.Screenshots.ScrollScreenshot(reverse);

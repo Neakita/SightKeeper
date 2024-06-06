@@ -13,11 +13,11 @@ public sealed class DbProfileEditor : ProfileEditor
 	public override void ApplyChanges(EditedProfileDataDTO data)
 	{
 		base.ApplyChanges(data);
-		for (var index = 0; index < data.Profile.ItemClasses.Count; index++)
+		for (var index = 0; index < data.Profile.Tags.Count; index++)
 		{
-			var profileItemClass = data.Profile.ItemClasses[index];
-			var itemClassEntry = _dbContext.Entry(profileItemClass);
-			itemClassEntry.Property<byte>("Order").CurrentValue = (byte)index;
+			var profileTag = data.Profile.Tags[index];
+			var tagEntry = _dbContext.Entry(profileTag);
+			tagEntry.Property<byte>("Order").CurrentValue = (byte)index;
 		}
 	}
 

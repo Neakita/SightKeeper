@@ -3,9 +3,9 @@ using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Application;
 
-public interface ProfileItemClassData
+public interface ProfileTagData
 {
-    public ItemClass ItemClass { get; }
+    public Tag Tag { get; }
     public byte Order { get; }
     public ActivationCondition ActivationCondition { get; }
 }

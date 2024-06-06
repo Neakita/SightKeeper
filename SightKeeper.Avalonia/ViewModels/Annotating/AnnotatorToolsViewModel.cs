@@ -13,10 +13,10 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
 internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
 {
-    public IReadOnlyCollection<ItemClass> ItemClasses
+    public IReadOnlyCollection<Tag> Tags
     {
-        get => _itemClasses;
-        private set => SetProperty(ref _itemClasses, value);
+        get => _tags;
+        private set => SetProperty(ref _tags, value);
     }
 
     public AnnotatorToolsViewModel(
@@ -32,12 +32,12 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
             .Subscribe(OnScreenshotSelected)
             .DisposeWith(_disposable);
         selectedDataSetViewModel.ObservableValue
-            .Subscribe(newValue => ItemClasses = newValue?.ItemClasses ?? Array.Empty<ItemClass>())
+            .Subscribe(newValue => Tags = newValue?.Tags ?? Array.Empty<Tag>())
             .DisposeWith(_disposable);
-        Drawer.DetectorItemViewModel.ItemClassChanged.Subscribe(item =>
+        Drawer.DetectorItemViewModel.TagChanged.Subscribe(item =>
         {
             Guard.IsNotNull(item.Item);
-            item.Item.ItemClass = item.ItemClass;
+            item.Item.Tag = item.Tag;
         }).DisposeWith(_disposable);
         _selectedScreenshotViewModel.NotifyCanExecuteChanged(
             MarkSelectedScreenshotAsAssetCommand,
@@ -45,14 +45,14 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
             DeleteScreenshotCommand);
     }
 
-    public void ScrollItemClass(bool reverse)
+    public void ScrollTag(bool reverse)
     {
-        if (ItemClasses.Count <= 1)
+        if (Tags.Count <= 1)
             return;
         if (reverse)
-	        SelectedItemClassIndex--;
+	        SelectedTagIndex--;
         else
-	        SelectedItemClassIndex++;
+	        SelectedTagIndex++;
     }
 
     public void Dispose()
@@ -70,13 +70,13 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     private IDisposable? _selectedScreenshotDisposable;
 
     
-    [ObservableProperty] private ItemClass? _selectedItemClass;
-    [ObservableProperty] private int _selectedItemClassIndex;
+    [ObservableProperty] private Tag? _selectedTag;
+    [ObservableProperty] private int _selectedTagIndex;
     
     [ObservableProperty, NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
     private Drawer.DetectorItemViewModel? _selectedItem;
 
-    private IReadOnlyCollection<ItemClass> _itemClasses = Array.Empty<ItemClass>();
+    private IReadOnlyCollection<Tag> _tags = Array.Empty<Tag>();
 
 
     [RelayCommand(CanExecute = nameof(CanMarkSelectedScreenshotAsAsset))]

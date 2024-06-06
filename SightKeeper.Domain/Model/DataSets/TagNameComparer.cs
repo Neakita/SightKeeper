@@ -1,10 +1,10 @@
 ﻿namespace SightKeeper.Domain.Model.DataSets;
 
-internal sealed class ItemClassNameComparer : IComparer<ItemClass>
+internal sealed class TagNameComparer : IComparer<Tag>
 {
-	public static ItemClassNameComparer Instance { get; } = new();
+	public static TagNameComparer Instance { get; } = new();
 
-	public int Compare(ItemClass? x, ItemClass? y)
+	public int Compare(Tag? x, Tag? y)
 	{
 		if (ReferenceEquals(x, y)) return 0;
 		if (ReferenceEquals(null, y)) return 1;

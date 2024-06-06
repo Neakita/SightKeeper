@@ -14,13 +14,13 @@ internal sealed partial class DetectedItemViewModel : ViewModel, DrawerItem
 
     public bool IsDashed => true;
     public BoundingViewModel Bounding { get; }
-    public ItemClass ItemClass { get; }
+    public Tag Tag { get; }
     public float Probability { get; }
 
-    public DetectedItemViewModel(BoundingViewModel bounding, ItemClass itemClass,  float probability)
+    public DetectedItemViewModel(BoundingViewModel bounding, Tag tag,  float probability)
     {
         Bounding = bounding;
-        ItemClass = itemClass;
+        Tag = tag;
         Probability = probability;
     }
 

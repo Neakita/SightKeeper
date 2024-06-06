@@ -22,13 +22,13 @@ public sealed class AssetsExporter
 	public void Export(
 		string targetDirectoryPath,
 		IReadOnlyCollection<DetectorAsset> assets,
-		IReadOnlyCollection<ItemClass> itemClasses)
+		IReadOnlyCollection<Tag> tags)
 	{
 		var imagesDirectoryPath = Path.Combine(targetDirectoryPath, "images");
 		var labelsDirectoryPath = Path.Combine(targetDirectoryPath, "labels");
 		var data = _screenshotsDataAccess.LoadImages(assets.Select(asset => asset.Screenshot)).ToImmutableList();
 		ExportImages(imagesDirectoryPath, data.Select(d => d.image).ToImmutableList());
-		ExportLabels(labelsDirectoryPath, data.Select(d => _objectsLookupper.GetAsset(d.screenshot)).ToImmutableList(), itemClasses);
+		ExportLabels(labelsDirectoryPath, data.Select(d => _objectsLookupper.GetAsset(d.screenshot)).ToImmutableList(), tags);
 	}
 	
 	private static readonly NumberFormatInfo NumberFormat = new() { NumberDecimalSeparator = "." };
@@ -64,48 +64,48 @@ public sealed class AssetsExporter
 	private void ExportLabels(
 		string directoryPath,
 		ImmutableList<DetectorAsset> assets,
-		IReadOnlyCollection<ItemClass> itemClasses)
+		IReadOnlyCollection<Tag> tags)
 	{
 		Directory.CreateDirectory(directoryPath);
 		var operation = _logger.BeginOperation("Exporting labels for {AssetsCount} assets ({AssetsWithoutItems} without items) with {ItemsCount} items",
 			assets.Count,
 			assets.Count(asset => !asset.Items.Any()),
 			assets.SelectMany(asset => asset.Items).Count());
-		var itemClassesWithIndexes = itemClasses
-			.Select((itemClass, itemClassIndex) => (itemClass, itemClassIndex))
-			.ToDictionary(tuple => tuple.itemClass, tuple => (byte)tuple.itemClassIndex);
-		_logger.Debug("Item classes by indexes: {ItemClasses}", itemClassesWithIndexes);
+		var tagsWithIndexes = tags
+			.Select((tag, tagIndex) => (tag, tagIndex))
+			.ToDictionary(tuple => tuple.tag, tuple => (byte)tuple.tagIndex);
+		_logger.Debug("Item classes by indexes: {Tags}", tagsWithIndexes);
 		var assetIndex = -1;
 		foreach (var asset in assets)
-			ExportLabels(directoryPath, asset, ++assetIndex, itemClassesWithIndexes);
+			ExportLabels(directoryPath, asset, ++assetIndex, tagsWithIndexes);
 		operation.Complete();
 	}
 
-	private void ExportLabels(string directoryPath, DetectorAsset asset, int assetIndex, Dictionary<ItemClass, byte> itemClasses)
+	private void ExportLabels(string directoryPath, DetectorAsset asset, int assetIndex, Dictionary<Tag, byte> tags)
 	{
 		if (!asset.Items.Any())
 			return;
 		var labelPath = Path.Combine(directoryPath, $"{assetIndex}.txt");
-		ExportLabels(labelPath, asset, itemClasses);
+		ExportLabels(labelPath, asset, tags);
 	}
 
 	private void ExportLabels(
 		string path,
 		DetectorAsset asset,
-		Dictionary<ItemClass, byte> itemClasses)
+		Dictionary<Tag, byte> tags)
 	{
-		var content = string.Join('\n', asset.Items.Select(item => GetDetectorItemLabel(item, itemClasses)));
+		var content = string.Join('\n', asset.Items.Select(item => GetDetectorItemLabel(item, tags)));
 		File.WriteAllText(path, content);
 	}
 
-	private static string GetDetectorItemLabel(DetectorItem item, Dictionary<ItemClass, byte> itemClasses) =>
-		string.Join(' ', GetDetectorItemLabelParameters(item, itemClasses));
+	private static string GetDetectorItemLabel(DetectorItem item, Dictionary<Tag, byte> tags) =>
+		string.Join(' ', GetDetectorItemLabelParameters(item, tags));
 
 	private static IEnumerable<string> GetDetectorItemLabelParameters(
 		DetectorItem item,
-		Dictionary<ItemClass, byte> itemClasses)
+		Dictionary<Tag, byte> tags)
 	{
-		yield return itemClasses[item.ItemClass].ToString();
+		yield return tags[item.Tag].ToString();
 		var bounding = item.Bounding;
 		yield return bounding.Center.X.ToString(NumberFormat);
 		yield return bounding.Center.Y.ToString(NumberFormat);

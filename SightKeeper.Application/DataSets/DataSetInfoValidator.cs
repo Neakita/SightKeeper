@@ -7,6 +7,6 @@ public sealed class DataSetInfoValidator : AbstractValidator<DataSetInfo>
 {
     public DataSetInfoValidator()
     {
-        RuleFor(changes => changes.ItemClasses).NoDuplicates(itemClass => itemClass.Name);
+        RuleFor(changes => changes.Tags).NoDuplicates(tag => tag.Name);
     }
 }

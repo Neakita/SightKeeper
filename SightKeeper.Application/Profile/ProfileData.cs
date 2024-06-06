@@ -17,5 +17,5 @@ public interface ProfileData
     byte? PreemptionStabilizationBufferSize { get; }
     StabilizationMethod? PreemptionStabilizationMethod { get; }
     Weights? Weights { get; }
-    IReadOnlyList<ProfileItemClassData> ItemClasses { get; }
+    IReadOnlyList<ProfileTagData> Tags { get; }
 }

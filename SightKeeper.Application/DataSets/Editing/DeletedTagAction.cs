@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Application.DataSets.Editing;
 
-public enum DeletedItemClassAction
+public enum DeletedTagAction
 {
     DeleteItems,
     DeleteAssets,

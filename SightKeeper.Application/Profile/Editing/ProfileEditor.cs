@@ -43,9 +43,9 @@ public class ProfileEditor
 
         profile.PostProcessDelay = data.PostProcessDelay;
         profile.Weights = data.Weights;
-        profile.ClearItemClasses();
-        foreach (var itemClassData in data.ItemClasses)
-            profile.AddItemClass(itemClassData.ItemClass, itemClassData.ActivationCondition);
+        profile.ClearTags();
+        foreach (var tagData in data.Tags)
+            profile.AddTag(tagData.Tag, tagData.ActivationCondition);
         _profileEdited.OnNext(profile);
     }
 

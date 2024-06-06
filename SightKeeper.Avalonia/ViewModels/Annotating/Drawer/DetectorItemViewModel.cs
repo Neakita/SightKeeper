@@ -11,8 +11,8 @@ namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 
 internal sealed partial class DetectorItemViewModel : ViewModel, DrawerItem
 {
-    public static IObservable<DetectorItemViewModel> ItemClassChanged => ItemClassChangedSubject.AsObservable();
-    private static readonly Subject<DetectorItemViewModel> ItemClassChangedSubject = new();
+    public static IObservable<DetectorItemViewModel> TagChanged => TagChangedSubject.AsObservable();
+    private static readonly Subject<DetectorItemViewModel> TagChangedSubject = new();
 
     public DetectorItem? Item
     {
@@ -36,23 +36,23 @@ internal sealed partial class DetectorItemViewModel : ViewModel, DrawerItem
         Item = item;
         Resizer = resizer;
         Drawer = drawer;
-        _itemClass = item.ItemClass;
+        _tag = item.Tag;
         Bounding = new BoundingViewModel(item.Bounding);
     }
 
-    public DetectorItemViewModel(ItemClass itemClass, Point position, DetectorItemResizer resizer, DrawerViewModel drawer)
+    public DetectorItemViewModel(Tag tag, Point position, DetectorItemResizer resizer, DrawerViewModel drawer)
     {
         Resizer = resizer;
         Drawer = drawer;
-        _itemClass = itemClass;
+        _tag = tag;
         Bounding = new BoundingViewModel(position);
     }
 
     private DetectorItem? _item;
-    [ObservableProperty] private ItemClass _itemClass;
+    [ObservableProperty] private Tag _tag;
     [ObservableProperty] private bool _isThumbsVisible;
 
     // ReSharper disable once UnusedParameterInPartialMethod
-    partial void OnItemClassChanged(ItemClass value) =>
-        ItemClassChangedSubject.OnNext(this);
+    partial void OnTagChanged(Tag value) =>
+        TagChangedSubject.OnNext(this);
 }

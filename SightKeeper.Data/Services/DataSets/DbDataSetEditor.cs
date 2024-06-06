@@ -26,81 +26,81 @@ public sealed class DbDataSetEditor : DataSetEditor
         dataSet.Name = dataSetChanges.Name;
         dataSet.Description = dataSetChanges.Description;
         dataSet.Game = dataSetChanges.Game;
-        ApplyItemClassesChanges(dataSetChanges);
+        ApplyTagsChanges(dataSetChanges);
         _dbContext.DataSets.Update(dataSet);
         await _dbContext.SaveChangesAsync(cancellationToken);
         _dataSetEdited.OnNext(dataSet);
     }
 
-    private void ApplyItemClassesChanges(DataSetChangesDTO changes)
+    private void ApplyTagsChanges(DataSetChangesDTO changes)
     {
-        DeleteItemClasses(changes);
-        ApplyItemClassesEditions(changes);
-        AddNewItemClasses(changes);
+        DeleteTags(changes);
+        ApplyTagsEditions(changes);
+        AddNewTags(changes);
     }
 
-    private void DeleteItemClasses(DataSetChangesDTO changes)
+    private void DeleteTags(DataSetChangesDTO changes)
     {
-        var deletedItemClasses = changes.DeletedItemClasses;
-        var itemClassesWithItemsAndNoActionSpecified = deletedItemClasses
-            .Where(deletedItemClass => IsItemClassHaveItems(deletedItemClass.ItemClass) && deletedItemClass.Action == null)
+        var deletedTags = changes.DeletedTags;
+        var tagsWithItemsAndNoActionSpecified = deletedTags
+            .Where(deletedTag => IsTagHaveItems(deletedTag.Tag) && deletedTag.Action == null)
             .ToList();
-        if (itemClassesWithItemsAndNoActionSpecified.Any())
-            ThrowHelper.ThrowArgumentException($"Item classes must have an action specified when they have items, but no action was specified for: {string.Join(", ", itemClassesWithItemsAndNoActionSpecified.Select(itemClass => itemClass.ItemClass.Name))}");
-        foreach (var deletedItemClass in deletedItemClasses)
+        if (tagsWithItemsAndNoActionSpecified.Any())
+            ThrowHelper.ThrowArgumentException($"Item classes must have an action specified when they have items, but no action was specified for: {string.Join(", ", tagsWithItemsAndNoActionSpecified.Select(tag => tag.Tag.Name))}");
+        foreach (var deletedTag in deletedTags)
         {
-            ExecuteActionIfNecessary(deletedItemClass);
-            var itemClass = deletedItemClass.ItemClass;
-            var dataSet = _objectsLookupper.GetDataSet(itemClass);
-            dataSet.DeleteItemClass(itemClass);
+            ExecuteActionIfNecessary(deletedTag);
+            var tag = deletedTag.Tag;
+            var dataSet = _objectsLookupper.GetDataSet(tag);
+            dataSet.DeleteTag(tag);
         }
     }
-    private void ExecuteActionIfNecessary(DeletedItemClass deletedItemClass)
+    private void ExecuteActionIfNecessary(DeletedTag deletedTag)
     {
-        if (!IsItemClassHaveItems(deletedItemClass.ItemClass))
+        if (!IsTagHaveItems(deletedTag.Tag))
             return;
-        Guard.IsNotNull(deletedItemClass.Action);
-        var action = deletedItemClass.Action switch
+        Guard.IsNotNull(deletedTag.Action);
+        var action = deletedTag.Action switch
         {
-            DeletedItemClassAction.DeleteItems => DeleteItems,
-            DeletedItemClassAction.DeleteAssets => DeleteAssets,
-            DeletedItemClassAction.DeleteScreenshots => DeleteScreenshots,
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Action<ItemClass>>(nameof(deletedItemClass.Action), deletedItemClass.Action, $"Expected one of {nameof(DeletedItemClassAction.DeleteItems)}, {nameof(DeletedItemClassAction.DeleteAssets)}, {nameof(DeletedItemClassAction.DeleteScreenshots)}")
+            DeletedTagAction.DeleteItems => DeleteItems,
+            DeletedTagAction.DeleteAssets => DeleteAssets,
+            DeletedTagAction.DeleteScreenshots => DeleteScreenshots,
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Action<Tag>>(nameof(deletedTag.Action), deletedTag.Action, $"Expected one of {nameof(DeletedTagAction.DeleteItems)}, {nameof(DeletedTagAction.DeleteAssets)}, {nameof(DeletedTagAction.DeleteScreenshots)}")
         };
-        action(deletedItemClass.ItemClass);
+        action(deletedTag.Tag);
     }
-    private void DeleteItems(ItemClass itemClass)
+    private void DeleteItems(Tag tag)
     {
-        foreach (var item in _objectsLookupper.GetItems(itemClass))
+        foreach (var item in _objectsLookupper.GetItems(tag))
             _objectsLookupper.GetAsset(item).DeleteItem(item);
     }
-    private void DeleteAssets(ItemClass itemClass)
+    private void DeleteAssets(Tag tag)
     {
-        foreach (var asset in _objectsLookupper.GetItems(itemClass).Select(item => _objectsLookupper.GetAsset(item)).Distinct().ToList())
+        foreach (var asset in _objectsLookupper.GetItems(tag).Select(item => _objectsLookupper.GetAsset(item)).Distinct().ToList())
             _objectsLookupper.GetLibrary(asset).DeleteAsset(asset);
     }
-    private void DeleteScreenshots(ItemClass itemClass)
+    private void DeleteScreenshots(Tag tag)
     {
-        foreach (var screenshot in _objectsLookupper.GetItems(itemClass).Select(item => _objectsLookupper.GetAsset(item).Screenshot).Distinct().ToList())
+        foreach (var screenshot in _objectsLookupper.GetItems(tag).Select(item => _objectsLookupper.GetAsset(item).Screenshot).Distinct().ToList())
 	        _objectsLookupper.GetLibrary(screenshot).DeleteScreenshot(screenshot);
     }
 
-    private static void ApplyItemClassesEditions(DataSetChangesDTO changes)
+    private static void ApplyTagsEditions(DataSetChangesDTO changes)
     {
-        var editedItemClasses = changes.EditedItemClasses;
-        foreach (var editedItemClass in editedItemClasses)
+        var editedTags = changes.EditedTags;
+        foreach (var editedTag in editedTags)
         {
-            var itemClass = editedItemClass.ItemClass;
-            itemClass.Name = editedItemClass.Name;
-            itemClass.Color = editedItemClass.Color;
+            var tag = editedTag.Tag;
+            tag.Name = editedTag.Name;
+            tag.Color = editedTag.Color;
         }
     }
 
-    private static void AddNewItemClasses(DataSetChangesDTO changes)
+    private static void AddNewTags(DataSetChangesDTO changes)
     {
-        var newItemClasses = changes.NewItemClasses;
-        foreach (var newItemClass in newItemClasses)
-            changes.DataSet.CreateItemClass(newItemClass.Name, newItemClass.Color);
+        var newTags = changes.NewTags;
+        foreach (var newTag in newTags)
+            changes.DataSet.CreateTag(newTag.Name, newTag.Color);
     }
 
     private readonly Subject<DetectorDataSet> _dataSetEdited = new();
@@ -108,8 +108,8 @@ public sealed class DbDataSetEditor : DataSetEditor
     private readonly AppDbContext _dbContext;
     private readonly ObjectsLookupper _objectsLookupper;
 
-    private bool IsItemClassHaveItems(ItemClass itemClass)
+    private bool IsTagHaveItems(Tag tag)
     {
-	    return _objectsLookupper.GetItems(itemClass).Any();
+	    return _objectsLookupper.GetItems(tag).Any();
     }
 }

@@ -10,7 +10,7 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
     {
         builder.HasFlakeIdKey();
         builder.HasOne(profile => profile.PreemptionSettings).WithOne().HasPrincipalKey<Profile>();
-        builder.HasMany(profile => profile.ItemClasses).WithOne().IsRequired();
+        builder.HasMany(profile => profile.Tags).WithOne().IsRequired();
         builder.HasIndex(profile => profile.Name).IsUnique();
         builder.Navigation(profile => profile.Weights).AutoInclude();
         builder.Property(profile => profile.PostProcessDelay).HasConversion(
