@@ -19,12 +19,6 @@ public sealed class DetectorAsset : Asset
 	    Guard.IsTrue(isRemoved);
     }
 
-    public void DeleteItem(int index)
-    {
-	    var item = _items[index];
-	    _items.RemoveAt(index);
-    }
-
     public void ClearItems()
     {
 	    _items.Clear();
