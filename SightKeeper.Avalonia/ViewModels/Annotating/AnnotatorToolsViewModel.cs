@@ -84,7 +84,7 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     {
         var screenshot = _selectedScreenshotViewModel.Value;
         Guard.IsNotNull(screenshot);
-        _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(screenshot.Item)).DetectorAssets.MakeAsset(screenshot.Item);
+        _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(screenshot.Item)).Assets.MakeAsset(screenshot.Item);
         screenshot.NotifyIsAssetChanged();
     }
     private bool CanMarkSelectedScreenshotAsAsset() =>
@@ -95,7 +95,7 @@ internal sealed partial class AnnotatorToolsViewModel : ViewModel, IDisposable
     {
         var screenshot = _selectedScreenshotViewModel.Value;
         Guard.IsNotNull(screenshot);
-        _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(screenshot.Item)).DetectorAssets.DeleteAsset(_objectsLookupper.GetAsset(screenshot.Item));
+        _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(screenshot.Item)).Assets.DeleteAsset(_objectsLookupper.GetAsset(screenshot.Item));
         screenshot.NotifyIsAssetChanged();
         _selectedScreenshotViewModel.DetectorItems.Clear();
     }

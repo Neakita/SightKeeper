@@ -10,7 +10,7 @@ public abstract class DataSet<TTag, TAsset, TAssetsLibrary> where TTag : Tag whe
 	public ushort Resolution { get; }
 	public IReadOnlySet<TTag> Tags => _tags;
 	public ScreenshotsLibrary Screenshots { get; }
-	public TAssetsLibrary DetectorAssets { get; }
+	public TAssetsLibrary Assets { get; }
 	public WeightsLibrary Weights { get; }
 
 	public void DeleteTag(TTag tag)
@@ -29,7 +29,7 @@ public abstract class DataSet<TTag, TAsset, TAssetsLibrary> where TTag : Tag whe
 		Resolution = resolution;
 		Screenshots = new ScreenshotsLibrary();
 		Weights = new WeightsLibrary();
-		DetectorAssets = assetsLibrary;
+		Assets = assetsLibrary;
 	}
 
 	protected void AddTag(TTag tag)

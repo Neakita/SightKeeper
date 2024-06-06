@@ -38,7 +38,7 @@ public sealed class Trainer
 		CancellationToken cancellationToken = default)
 	{
 		PrepareDataDirectory();
-		_assetsExporter.Export(DataDirectoryPath, dataSet.DetectorAssets, dataSet.Tags);
+		_assetsExporter.Export(DataDirectoryPath, dataSet.Assets, dataSet.Tags);
 		await ExportDataSet(dataSet, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);
 		CLITrainerArguments arguments = new(DataSetPath, modelSize, epochs, patience, dataSet.Resolution, false, AMP);
@@ -66,7 +66,7 @@ public sealed class Trainer
 	{
 		PrepareDataDirectory();
 		var dataSet = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(weights));
-		_assetsExporter.Export(DataDirectoryPath, dataSet.DetectorAssets, dataSet.Tags);
+		_assetsExporter.Export(DataDirectoryPath, dataSet.Assets, dataSet.Tags);
 		await ExportDataSet(dataSet, cancellationToken);
 		await ExportWeights(weights, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);

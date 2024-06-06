@@ -73,7 +73,7 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
     private DetectorAsset GetOrMakeAsset(Screenshot valueItem)
     {
 	    return _objectsLookupper.GetOptionalAsset(valueItem) ??
-	           _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(valueItem)).DetectorAssets.MakeAsset(valueItem);
+	           _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(valueItem)).Assets.MakeAsset(valueItem);
     }
 
     public void BeginDrawing(Point startPosition)
