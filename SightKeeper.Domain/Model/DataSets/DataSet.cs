@@ -13,9 +13,8 @@ public abstract class DataSet<TTag, TAsset, TAssetsLibrary> where TTag : Tag whe
 	public TAssetsLibrary Assets { get; }
 	public WeightsLibrary Weights { get; }
 
-	public void DeleteTag(TTag tag)
+	public virtual void DeleteTag(TTag tag)
 	{
-		// TODO check if tag is in use
 		bool isRemoved = _tags.Remove(tag);
 		Guard.IsTrue(isRemoved);
 	}
