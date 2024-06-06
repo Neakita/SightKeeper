@@ -2,11 +2,9 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DetectorAsset
+public sealed class DetectorAsset : Asset
 {
-    public AssetUsage Usage { get; set; } = AssetUsage.Any;
     public IReadOnlyList<DetectorItem> Items => _items;
-    public Screenshot Screenshot { get; }
 
     public DetectorItem CreateItem(Tag tag, Bounding bounding)
     {
@@ -32,9 +30,8 @@ public sealed class DetectorAsset
 	    _items.Clear();
     }
 
-    internal DetectorAsset(Screenshot screenshot)
+    internal DetectorAsset(Screenshot screenshot) : base(screenshot)
     {
-	    Screenshot = screenshot;
     }
 
     private readonly List<DetectorItem> _items = new();
