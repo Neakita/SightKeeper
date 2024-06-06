@@ -15,6 +15,7 @@ using DynamicData.Binding;
 using ReactiveUI;
 using Serilog;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
@@ -137,7 +138,7 @@ internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActiva
     private readonly SourceList<ScreenshotViewModel> _screenshotViewModels = new();
 
     [ObservableProperty, NotifyPropertyChangedFor(nameof(TotalScreenshotsCount))]
-    private DataSet? _dataSet;
+    private DetectorDataSet? _dataSet;
 
     private CompositeDisposable? _dataSetDisposable;
     private bool _isLoading;
@@ -147,7 +148,7 @@ internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActiva
     private readonly Subject<Unit> _actualizeFilterSubject = new();
     private readonly ILogger _logger = Log.ForContext<AnnotatorScreenshotsViewModel>();
 
-    partial void OnDataSetChanged(DataSet? value)
+    partial void OnDataSetChanged(DetectorDataSet? value)
     {
         _dataSetDisposable?.Dispose();
         _screenshotsSource.Clear();
@@ -156,7 +157,8 @@ internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActiva
         LoadScreenshots(value);
         _dataSetDisposable = new CompositeDisposable();
         _screenshotsDataAccess.ScreenshotAdded
-	        .Where(screenshot => _objectsLookupper.GetLibrary(screenshot) == value.Screenshots)
+	        .Where(data => data.library == value.Screenshots)
+	        .Select(data => data.screenshot)
             .Subscribe(OnScreenshotAdded)
             .DisposeWith(_dataSetDisposable);
         _screenshotsDataAccess.ScreenshotRemoved
@@ -166,7 +168,7 @@ internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActiva
         OnPropertyChanged(nameof(TotalScreenshotsCount));
     }
 
-    private void LoadScreenshots(DataSet dataSet)
+    private void LoadScreenshots(DetectorDataSet dataSet)
     {
         IsLoading = true;
         _screenshotsSource.AddRange(dataSet.Screenshots);

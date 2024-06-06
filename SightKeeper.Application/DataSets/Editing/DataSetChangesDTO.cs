@@ -1,11 +1,11 @@
 ﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
 public sealed class DataSetChangesDTO : DataSetChanges
 {
-    public DataSet DataSet { get; }
+    public DetectorDataSet DataSet { get; }
     public string Name { get; }
     public string Description { get; }
     public Game? Game { get; }
@@ -14,7 +14,7 @@ public sealed class DataSetChangesDTO : DataSetChanges
     public IReadOnlyCollection<EditedItemClass> EditedItemClasses { get; }
     public IReadOnlyCollection<DeletedItemClass> DeletedItemClasses { get; }
 
-    public DataSetChangesDTO(DataSet dataSet, DataSetChanges changes)
+    public DataSetChangesDTO(DetectorDataSet dataSet, DataSetChanges changes)
     {
         DataSet = dataSet;
         Name = changes.Name;
@@ -27,7 +27,7 @@ public sealed class DataSetChangesDTO : DataSetChanges
     }
     
     public DataSetChangesDTO(
-        DataSet dataSet,
+        DetectorDataSet dataSet,
         string name, string description, Game? game,
         IEnumerable<ItemClassInfo> newItemClasses,
         IEnumerable<EditedItemClass> editedItemClasses,

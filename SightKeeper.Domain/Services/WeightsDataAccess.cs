@@ -6,7 +6,7 @@ namespace SightKeeper.Domain.Services;
 
 public abstract class WeightsDataAccess : IDisposable
 {
-	public IObservable<Weights> WeightsCreated => _weightsCreated.AsObservable();
+	public IObservable<(WeightsLibrary library, Weights weights)> WeightsCreated => _weightsCreated.AsObservable();
 	public IObservable<Weights> WeightsRemoved => _weightsRemoved.AsObservable();
 
 	public abstract WeightsData LoadWeightsONNXData(Weights weights);
@@ -27,7 +27,7 @@ public abstract class WeightsDataAccess : IDisposable
 	{
 		var weights = library.CreateWeights(modelSize, metrics, itemClasses);
 		SaveWeightsData(weights, new WeightsData(onnxData), new WeightsData(ptData));
-		_weightsCreated.OnNext(weights);
+		_weightsCreated.OnNext((library, weights));
 		return weights;
 	}
 	public void RemoveWeights(Weights weights)
@@ -48,6 +48,6 @@ public abstract class WeightsDataAccess : IDisposable
 	protected abstract void RemoveWeightsData(Weights weights);
 
 	private readonly ObjectsLookupper _objectsLookupper;
-	private readonly Subject<Weights> _weightsCreated = new();
+	private readonly Subject<(WeightsLibrary, Weights)> _weightsCreated = new();
 	private readonly Subject<Weights> _weightsRemoved = new();
 }

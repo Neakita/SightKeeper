@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Model.DataSets;
+namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DataSet
+public sealed class DetectorDataSet
 {
 	public string Name { get; set; }
 	public string Description { get; set; }
@@ -10,17 +10,17 @@ public sealed class DataSet
 	public ushort Resolution { get; }
 	public IReadOnlySet<ItemClass> ItemClasses => _itemClasses;
 	public ScreenshotsLibrary Screenshots { get; }
-	public AssetsLibrary Assets { get; }
+	public DetectorAssetsLibrary DetectorAssets { get; }
 	public WeightsLibrary Weights { get; }
 
-	public DataSet(string name, ushort resolution = 320)
+	public DetectorDataSet(string name, ushort resolution = 320)
 	{
 		Name = name;
 		Description = string.Empty;
 		Resolution = resolution;
 		Screenshots = new ScreenshotsLibrary();
 		Weights = new WeightsLibrary();
-		Assets = new AssetsLibrary();
+		DetectorAssets = new DetectorAssetsLibrary();
 	}
 	public ItemClass CreateItemClass(string name, uint color)
 	{

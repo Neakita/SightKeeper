@@ -1,5 +1,6 @@
 ﻿using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Annotating;
@@ -12,7 +13,7 @@ public sealed class Screenshoter
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public Screenshot MakeScreenshot(DataSet dataSet)
+	public Screenshot MakeScreenshot(DetectorDataSet dataSet)
 	{
 		return MakeScreenshot(dataSet.Screenshots, dataSet.Resolution, dataSet.Game);
 	}

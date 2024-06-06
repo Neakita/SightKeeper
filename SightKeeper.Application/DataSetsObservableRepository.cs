@@ -5,13 +5,14 @@ using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Application;
 
 public sealed class DataSetsObservableRepository : IDisposable
 {
-    public ReadOnlyCollection<DataSet> DataSets { get; }
-    public IObservableList<DataSet> DataSetsSource => _source;
+    public ReadOnlyCollection<DetectorDataSet> DataSets { get; }
+    public IObservableList<DetectorDataSet> DataSetsSource => _source;
 
     public DataSetsObservableRepository(DataSetCreator dataSetCreator, DataSetsDataAccess dataSetsDataAccess)
     {
@@ -35,9 +36,9 @@ public sealed class DataSetsObservableRepository : IDisposable
         _constructorDisposables.Dispose();
     }
 
-    private readonly SourceList<DataSet> _source = new();
+    private readonly SourceList<DetectorDataSet> _source = new();
     private readonly CompositeDisposable _constructorDisposables = new();
 
-    private void OnDataSetCreated(DataSet dataSet) => _source.Add(dataSet);
-    private void OnDataSetRemoved(DataSet dataSet) => _source.Remove(dataSet);
+    private void OnDataSetCreated(DetectorDataSet dataSet) => _source.Add(dataSet);
+    private void OnDataSetRemoved(DetectorDataSet dataSet) => _source.Remove(dataSet);
 }

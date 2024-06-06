@@ -2,6 +2,7 @@
 using FlakeId;
 using Microsoft.EntityFrameworkCore;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services;
@@ -50,7 +51,7 @@ public sealed class DbScreenshotsDataAccess : ScreenshotsDataAccess
 		query = query.OrderBy(tuple => orderLookup[tuple.screenshot]);
 		return query;
 	}
-	public override IEnumerable<(Screenshot screenshot, Image image)> LoadImages(DataSet dataSet)
+	public override IEnumerable<(Screenshot screenshot, Image image)> LoadImages(DetectorDataSet dataSet)
 	{
 		var unsavedMatchingImages = _unsavedImages
 			.Where(pair => _objectsLookupper.GetLibrary(pair.Key) == dataSet.Screenshots)

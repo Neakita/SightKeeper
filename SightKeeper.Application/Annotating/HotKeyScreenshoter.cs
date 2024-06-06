@@ -2,12 +2,13 @@
 using SharpHook.Native;
 using SightKeeper.Application.Input;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Application.Annotating;
 
 public sealed class HotKeyScreenshoter : StreamScreenshoter
 {
-    public DataSet? DataSet
+    public DetectorDataSet? DataSet
     {
 	    get => _dataSet;
         set
@@ -56,7 +57,7 @@ public sealed class HotKeyScreenshoter : StreamScreenshoter
     private readonly SharpHookHotKeyManager _sharpHookHotKeyManager;
     private readonly Screenshoter _screenshoter;
 
-    private DataSet? _dataSet;
+    private DetectorDataSet? _dataSet;
     private IDisposable? _disposable;
     private bool _isEnabled;
     private byte _framesPerSecond;

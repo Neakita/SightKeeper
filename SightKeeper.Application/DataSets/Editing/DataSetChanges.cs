@@ -1,10 +1,10 @@
-﻿using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
 public interface DataSetChanges : DataSetInfo
 {
-    DataSet DataSet { get; }
+    DetectorDataSet DataSet { get; }
     IReadOnlyCollection<ItemClassInfo> NewItemClasses { get; }
     IReadOnlyCollection<EditedItemClass> EditedItemClasses { get; }
     IReadOnlyCollection<DeletedItemClass> DeletedItemClasses { get; }

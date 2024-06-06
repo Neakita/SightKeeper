@@ -1,29 +1,29 @@
 ﻿using System.Collections;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Model.DataSets;
+namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class AssetsLibrary : IReadOnlyCollection<Asset>
+public sealed class DetectorAssetsLibrary : IReadOnlyCollection<DetectorAsset>
 {
 	public int Count => _assets.Count;
 
-	public IEnumerator<Asset> GetEnumerator()
+	public IEnumerator<DetectorAsset> GetEnumerator()
 	{
 		return _assets.GetEnumerator();
 	}
 
-	public Asset MakeAsset(Screenshot screenshot)
+	public DetectorAsset MakeAsset(Screenshot screenshot)
 	{
 		// TODO
 		/*Guard.IsNull(screenshot.Asset);
 		screenshot.Asset = new Asset(screenshot);*/
-		Asset asset = new(screenshot);
+		DetectorAsset asset = new(screenshot);
 		bool isAdded = _assets.Add(asset);
 		Guard.IsTrue(isAdded);
 		return asset;
 	}
 
-	public void DeleteAsset(Asset asset)
+	public void DeleteAsset(DetectorAsset asset)
 	{
 		// TODO
 		var isRemoved = _assets.Remove(asset);
@@ -32,7 +32,7 @@ public sealed class AssetsLibrary : IReadOnlyCollection<Asset>
 		/*asset.Screenshot.Asset = null;*/
 	}
 
-	private readonly HashSet<Asset> _assets = new();
+	private readonly HashSet<DetectorAsset> _assets = new();
 
 	IEnumerator IEnumerable.GetEnumerator()
 	{

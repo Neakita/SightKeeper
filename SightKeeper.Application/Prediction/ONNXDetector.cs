@@ -5,6 +5,7 @@ using Compunet.YoloV8.Data;
 using Compunet.YoloV8.Metadata;
 using SerilogTimings;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using RectangleF = System.Drawing.RectangleF;
@@ -102,7 +103,7 @@ public sealed class ONNXDetector : Detector
 	    _objectsLookupper = objectsLookupper;
     }
 
-    private static YoloV8Metadata CreateMetadata(DataSet dataSet) => new(
+    private static YoloV8Metadata CreateMetadata(DetectorDataSet dataSet) => new(
         string.Empty, string.Empty, string.Empty,
         YoloV8Task.Detect,
         1,

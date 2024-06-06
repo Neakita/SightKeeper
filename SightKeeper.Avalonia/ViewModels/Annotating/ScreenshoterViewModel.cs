@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Annotating;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -10,7 +11,7 @@ internal sealed class ScreenshoterViewModel : ViewModel
 {
     public IObservable<bool> IsEnabledChanged => _isEnabledChanged;
 
-    public DataSet? DataSet
+    public DetectorDataSet? DataSet
     {
         get => _screenshoter.DataSet;
         set

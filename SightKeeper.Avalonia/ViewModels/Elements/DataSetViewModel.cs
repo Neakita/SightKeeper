@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using DynamicData;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
@@ -19,7 +20,7 @@ internal sealed class DataSetViewModel : ViewModel, IDisposable
         nameof(Resolution)
     };
     
-    public DataSet DataSet { get; }
+    public DetectorDataSet DataSet { get; }
     public string Name => DataSet.Name;
     public string Description => DataSet.Description;
     public Game? Game => DataSet.Game;
@@ -27,7 +28,7 @@ internal sealed class DataSetViewModel : ViewModel, IDisposable
     public IReadOnlyCollection<ItemClass> ItemClasses { get; }
     public IReadOnlyCollection<Weights> Weights { get; }
 
-    public DataSetViewModel(DataSet dataSet, WeightsDataAccess weightsDataAccess, ObjectsLookupper objectsLookupper)
+    public DataSetViewModel(DetectorDataSet dataSet, WeightsDataAccess weightsDataAccess, ObjectsLookupper objectsLookupper)
     {
         DataSet = dataSet;
         _itemClasses.Connect()
@@ -43,8 +44,8 @@ internal sealed class DataSetViewModel : ViewModel, IDisposable
             .DisposeWith(_constructorDisposables);
         Weights = weights;
         weightsDataAccess.WeightsCreated
-            .Where(w => objectsLookupper.GetDataSet(objectsLookupper.GetLibrary(w)) == DataSet)
-            .Subscribe(w => _weights.Add(w))
+            .Where(data => objectsLookupper.GetDataSet(data.library) == DataSet)
+            .Subscribe(data => _weights.Add(data.weights))
             .DisposeWith(_constructorDisposables);
         weightsDataAccess.WeightsRemoved
             .Where(w => objectsLookupper.GetDataSet(objectsLookupper.GetLibrary(w)) == DataSet)

@@ -19,6 +19,7 @@ using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.MessageBoxDialog;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.ItemClass;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
@@ -30,10 +31,10 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
         _itemClasses.Select(itemClass => itemClass.ToItemClassInfo()).ToList();
     public IReadOnlyCollection<EditableItemClass> ItemClasses => _itemClasses;
     public IReadOnlyCollection<Game> Games => _gamesDataAccess.Games;
-    public Domain.Model.DataSets.DataSet DataSet { get; private set; }
+    public DetectorDataSet DataSet { get; private set; }
 
     public DataSetEditingViewModel(
-	    Domain.Model.DataSets.DataSet dataSet,
+	    DetectorDataSet dataSet,
 	    IValidator<DataSetChanges> validator,
 	    GamesDataAccess gamesDataAccess,
 	    DialogManager dialogManager,
@@ -53,7 +54,7 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
     }
 
     [MemberNotNull(nameof(DataSet))]
-    private void SetData(Domain.Model.DataSets.DataSet dataSet)
+    private void SetData(DetectorDataSet dataSet)
     {
         DataSet = dataSet;
         _itemClasses.Clear();

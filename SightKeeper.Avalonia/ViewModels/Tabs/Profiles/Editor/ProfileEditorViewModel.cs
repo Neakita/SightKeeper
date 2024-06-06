@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
@@ -13,7 +14,7 @@ internal interface ProfileEditorViewModel
         StabilizationMethod.Mean
     ];
 
-    IReadOnlyCollection<DataSet> AvailableDataSets { get; }
+    IReadOnlyCollection<DetectorDataSet> AvailableDataSets { get; }
     IReadOnlyCollection<Weights> AvailableWeights { get; }
     IReadOnlyCollection<ItemClass> AvailableItemClasses { get; }
 
@@ -29,7 +30,7 @@ internal interface ProfileEditorViewModel
     bool IsPreemptionStabilizationEnabled { get; set; }
     byte? PreemptionStabilizationBufferSize { get; set; }
     StabilizationMethod? PreemptionStabilizationMethod { get; set; }
-    DataSet? DataSet { get; set; }
+    DetectorDataSet? DataSet { get; set; }
     Weights? Weights { get; set; }
     IReadOnlyList<ProfileItemClassViewModel> ItemClasses { get; }
     ItemClass? ItemClassToAdd { get; set; }

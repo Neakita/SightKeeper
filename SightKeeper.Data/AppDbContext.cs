@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using SightKeeper.Data.Configuration;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Data;
 
 public class AppDbContext : DbContext
 {
-	public DbSet<DataSet> DataSets { get; set; } = null!;
+	public DbSet<DetectorDataSet> DataSets { get; set; } = null!;
 	public DbSet<Game> Games { get; set; } = null!;
 	public DbSet<Profile> Profiles { get; set; } = null!;
 	public DbSet<Image> Images { get; set; } = null!;

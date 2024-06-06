@@ -20,7 +20,7 @@ internal sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel
             .DisposeWith(_disposable);
         Weights = weights;
         weightsDataAccess.WeightsCreated
-            .Subscribe(newWeights => _weights.Add(newWeights))
+            .Subscribe(data => _weights.Add(data.weights))
             .DisposeWith(_disposable);
         weightsDataAccess.WeightsRemoved
             .Subscribe(deletedWeights => _weights.Remove(deletedWeights))

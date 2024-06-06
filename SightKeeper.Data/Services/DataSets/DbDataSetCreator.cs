@@ -4,12 +4,13 @@ using FluentValidation;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Data.Services.DataSets;
 
 public sealed class DbDataSetCreator : DataSetCreator
 {
-    public IObservable<DataSet> DataSetCreated => _dataSetCreated.AsObservable();
+    public IObservable<DetectorDataSet> DataSetCreated => _dataSetCreated.AsObservable();
     
     public DbDataSetCreator(IValidator<DataSetInfo> validator, AppDbContext dbContext)
     {
@@ -17,10 +18,10 @@ public sealed class DbDataSetCreator : DataSetCreator
         _dbContext = dbContext;
     }
 
-    public DataSet CreateDataSet(NewDataSetInfoDTO newDataSetInfo)
+    public DetectorDataSet CreateDataSet(NewDataSetInfoDTO newDataSetInfo)
     {
         _validator.ValidateAndThrow(newDataSetInfo);
-        DataSet dataSet = new(newDataSetInfo.Name, newDataSetInfo.Resolution);
+        DetectorDataSet dataSet = new(newDataSetInfo.Name, newDataSetInfo.Resolution);
         dataSet.Description = newDataSetInfo.Description;
         foreach (var itemClass in newDataSetInfo.ItemClasses)
             dataSet.CreateItemClass(itemClass.Name, itemClass.Color);
@@ -33,6 +34,6 @@ public sealed class DbDataSetCreator : DataSetCreator
     
     private readonly IValidator<NewDataSetInfo> _validator;
     private readonly AppDbContext _dbContext;
-    private readonly Subject<DataSet> _dataSetCreated = new();
+    private readonly Subject<DetectorDataSet> _dataSetCreated = new();
 }
 

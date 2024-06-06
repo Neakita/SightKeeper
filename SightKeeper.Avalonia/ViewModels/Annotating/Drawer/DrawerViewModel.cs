@@ -6,6 +6,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
@@ -69,10 +70,10 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
         }).DisposeWith(_disposable);
     }
 
-    private Asset GetOrMakeAsset(Screenshot valueItem)
+    private DetectorAsset GetOrMakeAsset(Screenshot valueItem)
     {
 	    return _objectsLookupper.GetOptionalAsset(valueItem) ??
-	           _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(valueItem)).Assets.MakeAsset(valueItem);
+	           _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(valueItem)).DetectorAssets.MakeAsset(valueItem);
     }
 
     public void BeginDrawing(Point startPosition)

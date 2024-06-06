@@ -1,13 +1,14 @@
 ﻿using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Application.DataSets;
 
 public interface DataSetsDataAccess
 {
-	IObservable<DataSet> DataSetAdded { get; }
-	IObservable<DataSet> DataSetRemoved { get; }
-	IEnumerable<DataSet> DataSets { get; }
+	IObservable<DetectorDataSet> DataSetAdded { get; }
+	IObservable<DetectorDataSet> DataSetRemoved { get; }
+	IEnumerable<DetectorDataSet> DataSets { get; }
 
-	void AddDataSet(DataSet dataSet);
-	void RemoveDataSet(DataSet dataSet);
+	void AddDataSet(DetectorDataSet dataSet);
+	void RemoveDataSet(DetectorDataSet dataSet);
 }

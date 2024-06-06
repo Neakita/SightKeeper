@@ -5,6 +5,7 @@ using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
@@ -34,7 +35,7 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
     public void Dispose() => _disposable.Dispose();
 
     private readonly CompositeDisposable _disposable = new();
-    private readonly SourceCache<DataSetViewModel, DataSet> _cache = new(viewModel => viewModel.DataSet);
+    private readonly SourceCache<DataSetViewModel, DetectorDataSet> _cache = new(viewModel => viewModel.DataSet);
 
-    private void OnDataSetEdited(DataSet dataSet) => _cache.Lookup(dataSet).Value.NotifyChanges();
+    private void OnDataSetEdited(DetectorDataSet dataSet) => _cache.Lookup(dataSet).Value.NotifyChanges();
 }

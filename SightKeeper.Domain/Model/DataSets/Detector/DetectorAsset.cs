@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Model.DataSets;
+namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class Asset
+public sealed class DetectorAsset
 {
     public AssetUsage Usage { get; set; } = AssetUsage.Any;
     public IReadOnlyList<DetectorItem> Items => _items;
@@ -32,7 +32,7 @@ public sealed class Asset
 	    _items.Clear();
     }
 
-    internal Asset(Screenshot screenshot)
+    internal DetectorAsset(Screenshot screenshot)
     {
 	    Screenshot = screenshot;
     }

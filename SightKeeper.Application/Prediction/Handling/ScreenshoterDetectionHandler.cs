@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Prediction.Handling;
@@ -8,7 +9,7 @@ public sealed class ScreenshoterDetectionHandler : DetectionObserver
 {
     public IObservable<float?> RequestedProbabilityThreshold => _parameters.ObservableMinimumProbability.Select(value => (float?)value);
     
-    public ScreenshoterDetectionHandler(DataSet dataSet, DetectionScreenshotingParameters parameters, ScreenshotsDataAccess screenshotsDataAccess)
+    public ScreenshoterDetectionHandler(DetectorDataSet dataSet, DetectionScreenshotingParameters parameters, ScreenshotsDataAccess screenshotsDataAccess)
     {
         _dataSet = dataSet;
         _parameters = parameters;
@@ -21,7 +22,7 @@ public sealed class ScreenshoterDetectionHandler : DetectionObserver
             MakeScreenshot(data);
     }
 
-    private readonly DataSet _dataSet;
+    private readonly DetectorDataSet _dataSet;
     private readonly DetectionScreenshotingParameters _parameters;
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
     private DateTime _lastScreenshotTime = DateTime.UtcNow;

@@ -3,22 +3,23 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Data.Services.DataSets;
 
 public sealed class DbDataSetsDataAccess : DataSetsDataAccess
 {
-    public IObservable<DataSet> DataSetAdded => _dataSetAdded.AsObservable();
-    public IObservable<DataSet> DataSetRemoved => _dataSetRemoved.AsObservable();
-    public IEnumerable<DataSet> DataSets => _dataSets;
+    public IObservable<DetectorDataSet> DataSetAdded => _dataSetAdded.AsObservable();
+    public IObservable<DetectorDataSet> DataSetRemoved => _dataSetRemoved.AsObservable();
+    public IEnumerable<DetectorDataSet> DataSets => _dataSets;
     
     public DbDataSetsDataAccess(AppDbContext dbContext)
     {
         _dbContext = dbContext;
-        _dataSets = new HashSet<DataSet>(_dbContext.DataSets);
+        _dataSets = new HashSet<DetectorDataSet>(_dbContext.DataSets);
     }
 
-    public void AddDataSet(DataSet dataSet)
+    public void AddDataSet(DetectorDataSet dataSet)
     {
 	    bool isAdded = _dataSets.Add(dataSet);
 	    Guard.IsTrue(isAdded);
@@ -26,7 +27,7 @@ public sealed class DbDataSetsDataAccess : DataSetsDataAccess
         _dataSetAdded.OnNext(dataSet);
     }
 
-    public void RemoveDataSet(DataSet dataSet)
+    public void RemoveDataSet(DetectorDataSet dataSet)
     {
 	    var isRemoved = _dataSets.Remove(dataSet);
 	    Guard.IsTrue(isRemoved);
@@ -35,7 +36,7 @@ public sealed class DbDataSetsDataAccess : DataSetsDataAccess
     }
 
     private readonly AppDbContext _dbContext;
-    private readonly HashSet<DataSet> _dataSets;
-    private readonly Subject<DataSet> _dataSetAdded = new();
-    private readonly Subject<DataSet> _dataSetRemoved = new();
+    private readonly HashSet<DetectorDataSet> _dataSets;
+    private readonly Subject<DetectorDataSet> _dataSetAdded = new();
+    private readonly Subject<DetectorDataSet> _dataSetRemoved = new();
 }

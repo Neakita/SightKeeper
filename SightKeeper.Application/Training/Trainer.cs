@@ -2,6 +2,7 @@
 using Serilog;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Training;
@@ -29,7 +30,7 @@ public sealed class Trainer
 	public bool AMP { get; set; } = true;
 
 	public async Task<Weights?> TrainFromScratchAsync(
-		DataSet dataSet,
+		DetectorDataSet dataSet,
 		ModelSize modelSize,
 		uint epochs,
 		ushort patience,
@@ -37,7 +38,7 @@ public sealed class Trainer
 		CancellationToken cancellationToken = default)
 	{
 		PrepareDataDirectory();
-		_assetsExporter.Export(DataDirectoryPath, dataSet.Assets, dataSet.ItemClasses);
+		_assetsExporter.Export(DataDirectoryPath, dataSet.DetectorAssets, dataSet.ItemClasses);
 		await ExportDataSet(dataSet, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);
 		CLITrainerArguments arguments = new(DataSetPath, modelSize, epochs, patience, dataSet.Resolution, false, AMP);
@@ -65,7 +66,7 @@ public sealed class Trainer
 	{
 		PrepareDataDirectory();
 		var dataSet = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(weights));
-		_assetsExporter.Export(DataDirectoryPath, dataSet.Assets, dataSet.ItemClasses);
+		_assetsExporter.Export(DataDirectoryPath, dataSet.DetectorAssets, dataSet.ItemClasses);
 		await ExportDataSet(dataSet, cancellationToken);
 		await ExportWeights(weights, cancellationToken);
 		await using var runsDirectoryReplacement = await YoloCLIExtensions.TemporarilyReplaceRunsDirectory(Path.GetFullPath(RunsDirectoryPath), Logger);
@@ -98,7 +99,7 @@ public sealed class Trainer
 		Logger.Information("Created data directory: {DataDirectoryPath}", DataDirectoryPath);
 	}
 
-	private async Task ExportDataSet(DataSet dataSet, CancellationToken cancellationToken)
+	private async Task ExportDataSet(DetectorDataSet dataSet, CancellationToken cancellationToken)
 	{
 		DataSetConfigurationParameters dataSetParameters = new(Path.GetFullPath(DataDirectoryPath), dataSet.ItemClasses);
 		await _dataSetConfigurationExporter.Export(DataSetPath, dataSetParameters, cancellationToken);
@@ -110,7 +111,7 @@ public sealed class Trainer
 		await File.WriteAllBytesAsync(WeightsToResumeTrainingOnPath, data.Content, cancellationToken);
 	}
 	
-	private async Task<Weights> SaveWeights(DataSet dataSet, WeightsMetrics lastWeightsMetrics, ModelSize modelSize, CancellationToken cancellationToken)
+	private async Task<Weights> SaveWeights(DetectorDataSet dataSet, WeightsMetrics lastWeightsMetrics, ModelSize modelSize, CancellationToken cancellationToken)
 	{
 		var runDirectory = Directory.GetDirectories(RunsDirectoryPath).Single();
 		var ptModelPath = Path.Combine(runDirectory, "train", "weights", "last.pt");

@@ -14,6 +14,7 @@ using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
@@ -21,7 +22,7 @@ namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : DialogViewModel<ProfileEditorResult>, INotifyDataErrorInfo, ProfileEditorViewModel where TProfileData : class, ProfileData
 {
 	protected readonly ViewModelValidator<TProfileData> Validator;
-    public IReadOnlyCollection<DataSet> AvailableDataSets { get; }
+    public IReadOnlyCollection<DetectorDataSet> AvailableDataSets { get; }
 
     public IReadOnlyCollection<Weights> AvailableWeights
     {
@@ -131,7 +132,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
         set => SetProperty(PostProcessDelay.TotalMilliseconds, value, newValue => _postProcessDelay = TimeSpan.FromMilliseconds(newValue));
     }
 
-    public DataSet? DataSet
+    public DetectorDataSet? DataSet
     {
         get => _dataSet;
         set
@@ -185,7 +186,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     protected readonly SourceList<ProfileItemClassViewModel> ItemClassesSource = new();
     private readonly SourceList<ItemClass> _availableItemClasses = new();
     private readonly bool _canDelete;
-    private DataSet? _dataSet;
+    private DetectorDataSet? _dataSet;
     private Weights? _weights;
     private float _mouseSensitivity = 1;
     private float _detectionThreshold = 0.6f;

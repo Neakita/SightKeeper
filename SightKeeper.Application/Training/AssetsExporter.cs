@@ -3,6 +3,7 @@ using System.Globalization;
 using Serilog;
 using SerilogTimings.Extensions;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using Image = SixLabors.ImageSharp.Image;
@@ -20,7 +21,7 @@ public sealed class AssetsExporter
 
 	public void Export(
 		string targetDirectoryPath,
-		IReadOnlyCollection<Asset> assets,
+		IReadOnlyCollection<DetectorAsset> assets,
 		IReadOnlyCollection<ItemClass> itemClasses)
 	{
 		var imagesDirectoryPath = Path.Combine(targetDirectoryPath, "images");
@@ -62,7 +63,7 @@ public sealed class AssetsExporter
 
 	private void ExportLabels(
 		string directoryPath,
-		ImmutableList<Asset> assets,
+		ImmutableList<DetectorAsset> assets,
 		IReadOnlyCollection<ItemClass> itemClasses)
 	{
 		Directory.CreateDirectory(directoryPath);
@@ -80,7 +81,7 @@ public sealed class AssetsExporter
 		operation.Complete();
 	}
 
-	private void ExportLabels(string directoryPath, Asset asset, int assetIndex, Dictionary<ItemClass, byte> itemClasses)
+	private void ExportLabels(string directoryPath, DetectorAsset asset, int assetIndex, Dictionary<ItemClass, byte> itemClasses)
 	{
 		if (!asset.Items.Any())
 			return;
@@ -90,7 +91,7 @@ public sealed class AssetsExporter
 
 	private void ExportLabels(
 		string path,
-		Asset asset,
+		DetectorAsset asset,
 		Dictionary<ItemClass, byte> itemClasses)
 	{
 		var content = string.Join('\n', asset.Items.Select(item => GetDetectorItemLabel(item, itemClasses)));

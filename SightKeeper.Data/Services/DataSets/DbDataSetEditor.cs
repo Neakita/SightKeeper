@@ -3,13 +3,14 @@ using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Services.DataSets;
 
 public sealed class DbDataSetEditor : DataSetEditor
 {
-    public IObservable<DataSet> DataSetEdited => _dataSetEdited;
+    public IObservable<DetectorDataSet> DataSetEdited => _dataSetEdited;
     
     public DbDataSetEditor(IValidator<DataSetChanges> changesValidator, AppDbContext dbContext, ObjectsLookupper objectsLookupper)
     {
@@ -102,7 +103,7 @@ public sealed class DbDataSetEditor : DataSetEditor
             changes.DataSet.CreateItemClass(newItemClass.Name, newItemClass.Color);
     }
 
-    private readonly Subject<DataSet> _dataSetEdited = new();
+    private readonly Subject<DetectorDataSet> _dataSetEdited = new();
     private readonly IValidator<DataSetChangesDTO> _changesValidator;
     private readonly AppDbContext _dbContext;
     private readonly ObjectsLookupper _objectsLookupper;

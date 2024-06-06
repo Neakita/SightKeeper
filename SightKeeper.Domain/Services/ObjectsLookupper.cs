@@ -1,4 +1,5 @@
 ﻿using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Domain.Services;
 
@@ -6,12 +7,12 @@ public interface ObjectsLookupper
 {
 	ScreenshotsLibrary GetLibrary(Screenshot screenshot);
 	WeightsLibrary GetLibrary(Weights weights);
-	AssetsLibrary GetLibrary(Asset screenshot);
+	DetectorAssetsLibrary GetLibrary(DetectorAsset screenshot);
 	IReadOnlyCollection<DetectorItem> GetItems(ItemClass itemClass);
-	DataSet GetDataSet(ItemClass itemClass);
-	Asset GetAsset(DetectorItem item);
-	Asset? GetOptionalAsset(Screenshot screenshot);
-	DataSet GetDataSet(WeightsLibrary weightsLibrary);
-	Asset GetAsset(Screenshot screenshot);
-	DataSet GetDataSet(ScreenshotsLibrary screenshotsLibrary);
+	DetectorDataSet GetDataSet(ItemClass itemClass);
+	DetectorAsset GetAsset(DetectorItem item);
+	DetectorAsset? GetOptionalAsset(Screenshot screenshot);
+	DetectorDataSet GetDataSet(WeightsLibrary weightsLibrary);
+	DetectorAsset GetAsset(Screenshot screenshot);
+	DetectorDataSet GetDataSet(ScreenshotsLibrary screenshotsLibrary);
 }

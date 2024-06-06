@@ -1,9 +1,9 @@
-﻿using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Application.DataSets.Creating;
 
 public interface DataSetCreator
 {
-    IObservable<DataSet> DataSetCreated { get; }
-    DataSet CreateDataSet(NewDataSetInfoDTO newDataSetInfo);
+    IObservable<DetectorDataSet> DataSetCreated { get; }
+    DetectorDataSet CreateDataSet(NewDataSetInfoDTO newDataSetInfo);
 }
