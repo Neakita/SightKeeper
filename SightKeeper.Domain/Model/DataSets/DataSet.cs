@@ -13,16 +13,6 @@ public abstract class DataSet<TTag, TAsset, TAssetsLibrary> where TTag : Tag whe
 	public TAssetsLibrary DetectorAssets { get; }
 	public WeightsLibrary Weights { get; }
 
-	public DataSet(TAssetsLibrary assetsLibrary, string name, ushort resolution)
-	{
-		Name = name;
-		Description = string.Empty;
-		Resolution = resolution;
-		Screenshots = new ScreenshotsLibrary();
-		Weights = new WeightsLibrary();
-		DetectorAssets = assetsLibrary;
-	}
-
 	public void DeleteTag(TTag tag)
 	{
 		// TODO check if tag is in use
@@ -31,6 +21,16 @@ public abstract class DataSet<TTag, TAsset, TAssetsLibrary> where TTag : Tag whe
 	}
 
 	public override string ToString() => Name;
+
+	protected DataSet(TAssetsLibrary assetsLibrary, string name, ushort resolution)
+	{
+		Name = name;
+		Description = string.Empty;
+		Resolution = resolution;
+		Screenshots = new ScreenshotsLibrary();
+		Weights = new WeightsLibrary();
+		DetectorAssets = assetsLibrary;
+	}
 
 	protected void AddTag(TTag tag)
 	{
