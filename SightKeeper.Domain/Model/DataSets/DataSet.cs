@@ -1,0 +1,42 @@
+﻿using CommunityToolkit.Diagnostics;
+
+namespace SightKeeper.Domain.Model.DataSets;
+
+public abstract class DataSet<TTag, TAsset, TAssetsLibrary> where TTag : Tag where TAsset : Asset where TAssetsLibrary : AssetsLibrary<TAsset>
+{
+	public string Name { get; set; }
+	public string Description { get; set; }
+	public Game? Game { get; set; }
+	public ushort Resolution { get; }
+	public IReadOnlySet<TTag> Tags => _tags;
+	public ScreenshotsLibrary Screenshots { get; }
+	public TAssetsLibrary DetectorAssets { get; }
+	public WeightsLibrary Weights { get; }
+
+	public DataSet(TAssetsLibrary assetsLibrary, string name, ushort resolution)
+	{
+		Name = name;
+		Description = string.Empty;
+		Resolution = resolution;
+		Screenshots = new ScreenshotsLibrary();
+		Weights = new WeightsLibrary();
+		DetectorAssets = assetsLibrary;
+	}
+
+	public void DeleteTag(TTag tag)
+	{
+		// TODO check if tag is in use
+		bool isRemoved = _tags.Remove(tag);
+		Guard.IsTrue(isRemoved);
+	}
+
+	public override string ToString() => Name;
+
+	protected void AddTag(TTag tag)
+	{
+		bool isAdded = _tags.Add(tag);
+		Guard.IsTrue(isAdded);
+	}
+
+	private readonly SortedSet<TTag> _tags = new(TagNameComparer.Instance);
+}

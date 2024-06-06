@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.Model.DataSets;
 
-public sealed class Tag
+public class Tag
 {
 	public string Name { get; set; }
 	public uint Color { get; set; }
