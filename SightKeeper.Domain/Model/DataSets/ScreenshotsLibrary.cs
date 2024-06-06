@@ -4,9 +4,10 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
-public sealed class ScreenshotsLibrary : IEnumerable<Screenshot>
+public sealed class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
 {
     public ushort? MaxQuantity { get; set; }
+    public int Count => _screenshots.Count;
 
     public void DeleteScreenshot(Screenshot screenshot)
     {
