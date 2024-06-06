@@ -1,32 +1,15 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-namespace SightKeeper.Domain.Model.DataSets.Detector;
-
-public sealed class DetectorAsset : Asset
+public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 {
-    public IReadOnlyList<DetectorItem> Items => _items;
-
     public DetectorItem CreateItem(Tag tag, Bounding bounding)
     {
         DetectorItem item = new(tag, bounding);
-        _items.Add(item);
+        AddItem(item);
         return item;
-    }
-
-    public void DeleteItem(DetectorItem item)
-    {
-	    var isRemoved = _items.Remove(item);
-	    Guard.IsTrue(isRemoved);
-    }
-
-    public void ClearItems()
-    {
-	    _items.Clear();
     }
 
     internal DetectorAsset(Screenshot screenshot) : base(screenshot)
     {
     }
-
-    private readonly List<DetectorItem> _items = new();
 }
