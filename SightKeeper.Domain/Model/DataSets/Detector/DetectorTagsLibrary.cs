@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DetectorTagsLibrary : TagsLibrary<Tag>
+public sealed class DetectorTagsLibrary : TagsLibrary<DetectorTag>
 {
 	public DetectorDataSet DataSet { get; }
 	
@@ -13,7 +13,7 @@ public sealed class DetectorTagsLibrary : TagsLibrary<Tag>
 		return tag;
 	}
 
-	public override void DeleteTag(Tag tag)
+	public override void DeleteTag(DetectorTag tag)
 	{
 		bool isTagInUse = DataSet.Assets.SelectMany(asset => asset.Items).Any(item => item.Tag == tag);
 		Guard.IsFalse(isTagInUse);

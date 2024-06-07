@@ -2,7 +2,7 @@
 
 public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 {
-    public DetectorItem CreateItem(Tag tag, Bounding bounding)
+    public DetectorItem CreateItem(DetectorTag tag, Bounding bounding)
     {
         DetectorItem item = new(tag, bounding);
         AddItem(item);

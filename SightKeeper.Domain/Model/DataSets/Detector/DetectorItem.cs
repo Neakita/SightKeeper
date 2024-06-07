@@ -1,11 +1,11 @@
 ﻿namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public class DetectorItem
+public sealed class DetectorItem
 {
-	public Tag Tag { get; set; }
+	public DetectorTag Tag { get; set; }
 	public Bounding Bounding { get; set; }
 	
-	internal DetectorItem(Tag tag, Bounding bounding)
+	internal DetectorItem(DetectorTag tag, Bounding bounding)
 	{
 		Tag = tag;
 		Bounding = bounding;
