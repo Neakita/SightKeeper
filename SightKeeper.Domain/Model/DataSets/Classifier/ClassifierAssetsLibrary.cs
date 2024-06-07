@@ -8,4 +8,8 @@ public class ClassifierAssetsLibrary : AssetsLibrary<ClassifierAsset>
 		AddAsset(asset);
 		return asset;
 	}
+
+	internal ClassifierAssetsLibrary()
+	{
+	}
 }

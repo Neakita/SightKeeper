@@ -8,4 +8,8 @@ public sealed class DetectorAssetsLibrary : AssetsLibrary<DetectorAsset>
 		AddAsset(asset);
 		return asset;
 	}
+
+	internal DetectorAssetsLibrary()
+	{
+	}
 }

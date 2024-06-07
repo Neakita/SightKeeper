@@ -9,7 +9,7 @@ public sealed class PoserAsset : ItemsAsset<PoserItem>
 		return item;
 	}
 	
-	public PoserAsset(Screenshot screenshot) : base(screenshot)
+	internal PoserAsset(Screenshot screenshot) : base(screenshot)
 	{
 	}
 }

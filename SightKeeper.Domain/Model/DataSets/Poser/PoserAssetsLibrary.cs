@@ -8,4 +8,8 @@ public sealed class PoserAssetsLibrary : AssetsLibrary<PoserAsset>
 		AddAsset(asset);
 		return asset;
 	}
+
+	internal PoserAssetsLibrary()
+	{
+	}
 }
