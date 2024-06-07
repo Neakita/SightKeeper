@@ -2,8 +2,10 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Poser;
 
-public sealed class PoserDataSet : DataSet<PoserTag, PoserAsset, PoserAssetsLibrary>
+public sealed class PoserDataSet : DataSet<PoserTag>
 {
+	public PoserAssetsLibrary Assets { get; }
+
 	public PoserTag CreateTag(string name, uint color)
 	{
 		PoserTag tag = new(name, color);
@@ -18,7 +20,8 @@ public sealed class PoserDataSet : DataSet<PoserTag, PoserAsset, PoserAssetsLibr
 		base.DeleteTag(tag);
 	}
 
-	public PoserDataSet(string name, ushort resolution) : base(new PoserAssetsLibrary(), name, resolution)
+	public PoserDataSet(string name, ushort resolution) : base(name, resolution)
 	{
+		Assets = new PoserAssetsLibrary();
 	}
 }

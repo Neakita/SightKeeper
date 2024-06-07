@@ -2,8 +2,10 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DetectorDataSet : DataSet<Tag, DetectorAsset, DetectorAssetsLibrary>
+public sealed class DetectorDataSet : DataSet<Tag>
 {
+	public DetectorAssetsLibrary Assets { get; }
+
 	public Tag CreateTag(string name, uint color)
 	{
 		Tag tag = new(name, color);
@@ -18,7 +20,8 @@ public sealed class DetectorDataSet : DataSet<Tag, DetectorAsset, DetectorAssets
 		base.DeleteTag(tag);
 	}
 
-	public DetectorDataSet(string name, ushort resolution) : base(new DetectorAssetsLibrary(), name, resolution)
+	public DetectorDataSet(string name, ushort resolution) : base(name, resolution)
 	{
+		Assets = new DetectorAssetsLibrary();
 	}
 }
