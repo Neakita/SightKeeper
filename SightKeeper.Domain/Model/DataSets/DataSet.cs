@@ -8,7 +8,7 @@ public abstract class DataSet<TTag, TAsset, TAssetsLibrary> where TTag : Tag whe
 	public string Description { get; set; }
 	public Game? Game { get; set; }
 	public ushort Resolution { get; }
-	public IReadOnlySet<TTag> Tags => _tags;
+	public IReadOnlyCollection<TTag> Tags => _tags;
 	public ScreenshotsLibrary Screenshots { get; }
 	public TAssetsLibrary Assets { get; }
 	public WeightsLibrary Weights { get; }
@@ -33,9 +33,10 @@ public abstract class DataSet<TTag, TAsset, TAssetsLibrary> where TTag : Tag whe
 
 	protected void AddTag(TTag tag)
 	{
-		bool isAdded = _tags.Add(tag);
-		Guard.IsTrue(isAdded);
+		bool isNameAlreadyUsed = Tags.Any(existingTag => existingTag.Name == tag.Name);
+		Guard.IsFalse(isNameAlreadyUsed);
+		_tags.Add(tag);
 	}
 
-	private readonly SortedSet<TTag> _tags = new(TagNameComparer.Instance);
+	private readonly List<TTag> _tags = new();
 }
