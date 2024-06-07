@@ -1,6 +1,5 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using SightKeeper.Domain.Extensions;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
@@ -55,6 +54,7 @@ public abstract class ScreenshotsDataAccess : IDisposable
 	private void ClearExceed(ScreenshotsLibrary library)
 	{
 		var removedScreenshots = library.ClearExceed();
-		_screenshotRemoved.OnNextRange(removedScreenshots);
+		foreach (var removedScreenshot in removedScreenshots)
+			_screenshotRemoved.OnNext(removedScreenshot);
 	}
 }
