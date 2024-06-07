@@ -8,6 +8,6 @@ public sealed class ClassifierDataSet : DataSet
 	public ClassifierDataSet(string name, ushort resolution) : base(name, resolution)
 	{
 		Tags = new ClassifierTagsLibrary(this);
-		Assets = new ClassifierAssetsLibrary();
+		Assets = new ClassifierAssetsLibrary(this);
 	}
 }

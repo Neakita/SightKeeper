@@ -8,7 +8,7 @@ public sealed class PoserTagsLibrary : TagsLibrary<PoserTag>
 
 	public PoserTag CreateTag(string name, uint color)
 	{
-		PoserTag tag = new(name, color);
+		PoserTag tag = new(name, color, this);
 		AddTag(tag);
 		return tag;
 	}

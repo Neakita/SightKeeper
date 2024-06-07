@@ -4,25 +4,46 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserTag : Tag
 {
-	public IReadOnlyList<Tag> KeyPoints => _keyPoints.AsReadOnly();
-
-	public Tag AddKeyPoint(string name, uint color)
+	public override string Name
 	{
-		Tag tag = new(name, color);
+		get => _name;
+		set
+		{
+			if (_name == value)
+				return;
+			bool isNewNameOccupied = Library.Any(tag => tag.Name == value);
+			Guard.IsFalse(isNewNameOccupied);
+			_name = value;
+		}
+	}
+
+	public override uint Color { get; set; }
+	public IReadOnlyList<KeyPointTag> KeyPoints => _keyPoints.AsReadOnly();
+	public PoserTagsLibrary Library { get; }
+	public PoserDataSet DataSet => Library.DataSet;
+
+	internal PoserTag(string name, uint color, PoserTagsLibrary library)
+	{
+		_name = name;
+		Color = color;
+		_keyPoints = new List<KeyPointTag>();
+		Library = library;
+	}
+
+	private string _name;
+
+	public KeyPointTag AddKeyPoint(string name, uint color)
+	{
+		KeyPointTag tag = new(name, color, this);
 		_keyPoints.Add(tag);
 		return tag;
 	}
 
-	public void DeleteKeyPoint(Tag tag)
+	public void DeleteKeyPoint(KeyPointTag tag)
 	{
 		bool isRemoved = _keyPoints.Remove(tag);
 		Guard.IsTrue(isRemoved);
 	}
-	
-	internal PoserTag(string name, uint color) : base(name, color)
-	{
-		_keyPoints = new List<Tag>();
-	}
 
-	private readonly List<Tag> _keyPoints;
+	private readonly List<KeyPointTag> _keyPoints;
 }

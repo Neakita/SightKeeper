@@ -3,7 +3,7 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
-public class TagsLibrary<TTag> : IReadOnlyCollection<TTag> where TTag : Tag
+public abstract class TagsLibrary<TTag> : IReadOnlyCollection<TTag> where TTag : Tag
 {
 	public int Count => _tags.Count;
 

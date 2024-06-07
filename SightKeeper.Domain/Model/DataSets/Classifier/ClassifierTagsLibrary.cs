@@ -2,18 +2,18 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Classifier;
 
-public sealed class ClassifierTagsLibrary : TagsLibrary<Tag>
+public sealed class ClassifierTagsLibrary : TagsLibrary<ClassifierTag>
 {
 	public ClassifierDataSet DataSet { get; }
 
-	public Tag CreateTag(string name, uint color)
+	public ClassifierTag CreateTag(string name, uint color)
 	{
-		Tag tag = new(name, color);
+		ClassifierTag tag = new(name, color, this);
 		AddTag(tag);
 		return tag;
 	}
 
-	public override void DeleteTag(Tag tag)
+	public override void DeleteTag(ClassifierTag tag)
 	{
 		bool isTagInUse = DataSet.Assets.Any(asset => asset.Tag == tag);
 		Guard.IsFalse(isTagInUse);

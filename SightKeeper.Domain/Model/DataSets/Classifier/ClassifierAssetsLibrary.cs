@@ -1,15 +1,21 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Classifier;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace SightKeeper.Domain.Model.DataSets.Classifier;
 
 public class ClassifierAssetsLibrary : AssetsLibrary<ClassifierAsset>
 {
-	public ClassifierAsset MakeAsset(Screenshot screenshot, Tag tag)
+	public ClassifierDataSet DataSet { get; }
+
+	public ClassifierAsset MakeAsset(Screenshot screenshot, ClassifierTag tag)
 	{
+		Guard.IsTrue(DataSet.Tags.Contains(tag));
 		ClassifierAsset asset = new(screenshot, tag);
 		AddAsset(asset);
 		return asset;
 	}
 
-	internal ClassifierAssetsLibrary()
+	internal ClassifierAssetsLibrary(ClassifierDataSet dataSet)
 	{
+		DataSet = dataSet;
 	}
 }

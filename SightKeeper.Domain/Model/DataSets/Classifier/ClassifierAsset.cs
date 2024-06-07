@@ -2,9 +2,9 @@
 
 public sealed class ClassifierAsset : Asset
 {
-	public Tag Tag { get; set; }
+	public ClassifierTag Tag { get; set; }
 
-	internal ClassifierAsset(Screenshot screenshot, Tag tag) : base(screenshot)
+	internal ClassifierAsset(Screenshot screenshot, ClassifierTag tag) : base(screenshot)
 	{
 		Tag = tag;
 	}

@@ -8,6 +8,6 @@ public sealed class PoserDataSet : DataSet
 	public PoserDataSet(string name, ushort resolution) : base(name, resolution)
 	{
 		Tags = new PoserTagsLibrary(this);
-		Assets = new PoserAssetsLibrary();
+		Assets = new PoserAssetsLibrary(this);
 	}
 }
