@@ -1,10 +1,12 @@
-﻿namespace SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets.Detector;
 
-internal sealed class WeightsDateComparer : IComparer<Weights>
+namespace SightKeeper.Domain.Model.DataSets;
+
+internal sealed class WeightsDateComparer : IComparer<DetectorWeights>
 {
 	public static WeightsDateComparer Instance { get; } = new();
 	
-	public int Compare(Weights? x, Weights? y)
+	public int Compare(DetectorWeights? x, DetectorWeights? y)
 	{
 		if (ReferenceEquals(x, y)) return 0;
 		if (ReferenceEquals(null, y)) return 1;

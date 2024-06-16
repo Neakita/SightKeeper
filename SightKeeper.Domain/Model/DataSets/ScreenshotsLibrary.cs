@@ -19,7 +19,7 @@ public sealed class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
 
     internal Screenshot CreateScreenshot()
     {
-	    Screenshot screenshot = new();
+	    Screenshot screenshot = new(this);
 	    _screenshots.Add(screenshot);
 	    return screenshot;
     }

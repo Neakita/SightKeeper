@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets.Detector;
+
+namespace SightKeeper.Domain.Model.DataSets;
 
 public abstract class DataSet
 {
@@ -7,7 +9,7 @@ public abstract class DataSet
 	public Game? Game { get; set; }
 	public ushort Resolution { get; }
 	public ScreenshotsLibrary Screenshots { get; }
-	public WeightsLibrary Weights { get; }
+	public DetectorWeightsLibrary Weights { get; }
 
 	public override string ToString() => Name;
 
@@ -17,6 +19,6 @@ public abstract class DataSet
 		Description = string.Empty;
 		Resolution = resolution;
 		Screenshots = new ScreenshotsLibrary();
-		Weights = new WeightsLibrary();
+		Weights = new DetectorWeightsLibrary();
 	}
 }

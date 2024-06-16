@@ -1,22 +1,25 @@
 ﻿using System.Collections.Immutable;
 
-namespace SightKeeper.Domain.Model.DataSets;
+namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class Weights
+public sealed class DetectorWeights
 {
     public DateTime CreationDate { get; }
     public ModelSize Size { get; }
     public WeightsMetrics WeightsMetrics { get; }
-    public ImmutableList<Tag> Tags { get; }
+    public IReadOnlyCollection<DetectorTag> Tags { get; }
+    public DetectorWeightsLibrary Library { get; }
 
-    internal Weights(
+    internal DetectorWeights(
         ModelSize modelSize,
         WeightsMetrics weightsMetrics,
-        IEnumerable<Tag> tags)
+        IEnumerable<DetectorTag> tags,
+        DetectorWeightsLibrary library)
     {
         CreationDate = DateTime.Now;
         Size = modelSize;
         WeightsMetrics = weightsMetrics;
+        Library = library;
         Tags = tags.ToImmutableList();
         ValidateTags();
     }

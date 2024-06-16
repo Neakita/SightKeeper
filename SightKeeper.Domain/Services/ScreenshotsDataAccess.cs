@@ -15,11 +15,6 @@ public abstract class ScreenshotsDataAccess : IDisposable
 	public abstract IEnumerable<(Screenshot screenshot, Image image)> LoadImages(IReadOnlyCollection<Screenshot> screenshots, bool ordered = false);
 	public abstract IEnumerable<(Screenshot screenshot, Image image)> LoadImages(DetectorDataSet dataSet);
 
-	public ScreenshotsDataAccess(ObjectsLookupper objectsLookupper)
-	{
-		_objectsLookupper = objectsLookupper;
-	}
-
 	public Screenshot CreateScreenshot(ScreenshotsLibrary library, byte[] data)
 	{
 		var screenshot = library.CreateScreenshot();
@@ -31,7 +26,8 @@ public abstract class ScreenshotsDataAccess : IDisposable
 
 	public void DeleteScreenshot(Screenshot screenshot)
 	{
-		var library = _objectsLookupper.GetLibrary(screenshot);
+
+		var library = screenshot.Library;
 		library.DeleteScreenshot(screenshot);
 		DeleteScreenshotData(screenshot);
 		_screenshotRemoved.OnNext(screenshot);
@@ -47,7 +43,6 @@ public abstract class ScreenshotsDataAccess : IDisposable
 	protected abstract void SaveScreenshotData(Screenshot screenshot, Image image);
 	protected abstract void DeleteScreenshotData(Screenshot screenshot);
 
-	private readonly ObjectsLookupper _objectsLookupper;
 	private readonly Subject<(ScreenshotsLibrary, Screenshot)> _screenshotAdded = new();
 	private readonly Subject<Screenshot> _screenshotRemoved = new();
 

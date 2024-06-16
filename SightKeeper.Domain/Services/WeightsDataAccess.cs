@@ -1,42 +1,39 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Domain.Services;
 
 public abstract class WeightsDataAccess : IDisposable
 {
-	public IObservable<(WeightsLibrary library, Weights weights)> WeightsCreated => _weightsCreated.AsObservable();
-	public IObservable<Weights> WeightsRemoved => _weightsRemoved.AsObservable();
+	public IObservable<(DetectorWeightsLibrary library, DetectorWeights weights)> WeightsCreated => _weightsCreated.AsObservable();
+	public IObservable<DetectorWeights> WeightsRemoved => _weightsRemoved.AsObservable();
 
-	public abstract WeightsData LoadWeightsONNXData(Weights weights);
-	public abstract WeightsData LoadWeightsPTData(Weights weights);
+	public abstract WeightsData LoadWeightsONNXData(DetectorWeights weights);
+	public abstract WeightsData LoadWeightsPTData(DetectorWeights weights);
 
-	public WeightsDataAccess(ObjectsLookupper objectsLookupper)
-	{
-		_objectsLookupper = objectsLookupper;
-	}
-
-	public Weights CreateWeights(
-		WeightsLibrary library,
+	public DetectorWeights CreateWeights(
+		DetectorWeightsLibrary library,
 		byte[] onnxData,
 		byte[] ptData,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IReadOnlyCollection<Tag> tags)
+		IReadOnlyCollection<DetectorTag> tags)
 	{
 		var weights = library.CreateWeights(modelSize, metrics, tags);
 		SaveWeightsData(weights, new WeightsData(onnxData), new WeightsData(ptData));
 		_weightsCreated.OnNext((library, weights));
 		return weights;
 	}
-	public void RemoveWeights(Weights weights)
+
+	public void RemoveWeights(DetectorWeights weights)
 	{
-		var library = _objectsLookupper.GetLibrary(weights);
-		library.RemoveWeights(weights);
+		weights.Library.RemoveWeights(weights);
 		RemoveWeightsData(weights);
 		_weightsRemoved.OnNext(weights);
 	}
+
 	public void Dispose()
 	{
 		_weightsCreated.Dispose();
@@ -44,10 +41,9 @@ public abstract class WeightsDataAccess : IDisposable
 		GC.SuppressFinalize(this);
 	}
 
-	protected abstract void SaveWeightsData(Weights weights, WeightsData onnxData, WeightsData ptData);
-	protected abstract void RemoveWeightsData(Weights weights);
+	protected abstract void SaveWeightsData(DetectorWeights weights, WeightsData onnxData, WeightsData ptData);
+	protected abstract void RemoveWeightsData(DetectorWeights weights);
 
-	private readonly ObjectsLookupper _objectsLookupper;
-	private readonly Subject<(WeightsLibrary, Weights)> _weightsCreated = new();
-	private readonly Subject<Weights> _weightsRemoved = new();
+	private readonly Subject<(DetectorWeightsLibrary, DetectorWeights)> _weightsCreated = new();
+	private readonly Subject<DetectorWeights> _weightsRemoved = new();
 }
