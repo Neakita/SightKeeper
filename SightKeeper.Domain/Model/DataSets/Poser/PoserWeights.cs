@@ -9,7 +9,7 @@ public sealed class PoserWeights : Weights
 	public PoserWeightsLibrary Library { get; }
 	public PoserDataSet DataSet => Library.DataSet;
 
-	public PoserWeights(
+	internal PoserWeights(
 		ModelSize size,
 		WeightsMetrics metrics,
 		IEnumerable<PoserTag> tags,
