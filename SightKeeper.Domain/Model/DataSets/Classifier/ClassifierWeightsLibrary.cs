@@ -8,4 +8,14 @@ public sealed class ClassifierWeightsLibrary : WeightsLibrary<ClassifierWeights>
 	{
 		DataSet = dataSet;
 	}
+
+	internal ClassifierWeights CreateWeights(
+		ModelSize modelSize,
+		WeightsMetrics metrics,
+		IEnumerable<ClassifierTag> tags)
+	{
+		ClassifierWeights weights = new(modelSize, metrics, tags, this);
+		AddWeights(weights);
+		return weights;
+	}
 }
