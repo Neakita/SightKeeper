@@ -5,9 +5,9 @@ using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Domain.Services;
 
-public abstract class WeightsDataAccess : IDisposable
+public abstract class DetectorWeightsDataAccess : IDisposable
 {
-	public IObservable<(DetectorWeightsLibrary library, DetectorWeights weights)> WeightsCreated => _weightsCreated.AsObservable();
+	public IObservable<DetectorWeights> WeightsCreated => _weightsCreated.AsObservable();
 	public IObservable<DetectorWeights> WeightsRemoved => _weightsRemoved.AsObservable();
 
 	public abstract WeightsData LoadWeightsONNXData(DetectorWeights weights);
@@ -23,7 +23,7 @@ public abstract class WeightsDataAccess : IDisposable
 	{
 		var weights = library.CreateWeights(modelSize, metrics, tags);
 		SaveWeightsData(weights, new WeightsData(onnxData), new WeightsData(ptData));
-		_weightsCreated.OnNext((library, weights));
+		_weightsCreated.OnNext(weights);
 		return weights;
 	}
 
@@ -44,6 +44,6 @@ public abstract class WeightsDataAccess : IDisposable
 	protected abstract void SaveWeightsData(DetectorWeights weights, WeightsData onnxData, WeightsData ptData);
 	protected abstract void RemoveWeightsData(DetectorWeights weights);
 
-	private readonly Subject<(DetectorWeightsLibrary, DetectorWeights)> _weightsCreated = new();
+	private readonly Subject<DetectorWeights> _weightsCreated = new();
 	private readonly Subject<DetectorWeights> _weightsRemoved = new();
 }
