@@ -2,6 +2,8 @@
 
 public sealed class DetectorAssetsLibrary : AssetsLibrary<DetectorAsset>
 {
+	public DetectorDataSet DataSet { get; }
+
 	public DetectorAsset MakeAsset(Screenshot screenshot)
 	{
 		DetectorAsset asset = new(screenshot);
@@ -9,7 +11,8 @@ public sealed class DetectorAssetsLibrary : AssetsLibrary<DetectorAsset>
 		return asset;
 	}
 
-	internal DetectorAssetsLibrary()
+	internal DetectorAssetsLibrary(DetectorDataSet dataSet)
 	{
+		DataSet = dataSet;
 	}
 }

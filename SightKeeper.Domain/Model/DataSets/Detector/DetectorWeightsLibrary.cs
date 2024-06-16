@@ -1,16 +1,13 @@
-﻿using System.Collections;
-using CommunityToolkit.Diagnostics;
+﻿namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-namespace SightKeeper.Domain.Model.DataSets.Detector;
-
-public sealed class DetectorWeightsLibrary : IReadOnlyCollection<DetectorWeights>
+public sealed class DetectorWeightsLibrary : WeightsLibrary<DetectorWeights>
 {
-	public int Count => _weights.Count;
+	public DetectorDataSet DataSet { get; }
 
-    public IEnumerator<DetectorWeights> GetEnumerator()
-    {
-	    return _weights.GetEnumerator();
-    }
+	internal DetectorWeightsLibrary(DetectorDataSet dataSet)
+	{
+		DataSet = dataSet;
+	}
 
     internal DetectorWeights CreateWeights(
 	    ModelSize modelSize,
@@ -18,21 +15,7 @@ public sealed class DetectorWeightsLibrary : IReadOnlyCollection<DetectorWeights
 	    IEnumerable<DetectorTag> tags)
     {
 	    DetectorWeights weights = new(modelSize, metrics, tags, this);
-	    var isAdded = _weights.Add(weights);
-	    Guard.IsTrue(isAdded);
+	    AddWeights(weights);
 	    return weights;
-    }
-
-    internal void RemoveWeights(DetectorWeights weights)
-    {
-	    var isRemoved = _weights.Remove(weights);
-	    Guard.IsTrue(isRemoved);
-    }
-
-    private readonly SortedSet<DetectorWeights> _weights = new(WeightsDateComparer.Instance);
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-	    return GetEnumerator();
     }
 }

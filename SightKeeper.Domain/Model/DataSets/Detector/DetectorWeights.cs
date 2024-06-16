@@ -1,35 +1,31 @@
 ﻿using System.Collections.Immutable;
+using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DetectorWeights
+public sealed class DetectorWeights : Weights
 {
-    public DateTime CreationDate { get; }
-    public ModelSize Size { get; }
-    public WeightsMetrics WeightsMetrics { get; }
     public IReadOnlyCollection<DetectorTag> Tags { get; }
     public DetectorWeightsLibrary Library { get; }
+    public DetectorDataSet DataSet => Library.DataSet;
 
     internal DetectorWeights(
-        ModelSize modelSize,
-        WeightsMetrics weightsMetrics,
+        ModelSize size,
+        WeightsMetrics metrics,
         IEnumerable<DetectorTag> tags,
         DetectorWeightsLibrary library)
+	    : base(size, metrics)
     {
-        CreationDate = DateTime.Now;
-        Size = modelSize;
-        WeightsMetrics = weightsMetrics;
+	    Tags = tags.ToImmutableArray();
         Library = library;
-        Tags = tags.ToImmutableList();
         ValidateTags();
     }
 
-    public override string ToString() => $"{nameof(Size)}: {Size}, {WeightsMetrics}";
+    public override string ToString() => $"{nameof(Size)}: {Size}, {Metrics}";
 
     private void ValidateTags()
     {
-	    // TODO
-	    /*var isAllTagsBelongsToGivenLibrary = Tags.All(tag => Library.DataSet.Tags.Contains(tag));
-	    Guard.IsTrue(isAllTagsBelongsToGivenLibrary);*/
+	    foreach (var tag in Tags)
+		    Guard.IsReferenceEqualTo(tag.DataSet, DataSet);
     }
 }
