@@ -9,7 +9,7 @@ public class ClassifierAssetsLibrary : AssetsLibrary<ClassifierAsset>
 	public ClassifierAsset MakeAsset(Screenshot screenshot, ClassifierTag tag)
 	{
 		Guard.IsTrue(DataSet.Tags.Contains(tag));
-		ClassifierAsset asset = new(screenshot, tag);
+		ClassifierAsset asset = new(screenshot, tag, this);
 		AddAsset(asset);
 		return asset;
 	}
