@@ -6,7 +6,7 @@ public sealed class DetectorAssetsLibrary : AssetsLibrary<DetectorAsset>
 
 	public DetectorAsset MakeAsset(Screenshot screenshot)
 	{
-		DetectorAsset asset = new(screenshot);
+		DetectorAsset asset = new(screenshot, this);
 		AddAsset(asset);
 		return asset;
 	}
