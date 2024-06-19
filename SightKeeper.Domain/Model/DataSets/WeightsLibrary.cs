@@ -12,19 +12,19 @@ public abstract class WeightsLibrary<TWeights> : IReadOnlyCollection<TWeights> w
 		return _weights.GetEnumerator();
 	}
 
-	internal void RemoveWeights(TWeights weights)
-	{
-		var isRemoved = _weights.Remove(weights);
-		Guard.IsTrue(isRemoved);
-	}
-
 	protected void AddWeights(TWeights weights)
 	{
 		bool isAdded = _weights.Add(weights);
 		Guard.IsTrue(isAdded);
 	}
 
-	private readonly SortedSet<TWeights> _weights = new(WeightsDateComparer<TWeights>.Instance);
+	internal void RemoveWeights(TWeights weights)
+	{
+		var isRemoved = _weights.Remove(weights);
+		Guard.IsTrue(isRemoved);
+	}
+
+	private readonly SortedSet<TWeights> _weights = new(WeightsDateComparer.Instance);
 
 	IEnumerator IEnumerable.GetEnumerator()
 	{
