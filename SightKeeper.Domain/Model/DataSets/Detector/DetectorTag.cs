@@ -17,7 +17,6 @@ public sealed class DetectorTag : Tag
 		}
 	}
 
-	public override uint Color { get; set; }
 	public DetectorTagsLibrary Library { get; }
 	public DetectorDataSet DataSet => Library.DataSet;
 

@@ -17,7 +17,6 @@ public sealed class ClassifierTag : Tag
 		}
 	}
 
-	public override uint Color { get; set; }
 	public ClassifierTagsLibrary Library { get; }
 	public ClassifierDataSet DataSet => Library.DataSet;
 

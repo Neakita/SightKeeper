@@ -16,7 +16,6 @@ public sealed class KeyPointTag : Tag
 		}
 	}
 
-	public override uint Color { get; set; }
 	public PoserTag PoserTag { get; }
 
 	internal KeyPointTag(string name, uint color, PoserTag poserTag)

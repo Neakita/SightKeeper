@@ -17,7 +17,6 @@ public sealed class PoserTag : Tag
 		}
 	}
 
-	public override uint Color { get; set; }
 	public IReadOnlyList<KeyPointTag> KeyPoints => _keyPoints.AsReadOnly();
 	public PoserTagsLibrary Library { get; }
 	public PoserDataSet DataSet => Library.DataSet;
