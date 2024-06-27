@@ -12,10 +12,9 @@ public abstract class AssetsLibrary<TAsset> : IReadOnlyCollection<TAsset> where 
 		return _assets.GetEnumerator();
 	}
 
-	public void DeleteAsset(TAsset asset)
+	public virtual void DeleteAsset(TAsset asset)
 	{
-		var isRemoved = _assets.Remove(asset);
-		Guard.IsTrue(isRemoved);
+		Guard.IsTrue(_assets.Remove(asset));
 	}
 
 	protected void AddAsset(TAsset asset)

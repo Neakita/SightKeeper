@@ -20,10 +20,9 @@ public sealed class DetectorTag : Tag
 	public DetectorTagsLibrary Library { get; }
 	public DetectorDataSet DataSet => Library.DataSet;
 
-	internal DetectorTag(string name, uint color, DetectorTagsLibrary library)
+	internal DetectorTag(string name, DetectorTagsLibrary library)
 	{
 		_name = name;
-		Color = color;
 		Library = library;
 	}
 

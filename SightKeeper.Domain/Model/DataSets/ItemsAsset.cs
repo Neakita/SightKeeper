@@ -16,8 +16,9 @@ public abstract class ItemsAsset<TItem> : Asset
 	{
 		_items.Clear();
 	}
-	
-	protected ItemsAsset(Screenshot screenshot) : base(screenshot)
+
+	// TODO store screenshot
+	protected ItemsAsset(Screenshot screenshot)
 	{
 		_items = new List<TItem>();
 	}

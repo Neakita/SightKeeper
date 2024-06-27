@@ -25,7 +25,15 @@ public sealed class DetectorWeights : Weights
 
     private void ValidateTags()
     {
+	    Guard.IsGreaterThan(Tags.Count, 0);
+	    Guard.IsFalse(HasDuplicates(Tags));
 	    foreach (var tag in Tags)
 		    Guard.IsReferenceEqualTo(tag.DataSet, DataSet);
+    }
+
+    private static bool HasDuplicates<T>(IEnumerable<T> enumerable)
+    {
+	    HashSet<T> hashSet = new();
+	    return !enumerable.All(hashSet.Add);
     }
 }

@@ -2,6 +2,7 @@
 
 public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 {
+	public DetectorScreenshot Screenshot { get; }
 	public DetectorAssetsLibrary Library { get; }
 	public DetectorDataSet DataSet => Library.DataSet;
 	
@@ -12,8 +13,9 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>
         return item;
     }
 
-    internal DetectorAsset(Screenshot screenshot, DetectorAssetsLibrary library) : base(screenshot)
+    internal DetectorAsset(DetectorScreenshot screenshot, DetectorAssetsLibrary library) : base(screenshot)
     {
+	    Screenshot = screenshot;
 	    Library = library;
     }
 }

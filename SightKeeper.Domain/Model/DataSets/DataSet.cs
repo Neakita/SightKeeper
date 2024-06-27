@@ -6,7 +6,6 @@ public abstract class DataSet
 	public string Description { get; set; }
 	public Game? Game { get; set; }
 	public ushort Resolution { get; }
-	public ScreenshotsLibrary Screenshots { get; }
 
 	public override string ToString() => Name;
 
@@ -15,6 +14,5 @@ public abstract class DataSet
 		Name = name;
 		Description = string.Empty;
 		Resolution = resolution;
-		Screenshots = new ScreenshotsLibrary();
 	}
 }

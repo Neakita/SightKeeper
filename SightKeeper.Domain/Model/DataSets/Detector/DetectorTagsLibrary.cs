@@ -6,9 +6,9 @@ public sealed class DetectorTagsLibrary : TagsLibrary<DetectorTag>
 {
 	public DetectorDataSet DataSet { get; }
 	
-	public DetectorTag CreateTag(string name, uint color)
+	public DetectorTag CreateTag(string name)
 	{
-		DetectorTag tag = new(name, color, this);
+		DetectorTag tag = new(name, this);
 		AddTag(tag);
 		return tag;
 	}

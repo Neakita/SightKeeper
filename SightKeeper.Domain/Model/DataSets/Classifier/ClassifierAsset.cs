@@ -17,7 +17,8 @@ public sealed class ClassifierAsset : Asset
 	public ClassifierAssetsLibrary Library { get; }
 	public ClassifierDataSet DataSet => Library.DataSet;
 
-	internal ClassifierAsset(Screenshot screenshot, ClassifierTag tag, ClassifierAssetsLibrary library) : base(screenshot)
+	// TODO store screenshot
+	internal ClassifierAsset(Screenshot screenshot, ClassifierTag tag, ClassifierAssetsLibrary library)
 	{
 		_tag = tag;
 		Library = library;
