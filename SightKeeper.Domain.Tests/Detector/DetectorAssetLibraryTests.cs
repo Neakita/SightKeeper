@@ -9,8 +9,8 @@ public sealed class DetectorAssetLibraryTests
 	public void ShouldCreateAsset()
 	{
 		DetectorDataSet dataSet = new("", 320);
-		SimpleDetectorScreenshotsDataAccess detectorScreenshotsDataAccess = new();
-		var screenshot = detectorScreenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		screenshot.Asset.Should().Be(asset);
 		dataSet.Assets.Should().Contain(asset);
@@ -20,8 +20,8 @@ public sealed class DetectorAssetLibraryTests
 	public void ShouldNotCreateDuplicateAsset()
 	{
 		DetectorDataSet dataSet = new("", 320);
-		SimpleDetectorScreenshotsDataAccess detectorScreenshotsDataAccess = new();
-		var screenshot = detectorScreenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot));
 		screenshot.Asset.Should().Be(asset);
@@ -33,8 +33,8 @@ public sealed class DetectorAssetLibraryTests
 	public void ShouldRemoveAssetFromScreenshot()
 	{
 		DetectorDataSet dataSet = new("", 320);
-		SimpleDetectorScreenshotsDataAccess detectorScreenshotsDataAccess = new();
-		var screenshot = detectorScreenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		dataSet.Assets.DeleteAsset(asset);
 		screenshot.Asset.Should().BeNull();
@@ -45,8 +45,8 @@ public sealed class DetectorAssetLibraryTests
 	{
 		DetectorDataSet dataSet1 = new("", 320);
 		DetectorDataSet dataSet2 = new("", 320);
-		SimpleDetectorScreenshotsDataAccess detectorScreenshotsDataAccess = new();
-		var screenshot = detectorScreenshotsDataAccess.CreateScreenshot(dataSet1, []);
+		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet1, []);
 		var asset = dataSet1.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet2.Assets.DeleteAsset(asset));
 		asset.Screenshot.Asset.Should().Be(asset);

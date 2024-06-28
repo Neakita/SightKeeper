@@ -6,9 +6,9 @@ public sealed class ClassifierTagsLibrary : TagsLibrary<ClassifierTag>
 {
 	public ClassifierDataSet DataSet { get; }
 
-	public ClassifierTag CreateTag(string name, uint color)
+	public ClassifierTag CreateTag(string name)
 	{
-		ClassifierTag tag = new(name, color, this);
+		ClassifierTag tag = new(name, this);
 		AddTag(tag);
 		return tag;
 	}

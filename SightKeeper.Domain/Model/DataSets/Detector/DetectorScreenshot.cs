@@ -5,7 +5,7 @@ public sealed class DetectorScreenshot : Screenshot
 	public DetectorAsset? Asset { get; set; }
 	public DetectorScreenshotsLibrary Library { get; }
 
-	public DetectorScreenshot(DetectorScreenshotsLibrary library)
+	internal DetectorScreenshot(DetectorScreenshotsLibrary library)
 	{
 		Library = library;
 	}

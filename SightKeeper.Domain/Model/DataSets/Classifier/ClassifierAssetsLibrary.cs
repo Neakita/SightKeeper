@@ -6,12 +6,20 @@ public class ClassifierAssetsLibrary : AssetsLibrary<ClassifierAsset>
 {
 	public ClassifierDataSet DataSet { get; }
 
-	public ClassifierAsset MakeAsset(Screenshot screenshot, ClassifierTag tag)
+	public ClassifierAsset MakeAsset(ClassifierScreenshot screenshot, ClassifierTag tag)
 	{
-		Guard.IsTrue(DataSet.Tags.Contains(tag));
+		Guard.IsNull(screenshot.Asset);
 		ClassifierAsset asset = new(screenshot, tag, this);
+		screenshot.Asset = asset;
 		AddAsset(asset);
 		return asset;
+	}
+
+	public override void DeleteAsset(ClassifierAsset asset)
+	{
+		var screenshot = asset.Screenshot;
+		base.DeleteAsset(asset);
+		screenshot.Asset = null;
 	}
 
 	internal ClassifierAssetsLibrary(ClassifierDataSet dataSet)

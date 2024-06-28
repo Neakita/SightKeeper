@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Classifier;
 
@@ -7,21 +8,22 @@ public sealed class ClassifierAsset : Asset
 	public ClassifierTag Tag
 	{
 		get => _tag;
-		set
+		[MemberNotNull(nameof(_tag))] set
 		{
+			Guard.IsReferenceEqualTo(value.DataSet, DataSet);
 			_tag = value;
-			Guard.IsTrue(DataSet.Tags.Contains(value));
 		}
 	}
 
+	public ClassifierScreenshot Screenshot { get; }
 	public ClassifierAssetsLibrary Library { get; }
 	public ClassifierDataSet DataSet => Library.DataSet;
 
-	// TODO store screenshot
-	internal ClassifierAsset(Screenshot screenshot, ClassifierTag tag, ClassifierAssetsLibrary library)
+	internal ClassifierAsset(ClassifierScreenshot screenshot, ClassifierTag tag, ClassifierAssetsLibrary library)
 	{
-		_tag = tag;
+		Screenshot = screenshot;
 		Library = library;
+		Tag = tag;
 	}
 
 	private ClassifierTag _tag;

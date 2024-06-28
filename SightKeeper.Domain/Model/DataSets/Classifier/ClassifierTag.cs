@@ -11,8 +11,8 @@ public sealed class ClassifierTag : Tag
 		{
 			if (_name == value)
 				return;
-			bool isNewNameOccupied = Library.Any(tag => tag.Name == value);
-			Guard.IsFalse(isNewNameOccupied);
+			foreach (var sibling in Library)
+				Guard.IsNotEqualTo(value, sibling.Name);
 			_name = value;
 		}
 	}
@@ -20,10 +20,9 @@ public sealed class ClassifierTag : Tag
 	public ClassifierTagsLibrary Library { get; }
 	public ClassifierDataSet DataSet => Library.DataSet;
 
-	internal ClassifierTag(string name, uint color, ClassifierTagsLibrary library)
+	internal ClassifierTag(string name, ClassifierTagsLibrary library)
 	{
 		_name = name;
-		Color = color;
 		Library = library;
 	}
 

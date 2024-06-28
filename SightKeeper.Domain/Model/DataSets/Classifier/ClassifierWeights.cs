@@ -23,6 +23,8 @@ public sealed class ClassifierWeights : Weights
 
 	private void ValidateTags()
 	{
+		Guard.IsGreaterThanOrEqualTo(Tags.Count, 2);
+		Guard.IsFalse(Tags.HasDuplicates());
 		foreach (var tag in Tags)
 			Guard.IsReferenceEqualTo(tag.DataSet, DataSet);
 	}
