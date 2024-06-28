@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain;
 
-public static class Extensions
+internal static class Extensions
 {
 	public static bool HasDuplicates<T>(this IEnumerable<T> enumerable)
 	{
