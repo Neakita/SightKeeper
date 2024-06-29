@@ -17,6 +17,7 @@ public sealed class DetectorTag : Tag
 		}
 	}
 
+	public IReadOnlyCollection<DetectorItem> Items => _items;
 	public DetectorTagsLibrary Library { get; }
 	public DetectorDataSet DataSet => Library.DataSet;
 
@@ -24,7 +25,19 @@ public sealed class DetectorTag : Tag
 	{
 		_name = name;
 		Library = library;
+		_items = new HashSet<DetectorItem>();
 	}
 
+	internal void AddItem(DetectorItem item)
+	{
+		Guard.IsTrue(_items.Add(item));
+	}
+
+	internal void RemoveItem(DetectorItem item)
+	{
+		Guard.IsTrue(_items.Remove(item));
+	}
+
+	private readonly HashSet<DetectorItem> _items;
 	private string _name;
 }

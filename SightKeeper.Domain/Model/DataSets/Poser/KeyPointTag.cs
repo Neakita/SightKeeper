@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser;
 
@@ -7,22 +8,22 @@ public sealed class KeyPointTag : Tag
 	public override string Name
 	{
 		get => _name;
-		set
+		[MemberNotNull(nameof(_name))] set
 		{
 			if (_name == value)
 				return;
-			Guard.IsFalse(PoserTag.KeyPoints.Any(tag => tag.Name == value));
+			foreach (var sibling in PoserTag.KeyPoints)
+				Guard.IsNotEqualTo(sibling.Name, value);
 			_name = value;
 		}
 	}
 
 	public PoserTag PoserTag { get; }
 
-	internal KeyPointTag(string name, uint color, PoserTag poserTag)
+	internal KeyPointTag(string name, PoserTag poserTag)
 	{
-		_name = name;
-		Color = color;
 		PoserTag = poserTag;
+		Name = name;
 	}
 
 	private string _name;

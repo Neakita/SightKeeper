@@ -6,17 +6,16 @@ public sealed class PoserTagsLibrary : TagsLibrary<PoserTag>
 {
 	public PoserDataSet DataSet { get; }
 
-	public PoserTag CreateTag(string name, uint color)
+	public PoserTag CreateTag(string name)
 	{
-		PoserTag tag = new(name, color, this);
+		PoserTag tag = new(name, this);
 		AddTag(tag);
 		return tag;
 	}
 
 	public override void DeleteTag(PoserTag tag)
 	{
-		bool isTagInUse = DataSet.Assets.SelectMany(asset => asset.Items).Any(item => item.Tag == tag);
-		Guard.IsFalse(isTagInUse);
+		Guard.IsEmpty(tag.Items);
 		base.DeleteTag(tag);
 	}
 

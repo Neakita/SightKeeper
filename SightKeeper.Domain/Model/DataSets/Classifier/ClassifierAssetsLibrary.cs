@@ -17,9 +17,8 @@ public class ClassifierAssetsLibrary : AssetsLibrary<ClassifierAsset>
 
 	public override void DeleteAsset(ClassifierAsset asset)
 	{
-		var screenshot = asset.Screenshot;
 		base.DeleteAsset(asset);
-		screenshot.Asset = null;
+		asset.Screenshot.Asset = null;
 	}
 
 	internal ClassifierAssetsLibrary(ClassifierDataSet dataSet)

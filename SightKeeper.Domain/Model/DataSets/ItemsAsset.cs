@@ -6,21 +6,14 @@ public abstract class ItemsAsset<TItem> : Asset
 {
 	public IReadOnlyCollection<TItem> Items => _items.AsReadOnly();
 
-	public void DeleteItem(TItem item)
+	public virtual void DeleteItem(TItem item)
 	{
-		var isRemoved = _items.Remove(item);
-		Guard.IsTrue(isRemoved);
+		Guard.IsTrue(_items.Remove(item));
 	}
 
-	public void ClearItems()
+	public virtual void ClearItems()
 	{
 		_items.Clear();
-	}
-
-	// TODO store screenshot
-	protected ItemsAsset(Screenshot screenshot)
-	{
-		_items = new List<TItem>();
 	}
 
 	protected void AddItem(TItem item)
@@ -28,5 +21,5 @@ public abstract class ItemsAsset<TItem> : Asset
 		_items.Add(item);
 	}
 
-	private readonly List<TItem> _items;
+	private readonly List<TItem> _items = new();
 }

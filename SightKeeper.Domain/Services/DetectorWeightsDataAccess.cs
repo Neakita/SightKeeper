@@ -12,7 +12,7 @@ public abstract class DetectorWeightsDataAccess
 		byte[] data,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IReadOnlyCollection<DetectorTag> tags)
+		IEnumerable<DetectorTag> tags)
 	{
 		var weights = library.CreateWeights(modelSize, metrics, tags);
 		SaveWeightsData(weights, new WeightsData(data));
@@ -24,7 +24,7 @@ public abstract class DetectorWeightsDataAccess
 		byte[] data,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IReadOnlyCollection<DetectorTag> tags)
+		IEnumerable<DetectorTag> tags)
 	{
 		return CreateWeights(dataSet.Weights, data, modelSize, metrics, tags);
 	}

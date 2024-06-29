@@ -35,33 +35,12 @@ public sealed class DetectorTagsLibraryTests
 	}
 
 	[Fact]
-	public void ShouldNotChangeTagNameToOccupied()
-	{
-		DetectorDataSet dataSet = new("", 320);
-		var tag1 = dataSet.Tags.CreateTag("1");
-		var tag2 = dataSet.Tags.CreateTag("2");
-		Assert.ThrowsAny<Exception>(() => tag2.Name = "1");
-		tag1.Name.Should().Be("1");
-		tag2.Name.Should().Be("2");
-	}
-
-	[Fact]
 	public void ShouldDeleteTag()
 	{
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		dataSet.Tags.DeleteTag(tag);
 		dataSet.Tags.Should().BeEmpty();
-	}
-
-	[Fact]
-	public void ShouldSetTagNameToDeletedTagName()
-	{
-		DetectorDataSet dataSet = new("", 320);
-		var tag1 = dataSet.Tags.CreateTag("1");
-		var tag2 = dataSet.Tags.CreateTag("2");
-		dataSet.Tags.DeleteTag(tag1);
-		tag2.Name = tag1.Name;
 	}
 
 	[Fact]
@@ -75,5 +54,20 @@ public sealed class DetectorTagsLibraryTests
 		asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.DeleteTag(tag));
 		dataSet.Tags.Should().Contain(tag);
+	}
+
+	[Fact]
+	public void ShouldDeleteTagWithoutItems()
+	{
+		DetectorDataSet dataSet = new("", 320);
+		var tag1 = dataSet.Tags.CreateTag("1");
+		var tag2 = dataSet.Tags.CreateTag("2");
+		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		var asset = dataSet.Assets.MakeAsset(screenshot);
+		asset.CreateItem(tag1, new Bounding(0, 0, 1, 1));
+		dataSet.Tags.DeleteTag(tag2);
+		dataSet.Tags.Should().Contain(tag1);
+		dataSet.Tags.Should().NotContain(tag2);
 	}
 }

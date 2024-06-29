@@ -1,14 +1,15 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Poser;
 
-namespace SightKeeper.Domain.Tests.Classifier;
+namespace SightKeeper.Domain.Tests.Poser;
 
-public sealed class ClassifierTagsLibraryTests
+public class PoserTagsLibraryTests
 {
 	[Fact]
 	public void ShouldCreateTag()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		PoserDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		dataSet.Tags.Should().Contain(tag);
 	}
@@ -16,7 +17,7 @@ public sealed class ClassifierTagsLibraryTests
 	[Fact]
 	public void ShouldCreateMultipleTags()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		PoserDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		var tag3 = dataSet.Tags.CreateTag("3");
@@ -26,7 +27,7 @@ public sealed class ClassifierTagsLibraryTests
 	[Fact]
 	public void ShouldNotCreateTagWithOccupiedName()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		PoserDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.CreateTag("1"));
 		dataSet.Tags.Should().Contain(tag1);
@@ -36,23 +37,22 @@ public sealed class ClassifierTagsLibraryTests
 	[Fact]
 	public void ShouldDeleteTag()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		PoserDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		dataSet.Tags.DeleteTag(tag);
 		dataSet.Tags.Should().BeEmpty();
 	}
 
 	[Fact]
-	public void ShouldNotDeleteTagWithAssociatedAsset()
+	public void ShouldNotDeleteTagWithItems()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		PoserDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleClassifierScreenshotsDataAccess screenshotsDataAccess = new();
+		SimplePoserScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
-		var asset = dataSet.Assets.MakeAsset(screenshot, tag);
+		var asset = dataSet.Assets.MakeAsset(screenshot);
+		asset.CreateItem(tag, new Bounding(0, 0, 1, 1), []);
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.DeleteTag(tag));
 		dataSet.Tags.Should().Contain(tag);
-		dataSet.Assets.Should().Contain(asset);
-		asset.Tag.Should().Be(tag);
 	}
 }

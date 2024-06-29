@@ -32,7 +32,7 @@ public sealed class ClassifierAssetLibraryTests
 	}
 
 	[Fact]
-	public void ShouldRemoveAssetFromScreenshot()
+	public void ShouldDeleteAsset()
 	{
 		ClassifierDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
@@ -40,6 +40,7 @@ public sealed class ClassifierAssetLibraryTests
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot, tag);
 		dataSet.Assets.DeleteAsset(asset);
+		dataSet.Assets.Should().BeEmpty();
 		screenshot.Asset.Should().BeNull();
 	}
 

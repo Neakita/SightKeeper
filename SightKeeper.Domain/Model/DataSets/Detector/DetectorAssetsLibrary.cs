@@ -17,9 +17,8 @@ public sealed class DetectorAssetsLibrary : AssetsLibrary<DetectorAsset>
 
 	public override void DeleteAsset(DetectorAsset asset)
 	{
-		var screenshot = asset.Screenshot;
 		base.DeleteAsset(asset);
-		screenshot.Asset = null;
+		asset.Screenshot.Asset = null;
 	}
 
 	internal DetectorAssetsLibrary(DetectorDataSet dataSet)

@@ -23,6 +23,8 @@ public sealed class PoserWeights : Weights
 
 	private void ValidateTags()
 	{
+		Guard.IsGreaterThan(Tags.Count, 0);
+		Guard.IsFalse(Tags.HasDuplicates());
 		foreach (var tag in Tags)
 			Guard.IsReferenceEqualTo(tag.DataSet, DataSet);
 	}

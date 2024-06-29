@@ -11,8 +11,8 @@ public sealed class DetectorAssetTests
 	{
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleDetectorScreenshotsDataAccess detectorScreenshotsDataAccess = new();
-		var screenshot = detectorScreenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		var item = asset.CreateItem(tag, new Bounding());
 		asset.Items.Should().Contain(item);
@@ -23,8 +23,8 @@ public sealed class DetectorAssetTests
 	{
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleDetectorScreenshotsDataAccess detectorScreenshotsDataAccess = new();
-		var screenshot = detectorScreenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		var item1 = asset.CreateItem(tag, new Bounding(0, 0, 0.5, 0.5));
 		var item2 = asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
@@ -37,8 +37,8 @@ public sealed class DetectorAssetTests
 		DetectorDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		SimpleDetectorScreenshotsDataAccess detectorScreenshotsDataAccess = new();
-		var screenshot = detectorScreenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		var item1 = asset.CreateItem(tag1, new Bounding());
 		var item2 = asset.CreateItem(tag2, new Bounding());

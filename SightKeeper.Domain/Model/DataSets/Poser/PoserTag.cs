@@ -11,38 +11,51 @@ public sealed class PoserTag : Tag
 		{
 			if (_name == value)
 				return;
-			bool isNewNameOccupied = Library.Any(tag => tag.Name == value);
-			Guard.IsFalse(isNewNameOccupied);
+			foreach (var sibling in Library)
+				Guard.IsNotEqualTo(sibling.Name, value);
 			_name = value;
 		}
 	}
 
 	public IReadOnlyList<KeyPointTag> KeyPoints => _keyPoints.AsReadOnly();
+	public IReadOnlyCollection<PoserItem> Items => _items;
 	public PoserTagsLibrary Library { get; }
 	public PoserDataSet DataSet => Library.DataSet;
 
-	internal PoserTag(string name, uint color, PoserTagsLibrary library)
+	public KeyPointTag AddKeyPoint(string name)
 	{
-		_name = name;
-		Color = color;
-		_keyPoints = new List<KeyPointTag>();
-		Library = library;
-	}
-
-	private string _name;
-
-	public KeyPointTag AddKeyPoint(string name, uint color)
-	{
-		KeyPointTag tag = new(name, color, this);
+		Guard.IsEmpty(Items);
+		KeyPointTag tag = new(name, this);
 		_keyPoints.Add(tag);
 		return tag;
 	}
 
 	public void DeleteKeyPoint(KeyPointTag tag)
 	{
-		bool isRemoved = _keyPoints.Remove(tag);
-		Guard.IsTrue(isRemoved);
+		Guard.IsEmpty(Items);
+		Guard.IsTrue(_keyPoints.Remove(tag));
+	}
+
+	internal PoserTag(string name, PoserTagsLibrary library)
+	{
+		_name = name;
+		_keyPoints = new List<KeyPointTag>();
+		_items = new HashSet<PoserItem>();
+		Library = library;
+	}
+
+	internal void AddItem(PoserItem item)
+	{
+		Guard.IsTrue(_items.Add(item));
+	}
+
+	internal void RemoveItem(PoserItem item)
+	{
+		Guard.IsTrue(_items.Remove(item));
 	}
 
 	private readonly List<KeyPointTag> _keyPoints;
+	private readonly HashSet<PoserItem> _items;
+	private string _name;
+
 }

@@ -4,20 +4,36 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserAsset : ItemsAsset<PoserItem>
 {
+	public PoserScreenshot Screenshot { get; }
 	public PoserAssetsLibrary Library { get; }
 	public PoserDataSet DataSet => Library.DataSet;
 
-	public PoserItem CreateItem(PoserTag tag, Bounding bounding, IReadOnlyCollection<KeyPoint> keyPoints)
+	public PoserItem CreateItem(PoserTag tag, Bounding bounding, IReadOnlyCollection<Vector2<double>> keyPoints)
 	{
-		Guard.IsTrue(DataSet.Tags.Contains(tag));
 		Guard.IsEqualTo(keyPoints.Count, tag.KeyPoints.Count);
-		PoserItem item = new(tag, bounding, keyPoints);
+		var taggedKeyPoints = keyPoints.Zip(tag.KeyPoints).Select(t => new KeyPoint(t.First, t.Second)).ToList();
+		PoserItem item = new(tag, bounding, taggedKeyPoints);
+		tag.AddItem(item);
 		AddItem(item);
 		return item;
 	}
-	
-	internal PoserAsset(Screenshot screenshot, PoserAssetsLibrary library) : base(screenshot)
+
+	public override void DeleteItem(PoserItem item)
 	{
+		base.DeleteItem(item);
+		item.Tag.RemoveItem(item);
+	}
+
+	public override void ClearItems()
+	{
+		foreach (var item in Items)
+			item.Tag.RemoveItem(item);
+		base.ClearItems();
+	}
+
+	internal PoserAsset(PoserScreenshot screenshot, PoserAssetsLibrary library)
+	{
+		Screenshot = screenshot;
 		Library = library;
 	}
 }
