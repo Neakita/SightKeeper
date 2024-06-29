@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.DataSets;
+﻿using CommunityToolkit.Diagnostics;
+
+namespace SightKeeper.Domain.Model.DataSets;
 
 public abstract class DataSet
 {
@@ -13,6 +15,9 @@ public abstract class DataSet
 	{
 		Name = name;
 		Description = string.Empty;
+		Guard.IsGreaterThan<int>(resolution, 0);
+		Guard.IsEqualTo(resolution % 32, 0);
+		
 		Resolution = resolution;
 	}
 }
