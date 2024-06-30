@@ -10,7 +10,7 @@ public sealed class DetectorAssetsLibrary : AssetsLibrary<DetectorAsset>
 	{
 		Guard.IsNull(screenshot.Asset);
 		DetectorAsset asset = new(screenshot, this);
-		screenshot.Asset = asset;
+		screenshot.SetAsset(asset);
 		AddAsset(asset);
 		return asset;
 	}
@@ -18,7 +18,7 @@ public sealed class DetectorAssetsLibrary : AssetsLibrary<DetectorAsset>
 	public override void DeleteAsset(DetectorAsset asset)
 	{
 		base.DeleteAsset(asset);
-		asset.Screenshot.Asset = null;
+		asset.Screenshot.SetAsset(null);
 	}
 
 	internal DetectorAssetsLibrary(DetectorDataSet dataSet)

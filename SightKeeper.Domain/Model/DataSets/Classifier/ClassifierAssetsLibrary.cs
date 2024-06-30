@@ -11,7 +11,7 @@ public class ClassifierAssetsLibrary : AssetsLibrary<ClassifierAsset>
 		Guard.IsNull(screenshot.Asset);
 		ClassifierAsset asset = new(screenshot, tag, this);
 		tag.AddAsset(asset);
-		screenshot.Asset = asset;
+		screenshot.SetAsset(asset);
 		AddAsset(asset);
 		return asset;
 	}
@@ -19,7 +19,7 @@ public class ClassifierAssetsLibrary : AssetsLibrary<ClassifierAsset>
 	public override void DeleteAsset(ClassifierAsset asset)
 	{
 		base.DeleteAsset(asset);
-		asset.Screenshot.Asset = null;
+		asset.Screenshot.SetAsset(null);
 		asset.Tag.RemoveAsset(asset);
 	}
 

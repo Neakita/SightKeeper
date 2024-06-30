@@ -10,7 +10,7 @@ public sealed class PoserAssetsLibrary : AssetsLibrary<PoserAsset>
 	{
 		Guard.IsNull(screenshot.Asset);
 		PoserAsset asset = new(screenshot, this);
-		screenshot.Asset = asset;
+		screenshot.SetAsset(asset);
 		AddAsset(asset);
 		return asset;
 	}
@@ -18,7 +18,7 @@ public sealed class PoserAssetsLibrary : AssetsLibrary<PoserAsset>
 	public override void DeleteAsset(PoserAsset asset)
 	{
 		base.DeleteAsset(asset);
-		asset.Screenshot.Asset = null;
+		asset.Screenshot.SetAsset(null);
 	}
 
 	internal PoserAssetsLibrary(PoserDataSet dataSet)

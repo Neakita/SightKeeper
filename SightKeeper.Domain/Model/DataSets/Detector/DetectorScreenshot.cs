@@ -2,11 +2,18 @@
 
 public sealed class DetectorScreenshot : Screenshot
 {
-	public DetectorAsset? Asset { get; internal set; }
+	public override DetectorAsset? Asset => _asset;
 	public override DetectorScreenshotsLibrary Library { get; }
 
 	internal DetectorScreenshot(DetectorScreenshotsLibrary library)
 	{
 		Library = library;
 	}
+
+	internal void SetAsset(DetectorAsset? asset)
+	{
+		_asset = asset;
+	}
+
+	private DetectorAsset? _asset;
 }

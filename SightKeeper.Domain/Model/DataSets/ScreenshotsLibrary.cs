@@ -7,15 +7,11 @@ namespace SightKeeper.Domain.Model.DataSets;
 public abstract class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
 {
 	/// <summary>
-	/// The maximum number of screenshots that can be contained in this library.
-	/// If not specified (null), an unlimited number of images can be stored.
+	/// The maximum number of screenshots without asset that can be contained in this library.
+	/// If not specified (null), an unlimited number can be stored.
 	/// </summary>
 	public ushort? MaxQuantity { get; set; }
 
-	/// <summary>
-	/// The current number of screenshots stored.
-	/// If the <see cref="MaxQuantity"/> is specified, it (generally) cannot exceed it.
-	/// </summary>
 	public abstract int Count { get; }
 	
 	public abstract DataSet DataSet { get; }
@@ -45,16 +41,16 @@ public abstract class ScreenshotsLibrary<TScreenshot> : ScreenshotsLibrary, IRea
     {
 	    if (MaxQuantity == null)
 		    return ImmutableArray<Screenshot>.Empty;
-	    var exceedAmount = _screenshots.Count - MaxQuantity.Value;
+	    var screenshotWithoutAssetCount = _screenshots.Count - DataSet.Assets.Count;
+	    var exceedAmount = screenshotWithoutAssetCount - MaxQuantity.Value;
 	    if (exceedAmount <= 0)
 		    return ImmutableArray<Screenshot>.Empty;
 	    var builder = ImmutableArray.CreateBuilder<Screenshot>(exceedAmount);
-	    for (int i = 0; i < exceedAmount; i++)
+	    var screenshotsToDelete = _screenshots.Where(screenshot => screenshot.Asset == null).Take(exceedAmount);
+	    foreach (var screenshot in screenshotsToDelete)
 	    {
-		    var oldestScreenshot = _screenshots.Min;
-		    Guard.IsNotNull(oldestScreenshot);
-		    Guard.IsTrue(_screenshots.Remove(oldestScreenshot));
-		    builder.Add(oldestScreenshot);
+		    Guard.IsTrue(_screenshots.Remove(screenshot));
+		    builder.Add(screenshot);
 	    }
 	    return builder.ToImmutable();
     }
