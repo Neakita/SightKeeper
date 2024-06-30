@@ -4,9 +4,9 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserAsset : ItemsAsset<PoserItem>
 {
-	public PoserScreenshot Screenshot { get; }
-	public PoserAssetsLibrary Library { get; }
-	public PoserDataSet DataSet => Library.DataSet;
+	public override PoserScreenshot Screenshot { get; }
+	public override PoserAssetsLibrary Library { get; }
+	public override PoserDataSet DataSet => Library.DataSet;
 
 	public PoserItem CreateItem(PoserTag tag, Bounding bounding, IReadOnlyCollection<Vector2<double>> keyPoints)
 	{

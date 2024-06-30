@@ -2,10 +2,10 @@
 
 public sealed class DetectorDataSet : DataSet
 {
-	public DetectorTagsLibrary Tags { get; }
-	public DetectorScreenshotsLibrary Screenshots { get; }
-	public DetectorAssetsLibrary Assets { get; }
-	public DetectorWeightsLibrary Weights { get; }
+	public override DetectorTagsLibrary Tags { get; }
+	public override DetectorScreenshotsLibrary Screenshots { get; }
+	public override DetectorAssetsLibrary Assets { get; }
+	public override DetectorWeightsLibrary Weights { get; }
 
 	public DetectorDataSet(string name, ushort resolution) : base(name, resolution)
 	{

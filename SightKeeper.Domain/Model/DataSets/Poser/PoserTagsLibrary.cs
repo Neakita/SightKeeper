@@ -4,7 +4,7 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserTagsLibrary : TagsLibrary<PoserTag>
 {
-	public PoserDataSet DataSet { get; }
+	public override PoserDataSet DataSet { get; }
 
 	public PoserTag CreateTag(string name)
 	{

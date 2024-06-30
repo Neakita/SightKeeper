@@ -2,10 +2,10 @@
 
 public sealed class ClassifierDataSet : DataSet
 {
-	public ClassifierTagsLibrary Tags { get; }
-	public ClassifierScreenshotsLibrary Screenshots { get; }
-	public ClassifierAssetsLibrary Assets { get; }
-	public ClassifierWeightsLibrary Weights { get; }
+	public override ClassifierTagsLibrary Tags { get; }
+	public override ClassifierScreenshotsLibrary Screenshots { get; }
+	public override ClassifierAssetsLibrary Assets { get; }
+	public override ClassifierWeightsLibrary Weights { get; }
 
 	public ClassifierDataSet(string name, ushort resolution) : base(name, resolution)
 	{

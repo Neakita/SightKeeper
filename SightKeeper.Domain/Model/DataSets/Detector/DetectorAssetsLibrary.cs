@@ -4,7 +4,7 @@ namespace SightKeeper.Domain.Model.DataSets.Detector;
 
 public sealed class DetectorAssetsLibrary : AssetsLibrary<DetectorAsset>
 {
-	public DetectorDataSet DataSet { get; }
+	public override DetectorDataSet DataSet { get; }
 
 	public DetectorAsset MakeAsset(DetectorScreenshot screenshot)
 	{

@@ -2,7 +2,7 @@
 
 public sealed class PoserScreenshotsLibrary : ScreenshotsLibrary<PoserScreenshot>
 {
-	public PoserDataSet DataSet { get; }
+	public override PoserDataSet DataSet { get; }
 
 	internal PoserScreenshotsLibrary(PoserDataSet dataSet)
 	{

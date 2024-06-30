@@ -2,8 +2,8 @@
 
 public sealed class PoserScreenshot : Screenshot
 {
-	public PoserAsset? Asset { get; set; }
-	public PoserScreenshotsLibrary Library { get; }
+	public PoserAsset? Asset { get; internal set; }
+	public override PoserScreenshotsLibrary Library { get; }
 
 	internal PoserScreenshot(PoserScreenshotsLibrary library)
 	{

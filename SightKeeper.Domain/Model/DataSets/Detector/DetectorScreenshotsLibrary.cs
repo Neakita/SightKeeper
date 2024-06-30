@@ -2,7 +2,7 @@
 
 public class DetectorScreenshotsLibrary : ScreenshotsLibrary<DetectorScreenshot>
 {
-	public DetectorDataSet DataSet { get; }
+	public override DetectorDataSet DataSet { get; }
 
 	internal DetectorScreenshotsLibrary(DetectorDataSet dataSet)
 	{

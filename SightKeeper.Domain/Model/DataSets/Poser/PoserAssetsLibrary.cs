@@ -4,7 +4,7 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserAssetsLibrary : AssetsLibrary<PoserAsset>
 {
-	public PoserDataSet DataSet { get; }
+	public override PoserDataSet DataSet { get; }
 
 	public PoserAsset MakeAsset(PoserScreenshot screenshot)
 	{

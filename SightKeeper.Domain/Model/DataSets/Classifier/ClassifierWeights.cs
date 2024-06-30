@@ -5,9 +5,9 @@ namespace SightKeeper.Domain.Model.DataSets.Classifier;
 
 public sealed class ClassifierWeights : Weights
 {
-	public IReadOnlyCollection<ClassifierTag> Tags { get; }
-	public ClassifierWeightsLibrary Library { get; }
-	public ClassifierDataSet DataSet => Library.DataSet;
+	public override IReadOnlyCollection<ClassifierTag> Tags { get; }
+	public override ClassifierWeightsLibrary Library { get; }
+	public override ClassifierDataSet DataSet => Library.DataSet;
 
 	internal ClassifierWeights(
 		ModelSize size,

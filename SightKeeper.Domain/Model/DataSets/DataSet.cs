@@ -8,6 +8,10 @@ public abstract class DataSet
 	public string Description { get; set; }
 	public Game? Game { get; set; }
 	public ushort Resolution { get; }
+	public abstract TagsLibrary Tags { get; }
+	public abstract ScreenshotsLibrary Screenshots { get; }
+	public abstract AssetsLibrary Assets { get; }
+	public abstract WeightsLibrary Weights { get; }
 
 	public override string ToString() => Name;
 

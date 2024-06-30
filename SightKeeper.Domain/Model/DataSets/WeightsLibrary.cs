@@ -3,11 +3,23 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
-public abstract class WeightsLibrary<TWeights> : IReadOnlyCollection<TWeights> where TWeights : Weights
+public abstract class WeightsLibrary : IReadOnlyCollection<Weights>
 {
-	public int Count => _weights.Count;
+	public abstract int Count { get; }
+	public abstract DataSet DataSet { get; }
 
-	public IEnumerator<TWeights> GetEnumerator()
+	public abstract IEnumerator<Weights> GetEnumerator();
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
+}
+
+public abstract class WeightsLibrary<TWeights> : WeightsLibrary, IReadOnlyCollection<TWeights> where TWeights : Weights
+{
+	public override int Count => _weights.Count;
+
+	public override IEnumerator<TWeights> GetEnumerator()
 	{
 		return _weights.GetEnumerator();
 	}

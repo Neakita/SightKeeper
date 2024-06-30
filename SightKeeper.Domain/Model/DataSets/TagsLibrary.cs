@@ -3,9 +3,21 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
-public abstract class TagsLibrary<TTag> : IReadOnlyCollection<TTag> where TTag : Tag
+public abstract class TagsLibrary : IReadOnlyCollection<Tag>
 {
-	public int Count => _tags.Count;
+	public abstract int Count { get; }
+	public abstract DataSet DataSet { get; }
+
+	public abstract IEnumerator<Tag> GetEnumerator();
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
+}
+
+public abstract class TagsLibrary<TTag> : TagsLibrary, IReadOnlyCollection<TTag> where TTag : Tag
+{
+	public override int Count => _tags.Count;
 
 	public virtual void DeleteTag(TTag tag)
 	{
@@ -13,22 +25,17 @@ public abstract class TagsLibrary<TTag> : IReadOnlyCollection<TTag> where TTag :
 		Guard.IsTrue(isRemoved);
 	}
 
-	public IEnumerator<TTag> GetEnumerator()
+	public override IEnumerator<TTag> GetEnumerator()
 	{
 		return _tags.GetEnumerator();
 	}
 
 	protected void AddTag(TTag tag)
 	{
-		bool isNameAlreadyUsed = _tags.Any(existingTag => existingTag.Name == tag.Name);
-		Guard.IsFalse(isNameAlreadyUsed);
+		foreach (var existingTag in _tags)
+			Guard.IsNotEqualTo(existingTag.Name, tag.Name);
 		_tags.Add(tag);
 	}
 
 	private readonly List<TTag> _tags = new();
-
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
 }

@@ -2,7 +2,7 @@
 
 public sealed class PoserWeightsLibrary : WeightsLibrary<PoserWeights>
 {
-	public PoserDataSet DataSet { get; }
+	public override PoserDataSet DataSet { get; }
 
 	internal PoserWeightsLibrary(PoserDataSet dataSet)
 	{

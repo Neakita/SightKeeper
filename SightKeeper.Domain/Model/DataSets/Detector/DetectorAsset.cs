@@ -2,9 +2,9 @@
 
 public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 {
-	public DetectorScreenshot Screenshot { get; }
-	public DetectorAssetsLibrary Library { get; }
-	public DetectorDataSet DataSet => Library.DataSet;
+	public override DetectorScreenshot Screenshot { get; }
+	public override DetectorAssetsLibrary Library { get; }
+	public override DetectorDataSet DataSet => Library.DataSet;
 	
     public DetectorItem CreateItem(DetectorTag tag, Bounding bounding)
     {

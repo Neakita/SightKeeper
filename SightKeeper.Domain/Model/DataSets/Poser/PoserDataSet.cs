@@ -2,10 +2,10 @@
 
 public sealed class PoserDataSet : DataSet
 {
-	public PoserTagsLibrary Tags { get; }
-	public PoserScreenshotsLibrary Screenshots { get; }
-	public PoserAssetsLibrary Assets { get; }
-	public PoserWeightsLibrary Weights { get; }
+	public override PoserTagsLibrary Tags { get; }
+	public override PoserScreenshotsLibrary Screenshots { get; }
+	public override PoserAssetsLibrary Assets { get; }
+	public override PoserWeightsLibrary Weights { get; }
 
 	public PoserDataSet(string name, ushort resolution) : base(name, resolution)
 	{

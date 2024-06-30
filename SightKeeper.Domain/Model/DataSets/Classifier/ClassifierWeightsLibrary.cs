@@ -2,7 +2,7 @@
 
 public sealed class ClassifierWeightsLibrary : WeightsLibrary<ClassifierWeights>
 {
-	public ClassifierDataSet DataSet { get; }
+	public override ClassifierDataSet DataSet { get; }
 
 	internal ClassifierWeightsLibrary(ClassifierDataSet dataSet)
 	{

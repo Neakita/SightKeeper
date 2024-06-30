@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Domain.Tests.Poser;

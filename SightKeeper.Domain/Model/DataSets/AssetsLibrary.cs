@@ -3,11 +3,23 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
-public abstract class AssetsLibrary<TAsset> : IReadOnlyCollection<TAsset> where TAsset : Asset
+public abstract class AssetsLibrary : IReadOnlyCollection<Asset>
 {
-	public int Count => _assets.Count;
+	public abstract int Count { get; }
+	public abstract DataSet DataSet { get; }
 
-	public IEnumerator<TAsset> GetEnumerator()
+	public abstract IEnumerator<Asset> GetEnumerator();
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
+}
+
+public abstract class AssetsLibrary<TAsset> : AssetsLibrary, IReadOnlyCollection<TAsset> where TAsset : Asset
+{
+	public override int Count => _assets.Count;
+
+	public override IEnumerator<TAsset> GetEnumerator()
 	{
 		return _assets.GetEnumerator();
 	}
@@ -24,9 +36,4 @@ public abstract class AssetsLibrary<TAsset> : IReadOnlyCollection<TAsset> where 
 	}
 
 	private readonly HashSet<TAsset> _assets = new();
-
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
 }

@@ -5,9 +5,9 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserWeights : Weights
 {
-	public IReadOnlyCollection<PoserTag> Tags { get; }
-	public PoserWeightsLibrary Library { get; }
-	public PoserDataSet DataSet => Library.DataSet;
+	public override IReadOnlyCollection<PoserTag> Tags { get; }
+	public override PoserWeightsLibrary Library { get; }
+	public override PoserDataSet DataSet => Library.DataSet;
 
 	internal PoserWeights(
 		ModelSize size,

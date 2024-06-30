@@ -5,9 +5,9 @@ namespace SightKeeper.Domain.Model.DataSets.Detector;
 
 public sealed class DetectorWeights : Weights
 {
-    public IReadOnlyCollection<DetectorTag> Tags { get; }
-    public DetectorWeightsLibrary Library { get; }
-    public DetectorDataSet DataSet => Library.DataSet;
+    public override IReadOnlyCollection<DetectorTag> Tags { get; }
+    public override DetectorWeightsLibrary Library { get; }
+    public override DetectorDataSet DataSet => Library.DataSet;
 
     internal DetectorWeights(
         ModelSize size,

@@ -2,8 +2,8 @@
 
 public sealed class ClassifierScreenshot : Screenshot
 {
-	public ClassifierAsset? Asset { get; set; }
-	public ClassifierScreenshotsLibrary Library { get; }
+	public ClassifierAsset? Asset { get; internal set; }
+	public override ClassifierScreenshotsLibrary Library { get; }
 
 	internal ClassifierScreenshot(ClassifierScreenshotsLibrary library)
 	{

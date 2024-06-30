@@ -2,7 +2,7 @@
 
 public sealed class DetectorWeightsLibrary : WeightsLibrary<DetectorWeights>
 {
-	public DetectorDataSet DataSet { get; }
+	public override DetectorDataSet DataSet { get; }
 
 	internal DetectorWeightsLibrary(DetectorDataSet dataSet)
 	{

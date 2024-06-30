@@ -4,19 +4,32 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
-public abstract class ScreenshotsLibrary<TScreenshot> : IReadOnlyCollection<TScreenshot> where TScreenshot : Screenshot
+public abstract class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
 {
 	/// <summary>
 	/// The maximum number of screenshots that can be contained in this library.
 	/// If not specified (null), an unlimited number of images can be stored.
 	/// </summary>
-    public ushort? MaxQuantity { get; set; }
+	public ushort? MaxQuantity { get; set; }
+
+	/// <summary>
+	/// The current number of screenshots stored.
+	/// If the <see cref="MaxQuantity"/> is specified, it (generally) cannot exceed it.
+	/// </summary>
+	public abstract int Count { get; }
 	
-    /// <summary>
-    /// The current number of screenshots stored.
-    /// If the <see cref="MaxQuantity"/> is specified, it (generally) cannot exceed it.
-    /// </summary>
-    public int Count => _screenshots.Count;
+	public abstract DataSet DataSet { get; }
+
+	public abstract IEnumerator<Screenshot> GetEnumerator();
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
+}
+
+public abstract class ScreenshotsLibrary<TScreenshot> : ScreenshotsLibrary, IReadOnlyCollection<TScreenshot> where TScreenshot : Screenshot
+{
+    public override int Count => _screenshots.Count;
 
     public void DeleteScreenshot(TScreenshot screenshot)
     {
@@ -24,9 +37,9 @@ public abstract class ScreenshotsLibrary<TScreenshot> : IReadOnlyCollection<TScr
         Guard.IsTrue(isRemoved);
     }
 
-    public IEnumerator<TScreenshot> GetEnumerator() => _screenshots.GetEnumerator();
+    public override IEnumerator<TScreenshot> GetEnumerator() => _screenshots.GetEnumerator();
 
-    internal protected abstract TScreenshot CreateScreenshot();
+    protected internal abstract TScreenshot CreateScreenshot();
 
     internal ImmutableArray<Screenshot> ClearExceed()
     {
@@ -52,9 +65,4 @@ public abstract class ScreenshotsLibrary<TScreenshot> : IReadOnlyCollection<TScr
     }
 
     private readonly SortedSet<TScreenshot> _screenshots = new(ScreenshotsDateComparer.Instance);
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-	    return GetEnumerator();
-    }
 }

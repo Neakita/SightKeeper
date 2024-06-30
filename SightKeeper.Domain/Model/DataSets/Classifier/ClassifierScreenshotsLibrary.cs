@@ -2,7 +2,7 @@
 
 public sealed class ClassifierScreenshotsLibrary : ScreenshotsLibrary<ClassifierScreenshot>
 {
-	public ClassifierDataSet DataSet { get; }
+	public override ClassifierDataSet DataSet { get; }
 
 	internal ClassifierScreenshotsLibrary(ClassifierDataSet dataSet)
 	{

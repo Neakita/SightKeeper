@@ -11,15 +11,15 @@ public sealed class DetectorTag : Tag
 		{
 			if (_name == value)
 				return;
-			bool isNewNameOccupied = Library.Any(tag => tag.Name == value);
-			Guard.IsFalse(isNewNameOccupied);
+			foreach (var sibling in Library)
+				Guard.IsNotEqualTo(sibling.Name, value);
 			_name = value;
 		}
 	}
 
 	public IReadOnlyCollection<DetectorItem> Items => _items;
-	public DetectorTagsLibrary Library { get; }
-	public DetectorDataSet DataSet => Library.DataSet;
+	public override DetectorTagsLibrary Library { get; }
+	public override DetectorDataSet DataSet => Library.DataSet;
 
 	internal DetectorTag(string name, DetectorTagsLibrary library)
 	{

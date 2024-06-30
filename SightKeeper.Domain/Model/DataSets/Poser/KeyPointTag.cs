@@ -3,9 +3,9 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser;
 
-public sealed class KeyPointTag : Tag
+public sealed class KeyPointTag
 {
-	public override string Name
+	public string Name
 	{
 		get => _name;
 		[MemberNotNull(nameof(_name))] set

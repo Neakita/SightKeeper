@@ -4,7 +4,7 @@ namespace SightKeeper.Domain.Model.DataSets.Classifier;
 
 public sealed class ClassifierTagsLibrary : TagsLibrary<ClassifierTag>
 {
-	public ClassifierDataSet DataSet { get; }
+	public override ClassifierDataSet DataSet { get; }
 
 	public ClassifierTag CreateTag(string name)
 	{
@@ -15,8 +15,7 @@ public sealed class ClassifierTagsLibrary : TagsLibrary<ClassifierTag>
 
 	public override void DeleteTag(ClassifierTag tag)
 	{
-		bool isTagInUse = DataSet.Assets.Any(asset => asset.Tag == tag);
-		Guard.IsFalse(isTagInUse);
+		Guard.IsEmpty(tag.Assets);
 		base.DeleteTag(tag);
 	}
 
