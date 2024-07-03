@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
@@ -7,7 +8,7 @@ public sealed class DetectorTag : Tag
 	public override string Name
 	{
 		get => _name;
-		set
+		[MemberNotNull(nameof(_name))] set
 		{
 			if (_name == value)
 				return;
@@ -23,8 +24,8 @@ public sealed class DetectorTag : Tag
 
 	internal DetectorTag(string name, DetectorTagsLibrary library)
 	{
-		_name = name;
 		Library = library;
+		Name = name;
 		_items = new HashSet<DetectorItem>();
 	}
 
