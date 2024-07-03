@@ -2,10 +2,10 @@
 
 public sealed class Image
 {
-    public byte[] Content { get; }
+    public byte[] Data { get; }
 
-    internal Image(byte[] content)
+    internal Image(byte[] data)
     {
-        Content = content;
+        Data = data;
     }
 }
