@@ -5,7 +5,7 @@ namespace SightKeeper.Domain.Model.DataSets.Detector;
 
 public sealed class DetectorWeights : Weights
 {
-    public override IReadOnlyCollection<DetectorTag> Tags { get; }
+    public override IImmutableSet<DetectorTag> Tags { get; }
     public override DetectorWeightsLibrary Library { get; }
     public override DetectorDataSet DataSet => Library.DataSet;
 
@@ -16,7 +16,7 @@ public sealed class DetectorWeights : Weights
         DetectorWeightsLibrary library)
 	    : base(size, metrics)
     {
-	    Tags = tags.ToImmutableArray();
+	    Tags = tags.ToImmutableHashSetThrowOnDuplicate();
         Library = library;
         ValidateTags();
     }
@@ -25,8 +25,7 @@ public sealed class DetectorWeights : Weights
 
     private void ValidateTags()
     {
-	    Guard.IsGreaterThan(Tags.Count, 0);
-	    Guard.IsFalse(Tags.HasDuplicates());
+	    Guard.IsGreaterThanOrEqualTo(Tags.Count, 1);
 	    foreach (var tag in Tags)
 		    Guard.IsReferenceEqualTo(tag.DataSet, DataSet);
     }

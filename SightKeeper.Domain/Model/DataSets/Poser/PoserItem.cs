@@ -12,6 +12,6 @@ public sealed class PoserItem
 	{
 		Tag = tag;
 		Bounding = bounding;
-		KeyPoints = keyPoints.ToImmutableArray();
+		KeyPoints = keyPoints.ToImmutableList();
 	}
 }
