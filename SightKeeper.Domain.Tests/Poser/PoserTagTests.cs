@@ -33,8 +33,8 @@ public class PoserTagTests
 	{
 		PoserDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimplePoserScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag, new Bounding(), []);
 		Assert.ThrowsAny<Exception>(() => tag.AddKeyPoint(""));
@@ -47,8 +47,8 @@ public class PoserTagTests
 		PoserDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		var keyPoint = tag.AddKeyPoint("");
-		SimplePoserScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag, new Bounding(), [new Vector2<double>()]);
 		Assert.ThrowsAny<Exception>(() => tag.DeleteKeyPoint(keyPoint));
@@ -61,8 +61,8 @@ public class PoserTagTests
 		PoserDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		SimplePoserScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag1, new Bounding(), []);
 		var keyPoint = tag2.AddKeyPoint("");
@@ -77,8 +77,8 @@ public class PoserTagTests
 		var tag2 = dataSet.Tags.CreateTag("2");
 		var keyPoint1 = tag1.AddKeyPoint("");
 		var keyPoint2 = tag2.AddKeyPoint("");
-		SimplePoserScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag1, new Bounding(), [new Vector2<double>()]);
 		tag2.DeleteKeyPoint(keyPoint2);

@@ -17,6 +17,8 @@ public abstract class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
 	public abstract DataSet DataSet { get; }
 
 	public abstract IEnumerator<Screenshot> GetEnumerator();
+	internal abstract ImmutableArray<Screenshot> ClearExceed();
+	protected internal abstract Screenshot CreateScreenshot();
 	IEnumerator IEnumerable.GetEnumerator()
 	{
 		return GetEnumerator();
@@ -35,9 +37,9 @@ public abstract class ScreenshotsLibrary<TScreenshot> : ScreenshotsLibrary, IRea
 
     public override IEnumerator<TScreenshot> GetEnumerator() => _screenshots.GetEnumerator();
 
-    protected internal abstract TScreenshot CreateScreenshot();
+    protected internal abstract override TScreenshot CreateScreenshot();
 
-    internal ImmutableArray<Screenshot> ClearExceed()
+    internal override ImmutableArray<Screenshot> ClearExceed()
     {
 	    if (MaxQuantity == null)
 		    return ImmutableArray<Screenshot>.Empty;

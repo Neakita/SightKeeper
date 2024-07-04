@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Domain.Tests.Detector;
@@ -48,8 +47,8 @@ public sealed class DetectorTagsLibraryTests
 	{
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.DeleteTag(tag));
@@ -62,8 +61,8 @@ public sealed class DetectorTagsLibraryTests
 		DetectorDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		SimpleDetectorScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag1, new Bounding(0, 0, 1, 1));
 		dataSet.Tags.DeleteTag(tag2);

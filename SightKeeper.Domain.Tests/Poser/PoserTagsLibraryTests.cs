@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Domain.Tests.Poser;
@@ -48,8 +47,8 @@ public class PoserTagsLibraryTests
 	{
 		PoserDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimplePoserScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag, new Bounding(0, 0, 1, 1), []);
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.DeleteTag(tag));

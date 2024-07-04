@@ -15,5 +15,10 @@ public sealed class DetectorScreenshot : Screenshot
 		_asset = asset;
 	}
 
+	protected internal override void DeleteFromLibrary()
+	{
+		Library.DeleteScreenshot(this);
+	}
+
 	private DetectorAsset? _asset;
 }

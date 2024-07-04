@@ -8,7 +8,7 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 	
     public DetectorItem CreateItem(DetectorTag tag, Bounding bounding)
     {
-        DetectorItem item = new(tag, bounding);
+        DetectorItem item = new(tag, bounding, this);
         tag.AddItem(item);
         AddItem(item);
         return item;

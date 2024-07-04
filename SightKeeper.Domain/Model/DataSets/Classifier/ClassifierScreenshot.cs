@@ -15,5 +15,10 @@ public sealed class ClassifierScreenshot : Screenshot
 		_asset = asset;
 	}
 
+	protected internal override void DeleteFromLibrary()
+	{
+		Library.DeleteScreenshot(this);
+	}
+
 	private ClassifierAsset? _asset;
 }

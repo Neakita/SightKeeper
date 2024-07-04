@@ -15,5 +15,10 @@ public sealed class PoserScreenshot : Screenshot
 		_asset = asset;
 	}
 
+	protected internal override void DeleteFromLibrary()
+	{
+		Library.DeleteScreenshot(this);
+	}
+
 	private PoserAsset? _asset;
 }

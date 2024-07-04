@@ -10,8 +10,8 @@ public sealed class ClassifierAssetLibraryTests
 	{
 		ClassifierDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleClassifierScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot, tag);
 		screenshot.Asset.Should().Be(asset);
 		dataSet.Assets.Should().Contain(asset);
@@ -22,8 +22,8 @@ public sealed class ClassifierAssetLibraryTests
 	{
 		ClassifierDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleClassifierScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot, tag);
 		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot, tag));
 		screenshot.Asset.Should().Be(asset);
@@ -36,8 +36,8 @@ public sealed class ClassifierAssetLibraryTests
 	{
 		ClassifierDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleClassifierScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot, tag);
 		dataSet.Assets.DeleteAsset(asset);
 		dataSet.Assets.Should().BeEmpty();
@@ -50,8 +50,8 @@ public sealed class ClassifierAssetLibraryTests
 		ClassifierDataSet dataSet1 = new("", 320);
 		var tag = dataSet1.Tags.CreateTag("");
 		ClassifierDataSet dataSet2 = new("", 320);
-		SimpleClassifierScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet1, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet1.Screenshots, []);
 		var asset = dataSet1.Assets.MakeAsset(screenshot, tag);
 		Assert.ThrowsAny<Exception>(() => dataSet2.Assets.DeleteAsset(asset));
 		asset.Screenshot.Asset.Should().Be(asset);
@@ -62,8 +62,8 @@ public sealed class ClassifierAssetLibraryTests
 	{
 		ClassifierDataSet dataSet = new("", 320);
 		var foreignTag = new ClassifierDataSet("", 320).Tags.CreateTag("");
-		SimpleClassifierScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet, []);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot, foreignTag));
 		dataSet.Assets.Should().BeEmpty();
 	}
