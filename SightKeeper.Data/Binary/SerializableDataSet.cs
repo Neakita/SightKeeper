@@ -6,7 +6,7 @@ namespace SightKeeper.Data.Binary;
 
 [MemoryPackable]
 [MemoryPackUnion(0, typeof(SerializableDetectorDataSet))]
-public abstract partial record SerializableDataSet(string Name, string Description, Id? Game, ushort Resolution);
+public abstract partial record SerializableDataSet(string Name, string Description, ushort? GameId, ushort Resolution, ushort? MaxScreenshots);
 
 [MemoryPackable]
 public partial record SerializableTag(Id Id, string Name, uint Color);

@@ -13,16 +13,6 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		set => _dataAccess.DirectoryPath = value;
 	}
 
-	public FileSystemScreenshotsDataAccess(IEnumerable<(ScreenshotsLibrary Library, IEnumerable<Id> ImageIds)> initialData)
-	{
-		foreach (var data in initialData)
-		foreach (var imageId in data.ImageIds)
-			_dataAccess.AssociateId(CreateScreenshotInLibrary(data.Library), imageId);
-
-		[UnsafeAccessor(UnsafeAccessorKind.Method, Name = nameof(CreateScreenshot))]
-		static extern Screenshot CreateScreenshotInLibrary(ScreenshotsLibrary library);
-	}
-
 	public override Image LoadImage(Screenshot screenshot)
 	{
 		var data = _dataAccess.ReadAllBytes(screenshot);
@@ -30,6 +20,16 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 
 		[UnsafeAccessor(UnsafeAccessorKind.Constructor)]
 		static extern Image CreateImage(byte[] data);
+	}
+
+	public Id GetId(Screenshot screenshot)
+	{
+		return _dataAccess.GetId(screenshot);
+	}
+
+	public void AssociateId(Screenshot screenshot, Id id)
+	{
+		_dataAccess.AssociateId(screenshot, id);
 	}
 
 	protected override void SaveScreenshotData(Screenshot screenshot, Image image)

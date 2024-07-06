@@ -12,6 +12,11 @@ internal sealed class FileSystemDataAccess<T> where T : notnull
 		_fileExtension = fileExtension;
 	}
 
+	public Id GetId(T item)
+	{
+		return _ids[item];
+	}
+
 	public byte[] ReadAllBytes(T item)
 	{
 		var filePath = GetFilePath(item);
@@ -28,6 +33,7 @@ internal sealed class FileSystemDataAccess<T> where T : notnull
 
 	public void AssociateId(T item, Id id)
 	{
+		Guard.IsTrue(File.Exists(GetFilePath(id)));
 		_ids.Add(item, id);
 	}
 

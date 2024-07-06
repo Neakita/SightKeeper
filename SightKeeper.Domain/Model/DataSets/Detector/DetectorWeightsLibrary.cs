@@ -10,11 +10,11 @@ public sealed class DetectorWeightsLibrary : WeightsLibrary<DetectorWeights>
 	}
 
     internal DetectorWeights CreateWeights(
-	    ModelSize modelSize,
+	    ModelSize size,
 	    WeightsMetrics metrics,
 	    IEnumerable<DetectorTag> tags)
     {
-	    DetectorWeights weights = new(modelSize, metrics, tags, this);
+	    DetectorWeights weights = new(size, metrics, tags, this);
 	    AddWeights(weights);
 	    return weights;
     }

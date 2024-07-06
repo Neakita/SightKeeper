@@ -14,14 +14,6 @@ public sealed class FileSystemDetectorWeightsDataAccess: DetectorWeightsDataAcce
 		set => _dataAccess.DirectoryPath = value;
 	}
 
-	public FileSystemDetectorWeightsDataAccess(IEnumerable<(ScreenshotsLibrary Library, IEnumerable<Id> WeightsIds)> initialData)
-	{
-		foreach (var (library, ids) in initialData)
-		{
-			
-		}
-	}
-
 	public override WeightsData LoadWeightsData(DetectorWeights weights)
 	{
 		var data = _dataAccess.ReadAllBytes(weights);
@@ -29,6 +21,16 @@ public sealed class FileSystemDetectorWeightsDataAccess: DetectorWeightsDataAcce
 
 		[UnsafeAccessor(UnsafeAccessorKind.Constructor)]
 		static extern WeightsData CreateWeightsData(byte[] content);
+	}
+
+	public Id GetId(DetectorWeights weights)
+	{
+		return _dataAccess.GetId(weights);
+	}
+
+	public void AssociateId(DetectorWeights weights, Id id)
+	{
+		_dataAccess.AssociateId(weights, id);
 	}
 
 	protected override void SaveWeightsData(DetectorWeights weights, WeightsData data)

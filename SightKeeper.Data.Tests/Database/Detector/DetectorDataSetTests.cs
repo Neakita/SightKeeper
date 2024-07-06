@@ -4,7 +4,7 @@ using SightKeeper.Data.Database;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
-namespace SightKeeper.Data.Tests.Detector;
+namespace SightKeeper.Data.Tests.Database.Detector;
 
 public sealed class DetectorDataSetTests
 {

@@ -8,13 +8,14 @@ namespace SightKeeper.Data.Binary;
 public partial record SerializableDetectorDataSet(
 	string Name,
 	string Description,
-	Id? Game,
+	ushort? GameId,
 	ushort Resolution,
+	ushort? MaxScreenshots,
 	IReadOnlyCollection<SerializableTag> Tags,
 	IReadOnlyCollection<Id> Screenshots,
 	IReadOnlyCollection<SerializableDetectorAsset> Assets,
 	IReadOnlyCollection<SerializableDetectorWeights> Weights)
-	: SerializableDataSet(Name, Description, Game, Resolution);
+	: SerializableDataSet(Name, Description, GameId, Resolution, MaxScreenshots);
 
 [MemoryPackable]
 public partial record SerializableDetectorAsset(
@@ -24,7 +25,7 @@ public partial record SerializableDetectorAsset(
 	: SerializableAsset(ScreenshotId, Usage);
 
 [MemoryPackable]
-public partial record SerializableDetectorItem(Id Tag, Bounding Bounding);
+public partial record SerializableDetectorItem(Id TagId, Bounding Bounding);
 
 [MemoryPackable]
 public partial record SerializableDetectorWeights(

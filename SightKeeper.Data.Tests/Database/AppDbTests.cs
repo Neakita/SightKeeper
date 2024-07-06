@@ -6,7 +6,7 @@ using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using Xunit.Abstractions;
 
-namespace SightKeeper.Data.Tests;
+namespace SightKeeper.Data.Tests.Database;
 
 public sealed class AppDbTests
 {
