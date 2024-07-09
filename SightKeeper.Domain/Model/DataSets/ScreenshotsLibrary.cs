@@ -29,15 +29,12 @@ public abstract class ScreenshotsLibrary<TScreenshot> : ScreenshotsLibrary, IRea
 {
     public override int Count => _screenshots.Count;
 
-    public void DeleteScreenshot(TScreenshot screenshot)
-    {
-	    bool isRemoved = _screenshots.Remove(screenshot);
-        Guard.IsTrue(isRemoved);
-    }
-
     public override IEnumerator<TScreenshot> GetEnumerator() => _screenshots.GetEnumerator();
 
-    protected internal abstract override TScreenshot CreateScreenshot();
+    internal void DeleteScreenshot(TScreenshot screenshot)
+    {
+        Guard.IsTrue(_screenshots.Remove(screenshot));
+    }
 
     internal override ImmutableArray<Screenshot> ClearExceed()
     {
@@ -56,6 +53,8 @@ public abstract class ScreenshotsLibrary<TScreenshot> : ScreenshotsLibrary, IRea
 	    }
 	    return builder.ToImmutable();
     }
+
+    protected internal abstract override TScreenshot CreateScreenshot();
 
     protected void AddScreenshot(TScreenshot screenshot)
     {

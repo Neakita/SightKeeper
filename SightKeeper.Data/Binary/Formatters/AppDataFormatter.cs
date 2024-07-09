@@ -68,9 +68,9 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			dataSet.Resolution,
 			dataSet.Screenshots.MaxQuantity,
 			tagsDict.Values,
-			screenshots,
 			assets,
-			weights
+			weights,
+			screenshots
 		);
 		return serializableDataSet;
 	}
@@ -80,10 +80,10 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		return tags.ToDictionary(tag => tag, tag => new SerializableTag(Id.Create(), tag.Name, tag.Color));
 	}
 
-	private IEnumerable<Id> Convert(IEnumerable<Screenshot> screenshots)
+	private IEnumerable<SerializableScreenshot> Convert(IEnumerable<Screenshot> screenshots)
 	{
 		foreach (var screenshot in screenshots)
-			yield return _screenshotsDataAccess.GetId(screenshot);
+			yield return new SerializableScreenshot(_screenshotsDataAccess.GetId(screenshot), screenshot.CreationDate);
 	}
 
 	private IEnumerable<SerializableDetectorAsset> Convert(IEnumerable<DetectorAsset> assets, Func<DetectorTag, Id> getTagId)
@@ -129,11 +129,12 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 				tag.Color = rawTag.Color;
 			}
 			Dictionary<Id, DetectorScreenshot> screenshotsDict = new();
-			foreach (var screenshotId in raw.Screenshots)
+			foreach (var rawScreenshot in raw.Screenshots)
 			{
 				var screenshot = CreateScreenshot(dataSet.Screenshots);
-				screenshotsDict.Add(screenshotId, screenshot);
-				_screenshotsDataAccess.AssociateId(screenshot, screenshotId);
+				CreationDateBackingField(screenshot) = rawScreenshot.CreationDate;
+				screenshotsDict.Add(rawScreenshot.Id, screenshot);
+				_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
 			}
 			foreach (var rawAsset in raw.Assets)
 			{
@@ -150,9 +151,12 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			yield return dataSet;
 		}
 
-		[UnsafeAccessor(UnsafeAccessorKind.Method)]
+		[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
 		static extern DetectorScreenshot CreateScreenshot(DetectorScreenshotsLibrary library);
 
+		[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
+		static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
+		
 		[UnsafeAccessor(UnsafeAccessorKind.Method)]
 		static extern DetectorWeights CreateWeights(DetectorWeightsLibrary library, ModelSize size, WeightsMetrics metrics, IEnumerable<DetectorTag> tags);
 	}

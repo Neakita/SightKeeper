@@ -25,4 +25,10 @@
       <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="sample.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

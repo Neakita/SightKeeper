@@ -28,6 +28,7 @@ internal sealed class FileSystemDataAccess<T> where T : notnull
 		var id = Id.Create();
 		_ids.Add(item, id);
 		var filePath = GetFilePath(id);
+		Directory.CreateDirectory(DirectoryPath);
 		File.WriteAllBytes(filePath, data);
 	}
 

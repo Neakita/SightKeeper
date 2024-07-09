@@ -27,7 +27,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		return _dataAccess.GetId(screenshot);
 	}
 
-	public void AssociateId(Screenshot screenshot, Id id)
+	internal void AssociateId(Screenshot screenshot, Id id)
 	{
 		_dataAccess.AssociateId(screenshot, id);
 	}

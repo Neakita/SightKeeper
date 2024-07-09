@@ -14,10 +14,16 @@ public abstract class ScreenshotsDataAccess
 		return screenshot;
 	}
 
+	public Screenshot CreateScreenshot(DataSet dataSet, byte[] data)
+	{
+		return CreateScreenshot(dataSet.Screenshots, data);
+	}
+
 	public TScreenshot CreateScreenshot<TScreenshot>(ScreenshotsLibrary<TScreenshot> library, byte[] data) where TScreenshot : Screenshot
 	{
 		var screenshot = library.CreateScreenshot();
-		library.ClearExceed();
+		foreach (var removedScreenshot in library.ClearExceed())
+			DeleteScreenshotData(removedScreenshot);
 		SaveScreenshotData(screenshot, new Image(data));
 		return screenshot;
 	}

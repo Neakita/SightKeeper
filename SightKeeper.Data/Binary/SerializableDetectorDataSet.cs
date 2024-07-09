@@ -12,10 +12,10 @@ public partial record SerializableDetectorDataSet(
 	ushort Resolution,
 	ushort? MaxScreenshots,
 	IReadOnlyCollection<SerializableTag> Tags,
-	IReadOnlyCollection<Id> Screenshots,
 	IReadOnlyCollection<SerializableDetectorAsset> Assets,
-	IReadOnlyCollection<SerializableDetectorWeights> Weights)
-	: SerializableDataSet(Name, Description, GameId, Resolution, MaxScreenshots);
+	IReadOnlyCollection<SerializableDetectorWeights> Weights,
+	IReadOnlyCollection<SerializableScreenshot> Screenshots)
+	: SerializableDataSet(Name, Description, GameId, Resolution, MaxScreenshots, Screenshots);
 
 [MemoryPackable]
 public partial record SerializableDetectorAsset(
