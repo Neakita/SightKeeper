@@ -19,8 +19,8 @@ public sealed class ClassifierTag : Tag
 	}
 
 	public IReadOnlyCollection<ClassifierAsset> Assets => _assets;
-	public override ClassifierTagsLibrary Library { get; }
-	public override ClassifierDataSet DataSet => Library.DataSet;
+	public ClassifierTagsLibrary Library { get; }
+	public ClassifierDataSet DataSet => Library.DataSet;
 
 	internal ClassifierTag(string name, ClassifierTagsLibrary library)
 	{

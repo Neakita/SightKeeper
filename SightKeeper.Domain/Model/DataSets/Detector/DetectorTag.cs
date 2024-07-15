@@ -19,8 +19,8 @@ public sealed class DetectorTag : Tag
 	}
 
 	public IReadOnlyCollection<DetectorItem> Items => _items;
-	public override DetectorTagsLibrary Library { get; }
-	public override DetectorDataSet DataSet => Library.DataSet;
+	public DetectorTagsLibrary Library { get; }
+	public DetectorDataSet DataSet => Library.DataSet;
 
 	internal DetectorTag(string name, DetectorTagsLibrary library)
 	{

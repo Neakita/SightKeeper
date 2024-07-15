@@ -5,9 +5,14 @@ namespace SightKeeper.Domain.Model.DataSets.Classifier;
 
 public sealed class ClassifierWeights : Weights
 {
-	public override IImmutableSet<ClassifierTag> Tags { get; }
+	public IImmutableSet<ClassifierTag> Tags { get; }
 	public override ClassifierWeightsLibrary Library { get; }
 	public override ClassifierDataSet DataSet => Library.DataSet;
+
+	public override bool Contains(Tag tag)
+	{
+		return tag is ClassifierTag classifierTag && Tags.Contains(classifierTag);
+	}
 
 	internal ClassifierWeights(
 		ModelSize size,

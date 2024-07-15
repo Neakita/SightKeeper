@@ -19,10 +19,10 @@ public sealed class PoserTag : Tag
 
 	public IReadOnlyList<KeyPointTag> KeyPoints => _keyPoints.AsReadOnly();
 	public IReadOnlyCollection<PoserItem> Items => _items;
-	public override PoserTagsLibrary Library { get; }
-	public override PoserDataSet DataSet => Library.DataSet;
+	public PoserTagsLibrary Library { get; }
+	public PoserDataSet DataSet => Library.DataSet;
 
-	public KeyPointTag AddKeyPoint(string name)
+	public KeyPointTag CreateKeyPoint(string name)
 	{
 		Guard.IsEmpty(Items);
 		KeyPointTag tag = new(name, this);

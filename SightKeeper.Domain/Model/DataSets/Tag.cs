@@ -4,7 +4,4 @@ public abstract class Tag
 {
 	public abstract string Name { get; set; }
 	public uint Color { get; set; }
-
-	public abstract TagsLibrary Library { get; }
-	public abstract DataSet DataSet { get; }
 }

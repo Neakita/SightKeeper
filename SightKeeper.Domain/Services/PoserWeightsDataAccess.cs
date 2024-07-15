@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.DataSets;
+﻿using System.Collections.Immutable;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Domain.Services;
@@ -12,7 +13,7 @@ public abstract class PoserWeightsDataAccess
 		byte[] data,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IReadOnlyCollection<PoserTag> tags)
+		ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> tags)
 	{
 		var weights = library.CreateWeights(modelSize, metrics, tags);
 		SaveWeightsData(weights, new WeightsData(data));
@@ -24,7 +25,7 @@ public abstract class PoserWeightsDataAccess
 		byte[] data,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IReadOnlyCollection<PoserTag> tags)
+		ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> tags)
 	{
 		return CreateWeights(dataSet.Weights, data, modelSize, metrics, tags);
 	}

@@ -5,18 +5,28 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserWeights : Weights
 {
-	public override IImmutableSet<PoserTag> Tags { get; }
+	// TODO Ability to add specific KeyPointTags
+	public ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> Tags { get; }
 	public override PoserWeightsLibrary Library { get; }
 	public override PoserDataSet DataSet => Library.DataSet;
+
+	public override bool Contains(Tag tag)
+	{
+		if (tag is PoserTag poserTag)
+			return Tags.ContainsKey(poserTag);
+		if (tag is KeyPointTag keyPointTag)
+			return Tags.TryGetValue(keyPointTag.PoserTag, out var keyPointTags) && keyPointTags.Contains(keyPointTag);
+		return false;
+	}
 
 	internal PoserWeights(
 		ModelSize size,
 		WeightsMetrics metrics,
-		IEnumerable<PoserTag> tags,
+		ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> tags,
 		PoserWeightsLibrary library)
 		: base(size, metrics)
 	{
-		Tags = tags.ToImmutableHashSetThrowOnDuplicate();
+		Tags = tags;
 		Library = library;
 		ValidateTags();
 	}
@@ -24,7 +34,10 @@ public sealed class PoserWeights : Weights
 	private void ValidateTags()
 	{
 		Guard.IsGreaterThanOrEqualTo(Tags.Count, 1);
-		foreach (var tag in Tags)
+		foreach (var tag in Tags.Keys)
 			Guard.IsReferenceEqualTo(tag.DataSet, DataSet);
+		foreach (var (poserTag, keyPointTags) in Tags)
+		foreach (var keyPointTag in keyPointTags)
+			Guard.IsReferenceEqualTo(keyPointTag.PoserTag, poserTag);
 	}
 }

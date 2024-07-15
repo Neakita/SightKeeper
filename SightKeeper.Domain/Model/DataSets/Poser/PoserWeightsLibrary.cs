@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Poser;
+﻿using System.Collections.Immutable;
+
+namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserWeightsLibrary : WeightsLibrary<PoserWeights>
 {
@@ -12,7 +14,7 @@ public sealed class PoserWeightsLibrary : WeightsLibrary<PoserWeights>
 	internal PoserWeights CreateWeights(
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IEnumerable<PoserTag> tags)
+		ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> tags)
 	{
 		PoserWeights weights = new(modelSize, metrics, tags, this);
 		AddWeights(weights);
