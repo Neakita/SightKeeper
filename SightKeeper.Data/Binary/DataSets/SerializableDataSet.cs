@@ -1,4 +1,5 @@
-﻿using MemoryPack;
+﻿using System.Collections.Immutable;
+using MemoryPack;
 using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Binary.DataSets;
@@ -12,7 +13,7 @@ public abstract partial class SerializableDataSet
 	public ushort? GameId { get; }
 	public ushort Resolution { get; }
 	public ushort? MaxScreenshots { get; }
-	public IReadOnlyCollection<SerializableScreenshot> Screenshots { get; }
+	public ImmutableArray<SerializableScreenshot> Screenshots { get; }
 
 	[MemoryPackConstructor]
 	protected SerializableDataSet(
@@ -21,7 +22,7 @@ public abstract partial class SerializableDataSet
 		ushort? gameId,
 		ushort resolution,
 		ushort? maxScreenshots,
-		IReadOnlyCollection<SerializableScreenshot> screenshots)
+		ImmutableArray<SerializableScreenshot> screenshots)
 	{
 		Name = name;
 		Description = description;
@@ -31,7 +32,7 @@ public abstract partial class SerializableDataSet
 		Screenshots = screenshots;
 	}
 
-	protected SerializableDataSet(DataSet dataSet, ushort? gameId, IReadOnlyCollection<SerializableScreenshot> screenshots)
+	protected SerializableDataSet(DataSet dataSet, ushort? gameId, ImmutableArray<SerializableScreenshot> screenshots)
 	{
 		Name = dataSet.Name;
 		Description = dataSet.Description;

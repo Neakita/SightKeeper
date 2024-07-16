@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using MemoryPack;
 using SightKeeper.Data.Binary;
+using SightKeeper.Data.Binary.Conversion;
 using SightKeeper.Data.Binary.DataSets.Detector;
 using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
@@ -18,7 +19,7 @@ public sealed class BinarySerializationTests
 	[Fact]
 	public void ShouldSerializeAndDeserializeRawData()
 	{
-		RawAppData data = new([new SerializableDetectorDataSet("Test1", "", null, 160, null, [], [], [], [])], [], []);
+		RawAppData data = new([], [new SerializableDetectorDataSet("Test1", "", null, 160, null, [], [], [], [])], []);
 		var serializedData = MemoryPackSerializer.Serialize(data);
 		var deserializedData = MemoryPackSerializer.Deserialize<RawAppData>(serializedData);
 		deserializedData.Should().BeEquivalentTo(data);
@@ -30,16 +31,17 @@ public sealed class BinarySerializationTests
 		AppDataAccess dataAccess = new();
 		FileSystemScreenshotsDataAccess screenshotsDataAccess = new();
 		FileSystemDetectorWeightsDataAccess weightsDataAccess = new();
-		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, weightsDataAccess));
+		DataSetsConverter dataSetsConverter = new(screenshotsDataAccess, weightsDataAccess);
+		MemoryPackFormatterProvider.Register(new AppDataFormatter(dataSetsConverter));
 		Game game = new("PayDay 2", "payday2");
 		dataAccess.Data.Games.Add(game);
 		var dataSet = CreateDetectorDataSet(screenshotsDataAccess, game);
-		dataAccess.Data.DetectorDataSets.Add(dataSet);
+		dataAccess.Data.DataSets.Add(dataSet);
 		dataAccess.Save();
 		var data = dataAccess.Data;
 		dataAccess.Load();
 		dataAccess.Data.Should().NotBeSameAs(data);
-		dataAccess.Data.DetectorDataSets.Should().NotBeEmpty();
+		dataAccess.Data.DataSets.Should().NotBeEmpty();
 		screenshotsDataAccess.DeleteScreenshot(dataSet.Screenshots.As<IEnumerable<Screenshot>>().First());
 		screenshotsDataAccess.DeleteScreenshot(dataSet.Screenshots.As<IEnumerable<Screenshot>>().First());
 	}

@@ -1,21 +1,22 @@
 ﻿using System.Collections.Immutable;
 using MemoryPack;
+using SightKeeper.Data.Binary.DataSets;
+using SightKeeper.Data.Binary.Profiles;
 
 namespace SightKeeper.Data.Binary;
 
 [MemoryPackable]
 public sealed partial class RawAppData
 {
-	public ImmutableArray<DataSets.Detector.SerializableDetectorDataSet> DetectorDataSets { get; }
+	public ImmutableArray<SerializableDataSet> DataSets { get; }
 	public ImmutableArray<SerializableGame> Games { get; }
-	public ImmutableArray<Profiles.SerializableProfile> Profiles { get; }
+	public ImmutableArray<SerializableProfile> Profiles { get; }
 
-	public RawAppData(
-		ImmutableArray<DataSets.Detector.SerializableDetectorDataSet> detectorDataSets,
-		ImmutableArray<SerializableGame> games,
-		ImmutableArray<Profiles.SerializableProfile> profiles)
+	public RawAppData(ImmutableArray<SerializableGame> games,
+		ImmutableArray<SerializableDataSet> dataSets,
+		ImmutableArray<SerializableProfile> profiles)
 	{
-		DetectorDataSets = detectorDataSets;
+		DataSets = dataSets;
 		Games = games;
 		Profiles = profiles;
 	}
