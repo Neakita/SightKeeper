@@ -21,7 +21,7 @@ public sealed class TriggerBehaviourTests
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, Action>();
-		tagsBuilder.Add(tag2, new FakeActionTests());
+		tagsBuilder.Add(tag2, new FakeAction());
 		module.Behaviour.Actions = tagsBuilder.ToImmutable();
 		module.Behaviour.Actions.Should().ContainKey(tag2);
 	}
@@ -41,7 +41,7 @@ public sealed class TriggerBehaviourTests
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, Action>();
-		tagsBuilder.Add(tag3, new FakeActionTests());
+		tagsBuilder.Add(tag3, new FakeAction());
 		Assert.ThrowsAny<Exception>(() => module.Behaviour.Actions = tagsBuilder.ToImmutable());
 	}
 }

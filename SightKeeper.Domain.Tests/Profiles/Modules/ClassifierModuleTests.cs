@@ -24,7 +24,7 @@ public class ClassifierModuleTests
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, SightKeeper.Domain.Model.Profiles.Actions.Action>();
-		tagsBuilder.Add(tag1, new FakeActionTests());
+		tagsBuilder.Add(tag1, new FakeAction());
 		module.Behaviour.Actions = tagsBuilder.ToImmutable();
 		Assert.ThrowsAny<Exception>(() => module.SetWeights(weights2, tagsBuilder.ToImmutable()));
 	}

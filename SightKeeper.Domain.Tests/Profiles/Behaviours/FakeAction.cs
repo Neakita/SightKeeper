@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.Tests.Profiles.Behaviours;
 
-public sealed class FakeActionTests : Action
+public sealed class FakeAction : Action
 {
 	public override void Perform()
 	{
