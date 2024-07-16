@@ -12,7 +12,7 @@ public sealed class DetectorModuleTests
 	[Fact]
 	public void ShouldNotInvalidateTagsWhenSettingWeights()
 	{
-		SimpleDetectorWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		DetectorDataSet dataSet1 = new("", 320);
 		var tag1 = dataSet1.Tags.CreateTag("");
 		var weights1 = weightsDataAccess.CreateWeights(dataSet1, [], ModelSize.Nano, new WeightsMetrics(), [tag1]);

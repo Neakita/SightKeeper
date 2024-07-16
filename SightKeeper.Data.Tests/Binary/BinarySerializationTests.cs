@@ -19,9 +19,8 @@ public sealed class BinarySerializationTests
 	{
 		AppDataAccess dataAccess = new();
 		FileSystemScreenshotsDataAccess screenshotsDataAccess = new();
-		FileSystemDetectorWeightsDataAccess detectorWeightsDataAccess = new();
-		FileSystemClassifierWeightsDataAccess classifierWeightsDataAccess = new();
-		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, detectorWeightsDataAccess, classifierWeightsDataAccess));
+		FileSystemWeightsDataAccess weightsDataAccess = new();
+		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, weightsDataAccess));
 		Game game = new("PayDay 2", "payday2");
 		dataAccess.Data.Games.Add(game);
 		var dataSet = CreateDetectorDataSet(screenshotsDataAccess, game);

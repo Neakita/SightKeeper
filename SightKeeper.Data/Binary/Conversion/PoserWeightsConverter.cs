@@ -8,7 +8,7 @@ namespace SightKeeper.Data.Binary.Conversion;
 
 internal sealed class PoserWeightsConverter
 {
-	public PoserWeightsConverter(FileSystemPoserWeightsDataAccess weightsDataAccess)
+	public PoserWeightsConverter(FileSystemWeightsDataAccess weightsDataAccess)
 	{
 		_weightsDataAccess = weightsDataAccess;
 		throw new NotImplementedException();
@@ -19,7 +19,7 @@ internal sealed class PoserWeightsConverter
 		throw new NotImplementedException();
 	}
 
-	private readonly FileSystemPoserWeightsDataAccess _weightsDataAccess;
+	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
 
 	private SerializablePoserWeights Convert(PoserWeights weights, ConversionSession session)
 	{

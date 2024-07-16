@@ -12,7 +12,7 @@ public class PoserModuleTests
 	[Fact]
 	public void ShouldNotInvalidateTagsWhenSettingWeights()
 	{
-		SimplePoserWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		PoserDataSet dataSet1 = new("", 320);
 		var tag1 = dataSet1.Tags.CreateTag("");
 		var weightsTagsBuilder1 = ImmutableDictionary.CreateBuilder<PoserTag, ImmutableHashSet<KeyPointTag>>();

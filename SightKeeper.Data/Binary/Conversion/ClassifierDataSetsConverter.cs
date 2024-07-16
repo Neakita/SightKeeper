@@ -13,7 +13,7 @@ internal sealed class ClassifierDataSetsConverter
 {
 	public ClassifierDataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
-		FileSystemClassifierWeightsDataAccess weightsDataAccess)
+		FileSystemWeightsDataAccess weightsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_weightsDataAccess = weightsDataAccess;
@@ -52,7 +52,7 @@ internal sealed class ClassifierDataSetsConverter
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
-	private readonly FileSystemClassifierWeightsDataAccess _weightsDataAccess;
+	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
 	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly ClassifierAssetsConverter _assetsConverter;
 	private readonly ClassifierWeightsConverter _weightsConverter;

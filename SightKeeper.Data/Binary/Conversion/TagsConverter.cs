@@ -9,10 +9,7 @@ internal static class TagsConverter
 {
 	public static ImmutableArray<SerializableTag> Convert(IReadOnlyCollection<Tag> tags, ConversionSession session)
 	{
-		var converted = tags.Select(tag => Convert(tag, session)).ToImmutableArray();
-		foreach (var (tag, convertedTag) in tags.Zip(converted))
-			session.Tags.Add(tag, convertedTag.Id);
-		return converted;
+		return tags.Select(tag => Convert(tag, session)).ToImmutableArray();
 	}
 
 	private static SerializableTag Convert(Tag tag, ConversionSession session)

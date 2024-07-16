@@ -8,10 +8,9 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {
 	public AppDataFormatter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
-		FileSystemDetectorWeightsDataAccess detectorWeightsDataAccess,
-		FileSystemClassifierWeightsDataAccess classifierWeightsDataAccess)
+		FileSystemWeightsDataAccess weightsDataAccess)
 	{
-		_dataSetsConverter = new DataSetsConverter(screenshotsDataAccess, detectorWeightsDataAccess, classifierWeightsDataAccess);
+		_dataSetsConverter = new DataSetsConverter(screenshotsDataAccess, weightsDataAccess);
 	}
 	
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref AppData? value)

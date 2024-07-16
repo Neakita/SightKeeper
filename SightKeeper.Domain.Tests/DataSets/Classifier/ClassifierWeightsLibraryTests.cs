@@ -11,7 +11,7 @@ public sealed class ClassifierWeightsLibraryTests
 		ClassifierDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		SimpleClassifierWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		var weights = weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag1, tag2]);
 		dataSet.Weights.Should().Contain(weights);
 	}
@@ -20,7 +20,7 @@ public sealed class ClassifierWeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		ClassifierDataSet dataSet = new("", 320);
-		SimpleClassifierWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), []));
 		dataSet.Weights.Should().BeEmpty();
 	}
@@ -30,7 +30,7 @@ public sealed class ClassifierWeightsLibraryTests
 	{
 		ClassifierDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleClassifierWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag]));
 		dataSet.Weights.Should().BeEmpty();
 	}
@@ -41,7 +41,7 @@ public sealed class ClassifierWeightsLibraryTests
 		ClassifierDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		SimpleClassifierWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag1, tag1, tag2]));
 		dataSet.Weights.Should().BeEmpty();
 	}

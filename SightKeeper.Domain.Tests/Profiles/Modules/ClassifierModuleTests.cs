@@ -12,7 +12,7 @@ public class ClassifierModuleTests
 	[Fact]
 	public void ShouldNotInvalidateTagsWhenSettingWeights()
 	{
-		SimpleClassifierWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		ClassifierDataSet dataSet1 = new("", 320);
 		var tag1 = dataSet1.Tags.CreateTag("1");
 		var tag2 = dataSet1.Tags.CreateTag("2");

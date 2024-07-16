@@ -13,7 +13,7 @@ internal sealed class DetectorDataSetsConverter
 {
 	public DetectorDataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
-		FileSystemDetectorWeightsDataAccess weightsDataAccess)
+		FileSystemWeightsDataAccess weightsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_weightsDataAccess = weightsDataAccess;
@@ -55,7 +55,7 @@ internal sealed class DetectorDataSetsConverter
 
 	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
-	private readonly FileSystemDetectorWeightsDataAccess _weightsDataAccess;
+	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
 	private readonly DetectorAssetsConverter _assetsConverter;
 	private readonly DetectorWeightsConverter _weightsConverter;
 

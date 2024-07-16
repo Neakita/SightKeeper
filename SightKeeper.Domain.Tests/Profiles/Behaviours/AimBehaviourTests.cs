@@ -12,7 +12,7 @@ public sealed class AimBehaviourTests
 	[Fact]
 	public void ShouldSetTags()
 	{
-		SimpleDetectorWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		var weights = weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
@@ -27,7 +27,7 @@ public sealed class AimBehaviourTests
 	[Fact]
 	public void ShouldNotSetTagsWithWrongOwnership()
 	{
-		SimpleDetectorWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		DetectorDataSet dataSet1 = new("", 320);
 		var tag1 = dataSet1.Tags.CreateTag("");
 		var weights1 = weightsDataAccess.CreateWeights(dataSet1, [], ModelSize.Nano, new WeightsMetrics(), [tag1]);

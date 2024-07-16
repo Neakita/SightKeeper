@@ -14,11 +14,10 @@ internal sealed class DataSetsConverter
 {
 	public DataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
-		FileSystemDetectorWeightsDataAccess detectorWeightsDataAccess,
-		FileSystemClassifierWeightsDataAccess classifierWeightsDataAccess)
+		FileSystemWeightsDataAccess weightsDataAccess)
 	{
-		_classifierConverter = new ClassifierDataSetsConverter(screenshotsDataAccess, classifierWeightsDataAccess);
-		_detectorConverter = new DetectorDataSetsConverter(screenshotsDataAccess, detectorWeightsDataAccess);
+		_classifierConverter = new ClassifierDataSetsConverter(screenshotsDataAccess, weightsDataAccess);
+		_detectorConverter = new DetectorDataSetsConverter(screenshotsDataAccess, weightsDataAccess);
 	}
 
 	public ImmutableArray<SerializableDataSet> Convert(IEnumerable<DataSet> dataSets, ConversionSession session)

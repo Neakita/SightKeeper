@@ -7,7 +7,7 @@ namespace SightKeeper.Data.Binary.Conversion;
 
 internal sealed class ClassifierWeightsConverter
 {
-	public ClassifierWeightsConverter(FileSystemClassifierWeightsDataAccess weightsDataAccess)
+	public ClassifierWeightsConverter(FileSystemWeightsDataAccess weightsDataAccess)
 	{
 		_weightsDataAccess = weightsDataAccess;
 	}
@@ -17,7 +17,7 @@ internal sealed class ClassifierWeightsConverter
 		return weights.Select(w => Convert(w, session)).ToImmutableArray();
 	}
 
-	private readonly FileSystemClassifierWeightsDataAccess _weightsDataAccess;
+	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
 
 	private SerializableWeightsWithTags Convert(ClassifierWeights weights, ConversionSession session)
 	{

@@ -14,7 +14,7 @@ internal sealed class PoserDataSetsConverter
 {
 	public PoserDataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
-		FileSystemPoserWeightsDataAccess weightsDataAccess)
+		FileSystemWeightsDataAccess weightsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_weightsDataAccess = weightsDataAccess;
@@ -56,7 +56,7 @@ internal sealed class PoserDataSetsConverter
 
 	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
-	private readonly FileSystemPoserWeightsDataAccess _weightsDataAccess;
+	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
 	private readonly PoserAssetsConverter _assetsConverter;
 	private readonly PoserWeightsConverter _weightsConverter;
 

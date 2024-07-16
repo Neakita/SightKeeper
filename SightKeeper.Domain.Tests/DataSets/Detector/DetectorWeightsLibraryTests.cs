@@ -10,7 +10,7 @@ public sealed class DetectorWeightsLibraryTests
 	{
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleDetectorWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		var weights = weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
 		dataSet.Weights.Should().Contain(weights);
 	}
@@ -19,7 +19,7 @@ public sealed class DetectorWeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		DetectorDataSet dataSet = new("", 320);
-		SimpleDetectorWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), []));
 		dataSet.Weights.Should().BeEmpty();
 	}
@@ -29,7 +29,7 @@ public sealed class DetectorWeightsLibraryTests
 	{
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleDetectorWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag, tag]));
 		dataSet.Weights.Should().BeEmpty();
 	}

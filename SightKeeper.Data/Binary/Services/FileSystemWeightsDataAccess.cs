@@ -1,12 +1,11 @@
 ﻿using System.Runtime.CompilerServices;
 using FlakeId;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Binary.Services;
 
-public sealed class FileSystemClassifierWeightsDataAccess : ClassifierWeightsDataAccess
+public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 {
 	public string DirectoryPath
 	{
@@ -14,7 +13,7 @@ public sealed class FileSystemClassifierWeightsDataAccess : ClassifierWeightsDat
 		set => _dataAccess.DirectoryPath = value;
 	}
 
-	public override WeightsData LoadWeightsData(ClassifierWeights weights)
+	public override WeightsData LoadWeightsData(Weights weights)
 	{
 		var data = _dataAccess.ReadAllBytes(weights);
 		return CreateWeightsData(data);
@@ -23,25 +22,25 @@ public sealed class FileSystemClassifierWeightsDataAccess : ClassifierWeightsDat
 		static extern WeightsData CreateWeightsData(byte[] content);
 	}
 
-	public Id GetId(ClassifierWeights weights)
+	public Id GetId(Weights weights)
 	{
 		return _dataAccess.GetId(weights);
 	}
 
-	public void AssociateId(ClassifierWeights weights, Id id)
+	public void AssociateId(Weights weights, Id id)
 	{
 		_dataAccess.AssociateId(weights, id);
 	}
 
-	protected override void SaveWeightsData(ClassifierWeights weights, WeightsData data)
+	protected override void SaveWeightsData(Weights weights, WeightsData data)
 	{
 		_dataAccess.WriteAllBytes(weights, data.Content);
 	}
 
-	protected override void RemoveWeightsData(ClassifierWeights weights)
+	protected override void RemoveWeightsData(Weights weights)
 	{
 		_dataAccess.Delete(weights);
 	}
 
-	private readonly FileSystemDataAccess<ClassifierWeights> _dataAccess = new(".pt");
+	private readonly FileSystemDataAccess<Weights> _dataAccess = new(".pt");
 }

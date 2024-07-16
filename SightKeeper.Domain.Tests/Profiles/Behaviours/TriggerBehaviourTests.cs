@@ -13,7 +13,7 @@ public sealed class TriggerBehaviourTests
 	[Fact]
 	public void ShouldSetTags()
 	{
-		SimpleClassifierWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		ClassifierDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
@@ -29,7 +29,7 @@ public sealed class TriggerBehaviourTests
 	[Fact]
 	public void ShouldNotSetTagsWithWrongOwnership()
 	{
-		SimpleClassifierWeightsDataAccess weightsDataAccess = new();
+		SimpleWeightsDataAccess weightsDataAccess = new();
 		ClassifierDataSet dataSet1 = new("", 320);
 		var tag1 = dataSet1.Tags.CreateTag("1");
 		var tag2 = dataSet1.Tags.CreateTag("2");
