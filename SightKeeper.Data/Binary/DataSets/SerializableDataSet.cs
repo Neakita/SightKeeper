@@ -1,4 +1,5 @@
 ﻿using MemoryPack;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Binary.DataSets;
 
@@ -13,7 +14,9 @@ public abstract partial class SerializableDataSet
 	public ushort? MaxScreenshots { get; }
 	public IReadOnlyCollection<SerializableScreenshot> Screenshots { get; }
 
-	protected SerializableDataSet(string name,
+	[MemoryPackConstructor]
+	protected SerializableDataSet(
+		string name,
 		string description,
 		ushort? gameId,
 		ushort resolution,
@@ -25,6 +28,16 @@ public abstract partial class SerializableDataSet
 		GameId = gameId;
 		Resolution = resolution;
 		MaxScreenshots = maxScreenshots;
+		Screenshots = screenshots;
+	}
+
+	protected SerializableDataSet(DataSet dataSet, ushort? gameId, IReadOnlyCollection<SerializableScreenshot> screenshots)
+	{
+		Name = dataSet.Name;
+		Description = dataSet.Description;
+		GameId = gameId;
+		Resolution = dataSet.Resolution;
+		MaxScreenshots = dataSet.Screenshots.MaxQuantity;
 		Screenshots = screenshots;
 	}
 }
