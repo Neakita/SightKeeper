@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
+using SightKeeper.Data.Binary.DataSets.Detector;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
@@ -78,15 +79,15 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		return serializableDataSet;
 	}
 
-	private static Dictionary<Tag, SerializableTag> Convert(IEnumerable<Tag> tags)
+	private static Dictionary<Tag, DataSets.SerializableTag> Convert(IEnumerable<Tag> tags)
 	{
-		return tags.ToDictionary(tag => tag, tag => new SerializableTag(Id.Create(), tag.Name, tag.Color));
+		return tags.ToDictionary(tag => tag, tag => new DataSets.SerializableTag(Id.Create(), tag.Name, tag.Color));
 	}
 
-	private IEnumerable<SerializableScreenshot> Convert(IEnumerable<Screenshot> screenshots)
+	private IEnumerable<DataSets.SerializableScreenshot> Convert(IEnumerable<Screenshot> screenshots)
 	{
 		foreach (var screenshot in screenshots)
-			yield return new SerializableScreenshot(_screenshotsDataAccess.GetId(screenshot), screenshot.CreationDate);
+			yield return new DataSets.SerializableScreenshot(_screenshotsDataAccess.GetId(screenshot), screenshot.CreationDate);
 	}
 
 	private IEnumerable<SerializableDetectorAsset> Convert(IEnumerable<DetectorAsset> assets, Func<DetectorTag, Id> getTagId)

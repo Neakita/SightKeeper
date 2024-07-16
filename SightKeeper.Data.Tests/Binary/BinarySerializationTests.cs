@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using MemoryPack;
 using SightKeeper.Data.Binary;
+using SightKeeper.Data.Binary.DataSets.Detector;
 using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
