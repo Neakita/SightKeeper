@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using MemoryPack;
 using SightKeeper.Data.Binary;
-using SightKeeper.Data.Binary.DataSets.Detector;
 using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
@@ -14,15 +13,6 @@ namespace SightKeeper.Data.Tests.Binary;
 public sealed class BinarySerializationTests
 {
 	private static readonly byte[] SampleImageData = File.ReadAllBytes("sample.png");
-	
-	[Fact]
-	public void ShouldSerializeAndDeserializeRawData()
-	{
-		RawAppData data = new([], [new SerializableDetectorDataSet("Test1", "", null, 160, null, [], [], [], [])], []);
-		var serializedData = MemoryPackSerializer.Serialize(data);
-		var deserializedData = MemoryPackSerializer.Deserialize<RawAppData>(serializedData);
-		deserializedData.Should().BeEquivalentTo(data);
-	}
 
 	[Fact]
 	public void ShouldSaveAndLoadAppData()

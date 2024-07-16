@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
-public sealed class ScreenshotsConverter
+internal sealed class ScreenshotsConverter
 {
 	public ScreenshotsConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess)
 	{

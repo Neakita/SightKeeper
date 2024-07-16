@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.DataSets;
 namespace SightKeeper.Data.Binary.DataSets.Detector;
 
 [MemoryPackable]
-public partial class SerializableDetectorItem
+internal partial class SerializableDetectorItem
 {
 	public Id TagId { get; }
 	public Bounding Bounding { get; }

@@ -6,7 +6,7 @@ namespace SightKeeper.Data.Binary.DataSets;
 
 [MemoryPackable]
 [MemoryPackUnion(0, typeof(Detector.SerializableDetectorDataSet))]
-public abstract partial class SerializableDataSet
+internal abstract partial class SerializableDataSet
 {
 	public string Name { get; }
 	public string Description { get; }

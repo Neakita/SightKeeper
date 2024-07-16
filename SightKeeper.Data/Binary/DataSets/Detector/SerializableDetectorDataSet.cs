@@ -1,18 +1,19 @@
 ﻿using System.Collections.Immutable;
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Data.Binary.DataSets.Detector;
 
 [MemoryPackable]
-public partial class SerializableDetectorDataSet : SerializableDataSet
+internal partial class SerializableDetectorDataSet : SerializableDataSet
 {
 	public ImmutableArray<SerializableTag> Tags { get; }
 	public ImmutableArray<SerializableDetectorAsset> Assets { get; }
 	public ImmutableArray<SerializableWeightsWithTags> Weights { get; }
 
 	[MemoryPackConstructor]
-	public SerializableDetectorDataSet(string name,
+	public SerializableDetectorDataSet(
+		string name,
 		string description,
 		ushort? gameId,
 		ushort resolution,
@@ -28,7 +29,8 @@ public partial class SerializableDetectorDataSet : SerializableDataSet
 		Weights = weights;
 	}
 
-	public SerializableDetectorDataSet(DataSet dataSet,
+	public SerializableDetectorDataSet(
+		DetectorDataSet dataSet,
 		ushort? gameId,
 		ImmutableArray<SerializableTag> tags,
 		ImmutableArray<SerializableScreenshot> screenshots,

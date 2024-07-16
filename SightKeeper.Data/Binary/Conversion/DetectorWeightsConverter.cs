@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
-public sealed class DetectorWeightsConverter
+internal sealed class DetectorWeightsConverter
 {
 	public DetectorWeightsConverter(FileSystemDetectorWeightsDataAccess weightsDataAccess)
 	{

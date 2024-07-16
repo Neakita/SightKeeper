@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.DataSets;
 namespace SightKeeper.Data.Binary.DataSets;
 
 [MemoryPackable]
-public sealed partial class SerializableTag
+internal partial class SerializableTag
 {
 	public Id Id { get; }
 	public string Name { get; }

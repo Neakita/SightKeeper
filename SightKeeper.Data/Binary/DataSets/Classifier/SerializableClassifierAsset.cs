@@ -3,7 +3,7 @@ using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Binary.DataSets.Classifier;
 
-public sealed class SerializableClassifierAsset : SerializableAsset
+internal sealed class SerializableClassifierAsset : SerializableAsset
 {
 	public Id TagId { get; set; }
 

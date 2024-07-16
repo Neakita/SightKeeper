@@ -6,7 +6,7 @@ using SightKeeper.Domain.Model.DataSets;
 namespace SightKeeper.Data.Binary.DataSets.Detector;
 
 [MemoryPackable]
-public partial class SerializableDetectorAsset : SerializableAsset
+internal partial class SerializableDetectorAsset : SerializableAsset
 {
 	public ImmutableArray<SerializableDetectorItem> Items { get; }
 

@@ -4,7 +4,7 @@ using MemoryPack;
 namespace SightKeeper.Data.Binary.DataSets;
 
 [MemoryPackable]
-public partial class SerializableScreenshot
+internal partial class SerializableScreenshot
 {
 	public Id Id { get; }
 	public DateTime CreationDate { get; }

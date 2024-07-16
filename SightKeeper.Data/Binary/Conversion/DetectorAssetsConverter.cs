@@ -5,19 +5,19 @@ using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
-public sealed class DetectorAssetsConverter
+internal sealed class DetectorAssetsConverter
 {
 	public DetectorAssetsConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
-
 	internal ImmutableArray<SerializableDetectorAsset> Convert(IEnumerable<DetectorAsset> assets, ConversionSession session)
 	{
 		return assets.Select(asset => Convert(asset, session)).ToImmutableArray();
 	}
+
+	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
 	private SerializableDetectorAsset Convert(DetectorAsset asset, ConversionSession session)
 	{

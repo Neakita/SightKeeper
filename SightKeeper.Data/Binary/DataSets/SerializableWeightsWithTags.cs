@@ -6,7 +6,7 @@ using SightKeeper.Domain.Model.DataSets;
 namespace SightKeeper.Data.Binary.DataSets;
 
 [MemoryPackable]
-public partial class SerializableWeightsWithTags : SerializableWeights
+internal partial class SerializableWeightsWithTags : SerializableWeights
 {
 	public ImmutableArray<Id> Tags { get; }
 

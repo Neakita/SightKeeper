@@ -5,7 +5,6 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserWeights : Weights
 {
-	// TODO Ability to add specific KeyPointTags
 	public ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> Tags { get; }
 	public override PoserWeightsLibrary Library { get; }
 	public override PoserDataSet DataSet => Library.DataSet;

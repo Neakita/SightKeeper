@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model;
 namespace SightKeeper.Data.Binary;
 
 [MemoryPackable]
-public partial class SerializableGame
+internal partial class SerializableGame
 {
 	public Game ToGame() => new(Title, ProcessName, ExecutablePath);
 

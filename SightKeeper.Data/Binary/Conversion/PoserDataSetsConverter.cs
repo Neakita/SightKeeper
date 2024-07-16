@@ -1,47 +1,48 @@
 ﻿using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Diagnostics;
+using FlakeId;
 using SightKeeper.Data.Binary.DataSets;
-using SightKeeper.Data.Binary.DataSets.Detector;
+using SightKeeper.Data.Binary.DataSets.Poser;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
-internal sealed class DetectorDataSetsConverter
+internal sealed class PoserDataSetsConverter
 {
-	public DetectorDataSetsConverter(
+	public PoserDataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
-		FileSystemDetectorWeightsDataAccess weightsDataAccess)
+		FileSystemPoserWeightsDataAccess weightsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_weightsDataAccess = weightsDataAccess;
 		_screenshotsConverter = new ScreenshotsConverter(screenshotsDataAccess);
-		_assetsConverter = new DetectorAssetsConverter(screenshotsDataAccess);
-		_weightsConverter = new DetectorWeightsConverter(weightsDataAccess);
+		_assetsConverter = new PoserAssetsConverter(screenshotsDataAccess);
+		_weightsConverter = new PoserWeightsConverter(weightsDataAccess);
 	}
 
-	internal SerializableDetectorDataSet Convert(
-		DetectorDataSet dataSet,
+	internal SerializablePoserDataSet Convert(
+		PoserDataSet dataSet,
 		ConversionSession session)
 	{
-		SerializableDetectorDataSet serializableDataSet = new(
+		SerializablePoserDataSet serializableDataSet = new(
 			dataSet,
 			GamesConverter.GetGameId(dataSet.Game, session),
-			TagsConverter.Convert(dataSet.Tags, session),
+			PoserTagsConverter.Convert(dataSet.Tags, session),
 			_screenshotsConverter.Convert(dataSet.Screenshots),
 			_assetsConverter.Convert(dataSet.Assets, session),
 			_weightsConverter.Convert(dataSet.Weights, session));
 		return serializableDataSet;
 	}
 
-	internal DetectorDataSet ConvertBack(
-		SerializableDetectorDataSet raw,
+	internal PoserDataSet ConvertBack(
+		SerializablePoserDataSet raw,
 		ReverseConversionSession session)
 	{
 		Guard.IsNotNull(session.Games);
-		DetectorDataSet dataSet = new(raw.Name, raw.Resolution);
+		PoserDataSet dataSet = new(raw.Name, raw.Resolution);
 		if (raw.GameId != null)
 			dataSet.Game = session.Games[raw.GameId.Value];
 		dataSet.Screenshots.MaxQuantity = raw.MaxScreenshots;
@@ -55,24 +56,24 @@ internal sealed class DetectorDataSetsConverter
 
 	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
-	private readonly FileSystemDetectorWeightsDataAccess _weightsDataAccess;
-	private readonly DetectorAssetsConverter _assetsConverter;
-	private readonly DetectorWeightsConverter _weightsConverter;
+	private readonly FileSystemPoserWeightsDataAccess _weightsDataAccess;
+	private readonly PoserAssetsConverter _assetsConverter;
+	private readonly PoserWeightsConverter _weightsConverter;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
-	private static extern DetectorScreenshot CreateScreenshot(DetectorScreenshotsLibrary library);
+	private static extern PoserScreenshot CreateScreenshot(PoserScreenshotsLibrary library);
 
 	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
 	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
 		
 	[UnsafeAccessor(UnsafeAccessorKind.Method)]
-	private static extern DetectorWeights CreateWeights(
-		DetectorWeightsLibrary library,
+	private static extern PoserWeights CreateWeights(
+		PoserWeightsLibrary library,
 		ModelSize size,
 		WeightsMetrics metrics,
-		IEnumerable<DetectorTag> tags);
+		ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> tags);
 
-	private static void AddTags(DetectorDataSet dataSet, ImmutableArray<SerializableTag> tags, ReverseConversionSession session)
+	private static void AddTags(PoserDataSet dataSet, ImmutableArray<SerializablePoserTag> tags, ReverseConversionSession session)
 	{
 		foreach (var rawTag in tags)
 		{
@@ -82,7 +83,7 @@ internal sealed class DetectorDataSetsConverter
 		}
 	}
 
-	private void AddScreenshots(DetectorDataSet dataSet, ImmutableArray<SerializableScreenshot> screenshots, ReverseConversionSession session)
+	private void AddScreenshots(PoserDataSet dataSet, ImmutableArray<SerializableScreenshot> screenshots, ReverseConversionSession session)
 	{
 		foreach (var rawScreenshot in screenshots)
 		{
@@ -93,23 +94,32 @@ internal sealed class DetectorDataSetsConverter
 		}
 	}
 
-	private static void AddAssets(DetectorDataSet dataSet, ImmutableArray<SerializableDetectorAsset> assets, ReverseConversionSession session)
+	private static void AddAssets(PoserDataSet dataSet, ImmutableArray<SerializablePoserAsset> assets, ReverseConversionSession session)
 	{
 		foreach (var rawAsset in assets)
 		{
-			var screenshot = (DetectorScreenshot)session.Screenshots[rawAsset.ScreenshotId];
+			var screenshot = (PoserScreenshot)session.Screenshots[rawAsset.ScreenshotId];
 			var asset = dataSet.Assets.MakeAsset(screenshot);
 			foreach (var rawItem in rawAsset.Items)
-				asset.CreateItem((DetectorTag)session.Tags[rawItem.TagId], rawItem.Bounding);
+				asset.CreateItem((PoserTag)session.Tags[rawItem.TagId], rawItem.Bounding, rawItem.KeyPoints);
 		}
 	}
 
-	private void AddWeights(DetectorDataSet dataSet, ImmutableArray<SerializableWeightsWithTags> raw, ReverseConversionSession session)
+	private void AddWeights(PoserDataSet dataSet, ImmutableArray<SerializablePoserWeights> raw, ReverseConversionSession session)
 	{
 		foreach (var rawWeights in raw)
 		{
-			var weights = CreateWeights(dataSet.Weights, rawWeights.Size, rawWeights.Metrics, rawWeights.Tags.Select(tagId => (DetectorTag)session.Tags[tagId]));
+			var weights = CreateWeights(dataSet.Weights, rawWeights.Size, rawWeights.Metrics, ConvertBack(rawWeights.Tags, session));
 			_weightsDataAccess.AssociateId(weights, rawWeights.Id);
 		}
+	}
+
+	private ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> ConvertBack(
+		ImmutableArray<(Id Id, ImmutableArray<Id> KeyPointIds)> tags,
+		ReverseConversionSession session)
+	{
+		return tags.ToImmutableDictionary(
+			t => (PoserTag)session.Tags[t.Id],
+			t => t.KeyPointIds.Select(id => (KeyPointTag)session.Tags[id]).ToImmutableHashSet());
 	}
 }

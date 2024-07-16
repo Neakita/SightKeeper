@@ -6,7 +6,7 @@ namespace SightKeeper.Data.Binary.DataSets;
 
 [MemoryPackable]
 [MemoryPackUnion(0, typeof(Detector.SerializableDetectorAsset))]
-public abstract partial class SerializableAsset
+internal abstract partial class SerializableAsset
 {
 	public Id ScreenshotId { get; }
 	public AssetUsage Usage { get; }

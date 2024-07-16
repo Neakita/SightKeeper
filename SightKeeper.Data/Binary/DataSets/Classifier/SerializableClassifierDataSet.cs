@@ -1,18 +1,19 @@
 ﻿using System.Collections.Immutable;
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Classifier;
 
 namespace SightKeeper.Data.Binary.DataSets.Classifier;
 
 [MemoryPackable]
-public sealed partial class SerializableClassifierDataSet : SerializableDataSet
+internal sealed partial class SerializableClassifierDataSet : SerializableDataSet
 {
 	public ImmutableArray<SerializableTag> Tags { get; }
 	public ImmutableArray<SerializableClassifierAsset> Assets { get; }
 	public ImmutableArray<SerializableWeightsWithTags> Weights { get; }
 
 	[MemoryPackConstructor]
-	public SerializableClassifierDataSet(string name,
+	public SerializableClassifierDataSet(
+		string name,
 		string description,
 		ushort? gameId,
 		ushort resolution,
@@ -28,7 +29,8 @@ public sealed partial class SerializableClassifierDataSet : SerializableDataSet
 		Weights = weights;
 	}
 
-	public SerializableClassifierDataSet(DataSet dataSet,
+	public SerializableClassifierDataSet(
+		ClassifierDataSet dataSet,
 		ushort? gameId,
 		ImmutableArray<SerializableTag> tags,
 		ImmutableArray<SerializableScreenshot> screenshots,
