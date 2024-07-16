@@ -17,7 +17,7 @@ public sealed class BinarySerializationTests
 	[Fact]
 	public void ShouldSerializeAndDeserializeRawData()
 	{
-		RawAppData data = new([new SerializableDetectorDataSet("Test1", "", null, 160, null, [], [], [], [])], []);
+		RawAppData data = new([new SerializableDetectorDataSet("Test1", "", null, 160, null, [], [], [], [])], [], []);
 		var serializedData = MemoryPackSerializer.Serialize(data);
 		var deserializedData = MemoryPackSerializer.Deserialize<RawAppData>(serializedData);
 		deserializedData.Should().BeEquivalentTo(data);

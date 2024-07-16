@@ -8,7 +8,6 @@ namespace SightKeeper.Domain.Model.Profiles;
 public sealed class Profile
 {
 	public string Name { get; set; }
-
 	public IReadOnlyCollection<Module> Modules => _modules;
 
 	public Profile(string name)

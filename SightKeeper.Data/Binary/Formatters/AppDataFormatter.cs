@@ -7,6 +7,7 @@ using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Data.Binary.Formatters;
 
@@ -29,7 +30,8 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		var games = value.Games.Select((game, index) => (game, index)).ToDictionary(tuple => tuple.game,
 			tuple => new SerializableGame((ushort)tuple.index, tuple.game));
 		var detectorDataSets = value.DetectorDataSets.Select(dataSet => Convert(dataSet, games)).ToImmutableArray();
-		RawAppData raw = new(detectorDataSets, games.Values.ToImmutableArray());
+		var profiles = ImmutableArray<Profiles.SerializableProfile>.Empty;
+		RawAppData raw = new(detectorDataSets, games.Values.ToImmutableArray(), profiles);
 		writer.WritePackable(raw);
 	}
 
@@ -46,7 +48,8 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		Guard.IsNotNull(raw);
 		var games = raw.Games.ToDictionary(game => game.Id, game => new Game(game.Title, game.ProcessName, game.ExecutablePath));
 		var detectorDataSets = Convert(raw.DetectorDataSets, gameId => games[gameId]);
-		value = new AppData(detectorDataSets.ToHashSet(), games.Values.ToHashSet());
+		var profiles = Enumerable.Empty<Profile>();
+		value = new AppData(detectorDataSets.ToHashSet(), games.Values.ToHashSet(), profiles.ToHashSet());
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;

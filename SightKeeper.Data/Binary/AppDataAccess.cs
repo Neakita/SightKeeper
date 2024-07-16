@@ -6,7 +6,7 @@ namespace SightKeeper.Data.Binary;
 public sealed class AppDataAccess
 {
 	public string FilePath { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), "App.data");
-	public AppData Data { get; set; } = new([], []);
+	public AppData Data { get; set; } = new([], [], []);
 
 	public void Load()
 	{
