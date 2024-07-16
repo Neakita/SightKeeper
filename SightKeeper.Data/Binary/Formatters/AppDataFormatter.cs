@@ -1,13 +1,17 @@
 ﻿using MemoryPack;
 using SightKeeper.Data.Binary.Conversion;
+using SightKeeper.Data.Binary.Services;
 
 namespace SightKeeper.Data.Binary.Formatters;
 
 public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {
-	public AppDataFormatter(DataSetsConverter dataSetsConverter)
+	public AppDataFormatter(
+		FileSystemScreenshotsDataAccess screenshotsDataAccess,
+		FileSystemDetectorWeightsDataAccess detectorWeightsDataAccess,
+		FileSystemClassifierWeightsDataAccess classifierWeightsDataAccess)
 	{
-		_dataSetsConverter = dataSetsConverter;
+		_dataSetsConverter = new DataSetsConverter(screenshotsDataAccess, detectorWeightsDataAccess, classifierWeightsDataAccess);
 	}
 	
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref AppData? value)

@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using MemoryPack;
 using SightKeeper.Data.Binary;
-using SightKeeper.Data.Binary.Conversion;
 using SightKeeper.Data.Binary.DataSets.Detector;
 using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
@@ -30,9 +29,9 @@ public sealed class BinarySerializationTests
 	{
 		AppDataAccess dataAccess = new();
 		FileSystemScreenshotsDataAccess screenshotsDataAccess = new();
-		FileSystemDetectorWeightsDataAccess weightsDataAccess = new();
-		DataSetsConverter dataSetsConverter = new(screenshotsDataAccess, weightsDataAccess);
-		MemoryPackFormatterProvider.Register(new AppDataFormatter(dataSetsConverter));
+		FileSystemDetectorWeightsDataAccess detectorWeightsDataAccess = new();
+		FileSystemClassifierWeightsDataAccess classifierWeightsDataAccess = new();
+		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, detectorWeightsDataAccess, classifierWeightsDataAccess));
 		Game game = new("PayDay 2", "payday2");
 		dataAccess.Data.Games.Add(game);
 		var dataSet = CreateDetectorDataSet(screenshotsDataAccess, game);

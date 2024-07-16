@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.DataSets;
 namespace SightKeeper.Data.Binary.DataSets;
 
 [MemoryPackable]
-[MemoryPackUnion(0, typeof(Detector.SerializableDetectorWeights))]
+[MemoryPackUnion(0, typeof(SerializableWeightsWithTags))]
 public abstract partial class SerializableWeights
 {
 	public Id Id { get; }
