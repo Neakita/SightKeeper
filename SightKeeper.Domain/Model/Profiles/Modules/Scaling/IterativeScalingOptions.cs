@@ -2,6 +2,7 @@
 
 namespace SightKeeper.Domain.Model.Profiles.Modules.Scaling;
 
+// TODO Step and StepsCount instead
 public sealed class IterativeScalingOptions : PassiveScalingOptions
 {
 	public float MinimumScaling

@@ -7,4 +7,9 @@ namespace SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 internal sealed partial class SerializableTriggerBehaviour : SerializableBehaviour
 {
 	public ImmutableArray<SerializableAction> Actions { get; set; }
+
+	public SerializableTriggerBehaviour(ImmutableArray<SerializableAction> actions)
+	{
+		Actions = actions;
+	}
 }

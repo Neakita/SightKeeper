@@ -1,6 +1,7 @@
 ﻿using MemoryPack;
 using SightKeeper.Data.Binary.Conversion;
 using SightKeeper.Data.Binary.Conversion.DataSets;
+using SightKeeper.Data.Binary.Conversion.Profiles;
 using SightKeeper.Data.Binary.Services;
 
 namespace SightKeeper.Data.Binary.Formatters;
@@ -12,6 +13,7 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		FileSystemWeightsDataAccess weightsDataAccess)
 	{
 		_dataSetsConverter = new DataSetsConverter(screenshotsDataAccess, weightsDataAccess);
+		_profilesConverter = new ProfilesConverter(weightsDataAccess);
 	}
 	
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref AppData? value)
@@ -26,7 +28,7 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		RawAppData raw = new(
 			GamesConverter.Convert(value.Games, session),
 			_dataSetsConverter.Convert(value.DataSets, session),
-			[]);
+			_profilesConverter.Convert(value.Profiles, session));
 		writer.WritePackable(raw);
 	}
 
@@ -52,4 +54,5 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 	}
 
 	private readonly DataSetsConverter _dataSetsConverter;
+	private readonly ProfilesConverter _profilesConverter;
 }

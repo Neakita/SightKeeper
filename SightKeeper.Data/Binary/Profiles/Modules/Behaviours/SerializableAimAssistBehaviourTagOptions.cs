@@ -22,8 +22,9 @@ internal sealed partial class SerializableAimAssistBehaviourTagOptions
 		VerticalOffset = verticalOffset;
 	}
 
-	public SerializableAimAssistBehaviourTagOptions(AimAssistBehaviour.TagOptions options)
+	public SerializableAimAssistBehaviourTagOptions(Id tagId, AimAssistBehaviour.TagOptions options)
 	{
+		TagId = tagId;
 		Priority = options.Priority;
 		TargetAreaScale = options.TargetAreaScale;
 		VerticalOffset = options.VerticalOffset;

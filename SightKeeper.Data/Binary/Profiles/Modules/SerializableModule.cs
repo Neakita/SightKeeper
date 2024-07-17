@@ -1,6 +1,8 @@
 ﻿using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
+using SightKeeper.Data.Binary.Profiles.Modules.Scaling;
+using SightKeeper.Data.Binary.Profiles.Modules.Walking;
 
 namespace SightKeeper.Data.Binary.Profiles.Modules;
 
@@ -11,9 +13,9 @@ namespace SightKeeper.Data.Binary.Profiles.Modules;
 internal abstract partial class SerializableModule
 {
 	public Id WeightsId { get; set; }
-	public Scaling.SerializablePassiveScalingOptions? PassiveScalingOptions { get; set; }
-	public Walking.SerializablePassiveWalkingOptions? PassiveWalkingOptions { get; set; }
-	public SerializableBehaviour Behaviour { get; set; }
+	public SerializablePassiveScalingOptions? PassiveScalingOptions { get; set; }
+	public SerializablePassiveWalkingOptions? PassiveWalkingOptions { get; set; }
+	public SerializableBehaviour Behaviour { get; }
 
 	protected SerializableModule(SerializableBehaviour behaviour)
 	{
