@@ -9,8 +9,6 @@ public sealed class AimBehaviour : Behaviour
 {
 	public record TagOptions(byte Priority = 0, float VerticalOffset = 0);
 
-	public PreemptionOptions? Preemption { get; set; }
-
 	public ImmutableDictionary<Tag, TagOptions> Tags
 	{
 		get => _tags;
