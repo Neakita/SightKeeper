@@ -4,7 +4,7 @@ using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Data.Binary.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser;
 
 internal static class PoserTagsConverter
 {

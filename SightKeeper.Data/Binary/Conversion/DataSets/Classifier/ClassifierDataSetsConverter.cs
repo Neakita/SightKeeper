@@ -2,31 +2,29 @@
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Binary.DataSets;
-using SightKeeper.Data.Binary.DataSets.Detector;
+using SightKeeper.Data.Binary.DataSets.Classifier;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Classifier;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
 
-internal sealed class DetectorDataSetsConverter
+internal sealed class ClassifierDataSetsConverter
 {
-	public DetectorDataSetsConverter(
+	public ClassifierDataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
 		FileSystemWeightsDataAccess weightsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_weightsDataAccess = weightsDataAccess;
 		_screenshotsConverter = new ScreenshotsConverter(screenshotsDataAccess);
-		_assetsConverter = new DetectorAssetsConverter(screenshotsDataAccess);
-		_weightsConverter = new DetectorWeightsConverter(weightsDataAccess);
+		_assetsConverter = new ClassifierAssetsConverter(screenshotsDataAccess);
+		_weightsConverter = new ClassifierWeightsConverter(weightsDataAccess);
 	}
 
-	internal SerializableDetectorDataSet Convert(
-		DetectorDataSet dataSet,
-		ConversionSession session)
+	public SerializableClassifierDataSet Convert(ClassifierDataSet dataSet, ConversionSession session)
 	{
-		SerializableDetectorDataSet serializableDataSet = new(
+		SerializableClassifierDataSet serializableDataSet = new(
 			dataSet,
 			GamesConverter.GetGameId(dataSet.Game, session),
 			TagsConverter.Convert(dataSet.Tags, session),
@@ -36,12 +34,12 @@ internal sealed class DetectorDataSetsConverter
 		return serializableDataSet;
 	}
 
-	internal DetectorDataSet ConvertBack(
-		SerializableDetectorDataSet raw,
+	public ClassifierDataSet ConvertBack(
+		SerializableClassifierDataSet raw,
 		ReverseConversionSession session)
 	{
 		Guard.IsNotNull(session.Games);
-		DetectorDataSet dataSet = new(raw.Name, raw.Resolution);
+		ClassifierDataSet dataSet = new(raw.Name, raw.Resolution);
 		if (raw.GameId != null)
 			dataSet.Game = session.Games[raw.GameId.Value];
 		dataSet.Screenshots.MaxQuantity = raw.MaxScreenshots;
@@ -53,26 +51,26 @@ internal sealed class DetectorDataSetsConverter
 		return dataSet;
 	}
 
-	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
-	private readonly DetectorAssetsConverter _assetsConverter;
-	private readonly DetectorWeightsConverter _weightsConverter;
+	private readonly ScreenshotsConverter _screenshotsConverter;
+	private readonly ClassifierAssetsConverter _assetsConverter;
+	private readonly ClassifierWeightsConverter _weightsConverter;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
-	private static extern DetectorScreenshot CreateScreenshot(DetectorScreenshotsLibrary library);
+	private static extern ClassifierScreenshot CreateScreenshot(ClassifierScreenshotsLibrary library);
 
 	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
 	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
 		
 	[UnsafeAccessor(UnsafeAccessorKind.Method)]
-	private static extern DetectorWeights CreateWeights(
-		DetectorWeightsLibrary library,
+	private static extern ClassifierWeights CreateWeights(
+		ClassifierWeightsLibrary library,
 		ModelSize size,
 		WeightsMetrics metrics,
-		IEnumerable<DetectorTag> tags);
+		IEnumerable<ClassifierTag> tags);
 
-	private static void AddTags(DetectorDataSet dataSet, ImmutableArray<SerializableTag> tags, ReverseConversionSession session)
+	private static void AddTags(ClassifierDataSet dataSet, ImmutableArray<SerializableTag> tags, ReverseConversionSession session)
 	{
 		foreach (var rawTag in tags)
 		{
@@ -82,7 +80,7 @@ internal sealed class DetectorDataSetsConverter
 		}
 	}
 
-	private void AddScreenshots(DetectorDataSet dataSet, ImmutableArray<SerializableScreenshot> screenshots, ReverseConversionSession session)
+	private void AddScreenshots(ClassifierDataSet dataSet, ImmutableArray<SerializableScreenshot> screenshots, ReverseConversionSession session)
 	{
 		foreach (var rawScreenshot in screenshots)
 		{
@@ -93,22 +91,20 @@ internal sealed class DetectorDataSetsConverter
 		}
 	}
 
-	private static void AddAssets(DetectorDataSet dataSet, ImmutableArray<SerializableDetectorAsset> assets, ReverseConversionSession session)
+	private static void AddAssets(ClassifierDataSet dataSet, ImmutableArray<SerializableClassifierAsset> assets, ReverseConversionSession session)
 	{
 		foreach (var rawAsset in assets)
 		{
-			var screenshot = (DetectorScreenshot)session.Screenshots[rawAsset.ScreenshotId];
-			var asset = dataSet.Assets.MakeAsset(screenshot);
-			foreach (var rawItem in rawAsset.Items)
-				asset.CreateItem((DetectorTag)session.Tags[rawItem.TagId], rawItem.Bounding);
+			var screenshot = (ClassifierScreenshot)session.Screenshots[rawAsset.ScreenshotId];
+			dataSet.Assets.MakeAsset(screenshot, (ClassifierTag)session.Tags[rawAsset.TagId]);
 		}
 	}
 
-	private void AddWeights(DetectorDataSet dataSet, ImmutableArray<SerializableWeightsWithTags> raw, ReverseConversionSession session)
+	private void AddWeights(ClassifierDataSet dataSet, ImmutableArray<SerializableWeightsWithTags> raw, ReverseConversionSession session)
 	{
 		foreach (var rawWeights in raw)
 		{
-			var weights = CreateWeights(dataSet.Weights, rawWeights.Size, rawWeights.Metrics, rawWeights.Tags.Select(tagId => (DetectorTag)session.Tags[tagId]));
+			var weights = CreateWeights(dataSet.Weights, rawWeights.Size, rawWeights.Metrics, rawWeights.Tags.Select(tagId => (ClassifierTag)session.Tags[tagId]));
 			_weightsDataAccess.AssociateId(weights, rawWeights.Id);
 		}
 	}

@@ -3,7 +3,7 @@ using FlakeId;
 using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Domain.Model.DataSets;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal static class TagsConverter
 {

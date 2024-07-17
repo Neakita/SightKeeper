@@ -1,5 +1,6 @@
 ﻿using MemoryPack;
 using SightKeeper.Data.Binary.Conversion;
+using SightKeeper.Data.Binary.Conversion.DataSets;
 using SightKeeper.Data.Binary.Services;
 
 namespace SightKeeper.Data.Binary.Formatters;

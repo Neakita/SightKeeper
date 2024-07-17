@@ -3,7 +3,7 @@ using SightKeeper.Data.Binary.DataSets.Detector;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets.Detector;
 
 internal sealed class DetectorAssetsConverter
 {

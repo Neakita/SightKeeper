@@ -8,7 +8,7 @@ using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser;
 
 internal sealed class PoserDataSetsConverter
 {

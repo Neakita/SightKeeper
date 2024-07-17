@@ -3,7 +3,7 @@ using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
 
 internal sealed class ClassifierWeightsConverter
 {

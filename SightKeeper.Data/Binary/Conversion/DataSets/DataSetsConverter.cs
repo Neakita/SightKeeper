@@ -1,4 +1,6 @@
 ﻿using System.Collections.Immutable;
+using SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
+using SightKeeper.Data.Binary.Conversion.DataSets.Detector;
 using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Data.Binary.DataSets.Classifier;
 using SightKeeper.Data.Binary.DataSets.Detector;
@@ -8,7 +10,7 @@ using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal sealed class DataSetsConverter
 {
