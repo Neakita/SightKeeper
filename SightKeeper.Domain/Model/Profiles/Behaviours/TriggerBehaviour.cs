@@ -19,9 +19,13 @@ public sealed class TriggerBehaviour : Behaviour
 		}
 	}
 
-	public TriggerBehaviour(Module module) : base(module)
+	internal TriggerBehaviour(Module module) : base(module)
 	{
-		
+	}
+
+	internal override void RemoveInappropriateTags()
+	{
+		Actions = Actions.Where(pair => Module.Weights.Contains(pair.Key)).ToImmutableDictionary();
 	}
 
 	private ImmutableDictionary<Tag, Action> _actions = ImmutableDictionary<Tag, Action>.Empty;

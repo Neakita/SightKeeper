@@ -4,7 +4,7 @@ using MemoryPack;
 namespace SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 
 [MemoryPackable]
-public sealed partial class SerializableAimBehaviour
+internal sealed partial class SerializableAimBehaviour : SerializableBehaviour
 {
-	public ImmutableArray<SerializableTagOptions> Tags { get; set; }
+	public ImmutableArray<SerializableAimBehaviourTagOptions> Tags { get; set; }
 }

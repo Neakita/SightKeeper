@@ -3,6 +3,7 @@ using FluentAssertions;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model.Profiles.Behaviours;
 using SightKeeper.Domain.Tests.DataSets;
 
 namespace SightKeeper.Domain.Tests.Profiles.Behaviours;
@@ -18,10 +19,11 @@ public sealed class AimBehaviourTests
 		var weights = weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
-		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, Model.Profiles.Behaviours.AimBehaviour.TagOptions>();
-		tagsBuilder.Add(tag, new Model.Profiles.Behaviours.AimBehaviour.TagOptions());
-		module.Behaviour.Tags = tagsBuilder.ToImmutable();
-		module.Behaviour.Tags.Should().ContainKey(tag);
+		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();
+		tagsBuilder.Add(tag, new AimBehaviour.TagOptions());
+		var behaviour = module.SetAimBehaviour();
+		behaviour.Tags = tagsBuilder.ToImmutable();
+		behaviour.Tags.Should().ContainKey(tag);
 	}
 
 	[Fact]
@@ -36,8 +38,9 @@ public sealed class AimBehaviourTests
 		weightsDataAccess.CreateWeights(dataSet2, [], ModelSize.Nano, new WeightsMetrics(), [tag2]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
-		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, Model.Profiles.Behaviours.AimBehaviour.TagOptions>();
-		tagsBuilder.Add(tag2, new Model.Profiles.Behaviours.AimBehaviour.TagOptions());
-		Assert.ThrowsAny<Exception>(() => module.Behaviour.Tags = tagsBuilder.ToImmutable());
+		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();
+		tagsBuilder.Add(tag2, new AimBehaviour.TagOptions());
+		var behaviour = module.SetAimBehaviour();
+		Assert.ThrowsAny<Exception>(() => behaviour.Tags = tagsBuilder.ToImmutable());
 	}
 }

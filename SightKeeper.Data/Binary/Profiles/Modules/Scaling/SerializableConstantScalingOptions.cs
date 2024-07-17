@@ -3,4 +3,4 @@
 namespace SightKeeper.Data.Binary.Profiles.Modules.Scaling;
 
 [MemoryPackable]
-public sealed partial record SerializableConstantScalingOptions(float Factor) : SerializablePassiveScalingOptions;
+internal sealed partial record SerializableConstantScalingOptions(float Factor) : SerializablePassiveScalingOptions;

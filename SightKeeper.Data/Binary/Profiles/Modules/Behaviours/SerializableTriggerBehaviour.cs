@@ -4,7 +4,7 @@ using MemoryPack;
 namespace SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 
 [MemoryPackable]
-public sealed partial class SerializableTriggerBehaviour
+internal sealed partial class SerializableTriggerBehaviour : SerializableBehaviour
 {
 	public ImmutableArray<SerializableAction> Actions { get; set; }
 }

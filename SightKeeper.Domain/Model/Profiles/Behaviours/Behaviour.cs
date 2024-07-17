@@ -6,6 +6,8 @@ public abstract class Behaviour
 {
 	public Module Module { get; }
 
+	internal abstract void RemoveInappropriateTags();
+
 	protected Behaviour(Module module)
 	{
 		Module = module;

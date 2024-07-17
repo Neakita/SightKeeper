@@ -20,8 +20,13 @@ public sealed class AimBehaviour : Behaviour
 		}
 	}
 
-	public AimBehaviour(Module module) : base(module)
+	internal AimBehaviour(Module module) : base(module)
 	{
+	}
+
+	internal override void RemoveInappropriateTags()
+	{
+		Tags = Tags.Where(pair => Module.Weights.Contains(pair.Key)).ToImmutableDictionary();
 	}
 
 	private ImmutableDictionary<Tag, TagOptions> _tags = ImmutableDictionary<Tag, TagOptions>.Empty;

@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 
-public class SerializableAction
+internal class SerializableAction
 {
 	public Id TagId { get; set; }
 }

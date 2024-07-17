@@ -5,11 +5,9 @@ using SightKeeper.Domain.Model.Profiles.Modules;
 
 namespace SightKeeper.Domain.Model.Profiles.Behaviours;
 
-public sealed class AimAssistBehaviour
+public sealed class AimAssistBehaviour : Behaviour
 {
 	public record TagOptions(byte Priority, Vector2<float> TargetAreaScale, float VerticalOffset);
-
-	public Module Module { get; }
 
 	public ImmutableDictionary<Tag, TagOptions> Tags
 	{
@@ -52,9 +50,13 @@ public sealed class AimAssistBehaviour
 		}
 	}
 
-	public AimAssistBehaviour(Module module)
+	internal AimAssistBehaviour(Module module) : base(module)
 	{
-		Module = module;
+	}
+
+	internal override void RemoveInappropriateTags()
+	{
+		Tags = Tags.Where(pair => Module.Weights.Contains(pair.Key)).ToImmutableDictionary();
 	}
 
 	private ImmutableDictionary<Tag, TagOptions> _tags = ImmutableDictionary<Tag, TagOptions>.Empty;
