@@ -20,7 +20,7 @@ public sealed class AimBehaviourTests
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();
-		tagsBuilder.Add(tag, new AimBehaviour.TagOptions());
+		tagsBuilder.Add(tag, new AimBehaviour.TagOptions(0, 0));
 		var behaviour = module.SetAimBehaviour();
 		behaviour.Tags = tagsBuilder.ToImmutable();
 		behaviour.Tags.Should().ContainKey(tag);
@@ -39,7 +39,7 @@ public sealed class AimBehaviourTests
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();
-		tagsBuilder.Add(tag2, new AimBehaviour.TagOptions());
+		tagsBuilder.Add(tag2, new AimBehaviour.TagOptions(0, 0));
 		var behaviour = module.SetAimBehaviour();
 		Assert.ThrowsAny<Exception>(() => behaviour.Tags = tagsBuilder.ToImmutable());
 	}
