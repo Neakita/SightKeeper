@@ -14,6 +14,13 @@ internal static class TriggerBehaviourConverter
 		return new SerializableTriggerBehaviour(actions);
 	}
 
+	public static ImmutableDictionary<Tag, Action> ConvertBack(
+		ImmutableArray<SerializableAction> actions,
+		ReverseConversionSession session)
+	{
+		return actions.Select(action => ConvertBack(action, session)).ToImmutableDictionary();
+	}
+
 	private static ImmutableArray<SerializableAction> Convert(
 		IReadOnlyDictionary<Tag, Action> actions,
 		ConversionSession session)
@@ -27,5 +34,10 @@ internal static class TriggerBehaviourConverter
 	{
 		var tagId = session.Tags[action.Key];
 		return new SerializableAction(tagId);
+	}
+
+	private static KeyValuePair<Tag, Action> ConvertBack(SerializableAction action, ReverseConversionSession session)
+	{
+		throw new NotImplementedException();
 	}
 }

@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.Profiles.Modules.Walking;
 
 namespace SightKeeper.Domain.Model.Profiles.Modules;
 
-public sealed class PoserModule : Module
+public sealed class PoserModule : Module, Behavioural
 {
 	public override PoserWeights Weights => _weights;
 	public Behaviour Behaviour { get; private set; }

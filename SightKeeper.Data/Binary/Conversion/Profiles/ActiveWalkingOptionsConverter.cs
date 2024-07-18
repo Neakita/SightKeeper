@@ -14,4 +14,17 @@ internal static class ActiveWalkingOptionsConverter
 			_ => throw new ArgumentOutOfRangeException(nameof(options))
 		};
 	}
+
+	public static ActiveWalkingOptions? ConvertBack(SerializableActiveWalkingOptions? options)
+	{
+		return options switch
+		{
+			null => null,
+			SerializableTrackingWalkingOptions trackingWalkingOptions => new TrackingWalkingOptions
+			{
+				MaximumOffset = trackingWalkingOptions.MaximumOffset
+			},
+			_ => throw new ArgumentOutOfRangeException(nameof(options))
+		};
+	}
 }

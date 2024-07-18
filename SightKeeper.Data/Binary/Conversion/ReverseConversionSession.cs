@@ -10,4 +10,5 @@ internal sealed class ReverseConversionSession
 	public ImmutableDictionary<ushort, Game>? Games { get; set; }
 	public Dictionary<Id, Tag> Tags { get; } = new();
 	public Dictionary<Id, Screenshot> Screenshots { get; } = new();
+	public Dictionary<Id, Weights> Weights { get; } = new();
 }

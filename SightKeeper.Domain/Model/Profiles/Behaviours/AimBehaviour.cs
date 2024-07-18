@@ -7,7 +7,7 @@ namespace SightKeeper.Domain.Model.Profiles.Behaviours;
 
 public sealed class AimBehaviour : Behaviour
 {
-	public record TagOptions(byte Priority = 0, float VerticalOffset = 0);
+	public record TagOptions(byte Priority, float VerticalOffset);
 
 	public ImmutableDictionary<Tag, TagOptions> Tags
 	{

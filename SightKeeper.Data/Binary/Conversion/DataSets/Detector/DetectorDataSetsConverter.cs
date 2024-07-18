@@ -110,6 +110,7 @@ internal sealed class DetectorDataSetsConverter
 		{
 			var weights = CreateWeights(dataSet.Weights, rawWeights.Size, rawWeights.Metrics, rawWeights.Tags.Select(tagId => (DetectorTag)session.Tags[tagId]));
 			_weightsDataAccess.AssociateId(weights, rawWeights.Id);
+			session.Weights.Add(rawWeights.Id, weights);
 		}
 	}
 }

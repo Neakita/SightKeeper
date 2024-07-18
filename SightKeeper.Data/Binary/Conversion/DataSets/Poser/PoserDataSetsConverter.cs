@@ -111,6 +111,7 @@ internal sealed class PoserDataSetsConverter
 		{
 			var weights = CreateWeights(dataSet.Weights, rawWeights.Size, rawWeights.Metrics, ConvertBack(rawWeights.Tags, session));
 			_weightsDataAccess.AssociateId(weights, rawWeights.Id);
+			session.Weights.Add(rawWeights.Id, weights);
 		}
 	}
 

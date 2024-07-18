@@ -13,6 +13,11 @@ internal static class AimAssistBehavioursConverter
 		return new SerializableAimAssistBehaviour(behaviour, tags);
 	}
 
+	public static ImmutableDictionary<Tag, AimAssistBehaviour.TagOptions> ConvertBack(ImmutableArray<SerializableAimAssistBehaviourTagOptions> tags, ReverseConversionSession session)
+	{
+		return tags.Select(tag => ConvertBack(tag, session)).ToImmutableDictionary();
+	}
+
 	private static ImmutableArray<SerializableAimAssistBehaviourTagOptions> Convert(
 		IReadOnlyDictionary<Tag, AimAssistBehaviour.TagOptions> tags,
 		ConversionSession session)
@@ -26,5 +31,14 @@ internal static class AimAssistBehavioursConverter
 	{
 		var tagId = session.Tags[tag.Key];
 		return new SerializableAimAssistBehaviourTagOptions(tagId, tag.Value);
+	}
+
+	private static KeyValuePair<Tag, AimAssistBehaviour.TagOptions> ConvertBack(
+		SerializableAimAssistBehaviourTagOptions options,
+		ReverseConversionSession session)
+	{
+		return new KeyValuePair<Tag, AimAssistBehaviour.TagOptions>(
+			session.Tags[options.TagId],
+			new AimAssistBehaviour.TagOptions(options.Priority, options.TargetAreaScale, options.VerticalOffset));
 	}
 }

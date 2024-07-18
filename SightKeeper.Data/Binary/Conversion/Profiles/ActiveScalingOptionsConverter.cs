@@ -14,4 +14,18 @@ internal static class ActiveScalingOptionsConverter
 			_ => throw new ArgumentOutOfRangeException(nameof(options))
 		};
 	}
+
+	public static ActiveScalingOptions? ConvertBack(SerializableActiveScalingOptions? options)
+	{
+		return options switch
+		{
+			null => null,
+			SerializableAdaptiveScalingOptions adaptiveScalingOptions => new AdaptiveScalingOptions
+			{
+				Margin = adaptiveScalingOptions.Margin,
+				MaximumScaling = adaptiveScalingOptions.MaximumScaling
+			},
+			_ => throw new ArgumentOutOfRangeException(nameof(options))
+		};
+	}
 }

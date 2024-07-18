@@ -106,6 +106,7 @@ internal sealed class ClassifierDataSetsConverter
 		{
 			var weights = CreateWeights(dataSet.Weights, rawWeights.Size, rawWeights.Metrics, rawWeights.Tags.Select(tagId => (ClassifierTag)session.Tags[tagId]));
 			_weightsDataAccess.AssociateId(weights, rawWeights.Id);
+			session.Weights.Add(rawWeights.Id, weights);
 		}
 	}
 }

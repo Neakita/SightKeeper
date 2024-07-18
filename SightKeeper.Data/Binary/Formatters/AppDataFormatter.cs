@@ -50,7 +50,7 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		value = new AppData(
 			GamesConverter.ConvertBack(raw.Games, session),
 			_dataSetsConverter.ConvertBack(raw.DataSets, session),
-			[]);
+			_profilesConverter.ConvertBack(raw.Profiles, session));
 	}
 
 	private readonly DataSetsConverter _dataSetsConverter;

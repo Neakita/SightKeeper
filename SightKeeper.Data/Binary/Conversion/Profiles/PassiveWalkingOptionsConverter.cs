@@ -14,4 +14,18 @@ internal static class PassiveWalkingOptionsConverter
 			_ => throw new ArgumentOutOfRangeException(nameof(options))
 		};
 	}
+
+	public static PassiveWalkingOptions? ConvertBack(SerializablePassiveWalkingOptions? options)
+	{
+		return options switch
+		{
+			null => null,
+			SerializableIterativeWalkingOptions iterativeWalkingOptions => new IterativeWalkingOptions
+			{
+				OffsetStep = iterativeWalkingOptions.OffsetStep,
+				MaximumSteps = iterativeWalkingOptions.MaximumSteps
+			},
+			_ => throw new ArgumentOutOfRangeException(nameof(options))
+		};
+	}
 }

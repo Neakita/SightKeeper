@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.Profiles.Modules.Walking;
 
 namespace SightKeeper.Domain.Model.Profiles.Modules;
 
-public sealed class DetectorModule : Module
+public sealed class DetectorModule : Module, Behavioural
 {
 	public override DetectorWeights Weights => _weights;
 	public Behaviour Behaviour { get; private set; }
