@@ -6,19 +6,24 @@ namespace SightKeeper.Data.Binary.Profiles.Modules.Scaling;
 [MemoryPackable]
 internal sealed partial class SerializableIterativeScalingOptions : SerializablePassiveScalingOptions
 {
-	public float MinimumScale { get; }
-	public float MaximumScale { get; }
+	public float Initial { get; set; }
+	public float StepSize { get; set; }
+	public byte StepsCount { get; set; }
 
 	[MemoryPackConstructor]
-	public SerializableIterativeScalingOptions(float minimumScale, float maximumScale)
+	public SerializableIterativeScalingOptions(float initial, float stepSize, byte stepsCount)
 	{
-		MinimumScale = minimumScale;
-		MaximumScale = maximumScale;
+		Initial = initial;
+		StepSize = stepSize;
+		StepsCount = stepsCount;
 	}
 
 	public SerializableIterativeScalingOptions(IterativeScalingOptions options)
 	{
-		MinimumScale = options.MinimumScaling;
-		MaximumScale = options.MaximumScaling;
+		Initial = options.Initial;
+		StepSize = options.StepSize;
+		StepsCount = options.StepsCount;
 	}
+
+	public override IterativeScalingOptions Convert() => new(Initial, StepSize, StepsCount);
 }

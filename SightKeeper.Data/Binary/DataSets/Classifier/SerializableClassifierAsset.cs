@@ -1,9 +1,11 @@
 ﻿using FlakeId;
+using MemoryPack;
 using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Binary.DataSets.Classifier;
 
-internal sealed class SerializableClassifierAsset : SerializableAsset
+[MemoryPackable]
+internal sealed partial class SerializableClassifierAsset : SerializableAsset
 {
 	public Id TagId { get; set; }
 

@@ -69,7 +69,7 @@ internal sealed class ProfilesConverter
 		var converted = profile.CreateModule(weights);
 		var actions = ((SerializableTriggerBehaviour)module.Behaviour).Actions;
 		converted.Behaviour.Actions = TriggerBehaviourConverter.ConvertBack(actions, session);
-		converted.PassiveScalingOptions = PassiveScalingOptionsConverter.ConvertBack(module.PassiveScalingOptions);
+		converted.PassiveScalingOptions = module.PassiveScalingOptions?.Convert();
 		converted.PassiveWalkingOptions = PassiveWalkingOptionsConverter.ConvertBack(module.PassiveWalkingOptions);
 	}
 
@@ -77,7 +77,7 @@ internal sealed class ProfilesConverter
 	{
 		var weights = (DetectorWeights)session.Weights[module.WeightsId];
 		var converted = profile.CreateModule(weights);
-		converted.PassiveScalingOptions = PassiveScalingOptionsConverter.ConvertBack(module.PassiveScalingOptions);
+		converted.PassiveScalingOptions = module.PassiveScalingOptions?.Convert();
 		converted.PassiveWalkingOptions = PassiveWalkingOptionsConverter.ConvertBack(module.PassiveWalkingOptions);
 		converted.ActiveScalingOptions = ActiveScalingOptionsConverter.ConvertBack(module.ActiveScalingOptions);
 		converted.ActiveWalkingOptions = ActiveWalkingOptionsConverter.ConvertBack(module.ActiveWalkingOptions);
@@ -88,7 +88,7 @@ internal sealed class ProfilesConverter
 	{
 		var weights = (PoserWeights)session.Weights[module.WeightsId];
 		var converted = profile.CreateModule(weights);
-		converted.PassiveScalingOptions = PassiveScalingOptionsConverter.ConvertBack(module.PassiveScalingOptions);
+		converted.PassiveScalingOptions = module.PassiveScalingOptions?.Convert();
 		converted.PassiveWalkingOptions = PassiveWalkingOptionsConverter.ConvertBack(module.PassiveWalkingOptions);
 		converted.ActiveScalingOptions = ActiveScalingOptionsConverter.ConvertBack(module.ActiveScalingOptions);
 		converted.ActiveWalkingOptions = ActiveWalkingOptionsConverter.ConvertBack(module.ActiveWalkingOptions);

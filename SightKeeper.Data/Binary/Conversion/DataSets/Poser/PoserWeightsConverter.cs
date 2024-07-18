@@ -11,12 +11,11 @@ internal sealed class PoserWeightsConverter
 	public PoserWeightsConverter(FileSystemWeightsDataAccess weightsDataAccess)
 	{
 		_weightsDataAccess = weightsDataAccess;
-		throw new NotImplementedException();
 	}
 
-	public ImmutableArray<SerializablePoserWeights> Convert(IEnumerable<PoserWeights> dataSetWeights, ConversionSession session)
+	public ImmutableArray<SerializablePoserWeights> Convert(IEnumerable<PoserWeights> weights, ConversionSession session)
 	{
-		throw new NotImplementedException();
+		return weights.Select(w => Convert(w, session)).ToImmutableArray();
 	}
 
 	private readonly FileSystemWeightsDataAccess _weightsDataAccess;

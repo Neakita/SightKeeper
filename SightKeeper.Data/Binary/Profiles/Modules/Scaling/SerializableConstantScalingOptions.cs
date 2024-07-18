@@ -18,4 +18,9 @@ internal sealed partial class SerializableConstantScalingOptions : SerializableP
 	{
 		Factor = options.Factor;
 	}
+
+	public override ConstantScalingOptions Convert()
+	{
+		return new ConstantScalingOptions(Factor);
+	}
 }

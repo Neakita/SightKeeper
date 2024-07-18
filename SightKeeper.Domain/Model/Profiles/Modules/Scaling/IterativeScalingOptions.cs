@@ -2,29 +2,47 @@
 
 namespace SightKeeper.Domain.Model.Profiles.Modules.Scaling;
 
-// TODO Step and StepsCount instead
 public sealed class IterativeScalingOptions : PassiveScalingOptions
 {
-	public float MinimumScaling
+	public float Initial
 	{
-		get => _minimumScaling;
+		get => _initial;
 		set
 		{
 			Guard.IsGreaterThanOrEqualTo(value, 1);
-			_minimumScaling = value;
+			_initial = value;
 		}
 	}
 
-	public float MaximumScaling
+	public float StepSize
 	{
-		get => _maximumScaling;
+		get => _stepSize;
 		set
 		{
-			Guard.IsGreaterThan(value, 1);
-			_maximumScaling = value;
+			Guard.IsGreaterThan(value, 0);
+			_stepSize = value;
 		}
 	}
 
-	private float _minimumScaling = 1;
-	private float _maximumScaling = 2;
+	public byte StepsCount
+	{
+		get => _stepsCount;
+		set
+		{
+			const byte minimumValue = 2;
+			Guard.IsGreaterThanOrEqualTo(value, minimumValue);
+			_stepsCount = value;
+		}
+	}
+
+	public IterativeScalingOptions(float initial = 1, float stepSize = 1, byte stepsCount = 2)
+	{
+		Initial = initial;
+		StepSize = stepSize;
+		StepsCount = stepsCount;
+	}
+
+	private float _initial;
+	private float _stepSize;
+	private byte _stepsCount;
 }

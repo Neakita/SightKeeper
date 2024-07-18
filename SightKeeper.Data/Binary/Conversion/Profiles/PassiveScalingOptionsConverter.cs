@@ -15,22 +15,4 @@ internal static class PassiveScalingOptionsConverter
 			_ => throw new ArgumentOutOfRangeException(nameof(options))
 		};
 	}
-
-	public static PassiveScalingOptions? ConvertBack(SerializablePassiveScalingOptions? options)
-	{
-		return options switch
-		{
-			null => null,
-			SerializableConstantScalingOptions constantScalingOptions => new ConstantScalingOptions
-			{
-				Factor = constantScalingOptions.Factor
-			},
-			SerializableIterativeScalingOptions iterativeScalingOptions => new IterativeScalingOptions
-			{
-				MinimumScaling = iterativeScalingOptions.MinimumScale,
-				MaximumScaling = iterativeScalingOptions.MaximumScale
-			},
-			_ => throw new ArgumentOutOfRangeException(nameof(options))
-		};
-	}
 }

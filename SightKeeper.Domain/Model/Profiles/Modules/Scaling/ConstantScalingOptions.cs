@@ -14,5 +14,10 @@ public sealed class ConstantScalingOptions : PassiveScalingOptions
 		}
 	}
 
-	private float _factor = 2;
+	private float _factor;
+
+	public ConstantScalingOptions(float factor = 2)
+	{
+		_factor = factor;
+	}
 }
