@@ -13,10 +13,5 @@ public sealed class WindowsMouseMover : MouseMover
         _moved.OnNext((xDelta, yDelta));
     }
 
-    public void SetPosition(int x, int y)
-    {
-        Cursor.Position = new Point(x, y);
-    }
-
     private readonly Subject<(int, int)> _moved = new();
 }
