@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+﻿/*using System.Numerics;
 using CommunityToolkit.Diagnostics;
 using Serilog;
 using SightKeeper.Domain.Model.Profiles;
@@ -31,4 +31,4 @@ public sealed class SimplePreemptionComputer : PreemptionComputer
 	private const float BasePreemptionFactor = 100;
 	private readonly Vector2 _preemptionFactor;
 	private Vector2 _previousPreemption = Vector2.Zero;
-}
+}*/

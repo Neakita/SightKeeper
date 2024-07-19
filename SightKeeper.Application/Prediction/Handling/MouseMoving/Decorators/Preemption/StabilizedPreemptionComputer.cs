@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+﻿/*using System.Numerics;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model.Profiles;
@@ -49,4 +49,4 @@ public sealed class StabilizedPreemptionComputer : PreemptionComputer
 	private readonly List<Vector2> _velocities;
 	private readonly Func<IEnumerable<float>, float> _method;
 	private Vector2 _previousPreemption = Vector2.Zero;
-}
+}*/

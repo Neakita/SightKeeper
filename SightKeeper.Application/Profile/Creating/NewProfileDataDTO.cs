@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Application;
 
@@ -16,7 +15,7 @@ public sealed class NewProfileDataDTO : NewProfileData
     public float? PreemptionVerticalFactor { get; }
     public bool IsPreemptionStabilizationEnabled { get; }
     public byte? PreemptionStabilizationBufferSize { get; }
-    public StabilizationMethod? PreemptionStabilizationMethod { get; }
+    // public StabilizationMethod? PreemptionStabilizationMethod { get; }
     public Weights Weights { get; }
     public IReadOnlyList<ProfileTagData> Tags { get; }
     
@@ -31,7 +30,7 @@ public sealed class NewProfileDataDTO : NewProfileData
         float? preemptionVerticalFactor,
         bool isPreemptionStabilizationEnabled,
         byte? preemptionStabilizationBufferSize,
-        StabilizationMethod? preemptionStabilizationMethod,
+        // StabilizationMethod? preemptionStabilizationMethod,
         Weights weights,
         IEnumerable<ProfileTagData> tags)
     {
@@ -45,7 +44,7 @@ public sealed class NewProfileDataDTO : NewProfileData
         PreemptionVerticalFactor = preemptionVerticalFactor;
         IsPreemptionStabilizationEnabled = isPreemptionStabilizationEnabled;
         PreemptionStabilizationBufferSize = preemptionStabilizationBufferSize;
-        PreemptionStabilizationMethod = preemptionStabilizationMethod;
+        // PreemptionStabilizationMethod = preemptionStabilizationMethod;
         Weights = weights;
         Tags = tags.ToImmutableList();
     }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+﻿/*using System.Collections.Immutable;
 using System.Drawing;
 using System.Numerics;
 using System.Reactive.Disposables;
@@ -9,7 +9,6 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Input;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.Profiles;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Application.Prediction.Handling.MouseMoving;
 
@@ -21,12 +20,10 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
 	    Profile profile,
 	    DetectionMouseMover mouseMover,
 	    SharpHookHotKeyManager hotKeyManager,
-	    ProfileEditor profileEditor,
-	    ObjectsLookupper objectsLookupper)
+	    ProfileEditor profileEditor)
     {
         _profile = profile;
         _mouseMover = mouseMover;
-        _objectsLookupper = objectsLookupper;
         _profileTags = profile.Tags.ToDictionary(
             profileTag => profileTag.Tag,
             profileTag => profileTag);
@@ -122,4 +119,4 @@ public sealed class MouseMoverDetectionHandler : DetectionObserver, IDisposable
         var difference = pos - center;
         return difference;
     }
-}
+}*/

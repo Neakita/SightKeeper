@@ -5,7 +5,6 @@ using Compunet.YoloV8.Data;
 using Compunet.YoloV8.Metadata;
 using SerilogTimings;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using RectangleF = System.Drawing.RectangleF;
@@ -27,7 +26,7 @@ public sealed class ONNXDetector : Detector
             if (value == null)
                 return;
             SetWeights(value);
-            _tags = _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(value)).Tags
+            _tags = value.DataSet.Tags
                 .Select((tag, tagIndex) => (tag, tagIndex))
                 .ToDictionary(t => t.tagIndex, t => t.tag);
         }
@@ -35,16 +34,17 @@ public sealed class ONNXDetector : Detector
     
     private void SetWeights(Weights weights)
     {
-        var weightsData = _weightsDataAccess.LoadWeightsONNXData(weights);
-        YoloV8Builder builder = new();
-        builder.UseOnnxModel(new BinarySelector(weightsData.Content));
-        builder.WithMetadata(CreateMetadata(_objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(weights))));
-        builder.WithConfiguration(configuration =>
-        {
-	        configuration.Confidence = ProbabilityThreshold;
-	        configuration.IoU = IoU;
-        });
-        _predictor = builder.Build();
+	    throw new NotImplementedException();
+	    // var weightsData = _weightsDataAccess.LoadWeightsONNXData(weights);
+	    // YoloV8Builder builder = new();
+	    // builder.UseOnnxModel(new BinarySelector(weightsData.Content));
+	    // builder.WithMetadata(CreateMetadata(weights.DataSet));
+	    // builder.WithConfiguration(configuration =>
+	    // {
+	    //  configuration.Confidence = ProbabilityThreshold;
+	    //  configuration.IoU = IoU;
+	    // });
+	    // _predictor = builder.Build();
     }
 
     public float ProbabilityThreshold
@@ -90,20 +90,18 @@ public sealed class ONNXDetector : Detector
     }
 
     private readonly WeightsDataAccess _weightsDataAccess;
-    private readonly ObjectsLookupper _objectsLookupper;
     private float _probabilityThreshold = YoloV8Configuration.Default.Confidence;
     private float _iou = YoloV8Configuration.Default.IoU;
     private YoloV8Predictor? _predictor;
     private Weights? _weights;
     private Dictionary<int, Tag>? _tags;
 
-    public ONNXDetector(WeightsDataAccess weightsDataAccess, ObjectsLookupper objectsLookupper)
+    public ONNXDetector(WeightsDataAccess weightsDataAccess)
     {
 	    _weightsDataAccess = weightsDataAccess;
-	    _objectsLookupper = objectsLookupper;
     }
 
-    private static YoloV8Metadata CreateMetadata(DetectorDataSet dataSet) => new(
+    private static YoloV8Metadata CreateMetadata(DataSet dataSet) => new(
         string.Empty, string.Empty, string.Empty,
         YoloV8Task.Detect,
         1,
@@ -114,7 +112,7 @@ public sealed class ONNXDetector : Detector
     {
         Guard.IsNotNull(_tags);
         Guard.IsNotNull(_weights);
-        return new DetectionItem(_tags[bounding.Class.Id], CreateBounding(bounding.Bounds, _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(_weights)).Resolution), bounding.Confidence);
+        return new DetectionItem(_tags[bounding.Class.Id], CreateBounding(bounding.Bounds, _weights.DataSet.Resolution), bounding.Confidence);
     }
 
     private static RectangleF CreateBounding(Rectangle rectangle, ushort resolution) => new(

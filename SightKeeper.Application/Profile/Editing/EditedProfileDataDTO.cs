@@ -17,7 +17,7 @@ public sealed class EditedProfileDataDTO : EditedProfileData
     public float? PreemptionVerticalFactor { get; }
     public bool IsPreemptionStabilizationEnabled { get; }
     public byte? PreemptionStabilizationBufferSize { get; }
-    public StabilizationMethod? PreemptionStabilizationMethod { get; }
+    // public StabilizationMethod? PreemptionStabilizationMethod { get; }
     public Weights Weights { get; }
     public IReadOnlyList<ProfileTagData> Tags { get; }
 
@@ -33,7 +33,7 @@ public sealed class EditedProfileDataDTO : EditedProfileData
         float? preemptionVerticalFactor,
         bool isPreemptionStabilizationEnabled,
         byte? preemptionStabilizationBufferSize,
-        StabilizationMethod? preemptionStabilizationMethod,
+        // StabilizationMethod? preemptionStabilizationMethod,
         Weights weights,
         IEnumerable<ProfileTagData> tags)
     {
@@ -47,7 +47,7 @@ public sealed class EditedProfileDataDTO : EditedProfileData
         PreemptionVerticalFactor = preemptionVerticalFactor;
         IsPreemptionStabilizationEnabled = isPreemptionStabilizationEnabled;
         PreemptionStabilizationBufferSize = preemptionStabilizationBufferSize;
-        PreemptionStabilizationMethod = preemptionStabilizationMethod;
+        // PreemptionStabilizationMethod = preemptionStabilizationMethod;
         PostProcessDelay = postProcessDelay;
         Weights = weights;
         Tags = tags.ToImmutableList();

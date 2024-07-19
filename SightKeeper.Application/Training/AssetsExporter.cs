@@ -12,11 +12,10 @@ namespace SightKeeper.Application.Training;
 
 public sealed class AssetsExporter
 {
-	public AssetsExporter(ScreenshotsDataAccess screenshotsDataAccess, ILogger logger, ObjectsLookupper objectsLookupper)
+	public AssetsExporter(ScreenshotsDataAccess screenshotsDataAccess, ILogger logger)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_logger = logger;
-		_objectsLookupper = objectsLookupper;
 	}
 
 	public void Export(
@@ -24,17 +23,17 @@ public sealed class AssetsExporter
 		IReadOnlyCollection<DetectorAsset> assets,
 		IReadOnlyCollection<Tag> tags)
 	{
-		var imagesDirectoryPath = Path.Combine(targetDirectoryPath, "images");
-		var labelsDirectoryPath = Path.Combine(targetDirectoryPath, "labels");
-		var data = _screenshotsDataAccess.LoadImages(assets.Select(asset => asset.Screenshot)).ToImmutableList();
-		ExportImages(imagesDirectoryPath, data.Select(d => d.image).ToImmutableList());
-		ExportLabels(labelsDirectoryPath, data.Select(d => _objectsLookupper.GetAsset(d.screenshot)).ToImmutableList(), tags);
+		throw new NotImplementedException();
+		// var imagesDirectoryPath = Path.Combine(targetDirectoryPath, "images");
+		// var labelsDirectoryPath = Path.Combine(targetDirectoryPath, "labels");
+		// var data = _screenshotsDataAccess.LoadImages(assets.Select(asset => asset.Screenshot)).ToImmutableList();
+		// ExportImages(imagesDirectoryPath, data.Select(d => d.image).ToImmutableList());
+		// ExportLabels(labelsDirectoryPath, data.Select(d => _objectsLookupper.GetAsset(d.screenshot)).ToImmutableList(), tags);
 	}
 	
 	private static readonly NumberFormatInfo NumberFormat = new() { NumberDecimalSeparator = "." };
 	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly ILogger _logger;
-	private readonly ObjectsLookupper _objectsLookupper;
 
 	private void ExportImages(string directoryPath, IReadOnlyCollection<Domain.Model.DataSets.Image> images)
 	{
@@ -50,8 +49,9 @@ public sealed class AssetsExporter
 
 	private void ExportImage(string directoryPath, Domain.Model.DataSets.Image image, int assetIndex)
 	{
-		var imagePath = Path.Combine(directoryPath, $"{assetIndex}.png");
-		ExportImage(imagePath, image.Content);
+		throw new NotImplementedException();
+		// var imagePath = Path.Combine(directoryPath, $"{assetIndex}.png");
+		// ExportImage(imagePath, image.Content);
 	}
 
 	private static void ExportImage(string path, byte[] content)
