@@ -15,7 +15,13 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid RowDefinitions="* 16 Auto Auto">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition MinHeight="68"/>
+			<RowDefinition Height="16"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
 		<ListBox Grid.Row="0"
 		         Classes="compact"
 		         ItemsSource="{Binding AvailableGames}"
