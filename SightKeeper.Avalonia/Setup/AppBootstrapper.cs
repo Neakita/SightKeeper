@@ -11,7 +11,6 @@ internal static class AppBootstrapper
 	{
 		ContainerBuilder builder = new();
 		SetupLogger(builder);
-		// DataBaseBootstrapper.Setup(builder);
 		ViewModelsBootstrapper.Setup(builder);
 		ServicesBootstrapper.Setup(builder);
 		return builder.Build();
@@ -20,7 +19,6 @@ internal static class AppBootstrapper
 	public static void OnRelease()
 	{
 		ServicesBootstrapper.OnRelease();
-		// DataBaseBootstrapper.OnRelease(ServiceLocator.Instance);
 	}
 
 	private static void SetupLogger(ContainerBuilder builder)
