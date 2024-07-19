@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using DynamicData;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
@@ -28,29 +27,30 @@ internal sealed class DataSetViewModel : ViewModel, IDisposable
     public IReadOnlyCollection<Tag> Tags { get; }
     public IReadOnlyCollection<Weights> Weights { get; }
 
-    public DataSetViewModel(DetectorDataSet dataSet, WeightsDataAccess weightsDataAccess, ObjectsLookupper objectsLookupper)
+    public DataSetViewModel(DetectorDataSet dataSet, WeightsDataAccess weightsDataAccess)
     {
-        DataSet = dataSet;
-        _tags.Connect()
-            .Bind(out var tags)
-            .Subscribe()
-            .DisposeWith(_constructorDisposables);
-        _tags.AddOrUpdate(dataSet.Tags);
-        Tags = tags;
-        _weights.AddRange(DataSet.Weights);
-        _weights.Connect()
-            .Bind(out var weights)
-            .Subscribe()
-            .DisposeWith(_constructorDisposables);
-        Weights = weights;
-        weightsDataAccess.WeightsCreated
-            .Where(data => objectsLookupper.GetDataSet(data.library) == DataSet)
-            .Subscribe(data => _weights.Add(data.weights))
-            .DisposeWith(_constructorDisposables);
-        weightsDataAccess.WeightsRemoved
-            .Where(w => objectsLookupper.GetDataSet(objectsLookupper.GetLibrary(w)) == DataSet)
-            .Subscribe(w => _weights.Remove(w))
-            .DisposeWith(_constructorDisposables);
+	    throw new NotImplementedException();
+	    // DataSet = dataSet;
+	    // _tags.Connect()
+	    //     .Bind(out var tags)
+	    //     .Subscribe()
+	    //     .DisposeWith(_constructorDisposables);
+	    // _tags.AddOrUpdate(dataSet.Tags);
+	    // Tags = tags;
+	    // _weights.AddRange(DataSet.Weights);
+	    // _weights.Connect()
+	    //     .Bind(out var weights)
+	    //     .Subscribe()
+	    //     .DisposeWith(_constructorDisposables);
+	    // Weights = weights;
+	    // weightsDataAccess.WeightsCreated
+	    //     .Where(data => objectsLookupper.GetDataSet(data.library) == DataSet)
+	    //     .Subscribe(data => _weights.Add(data.weights))
+	    //     .DisposeWith(_constructorDisposables);
+	    // weightsDataAccess.WeightsRemoved
+	    //     .Where(w => objectsLookupper.GetDataSet(objectsLookupper.GetLibrary(w)) == DataSet)
+	    //     .Subscribe(w => _weights.Remove(w))
+	    //     .DisposeWith(_constructorDisposables);
     }
 
     public void NotifyChanges()

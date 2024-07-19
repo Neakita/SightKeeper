@@ -4,7 +4,6 @@ using System.Reactive.Disposables;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Editing;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
@@ -16,11 +15,10 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
 
     public DataSetsListViewModel(DataSetsObservableRepository dataSetsObservableRepository,
 	    DataSetEditor editor,
-	    WeightsDataAccess weightsDataAccess,
-	    ObjectsLookupper objectsLookupper)
+	    WeightsDataAccess weightsDataAccess)
     {
         dataSetsObservableRepository.DataSetsSource.Connect()
-            .Transform(dataSet => new DataSetViewModel(dataSet, weightsDataAccess, objectsLookupper))
+            .Transform(dataSet => new DataSetViewModel(dataSet, weightsDataAccess))
             .DisposeMany()
             .AddKey(viewModel => viewModel.DataSet)
             .Bind(out var dataSets)

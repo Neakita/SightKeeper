@@ -14,17 +14,18 @@ internal sealed class SelectedDataSetViewModel : ValueViewModel<DataSetViewModel
 
     public SelectedDataSetViewModel(WeightsDataAccess weightsDataAccess) : base(null)
     {
-        _weights.Connect()
-            .Bind(out var weights)
-            .Subscribe()
-            .DisposeWith(_disposable);
-        Weights = weights;
-        weightsDataAccess.WeightsCreated
-            .Subscribe(data => _weights.Add(data.weights))
-            .DisposeWith(_disposable);
-        weightsDataAccess.WeightsRemoved
-            .Subscribe(deletedWeights => _weights.Remove(deletedWeights))
-            .DisposeWith(_disposable);
+	    throw new NotImplementedException();
+	    // _weights.Connect()
+	    //     .Bind(out var weights)
+	    //     .Subscribe()
+	    //     .DisposeWith(_disposable);
+	    // Weights = weights;
+	    // weightsDataAccess.WeightsCreated
+	    //     .Subscribe(data => _weights.Add(data.weights))
+	    //     .DisposeWith(_disposable);
+	    // weightsDataAccess.WeightsRemoved
+	    //     .Subscribe(deletedWeights => _weights.Remove(deletedWeights))
+	    //     .DisposeWith(_disposable);
     }
 
     public override void Dispose()

@@ -20,7 +20,6 @@ using SightKeeper.Avalonia.MessageBoxDialog;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 
@@ -37,13 +36,11 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
 	    DetectorDataSet dataSet,
 	    IValidator<DataSetChanges> validator,
 	    GamesDataAccess gamesDataAccess,
-	    DialogManager dialogManager,
-	    ObjectsLookupper objectsLookupper)
+	    DialogManager dialogManager)
     {
 	    Validator = new ViewModelValidator<DataSetChanges>(validator, this, this);
         _gamesDataAccess = gamesDataAccess;
         _dialogManager = dialogManager;
-        _objectsLookupper = objectsLookupper;
         SetData(dataSet);
         ErrorsChanged += OnErrorsChanged;
     }
@@ -78,7 +75,6 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
     private readonly List<DeletedTag> _deletedTags = new();
     private readonly GamesDataAccess _gamesDataAccess;
     private readonly DialogManager _dialogManager;
-    private readonly ObjectsLookupper _objectsLookupper;
 
     ICommand IDataSetEditorViewModel.AddTagCommand => AddTagCommand;
     [RelayCommand(CanExecute = nameof(CanAddTag))]
@@ -114,35 +110,36 @@ internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, I
 
     ICommand IDataSetEditorViewModel.DeleteTagCommand => DeleteTagCommand;
     [RelayCommand]
-    private async Task DeleteTag(EditableTag tag)
+    private Task DeleteTag(EditableTag tag)
     {
-        // ISSUE HUGE mess!
-        if (tag is ExistingTag existingTag)
-        {
-            DeletedTagAction? action = null;
-            if (_objectsLookupper.GetItems(existingTag.Tag).Any())
-            {
-                var cancel = new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel);
-                var deleteItems = new MessageBoxButtonDefinition("Delete items", MaterialIconKind.TrashCanOutline);
-                var deleteAssets = new MessageBoxButtonDefinition("Delete assets", MaterialIconKind.TrashCanOutline);
-                var deleteScreenshots = new MessageBoxButtonDefinition("Delete screenshots", MaterialIconKind.TrashCanOutline);
-                MessageBoxDialogViewModel messageBox = new(
-                    "Associated items",
-                    $"Item class {tag.Name} has some items ({_objectsLookupper.GetItems(existingTag.Tag).Count}). Are you sure you want to delete it? Choose action",
-                    cancel, deleteItems, deleteAssets, deleteScreenshots);
-                var result = await _dialogManager.ShowDialogAsync(messageBox);
-                if (result == cancel)
-                    return;
-                if (result == deleteItems)
-                    action = DeletedTagAction.DeleteItems;
-                else if (result == deleteAssets)
-                    action = DeletedTagAction.DeleteAssets;
-                else if (result == deleteScreenshots)
-                    action = DeletedTagAction.DeleteScreenshots;
-            }
-            _deletedTags.Add(new DeletedTag(existingTag.Tag, action));
-        }
-        Guard.IsTrue(_tags.Remove(tag));
+	    throw new NotImplementedException();
+	    // ISSUE HUGE mess!
+	    // if (tag is ExistingTag existingTag)
+	    // {
+	    //     DeletedTagAction? action = null;
+	    //     if (_objectsLookupper.GetItems(existingTag.Tag).Any())
+	    //     {
+	    //         var cancel = new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel);
+	    //         var deleteItems = new MessageBoxButtonDefinition("Delete items", MaterialIconKind.TrashCanOutline);
+	    //         var deleteAssets = new MessageBoxButtonDefinition("Delete assets", MaterialIconKind.TrashCanOutline);
+	    //         var deleteScreenshots = new MessageBoxButtonDefinition("Delete screenshots", MaterialIconKind.TrashCanOutline);
+	    //         MessageBoxDialogViewModel messageBox = new(
+	    //             "Associated items",
+	    //             $"Item class {tag.Name} has some items ({_objectsLookupper.GetItems(existingTag.Tag).Count}). Are you sure you want to delete it? Choose action",
+	    //             cancel, deleteItems, deleteAssets, deleteScreenshots);
+	    //         var result = await _dialogManager.ShowDialogAsync(messageBox);
+	    //         if (result == cancel)
+	    //             return;
+	    //         if (result == deleteItems)
+	    //             action = DeletedTagAction.DeleteItems;
+	    //         else if (result == deleteAssets)
+	    //             action = DeletedTagAction.DeleteAssets;
+	    //         else if (result == deleteScreenshots)
+	    //             action = DeletedTagAction.DeleteScreenshots;
+	    //     }
+	    //     _deletedTags.Add(new DeletedTag(existingTag.Tag, action));
+	    // }
+	    // Guard.IsTrue(_tags.Remove(tag));
     }
 
     ICommand IDataSetEditorViewModel.ApplyCommand => ApplyCommand;

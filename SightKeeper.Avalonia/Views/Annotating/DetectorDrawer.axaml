@@ -11,8 +11,8 @@
 	<Panel HorizontalAlignment="Center" VerticalAlignment="Center"
 	       Name="Root">
 
-		<Image Name="Image" IsHitTestVisible="True"
-		       Source="{Binding SelectedScreenshotViewModel.Value.Image.Content, Converter={x:Static root:Converters.BytesToBitmapConverter}}"/>
+		<!--<Image Name="Image" IsHitTestVisible="True"
+		       Source="{Binding SelectedScreenshotViewModel.Value.Image.Content, Converter={x:Static root:Converters.BytesToBitmapConverter}}"/>-->
 
 		<ListBox Name="CanvasItemsControl"
 		         ItemsSource="{Binding Path=SelectedScreenshotViewModel.Items}"

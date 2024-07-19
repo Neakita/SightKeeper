@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:profilesEditorViewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Profiles.ProfileEditor"
              x:DataType="profilesEditorViewModels:ProfileEditorViewModel"
@@ -98,10 +97,10 @@
                        Minimum="2"
                        Maximum="100"/>
         
-        <ComboBox PlaceholderText="Method"
+        <!--<ComboBox PlaceholderText="Method"
                   ItemsSource="{Binding PreemptionStabilizationMethods, Mode=OneTime}"
                   SelectedItem="{Binding PreemptionStabilizationMethod}"
-                  IsVisible="{Binding IsPreemptionStabilizationEnabled}"/>
+                  IsVisible="{Binding IsPreemptionStabilizationEnabled}"/>-->
         
         <StackPanel Orientation="Horizontal">
             <ComboBox ItemsSource="{Binding AvailableTags}"
@@ -134,14 +133,14 @@
                                        Text="{Binding Tag.Name}"
                                        VerticalAlignment="Center"
                                        Margin="5 0 0 0"/>
-                            <CheckBox Grid.Row="0" Grid.RowSpan="2"
+                            <!--<CheckBox Grid.Row="0" Grid.RowSpan="2"
                                       Grid.Column="2"
                                       IsThreeState="True"
                                       Content="{icons:MaterialIconExt SwordCross}"
                                       Margin="10 0"
                                       Padding="5"
                                       ToolTip.Tip="{Binding ActivationCondition, Converter={x:Static root:Converters.EnumToDescriptionConverter}, StringFormat=Activation condition: {0}}"
-                                      IsChecked="{Binding ActivationCondition, Converter={x:Static root:Converters.TagActivationConditionToBoolConverter}}"/>
+                                      IsChecked="{Binding ActivationCondition, Converter={x:Static root:Converters.TagActivationConditionToBoolConverter}}"/>-->
                             <Button Grid.Row="0" Grid.RowSpan="2"
                                     Grid.Column="3"
                                     Content="{icons:MaterialIconExt Close}"

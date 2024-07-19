@@ -7,7 +7,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 
@@ -38,42 +37,42 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
     public DrawerViewModel(
         AnnotatorToolsViewModel tools,
         DetectorItemResizer resizer,
-        SelectedScreenshotViewModel selectedScreenshotViewModel,
-        ObjectsLookupper objectsLookupper)
+        SelectedScreenshotViewModel selectedScreenshotViewModel)
     {
-        SelectedScreenshotViewModel = selectedScreenshotViewModel;
-        _resizer = resizer;
-        _objectsLookupper = objectsLookupper;
-        _tools = tools;
-        selectedScreenshotViewModel.ObservableValue.Subscribe(_ =>
-        {
-	        if (SelectedScreenshotViewModel.Value == null)
-		        return;
-            var asset = _objectsLookupper.GetAsset(SelectedScreenshotViewModel.Value.Item);
-            foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer, this)))
-                SelectedScreenshotViewModel.DetectorItems.Add(item);
-        }).DisposeWith(_disposable);
+	    throw new NotImplementedException();
+	    /*SelectedScreenshotViewModel = selectedScreenshotViewModel;
+	    _resizer = resizer;
+	    _tools = tools;
+	    selectedScreenshotViewModel.ObservableValue.Subscribe(_ =>
+	    {
+		    if (SelectedScreenshotViewModel.Value == null)
+			    return;
+		    var asset = SelectedScreenshotViewModel.Value.Item.Asset;
+	        foreach (var item in asset.Items.Select(item => new DetectorItemViewModel(item, resizer, this)))
+	            SelectedScreenshotViewModel.DetectorItems.Add(item);
+	    }).DisposeWith(_disposable);
 
-        DetectedItemViewModel.MakeAnnotationRequested.Subscribe(item =>
-        {
-            Guard.IsNotNull(SelectedScreenshotViewModel.Value);
-            SelectedScreenshotViewModel.DetectedItems.Remove(item);
-            var screenshot = SelectedScreenshotViewModel.Value.Item;
-            var asset = GetOrMakeAsset(screenshot);
-            var detectorItem = asset.CreateItem(item.Tag, item.Bounding.Bounding);
-            DetectorItemViewModel detectorItemViewModel = new(detectorItem, resizer, this)
-            {
-                IsThumbsVisible = IsItemSelectionEnabled
-            };
-            SelectedScreenshotViewModel.DetectorItems.Add(detectorItemViewModel);
-            SelectedScreenshotViewModel.Value.NotifyIsAssetChanged();
-        }).DisposeWith(_disposable);
+	    DetectedItemViewModel.MakeAnnotationRequested.Subscribe(item =>
+	    {
+	        Guard.IsNotNull(SelectedScreenshotViewModel.Value);
+	        SelectedScreenshotViewModel.DetectedItems.Remove(item);
+	        var screenshot = SelectedScreenshotViewModel.Value.Item;
+	        var asset = GetOrMakeAsset(screenshot);
+	        var detectorItem = asset.CreateItem(item.Tag, item.Bounding.Bounding);
+	        DetectorItemViewModel detectorItemViewModel = new(detectorItem, resizer, this)
+	        {
+	            IsThumbsVisible = IsItemSelectionEnabled
+	        };
+	        SelectedScreenshotViewModel.DetectorItems.Add(detectorItemViewModel);
+	        SelectedScreenshotViewModel.Value.NotifyIsAssetChanged();
+	    }).DisposeWith(_disposable);*/
     }
 
     private DetectorAsset GetOrMakeAsset(Screenshot valueItem)
     {
-	    return _objectsLookupper.GetOptionalAsset(valueItem) ??
-	           _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(valueItem)).Assets.MakeAsset(valueItem);
+	    throw new NotImplementedException();
+	    // return _objectsLookupper.GetOptionalAsset(valueItem) ??
+	    //        _objectsLookupper.GetDataSet(_objectsLookupper.GetLibrary(valueItem)).Assets.MakeAsset(valueItem);
     }
 
     public void BeginDrawing(Point startPosition)
@@ -95,33 +94,33 @@ internal sealed partial class DrawerViewModel : ViewModel, IDisposable
 
     public void EndDrawing(Point finishPosition)
     {
-        Guard.IsNotNull(_drawingData);
-        var screenshot = SelectedScreenshotViewModel.Value;
-        Guard.IsNotNull(screenshot);
-        Guard.IsNotNull(_tools.SelectedTag);
-        finishPosition = Clamp(finishPosition);
-        _drawingData.UpdateBounding(finishPosition);
-        var boundingViewModel = _drawingData.ItemViewModel.Bounding;
-        if (boundingViewModel.Width < MinimumDimensionSize || boundingViewModel.Height < MinimumDimensionSize)
-        {
-            SelectedScreenshotViewModel.DetectorItems.Remove(_drawingData.ItemViewModel);
-            _drawingData = null;
-            return;
-        }
-        boundingViewModel.Synchronize();
-        var asset = GetOrMakeAsset(screenshot.Item);
-        _drawingData.ItemViewModel.Item = asset.CreateItem(_tools.SelectedTag, boundingViewModel.Bounding);
-        screenshot.NotifyIsAssetChanged();
-        _drawingData = null;
+	    throw new NotImplementedException();
+	    // Guard.IsNotNull(_drawingData);
+	    // var screenshot = SelectedScreenshotViewModel.Value;
+	    // Guard.IsNotNull(screenshot);
+	    // Guard.IsNotNull(_tools.SelectedTag);
+	    // finishPosition = Clamp(finishPosition);
+	    // _drawingData.UpdateBounding(finishPosition);
+	    // var boundingViewModel = _drawingData.ItemViewModel.Bounding;
+	    // if (boundingViewModel.Width < MinimumDimensionSize || boundingViewModel.Height < MinimumDimensionSize)
+	    // {
+	    //     SelectedScreenshotViewModel.DetectorItems.Remove(_drawingData.ItemViewModel);
+	    //     _drawingData = null;
+	    //     return;
+	    // }
+	    // boundingViewModel.Synchronize();
+	    // var asset = GetOrMakeAsset(screenshot.Item);
+	    // _drawingData.ItemViewModel.Item = asset.CreateItem(_tools.SelectedTag, boundingViewModel.Bounding);
+	    // screenshot.NotifyIsAssetChanged();
+	    // _drawingData = null;
     }
 
     private static Point Clamp(Point point) => new(Math.Clamp(point.X, 0, 1), Math.Clamp(point.Y, 0, 1));
 
     public void Dispose() => _disposable.Dispose();
 
-    private readonly AnnotatorToolsViewModel _tools;
-    private readonly DetectorItemResizer _resizer;
-    private readonly ObjectsLookupper _objectsLookupper;
+    private readonly AnnotatorToolsViewModel _tools = null!;
+    private readonly DetectorItemResizer _resizer = null!;
     private readonly CompositeDisposable _disposable = new();
     private DrawingData? _drawingData;
     [ObservableProperty] private bool _isItemSelectionEnabled;

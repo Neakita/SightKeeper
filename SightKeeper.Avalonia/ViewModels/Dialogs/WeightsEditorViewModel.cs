@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Input;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -39,9 +38,10 @@ internal sealed partial class WeightsEditorViewModel : DialogViewModel, IWeights
     [RelayCommand(CanExecute = nameof(CanDeleteSelectedWeights))]
     private void DeleteSelectedWeights(CancellationToken cancellationToken)
     {
-        Guard.IsNotNull(SelectedWeights);
-        _weightsDataAccess.RemoveWeights(SelectedWeights);
-        _weightsSource.Remove(SelectedWeights);
+	    throw new NotImplementedException();
+	    // Guard.IsNotNull(SelectedWeights);
+	    // _weightsDataAccess.RemoveWeights(SelectedWeights);
+	    // _weightsSource.Remove(SelectedWeights);
     }
 
     private bool CanDeleteSelectedWeights() => SelectedWeights != null;

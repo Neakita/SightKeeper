@@ -29,7 +29,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Size"
+                <!--<DataGridTextColumn Header="Size"
                                     Binding="{Binding Size}"/>
                 <DataGridTextColumn Header="Epoch"
                                     Binding="{Binding WeightsMetrics.Epoch}"/>
@@ -38,7 +38,7 @@
                 <DataGridTextColumn Header="Classification loss"
                                     Binding="{Binding WeightsMetrics.LossMetrics.ClassificationLoss}"/>
                 <DataGridTextColumn Header="Deformation loss"
-                                    Binding="{Binding WeightsMetrics.LossMetrics.DeformationLoss}"/>
+                                    Binding="{Binding WeightsMetrics.LossMetrics.DeformationLoss}"/>-->
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

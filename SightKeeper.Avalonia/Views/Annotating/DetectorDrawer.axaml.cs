@@ -1,10 +1,10 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Avalonia.Extensions;
 using DrawerViewModel = SightKeeper.Avalonia.ViewModels.Annotating.Drawer.DrawerViewModel;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
@@ -18,15 +18,16 @@ internal sealed partial class DetectorDrawer : ReactiveUserControl<DrawerViewMod
 
 	protected override void OnLoaded(RoutedEventArgs e)
 	{
-		base.OnLoaded(e);
-		Image.PointerPressed += ImageOnPointerPressed;
-		Image.SizeChanged += OnImageSizeChanged;
-		_topLevel = this.GetTopLevel();
-		_topLevel.KeyDown += OnTopLevelKeyDown;
-		_topLevel.KeyUp += OnTopLevelKeyUp;
-		if (ViewModel == null)
-			return;
-		ViewModel.ImageSize = Image.Bounds.Size;
+		throw new NotImplementedException();
+		// base.OnLoaded(e);
+		// Image.PointerPressed += ImageOnPointerPressed;
+		// Image.SizeChanged += OnImageSizeChanged;
+		// _topLevel = this.GetTopLevel();
+		// _topLevel.KeyDown += OnTopLevelKeyDown;
+		// _topLevel.KeyUp += OnTopLevelKeyUp;
+		// if (ViewModel == null)
+		// 	return;
+		// ViewModel.ImageSize = Image.Bounds.Size;
 	}
 
 	private void OnImageSizeChanged(object? sender, SizeChangedEventArgs e)
@@ -38,28 +39,30 @@ internal sealed partial class DetectorDrawer : ReactiveUserControl<DrawerViewMod
 
 	protected override void OnUnloaded(RoutedEventArgs e)
 	{
-		base.OnUnloaded(e);
-		Image.SizeChanged += OnImageSizeChanged;
-		Guard.IsNotNull(_topLevel);
-		_topLevel.KeyDown -= OnTopLevelKeyDown;
-		_topLevel.KeyUp -= OnTopLevelKeyUp;
-		if (ViewModel == null)
-			return;
-		ViewModel.ImageSize = null;
+		throw new NotImplementedException();
+		// base.OnUnloaded(e);
+		// Image.SizeChanged += OnImageSizeChanged;
+		// Guard.IsNotNull(_topLevel);
+		// _topLevel.KeyDown -= OnTopLevelKeyDown;
+		// _topLevel.KeyUp -= OnTopLevelKeyUp;
+		// if (ViewModel == null)
+		// 	return;
+		// ViewModel.ImageSize = null;
 	}
 
-	private TopLevel? _topLevel;
+	// private TopLevel? _topLevel;
 
     private void ImageOnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-	    if (ViewModel == null || !ViewModel.CanBeginDrawing)
-		    return;
-	    var normalizedPosition = GetNormalizedPosition(e);
-	    ViewModel.BeginDrawing(normalizedPosition);
-	    Image.PointerPressed -= ImageOnPointerPressed;
-	    var topLevel = this.GetTopLevel();
-	    topLevel.PointerReleased += OnPointerReleased;
-	    topLevel.PointerMoved += OnPointerMoved;
+	    throw new NotImplementedException();
+	    // if (ViewModel == null || !ViewModel.CanBeginDrawing)
+	    //  return;
+	    // var normalizedPosition = GetNormalizedPosition(e);
+	    // ViewModel.BeginDrawing(normalizedPosition);
+	    // Image.PointerPressed -= ImageOnPointerPressed;
+	    // var topLevel = this.GetTopLevel();
+	    // topLevel.PointerReleased += OnPointerReleased;
+	    // topLevel.PointerMoved += OnPointerMoved;
     }
     
     private void OnPointerMoved(object? sender, PointerEventArgs e)
@@ -71,21 +74,27 @@ internal sealed partial class DetectorDrawer : ReactiveUserControl<DrawerViewMod
 
     private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
-	    Guard.IsNotNull(ViewModel);
-	    this.GetTopLevel().PointerReleased -= OnPointerReleased;
-	    this.GetTopLevel().PointerMoved -= OnPointerMoved;
-	    Image.PointerPressed += ImageOnPointerPressed;
-	    var normalizedPosition = GetNormalizedPosition(e);
-	    ViewModel.EndDrawing(normalizedPosition);
+	    throw new NotImplementedException();
+	    // Guard.IsNotNull(ViewModel);
+	    // this.GetTopLevel().PointerReleased -= OnPointerReleased;
+	    // this.GetTopLevel().PointerMoved -= OnPointerMoved;
+	    // Image.PointerPressed += ImageOnPointerPressed;
+	    // var normalizedPosition = GetNormalizedPosition(e);
+	    // ViewModel.EndDrawing(normalizedPosition);
     }
 
     private Point GetNormalizedPosition(PointerEventArgs e)
     {
-	    var position = e.GetPosition(Image);
-	    return GetNormalizedPosition(position);
+	    throw new NotImplementedException();
+	    // var position = e.GetPosition(Image);
+	    // return GetNormalizedPosition(position);
     }
 
-    private Point GetNormalizedPosition(Point position) => new(position.X / Image.Bounds.Width, position.Y / Image.Bounds.Height);
+    private Point GetNormalizedPosition(Point position)
+    {
+	    throw new NotImplementedException();
+	    // return new Point(position.X / Image.Bounds.Width, position.Y / Image.Bounds.Height);
+    }
 
     private void OnTopLevelKeyDown(object? sender, KeyEventArgs e)
     {

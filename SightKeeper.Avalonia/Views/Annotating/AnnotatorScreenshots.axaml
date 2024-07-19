@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:annotating="clr-namespace:SightKeeper.Avalonia.ViewModels.Annotating"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Views.Annotating.AnnotatorScreenshots"
              x:DataType="annotating:AnnotatorScreenshotsViewModel">
@@ -67,8 +66,8 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Panel Name="Panel">
-                        <Image Source="{Binding Image.Content, Converter={x:Static root:Converters.BytesToBitmapConverter}}"
-                               Margin="1"/>
+                        <!--<Image Source="{Binding Image.Content, Converter={x:Static root:Converters.BytesToBitmapConverter}}"
+                               Margin="1"/>-->
                         <icons:MaterialIcon Kind="BookmarkCheck"
                                                Width="30" Height="30"
                                                Foreground="Green"

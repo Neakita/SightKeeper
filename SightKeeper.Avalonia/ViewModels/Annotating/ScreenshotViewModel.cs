@@ -17,22 +17,20 @@ public sealed class ScreenshotViewModel
 
     public DateTime CreationDate => Item.CreationDate;
 
-    public ScreenshotViewModel(ScreenshotsDataAccess screenshotsDataAccess, Screenshot item, ObjectsLookupper objectsLookupper)
+    public ScreenshotViewModel(ScreenshotsDataAccess screenshotsDataAccess, Screenshot item)
     {
         _screenshotsDataAccess = screenshotsDataAccess;
-        _objectsLookupper = objectsLookupper;
         Item = item;
-        var asset = _objectsLookupper.GetOptionalAsset(item);
+        var asset = item.Asset;
         _isAssetSubject = new BehaviorSubject<bool>(asset != null);
     }
     
     private readonly ScreenshotsDataAccess _screenshotsDataAccess;
-    private readonly ObjectsLookupper _objectsLookupper;
     private readonly BehaviorSubject<bool> _isAssetSubject;
 
     public void NotifyIsAssetChanged()
     {
-	    var asset = _objectsLookupper.GetOptionalAsset(Item);
+	    var asset = Item.Asset;
         var isCurrentlyAsset = asset != null;
         if (_isAssetSubject.Value != isCurrentlyAsset)
             _isAssetSubject.OnNext(isCurrentlyAsset);

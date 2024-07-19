@@ -95,7 +95,7 @@ internal partial class ProfilesViewModel : ViewModel
                 viewModel.PreemptionVerticalFactor,
                 viewModel.IsPreemptionStabilizationEnabled,
                 viewModel.PreemptionStabilizationBufferSize,
-                viewModel.PreemptionStabilizationMethod,
+                // viewModel.PreemptionStabilizationMethod,
                 viewModel.Weights,
                 viewModel.Tags);
             _profileCreator.CreateProfile(data);
@@ -124,7 +124,7 @@ internal partial class ProfilesViewModel : ViewModel
                 viewModel.PreemptionVerticalFactor,
                 viewModel.IsPreemptionStabilizationEnabled,
                 viewModel.PreemptionStabilizationBufferSize,
-                viewModel.PreemptionStabilizationMethod, viewModel.Weights, viewModel.Tags);
+                /*viewModel.PreemptionStabilizationMethod,*/ viewModel.Weights, viewModel.Tags);
             _profileEditor.ApplyChanges(data);
         }
         else if (result == ProfileEditorResult.Delete)

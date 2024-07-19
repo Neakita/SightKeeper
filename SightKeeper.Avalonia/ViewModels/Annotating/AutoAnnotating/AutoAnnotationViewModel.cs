@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
@@ -63,14 +62,15 @@ internal sealed partial class AutoAnnotationViewModel : ViewModel
     private readonly SelectedDataSetViewModel _selectedDataSetViewModel;
 
     [RelayCommand(CanExecute = nameof(CanAnnotate))]
-    private async Task Annotate(CancellationToken cancellationToken)
+    private Task Annotate(CancellationToken cancellationToken)
     {
-        Guard.IsNotNull(_selectedScreenshotViewModel.Value);
-        var image = _selectedScreenshotViewModel.Value.Image;
-        var items = await _detector.DetectAsync(image.Content, cancellationToken);
-        _selectedScreenshotViewModel.DetectedItems.Clear();
-        _selectedScreenshotViewModel.DetectedItems.AddRange(items.Select(CreateDetectedItemViewModel));
-        ClearCommand.NotifyCanExecuteChanged();
+	    throw new NotImplementedException();
+	    // Guard.IsNotNull(_selectedScreenshotViewModel.Value);
+	    // var image = _selectedScreenshotViewModel.Value.Image;
+	    // var items = await _detector.DetectAsync(image.Content, cancellationToken);
+	    // _selectedScreenshotViewModel.DetectedItems.Clear();
+	    // _selectedScreenshotViewModel.DetectedItems.AddRange(items.Select(CreateDetectedItemViewModel));
+	    // ClearCommand.NotifyCanExecuteChanged();
     }
     private bool CanAnnotate() => SelectedWeights != null && _selectedScreenshotViewModel.Value != null && !AutoAnnotatingEnabled;
 

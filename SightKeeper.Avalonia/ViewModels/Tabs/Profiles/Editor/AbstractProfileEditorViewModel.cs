@@ -120,11 +120,11 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
         set => SetProperty(ref _preemptionStabilizationBufferSize, value);
     }
 
-    public StabilizationMethod? PreemptionStabilizationMethod
-    {
-        get => _preemptionStabilizationMethod;
-        set => SetProperty(ref _preemptionStabilizationMethod, value);
-    }
+    // public StabilizationMethod? PreemptionStabilizationMethod
+    // {
+    //     get => _preemptionStabilizationMethod;
+    //     set => SetProperty(ref _preemptionStabilizationMethod, value);
+    // }
 
     ushort ProfileEditorViewModel.PostProcessDelay
     {
@@ -201,7 +201,7 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     private float? _preemptionVerticalFactor;
     private bool _isPreemptionStabilizationEnabled;
     private byte? _preemptionStabilizationBufferSize;
-    private StabilizationMethod? _preemptionStabilizationMethod;
+    // private StabilizationMethod? _preemptionStabilizationMethod;
     private bool _preemptionFactorsLink;
 
     ICommand ProfileEditorViewModel.AddTagCommand => AddTagCommand;
