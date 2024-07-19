@@ -11,7 +11,7 @@ internal static class AppBootstrapper
 	{
 		ContainerBuilder builder = new();
 		SetupLogger(builder);
-		DataBaseBootstrapper.Setup(builder);
+		// DataBaseBootstrapper.Setup(builder);
 		ViewModelsBootstrapper.Setup(builder);
 		ServicesBootstrapper.Setup(builder);
 		return builder.Build();

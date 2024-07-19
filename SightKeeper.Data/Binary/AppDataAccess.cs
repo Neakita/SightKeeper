@@ -10,6 +10,11 @@ public sealed class AppDataAccess
 
 	public void Load()
 	{
+		if (!File.Exists(FilePath))
+		{
+			Data = new AppData([], [], []);
+			return;
+		}
 		var serializedData = File.ReadAllBytes(FilePath);
 		var data = MemoryPackSerializer.Deserialize<AppData>(serializedData);
 		Guard.IsNotNull(data);
