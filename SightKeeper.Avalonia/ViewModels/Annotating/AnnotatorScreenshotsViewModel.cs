@@ -9,15 +9,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using DynamicData.Binding;
-using ReactiveUI;
 using Serilog;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
-internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActivatableViewModel
+internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel
 {
     public SelectedScreenshotViewModel SelectedScreenshotViewModel { get; }
 
@@ -195,6 +195,4 @@ internal sealed partial class AnnotatorScreenshotsViewModel : ViewModel, IActiva
 
     [RelayCommand]
     private void ActualizeFiltering() => _actualizeFilterSubject.OnNext(Unit.Default);
-
-    public ViewModelActivator Activator { get; } = new();
 }

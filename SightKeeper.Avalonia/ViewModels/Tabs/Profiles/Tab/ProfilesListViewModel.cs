@@ -6,6 +6,7 @@ using System.Threading;
 using CommunityToolkit.Diagnostics;
 using DynamicData;
 using SightKeeper.Application;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Tab;

@@ -1,16 +1,14 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
 
 namespace SightKeeper.Avalonia.Views.Dialogs;
 
-public sealed partial class DataSetEditor : UserControl, IViewFor<IDataSetEditorViewModel>, IViewFor<DataSetEditingViewModel>, IViewFor<DataSetCreatingViewModel>
+public sealed partial class DataSetEditor : UserControl/*, IViewFor<IDataSetEditorViewModel>, IViewFor<DataSetEditingViewModel>, IViewFor<DataSetCreatingViewModel>*/
 {
-    IDataSetEditorViewModel? IViewFor<IDataSetEditorViewModel>.ViewModel { get; set; }
-    DataSetEditingViewModel? IViewFor<DataSetEditingViewModel>.ViewModel { get; set; }
-
-    DataSetCreatingViewModel? IViewFor<DataSetCreatingViewModel>.ViewModel { get; set; }
+    // IDataSetEditorViewModel? IViewFor<IDataSetEditorViewModel>.ViewModel { get; set; }
+    // DataSetEditingViewModel? IViewFor<DataSetEditingViewModel>.ViewModel { get; set; }
+    //
+    // DataSetCreatingViewModel? IViewFor<DataSetCreatingViewModel>.ViewModel { get; set; }
     
     public DataSetEditor()
     {
@@ -22,9 +20,9 @@ public sealed partial class DataSetEditor : UserControl, IViewFor<IDataSetEditor
         AvaloniaXamlLoader.Load(this);
     }
 
-    object? IViewFor.ViewModel
-    {
-        get => DataContext;
-        set => DataContext = (IDataSetEditorViewModel?)value;
-    }
+    // object? IViewFor.ViewModel
+    // {
+    //     get => DataContext;
+    //     set => DataContext = (IDataSetEditorViewModel?)value;
+    // }
 }

@@ -1,9 +1,8 @@
-﻿using Avalonia.ReactiveUI;
-using DetectedItemViewModel = SightKeeper.Avalonia.ViewModels.Annotating.Drawer.DetectedItemViewModel;
+﻿using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-internal sealed partial class DetectedItem : ReactiveUserControl<DetectedItemViewModel>
+internal sealed partial class DetectedItem : UserControl
 {
     public DetectedItem()
     {

@@ -1,9 +1,8 @@
-﻿using Avalonia.ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Dialogs;
+﻿using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Views.Dialogs;
 
-internal partial class WeightsEditor : ReactiveUserControl<WeightsEditorViewModel>
+internal partial class WeightsEditor : UserControl
 {
     public WeightsEditor()
     {

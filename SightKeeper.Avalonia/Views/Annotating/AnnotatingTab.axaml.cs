@@ -1,24 +1,24 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.Reactive.Disposables;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.ReactiveUI;
 using CommunityToolkit.Diagnostics;
-using ReactiveUI;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Avalonia.ViewModels.Annotating;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-internal sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatorViewModel>
+internal sealed partial class AnnotatingTab : UserControl
 {
 	public AnnotatingTab()
 	{
-		this.WhenActivated(OnActivated);
-		InitializeComponent();
+		throw new NotImplementedException();
+		// this.WhenActivated(OnActivated);
+		// InitializeComponent();
 	}
 
 	private TopLevel? _topLevel;
-	private bool _scrollScreenshotsInsteadOfTags;
+	// private bool _scrollScreenshotsInsteadOfTags;
 
 	private void OnActivated(CompositeDisposable disposable)
 	{
@@ -39,31 +39,34 @@ internal sealed partial class AnnotatingTab : ReactiveUserControl<AnnotatorViewM
 
 	private void OnTopLevelKeyDown(object? sender, KeyEventArgs e)
 	{
-		if (e.Key == Key.LeftShift)
-			_scrollScreenshotsInsteadOfTags = true;
+		throw new NotImplementedException();
+		// if (e.Key == Key.LeftShift)
+		// 	_scrollScreenshotsInsteadOfTags = true;
 	}
 
 	private void OnTopLevelKeyUp(object? sender, KeyEventArgs e)
 	{
-		if (e.Key == Key.LeftShift)
-			_scrollScreenshotsInsteadOfTags = false;
+		throw new NotImplementedException();
+		// if (e.Key == Key.LeftShift)
+		// 	_scrollScreenshotsInsteadOfTags = false;
 	}
 
 	private void OnTopLevelScrolled(object? sender, PointerWheelEventArgs e)
 	{
-		var delta = e.Delta.Y;
-		if (delta == 0)
-			return;
-		var reverse = delta > 0;
-		if (_scrollScreenshotsInsteadOfTags)
-			ScrollScreenshot(reverse);
-		else
-			ScrollTag(reverse);
+		throw new NotImplementedException();
+		// var delta = e.Delta.Y;
+		// if (delta == 0)
+		// 	return;
+		// var reverse = delta > 0;
+		// if (_scrollScreenshotsInsteadOfTags)
+		// 	ScrollScreenshot(reverse);
+		// else
+		// 	ScrollTag(reverse);
 	}
 
-	private void ScrollTag(bool reverse) =>
+	/*private void ScrollTag(bool reverse) =>
 		ViewModel?.ToolsViewModel.ScrollTag(reverse);
 
 	private void ScrollScreenshot(bool reverse) =>
-		ViewModel?.Screenshots.ScrollScreenshot(reverse);
+		ViewModel?.Screenshots.ScrollScreenshot(reverse);*/
 }

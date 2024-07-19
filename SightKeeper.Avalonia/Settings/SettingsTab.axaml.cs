@@ -1,8 +1,8 @@
-﻿using Avalonia.ReactiveUI;
+﻿using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Settings;
 
-internal sealed partial class SettingsTab : ReactiveUserControl<SettingsViewModel>
+internal sealed partial class SettingsTab : UserControl
 {
 	public SettingsTab()
 	{

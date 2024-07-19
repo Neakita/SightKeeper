@@ -1,9 +1,8 @@
-﻿using Avalonia.ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Annotating;
+﻿using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-internal partial class ViewSettings : ReactiveUserControl<ViewSettingsViewModel>
+internal partial class ViewSettings : UserControl
 {
     public ViewSettings()
     {

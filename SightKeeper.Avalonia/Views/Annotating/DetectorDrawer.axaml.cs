@@ -3,13 +3,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.ReactiveUI;
-using CommunityToolkit.Diagnostics;
-using DrawerViewModel = SightKeeper.Avalonia.ViewModels.Annotating.Drawer.DrawerViewModel;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-internal sealed partial class DetectorDrawer : ReactiveUserControl<DrawerViewModel>
+internal sealed partial class DetectorDrawer : UserControl
 {
 	public DetectorDrawer()
     {
@@ -32,9 +29,10 @@ internal sealed partial class DetectorDrawer : ReactiveUserControl<DrawerViewMod
 
 	private void OnImageSizeChanged(object? sender, SizeChangedEventArgs e)
 	{
-		if (ViewModel == null)
-			return;
-		ViewModel.ImageSize = e.NewSize;
+		throw new NotImplementedException();
+		// if (ViewModel == null)
+		// 	return;
+		// ViewModel.ImageSize = e.NewSize;
 	}
 
 	protected override void OnUnloaded(RoutedEventArgs e)
@@ -67,9 +65,10 @@ internal sealed partial class DetectorDrawer : ReactiveUserControl<DrawerViewMod
     
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
-	    Guard.IsNotNull(ViewModel);
-	    var normalizedPosition = GetNormalizedPosition(e);
-	    ViewModel.UpdateDrawing(normalizedPosition);
+	    throw new NotImplementedException();
+	    // Guard.IsNotNull(ViewModel);
+	    // var normalizedPosition = GetNormalizedPosition(e);
+	    // ViewModel.UpdateDrawing(normalizedPosition);
     }
 
     private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
@@ -98,13 +97,15 @@ internal sealed partial class DetectorDrawer : ReactiveUserControl<DrawerViewMod
 
     private void OnTopLevelKeyDown(object? sender, KeyEventArgs e)
     {
-	    if (ViewModel != null && e.Key == Key.LeftCtrl)
-		    ViewModel.IsItemSelectionEnabled = true;
+	    throw new NotImplementedException();
+	    // if (ViewModel != null && e.Key == Key.LeftCtrl)
+	    //  ViewModel.IsItemSelectionEnabled = true;
     }
 
     private void OnTopLevelKeyUp(object? sender, KeyEventArgs e)
     {
-	    if (ViewModel != null && e.Key == Key.LeftCtrl)
-		    ViewModel.IsItemSelectionEnabled = false;
+	    throw new NotImplementedException();
+	    // if (ViewModel != null && e.Key == Key.LeftCtrl)
+	    //  ViewModel.IsItemSelectionEnabled = false;
     }
 }

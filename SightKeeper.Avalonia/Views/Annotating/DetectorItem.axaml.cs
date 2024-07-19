@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
-using Avalonia.ReactiveUI;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 using DetectorItemViewModel = SightKeeper.Avalonia.ViewModels.Annotating.Drawer.DetectorItemViewModel;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-internal sealed partial class DetectorItem : ReactiveUserControl<DetectorItemViewModel>
+internal sealed partial class DetectorItem : UserControl
 {
 	public DetectorItem()
 	{
@@ -20,33 +21,37 @@ internal sealed partial class DetectorItem : ReactiveUserControl<DetectorItemVie
 	// ReSharper disable UnusedParameter.Local
 	private void OnThumbDragStarted(object? sender, VectorEventArgs e)
 	{
-	    if (ViewModel == null)
-		    return;
-	    var thumb = GetThumb(sender);
-	    var item = GetItem(thumb);
-	    var resizeMode = GetResizeDirection(thumb);
-	    ViewModel.Resizer.BeginResize(item, resizeMode);
-    }
+		throw new NotImplementedException();
+		// if (ViewModel == null)
+		//  return;
+		// var thumb = GetThumb(sender);
+		// var item = GetItem(thumb);
+		// var resizeMode = GetResizeDirection(thumb);
+		// ViewModel.Resizer.BeginResize(item, resizeMode);
+	}
 
     private void OnThumbDragDelta(object? sender, VectorEventArgs e)
     {
-	    Guard.IsNotNull(ViewModel);
-	    ViewModel.Resizer.UpdateResize(GetNormalizedVector(e));
+	    throw new NotImplementedException();
+	    // Guard.IsNotNull(ViewModel);
+	    // ViewModel.Resizer.UpdateResize(GetNormalizedVector(e));
     }
 
     private void OnThumbDragCompleted(object? sender, VectorEventArgs e)
     {
-	    Guard.IsNotNull(ViewModel);
-	    ViewModel.Resizer.EndResize();
+	    throw new NotImplementedException();
+	    // Guard.IsNotNull(ViewModel);
+	    // ViewModel.Resizer.EndResize();
     }
     // ReSharper restore UnusedParameter.Local
 
     private Vector GetNormalizedVector(VectorEventArgs args)
     {
-	    Guard.IsNotNull(ViewModel);
-	    var drawer = ViewModel.Drawer;
-	    Guard.IsNotNull(drawer.ImageSize);
-	    return new Vector(args.Vector.X / drawer.ImageSize.Value.Width, args.Vector.Y / drawer.ImageSize.Value.Height);
+	    throw new NotImplementedException();
+	    // Guard.IsNotNull(ViewModel);
+	    // var drawer = ViewModel.Drawer;
+	    // Guard.IsNotNull(drawer.ImageSize);
+	    // return new Vector(args.Vector.X / drawer.ImageSize.Value.Width, args.Vector.Y / drawer.ImageSize.Value.Height);
     }
 
     private static Thumb GetThumb(object? sender)

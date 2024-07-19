@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Editing;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Services;
 

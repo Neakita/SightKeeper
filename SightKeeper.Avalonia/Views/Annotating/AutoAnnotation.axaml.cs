@@ -1,9 +1,8 @@
-﻿using Avalonia.ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
+﻿using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-internal sealed partial class AutoAnnotation : ReactiveUserControl<AutoAnnotationViewModel>
+internal sealed partial class AutoAnnotation : UserControl
 {
     public AutoAnnotation()
     {

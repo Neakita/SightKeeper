@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.ReactiveUI;
-using ReactiveUI;
-using SightKeeper.Avalonia.ViewModels.Annotating;
+using SightKeeper.Application.Extensions;
 
 namespace SightKeeper.Avalonia.Views.Annotating;
 
-internal sealed partial class AnnotatorTools : ReactiveUserControl<AnnotatorToolsViewModel>, IDisposable
+internal sealed partial class AnnotatorTools : UserControl, IDisposable
 {
     public AnnotatorTools()
     {
-        _disposable = this.WhenActivated(OnActivated);
-        InitializeComponent();
+	    throw new NotImplementedException();
+	    // _disposable = this.WhenActivated(OnActivated);
+	    // InitializeComponent();
     }
 
     public void Dispose() => _disposable.Dispose();
 
-    private readonly IDisposable _disposable;
+    private readonly IDisposable _disposable = null!;
 
     private void OnActivated(CompositeDisposable disposable)
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using Serilog;
 using SightKeeper.Avalonia.Setup;
@@ -43,8 +42,7 @@ internal static class Program
 	public static AppBuilder BuildAvaloniaApp()
 		=> AppBuilder.Configure<App>()
 			.UsePlatformDetect()
-			.LogToTrace()
-			.UseReactiveUI();
+			.LogToTrace();
 
 	private static void HandleUnhandledExceptions(Exception exception, string source)
 	{
