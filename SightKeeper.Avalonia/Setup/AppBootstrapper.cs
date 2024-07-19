@@ -19,6 +19,7 @@ internal static class AppBootstrapper
 
 	public static void OnRelease()
 	{
+		ServicesBootstrapper.OnRelease();
 		// DataBaseBootstrapper.OnRelease(ServiceLocator.Instance);
 	}
 
