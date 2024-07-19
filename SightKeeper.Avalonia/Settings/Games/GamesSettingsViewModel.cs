@@ -33,8 +33,9 @@ internal sealed partial class GamesSettingsViewModel : ViewModel, SettingsSectio
 	private async Task AddGame()
 	{
 		var viewModel = _context.Resolve<AddGameViewModel>();
-		var applied = await _dialogManager.ShowDialogAsync(viewModel);
-		if (applied)
+		await viewModel.UpdateAvailableGames();
+		var isApplied = await _dialogManager.ShowDialogAsync(viewModel);
+		if (isApplied)
 			_gameCreator.CreateGame(viewModel);
 	}
 }

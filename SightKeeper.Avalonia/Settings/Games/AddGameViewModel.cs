@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -34,7 +35,13 @@ internal sealed partial class AddGameViewModel : DialogViewModel<bool>, GameData
 		_iconProvider = iconProvider;
 		_executableDisplayer = executableDisplayer;
 		_validator = new ViewModelValidator<GameData>(validator, this, this);
-		_availableGames = GetAvailableGames();
+		_availableGames = ImmutableList<GameViewModel>.Empty;
+	}
+
+	[RelayCommand]
+	public async Task UpdateAvailableGames()
+	{
+		AvailableGames = await GetAvailableGamesAsync();
 	}
 
 	private readonly ProcessesAvailableGamesProvider _availableGamesProvider;
@@ -55,15 +62,14 @@ internal sealed partial class AddGameViewModel : DialogViewModel<bool>, GameData
 	[NotifyCanExecuteChangedFor(nameof(ApplyCommand))]
 	private string? _executablePath = string.Empty;
 
-	[RelayCommand]
-	private void UpdateAvailableGames()
+	private Task<IReadOnlyCollection<GameViewModel>> GetAvailableGamesAsync()
 	{
-		AvailableGames = GetAvailableGames();
+		return Task.Run(GetAvailableGames);
 	}
 
 	private IReadOnlyCollection<GameViewModel> GetAvailableGames()
 	{
-		return _availableGamesProvider.AvailableGames.Select(CreateGameViewModel).ToImmutableArray();
+		return _availableGamesProvider.AvailableGames.Select(CreateGameViewModel).ToImmutableList();
 	}
 
 	private GameViewModel CreateGameViewModel(Game game)
