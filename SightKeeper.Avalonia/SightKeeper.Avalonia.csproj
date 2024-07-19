@@ -9,9 +9,7 @@
         <AssemblyTitle>Sight Keeper</AssemblyTitle>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <PublishTrimmed>true</PublishTrimmed>
-        <TrimMode>partial</TrimMode>
-        <TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+        <PublishAot>true</PublishAot>
     </PropertyGroup>
 
     <ItemGroup>
