@@ -26,7 +26,14 @@
 	<Panel>
 		<Grid>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="{Binding $parent[Window].ExtendClientAreaTitleBarHeightHint, Converter={x:Static root:Converters.DoubleToGridLengthConvert}}"/>
+				<RowDefinition>
+					<RowDefinition.Height>
+						<MultiBinding Converter="{x:Static root:Converters.TitleBarToGridLengthConverter}">
+							<Binding Path="$parent[Window].ExtendClientAreaTitleBarHeightHint"/>
+							<Binding Path="$parent[Window].ExtendClientAreaToDecorationsHint"/>
+						</MultiBinding>
+					</RowDefinition.Height>
+				</RowDefinition>
 				<RowDefinition/>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>

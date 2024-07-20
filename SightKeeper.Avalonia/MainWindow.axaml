@@ -12,8 +12,7 @@
         Title="Sight Keeper"
         MinWidth="480"
         MinHeight="320"
-        x:DataType="local:MainViewModel"
-        ExtendClientAreaToDecorationsHint="True">
+        x:DataType="local:MainViewModel">
 	<assists:WindowAssist.OverlayContent>
 		<dialogs:DialogHostPresenter/>
 	</assists:WindowAssist.OverlayContent>
