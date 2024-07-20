@@ -1,4 +1,5 @@
-﻿using Avalonia.Data.Converters;
+﻿using Avalonia.Controls;
+using Avalonia.Data.Converters;
 using SightKeeper.Avalonia.Misc.Converters;
 
 namespace SightKeeper.Avalonia;
@@ -13,4 +14,6 @@ internal static class Converters
 	public static CanvasNormalizeConverter CanvasNormalizeConverter { get; } = new();
 	public static EnumToDescriptionConverter EnumToDescriptionConverter { get; } = new();
 	public static TagActivationConditionToBoolConverter TagActivationConditionToBoolConverter { get; } = new();
+	public static FuncValueConverter<double, GridLength> DoubleToGridLengthConvert { get; } =
+		new(d => new GridLength(d));
 }
