@@ -11,10 +11,10 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Avalonia.Behaviours;
 
-internal sealed class CopyStanceFromContent : Behavior<Layoutable>
+internal sealed class CopyStanceFromContentBehavior : Behavior<Layoutable>
 {
 	public static readonly StyledProperty<ContentControl?> ContentControlProperty =
-		AvaloniaProperty.Register<CopyStanceFromContent, ContentControl?>(nameof(ContentControl));
+		AvaloniaProperty.Register<CopyStanceFromContentBehavior, ContentControl?>(nameof(ContentControl));
 
 	public ContentControl? ContentControl
 	{
@@ -23,7 +23,7 @@ internal sealed class CopyStanceFromContent : Behavior<Layoutable>
 	}
 
 	public static readonly StyledProperty<double> FallbackMaxWidthProperty =
-		AvaloniaProperty.Register<CopyStanceFromContent, double>(nameof(FallbackMaxWidth), Layoutable.MaxWidthProperty.GetDefaultValue(typeof(Layoutable)));
+		AvaloniaProperty.Register<CopyStanceFromContentBehavior, double>(nameof(FallbackMaxWidth), Layoutable.MaxWidthProperty.GetDefaultValue(typeof(Layoutable)));
 
 	public double FallbackMaxWidth
 	{
@@ -32,7 +32,7 @@ internal sealed class CopyStanceFromContent : Behavior<Layoutable>
 	}
 
 	public static readonly StyledProperty<double> FallbackMaxHeightProperty =
-		AvaloniaProperty.Register<CopyStanceFromContent, double>(nameof(FallbackMaxHeight), Layoutable.MaxHeightProperty.GetDefaultValue(typeof(Layoutable)));
+		AvaloniaProperty.Register<CopyStanceFromContentBehavior, double>(nameof(FallbackMaxHeight), Layoutable.MaxHeightProperty.GetDefaultValue(typeof(Layoutable)));
 
 	public double FallbackMaxHeight
 	{
@@ -41,7 +41,7 @@ internal sealed class CopyStanceFromContent : Behavior<Layoutable>
 	}
 
 	public static readonly StyledProperty<HorizontalAlignment> FallbackHorizontalAlignmentProperty =
-		AvaloniaProperty.Register<CopyStanceFromContent, HorizontalAlignment>(nameof(FallbackHorizontalAlignment), Layoutable.HorizontalAlignmentProperty.GetDefaultValue(typeof(Layoutable)));
+		AvaloniaProperty.Register<CopyStanceFromContentBehavior, HorizontalAlignment>(nameof(FallbackHorizontalAlignment), Layoutable.HorizontalAlignmentProperty.GetDefaultValue(typeof(Layoutable)));
 
 	public HorizontalAlignment FallbackHorizontalAlignment
 	{
@@ -50,7 +50,7 @@ internal sealed class CopyStanceFromContent : Behavior<Layoutable>
 	}
 
 	public static readonly StyledProperty<VerticalAlignment> FallbackVerticalAlignmentProperty =
-		AvaloniaProperty.Register<CopyStanceFromContent, VerticalAlignment>(nameof(FallbackVerticalAlignment), Layoutable.VerticalAlignmentProperty.GetDefaultValue(typeof(Layoutable)));
+		AvaloniaProperty.Register<CopyStanceFromContentBehavior, VerticalAlignment>(nameof(FallbackVerticalAlignment), Layoutable.VerticalAlignmentProperty.GetDefaultValue(typeof(Layoutable)));
 
 	public VerticalAlignment FallbackVerticalAlignment
 	{
