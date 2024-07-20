@@ -6,7 +6,9 @@
              xmlns:messageBoxDialog="clr-namespace:SightKeeper.Avalonia.MessageBoxDialog"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.MessageBoxDialog.MessageBox"
-             x:DataType="messageBoxDialog:MessageBoxDialogViewModel">
+             x:DataType="messageBoxDialog:MessageBoxDialogViewModel"
+             VerticalAlignment="Center"
+             HorizontalAlignment="Center">
 	<StackPanel Spacing="16" Name="Root">
 		<TextBlock Text="{Binding Message}"
 		           Foreground="{DynamicResource SecondaryForeground}"/>

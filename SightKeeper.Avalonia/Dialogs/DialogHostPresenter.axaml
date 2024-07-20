@@ -53,7 +53,7 @@
 					<Border Classes="outer">
 						<Interaction.Behaviors>
 							<BehaviorCollection>
-								<behaviours:CopyMaxWidthAndHeightFromContent ContentControl="{Binding #DialogContentControl}"/>
+								<behaviours:CopyStanceFromContent ContentControl="{Binding #DialogContentControl}"/>
 							</BehaviorCollection>
 						</Interaction.Behaviors>
 						<DockPanel>

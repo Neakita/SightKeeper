@@ -11,16 +11,10 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Avalonia.Behaviours;
 
-internal sealed class CopyMaxWidthAndHeightFromContent : Behavior<Layoutable>
+internal sealed class CopyStanceFromContent : Behavior<Layoutable>
 {
 	public static readonly StyledProperty<ContentControl?> ContentControlProperty =
-		AvaloniaProperty.Register<CopyMaxWidthAndHeightFromContent, ContentControl?>(nameof(ContentControl));
-
-	public static readonly StyledProperty<double> FallbackMaxWidthProperty =
-		AvaloniaProperty.Register<CopyMaxWidthAndHeightFromContent, double>(nameof(FallbackMaxWidth), Layoutable.MaxWidthProperty.GetDefaultValue(typeof(Layoutable)));
-
-	public static readonly StyledProperty<double> FallbackMaxHeightProperty =
-		AvaloniaProperty.Register<CopyMaxWidthAndHeightFromContent, double>(nameof(FallbackMaxHeight), Layoutable.MaxHeightProperty.GetDefaultValue(typeof(Layoutable)));
+		AvaloniaProperty.Register<CopyStanceFromContent, ContentControl?>(nameof(ContentControl));
 
 	public ContentControl? ContentControl
 	{
@@ -28,16 +22,40 @@ internal sealed class CopyMaxWidthAndHeightFromContent : Behavior<Layoutable>
 		set => SetValue(ContentControlProperty, value);
 	}
 
+	public static readonly StyledProperty<double> FallbackMaxWidthProperty =
+		AvaloniaProperty.Register<CopyStanceFromContent, double>(nameof(FallbackMaxWidth), Layoutable.MaxWidthProperty.GetDefaultValue(typeof(Layoutable)));
+
 	public double FallbackMaxWidth
 	{
 		get => GetValue(FallbackMaxWidthProperty);
 		set => SetValue(FallbackMaxWidthProperty, value);
 	}
 
+	public static readonly StyledProperty<double> FallbackMaxHeightProperty =
+		AvaloniaProperty.Register<CopyStanceFromContent, double>(nameof(FallbackMaxHeight), Layoutable.MaxHeightProperty.GetDefaultValue(typeof(Layoutable)));
+
 	public double FallbackMaxHeight
 	{
 		get => GetValue(FallbackMaxHeightProperty);
 		set => SetValue(FallbackMaxHeightProperty, value);
+	}
+
+	public static readonly StyledProperty<HorizontalAlignment> FallbackHorizontalAlignmentProperty =
+		AvaloniaProperty.Register<CopyStanceFromContent, HorizontalAlignment>(nameof(FallbackHorizontalAlignment), Layoutable.HorizontalAlignmentProperty.GetDefaultValue(typeof(Layoutable)));
+
+	public HorizontalAlignment FallbackHorizontalAlignment
+	{
+		get => GetValue(FallbackHorizontalAlignmentProperty);
+		set => SetValue(FallbackHorizontalAlignmentProperty, value);
+	}
+
+	public static readonly StyledProperty<VerticalAlignment> FallbackVerticalAlignmentProperty =
+		AvaloniaProperty.Register<CopyStanceFromContent, VerticalAlignment>(nameof(FallbackVerticalAlignment), Layoutable.VerticalAlignmentProperty.GetDefaultValue(typeof(Layoutable)));
+
+	public VerticalAlignment FallbackVerticalAlignment
+	{
+		get => GetValue(FallbackVerticalAlignmentProperty);
+		set => SetValue(FallbackVerticalAlignmentProperty, value);
 	}
 
 	protected override void OnAttachedToVisualTree()
@@ -81,9 +99,13 @@ internal sealed class CopyMaxWidthAndHeightFromContent : Behavior<Layoutable>
 		{
 			AssociatedObject.MaxWidth = content.MaxWidth;
 			AssociatedObject.MaxHeight = content.MaxHeight;
+			AssociatedObject.HorizontalAlignment = content.HorizontalAlignment;
+			AssociatedObject.VerticalAlignment = content.VerticalAlignment;
 			return;
 		}
 		AssociatedObject.MaxWidth = FallbackMaxWidth;
 		AssociatedObject.MaxHeight = FallbackMaxHeight;
+		AssociatedObject.HorizontalAlignment = FallbackHorizontalAlignment;
+		AssociatedObject.VerticalAlignment = FallbackVerticalAlignment;
 	}
 }
