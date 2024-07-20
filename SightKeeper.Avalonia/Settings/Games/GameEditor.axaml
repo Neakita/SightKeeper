@@ -7,23 +7,23 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Settings.Games.GameEditor"
              x:DataType="games:MutableGameData">
-	<StackPanel Spacing="8">
-		<StackPanel.Resources>
-			<ResourceDictionary>
-				<system:Boolean x:Key="IsEnabledFallbackValue">False</system:Boolean>
-			</ResourceDictionary>
-		</StackPanel.Resources>
-		<HeaderedContentControl Header="Title">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<system:Boolean x:Key="IsEnabledFallbackValue">False</system:Boolean>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid RowDefinitions="Auto 8 Auto" ColumnDefinitions="* 8 *">
+		<HeaderedContentControl Grid.Row="0" Grid.Column="0" Header="Title">
 			<TextBox Text="{Binding Title}"
 			         IsEnabled="{Binding Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue={StaticResource IsEnabledFallbackValue}}"/>
 		</HeaderedContentControl>
-		<HeaderedContentControl Header="Process name">
+		<HeaderedContentControl Grid.Row="0" Grid.Column="2" Header="Process name">
 			<TextBox Text="{Binding ProcessName}"
 			         IsEnabled="{Binding Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue={StaticResource IsEnabledFallbackValue}}"/>
 		</HeaderedContentControl>
-		<HeaderedContentControl Header="Executable path">
+		<HeaderedContentControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Header="Executable path">
 			<TextBox Text="{Binding ExecutablePath}"
 			         IsEnabled="{Binding Converter={x:Static ObjectConverters.IsNotNull}, FallbackValue={StaticResource IsEnabledFallbackValue}}"/>
 		</HeaderedContentControl>
-	</StackPanel>
+	</Grid>
 </UserControl>

@@ -20,6 +20,7 @@
 			<RowDefinition MinHeight="68"/>
 			<RowDefinition Height="16"/>
 			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="12"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<ListBox Grid.Row="0"
@@ -28,11 +29,10 @@
 		         ItemTemplate="{StaticResource GameTitleCellTemplate}"
 		         SelectedItem="{Binding SelectedGame}"/>
 		<local:GameEditor Grid.Row="2"/>
-		<StackPanel Grid.Row="3"
+		<StackPanel Grid.Row="4"
 		            Orientation="Horizontal"
 		            HorizontalAlignment="Right"
-		            Spacing="8"
-		            Margin="0 12 0 0">
+		            Spacing="8">
 			<Button Command="{Binding CloseCommand}">
 				<StackPanel Orientation="Horizontal">
 					<icons:MaterialIcon Kind="Close"/>
