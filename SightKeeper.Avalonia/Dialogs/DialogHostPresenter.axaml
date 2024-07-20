@@ -11,9 +11,12 @@
              xmlns:behaviours="clr-namespace:SightKeeper.Avalonia.Behaviours"
              xmlns:themeAssists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
              x:DataType="local:DialogHost"
-             assists:VisibilityAssist.DisableHitTestWhenOpacityIsZero="True"
-             IsHitTestVisible="False"
              Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static root:Converters.ContentToOpacityConverter}}">
+	<Interaction.Behaviors>
+		<BehaviorCollection>
+			<behaviours:DisableHitTestWhenOpacityIsZeroBehavior/>
+		</BehaviorCollection>
+	</Interaction.Behaviors>
 	<UserControl.Transitions>
 		<Transitions>
 			<DoubleTransition Property="Opacity" Duration="0:0:0.5">
