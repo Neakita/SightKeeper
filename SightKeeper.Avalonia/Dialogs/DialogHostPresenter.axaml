@@ -7,7 +7,6 @@
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Dialogs"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:assists="clr-namespace:SightKeeper.Avalonia.Assists"
              xmlns:behaviours="clr-namespace:SightKeeper.Avalonia.Behaviours"
              xmlns:themeAssists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
@@ -46,8 +45,20 @@
 			</Grid.ColumnDefinitions>
 			<Border Grid.Row="0" Grid.Column="0" Background="#7F000000"/>
 			<Border Grid.Row="0" Grid.Column="1" Background="#7F000000" IsHitTestVisible="False"/>
-			<Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="#7F000000"
-			        assists:InputAssist.PointerReleasedCommand="{Binding DialogManager.CurrentDialog.CloseCommand}"/>
+			<Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="#7F000000"
+			        Command="{Binding DialogManager.CurrentDialog.CloseCommand}">
+				<Button.Theme>
+					<ControlTheme TargetType="Button">
+						<Setter Property="Template">
+							<ControlTemplate>
+								<Border Background="{TemplateBinding Background}"
+								        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+								        VerticalAlignment="{TemplateBinding HorizontalAlignment}"/>
+							</ControlTemplate>
+						</Setter>
+					</ControlTheme>
+				</Button.Theme>
+			</Button>
 		</Grid>
 		<TransitioningContentControl
 			Content="{Binding DialogManager.CurrentDialog}"
