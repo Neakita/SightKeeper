@@ -10,6 +10,7 @@
              xmlns:assists="clr-namespace:SightKeeper.Avalonia.Assists"
              xmlns:behaviours="clr-namespace:SightKeeper.Avalonia.Behaviours"
              xmlns:themeAssists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              x:DataType="local:DialogHost"
              Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static root:Converters.ContentToOpacityConverter}}">
 	<Interaction.Behaviors>
@@ -56,7 +57,7 @@
 					<Border Classes="outer">
 						<Interaction.Behaviors>
 							<BehaviorCollection>
-								<behaviours:CopyStanceFromContentBehavior ContentControl="{Binding #DialogContentControl}"/>
+								<behaviors:CopyStanceFromContentBehavior ContentControl="{Binding #DialogContentControl}"/>
 							</BehaviorCollection>
 						</Interaction.Behaviors>
 						<DockPanel>
