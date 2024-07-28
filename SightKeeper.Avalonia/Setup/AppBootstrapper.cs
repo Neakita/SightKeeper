@@ -10,6 +10,7 @@ internal static class AppBootstrapper
 	public static IContainer Setup()
 	{
 		ContainerBuilder builder = new();
+		builder.RegisterModule(new MiddlewareModule(new SerilogMiddleware()));
 		SetupLogger(builder);
 		ViewModelsBootstrapper.Setup(builder);
 		ServicesBootstrapper.Setup(builder);
