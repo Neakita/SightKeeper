@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Threading;
 using Serilog;
-using SightKeeper.Avalonia.Setup;
 
 namespace SightKeeper.Avalonia;
 
@@ -15,11 +14,12 @@ internal static class Program
 	[STAThread]
 	public static void Main(string[] args)
 	{
+		AppBuilder? appBuilder = null;
 		try
 		{
-			AppBootstrapper.Setup();
 			TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedException;
-			BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+			appBuilder = BuildAvaloniaApp();
+			appBuilder.StartWithClassicDesktopLifetime(args);
 		}
 		catch (Exception exception)
 		{
@@ -28,6 +28,8 @@ internal static class Program
 		}
 		finally
 		{
+			if (appBuilder?.Instance is IDisposable disposable)
+				disposable.Dispose();
 			Log.CloseAndFlush();
 		}
 	}

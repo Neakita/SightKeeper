@@ -1,12 +1,12 @@
+using System;
 using Autofac;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Setup;
 
 namespace SightKeeper.Avalonia;
 
-public sealed class App : global::Avalonia.Application
+public sealed class App : global::Avalonia.Application, IDisposable
 {
 	public override void Initialize()
 	{
@@ -16,28 +16,21 @@ public sealed class App : global::Avalonia.Application
 
 	public override void OnFrameworkInitializationCompleted()
 	{
-		if (ApplicationLifetime is IControlledApplicationLifetime controlledLifetime)
-			controlledLifetime.Exit += OnExit;
+		_container = AppBootstrapper.Setup();
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
-			var scope = ServiceLocator.Instance.BeginLifetimeScope(builder =>
-			{
-				builder.RegisterInstance(new DialogManager());
-			});
-			var viewModel = scope.Resolve<MainViewModel>();
 			desktop.MainWindow = new MainWindow
 			{
-				DataContext = viewModel
+				DataContext = _container.Resolve<MainViewModel>()
 			};
 		}
 		base.OnFrameworkInitializationCompleted();
 	}
 
-	private void OnExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+	public void Dispose()
 	{
-		if (ApplicationLifetime is IControlledApplicationLifetime controlledLifetime)
-			controlledLifetime.Exit -= OnExit;
-		AppBootstrapper.OnRelease();
-		ServiceLocator.Instance.Dispose();
+		_container?.Dispose();
 	}
+
+	private IContainer? _container;
 }

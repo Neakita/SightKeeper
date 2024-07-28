@@ -16,11 +16,6 @@ internal static class AppBootstrapper
 		return builder.Build();
 	}
 
-	public static void OnRelease()
-	{
-		ServicesBootstrapper.OnRelease();
-	}
-
 	private static void SetupLogger(ContainerBuilder builder)
 	{
 		LoggingLevelSwitch levelSwitch = new(LogEventLevel.Verbose);

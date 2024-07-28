@@ -3,6 +3,7 @@ using FluentValidation;
 using MemoryPack;
 using SightKeeper.Application.Games;
 using SightKeeper.Application.Windows;
+using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
@@ -21,6 +22,7 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<WindowsFileExplorerGameExecutableDisplayer>().As<GameExecutableDisplayer>();
 		builder.RegisterType<GameDataValidator>().As<IValidator<GameData>>();
 		builder.RegisterType<GameCreator>();
+		builder.RegisterType<DialogManager>().SingleInstance();
 	}
 
 	private static void SetupBinarySerialization(ContainerBuilder builder)
@@ -32,11 +34,6 @@ internal static class ServicesBootstrapper
 		appDataAccess.Load();
 		builder.RegisterInstance(screenshotsDataAccess);
 		builder.RegisterInstance(weightsDataAccess);
-		builder.RegisterInstance(appDataAccess);
-	}
-
-	public static void OnRelease()
-	{
-		ServiceLocator.Instance.Resolve<AppDataAccess>().Save();
+		builder.RegisterInstance(appDataAccess).OnRelease(dataAccess => dataAccess.Save());
 	}
 }
