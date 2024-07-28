@@ -18,12 +18,12 @@ internal static class Program
 		try
 		{
 			AppBootstrapper.Setup();
-			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+			TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedException;
 			BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
 		}
 		catch (Exception exception)
 		{
-			HandleUnhandledExceptions(exception, "Program.Main");
+			LogUnhandledExceptions(exception, $"{nameof(Program)}.{nameof(Main)}");
 			throw;
 		}
 		finally
@@ -32,10 +32,10 @@ internal static class Program
 		}
 	}
 
-	private static void TaskSchedulerOnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+	private static void OnTaskSchedulerUnobservedException(object? sender, UnobservedTaskExceptionEventArgs e)
 	{
-		e.SetObserved();
-		Dispatcher.UIThread.InvokeAsync(() => HandleUnhandledExceptions(e.Exception, "TaskScheduler"), DispatcherPriority.Normal);
+		// TODO should it really use dispatcher?
+		Dispatcher.UIThread.InvokeAsync(() => LogUnhandledExceptions(e.Exception, nameof(TaskScheduler)), DispatcherPriority.Normal);
 	}
 
 	// Avalonia configuration, don't remove; also used by visual designer.
@@ -44,7 +44,7 @@ internal static class Program
 			.UsePlatformDetect()
 			.LogToTrace();
 
-	private static void HandleUnhandledExceptions(Exception exception, string source)
+	private static void LogUnhandledExceptions(Exception exception, string source)
 	{
 		Log.Fatal(exception, "Unhandled exception occured from {Source}", source);
 	}
