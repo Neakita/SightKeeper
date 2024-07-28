@@ -14,6 +14,7 @@ internal static class Program
 	[STAThread]
 	public static void Main(string[] args)
 	{
+		SetupLogger();
 		AppBuilder? appBuilder = null;
 		try
 		{
@@ -49,5 +50,16 @@ internal static class Program
 	private static void LogUnhandledExceptions(Exception exception, string source)
 	{
 		Log.Fatal(exception, "Unhandled exception occured from {Source}", source);
+	}
+
+	private static void SetupLogger()
+	{
+		Log.Logger = new LoggerConfiguration()
+			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+#if DEBUG
+			.WriteTo.Debug()
+#endif
+			.WriteTo.Seq("http://localhost:5341/", apiKey: "YKxpWEmlEG0TwTHJIYuX")
+			.CreateLogger();
 	}
 }

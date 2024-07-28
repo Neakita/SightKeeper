@@ -1,7 +1,4 @@
 ﻿using Autofac;
-using Serilog;
-using Serilog.Core;
-using Serilog.Events;
 
 namespace SightKeeper.Avalonia.Setup;
 
@@ -11,23 +8,8 @@ internal static class AppBootstrapper
 	{
 		ContainerBuilder builder = new();
 		builder.RegisterModule(new MiddlewareModule(new SerilogMiddleware()));
-		SetupLogger(builder);
 		ViewModelsBootstrapper.Setup(builder);
 		ServicesBootstrapper.Setup(builder);
 		return builder.Build();
-	}
-
-	private static void SetupLogger(ContainerBuilder builder)
-	{
-		LoggingLevelSwitch levelSwitch = new(LogEventLevel.Verbose);
-		builder.RegisterInstance(levelSwitch);
-		Log.Logger = new LoggerConfiguration()
-			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-			#if DEBUG
-			.WriteTo.Debug()
-			#endif
-			.WriteTo.Seq("http://localhost:5341/", apiKey: "YKxpWEmlEG0TwTHJIYuX")
-			.MinimumLevel.ControlledBy(levelSwitch)
-			.CreateLogger();
 	}
 }
