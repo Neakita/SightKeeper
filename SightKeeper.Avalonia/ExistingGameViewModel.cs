@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Material.Icons;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Avalonia.MessageBoxDialog;
+using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Avalonia.ViewModels;
 using SightKeeper.Domain.Model;
 

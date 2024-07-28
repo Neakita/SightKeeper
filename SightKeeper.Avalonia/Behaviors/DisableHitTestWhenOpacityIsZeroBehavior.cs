@@ -4,7 +4,7 @@ using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Avalonia.Behaviours;
+namespace SightKeeper.Avalonia.Behaviors;
 
 internal sealed class DisableHitTestWhenOpacityIsZeroBehavior : Behavior<InputElement>
 {

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace SightKeeper.Avalonia.MessageBoxDialog;
+namespace SightKeeper.Avalonia.Dialogs.MessageBox;
 
 internal partial class MessageBox : UserControl
 {

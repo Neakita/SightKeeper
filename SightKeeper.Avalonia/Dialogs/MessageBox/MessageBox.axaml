@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:messageBoxDialog="clr-namespace:SightKeeper.Avalonia.MessageBoxDialog"
+             xmlns:messageBox="clr-namespace:SightKeeper.Avalonia.Dialogs.MessageBox"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.MessageBoxDialog.MessageBox"
-             x:DataType="messageBoxDialog:MessageBoxDialogViewModel"
+             x:Class="SightKeeper.Avalonia.Dialogs.MessageBox.MessageBox"
+             x:DataType="messageBox:MessageBoxDialogViewModel"
              VerticalAlignment="Center"
              HorizontalAlignment="Center">
 	<StackPanel Spacing="16" Name="Root">
@@ -19,7 +19,7 @@
 			</ItemsRepeater.Layout>
 			<ItemsRepeater.ItemTemplate>
 				<DataTemplate>
-					<Button Command="{Binding #Root.((messageBoxDialog:MessageBoxDialogViewModel)DataContext).ReturnButtonDefinitionCommand}"
+					<Button Command="{Binding #Root.((messageBox:MessageBoxDialogViewModel)DataContext).ReturnButtonDefinitionCommand}"
 					        CommandParameter="{Binding}">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
 							<icons:MaterialIcon Kind="{Binding IconKind}"/>

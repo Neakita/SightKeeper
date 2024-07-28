@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using SightKeeper.Avalonia.MessageBoxDialog;
+using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Avalonia.Settings;
 using SightKeeper.Avalonia.Settings.Games;
 using SightKeeper.Avalonia.ViewModels;

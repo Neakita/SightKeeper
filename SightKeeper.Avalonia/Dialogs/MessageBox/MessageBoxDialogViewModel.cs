@@ -2,9 +2,8 @@
 using System.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Avalonia.Dialogs;
 
-namespace SightKeeper.Avalonia.MessageBoxDialog;
+namespace SightKeeper.Avalonia.Dialogs.MessageBox;
 
 internal partial class MessageBoxDialogViewModel : DialogViewModel<MessageBoxButtonDefinition>
 {

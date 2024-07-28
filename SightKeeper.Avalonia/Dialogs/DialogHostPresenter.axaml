@@ -7,14 +7,13 @@
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Dialogs"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:behaviours="clr-namespace:SightKeeper.Avalonia.Behaviours"
              xmlns:themeAssists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              x:DataType="local:DialogHost"
              Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static root:Converters.ContentToOpacityConverter}}">
 	<Interaction.Behaviors>
 		<BehaviorCollection>
-			<behaviours:DisableHitTestWhenOpacityIsZeroBehavior/>
+			<behaviors:DisableHitTestWhenOpacityIsZeroBehavior/>
 		</BehaviorCollection>
 	</Interaction.Behaviors>
 	<UserControl.Transitions>

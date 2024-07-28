@@ -16,7 +16,7 @@ using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Avalonia.MessageBoxDialog;
+using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
