@@ -14,14 +14,14 @@ internal static class ViewsBootstrapper
 	{
 		return
 		[
-			RegisterView<GamesSettings, GamesSettingsViewModel>(),
-			RegisterView<SettingsTab, SettingsViewModel>(),
-			RegisterView<AddGameDialog, AddGameViewModel>(),
-			RegisterView<MessageBox, MessageBoxDialogViewModel>()
+			CreateDataTemplate<GamesSettings, GamesSettingsViewModel>(),
+			CreateDataTemplate<SettingsTab, SettingsViewModel>(),
+			CreateDataTemplate<AddGameDialog, AddGameViewModel>(),
+			CreateDataTemplate<MessageBox, MessageBoxDialogViewModel>()
 		];
 	}
 
-	private static FuncDataTemplate<TViewModel?> RegisterView<TView, TViewModel>()
+	private static FuncDataTemplate<TViewModel?> CreateDataTemplate<TView, TViewModel>()
 		where TView : Control, new()
 		where TViewModel : ViewModel
 	{
