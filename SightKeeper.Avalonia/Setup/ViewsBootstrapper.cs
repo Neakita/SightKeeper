@@ -35,6 +35,6 @@ internal static class ViewsBootstrapper
 
 	private static TView Build<TView, TViewModel>(TViewModel? viewModel) where TView : Control, new() where TViewModel : ViewModel
 	{
-		return new TView { DataContext = viewModel };
+		return new TView();
 	}
 }
