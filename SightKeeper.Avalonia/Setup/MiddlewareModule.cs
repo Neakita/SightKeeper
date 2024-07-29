@@ -6,8 +6,6 @@ namespace SightKeeper.Avalonia.Setup;
 
 internal sealed class MiddlewareModule : Autofac.Module
 {
-	private readonly IResolveMiddleware _middleware;
-
 	public MiddlewareModule(IResolveMiddleware middleware)
 	{
 		_middleware = middleware;
@@ -22,4 +20,6 @@ internal sealed class MiddlewareModule : Autofac.Module
 			pipeline.Use(_middleware);
 		};
 	}
+
+	private readonly IResolveMiddleware _middleware;
 }
