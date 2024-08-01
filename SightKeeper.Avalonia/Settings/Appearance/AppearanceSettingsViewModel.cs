@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.Settings.Appearance;
@@ -18,7 +19,8 @@ internal sealed class AppearanceSettingsViewModel : ViewModel, SettingsSection
 				return;
 			_customDecorations = value;
 			OnPropertyChanged();
-			
+			// ISSUE Should not directly reference window
+			ControlExtensions.ReopenWindow<MainWindow>();
 		}
 	}
 

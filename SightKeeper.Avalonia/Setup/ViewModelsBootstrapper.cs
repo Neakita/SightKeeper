@@ -12,7 +12,7 @@ internal static class ViewModelsBootstrapper
 	{
 		builder.RegisterType<MainViewModel>();
 		builder.RegisterType<SettingsViewModel>();
-		builder.RegisterType<AppearanceSettingsViewModel>().As<SettingsSection>();
+		builder.RegisterType<AppearanceSettingsViewModel>().AsSelf().As<SettingsSection>().SingleInstance();
 		builder.RegisterType<GamesSettingsViewModel>().As<SettingsSection>();
 		builder.RegisterType<GamesRepositoryViewModel>();
 		builder.RegisterType<AddGameViewModel>();

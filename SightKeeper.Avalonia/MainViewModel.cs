@@ -4,6 +4,7 @@ using Autofac;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Material.Icons;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Avalonia.Settings.Appearance;
 using SightKeeper.Avalonia.ViewModels;
 using SightKeeper.Avalonia.ViewModels.Elements;
 using SettingsViewModel = SightKeeper.Avalonia.Settings.SettingsViewModel;
@@ -13,11 +14,16 @@ namespace SightKeeper.Avalonia;
 internal sealed partial class MainViewModel : ViewModel, DialogHost
 {
 	public DialogManager DialogManager { get; }
+	public AppearanceSettingsViewModel AppearanceSettings { get; }
 	public IReadOnlyCollection<TabItem> Tabs { get; }
 
-	public MainViewModel(IComponentContext context, DialogManager dialogManager)
+	public MainViewModel(
+		IComponentContext context,
+		DialogManager dialogManager,
+		AppearanceSettingsViewModel appearanceSettings)
 	{
 		DialogManager = dialogManager;
+		AppearanceSettings = appearanceSettings;
 		Tabs =
 		[
 			CreateTab<SettingsViewModel>(context, MaterialIconKind.Cog, "Settings"),
