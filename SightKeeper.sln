@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC16BB21
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Data.Tests", "SightKeeper.Data.Tests\SightKeeper.Data.Tests.csproj", "{84712458-3E84-4279-AD52-58F24E88EBD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sightful.Avalonia.Controls.PropertyGrid", "..\Sightful.Theme\Sightful.Avalonia.Controls.PropertyGrid\Sightful.Avalonia.Controls.PropertyGrid.csproj", "{F7114FB2-C0FF-4FC1-B047-7F2AB9F21EAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{84712458-3E84-4279-AD52-58F24E88EBD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84712458-3E84-4279-AD52-58F24E88EBD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84712458-3E84-4279-AD52-58F24E88EBD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7114FB2-C0FF-4FC1-B047-7F2AB9F21EAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7114FB2-C0FF-4FC1-B047-7F2AB9F21EAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7114FB2-C0FF-4FC1-B047-7F2AB9F21EAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7114FB2-C0FF-4FC1-B047-7F2AB9F21EAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4D385463-EE5E-4257-84C8-75C0A0018879} = {EC16BB21-7A91-4224-BAB7-4C896D7B2920}

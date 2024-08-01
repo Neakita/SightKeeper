@@ -8,7 +8,6 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <AssemblyTitle>Sight Keeper</AssemblyTitle>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <PublishAot>true</PublishAot>
     </PropertyGroup>
 
@@ -34,9 +33,11 @@
         <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0"/>
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls.PropertyGrid\Sightful.Avalonia.Controls.PropertyGrid.csproj" OutputItemType="Analyzer" />
       <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj" />
       <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid\Sightful.Avalonia.TreeDataGrid.csproj" />
       <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj" />

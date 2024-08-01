@@ -6,6 +6,7 @@
     <Application.Styles>
 	    <StyleInclude Source="avares://Sightful.Avalonia/DefaultTheme.axaml"/>
 	    <StyleInclude Source="avares://Sightful.Avalonia.TreeDataGrid/SightfulTreeDataGridTheme.axaml"/>
+	    <StyleInclude Source="avares://Sightful.Avalonia.Controls.PropertyGrid/PropertyHeader.axaml"/>
     </Application.Styles>
     
 </Application>
