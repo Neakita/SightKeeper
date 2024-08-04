@@ -11,13 +11,17 @@ internal sealed partial class RawAppData
 	public ImmutableArray<SerializableDataSet> DataSets { get; }
 	public ImmutableArray<SerializableGame> Games { get; }
 	public ImmutableArray<SerializableProfile> Profiles { get; }
+	public SerializableApplicationSettings ApplicationSettings { get; }
 
-	public RawAppData(ImmutableArray<SerializableGame> games,
+	public RawAppData(
 		ImmutableArray<SerializableDataSet> dataSets,
-		ImmutableArray<SerializableProfile> profiles)
+		ImmutableArray<SerializableGame> games,
+		ImmutableArray<SerializableProfile> profiles,
+		SerializableApplicationSettings applicationSettings)
 	{
 		DataSets = dataSets;
 		Games = games;
 		Profiles = profiles;
+		ApplicationSettings = applicationSettings;
 	}
 }

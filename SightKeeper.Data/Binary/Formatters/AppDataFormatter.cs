@@ -23,12 +23,12 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			writer.WriteNullObjectHeader();
 			return;
 		}
-
 		ConversionSession session = new();
 		RawAppData raw = new(
-			GamesConverter.Convert(value.Games, session),
 			_dataSetsConverter.Convert(value.DataSets, session),
-			_profilesConverter.Convert(value.Profiles, session));
+			GamesConverter.Convert(value.Games, session),
+			_profilesConverter.Convert(value.Profiles, session),
+			value.ApplicationSettings);
 		writer.WritePackable(raw);
 	}
 
@@ -50,7 +50,8 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		value = new AppData(
 			GamesConverter.ConvertBack(raw.Games, session),
 			_dataSetsConverter.ConvertBack(raw.DataSets, session),
-			_profilesConverter.ConvertBack(raw.Profiles, session));
+			_profilesConverter.ConvertBack(raw.Profiles, session),
+			raw.ApplicationSettings);
 	}
 
 	private readonly DataSetsConverter _dataSetsConverter;

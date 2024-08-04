@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using FluentValidation;
 using MemoryPack;
+using SightKeeper.Application;
 using SightKeeper.Application.Games;
 using SightKeeper.Application.Windows;
 using SightKeeper.Avalonia.Dialogs;
@@ -34,6 +35,6 @@ internal static class ServicesBootstrapper
 		appDataAccess.Load();
 		builder.RegisterInstance(screenshotsDataAccess);
 		builder.RegisterInstance(weightsDataAccess);
-		builder.RegisterInstance(appDataAccess).OnRelease(dataAccess => dataAccess.Save());
+		builder.RegisterInstance(appDataAccess).AsSelf().As<ApplicationSettingsProvider>().OnRelease(dataAccess => dataAccess.Save());
 	}
 }

@@ -1,23 +1,35 @@
 ﻿using System.ComponentModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+using SightKeeper.Application;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.Settings.Appearance;
 
 [Browsable(true)]
-internal sealed partial class AppearanceSettingsViewModel : ViewModel, SettingsSection
+internal sealed class AppearanceSettingsViewModel : ViewModel, SettingsSection
 {
 	public string Header => "Appearance";
 
-	[ObservableProperty]
 	[Description("Custom window decorations look like the rest of the window and integrate with the contents, taking up less space. Off by default, using system decorations, providing a native experience.")]
-	private bool _customDecorations;
-
-	partial void OnCustomDecorationsChanged(bool value)
+	public bool CustomDecorations
 	{
-		_ = value;
-		// ISSUE Should not directly reference window
-		ControlExtensions.ReopenWindow<MainWindow>();
+		get => _applicationSettingsProvider.CustomDecorations;
+		set
+		{
+			if (value == _applicationSettingsProvider.CustomDecorations)
+				return;
+			_applicationSettingsProvider.CustomDecorations = value;
+			OnPropertyChanged();
+			// ISSUE Should not directly reference window
+			// ISSUE Probably shouldn't do this directly in the setter
+			ControlExtensions.ReopenWindow<MainWindow>();
+		}
 	}
+
+	public AppearanceSettingsViewModel(ApplicationSettingsProvider applicationSettingsProvider)
+	{
+		_applicationSettingsProvider = applicationSettingsProvider;
+	}
+
+	private readonly ApplicationSettingsProvider _applicationSettingsProvider;
 }
