@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser;
 
@@ -7,7 +8,7 @@ public sealed class PoserTag : Tag
 	public override string Name
 	{
 		get => _name;
-		set
+		[MemberNotNull(nameof(_name))] set
 		{
 			if (_name == value)
 				return;
@@ -38,10 +39,10 @@ public sealed class PoserTag : Tag
 
 	internal PoserTag(string name, PoserTagsLibrary library)
 	{
-		_name = name;
+		Library = library;
+		Name = name;
 		_keyPoints = new List<KeyPointTag>();
 		_items = new HashSet<PoserItem>();
-		Library = library;
 	}
 
 	internal void AddItem(PoserItem item)
