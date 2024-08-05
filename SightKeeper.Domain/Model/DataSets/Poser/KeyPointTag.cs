@@ -1,30 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Diagnostics;
-
-namespace SightKeeper.Domain.Model.DataSets.Poser;
+﻿namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class KeyPointTag : Tag
 {
-	public override string Name
-	{
-		get => _name;
-		[MemberNotNull(nameof(_name))] set
-		{
-			if (_name == value)
-				return;
-			foreach (var sibling in PoserTag.KeyPoints)
-				Guard.IsNotEqualTo(sibling.Name, value);
-			_name = value;
-		}
-	}
-
 	public PoserTag PoserTag { get; }
 
-	internal KeyPointTag(string name, PoserTag poserTag)
+	internal KeyPointTag(string name, PoserTag poserTag) : base(name, poserTag.KeyPoints)
 	{
 		PoserTag = poserTag;
-		Name = name;
 	}
 
-	private string _name;
+	protected override IEnumerable<Tag> Siblings => PoserTag.KeyPoints;
 }

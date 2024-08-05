@@ -1,31 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Classifier;
 
 public sealed class ClassifierTag : Tag
 {
-	public override string Name
-	{
-		get => _name;
-		[MemberNotNull(nameof(_name))] set
-		{
-			if (_name == value)
-				return;
-			foreach (var sibling in Library)
-				Guard.IsNotEqualTo(value, sibling.Name);
-			_name = value;
-		}
-	}
-
 	public IReadOnlyCollection<ClassifierAsset> Assets => _assets;
 	public ClassifierTagsLibrary Library { get; }
 	public ClassifierDataSet DataSet => Library.DataSet;
 
-	internal ClassifierTag(string name, ClassifierTagsLibrary library)
+	internal ClassifierTag(string name, ClassifierTagsLibrary library) : base(name, library)
 	{
 		Library = library;
-		Name = name;
 		_assets = new HashSet<ClassifierAsset>();
 	}
 
@@ -39,6 +24,6 @@ public sealed class ClassifierTag : Tag
 		Guard.IsTrue(_assets.Remove(asset));
 	}
 
+	protected override IEnumerable<Tag> Siblings => Library;
 	private readonly HashSet<ClassifierAsset> _assets;
-	private string _name;
 }

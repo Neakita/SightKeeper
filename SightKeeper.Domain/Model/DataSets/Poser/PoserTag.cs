@@ -1,23 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserTag : Tag
 {
-	public override string Name
-	{
-		get => _name;
-		[MemberNotNull(nameof(_name))] set
-		{
-			if (_name == value)
-				return;
-			foreach (var sibling in Library)
-				Guard.IsNotEqualTo(sibling.Name, value);
-			_name = value;
-		}
-	}
-
 	public IReadOnlyList<KeyPointTag> KeyPoints => _keyPoints.AsReadOnly();
 	public IReadOnlyCollection<PoserItem> Items => _items;
 	public PoserTagsLibrary Library { get; }
@@ -37,10 +23,9 @@ public sealed class PoserTag : Tag
 		Guard.IsTrue(_keyPoints.Remove(tag));
 	}
 
-	internal PoserTag(string name, PoserTagsLibrary library)
+	internal PoserTag(string name, PoserTagsLibrary library) : base(name, library)
 	{
 		Library = library;
-		Name = name;
 		_keyPoints = new List<KeyPointTag>();
 		_items = new HashSet<PoserItem>();
 	}
@@ -55,8 +40,8 @@ public sealed class PoserTag : Tag
 		Guard.IsTrue(_items.Remove(item));
 	}
 
+	protected override IEnumerable<Tag> Siblings => Library;
+
 	private readonly List<KeyPointTag> _keyPoints;
 	private readonly HashSet<PoserItem> _items;
-	private string _name;
-
 }
