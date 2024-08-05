@@ -36,7 +36,7 @@ internal sealed class DataSetsConverter
 		{
 			ClassifierDataSet classifierDataSet => _classifierConverter.Convert(classifierDataSet, session),
 			DetectorDataSet detectorDataSet => _detectorConverter.Convert(detectorDataSet, session),
-			PoserDataSet poserDataSet => throw new NotImplementedException(),
+			PoserDataSet poserDataSet => _poserConverter.Convert(poserDataSet, session),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
 		};
 	}
