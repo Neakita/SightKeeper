@@ -13,9 +13,8 @@ internal sealed partial class RawAppData
 	public ImmutableArray<SerializableProfile> Profiles { get; }
 	public SerializableApplicationSettings ApplicationSettings { get; }
 
-	public RawAppData(
+	public RawAppData(ImmutableArray<SerializableGame> games,
 		ImmutableArray<SerializableDataSet> dataSets,
-		ImmutableArray<SerializableGame> games,
 		ImmutableArray<SerializableProfile> profiles,
 		SerializableApplicationSettings applicationSettings)
 	{

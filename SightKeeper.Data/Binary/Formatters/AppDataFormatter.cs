@@ -25,8 +25,8 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		}
 		ConversionSession session = new();
 		RawAppData raw = new(
-			_dataSetsConverter.Convert(value.DataSets, session),
 			GamesConverter.Convert(value.Games, session),
+			_dataSetsConverter.Convert(value.DataSets, session),
 			_profilesConverter.Convert(value.Profiles, session),
 			value.ApplicationSettings);
 		writer.WritePackable(raw);
