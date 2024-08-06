@@ -2,7 +2,7 @@
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Poser2D;
 
 namespace SightKeeper.Domain.Services;
 
@@ -52,24 +52,24 @@ public abstract class WeightsDataAccess
 		return CreateWeights(dataSet.Weights, data, modelSize, metrics, tags);
 	}
 
-	public PoserWeights CreateWeights(
-		PoserWeightsLibrary library,
+	public Poser2DWeights CreateWeights(
+		Poser2DWeightsLibrary library,
 		byte[] data,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> tags)
+		ImmutableDictionary<Poser2DTag, ImmutableHashSet<KeyPointTag2D>> tags)
 	{
 		var weights = library.CreateWeights(modelSize, metrics, tags);
 		SaveWeightsData(weights, new WeightsData(data));
 		return weights;
 	}
 
-	public PoserWeights CreateWeights(
-		PoserDataSet dataSet,
+	public Poser2DWeights CreateWeights(
+		Poser2DDataSet dataSet,
 		byte[] data,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>> tags)
+		ImmutableDictionary<Poser2DTag, ImmutableHashSet<KeyPointTag2D>> tags)
 	{
 		return CreateWeights(dataSet.Weights, data, modelSize, metrics, tags);
 	}
@@ -86,7 +86,7 @@ public abstract class WeightsDataAccess
 		RemoveWeightsData(weights);
 	}
 
-	public void RemoveWeights(PoserWeights weights)
+	public void RemoveWeights(Poser2DWeights weights)
 	{
 		weights.Library.RemoveWeights(weights);
 		RemoveWeightsData(weights);

@@ -3,15 +3,15 @@ using FlakeId;
 using MemoryPack;
 using SightKeeper.Domain.Model.DataSets;
 
-namespace SightKeeper.Data.Binary.DataSets.Poser;
+namespace SightKeeper.Data.Binary.DataSets.Poser2D;
 
 [MemoryPackable]
-internal partial class SerializablePoserTag : SerializableTag
+internal partial class SerializablePoser2DTag : SerializableTag
 {
 	public ImmutableArray<SerializableTag> KeyPoints { get; }
 
 	[MemoryPackConstructor]
-	public SerializablePoserTag(
+	public SerializablePoser2DTag(
 		Id id,
 		string name,
 		uint color,
@@ -21,7 +21,7 @@ internal partial class SerializablePoserTag : SerializableTag
 		KeyPoints = keyPoints;
 	}
 
-	public SerializablePoserTag(Id id, Tag tag, ImmutableArray<SerializableTag> keyPoints) : base(id, tag)
+	public SerializablePoser2DTag(Id id, Tag tag, ImmutableArray<SerializableTag> keyPoints) : base(id, tag)
 	{
 		KeyPoints = keyPoints;
 	}

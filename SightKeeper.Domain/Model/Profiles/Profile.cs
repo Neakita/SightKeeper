@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.Profiles.Modules;
 
 namespace SightKeeper.Domain.Model.Profiles;
@@ -29,7 +29,7 @@ public sealed class Profile
 		return module;
 	}
 
-	public PoserModule CreateModule(PoserWeights weights)
+	public PoserModule CreateModule(Poser2DWeights weights)
 	{
 		PoserModule module = new(this, weights);
 		_modules.Add(module);

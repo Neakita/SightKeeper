@@ -1,16 +1,16 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Poser2D;
 
-namespace SightKeeper.Domain.Tests.DataSets.Poser;
+namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 
-public class PoserTagTests
+public class Poser2DTagTests
 {
 	[Fact]
 	public void ShouldNotChangeTagNameToOccupied()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		Assert.ThrowsAny<Exception>(() => tag2.Name = "1");
@@ -21,7 +21,7 @@ public class PoserTagTests
 	[Fact]
 	public void ShouldSetTagNameToDeletedTagName()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		dataSet.Tags.DeleteTag(tag1);
@@ -31,12 +31,12 @@ public class PoserTagTests
 	[Fact]
 	public void ShouldNotAddNewPointToTagWithAssociatedItems()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
-		asset.CreateItem(tag, new Bounding(), []);
+		asset.CreateItem(tag, new Bounding(), [], []);
 		Assert.ThrowsAny<Exception>(() => tag.CreateKeyPoint(""));
 		tag.KeyPoints.Should().BeEmpty();
 	}
@@ -44,13 +44,13 @@ public class PoserTagTests
 	[Fact]
 	public void ShouldNotDeletePointOfTagWithAssociatedItems()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		var keyPoint = tag.CreateKeyPoint("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
-		asset.CreateItem(tag, new Bounding(), [new Vector2<double>()]);
+		asset.CreateItem(tag, new Bounding(), [new Vector2<double>()], []);
 		Assert.ThrowsAny<Exception>(() => tag.DeleteKeyPoint(keyPoint));
 		tag.KeyPoints.Should().Contain(keyPoint);
 	}
@@ -58,13 +58,13 @@ public class PoserTagTests
 	[Fact]
 	public void ShouldAddNewPointToTagWithoutAssociatedItems()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
-		asset.CreateItem(tag1, new Bounding(), []);
+		asset.CreateItem(tag1, new Bounding(), [], []);
 		var keyPoint = tag2.CreateKeyPoint("");
 		tag2.KeyPoints.Should().Contain(keyPoint);
 	}
@@ -72,7 +72,7 @@ public class PoserTagTests
 	[Fact]
 	public void ShouldDeletePointOfTagWithoutAssociatedItems()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		var keyPoint1 = tag1.CreateKeyPoint("");
@@ -80,7 +80,7 @@ public class PoserTagTests
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
-		asset.CreateItem(tag1, new Bounding(), [new Vector2<double>()]);
+		asset.CreateItem(tag1, new Bounding(), [new Vector2<double>()], []);
 		tag2.DeleteKeyPoint(keyPoint2);
 		tag2.KeyPoints.Should().BeEmpty();
 	}

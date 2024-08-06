@@ -1,11 +1,14 @@
 ﻿using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser3D;
 
-public sealed class Poser3DTag : Tag
+public sealed class Poser3DTag : PoserTag
 {
 	public IReadOnlyList<KeyPointTag3D> KeyPoints => _keyPoints.AsReadOnly();
-	public IReadOnlyCollection<Poser3DItem> Items => _items;
+	public IReadOnlyList<NumericItemProperty> NumericProperties => _numericProperties.AsReadOnly();
+	public IReadOnlyList<BooleanItemProperty> BooleanProperties => _booleanProperties.AsReadOnly();
+	public override IReadOnlyCollection<Poser3DItem> Items => _items;
 	public Poser3DTagsLibrary Library { get; }
 	public Poser3DDataSet DataSet => Library.DataSet;
 
@@ -23,10 +26,38 @@ public sealed class Poser3DTag : Tag
 		Guard.IsTrue(_keyPoints.Remove(tag));
 	}
 
+	public void CreateNumericProperty(string name, double minimumValue, double maximumValue)
+	{
+		Guard.IsEmpty(Items);
+		NumericItemProperty property = new(this, name, minimumValue, maximumValue);
+		_numericProperties.Add(property);
+	}
+
+	public void CreateBooleanProperty(string name)
+	{
+		Guard.IsEmpty(Items);
+		BooleanItemProperty property = new(name);
+		_booleanProperties.Add(property);
+	}
+
+	public void RemoveProperty(NumericItemProperty property)
+	{
+		Guard.IsEmpty(Items);
+		Guard.IsTrue(_numericProperties.Remove(property));
+	}
+
+	public void RemoveProperty(BooleanItemProperty property)
+	{
+		Guard.IsEmpty(Items);
+		Guard.IsTrue(_booleanProperties.Remove(property));
+	}
+
 	internal Poser3DTag(string name, Poser3DTagsLibrary library) : base(name, library)
 	{
 		Library = library;
 		_keyPoints = new List<KeyPointTag3D>();
+		_numericProperties = new List<NumericItemProperty>();
+		_booleanProperties = new List<BooleanItemProperty>();
 		_items = new HashSet<Poser3DItem>();
 	}
 
@@ -43,5 +74,7 @@ public sealed class Poser3DTag : Tag
 	protected override IEnumerable<Tag> Siblings => Library;
 
 	private readonly List<KeyPointTag3D> _keyPoints;
+	private readonly List<NumericItemProperty> _numericProperties;
+	private readonly List<BooleanItemProperty> _booleanProperties;
 	private readonly HashSet<Poser3DItem> _items;
 }

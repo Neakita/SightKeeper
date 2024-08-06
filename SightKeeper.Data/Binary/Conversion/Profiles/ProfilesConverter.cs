@@ -6,7 +6,7 @@ using SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviours;
 
@@ -86,7 +86,7 @@ internal sealed class ProfilesConverter
 
 	private static void AddModule(Profile profile, SerializablePoserModule module, ReverseConversionSession session)
 	{
-		var weights = (PoserWeights)session.Weights[module.WeightsId];
+		var weights = (Poser2DWeights)session.Weights[module.WeightsId];
 		var converted = profile.CreateModule(weights);
 		converted.PassiveScalingOptions = module.PassiveScalingOptions?.Convert();
 		converted.PassiveWalkingOptions = PassiveWalkingOptionsConverter.ConvertBack(module.PassiveWalkingOptions);

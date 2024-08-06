@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Poser2D;
 
-namespace SightKeeper.Domain.Tests.DataSets.Poser;
+namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 
-public sealed class PoserAssetLibraryTests
+public sealed class Poser2DAssetLibraryTests
 {
 	[Fact]
 	public void ShouldCreateAsset()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -19,7 +19,7 @@ public sealed class PoserAssetLibraryTests
 	[Fact]
 	public void ShouldNotCreateDuplicateAsset()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -32,7 +32,7 @@ public sealed class PoserAssetLibraryTests
 	[Fact]
 	public void ShouldDeleteAsset()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -44,8 +44,8 @@ public sealed class PoserAssetLibraryTests
 	[Fact]
 	public void ShouldNotDeleteAssetFromOtherDataSet()
 	{
-		PoserDataSet dataSet1 = new("", 320);
-		PoserDataSet dataSet2 = new("", 320);
+		Poser2DDataSet dataSet1 = new("", 320);
+		Poser2DDataSet dataSet2 = new("", 320);
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet1.Screenshots, []);
 		var asset = dataSet1.Assets.MakeAsset(screenshot);

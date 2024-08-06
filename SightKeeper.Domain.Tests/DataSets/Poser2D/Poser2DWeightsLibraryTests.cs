@@ -1,19 +1,19 @@
 ﻿using System.Collections.Immutable;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Poser2D;
 
-namespace SightKeeper.Domain.Tests.DataSets.Poser;
+namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 
-public sealed class PoserWeightsLibraryTests
+public sealed class Poser2DWeightsLibraryTests
 {
 	[Fact]
 	public void ShouldCreateWeights()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		var tagsBuilder = ImmutableDictionary.CreateBuilder<PoserTag, ImmutableHashSet<KeyPointTag>>();
-		tagsBuilder.Add(tag, ImmutableHashSet<KeyPointTag>.Empty);
+		var tagsBuilder = ImmutableDictionary.CreateBuilder<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>();
+		tagsBuilder.Add(tag, ImmutableHashSet<KeyPointTag2D>.Empty);
 		var weights = weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), tagsBuilder.ToImmutable());
 		dataSet.Weights.Should().Contain(weights);
 	}
@@ -21,22 +21,22 @@ public sealed class PoserWeightsLibraryTests
 	[Fact]
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), ImmutableDictionary<PoserTag, ImmutableHashSet<KeyPointTag>>.Empty));
+		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), ImmutableDictionary<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>.Empty));
 		dataSet.Weights.Should().BeEmpty();
 	}
 
 	[Fact]
 	public void ShouldNotCreateWeightsWithWrongAssociatedKeyPointTags()
 	{
-		PoserDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new("", 320);
 		var tag1 = dataSet.Tags.CreateTag("1");
 		tag1.CreateKeyPoint("1.1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		var keyPoint2 = tag2.CreateKeyPoint("2.1");
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		var tagsBuilder = ImmutableDictionary.CreateBuilder<PoserTag, ImmutableHashSet<KeyPointTag>>();
+		var tagsBuilder = ImmutableDictionary.CreateBuilder<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>();
 		tagsBuilder.Add(tag1, ImmutableHashSet.Create(keyPoint2));
 		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), tagsBuilder.ToImmutable()));
 		dataSet.Weights.Should().BeEmpty();
