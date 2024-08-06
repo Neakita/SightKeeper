@@ -1,13 +1,13 @@
 ﻿using FlakeId;
 using MemoryPack;
-using SightKeeper.Data.Binary.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets;
+using SerializablePoserWeights = SightKeeper.Data.Binary.DataSets.Poser.SerializablePoserWeights;
 
 namespace SightKeeper.Data.Binary.DataSets;
 
 [MemoryPackable]
 [MemoryPackUnion(0, typeof(SerializableWeightsWithTags))]
-[MemoryPackUnion(1, typeof(SerializablePoser2DWeights))]
+[MemoryPackUnion(1, typeof(SerializablePoserWeights))]
 internal abstract partial class SerializableWeights
 {
 	public Id Id { get; }

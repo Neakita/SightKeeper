@@ -1,49 +1,49 @@
 ﻿using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Diagnostics;
-using FlakeId;
 using SightKeeper.Data.Binary.DataSets;
-using SightKeeper.Data.Binary.DataSets.Poser2D;
+using SightKeeper.Data.Binary.DataSets.Poser;
+using SightKeeper.Data.Binary.DataSets.Poser3D;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
-using SerializablePoserWeights = SightKeeper.Data.Binary.DataSets.Poser.SerializablePoserWeights;
+using SightKeeper.Domain.Model.DataSets.Poser3D;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser2D;
+namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser3D;
 
-internal sealed class Poser2DDataSetsConverter
+internal sealed class Poser3DDataSetsConverter
 {
-	public Poser2DDataSetsConverter(
+	public Poser3DDataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
 		FileSystemWeightsDataAccess weightsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_weightsDataAccess = weightsDataAccess;
 		_screenshotsConverter = new ScreenshotsConverter(screenshotsDataAccess);
-		_assetsConverter = new Poser2DAssetsConverter(screenshotsDataAccess);
-		_weightsConverter = new Poser2DWeightsConverter(weightsDataAccess);
+		_assetsConverter = new Poser3DAssetsConverter(screenshotsDataAccess);
+		_weightsConverter = new Poser3DWeightsConverter(weightsDataAccess);
 	}
 
-	internal SerializablePoser2DDataSet Convert(
-		Poser2DDataSet dataSet,
+	internal SerializablePoser3DDataSet Convert(
+		Poser3DDataSet dataSet,
 		ConversionSession session)
 	{
-		SerializablePoser2DDataSet serializableDataSet = new(
+		SerializablePoser3DDataSet serializableDataSet = new(
 			dataSet,
 			GamesConverter.GetGameId(dataSet.Game, session),
-			Poser2DTagsConverter.Convert(dataSet.Tags, session),
 			_screenshotsConverter.Convert(dataSet.Screenshots),
+			Poser3DTagsConverter.Convert(dataSet.Tags, session),
 			_assetsConverter.Convert(dataSet.Assets, session),
 			_weightsConverter.Convert(dataSet.Weights, session));
 		return serializableDataSet;
 	}
 
-	internal Poser2DDataSet ConvertBack(
-		SerializablePoser2DDataSet raw,
+	internal Poser3DDataSet ConvertBack(
+		SerializablePoser3DDataSet raw,
 		ReverseConversionSession session)
 	{
 		Guard.IsNotNull(session.Games);
-		Poser2DDataSet dataSet = new(raw.Name, raw.Resolution);
+		Poser3DDataSet dataSet = new(raw.Name, raw.Resolution);
 		if (raw.GameId != null)
 			dataSet.Game = session.Games[raw.GameId.Value];
 		dataSet.Screenshots.MaxQuantity = raw.MaxScreenshots;
@@ -58,52 +58,54 @@ internal sealed class Poser2DDataSetsConverter
 	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
-	private readonly Poser2DAssetsConverter _assetsConverter;
-	private readonly Poser2DWeightsConverter _weightsConverter;
+	private readonly Poser3DAssetsConverter _assetsConverter;
+	private readonly Poser3DWeightsConverter _weightsConverter;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
-	private static extern Poser2DScreenshot CreateScreenshot(Poser2DScreenshotsLibrary library);
+	private static extern Poser2DScreenshot CreateScreenshot(Poser3DScreenshotsLibrary library);
 
 	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
 	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
 		
 	[UnsafeAccessor(UnsafeAccessorKind.Method)]
-	private static extern Poser2DWeights CreateWeights(
-		Poser2DWeightsLibrary library,
+	private static extern Poser3DWeights CreateWeights(
+		Poser3DWeightsLibrary library,
 		ModelSize size,
 		WeightsMetrics metrics,
-		ImmutableDictionary<Poser2DTag, ImmutableHashSet<KeyPointTag2D>> tags);
+		ImmutableDictionary<Poser3DTag, ImmutableHashSet<KeyPointTag3D>> tags);
 
-	private static void CreateTags(Poser2DDataSet dataSet, ImmutableArray<SerializablePoser2DTag> tags, ReverseConversionSession session)
+	private static void CreateTags(Poser3DDataSet dataSet, ImmutableArray<SerializablePoser3DTag> tags, ReverseConversionSession session)
 	{
 		foreach (var rawTag in tags)
 			CreateTag(dataSet, session, rawTag);
 	}
 
-	private static void CreateTag(Poser2DDataSet dataSet, ReverseConversionSession session, SerializablePoser2DTag rawTag)
+	private static void CreateTag(Poser3DDataSet dataSet, ReverseConversionSession session, SerializablePoser3DTag rawTag)
 	{
 		var tag = dataSet.Tags.CreateTag(rawTag.Name);
 		tag.Color = rawTag.Color;
 		CreateKeyPoints(session, rawTag.KeyPoints, tag);
-		foreach (var property in rawTag.Properties)
-			tag.CreateProperty(property.Name, property.MinimumValue, property.MaximumValue);
+		foreach (var property in rawTag.NumericProperties)
+			tag.CreateNumericProperty(property.Name, property.MinimumValue, property.MaximumValue);
+		foreach (var propertyName in rawTag.BooleanProperties)
+			tag.CreateBooleanProperty(propertyName);
 		session.Tags.Add(rawTag.Id, tag);
 	}
 
-	private static void CreateKeyPoints(ReverseConversionSession session, ImmutableArray<SerializableTag> keyPoints, Poser2DTag tag)
+	private static void CreateKeyPoints(ReverseConversionSession session, ImmutableArray<SerializableTag> keyPoints, Poser3DTag tag)
 	{
 		foreach (var rawKeyPoint in keyPoints)
 			CreateKeyPoint(session, tag, rawKeyPoint);
 	}
 
-	private static void CreateKeyPoint(ReverseConversionSession session, Poser2DTag tag, SerializableTag rawKeyPoint)
+	private static void CreateKeyPoint(ReverseConversionSession session, Poser3DTag tag, SerializableTag rawKeyPoint)
 	{
 		var keyPoint = tag.CreateKeyPoint(rawKeyPoint.Name);
 		keyPoint.Color = rawKeyPoint.Color;
 		session.Tags.Add(rawKeyPoint.Id, keyPoint);
 	}
 
-	private void CreateScreenshots(Poser2DDataSet dataSet, ImmutableArray<SerializableScreenshot> screenshots, ReverseConversionSession session)
+	private void CreateScreenshots(Poser3DDataSet dataSet, ImmutableArray<SerializableScreenshot> screenshots, ReverseConversionSession session)
 	{
 		foreach (var rawScreenshot in screenshots)
 		{
@@ -114,18 +116,23 @@ internal sealed class Poser2DDataSetsConverter
 		}
 	}
 
-	private static void CreateAssets(Poser2DDataSet dataSet, ImmutableArray<SerializablePoser2DAsset> assets, ReverseConversionSession session)
+	private static void CreateAssets(Poser3DDataSet dataSet, ImmutableArray<SerializablePoser3DAsset> assets, ReverseConversionSession session)
 	{
 		foreach (var rawAsset in assets)
 		{
-			var screenshot = (Poser2DScreenshot)session.Screenshots[rawAsset.ScreenshotId];
+			var screenshot = (Poser3DScreenshot)session.Screenshots[rawAsset.ScreenshotId];
 			var asset = dataSet.Assets.MakeAsset(screenshot);
 			foreach (var rawItem in rawAsset.Items)
-				asset.CreateItem((Poser2DTag)session.Tags[rawItem.TagId], rawItem.Bounding, rawItem.KeyPoints, rawItem.Properties);
+				asset.CreateItem(
+					(Poser3DTag)session.Tags[rawItem.TagId],
+					rawItem.Bounding,
+					rawItem.KeyPoints.Select(keyPoint => (keyPoint.Position, keyPoint.IsVisible)).ToImmutableList(),
+					rawItem.NumericProperties,
+					rawItem.BooleanProperties);
 		}
 	}
 
-	private void CreateWeights(Poser2DDataSet dataSet, ImmutableArray<SerializablePoserWeights> raw, ReverseConversionSession session)
+	private void CreateWeights(Poser3DDataSet dataSet, ImmutableArray<SerializablePoserWeights> raw, ReverseConversionSession session)
 	{
 		foreach (var rawWeights in raw)
 		{
@@ -135,12 +142,12 @@ internal sealed class Poser2DDataSetsConverter
 		}
 	}
 
-	private ImmutableDictionary<Poser2DTag, ImmutableHashSet<KeyPointTag2D>> ConvertBack(
-		ImmutableArray<(Id Id, ImmutableArray<Id> KeyPointIds)> tags,
+	private ImmutableDictionary<Poser3DTag, ImmutableHashSet<KeyPointTag3D>> ConvertBack(
+		ImmutableArray<(FlakeId.Id Id, ImmutableArray<FlakeId.Id> KeyPointIds)> tags,
 		ReverseConversionSession session)
 	{
 		return tags.ToImmutableDictionary(
-			t => (Poser2DTag)session.Tags[t.Id],
-			t => t.KeyPointIds.Select(id => (KeyPointTag2D)session.Tags[id]).ToImmutableHashSet());
+			t => (Poser3DTag)session.Tags[t.Id],
+			t => t.KeyPointIds.Select(id => (KeyPointTag3D)session.Tags[id]).ToImmutableHashSet());
 	}
 }

@@ -25,10 +25,11 @@ public sealed class Poser2DTag : PoserTag
 		Guard.IsTrue(_keyPoints.Remove(tag));
 	}
 
-	public void CreateProperty(string name, double minimumValue, double maximumValue)
+	public NumericItemProperty CreateProperty(string name, double minimumValue, double maximumValue)
 	{
 		NumericItemProperty property = new(this, name, minimumValue, maximumValue);
 		_properties.Add(property);
+		return property;
 	}
 
 	public void RemoveProperty(NumericItemProperty property)

@@ -2,7 +2,9 @@
 using FlakeId;
 using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Data.Binary.DataSets.Poser2D;
+using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SerializableNumericItemProperty = SightKeeper.Data.Binary.DataSets.Poser.SerializableNumericItemProperty;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser2D;
 
@@ -18,7 +20,11 @@ internal static class Poser2DTagsConverter
 
 	private static SerializablePoser2DTag Convert(Poser2DTag tag, ConversionSession session)
 	{
-		SerializablePoser2DTag converted = new(Id.Create(), tag, Convert(tag.KeyPoints, session));
+		SerializablePoser2DTag converted = new(
+			Id.Create(),
+			tag,
+			Convert(tag.KeyPoints, session),
+			Convert(tag.Properties));
 		session.Tags.Add(tag, converted.Id);
 		return converted;
 	}
@@ -33,5 +39,10 @@ internal static class Poser2DTagsConverter
 		SerializableTag converted = new(Id.Create(), tag);
 		session.Tags.Add(tag, converted.Id);
 		return converted;
+	}
+
+	private static ImmutableArray<SerializableNumericItemProperty> Convert(IEnumerable<NumericItemProperty> properties)
+	{
+		return properties.Select(SerializableNumericItemProperty.Create).ToImmutableArray();
 	}
 }

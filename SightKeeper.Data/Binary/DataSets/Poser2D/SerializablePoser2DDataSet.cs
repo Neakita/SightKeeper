@@ -7,9 +7,9 @@ internal sealed class SerializablePoser2DDataSet : SerializableDataSet
 {
 	public ImmutableArray<SerializablePoser2DTag> Tags { get; }
 	public ImmutableArray<SerializablePoser2DAsset> Assets { get; }
-	public ImmutableArray<SerializablePoser2DWeights> Weights { get; }
+	public ImmutableArray<Poser.SerializablePoserWeights> Weights { get; }
 
-	public SerializablePoser2DDataSet(string name, string description, ushort? gameId, ushort resolution, ushort? maxScreenshots, ImmutableArray<SerializableScreenshot> screenshots, ImmutableArray<SerializablePoser2DTag> tags, ImmutableArray<SerializablePoser2DAsset> assets, ImmutableArray<SerializablePoser2DWeights> weights) : base(name, description, gameId, resolution, maxScreenshots, screenshots)
+	public SerializablePoser2DDataSet(string name, string description, ushort? gameId, ushort resolution, ushort? maxScreenshots, ImmutableArray<SerializableScreenshot> screenshots, ImmutableArray<SerializablePoser2DTag> tags, ImmutableArray<SerializablePoser2DAsset> assets, ImmutableArray<Poser.SerializablePoserWeights> weights) : base(name, description, gameId, resolution, maxScreenshots, screenshots)
 	{
 		Tags = tags;
 		Assets = assets;
@@ -18,7 +18,7 @@ internal sealed class SerializablePoser2DDataSet : SerializableDataSet
 
 	public SerializablePoser2DDataSet(DataSet dataSet, ushort? gameId, ImmutableArray<SerializablePoser2DTag> tags,
 		ImmutableArray<SerializableScreenshot> screenshots, ImmutableArray<SerializablePoser2DAsset> assets,
-		ImmutableArray<SerializablePoser2DWeights> weights) : base(dataSet, gameId, screenshots)
+		ImmutableArray<Poser.SerializablePoserWeights> weights) : base(dataSet, gameId, screenshots)
 	{
 		Tags = tags;
 		Assets = assets;
