@@ -20,7 +20,17 @@ public sealed class Poser2DItem : PoserItem
 	}
 
 	public Bounding Bounding { get; set; }
-	public IReadOnlyList<KeyPoint2D> KeyPoints { get; }
+
+	public ImmutableList<Vector2<double>> KeyPoints
+	{
+		get => _keyPoints;
+		[MemberNotNull(nameof(_keyPoints))] set
+		{
+			Guard.IsEqualTo(value.Count, Tag.KeyPoints.Count);
+			_keyPoints = value;
+		}
+	}
+
 	public Poser2DAsset Asset { get; }
 	public DataSet DataSet => Asset.DataSet;
 
@@ -34,15 +44,16 @@ public sealed class Poser2DItem : PoserItem
 		}
 	}
 
-	internal Poser2DItem(Poser2DTag tag, Bounding bounding, IEnumerable<KeyPoint2D> keyPoints, ImmutableList<double> properties, Poser2DAsset asset)
+	internal Poser2DItem(Poser2DTag tag, Bounding bounding, ImmutableList<Vector2<double>> keyPoints, ImmutableList<double> properties, Poser2DAsset asset)
 	{
 		Asset = asset;
 		Tag = tag;
 		Bounding = bounding;
 		Properties = properties;
-		KeyPoints = keyPoints.ToImmutableList();
+		KeyPoints = keyPoints;
 	}
 
 	private ImmutableList<double> _properties;
 	private Poser2DTag _tag;
+	private ImmutableList<Vector2<double>> _keyPoints;
 }

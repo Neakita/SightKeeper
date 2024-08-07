@@ -11,10 +11,10 @@ internal sealed partial class SerializablePoser2DItem
 {
 	public Id TagId { get; }
 	public Bounding Bounding { get; }
-	public ImmutableArray<Vector2<double>> KeyPoints { get; }
+	public ImmutableList<Vector2<double>> KeyPoints { get; }
 	public ImmutableList<double> Properties { get; }
 
-	public SerializablePoser2DItem(Id tagId, Bounding bounding, ImmutableArray<Vector2<double>> keyPoints, ImmutableList<double> properties)
+	public SerializablePoser2DItem(Id tagId, Bounding bounding, ImmutableList<Vector2<double>> keyPoints, ImmutableList<double> properties)
 	{
 		TagId = tagId;
 		Bounding = bounding;
