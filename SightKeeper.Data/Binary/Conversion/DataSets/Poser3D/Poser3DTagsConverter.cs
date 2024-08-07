@@ -1,16 +1,15 @@
 ﻿using System.Collections.Immutable;
 using FlakeId;
 using SightKeeper.Data.Binary.DataSets;
-using SightKeeper.Data.Binary.DataSets.Poser;
-using SightKeeper.Data.Binary.DataSets.Poser3D;
-using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
+using NumericItemProperty = SightKeeper.Data.Binary.DataSets.Poser.NumericItemProperty;
+using Poser3DTag = SightKeeper.Data.Binary.DataSets.Poser3D.Poser3DTag;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser3D;
 
 internal sealed class Poser3DTagsConverter
 {
-	public static ImmutableArray<SerializablePoser3DTag> Convert(IReadOnlyCollection<Poser3DTag> tags, ConversionSession session)
+	public static ImmutableArray<Poser3DTag> Convert(IReadOnlyCollection<Domain.Model.DataSets.Poser3D.Poser3DTag> tags, ConversionSession session)
 	{
 		var converted = tags.Select(tag => Convert(tag, session)).ToImmutableArray();
 		foreach (var (tag, convertedTag) in tags.Zip(converted))
@@ -18,9 +17,9 @@ internal sealed class Poser3DTagsConverter
 		return converted;
 	}
 
-	private static SerializablePoser3DTag Convert(Poser3DTag tag, ConversionSession session)
+	private static Poser3DTag Convert(Domain.Model.DataSets.Poser3D.Poser3DTag tag, ConversionSession session)
 	{
-		SerializablePoser3DTag converted = new(
+		Poser3DTag converted = new(
 			Id.Create(),
 			tag,
 			Convert(tag.KeyPoints, session),
@@ -30,21 +29,21 @@ internal sealed class Poser3DTagsConverter
 		return converted;
 	}
 
-	private static ImmutableArray<SerializableTag> Convert(IEnumerable<KeyPointTag3D> tags, ConversionSession session)
+	private static ImmutableArray<Tag> Convert(IEnumerable<KeyPointTag3D> tags, ConversionSession session)
 	{
 		return tags.Select(tag => Convert(tag, session)).ToImmutableArray();
 	}
 
-	private static SerializableTag Convert(KeyPointTag3D tag, ConversionSession session)
+	private static Tag Convert(KeyPointTag3D tag, ConversionSession session)
 	{
-		SerializableTag converted = new(Id.Create(), tag);
+		Tag converted = new(Id.Create(), tag);
 		session.Tags.Add(tag, converted.Id);
 		return converted;
 	}
 
-	private static ImmutableArray<SerializableNumericItemProperty> Convert(IEnumerable<NumericItemProperty> properties)
+	private static ImmutableArray<NumericItemProperty> Convert(IEnumerable<Domain.Model.DataSets.Poser.NumericItemProperty> properties)
 	{
-		return properties.Select(SerializableNumericItemProperty.Create).ToImmutableArray();
+		return properties.Select(NumericItemProperty.Create).ToImmutableArray();
 	}
 
 	private static ImmutableArray<string> Convert(IEnumerable<BooleanItemProperty> properties)

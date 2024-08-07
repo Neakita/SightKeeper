@@ -1,7 +1,9 @@
 ﻿using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Profiles.Modules;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.Profiles.Modules;
+using ClassifierModule = SightKeeper.Domain.Model.Profiles.Modules.ClassifierModule;
+using DetectorModule = SightKeeper.Domain.Model.Profiles.Modules.DetectorModule;
+using Module = SightKeeper.Data.Binary.Profiles.Modules.Module;
+using PoserModule = SightKeeper.Domain.Model.Profiles.Modules.PoserModule;
 
 namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
@@ -14,12 +16,12 @@ internal sealed class ModulesConverter
 		_poserConverter = new PoserModulesConverter(weightsDataAccess);
 	}
 
-	public ImmutableArray<SerializableModule> Convert(IEnumerable<Module> modules, ConversionSession session)
+	public ImmutableArray<Module> Convert(IEnumerable<Domain.Model.Profiles.Modules.Module> modules, ConversionSession session)
 	{
 		return modules.Select(module => Convert(module, session)).ToImmutableArray();
 	}
 
-	private SerializableModule Convert(Module module, ConversionSession session)
+	private Module Convert(Domain.Model.Profiles.Modules.Module module, ConversionSession session)
 	{
 		return module switch
 		{

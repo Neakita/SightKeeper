@@ -1,15 +1,17 @@
 ﻿using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Conversion.Profiles.Behaviours;
-using SightKeeper.Data.Binary.Profiles;
 using SightKeeper.Data.Binary.Profiles.Modules;
-using SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviours;
+using AimAssistBehaviour = SightKeeper.Data.Binary.Profiles.Modules.Behaviours.AimAssistBehaviour;
+using AimBehaviour = SightKeeper.Data.Binary.Profiles.Modules.Behaviours.AimBehaviour;
+using Behaviour = SightKeeper.Data.Binary.Profiles.Modules.Behaviours.Behaviour;
+using Profile = SightKeeper.Data.Binary.Profiles.Profile;
+using TriggerBehaviour = SightKeeper.Data.Binary.Profiles.Modules.Behaviours.TriggerBehaviour;
 
 namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
@@ -20,43 +22,43 @@ internal sealed class ProfilesConverter
 		_modulesConverter = new ModulesConverter(weightsDataAccess);
 	}
 	
-	public ImmutableArray<SerializableProfile> Convert(IEnumerable<Profile> profiles, ConversionSession session)
+	public ImmutableArray<Profile> Convert(IEnumerable<Domain.Model.Profiles.Profile> profiles, ConversionSession session)
 	{
 		return profiles.Select(profile => Convert(profile, session)).ToImmutableArray();
 	}
 
-	public HashSet<Profile> ConvertBack(ImmutableArray<SerializableProfile> profiles, ReverseConversionSession session)
+	public HashSet<Domain.Model.Profiles.Profile> ConvertBack(ImmutableArray<Profile> profiles, ReverseConversionSession session)
 	{
 		return profiles.Select(profile => ConvertBack(profile, session)).ToHashSet();
 	}
 
 	private readonly ModulesConverter _modulesConverter;
 
-	private SerializableProfile Convert(Profile profile, ConversionSession session)
+	private Profile Convert(Domain.Model.Profiles.Profile profile, ConversionSession session)
 	{
 		var modules = _modulesConverter.Convert(profile.Modules, session);
-		return new SerializableProfile(profile.Name, modules);
+		return new Profile(profile.Name, modules);
 	}
 
-	private Profile ConvertBack(SerializableProfile profile, ReverseConversionSession session)
+	private Domain.Model.Profiles.Profile ConvertBack(Profile profile, ReverseConversionSession session)
 	{
-		Profile converted = new(profile.Name);
+		Domain.Model.Profiles.Profile converted = new(profile.Name);
 		foreach (var module in profile.Modules)
 			AddModule(converted, module, session);
 		return converted;
 	}
 
-	private static void AddModule(Profile profile, SerializableModule module, ReverseConversionSession session)
+	private static void AddModule(Domain.Model.Profiles.Profile profile, Module module, ReverseConversionSession session)
 	{
 		switch (module)
 		{
-			case SerializableClassifierModule classifierModule:
+			case ClassifierModule classifierModule:
 				AddModule(profile, classifierModule, session);
 				break;
-			case SerializableDetectorModule detectorModule:
+			case DetectorModule detectorModule:
 				AddModule(profile, detectorModule, session);
 				break;
-			case SerializablePoserModule poserModule:
+			case PoserModule poserModule:
 				AddModule(profile, poserModule, session);
 				break;
 			default:
@@ -64,17 +66,17 @@ internal sealed class ProfilesConverter
 		}
 	}
 
-	private static void AddModule(Profile profile, SerializableClassifierModule module, ReverseConversionSession session)
+	private static void AddModule(Domain.Model.Profiles.Profile profile, ClassifierModule module, ReverseConversionSession session)
 	{
 		var weights = (Weights<ClassifierTag>)session.Weights[module.WeightsId];
 		var converted = profile.CreateModule(weights);
-		var actions = ((SerializableTriggerBehaviour)module.Behaviour).Actions;
+		var actions = ((TriggerBehaviour)module.Behaviour).Actions;
 		converted.Behaviour.Actions = TriggerBehaviourConverter.ConvertBack(actions, session);
 		converted.PassiveScalingOptions = module.PassiveScalingOptions?.Convert();
 		converted.PassiveWalkingOptions = PassiveWalkingOptionsConverter.ConvertBack(module.PassiveWalkingOptions);
 	}
 
-	private static void AddModule(Profile profile, SerializableDetectorModule module, ReverseConversionSession session)
+	private static void AddModule(Domain.Model.Profiles.Profile profile, DetectorModule module, ReverseConversionSession session)
 	{
 		var weights = (Weights<DetectorTag>)session.Weights[module.WeightsId];
 		var converted = profile.CreateModule(weights);
@@ -85,7 +87,7 @@ internal sealed class ProfilesConverter
 		SetBehaviour(converted, module.Behaviour, session);
 	}
 
-	private static void AddModule(Profile profile, SerializablePoserModule module, ReverseConversionSession session)
+	private static void AddModule(Domain.Model.Profiles.Profile profile, PoserModule module, ReverseConversionSession session)
 	{
 		var weights = (Weights<Poser2DTag, KeyPointTag2D>)session.Weights[module.WeightsId];
 		var converted = profile.CreateModule(weights);
@@ -96,17 +98,17 @@ internal sealed class ProfilesConverter
 		SetBehaviour(converted, module.Behaviour, session);
 	}
 
-	private static void SetBehaviour(Behavioural behavioural, SerializableBehaviour behaviour, ReverseConversionSession session)
+	private static void SetBehaviour(Behavioural behavioural, Behaviour behaviour, ReverseConversionSession session)
 	{
 		switch (behaviour)
 		{
-			case SerializableAimAssistBehaviour aimAssistBehaviour:
+			case AimAssistBehaviour aimAssistBehaviour:
 				SetBehaviour(behavioural, aimAssistBehaviour, session);
 				break;
-			case SerializableAimBehaviour aimBehaviour:
+			case AimBehaviour aimBehaviour:
 				SetBehaviour(behavioural, aimBehaviour, session);
 				break;
-			case SerializableTriggerBehaviour triggerBehaviour:
+			case TriggerBehaviour triggerBehaviour:
 				SetBehaviour(behavioural, triggerBehaviour, session);
 				break;
 			default:
@@ -116,7 +118,7 @@ internal sealed class ProfilesConverter
 
 	private static void SetBehaviour(
 		Behavioural behavioural,
-		SerializableAimAssistBehaviour behaviour,
+		AimAssistBehaviour behaviour,
 		ReverseConversionSession session)
 	{
 		var converted = behavioural.SetAimAssistBehaviour();
@@ -127,7 +129,7 @@ internal sealed class ProfilesConverter
 	}
 
 	private static void SetBehaviour(Behavioural behavioural,
-		SerializableAimBehaviour behaviour,
+		AimBehaviour behaviour,
 		ReverseConversionSession session)
 	{
 		var converted = behavioural.SetAimBehaviour();
@@ -136,7 +138,7 @@ internal sealed class ProfilesConverter
 
 	private static void SetBehaviour(
 		Behavioural behavioural,
-		SerializableTriggerBehaviour behaviour,
+		TriggerBehaviour behaviour,
 		ReverseConversionSession session)
 	{
 		var converted = behavioural.SetTriggerBehaviour();

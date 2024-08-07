@@ -1,26 +1,26 @@
-﻿using SightKeeper.Data.Binary.Profiles.Modules.Walking;
-using SightKeeper.Domain.Model.Profiles.Modules.Walking;
+﻿using IterativeWalkingOptions = SightKeeper.Data.Binary.Profiles.Modules.Walking.IterativeWalkingOptions;
+using PassiveWalkingOptions = SightKeeper.Data.Binary.Profiles.Modules.Walking.PassiveWalkingOptions;
 
 namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
 internal static class PassiveWalkingOptionsConverter
 {
-	public static SerializablePassiveWalkingOptions? Convert(PassiveWalkingOptions? options)
+	public static PassiveWalkingOptions? Convert(Domain.Model.Profiles.Modules.Walking.PassiveWalkingOptions? options)
 	{
 		return options switch
 		{
 			null => null,
-			IterativeWalkingOptions iterativeWalkingOptions => new SerializableIterativeWalkingOptions(iterativeWalkingOptions),
+			Domain.Model.Profiles.Modules.Walking.IterativeWalkingOptions iterativeWalkingOptions => new IterativeWalkingOptions(iterativeWalkingOptions),
 			_ => throw new ArgumentOutOfRangeException(nameof(options))
 		};
 	}
 
-	public static PassiveWalkingOptions? ConvertBack(SerializablePassiveWalkingOptions? options)
+	public static Domain.Model.Profiles.Modules.Walking.PassiveWalkingOptions? ConvertBack(PassiveWalkingOptions? options)
 	{
 		return options switch
 		{
 			null => null,
-			SerializableIterativeWalkingOptions iterativeWalkingOptions => new IterativeWalkingOptions
+			IterativeWalkingOptions iterativeWalkingOptions => new Domain.Model.Profiles.Modules.Walking.IterativeWalkingOptions
 			{
 				OffsetStep = iterativeWalkingOptions.OffsetStep,
 				MaximumSteps = iterativeWalkingOptions.MaximumSteps

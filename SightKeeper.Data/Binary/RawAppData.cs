@@ -8,15 +8,15 @@ namespace SightKeeper.Data.Binary;
 [MemoryPackable]
 internal sealed partial class RawAppData
 {
-	public ImmutableArray<SerializableDataSet> DataSets { get; }
-	public ImmutableArray<SerializableGame> Games { get; }
-	public ImmutableArray<SerializableProfile> Profiles { get; }
-	public SerializableApplicationSettings ApplicationSettings { get; }
+	public ImmutableArray<DataSet> DataSets { get; }
+	public ImmutableArray<Game> Games { get; }
+	public ImmutableArray<Profile> Profiles { get; }
+	public ApplicationSettings ApplicationSettings { get; }
 
-	public RawAppData(ImmutableArray<SerializableGame> games,
-		ImmutableArray<SerializableDataSet> dataSets,
-		ImmutableArray<SerializableProfile> profiles,
-		SerializableApplicationSettings applicationSettings)
+	public RawAppData(ImmutableArray<Game> games,
+		ImmutableArray<DataSet> dataSets,
+		ImmutableArray<Profile> profiles,
+		ApplicationSettings applicationSettings)
 	{
 		DataSets = dataSets;
 		Games = games;

@@ -3,16 +3,12 @@ using SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
 using SightKeeper.Data.Binary.Conversion.DataSets.Detector;
 using SightKeeper.Data.Binary.Conversion.DataSets.Poser2D;
 using SightKeeper.Data.Binary.Conversion.DataSets.Poser3D;
-using SightKeeper.Data.Binary.DataSets;
-using SightKeeper.Data.Binary.DataSets.Classifier;
-using SightKeeper.Data.Binary.DataSets.Detector;
-using SightKeeper.Data.Binary.DataSets.Poser2D;
 using SightKeeper.Data.Binary.DataSets.Poser3D;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Classifier;
-using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Poser2D;
+using ClassifierDataSet = SightKeeper.Data.Binary.DataSets.Classifier.ClassifierDataSet;
+using DataSet = SightKeeper.Data.Binary.DataSets.DataSet;
+using DetectorDataSet = SightKeeper.Data.Binary.DataSets.Detector.DetectorDataSet;
+using Poser2DDataSet = SightKeeper.Data.Binary.DataSets.Poser2D.Poser2DDataSet;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
@@ -29,37 +25,37 @@ internal sealed class DataSetsConverter
 		_poser3DConverter = new Poser3DDataSetsConverter(screenshotsDataAccess, weightsDataAccess, weightsConverter);
 	}
 
-	public ImmutableArray<SerializableDataSet> Convert(IEnumerable<DataSet> dataSets, ConversionSession session)
+	public ImmutableArray<DataSet> Convert(IEnumerable<Domain.Model.DataSets.DataSet> dataSets, ConversionSession session)
 	{
 		return dataSets.Select(dataSet => Convert(dataSet, session)).ToImmutableArray();
 	}
 
-	public SerializableDataSet Convert(DataSet dataSet, ConversionSession session)
+	public DataSet Convert(Domain.Model.DataSets.DataSet dataSet, ConversionSession session)
 	{
 		return dataSet switch
 		{
-			ClassifierDataSet classifierDataSet => _classifierConverter.Convert(classifierDataSet, session),
-			DetectorDataSet detectorDataSet => _detectorConverter.Convert(detectorDataSet, session),
-			Poser2DDataSet poserDataSet => _poser2DConverter.Convert(poserDataSet, session),
+			Domain.Model.DataSets.Classifier.ClassifierDataSet classifierDataSet => _classifierConverter.Convert(classifierDataSet, session),
+			Domain.Model.DataSets.Detector.DetectorDataSet detectorDataSet => _detectorConverter.Convert(detectorDataSet, session),
+			Domain.Model.DataSets.Poser2D.Poser2DDataSet poserDataSet => _poser2DConverter.Convert(poserDataSet, session),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
 		};
 	}
 
-	public HashSet<DataSet> ConvertBack(
-		ImmutableArray<SerializableDataSet> dataSets,
+	public HashSet<Domain.Model.DataSets.DataSet> ConvertBack(
+		ImmutableArray<DataSet> dataSets,
 		ReverseConversionSession session)
 	{
 		return dataSets.Select(dataSet => ConvertBack(dataSet, session)).ToHashSet();
 	}
 
-	public DataSet ConvertBack(SerializableDataSet dataSet, ReverseConversionSession session)
+	public Domain.Model.DataSets.DataSet ConvertBack(DataSet dataSet, ReverseConversionSession session)
 	{
 		return dataSet switch
 		{
-			SerializableClassifierDataSet classifierDataSet => _classifierConverter.ConvertBack(classifierDataSet, session),
-			SerializableDetectorDataSet detectorDataSet => _detectorConverter.ConvertBack(detectorDataSet, session),
-			SerializablePoser2DDataSet poserDataSet => _poser2DConverter.ConvertBack(poserDataSet, session),
-			SerializablePoser3DDataSet poser3DDataSet => _poser3DConverter.ConvertBack(poser3DDataSet, session),
+			ClassifierDataSet classifierDataSet => _classifierConverter.ConvertBack(classifierDataSet, session),
+			DetectorDataSet detectorDataSet => _detectorConverter.ConvertBack(detectorDataSet, session),
+			Poser2DDataSet poserDataSet => _poser2DConverter.ConvertBack(poserDataSet, session),
+			Poser3DDataSet poser3DDataSet => _poser3DConverter.ConvertBack(poser3DDataSet, session),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
 		};
 	}

@@ -1,5 +1,4 @@
 ﻿using SightKeeper.Application;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.Profiles;
 
@@ -8,9 +7,9 @@ namespace SightKeeper.Data.Binary;
 public sealed class AppData : ApplicationSettingsProvider
 {
 	public HashSet<DataSet> DataSets { get; }
-	public HashSet<Game> Games { get; }
+	public HashSet<Domain.Model.Game> Games { get; }
 	public HashSet<Profile> Profiles { get; }
-	public SerializableApplicationSettings ApplicationSettings { get; }
+	public ApplicationSettings ApplicationSettings { get; }
 
 	public bool CustomDecorations
 	{
@@ -19,10 +18,10 @@ public sealed class AppData : ApplicationSettingsProvider
 	}
 
 	internal AppData(
-		HashSet<Game> games,
+		HashSet<Domain.Model.Game> games,
 		HashSet<DataSet> dataSets,
 		HashSet<Profile> profiles,
-		SerializableApplicationSettings applicationSettings)
+		ApplicationSettings applicationSettings)
 	{
 		DataSets = dataSets;
 		Games = games;
@@ -33,8 +32,8 @@ public sealed class AppData : ApplicationSettingsProvider
 	internal AppData()
 	{
 		DataSets = new HashSet<DataSet>();
-		Games = new HashSet<Game>();
+		Games = new HashSet<Domain.Model.Game>();
 		Profiles = new HashSet<Profile>();
-		ApplicationSettings = new SerializableApplicationSettings();
+		ApplicationSettings = new ApplicationSettings();
 	}
 }

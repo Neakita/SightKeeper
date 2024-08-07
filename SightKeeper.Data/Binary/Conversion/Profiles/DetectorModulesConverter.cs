@@ -1,7 +1,6 @@
 ﻿using SightKeeper.Data.Binary.Conversion.Profiles.Behaviours;
-using SightKeeper.Data.Binary.Profiles.Modules;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.Profiles.Modules;
+using DetectorModule = SightKeeper.Data.Binary.Profiles.Modules.DetectorModule;
 
 namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
@@ -12,9 +11,9 @@ internal sealed class DetectorModulesConverter
 		_weightsDataAccess = weightsDataAccess;
 	}
 
-	public SerializableDetectorModule Convert(DetectorModule module, ConversionSession session)
+	public DetectorModule Convert(Domain.Model.Profiles.Modules.DetectorModule module, ConversionSession session)
 	{
-		return new SerializableDetectorModule(BehavioursConverter.Convert(module.Behaviour, session))
+		return new DetectorModule(BehavioursConverter.Convert(module.Behaviour, session))
 		{
 			WeightsId = _weightsDataAccess.GetId(module.Weights),
 			PassiveScalingOptions = PassiveScalingOptionsConverter.Convert(module.PassiveScalingOptions),

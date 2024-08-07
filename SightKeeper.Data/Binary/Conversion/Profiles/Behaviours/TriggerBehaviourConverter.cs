@@ -1,42 +1,41 @@
 ﻿using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.Profiles.Behaviours;
 using Action = SightKeeper.Domain.Model.Profiles.Actions.Action;
+using TriggerBehaviour = SightKeeper.Data.Binary.Profiles.Modules.Behaviours.TriggerBehaviour;
 
 namespace SightKeeper.Data.Binary.Conversion.Profiles.Behaviours;
 
 internal static class TriggerBehaviourConverter
 {
-	public static SerializableTriggerBehaviour Convert(TriggerBehaviour behaviour, ConversionSession session)
+	public static TriggerBehaviour Convert(Domain.Model.Profiles.Behaviours.TriggerBehaviour behaviour, ConversionSession session)
 	{
 		var actions = Convert(behaviour.Actions, session);
-		return new SerializableTriggerBehaviour(actions);
+		return new TriggerBehaviour(actions);
 	}
 
 	public static ImmutableDictionary<Tag, Action> ConvertBack(
-		ImmutableArray<SerializableAction> actions,
+		ImmutableArray<Binary.Profiles.Modules.Behaviours.Action> actions,
 		ReverseConversionSession session)
 	{
 		return actions.Select(action => ConvertBack(action, session)).ToImmutableDictionary();
 	}
 
-	private static ImmutableArray<SerializableAction> Convert(
+	private static ImmutableArray<Binary.Profiles.Modules.Behaviours.Action> Convert(
 		IReadOnlyDictionary<Tag, Action> actions,
 		ConversionSession session)
 	{
 		return actions.Select(tag => Convert(tag, session)).ToImmutableArray();
 	}
 
-	private static SerializableAction Convert(
+	private static Binary.Profiles.Modules.Behaviours.Action Convert(
 		KeyValuePair<Tag, Action> action,
 		ConversionSession session)
 	{
 		var tagId = session.Tags[action.Key];
-		return new SerializableAction(tagId);
+		return new Binary.Profiles.Modules.Behaviours.Action(tagId);
 	}
 
-	private static KeyValuePair<Tag, Action> ConvertBack(SerializableAction action, ReverseConversionSession session)
+	private static KeyValuePair<Tag, Action> ConvertBack(Binary.Profiles.Modules.Behaviours.Action action, ReverseConversionSession session)
 	{
 		throw new NotImplementedException();
 	}

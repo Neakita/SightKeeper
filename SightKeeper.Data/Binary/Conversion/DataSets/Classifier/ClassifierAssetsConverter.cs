@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
-using SightKeeper.Data.Binary.DataSets.Classifier;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets.Classifier;
+using ClassifierAsset = SightKeeper.Data.Binary.DataSets.Classifier.ClassifierAsset;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
 
@@ -12,14 +11,14 @@ internal sealed class ClassifierAssetsConverter
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public ImmutableArray<SerializableClassifierAsset> Convert(IEnumerable<ClassifierAsset> assets, ConversionSession session)
+	public ImmutableArray<ClassifierAsset> Convert(IEnumerable<Domain.Model.DataSets.Classifier.ClassifierAsset> assets, ConversionSession session)
 	{
 		return assets.Select(asset => Convert(asset, session)).ToImmutableArray();
 	}
 
-	private SerializableClassifierAsset Convert(ClassifierAsset asset, ConversionSession session)
+	private ClassifierAsset Convert(Domain.Model.DataSets.Classifier.ClassifierAsset asset, ConversionSession session)
 	{
-		return new SerializableClassifierAsset(
+		return new ClassifierAsset(
 			_screenshotsDataAccess.GetId(asset.Screenshot),
 			asset.Usage,
 			session.Tags[asset.Tag]);

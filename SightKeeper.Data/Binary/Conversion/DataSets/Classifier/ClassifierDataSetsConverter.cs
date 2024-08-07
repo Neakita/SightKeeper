@@ -2,13 +2,16 @@
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Binary.DataSets;
-using SightKeeper.Data.Binary.DataSets.Classifier;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
+using Asset = SightKeeper.Domain.Model.DataSets.Assets.Asset;
+using ClassifierAsset = SightKeeper.Data.Binary.DataSets.Classifier.ClassifierAsset;
+using ClassifierDataSet = SightKeeper.Data.Binary.DataSets.Classifier.ClassifierDataSet;
+using Screenshot = SightKeeper.Data.Binary.DataSets.Screenshot;
+using Tag = SightKeeper.Data.Binary.DataSets.Tag;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
 
@@ -26,9 +29,9 @@ internal sealed class ClassifierDataSetsConverter
 		_assetsConverter = new ClassifierAssetsConverter(screenshotsDataAccess);
 	}
 
-	public SerializableClassifierDataSet Convert(ClassifierDataSet dataSet, ConversionSession session)
+	public ClassifierDataSet Convert(Domain.Model.DataSets.Classifier.ClassifierDataSet dataSet, ConversionSession session)
 	{
-		SerializableClassifierDataSet serializableDataSet = new(
+		ClassifierDataSet serializableDataSet = new(
 			dataSet,
 			GamesConverter.GetGameId(dataSet.Game, session),
 			TagsConverter.Convert(dataSet.Tags, session),
@@ -38,12 +41,12 @@ internal sealed class ClassifierDataSetsConverter
 		return serializableDataSet;
 	}
 
-	public ClassifierDataSet ConvertBack(
-		SerializableClassifierDataSet raw,
+	public Domain.Model.DataSets.Classifier.ClassifierDataSet ConvertBack(
+		ClassifierDataSet raw,
 		ReverseConversionSession session)
 	{
 		Guard.IsNotNull(session.Games);
-		ClassifierDataSet dataSet = new()
+		Domain.Model.DataSets.Classifier.ClassifierDataSet dataSet = new()
 		{
 			Name = raw.Name,
 			Description = raw.Description,
@@ -69,7 +72,7 @@ internal sealed class ClassifierDataSetsConverter
 	private static extern Screenshot<TAsset> CreateScreenshot<TAsset>(AssetScreenshotsLibrary<TAsset> library) where TAsset : Asset;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
-	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
+	private static extern ref DateTime CreationDateBackingField(Domain.Model.DataSets.Screenshots.Screenshot screenshot);
 		
 	[UnsafeAccessor(UnsafeAccessorKind.Method)]
 	private static extern Weights<TTag> CreateWeights<TTag>(
@@ -77,9 +80,9 @@ internal sealed class ClassifierDataSetsConverter
 		ModelSize size,
 		WeightsMetrics metrics,
 		IEnumerable<ClassifierTag> tags)
-		where TTag : Tag, MinimumTagsCount;
+		where TTag : Domain.Model.DataSets.Tags.Tag, MinimumTagsCount;
 
-	private static void AddTags(ClassifierDataSet dataSet, ImmutableArray<SerializableTag> tags, ReverseConversionSession session)
+	private static void AddTags(Domain.Model.DataSets.Classifier.ClassifierDataSet dataSet, ImmutableArray<Tag> tags, ReverseConversionSession session)
 	{
 		foreach (var rawTag in tags)
 		{
@@ -89,7 +92,7 @@ internal sealed class ClassifierDataSetsConverter
 		}
 	}
 
-	private void AddScreenshots(ClassifierDataSet dataSet, ImmutableArray<SerializableScreenshot> screenshots, ReverseConversionSession session)
+	private void AddScreenshots(Domain.Model.DataSets.Classifier.ClassifierDataSet dataSet, ImmutableArray<Screenshot> screenshots, ReverseConversionSession session)
 	{
 		foreach (var rawScreenshot in screenshots)
 		{
@@ -100,17 +103,17 @@ internal sealed class ClassifierDataSetsConverter
 		}
 	}
 
-	private static void AddAssets(ClassifierDataSet dataSet, ImmutableArray<SerializableClassifierAsset> assets, ReverseConversionSession session)
+	private static void AddAssets(Domain.Model.DataSets.Classifier.ClassifierDataSet dataSet, ImmutableArray<ClassifierAsset> assets, ReverseConversionSession session)
 	{
 		foreach (var rawAsset in assets)
 		{
-			var screenshot = (Screenshot<ClassifierAsset>)session.Screenshots[rawAsset.ScreenshotId];
+			var screenshot = (Screenshot<Domain.Model.DataSets.Classifier.ClassifierAsset>)session.Screenshots[rawAsset.ScreenshotId];
 			var asset = dataSet.Assets.MakeAsset(screenshot);
 			asset.Tag = (ClassifierTag)session.Tags[rawAsset.TagId];
 		}
 	}
 
-	private void AddWeights(ClassifierDataSet dataSet, ImmutableArray<SerializableWeightsWithTags> raw, ReverseConversionSession session)
+	private void AddWeights(Domain.Model.DataSets.Classifier.ClassifierDataSet dataSet, ImmutableArray<WeightsWithTags> raw, ReverseConversionSession session)
 	{
 		foreach (var rawWeights in raw)
 		{

@@ -1,44 +1,44 @@
 ﻿using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.Profiles.Behaviours;
+using AimAssistBehaviour = SightKeeper.Data.Binary.Profiles.Modules.Behaviours.AimAssistBehaviour;
 
 namespace SightKeeper.Data.Binary.Conversion.Profiles.Behaviours;
 
 internal static class AimAssistBehavioursConverter
 {
-	public static SerializableAimAssistBehaviour Convert(AimAssistBehaviour behaviour, ConversionSession session)
+	public static AimAssistBehaviour Convert(Domain.Model.Profiles.Behaviours.AimAssistBehaviour behaviour, ConversionSession session)
 	{
 		var tags = Convert(behaviour.Tags, session);
-		return new SerializableAimAssistBehaviour(behaviour, tags);
+		return new AimAssistBehaviour(behaviour, tags);
 	}
 
-	public static ImmutableDictionary<Tag, AimAssistBehaviour.TagOptions> ConvertBack(ImmutableArray<SerializableAimAssistBehaviourTagOptions> tags, ReverseConversionSession session)
+	public static ImmutableDictionary<Tag, Domain.Model.Profiles.Behaviours.AimAssistBehaviour.TagOptions> ConvertBack(ImmutableArray<AimAssistBehaviourTagOptions> tags, ReverseConversionSession session)
 	{
 		return tags.Select(tag => ConvertBack(tag, session)).ToImmutableDictionary();
 	}
 
-	private static ImmutableArray<SerializableAimAssistBehaviourTagOptions> Convert(
-		IReadOnlyDictionary<Tag, AimAssistBehaviour.TagOptions> tags,
+	private static ImmutableArray<AimAssistBehaviourTagOptions> Convert(
+		IReadOnlyDictionary<Tag, Domain.Model.Profiles.Behaviours.AimAssistBehaviour.TagOptions> tags,
 		ConversionSession session)
 	{
 		return tags.Select(tag => Convert(tag, session)).ToImmutableArray();
 	}
 
-	private static SerializableAimAssistBehaviourTagOptions Convert(
-		KeyValuePair<Tag, AimAssistBehaviour.TagOptions> tag,
+	private static AimAssistBehaviourTagOptions Convert(
+		KeyValuePair<Tag, Domain.Model.Profiles.Behaviours.AimAssistBehaviour.TagOptions> tag,
 		ConversionSession session)
 	{
 		var tagId = session.Tags[tag.Key];
-		return new SerializableAimAssistBehaviourTagOptions(tagId, tag.Value);
+		return new AimAssistBehaviourTagOptions(tagId, tag.Value);
 	}
 
-	private static KeyValuePair<Tag, AimAssistBehaviour.TagOptions> ConvertBack(
-		SerializableAimAssistBehaviourTagOptions options,
+	private static KeyValuePair<Tag, Domain.Model.Profiles.Behaviours.AimAssistBehaviour.TagOptions> ConvertBack(
+		AimAssistBehaviourTagOptions options,
 		ReverseConversionSession session)
 	{
-		return new KeyValuePair<Tag, AimAssistBehaviour.TagOptions>(
+		return new KeyValuePair<Tag, Domain.Model.Profiles.Behaviours.AimAssistBehaviour.TagOptions>(
 			session.Tags[options.TagId],
-			new AimAssistBehaviour.TagOptions(options.Priority, options.TargetAreaScale, options.VerticalOffset));
+			new Domain.Model.Profiles.Behaviours.AimAssistBehaviour.TagOptions(options.Priority, options.TargetAreaScale, options.VerticalOffset));
 	}
 }

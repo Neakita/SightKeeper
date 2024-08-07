@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
-using SightKeeper.Data.Binary.DataSets.Detector;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets.Detector;
+using DetectorAsset = SightKeeper.Data.Binary.DataSets.Detector.DetectorAsset;
+using DetectorItem = SightKeeper.Data.Binary.DataSets.Detector.DetectorItem;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Detector;
 
@@ -12,23 +12,23 @@ internal sealed class DetectorAssetsConverter
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	internal ImmutableArray<SerializableDetectorAsset> Convert(IEnumerable<DetectorAsset> assets, ConversionSession session)
+	internal ImmutableArray<DetectorAsset> Convert(IEnumerable<Domain.Model.DataSets.Detector.DetectorAsset> assets, ConversionSession session)
 	{
 		return assets.Select(asset => Convert(asset, session)).ToImmutableArray();
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
-	private SerializableDetectorAsset Convert(DetectorAsset asset, ConversionSession session)
+	private DetectorAsset Convert(Domain.Model.DataSets.Detector.DetectorAsset asset, ConversionSession session)
 	{
-		return new SerializableDetectorAsset(
+		return new DetectorAsset(
 			_screenshotsDataAccess.GetId(asset.Screenshot),
 			asset.Usage,
 			Convert(asset.Items, session));
 	}
 
-	private static ImmutableArray<SerializableDetectorItem> Convert(IEnumerable<DetectorItem> items, ConversionSession session)
+	private static ImmutableArray<DetectorItem> Convert(IEnumerable<Domain.Model.DataSets.Detector.DetectorItem> items, ConversionSession session)
 	{
-		return items.Select(item => new SerializableDetectorItem(session.Tags[item.Tag], item.Bounding)).ToImmutableArray();
+		return items.Select(item => new DetectorItem(session.Tags[item.Tag], item.Bounding)).ToImmutableArray();
 	}
 }
