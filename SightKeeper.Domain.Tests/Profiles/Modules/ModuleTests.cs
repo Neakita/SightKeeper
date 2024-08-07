@@ -14,7 +14,7 @@ public sealed class ModuleTests
 	public void ShouldNotSetIterativeScalingAndIterativeWalkingOptionsTogether()
 	{
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		var weights = weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
 		Profile profile = new("");

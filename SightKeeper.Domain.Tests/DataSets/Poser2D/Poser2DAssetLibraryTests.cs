@@ -8,7 +8,7 @@ public sealed class Poser2DAssetLibraryTests
 	[Fact]
 	public void ShouldCreateAsset()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -19,7 +19,7 @@ public sealed class Poser2DAssetLibraryTests
 	[Fact]
 	public void ShouldNotCreateDuplicateAsset()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -32,7 +32,7 @@ public sealed class Poser2DAssetLibraryTests
 	[Fact]
 	public void ShouldDeleteAsset()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -44,8 +44,8 @@ public sealed class Poser2DAssetLibraryTests
 	[Fact]
 	public void ShouldNotDeleteAssetFromOtherDataSet()
 	{
-		Poser2DDataSet dataSet1 = new("", 320);
-		Poser2DDataSet dataSet2 = new("", 320);
+		Poser2DDataSet dataSet1 = new();
+		Poser2DDataSet dataSet2 = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet1.Screenshots, []);
 		var asset = dataSet1.Assets.MakeAsset(screenshot);

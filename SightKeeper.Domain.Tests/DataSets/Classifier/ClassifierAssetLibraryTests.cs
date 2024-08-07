@@ -8,7 +8,7 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldCreateAsset()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -20,7 +20,7 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldNotCreateDuplicateAsset()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -34,7 +34,7 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldDeleteAsset()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -47,9 +47,9 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldNotDeleteAssetFromOtherDataSet()
 	{
-		ClassifierDataSet dataSet1 = new("", 320);
+		ClassifierDataSet dataSet1 = new();
 		dataSet1.Tags.CreateTag("");
-		ClassifierDataSet dataSet2 = new("", 320);
+		ClassifierDataSet dataSet2 = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet1.Screenshots, []);
 		var asset = dataSet1.Assets.MakeAsset(screenshot);
@@ -60,9 +60,9 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldNotSetAssetTagToForeign()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		var properTag = dataSet.Tags.CreateTag("");
-		var foreignTag = new ClassifierDataSet("", 320).Tags.CreateTag("");
+		var foreignTag = new ClassifierDataSet().Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -73,7 +73,7 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldNotCreateAssetWithoutAvailableTags()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot));

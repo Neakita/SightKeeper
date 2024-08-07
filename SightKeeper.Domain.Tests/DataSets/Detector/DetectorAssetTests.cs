@@ -9,7 +9,7 @@ public sealed class DetectorAssetTests
 	[Fact]
 	public void ShouldCreateItem()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -21,7 +21,7 @@ public sealed class DetectorAssetTests
 	[Fact]
 	public void ShouldCreateMultipleItemsWithSameTag()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -34,7 +34,7 @@ public sealed class DetectorAssetTests
 	[Fact]
 	public void ShouldCreateMultipleItemsWithSameBounding()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();

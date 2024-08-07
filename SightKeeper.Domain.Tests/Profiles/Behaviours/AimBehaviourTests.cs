@@ -14,7 +14,7 @@ public sealed class AimBehaviourTests
 	public void ShouldSetTags()
 	{
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		var weights = weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
 		Profile profile = new("");
@@ -30,10 +30,10 @@ public sealed class AimBehaviourTests
 	public void ShouldNotSetTagsWithWrongOwnership()
 	{
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		DetectorDataSet dataSet1 = new("", 320);
+		DetectorDataSet dataSet1 = new();
 		var tag1 = dataSet1.Tags.CreateTag("");
 		var weights1 = weightsDataAccess.CreateWeights(dataSet1.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag1]);
-		DetectorDataSet dataSet2 = new("", 320);
+		DetectorDataSet dataSet2 = new();
 		var tag2 = dataSet2.Tags.CreateTag("");
 		weightsDataAccess.CreateWeights(dataSet2.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag2]);
 		Profile profile = new("");

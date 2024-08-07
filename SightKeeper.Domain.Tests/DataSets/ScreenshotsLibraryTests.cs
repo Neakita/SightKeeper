@@ -7,7 +7,7 @@ public sealed class ScreenshotsLibraryTests
 	[Fact]
 	public void ShouldDeleteExceedScreenshot()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		dataSet.Screenshots.MaxQuantity = 2;
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot1 = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -20,7 +20,7 @@ public sealed class ScreenshotsLibraryTests
 	[Fact]
 	public void ShouldNotDeleteScreenshotWithAsset()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		dataSet.Screenshots.MaxQuantity = 2;
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot1 = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);

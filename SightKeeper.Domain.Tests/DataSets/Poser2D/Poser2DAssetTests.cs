@@ -10,7 +10,7 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldCreateItem()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -22,7 +22,7 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldCreateMultipleItemsWithSameTag()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -35,7 +35,7 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldCreateMultipleItemsWithSameBounding()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
@@ -49,7 +49,7 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldCreateItemWithKeyPoints()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		tag.CreateKeyPoint("1");
 		tag.CreateKeyPoint("2");
@@ -63,7 +63,7 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldNotCreateItemWithNotEqualAmountOfKeyPoints()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		tag.CreateKeyPoint("1");
 		tag.CreateKeyPoint("2");

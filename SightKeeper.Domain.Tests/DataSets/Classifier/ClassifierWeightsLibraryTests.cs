@@ -8,7 +8,7 @@ public sealed class ClassifierWeightsLibraryTests
 	[Fact]
 	public void ShouldCreateWeights()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		SimpleWeightsDataAccess weightsDataAccess = new();
@@ -19,7 +19,7 @@ public sealed class ClassifierWeightsLibraryTests
 	[Fact]
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		SimpleWeightsDataAccess weightsDataAccess = new();
 		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), []));
 		dataSet.Weights.Should().BeEmpty();
@@ -28,7 +28,7 @@ public sealed class ClassifierWeightsLibraryTests
 	[Fact]
 	public void ShouldNotCreateWeightsWithOneTag()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleWeightsDataAccess weightsDataAccess = new();
 		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag]));
@@ -38,7 +38,7 @@ public sealed class ClassifierWeightsLibraryTests
 	[Fact]
 	public void ShouldNotCreateWeightsWithDuplicateTags()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		SimpleWeightsDataAccess weightsDataAccess = new();

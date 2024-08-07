@@ -36,9 +36,12 @@ public sealed class BinarySerializationTests
 
 	private DetectorDataSet CreateDetectorDataSet(ScreenshotsDataAccess screenshotsDataAccess, Game game)
 	{
-		DetectorDataSet dataSet = new("PD2", 320);
-		dataSet.Description = "Test dataset";
-		dataSet.Game = game;
+		DetectorDataSet dataSet = new()
+		{
+			Name = "PD2",
+			Description = "Test dataset",
+			Game = game
+		};
 		var copTag = dataSet.Tags.CreateTag("Cop");
 		copTag.Color = 123;
 		var bulldozerTag = dataSet.Tags.CreateTag("Bulldozer");

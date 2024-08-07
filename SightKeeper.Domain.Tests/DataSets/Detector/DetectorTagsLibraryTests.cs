@@ -8,7 +8,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldCreateTag()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		dataSet.Tags.Should().Contain(tag);
 	}
@@ -16,7 +16,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldCreateMultipleTags()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		var tag3 = dataSet.Tags.CreateTag("3");
@@ -26,7 +26,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldNotCreateTagWithOccupiedName()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.CreateTag("1"));
 		dataSet.Tags.Should().Contain(tag1);
@@ -36,7 +36,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldDeleteTag()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		dataSet.Tags.DeleteTag(tag);
 		dataSet.Tags.Should().BeEmpty();
@@ -45,7 +45,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldNotDeleteTagWithItems()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -58,7 +58,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldDeleteTagWithoutItems()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();

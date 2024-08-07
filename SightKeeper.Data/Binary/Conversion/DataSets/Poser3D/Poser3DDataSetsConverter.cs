@@ -44,11 +44,16 @@ internal sealed class Poser3DDataSetsConverter
 		ReverseConversionSession session)
 	{
 		Guard.IsNotNull(session.Games);
-		Poser3DDataSet dataSet = new(raw.Name, raw.Resolution);
+		Poser3DDataSet dataSet = new()
+		{
+			Name = raw.Name,
+			Description = raw.Description,
+			Game = null,
+			Resolution = raw.Resolution
+		};
 		if (raw.GameId != null)
 			dataSet.Game = session.Games[raw.GameId.Value];
 		dataSet.Screenshots.MaxQuantity = raw.MaxScreenshots;
-		dataSet.Description = raw.Description;
 		CreateTags(dataSet, raw.Tags, session);
 		CreateScreenshots(dataSet, raw.Screenshots, session);
 		CreateAssets(dataSet, raw.Assets, session);

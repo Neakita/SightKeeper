@@ -8,7 +8,7 @@ public sealed class NumericItemPropertyTests
 	[Fact]
 	public void ShouldGetSameValueAfterNormalizing()
 	{
-		Poser2DDataSet dataSet = new("Test", 320);
+		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		var property = tag.CreateProperty("", 100, 300);
 		const double value = 200;

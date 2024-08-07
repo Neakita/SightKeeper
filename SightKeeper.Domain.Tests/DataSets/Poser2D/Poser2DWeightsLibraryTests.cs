@@ -9,7 +9,7 @@ public sealed class Poser2DWeightsLibraryTests
 	[Fact]
 	public void ShouldCreateWeights()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleWeightsDataAccess weightsDataAccess = new();
 		var weights = weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [(tag, [])]);
@@ -19,7 +19,7 @@ public sealed class Poser2DWeightsLibraryTests
 	[Fact]
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		SimpleWeightsDataAccess weightsDataAccess = new();
 		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), []));
 		dataSet.Weights.Should().BeEmpty();
@@ -28,7 +28,7 @@ public sealed class Poser2DWeightsLibraryTests
 	[Fact]
 	public void ShouldNotCreateWeightsWithWrongAssociatedKeyPointTags()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		tag1.CreateKeyPoint("1.1");
 		var tag2 = dataSet.Tags.CreateTag("2");

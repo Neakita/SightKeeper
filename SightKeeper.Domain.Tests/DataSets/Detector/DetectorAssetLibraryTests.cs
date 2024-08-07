@@ -8,7 +8,7 @@ public sealed class DetectorAssetLibraryTests
 	[Fact]
 	public void ShouldCreateAsset()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -19,7 +19,7 @@ public sealed class DetectorAssetLibraryTests
 	[Fact]
 	public void ShouldNotCreateDuplicateAsset()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -32,7 +32,7 @@ public sealed class DetectorAssetLibraryTests
 	[Fact]
 	public void ShouldDeleteAsset()
 	{
-		DetectorDataSet dataSet = new("", 320);
+		DetectorDataSet dataSet = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
@@ -44,8 +44,8 @@ public sealed class DetectorAssetLibraryTests
 	[Fact]
 	public void ShouldNotDeleteAssetFromOtherDataSet()
 	{
-		DetectorDataSet dataSet1 = new("", 320);
-		DetectorDataSet dataSet2 = new("", 320);
+		DetectorDataSet dataSet1 = new();
+		DetectorDataSet dataSet2 = new();
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet1.Screenshots, []);
 		var asset = dataSet1.Assets.MakeAsset(screenshot);

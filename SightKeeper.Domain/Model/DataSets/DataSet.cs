@@ -5,10 +5,21 @@ namespace SightKeeper.Domain.Model.DataSets;
 
 public abstract class DataSet
 {
-	public string Name { get; set; }
-	public string Description { get; set; }
+	public string Name { get; set; } = string.Empty;
+	public string Description { get; set; } = string.Empty;
 	public Game? Game { get; set; }
-	public ushort Resolution { get; }
+
+	public ushort Resolution
+	{
+		get => _resolution;
+		init
+		{
+			Guard.IsGreaterThan<int>(value, 0);
+			Guard.IsEqualTo(value % 32, 0);
+			_resolution = value;
+		}
+	}
+
 	public abstract TagsLibrary Tags { get; }
 	public abstract ScreenshotsLibrary Screenshots { get; }
 	public abstract AssetsLibrary Assets { get; }
@@ -16,15 +27,7 @@ public abstract class DataSet
 
 	public override string ToString() => Name;
 
-	protected DataSet(string name, ushort resolution)
-	{
-		Name = name;
-		Description = string.Empty;
-		Guard.IsGreaterThan<int>(resolution, 0);
-		Guard.IsEqualTo(resolution % 32, 0);
-		
-		Resolution = resolution;
-	}
+	private readonly ushort _resolution = 320;
 }
 
 public class DataSet<TTag, TAsset> : DataSet
@@ -36,7 +39,7 @@ public class DataSet<TTag, TAsset> : DataSet
 	public override AssetsLibrary<TAsset> Assets { get; }
 	public override WeightsLibrary<TTag> Weights { get; }
 
-	public DataSet(string name, ushort resolution) : base(name, resolution)
+	protected DataSet()
 	{
 		Tags = new TagsLibrary<TTag>(this);
 		Screenshots = new AssetScreenshotsLibrary<TAsset>(this);
@@ -55,7 +58,7 @@ public class DataSet<TTag, TKeyPointTag, TAsset> : DataSet
 	public override AssetsLibrary<TAsset> Assets { get; }
 	public override WeightsLibrary<TTag, TKeyPointTag> Weights { get; }
 
-	public DataSet(string name, ushort resolution) : base(name, resolution)
+	protected DataSet()
 	{
 		Tags = new TagsLibrary<TTag>(this);
 		Screenshots = new AssetScreenshotsLibrary<TAsset>(this);

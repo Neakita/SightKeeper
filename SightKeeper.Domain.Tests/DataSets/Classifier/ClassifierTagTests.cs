@@ -8,7 +8,7 @@ public class ClassifierTagTests
 	[Fact]
 	public void ShouldNotChangeTagNameToOccupied()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		Assert.ThrowsAny<Exception>(() => tag2.Name = "1");
@@ -19,7 +19,7 @@ public class ClassifierTagTests
 	[Fact]
 	public void ShouldSetTagNameToDeletedTagName()
 	{
-		ClassifierDataSet dataSet = new("", 320);
+		ClassifierDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		dataSet.Tags.DeleteTag(tag1);

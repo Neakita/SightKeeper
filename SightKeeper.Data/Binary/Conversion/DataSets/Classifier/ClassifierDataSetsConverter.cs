@@ -40,11 +40,15 @@ internal sealed class ClassifierDataSetsConverter
 		ReverseConversionSession session)
 	{
 		Guard.IsNotNull(session.Games);
-		ClassifierDataSet dataSet = new(raw.Name, raw.Resolution);
+		ClassifierDataSet dataSet = new()
+		{
+			Name = raw.Name,
+			Description = raw.Description,
+			Resolution = raw.Resolution
+		};
 		if (raw.GameId != null)
 			dataSet.Game = session.Games[raw.GameId.Value];
 		dataSet.Screenshots.MaxQuantity = raw.MaxScreenshots;
-		dataSet.Description = raw.Description;
 		AddTags(dataSet, raw.Tags, session);
 		AddScreenshots(dataSet, raw.Screenshots, session);
 		AddAssets(dataSet, raw.Assets, session);

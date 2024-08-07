@@ -10,7 +10,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldNotChangeTagNameToOccupied()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		Assert.ThrowsAny<Exception>(() => tag2.Name = "1");
@@ -21,7 +21,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldSetTagNameToDeletedTagName()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		dataSet.Tags.DeleteTag(tag1);
@@ -31,7 +31,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldNotAddNewPointToTagWithAssociatedItems()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
@@ -44,7 +44,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldNotDeletePointOfTagWithAssociatedItems()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		var keyPoint = tag.CreateKeyPoint("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
@@ -58,7 +58,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldAddNewPointToTagWithoutAssociatedItems()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
@@ -72,7 +72,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldDeletePointOfTagWithoutAssociatedItems()
 	{
-		Poser2DDataSet dataSet = new("", 320);
+		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		var keyPoint1 = tag1.CreateKeyPoint("");
