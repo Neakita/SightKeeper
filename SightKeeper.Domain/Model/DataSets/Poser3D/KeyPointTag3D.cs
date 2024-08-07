@@ -5,6 +5,7 @@ namespace SightKeeper.Domain.Model.DataSets.Poser3D;
 public sealed class KeyPointTag3D : KeyPointTag<Poser3DTag>
 {
 	public override Poser3DTag PoserTag { get; }
+	internal override bool CanDelete => PoserTag.Items.Count == 0;
 
 	internal KeyPointTag3D(string name, Poser3DTag poserTag) : base(name, poserTag.KeyPoints)
 	{

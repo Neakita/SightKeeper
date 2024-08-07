@@ -3,14 +3,20 @@ using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser3D;
 
-public sealed class Poser3DTag : PoserTag
+public sealed class Poser3DTag : PoserTag, TagsFactory<Poser3DTag>
 {
+	static Poser3DTag TagsFactory<Poser3DTag>.Create(string name, TagsLibrary<Poser3DTag> library)
+	{
+		return new Poser3DTag(name, library);
+	}
+
 	public IReadOnlyList<KeyPointTag3D> KeyPoints => _keyPoints.AsReadOnly();
 	public IReadOnlyList<NumericItemProperty> NumericProperties => _numericProperties.AsReadOnly();
 	public IReadOnlyList<BooleanItemProperty> BooleanProperties => _booleanProperties.AsReadOnly();
 	public override IReadOnlyCollection<Poser3DItem> Items => _items;
-	public Poser3DTagsLibrary Library { get; }
-	public override Poser3DDataSet DataSet => Library.DataSet;
+	public TagsLibrary<Poser3DTag> Library { get; }
+	public override DataSet DataSet => Library.DataSet;
+	internal override bool CanDelete => Items.Count == 0;
 
 	public KeyPointTag3D CreateKeyPoint(string name)
 	{
@@ -52,7 +58,7 @@ public sealed class Poser3DTag : PoserTag
 		Guard.IsTrue(_booleanProperties.Remove(property));
 	}
 
-	internal Poser3DTag(string name, Poser3DTagsLibrary library) : base(name, library)
+	internal Poser3DTag(string name, TagsLibrary<Poser3DTag> library) : base(name, library)
 	{
 		Library = library;
 		_keyPoints = new List<KeyPointTag3D>();

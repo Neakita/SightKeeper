@@ -15,14 +15,27 @@ public abstract class TagsLibrary : IReadOnlyCollection<Tag>
 	}
 }
 
-public abstract class TagsLibrary<TTag> : TagsLibrary, IReadOnlyCollection<TTag> where TTag : Tag
+public sealed class TagsLibrary<TTag> : TagsLibrary, IReadOnlyCollection<TTag> where TTag : Tag, TagsFactory<TTag>
 {
 	public override int Count => _tags.Count;
+	public override DataSet DataSet { get; }
 
-	public virtual void DeleteTag(TTag tag)
+	public TagsLibrary(DataSet dataSet)
 	{
-		bool isRemoved = _tags.Remove(tag);
-		Guard.IsTrue(isRemoved);
+		DataSet = dataSet;
+	}
+
+	public TTag CreateTag(string name)
+	{
+		var tag = TTag.Create(name, this);
+		AddTag(tag);
+		return tag;
+	}
+
+	public void DeleteTag(TTag tag)
+	{
+		Guard.IsTrue(tag.CanDelete);
+		Guard.IsTrue(_tags.Remove(tag));
 	}
 
 	public override IEnumerator<TTag> GetEnumerator()
@@ -30,7 +43,7 @@ public abstract class TagsLibrary<TTag> : TagsLibrary, IReadOnlyCollection<TTag>
 		return _tags.GetEnumerator();
 	}
 
-	protected void AddTag(TTag tag)
+	private void AddTag(TTag tag)
 	{
 		foreach (var existingTag in _tags)
 			Guard.IsNotEqualTo(existingTag.Name, tag.Name);

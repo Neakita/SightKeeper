@@ -2,15 +2,21 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Classifier;
 
-public sealed class ClassifierTag : Tag, MinimumTagsCount
+public sealed class ClassifierTag : Tag, MinimumTagsCount, TagsFactory<ClassifierTag>
 {
 	public static byte MinimumCount => 2;
 
-	public IReadOnlyCollection<ClassifierAsset> Assets => _assets;
-	public ClassifierTagsLibrary Library { get; }
-	public override ClassifierDataSet DataSet => Library.DataSet;
+	static ClassifierTag TagsFactory<ClassifierTag>.Create(string name, TagsLibrary<ClassifierTag> library)
+	{
+		return new ClassifierTag(name, library);
+	}
 
-	internal ClassifierTag(string name, ClassifierTagsLibrary library) : base(name, library)
+	public IReadOnlyCollection<ClassifierAsset> Assets => _assets;
+	public TagsLibrary<ClassifierTag> Library { get; }
+	public override DataSet DataSet => Library.DataSet;
+	internal override bool CanDelete => _assets.Count == 0;
+
+	internal ClassifierTag(string name, TagsLibrary<ClassifierTag> library) : base(name, library)
 	{
 		Library = library;
 		_assets = new HashSet<ClassifierAsset>();

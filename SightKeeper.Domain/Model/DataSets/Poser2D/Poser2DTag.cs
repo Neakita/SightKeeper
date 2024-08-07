@@ -3,13 +3,19 @@ using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser2D;
 
-public sealed class Poser2DTag : PoserTag
+public sealed class Poser2DTag : PoserTag, TagsFactory<Poser2DTag>
 {
+	static Poser2DTag TagsFactory<Poser2DTag>.Create(string name, TagsLibrary<Poser2DTag> library)
+	{
+		return new Poser2DTag(name, library);
+	}
+
 	public IReadOnlyList<KeyPointTag2D> KeyPoints => _keyPoints.AsReadOnly();
 	public IReadOnlyList<NumericItemProperty> Properties => _properties.AsReadOnly();
 	public override IReadOnlyCollection<Poser2DItem> Items => _items;
-	public Poser2DTagsLibrary Library { get; }
-	public override Poser2DDataSet DataSet => Library.DataSet;
+	public TagsLibrary<Poser2DTag> Library { get; }
+	public override DataSet DataSet => Library.DataSet;
+	internal override bool CanDelete => Items.Count == 0;
 
 	public KeyPointTag2D CreateKeyPoint(string name)
 	{
@@ -37,7 +43,7 @@ public sealed class Poser2DTag : PoserTag
 		_properties.Remove(property);
 	}
 
-	internal Poser2DTag(string name, Poser2DTagsLibrary library) : base(name, library)
+	internal Poser2DTag(string name, TagsLibrary<Poser2DTag> library) : base(name, library)
 	{
 		Library = library;
 		_keyPoints = new List<KeyPointTag2D>();

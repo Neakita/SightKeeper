@@ -12,7 +12,7 @@ public static class Extensions
 		return ((IEnumerable<T>)library).Should();
 	}
 
-	public static GenericCollectionAssertions<T> Should<T>(this TagsLibrary<T> library) where T : Tag
+	public static GenericCollectionAssertions<T> Should<T>(this TagsLibrary<T> library) where T : Tag, TagsFactory<T>
 	{
 		return ((IEnumerable<T>)library).Should();
 	}
