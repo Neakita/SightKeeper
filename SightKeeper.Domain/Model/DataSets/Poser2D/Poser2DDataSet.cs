@@ -1,17 +1,8 @@
 ﻿namespace SightKeeper.Domain.Model.DataSets.Poser2D;
 
-public sealed class Poser2DDataSet : DataSet
+public sealed class Poser2DDataSet : DataSet<Poser2DTag, KeyPointTag2D, Poser2DAsset>
 {
-	public override TagsLibrary<Poser2DTag> Tags { get; }
-	public override AssetScreenshotsLibrary<Poser2DAsset> Screenshots { get; }
-	public override AssetsLibrary<Poser2DAsset> Assets { get; }
-	public override WeightsLibrary<Poser2DTag, KeyPointTag2D> Weights { get; }
-
 	public Poser2DDataSet(string name, ushort resolution) : base(name, resolution)
 	{
-		Tags = new TagsLibrary<Poser2DTag>(this);
-		Screenshots = new AssetScreenshotsLibrary<Poser2DAsset>(this);
-		Assets = new AssetsLibrary<Poser2DAsset>(this);
-		Weights = new WeightsLibrary<Poser2DTag, KeyPointTag2D>(this);
 	}
 }
