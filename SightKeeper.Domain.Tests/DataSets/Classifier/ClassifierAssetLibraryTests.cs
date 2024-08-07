@@ -9,10 +9,10 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldCreateAsset()
 	{
 		ClassifierDataSet dataSet = new("", 320);
-		var tag = dataSet.Tags.CreateTag("");
+		dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
-		var asset = dataSet.Assets.MakeAsset(screenshot, tag);
+		var asset = dataSet.Assets.MakeAsset(screenshot);
 		screenshot.Asset.Should().Be(asset);
 		dataSet.Assets.Should().Contain(asset);
 	}
@@ -21,11 +21,11 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldNotCreateDuplicateAsset()
 	{
 		ClassifierDataSet dataSet = new("", 320);
-		var tag = dataSet.Tags.CreateTag("");
+		dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
-		var asset = dataSet.Assets.MakeAsset(screenshot, tag);
-		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot, tag));
+		var asset = dataSet.Assets.MakeAsset(screenshot);
+		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot));
 		screenshot.Asset.Should().Be(asset);
 		dataSet.Assets.Should().Contain(asset);
 		dataSet.Assets.Should().HaveCount(1);
@@ -35,10 +35,10 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldDeleteAsset()
 	{
 		ClassifierDataSet dataSet = new("", 320);
-		var tag = dataSet.Tags.CreateTag("");
+		dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
-		var asset = dataSet.Assets.MakeAsset(screenshot, tag);
+		var asset = dataSet.Assets.MakeAsset(screenshot);
 		dataSet.Assets.DeleteAsset(asset);
 		dataSet.Assets.Should().BeEmpty();
 		screenshot.Asset.Should().BeNull();
@@ -48,23 +48,34 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldNotDeleteAssetFromOtherDataSet()
 	{
 		ClassifierDataSet dataSet1 = new("", 320);
-		var tag = dataSet1.Tags.CreateTag("");
+		dataSet1.Tags.CreateTag("");
 		ClassifierDataSet dataSet2 = new("", 320);
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet1.Screenshots, []);
-		var asset = dataSet1.Assets.MakeAsset(screenshot, tag);
+		var asset = dataSet1.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet2.Assets.DeleteAsset(asset));
 		asset.Screenshot.Asset.Should().Be(asset);
 	}
 	
 	[Fact]
-	public void ShouldNotCreateAssetWithForeignTag()
+	public void ShouldNotSetAssetTagToForeign()
 	{
 		ClassifierDataSet dataSet = new("", 320);
+		var properTag = dataSet.Tags.CreateTag("");
 		var foreignTag = new ClassifierDataSet("", 320).Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
-		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot, foreignTag));
-		dataSet.Assets.Should().BeEmpty();
+		var asset = dataSet.Assets.MakeAsset(screenshot);
+		Assert.ThrowsAny<Exception>(() => asset.Tag = foreignTag);
+		asset.Tag.Should().Be(properTag);
+	}
+	
+	[Fact]
+	public void ShouldNotCreateAssetWithoutAvailableTags()
+	{
+		ClassifierDataSet dataSet = new("", 320);
+		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot));
 	}
 }

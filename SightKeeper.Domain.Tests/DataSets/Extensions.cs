@@ -17,7 +17,8 @@ public static class Extensions
 		return ((IEnumerable<T>)library).Should();
 	}
 
-	public static GenericCollectionAssertions<T> Should<T>(this AssetsLibrary<T> library) where T : Asset
+	public static GenericCollectionAssertions<T> Should<T>(this AssetsLibrary<T> library)
+		where T : Asset, AssetsFactory<T>, AssetsDestroyer<T>
 	{
 		return ((IEnumerable<T>)library).Should();
 	}

@@ -98,7 +98,8 @@ internal sealed class ClassifierDataSetsConverter
 		foreach (var rawAsset in assets)
 		{
 			var screenshot = (Screenshot<ClassifierAsset>)session.Screenshots[rawAsset.ScreenshotId];
-			dataSet.Assets.MakeAsset(screenshot, (ClassifierTag)session.Tags[rawAsset.TagId]);
+			var asset = dataSet.Assets.MakeAsset(screenshot);
+			asset.Tag = (ClassifierTag)session.Tags[rawAsset.TagId];
 		}
 	}
 

@@ -1,15 +1,28 @@
 ﻿namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DetectorAsset : ItemsAsset<DetectorItem>
+public sealed class DetectorAsset : ItemsAsset<DetectorItem>, AssetsFactory<DetectorAsset>, AssetsDestroyer<DetectorAsset>
 {
+	public static DetectorAsset Create(Screenshot<DetectorAsset> screenshot)
+	{
+		DetectorAsset asset = new(screenshot, (AssetsLibrary<DetectorAsset>)screenshot.DataSet.Assets);
+		screenshot.SetAsset(asset);
+		return asset;
+	}
+
+	public static void Destroy(DetectorAsset asset)
+	{
+		asset.Screenshot.SetAsset(null);
+		foreach (var item in asset.Items)
+			item.Tag.RemoveItem(item);
+	}
+
 	public override Screenshot<DetectorAsset> Screenshot { get; }
-	public override DetectorAssetsLibrary Library { get; }
-	public override DetectorDataSet DataSet => Library.DataSet;
+	public override AssetsLibrary<DetectorAsset> Library { get; }
+	public override DataSet DataSet => Library.DataSet;
 	
     public DetectorItem CreateItem(DetectorTag tag, Bounding bounding)
     {
         DetectorItem item = new(tag, bounding, this);
-        tag.AddItem(item);
         AddItem(item);
         return item;
     }
@@ -27,7 +40,7 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 	    base.ClearItems();
     }
 
-    internal DetectorAsset(Screenshot<DetectorAsset> screenshot, DetectorAssetsLibrary library)
+    internal DetectorAsset(Screenshot<DetectorAsset> screenshot, AssetsLibrary<DetectorAsset> library)
     {
 	    Screenshot = screenshot;
 	    Library = library;

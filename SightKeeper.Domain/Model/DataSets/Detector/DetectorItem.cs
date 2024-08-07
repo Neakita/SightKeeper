@@ -1,16 +1,32 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Detector;
+﻿using System.Diagnostics.CodeAnalysis;
+using CommunityToolkit.Diagnostics;
+
+namespace SightKeeper.Domain.Model.DataSets.Detector;
 
 public sealed class DetectorItem
 {
-	public DetectorTag Tag { get; set; }
+	public DetectorTag Tag
+	{
+		get => _tag;
+		[MemberNotNull(nameof(_tag))] set
+		{
+			Guard.IsReferenceEqualTo(value.DataSet, DataSet);
+			_tag?.RemoveItem(this);
+			_tag = value;
+			_tag.AddItem(this);
+		}
+	}
+
 	public Bounding Bounding { get; set; }
 	public DetectorAsset Asset { get; }
-	public DetectorDataSet DataSet => Asset.DataSet;
+	public DataSet DataSet => Asset.DataSet;
 	
 	internal DetectorItem(DetectorTag tag, Bounding bounding, DetectorAsset asset)
 	{
+		Asset = asset;
 		Tag = tag;
 		Bounding = bounding;
-		Asset = asset;
 	}
+
+	private DetectorTag _tag;
 }

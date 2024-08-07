@@ -49,7 +49,7 @@ public sealed class ClassifierTagsLibraryTests
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
-		var asset = dataSet.Assets.MakeAsset(screenshot, tag);
+		var asset = dataSet.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.DeleteTag(tag));
 		dataSet.Tags.Should().Contain(tag);
 		dataSet.Assets.Should().Contain(asset);
