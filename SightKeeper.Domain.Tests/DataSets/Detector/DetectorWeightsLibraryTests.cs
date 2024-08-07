@@ -11,7 +11,7 @@ public sealed class DetectorWeightsLibraryTests
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		var weights = weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
+		var weights = weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
 		dataSet.Weights.Should().Contain(weights);
 	}
 
@@ -20,7 +20,7 @@ public sealed class DetectorWeightsLibraryTests
 	{
 		DetectorDataSet dataSet = new("", 320);
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), []));
+		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), []));
 		dataSet.Weights.Should().BeEmpty();
 	}
 
@@ -30,7 +30,7 @@ public sealed class DetectorWeightsLibraryTests
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag, tag]));
+		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag, tag]));
 		dataSet.Weights.Should().BeEmpty();
 	}
 }

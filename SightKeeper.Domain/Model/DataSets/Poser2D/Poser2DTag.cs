@@ -9,7 +9,7 @@ public sealed class Poser2DTag : PoserTag
 	public IReadOnlyList<NumericItemProperty> Properties => _properties.AsReadOnly();
 	public override IReadOnlyCollection<Poser2DItem> Items => _items;
 	public Poser2DTagsLibrary Library { get; }
-	public Poser2DDataSet DataSet => Library.DataSet;
+	public override Poser2DDataSet DataSet => Library.DataSet;
 
 	public KeyPointTag2D CreateKeyPoint(string name)
 	{

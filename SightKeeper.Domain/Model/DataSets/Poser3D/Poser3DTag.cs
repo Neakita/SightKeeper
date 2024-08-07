@@ -10,7 +10,7 @@ public sealed class Poser3DTag : PoserTag
 	public IReadOnlyList<BooleanItemProperty> BooleanProperties => _booleanProperties.AsReadOnly();
 	public override IReadOnlyCollection<Poser3DItem> Items => _items;
 	public Poser3DTagsLibrary Library { get; }
-	public Poser3DDataSet DataSet => Library.DataSet;
+	public override Poser3DDataSet DataSet => Library.DataSet;
 
 	public KeyPointTag3D CreateKeyPoint(string name)
 	{

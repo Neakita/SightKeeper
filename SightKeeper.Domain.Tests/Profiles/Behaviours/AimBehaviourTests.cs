@@ -16,7 +16,7 @@ public sealed class AimBehaviourTests
 		SimpleWeightsDataAccess weightsDataAccess = new();
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		var weights = weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
+		var weights = weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();
@@ -32,10 +32,10 @@ public sealed class AimBehaviourTests
 		SimpleWeightsDataAccess weightsDataAccess = new();
 		DetectorDataSet dataSet1 = new("", 320);
 		var tag1 = dataSet1.Tags.CreateTag("");
-		var weights1 = weightsDataAccess.CreateWeights(dataSet1, [], ModelSize.Nano, new WeightsMetrics(), [tag1]);
+		var weights1 = weightsDataAccess.CreateWeights(dataSet1.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag1]);
 		DetectorDataSet dataSet2 = new("", 320);
 		var tag2 = dataSet2.Tags.CreateTag("");
-		weightsDataAccess.CreateWeights(dataSet2, [], ModelSize.Nano, new WeightsMetrics(), [tag2]);
+		weightsDataAccess.CreateWeights(dataSet2.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag2]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();

@@ -4,6 +4,7 @@ using SightKeeper.Data.Binary.Profiles;
 using SightKeeper.Data.Binary.Profiles.Modules;
 using SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 using SightKeeper.Data.Binary.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
@@ -65,7 +66,7 @@ internal sealed class ProfilesConverter
 
 	private static void AddModule(Profile profile, SerializableClassifierModule module, ReverseConversionSession session)
 	{
-		var weights = (ClassifierWeights)session.Weights[module.WeightsId];
+		var weights = (Weights<ClassifierTag>)session.Weights[module.WeightsId];
 		var converted = profile.CreateModule(weights);
 		var actions = ((SerializableTriggerBehaviour)module.Behaviour).Actions;
 		converted.Behaviour.Actions = TriggerBehaviourConverter.ConvertBack(actions, session);
@@ -75,7 +76,7 @@ internal sealed class ProfilesConverter
 
 	private static void AddModule(Profile profile, SerializableDetectorModule module, ReverseConversionSession session)
 	{
-		var weights = (DetectorWeights)session.Weights[module.WeightsId];
+		var weights = (Weights<DetectorTag>)session.Weights[module.WeightsId];
 		var converted = profile.CreateModule(weights);
 		converted.PassiveScalingOptions = module.PassiveScalingOptions?.Convert();
 		converted.PassiveWalkingOptions = PassiveWalkingOptionsConverter.ConvertBack(module.PassiveWalkingOptions);
@@ -86,7 +87,7 @@ internal sealed class ProfilesConverter
 
 	private static void AddModule(Profile profile, SerializablePoserModule module, ReverseConversionSession session)
 	{
-		var weights = (Poser2DWeights)session.Weights[module.WeightsId];
+		var weights = (Weights<Poser2DTag, KeyPointTag2D>)session.Weights[module.WeightsId];
 		var converted = profile.CreateModule(weights);
 		converted.PassiveScalingOptions = module.PassiveScalingOptions?.Convert();
 		converted.PassiveWalkingOptions = PassiveWalkingOptionsConverter.ConvertBack(module.PassiveWalkingOptions);

@@ -13,13 +13,14 @@ internal sealed class DetectorDataSetsConverter
 {
 	public DetectorDataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
-		FileSystemWeightsDataAccess weightsDataAccess)
+		FileSystemWeightsDataAccess weightsDataAccess,
+		WeightsConverter weightsConverter)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_weightsDataAccess = weightsDataAccess;
+		_weightsConverter = weightsConverter;
 		_screenshotsConverter = new ScreenshotsConverter(screenshotsDataAccess);
 		_assetsConverter = new DetectorAssetsConverter(screenshotsDataAccess);
-		_weightsConverter = new DetectorWeightsConverter(weightsDataAccess);
 	}
 
 	internal SerializableDetectorDataSet Convert(
@@ -56,8 +57,8 @@ internal sealed class DetectorDataSetsConverter
 	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
+	private readonly WeightsConverter _weightsConverter;
 	private readonly DetectorAssetsConverter _assetsConverter;
-	private readonly DetectorWeightsConverter _weightsConverter;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
 	private static extern DetectorScreenshot CreateScreenshot(DetectorScreenshotsLibrary library);
@@ -66,11 +67,12 @@ internal sealed class DetectorDataSetsConverter
 	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
 		
 	[UnsafeAccessor(UnsafeAccessorKind.Method)]
-	private static extern DetectorWeights CreateWeights(
-		DetectorWeightsLibrary library,
+	private static extern Weights<TTag> CreateWeights<TTag>(
+		WeightsLibrary<TTag> library,
 		ModelSize size,
 		WeightsMetrics metrics,
-		IEnumerable<DetectorTag> tags);
+		IEnumerable<DetectorTag> tags)
+		where TTag : Tag, MinimumTagsCount;
 
 	private static void AddTags(DetectorDataSet dataSet, ImmutableArray<SerializableTag> tags, ReverseConversionSession session)
 	{

@@ -1,92 +1,43 @@
-﻿using System.Collections.Immutable;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Classifier;
-using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Poser2D;
+﻿using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Domain.Services;
 
 public abstract class WeightsDataAccess
 {
-	public ClassifierWeights CreateWeights(
-		ClassifierWeightsLibrary library,
+	public Weights<TTag> CreateWeights<TTag>(
+		WeightsLibrary<TTag> library,
 		byte[] data,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IEnumerable<ClassifierTag> tags)
+		IEnumerable<TTag> tags) where TTag : Tag, MinimumTagsCount
 	{
 		var weights = library.CreateWeights(modelSize, metrics, tags);
 		SaveWeightsData(weights, new WeightsData(data));
 		return weights;
 	}
 
-	public ClassifierWeights CreateWeights(
-		ClassifierDataSet dataSet,
+	public Weights<TTag, TKeyPointTag> CreateWeights<TTag, TKeyPointTag>(
+		WeightsLibrary<TTag, TKeyPointTag> library,
 		byte[] data,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IEnumerable<ClassifierTag> tags)
-	{
-		return CreateWeights(dataSet.Weights, data, modelSize, metrics, tags);
-	}
-
-	public DetectorWeights CreateWeights(
-		DetectorWeightsLibrary library,
-		byte[] data,
-		ModelSize modelSize,
-		WeightsMetrics metrics,
-		IEnumerable<DetectorTag> tags)
+		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags) where TTag : Tag where TKeyPointTag : KeyPointTag<TTag>
 	{
 		var weights = library.CreateWeights(modelSize, metrics, tags);
 		SaveWeightsData(weights, new WeightsData(data));
 		return weights;
 	}
 
-	public DetectorWeights CreateWeights(
-		DetectorDataSet dataSet,
-		byte[] data,
-		ModelSize modelSize,
-		WeightsMetrics metrics,
-		IEnumerable<DetectorTag> tags)
-	{
-		return CreateWeights(dataSet.Weights, data, modelSize, metrics, tags);
-	}
-
-	public Poser2DWeights CreateWeights(
-		Poser2DWeightsLibrary library,
-		byte[] data,
-		ModelSize modelSize,
-		WeightsMetrics metrics,
-		ImmutableDictionary<Poser2DTag, ImmutableHashSet<KeyPointTag2D>> tags)
-	{
-		var weights = library.CreateWeights(modelSize, metrics, tags);
-		SaveWeightsData(weights, new WeightsData(data));
-		return weights;
-	}
-
-	public Poser2DWeights CreateWeights(
-		Poser2DDataSet dataSet,
-		byte[] data,
-		ModelSize modelSize,
-		WeightsMetrics metrics,
-		ImmutableDictionary<Poser2DTag, ImmutableHashSet<KeyPointTag2D>> tags)
-	{
-		return CreateWeights(dataSet.Weights, data, modelSize, metrics, tags);
-	}
-
-	public void RemoveWeights(DetectorWeights weights)
+	public void RemoveWeights<TTag>(Weights<TTag> weights) where TTag : Tag, MinimumTagsCount
 	{
 		weights.Library.RemoveWeights(weights);
 		RemoveWeightsData(weights);
 	}
 
-	public void RemoveWeights(ClassifierWeights weights)
-	{
-		weights.Library.RemoveWeights(weights);
-		RemoveWeightsData(weights);
-	}
-
-	public void RemoveWeights(Poser2DWeights weights)
+	public void RemoveWeights<TTag, TKeyPointTag>(Weights<TTag, TKeyPointTag> weights)
+		where TTag : Tag
+		where TKeyPointTag : KeyPointTag<TTag>
 	{
 		weights.Library.RemoveWeights(weights);
 		RemoveWeightsData(weights);

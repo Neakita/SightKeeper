@@ -2,11 +2,13 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DetectorTag : Tag
+public sealed class DetectorTag : Tag, MinimumTagsCount
 {
+	public static byte MinimumCount => 1;
+
 	public IReadOnlyCollection<DetectorItem> Items => _items;
 	public DetectorTagsLibrary Library { get; }
-	public DetectorDataSet DataSet => Library.DataSet;
+	public override DetectorDataSet DataSet => Library.DataSet;
 
 	internal DetectorTag(string name, DetectorTagsLibrary library) : base(name, library)
 	{

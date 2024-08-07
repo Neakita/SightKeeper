@@ -13,13 +13,14 @@ internal sealed class ClassifierDataSetsConverter
 {
 	public ClassifierDataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
-		FileSystemWeightsDataAccess weightsDataAccess)
+		FileSystemWeightsDataAccess weightsDataAccess,
+		WeightsConverter weightsConverter)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_weightsDataAccess = weightsDataAccess;
+		_weightsConverter = weightsConverter;
 		_screenshotsConverter = new ScreenshotsConverter(screenshotsDataAccess);
 		_assetsConverter = new ClassifierAssetsConverter(screenshotsDataAccess);
-		_weightsConverter = new ClassifierWeightsConverter(weightsDataAccess);
 	}
 
 	public SerializableClassifierDataSet Convert(ClassifierDataSet dataSet, ConversionSession session)
@@ -53,9 +54,9 @@ internal sealed class ClassifierDataSetsConverter
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
+	private readonly WeightsConverter _weightsConverter;
 	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly ClassifierAssetsConverter _assetsConverter;
-	private readonly ClassifierWeightsConverter _weightsConverter;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
 	private static extern ClassifierScreenshot CreateScreenshot(ClassifierScreenshotsLibrary library);
@@ -64,11 +65,12 @@ internal sealed class ClassifierDataSetsConverter
 	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
 		
 	[UnsafeAccessor(UnsafeAccessorKind.Method)]
-	private static extern ClassifierWeights CreateWeights(
-		ClassifierWeightsLibrary library,
+	private static extern Weights<TTag> CreateWeights<TTag>(
+		WeightsLibrary<TTag> library,
 		ModelSize size,
 		WeightsMetrics metrics,
-		IEnumerable<ClassifierTag> tags);
+		IEnumerable<ClassifierTag> tags)
+		where TTag : Tag, MinimumTagsCount;
 
 	private static void AddTags(ClassifierDataSet dataSet, ImmutableArray<SerializableTag> tags, ReverseConversionSession session)
 	{

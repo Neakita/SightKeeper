@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Domain.Model.DataSets;
 
@@ -9,38 +10,89 @@ public abstract class WeightsLibrary : IReadOnlyCollection<Weights>
 	public abstract DataSet DataSet { get; }
 
 	public abstract IEnumerator<Weights> GetEnumerator();
+
 	IEnumerator IEnumerable.GetEnumerator()
 	{
 		return GetEnumerator();
 	}
 }
 
-public abstract class WeightsLibrary<TWeights> : WeightsLibrary, IReadOnlyCollection<TWeights> where TWeights : Weights
+public sealed class WeightsLibrary<TTag> : WeightsLibrary, IReadOnlyCollection<Weights<TTag>> where TTag : Tag, MinimumTagsCount
 {
 	public override int Count => _weights.Count;
+	public override DataSet DataSet { get; }
 
-	public override IEnumerator<TWeights> GetEnumerator()
+	public override IEnumerator<Weights<TTag>> GetEnumerator()
 	{
 		return _weights.GetEnumerator();
 	}
 
-	protected void AddWeights(TWeights weights)
+	internal WeightsLibrary(DataSet dataSet)
 	{
-		bool isAdded = _weights.Add(weights);
-		Guard.IsTrue(isAdded);
+		DataSet = dataSet;
 	}
 
-	internal void RemoveWeights(TWeights weights)
+	internal Weights<TTag> CreateWeights(
+		ModelSize modelSize,
+		WeightsMetrics metrics,
+		IEnumerable<TTag> tags)
+	{
+		Weights<TTag> weights = new(modelSize, metrics, tags, this);
+		Guard.IsTrue(_weights.Add(weights));
+		return weights;
+	}
+
+	internal void RemoveWeights(Weights<TTag> weights)
 	{
 		var isRemoved = _weights.Remove(weights);
 		Guard.IsTrue(isRemoved);
 	}
 
-	private readonly SortedSet<TWeights> _weights = new(WeightsDateComparer.Instance);
+	private readonly SortedSet<Weights<TTag>> _weights = new(WeightsDateComparer.Instance);
 
 	IEnumerator IEnumerable.GetEnumerator()
 	{
 		return GetEnumerator();
 	}
-	
+}
+
+public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary, IReadOnlyCollection<Weights<TTag, TKeyPointTag>>
+	where TTag : Tag
+	where TKeyPointTag : KeyPointTag<TTag>
+{
+	public override int Count => _weights.Count;
+	public override DataSet DataSet { get; }
+
+	public override IEnumerator<Weights<TTag, TKeyPointTag>> GetEnumerator()
+	{
+		return _weights.GetEnumerator();
+	}
+
+	internal WeightsLibrary(DataSet dataSet)
+	{
+		DataSet = dataSet;
+	}
+
+	internal Weights<TTag, TKeyPointTag> CreateWeights(
+		ModelSize modelSize,
+		WeightsMetrics metrics,
+		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags)
+	{
+		Weights<TTag, TKeyPointTag> weights = new(modelSize, metrics, tags, this);
+		Guard.IsTrue(_weights.Add(weights));
+		return weights;
+	}
+
+	internal void RemoveWeights(Weights<TTag, TKeyPointTag> weights)
+	{
+		var isRemoved = _weights.Remove(weights);
+		Guard.IsTrue(isRemoved);
+	}
+
+	private readonly SortedSet<Weights<TTag, TKeyPointTag>> _weights = new(WeightsDateComparer.Instance);
+
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
 }

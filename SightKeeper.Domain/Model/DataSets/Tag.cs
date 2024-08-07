@@ -12,6 +12,8 @@ public abstract class Tag
 	}
 
 	public uint Color { get; set; }
+	
+	public abstract DataSet DataSet { get; }
 
 	/// <param name="name">Initial name</param>
 	/// <param name="siblings">A collection of siblings for initial name validation</param>

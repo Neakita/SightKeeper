@@ -12,9 +12,7 @@ public sealed class Poser2DWeightsLibraryTests
 		Poser2DDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		var tagsBuilder = ImmutableDictionary.CreateBuilder<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>();
-		tagsBuilder.Add(tag, ImmutableHashSet<KeyPointTag2D>.Empty);
-		var weights = weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), tagsBuilder.ToImmutable());
+		var weights = weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [(tag, [])]);
 		dataSet.Weights.Should().Contain(weights);
 	}
 
@@ -23,7 +21,7 @@ public sealed class Poser2DWeightsLibraryTests
 	{
 		Poser2DDataSet dataSet = new("", 320);
 		SimpleWeightsDataAccess weightsDataAccess = new();
-		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), ImmutableDictionary<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>.Empty));
+		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), []));
 		dataSet.Weights.Should().BeEmpty();
 	}
 
@@ -38,7 +36,7 @@ public sealed class Poser2DWeightsLibraryTests
 		SimpleWeightsDataAccess weightsDataAccess = new();
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>();
 		tagsBuilder.Add(tag1, ImmutableHashSet.Create(keyPoint2));
-		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), tagsBuilder.ToImmutable()));
+		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [(tag1, [keyPoint2])]));
 		dataSet.Weights.Should().BeEmpty();
 	}
 }

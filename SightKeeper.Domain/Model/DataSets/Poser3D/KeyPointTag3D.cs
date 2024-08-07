@@ -1,8 +1,10 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Poser3D;
+﻿using SightKeeper.Domain.Model.DataSets.Poser;
 
-public sealed class KeyPointTag3D : Tag
+namespace SightKeeper.Domain.Model.DataSets.Poser3D;
+
+public sealed class KeyPointTag3D : KeyPointTag<Poser3DTag>
 {
-	public Poser3DTag PoserTag { get; }
+	public override Poser3DTag PoserTag { get; }
 
 	internal KeyPointTag3D(string name, Poser3DTag poserTag) : base(name, poserTag.KeyPoints)
 	{

@@ -6,6 +6,7 @@ using SightKeeper.Data.Binary.DataSets.Poser;
 using SightKeeper.Data.Binary.DataSets.Poser3D;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
 
@@ -15,13 +16,14 @@ internal sealed class Poser3DDataSetsConverter
 {
 	public Poser3DDataSetsConverter(
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
-		FileSystemWeightsDataAccess weightsDataAccess)
+		FileSystemWeightsDataAccess weightsDataAccess,
+		WeightsConverter weightsConverter)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 		_weightsDataAccess = weightsDataAccess;
+		_weightsConverter = weightsConverter;
 		_screenshotsConverter = new ScreenshotsConverter(screenshotsDataAccess);
 		_assetsConverter = new Poser3DAssetsConverter(screenshotsDataAccess);
-		_weightsConverter = new Poser3DWeightsConverter(weightsDataAccess);
 	}
 
 	internal SerializablePoser3DDataSet Convert(
@@ -58,8 +60,8 @@ internal sealed class Poser3DDataSetsConverter
 	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly FileSystemWeightsDataAccess _weightsDataAccess;
+	private readonly WeightsConverter _weightsConverter;
 	private readonly Poser3DAssetsConverter _assetsConverter;
-	private readonly Poser3DWeightsConverter _weightsConverter;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
 	private static extern Poser2DScreenshot CreateScreenshot(Poser3DScreenshotsLibrary library);
@@ -68,11 +70,13 @@ internal sealed class Poser3DDataSetsConverter
 	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
 		
 	[UnsafeAccessor(UnsafeAccessorKind.Method)]
-	private static extern Poser3DWeights CreateWeights(
-		Poser3DWeightsLibrary library,
+	private static extern Weights<TTag, TKeyPoint> CreateWeights<TTag, TKeyPoint>(
+		WeightsLibrary<TTag, TKeyPoint> library,
 		ModelSize size,
 		WeightsMetrics metrics,
-		ImmutableDictionary<Poser3DTag, ImmutableHashSet<KeyPointTag3D>> tags);
+		ImmutableDictionary<Poser3DTag, ImmutableHashSet<KeyPointTag3D>> tags)
+		where TTag : Tag
+		where TKeyPoint : KeyPointTag<TTag>;
 
 	private static void CreateTags(Poser3DDataSet dataSet, ImmutableArray<SerializablePoser3DTag> tags, ReverseConversionSession session)
 	{

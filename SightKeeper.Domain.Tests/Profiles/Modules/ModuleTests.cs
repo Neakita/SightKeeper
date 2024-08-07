@@ -16,7 +16,7 @@ public sealed class ModuleTests
 		SimpleWeightsDataAccess weightsDataAccess = new();
 		DetectorDataSet dataSet = new("", 320);
 		var tag = dataSet.Tags.CreateTag("");
-		var weights = weightsDataAccess.CreateWeights(dataSet, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
+		var weights = weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		module.PassiveScalingOptions = new IterativeScalingOptions();

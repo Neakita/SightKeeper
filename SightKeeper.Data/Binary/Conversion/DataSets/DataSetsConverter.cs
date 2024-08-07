@@ -22,10 +22,11 @@ internal sealed class DataSetsConverter
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
 		FileSystemWeightsDataAccess weightsDataAccess)
 	{
-		_classifierConverter = new ClassifierDataSetsConverter(screenshotsDataAccess, weightsDataAccess);
-		_detectorConverter = new DetectorDataSetsConverter(screenshotsDataAccess, weightsDataAccess);
-		_poser2DConverter = new Poser2DDataSetsConverter(screenshotsDataAccess, weightsDataAccess);
-		_poser3DConverter = new Poser3DDataSetsConverter(screenshotsDataAccess, weightsDataAccess);
+		WeightsConverter weightsConverter = new(weightsDataAccess);
+		_classifierConverter = new ClassifierDataSetsConverter(screenshotsDataAccess, weightsDataAccess, weightsConverter);
+		_detectorConverter = new DetectorDataSetsConverter(screenshotsDataAccess, weightsDataAccess, weightsConverter);
+		_poser2DConverter = new Poser2DDataSetsConverter(screenshotsDataAccess, weightsDataAccess, weightsConverter);
+		_poser3DConverter = new Poser3DDataSetsConverter(screenshotsDataAccess, weightsDataAccess, weightsConverter);
 	}
 
 	public ImmutableArray<SerializableDataSet> Convert(IEnumerable<DataSet> dataSets, ConversionSession session)
