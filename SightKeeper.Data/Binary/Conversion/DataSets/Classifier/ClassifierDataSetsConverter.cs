@@ -59,7 +59,7 @@ internal sealed class ClassifierDataSetsConverter
 	private readonly ClassifierAssetsConverter _assetsConverter;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
-	private static extern ClassifierScreenshot CreateScreenshot(ClassifierScreenshotsLibrary library);
+	private static extern Screenshot<TAsset> CreateScreenshot<TAsset>(AssetScreenshotsLibrary<TAsset> library) where TAsset : Asset;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
 	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
@@ -97,7 +97,7 @@ internal sealed class ClassifierDataSetsConverter
 	{
 		foreach (var rawAsset in assets)
 		{
-			var screenshot = (ClassifierScreenshot)session.Screenshots[rawAsset.ScreenshotId];
+			var screenshot = (Screenshot<ClassifierAsset>)session.Screenshots[rawAsset.ScreenshotId];
 			dataSet.Assets.MakeAsset(screenshot, (ClassifierTag)session.Tags[rawAsset.TagId]);
 		}
 	}

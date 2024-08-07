@@ -15,11 +15,11 @@ public sealed class ClassifierAsset : Asset
 		}
 	}
 
-	public override ClassifierScreenshot Screenshot { get; }
+	public override Screenshot<ClassifierAsset> Screenshot { get; }
 	public override ClassifierAssetsLibrary Library { get; }
 	public override ClassifierDataSet DataSet => Library.DataSet;
 
-	internal ClassifierAsset(ClassifierScreenshot screenshot, ClassifierTag tag, ClassifierAssetsLibrary library)
+	internal ClassifierAsset(Screenshot<ClassifierAsset> screenshot, ClassifierTag tag, ClassifierAssetsLibrary library)
 	{
 		Screenshot = screenshot;
 		Library = library;

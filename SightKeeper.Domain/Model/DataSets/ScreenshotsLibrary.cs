@@ -63,3 +63,20 @@ public abstract class ScreenshotsLibrary<TScreenshot> : ScreenshotsLibrary, IRea
 
     private readonly SortedSet<TScreenshot> _screenshots = new(ScreenshotsDateComparer.Instance);
 }
+
+public sealed class AssetScreenshotsLibrary<TAsset> : ScreenshotsLibrary<Screenshot<TAsset>> where TAsset : Asset
+{
+	public override DataSet DataSet { get; }
+
+	public AssetScreenshotsLibrary(DataSet dataSet)
+	{
+		DataSet = dataSet;
+	}
+
+	protected internal override Screenshot<TAsset> CreateScreenshot()
+	{
+		Screenshot<TAsset> screenshot = new(this);
+		AddScreenshot(screenshot);
+		return screenshot;
+	}
+}

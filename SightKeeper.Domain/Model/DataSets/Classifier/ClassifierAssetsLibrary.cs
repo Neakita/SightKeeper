@@ -6,7 +6,7 @@ public class ClassifierAssetsLibrary : AssetsLibrary<ClassifierAsset>
 {
 	public override ClassifierDataSet DataSet { get; }
 
-	public ClassifierAsset MakeAsset(ClassifierScreenshot screenshot, ClassifierTag tag)
+	public ClassifierAsset MakeAsset(Screenshot<ClassifierAsset> screenshot, ClassifierTag tag)
 	{
 		Guard.IsNull(screenshot.Asset);
 		ClassifierAsset asset = new(screenshot, tag, this);

@@ -5,7 +5,7 @@ namespace SightKeeper.Domain.Model.DataSets.Poser3D;
 
 public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>
 {
-	public override Poser3DScreenshot Screenshot { get; }
+	public override Screenshot<Poser3DAsset> Screenshot { get; }
 	public override Poser3DAssetsLibrary Library { get; }
 	public override Poser3DDataSet DataSet => Library.DataSet;
 
@@ -37,7 +37,7 @@ public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>
 		base.ClearItems();
 	}
 
-	internal Poser3DAsset(Poser3DScreenshot screenshot, Poser3DAssetsLibrary library)
+	internal Poser3DAsset(Screenshot<Poser3DAsset> screenshot, Poser3DAssetsLibrary library)
 	{
 		Screenshot = screenshot;
 		Library = library;

@@ -6,7 +6,7 @@ public sealed class DetectorAssetsLibrary : AssetsLibrary<DetectorAsset>
 {
 	public override DetectorDataSet DataSet { get; }
 
-	public DetectorAsset MakeAsset(DetectorScreenshot screenshot)
+	public DetectorAsset MakeAsset(Screenshot<DetectorAsset> screenshot)
 	{
 		Guard.IsNull(screenshot.Asset);
 		DetectorAsset asset = new(screenshot, this);

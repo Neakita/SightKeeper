@@ -64,7 +64,7 @@ internal sealed class Poser2DDataSetsConverter
 	private readonly Poser2DAssetsConverter _assetsConverter;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
-	private static extern Poser2DScreenshot CreateScreenshot(Poser2DScreenshotsLibrary library);
+	private static extern Screenshot<Poser2DAsset> CreateScreenshot(AssetScreenshotsLibrary<Poser2DAsset> library);
 
 	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
 	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
@@ -122,7 +122,7 @@ internal sealed class Poser2DDataSetsConverter
 	{
 		foreach (var rawAsset in assets)
 		{
-			var screenshot = (Poser2DScreenshot)session.Screenshots[rawAsset.ScreenshotId];
+			var screenshot = (Screenshot<Poser2DAsset>)session.Screenshots[rawAsset.ScreenshotId];
 			var asset = dataSet.Assets.MakeAsset(screenshot);
 			foreach (var rawItem in rawAsset.Items)
 				asset.CreateItem((Poser2DTag)session.Tags[rawItem.TagId], rawItem.Bounding, rawItem.KeyPoints, rawItem.Properties);

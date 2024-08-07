@@ -3,14 +3,14 @@
 public sealed class DetectorDataSet : DataSet
 {
 	public override DetectorTagsLibrary Tags { get; }
-	public override DetectorScreenshotsLibrary Screenshots { get; }
+	public override AssetScreenshotsLibrary<DetectorAsset> Screenshots { get; }
 	public override DetectorAssetsLibrary Assets { get; }
 	public override WeightsLibrary<DetectorTag> Weights { get; }
 
 	public DetectorDataSet(string name, ushort resolution) : base(name, resolution)
 	{
 		Tags = new DetectorTagsLibrary(this);
-		Screenshots = new DetectorScreenshotsLibrary(this);
+		Screenshots = new AssetScreenshotsLibrary<DetectorAsset>(this);
 		Assets = new DetectorAssetsLibrary(this);
 		Weights = new WeightsLibrary<DetectorTag>(this);
 	}

@@ -2,7 +2,7 @@
 
 public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 {
-	public override DetectorScreenshot Screenshot { get; }
+	public override Screenshot<DetectorAsset> Screenshot { get; }
 	public override DetectorAssetsLibrary Library { get; }
 	public override DetectorDataSet DataSet => Library.DataSet;
 	
@@ -27,7 +27,7 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 	    base.ClearItems();
     }
 
-    internal DetectorAsset(DetectorScreenshot screenshot, DetectorAssetsLibrary library)
+    internal DetectorAsset(Screenshot<DetectorAsset> screenshot, DetectorAssetsLibrary library)
     {
 	    Screenshot = screenshot;
 	    Library = library;

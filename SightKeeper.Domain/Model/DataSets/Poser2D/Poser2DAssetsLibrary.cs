@@ -6,7 +6,7 @@ public sealed class Poser2DAssetsLibrary : AssetsLibrary<Poser2DAsset>
 {
 	public override Poser2DDataSet DataSet { get; }
 
-	public Poser2DAsset MakeAsset(Poser2DScreenshot screenshot)
+	public Poser2DAsset MakeAsset(Screenshot<Poser2DAsset> screenshot)
 	{
 		Guard.IsNull(screenshot.Asset);
 		Poser2DAsset asset = new(screenshot, this);

@@ -7,7 +7,6 @@ using SightKeeper.Data.Binary.DataSets.Poser3D;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser3D;
@@ -64,7 +63,7 @@ internal sealed class Poser3DDataSetsConverter
 	private readonly Poser3DAssetsConverter _assetsConverter;
 
 	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
-	private static extern Poser2DScreenshot CreateScreenshot(Poser3DScreenshotsLibrary library);
+	private static extern Screenshot<Poser3DAsset> CreateScreenshot(AssetScreenshotsLibrary<Poser3DAsset> library);
 
 	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
 	private static extern ref DateTime CreationDateBackingField(Screenshot screenshot);
@@ -124,7 +123,7 @@ internal sealed class Poser3DDataSetsConverter
 	{
 		foreach (var rawAsset in assets)
 		{
-			var screenshot = (Poser3DScreenshot)session.Screenshots[rawAsset.ScreenshotId];
+			var screenshot = (Screenshot<Poser3DAsset>)session.Screenshots[rawAsset.ScreenshotId];
 			var asset = dataSet.Assets.MakeAsset(screenshot);
 			foreach (var rawItem in rawAsset.Items)
 				asset.CreateItem(
