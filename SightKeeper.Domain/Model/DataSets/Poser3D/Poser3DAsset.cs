@@ -26,13 +26,12 @@ public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>, AssetsFactory<Poser3
 	public Poser3DItem CreateItem(
 		Poser3DTag tag,
 		Bounding bounding,
-		IReadOnlyCollection<(Vector2<double>, bool)> keyPoints,
+		IReadOnlyCollection<KeyPoint3D> keyPoints,
 		ImmutableList<double> numericProperties,
 		ImmutableList<bool> booleanProperties)
 	{
 		Guard.IsEqualTo(keyPoints.Count, tag.KeyPoints.Count);
-		var taggedKeyPoints = keyPoints.Zip(tag.KeyPoints).Select(t => new KeyPoint3D(t.First.Item1, t.Second, t.First.Item2)).ToList();
-		Poser3DItem item = new(tag, bounding, taggedKeyPoints, numericProperties, booleanProperties, this);
+		Poser3DItem item = new(tag, bounding, keyPoints, numericProperties, booleanProperties, this);
 		AddItem(item);
 		return item;
 	}

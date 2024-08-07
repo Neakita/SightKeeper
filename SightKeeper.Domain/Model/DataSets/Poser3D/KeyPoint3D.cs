@@ -3,13 +3,11 @@
 public sealed class KeyPoint3D
 {
 	public Vector2<double> Position { get; set; }
-	public KeyPointTag3D Tag { get; }
 	public bool IsVisible { get; set; }
 
-	internal KeyPoint3D(Vector2<double> position, KeyPointTag3D tag, bool isVisible)
+	public KeyPoint3D(Vector2<double> position, bool isVisible)
 	{
 		Position = position;
-		Tag = tag;
 		IsVisible = isVisible;
 	}
 }

@@ -134,7 +134,7 @@ internal sealed class Poser3DDataSetsConverter
 				asset.CreateItem(
 					(Poser3DTag)session.Tags[rawItem.TagId],
 					rawItem.Bounding,
-					rawItem.KeyPoints.Select(keyPoint => (keyPoint.Position, keyPoint.IsVisible)).ToImmutableList(),
+					rawItem.KeyPoints.Select(keyPoint => new KeyPoint3D(keyPoint.Position, keyPoint.IsVisible)).ToImmutableList(),
 					rawItem.NumericProperties,
 					rawItem.BooleanProperties);
 		}
