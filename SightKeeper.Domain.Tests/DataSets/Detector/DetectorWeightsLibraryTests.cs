@@ -1,5 +1,5 @@
-﻿using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Detector;
+﻿using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
 

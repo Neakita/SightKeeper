@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 

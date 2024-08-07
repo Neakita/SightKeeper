@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;

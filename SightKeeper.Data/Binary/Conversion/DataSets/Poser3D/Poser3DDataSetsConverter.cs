@@ -5,9 +5,11 @@ using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Data.Binary.DataSets.Poser;
 using SightKeeper.Data.Binary.DataSets.Poser3D;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser3D;
 

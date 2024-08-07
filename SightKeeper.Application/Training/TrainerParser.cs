@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Application.Training;
 

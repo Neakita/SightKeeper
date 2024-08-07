@@ -2,7 +2,7 @@
 using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.Binary.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Data.Binary.DataSets.Poser3D;
 

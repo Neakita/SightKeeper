@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Assets;
 
-namespace SightKeeper.Domain.Model.DataSets;
+namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 
 public abstract class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
 {

@@ -14,8 +14,9 @@ using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;

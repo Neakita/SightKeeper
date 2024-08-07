@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Model.DataSets;
+namespace SightKeeper.Domain.Model.DataSets.Tags;
 
 public abstract class TagsLibrary : IReadOnlyCollection<Tag>
 {

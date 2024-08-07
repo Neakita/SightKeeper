@@ -1,4 +1,7 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Detector;
+﻿using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
+
+namespace SightKeeper.Domain.Model.DataSets.Detector;
 
 public sealed class DetectorAsset : ItemsAsset<DetectorItem>, AssetsFactory<DetectorAsset>, AssetsDestroyer<DetectorAsset>
 {

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
 

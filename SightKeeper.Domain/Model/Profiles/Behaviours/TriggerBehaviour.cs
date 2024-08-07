@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.Profiles.Modules;
 using Action = SightKeeper.Domain.Model.Profiles.Actions.Action;
 

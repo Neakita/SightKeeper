@@ -1,7 +1,7 @@
-﻿using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Classifier;
+﻿using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles.Modules;
 
 namespace SightKeeper.Domain.Model.Profiles;

@@ -4,8 +4,8 @@ using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Tests.Binary;

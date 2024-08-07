@@ -15,7 +15,7 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc.Logging;
 using SightKeeper.Avalonia.ViewModels.Elements;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
 

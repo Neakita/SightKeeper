@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model.DataSets;
+﻿namespace SightKeeper.Domain.Model.DataSets.Tags;
 
 public interface TagsFactory<TTag> where TTag : Tag, TagsFactory<TTag>
 {

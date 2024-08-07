@@ -1,7 +1,9 @@
 ﻿using System.Collections.Immutable;
 using FlakeId;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion;
 

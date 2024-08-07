@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Application.Training;
 

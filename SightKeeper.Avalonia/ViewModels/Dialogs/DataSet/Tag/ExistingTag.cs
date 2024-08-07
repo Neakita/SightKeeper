@@ -6,13 +6,13 @@ namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
 
 internal sealed class ExistingTag : ViewModel, EditableTag
 {
-    public Domain.Model.DataSets.Tag Tag { get; }
+    public Domain.Model.DataSets.Tags.Tag Tag { get; }
     public string Name { get; set; }
     public Color Color { get; set; }
 
     public bool IsEdited => Name != Tag.Name || Color.ToUInt32() != Tag.Color;
 
-    public ExistingTag(Domain.Model.DataSets.Tag tag)
+    public ExistingTag(Domain.Model.DataSets.Tags.Tag tag)
     {
         Tag = tag;
         Name = tag.Name;

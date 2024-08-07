@@ -1,4 +1,4 @@
-﻿using SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 
 namespace SightKeeper.Domain.Tests.DataSets.Poser2D;

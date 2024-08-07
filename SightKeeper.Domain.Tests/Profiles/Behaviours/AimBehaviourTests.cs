@@ -1,7 +1,8 @@
 ﻿using System.Collections.Immutable;
 using FluentAssertions;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviours;
 using SightKeeper.Domain.Tests.DataSets;

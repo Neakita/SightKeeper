@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using FlakeId;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Binary.Services;

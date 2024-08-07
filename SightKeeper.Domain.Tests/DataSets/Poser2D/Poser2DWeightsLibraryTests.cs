@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 

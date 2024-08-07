@@ -1,5 +1,6 @@
-﻿using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Poser;
+﻿using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Domain.Services;
 

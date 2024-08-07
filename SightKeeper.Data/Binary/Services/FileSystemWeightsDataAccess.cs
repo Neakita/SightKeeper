@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using FlakeId;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Binary.Services;

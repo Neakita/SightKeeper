@@ -3,7 +3,7 @@ using MemoryPack;
 using SightKeeper.Data.Binary.DataSets.Classifier;
 using SightKeeper.Data.Binary.DataSets.Detector;
 using SightKeeper.Data.Binary.DataSets.Poser2D;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Assets;
 
 namespace SightKeeper.Data.Binary.DataSets;
 

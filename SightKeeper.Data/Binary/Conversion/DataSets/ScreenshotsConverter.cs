@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 

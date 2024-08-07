@@ -4,10 +4,10 @@ using SightKeeper.Data.Binary.Profiles;
 using SightKeeper.Data.Binary.Profiles.Modules;
 using SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviours;
 

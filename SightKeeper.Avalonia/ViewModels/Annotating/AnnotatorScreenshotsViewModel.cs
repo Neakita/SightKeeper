@@ -11,8 +11,8 @@ using DynamicData;
 using DynamicData.Binding;
 using Serilog;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;

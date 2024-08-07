@@ -5,9 +5,11 @@ using FlakeId;
 using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Data.Binary.DataSets.Poser2D;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SerializablePoserWeights = SightKeeper.Data.Binary.DataSets.Poser.SerializablePoserWeights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser2D;

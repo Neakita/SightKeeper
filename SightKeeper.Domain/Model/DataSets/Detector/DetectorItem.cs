@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Assets;
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 

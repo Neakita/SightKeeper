@@ -1,5 +1,5 @@
-﻿using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Poser2D;
+﻿using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles.Behaviours;
 using SightKeeper.Domain.Model.Profiles.Modules.Scaling;
 using SightKeeper.Domain.Model.Profiles.Modules.Walking;

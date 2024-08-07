@@ -4,8 +4,11 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Data.Binary.DataSets.Classifier;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
 

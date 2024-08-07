@@ -1,5 +1,7 @@
 ﻿using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser3D;
 

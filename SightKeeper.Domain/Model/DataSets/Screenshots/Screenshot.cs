@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.DataSets;
+﻿using SightKeeper.Domain.Model.DataSets.Assets;
+
+namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 
 public abstract class Screenshot
 {

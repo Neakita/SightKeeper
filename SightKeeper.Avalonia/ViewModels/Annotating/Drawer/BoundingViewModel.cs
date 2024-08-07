@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;

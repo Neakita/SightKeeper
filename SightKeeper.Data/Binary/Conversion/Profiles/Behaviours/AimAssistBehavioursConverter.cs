@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Profiles.Modules.Behaviours;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.Profiles.Behaviours;
 
 namespace SightKeeper.Data.Binary.Conversion.Profiles.Behaviours;

@@ -5,6 +5,8 @@ using Compunet.YoloV8.Data;
 using Compunet.YoloV8.Metadata;
 using SerilogTimings;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using RectangleF = System.Drawing.RectangleF;

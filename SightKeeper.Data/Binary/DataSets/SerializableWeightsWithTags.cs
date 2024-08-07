@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using FlakeId;
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.DataSets;
 

@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Domain.Tests.DataSets;

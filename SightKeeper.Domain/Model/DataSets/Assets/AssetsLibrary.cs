@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Domain.Model.DataSets;
+namespace SightKeeper.Domain.Model.DataSets.Assets;
 
 public abstract class AssetsLibrary : IReadOnlyCollection<Asset>
 {

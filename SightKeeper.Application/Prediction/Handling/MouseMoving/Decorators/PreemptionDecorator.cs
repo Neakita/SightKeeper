@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Serilog;
 using SightKeeper.Application.Prediction.Handling.MouseMoving.Decorators.Preemption;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Application.Prediction.Handling.MouseMoving.Decorators;
 

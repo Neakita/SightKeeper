@@ -1,5 +1,5 @@
-﻿using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Classifier;
+﻿using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Domain.Tests.DataSets.Classifier;
 

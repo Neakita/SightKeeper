@@ -1,6 +1,6 @@
 ﻿using FlakeId;
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 using SerializablePoserWeights = SightKeeper.Data.Binary.DataSets.Poser.SerializablePoserWeights;
 
 namespace SightKeeper.Data.Binary.DataSets;

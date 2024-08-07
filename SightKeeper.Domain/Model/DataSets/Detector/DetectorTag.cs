@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 

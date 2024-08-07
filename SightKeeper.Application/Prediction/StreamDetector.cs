@@ -4,7 +4,7 @@ using CommunityToolkit.Diagnostics;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Application.Prediction;
 

@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Model.DataSets;
+﻿namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 
 internal sealed class ScreenshotsDateComparer : IComparer<Screenshot>
 {

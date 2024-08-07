@@ -4,8 +4,8 @@ using System.Reactive.Subjects;
 using Avalonia;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating.Drawer;
 

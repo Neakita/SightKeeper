@@ -3,7 +3,7 @@ using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.Binary.Conversion;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
 
 namespace SightKeeper.Data.Binary.DataSets.Poser3D;
