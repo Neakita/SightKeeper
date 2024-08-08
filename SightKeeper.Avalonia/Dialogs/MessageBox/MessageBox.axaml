@@ -8,10 +8,12 @@
              x:Class="SightKeeper.Avalonia.Dialogs.MessageBox.MessageBox"
              x:DataType="messageBox:MessageBoxDialogViewModel"
              VerticalAlignment="Center"
-             HorizontalAlignment="Center">
+             HorizontalAlignment="Center"
+             MaxWidth="600">
 	<StackPanel Spacing="16" Name="Root">
 		<TextBlock Text="{Binding Message}"
-		           Foreground="{DynamicResource SecondaryForeground}"/>
+		           Foreground="{DynamicResource SecondaryForeground}"
+		           TextWrapping="Wrap"/>
 		<ItemsRepeater ItemsSource="{Binding Buttons}"
 		               ClipToBounds="False">
 			<ItemsRepeater.Layout>
