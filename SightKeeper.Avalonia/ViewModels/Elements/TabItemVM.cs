@@ -1,11 +1,9 @@
 ﻿using Material.Icons;
-using Material.Icons.Avalonia;
 
 namespace SightKeeper.Avalonia.ViewModels.Elements;
 
 internal sealed class TabItem : ViewModel
 {
-	public object Icon { get; }
 	public MaterialIconKind IconKind { get; }
 	public string Header { get; }
 	public ViewModel ViewModel { get; }
@@ -13,7 +11,6 @@ internal sealed class TabItem : ViewModel
 	public TabItem(MaterialIconKind iconKind, string header, ViewModel viewModel)
 	{
 		IconKind = iconKind;
-		Icon = new MaterialIcon { Kind = iconKind };
 		Header = header;
 		ViewModel = viewModel;
 	}
