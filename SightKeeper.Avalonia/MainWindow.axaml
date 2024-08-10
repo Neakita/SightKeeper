@@ -6,6 +6,7 @@
         xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:local="clr-namespace:SightKeeper.Avalonia"
         xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.Dialogs"
+        xmlns:elementsViewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Elements"
         mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="320"
         x:Class="SightKeeper.Avalonia.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -21,6 +22,11 @@
 		<TabStrip ItemsSource="{Binding Tabs}"
 		          SelectedItem="{Binding SelectedTab}"
 		          Theme="{DynamicResource VerticalButtonsTabStripTheme}">
+			<TabStrip.Styles>
+				<Style Selector="TabStripItem">
+					<Setter Property="ToolTip.Tip" Value="{Binding (elementsViewModels:TabItem).Header}"/>
+				</Style>
+			</TabStrip.Styles>
 			<TabStrip.ItemTemplate>
 				<DataTemplate>
 					<icons:MaterialIcon Kind="{Binding IconKind}"/>
