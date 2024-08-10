@@ -24,7 +24,7 @@
 		          Theme="{DynamicResource VerticalButtonsTabStripTheme}">
 			<TabStrip.Styles>
 				<Style Selector="TabStripItem">
-					<Setter Property="ToolTip.Tip" Value="{Binding (elementsViewModels:TabItem).Header}"/>
+					<Setter Property="ToolTip.Tip" Value="{Binding (elementsViewModels:TabItemViewModel).Header}"/>
 				</Style>
 			</TabStrip.Styles>
 			<TabStrip.ItemTemplate>

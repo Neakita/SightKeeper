@@ -15,7 +15,7 @@ internal sealed partial class MainViewModel : ViewModel, DialogHost
 {
 	public DialogManager DialogManager { get; }
 	public AppearanceSettingsViewModel AppearanceSettings { get; }
-	public IReadOnlyCollection<TabItem> Tabs { get; }
+	public IReadOnlyCollection<TabItemViewModel> Tabs { get; }
 
 	public MainViewModel(
 		IComponentContext context,
@@ -31,14 +31,14 @@ internal sealed partial class MainViewModel : ViewModel, DialogHost
 		SelectedTab = Tabs.First();
 	}
 
-	[ObservableProperty] private TabItem _selectedTab;
+	[ObservableProperty] private TabItemViewModel _selectedTab;
 
-	private static TabItem CreateTab<TViewModel>(
+	private static TabItemViewModel CreateTab<TViewModel>(
 		IComponentContext context,
 		MaterialIconKind iconKind,
 		string header)
 		where TViewModel : ViewModel
 	{
-		return new TabItem(iconKind, header, context.Resolve<TViewModel>());
+		return new TabItemViewModel(iconKind, header, context.Resolve<TViewModel>());
 	}
 }
