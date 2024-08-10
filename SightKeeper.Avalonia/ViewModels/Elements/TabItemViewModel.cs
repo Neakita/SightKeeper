@@ -6,12 +6,12 @@ internal sealed class TabItemViewModel : ViewModel
 {
 	public MaterialIconKind IconKind { get; }
 	public string Header { get; }
-	public ViewModel ViewModel { get; }
+	public ViewModel Content { get; }
 	
-	public TabItemViewModel(MaterialIconKind iconKind, string header, ViewModel viewModel)
+	public TabItemViewModel(MaterialIconKind iconKind, string header, ViewModel content)
 	{
 		IconKind = iconKind;
 		Header = header;
-		ViewModel = viewModel;
+		Content = content;
 	}
 }
