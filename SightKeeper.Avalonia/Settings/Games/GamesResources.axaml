@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels"
                     xmlns:local="clr-namespace:SightKeeper.Avalonia.Settings.Games"
-                    xmlns:root="clr-namespace:SightKeeper.Avalonia"
                     xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
                     xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors">
 	<DataTemplate x:Key="GameTitleCellTemplate" DataType="viewModels:GameViewModel">
@@ -49,12 +48,13 @@
 			</TextBlock>
 		</Grid>
 	</DataTemplate>
-	<DataTemplate x:Key="ExistingGameActionsCellTemplate" DataType="root:ExistingGameViewModel">
+	<DataTemplate x:Key="ExistingGameActionsCellTemplate" DataType="viewModels:GameViewModel">
 		<StackPanel Orientation="Horizontal" Spacing="8">
 			<Button Classes="square"
 			        Content="{icons:MaterialIconExt TrashCanOutline}"
 			        ToolTip.Tip="Delete game"
-			        Command="{Binding DeleteCommand}"/>
+			        Command="{Binding $parent[local:GamesSettings].((local:GamesSettingsViewModel)DataContext).DeleteGameCommand}"
+			        CommandParameter="{Binding Game}"/>
 			<Button Classes="square"
 			        Content="{icons:MaterialIconExt FolderOutline}"
 			        ToolTip.Tip="Show executable in File Explorer"
