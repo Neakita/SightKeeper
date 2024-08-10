@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:SightKeeper.Avalonia"
         xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.Dialogs"
         xmlns:elementsViewModels="clr-namespace:SightKeeper.Avalonia.ViewModels.Elements"
+        xmlns:settings="clr-namespace:SightKeeper.Avalonia.Settings"
         mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="320"
         x:Class="SightKeeper.Avalonia.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -42,4 +43,11 @@
 		           IsHitTestVisible="False"/>
 	</assists:WindowAssist.TopContent>
 	<ContentControl Content="{Binding SelectedTab.ViewModel}"/>
+	<ContentControl Content="{Binding SelectedTab.Content}">
+		<ContentControl.DataTemplates>
+			<DataTemplate x:DataType="settings:SettingsViewModel">
+				<settings:SettingsTab/>
+			</DataTemplate>
+		</ContentControl.DataTemplates>
+	</ContentControl>
 </Window>
