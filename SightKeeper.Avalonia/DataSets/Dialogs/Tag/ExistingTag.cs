@@ -1,8 +1,9 @@
 ﻿using Avalonia.Media;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
+using SightKeeper.Avalonia.ViewModels;
 
-namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tag;
 
 internal sealed class ExistingTag : ViewModel, EditableTag
 {

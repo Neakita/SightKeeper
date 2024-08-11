@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Input;
-using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tag;
 using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
+namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
 public interface IDataSetEditorViewModel
 {

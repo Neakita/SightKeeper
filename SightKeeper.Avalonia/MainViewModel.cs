@@ -3,6 +3,7 @@ using System.Linq;
 using Autofac;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Material.Icons;
+using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Settings.Appearance;
 using SightKeeper.Avalonia.ViewModels;
@@ -26,7 +27,8 @@ internal sealed partial class MainViewModel : ViewModel, DialogHost
 		AppearanceSettings = appearanceSettings;
 		Tabs =
 		[
-			CreateTab<SettingsViewModel>(context, MaterialIconKind.Cog, "Settings"),
+			CreateTab<DataSetsViewModel>(context, MaterialIconKind.ImageAlbum, "Datasets"),
+			CreateTab<SettingsViewModel>(context, MaterialIconKind.Cog, "Settings")
 		];
 		SelectedTab = Tabs.First();
 	}

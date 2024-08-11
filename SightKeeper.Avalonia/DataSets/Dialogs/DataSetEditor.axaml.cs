@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace SightKeeper.Avalonia.Views.Dialogs;
+namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
 public sealed partial class DataSetEditor : UserControl/*, IViewFor<IDataSetEditorViewModel>, IViewFor<DataSetEditingViewModel>, IViewFor<DataSetCreatingViewModel>*/
 {

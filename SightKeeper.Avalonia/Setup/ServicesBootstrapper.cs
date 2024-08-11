@@ -8,6 +8,8 @@ using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
+using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Services;
 using GamesDataAccess = SightKeeper.Application.Games.GamesDataAccess;
 
 namespace SightKeeper.Avalonia.Setup;
@@ -24,6 +26,8 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<GameDataValidator>().As<IValidator<GameData>>();
 		builder.RegisterType<GameCreator>();
 		builder.RegisterType<DialogManager>().SingleInstance();
+		builder.RegisterGeneric(typeof(ObservableRepository<>)).SingleInstance();
+		builder.RegisterType<DataSetsDataAccess>().As<ObservableDataAccess<DataSet>>().As<ReadDataAccess<DataSet>>().SingleInstance();
 	}
 
 	private static void SetupBinarySerialization(ContainerBuilder builder)
@@ -34,7 +38,7 @@ internal static class ServicesBootstrapper
 		AppDataAccess appDataAccess = new();
 		appDataAccess.Load();
 		builder.RegisterInstance(screenshotsDataAccess);
-		builder.RegisterInstance(weightsDataAccess);
+		builder.RegisterInstance(weightsDataAccess).As<WeightsDataAccess>();
 		builder.RegisterInstance(appDataAccess).AsSelf().As<ApplicationSettingsProvider>().OnRelease(dataAccess => dataAccess.Save());
 	}
 }

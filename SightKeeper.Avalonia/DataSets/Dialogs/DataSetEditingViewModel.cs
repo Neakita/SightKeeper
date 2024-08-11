@@ -15,13 +15,13 @@ using Material.Icons;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Games;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tag;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
-using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
-namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
+namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
 internal sealed partial class DataSetEditingViewModel : DialogViewModel<bool>, INotifyDataErrorInfo, IDataSetEditorViewModel, DataSetChanges, IDisposable
 {

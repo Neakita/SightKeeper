@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:dataSet="clr-namespace:SightKeeper.Avalonia.ViewModels.Dialogs.DataSet"
+             xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
              mc:Ignorable="d"
-             x:Class="SightKeeper.Avalonia.Views.Dialogs.DataSetEditor"
-             x:DataType="dataSet:IDataSetEditorViewModel"
+             x:Class="SightKeeper.Avalonia.DataSets.Dialogs.DataSetEditor"
+             x:DataType="dialogs:IDataSetEditorViewModel"
              Width="450" Height="450">
     <Grid RowDefinitions="*, 50" Name="Root">
         <ScrollViewer Grid.Row="0" Grid.Column="0">
@@ -66,7 +66,7 @@
                                         </ColorPicker>
                                         <TextBlock Text="{Binding Name}"/>
                                         <Button Content="{icons:MaterialIconExt Close}"
-                                                Command="{Binding #Root.((dataSet:IDataSetEditorViewModel)DataContext).DeleteTagCommand}"
+                                                Command="{Binding #Root.((dialogs:IDataSetEditorViewModel)DataContext).DeleteTagCommand}"
                                                 CommandParameter="{Binding}"
                                                 Padding="2"/>
                                     </StackPanel>

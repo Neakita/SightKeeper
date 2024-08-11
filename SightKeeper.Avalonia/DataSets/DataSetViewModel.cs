@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using DynamicData;
+using SightKeeper.Avalonia.ViewModels;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Services;
 
-namespace SightKeeper.Avalonia.ViewModels.Elements;
+namespace SightKeeper.Avalonia.DataSets;
 
 internal sealed class DataSetViewModel : ViewModel, IDisposable
 {
     private static readonly string[] Properties =
-    {
-        nameof(Name),
+    [
+	    nameof(Name),
         nameof(Description),
         nameof(Game),
         nameof(Resolution)
-    };
+    ];
     
-    public DetectorDataSet DataSet { get; }
+    public DataSet DataSet { get; }
     public string Name => DataSet.Name;
     public string Description => DataSet.Description;
     public Game? Game => DataSet.Game;
@@ -28,7 +29,7 @@ internal sealed class DataSetViewModel : ViewModel, IDisposable
     public IReadOnlyCollection<Tag> Tags { get; }
     public IReadOnlyCollection<Weights> Weights { get; }
 
-    public DataSetViewModel(DetectorDataSet dataSet, WeightsDataAccess weightsDataAccess)
+    public DataSetViewModel(DataSet dataSet, WeightsDataAccess weightsDataAccess)
     {
 	    throw new NotImplementedException();
 	    // DataSet = dataSet;

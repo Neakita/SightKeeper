@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
-using SightKeeper.Application.Extensions;
+using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.ViewModels.Annotating.AutoAnnotating;
-using SightKeeper.Avalonia.ViewModels.Elements;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -32,7 +31,8 @@ internal sealed class AnnotatorViewModel : ViewModel, IDisposable
 		AutoAnnotationViewModel autoAnnotationViewModel,
 		ViewSettingsViewModel viewSettingsViewModel)
 	{
-		Screenshoter = screenshoterViewModel;
+		throw new NotImplementedException();
+		/*Screenshoter = screenshoterViewModel;
 		Screenshots = screenshots;
 		ToolsViewModel = toolsViewModel;
 		DrawerViewModel = drawerViewModel;
@@ -46,7 +46,7 @@ internal sealed class AnnotatorViewModel : ViewModel, IDisposable
 		{
 			Screenshoter.DataSet = newValue?.DataSet;
 			Screenshots.DataSet = newValue?.DataSet;
-		}).DisposeWith(_disposable);
+		}).DisposeWith(_disposable);*/
 	}
 
 	public void Dispose()

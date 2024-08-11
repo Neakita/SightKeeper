@@ -12,11 +12,11 @@ using FluentValidation;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.Games;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tag;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
 using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet;
+namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
 internal sealed partial class DataSetCreatingViewModel : DialogViewModel<bool>, IDataSetEditorViewModel, NewDataSetInfo, INotifyDataErrorInfo, IDisposable
 {

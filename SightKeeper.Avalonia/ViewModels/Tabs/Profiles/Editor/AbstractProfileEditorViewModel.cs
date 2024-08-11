@@ -12,8 +12,8 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using FluentValidation;
 using SightKeeper.Application;
-using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
@@ -163,25 +163,26 @@ internal abstract partial class AbstractProfileEditorViewModel<TProfileData> : D
     IReadOnlyList<ProfileTagViewModel> ProfileEditorViewModel.Tags => _tagsViewModels;
     private readonly ReadOnlyObservableCollection<ProfileTagViewModel> _tagsViewModels;
 
-    protected AbstractProfileEditorViewModel(IValidator<TProfileData> validator, DataSetsObservableRepository dataSetsObservableRepository, bool canDelete)
+    protected AbstractProfileEditorViewModel(IValidator<TProfileData> validator, ObservableRepository<DataSet> observableRepository, bool canDelete)
     {
-        _canDelete = canDelete;
-        AvailableDataSets = dataSetsObservableRepository.DataSets;
-        TagsSource.Connect()
-            .Bind(out var tags)
-            .Subscribe()
-            .DisposeWith(_constructorDisposables);
-        Tags = tags;
-        _tagsViewModels = tags;
-        _availableTags.Connect()
-            .Except(TagsSource.Connect().Transform(tagData => tagData.Tag))
-            .Bind(out var availableTags)
-            .Subscribe()
-            .DisposeWith(_constructorDisposables);
-        AvailableTags = availableTags;
-        var validatable = this as TProfileData;
-        Guard.IsNotNull(validatable);
-        Validator = new ViewModelValidator<TProfileData>(validator, this, validatable);
+	    throw new NotImplementedException();
+	    /*_canDelete = canDelete;
+	    AvailableDataSets = dataSetsObservableRepository.DataSets;
+	    TagsSource.Connect()
+	        .Bind(out var tags)
+	        .Subscribe()
+	        .DisposeWith(_constructorDisposables);
+	    Tags = tags;
+	    _tagsViewModels = tags;
+	    _availableTags.Connect()
+	        .Except(TagsSource.Connect().Transform(tagData => tagData.Tag))
+	        .Bind(out var availableTags)
+	        .Subscribe()
+	        .DisposeWith(_constructorDisposables);
+	    AvailableTags = availableTags;
+	    var validatable = this as TProfileData;
+	    Guard.IsNotNull(validatable);
+	    Validator = new ViewModelValidator<TProfileData>(validator, this, validatable);*/
     }
 
     private readonly CompositeDisposable _constructorDisposables = new();

@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using SightKeeper.Application.DataSets;
 
-namespace SightKeeper.Avalonia.ViewModels.Dialogs.DataSet.Tag;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tag;
 
 public sealed class NewTagViewModel : EditableTag
 {

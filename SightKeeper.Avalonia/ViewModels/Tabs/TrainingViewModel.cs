@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Avalonia.Controls.Documents;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Serilog;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Training;
+using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Misc.Logging;
-using SightKeeper.Avalonia.ViewModels.Elements;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs;
@@ -109,26 +107,27 @@ internal partial class TrainingViewModel : ViewModel
     [RelayCommand(CanExecute = nameof(CanStartTraining), IncludeCancelCommand = true)]
     public async Task StartTraining(CancellationToken cancellationToken)
     {
-        Guard.IsNotNull(SelectedDataSet);
-        Guard.IsNotNull(Epochs);
-        IsTraining = true;
-        try
-        {
-            if (SelectedWeights != null && Resume)
-                await _trainer.ResumeTrainingAsync(SelectedWeights, Epochs.Value, Patience,
-                    Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
-            else
-            {
-                Guard.IsNotNull(SelectedModelSize);
-                await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs.Value, Patience,
-                    Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
-            }
-        }
-        catch (TaskCanceledException)
-        {
-        }
-        _progress.OnNext(null);
-        IsTraining = false;
+	    throw new NotImplementedException();
+	    /*Guard.IsNotNull(SelectedDataSet);
+	    Guard.IsNotNull(Epochs);
+	    IsTraining = true;
+	    try
+	    {
+	        if (SelectedWeights != null && Resume)
+	            await _trainer.ResumeTrainingAsync(SelectedWeights, Epochs.Value, Patience,
+	                Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+	        else
+	        {
+	            Guard.IsNotNull(SelectedModelSize);
+	            await _trainer.TrainFromScratchAsync(SelectedDataSet.DataSet, SelectedModelSize.Value, Epochs.Value, Patience,
+	                Observer.Create<TrainingProgress>(value => _progress.OnNext(value)), cancellationToken);
+	        }
+	    }
+	    catch (TaskCanceledException)
+	    {
+	    }
+	    _progress.OnNext(null);
+	    IsTraining = false;*/
     }
 
     public bool CanStartTraining()

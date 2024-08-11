@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
 public sealed class DataSetChangesValidator : AbstractValidator<DataSetChanges>
 {
-    public DataSetChangesValidator(IValidator<DataSetInfo> dataSetInfoValidator, DataSetsDataAccess dataSetsDataAccess)
+    public DataSetChangesValidator(IValidator<DataSetInfo> dataSetInfoValidator, ReadDataAccess<DataSet> dataSetsDataAccess)
     {
         _dataSetsDataAccess = dataSetsDataAccess;
         
@@ -17,8 +18,8 @@ public sealed class DataSetChangesValidator : AbstractValidator<DataSetChanges>
 
     private bool IsNameFree(DataSetChanges changes)
     {
-	    return _dataSetsDataAccess.DataSets.All(dataSet => dataSet == changes.DataSet || dataSet.Name != changes.Name);
+	    return _dataSetsDataAccess.Items.All(dataSet => dataSet == changes.DataSet || dataSet.Name != changes.Name);
     }
 
-    private readonly DataSetsDataAccess _dataSetsDataAccess;
+    private readonly ReadDataAccess<DataSet> _dataSetsDataAccess;
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentValidation;
 using SightKeeper.Application;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.Profiles;
 
 namespace SightKeeper.Avalonia.ViewModels.Tabs.Profiles.Editor;
@@ -10,7 +11,7 @@ internal sealed class ExistingProfileEditorViewModel : AbstractProfileEditorView
 
 	public ExistingProfileEditorViewModel(
 	    IValidator<EditedProfileData> validator,
-	    DataSetsObservableRepository dataSetsObservableRepository) : base(validator, dataSetsObservableRepository, true)
+	    ObservableRepository<DataSet> observableRepository) : base(validator, observableRepository, true)
 	{
 	}
     
