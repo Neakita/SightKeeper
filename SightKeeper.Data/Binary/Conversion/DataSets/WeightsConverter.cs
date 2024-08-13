@@ -34,7 +34,7 @@ internal sealed class WeightsConverter
 	}
 
 	public ImmutableArray<PoserWeights> Convert<TTag, TKeyPointTag>(WeightsLibrary<TTag, TKeyPointTag> library, ConversionSession session)
-		where TTag : Tag
+		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{
 		var builder = ImmutableArray.CreateBuilder<PoserWeights>(library.Count);
@@ -46,7 +46,7 @@ internal sealed class WeightsConverter
 	public PoserWeights Convert<TTag, TKeyPointTag>(
 		Weights<TTag, TKeyPointTag> weights,
 		ConversionSession session)
-		where TTag : Tag
+		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{
 		var tags = Convert(weights.Tags, session);
@@ -69,7 +69,7 @@ internal sealed class WeightsConverter
 	private static ImmutableArray<(Id, ImmutableArray<Id>)> Convert<TTag, TKeyPointTag>(
 		IImmutableDictionary<TTag, IImmutableSet<TKeyPointTag>> tags,
 		ConversionSession session)
-		where TTag : Tag
+		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{
 		var tagsBuilder = ImmutableArray.CreateBuilder<(Id, ImmutableArray<Id>)>(tags.Count);

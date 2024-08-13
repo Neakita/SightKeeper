@@ -17,7 +17,6 @@ public sealed class Poser3DTag : PoserTag, TagsFactory<Poser3DTag>
 	public override IReadOnlyCollection<Poser3DItem> Items => _items;
 	public TagsLibrary<Poser3DTag> Library { get; }
 	public override DataSet DataSet => Library.DataSet;
-	internal override bool CanDelete => Items.Count == 0;
 
 	public KeyPointTag3D CreateKeyPoint(string name)
 	{

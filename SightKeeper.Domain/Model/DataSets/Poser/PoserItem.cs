@@ -1,3 +1,5 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Poser;
+﻿using SightKeeper.Domain.Model.DataSets.Assets;
 
-public abstract class PoserItem;
+namespace SightKeeper.Domain.Model.DataSets.Poser;
+
+public abstract class PoserItem : AssetItem;

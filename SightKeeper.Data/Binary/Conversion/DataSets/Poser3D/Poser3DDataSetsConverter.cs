@@ -83,7 +83,7 @@ internal sealed class Poser3DDataSetsConverter
 		ModelSize size,
 		WeightsMetrics metrics,
 		ImmutableDictionary<Domain.Model.DataSets.Poser3D.Poser3DTag, ImmutableHashSet<KeyPointTag3D>> tags)
-		where TTag : Domain.Model.DataSets.Tags.Tag
+		where TTag : PoserTag
 		where TKeyPoint : KeyPointTag<TTag>;
 
 	private static void CreateTags(Domain.Model.DataSets.Poser3D.Poser3DDataSet dataSet, ImmutableArray<Poser3DTag> tags, ReverseConversionSession session)

@@ -58,7 +58,7 @@ public sealed class WeightsLibrary<TTag> : WeightsLibrary, IReadOnlyCollection<W
 }
 
 public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary, IReadOnlyCollection<Weights<TTag, TKeyPointTag>>
-	where TTag : Tag
+	where TTag : PoserTag
 	where TKeyPointTag : KeyPointTag<TTag>
 {
 	public override int Count => _weights.Count;

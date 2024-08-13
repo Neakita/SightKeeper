@@ -34,7 +34,7 @@ public static class Extensions
 
 	public static GenericCollectionAssertions<Weights<TTag, TKeyPointTag>> Should<TTag, TKeyPointTag>(
 		this WeightsLibrary<TTag, TKeyPointTag> library)
-		where TTag : Tag
+		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{
 		return ((IEnumerable<Weights<TTag, TKeyPointTag>>)library).Should();

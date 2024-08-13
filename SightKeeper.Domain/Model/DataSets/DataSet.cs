@@ -53,7 +53,7 @@ public class DataSet<TTag, TAsset> : DataSet
 }
 
 public class DataSet<TTag, TKeyPointTag, TAsset> : DataSet
-	where TTag : Tag, TagsFactory<TTag>
+	where TTag : PoserTag, TagsFactory<TTag>
 	where TKeyPointTag : KeyPointTag<TTag>
 	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 {

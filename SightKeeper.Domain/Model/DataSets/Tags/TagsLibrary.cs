@@ -34,7 +34,7 @@ public sealed class TagsLibrary<TTag> : TagsLibrary, IReadOnlyCollection<TTag> w
 
 	public void DeleteTag(TTag tag)
 	{
-		Guard.IsTrue(tag.CanDelete);
+		Guard.IsFalse(tag.IsInUse);
 		Guard.IsTrue(_tags.Remove(tag));
 	}
 

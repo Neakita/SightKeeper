@@ -54,7 +54,7 @@ public sealed class Weights<TTag> : Weights where TTag : Tag, MinimumTagsCount
 }
 
 public sealed class Weights<TTag, TKeyPointTag> : Weights
-	where TTag : Tag
+	where TTag : PoserTag
 	where TKeyPointTag : KeyPointTag<TTag>
 {
 	public IImmutableDictionary<TTag, IImmutableSet<TKeyPointTag>> Tags { get; }

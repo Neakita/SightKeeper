@@ -16,7 +16,6 @@ public sealed class Poser2DTag : PoserTag, TagsFactory<Poser2DTag>
 	public override IReadOnlyCollection<Poser2DItem> Items => _items;
 	public TagsLibrary<Poser2DTag> Library { get; }
 	public override DataSet DataSet => Library.DataSet;
-	internal override bool CanDelete => Items.Count == 0;
 
 	public KeyPointTag2D CreateKeyPoint(string name)
 	{

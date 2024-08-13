@@ -2,9 +2,9 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Poser;
 
-public abstract class PoserTag : Tag
+public abstract class PoserTag : ItemTag
 {
-	public abstract IReadOnlyCollection<PoserItem> Items { get; }
+	public abstract override IReadOnlyCollection<PoserItem> Items { get; }
 
 	protected PoserTag(string name, IEnumerable<Tag> siblings) : base(name, siblings)
 	{

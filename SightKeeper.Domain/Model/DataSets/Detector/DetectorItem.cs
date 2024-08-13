@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.DataSets.Assets;
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DetectorItem
+public sealed class DetectorItem : AssetItem
 {
 	public DetectorTag Tag
 	{

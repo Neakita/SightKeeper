@@ -15,7 +15,7 @@ public sealed class ClassifierTag : Tag, MinimumTagsCount, TagsFactory<Classifie
 	public IReadOnlyCollection<ClassifierAsset> Assets => _assets;
 	public TagsLibrary<ClassifierTag> Library { get; }
 	public override DataSet DataSet => Library.DataSet;
-	internal override bool CanDelete => _assets.Count == 0;
+	public override bool IsInUse => _assets.Count != 0;
 
 	internal ClassifierTag(string name, TagsLibrary<ClassifierTag> library) : base(name, library)
 	{

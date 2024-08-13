@@ -23,7 +23,9 @@ public abstract class WeightsDataAccess
 		byte[] data,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
-		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags) where TTag : Tag where TKeyPointTag : KeyPointTag<TTag>
+		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags)
+		where TTag : PoserTag
+		where TKeyPointTag : KeyPointTag<TTag>
 	{
 		var weights = library.CreateWeights(modelSize, metrics, tags);
 		SaveWeightsData(weights, new WeightsData(data));
@@ -37,7 +39,7 @@ public abstract class WeightsDataAccess
 	}
 
 	public void RemoveWeights<TTag, TKeyPointTag>(Weights<TTag, TKeyPointTag> weights)
-		where TTag : Tag
+		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{
 		weights.Library.RemoveWeights(weights);

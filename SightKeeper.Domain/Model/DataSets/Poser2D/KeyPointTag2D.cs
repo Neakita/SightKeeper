@@ -6,7 +6,6 @@ namespace SightKeeper.Domain.Model.DataSets.Poser2D;
 public sealed class KeyPointTag2D : KeyPointTag<Poser2DTag>
 {
 	public override Poser2DTag PoserTag { get; }
-	internal override bool CanDelete => PoserTag.Items.Count == 0;
 
 	internal KeyPointTag2D(string name, Poser2DTag poserTag) : base(name, poserTag.KeyPoints)
 	{

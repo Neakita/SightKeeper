@@ -3,7 +3,7 @@ using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DetectorTag : Tag, MinimumTagsCount, TagsFactory<DetectorTag>
+public sealed class DetectorTag : ItemTag, MinimumTagsCount, TagsFactory<DetectorTag>
 {
 	public static byte MinimumCount => 1;
 
@@ -12,10 +12,9 @@ public sealed class DetectorTag : Tag, MinimumTagsCount, TagsFactory<DetectorTag
 		return new DetectorTag(name, library);
 	}
 
-	public IReadOnlyCollection<DetectorItem> Items => _items;
+	public override IReadOnlyCollection<DetectorItem> Items => _items;
 	public TagsLibrary<DetectorTag> Library { get; }
 	public override DataSet DataSet => Library.DataSet;
-	internal override bool CanDelete => _items.Count == 0;
 
 	internal DetectorTag(string name, TagsLibrary<DetectorTag> library) : base(name, library)
 	{

@@ -84,7 +84,7 @@ internal sealed class Poser2DDataSetsConverter
 		ModelSize size,
 		WeightsMetrics metrics,
 		ImmutableDictionary<Domain.Model.DataSets.Poser2D.Poser2DTag, ImmutableHashSet<KeyPointTag2D>> tags)
-		where TTag : Domain.Model.DataSets.Tags.Tag
+		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>;
 
 	private static void CreateTags(Domain.Model.DataSets.Poser2D.Poser2DDataSet dataSet, ImmutableArray<Poser2DTag> tags, ReverseConversionSession session)
