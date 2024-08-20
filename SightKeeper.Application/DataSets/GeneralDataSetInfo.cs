@@ -2,10 +2,9 @@
 
 namespace SightKeeper.Application.DataSets;
 
-public interface DataSetInfo
+public interface GeneralDataSetInfo
 {
     string Name { get; }
     string Description { get; }
-    IReadOnlyCollection<TagInfo> Tags { get; }
     Game? Game { get; }
 }

@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Application.DataSets.Creating;
 
-public interface NewDataSetInfo : DataSetInfo
+public interface NewDataSetInfo : GeneralDataSetInfo
 {
 	int? Resolution { get; }
 }

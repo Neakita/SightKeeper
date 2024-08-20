@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.DataSets.Editing;
 
-public interface DataSetChanges : DataSetInfo
+public interface DataSetChanges : GeneralDataSetInfo
 {
     DetectorDataSet DataSet { get; }
     IReadOnlyCollection<TagInfo> NewTags { get; }

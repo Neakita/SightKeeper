@@ -12,6 +12,9 @@
 	<ScrollViewer Classes="regular-padding">
 		<StackPanel Classes="regular-spacing">
 			<Border Classes="outer wide-padding">
+				<Button Content="Create dataset" Command="{Binding CreateDataSetCommand}"/>
+			</Border>
+			<Border Classes="outer wide-padding">
 				<TreeDataGrid Source="{Binding DataSets, Converter={StaticResource DataSetsConverter}}"/>
 			</Border>
 		</StackPanel>

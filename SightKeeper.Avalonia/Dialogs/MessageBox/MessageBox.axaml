@@ -21,7 +21,7 @@
 			</ItemsRepeater.Layout>
 			<ItemsRepeater.ItemTemplate>
 				<DataTemplate>
-					<Button Command="{Binding #Root.((messageBox:MessageBoxDialogViewModel)DataContext).ReturnButtonDefinitionCommand}"
+					<Button Command="{Binding #Root.((messageBox:MessageBoxDialogViewModel)DataContext).ReturnCommand}"
 					        CommandParameter="{Binding}">
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
 							<icons:MaterialIcon Kind="{Binding IconKind}"/>

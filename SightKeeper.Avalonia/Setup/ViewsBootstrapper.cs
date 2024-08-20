@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Avalonia.Settings.Games;
 using SightKeeper.Avalonia.ViewModels;
@@ -15,7 +16,8 @@ internal static class ViewsBootstrapper
 		[
 			CreateDataTemplate<GamesSettings, GamesSettingsViewModel>(),
 			CreateDataTemplate<AddGameDialog, AddGameViewModel>(),
-			CreateDataTemplate<MessageBox, MessageBoxDialogViewModel>()
+			CreateDataTemplate<MessageBox, MessageBoxDialogViewModel>(),
+			CreateDataTemplate<CreateDataSetDialog, CreateDataSetViewModel>()
 		];
 	}
 

@@ -16,7 +16,6 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
 
     public DataSetsListViewModel(
 	    ObservableRepository<DataSet> observableRepository,
-	    /*DataSetEditor editor,*/
 	    WeightsDataAccess weightsDataAccess)
     {
         observableRepository.DataSetsSource.Connect()
@@ -26,9 +25,6 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
             .Bind(out var dataSets)
             .PopulateInto(_cache)
             .DisposeWith(_disposable);
-        /*editor.DataSetEdited
-            .Subscribe(OnDataSetEdited)
-            .DisposeWith(_disposable);*/
         DataSets = dataSets;
     }
 
@@ -36,6 +32,4 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
 
     private readonly CompositeDisposable _disposable = new();
     private readonly SourceCache<DataSetViewModel, DataSet> _cache = new(viewModel => viewModel.DataSet);
-
-    /*private void OnDataSetEdited(DetectorDataSet dataSet) => _cache.Lookup(dataSet).Value.NotifyChanges();*/
 }

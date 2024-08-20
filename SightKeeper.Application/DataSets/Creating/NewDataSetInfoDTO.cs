@@ -8,7 +8,7 @@ public sealed class NewDataSetInfoDTO : NewDataSetInfo
     public string Name { get; }
     public string Description { get; }
     public ushort Resolution { get; }
-    public IReadOnlyCollection<TagInfo> Tags { get; }
+    /*public IReadOnlyCollection<TagInfo> Tags { get; }*/
     public Game? Game { get; }
     int? NewDataSetInfo.Resolution => Resolution;
 
@@ -18,7 +18,7 @@ public sealed class NewDataSetInfoDTO : NewDataSetInfo
         Name = dataSetInfo.Name;
         Description = dataSetInfo.Description;
         Resolution = (ushort)dataSetInfo.Resolution.Value;
-        Tags = dataSetInfo.Tags.ToList();
+        /*Tags = dataSetInfo.Tags.ToList();*/
         Game = dataSetInfo.Game;
     }
     
@@ -32,7 +32,7 @@ public sealed class NewDataSetInfoDTO : NewDataSetInfo
         Name = name;
         Description = description;
         Resolution = resolution;
-        Tags = tags;
+        /*Tags = tags;*/
         Game = game;
     }
 }

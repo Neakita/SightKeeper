@@ -6,7 +6,7 @@ namespace SightKeeper.Application.DataSets.Creating;
 
 public sealed class NewDataSetInfoValidator : AbstractValidator<NewDataSetInfo>
 {
-    public NewDataSetInfoValidator(IValidator<DataSetInfo> dataSetInfoValidator, ReadDataAccess<DataSet> dataSetsDataAccess)
+    public NewDataSetInfoValidator(IValidator<GeneralDataSetInfo> dataSetInfoValidator, ReadDataAccess<DataSet> dataSetsDataAccess)
     {
         _dataSetsDataAccess = dataSetsDataAccess;
         Include(dataSetInfoValidator);

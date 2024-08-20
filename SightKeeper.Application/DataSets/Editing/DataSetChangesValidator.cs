@@ -5,15 +5,13 @@ namespace SightKeeper.Application.DataSets.Editing;
 
 public sealed class DataSetChangesValidator : AbstractValidator<DataSetChanges>
 {
-    public DataSetChangesValidator(IValidator<DataSetInfo> dataSetInfoValidator, ReadDataAccess<DataSet> dataSetsDataAccess)
+    public DataSetChangesValidator(IValidator<GeneralDataSetInfo> dataSetInfoValidator, ReadDataAccess<DataSet> dataSetsDataAccess)
     {
         _dataSetsDataAccess = dataSetsDataAccess;
-        
         Include(dataSetInfoValidator);
-        
         RuleFor(data => data.Name)
             .NotEmpty()
-            .Must((dataSet, _) => IsNameFree(dataSet)).WithMessage("Name must be unique");
+            .Must((changes, _) => IsNameFree(changes)).WithMessage("Name must be unique");
     }
 
     private bool IsNameFree(DataSetChanges changes)

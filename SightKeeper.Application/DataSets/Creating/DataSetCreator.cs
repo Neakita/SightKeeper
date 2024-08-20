@@ -4,6 +4,5 @@ namespace SightKeeper.Application.DataSets.Creating;
 
 public interface DataSetCreator
 {
-    IObservable<DetectorDataSet> DataSetCreated { get; }
     DetectorDataSet CreateDataSet(NewDataSetInfoDTO newDataSetInfo);
 }

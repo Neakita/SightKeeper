@@ -1,0 +1,33 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
+             xmlns:specific="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Specific"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.DataSets.Dialogs.CreateDataSetDialog"
+             x:DataType="local:CreateDataSetViewModel"
+             HorizontalAlignment="Center">
+	<ScrollViewer>
+		<StackPanel Classes="regular-spacing">
+			<local:GeneralDataSetEditor DataContext="{Binding GeneralDataSetEditor}"/>
+			<ListBox SelectedItem="{Binding SpecificDataSetEditor}"
+			         ItemsSource="{Binding SpecificDataSetEditors}"
+			         Theme="{DynamicResource RadioButtonsListBoxTheme}"
+			         Classes="horizontal">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Header}"/>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+			<ContentControl Content="{Binding SpecificDataSetEditor}">
+				<ContentControl.DataTemplates>
+					<DataTemplate x:DataType="specific:ClassifierDataSetEditorViewModel">
+						<specific:ClassifierDataSetEditor/>
+					</DataTemplate>
+				</ContentControl.DataTemplates>
+			</ContentControl>
+		</StackPanel>
+	</ScrollViewer>
+</UserControl>
