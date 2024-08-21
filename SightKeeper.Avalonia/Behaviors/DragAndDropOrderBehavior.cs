@@ -17,6 +17,9 @@ namespace SightKeeper.Avalonia.Behaviors;
 
 internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 {
+	private const double InsertLineHeight = 4;
+	private const double InsertLineHalfHeight = InsertLineHeight / 2;
+
 	private sealed class DragDecorations
 	{
 		public Canvas Canvas { get; }
@@ -37,7 +40,7 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 
 		public void MoveInsertLine(Point position)
 		{
-			SetPositionAtCanvas(InsertLine, position - new Vector(0, InsertLine.Bounds.Height / 2));
+			SetPositionAtCanvas(InsertLine, position - new Vector(0, InsertLineHalfHeight));
 		}
 
 		private static void SetPositionAtCanvas(AvaloniaObject element, Point position)
@@ -161,7 +164,7 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 		Border insertLine = new()
 		{
 			Width = AssociatedObject.Bounds.Width,
-			Height = 4,
+			Height = InsertLineHeight,
 			CornerRadius = new CornerRadius(2),
 			Background = Brushes.Chartreuse
 		};
