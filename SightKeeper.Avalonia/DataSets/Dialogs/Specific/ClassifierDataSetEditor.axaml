@@ -21,7 +21,7 @@
 		<ListBox ItemsSource="{Binding Tags}">
 			<Interaction.Behaviors>
 				<BehaviorCollection>
-					<behaviors:DragAndDropOrderBehavior DragMoveThreshold="10"/>
+					<behaviors:DragAndDropOrderBehavior InsertLineFill="{DynamicResource Accent}" DragMoveThreshold="10"/>
 				</BehaviorCollection>
 			</Interaction.Behaviors>
 			<ListBox.ItemTemplate>

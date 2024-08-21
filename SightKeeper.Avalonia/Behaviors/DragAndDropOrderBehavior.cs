@@ -78,10 +78,19 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 	public static readonly StyledProperty<double> DragMoveThresholdProperty =
 		AvaloniaProperty.Register<DragAndDropOrderBehavior, double>(nameof(DragMoveThreshold));
 
+	public static readonly StyledProperty<Brush?> InsertLineFillProperty =
+		AvaloniaProperty.Register<DragAndDropOrderBehavior, Brush?>(nameof(InsertLineFill));
+
 	public double DragMoveThreshold
 	{
 		get => GetValue(DragMoveThresholdProperty);
 		set => SetValue(DragMoveThresholdProperty, value);
+	}
+
+	public Brush? InsertLineFill
+	{
+		get => GetValue(InsertLineFillProperty);
+		set => SetValue(InsertLineFillProperty, value);
 	}
 
 	protected override void OnAttachedToVisualTree()
@@ -196,7 +205,7 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 			Width = AssociatedObject.Bounds.Width,
 			Height = InsertLineHeight,
 			CornerRadius = new CornerRadius(2),
-			Background = Brushes.Chartreuse
+			Background = InsertLineFill
 		};
 		var item = AssociatedObject.ItemFromContainer(itemContainer);
 		Guard.IsNotNull(item);
