@@ -9,13 +9,33 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Avalonia.Behaviors;
+namespace SightKeeper.Avalonia.Behaviors.DragAndDrop;
 
-internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
+internal abstract class DragAndDropOrderBehavior : Behavior<ItemsControl>
+{
+	public static readonly StyledProperty<double> DragMoveThresholdProperty =
+		AvaloniaProperty.Register<DragAndDropOrderBehavior, double>(nameof(DragMoveThreshold));
+
+	public static readonly StyledProperty<Brush?> InsertLineFillProperty =
+		AvaloniaProperty.Register<DragAndDropOrderBehavior, Brush?>(nameof(InsertLineFill));
+
+	public double DragMoveThreshold
+	{
+		get => GetValue(DragMoveThresholdProperty);
+		set => SetValue(DragMoveThresholdProperty, value);
+	}
+
+	public Brush? InsertLineFill
+	{
+		get => GetValue(InsertLineFillProperty);
+		set => SetValue(InsertLineFillProperty, value);
+	}
+}
+
+internal abstract class DragAndDropOrderBehavior<T> : DragAndDropOrderBehavior where T : ItemsControl
 {
 	private const double InsertLineHeight = 4;
 	private const double InsertLineHalfHeight = InsertLineHeight / 2;
@@ -23,10 +43,10 @@ internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
 	private sealed class DragDecorations
 	{
 		public Canvas Canvas { get; }
-		public ListBoxItem ItemGhost { get; }
+		public Control ItemGhost { get; }
 		public Border InsertLine { get; }
 
-		public DragDecorations(Canvas canvas, ListBoxItem itemGhost, Border insertLine)
+		public DragDecorations(Canvas canvas, Control itemGhost, Border insertLine)
 		{
 			Canvas = canvas;
 			ItemGhost = itemGhost;
@@ -53,7 +73,7 @@ internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
 	private sealed class DragSession
 	{
 		public DragDecorations? Decorations { get; set; }
-		public ListBoxItem DraggingItemContainer { get; }
+		public Control DraggingItemContainer { get; }
 		public object DraggingItem { get; }
 		public int DraggingItemIndex { get; }
 		public ImmutableArray<double> InsertLinePositions { get; }
@@ -61,7 +81,7 @@ internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
 		public bool IsThresholdCrossed { get; set; }
 
 		public DragSession(
-			ListBoxItem draggingItemContainer,
+			Control draggingItemContainer,
 			object draggingItem,
 			ImmutableArray<double> insertLinePositions,
 			int draggingItemIndex,
@@ -73,24 +93,6 @@ internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
 			DraggingItemIndex = draggingItemIndex;
 			InitialPosition = initialPosition;
 		}
-	}
-
-	public static readonly StyledProperty<double> DragMoveThresholdProperty =
-		AvaloniaProperty.Register<ListBoxDragAndDropOrderBehavior, double>(nameof(DragMoveThreshold));
-
-	public static readonly StyledProperty<Brush?> InsertLineFillProperty =
-		AvaloniaProperty.Register<ListBoxDragAndDropOrderBehavior, Brush?>(nameof(InsertLineFill));
-
-	public double DragMoveThreshold
-	{
-		get => GetValue(DragMoveThresholdProperty);
-		set => SetValue(DragMoveThresholdProperty, value);
-	}
-
-	public Brush? InsertLineFill
-	{
-		get => GetValue(InsertLineFillProperty);
-		set => SetValue(InsertLineFillProperty, value);
 	}
 
 	protected override void OnAttachedToVisualTree()
@@ -108,6 +110,8 @@ internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
 		AssociatedObject.RemoveHandler(InputElement.PointerPressedEvent, OnPointerPressed);
 	}
 
+	protected abstract Control? FindAncestorItemContainer(Visual visual);
+
 	private DragSession? _dragSession;
 	private OverlayLayer? _overlayLayer;
 
@@ -116,9 +120,10 @@ internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
 		Guard.IsNotNull(AssociatedObject);
 		Guard.IsNotNull(args.Source);
 		var visual = (Visual)args.Source;
-		var itemContainer = visual.FindAncestorOfType<ListBoxItem>();
+		var itemContainer = FindAncestorItemContainer(visual);
 		if (itemContainer == null)
 			return;
+		Guard.IsNotNull(AssociatedObject.ItemFromContainer(itemContainer));
 		Guard.IsNull(_dragSession);
 		_dragSession = InitializeDragSession(itemContainer, args.GetPosition(null));
 		if (DragMoveThreshold == 0)
@@ -176,7 +181,7 @@ internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
 		list.Insert(targetIndex, item);
 	}
 
-	private DragSession InitializeDragSession(ListBoxItem itemContainer, Point initialPosition)
+	private DragSession InitializeDragSession(Control itemContainer, Point initialPosition)
 	{
 		Guard.IsNotNull(AssociatedObject);
 		var itemIndex = AssociatedObject.IndexFromContainer(itemContainer);
@@ -186,20 +191,16 @@ internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
 		return session;
 	}
 
+	protected abstract Control CreateItemGhost(Control itemContainer);
+
 	private DragDecorations InitializeDragDecorations(
-		ListBoxItem itemContainer,
+		Control itemContainer,
 		Func<Visual, Point> pointerPositionFactory)
 	{
 		Guard.IsNotNull(AssociatedObject);
 		Guard.IsNotNull(_dragSession);
 		Canvas canvas = new();
-		ListBoxItem itemGhost = new()
-		{
-			ContentTemplate = AssociatedObject.ItemTemplate,
-			Content = itemContainer.Content,
-			IsHitTestVisible = false,
-			Opacity = 0.4
-		};
+		var itemGhost = CreateItemGhost(itemContainer);
 		Border insertLine = new()
 		{
 			Width = AssociatedObject.Bounds.Width,

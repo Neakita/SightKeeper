@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Specific"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:dragAndDrop="clr-namespace:SightKeeper.Avalonia.Behaviors.DragAndDrop"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Specific.ClassifierDataSetEditor"
              x:DataType="local:ClassifierDataSetEditorViewModel">
@@ -18,17 +19,17 @@
 				</BehaviorCollection>
 			</Interaction.Behaviors>
 		</Button>
-		<ListBox ItemsSource="{Binding Tags}">
+		<ItemsControl ItemsSource="{Binding Tags}">
 			<Interaction.Behaviors>
 				<BehaviorCollection>
-					<behaviors:ListBoxDragAndDropOrderBehavior InsertLineFill="{DynamicResource Accent}" DragMoveThreshold="10"/>
+					<dragAndDrop:ItemsControlDragAndDropOrderBehavior InsertLineFill="{DynamicResource Accent}" DragMoveThreshold="10"/>
 				</BehaviorCollection>
 			</Interaction.Behaviors>
-			<ListBox.ItemTemplate>
+			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Text="{Binding Name}"/>
+					<TextBlock Text="{Binding Name}" Background="Black"/>
 				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
 	</StackPanel>
 </UserControl>
