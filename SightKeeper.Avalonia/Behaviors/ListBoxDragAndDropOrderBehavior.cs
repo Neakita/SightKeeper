@@ -15,7 +15,7 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Avalonia.Behaviors;
 
-internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
+internal sealed class ListBoxDragAndDropOrderBehavior : Behavior<ListBox>
 {
 	private const double InsertLineHeight = 4;
 	private const double InsertLineHalfHeight = InsertLineHeight / 2;
@@ -76,10 +76,10 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 	}
 
 	public static readonly StyledProperty<double> DragMoveThresholdProperty =
-		AvaloniaProperty.Register<DragAndDropOrderBehavior, double>(nameof(DragMoveThreshold));
+		AvaloniaProperty.Register<ListBoxDragAndDropOrderBehavior, double>(nameof(DragMoveThreshold));
 
 	public static readonly StyledProperty<Brush?> InsertLineFillProperty =
-		AvaloniaProperty.Register<DragAndDropOrderBehavior, Brush?>(nameof(InsertLineFill));
+		AvaloniaProperty.Register<ListBoxDragAndDropOrderBehavior, Brush?>(nameof(InsertLineFill));
 
 	public double DragMoveThreshold
 	{
