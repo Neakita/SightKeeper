@@ -57,18 +57,31 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 		public object DraggingItem { get; }
 		public int DraggingItemIndex { get; }
 		public ImmutableArray<double> InsertLinePositions { get; }
+		public Point InitialPosition { get; }
+		public bool IsThresholdCrossed { get; set; }
 
 		public DragSession(
 			ListBoxItem draggingItemContainer,
 			object draggingItem,
 			ImmutableArray<double> insertLinePositions,
-			int draggingItemIndex)
+			int draggingItemIndex,
+			Point initialPosition)
 		{
 			DraggingItemContainer = draggingItemContainer;
 			DraggingItem = draggingItem;
 			InsertLinePositions = insertLinePositions;
 			DraggingItemIndex = draggingItemIndex;
+			InitialPosition = initialPosition;
 		}
+	}
+
+	public static readonly StyledProperty<double> DragMoveThresholdProperty =
+		AvaloniaProperty.Register<DragAndDropOrderBehavior, double>(nameof(DragMoveThreshold));
+
+	public double DragMoveThreshold
+	{
+		get => GetValue(DragMoveThresholdProperty);
+		set => SetValue(DragMoveThresholdProperty, value);
 	}
 
 	protected override void OnAttachedToVisualTree()
@@ -98,8 +111,9 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 		if (itemContainer == null)
 			return;
 		Guard.IsNull(_dragSession);
-		_dragSession = InitializeDragSession(itemContainer);
-		_dragSession.Decorations = InitializeDragDecorations(itemContainer, args.GetPosition);
+		_dragSession = InitializeDragSession(itemContainer, args.GetPosition(null));
+		if (DragMoveThreshold == 0)
+			_dragSession.Decorations = InitializeDragDecorations(itemContainer, args.GetPosition);
 		BeginDragging();
 	}
 
@@ -107,6 +121,15 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 	{
 		Guard.IsNotNull(AssociatedObject);
 		Guard.IsNotNull(_dragSession);
+
+		if (!_dragSession.IsThresholdCrossed)
+		{
+			var currentPosition = args.GetPosition(null);
+			if (Point.Distance(_dragSession.InitialPosition, currentPosition) < DragMoveThreshold)
+				return;
+			_dragSession.IsThresholdCrossed = true;
+		}
+		
 		if (_dragSession.Decorations == null)
 			_dragSession.Decorations ??=
 				InitializeDragDecorations(_dragSession.DraggingItemContainer, args.GetPosition);
@@ -124,11 +147,17 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 	private void OnPointerReleased(object? sender, PointerReleasedEventArgs args)
 	{
 		Guard.IsNotNull(_dragSession);
-		var originalIndex = _dragSession.DraggingItemIndex;
-		var targetIndex = IndexOfClosest(args.GetPosition(AssociatedObject).Y, _dragSession.InsertLinePositions);
-		var item = _dragSession.DraggingItem;
-		RemoveDragDecorations();
+		Guard.IsNotNull(AssociatedObject);
+		Guard.IsNotNull(AssociatedObject.ItemsSource);
+		var dragSession = _dragSession;
+		if (_dragSession.Decorations != null)
+			RemoveDragDecorations();
 		EndDragging();
+		if (!dragSession.IsThresholdCrossed)
+			return;
+		var originalIndex = dragSession.DraggingItemIndex;
+		var targetIndex = IndexOfClosest(args.GetPosition(AssociatedObject).Y, dragSession.InsertLinePositions);
+		var item = dragSession.DraggingItem;
 		if (targetIndex > originalIndex)
 			targetIndex--;
 		if (targetIndex == originalIndex)
@@ -138,13 +167,13 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 		list.Insert(targetIndex, item);
 	}
 
-	private DragSession InitializeDragSession(ListBoxItem itemContainer)
+	private DragSession InitializeDragSession(ListBoxItem itemContainer, Point initialPosition)
 	{
 		Guard.IsNotNull(AssociatedObject);
 		var itemIndex = AssociatedObject.IndexFromContainer(itemContainer);
 		var item = AssociatedObject.ItemFromContainer(itemContainer);
 		Guard.IsNotNull(item);
-		DragSession session = new(itemContainer, item, GetInsertLinePositions(AssociatedObject).ToImmutableArray(), itemIndex);
+		DragSession session = new(itemContainer, item, GetInsertLinePositions(AssociatedObject).ToImmutableArray(), itemIndex, initialPosition);
 		return session;
 	}
 
@@ -153,6 +182,7 @@ internal sealed class DragAndDropOrderBehavior : Behavior<ItemsControl>
 		Func<Visual, Point> pointerPositionFactory)
 	{
 		Guard.IsNotNull(AssociatedObject);
+		Guard.IsNotNull(_dragSession);
 		Canvas canvas = new();
 		ListBoxItem itemGhost = new()
 		{
