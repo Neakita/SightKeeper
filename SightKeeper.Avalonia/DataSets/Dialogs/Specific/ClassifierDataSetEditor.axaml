@@ -4,32 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Specific"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
-             xmlns:dragAndDrop="clr-namespace:SightKeeper.Avalonia.Behaviors.DragAndDrop"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Specific.ClassifierDataSetEditor"
              x:DataType="local:ClassifierDataSetEditorViewModel">
+	<UserControl.Resources>
+		<local:TreeDataGridTagsSourceConverter x:Key="TreeDataGridTagsSourceConverter"/>
+	</UserControl.Resources>
 	<StackPanel Classes="regular-spacing">
-		<TextBox Name="TagNameTextBox" Watermark="Tag name"/>
+		<TextBox Name="TagNameTextBox" Watermark="Tag name">
+			<Interaction.Behaviors>
+				<behaviors:ExecuteCommandAndClearOnKeyDown
+					Key="Enter"
+					Command="{Binding AddTagCommand}"
+					CommandParameter="{Binding #TagNameTextBox.Text}"/>
+			</Interaction.Behaviors>
+		</TextBox>
 		<Button Content="Add"
 		        Command="{Binding AddTagCommand}"
 		        CommandParameter="{Binding #TagNameTextBox.Text}">
 			<Interaction.Behaviors>
-				<BehaviorCollection>
-					<behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
-				</BehaviorCollection>
+				<behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
 			</Interaction.Behaviors>
 		</Button>
-		<ItemsControl ItemsSource="{Binding Tags}">
-			<Interaction.Behaviors>
-				<BehaviorCollection>
-					<dragAndDrop:ItemsControlDragAndDropOrderBehavior InsertLineFill="{DynamicResource Accent}" DragMoveThreshold="10"/>
-				</BehaviorCollection>
-			</Interaction.Behaviors>
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding Name}" Background="Black"/>
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
+		<TreeDataGrid Source="{Binding Tags, Converter={StaticResource TreeDataGridTagsSourceConverter}}"/>
 	</StackPanel>
 </UserControl>
