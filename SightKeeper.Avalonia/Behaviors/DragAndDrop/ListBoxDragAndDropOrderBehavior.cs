@@ -5,7 +5,7 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Avalonia.Behaviors.DragAndDrop;
 
-internal sealed class ListBoxDragAndDropOrderBehavior : DragAndDropOrderBehavior<ListBox>
+internal sealed class ListBoxDragAndDropOrderBehavior : DragAndDropOrderBehavior
 {
 	protected override Control? FindAncestorItemContainer(Visual visual)
 	{

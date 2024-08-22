@@ -16,6 +16,9 @@ namespace SightKeeper.Avalonia.Behaviors.DragAndDrop;
 
 internal abstract class DragAndDropOrderBehavior : Behavior<ItemsControl>
 {
+	internal const double InsertLineHeight = 4;
+	internal const double InsertLineHalfHeight = InsertLineHeight / 2;
+
 	public static readonly StyledProperty<double> DragMoveThresholdProperty =
 		AvaloniaProperty.Register<DragAndDropOrderBehavior, double>(nameof(DragMoveThreshold));
 
@@ -32,67 +35,6 @@ internal abstract class DragAndDropOrderBehavior : Behavior<ItemsControl>
 	{
 		get => GetValue(InsertLineFillProperty);
 		set => SetValue(InsertLineFillProperty, value);
-	}
-}
-
-internal abstract class DragAndDropOrderBehavior<T> : DragAndDropOrderBehavior where T : ItemsControl
-{
-	private const double InsertLineHeight = 4;
-	private const double InsertLineHalfHeight = InsertLineHeight / 2;
-
-	private sealed class DragDecorations
-	{
-		public Canvas Canvas { get; }
-		public Control ItemGhost { get; }
-		public Border InsertLine { get; }
-
-		public DragDecorations(Canvas canvas, Control itemGhost, Border insertLine)
-		{
-			Canvas = canvas;
-			ItemGhost = itemGhost;
-			InsertLine = insertLine;
-		}
-
-		public void MoveItemGhost(Point position)
-		{
-			SetPositionAtCanvas(ItemGhost, position);
-		}
-
-		public void MoveInsertLine(Point position)
-		{
-			SetPositionAtCanvas(InsertLine, position - new Vector(0, InsertLineHalfHeight));
-		}
-
-		private static void SetPositionAtCanvas(AvaloniaObject element, Point position)
-		{
-			Canvas.SetLeft(element, position.X);
-			Canvas.SetTop(element, position.Y);
-		}
-	}
-
-	private sealed class DragSession
-	{
-		public DragDecorations? Decorations { get; set; }
-		public Control DraggingItemContainer { get; }
-		public object DraggingItem { get; }
-		public int DraggingItemIndex { get; }
-		public ImmutableArray<double> InsertLinePositions { get; }
-		public Point InitialPosition { get; }
-		public bool IsThresholdCrossed { get; set; }
-
-		public DragSession(
-			Control draggingItemContainer,
-			object draggingItem,
-			ImmutableArray<double> insertLinePositions,
-			int draggingItemIndex,
-			Point initialPosition)
-		{
-			DraggingItemContainer = draggingItemContainer;
-			DraggingItem = draggingItem;
-			InsertLinePositions = insertLinePositions;
-			DraggingItemIndex = draggingItemIndex;
-			InitialPosition = initialPosition;
-		}
 	}
 
 	protected override void OnAttachedToVisualTree()
