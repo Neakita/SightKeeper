@@ -9,8 +9,7 @@ public sealed class DetectorAssetLibraryTests
 	public void ShouldCreateAsset()
 	{
 		DetectorDataSet dataSet = new();
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		screenshot.Asset.Should().Be(asset);
 		dataSet.Assets.Should().Contain(asset);
@@ -20,8 +19,7 @@ public sealed class DetectorAssetLibraryTests
 	public void ShouldNotCreateDuplicateAsset()
 	{
 		DetectorDataSet dataSet = new();
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot));
 		screenshot.Asset.Should().Be(asset);
@@ -33,8 +31,7 @@ public sealed class DetectorAssetLibraryTests
 	public void ShouldDeleteAsset()
 	{
 		DetectorDataSet dataSet = new();
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		dataSet.Assets.DeleteAsset(asset);
 		dataSet.Assets.Should().BeEmpty();
@@ -46,8 +43,7 @@ public sealed class DetectorAssetLibraryTests
 	{
 		DetectorDataSet dataSet1 = new();
 		DetectorDataSet dataSet2 = new();
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet1.Screenshots, []);
+		var screenshot = dataSet1.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet1.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet2.Assets.DeleteAsset(asset));
 		asset.Screenshot.Asset.Should().Be(asset);

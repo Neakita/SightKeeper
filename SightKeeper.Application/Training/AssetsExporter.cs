@@ -4,7 +4,6 @@ using Serilog;
 using SerilogTimings.Extensions;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using Image = SixLabors.ImageSharp.Image;
 
@@ -35,7 +34,7 @@ public sealed class AssetsExporter
 	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly ILogger _logger;
 
-	private void ExportImages(string directoryPath, IReadOnlyCollection<Domain.Model.DataSets.Screenshots.Image> images)
+	/*private void ExportImages(string directoryPath, IReadOnlyCollection<byte[]> images)
 	{
 		Directory.CreateDirectory(directoryPath);
 		var operation = _logger.BeginOperation("Exporting images for {AssetsCount} assets", images.Count);
@@ -45,14 +44,14 @@ public sealed class AssetsExporter
 			ExportImage(directoryPath, image, ++imageIndex);
 		}
 		operation.Complete();
-	}
+	}*/
 
-	private void ExportImage(string directoryPath, Domain.Model.DataSets.Screenshots.Image image, int assetIndex)
+	/*private void ExportImage(string directoryPath, Domain.Model.DataSets.Screenshots.Image image, int assetIndex)
 	{
 		throw new NotImplementedException();
 		// var imagePath = Path.Combine(directoryPath, $"{assetIndex}.png");
 		// ExportImage(imagePath, image.Content);
-	}
+	}*/
 
 	private static void ExportImage(string path, byte[] content)
 	{

@@ -2,17 +2,18 @@
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Domain.Services;
+namespace SightKeeper.Application;
 
 public abstract class ScreenshotsDataAccess
 {
-	public abstract Image LoadImage(Screenshot screenshot);
+	public abstract byte[] LoadImage(Screenshot screenshot);
 
 	public Screenshot CreateScreenshot(ScreenshotsLibrary library, byte[] data, DateTime creationDate)
 	{
-		var screenshot = library.AddScreenshot(creationDate);
-		library.ClearExceed();
-		SaveScreenshotData(screenshot, new Image(data));
+		var screenshot = library.AddScreenshot(creationDate, out var removedScreenshots);
+		foreach (var removedScreenshot in removedScreenshots)
+			DeleteScreenshotData(removedScreenshot);
+		SaveScreenshotData(screenshot, data);
 		return screenshot;
 	}
 
@@ -28,10 +29,10 @@ public abstract class ScreenshotsDataAccess
 
 	public Screenshot<TAsset> CreateScreenshot<TAsset>(ScreenshotsLibrary<TAsset> library, byte[] data, DateTime creationDate) where TAsset : Asset
 	{
-		var screenshot = library.AddScreenshot(creationDate);
-		foreach (var removedScreenshot in library.ClearExceed())
+		var screenshot = library.AddScreenshot(creationDate, out var removedScreenshots);
+		foreach (var removedScreenshot in removedScreenshots)
 			DeleteScreenshotData(removedScreenshot);
-		SaveScreenshotData(screenshot, new Image(data));
+		SaveScreenshotData(screenshot, data);
 		return screenshot;
 	}
 
@@ -46,6 +47,6 @@ public abstract class ScreenshotsDataAccess
 		DeleteScreenshotData(screenshot);
 	}
 
-	protected abstract void SaveScreenshotData(Screenshot screenshot, Image image);
+	protected abstract void SaveScreenshotData(Screenshot screenshot, byte[] data);
 	protected abstract void DeleteScreenshotData(Screenshot screenshot);
 }

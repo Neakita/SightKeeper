@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using SightKeeper.Application;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;
 
@@ -10,7 +10,7 @@ public sealed class ScreenshotViewModel
 {
     public Screenshot Item { get; }
 
-    public Image Image => _screenshotsDataAccess.LoadImage(Item);
+    public byte[] ImageData => _screenshotsDataAccess.LoadImage(Item);
 
     public bool IsAsset => _isAssetSubject.Value;
     public IObservable<bool> IsAssetObservable => _isAssetSubject.AsObservable();

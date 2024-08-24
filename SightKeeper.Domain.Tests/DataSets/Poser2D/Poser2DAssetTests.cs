@@ -12,8 +12,7 @@ public sealed class Poser2DAssetTests
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		var item = asset.CreateItem(tag, new Bounding(), [], []);
 		asset.Items.Should().Contain(item);
@@ -24,8 +23,7 @@ public sealed class Poser2DAssetTests
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		var item1 = asset.CreateItem(tag, new Bounding(0, 0, 0.5, 0.5), [], []);
 		var item2 = asset.CreateItem(tag, new Bounding(0, 0, 1, 1), [], []);
@@ -38,8 +36,7 @@ public sealed class Poser2DAssetTests
 		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		var item1 = asset.CreateItem(tag1, new Bounding(), [], []);
 		var item2 = asset.CreateItem(tag2, new Bounding(), [], []);
@@ -53,8 +50,7 @@ public sealed class Poser2DAssetTests
 		var tag = dataSet.Tags.CreateTag("");
 		tag.CreateKeyPoint("1");
 		tag.CreateKeyPoint("2");
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		var item = asset.CreateItem(tag, new Bounding(), [new Vector2<double>(), new Vector2<double>()], []);
 		asset.Items.Should().Contain(item);
@@ -67,8 +63,7 @@ public sealed class Poser2DAssetTests
 		var tag = dataSet.Tags.CreateTag("");
 		tag.CreateKeyPoint("1");
 		tag.CreateKeyPoint("2");
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => asset.CreateItem(tag, new Bounding(), [new Vector2<double>()], []));
 		asset.Items.Should().BeEmpty();

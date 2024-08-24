@@ -10,8 +10,7 @@ public sealed class ClassifierAssetTests
 	{
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleScreenshotsDataAccess screenshotsDataAccess = new();
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, []);
+		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.Tag.Should().Be(tag);
 		Assert.ThrowsAny<Exception>(() => asset.Tag = new ClassifierDataSet().Tags.CreateTag(""));

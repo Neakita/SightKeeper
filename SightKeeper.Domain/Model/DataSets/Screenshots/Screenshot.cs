@@ -14,7 +14,7 @@ public abstract class Screenshot
 		CreationDate = creationDate;
 	}
 
-	protected internal abstract void DeleteFromLibrary();
+	public abstract void DeleteFromLibrary();
 }
 
 public sealed class Screenshot<TAsset> : Screenshot where TAsset : Asset
@@ -32,7 +32,7 @@ public sealed class Screenshot<TAsset> : Screenshot where TAsset : Asset
 		_asset = asset;
 	}
 
-	protected internal override void DeleteFromLibrary()
+	public override void DeleteFromLibrary()
 	{
 		Library.DeleteScreenshot(this);
 	}

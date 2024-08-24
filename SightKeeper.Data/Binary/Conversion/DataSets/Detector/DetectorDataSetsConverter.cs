@@ -91,7 +91,8 @@ internal sealed class DetectorDataSetsConverter
 	{
 		foreach (var rawScreenshot in screenshots)
 		{
-			var screenshot = dataSet.Screenshots.AddScreenshot(rawScreenshot.CreationDate);
+			var screenshot = dataSet.Screenshots.AddScreenshot(rawScreenshot.CreationDate, out var removedScreenshots);
+			Guard.IsTrue(removedScreenshots.IsEmpty);
 			session.Screenshots.Add(rawScreenshot.Id, screenshot);
 			_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
 		}

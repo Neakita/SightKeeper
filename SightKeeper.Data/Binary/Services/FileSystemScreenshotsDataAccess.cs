@@ -1,7 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using FlakeId;
+﻿using FlakeId;
+using SightKeeper.Application;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Binary.Services;
 
@@ -13,13 +12,9 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		set => _dataAccess.DirectoryPath = value;
 	}
 
-	public override Image LoadImage(Screenshot screenshot)
+	public override byte[] LoadImage(Screenshot screenshot)
 	{
-		var data = _dataAccess.ReadAllBytes(screenshot);
-		return CreateImage(data);
-
-		[UnsafeAccessor(UnsafeAccessorKind.Constructor)]
-		static extern Image CreateImage(byte[] data);
+		return _dataAccess.ReadAllBytes(screenshot);
 	}
 
 	public Id GetId(Screenshot screenshot)
@@ -32,9 +27,9 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		_dataAccess.AssociateId(screenshot, id);
 	}
 
-	protected override void SaveScreenshotData(Screenshot screenshot, Image image)
+	protected override void SaveScreenshotData(Screenshot screenshot, byte[] data)
 	{
-		_dataAccess.WriteAllBytes(screenshot, image.Data);
+		_dataAccess.WriteAllBytes(screenshot, data);
 	}
 
 	protected override void DeleteScreenshotData(Screenshot screenshot)
