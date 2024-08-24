@@ -41,7 +41,8 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCo
     public override Screenshot<TAsset> CreateScreenshot(DateTime creationDate, out ImmutableArray<Screenshot> removedScreenshots)
     {
 	    Screenshot<TAsset> screenshot = new(this, creationDate);
-	    Guard.IsTrue(_screenshots.Add(screenshot));
+	    Guard.IsGreaterThan(creationDate, _screenshots[^1].CreationDate);
+	    _screenshots.Add(screenshot);
 	    removedScreenshots = ClearExceed();
 	    return screenshot;
     }
@@ -60,14 +61,22 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCo
 	    if (exceedAmount <= 0)
 		    return ImmutableArray<Screenshot>.Empty;
 	    var builder = ImmutableArray.CreateBuilder<Screenshot>(exceedAmount);
-	    var screenshotsToDelete = _screenshots.Where(screenshot => screenshot.Asset == null).Take(exceedAmount);
-	    foreach (var screenshot in screenshotsToDelete)
+	    var screenshotsToDelete =
+		    _screenshots
+			    .Select((screenshot, index) => (screenshot, index))
+			    .Where(tuple => tuple.screenshot.Asset == null)
+			    .Take(exceedAmount)
+			    .ToRanges(tuple => tuple.index)
+			    .OrderByDescending(tuple => tuple.start);
+	    foreach (var (tuples, start, end) in screenshotsToDelete)
 	    {
-		    Guard.IsTrue(_screenshots.Remove(screenshot));
-		    builder.Add(screenshot);
+		    _screenshots.RemoveRange(start, end);
+		    builder.Capacity += tuples.Length;
+		    foreach (var (screenshot, _) in tuples)
+			    builder.Add(screenshot);
 	    }
 	    return builder.ToImmutable();
     }
 
-    private readonly SortedSet<Screenshot<TAsset>> _screenshots = new(ScreenshotsDateComparer.Instance);
+    private readonly List<Screenshot<TAsset>> _screenshots = new();
 }
