@@ -1,4 +1,5 @@
 ﻿using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Services;
@@ -20,7 +21,7 @@ public abstract class ScreenshotsDataAccess
 		return CreateScreenshot(dataSet.Screenshots, data);
 	}
 
-	public TScreenshot CreateScreenshot<TScreenshot>(ScreenshotsLibrary<TScreenshot> library, byte[] data) where TScreenshot : Screenshot
+	public Screenshot<TAsset> CreateScreenshot<TAsset>(ScreenshotsLibrary<TAsset> library, byte[] data) where TAsset : Asset
 	{
 		var screenshot = library.CreateScreenshot();
 		foreach (var removedScreenshot in library.ClearExceed())

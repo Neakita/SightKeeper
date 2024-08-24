@@ -26,13 +26,19 @@ public abstract class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
 	}
 }
 
-public abstract class ScreenshotsLibrary<TScreenshot> : ScreenshotsLibrary, IReadOnlyCollection<TScreenshot> where TScreenshot : Screenshot
+public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCollection<Screenshot<TAsset>> where TAsset : Asset
 {
     public override int Count => _screenshots.Count;
+    public override DataSet DataSet { get; }
 
-    public override IEnumerator<TScreenshot> GetEnumerator() => _screenshots.GetEnumerator();
+    public ScreenshotsLibrary(DataSet dataSet)
+    {
+	    DataSet = dataSet;
+    }
 
-    internal void DeleteScreenshot(TScreenshot screenshot)
+    public override IEnumerator<Screenshot<TAsset>> GetEnumerator() => _screenshots.GetEnumerator();
+
+    internal void DeleteScreenshot(Screenshot<TAsset> screenshot)
     {
         Guard.IsTrue(_screenshots.Remove(screenshot));
     }
@@ -55,29 +61,12 @@ public abstract class ScreenshotsLibrary<TScreenshot> : ScreenshotsLibrary, IRea
 	    return builder.ToImmutable();
     }
 
-    protected internal abstract override TScreenshot CreateScreenshot();
-
-    protected void AddScreenshot(TScreenshot screenshot)
+    protected internal override Screenshot<TAsset> CreateScreenshot()
     {
+	    Screenshot<TAsset> screenshot = new(this);
 	    Guard.IsTrue(_screenshots.Add(screenshot));
+	    return screenshot;
     }
 
-    private readonly SortedSet<TScreenshot> _screenshots = new(ScreenshotsDateComparer.Instance);
-}
-
-public sealed class AssetScreenshotsLibrary<TAsset> : ScreenshotsLibrary<Screenshot<TAsset>> where TAsset : Asset
-{
-	public override DataSet DataSet { get; }
-
-	public AssetScreenshotsLibrary(DataSet dataSet)
-	{
-		DataSet = dataSet;
-	}
-
-	protected internal override Screenshot<TAsset> CreateScreenshot()
-	{
-		Screenshot<TAsset> screenshot = new(this);
-		AddScreenshot(screenshot);
-		return screenshot;
-	}
+    private readonly SortedSet<Screenshot<TAsset>> _screenshots = new(ScreenshotsDateComparer.Instance);
 }

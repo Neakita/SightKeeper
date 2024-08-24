@@ -15,9 +15,9 @@ public abstract class Screenshot
 public sealed class Screenshot<TAsset> : Screenshot where TAsset : Asset
 {
 	public override TAsset? Asset => _asset;
-	public override AssetScreenshotsLibrary<TAsset> Library { get; }
+	public override ScreenshotsLibrary<TAsset> Library { get; }
 
-	public Screenshot(AssetScreenshotsLibrary<TAsset> library)
+	public Screenshot(ScreenshotsLibrary<TAsset> library)
 	{
 		Library = library;
 	}

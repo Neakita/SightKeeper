@@ -39,14 +39,14 @@ public class DataSet<TTag, TAsset> : DataSet
 	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 {
 	public override TagsLibrary<TTag> Tags { get; }
-	public override AssetScreenshotsLibrary<TAsset> Screenshots { get; }
+	public override ScreenshotsLibrary<TAsset> Screenshots { get; }
 	public override AssetsLibrary<TAsset> Assets { get; }
 	public override WeightsLibrary<TTag> Weights { get; }
 
 	protected DataSet()
 	{
 		Tags = new TagsLibrary<TTag>(this);
-		Screenshots = new AssetScreenshotsLibrary<TAsset>(this);
+		Screenshots = new ScreenshotsLibrary<TAsset>(this);
 		Assets = new AssetsLibrary<TAsset>(this);
 		Weights = new WeightsLibrary<TTag>(this);
 	}
@@ -58,14 +58,14 @@ public class DataSet<TTag, TKeyPointTag, TAsset> : DataSet
 	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 {
 	public override TagsLibrary<TTag> Tags { get; }
-	public override AssetScreenshotsLibrary<TAsset> Screenshots { get; }
+	public override ScreenshotsLibrary<TAsset> Screenshots { get; }
 	public override AssetsLibrary<TAsset> Assets { get; }
 	public override WeightsLibrary<TTag, TKeyPointTag> Weights { get; }
 
 	protected DataSet()
 	{
 		Tags = new TagsLibrary<TTag>(this);
-		Screenshots = new AssetScreenshotsLibrary<TAsset>(this);
+		Screenshots = new ScreenshotsLibrary<TAsset>(this);
 		Assets = new AssetsLibrary<TAsset>(this);
 		Weights = new WeightsLibrary<TTag, TKeyPointTag>(this);
 	}
