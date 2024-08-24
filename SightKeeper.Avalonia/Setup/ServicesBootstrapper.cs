@@ -9,7 +9,6 @@ using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Services;
 using GamesDataAccess = SightKeeper.Application.Games.GamesDataAccess;
 
 namespace SightKeeper.Avalonia.Setup;

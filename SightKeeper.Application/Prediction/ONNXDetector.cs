@@ -7,7 +7,6 @@ using SerilogTimings;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Services;
 using SixLabors.ImageSharp;
 using RectangleF = System.Drawing.RectangleF;
 using Size = SixLabors.ImageSharp.Size;

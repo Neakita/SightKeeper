@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 using SharpHook.Native;
 using SightKeeper.Application.Input;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Application.Annotating;

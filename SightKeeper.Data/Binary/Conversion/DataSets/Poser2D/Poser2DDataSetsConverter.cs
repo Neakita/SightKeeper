@@ -1,13 +1,10 @@
 ﻿using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using SightKeeper.Data.Binary.DataSets.Poser;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SightKeeper.Domain.Model.DataSets.Weights;
 using Poser2DAsset = SightKeeper.Data.Binary.DataSets.Poser2D.Poser2DAsset;
 using Poser2DDataSet = SightKeeper.Data.Binary.DataSets.Poser2D.Poser2DDataSet;
 using Poser2DTag = SightKeeper.Data.Binary.DataSets.Poser2D.Poser2DTag;
@@ -72,15 +69,6 @@ internal sealed class Poser2DDataSetsConverter
 	private readonly WeightsConverter _weightsConverter;
 	private readonly Poser2DAssetsConverter _assetsConverter;
 
-	[UnsafeAccessor(UnsafeAccessorKind.Method)]
-	private static extern Weights<TTag, TKeyPointTag> CreateWeights<TTag, TKeyPointTag>(
-		WeightsLibrary<TTag, TKeyPointTag> library,
-		ModelSize size,
-		WeightsMetrics metrics,
-		ImmutableDictionary<Domain.Model.DataSets.Poser2D.Poser2DTag, ImmutableHashSet<KeyPointTag2D>> tags)
-		where TTag : PoserTag
-		where TKeyPointTag : KeyPointTag<TTag>;
-
 	private static void CreateTags(Domain.Model.DataSets.Poser2D.Poser2DDataSet dataSet, ImmutableArray<Poser2DTag> tags, ReverseConversionSession session)
 	{
 		foreach (var rawTag in tags)
@@ -136,18 +124,20 @@ internal sealed class Poser2DDataSetsConverter
 	{
 		foreach (var rawWeights in raw)
 		{
-			var weights = CreateWeights(dataSet.Weights, rawWeights.Size, rawWeights.Metrics, ConvertBack(rawWeights.Tags, session));
+			var weights = dataSet.Weights.CreateWeights(rawWeights.CreationDate, rawWeights.Size, rawWeights.Metrics, ConvertBack(rawWeights.Tags, session));
 			_weightsDataAccess.AssociateId(weights, rawWeights.Id);
 			session.Weights.Add(rawWeights.Id, weights);
 		}
 	}
 
-	private ImmutableDictionary<Domain.Model.DataSets.Poser2D.Poser2DTag, ImmutableHashSet<KeyPointTag2D>> ConvertBack(
+	private IEnumerable<(Domain.Model.DataSets.Poser2D.Poser2DTag, IEnumerable<KeyPointTag2D>)> ConvertBack(
 		ImmutableArray<(Id Id, ImmutableArray<Id> KeyPointIds)> tags,
 		ReverseConversionSession session)
 	{
-		return tags.ToImmutableDictionary(
-			t => (Domain.Model.DataSets.Poser2D.Poser2DTag)session.Tags[t.Id],
-			t => t.KeyPointIds.Select(id => (KeyPointTag2D)session.Tags[id]).ToImmutableHashSet());
+		foreach (var (tagId, keyPointIds) in tags)
+		{
+			yield return ((Domain.Model.DataSets.Poser2D.Poser2DTag)session.Tags[tagId],
+				keyPointIds.Select(id => (KeyPointTag2D)session.Tags[id]).ToImmutableList());
+		}
 	}
 }

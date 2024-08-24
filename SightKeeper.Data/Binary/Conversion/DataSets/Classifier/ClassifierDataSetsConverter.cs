@@ -1,12 +1,9 @@
 ﻿using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Binary.DataSets;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets.Weights;
 using ClassifierAsset = SightKeeper.Data.Binary.DataSets.Classifier.ClassifierAsset;
 using ClassifierDataSet = SightKeeper.Data.Binary.DataSets.Classifier.ClassifierDataSet;
 using Screenshot = SightKeeper.Data.Binary.DataSets.Screenshot;
@@ -67,14 +64,6 @@ internal sealed class ClassifierDataSetsConverter
 	private readonly ScreenshotsConverter _screenshotsConverter;
 	private readonly ClassifierAssetsConverter _assetsConverter;
 
-	[UnsafeAccessor(UnsafeAccessorKind.Method)]
-	private static extern Weights<TTag> CreateWeights<TTag>(
-		WeightsLibrary<TTag> library,
-		ModelSize size,
-		WeightsMetrics metrics,
-		IEnumerable<ClassifierTag> tags)
-		where TTag : Domain.Model.DataSets.Tags.Tag, MinimumTagsCount;
-
 	private static void AddTags(Domain.Model.DataSets.Classifier.ClassifierDataSet dataSet, ImmutableArray<Tag> tags, ReverseConversionSession session)
 	{
 		foreach (var rawTag in tags)
@@ -110,7 +99,7 @@ internal sealed class ClassifierDataSetsConverter
 	{
 		foreach (var rawWeights in raw)
 		{
-			var weights = CreateWeights(dataSet.Weights, rawWeights.Size, rawWeights.Metrics, rawWeights.Tags.Select(tagId => (ClassifierTag)session.Tags[tagId]));
+			var weights = dataSet.Weights.CreateWeights(rawWeights.CreationDate, rawWeights.Size, rawWeights.Metrics, rawWeights.Tags.Select(tagId => (ClassifierTag)session.Tags[tagId]));
 			_weightsDataAccess.AssociateId(weights, rawWeights.Id);
 			session.Weights.Add(rawWeights.Id, weights);
 		}

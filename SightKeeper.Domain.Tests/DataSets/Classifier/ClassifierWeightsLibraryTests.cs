@@ -11,8 +11,7 @@ public sealed class ClassifierWeightsLibraryTests
 		ClassifierDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		SimpleWeightsDataAccess weightsDataAccess = new();
-		var weights = weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag1, tag2]);
+		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag1, tag2]);
 		dataSet.Weights.Should().Contain(weights);
 	}
 
@@ -20,8 +19,7 @@ public sealed class ClassifierWeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		ClassifierDataSet dataSet = new();
-		SimpleWeightsDataAccess weightsDataAccess = new();
-		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), []));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), []));
 		dataSet.Weights.Should().BeEmpty();
 	}
 
@@ -30,8 +28,7 @@ public sealed class ClassifierWeightsLibraryTests
 	{
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		SimpleWeightsDataAccess weightsDataAccess = new();
-		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag]));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag]));
 		dataSet.Weights.Should().BeEmpty();
 	}
 
@@ -41,8 +38,7 @@ public sealed class ClassifierWeightsLibraryTests
 		ClassifierDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		SimpleWeightsDataAccess weightsDataAccess = new();
-		Assert.ThrowsAny<Exception>(() => weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag1, tag1, tag2]));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag1, tag1, tag2]));
 		dataSet.Weights.Should().BeEmpty();
 	}
 }

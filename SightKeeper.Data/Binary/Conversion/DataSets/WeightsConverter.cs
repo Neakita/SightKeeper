@@ -67,7 +67,7 @@ internal sealed class WeightsConverter
 	}
 
 	private static ImmutableArray<(Id, ImmutableArray<Id>)> Convert<TTag, TKeyPointTag>(
-		IImmutableDictionary<TTag, IImmutableSet<TKeyPointTag>> tags,
+		ImmutableDictionary<TTag, ImmutableHashSet<TKeyPointTag>> tags,
 		ConversionSession session)
 		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>

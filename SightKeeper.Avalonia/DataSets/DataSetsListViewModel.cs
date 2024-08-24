@@ -6,7 +6,6 @@ using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.ViewModels;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.DataSets;
 

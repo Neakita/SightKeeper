@@ -5,9 +5,9 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using SightKeeper.Application;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.ViewModels.Dialogs;
 

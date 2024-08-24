@@ -2,7 +2,6 @@
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Annotating;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Avalonia.ViewModels.Annotating;

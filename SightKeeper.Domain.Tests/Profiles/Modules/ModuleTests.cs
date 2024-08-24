@@ -4,7 +4,6 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Modules.Scaling;
 using SightKeeper.Domain.Model.Profiles.Modules.Walking;
-using SightKeeper.Domain.Tests.DataSets;
 
 namespace SightKeeper.Domain.Tests.Profiles.Modules;
 
@@ -13,10 +12,9 @@ public sealed class ModuleTests
 	[Fact]
 	public void ShouldNotSetIterativeScalingAndIterativeWalkingOptionsTogether()
 	{
-		SimpleWeightsDataAccess weightsDataAccess = new();
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		var weights = weightsDataAccess.CreateWeights(dataSet.Weights, [], ModelSize.Nano, new WeightsMetrics(), [tag]);
+		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		module.PassiveScalingOptions = new IterativeScalingOptions();

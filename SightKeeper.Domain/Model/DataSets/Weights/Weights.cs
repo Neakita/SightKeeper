@@ -15,9 +15,9 @@ public abstract class Weights
 
 	public abstract bool Contains(Tag tag);
 
-	protected Weights(ModelSize size, WeightsMetrics metrics)
+	protected Weights(DateTime creationDate, ModelSize size, WeightsMetrics metrics)
 	{
-		CreationDate = DateTime.Now;
+		CreationDate = creationDate;
 		Size = size;
 		Metrics = metrics;
 	}
@@ -25,7 +25,7 @@ public abstract class Weights
 
 public sealed class Weights<TTag> : Weights where TTag : Tag, MinimumTagsCount
 {
-	public IImmutableSet<TTag> Tags { get; }
+	public ImmutableHashSet<TTag> Tags { get; }
 	public override WeightsLibrary<TTag> Library { get; }
 
 	public override bool Contains(Tag tag)
@@ -34,11 +34,12 @@ public sealed class Weights<TTag> : Weights where TTag : Tag, MinimumTagsCount
 	}
 
 	internal Weights(
+		DateTime creationDate,
 		ModelSize size,
 		WeightsMetrics metrics,
 		IEnumerable<TTag> tags,
 		WeightsLibrary<TTag> library)
-		: base(size, metrics)
+		: base(creationDate, size, metrics)
 	{
 		Tags = tags.ToImmutableHashSetThrowOnDuplicate();
 		Library = library;
@@ -57,7 +58,7 @@ public sealed class Weights<TTag, TKeyPointTag> : Weights
 	where TTag : PoserTag
 	where TKeyPointTag : KeyPointTag<TTag>
 {
-	public IImmutableDictionary<TTag, IImmutableSet<TKeyPointTag>> Tags { get; }
+	public ImmutableDictionary<TTag, ImmutableHashSet<TKeyPointTag>> Tags { get; }
 	public override WeightsLibrary<TTag, TKeyPointTag> Library { get; }
 
 	public override bool Contains(Tag tag)
@@ -71,13 +72,14 @@ public sealed class Weights<TTag, TKeyPointTag> : Weights
 	}
 
 	internal Weights(
+		DateTime creationDate,
 		ModelSize size,
 		WeightsMetrics metrics,
 		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags,
 		WeightsLibrary<TTag, TKeyPointTag> library)
-		: base(size, metrics)
+		: base(creationDate, size, metrics)
 	{
-		var builder = ImmutableDictionary.CreateBuilder<TTag, IImmutableSet<TKeyPointTag>>();
+		var builder = ImmutableDictionary.CreateBuilder<TTag, ImmutableHashSet<TKeyPointTag>>();
 		foreach (var (tag, keyPointTags) in tags)
 			builder.Add(tag, ImmutableHashSet.CreateRange(keyPointTags));
 		Tags = builder.ToImmutable();

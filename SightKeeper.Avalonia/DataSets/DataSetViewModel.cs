@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using DynamicData;
+using SightKeeper.Application;
 using SightKeeper.Avalonia.ViewModels;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Avalonia.DataSets;
 

@@ -33,20 +33,20 @@ public sealed class WeightsLibrary<TTag> : WeightsLibrary, IReadOnlyCollection<W
 		DataSet = dataSet;
 	}
 
-	internal Weights<TTag> CreateWeights(
+	public Weights<TTag> CreateWeights(
+		DateTime creationDate,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		IEnumerable<TTag> tags)
 	{
-		Weights<TTag> weights = new(modelSize, metrics, tags, this);
+		Weights<TTag> weights = new(creationDate, modelSize, metrics, tags, this);
 		Guard.IsTrue(_weights.Add(weights));
 		return weights;
 	}
 
-	internal void RemoveWeights(Weights<TTag> weights)
+	public void RemoveWeights(Weights<TTag> weights)
 	{
-		var isRemoved = _weights.Remove(weights);
-		Guard.IsTrue(isRemoved);
+		Guard.IsTrue(_weights.Remove(weights));
 	}
 
 	private readonly SortedSet<Weights<TTag>> _weights = new(WeightsDateComparer.Instance);
@@ -74,20 +74,20 @@ public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary, IReadOn
 		DataSet = dataSet;
 	}
 
-	internal Weights<TTag, TKeyPointTag> CreateWeights(
+	public Weights<TTag, TKeyPointTag> CreateWeights(
+		DateTime creationDate,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags)
 	{
-		Weights<TTag, TKeyPointTag> weights = new(modelSize, metrics, tags, this);
+		Weights<TTag, TKeyPointTag> weights = new(creationDate, modelSize, metrics, tags, this);
 		Guard.IsTrue(_weights.Add(weights));
 		return weights;
 	}
 
-	internal void RemoveWeights(Weights<TTag, TKeyPointTag> weights)
+	public void RemoveWeights(Weights<TTag, TKeyPointTag> weights)
 	{
-		var isRemoved = _weights.Remove(weights);
-		Guard.IsTrue(isRemoved);
+		Guard.IsTrue(_weights.Remove(weights));
 	}
 
 	private readonly SortedSet<Weights<TTag, TKeyPointTag>> _weights = new(WeightsDateComparer.Instance);

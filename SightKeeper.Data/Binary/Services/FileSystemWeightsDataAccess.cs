@@ -1,7 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using FlakeId;
+﻿using FlakeId;
+using SightKeeper.Application;
 using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Services;
 
 namespace SightKeeper.Data.Binary.Services;
 
@@ -13,13 +12,9 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 		set => _dataAccess.DirectoryPath = value;
 	}
 
-	public override WeightsData LoadWeightsData(Weights weights)
+	public override byte[] LoadWeightsData(Weights weights)
 	{
-		var data = _dataAccess.ReadAllBytes(weights);
-		return CreateWeightsData(data);
-
-		[UnsafeAccessor(UnsafeAccessorKind.Constructor)]
-		static extern WeightsData CreateWeightsData(byte[] content);
+		return _dataAccess.ReadAllBytes(weights);
 	}
 
 	public Id GetId(Weights weights)
@@ -32,9 +27,9 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 		_dataAccess.AssociateId(weights, id);
 	}
 
-	protected override void SaveWeightsData(Weights weights, WeightsData data)
+	protected override void SaveWeightsData(Weights weights, byte[] data)
 	{
-		_dataAccess.WriteAllBytes(weights, data.Content);
+		_dataAccess.WriteAllBytes(weights, data);
 	}
 
 	protected override void RemoveWeightsData(Weights weights)
