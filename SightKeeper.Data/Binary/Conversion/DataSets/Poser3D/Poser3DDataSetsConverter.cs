@@ -71,12 +71,6 @@ internal sealed class Poser3DDataSetsConverter
 	private readonly WeightsConverter _weightsConverter;
 	private readonly Poser3DAssetsConverter _assetsConverter;
 
-	[UnsafeAccessor(UnsafeAccessorKind.Method, Name = "CreateScreenshot")]
-	private static extern Screenshot<Domain.Model.DataSets.Poser3D.Poser3DAsset> CreateScreenshot(AssetScreenshotsLibrary<Domain.Model.DataSets.Poser3D.Poser3DAsset> library);
-
-	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
-	private static extern ref DateTime CreationDateBackingField(Domain.Model.DataSets.Screenshots.Screenshot screenshot);
-		
 	[UnsafeAccessor(UnsafeAccessorKind.Method)]
 	private static extern Weights<TTag, TKeyPoint> CreateWeights<TTag, TKeyPoint>(
 		WeightsLibrary<TTag, TKeyPoint> library,
@@ -121,9 +115,8 @@ internal sealed class Poser3DDataSetsConverter
 	{
 		foreach (var rawScreenshot in screenshots)
 		{
-			var screenshot = CreateScreenshot(dataSet.Screenshots);
+			var screenshot = dataSet.Screenshots.AddScreenshot(rawScreenshot.CreationDate);
 			session.Screenshots.Add(rawScreenshot.Id, screenshot);
-			CreationDateBackingField(screenshot) = rawScreenshot.CreationDate;
 			_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
 		}
 	}

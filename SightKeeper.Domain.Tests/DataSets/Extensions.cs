@@ -10,9 +10,9 @@ namespace SightKeeper.Domain.Tests.DataSets;
 
 public static class Extensions
 {
-	public static GenericCollectionAssertions<T> Should<T>(this ScreenshotsLibrary<T> library) where T : Screenshot
+	public static GenericCollectionAssertions<Screenshot<TAsset>> Should<TAsset>(this ScreenshotsLibrary<TAsset> library) where TAsset : Asset
 	{
-		return ((IEnumerable<T>)library).Should();
+		return ((IEnumerable<Screenshot<TAsset>>)library).Should();
 	}
 
 	public static GenericCollectionAssertions<T> Should<T>(this TagsLibrary<T> library) where T : Tag, TagsFactory<T>

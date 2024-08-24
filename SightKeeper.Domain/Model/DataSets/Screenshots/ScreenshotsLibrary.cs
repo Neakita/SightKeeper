@@ -18,8 +18,8 @@ public abstract class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
 	public abstract DataSet DataSet { get; }
 
 	public abstract IEnumerator<Screenshot> GetEnumerator();
+	public abstract Screenshot AddScreenshot(DateTime creationDate);
 	internal abstract ImmutableArray<Screenshot> ClearExceed();
-	protected internal abstract Screenshot CreateScreenshot();
 	IEnumerator IEnumerable.GetEnumerator()
 	{
 		return GetEnumerator();
@@ -37,6 +37,13 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCo
     }
 
     public override IEnumerator<Screenshot<TAsset>> GetEnumerator() => _screenshots.GetEnumerator();
+
+    public override Screenshot<TAsset> AddScreenshot(DateTime creationDate)
+    {
+	    Screenshot<TAsset> screenshot = new(this, creationDate);
+	    Guard.IsTrue(_screenshots.Add(screenshot));
+	    return screenshot;
+    }
 
     internal void DeleteScreenshot(Screenshot<TAsset> screenshot)
     {
@@ -59,13 +66,6 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCo
 		    builder.Add(screenshot);
 	    }
 	    return builder.ToImmutable();
-    }
-
-    protected internal override Screenshot<TAsset> CreateScreenshot()
-    {
-	    Screenshot<TAsset> screenshot = new(this);
-	    Guard.IsTrue(_screenshots.Add(screenshot));
-	    return screenshot;
     }
 
     private readonly SortedSet<Screenshot<TAsset>> _screenshots = new(ScreenshotsDateComparer.Instance);

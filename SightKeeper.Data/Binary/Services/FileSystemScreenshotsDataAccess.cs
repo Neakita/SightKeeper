@@ -1,6 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
 using FlakeId;
-using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Services;
 
@@ -33,24 +32,8 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		_dataAccess.AssociateId(screenshot, id);
 	}
 
-	internal Screenshot<TAsset> CreateExistingScreenshot<TAsset>(AssetScreenshotsLibrary<TAsset> library)
-		where TAsset : Asset
-	{
-		_ignoreNewScreenshots = true;
-		try
-		{
-			return CreateScreenshot(library, []);
-		}
-		finally
-		{
-			_ignoreNewScreenshots = false;
-		}
-	}
-
 	protected override void SaveScreenshotData(Screenshot screenshot, Image image)
 	{
-		if (_ignoreNewScreenshots)
-			return;
 		_dataAccess.WriteAllBytes(screenshot, image.Data);
 	}
 
@@ -60,5 +43,4 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 	}
 
 	private readonly FileSystemDataAccess<Screenshot> _dataAccess = new(".png");
-	private bool _ignoreNewScreenshots;
 }

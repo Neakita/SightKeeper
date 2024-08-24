@@ -8,12 +8,17 @@ public abstract class ScreenshotsDataAccess
 {
 	public abstract Image LoadImage(Screenshot screenshot);
 
-	public Screenshot CreateScreenshot(ScreenshotsLibrary library, byte[] data)
+	public Screenshot CreateScreenshot(ScreenshotsLibrary library, byte[] data, DateTime creationDate)
 	{
-		var screenshot = library.CreateScreenshot();
+		var screenshot = library.AddScreenshot(creationDate);
 		library.ClearExceed();
 		SaveScreenshotData(screenshot, new Image(data));
 		return screenshot;
+	}
+
+	public Screenshot CreateScreenshot(ScreenshotsLibrary library, byte[] data)
+	{
+		return CreateScreenshot(library, data, DateTime.Now);
 	}
 
 	public Screenshot CreateScreenshot(DataSet dataSet, byte[] data)
@@ -21,13 +26,18 @@ public abstract class ScreenshotsDataAccess
 		return CreateScreenshot(dataSet.Screenshots, data);
 	}
 
-	public Screenshot<TAsset> CreateScreenshot<TAsset>(ScreenshotsLibrary<TAsset> library, byte[] data) where TAsset : Asset
+	public Screenshot<TAsset> CreateScreenshot<TAsset>(ScreenshotsLibrary<TAsset> library, byte[] data, DateTime creationDate) where TAsset : Asset
 	{
-		var screenshot = library.CreateScreenshot();
+		var screenshot = library.AddScreenshot(creationDate);
 		foreach (var removedScreenshot in library.ClearExceed())
 			DeleteScreenshotData(removedScreenshot);
 		SaveScreenshotData(screenshot, new Image(data));
 		return screenshot;
+	}
+
+	public Screenshot<TAsset> CreateScreenshot<TAsset>(ScreenshotsLibrary<TAsset> library, byte[] data) where TAsset : Asset
+	{
+		return CreateScreenshot(library, data, DateTime.Now);
 	}
 
 	public void DeleteScreenshot(Screenshot screenshot)

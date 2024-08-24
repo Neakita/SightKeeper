@@ -69,9 +69,6 @@ internal sealed class DetectorDataSetsConverter
 	private readonly WeightsConverter _weightsConverter;
 	private readonly DetectorAssetsConverter _assetsConverter;
 
-	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "<CreationDate>k__BackingField")]
-	private static extern ref DateTime CreationDateBackingField(Domain.Model.DataSets.Screenshots.Screenshot screenshot);
-		
 	[UnsafeAccessor(UnsafeAccessorKind.Method)]
 	private static extern Weights<TTag> CreateWeights<TTag>(
 		WeightsLibrary<TTag> library,
@@ -94,9 +91,8 @@ internal sealed class DetectorDataSetsConverter
 	{
 		foreach (var rawScreenshot in screenshots)
 		{
-			var screenshot = _screenshotsDataAccess.CreateExistingScreenshot(dataSet.Screenshots);
+			var screenshot = dataSet.Screenshots.AddScreenshot(rawScreenshot.CreationDate);
 			session.Screenshots.Add(rawScreenshot.Id, screenshot);
-			CreationDateBackingField(screenshot) = rawScreenshot.CreationDate;
 			_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
 		}
 	}
