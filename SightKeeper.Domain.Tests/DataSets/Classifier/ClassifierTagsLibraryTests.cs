@@ -47,7 +47,7 @@ public sealed class ClassifierTagsLibraryTests
 	{
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.AddScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.DeleteTag(tag));
 		dataSet.Tags.Should().Contain(tag);
