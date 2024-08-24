@@ -41,7 +41,8 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCo
     public override Screenshot<TAsset> CreateScreenshot(DateTime creationDate, out ImmutableArray<Screenshot> removedScreenshots)
     {
 	    Screenshot<TAsset> screenshot = new(this, creationDate);
-	    Guard.IsGreaterThan(creationDate, _screenshots[^1].CreationDate);
+	    if (_screenshots.Count != 0)
+			Guard.IsGreaterThan(creationDate, _screenshots[^1].CreationDate);
 	    _screenshots.Add(screenshot);
 	    removedScreenshots = ClearExceed();
 	    return screenshot;
@@ -70,7 +71,7 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCo
 			    .OrderByDescending(tuple => tuple.start);
 	    foreach (var (tuples, start, end) in screenshotsToDelete)
 	    {
-		    _screenshots.RemoveRange(start, end);
+		    _screenshots.RemoveRange(start, end - start + 1);
 		    builder.Capacity += tuples.Length;
 		    foreach (var (screenshot, _) in tuples)
 			    builder.Add(screenshot);
