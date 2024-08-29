@@ -3,7 +3,6 @@ using FluentValidation;
 using MemoryPack;
 using SightKeeper.Application;
 using SightKeeper.Application.Games;
-using SightKeeper.Application.Windows;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Formatters;
@@ -19,9 +18,7 @@ internal static class ServicesBootstrapper
 	{
 		SetupBinarySerialization(builder);
 		builder.RegisterType<Data.Binary.GamesDataAccess>().As<GamesDataAccess>().SingleInstance();
-		builder.RegisterType<WindowsGameIconProvider>().As<GameIconProvider>();
 		builder.RegisterType<ProcessesAvailableGamesProvider>();
-		builder.RegisterType<WindowsFileExplorerGameExecutableDisplayer>().As<GameExecutableDisplayer>();
 		builder.RegisterType<GameDataValidator>().As<IValidator<GameData>>();
 		builder.RegisterType<GameCreator>();
 		builder.RegisterType<DialogManager>().SingleInstance();
