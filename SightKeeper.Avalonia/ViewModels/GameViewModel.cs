@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Games;
 using SightKeeper.Domain.Model;
@@ -37,7 +38,7 @@ internal partial class GameViewModel : ViewModel
 		private set => SetProperty(ref _icon, value);
 	}
 
-	public GameViewModel(Game game, GameIconProvider iconProvider, GameExecutableDisplayer executableDisplayer)
+	public GameViewModel(Game game, GameIconProvider? iconProvider, GameExecutableDisplayer? executableDisplayer)
 	{
 		Game = game;
 		_iconProvider = iconProvider;
@@ -45,8 +46,8 @@ internal partial class GameViewModel : ViewModel
 		_icon = GetIcon();
 	}
 
-	private readonly GameIconProvider _iconProvider;
-	private readonly GameExecutableDisplayer _executableDisplayer;
+	private readonly GameIconProvider? _iconProvider;
+	private readonly GameExecutableDisplayer? _executableDisplayer;
 	private Bitmap? _icon;
 
 	private void UpdateIcon()
@@ -56,18 +57,19 @@ internal partial class GameViewModel : ViewModel
 
 	private Bitmap? GetIcon()
 	{
-		var data = _iconProvider.GetIcon(Game);
+		var data = _iconProvider?.GetIcon(Game);
 		if (data == null)
 			return null;
 		using MemoryStream stream = new(data);
 		return new Bitmap(stream);
 	}
 
-	private bool CanShowExecutable => !string.IsNullOrEmpty(ExecutablePath);
-
 	[RelayCommand(CanExecute = nameof(CanShowExecutable))]
 	private void ShowExecutable()
 	{
+		Guard.IsNotNull(_executableDisplayer);
 		_executableDisplayer.ShowGameExecutable(Game);
 	}
+
+	private bool CanShowExecutable => _executableDisplayer != null && !string.IsNullOrEmpty(ExecutablePath);
 }

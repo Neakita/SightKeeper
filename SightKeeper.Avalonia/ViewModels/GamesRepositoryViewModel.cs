@@ -15,8 +15,8 @@ internal sealed class GamesRepositoryViewModel : IDisposable
 	
 	public GamesRepositoryViewModel(
 		GamesDataAccess gamesDataAccess,
-		GameIconProvider gameIconProvider,
-		GameExecutableDisplayer gameExecutableDisplayer)
+		GameIconProvider? gameIconProvider = null,
+		GameExecutableDisplayer? gameExecutableDisplayer = null)
 	{
 		_games.AddRange(gamesDataAccess.Games);
 		gamesDataAccess.GameAdded.Subscribe(OnGameAdded).DisposeWith(_constructorDisposables);

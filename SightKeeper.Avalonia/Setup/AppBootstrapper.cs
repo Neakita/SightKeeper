@@ -10,6 +10,7 @@ internal static class AppBootstrapper
 		builder.RegisterModule(new MiddlewareModule(new SerilogMiddleware()));
 		ViewModelsBootstrapper.Setup(builder);
 		ServicesBootstrapper.Setup(builder);
+		OSSpecificBootstrapper.Setup(builder);
 		return builder.Build();
 	}
 }

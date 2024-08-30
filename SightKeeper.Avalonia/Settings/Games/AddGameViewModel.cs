@@ -27,9 +27,9 @@ internal sealed partial class AddGameViewModel : DialogViewModel<bool>, GameData
 
 	public AddGameViewModel(
 		ProcessesAvailableGamesProvider availableGamesProvider,
-		GameIconProvider iconProvider,
-		GameExecutableDisplayer executableDisplayer,
-		IValidator<GameData> validator)
+		IValidator<GameData> validator,
+		GameIconProvider? iconProvider = null,
+		GameExecutableDisplayer? executableDisplayer = null)
 	{
 		_availableGamesProvider = availableGamesProvider;
 		_iconProvider = iconProvider;
@@ -45,8 +45,8 @@ internal sealed partial class AddGameViewModel : DialogViewModel<bool>, GameData
 	}
 
 	private readonly ProcessesAvailableGamesProvider _availableGamesProvider;
-	private readonly GameIconProvider _iconProvider;
-	private readonly GameExecutableDisplayer _executableDisplayer;
+	private readonly GameIconProvider? _iconProvider;
+	private readonly GameExecutableDisplayer? _executableDisplayer;
 	private readonly ViewModelValidator<GameData> _validator;
 	private IReadOnlyCollection<GameViewModel> _availableGames;
 
