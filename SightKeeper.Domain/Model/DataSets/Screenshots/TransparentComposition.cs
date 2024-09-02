@@ -20,7 +20,8 @@ public sealed class TransparentComposition : Composition
 		ImmutableArray<float> opacities)
 		: base(maximumScreenshotsDelay)
 	{
-		_opacities = opacities;
+		Guard.IsGreaterThanOrEqualTo(opacities.Length, 2);
+		Opacities = opacities;
 	}
 
 	private ImmutableArray<float> _opacities;

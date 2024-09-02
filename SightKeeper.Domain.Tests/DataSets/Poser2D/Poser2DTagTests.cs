@@ -75,7 +75,7 @@ public class Poser2DTagTests
 		var keyPoint2 = tag2.CreateKeyPoint("");
 		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
-		asset.CreateItem(tag1, new Bounding(), [new Vector2<double>()], []);
+		asset.CreateItem(tag1, new Bounding(), [], []);
 		tag2.DeleteKeyPoint(keyPoint2);
 		tag2.KeyPoints.Should().BeEmpty();
 	}
