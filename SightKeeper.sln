@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SightKeeper.Data.Tests", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sightful.Avalonia.Controls.PropertyGrid", "..\Sightful.Theme\Sightful.Avalonia.Controls.PropertyGrid\Sightful.Avalonia.Controls.PropertyGrid.csproj", "{F7114FB2-C0FF-4FC1-B047-7F2AB9F21EAD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sightful", "Sightful", "{61ECB802-CDBC-4D92-869F-C0F305B6705C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4D385463-EE5E-4257-84C8-75C0A0018879} = {EC16BB21-7A91-4224-BAB7-4C896D7B2920}
 		{84712458-3E84-4279-AD52-58F24E88EBD5} = {EC16BB21-7A91-4224-BAB7-4C896D7B2920}
+		{542EC90B-A2D0-4055-95C6-3FCD5A8CA08D} = {61ECB802-CDBC-4D92-869F-C0F305B6705C}
+		{F7114FB2-C0FF-4FC1-B047-7F2AB9F21EAD} = {61ECB802-CDBC-4D92-869F-C0F305B6705C}
+		{25B85324-71B2-4011-8C8D-FDFF38668A00} = {61ECB802-CDBC-4D92-869F-C0F305B6705C}
 	EndGlobalSection
 EndGlobal
