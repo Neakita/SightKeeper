@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.Settings.Appearance;
 

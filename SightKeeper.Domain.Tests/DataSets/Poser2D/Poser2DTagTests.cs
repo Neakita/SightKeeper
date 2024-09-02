@@ -72,7 +72,6 @@ public class Poser2DTagTests
 		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		var keyPoint1 = tag1.CreateKeyPoint("");
 		var keyPoint2 = tag2.CreateKeyPoint("");
 		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);

@@ -47,11 +47,5 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary, IReadOnlyCollection<T
 		return _assets.GetEnumerator();
 	}
 
-	private void AddAsset(TAsset asset)
-	{
-		var isAdded = _assets.Add(asset);
-		Guard.IsTrue(isAdded);
-	}
-
 	private readonly HashSet<TAsset> _assets = new();
 }
