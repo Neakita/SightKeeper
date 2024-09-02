@@ -22,8 +22,7 @@ internal sealed class TreeDataGridTagsSourceConverter : FuncValueConverter<IRead
 				new TextColumn<TagViewModel, string>(
 					"Name",
 					tag => tag.Name,
-					SetTagName,
-					new GridLength(1, GridUnitType.Star))
+					SetTagName)
 			}
 		};
 	}
