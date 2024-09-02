@@ -16,9 +16,10 @@ public abstract class DataSet
 	public ushort Resolution
 	{
 		get => _resolution;
-		init
+		set
 		{
-			Guard.IsGreaterThan<int>(value, 0);
+			Guard.IsEmpty(Screenshots);
+			Guard.IsGreaterThan<ushort>(value, 0);
 			Guard.IsEqualTo(value % 32, 0);
 			_resolution = value;
 		}
@@ -31,7 +32,7 @@ public abstract class DataSet
 
 	public override string ToString() => Name;
 
-	private readonly ushort _resolution = 320;
+	private ushort _resolution = 320;
 }
 
 public class DataSet<TTag, TAsset> : DataSet
