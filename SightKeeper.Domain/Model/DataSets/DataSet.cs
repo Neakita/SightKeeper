@@ -25,6 +25,8 @@ public abstract class DataSet
 		}
 	}
 
+	public Composition? Composition { get; set; }
+
 	public abstract TagsLibrary Tags { get; }
 	public abstract ScreenshotsLibrary Screenshots { get; }
 	public abstract AssetsLibrary Assets { get; }
