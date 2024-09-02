@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SightKeeper.Avalonia.ViewModels;
+namespace SightKeeper.Avalonia;
 
 internal abstract class ViewModel : ObservableObject
 {

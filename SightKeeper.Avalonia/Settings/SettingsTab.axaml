@@ -3,9 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:settings="clr-namespace:SightKeeper.Avalonia.Settings"
-             xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels"
              xmlns:generated="clr-namespace:Generated"
              xmlns:games="clr-namespace:SightKeeper.Avalonia.Settings.Games"
+             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
              x:Class="SightKeeper.Avalonia.Settings.SettingsTab"
              x:DataType="settings:SettingsViewModel">
@@ -26,7 +26,7 @@
 			        <DataTemplate x:DataType="games:GamesSettingsViewModel">
 				        <games:GamesSettings/>
 			        </DataTemplate>
-			        <DataTemplate x:DataType="viewModels:ViewModel">
+			        <DataTemplate x:DataType="root:ViewModel">
 				        <Border Classes="outer wide-padding">
 					        <generated:PropertyGrid/>
 				        </Border>

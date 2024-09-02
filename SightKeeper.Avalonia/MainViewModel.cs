@@ -6,8 +6,6 @@ using Material.Icons;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Settings.Appearance;
-using SightKeeper.Avalonia.ViewModels;
-using SightKeeper.Avalonia.ViewModels.Elements;
 using SettingsViewModel = SightKeeper.Avalonia.Settings.SettingsViewModel;
 
 namespace SightKeeper.Avalonia;

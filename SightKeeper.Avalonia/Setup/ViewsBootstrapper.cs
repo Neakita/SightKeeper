@@ -4,7 +4,6 @@ using Avalonia.Controls.Templates;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Avalonia.Settings.Games;
-using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.Setup;
 

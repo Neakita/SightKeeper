@@ -1,6 +1,6 @@
 ﻿using Material.Icons;
 
-namespace SightKeeper.Avalonia.ViewModels.Elements;
+namespace SightKeeper.Avalonia;
 
 internal sealed class TabItemViewModel : ViewModel
 {

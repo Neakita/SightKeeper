@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.Dialogs;
 

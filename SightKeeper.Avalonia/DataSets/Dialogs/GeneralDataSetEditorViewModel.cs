@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.Games;
-using SightKeeper.Avalonia.ViewModels;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;

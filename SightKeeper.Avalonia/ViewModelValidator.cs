@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using FluentValidation;
-using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia;
 

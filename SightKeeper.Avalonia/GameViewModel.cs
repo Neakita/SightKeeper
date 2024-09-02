@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Games;
 using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Avalonia.ViewModels;
+namespace SightKeeper.Avalonia;
 
 internal partial class GameViewModel : ViewModel
 {

@@ -4,7 +4,6 @@ using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Data.Converters;
-using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.Settings.Games;
 

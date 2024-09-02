@@ -1,10 +1,10 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:viewModels="clr-namespace:SightKeeper.Avalonia.ViewModels"
                     xmlns:local="clr-namespace:SightKeeper.Avalonia.Settings.Games"
                     xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-                    xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors">
-	<DataTemplate x:Key="GameTitleCellTemplate" DataType="viewModels:GameViewModel">
+                    xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+                    xmlns:avalonia="clr-namespace:SightKeeper.Avalonia">
+	<DataTemplate x:Key="GameTitleCellTemplate" DataType="avalonia:GameViewModel">
 		<Grid ColumnDefinitions="Auto 12 *" RowDefinitions="Auto Auto">
 			<Grid.Styles>
 				<Style Selector="TextBlock#ProcessNameOrPath">
@@ -48,7 +48,7 @@
 			</TextBlock>
 		</Grid>
 	</DataTemplate>
-	<DataTemplate x:Key="ExistingGameActionsCellTemplate" DataType="viewModels:GameViewModel">
+	<DataTemplate x:Key="ExistingGameActionsCellTemplate" DataType="avalonia:GameViewModel">
 		<StackPanel Orientation="Horizontal" Spacing="8">
 			<Button Classes="square"
 			        Content="{icons:MaterialIconExt TrashCanOutline}"

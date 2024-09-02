@@ -1,5 +1,4 @@
 ﻿using Avalonia.Media;
-using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 

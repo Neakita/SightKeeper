@@ -7,7 +7,7 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Games;
 using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Avalonia.ViewModels;
+namespace SightKeeper.Avalonia.Settings.Games;
 
 internal sealed class GamesRepositoryViewModel : IDisposable
 {

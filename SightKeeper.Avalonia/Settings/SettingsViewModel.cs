@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.Settings;
 

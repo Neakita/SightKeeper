@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Avalonia.ViewModels;
 
 namespace SightKeeper.Avalonia.DataSets;
 
