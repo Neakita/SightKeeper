@@ -12,12 +12,10 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
 {
     public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 
-    public DataSetsListViewModel(
-	    ObservableRepository<DataSet> observableRepository,
-	    WeightsDataAccess weightsDataAccess)
+    public DataSetsListViewModel(ObservableRepository<DataSet> observableRepository)
     {
         observableRepository.DataSetsSource.Connect()
-            .Transform(dataSet => new DataSetViewModel(dataSet, weightsDataAccess))
+            .Transform(dataSet => new DataSetViewModel(dataSet))
             .DisposeMany()
             .AddKey(viewModel => viewModel.DataSet)
             .Bind(out var dataSets)
@@ -26,7 +24,11 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
         DataSets = dataSets;
     }
 
-    public void Dispose() => _disposable.Dispose();
+    public void Dispose()
+    {
+	    _disposable.Dispose();
+	    _cache.Dispose();
+    }
 
     private readonly CompositeDisposable _disposable = new();
     private readonly SourceCache<DataSetViewModel, DataSet> _cache = new(viewModel => viewModel.DataSet);

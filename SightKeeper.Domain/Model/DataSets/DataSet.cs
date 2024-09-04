@@ -18,6 +18,8 @@ public abstract class DataSet
 		get => _resolution;
 		set
 		{
+			if (_resolution == value)
+				return;
 			Guard.IsEmpty(Screenshots);
 			Guard.IsGreaterThan<ushort>(value, 0);
 			Guard.IsEqualTo(value % 32, 0);

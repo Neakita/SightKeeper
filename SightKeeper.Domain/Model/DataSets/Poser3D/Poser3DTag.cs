@@ -18,7 +18,7 @@ public sealed class Poser3DTag : PoserTag, TagsFactory<Poser3DTag>
 	public TagsLibrary<Poser3DTag> Library { get; }
 	public override DataSet DataSet => Library.DataSet;
 
-	public KeyPointTag3D CreateKeyPoint(string name)
+	public override KeyPointTag3D CreateKeyPoint(string name)
 	{
 		Guard.IsEmpty(Items);
 		KeyPointTag3D tag = new(name, this);

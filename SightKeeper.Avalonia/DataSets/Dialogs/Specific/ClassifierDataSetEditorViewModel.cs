@@ -6,14 +6,16 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.Extensions;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Specific;
 
 internal sealed partial class ClassifierDataSetEditorViewModel : SpecificDataSetEditorViewModel
 {
 	public override string Header => "Classifier";
+	public override DataSetType DataSetType => DataSetType.Classifier;
 
-	public IReadOnlyCollection<TagViewModel> Tags => _tags;
+	public override IReadOnlyCollection<TagViewModel> Tags => _tags;
 
 	public ClassifierDataSetEditorViewModel() : base(true)
 	{

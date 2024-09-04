@@ -17,7 +17,7 @@ public sealed class Poser2DTag : PoserTag, TagsFactory<Poser2DTag>
 	public TagsLibrary<Poser2DTag> Library { get; }
 	public override DataSet DataSet => Library.DataSet;
 
-	public KeyPointTag2D CreateKeyPoint(string name)
+	public override KeyPointTag2D CreateKeyPoint(string name)
 	{
 		Guard.IsEmpty(Items);
 		KeyPointTag2D tag = new(name, this);

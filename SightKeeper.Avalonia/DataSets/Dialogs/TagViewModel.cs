@@ -32,4 +32,6 @@ internal partial class TagViewModel : ViewModel, TagData, INotifyDataErrorInfo
 
 	[ObservableProperty] private string _name;
 	[ObservableProperty] private Color _color;
+
+	uint TagData.Color => Color.ToUInt32();
 }

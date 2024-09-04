@@ -8,6 +8,7 @@ public abstract class TagsLibrary : IReadOnlyCollection<Tag>
 	public abstract int Count { get; }
 	public abstract DataSet DataSet { get; }
 
+	public abstract Tag CreateTag(string name);
 	public abstract IEnumerator<Tag> GetEnumerator();
 	IEnumerator IEnumerable.GetEnumerator()
 	{
@@ -25,7 +26,7 @@ public sealed class TagsLibrary<TTag> : TagsLibrary, IReadOnlyCollection<TTag> w
 		DataSet = dataSet;
 	}
 
-	public TTag CreateTag(string name)
+	public override TTag CreateTag(string name)
 	{
 		var tag = TTag.Create(name, this);
 		AddTag(tag);

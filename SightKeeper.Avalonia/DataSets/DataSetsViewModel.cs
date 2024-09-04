@@ -20,16 +20,19 @@ internal partial class DataSetsViewModel : ViewModel
 		DataSetsListViewModel dataSetsListViewModel,
 		DialogManager dialogManager,
 		GamesDataAccess gamesDataAccess,
-		ReadDataAccess<DataSet> dataSetsDataAccess)
+		ReadDataAccess<DataSet> dataSetsDataAccess,
+		DataSetCreator dataSetCreator)
 	{
 		_dialogManager = dialogManager;
 		_gamesDataAccess = gamesDataAccess;
+		_dataSetCreator = dataSetCreator;
 		DataSets = dataSetsListViewModel.DataSets;
 		_newDataSetDataValidator = new NewDataSetDataValidator(new DataSetDataValidator(), dataSetsDataAccess);
 	}
 
 	private readonly DialogManager _dialogManager;
 	private readonly GamesDataAccess _gamesDataAccess;
+	private readonly DataSetCreator _dataSetCreator;
 	private readonly NewDataSetDataValidator _newDataSetDataValidator;
 
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
@@ -39,7 +42,9 @@ internal partial class DataSetsViewModel : ViewModel
 	{
 		using CreateDataSetViewModel dialog = new(new DataSetEditorViewModel(_gamesDataAccess, _newDataSetDataValidator));
 		if (await _dialogManager.ShowDialogAsync(dialog))
-		{
-		}
+			_dataSetCreator.CreateDataSet(
+				dialog.DataSetEditor,
+				dialog.SpecificDataSetEditor.Tags,
+				dialog.SpecificDataSetEditor.DataSetType);
 	}
 }
