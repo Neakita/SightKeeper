@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
-             xmlns:specific="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Specific"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.CreateDataSetDialog"
@@ -12,23 +11,11 @@
 	<ScrollViewer>
 		<StackPanel Classes="regular-spacing">
 			<local:GeneralDataSetEditor DataContext="{Binding DataSetEditor}"/>
-			<ListBox SelectedItem="{Binding SpecificDataSetEditor}"
-			         ItemsSource="{Binding SpecificDataSetEditors}"
+			<ListBox SelectedItem="{Binding DataSetType}"
+			         ItemsSource="{Binding DataSetTypes}"
 			         Theme="{DynamicResource RadioButtonsListBoxTheme}"
-			         Classes="horizontal">
-				<ListBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Header}"/>
-					</DataTemplate>
-				</ListBox.ItemTemplate>
-			</ListBox>
-			<ContentControl Content="{Binding SpecificDataSetEditor}">
-				<ContentControl.DataTemplates>
-					<DataTemplate x:DataType="specific:ClassifierDataSetEditorViewModel">
-						<specific:ClassifierDataSetEditor/>
-					</DataTemplate>
-				</ContentControl.DataTemplates>
-			</ContentControl>
+			         Classes="horizontal"/>
+			<local:TagsEditor DataContext="{Binding TagsEditor}"/>
             <StackPanel Orientation="Horizontal"
                         Classes="regular-spacing"
                         HorizontalAlignment="Right">

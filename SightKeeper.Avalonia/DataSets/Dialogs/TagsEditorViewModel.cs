@@ -1,29 +1,23 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Subjects;
 using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Domain.Model.DataSets;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs.Specific;
+namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-internal sealed partial class ClassifierDataSetEditorViewModel : SpecificDataSetEditorViewModel
+internal sealed partial class TagsEditorViewModel : ViewModel, IDisposable
 {
-	public override string Header => "Classifier";
-	public override DataSetType DataSetType => DataSetType.Classifier;
+	public BehaviorObservable<bool> IsValid => _isValid;
+	public IReadOnlyCollection<TagViewModel> Tags => _tags;
 
-	public override IReadOnlyCollection<TagViewModel> Tags => _tags;
-
-	public ClassifierDataSetEditorViewModel() : base(true)
+	public void Dispose()
 	{
-	}
-
-	public override void Dispose()
-	{
-		base.Dispose();
 		foreach (var tag in Tags)
 		{
 			tag.PropertyChanged -= OnTagPropertyChanged;
@@ -31,6 +25,7 @@ internal sealed partial class ClassifierDataSetEditorViewModel : SpecificDataSet
 		}
 	}
 
+	private readonly BehaviorSubject<bool> _isValid = new(true);
 	private readonly AvaloniaList<TagViewModel> _tags = new();
 
 	[RelayCommand(CanExecute = nameof(CanAddTag))]

@@ -2,11 +2,9 @@
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
-using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Avalonia.DataSets.Dialogs.Specific;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Domain.Model.DataSets;
 
@@ -18,36 +16,35 @@ internal sealed partial class CreateDataSetViewModel : DialogViewModel<bool>, ID
 	protected override bool DefaultResult => false;
 
 	public DataSetEditorViewModel DataSetEditor { get; }
+	public TagsEditorViewModel TagsEditor { get; } = new();
 
-	public ImmutableArray<SpecificDataSetEditorViewModel> SpecificDataSetEditors { get; } =
+	public ImmutableArray<DataSetType> DataSetTypes { get; } =
 	[
-		new ClassifierDataSetEditorViewModel(),
-		new DetectorDataSetEditorViewModel(),
-		new Poser2DDataSetEditorViewModel(),
-		new Poser3DDataSetEditorViewModel()
+		DataSetType.Classifier,
+		DataSetType.Detector,
+		DataSetType.Poser2D,
+		DataSetType.Poser3D
 	];
 
 	public CreateDataSetViewModel(DataSetEditorViewModel dataSetDataSetEditor)
 	{
 		DataSetEditor = dataSetDataSetEditor;
 		DataSetEditor.Resolution = DataSet.DefaultResolution;
-		_specificDataSetEditor = SpecificDataSetEditors.First();
+		_dataSetType = DataSetTypes.First();
 		DataSetEditor.ErrorsChanged += OnDataSetEditorErrorsChanged;
-		_constructorDisposable = SpecificDataSetEditors.Select(editor => editor.IsValid).Cast<IObservable<bool>>()
-			.Aggregate((x, y) => x.Merge(y)).Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
+		_constructorDisposable = TagsEditor.IsValid.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
 	}
 
 	public void Dispose()
 	{
 		DataSetEditor.Dispose();
 		DataSetEditor.ErrorsChanged -= OnDataSetEditorErrorsChanged;
-		foreach (var editor in SpecificDataSetEditors)
-			editor.Dispose();
+		TagsEditor.Dispose();
 		_constructorDisposable.Dispose();
 	}
 
-	[ObservableProperty] private SpecificDataSetEditorViewModel _specificDataSetEditor;
-	private IDisposable _constructorDisposable;
+	[ObservableProperty] private DataSetType _dataSetType;
+	private readonly IDisposable _constructorDisposable;
 
 	private void OnDataSetEditorErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
 	{
@@ -63,6 +60,6 @@ internal sealed partial class CreateDataSetViewModel : DialogViewModel<bool>, ID
 
 	private bool CanApply()
 	{
-		return !DataSetEditor.HasErrors && SpecificDataSetEditor.IsValid;
+		return !DataSetEditor.HasErrors && TagsEditor.IsValid;
 	}
 }

@@ -44,7 +44,7 @@ internal partial class DataSetsViewModel : ViewModel
 		if (await _dialogManager.ShowDialogAsync(dialog))
 			_dataSetCreator.CreateDataSet(
 				dialog.DataSetEditor,
-				dialog.SpecificDataSetEditor.Tags,
-				dialog.SpecificDataSetEditor.DataSetType);
+				dialog.TagsEditor.Tags,
+				dialog.DataSetType);
 	}
 }

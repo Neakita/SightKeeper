@@ -1,13 +1,13 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Specific"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Specific.ClassifierDataSetEditor"
-             x:DataType="local:ClassifierDataSetEditorViewModel">
-	<StackPanel Classes="regular-spacing">
+             x:Class="SightKeeper.Avalonia.DataSets.Dialogs.TagsEditor"
+             x:DataType="local:TagsEditorViewModel">
+    <StackPanel Classes="regular-spacing">
         <Grid ColumnDefinitions="* 8 Auto">
             <TextBox Grid.Column="0"
                      Name="TagNameTextBox"
@@ -28,7 +28,7 @@
                 </Interaction.Behaviors>
             </Button>
         </Grid>
-		<ItemsControl ItemsSource="{Binding Tags}">
+        <ItemsControl ItemsSource="{Binding Tags}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <TextBox Text="{Binding Name}"/>
