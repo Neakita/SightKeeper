@@ -9,6 +9,8 @@ namespace SightKeeper.Domain.Model.DataSets;
 
 public abstract class DataSet
 {
+	public const ushort DefaultResolution = 320;
+
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
 	public Game? Game { get; set; }
@@ -36,7 +38,7 @@ public abstract class DataSet
 
 	public override string ToString() => Name;
 
-	private ushort _resolution = 320;
+	private ushort _resolution = DefaultResolution;
 }
 
 public class DataSet<TTag, TAsset> : DataSet

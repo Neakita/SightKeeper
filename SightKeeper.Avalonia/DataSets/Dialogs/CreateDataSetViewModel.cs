@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Avalonia.DataSets.Dialogs.Specific;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
@@ -29,6 +30,7 @@ internal sealed partial class CreateDataSetViewModel : DialogViewModel<bool>, ID
 	public CreateDataSetViewModel(DataSetEditorViewModel dataSetDataSetEditor)
 	{
 		DataSetEditor = dataSetDataSetEditor;
+		DataSetEditor.Resolution = DataSet.DefaultResolution;
 		_specificDataSetEditor = SpecificDataSetEditors.First();
 		DataSetEditor.ErrorsChanged += OnDataSetEditorErrorsChanged;
 		_constructorDisposable = SpecificDataSetEditors.Select(editor => editor.IsValid).Cast<IObservable<bool>>()
