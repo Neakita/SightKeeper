@@ -47,6 +47,28 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 		});
 	}
 
+	public void ValidateEntireViewModel()
+	{
+		var validationResult = _validator.Validate(_validatable);
+		_errors = validationResult.ToDictionary();
+		ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(null));
+	}
+
+	public void ValidateProperty(string propertyName)
+	{
+		var validationResult = _validator.Validate(_validatable, strategy => strategy.IncludeProperties(propertyName));
+		if (validationResult.IsValid)
+		{
+			if (_errors.Remove(propertyName))
+				ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+			return;
+		}
+		var wasValid = !_errors.ContainsKey(propertyName);
+		_errors[propertyName] = validationResult.ToDictionary().Single().Value;
+		if (wasValid)
+			ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+	}
+
 	private readonly IValidator<TValidatable> _validator;
 	private readonly ViewModel _viewModel;
 	private readonly TValidatable _validatable;
@@ -61,21 +83,5 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 			ValidateEntireViewModel();
 		else
 			ValidateProperty(e.PropertyName);
-	}
-
-	private void ValidateEntireViewModel()
-	{
-		var validationResult = _validator.Validate(_validatable);
-		_errors = validationResult.ToDictionary();
-		ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(null));
-	}
-
-	private void ValidateProperty(string propertyName)
-	{
-		var validationResult = _validator.Validate(_validatable, strategy => strategy.IncludeProperties(propertyName));
-		if (validationResult.IsValid)
-			_errors.Remove(propertyName);
-		else
-			_errors[propertyName] = validationResult.ToDictionary().Single().Value;
 	}
 }

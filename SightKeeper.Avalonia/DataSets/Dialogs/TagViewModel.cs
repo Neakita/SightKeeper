@@ -1,26 +1,35 @@
-﻿using Avalonia.Media;
+﻿using System;
+using System.Collections;
+using System.ComponentModel;
+using Avalonia.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
+using FluentValidation;
+using SightKeeper.Application.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-internal class TagViewModel : ViewModel
+internal partial class TagViewModel : ViewModel, TagData, INotifyDataErrorInfo
 {
-	public string Name
+	public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
 	{
-		get => _name;
-		set => SetProperty(ref _name, value);
+		add => Validator.ErrorsChanged += value;
+		remove => Validator.ErrorsChanged -= value;
 	}
 
-	public Color Color
-	{
-		get => _color;
-		set => SetProperty(ref _color, value);
-	}
+	public ViewModelValidator<TagData> Validator { get; }
+	public bool HasErrors => Validator.HasErrors;
 
-	public TagViewModel(string name)
+	public TagViewModel(string name, IValidator<TagData> validator)
 	{
 		_name = name;
+		Validator = new ViewModelValidator<TagData>(validator, this, this);
 	}
 
-	private string _name;
-	private Color _color;
+	public IEnumerable GetErrors(string? propertyName)
+	{
+		return Validator.GetErrors(propertyName);
+	}
+
+	[ObservableProperty] private string _name;
+	[ObservableProperty] private Color _color;
 }

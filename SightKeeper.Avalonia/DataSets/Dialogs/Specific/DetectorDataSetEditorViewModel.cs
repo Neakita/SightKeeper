@@ -3,4 +3,8 @@
 internal sealed class DetectorDataSetEditorViewModel : SpecificDataSetEditorViewModel
 {
 	public override string Header => "Detector";
+
+	public DetectorDataSetEditorViewModel() : base(true)
+	{
+	}
 }

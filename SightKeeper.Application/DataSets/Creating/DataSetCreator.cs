@@ -4,5 +4,5 @@ namespace SightKeeper.Application.DataSets.Creating;
 
 public interface DataSetCreator
 {
-    DetectorDataSet CreateDataSet(NewDataSetInfoDTO newDataSetInfo);
+    DetectorDataSet CreateDataSet(DataSetData data);
 }

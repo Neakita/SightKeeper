@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
              xmlns:specific="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Specific"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.CreateDataSetDialog"
              x:DataType="local:CreateDataSetViewModel"
              HorizontalAlignment="Center">
 	<ScrollViewer>
 		<StackPanel Classes="regular-spacing">
-			<local:GeneralDataSetEditor DataContext="{Binding GeneralDataSetEditor}"/>
+			<local:GeneralDataSetEditor DataContext="{Binding DataSetEditor}"/>
 			<ListBox SelectedItem="{Binding SpecificDataSetEditor}"
 			         ItemsSource="{Binding SpecificDataSetEditors}"
 			         Theme="{DynamicResource RadioButtonsListBoxTheme}"
@@ -28,6 +29,22 @@
 					</DataTemplate>
 				</ContentControl.DataTemplates>
 			</ContentControl>
+            <StackPanel Orientation="Horizontal"
+                        Classes="regular-spacing"
+                        HorizontalAlignment="Right">
+                <Button Command="{Binding ApplyCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <icons:MaterialIcon Kind="Check"/>
+                        <TextBlock Text="Apply"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding CloseCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <icons:MaterialIcon Kind="Close"/>
+                        <TextBlock Text="Cancel"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
 		</StackPanel>
 	</ScrollViewer>
 </UserControl>
