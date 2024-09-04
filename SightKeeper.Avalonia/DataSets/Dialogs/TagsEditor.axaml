@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.TagsEditor"
              x:DataType="local:TagsEditorViewModel">
@@ -29,11 +30,36 @@
             </Button>
         </Grid>
         <ItemsControl ItemsSource="{Binding Tags}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
+            <ItemsControl.DataTemplates>
+                <DataTemplate x:DataType="local:PoserTagViewModel">
+                    <HeaderedContentControl>
+                        <HeaderedContentControl.Header>
+                            <Grid ColumnDefinitions="Auto 8 *">
+                                <Button Grid.Column="0" Content="{icons:MaterialIconExt Kind=Plus}"
+                                        Classes="square"
+                                        ToolTip.Tip="Create keypoint tag"
+                                        Command="{Binding AddKeyPointTagCommand}"
+                                        CommandParameter="{Binding #TagNameTextBox.Text}">
+                                    <Interaction.Behaviors>
+                                        <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
+                                    </Interaction.Behaviors>
+                                </Button>
+                                <TextBox Grid.Column="2" Text="{Binding Name}"/>
+                            </Grid>
+                        </HeaderedContentControl.Header>
+                        <ItemsControl ItemsSource="{Binding KeyPointTags}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </HeaderedContentControl>
+                </DataTemplate>
+                <DataTemplate x:DataType="local:TagViewModel">
                     <TextBox Text="{Binding Name}"/>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+            </ItemsControl.DataTemplates>
         </ItemsControl>
     </StackPanel>
 </UserControl>

@@ -17,7 +17,7 @@ internal partial class TagViewModel : ViewModel, TagData, INotifyDataErrorInfo
 	}
 
 	public ViewModelValidator<TagData> Validator { get; }
-	public bool HasErrors => Validator.HasErrors;
+	public virtual bool HasErrors => Validator.HasErrors;
 
 	public TagViewModel(string name, IValidator<TagData> validator)
 	{

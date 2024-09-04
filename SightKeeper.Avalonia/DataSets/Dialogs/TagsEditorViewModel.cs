@@ -11,7 +11,7 @@ using SightKeeper.Avalonia.Extensions;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-internal sealed partial class TagsEditorViewModel : ViewModel, IDisposable
+internal partial class TagsEditorViewModel : ViewModel, IDisposable
 {
 	public BehaviorObservable<bool> IsValid => _isValid;
 	public IReadOnlyCollection<TagViewModel> Tags => _tags;
@@ -25,6 +25,11 @@ internal sealed partial class TagsEditorViewModel : ViewModel, IDisposable
 		}
 	}
 
+	protected virtual TagViewModel CreateTagViewModel(string name, TagDataValidator validator)
+	{
+		return new TagViewModel(name, validator);
+	}
+
 	private readonly BehaviorSubject<bool> _isValid = new(true);
 	private readonly AvaloniaList<TagViewModel> _tags = new();
 
@@ -32,7 +37,7 @@ internal sealed partial class TagsEditorViewModel : ViewModel, IDisposable
 	private void AddTag(string name)
 	{
 		TagDataValidator validator = new(Tags);
-		TagViewModel tag = new(name, validator);
+		TagViewModel tag = CreateTagViewModel(name, validator);
 		tag.PropertyChanged += OnTagPropertyChanged;
 		tag.ErrorsChanged += OnTagErrorsChanged;
 		_tags.Add(tag);
@@ -40,9 +45,19 @@ internal sealed partial class TagsEditorViewModel : ViewModel, IDisposable
 
 	private void OnTagErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
 	{
-		bool isValid = Tags.All(tag => !tag.HasErrors);
+		UpdateIsValid();
+	}
+
+	protected void UpdateIsValid()
+	{
+		bool isValid = Tags.All(IsTagValid);
 		if (IsValid != isValid)
 			_isValid.OnNext(isValid);
+	}
+
+	protected virtual bool IsTagValid(TagViewModel tag)
+	{
+		return !tag.HasErrors;
 	}
 
 	private void OnTagPropertyChanged(object? sender, PropertyChangedEventArgs e)

@@ -16,7 +16,12 @@ internal sealed partial class CreateDataSetViewModel : DialogViewModel<bool>, ID
 	protected override bool DefaultResult => false;
 
 	public DataSetEditorViewModel DataSetEditor { get; }
-	public TagsEditorViewModel TagsEditor { get; } = new();
+
+	public TagsEditorViewModel TagsEditor
+	{
+		get => _tagsEditor;
+		private set => SetProperty(ref _tagsEditor, value);
+	}
 
 	public ImmutableArray<DataSetType> DataSetTypes { get; } =
 	[
@@ -32,7 +37,7 @@ internal sealed partial class CreateDataSetViewModel : DialogViewModel<bool>, ID
 		DataSetEditor.Resolution = DataSet.DefaultResolution;
 		_dataSetType = DataSetTypes.First();
 		DataSetEditor.ErrorsChanged += OnDataSetEditorErrorsChanged;
-		_constructorDisposable = TagsEditor.IsValid.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
+		_tagsEditorSubscription = TagsEditor.IsValid.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
 	}
 
 	public void Dispose()
@@ -40,11 +45,24 @@ internal sealed partial class CreateDataSetViewModel : DialogViewModel<bool>, ID
 		DataSetEditor.Dispose();
 		DataSetEditor.ErrorsChanged -= OnDataSetEditorErrorsChanged;
 		TagsEditor.Dispose();
-		_constructorDisposable.Dispose();
+		_tagsEditorSubscription.Dispose();
 	}
 
 	[ObservableProperty] private DataSetType _dataSetType;
-	private readonly IDisposable _constructorDisposable;
+	private IDisposable _tagsEditorSubscription;
+	private TagsEditorViewModel _tagsEditor = new();
+
+	partial void OnDataSetTypeChanged(DataSetType value)
+	{
+		_tagsEditorSubscription.Dispose();
+		TagsEditor = value switch
+		{
+			DataSetType.Classifier or DataSetType.Detector => new TagsEditorViewModel(),
+			DataSetType.Poser2D or DataSetType.Poser3D => new PoserTagsEditorViewModel(),
+			_ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
+		};
+		_tagsEditorSubscription = TagsEditor.IsValid.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
+	}
 
 	private void OnDataSetEditorErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
 	{
