@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 using MemoryPack;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Data.Binary.Model.DataSets.Composition;
+namespace SightKeeper.Data.Binary.Model.DataSets.Compositions;
 
 /// <summary>
 /// MemoryPackable version of <see cref="TransparentComposition"/>

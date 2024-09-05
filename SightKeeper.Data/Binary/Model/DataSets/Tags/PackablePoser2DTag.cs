@@ -12,7 +12,12 @@ internal sealed class PackablePoser2DTag : PackableTag
 {
 	public ImmutableArray<PackableTag> KeyPointTags { get; }
 
-	public PackablePoser2DTag(string name, uint color, ImmutableArray<PackableTag> keyPointTags) : base(name, color)
+	public PackablePoser2DTag(
+		byte id,
+		string name,
+		uint color,
+		ImmutableArray<PackableTag> keyPointTags)
+		: base(id, name, color)
 	{
 		KeyPointTags = keyPointTags;
 	}
