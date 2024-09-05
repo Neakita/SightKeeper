@@ -1,16 +1,16 @@
 using System.Collections.Immutable;
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Poser3D;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Tags;
 
 /// <summary>
-/// MemoryPackable version of <see cref="PoserTag"/>
+/// MemoryPackable version of <see cref="Poser3DTag"/>
 /// </summary>
 [MemoryPackable]
-internal sealed partial class PackablePoser2DTag : PackablePoserTag
+internal sealed partial class PackablePoser3DTag : PackablePoserTag
 {
-	public PackablePoser2DTag(
+	public PackablePoser3DTag(
 		byte id,
 		string name,
 		uint color,
