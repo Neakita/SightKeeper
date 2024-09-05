@@ -1,5 +1,7 @@
+using System.Collections.Immutable;
 using MemoryPack;
 using SightKeeper.Data.Binary.Model.DataSets.Composition;
+using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Binary.Model.DataSets;
@@ -8,18 +10,44 @@ namespace SightKeeper.Data.Binary.Model.DataSets;
 /// MemoryPackable version of <see cref="DataSet"/>
 /// </summary>
 [MemoryPackable]
-internal sealed partial class PackableDataSet
+[MemoryPackUnion(0, typeof(PackableDataSet<PackableTag>))]
+internal abstract partial class PackableDataSet
 {
 	public string Name { get; }
 	public string Description { get; }
 	public ushort? GameId { get; }
 	public PackableComposition? Composition { get; }
+	public abstract IReadOnlyCollection<PackableTag> Tags { get; }
 
-	public PackableDataSet(string name, string description, ushort? gameId, PackableComposition? composition)
+	public PackableDataSet(
+		string name,
+		string description,
+		ushort? gameId,
+		PackableComposition? composition)
 	{
 		Name = name;
 		Description = description;
 		GameId = gameId;
 		Composition = composition;
+	}
+}
+
+/// <summary>
+/// MemoryPackable version of <see cref="DataSet{TTag,TAsset}"/>
+/// </summary>
+[MemoryPackable]
+internal sealed partial class PackableDataSet<TTag> : PackableDataSet where TTag : PackableTag
+{
+	public override ImmutableList<PackableTag> Tags { get; }
+
+	public PackableDataSet(
+		string name,
+		string description,
+		ushort? gameId,
+		PackableComposition? composition,
+		ImmutableList<PackableTag> tags)
+		: base(name, description, gameId, composition)
+	{
+		Tags = tags;
 	}
 }
