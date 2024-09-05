@@ -34,7 +34,6 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, I
 		Games = gamesDataAccess.Games;
 		_name = dataSet.Name;
 		_description = dataSet.Description;
-		_resolution = dataSet.Resolution;
 		_game = dataSet.Game;
 		_composition = dataSet.Composition;
 		_validator = new ViewModelValidator<DataSetData>(validator, this, this);
@@ -54,7 +53,6 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, I
 
 	[ObservableProperty] private string _name = string.Empty;
 	[ObservableProperty] private string _description = string.Empty;
-	[ObservableProperty] private int? _resolution;
 	[ObservableProperty] private Game? _game;
 	[ObservableProperty] private Composition? _composition;
 }

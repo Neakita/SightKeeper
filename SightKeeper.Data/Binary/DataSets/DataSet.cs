@@ -1,10 +1,11 @@
 ﻿using System.Collections.Immutable;
 using MemoryPack;
+using SightKeeper.Data.Binary.DataSets.Detector;
 
 namespace SightKeeper.Data.Binary.DataSets;
 
 [MemoryPackable]
-[MemoryPackUnion(0, typeof(Detector.DetectorDataSet))]
+[MemoryPackUnion(0, typeof(DetectorDataSet))]
 internal abstract partial class DataSet
 {
 	public string Name { get; }
@@ -33,11 +34,11 @@ internal abstract partial class DataSet
 
 	protected DataSet(Domain.Model.DataSets.DataSet dataSet, ushort? gameId, ImmutableArray<Screenshot> screenshots)
 	{
-		Name = dataSet.Name;
-		Description = dataSet.Description;
-		GameId = gameId;
-		Resolution = dataSet.Resolution;
-		MaxScreenshots = dataSet.Screenshots.MaxQuantity;
-		Screenshots = screenshots;
+		throw new NotImplementedException();
+		// Name = dataSet.Name;
+		// Description = dataSet.Description;
+		// GameId = gameId;
+		// MaxScreenshots = dataSet.Screenshots.MaxQuantity;
+		// Screenshots = screenshots;
 	}
 }

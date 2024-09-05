@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
@@ -9,7 +10,7 @@ public sealed class DetectorAssetLibraryTests
 	public void ShouldCreateAsset()
 	{
 		DetectorDataSet dataSet = new();
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		screenshot.Asset.Should().Be(asset);
 		dataSet.Assets.Should().Contain(asset);
@@ -19,7 +20,7 @@ public sealed class DetectorAssetLibraryTests
 	public void ShouldNotCreateDuplicateAsset()
 	{
 		DetectorDataSet dataSet = new();
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot));
 		screenshot.Asset.Should().Be(asset);
@@ -31,7 +32,7 @@ public sealed class DetectorAssetLibraryTests
 	public void ShouldDeleteAsset()
 	{
 		DetectorDataSet dataSet = new();
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		dataSet.Assets.DeleteAsset(asset);
 		dataSet.Assets.Should().BeEmpty();
@@ -43,7 +44,7 @@ public sealed class DetectorAssetLibraryTests
 	{
 		DetectorDataSet dataSet1 = new();
 		DetectorDataSet dataSet2 = new();
-		var screenshot = dataSet1.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet1.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet1.Assets.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet2.Assets.DeleteAsset(asset));
 		asset.Screenshot.Asset.Should().Be(asset);

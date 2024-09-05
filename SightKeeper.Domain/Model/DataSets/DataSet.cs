@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets.Assets;
+﻿using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
@@ -9,26 +8,9 @@ namespace SightKeeper.Domain.Model.DataSets;
 
 public abstract class DataSet
 {
-	public const ushort DefaultResolution = 320;
-
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
 	public Game? Game { get; set; }
-
-	public ushort Resolution
-	{
-		get => _resolution;
-		set
-		{
-			if (_resolution == value)
-				return;
-			Guard.IsEmpty(Screenshots);
-			Guard.IsGreaterThan<ushort>(value, 0);
-			Guard.IsEqualTo(value % 32, 0);
-			_resolution = value;
-		}
-	}
-
 	public Composition? Composition { get; set; }
 
 	public abstract TagsLibrary Tags { get; }
@@ -37,8 +19,6 @@ public abstract class DataSet
 	public abstract WeightsLibrary Weights { get; }
 
 	public override string ToString() => Name;
-
-	private ushort _resolution = DefaultResolution;
 }
 
 public class DataSet<TTag, TAsset> : DataSet

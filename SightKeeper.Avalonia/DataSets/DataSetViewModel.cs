@@ -9,7 +9,6 @@ internal sealed class DataSetViewModel : ViewModel
     public string Name => DataSet.Name;
     public string Description => DataSet.Description;
     public Game? Game => DataSet.Game;
-    public ushort Resolution => DataSet.Resolution;
 
     public DataSetViewModel(DataSet dataSet)
     {

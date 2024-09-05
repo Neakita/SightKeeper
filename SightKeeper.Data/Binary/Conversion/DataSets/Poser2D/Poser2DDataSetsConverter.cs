@@ -50,8 +50,7 @@ internal sealed class Poser2DDataSetsConverter
 		{
 			Name = raw.Name,
 			Description = raw.Description,
-			Game = null,
-			Resolution = raw.Resolution
+			Game = null
 		};
 		if (raw.GameId != null)
 			dataSet.Game = session.Games[raw.GameId.Value];
@@ -100,13 +99,14 @@ internal sealed class Poser2DDataSetsConverter
 
 	private void CreateScreenshots(Domain.Model.DataSets.Poser2D.Poser2DDataSet dataSet, ImmutableArray<Screenshot> screenshots, ReverseConversionSession session)
 	{
-		foreach (var rawScreenshot in screenshots)
-		{
-			var screenshot = dataSet.Screenshots.CreateScreenshot(rawScreenshot.CreationDate, out var removedScreenshots);
-			Guard.IsTrue(removedScreenshots.IsEmpty);
-			session.Screenshots.Add(rawScreenshot.Id, screenshot);
-			_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
-		}
+		throw new NotImplementedException();
+		// foreach (var rawScreenshot in screenshots)
+		// {
+		// 	var screenshot = dataSet.Screenshots.CreateScreenshot(rawScreenshot.CreationDate, new Vector2<ushort>(), out var removedScreenshots);
+		// 	Guard.IsTrue(removedScreenshots.IsEmpty);
+		// 	session.Screenshots.Add(rawScreenshot.Id, screenshot);
+		// 	_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
+		// }
 	}
 
 	private static void CreateAssets(Domain.Model.DataSets.Poser2D.Poser2DDataSet dataSet, ImmutableArray<Poser2DAsset> assets, ReverseConversionSession session)
@@ -122,12 +122,13 @@ internal sealed class Poser2DDataSetsConverter
 
 	private void CreateWeights(Domain.Model.DataSets.Poser2D.Poser2DDataSet dataSet, ImmutableArray<PoserWeights> raw, ReverseConversionSession session)
 	{
-		foreach (var rawWeights in raw)
-		{
-			var weights = dataSet.Weights.CreateWeights(rawWeights.CreationDate, rawWeights.Size, rawWeights.Metrics, ConvertBack(rawWeights.Tags, session));
-			_weightsDataAccess.AssociateId(weights, rawWeights.Id);
-			session.Weights.Add(rawWeights.Id, weights);
-		}
+		throw new NotImplementedException();
+		// foreach (var rawWeights in raw)
+		// {
+		// 	var weights = dataSet.Weights.CreateWeights(rawWeights.CreationDate, rawWeights.Size, rawWeights.Metrics, new Vector2<ushort>(), ConvertBack(rawWeights.Tags, session));
+		// 	_weightsDataAccess.AssociateId(weights, rawWeights.Id);
+		// 	session.Weights.Add(rawWeights.Id, weights);
+		// }
 	}
 
 	private IEnumerable<(Domain.Model.DataSets.Poser2D.Poser2DTag, IEnumerable<KeyPointTag2D>)> ConvertBack(

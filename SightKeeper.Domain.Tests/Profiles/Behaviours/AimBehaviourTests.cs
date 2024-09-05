@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using FluentAssertions;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
@@ -15,7 +16,7 @@ public sealed class AimBehaviourTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag]);
+		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();
@@ -30,10 +31,10 @@ public sealed class AimBehaviourTests
 	{
 		DetectorDataSet dataSet1 = new();
 		var tag1 = dataSet1.Tags.CreateTag("");
-		var weights1 = dataSet1.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag1]);
+		var weights1 = dataSet1.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1]);
 		DetectorDataSet dataSet2 = new();
 		var tag2 = dataSet2.Tags.CreateTag("");
-		dataSet2.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag2]);
+		dataSet2.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag2]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();

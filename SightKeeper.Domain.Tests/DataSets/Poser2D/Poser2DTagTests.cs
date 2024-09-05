@@ -33,7 +33,7 @@ public class Poser2DTagTests
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag, new Bounding(), [], []);
 		Assert.ThrowsAny<Exception>(() => tag.CreateKeyPoint(""));
@@ -46,7 +46,7 @@ public class Poser2DTagTests
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
 		var keyPoint = tag.CreateKeyPoint("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag, new Bounding(), [new Vector2<double>()], []);
 		Assert.ThrowsAny<Exception>(() => tag.DeleteKeyPoint(keyPoint));
@@ -59,7 +59,7 @@ public class Poser2DTagTests
 		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag1, new Bounding(), [], []);
 		var keyPoint = tag2.CreateKeyPoint("");
@@ -73,7 +73,7 @@ public class Poser2DTagTests
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
 		var keyPoint2 = tag2.CreateKeyPoint("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag1, new Bounding(), [], []);
 		tag2.DeleteKeyPoint(keyPoint2);

@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.DataSets.Classifier;
+﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Domain.Tests.DataSets.Classifier;
@@ -11,7 +12,7 @@ public sealed class ClassifierWeightsLibraryTests
 		ClassifierDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag1, tag2]);
+		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag2]);
 		dataSet.Weights.Should().Contain(weights);
 	}
 
@@ -19,7 +20,7 @@ public sealed class ClassifierWeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		ClassifierDataSet dataSet = new();
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), []));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), []));
 		dataSet.Weights.Should().BeEmpty();
 	}
 
@@ -28,7 +29,7 @@ public sealed class ClassifierWeightsLibraryTests
 	{
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag]));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]));
 		dataSet.Weights.Should().BeEmpty();
 	}
 
@@ -38,7 +39,7 @@ public sealed class ClassifierWeightsLibraryTests
 		ClassifierDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag1, tag1, tag2]));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag1, tag2]));
 		dataSet.Weights.Should().BeEmpty();
 	}
 }

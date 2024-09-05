@@ -37,9 +37,10 @@ public sealed class WeightsLibrary<TTag> : WeightsLibrary, IReadOnlyCollection<W
 		DateTime creationDate,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
+		Vector2<ushort> resolution,
 		IEnumerable<TTag> tags)
 	{
-		Weights<TTag> weights = new(creationDate, modelSize, metrics, tags, this);
+		Weights<TTag> weights = new(creationDate, modelSize, metrics, resolution, tags, this);
 		Guard.IsTrue(_weights.Add(weights));
 		return weights;
 	}
@@ -78,9 +79,10 @@ public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary, IReadOn
 		DateTime creationDate,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
+		Vector2<ushort> resolution,
 		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags)
 	{
-		Weights<TTag, TKeyPointTag> weights = new(creationDate, modelSize, metrics, tags, this);
+		Weights<TTag, TKeyPointTag> weights = new(creationDate, modelSize, metrics, resolution, tags, this);
 		Guard.IsTrue(_weights.Add(weights));
 		return weights;
 	}

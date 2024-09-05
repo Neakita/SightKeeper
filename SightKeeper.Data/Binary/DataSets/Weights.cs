@@ -28,7 +28,7 @@ internal abstract partial class Weights
 	{
 		Id = id;
 		CreationDate = weights.CreationDate;
-		Size = weights.Size;
+		Size = weights.ModelSize;
 		Metrics = weights.Metrics;
 	}
 }

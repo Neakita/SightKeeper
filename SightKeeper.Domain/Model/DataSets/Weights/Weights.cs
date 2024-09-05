@@ -8,18 +8,20 @@ namespace SightKeeper.Domain.Model.DataSets.Weights;
 public abstract class Weights
 {
 	public DateTime CreationDate { get; }
-	public ModelSize Size { get; }
+	public ModelSize ModelSize { get; }
 	public WeightsMetrics Metrics { get; }
+	public Vector2<ushort> Resolution { get; }
 	public abstract WeightsLibrary Library { get; }
-	public virtual DataSet DataSet => Library.DataSet;
+	public DataSet DataSet => Library.DataSet;
 
 	public abstract bool Contains(Tag tag);
 
-	protected Weights(DateTime creationDate, ModelSize size, WeightsMetrics metrics)
+	protected Weights(DateTime creationDate, ModelSize size, WeightsMetrics metrics, Vector2<ushort> resolution)
 	{
 		CreationDate = creationDate;
-		Size = size;
+		ModelSize = size;
 		Metrics = metrics;
+		Resolution = resolution;
 	}
 }
 
@@ -37,9 +39,10 @@ public sealed class Weights<TTag> : Weights where TTag : Tag, MinimumTagsCount
 		DateTime creationDate,
 		ModelSize size,
 		WeightsMetrics metrics,
+		Vector2<ushort> resolution,
 		IEnumerable<TTag> tags,
 		WeightsLibrary<TTag> library)
-		: base(creationDate, size, metrics)
+		: base(creationDate, size, metrics, resolution)
 	{
 		Tags = tags.ToImmutableHashSetThrowOnDuplicate();
 		Library = library;
@@ -75,9 +78,10 @@ public sealed class Weights<TTag, TKeyPointTag> : Weights
 		DateTime creationDate,
 		ModelSize size,
 		WeightsMetrics metrics,
+		Vector2<ushort> resolution,
 		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags,
 		WeightsLibrary<TTag, TKeyPointTag> library)
-		: base(creationDate, size, metrics)
+		: base(creationDate, size, metrics, resolution)
 	{
 		var builder = ImmutableDictionary.CreateBuilder<TTag, ImmutableHashSet<TKeyPointTag>>();
 		foreach (var (tag, keyPointTags) in tags)

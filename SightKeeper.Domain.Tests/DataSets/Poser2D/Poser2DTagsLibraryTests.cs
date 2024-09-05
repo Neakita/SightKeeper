@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.DataSets.Assets;
+﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 
 namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
@@ -47,7 +48,7 @@ public class Poser2DTagsLibraryTests
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag, new Bounding(0, 0, 1, 1), [], []);
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.DeleteTag(tag));

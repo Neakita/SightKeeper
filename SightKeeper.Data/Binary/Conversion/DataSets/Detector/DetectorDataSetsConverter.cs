@@ -47,8 +47,7 @@ internal sealed class DetectorDataSetsConverter
 		Domain.Model.DataSets.Detector.DetectorDataSet dataSet = new()
 		{
 			Name = raw.Name,
-			Description = raw.Description,
-			Resolution = raw.Resolution
+			Description = raw.Description
 		};
 		if (raw.GameId != null)
 			dataSet.Game = session.Games[raw.GameId.Value];
@@ -78,13 +77,14 @@ internal sealed class DetectorDataSetsConverter
 
 	private void AddScreenshots(Domain.Model.DataSets.Detector.DetectorDataSet dataSet, ImmutableArray<Screenshot> screenshots, ReverseConversionSession session)
 	{
-		foreach (var rawScreenshot in screenshots)
-		{
-			var screenshot = dataSet.Screenshots.CreateScreenshot(rawScreenshot.CreationDate, out var removedScreenshots);
-			Guard.IsTrue(removedScreenshots.IsEmpty);
-			session.Screenshots.Add(rawScreenshot.Id, screenshot);
-			_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
-		}
+		throw new NotImplementedException();
+		// foreach (var rawScreenshot in screenshots)
+		// {
+		// 	var screenshot = dataSet.Screenshots.CreateScreenshot(rawScreenshot.CreationDate, new Vector2<ushort>(), out var removedScreenshots);
+		// 	Guard.IsTrue(removedScreenshots.IsEmpty);
+		// 	session.Screenshots.Add(rawScreenshot.Id, screenshot);
+		// 	_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
+		// }
 	}
 
 	private static void AddAssets(Domain.Model.DataSets.Detector.DetectorDataSet dataSet, ImmutableArray<DetectorAsset> assets, ReverseConversionSession session)
@@ -100,11 +100,12 @@ internal sealed class DetectorDataSetsConverter
 
 	private void AddWeights(Domain.Model.DataSets.Detector.DetectorDataSet dataSet, ImmutableArray<WeightsWithTags> raw, ReverseConversionSession session)
 	{
-		foreach (var rawWeights in raw)
-		{
-			var weights = dataSet.Weights.CreateWeights(rawWeights.CreationDate, rawWeights.Size, rawWeights.Metrics, rawWeights.Tags.Select(tagId => (DetectorTag)session.Tags[tagId]));
-			_weightsDataAccess.AssociateId(weights, rawWeights.Id);
-			session.Weights.Add(rawWeights.Id, weights);
-		}
+		throw new NotImplementedException();
+		// foreach (var rawWeights in raw)
+		// {
+		// 	var weights = dataSet.Weights.CreateWeights(rawWeights.CreationDate, rawWeights.Size, rawWeights.Metrics, new Vector2<ushort>(), rawWeights.Tags.Select(tagId => (DetectorTag)session.Tags[tagId]));
+		// 	_weightsDataAccess.AssociateId(weights, rawWeights.Id);
+		// 	session.Weights.Add(rawWeights.Id, weights);
+		// }
 	}
 }

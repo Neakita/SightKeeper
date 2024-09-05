@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.DataSets.Detector;
+﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
@@ -10,7 +11,7 @@ public sealed class DetectorWeightsLibraryTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag]);
+		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
 		dataSet.Weights.Should().Contain(weights);
 	}
 
@@ -18,7 +19,7 @@ public sealed class DetectorWeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		DetectorDataSet dataSet = new();
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), []));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), []));
 		dataSet.Weights.Should().BeEmpty();
 	}
 
@@ -27,7 +28,7 @@ public sealed class DetectorWeightsLibraryTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag, tag]));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag, tag]));
 		dataSet.Weights.Should().BeEmpty();
 	}
 }

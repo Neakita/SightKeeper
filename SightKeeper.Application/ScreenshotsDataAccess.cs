@@ -10,11 +10,12 @@ public abstract class ScreenshotsDataAccess
 
 	public Screenshot CreateScreenshot(ScreenshotsLibrary library, byte[] data, DateTime creationDate)
 	{
-		var screenshot = library.CreateScreenshot(creationDate, out var removedScreenshots);
-		foreach (var removedScreenshot in removedScreenshots)
-			DeleteScreenshotData(removedScreenshot);
-		SaveScreenshotData(screenshot, data);
-		return screenshot;
+		throw new NotImplementedException();
+		// var screenshot = library.CreateScreenshot(creationDate, out var removedScreenshots);
+		// foreach (var removedScreenshot in removedScreenshots)
+		// 	DeleteScreenshotData(removedScreenshot);
+		// SaveScreenshotData(screenshot, data);
+		// return screenshot;
 	}
 
 	public Screenshot CreateScreenshot(ScreenshotsLibrary library, byte[] data)
@@ -29,11 +30,12 @@ public abstract class ScreenshotsDataAccess
 
 	public Screenshot<TAsset> CreateScreenshot<TAsset>(ScreenshotsLibrary<TAsset> library, byte[] data, DateTime creationDate) where TAsset : Asset
 	{
-		var screenshot = library.CreateScreenshot(creationDate, out var removedScreenshots);
-		foreach (var removedScreenshot in removedScreenshots)
-			DeleteScreenshotData(removedScreenshot);
-		SaveScreenshotData(screenshot, data);
-		return screenshot;
+		throw new NotImplementedException();
+		// var screenshot = library.CreateScreenshot(creationDate, out var removedScreenshots);
+		// foreach (var removedScreenshot in removedScreenshots)
+		// 	DeleteScreenshotData(removedScreenshot);
+		// SaveScreenshotData(screenshot, data);
+		// return screenshot;
 	}
 
 	public Screenshot<TAsset> CreateScreenshot<TAsset>(ScreenshotsLibrary<TAsset> library, byte[] data) where TAsset : Asset

@@ -14,7 +14,6 @@ internal sealed class CreateDataSetViewModel : DataSetDialogViewModel
 
 	public CreateDataSetViewModel(DataSetEditorViewModel dataSetEditor) : base(dataSetEditor)
 	{
-		DataSetEditor.Resolution = DataSet.DefaultResolution;
 		_typePickerSubscription = TypePicker.TypeChanged.Subscribe(OnDataSetTypeChanged);
 		_tagsEditorSubscription = TagsEditor.IsValid.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
 	}

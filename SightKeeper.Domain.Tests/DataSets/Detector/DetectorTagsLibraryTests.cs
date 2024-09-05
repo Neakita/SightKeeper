@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model.DataSets.Assets;
+﻿using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
@@ -47,7 +48,7 @@ public sealed class DetectorTagsLibraryTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
 		Assert.ThrowsAny<Exception>(() => dataSet.Tags.DeleteTag(tag));
@@ -60,7 +61,7 @@ public sealed class DetectorTagsLibraryTests
 		DetectorDataSet dataSet = new();
 		var tag1 = dataSet.Tags.CreateTag("1");
 		var tag2 = dataSet.Tags.CreateTag("2");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, out _);
+		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.Assets.MakeAsset(screenshot);
 		asset.CreateItem(tag1, new Bounding(0, 0, 1, 1));
 		dataSet.Tags.DeleteTag(tag2);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
@@ -11,7 +12,7 @@ public sealed class Poser2DWeightsLibraryTests
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [(tag, [])]);
+		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [(tag, [])]);
 		dataSet.Weights.Should().Contain(weights);
 	}
 
@@ -19,7 +20,7 @@ public sealed class Poser2DWeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		Poser2DDataSet dataSet = new();
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), []));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), []));
 		dataSet.Weights.Should().BeEmpty();
 	}
 
@@ -33,7 +34,7 @@ public sealed class Poser2DWeightsLibraryTests
 		var keyPoint2 = tag2.CreateKeyPoint("2.1");
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>();
 		tagsBuilder.Add(tag1, ImmutableHashSet.Create(keyPoint2));
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [(tag1, [keyPoint2])]));
+		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [(tag1, [keyPoint2])]));
 		dataSet.Weights.Should().BeEmpty();
 	}
 }

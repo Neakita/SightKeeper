@@ -7,7 +7,6 @@ public interface DataSetData
 {
     string Name { get; }
     string Description { get; }
-    int? Resolution { get; }
     Composition? Composition { get; }
     Game? Game { get; }
 }

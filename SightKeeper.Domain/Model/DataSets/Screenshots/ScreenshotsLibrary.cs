@@ -18,7 +18,7 @@ public abstract class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
 	public abstract DataSet DataSet { get; }
 
 	public abstract IEnumerator<Screenshot> GetEnumerator();
-	public abstract Screenshot CreateScreenshot(DateTime creationDate, out ImmutableArray<Screenshot> removedScreenshots);
+	public abstract Screenshot CreateScreenshot(DateTime creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots);
 
 	IEnumerator IEnumerable.GetEnumerator()
 	{
@@ -38,9 +38,9 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCo
 
     public override IEnumerator<Screenshot<TAsset>> GetEnumerator() => _screenshots.GetEnumerator();
 
-    public override Screenshot<TAsset> CreateScreenshot(DateTime creationDate, out ImmutableArray<Screenshot> removedScreenshots)
+    public override Screenshot<TAsset> CreateScreenshot(DateTime creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots)
     {
-	    Screenshot<TAsset> screenshot = new(this, creationDate);
+	    Screenshot<TAsset> screenshot = new(this, creationDate, resolution);
 	    if (_screenshots.Count != 0)
 			Guard.IsGreaterThan(creationDate, _screenshots[^1].CreationDate);
 	    _screenshots.Add(screenshot);

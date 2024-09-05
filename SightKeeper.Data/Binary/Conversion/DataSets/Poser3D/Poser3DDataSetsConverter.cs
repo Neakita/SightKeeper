@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Diagnostics;
+using FlakeId;
 using SightKeeper.Data.Binary.DataSets.Poser;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Poser;
@@ -52,8 +53,7 @@ internal sealed class Poser3DDataSetsConverter
 		{
 			Name = raw.Name,
 			Description = raw.Description,
-			Game = null,
-			Resolution = raw.Resolution
+			Game = null
 		};
 		if (raw.GameId != null)
 			dataSet.Game = session.Games[raw.GameId.Value];
@@ -113,13 +113,14 @@ internal sealed class Poser3DDataSetsConverter
 
 	private void CreateScreenshots(Domain.Model.DataSets.Poser3D.Poser3DDataSet dataSet, ImmutableArray<Screenshot> screenshots, ReverseConversionSession session)
 	{
-		foreach (var rawScreenshot in screenshots)
-		{
-			var screenshot = dataSet.Screenshots.CreateScreenshot(rawScreenshot.CreationDate, out var removedScreenshots);
-			Guard.IsTrue(removedScreenshots.IsEmpty);
-			session.Screenshots.Add(rawScreenshot.Id, screenshot);
-			_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
-		}
+		throw new NotImplementedException();
+		// foreach (var rawScreenshot in screenshots)
+		// {
+		// 	var screenshot = dataSet.Screenshots.CreateScreenshot(rawScreenshot.CreationDate, out var removedScreenshots);
+		// 	Guard.IsTrue(removedScreenshots.IsEmpty);
+		// 	session.Screenshots.Add(rawScreenshot.Id, screenshot);
+		// 	_screenshotsDataAccess.AssociateId(screenshot, rawScreenshot.Id);
+		// }
 	}
 
 	private static void CreateAssets(Domain.Model.DataSets.Poser3D.Poser3DDataSet dataSet, ImmutableArray<Poser3DAsset> assets, ReverseConversionSession session)
@@ -149,7 +150,7 @@ internal sealed class Poser3DDataSetsConverter
 	}
 
 	private ImmutableDictionary<Domain.Model.DataSets.Poser3D.Poser3DTag, ImmutableHashSet<KeyPointTag3D>> ConvertBack(
-		ImmutableArray<(FlakeId.Id Id, ImmutableArray<FlakeId.Id> KeyPointIds)> tags,
+		ImmutableArray<(Id Id, ImmutableArray<Id> KeyPointIds)> tags,
 		ReverseConversionSession session)
 	{
 		return tags.ToImmutableDictionary(

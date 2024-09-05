@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Application.DataSets.Tags;
+﻿using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
@@ -38,8 +37,6 @@ public sealed class DataSetCreator
 	{
 		dataSet.Name = data.Name;
 		dataSet.Description = data.Description;
-		Guard.IsNotNull(data.Resolution);
-		dataSet.Resolution = (ushort)data.Resolution;
 		dataSet.Composition = data.Composition;
 		dataSet.Game = data.Game;
 	}

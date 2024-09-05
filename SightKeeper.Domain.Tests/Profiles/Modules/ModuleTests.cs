@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
@@ -14,7 +15,7 @@ public sealed class ModuleTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.Tags.CreateTag("");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), [tag]);
+		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		module.PassiveScalingOptions = new IterativeScalingOptions();

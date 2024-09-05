@@ -17,8 +17,5 @@
 			<ComboBox SelectedItem="{Binding Game}"
 			          ItemsSource="{Binding Games}"/>
 		</HeaderedContentControl>
-        <HeaderedContentControl Header="Resolution">
-            <TextBox Text="{Binding Resolution, FallbackValue={x:Null}}"/>
-        </HeaderedContentControl>
 	</StackPanel>
 </UserControl>
