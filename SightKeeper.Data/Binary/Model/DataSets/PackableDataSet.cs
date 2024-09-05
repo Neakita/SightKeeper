@@ -17,18 +17,21 @@ internal abstract partial class PackableDataSet
 	public string Description { get; }
 	public ushort? GameId { get; }
 	public PackableComposition? Composition { get; }
+	public ImmutableArray<PackableScreenshot> Screenshots { get; }
 	public abstract IReadOnlyCollection<PackableTag> Tags { get; }
 
 	public PackableDataSet(
 		string name,
 		string description,
 		ushort? gameId,
-		PackableComposition? composition)
+		PackableComposition? composition,
+		ImmutableArray<PackableScreenshot> screenshots)
 	{
 		Name = name;
 		Description = description;
 		GameId = gameId;
 		Composition = composition;
+		Screenshots = screenshots;
 	}
 }
 
@@ -45,8 +48,9 @@ internal sealed partial class PackableDataSet<TTag> : PackableDataSet where TTag
 		string description,
 		ushort? gameId,
 		PackableComposition? composition,
+		ImmutableArray<PackableScreenshot> screenshots,
 		ImmutableList<PackableTag> tags)
-		: base(name, description, gameId, composition)
+		: base(name, description, gameId, composition, screenshots)
 	{
 		Tags = tags;
 	}
