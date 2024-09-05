@@ -8,10 +8,7 @@ public abstract class ItemProperty
 	{
 		get => _name;
 		[MemberNotNull(nameof(_name))]
-		set
-		{
-			_name = value;
-		}
+		set => _name = value;
 	}
 
 	protected ItemProperty(string name)
