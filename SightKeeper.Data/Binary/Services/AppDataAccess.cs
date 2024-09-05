@@ -2,7 +2,7 @@
 using MemoryPack;
 using SightKeeper.Application;
 
-namespace SightKeeper.Data.Binary;
+namespace SightKeeper.Data.Binary.Services;
 
 public sealed class AppDataAccess : ApplicationSettingsProvider
 {

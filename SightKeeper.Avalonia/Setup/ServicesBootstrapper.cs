@@ -6,7 +6,6 @@ using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
@@ -19,7 +18,7 @@ internal static class ServicesBootstrapper
 	public static void Setup(ContainerBuilder builder)
 	{
 		SetupBinarySerialization(builder);
-		builder.RegisterType<Data.Binary.GamesDataAccess>().As<GamesDataAccess>().SingleInstance();
+		builder.RegisterType<Data.Binary.Services.GamesDataAccess>().As<GamesDataAccess>().SingleInstance();
 		builder.RegisterType<ProcessesAvailableGamesProvider>();
 		builder.RegisterType<GameDataValidator>().As<IValidator<GameData>>();
 		builder.RegisterType<GameCreator>();

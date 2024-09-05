@@ -4,7 +4,7 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.DataSets;
 
-namespace SightKeeper.Data.Binary;
+namespace SightKeeper.Data.Binary.Services;
 
 public sealed class DataSetsDataAccess : ReadDataAccess<DataSet>, ObservableDataAccess<DataSet>, WriteDataAccess<DataSet>
 {
