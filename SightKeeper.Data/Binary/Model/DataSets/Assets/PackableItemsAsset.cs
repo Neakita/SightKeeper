@@ -6,7 +6,7 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 /// <summary>
 /// MemoryPackable version of <see cref="ItemsAsset{TItem}"/>
 /// </summary>
-internal abstract class PackableItemsAsset<TItem> : PackableAsset
+internal sealed class PackableItemsAsset<TItem> : PackableAsset
 {
 	public ImmutableArray<TItem> Items { get; }
 

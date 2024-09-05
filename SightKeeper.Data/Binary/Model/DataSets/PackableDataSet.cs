@@ -13,7 +13,8 @@ namespace SightKeeper.Data.Binary.Model.DataSets;
 /// </summary>
 [MemoryPackable]
 [MemoryPackUnion(0, typeof(PackableDataSet<PackableTag, PackableClassifierAsset, PackablePlainWeights>))]
-[MemoryPackUnion(1, typeof(PackableDataSet<PackableTag, PackableDetectorAsset, PackablePlainWeights>))]
+[MemoryPackUnion(1, typeof(PackableDataSet<PackableTag, PackableItemsAsset<PackableDetectorItem>, PackablePlainWeights>))]
+[MemoryPackUnion(2, typeof(PackableDataSet<PackablePoser2DTag, PackableItemsAsset<PackablePoser2DItem>, PackablePoserWeights>))]
 internal abstract partial class PackableDataSet
 {
 	public string Name { get; }
