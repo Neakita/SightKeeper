@@ -19,7 +19,8 @@ internal sealed class TreeDataGridDataSetsConverter : FuncValueConverter<IReadOn
 		{
 			Columns =
 			{
-				new TextColumn<DataSetViewModel, string>("Name", dataSet => dataSet.Name)
+				new TextColumn<DataSetViewModel, string>("Name", dataSet => dataSet.Name),
+				new TemplateColumn<DataSetViewModel>("Actions", "DataSetActions")
 			}
 		};
 		return source;

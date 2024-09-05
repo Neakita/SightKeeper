@@ -2,9 +2,9 @@
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-public partial class CreateDataSetDialog : UserControl
+public partial class DataSetDialog : UserControl
 {
-	public CreateDataSetDialog()
+	public DataSetDialog()
 	{
 		InitializeComponent();
 	}

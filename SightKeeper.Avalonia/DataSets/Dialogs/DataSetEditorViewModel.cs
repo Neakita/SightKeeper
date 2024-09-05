@@ -7,6 +7,7 @@ using FluentValidation;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.Games;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
@@ -25,6 +26,17 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, I
 	public DataSetEditorViewModel(GamesDataAccess gamesDataAccess, IValidator<DataSetData> validator)
 	{
 		Games = gamesDataAccess.Games;
+		_validator = new ViewModelValidator<DataSetData>(validator, this, this);
+	}
+
+	public DataSetEditorViewModel(GamesDataAccess gamesDataAccess, IValidator<DataSetData> validator, DataSet dataSet)
+	{
+		Games = gamesDataAccess.Games;
+		_name = dataSet.Name;
+		_description = dataSet.Description;
+		_resolution = dataSet.Resolution;
+		_game = dataSet.Game;
+		_composition = dataSet.Composition;
 		_validator = new ViewModelValidator<DataSetData>(validator, this, this);
 	}
 

@@ -16,7 +16,7 @@ internal static class ViewsBootstrapper
 			CreateDataTemplate<GamesSettings, GamesSettingsViewModel>(),
 			CreateDataTemplate<AddGameDialog, AddGameViewModel>(),
 			CreateDataTemplate<MessageBox, MessageBoxDialogViewModel>(),
-			CreateDataTemplate<CreateDataSetDialog, CreateDataSetViewModel>()
+			CreateDataTemplate<DataSetDialog, DataSetDialogViewModel>(),
 		];
 	}
 

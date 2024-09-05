@@ -3,6 +3,7 @@ using FluentValidation;
 using MemoryPack;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Creating;
+using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Data.Binary;
@@ -26,6 +27,7 @@ internal static class ServicesBootstrapper
 		builder.RegisterGeneric(typeof(ObservableRepository<>)).SingleInstance();
 		builder.RegisterType<DataSetsDataAccess>().As<ObservableDataAccess<DataSet>>().As<ReadDataAccess<DataSet>>().As<WriteDataAccess<DataSet>>().SingleInstance();
 		builder.RegisterType<DataSetCreator>();
+		builder.RegisterType<DataSetEditor>().SingleInstance();
 	}
 
 	private static void SetupBinarySerialization(ContainerBuilder builder)

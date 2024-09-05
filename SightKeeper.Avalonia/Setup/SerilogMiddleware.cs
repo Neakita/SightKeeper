@@ -13,17 +13,15 @@ internal sealed class SerilogMiddleware : IResolveMiddleware
 
 	public void Execute(ResolveRequestContext context, Action<ResolveRequestContext> next)
 	{
-		context.ChangeParameters(context.Parameters.Union(
-			new[]
-			{
-				new ResolvedParameter(
+		context.ChangeParameters(context.Parameters.Append(
+			new ResolvedParameter(
 					(p, _) => p.ParameterType == typeof(ILogger),
 					(p, _) =>
 					{
 						Guard.IsNotNull(p.Member.DeclaringType);
 						return Log.ForContext(p.Member.DeclaringType);
 					})
-			}));
+		));
 		next(context);
 	}
 }

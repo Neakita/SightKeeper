@@ -6,9 +6,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FluentValidation;
 using SightKeeper.Application.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 
-internal partial class TagViewModel : ViewModel, TagData, INotifyDataErrorInfo
+internal partial class TagDataViewModel : ViewModel, NewTagData, INotifyDataErrorInfo
 {
 	public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
 	{
@@ -16,13 +16,13 @@ internal partial class TagViewModel : ViewModel, TagData, INotifyDataErrorInfo
 		remove => Validator.ErrorsChanged -= value;
 	}
 
-	public ViewModelValidator<TagData> Validator { get; }
+	public ViewModelValidator<NewTagData> Validator { get; }
 	public virtual bool HasErrors => Validator.HasErrors;
 
-	public TagViewModel(string name, IValidator<TagData> validator)
+	public TagDataViewModel(string name, IValidator<NewTagData> validator)
 	{
 		_name = name;
-		Validator = new ViewModelValidator<TagData>(validator, this, this);
+		Validator = new ViewModelValidator<NewTagData>(validator, this, this);
 	}
 
 	public IEnumerable GetErrors(string? propertyName)
@@ -33,5 +33,5 @@ internal partial class TagViewModel : ViewModel, TagData, INotifyDataErrorInfo
 	[ObservableProperty] private string _name;
 	[ObservableProperty] private Color _color;
 
-	uint TagData.Color => Color.ToUInt32();
+	uint NewTagData.Color => Color.ToUInt32();
 }

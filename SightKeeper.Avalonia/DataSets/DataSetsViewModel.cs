@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
+using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs;
@@ -21,18 +22,23 @@ internal partial class DataSetsViewModel : ViewModel
 		DialogManager dialogManager,
 		GamesDataAccess gamesDataAccess,
 		ReadDataAccess<DataSet> dataSetsDataAccess,
-		DataSetCreator dataSetCreator)
+		DataSetCreator dataSetCreator,
+		DataSetEditor dataSetEditor)
 	{
 		_dialogManager = dialogManager;
 		_gamesDataAccess = gamesDataAccess;
+		_dataSetsDataAccess = dataSetsDataAccess;
 		_dataSetCreator = dataSetCreator;
+		_dataSetEditor = dataSetEditor;
 		DataSets = dataSetsListViewModel.DataSets;
 		_newDataSetDataValidator = new NewDataSetDataValidator(new DataSetDataValidator(), dataSetsDataAccess);
 	}
 
 	private readonly DialogManager _dialogManager;
 	private readonly GamesDataAccess _gamesDataAccess;
+	private readonly ReadDataAccess<DataSet> _dataSetsDataAccess;
 	private readonly DataSetCreator _dataSetCreator;
+	private readonly DataSetEditor _dataSetEditor;
 	private readonly NewDataSetDataValidator _newDataSetDataValidator;
 
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
@@ -45,6 +51,14 @@ internal partial class DataSetsViewModel : ViewModel
 			_dataSetCreator.Create(
 				dialog.DataSetEditor,
 				dialog.TagsEditor.Tags,
-				dialog.DataSetType);
+				dialog.TypePicker.Type);
+	}
+
+	[RelayCommand]
+	private async Task EditDataSetAsync(DataSet dataSet)
+	{
+		using EditDataSetViewModel dialog = new(dataSet, new DataSetEditorViewModel(_gamesDataAccess, new ExistingDataSetDataValidator(dataSet, new DataSetDataValidator(), _dataSetsDataAccess), dataSet));
+		if (await _dialogManager.ShowDialogAsync(dialog))
+			_dataSetEditor.Edit(dataSet, dialog.DataSetEditor, dialog.TagsEditor.Tags);
 	}
 }
