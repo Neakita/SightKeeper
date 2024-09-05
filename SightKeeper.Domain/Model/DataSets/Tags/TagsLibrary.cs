@@ -3,7 +3,7 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Tags;
 
-public abstract class TagsLibrary : IReadOnlyCollection<Tag>
+public abstract class TagsLibrary : IReadOnlyCollection<Tag>, TagsHolder
 {
 	public abstract int Count { get; }
 	public abstract DataSet DataSet { get; }

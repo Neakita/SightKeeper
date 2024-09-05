@@ -42,7 +42,7 @@ internal partial class DataSetsViewModel : ViewModel
 	{
 		using CreateDataSetViewModel dialog = new(new DataSetEditorViewModel(_gamesDataAccess, _newDataSetDataValidator));
 		if (await _dialogManager.ShowDialogAsync(dialog))
-			_dataSetCreator.CreateDataSet(
+			_dataSetCreator.Create(
 				dialog.DataSetEditor,
 				dialog.TagsEditor.Tags,
 				dialog.DataSetType);

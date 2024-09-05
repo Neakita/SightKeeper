@@ -16,7 +16,7 @@ public sealed class DataSetCreator
 		_dataAccess = dataAccess;
 	}
 
-	public DataSet CreateDataSet(DataSetData data, IReadOnlyCollection<TagData> tagsData, DataSetType type)
+	public DataSet Create(DataSetData data, IReadOnlyCollection<NewTagData> tagsData, DataSetType type)
 	{
 		DataSet dataSet = type switch
 		{
@@ -44,18 +44,18 @@ public sealed class DataSetCreator
 		dataSet.Game = data.Game;
 	}
 
-	private static void AddTags(DataSet dataSet, IReadOnlyCollection<TagData> tagsData)
+	private static void AddTags(DataSet dataSet, IReadOnlyCollection<NewTagData> tagsData)
 	{
 		foreach (var tagData in tagsData)
 		{
 			var tag = dataSet.Tags.CreateTag(tagData.Name);
 			tag.Color = tagData.Color;
 			if (tag is PoserTag poserTag)
-				CreateKeyPointTags(poserTag, (PoserTagData)tagData);
+				CreateKeyPointTags(poserTag, (NewPoserTagData)tagData);
 		}
 	}
 
-	private static void CreateKeyPointTags(PoserTag tag, PoserTagData data)
+	private static void CreateKeyPointTags(PoserTag tag, NewPoserTagData data)
 	{
 		foreach (var keyPointTagData in data.KeyPointTags)
 		{

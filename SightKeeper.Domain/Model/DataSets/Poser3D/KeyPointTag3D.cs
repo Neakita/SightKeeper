@@ -7,6 +7,11 @@ public sealed class KeyPointTag3D : KeyPointTag<Poser3DTag>
 {
 	public override Poser3DTag PoserTag { get; }
 
+	public override void Delete()
+	{
+		PoserTag.DeleteKeyPoint(this);
+	}
+
 	internal KeyPointTag3D(string name, Poser3DTag poserTag) : base(name, poserTag.KeyPoints)
 	{
 		PoserTag = poserTag;

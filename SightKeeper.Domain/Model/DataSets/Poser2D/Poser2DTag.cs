@@ -43,6 +43,11 @@ public sealed class Poser2DTag : PoserTag, TagsFactory<Poser2DTag>
 		_properties.Remove(property);
 	}
 
+	public override void Delete()
+	{
+		Library.DeleteTag(this);
+	}
+
 	internal Poser2DTag(string name, TagsLibrary<Poser2DTag> library) : base(name, library)
 	{
 		Library = library;

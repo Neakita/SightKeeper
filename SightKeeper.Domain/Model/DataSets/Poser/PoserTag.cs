@@ -2,8 +2,10 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Poser;
 
-public abstract class PoserTag : ItemTag
+public abstract class PoserTag : ItemTag, TagsHolder
 {
+	Tag TagsHolder.CreateTag(string name) => CreateKeyPoint(name);
+
 	public abstract override IReadOnlyCollection<PoserItem> Items { get; }
 
 	public abstract KeyPointTag CreateKeyPoint(string name);

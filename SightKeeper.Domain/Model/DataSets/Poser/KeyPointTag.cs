@@ -4,7 +4,7 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public abstract class KeyPointTag : Tag
 {
-	public abstract Tag PoserTag { get; }
+	public abstract PoserTag PoserTag { get; }
 	public override DataSet DataSet => PoserTag.DataSet;
 
 	protected KeyPointTag(string name, IEnumerable<Tag> siblings) : base(name, siblings)

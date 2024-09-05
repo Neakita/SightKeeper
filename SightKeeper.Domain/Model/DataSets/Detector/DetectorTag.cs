@@ -16,6 +16,11 @@ public sealed class DetectorTag : ItemTag, MinimumTagsCount, TagsFactory<Detecto
 	public TagsLibrary<DetectorTag> Library { get; }
 	public override DataSet DataSet => Library.DataSet;
 
+	public override void Delete()
+	{
+		Library.DeleteTag(this);
+	}
+
 	internal DetectorTag(string name, TagsLibrary<DetectorTag> library) : base(name, library)
 	{
 		Library = library;

@@ -58,6 +58,11 @@ public sealed class Poser3DTag : PoserTag, TagsFactory<Poser3DTag>
 		Guard.IsTrue(_booleanProperties.Remove(property));
 	}
 
+	public override void Delete()
+	{
+		Library.DeleteTag(this);
+	}
+
 	internal Poser3DTag(string name, TagsLibrary<Poser3DTag> library) : base(name, library)
 	{
 		Library = library;
