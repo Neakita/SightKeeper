@@ -54,11 +54,11 @@ internal sealed partial class PackableDataSet<TTag, TAsset> : PackableDataSet
 		ushort? gameId,
 		PackableComposition? composition,
 		ImmutableArray<PackableScreenshot> screenshots,
-		ImmutableList<TTag> tags,
-		ImmutableList<TAsset> assets)
+		IEnumerable<PackableTag> tags,
+		IEnumerable<PackableAsset> assets)
 		: base(name, description, gameId, composition, screenshots)
 	{
-		Tags = tags;
-		Assets = assets;
+		Tags = tags.Cast<TTag>().ToImmutableList();
+		Assets = assets.Cast<TAsset>().ToImmutableList();
 	}
 }

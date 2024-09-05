@@ -8,7 +8,7 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 /// MemoryPackable version of <see cref="ClassifierAsset"/>
 /// </summary>
 [MemoryPackable]
-internal sealed class PackableClassifierAsset : PackableAsset
+internal sealed partial class PackableClassifierAsset : PackableAsset
 {
 	public byte TagId { get; }
 
