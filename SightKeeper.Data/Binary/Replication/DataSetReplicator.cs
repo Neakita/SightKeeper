@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
+using FlakeId;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Compositions;
@@ -28,9 +29,13 @@ internal abstract class DataSetReplicator
 		var game = packed.GameId == null ? null : session.Games[packed.GameId.Value];
 		var composition = ReplicateComposition(packed.Composition);
 		var dataSet = CreateDataSet(packed.Name, packed.Description, game, composition);
-		ReplicateScreenshots(dataSet.Screenshots, packed.Screenshots);
+		var screenshotsLookup = ReplicateScreenshots(dataSet.Screenshots, packed.Screenshots);
 		var tagsLookup = ReplicateTags(dataSet.Tags, packed.GetTags());
-		ReplicateAssets(dataSet.Assets, packed.GetAssets(), (tagId, keyPointTagId) => tagsLookup[(tagId, keyPointTagId)]);
+		ReplicateAssets(
+			dataSet.Assets,
+			packed.GetAssets(),
+			screenshotId => screenshotsLookup[screenshotId],
+			(tagId, keyPointTagId) => tagsLookup[(tagId, keyPointTagId)]);
 		return dataSet;
 	}
 
@@ -48,7 +53,7 @@ internal abstract class DataSetReplicator
 		return tag;
 	}
 
-	protected abstract void ReplicateAsset(AssetsLibrary library, PackableAsset asset, TagGetter getTag);
+	protected abstract void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Func<Id, Screenshot> getScreenshot, TagGetter getTag);
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
@@ -64,14 +69,17 @@ internal abstract class DataSetReplicator
 		};
 	}
 
-	private void ReplicateScreenshots(ScreenshotsLibrary library, ImmutableArray<PackableScreenshot> screenshots)
+	private ImmutableDictionary<Id, Screenshot> ReplicateScreenshots(ScreenshotsLibrary library, ImmutableArray<PackableScreenshot> screenshots)
 	{
+		var builder = ImmutableDictionary.CreateBuilder<Id, Screenshot>();
 		foreach (var packedScreenshot in screenshots)
 		{
 			var screenshot = library.CreateScreenshot(packedScreenshot.CreationDate, packedScreenshot.Resolution, out var removedScreenshots);
 			Guard.IsTrue(removedScreenshots.IsEmpty);
 			_screenshotsDataAccess.AssociateId(screenshot, packedScreenshot.Id);
+			builder.Add(packedScreenshot.Id, screenshot);
 		}
+		return builder.ToImmutable();
 	}
 
 	private ImmutableDictionary<(byte, byte?), Tag> ReplicateTags(TagsLibrary library, ImmutableArray<PackableTag> tags)
@@ -82,9 +90,9 @@ internal abstract class DataSetReplicator
 		return lookupBuilder.ToImmutable();
 	}
 
-	private void ReplicateAssets(AssetsLibrary library, ImmutableArray<PackableAsset> assets, TagGetter getTag)
+	private void ReplicateAssets(AssetsLibrary library, ImmutableArray<PackableAsset> assets, Func<Id, Screenshot> getScreenshot, TagGetter getTag)
 	{
 		foreach (var asset in assets)
-			ReplicateAsset(library, asset, getTag);
+			ReplicateAsset(library, asset, getScreenshot, getTag);
 	}
 }
