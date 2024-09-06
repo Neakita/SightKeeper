@@ -1,11 +1,13 @@
 using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Binary.Model.DataSets;
+using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Compositions;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
 
@@ -13,6 +15,8 @@ namespace SightKeeper.Data.Binary.Replication;
 
 internal abstract class DataSetReplicator
 {
+	protected delegate Tag TagGetter(byte TagId, byte? KeyPointTagId = null);
+	
 	public DataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
@@ -26,6 +30,7 @@ internal abstract class DataSetReplicator
 		var dataSet = CreateDataSet(packed.Name, packed.Description, game, composition);
 		ReplicateScreenshots(dataSet.Screenshots, packed.Screenshots);
 		var tagsLookup = ReplicateTags(dataSet.Tags, packed.GetTags());
+		ReplicateAssets(dataSet.Assets, packed.GetAssets(), (tagId, keyPointTagId) => tagsLookup[(tagId, keyPointTagId)]);
 		return dataSet;
 	}
 
@@ -42,6 +47,8 @@ internal abstract class DataSetReplicator
 		lookupBuilder.Add((insertIndex, null), tag);
 		return tag;
 	}
+
+	protected abstract void ReplicateAsset(AssetsLibrary library, PackableAsset asset, TagGetter getTag);
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
@@ -73,5 +80,11 @@ internal abstract class DataSetReplicator
 		foreach (var tag in tags)
 			ReplicateTag(library, tag, lookupBuilder);
 		return lookupBuilder.ToImmutable();
+	}
+
+	private void ReplicateAssets(AssetsLibrary library, ImmutableArray<PackableAsset> assets, TagGetter getTag)
+	{
+		foreach (var asset in assets)
+			ReplicateAsset(library, asset, getTag);
 	}
 }

@@ -39,6 +39,7 @@ internal abstract partial class PackableDataSet
 	}
 
 	public abstract ImmutableArray<PackableTag> GetTags();
+	public abstract ImmutableArray<PackableAsset> GetAssets();
 }
 
 /// <summary>
@@ -72,5 +73,10 @@ internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSe
 	public sealed override ImmutableArray<PackableTag> GetTags()
 	{
 		return ImmutableArray<PackableTag>.CastUp(Tags);
+	}
+
+	public sealed override ImmutableArray<PackableAsset> GetAssets()
+	{
+		return ImmutableArray<PackableAsset>.CastUp(Assets);
 	}
 }
