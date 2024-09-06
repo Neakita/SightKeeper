@@ -1,4 +1,6 @@
 ﻿using MemoryPack;
+using SightKeeper.Data.Binary.Conversion;
+using SightKeeper.Data.Binary.Conversion.DataSets;
 using SightKeeper.Data.Binary.Services;
 
 namespace SightKeeper.Data.Binary;
@@ -9,6 +11,7 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		FileSystemScreenshotsDataAccess screenshotsDataAccess,
 		FileSystemWeightsDataAccess weightsDataAccess)
 	{
+		_dataSetConverter = new MultiDataSetConverter(screenshotsDataAccess);
 	}
 	
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref AppData? value)
@@ -18,6 +21,12 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			writer.WriteNullObjectHeader();
 			return;
 		}
+		ConversionSession session = new();
+		PackableAppData raw = new(
+			value.ApplicationSettings,
+			GamesConverter.Convert(value.Games, session),
+			_dataSetConverter.Convert(value.DataSets, session));
+		writer.WritePackable(raw);
 	}
 
 	public override void Deserialize(ref MemoryPackReader reader, scoped ref AppData? value)
@@ -28,11 +37,14 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			value = null;
 			return;
 		}
-		var raw = reader.ReadPackable<PackableAppData>();
-		if (raw == null)
+		var packable = reader.ReadPackable<PackableAppData>();
+		if (packable == null)
 		{
 			value = null;
 			return;
 		}
+		throw new NotImplementedException();
 	}
+
+	private readonly MultiDataSetConverter _dataSetConverter;
 }
