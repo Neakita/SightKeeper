@@ -1,9 +1,11 @@
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
+using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets;
 
@@ -34,5 +36,13 @@ internal sealed class DetectorDataSetReplicator : DataSetReplicator
 			var itemTag = (DetectorTag)getTag(packedItem.TagId);
 			asset.CreateItem(itemTag, packedItem.Bounding);
 		}
+	}
+
+	protected override void ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag)
+	{
+		var typedLibrary = (WeightsLibrary<DetectorTag>)library;
+		var typedWeights = (PackablePlainWeights)weights;
+		var tags = typedWeights.TagIds.Select(id => getTag(id)).Cast<DetectorTag>();
+		typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
 	}
 }

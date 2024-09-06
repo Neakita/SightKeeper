@@ -5,12 +5,14 @@ using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Compositions;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
+using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets;
 
@@ -54,6 +56,7 @@ internal abstract class DataSetReplicator
 	}
 
 	protected abstract void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, TagGetter getTag);
+	protected abstract void ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag);
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
@@ -94,5 +97,13 @@ internal abstract class DataSetReplicator
 	{
 		foreach (var asset in assets)
 			ReplicateAsset(library, asset, getScreenshot(asset.ScreenshotId), getTag);
+	}
+
+	private void ReplicateWeights(WeightsLibrary library, ImmutableArray<PackableWeights> weights, TagGetter getTag)
+	{
+		foreach (var item in weights)
+		{
+			ReplicateWeights(library, item, getTag);
+		}
 	}
 }
