@@ -1,3 +1,4 @@
+using FlakeId;
 using MemoryPack;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
@@ -12,7 +13,7 @@ internal sealed partial class PackableClassifierAsset : PackableAsset
 {
 	public byte TagId { get; }
 
-	public PackableClassifierAsset(AssetUsage usage, uint screenshotId, byte tagId) : base(usage, screenshotId)
+	public PackableClassifierAsset(AssetUsage usage, Id screenshotId, byte tagId) : base(usage, screenshotId)
 	{
 		TagId = tagId;
 	}

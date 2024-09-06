@@ -1,3 +1,4 @@
+using FlakeId;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
@@ -8,9 +9,9 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 internal abstract class PackableAsset
 {
 	public AssetUsage Usage { get; }
-	public uint ScreenshotId { get; }
+	public Id ScreenshotId { get; }
 
-	protected PackableAsset(AssetUsage usage, uint screenshotId)
+	protected PackableAsset(AssetUsage usage, Id screenshotId)
 	{
 		Usage = usage;
 		ScreenshotId = screenshotId;
