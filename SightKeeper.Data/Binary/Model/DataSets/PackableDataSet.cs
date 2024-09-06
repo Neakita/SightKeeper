@@ -12,10 +12,10 @@ namespace SightKeeper.Data.Binary.Model.DataSets;
 /// MemoryPackable version of <see cref="DataSet"/>
 /// </summary>
 [MemoryPackable]
-[MemoryPackUnion(0, typeof(PackableDataSet<PackableTag, PackableClassifierAsset, PackablePlainWeights>))]
-[MemoryPackUnion(1, typeof(PackableDataSet<PackableTag, PackableItemsAsset<PackableDetectorItem>, PackablePlainWeights>))]
-[MemoryPackUnion(2, typeof(PackableDataSet<PackablePoser2DTag, PackableItemsAsset<PackablePoser2DItem>, PackablePoserWeights>))]
-[MemoryPackUnion(3, typeof(PackableDataSet<PackablePoser3DTag, PackableItemsAsset<PackablePoser3DItem>, PackablePoserWeights>))]
+[MemoryPackUnion(0, typeof(PackableClassifierDataSet))]
+[MemoryPackUnion(1, typeof(PackableDetectorDataSet))]
+[MemoryPackUnion(2, typeof(PackablePoser2DDataSet))]
+[MemoryPackUnion(3, typeof(PackablePoser3DDataSet))]
 internal abstract partial class PackableDataSet
 {
 	public string Name { get; }
@@ -45,8 +45,7 @@ internal abstract partial class PackableDataSet
 /// <summary>
 /// MemoryPackable version of <see cref="DataSet{TTag,TAsset}"/>
 /// </summary>
-[MemoryPackable]
-internal sealed partial class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSet
+internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSet
 	where TTag : PackableTag
 	where TAsset : PackableAsset
 	where TWeights : PackableWeights
