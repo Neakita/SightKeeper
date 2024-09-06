@@ -33,7 +33,7 @@ internal static class ServicesBootstrapper
 	{
 		FileSystemScreenshotsDataAccess screenshotsDataAccess = new();
 		FileSystemWeightsDataAccess weightsDataAccess = new();
-		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, weightsDataAccess));
+		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess));
 		AppDataAccess appDataAccess = new();
 		appDataAccess.Load();
 		builder.RegisterInstance(screenshotsDataAccess);
