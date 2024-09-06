@@ -7,14 +7,13 @@ using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
-internal sealed class Poser2DDataSetConverter : DataSetConverter<Poser2DDataSet>
+internal sealed class Poser2DDataSetConverter : PoserDataSetConverter<Poser2DTag, KeyPointTag2D, Poser2DAsset>
 {
 	public Poser2DDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
@@ -42,14 +41,6 @@ internal sealed class Poser2DDataSetConverter : DataSetConverter<Poser2DDataSet>
 			tag.Color,
 			ConvertKeyPointTags(tag.KeyPoints),
 			ConvertNumericItemProperties(tag.Properties));
-		ImmutableArray<PackableTag> ConvertKeyPointTags(IEnumerable<KeyPointTag> keyPointTags) =>
-			keyPointTags.Select((tag, index) => ConvertKeyPointTag((byte)index, tag)).ToImmutableArray();
-		PackableTag ConvertKeyPointTag(byte id, KeyPointTag tag) => new(id, tag.Name, tag.Color);
-		ImmutableArray<PackableNumericItemProperty> ConvertNumericItemProperties(
-			IEnumerable<NumericItemProperty> properties) =>
-			properties.Select(ConvertNumericItemProperty).ToImmutableArray();
-		PackableNumericItemProperty ConvertNumericItemProperty(NumericItemProperty property) =>
-			new(property.Name, property.MinimumValue, property.MaximumValue);
 	}
 
 	protected override IEnumerable<PackableItemsAsset<PackablePoser2DItem>> ConvertAssets(AssetsLibrary assets, Func<Tag, byte> getTagId)
