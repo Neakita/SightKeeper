@@ -3,7 +3,7 @@ using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal abstract class PoserDataSetConverter : DataSetConverter
 {

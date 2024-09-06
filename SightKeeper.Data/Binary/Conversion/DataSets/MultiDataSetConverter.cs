@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
@@ -6,7 +7,7 @@ using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal sealed class MultiDataSetConverter
 {
@@ -16,6 +17,11 @@ internal sealed class MultiDataSetConverter
 		_detectorConverter = new DetectorDataSetConverter(screenshotsDataAccess);
 		_poser2DConverter = new Poser2DDataSetConverter(screenshotsDataAccess);
 		_poser3DConverter = new Poser3DDataSetConverter(screenshotsDataAccess);
+	}
+
+	public ImmutableArray<PackableDataSet> Convert(IEnumerable<DataSet> dataSets, ConversionSession session)
+	{
+		return dataSets.Select(dataSet => Convert(dataSet, session)).ToImmutableArray();
 	}
 
 	public PackableDataSet Convert(DataSet dataSet, ConversionSession session)

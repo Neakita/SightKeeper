@@ -11,7 +11,7 @@ using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 {

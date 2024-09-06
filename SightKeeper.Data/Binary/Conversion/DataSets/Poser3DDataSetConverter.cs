@@ -10,7 +10,7 @@ using SightKeeper.Domain.Model.DataSets.Poser3D;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal sealed class Poser3DDataSetConverter : PoserDataSetConverter
 {
