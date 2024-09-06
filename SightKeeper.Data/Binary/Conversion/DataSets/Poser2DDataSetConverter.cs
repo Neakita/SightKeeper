@@ -94,16 +94,9 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 
 	protected override ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId)
 	{
-		return weights.Cast<Weights<Poser2DTag, KeyPointTag2D>>().Select(ConvertWeightsItem).ToImmutableArray();
-		PackableWeights ConvertWeightsItem(Weights<Poser2DTag, KeyPointTag2D> item) =>
-			new PackablePoserWeights(item.CreationDate, item.ModelSize, item.Metrics, item.Resolution,
-				ConvertWeightsTags(item.Tags));
-		ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(
-			IReadOnlyDictionary<Poser2DTag, ImmutableHashSet<KeyPointTag2D>> tags) =>
-			tags.ToImmutableDictionary(
-				pair => getTagId(pair.Key),
-				pair => ConvertWeightsKeyPointTags(pair.Value));
-		ImmutableArray<byte> ConvertWeightsKeyPointTags(IEnumerable<KeyPointTag2D> tags) =>
-			tags.Select(tag => getTagId(tag)).ToImmutableArray();
+		return weights
+			.Cast<Weights<Poser2DTag, KeyPointTag2D>>()
+			.Select(weightsItem => ConvertWeightsItem(weightsItem, getTagId))
+			.ToImmutableArray();
 	}
 }
