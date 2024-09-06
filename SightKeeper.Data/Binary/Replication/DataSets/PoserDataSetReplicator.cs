@@ -4,7 +4,7 @@ using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Tags;
 
-namespace SightKeeper.Data.Binary.Replication;
+namespace SightKeeper.Data.Binary.Replication.DataSets;
 
 internal abstract class PoserDataSetReplicator : DataSetReplicator
 {

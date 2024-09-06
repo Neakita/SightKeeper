@@ -6,7 +6,7 @@ using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Data.Binary.Replication;
+namespace SightKeeper.Data.Binary.Replication.DataSets;
 
 internal sealed class Poser3DDataSetReplicator : PoserDataSetReplicator
 {

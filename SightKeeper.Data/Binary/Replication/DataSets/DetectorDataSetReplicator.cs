@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Data.Binary.Replication;
+namespace SightKeeper.Data.Binary.Replication.DataSets;
 
 internal sealed class DetectorDataSetReplicator : DataSetReplicator
 {

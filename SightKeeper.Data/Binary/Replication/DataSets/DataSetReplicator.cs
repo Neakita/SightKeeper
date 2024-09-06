@@ -12,7 +12,7 @@ using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
 
-namespace SightKeeper.Data.Binary.Replication;
+namespace SightKeeper.Data.Binary.Replication.DataSets;
 
 internal abstract class DataSetReplicator
 {

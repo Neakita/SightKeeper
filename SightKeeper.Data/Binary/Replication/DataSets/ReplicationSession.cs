@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using SightKeeper.Domain.Model;
 
-namespace SightKeeper.Data.Binary.Replication;
+namespace SightKeeper.Data.Binary.Replication.DataSets;
 
 internal sealed class ReplicationSession
 {
