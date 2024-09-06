@@ -8,7 +8,7 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Data.Binary.Replication;
 
-internal sealed class Poser3DDataSetReplicator : DataSetReplicator
+internal sealed class Poser3DDataSetReplicator : PoserDataSetReplicator
 {
 	public Poser3DDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
