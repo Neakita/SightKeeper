@@ -2,7 +2,6 @@
 using MemoryPack;
 using SightKeeper.Application;
 using SightKeeper.Data.Binary;
-using SightKeeper.Data.Binary.Formatters;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;

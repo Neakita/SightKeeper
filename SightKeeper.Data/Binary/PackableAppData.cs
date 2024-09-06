@@ -3,11 +3,11 @@
 namespace SightKeeper.Data.Binary;
 
 [MemoryPackable]
-internal sealed partial class RawAppData
+internal sealed partial class PackableAppData
 {
 	public ApplicationSettings ApplicationSettings { get; }
 
-	public RawAppData(
+	public PackableAppData(
 		ApplicationSettings applicationSettings)
 	{
 		ApplicationSettings = applicationSettings;

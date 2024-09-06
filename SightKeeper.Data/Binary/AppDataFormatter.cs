@@ -1,7 +1,7 @@
 ﻿using MemoryPack;
 using SightKeeper.Data.Binary.Services;
 
-namespace SightKeeper.Data.Binary.Formatters;
+namespace SightKeeper.Data.Binary;
 
 public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {
@@ -28,7 +28,7 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			value = null;
 			return;
 		}
-		var raw = reader.ReadPackable<RawAppData>();
+		var raw = reader.ReadPackable<PackableAppData>();
 		if (raw == null)
 		{
 			value = null;

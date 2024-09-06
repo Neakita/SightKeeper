@@ -6,7 +6,7 @@ using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Data.Binary.Formatters;
+using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
 using GamesDataAccess = SightKeeper.Application.Games.GamesDataAccess;
