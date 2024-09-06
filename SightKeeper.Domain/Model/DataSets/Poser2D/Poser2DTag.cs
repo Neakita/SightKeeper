@@ -11,7 +11,7 @@ public sealed class Poser2DTag : PoserTag, TagsFactory<Poser2DTag>
 		return new Poser2DTag(name, library);
 	}
 
-	public IReadOnlyList<KeyPointTag2D> KeyPoints => _keyPoints.AsReadOnly();
+	public override IReadOnlyList<KeyPointTag2D> KeyPoints => _keyPoints.AsReadOnly();
 	public IReadOnlyList<NumericItemProperty> Properties => _properties.AsReadOnly();
 	public override IReadOnlyCollection<Poser2DItem> Items => _items;
 	public TagsLibrary<Poser2DTag> Library { get; }

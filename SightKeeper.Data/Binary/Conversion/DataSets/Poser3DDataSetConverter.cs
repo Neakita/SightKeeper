@@ -53,20 +53,8 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter
 			numericItemPropertiesBuilder.Capacity = tag.NumericProperties.Count;
 			booleanItemPropertiesBuilder.Capacity = tag.BooleanProperties.Count;
 			byte keyPointTagIndex = 0;
-			foreach (var keyPointTag in tag.KeyPoints)
-			{
-				var keyPointTagId = keyPointTagIndex++;
-				lookupBuilder.Add(keyPointTag, keyPointTagId);
-				keyPointTagsBuilder.Add(ConvertPlainTag(keyPointTagId, keyPointTag));
-			}
-			foreach (var property in tag.NumericProperties)
-			{
-				PackableNumericItemProperty convertedProperty = new(
-					property.Name,
-					property.MinimumValue,
-					property.MaximumValue);
-				numericItemPropertiesBuilder.Add(convertedProperty);
-			}
+			BuildKeyPoints(tag.KeyPoints, ref keyPointTagIndex, lookupBuilder, keyPointTagsBuilder);
+			BuildNumericProperties(tag.NumericProperties, numericItemPropertiesBuilder);
 			foreach (var property in tag.BooleanProperties)
 			{
 				PackableBooleanItemProperty convertedProperty = new(

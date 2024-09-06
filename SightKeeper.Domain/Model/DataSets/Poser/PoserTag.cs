@@ -7,6 +7,7 @@ public abstract class PoserTag : ItemTag, TagsHolder
 	Tag TagsHolder.CreateTag(string name) => CreateKeyPoint(name);
 
 	public abstract override IReadOnlyCollection<PoserItem> Items { get; }
+	public abstract IReadOnlyCollection<KeyPointTag> KeyPoints { get; }
 
 	public abstract KeyPointTag CreateKeyPoint(string name);
 

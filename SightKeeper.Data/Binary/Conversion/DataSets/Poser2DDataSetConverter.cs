@@ -52,20 +52,8 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 			keyPointTagsBuilder.Capacity = tag.KeyPoints.Count;
 			numericItemPropertiesBuilder.Capacity = tag.Properties.Count;
 			byte keyPointTagIndex = 0;
-			foreach (var keyPointTag in tag.KeyPoints)
-			{
-				var keyPointTagId = keyPointTagIndex++;
-				lookupBuilder.Add(keyPointTag, keyPointTagId);
-				keyPointTagsBuilder.Add(ConvertPlainTag(keyPointTagId, keyPointTag));
-			}
-			foreach (var property in tag.Properties)
-			{
-				PackableNumericItemProperty convertedProperty = new(
-					property.Name,
-					property.MinimumValue,
-					property.MaximumValue);
-				numericItemPropertiesBuilder.Add(convertedProperty);
-			}
+			BuildKeyPoints(tag.KeyPoints, ref keyPointTagIndex, lookupBuilder, keyPointTagsBuilder);
+			BuildNumericProperties(tag.Properties, numericItemPropertiesBuilder);
 			var tagId = tagIndex++;
 			PackablePoser2DTag convertedTag = new(
 				tagId,

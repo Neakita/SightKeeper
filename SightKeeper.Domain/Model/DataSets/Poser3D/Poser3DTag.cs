@@ -11,7 +11,7 @@ public sealed class Poser3DTag : PoserTag, TagsFactory<Poser3DTag>
 		return new Poser3DTag(name, library);
 	}
 
-	public IReadOnlyList<KeyPointTag3D> KeyPoints => _keyPoints.AsReadOnly();
+	public override IReadOnlyList<KeyPointTag3D> KeyPoints => _keyPoints.AsReadOnly();
 	public IReadOnlyList<NumericItemProperty> NumericProperties => _numericProperties.AsReadOnly();
 	public IReadOnlyList<BooleanItemProperty> BooleanProperties => _booleanProperties.AsReadOnly();
 	public override IReadOnlyCollection<Poser3DItem> Items => _items;

@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Poser;
@@ -12,8 +13,36 @@ internal abstract class PoserDataSetConverter : DataSetConverter
 	protected PoserDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
 	}
+
+	protected static void BuildKeyPoints(
+		IEnumerable<KeyPointTag> keyPointTags,
+		ref byte indexCounter,
+		ImmutableDictionary<Tag, byte>.Builder lookupBuilder,
+		ImmutableArray<PackableTag>.Builder keyPointTagsBuilder)
+	{
+		foreach (var keyPointTag in keyPointTags)
+		{
+			var keyPointTagId = indexCounter++;
+			lookupBuilder.Add(keyPointTag, keyPointTagId);
+			keyPointTagsBuilder.Add(ConvertPlainTag(keyPointTagId, keyPointTag));
+		}
+	}
+
+	protected static void BuildNumericProperties(
+		IEnumerable<NumericItemProperty> properties,
+		ImmutableArray<PackableNumericItemProperty>.Builder builder)
+	{
+		foreach (var property in properties)
+		{
+			PackableNumericItemProperty convertedProperty = new(
+				property.Name,
+				property.MinimumValue,
+				property.MaximumValue);
+			builder.Add(convertedProperty);
+		}
+	}
 	
-	protected PackableWeights ConvertWeightsItem<TTag, TKeyPointTag>(Weights<TTag, TKeyPointTag> item, Func<Tag, byte> getTagId)
+	protected static PackableWeights ConvertWeightsItem<TTag, TKeyPointTag>(Weights<TTag, TKeyPointTag> item, Func<Tag, byte> getTagId)
 		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{
