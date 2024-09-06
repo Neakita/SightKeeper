@@ -37,6 +37,8 @@ internal abstract partial class PackableDataSet
 		Composition = composition;
 		Screenshots = screenshots;
 	}
+
+	public abstract IReadOnlyCollection<PackableTag> GetTags();
 }
 
 /// <summary>
@@ -65,5 +67,10 @@ internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSe
 		Tags = tags;
 		Assets = assets;
 		Weights = weights;
+	}
+
+	public sealed override IReadOnlyCollection<PackableTag> GetTags()
+	{
+		return Tags;
 	}
 }
