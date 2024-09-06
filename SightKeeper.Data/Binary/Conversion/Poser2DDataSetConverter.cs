@@ -51,7 +51,7 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter<Poser2DTag
 			ScreenshotsDataAccess.GetId(asset.Screenshot),
 			ConvertItems(asset.Items));
 		ImmutableArray<PackablePoser2DItem> ConvertItems(IEnumerable<Poser2DItem> items) => items.Select(ConvertItem).ToImmutableArray();
-		PackablePoser2DItem ConvertItem(Poser2DItem item) => new(getTagId(item.Tag), item.Bounding, ConvertKeyPoints(item.KeyPoints));
+		PackablePoser2DItem ConvertItem(Poser2DItem item) => new(getTagId(item.Tag), item.Bounding, ConvertKeyPoints(item.KeyPoints), item.Properties);
 		ImmutableArray<PackableKeyPoint2D> ConvertKeyPoints(IEnumerable<Vector2<double>> keyPoints) =>
 			keyPoints.Select(position => new PackableKeyPoint2D(position)).ToImmutableArray();
 	}
