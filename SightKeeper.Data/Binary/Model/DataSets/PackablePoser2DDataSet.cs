@@ -20,9 +20,9 @@ internal sealed partial class PackablePoser2DDataSet : PackableDataSet<PackableP
 		ushort? gameId,
 		PackableComposition? composition,
 		ImmutableArray<PackableScreenshot> screenshots,
-		IEnumerable<PackableTag> tags,
-		IEnumerable<PackableAsset> assets,
-		IEnumerable<PackableWeights> weights)
+		ImmutableArray<PackablePoser2DTag> tags,
+		ImmutableArray<PackableItemsAsset<PackablePoser2DItem>> assets,
+		ImmutableArray<PackablePoserWeights> weights)
 		: base(name, description, gameId, composition, screenshots, tags, assets, weights)
 	{
 	}

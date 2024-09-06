@@ -12,42 +12,54 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
-internal sealed class ClassifierDataSetConverter : DataSetConverter<ClassifierDataSet>
+internal sealed class ClassifierDataSetConverter : DataSetConverter
 {
 	public ClassifierDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
 	}
 
-	protected override PackableClassifierDataSet CreatePackableDataSet(string name,
+	protected override PackableClassifierDataSet CreatePackableDataSet(
+		string name,
 		string description,
 		ushort? gameId,
 		PackableComposition? composition,
 		ImmutableArray<PackableScreenshot> screenshots,
-		IEnumerable<PackableTag> tags,
-		IEnumerable<PackableAsset> assets, IEnumerable<PackableWeights> weights)
+		ImmutableArray<PackableTag> tags,
+		ImmutableArray<PackableAsset> assets,
+		ImmutableArray<PackableWeights> weights)
 	{
-		return new PackableClassifierDataSet(name, description, gameId, composition, screenshots, tags, assets, weights);
+		return new PackableClassifierDataSet(
+			name,
+			description,
+			gameId,
+			composition,
+			screenshots,
+			tags,
+			assets.CastArray<PackableClassifierAsset>(),
+			weights.CastArray<PackablePlainWeights>());
 	}
 
-	protected override IEnumerable<PackableTag> ConvertTags(TagsLibrary tags)
+	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup)
 	{
-		return tags.Select((tag, index) => ConvertPlainTag((byte)index, tag));
+		lookup = tags.Select((tag, index) => (tag, index))
+			.ToImmutableDictionary(tuple => tuple.tag, tuple => (byte)tuple.index);
+		return tags.Select((tag, index) => ConvertPlainTag((byte)index, tag)).ToImmutableArray();
 	}
 
-	protected override IEnumerable<PackableClassifierAsset> ConvertAssets(AssetsLibrary assets, Func<Tag, byte> getTagId)
+	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)
 	{
-		return ((IReadOnlyCollection<ClassifierAsset>)assets).Select(ConvertAsset);
-		PackableClassifierAsset ConvertAsset(ClassifierAsset asset) => new(
+		return assets.Cast<ClassifierAsset>().Select(ConvertAsset).ToImmutableArray();
+		PackableAsset ConvertAsset(ClassifierAsset asset) => new PackableClassifierAsset(
 			asset.Usage,
 			ScreenshotsDataAccess.GetId(asset.Screenshot),
 			getTagId(asset.Tag));
 	}
 
-	protected override IEnumerable<PackablePlainWeights> ConvertWeights(WeightsLibrary weights, Func<Tag, byte> getTagId)
+	protected override ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId)
 	{
-		return ((IReadOnlyCollection<Weights<ClassifierTag>>)weights).Select(ConvertWeightsItem);
-		PackablePlainWeights ConvertWeightsItem(Weights<ClassifierTag> item) =>
-			new(item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, ConvertWeightsTags(item.Tags));
+		return weights.Cast<Weights<ClassifierTag>>().Select(ConvertWeightsItem).ToImmutableArray();
+		PackableWeights ConvertWeightsItem(Weights<ClassifierTag> item) =>
+			new PackablePlainWeights(item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, ConvertWeightsTags(item.Tags));
 		ImmutableArray<byte> ConvertWeightsTags(IEnumerable<Tag> tags) => tags.Select(getTagId).ToImmutableArray();
 	}
 }

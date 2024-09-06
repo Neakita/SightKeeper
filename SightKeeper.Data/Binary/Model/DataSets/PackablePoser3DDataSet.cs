@@ -20,9 +20,9 @@ internal sealed partial class PackablePoser3DDataSet : PackableDataSet<PackableP
 		ushort? gameId,
 		PackableComposition? composition,
 		ImmutableArray<PackableScreenshot> screenshots,
-		IEnumerable<PackableTag> tags,
-		IEnumerable<PackableAsset> assets,
-		IEnumerable<PackableWeights> weights)
+		ImmutableArray<PackablePoser3DTag> tags,
+		ImmutableArray<PackableItemsAsset<PackablePoser3DItem>> assets,
+		ImmutableArray<PackablePoserWeights> weights)
 		: base(name, description, gameId, composition, screenshots, tags, assets, weights)
 	{
 	}

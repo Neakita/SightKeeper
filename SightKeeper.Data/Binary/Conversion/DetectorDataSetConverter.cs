@@ -12,7 +12,7 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
-internal sealed class DetectorDataSetConverter : DataSetConverter<DetectorDataSet>
+internal sealed class DetectorDataSetConverter : DataSetConverter
 {
 	public DetectorDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
@@ -24,33 +24,44 @@ internal sealed class DetectorDataSetConverter : DataSetConverter<DetectorDataSe
 		ushort? gameId,
 		PackableComposition? composition,
 		ImmutableArray<PackableScreenshot> screenshots,
-		IEnumerable<PackableTag> tags,
-		IEnumerable<PackableAsset> assets,
-		IEnumerable<PackableWeights> weights)
+		ImmutableArray<PackableTag> tags,
+		ImmutableArray<PackableAsset> assets,
+		ImmutableArray<PackableWeights> weights)
 	{
-		return new PackableDetectorDataSet(name, description, gameId, composition, screenshots, tags, assets, weights);
+		return new PackableDetectorDataSet(
+			name,
+			description,
+			gameId,
+			composition,
+			screenshots,
+			tags,
+			assets.CastArray<PackableItemsAsset<PackableDetectorItem>>(),
+			weights.CastArray<PackablePlainWeights>());
 	}
 
-	protected override IEnumerable<PackableTag> ConvertTags(TagsLibrary tags)
+	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup)
 	{
-		return tags.Select((tag, index) => ConvertPlainTag((byte)index, tag));
+		lookup = tags.Select((tag, index) => (tag, index))
+			.ToImmutableDictionary(tuple => tuple.tag, tuple => (byte)tuple.index);
+		return tags.Select((tag, index) => ConvertPlainTag((byte)index, tag)).ToImmutableArray();
 	}
 
-	protected override IEnumerable<PackableItemsAsset<PackableDetectorItem>> ConvertAssets(AssetsLibrary assets, Func<Tag, byte> getTagId)
+	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)
 	{
-		return ((IReadOnlyCollection<DetectorAsset>)assets).Select(ConvertAsset);
-		PackableItemsAsset<PackableDetectorItem> ConvertAsset(DetectorAsset asset) => new(
+		return assets.Cast<DetectorAsset>().Select(ConvertAsset).ToImmutableArray();
+		PackableAsset ConvertAsset(DetectorAsset asset) => new PackableItemsAsset<PackableDetectorItem>(
 			asset.Usage,
 			ScreenshotsDataAccess.GetId(asset.Screenshot),
 			asset.Items.Select(ConvertItem).ToImmutableArray());
 		PackableDetectorItem ConvertItem(DetectorItem item) => new(getTagId(item.Tag), item.Bounding);
 	}
 
-	protected override IEnumerable<PackablePlainWeights> ConvertWeights(WeightsLibrary weights, Func<Tag, byte> getTagId)
+	protected override ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId)
 	{
-		return ((IReadOnlyCollection<Weights<DetectorTag>>)weights).Select(ConvertWeightsItem);
-		PackablePlainWeights ConvertWeightsItem(Weights<DetectorTag> item) =>
-			new(item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, ConvertWeightsTags(item.Tags));
+		return weights.Cast<Weights<DetectorTag>>().Select(ConvertWeightsItem).ToImmutableArray();
+		PackableWeights ConvertWeightsItem(Weights<DetectorTag> item) =>
+			new PackablePlainWeights(item.CreationDate, item.ModelSize, item.Metrics, item.Resolution,
+				ConvertWeightsTags(item.Tags));
 		ImmutableArray<byte> ConvertWeightsTags(IEnumerable<Tag> tags) => tags.Select(getTagId).ToImmutableArray();
 	}
 }

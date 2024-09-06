@@ -23,9 +23,6 @@ internal abstract partial class PackableDataSet
 	public ushort? GameId { get; }
 	public PackableComposition? Composition { get; }
 	public ImmutableArray<PackableScreenshot> Screenshots { get; }
-	public abstract IReadOnlyCollection<PackableTag> Tags { get; }
-	public abstract IReadOnlyCollection<PackableAsset> Assets { get; }
-	public abstract IReadOnlyCollection<PackableWeights> Weights { get; }
 
 	public PackableDataSet(
 		string name,
@@ -50,9 +47,9 @@ internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSe
 	where TAsset : PackableAsset
 	where TWeights : PackableWeights
 {
-	public override ImmutableList<TTag> Tags { get; }
-	public override ImmutableList<TAsset> Assets { get; }
-	public override ImmutableList<TWeights> Weights { get; }
+	public ImmutableArray<TTag> Tags { get; }
+	public ImmutableArray<TAsset> Assets { get; }
+	public ImmutableArray<TWeights> Weights { get; }
 
 	public PackableDataSet(
 		string name,
@@ -60,13 +57,13 @@ internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSe
 		ushort? gameId,
 		PackableComposition? composition,
 		ImmutableArray<PackableScreenshot> screenshots,
-		IEnumerable<PackableTag> tags,
-		IEnumerable<PackableAsset> assets,
-		IEnumerable<PackableWeights> weights)
+		ImmutableArray<TTag> tags,
+		ImmutableArray<TAsset> assets,
+		ImmutableArray<TWeights> weights)
 		: base(name, description, gameId, composition, screenshots)
 	{
-		Tags = tags.Cast<TTag>().ToImmutableList();
-		Assets = assets.Cast<TAsset>().ToImmutableList();
-		Weights = weights.Cast<TWeights>().ToImmutableList();
+		Tags = tags;
+		Assets = assets;
+		Weights = weights;
 	}
 }

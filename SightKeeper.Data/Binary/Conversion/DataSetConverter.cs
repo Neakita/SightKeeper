@@ -14,28 +14,26 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
-internal abstract class DataSetConverter<TDataSet> where TDataSet : DataSet
+internal abstract class DataSetConverter
 {
 	protected DataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess)
 	{
 		ScreenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public PackableDataSet Convert(TDataSet dataSet, ConversionSession session)
+	public PackableDataSet Convert(DataSet dataSet, ConversionSession session)
 	{
-		var tagsDictionary = ConvertTagsToDictionary(dataSet.Tags);
 		Guard.IsNotNull(session.GameIds);
 
 		ushort? gameId = dataSet.Game == null ? null : session.GameIds[dataSet.Game];
 		PackableComposition? composition = ConvertComposition(dataSet.Composition);
 		ImmutableArray<PackableScreenshot> screenshots = ConvertScreenshots(dataSet.Screenshots);
-		IEnumerable<PackableTag> tags = tagsDictionary.Values;
-		IEnumerable<PackableAsset> assets = ConvertAssets(dataSet.Assets, GetTagId);
-		IEnumerable<PackableWeights> weights = ConvertWeights(dataSet.Weights, GetTagId);
-
+		ImmutableArray<PackableTag> tags = ConvertTags(dataSet.Tags, out var lookup);
+		ImmutableArray<PackableAsset> assets = ConvertAssets(dataSet.Assets, GetTagId);
+		ImmutableArray<PackableWeights> weights = ConvertWeights(dataSet.Weights, GetTagId);
 		return CreatePackableDataSet(dataSet.Name, dataSet.Description, gameId, composition, screenshots, tags, assets, weights);
 
-		byte GetTagId(Tag tag) => tagsDictionary[tag].Id;
+		byte GetTagId(Tag tag) => lookup[tag];
 	}
 
 	protected FileSystemScreenshotsDataAccess ScreenshotsDataAccess { get; }
@@ -50,16 +48,13 @@ internal abstract class DataSetConverter<TDataSet> where TDataSet : DataSet
 		ushort? gameId,
 		PackableComposition? composition,
 		ImmutableArray<PackableScreenshot> screenshots,
-		IEnumerable<PackableTag> tags,
-		IEnumerable<PackableAsset> assets,
-		IEnumerable<PackableWeights> weights);
-	protected virtual ImmutableDictionary<Tag, PackableTag> ConvertTagsToDictionary(TagsLibrary tagsLibrary)
-	{
-		return ConvertTags(tagsLibrary).Zip(tagsLibrary).ToImmutableDictionary(tuple => tuple.Second, tuple => tuple.First);
-	}
-	protected abstract IEnumerable<PackableTag> ConvertTags(TagsLibrary tags);
-	protected abstract IEnumerable<PackableAsset> ConvertAssets(AssetsLibrary assets, Func<Tag, byte> getTagId);
-	protected abstract IEnumerable<PackableWeights> ConvertWeights(WeightsLibrary weights, Func<Tag, byte> getTagId);
+		ImmutableArray<PackableTag> tags,
+		ImmutableArray<PackableAsset> assets,
+		ImmutableArray<PackableWeights> weights);
+
+	protected abstract ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup);
+	protected abstract ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId);
+	protected abstract ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId);
 
 	private static PackableTransparentComposition? ConvertComposition(Composition? composition)
 	{

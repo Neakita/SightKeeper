@@ -1,17 +1,11 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
-internal abstract class PoserDataSetConverter<TTag, TKeyPointTag, TAsset> : DataSetConverter<DataSet<TTag, TKeyPointTag, TAsset>>
-	where TTag : PoserTag, TagsFactory<TTag>
-	where TKeyPointTag : KeyPointTag<TTag>
-	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
+internal abstract class PoserDataSetConverter : DataSetConverter
 {
 	protected PoserDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{

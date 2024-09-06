@@ -12,11 +12,20 @@ internal sealed class PackablePoser3DItem
 	public byte TagId { get; }
 	public Bounding Bounding { get; }
 	public ImmutableArray<PackableKeyPoint3D> KeyPoints { get; }
+	public ImmutableList<double> NumericProperties { get; }
+	public ImmutableList<bool> BooleanProperties { get; }
 
-	public PackablePoser3DItem(byte tagId, Bounding bounding, ImmutableArray<PackableKeyPoint3D> keyPoints)
+	public PackablePoser3DItem(
+		byte tagId,
+		Bounding bounding,
+		ImmutableArray<PackableKeyPoint3D> keyPoints,
+		ImmutableList<double> numericProperties,
+		ImmutableList<bool> booleanProperties)
 	{
 		TagId = tagId;
 		Bounding = bounding;
 		KeyPoints = keyPoints;
+		NumericProperties = numericProperties;
+		BooleanProperties = booleanProperties;
 	}
 }

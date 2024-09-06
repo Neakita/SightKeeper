@@ -20,9 +20,9 @@ internal sealed partial class PackableClassifierDataSet : PackableDataSet<Packab
 		ushort? gameId,
 		PackableComposition? composition,
 		ImmutableArray<PackableScreenshot> screenshots,
-		IEnumerable<PackableTag> tags,
-		IEnumerable<PackableAsset> assets,
-		IEnumerable<PackableWeights> weights)
+		ImmutableArray<PackableTag> tags,
+		ImmutableArray<PackableClassifierAsset> assets,
+		ImmutableArray<PackablePlainWeights> weights)
 		: base(name, description, gameId, composition, screenshots, tags, assets, weights)
 	{
 	}
