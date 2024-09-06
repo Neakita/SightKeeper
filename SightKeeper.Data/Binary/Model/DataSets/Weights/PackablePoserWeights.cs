@@ -11,14 +11,14 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Weights;
 [MemoryPackable]
 internal sealed partial class PackablePoserWeights : PackableWeights
 {
-	public ImmutableDictionary<byte, byte> Tags { get; }
+	public ImmutableDictionary<byte, ImmutableArray<byte>> Tags { get; }
 
 	public PackablePoserWeights(
 		DateTime creationDate,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		ImmutableDictionary<byte, byte> tags)
+		ImmutableDictionary<byte, ImmutableArray<byte>> tags)
 		: base(creationDate, modelSize, metrics, resolution)
 	{
 		Tags = tags;

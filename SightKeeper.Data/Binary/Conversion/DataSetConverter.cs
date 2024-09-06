@@ -53,6 +53,10 @@ internal abstract class DataSetConverter<TDataSet> where TDataSet : DataSet
 		IEnumerable<PackableTag> tags,
 		IEnumerable<PackableAsset> assets,
 		IEnumerable<PackableWeights> weights);
+	protected virtual ImmutableDictionary<Tag, PackableTag> ConvertTagsToDictionary(TagsLibrary tagsLibrary)
+	{
+		return ConvertTags(tagsLibrary).Zip(tagsLibrary).ToImmutableDictionary(tuple => tuple.Second, tuple => tuple.First);
+	}
 	protected abstract IEnumerable<PackableTag> ConvertTags(TagsLibrary tags);
 	protected abstract IEnumerable<PackableAsset> ConvertAssets(AssetsLibrary assets, Func<Tag, byte> getTagId);
 	protected abstract IEnumerable<PackableWeights> ConvertWeights(WeightsLibrary weights, Func<Tag, byte> getTagId);
@@ -67,11 +71,6 @@ internal abstract class DataSetConverter<TDataSet> where TDataSet : DataSet
 				transparentComposition.Opacities),
 			_ => throw new ArgumentOutOfRangeException()
 		};
-	}
-
-	private ImmutableDictionary<Tag, PackableTag> ConvertTagsToDictionary(TagsLibrary tagsLibrary)
-	{
-		return ConvertTags(tagsLibrary).Zip(tagsLibrary).ToImmutableDictionary(tuple => tuple.Second, tuple => tuple.First);
 	}
 
 	private ImmutableArray<PackableScreenshot> ConvertScreenshots(ScreenshotsLibrary screenshots)
