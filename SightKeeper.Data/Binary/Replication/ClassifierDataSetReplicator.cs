@@ -1,4 +1,3 @@
-using FlakeId;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
@@ -25,12 +24,11 @@ internal sealed class ClassifierDataSetReplicator : DataSetReplicator
 		};
 	}
 
-	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Func<Id, Screenshot> getScreenshot, TagGetter getTag)
+	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, TagGetter getTag)
 	{
 		var typedPackedAsset = (PackableClassifierAsset)packedAsset;
 		var typedLibrary = (AssetsLibrary<ClassifierAsset>)library;
-		var screenshot = (Screenshot<ClassifierAsset>)getScreenshot(packedAsset.ScreenshotId);
-		var asset = typedLibrary.MakeAsset(screenshot);
+		var asset = typedLibrary.MakeAsset((Screenshot<ClassifierAsset>)screenshot);
 		asset.Tag = (ClassifierTag)getTag(typedPackedAsset.TagId);
 	}
 }

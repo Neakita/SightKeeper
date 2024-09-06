@@ -53,7 +53,7 @@ internal abstract class DataSetReplicator
 		return tag;
 	}
 
-	protected abstract void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Func<Id, Screenshot> getScreenshot, TagGetter getTag);
+	protected abstract void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, TagGetter getTag);
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
@@ -93,6 +93,6 @@ internal abstract class DataSetReplicator
 	private void ReplicateAssets(AssetsLibrary library, ImmutableArray<PackableAsset> assets, Func<Id, Screenshot> getScreenshot, TagGetter getTag)
 	{
 		foreach (var asset in assets)
-			ReplicateAsset(library, asset, getScreenshot, getTag);
+			ReplicateAsset(library, asset, getScreenshot(asset.ScreenshotId), getTag);
 	}
 }

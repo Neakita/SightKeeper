@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using FlakeId;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
@@ -26,12 +25,11 @@ internal sealed class Poser2DDataSetReplicator : DataSetReplicator
 		};
 	}
 
-	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Func<Id, Screenshot> getScreenshot, TagGetter getTag)
+	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, TagGetter getTag)
 	{
 		var typedLibrary = (AssetsLibrary<Poser2DAsset>)library;
 		var typedPackedAsset = (PackableItemsAsset<PackablePoser2DItem>)packedAsset;
-		var screenshot = (Screenshot<Poser2DAsset>)getScreenshot(packedAsset.ScreenshotId);
-		var asset = typedLibrary.MakeAsset(screenshot);
+		var asset = typedLibrary.MakeAsset((Screenshot<Poser2DAsset>)screenshot);
 		foreach (var packedItem in typedPackedAsset.Items)
 		{
 			var itemTag = (Poser2DTag)getTag(packedItem.TagId);

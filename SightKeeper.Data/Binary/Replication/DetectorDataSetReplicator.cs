@@ -1,4 +1,3 @@
-using FlakeId;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
@@ -25,12 +24,11 @@ internal sealed class DetectorDataSetReplicator : DataSetReplicator
 		};
 	}
 
-	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Func<Id, Screenshot> getScreenshot, TagGetter getTag)
+	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, TagGetter getTag)
 	{
 		var typedLibrary = (AssetsLibrary<DetectorAsset>)library;
 		var typedPackedAsset = (PackableItemsAsset<PackableDetectorItem>)packedAsset;
-		var screenshot = (Screenshot<DetectorAsset>)getScreenshot(packedAsset.ScreenshotId);
-		var asset = typedLibrary.MakeAsset(screenshot);
+		var asset = typedLibrary.MakeAsset((Screenshot<DetectorAsset>)screenshot);
 		foreach (var packedItem in typedPackedAsset.Items)
 		{
 			var itemTag = (DetectorTag)getTag(packedItem.TagId);
