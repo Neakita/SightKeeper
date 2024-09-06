@@ -74,12 +74,13 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter
 				booleanItemPropertiesBuilder.Add(convertedProperty);
 			}
 			var tagId = tagIndex++;
-			PackablePoser2DTag convertedTag = new(
+			PackablePoser3DTag convertedTag = new(
 				tagId,
 				tag.Name,
 				tag.Color,
 				keyPointTagsBuilder.DrainToImmutable(),
-				numericItemPropertiesBuilder.DrainToImmutable());
+				numericItemPropertiesBuilder.DrainToImmutable(),
+				booleanItemPropertiesBuilder.DrainToImmutable());
 			resultBuilder.Add(convertedTag);
 			lookupBuilder.Add(tag, tagId);
 		}
