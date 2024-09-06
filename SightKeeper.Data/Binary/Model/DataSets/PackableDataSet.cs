@@ -38,7 +38,7 @@ internal abstract partial class PackableDataSet
 		Screenshots = screenshots;
 	}
 
-	public abstract IReadOnlyCollection<PackableTag> GetTags();
+	public abstract ImmutableArray<PackableTag> GetTags();
 }
 
 /// <summary>
@@ -69,8 +69,8 @@ internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSe
 		Weights = weights;
 	}
 
-	public sealed override IReadOnlyCollection<PackableTag> GetTags()
+	public sealed override ImmutableArray<PackableTag> GetTags()
 	{
-		return Tags;
+		return ImmutableArray<PackableTag>.CastUp(Tags);
 	}
 }

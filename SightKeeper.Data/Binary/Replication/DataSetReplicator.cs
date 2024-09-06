@@ -48,7 +48,7 @@ internal abstract class DataSetReplicator
 		};
 	}
 
-	private ImmutableDictionary<(byte, byte?), Tag> ReplicateTags(TagsLibrary library, IReadOnlyCollection<PackableTag> tags)
+	private ImmutableDictionary<(byte, byte?), Tag> ReplicateTags(TagsLibrary library, ImmutableArray<PackableTag> tags)
 	{
 		var lookupBuilder = ImmutableDictionary.CreateBuilder<(byte, byte?), Tag>();
 		foreach (var tag in tags)
