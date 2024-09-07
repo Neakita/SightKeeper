@@ -10,11 +10,11 @@ public sealed class ClassifierAssetTests
 	public void ShouldNotSetTagToForeign()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.Assets.MakeAsset(screenshot);
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.Tag.Should().Be(tag);
-		Assert.ThrowsAny<Exception>(() => asset.Tag = new ClassifierDataSet().Tags.CreateTag(""));
+		Assert.ThrowsAny<Exception>(() => asset.Tag = new ClassifierDataSet().TagsLibrary.CreateTag(""));
 		asset.Tag.Should().Be(tag);
 	}
 }

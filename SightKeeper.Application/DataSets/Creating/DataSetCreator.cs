@@ -45,7 +45,7 @@ public sealed class DataSetCreator
 	{
 		foreach (var tagData in tagsData)
 		{
-			var tag = dataSet.Tags.CreateTag(tagData.Name);
+			var tag = dataSet.TagsLibrary.CreateTag(tagData.Name);
 			tag.Color = tagData.Color;
 			if (tag is PoserTag poserTag)
 				CreateKeyPointTags(poserTag, (NewPoserTagData)tagData);

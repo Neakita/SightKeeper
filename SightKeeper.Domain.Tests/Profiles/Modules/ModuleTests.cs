@@ -14,8 +14,8 @@ public sealed class ModuleTests
 	public void ShouldNotSetIterativeScalingAndIterativeWalkingOptionsTogether()
 	{
 		DetectorDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		module.PassiveScalingOptions = new IterativeScalingOptions();

@@ -9,7 +9,7 @@ public sealed class Poser2DAsset : ItemsAsset<Poser2DItem>, AssetsFactory<Poser2
 {
 	public static Poser2DAsset Create(Screenshot<Poser2DAsset> screenshot)
 	{
-		Poser2DAsset asset = new(screenshot, (AssetsLibrary<Poser2DAsset>)screenshot.DataSet.Assets);
+		Poser2DAsset asset = new(screenshot, (AssetsLibrary<Poser2DAsset>)screenshot.DataSet.AssetsLibrary);
 		screenshot.SetAsset(asset);
 		return asset;
 	}

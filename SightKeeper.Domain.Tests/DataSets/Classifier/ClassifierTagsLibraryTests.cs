@@ -10,49 +10,49 @@ public sealed class ClassifierTagsLibraryTests
 	public void ShouldCreateTag()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
-		dataSet.Tags.Should().Contain(tag);
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		dataSet.TagsLibrary.Tags.Should().Contain(tag);
 	}
 
 	[Fact]
 	public void ShouldCreateMultipleTags()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag1 = dataSet.Tags.CreateTag("1");
-		var tag2 = dataSet.Tags.CreateTag("2");
-		var tag3 = dataSet.Tags.CreateTag("3");
-		dataSet.Tags.Should().Contain([tag1, tag2, tag3]);
+		var tag1 = dataSet.TagsLibrary.CreateTag("1");
+		var tag2 = dataSet.TagsLibrary.CreateTag("2");
+		var tag3 = dataSet.TagsLibrary.CreateTag("3");
+		dataSet.TagsLibrary.Tags.Should().Contain([tag1, tag2, tag3]);
 	}
 
 	[Fact]
 	public void ShouldNotCreateTagWithOccupiedName()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag1 = dataSet.Tags.CreateTag("1");
-		Assert.ThrowsAny<Exception>(() => dataSet.Tags.CreateTag("1"));
-		dataSet.Tags.Should().Contain(tag1);
-		dataSet.Tags.Should().HaveCount(1);
+		var tag1 = dataSet.TagsLibrary.CreateTag("1");
+		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.CreateTag("1"));
+		dataSet.TagsLibrary.Tags.Should().Contain(tag1);
+		dataSet.TagsLibrary.Tags.Should().HaveCount(1);
 	}
 
 	[Fact]
 	public void ShouldDeleteTag()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
-		dataSet.Tags.DeleteTag(tag);
-		dataSet.Tags.Should().BeEmpty();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		dataSet.TagsLibrary.DeleteTag(tag);
+		dataSet.TagsLibrary.Tags.Should().BeEmpty();
 	}
 
 	[Fact]
 	public void ShouldNotDeleteTagWithAssociatedAsset()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.Assets.MakeAsset(screenshot);
-		Assert.ThrowsAny<Exception>(() => dataSet.Tags.DeleteTag(tag));
-		dataSet.Tags.Should().Contain(tag);
-		dataSet.Assets.Should().Contain(asset);
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.DeleteTag(tag));
+		dataSet.TagsLibrary.Tags.Should().Contain(tag);
+		dataSet.AssetsLibrary.Assets.Should().Contain(asset);
 		asset.Tag.Should().Be(tag);
 	}
 }

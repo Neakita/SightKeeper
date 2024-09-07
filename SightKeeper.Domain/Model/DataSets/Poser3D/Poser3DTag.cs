@@ -63,7 +63,7 @@ public sealed class Poser3DTag : PoserTag, TagsFactory<Poser3DTag>
 		Library.DeleteTag(this);
 	}
 
-	internal Poser3DTag(string name, TagsLibrary<Poser3DTag> library) : base(name, library)
+	internal Poser3DTag(string name, TagsLibrary<Poser3DTag> library) : base(name, library.Tags)
 	{
 		Library = library;
 		_keyPoints = new List<KeyPointTag3D>();
@@ -82,7 +82,7 @@ public sealed class Poser3DTag : PoserTag, TagsFactory<Poser3DTag>
 		Guard.IsTrue(_items.Remove(item));
 	}
 
-	protected override IEnumerable<Tag> Siblings => Library;
+	protected override IEnumerable<Tag> Siblings => Library.Tags;
 
 	private readonly List<KeyPointTag3D> _keyPoints;
 	private readonly List<NumericItemProperty> _numericProperties;

@@ -10,32 +10,32 @@ public sealed class Poser2DAssetLibraryTests
 	public void ShouldCreateAsset()
 	{
 		Poser2DDataSet dataSet = new();
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.Assets.MakeAsset(screenshot);
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		screenshot.Asset.Should().Be(asset);
-		dataSet.Assets.Should().Contain(asset);
+		dataSet.AssetsLibrary.Assets.Should().Contain(asset);
 	}
 
 	[Fact]
 	public void ShouldNotCreateDuplicateAsset()
 	{
 		Poser2DDataSet dataSet = new();
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.Assets.MakeAsset(screenshot);
-		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot));
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+		Assert.ThrowsAny<Exception>(() => dataSet.AssetsLibrary.MakeAsset(screenshot));
 		screenshot.Asset.Should().Be(asset);
-		dataSet.Assets.Should().Contain(asset);
-		dataSet.Assets.Should().HaveCount(1);
+		dataSet.AssetsLibrary.Assets.Should().Contain(asset);
+		dataSet.AssetsLibrary.Assets.Should().HaveCount(1);
 	}
 
 	[Fact]
 	public void ShouldDeleteAsset()
 	{
 		Poser2DDataSet dataSet = new();
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.Assets.MakeAsset(screenshot);
-		dataSet.Assets.DeleteAsset(asset);
-		dataSet.Assets.Should().BeEmpty();
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+		dataSet.AssetsLibrary.DeleteAsset(asset);
+		dataSet.AssetsLibrary.Assets.Should().BeEmpty();
 		screenshot.Asset.Should().BeNull();
 	}
 
@@ -44,9 +44,9 @@ public sealed class Poser2DAssetLibraryTests
 	{
 		Poser2DDataSet dataSet1 = new();
 		Poser2DDataSet dataSet2 = new();
-		var screenshot = dataSet1.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet1.Assets.MakeAsset(screenshot);
-		Assert.ThrowsAny<Exception>(() => dataSet2.Assets.DeleteAsset(asset));
+		var screenshot = dataSet1.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet1.AssetsLibrary.MakeAsset(screenshot);
+		Assert.ThrowsAny<Exception>(() => dataSet2.AssetsLibrary.DeleteAsset(asset));
 		asset.Screenshot.Asset.Should().Be(asset);
 	}
 }

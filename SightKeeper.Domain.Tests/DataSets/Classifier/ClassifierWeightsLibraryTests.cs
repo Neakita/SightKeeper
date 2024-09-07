@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model;
+﻿using FluentAssertions;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
@@ -10,36 +11,36 @@ public sealed class ClassifierWeightsLibraryTests
 	public void ShouldCreateWeights()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag1 = dataSet.Tags.CreateTag("1");
-		var tag2 = dataSet.Tags.CreateTag("2");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag2]);
-		dataSet.Weights.Should().Contain(weights);
+		var tag1 = dataSet.TagsLibrary.CreateTag("1");
+		var tag2 = dataSet.TagsLibrary.CreateTag("2");
+		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag2]);
+		dataSet.WeightsLibrary.Weights.Should().Contain(weights);
 	}
 
 	[Fact]
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		ClassifierDataSet dataSet = new();
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), []));
-		dataSet.Weights.Should().BeEmpty();
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), []));
+		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 
 	[Fact]
 	public void ShouldNotCreateWeightsWithOneTag()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]));
-		dataSet.Weights.Should().BeEmpty();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]));
+		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 
 	[Fact]
 	public void ShouldNotCreateWeightsWithDuplicateTags()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag1 = dataSet.Tags.CreateTag("1");
-		var tag2 = dataSet.Tags.CreateTag("2");
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag1, tag2]));
-		dataSet.Weights.Should().BeEmpty();
+		var tag1 = dataSet.TagsLibrary.CreateTag("1");
+		var tag2 = dataSet.TagsLibrary.CreateTag("2");
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag1, tag2]));
+		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 }

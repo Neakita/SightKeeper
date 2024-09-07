@@ -22,7 +22,7 @@ public sealed class ClassifierTag : Tag, MinimumTagsCount, TagsFactory<Classifie
 		Library.DeleteTag(this);
 	}
 
-	internal ClassifierTag(string name, TagsLibrary<ClassifierTag> library) : base(name, library)
+	internal ClassifierTag(string name, TagsLibrary<ClassifierTag> library) : base(name, library.Tags)
 	{
 		Library = library;
 		_assets = new HashSet<ClassifierAsset>();
@@ -38,6 +38,6 @@ public sealed class ClassifierTag : Tag, MinimumTagsCount, TagsFactory<Classifie
 		Guard.IsTrue(_assets.Remove(asset));
 	}
 
-	protected override IEnumerable<Tag> Siblings => Library;
+	protected override IEnumerable<Tag> Siblings => Library.Tags;
 	private readonly HashSet<ClassifierAsset> _assets;
 }

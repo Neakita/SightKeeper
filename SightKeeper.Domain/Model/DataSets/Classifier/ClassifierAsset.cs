@@ -11,8 +11,8 @@ public sealed class ClassifierAsset : Asset, AssetsFactory<ClassifierAsset>, Ass
 	{
 		return new ClassifierAsset(
 			screenshot,
-			(ClassifierTag)screenshot.DataSet.Tags.First(),
-			(AssetsLibrary<ClassifierAsset>)screenshot.DataSet.Assets);
+			(ClassifierTag)screenshot.DataSet.TagsLibrary.Tags.First(),
+			(AssetsLibrary<ClassifierAsset>)screenshot.DataSet.AssetsLibrary);
 	}
 
 	public static void Destroy(ClassifierAsset asset)

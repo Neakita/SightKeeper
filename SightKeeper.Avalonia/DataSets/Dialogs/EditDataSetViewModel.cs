@@ -20,8 +20,8 @@ internal sealed class EditDataSetViewModel : DataSetDialogViewModel
 		_dataSet = dataSet;
 		TagsEditor = dataSet switch
 		{
-			ClassifierDataSet or DetectorDataSet => new TagsEditorViewModel(dataSet.Tags),
-			Poser2DDataSet or Poser3DDataSet => new PoserTagsEditorViewModel(dataSet.Tags.Cast<PoserTag>()),
+			ClassifierDataSet or DetectorDataSet => new TagsEditorViewModel(dataSet.TagsLibrary.Tags),
+			Poser2DDataSet or Poser3DDataSet => new PoserTagsEditorViewModel(dataSet.TagsLibrary.Tags.Cast<PoserTag>()),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
 		};
 		_tagsEditorSubscription = TagsEditor.IsValid.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());

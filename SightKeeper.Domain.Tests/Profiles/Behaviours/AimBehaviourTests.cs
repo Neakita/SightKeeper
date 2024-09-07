@@ -15,8 +15,8 @@ public sealed class AimBehaviourTests
 	public void ShouldSetTags()
 	{
 		DetectorDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();
@@ -30,11 +30,11 @@ public sealed class AimBehaviourTests
 	public void ShouldNotSetTagsWithWrongOwnership()
 	{
 		DetectorDataSet dataSet1 = new();
-		var tag1 = dataSet1.Tags.CreateTag("");
-		var weights1 = dataSet1.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1]);
+		var tag1 = dataSet1.TagsLibrary.CreateTag("");
+		var weights1 = dataSet1.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1]);
 		DetectorDataSet dataSet2 = new();
-		var tag2 = dataSet2.Tags.CreateTag("");
-		dataSet2.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag2]);
+		var tag2 = dataSet2.TagsLibrary.CreateTag("");
+		dataSet2.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag2]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, AimBehaviour.TagOptions>();

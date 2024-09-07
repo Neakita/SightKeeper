@@ -1,25 +1,21 @@
-﻿using System.Collections;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Model.DataSets.Tags;
 
-public abstract class TagsLibrary : IReadOnlyCollection<Tag>, TagsHolder
+public abstract class TagsLibrary : TagsHolder
 {
 	public abstract int Count { get; }
 	public abstract DataSet DataSet { get; }
+	public abstract IReadOnlyCollection<Tag> Tags { get; }
 
 	public abstract Tag CreateTag(string name);
-	public abstract IEnumerator<Tag> GetEnumerator();
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
 }
 
-public sealed class TagsLibrary<TTag> : TagsLibrary, IReadOnlyCollection<TTag> where TTag : Tag, TagsFactory<TTag>
+public sealed class TagsLibrary<TTag> : TagsLibrary where TTag : Tag, TagsFactory<TTag>
 {
 	public override int Count => _tags.Count;
 	public override DataSet DataSet { get; }
+	public override IReadOnlyCollection<TTag> Tags => _tags;
 
 	public TagsLibrary(DataSet dataSet)
 	{
@@ -37,11 +33,6 @@ public sealed class TagsLibrary<TTag> : TagsLibrary, IReadOnlyCollection<TTag> w
 	{
 		Guard.IsFalse(tag.IsInUse);
 		Guard.IsTrue(_tags.Remove(tag));
-	}
-
-	public override IEnumerator<TTag> GetEnumerator()
-	{
-		return _tags.GetEnumerator();
 	}
 
 	private void AddTag(TTag tag)

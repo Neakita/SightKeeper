@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.Model;
+﻿using FluentAssertions;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
@@ -10,25 +11,25 @@ public sealed class DetectorWeightsLibraryTests
 	public void ShouldCreateWeights()
 	{
 		DetectorDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
-		dataSet.Weights.Should().Contain(weights);
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
+		dataSet.WeightsLibrary.Weights.Should().Contain(weights);
 	}
 
 	[Fact]
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		DetectorDataSet dataSet = new();
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), []));
-		dataSet.Weights.Should().BeEmpty();
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), []));
+		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 
 	[Fact]
 	public void ShouldNotCreateWeightsWithDuplicateTags()
 	{
 		DetectorDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
-		Assert.ThrowsAny<Exception>(() => dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag, tag]));
-		dataSet.Weights.Should().BeEmpty();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag, tag]));
+		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 }

@@ -31,10 +31,10 @@ internal abstract class DataSetReplicator
 		var game = packed.GameId == null ? null : session.Games[packed.GameId.Value];
 		var composition = ReplicateComposition(packed.Composition);
 		var dataSet = CreateDataSet(packed.Name, packed.Description, game, composition);
-		var screenshotsLookup = ReplicateScreenshots(dataSet.Screenshots, packed.Screenshots);
-		var tagsLookup = ReplicateTags(dataSet.Tags, packed.GetTags());
+		var screenshotsLookup = ReplicateScreenshots(dataSet.ScreenshotsLibrary, packed.Screenshots);
+		var tagsLookup = ReplicateTags(dataSet.TagsLibrary, packed.GetTags());
 		ReplicateAssets(
-			dataSet.Assets,
+			dataSet.AssetsLibrary,
 			packed.GetAssets(),
 			screenshotId => screenshotsLookup[screenshotId],
 			(tagId, keyPointTagId) => tagsLookup[(tagId, keyPointTagId)]);

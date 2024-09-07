@@ -1,26 +1,21 @@
-﻿using System.Collections;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Model.DataSets.Assets;
 
-public abstract class AssetsLibrary : IReadOnlyCollection<Asset>
+public abstract class AssetsLibrary
 {
 	public abstract int Count { get; }
 	public abstract DataSet DataSet { get; }
-
-	public abstract IEnumerator<Asset> GetEnumerator();
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
+	public abstract IReadOnlyCollection<Asset> Assets { get; }
 }
 
-public sealed class AssetsLibrary<TAsset> : AssetsLibrary, IReadOnlyCollection<TAsset>
+public sealed class AssetsLibrary<TAsset> : AssetsLibrary
 	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 {
 	public override int Count => _assets.Count;
 	public override DataSet DataSet { get; }
+	public override IReadOnlyCollection<TAsset> Assets => _assets;
 
 	public AssetsLibrary(DataSet dataSet)
 	{
@@ -40,11 +35,6 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary, IReadOnlyCollection<T
 	{
 		Guard.IsTrue(_assets.Remove(asset));
 		TAsset.Destroy(asset);
-	}
-
-	public override IEnumerator<TAsset> GetEnumerator()
-	{
-		return _assets.GetEnumerator();
 	}
 
 	private readonly HashSet<TAsset> _assets = new();

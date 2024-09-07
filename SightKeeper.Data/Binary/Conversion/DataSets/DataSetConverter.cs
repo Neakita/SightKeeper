@@ -27,10 +27,10 @@ internal abstract class DataSetConverter
 
 		ushort? gameId = dataSet.Game == null ? null : session.GameIds[dataSet.Game];
 		PackableComposition? composition = ConvertComposition(dataSet.Composition);
-		ImmutableArray<PackableScreenshot> screenshots = ConvertScreenshots(dataSet.Screenshots);
-		ImmutableArray<PackableTag> tags = ConvertTags(dataSet.Tags, out var lookup);
-		ImmutableArray<PackableAsset> assets = ConvertAssets(dataSet.Assets, GetTagId);
-		ImmutableArray<PackableWeights> weights = ConvertWeights(dataSet.Weights, GetTagId);
+		ImmutableArray<PackableScreenshot> screenshots = ConvertScreenshots(dataSet.ScreenshotsLibrary);
+		ImmutableArray<PackableTag> tags = ConvertTags(dataSet.TagsLibrary.Tags, out var lookup);
+		ImmutableArray<PackableAsset> assets = ConvertAssets(dataSet.AssetsLibrary.Assets, GetTagId);
+		ImmutableArray<PackableWeights> weights = ConvertWeights(dataSet.WeightsLibrary.Weights, GetTagId);
 		return CreatePackableDataSet(dataSet.Name, dataSet.Description, gameId, composition, screenshots, tags, assets, weights);
 
 		byte GetTagId(Tag tag) => lookup[tag];
@@ -70,9 +70,9 @@ internal abstract class DataSetConverter
 		};
 	}
 
-	private ImmutableArray<PackableScreenshot> ConvertScreenshots(ScreenshotsLibrary screenshots)
+	private ImmutableArray<PackableScreenshot> ConvertScreenshots(ScreenshotsLibrary library)
 	{
-		return screenshots.Select(ConvertScreenshot).ToImmutableArray();
+		return library.Screenshots.Select(ConvertScreenshot).ToImmutableArray();
 		PackableScreenshot ConvertScreenshot(Screenshot screenshot) => new(
 			ScreenshotsDataAccess.GetId(screenshot),
 			screenshot.CreationDate,

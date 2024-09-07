@@ -13,10 +13,10 @@ public abstract class DataSet
 	public Game? Game { get; set; }
 	public Composition? Composition { get; set; }
 
-	public abstract TagsLibrary Tags { get; }
-	public abstract ScreenshotsLibrary Screenshots { get; }
-	public abstract AssetsLibrary Assets { get; }
-	public abstract WeightsLibrary Weights { get; }
+	public abstract TagsLibrary TagsLibrary { get; }
+	public abstract ScreenshotsLibrary ScreenshotsLibrary { get; }
+	public abstract AssetsLibrary AssetsLibrary { get; }
+	public abstract WeightsLibrary WeightsLibrary { get; }
 
 	public override string ToString() => Name;
 }
@@ -25,17 +25,17 @@ public class DataSet<TTag, TAsset> : DataSet
 	where TTag : Tag, TagsFactory<TTag>, MinimumTagsCount
 	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 {
-	public override TagsLibrary<TTag> Tags { get; }
-	public override ScreenshotsLibrary<TAsset> Screenshots { get; }
-	public override AssetsLibrary<TAsset> Assets { get; }
-	public override WeightsLibrary<TTag> Weights { get; }
+	public override TagsLibrary<TTag> TagsLibrary { get; }
+	public override ScreenshotsLibrary<TAsset> ScreenshotsLibrary { get; }
+	public override AssetsLibrary<TAsset> AssetsLibrary { get; }
+	public override WeightsLibrary<TTag> WeightsLibrary { get; }
 
 	protected DataSet()
 	{
-		Tags = new TagsLibrary<TTag>(this);
-		Screenshots = new ScreenshotsLibrary<TAsset>(this);
-		Assets = new AssetsLibrary<TAsset>(this);
-		Weights = new WeightsLibrary<TTag>(this);
+		TagsLibrary = new TagsLibrary<TTag>(this);
+		ScreenshotsLibrary = new ScreenshotsLibrary<TAsset>(this);
+		AssetsLibrary = new AssetsLibrary<TAsset>(this);
+		WeightsLibrary = new WeightsLibrary<TTag>(this);
 	}
 }
 
@@ -44,16 +44,16 @@ public class DataSet<TTag, TKeyPointTag, TAsset> : DataSet
 	where TKeyPointTag : KeyPointTag<TTag>
 	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 {
-	public override TagsLibrary<TTag> Tags { get; }
-	public override ScreenshotsLibrary<TAsset> Screenshots { get; }
-	public override AssetsLibrary<TAsset> Assets { get; }
-	public override WeightsLibrary<TTag, TKeyPointTag> Weights { get; }
+	public override TagsLibrary<TTag> TagsLibrary { get; }
+	public override ScreenshotsLibrary<TAsset> ScreenshotsLibrary { get; }
+	public override AssetsLibrary<TAsset> AssetsLibrary { get; }
+	public override WeightsLibrary<TTag, TKeyPointTag> WeightsLibrary { get; }
 
 	protected DataSet()
 	{
-		Tags = new TagsLibrary<TTag>(this);
-		Screenshots = new ScreenshotsLibrary<TAsset>(this);
-		Assets = new AssetsLibrary<TAsset>(this);
-		Weights = new WeightsLibrary<TTag, TKeyPointTag>(this);
+		TagsLibrary = new TagsLibrary<TTag>(this);
+		ScreenshotsLibrary = new ScreenshotsLibrary<TAsset>(this);
+		AssetsLibrary = new AssetsLibrary<TAsset>(this);
+		WeightsLibrary = new WeightsLibrary<TTag, TKeyPointTag>(this);
 	}
 }

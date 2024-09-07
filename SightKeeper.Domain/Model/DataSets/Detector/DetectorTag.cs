@@ -21,7 +21,7 @@ public sealed class DetectorTag : ItemTag, MinimumTagsCount, TagsFactory<Detecto
 		Library.DeleteTag(this);
 	}
 
-	internal DetectorTag(string name, TagsLibrary<DetectorTag> library) : base(name, library)
+	internal DetectorTag(string name, TagsLibrary<DetectorTag> library) : base(name, library.Tags)
 	{
 		Library = library;
 		_items = new HashSet<DetectorItem>();
@@ -37,6 +37,6 @@ public sealed class DetectorTag : ItemTag, MinimumTagsCount, TagsFactory<Detecto
 		Guard.IsTrue(_items.Remove(item));
 	}
 
-	protected override IEnumerable<Tag> Siblings => Library;
+	protected override IEnumerable<Tag> Siblings => Library.Tags;
 	private readonly HashSet<DetectorItem> _items;
 }

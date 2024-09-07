@@ -10,35 +10,35 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldCreateAsset()
 	{
 		ClassifierDataSet dataSet = new();
-		dataSet.Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.Assets.MakeAsset(screenshot);
+		dataSet.TagsLibrary.CreateTag("");
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		screenshot.Asset.Should().Be(asset);
-		dataSet.Assets.Should().Contain(asset);
+		dataSet.AssetsLibrary.Assets.Should().Contain(asset);
 	}
 
 	[Fact]
 	public void ShouldNotCreateDuplicateAsset()
 	{
 		ClassifierDataSet dataSet = new();
-		dataSet.Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.Assets.MakeAsset(screenshot);
-		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot));
+		dataSet.TagsLibrary.CreateTag("");
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+		Assert.ThrowsAny<Exception>(() => dataSet.AssetsLibrary.MakeAsset(screenshot));
 		screenshot.Asset.Should().Be(asset);
-		dataSet.Assets.Should().Contain(asset);
-		dataSet.Assets.Should().HaveCount(1);
+		dataSet.AssetsLibrary.Assets.Should().Contain(asset);
+		dataSet.AssetsLibrary.Assets.Should().HaveCount(1);
 	}
 
 	[Fact]
 	public void ShouldDeleteAsset()
 	{
 		ClassifierDataSet dataSet = new();
-		dataSet.Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.Assets.MakeAsset(screenshot);
-		dataSet.Assets.DeleteAsset(asset);
-		dataSet.Assets.Should().BeEmpty();
+		dataSet.TagsLibrary.CreateTag("");
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+		dataSet.AssetsLibrary.DeleteAsset(asset);
+		dataSet.AssetsLibrary.Assets.Should().BeEmpty();
 		screenshot.Asset.Should().BeNull();
 	}
 
@@ -46,11 +46,11 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldNotDeleteAssetFromOtherDataSet()
 	{
 		ClassifierDataSet dataSet1 = new();
-		dataSet1.Tags.CreateTag("");
+		dataSet1.TagsLibrary.CreateTag("");
 		ClassifierDataSet dataSet2 = new();
-		var screenshot = dataSet1.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet1.Assets.MakeAsset(screenshot);
-		Assert.ThrowsAny<Exception>(() => dataSet2.Assets.DeleteAsset(asset));
+		var screenshot = dataSet1.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet1.AssetsLibrary.MakeAsset(screenshot);
+		Assert.ThrowsAny<Exception>(() => dataSet2.AssetsLibrary.DeleteAsset(asset));
 		asset.Screenshot.Asset.Should().Be(asset);
 	}
 	
@@ -58,10 +58,10 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldNotSetAssetTagToForeign()
 	{
 		ClassifierDataSet dataSet = new();
-		var properTag = dataSet.Tags.CreateTag("");
-		var foreignTag = new ClassifierDataSet().Tags.CreateTag("");
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.Assets.MakeAsset(screenshot);
+		var properTag = dataSet.TagsLibrary.CreateTag("");
+		var foreignTag = new ClassifierDataSet().TagsLibrary.CreateTag("");
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => asset.Tag = foreignTag);
 		asset.Tag.Should().Be(properTag);
 	}
@@ -70,7 +70,7 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldNotCreateAssetWithoutAvailableTags()
 	{
 		ClassifierDataSet dataSet = new();
-		var screenshot = dataSet.Screenshots.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		Assert.ThrowsAny<Exception>(() => dataSet.Assets.MakeAsset(screenshot));
+		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
+		Assert.ThrowsAny<Exception>(() => dataSet.AssetsLibrary.MakeAsset(screenshot));
 	}
 }

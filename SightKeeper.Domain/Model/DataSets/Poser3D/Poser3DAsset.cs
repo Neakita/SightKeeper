@@ -9,7 +9,7 @@ public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>, AssetsFactory<Poser3
 {
 	public static Poser3DAsset Create(Screenshot<Poser3DAsset> screenshot)
 	{
-		Poser3DAsset asset = new(screenshot, (AssetsLibrary<Poser3DAsset>)screenshot.DataSet.Assets);
+		Poser3DAsset asset = new(screenshot, (AssetsLibrary<Poser3DAsset>)screenshot.DataSet.AssetsLibrary);
 		screenshot.SetAsset(asset);
 		return asset;
 	}

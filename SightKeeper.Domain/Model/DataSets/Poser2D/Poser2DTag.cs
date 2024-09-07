@@ -48,7 +48,7 @@ public sealed class Poser2DTag : PoserTag, TagsFactory<Poser2DTag>
 		Library.DeleteTag(this);
 	}
 
-	internal Poser2DTag(string name, TagsLibrary<Poser2DTag> library) : base(name, library)
+	internal Poser2DTag(string name, TagsLibrary<Poser2DTag> library) : base(name, library.Tags)
 	{
 		Library = library;
 		_keyPoints = new List<KeyPointTag2D>();
@@ -66,7 +66,7 @@ public sealed class Poser2DTag : PoserTag, TagsFactory<Poser2DTag>
 		Guard.IsTrue(_items.Remove(item));
 	}
 
-	protected override IEnumerable<Tag> Siblings => Library;
+	protected override IEnumerable<Tag> Siblings => Library.Tags;
 
 	private readonly List<KeyPointTag2D> _keyPoints;
 	private readonly List<NumericItemProperty> _properties;

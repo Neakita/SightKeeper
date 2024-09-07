@@ -15,9 +15,9 @@ public sealed class TriggerBehaviourTests
 	public void ShouldSetTags()
 	{
 		ClassifierDataSet dataSet = new();
-		var tag1 = dataSet.Tags.CreateTag("1");
-		var tag2 = dataSet.Tags.CreateTag("2");
-		var weights = dataSet.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag2]);
+		var tag1 = dataSet.TagsLibrary.CreateTag("1");
+		var tag2 = dataSet.TagsLibrary.CreateTag("2");
+		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag2]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, Action>();
@@ -30,13 +30,13 @@ public sealed class TriggerBehaviourTests
 	public void ShouldNotSetTagsWithWrongOwnership()
 	{
 		ClassifierDataSet dataSet1 = new();
-		var tag1 = dataSet1.Tags.CreateTag("1");
-		var tag2 = dataSet1.Tags.CreateTag("2");
-		var weights1 = dataSet1.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag2]);
+		var tag1 = dataSet1.TagsLibrary.CreateTag("1");
+		var tag2 = dataSet1.TagsLibrary.CreateTag("2");
+		var weights1 = dataSet1.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag2]);
 		ClassifierDataSet dataSet2 = new();
-		var tag3 = dataSet2.Tags.CreateTag("3");
-		var tag4 = dataSet2.Tags.CreateTag("4");
-		dataSet2.Weights.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag3, tag4]);
+		var tag3 = dataSet2.TagsLibrary.CreateTag("3");
+		var tag4 = dataSet2.TagsLibrary.CreateTag("4");
+		dataSet2.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag3, tag4]);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, Action>();

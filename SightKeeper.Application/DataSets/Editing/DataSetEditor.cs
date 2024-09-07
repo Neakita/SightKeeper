@@ -44,7 +44,7 @@ public sealed class DataSetEditor : IDisposable
 			else if (tagData is ExistingTagData existingTagData)
 				RemoveTag(existingTagData);
 			else if (tagData is NewTagData newTagData)
-				CreateNewTag(dataSet.Tags, newTagData);
+				CreateNewTag(dataSet.TagsLibrary, newTagData);
 			else
 				throw new ArgumentOutOfRangeException(nameof(tagData));
 		}

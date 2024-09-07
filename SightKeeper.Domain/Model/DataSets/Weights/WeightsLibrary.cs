@@ -1,32 +1,21 @@
-﻿using System.Collections;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Weights;
 
-public abstract class WeightsLibrary : IReadOnlyCollection<Weights>
+public abstract class WeightsLibrary
 {
 	public abstract int Count { get; }
 	public abstract DataSet DataSet { get; }
-
-	public abstract IEnumerator<Weights> GetEnumerator();
-
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
+	public abstract IReadOnlyCollection<Weights> Weights { get; }
 }
 
-public sealed class WeightsLibrary<TTag> : WeightsLibrary, IReadOnlyCollection<Weights<TTag>> where TTag : Tag, MinimumTagsCount
+public sealed class WeightsLibrary<TTag> : WeightsLibrary where TTag : Tag, MinimumTagsCount
 {
 	public override int Count => _weights.Count;
 	public override DataSet DataSet { get; }
-
-	public override IEnumerator<Weights<TTag>> GetEnumerator()
-	{
-		return _weights.GetEnumerator();
-	}
+	public override IReadOnlyCollection<Weights<TTag>> Weights => _weights;
 
 	internal WeightsLibrary(DataSet dataSet)
 	{
@@ -51,24 +40,15 @@ public sealed class WeightsLibrary<TTag> : WeightsLibrary, IReadOnlyCollection<W
 	}
 
 	private readonly SortedSet<Weights<TTag>> _weights = new(WeightsDateComparer.Instance);
-
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
 }
 
-public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary, IReadOnlyCollection<Weights<TTag, TKeyPointTag>>
+public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary
 	where TTag : PoserTag
 	where TKeyPointTag : KeyPointTag<TTag>
 {
 	public override int Count => _weights.Count;
 	public override DataSet DataSet { get; }
-
-	public override IEnumerator<Weights<TTag, TKeyPointTag>> GetEnumerator()
-	{
-		return _weights.GetEnumerator();
-	}
+	public override IReadOnlyCollection<Weights<TTag, TKeyPointTag>> Weights => _weights;
 
 	internal WeightsLibrary(DataSet dataSet)
 	{
@@ -93,9 +73,4 @@ public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary, IReadOn
 	}
 
 	private readonly SortedSet<Weights<TTag, TKeyPointTag>> _weights = new(WeightsDateComparer.Instance);
-
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
 }

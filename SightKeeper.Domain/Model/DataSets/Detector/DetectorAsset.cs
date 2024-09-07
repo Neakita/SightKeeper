@@ -7,7 +7,7 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>, AssetsFactory<Dete
 {
 	public static DetectorAsset Create(Screenshot<DetectorAsset> screenshot)
 	{
-		DetectorAsset asset = new(screenshot, (AssetsLibrary<DetectorAsset>)screenshot.DataSet.Assets);
+		DetectorAsset asset = new(screenshot, (AssetsLibrary<DetectorAsset>)screenshot.DataSet.AssetsLibrary);
 		screenshot.SetAsset(asset);
 		return asset;
 	}

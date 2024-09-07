@@ -1,42 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
 namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 
-public abstract class ScreenshotsLibrary : IReadOnlyCollection<Screenshot>
+public abstract class ScreenshotsLibrary
 {
 	/// <summary>
 	/// The maximum number of screenshots without asset that can be contained in this library.
 	/// If not specified (null), an unlimited number can be stored.
 	/// </summary>
 	public ushort? MaxQuantity { get; set; }
-
 	public abstract int Count { get; }
-	
 	public abstract DataSet DataSet { get; }
+	public abstract IReadOnlyCollection<Screenshot> Screenshots { get; }
 
-	public abstract IEnumerator<Screenshot> GetEnumerator();
 	public abstract Screenshot CreateScreenshot(DateTime creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots);
-
-	IEnumerator IEnumerable.GetEnumerator()
-	{
-		return GetEnumerator();
-	}
 }
 
-public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCollection<Screenshot<TAsset>> where TAsset : Asset
+public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary where TAsset : Asset
 {
     public override int Count => _screenshots.Count;
     public override DataSet DataSet { get; }
+    public override IReadOnlyCollection<Screenshot<TAsset>> Screenshots => _screenshots;
 
     public ScreenshotsLibrary(DataSet dataSet)
     {
 	    DataSet = dataSet;
     }
-
-    public override IEnumerator<Screenshot<TAsset>> GetEnumerator() => _screenshots.GetEnumerator();
 
     public override Screenshot<TAsset> CreateScreenshot(DateTime creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots)
     {
@@ -57,7 +48,7 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary, IReadOnlyCo
     {
 	    if (MaxQuantity == null)
 		    return ImmutableArray<Screenshot>.Empty;
-	    var screenshotWithoutAssetCount = _screenshots.Count - DataSet.Assets.Count;
+	    var screenshotWithoutAssetCount = _screenshots.Count - DataSet.AssetsLibrary.Count;
 	    var exceedAmount = screenshotWithoutAssetCount - MaxQuantity.Value;
 	    if (exceedAmount <= 0)
 		    return ImmutableArray<Screenshot>.Empty;

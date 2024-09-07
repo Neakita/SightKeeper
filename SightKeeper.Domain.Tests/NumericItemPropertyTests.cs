@@ -9,7 +9,7 @@ public sealed class NumericItemPropertyTests
 	public void ShouldGetSameValueAfterNormalizing()
 	{
 		Poser2DDataSet dataSet = new();
-		var tag = dataSet.Tags.CreateTag("");
+		var tag = dataSet.TagsLibrary.CreateTag("");
 		var property = tag.CreateProperty("", 100, 300);
 		const double value = 200;
 		var normalizedValue = property.GetNormalizedValue(value);
