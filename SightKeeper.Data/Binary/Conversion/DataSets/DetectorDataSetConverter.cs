@@ -59,10 +59,11 @@ internal sealed class DetectorDataSetConverter : DataSetConverter
 
 	protected override ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId)
 	{
-		return weights.Cast<Weights<DetectorTag>>().Select(ConvertWeightsItem).ToImmutableArray();
-		PackableWeights ConvertWeightsItem(Weights<DetectorTag> item) =>
-			new PackablePlainWeights(item.CreationDate, item.ModelSize, item.Metrics, item.Resolution,
-				ConvertWeightsTags(item.Tags));
+		var convertedWeights = weights
+			.Cast<Weights<DetectorTag>>()
+			.Select(item => ConvertWeights(item, ConvertWeightsTags(item.Tags)))
+			.ToImmutableArray();
+		return ImmutableArray<PackableWeights>.CastUp(convertedWeights);
 		ImmutableArray<byte> ConvertWeightsTags(IEnumerable<Tag> tags) => tags.Select(getTagId).ToImmutableArray();
 	}
 }

@@ -42,7 +42,7 @@ internal abstract class PoserDataSetConverter : DataSetConverter
 		}
 	}
 	
-	protected static PackableWeights ConvertWeightsItem<TTag, TKeyPointTag>(Weights<TTag, TKeyPointTag> item, Func<Tag, byte> getTagId)
+	protected static PackablePoserWeights ConvertWeights<TTag, TKeyPointTag>(Weights<TTag, TKeyPointTag> item, Func<Tag, byte> getTagId)
 		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{

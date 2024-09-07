@@ -55,6 +55,8 @@ internal abstract class DataSetConverter
 	protected abstract ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup);
 	protected abstract ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId);
 	protected abstract ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId);
+	protected static PackablePlainWeights ConvertWeights(Weights item, ImmutableArray<byte> tagIds) =>
+		new(item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, tagIds);
 
 	private static PackableTransparentComposition? ConvertComposition(Composition? composition)
 	{

@@ -90,9 +90,10 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter
 
 	protected override ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId)
 	{
-		return weights
+		var convertedWeights = weights
 			.Cast<Weights<Poser3DTag, KeyPointTag3D>>()
-			.Select(weightsItem => ConvertWeightsItem(weightsItem, getTagId))
+			.Select(weightsItem => ConvertWeights(weightsItem, getTagId))
 			.ToImmutableArray();
+		return ImmutableArray<PackableWeights>.CastUp(convertedWeights);
 	}
 }
