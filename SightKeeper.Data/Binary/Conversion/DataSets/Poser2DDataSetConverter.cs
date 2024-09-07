@@ -45,7 +45,7 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup)
 	{
 		var lookupBuilder = ImmutableDictionary.CreateBuilder<Tag, byte>();
-		var resultBuilder = ImmutableArray.CreateBuilder<PackableTag>(tags.Count);
+		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoser2DTag>(tags.Count);
 		var keyPointTagsBuilder = ImmutableArray.CreateBuilder<PackableTag>();
 		var numericItemPropertiesBuilder = ImmutableArray.CreateBuilder<PackableNumericItemProperty>();
 		byte tagIndex = 0;
@@ -67,7 +67,7 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 			lookupBuilder.Add(tag, tagId);
 		}
 		lookup = lookupBuilder.ToImmutable();
-		return resultBuilder.ToImmutable();
+		return ImmutableArray<PackableTag>.CastUp(resultBuilder.ToImmutable());
 	}
 
 	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)

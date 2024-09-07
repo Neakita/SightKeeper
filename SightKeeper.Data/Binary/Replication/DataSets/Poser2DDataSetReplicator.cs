@@ -1,10 +1,13 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
+using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets;
 
@@ -23,6 +26,15 @@ internal sealed class Poser2DDataSetReplicator : PoserDataSetReplicator<Poser2DT
 			Game = game,
 			Composition = composition
 		};
+	}
+
+	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed, ImmutableDictionary<(byte, byte?), Tag>.Builder lookupBuilder)
+	{
+		var typedPackedTag = (PackablePoser2DTag)packed;
+		var tag = (Poser2DTag)base.ReplicateTag(library, packed, lookupBuilder);
+		foreach (var property in typedPackedTag.NumericProperties)
+			tag.CreateProperty(property.Name, property.MinimumValue, property.MaximumValue);
+		return tag;
 	}
 
 	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, TagGetter getTag)
