@@ -30,8 +30,8 @@ internal sealed class Poser2DDataSetReplicator : PoserDataSetReplicator<Poser2DT
 
 	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed, ImmutableDictionary<(byte, byte?), Tag>.Builder lookupBuilder)
 	{
-		var typedPackedTag = (PackablePoser2DTag)packed;
 		var tag = (Poser2DTag)base.ReplicateTag(library, packed, lookupBuilder);
+		var typedPackedTag = (PackablePoser2DTag)packed;
 		foreach (var property in typedPackedTag.NumericProperties)
 			tag.CreateProperty(property.Name, property.MinimumValue, property.MaximumValue);
 		return tag;

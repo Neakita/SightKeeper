@@ -44,7 +44,7 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter
 	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup)
 	{
 		var lookupBuilder = ImmutableDictionary.CreateBuilder<Tag, byte>();
-		var resultBuilder = ImmutableArray.CreateBuilder<PackableTag>(tags.Count);
+		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoser3DTag>(tags.Count);
 		var keyPointTagsBuilder = ImmutableArray.CreateBuilder<PackableTag>();
 		var numericItemPropertiesBuilder = ImmutableArray.CreateBuilder<PackableNumericItemProperty>();
 		var booleanItemPropertiesBuilder = ImmutableArray.CreateBuilder<PackableBooleanItemProperty>();
@@ -75,7 +75,7 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter
 			lookupBuilder.Add(tag, tagId);
 		}
 		lookup = lookupBuilder.ToImmutable();
-		return resultBuilder.ToImmutable();
+		return ImmutableArray<PackableTag>.CastUp(resultBuilder.ToImmutable());
 	}
 
 	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)

@@ -4,10 +4,12 @@ using SightKeeper.Application;
 using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SightKeeper.Domain.Model.DataSets.Poser3D;
 
 namespace SightKeeper.Data.Tests.Binary;
 
@@ -24,14 +26,21 @@ public sealed class BinarySerializationTests
 		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess));
 		Game game = new("PayDay 2", "payday2");
 		dataAccess.Data.Games.Add(game);
-		dataAccess.Data.DataSets.Add(CreateClassifierDataSet(screenshotsDataAccess, game));
-		dataAccess.Data.DataSets.Add(CreateDetectorDataSet(screenshotsDataAccess, game));
-		dataAccess.Data.DataSets.Add(CreatePoser2DDataSet(screenshotsDataAccess, game));
+		foreach (var dataSet in CreateDataSets(screenshotsDataAccess, game))
+			dataAccess.Data.DataSets.Add(dataSet);
 		dataAccess.Save();
 		var data = dataAccess.Data;
 		dataAccess.Load();
 		dataAccess.Data.Should().BeEquivalentTo(data, options => options.IgnoringCyclicReferences());
 		Directory.Delete(screenshotsDataAccess.DirectoryPath, true);
+	}
+
+	private static IEnumerable<DataSet> CreateDataSets(ScreenshotsDataAccess screenshotsDataAccess, Game game)
+	{
+		yield return CreateClassifierDataSet(screenshotsDataAccess, game);
+		yield return CreateDetectorDataSet(screenshotsDataAccess, game);
+		yield return CreatePoser2DDataSet(screenshotsDataAccess, game);
+		yield return CreatePoser3DDataSet(screenshotsDataAccess, game);
 	}
 
 	private static ClassifierDataSet CreateClassifierDataSet(ScreenshotsDataAccess screenshotsDataAccess, Game game)
@@ -94,6 +103,33 @@ public sealed class BinarySerializationTests
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [new Vector2<double>(0.3, 0.2)], [20]);
 		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [new Vector2<double>(0.4, 0.3)], [25]);
+		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
+		return dataSet;
+	}
+
+	private static Poser3DDataSet CreatePoser3DDataSet(ScreenshotsDataAccess screenshotsDataAccess, Game game)
+	{
+		Poser3DDataSet dataSet = new()
+		{
+			Name = "PD2",
+			Description = "Test dataset",
+			Game = game
+		};
+		var copTag = dataSet.TagsLibrary.CreateTag("Cop");
+		copTag.Color = 123;
+		copTag.CreateKeyPoint("Head");
+		copTag.CreateNumericProperty("Distance", 0, 200);
+		copTag.CreateBooleanProperty("ShouldShoot");
+		var bulldozerTag = dataSet.TagsLibrary.CreateTag("Bulldozer");
+		bulldozerTag.Color = 456;
+		bulldozerTag.CreateKeyPoint("Face");
+		bulldozerTag.CreateNumericProperty("Distance", 0, 200);
+		bulldozerTag.CreateBooleanProperty("ShouldShoot");
+		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
+		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [new KeyPoint3D(new Vector2<double>(0.3, 0.2), true)], [20], [true]);
+		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [new KeyPoint3D(new Vector2<double>(0.4, 0.3), false)], [25], [false]);
 		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
 		return dataSet;
 	}

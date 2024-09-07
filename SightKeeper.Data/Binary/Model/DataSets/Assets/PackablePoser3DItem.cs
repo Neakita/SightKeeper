@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using MemoryPack;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
 
@@ -7,7 +8,8 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 /// <summary>
 /// MemoryPackable version of <see cref="Poser3DItem"/>
 /// </summary>
-internal sealed class PackablePoser3DItem
+[MemoryPackable]
+internal sealed partial class PackablePoser3DItem
 {
 	public byte TagId { get; }
 	public Bounding Bounding { get; }
