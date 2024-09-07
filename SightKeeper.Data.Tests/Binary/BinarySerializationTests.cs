@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using FluentAssertions.Equivalency;
 using MemoryPack;
 using SightKeeper.Application;
 using SightKeeper.Data.Binary;
@@ -28,7 +27,7 @@ public sealed class BinarySerializationTests
 		dataAccess.Save();
 		var data = dataAccess.Data;
 		dataAccess.Load();
-		dataAccess.Data.Should().BeEquivalentTo(data, ConfigureEquivalencyAssertion);
+		dataAccess.Data.Should().BeEquivalentTo(data, options => options.IgnoringCyclicReferences());
 		screenshotsDataAccess.DeleteScreenshot(testingDataSet.ScreenshotsLibrary.As<IEnumerable<Screenshot>>().First());
 		screenshotsDataAccess.DeleteScreenshot(testingDataSet.ScreenshotsLibrary.As<IEnumerable<Screenshot>>().First());
 	}
@@ -49,10 +48,5 @@ public sealed class BinarySerializationTests
 		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
 		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
 		return dataSet;
-	}
-
-	private static EquivalencyAssertionOptions<AppData> ConfigureEquivalencyAssertion(EquivalencyAssertionOptions<AppData> options)
-	{
-		return options.IgnoringCyclicReferences();
 	}
 }
