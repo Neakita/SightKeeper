@@ -5,7 +5,6 @@ using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Data.Tests.Binary;
 
@@ -22,14 +21,14 @@ public sealed class BinarySerializationTests
 		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess));
 		Game game = new("PayDay 2", "payday2");
 		dataAccess.Data.Games.Add(game);
-		var testingDataSet = CreateDetectorDataSet(screenshotsDataAccess, game);
-		dataAccess.Data.DataSets.Add(testingDataSet);
+		var dataSet = CreateDetectorDataSet(screenshotsDataAccess, game);
+		dataAccess.Data.DataSets.Add(dataSet);
 		dataAccess.Save();
 		var data = dataAccess.Data;
 		dataAccess.Load();
 		dataAccess.Data.Should().BeEquivalentTo(data, options => options.IgnoringCyclicReferences());
-		screenshotsDataAccess.DeleteScreenshot(testingDataSet.ScreenshotsLibrary.As<IEnumerable<Screenshot>>().First());
-		screenshotsDataAccess.DeleteScreenshot(testingDataSet.ScreenshotsLibrary.As<IEnumerable<Screenshot>>().First());
+		screenshotsDataAccess.DeleteScreenshot(dataSet.ScreenshotsLibrary.Screenshots.First());
+		screenshotsDataAccess.DeleteScreenshot(dataSet.ScreenshotsLibrary.Screenshots.First());
 	}
 
 	private static DetectorDataSet CreateDetectorDataSet(ScreenshotsDataAccess screenshotsDataAccess, Game game)

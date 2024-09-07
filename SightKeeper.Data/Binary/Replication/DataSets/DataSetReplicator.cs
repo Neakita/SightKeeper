@@ -33,11 +33,19 @@ internal abstract class DataSetReplicator
 		var dataSet = CreateDataSet(packed.Name, packed.Description, game, composition);
 		var screenshotsLookup = ReplicateScreenshots(dataSet.ScreenshotsLibrary, packed.Screenshots);
 		var tagsLookup = ReplicateTags(dataSet.TagsLibrary, packed.GetTags());
+		TagGetter getTag = (tagId, keyPointTagId) => tagsLookup[(tagId, keyPointTagId)];
 		ReplicateAssets(
 			dataSet.AssetsLibrary,
 			packed.GetAssets(),
 			screenshotId => screenshotsLookup[screenshotId],
-			(tagId, keyPointTagId) => tagsLookup[(tagId, keyPointTagId)]);
+			getTag);
+		if (packed.MaxScreenshotsWithoutAsset != null)
+		{
+			var screenshotsWithoutAssets = dataSet.ScreenshotsLibrary.Screenshots.Count - dataSet.AssetsLibrary.Assets.Count;
+			Guard.IsLessThanOrEqualTo(screenshotsWithoutAssets, packed.MaxScreenshotsWithoutAsset.Value);
+			dataSet.ScreenshotsLibrary.MaxQuantity = packed.MaxScreenshotsWithoutAsset;
+		}
+		ReplicateWeights(dataSet.WeightsLibrary, packed.GetWeights(), getTag);
 		return dataSet;
 	}
 
@@ -48,7 +56,7 @@ internal abstract class DataSetReplicator
 		PackableTag packed,
 		ImmutableDictionary<(byte, byte?), Tag>.Builder lookupBuilder)
 	{
-		byte insertIndex = (byte)library.Count;
+		byte insertIndex = (byte)library.Tags.Count;
 		var tag = library.CreateTag(packed.Name);
 		tag.Color = packed.Color;
 		lookupBuilder.Add((insertIndex, null), tag);
@@ -103,8 +111,6 @@ internal abstract class DataSetReplicator
 	private void ReplicateWeights(WeightsLibrary library, ImmutableArray<PackableWeights> weights, TagGetter getTag)
 	{
 		foreach (var item in weights)
-		{
 			ReplicateWeights(library, item, getTag);
-		}
 	}
 }

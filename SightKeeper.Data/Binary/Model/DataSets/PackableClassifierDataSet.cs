@@ -19,11 +19,12 @@ internal sealed partial class PackableClassifierDataSet : PackableDataSet<Packab
 		string description,
 		ushort? gameId,
 		PackableComposition? composition,
+		ushort? maxScreenshotsWithoutAsset,
 		ImmutableArray<PackableScreenshot> screenshots,
 		ImmutableArray<PackableTag> tags,
 		ImmutableArray<PackableClassifierAsset> assets,
 		ImmutableArray<PackablePlainWeights> weights)
-		: base(name, description, gameId, composition, screenshots, tags, assets, weights)
+		: base(name, description, gameId, composition, maxScreenshotsWithoutAsset, screenshots, tags, assets, weights)
 	{
 	}
 }

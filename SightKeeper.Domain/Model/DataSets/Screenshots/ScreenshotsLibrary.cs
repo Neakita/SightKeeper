@@ -11,7 +11,6 @@ public abstract class ScreenshotsLibrary
 	/// If not specified (null), an unlimited number can be stored.
 	/// </summary>
 	public ushort? MaxQuantity { get; set; }
-	public abstract int Count { get; }
 	public abstract DataSet DataSet { get; }
 	public abstract IReadOnlyCollection<Screenshot> Screenshots { get; }
 
@@ -20,7 +19,6 @@ public abstract class ScreenshotsLibrary
 
 public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary where TAsset : Asset
 {
-    public override int Count => _screenshots.Count;
     public override DataSet DataSet { get; }
     public override IReadOnlyCollection<Screenshot<TAsset>> Screenshots => _screenshots;
 
@@ -48,7 +46,7 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary where TAsset
     {
 	    if (MaxQuantity == null)
 		    return ImmutableArray<Screenshot>.Empty;
-	    var screenshotWithoutAssetCount = _screenshots.Count - DataSet.AssetsLibrary.Count;
+	    var screenshotWithoutAssetCount = _screenshots.Count - DataSet.AssetsLibrary.Assets.Count;
 	    var exceedAmount = screenshotWithoutAssetCount - MaxQuantity.Value;
 	    if (exceedAmount <= 0)
 		    return ImmutableArray<Screenshot>.Empty;

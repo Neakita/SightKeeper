@@ -31,7 +31,16 @@ internal abstract class DataSetConverter
 		ImmutableArray<PackableTag> tags = ConvertTags(dataSet.TagsLibrary.Tags, out var lookup);
 		ImmutableArray<PackableAsset> assets = ConvertAssets(dataSet.AssetsLibrary.Assets, GetTagId);
 		ImmutableArray<PackableWeights> weights = ConvertWeights(dataSet.WeightsLibrary.Weights, GetTagId);
-		return CreatePackableDataSet(dataSet.Name, dataSet.Description, gameId, composition, screenshots, tags, assets, weights);
+		return CreatePackableDataSet(
+			dataSet.Name,
+			dataSet.Description,
+			gameId,
+			composition,
+			dataSet.ScreenshotsLibrary.MaxQuantity,
+			screenshots,
+			tags,
+			assets,
+			weights);
 
 		byte GetTagId(Tag tag) => lookup[tag];
 	}
@@ -47,6 +56,7 @@ internal abstract class DataSetConverter
 		string description,
 		ushort? gameId,
 		PackableComposition? composition,
+		ushort? maxScreenshotsWithoutAsset,
 		ImmutableArray<PackableScreenshot> screenshots,
 		ImmutableArray<PackableTag> tags,
 		ImmutableArray<PackableAsset> assets,

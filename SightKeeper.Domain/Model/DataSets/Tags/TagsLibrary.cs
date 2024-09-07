@@ -4,7 +4,6 @@ namespace SightKeeper.Domain.Model.DataSets.Tags;
 
 public abstract class TagsLibrary : TagsHolder
 {
-	public abstract int Count { get; }
 	public abstract DataSet DataSet { get; }
 	public abstract IReadOnlyCollection<Tag> Tags { get; }
 
@@ -13,7 +12,6 @@ public abstract class TagsLibrary : TagsHolder
 
 public sealed class TagsLibrary<TTag> : TagsLibrary where TTag : Tag, TagsFactory<TTag>
 {
-	public override int Count => _tags.Count;
 	public override DataSet DataSet { get; }
 	public override IReadOnlyCollection<TTag> Tags => _tags;
 

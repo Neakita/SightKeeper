@@ -6,14 +6,12 @@ namespace SightKeeper.Domain.Model.DataSets.Weights;
 
 public abstract class WeightsLibrary
 {
-	public abstract int Count { get; }
 	public abstract DataSet DataSet { get; }
 	public abstract IReadOnlyCollection<Weights> Weights { get; }
 }
 
 public sealed class WeightsLibrary<TTag> : WeightsLibrary where TTag : Tag, MinimumTagsCount
 {
-	public override int Count => _weights.Count;
 	public override DataSet DataSet { get; }
 	public override IReadOnlyCollection<Weights<TTag>> Weights => _weights;
 
@@ -46,7 +44,6 @@ public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary
 	where TTag : PoserTag
 	where TKeyPointTag : KeyPointTag<TTag>
 {
-	public override int Count => _weights.Count;
 	public override DataSet DataSet { get; }
 	public override IReadOnlyCollection<Weights<TTag, TKeyPointTag>> Weights => _weights;
 

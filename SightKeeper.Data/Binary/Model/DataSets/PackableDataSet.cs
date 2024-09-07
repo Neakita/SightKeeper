@@ -22,6 +22,7 @@ internal abstract partial class PackableDataSet
 	public string Description { get; }
 	public ushort? GameId { get; }
 	public PackableComposition? Composition { get; }
+	public ushort? MaxScreenshotsWithoutAsset { get; }
 	public ImmutableArray<PackableScreenshot> Screenshots { get; }
 
 	public PackableDataSet(
@@ -29,17 +30,20 @@ internal abstract partial class PackableDataSet
 		string description,
 		ushort? gameId,
 		PackableComposition? composition,
+		ushort? maxScreenshotsWithoutAsset,
 		ImmutableArray<PackableScreenshot> screenshots)
 	{
 		Name = name;
 		Description = description;
 		GameId = gameId;
 		Composition = composition;
+		MaxScreenshotsWithoutAsset = maxScreenshotsWithoutAsset;
 		Screenshots = screenshots;
 	}
 
 	public abstract ImmutableArray<PackableTag> GetTags();
 	public abstract ImmutableArray<PackableAsset> GetAssets();
+	public abstract ImmutableArray<PackableWeights> GetWeights();
 }
 
 /// <summary>
@@ -59,11 +63,12 @@ internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSe
 		string description,
 		ushort? gameId,
 		PackableComposition? composition,
+		ushort? maxScreenshotsWithoutAsset,
 		ImmutableArray<PackableScreenshot> screenshots,
 		ImmutableArray<TTag> tags,
 		ImmutableArray<TAsset> assets,
 		ImmutableArray<TWeights> weights)
-		: base(name, description, gameId, composition, screenshots)
+		: base(name, description, gameId, composition, maxScreenshotsWithoutAsset, screenshots)
 	{
 		Tags = tags;
 		Assets = assets;
@@ -78,5 +83,10 @@ internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSe
 	public sealed override ImmutableArray<PackableAsset> GetAssets()
 	{
 		return ImmutableArray<PackableAsset>.CastUp(Assets);
+	}
+
+	public sealed override ImmutableArray<PackableWeights> GetWeights()
+	{
+		return ImmutableArray<PackableWeights>.CastUp(Weights);
 	}
 }

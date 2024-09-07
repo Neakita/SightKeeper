@@ -19,11 +19,12 @@ internal sealed partial class PackablePoser2DDataSet : PackableDataSet<PackableP
 		string description,
 		ushort? gameId,
 		PackableComposition? composition,
+		ushort? maxScreenshotsWithoutAsset,
 		ImmutableArray<PackableScreenshot> screenshots,
 		ImmutableArray<PackablePoser2DTag> tags,
 		ImmutableArray<PackableItemsAsset<PackablePoser2DItem>> assets,
 		ImmutableArray<PackablePoserWeights> weights)
-		: base(name, description, gameId, composition, screenshots, tags, assets, weights)
+		: base(name, description, gameId, composition, maxScreenshotsWithoutAsset, screenshots, tags, assets, weights)
 	{
 	}
 }

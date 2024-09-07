@@ -5,7 +5,6 @@ namespace SightKeeper.Domain.Model.DataSets.Assets;
 
 public abstract class AssetsLibrary
 {
-	public abstract int Count { get; }
 	public abstract DataSet DataSet { get; }
 	public abstract IReadOnlyCollection<Asset> Assets { get; }
 }
@@ -13,7 +12,6 @@ public abstract class AssetsLibrary
 public sealed class AssetsLibrary<TAsset> : AssetsLibrary
 	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 {
-	public override int Count => _assets.Count;
 	public override DataSet DataSet { get; }
 	public override IReadOnlyCollection<TAsset> Assets => _assets;
 
