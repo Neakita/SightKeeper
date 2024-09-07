@@ -60,10 +60,11 @@ internal abstract class DataSetReplicator
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
-	private static Composition ReplicateComposition(PackableComposition? composition)
+	private static Composition? ReplicateComposition(PackableComposition? composition)
 	{
 		return composition switch
 		{
+			null => null,
 			PackableTransparentComposition transparentComposition =>
 				new TransparentComposition(
 					transparentComposition.MaximumScreenshotsDelay,
