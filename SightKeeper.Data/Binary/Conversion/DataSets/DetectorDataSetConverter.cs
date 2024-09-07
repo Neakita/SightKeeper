@@ -48,8 +48,9 @@ internal sealed class DetectorDataSetConverter : DataSetConverter
 
 	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)
 	{
-		return assets.Cast<DetectorAsset>().Select(ConvertAsset).ToImmutableArray();
-		PackableAsset ConvertAsset(DetectorAsset asset) => new PackableItemsAsset<PackableDetectorItem>(
+		var convertedAssets = assets.Cast<DetectorAsset>().Select(ConvertAsset).ToImmutableArray();
+		return ImmutableArray<PackableAsset>.CastUp(convertedAssets);
+		PackableItemsAsset<PackableDetectorItem> ConvertAsset(DetectorAsset asset) => new(
 			asset.Usage,
 			ScreenshotsDataAccess.GetId(asset.Screenshot),
 			asset.Items.Select(ConvertItem).ToImmutableArray());

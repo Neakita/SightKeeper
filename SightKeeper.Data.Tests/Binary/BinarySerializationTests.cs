@@ -12,6 +12,7 @@ namespace SightKeeper.Data.Tests.Binary;
 public sealed class BinarySerializationTests
 {
 	private static readonly byte[] SampleImageData = File.ReadAllBytes("sample.png");
+	private static readonly Vector2<ushort> SampleImageResolution = new(320, 320);
 
 	[Fact]
 	public void ShouldSaveAndLoadAppData()
@@ -45,8 +46,8 @@ public sealed class BinarySerializationTests
 		var bulldozerTag = dataSet.Tags.CreateTag("Bulldozer");
 		bulldozerTag.Color = 456;
 		dataSet.Screenshots.MaxQuantity = 2;
-		screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, SampleImageData);
-		screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, SampleImageData);
+		screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, SampleImageData, DateTime.Now, SampleImageResolution);
+		screenshotsDataAccess.CreateScreenshot(dataSet.Screenshots, SampleImageData, DateTime.Now, SampleImageResolution);
 		return dataSet;
 	}
 }

@@ -70,9 +70,10 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 
 	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)
 	{
-		return assets.Cast<Poser2DAsset>().Select(ConvertAsset).ToImmutableArray();
-		PackableAsset ConvertAsset(Poser2DAsset asset) =>
-			new PackableItemsAsset<PackablePoser2DItem>(asset.Usage, ScreenshotsDataAccess.GetId(asset.Screenshot), ConvertItems(asset.Items));
+		var convertedAssets = assets.Cast<Poser2DAsset>().Select(ConvertAsset).ToImmutableArray();
+		return ImmutableArray<PackableAsset>.CastUp(convertedAssets);
+		PackableItemsAsset<PackablePoser2DItem> ConvertAsset(Poser2DAsset asset) =>
+			new(asset.Usage, ScreenshotsDataAccess.GetId(asset.Screenshot), ConvertItems(asset.Items));
 		ImmutableArray<PackablePoser2DItem> ConvertItems(IEnumerable<Poser2DItem> items) => items.Select(ConvertItem).ToImmutableArray();
 		PackablePoser2DItem ConvertItem(Poser2DItem item) => new(getTagId(item.Tag), item.Bounding, ConvertKeyPoints(item.KeyPoints), item.Properties);
 		ImmutableArray<PackableKeyPoint2D> ConvertKeyPoints(IEnumerable<Vector2<double>> keyPoints) =>

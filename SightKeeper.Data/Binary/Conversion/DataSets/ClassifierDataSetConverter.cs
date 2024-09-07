@@ -48,8 +48,9 @@ internal sealed class ClassifierDataSetConverter : DataSetConverter
 
 	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)
 	{
-		return assets.Cast<ClassifierAsset>().Select(ConvertAsset).ToImmutableArray();
-		PackableAsset ConvertAsset(ClassifierAsset asset) => new PackableClassifierAsset(
+		var convertedAssets = assets.Cast<ClassifierAsset>().Select(ConvertAsset).ToImmutableArray();
+		return ImmutableArray<PackableAsset>.CastUp(convertedAssets);
+		PackableClassifierAsset ConvertAsset(ClassifierAsset asset) => new(
 			asset.Usage,
 			ScreenshotsDataAccess.GetId(asset.Screenshot),
 			getTagId(asset.Tag));
