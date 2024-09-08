@@ -7,9 +7,9 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using Action = SightKeeper.Domain.Model.Profiles.Actions.Action;
 
-namespace SightKeeper.Domain.Tests.Profiles.Behaviours;
+namespace SightKeeper.Domain.Tests.Profiles.Behaviors;
 
-public sealed class TriggerBehaviourTests
+public sealed class TriggerBehaviorTests
 {
 	[Fact]
 	public void ShouldSetTags()
@@ -22,8 +22,8 @@ public sealed class TriggerBehaviourTests
 		var module = profile.CreateModule(weights);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, Action>();
 		tagsBuilder.Add(tag2, new FakeAction());
-		module.Behaviour.Actions = tagsBuilder.ToImmutable();
-		module.Behaviour.Actions.Should().ContainKey(tag2);
+		module.Behavior.Actions = tagsBuilder.ToImmutable();
+		module.Behavior.Actions.Should().ContainKey(tag2);
 	}
 
 	[Fact]
@@ -41,6 +41,6 @@ public sealed class TriggerBehaviourTests
 		var module = profile.CreateModule(weights1);
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Tag, Action>();
 		tagsBuilder.Add(tag3, new FakeAction());
-		Assert.ThrowsAny<Exception>(() => module.Behaviour.Actions = tagsBuilder.ToImmutable());
+		Assert.ThrowsAny<Exception>(() => module.Behavior.Actions = tagsBuilder.ToImmutable());
 	}
 }

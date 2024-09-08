@@ -3,10 +3,15 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.Profiles.Modules;
 
-namespace SightKeeper.Domain.Model.Profiles.Behaviours;
+namespace SightKeeper.Domain.Model.Profiles.Behaviors;
 
-public sealed class AimAssistBehaviour : Behaviour
+public sealed class AimAssistBehavior : Behavior, BehaviorFactory<AimAssistBehavior>
 {
+	public static AimAssistBehavior CreateBehavior(Module module)
+	{
+		return new AimAssistBehavior(module);
+	}
+
 	public record TagOptions(byte Priority, Vector2<float> TargetAreaScale, float VerticalOffset);
 
 	public ImmutableDictionary<Tag, TagOptions> Tags
@@ -50,7 +55,7 @@ public sealed class AimAssistBehaviour : Behaviour
 		}
 	}
 
-	internal AimAssistBehaviour(Module module) : base(module)
+	internal AimAssistBehavior(Module module) : base(module)
 	{
 	}
 

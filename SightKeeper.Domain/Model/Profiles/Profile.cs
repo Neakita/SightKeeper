@@ -9,6 +9,7 @@ namespace SightKeeper.Domain.Model.Profiles;
 public sealed class Profile
 {
 	public string Name { get; set; }
+	public string Description { get; set; } = string.Empty;
 	public IReadOnlyCollection<Module> Modules => _modules;
 
 	public Profile(string name)
@@ -30,9 +31,9 @@ public sealed class Profile
 		return module;
 	}
 
-	public PoserModule CreateModule(Weights<Poser2DTag, KeyPointTag2D> weights)
+	public Poser2DModule CreateModule(Weights<Poser2DTag, KeyPointTag2D> weights)
 	{
-		PoserModule module = new(this, weights);
+		Poser2DModule module = new(this, weights);
 		_modules.Add(module);
 		return module;
 	}

@@ -4,10 +4,15 @@ using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.Profiles.Modules;
 using Action = SightKeeper.Domain.Model.Profiles.Actions.Action;
 
-namespace SightKeeper.Domain.Model.Profiles.Behaviours;
+namespace SightKeeper.Domain.Model.Profiles.Behaviors;
 
-public sealed class TriggerBehaviour : Behaviour
+public sealed class TriggerBehavior : Behavior, BehaviorFactory<TriggerBehavior>
 {
+	public static TriggerBehavior CreateBehavior(Module module)
+	{
+		return new TriggerBehavior(module);
+	}
+
 	public ImmutableDictionary<Tag, Action> Actions
 	{
 		get => _actions;
@@ -19,7 +24,7 @@ public sealed class TriggerBehaviour : Behaviour
 		}
 	}
 
-	internal TriggerBehaviour(Module module) : base(module)
+	internal TriggerBehavior(Module module) : base(module)
 	{
 	}
 
