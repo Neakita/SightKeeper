@@ -4,8 +4,6 @@ namespace SightKeeper.Domain.Model.Profiles.Behaviors;
 
 public abstract class Behavior
 {
-	
-	
 	public Module Module { get; }
 
 	internal abstract void RemoveInappropriateTags();

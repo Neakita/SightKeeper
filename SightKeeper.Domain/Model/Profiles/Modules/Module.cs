@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.Model.Profiles.Behaviors;
 using SightKeeper.Domain.Model.Profiles.Modules.Scaling;
 using SightKeeper.Domain.Model.Profiles.Modules.Walking;
 
@@ -9,6 +10,7 @@ public abstract class Module
 {
 	public Profile Profile { get; }
 	public abstract Weights Weights { get; }
+	public abstract Behavior Behavior { get; }
 
 	public PassiveScalingOptions? PassiveScalingOptions
 	{

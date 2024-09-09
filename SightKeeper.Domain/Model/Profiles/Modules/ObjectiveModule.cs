@@ -9,20 +9,21 @@ public abstract class ObjectiveModule : Module
 {
 	public ActiveScalingOptions? ActiveScalingOptions { get; set; }
 	public ActiveWalkingOptions? ActiveWalkingOptions { get; set; }
-
-	public Behavior Behavior { get; private set; }
+	public override Behavior Behavior => _behavior;
 
 	public T SetBehavior<T>() where T : Behavior, BehaviorFactory<T>
 	{
 		var behavior = T.CreateBehavior(this);
-		Behavior = behavior;
+		_behavior = behavior;
 		return behavior;
 	}
 
 	public ObjectiveModule(Profile profile) : base(profile)
 	{
-		Behavior = new AimBehavior(this);
+		_behavior = new AimBehavior(this);
 	}
+
+	private Behavior _behavior;
 }
 
 public abstract class ObjectiveModule<TWeights> : ObjectiveModule

@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Immutable;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
@@ -41,12 +43,26 @@ internal abstract class PoserDataSetConverter : DataSetConverter
 			builder.Add(convertedProperty);
 		}
 	}
+
+	protected sealed override ImmutableArray<PackableWeights> ConvertWeights(
+		IReadOnlyCollection<Weights> weights,
+		ConversionSession session,
+		ImmutableDictionary<Weights, ushort>.Builder lookupBuilder,
+		Func<Tag, byte> getTagId)
+	{
+		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoserWeights>();
+		foreach (var item in weights.Cast<PoserWeights>())
+		{
+			resultBuilder.Add(ConvertWeights(session.WeightsIdCounter++, item, getTagId));
+			lookupBuilder.Add(item, session.WeightsIdCounter++);
+		}
+		return ImmutableArray<PackableWeights>.CastUp(resultBuilder.DrainToImmutable());
+	}
 	
-	protected static PackablePoserWeights ConvertWeights<TTag, TKeyPointTag>(Weights<TTag, TKeyPointTag> item, Func<Tag, byte> getTagId)
-		where TTag : PoserTag
-		where TKeyPointTag : KeyPointTag<TTag>
+	private static PackablePoserWeights ConvertWeights(ushort id, PoserWeights item, Func<Tag, byte> getTagId)
 	{
 		return new PackablePoserWeights(
+			id,
 			item.CreationDate,
 			item.ModelSize,
 			item.Metrics,
@@ -54,12 +70,11 @@ internal abstract class PoserDataSetConverter : DataSetConverter
 			ConvertWeightsTags(item.Tags));
 
 		ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(
-			IReadOnlyDictionary<TTag, ImmutableHashSet<TKeyPointTag>> tags) =>
-			tags.ToImmutableDictionary(
-				pair => getTagId(pair.Key),
-				pair => ConvertWeightsKeyPointTags(pair.Value));
-
-		ImmutableArray<byte> ConvertWeightsKeyPointTags(IEnumerable<KeyPointTag> source) =>
-			source.Select(tag => getTagId(tag)).ToImmutableArray();
+			IDictionary tags) =>
+			tags.Cast<DictionaryEntry>().ToImmutableDictionary(entry => getTagId((PoserTag)entry.Key), entry =>
+			{
+				Guard.IsNotNull(entry.Value);
+				return ((IReadOnlyCollection<KeyPointTag>)entry.Value).Select(getTagId).ToImmutableArray();
+			});
 	}
 }

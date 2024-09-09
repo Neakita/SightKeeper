@@ -25,7 +25,7 @@ internal abstract class DataSetReplicator
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public DataSet Replicate(PackableDataSet packed, ReplicationSession session)
+	public DataSet Replicate(PackableDataSet packed, ReplicationSession session, ImmutableDictionary<ushort, Weights>.Builder weightsLookupBuilder)
 	{
 		Guard.IsNotNull(session.Games);
 		var game = packed.GameId == null ? null : session.Games[packed.GameId.Value];
@@ -45,7 +45,7 @@ internal abstract class DataSetReplicator
 			Guard.IsLessThanOrEqualTo(screenshotsWithoutAssets, packed.MaxScreenshotsWithoutAsset.Value);
 			dataSet.ScreenshotsLibrary.MaxQuantity = packed.MaxScreenshotsWithoutAsset;
 		}
-		ReplicateWeights(dataSet.WeightsLibrary, packed.GetWeights(), getTag);
+		ReplicateWeights(dataSet.WeightsLibrary, packed.GetWeights(), getTag, weightsLookupBuilder);
 		return dataSet;
 	}
 
@@ -64,7 +64,7 @@ internal abstract class DataSetReplicator
 	}
 
 	protected abstract void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, TagGetter getTag);
-	protected abstract void ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag);
+	protected abstract Weights ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag);
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
@@ -108,9 +108,12 @@ internal abstract class DataSetReplicator
 			ReplicateAsset(library, asset, getScreenshot(asset.ScreenshotId), getTag);
 	}
 
-	private void ReplicateWeights(WeightsLibrary library, ImmutableArray<PackableWeights> weights, TagGetter getTag)
+	private void ReplicateWeights(WeightsLibrary library, ImmutableArray<PackableWeights> packedWeights, TagGetter getTag, ImmutableDictionary<ushort, Weights>.Builder weightsLookupBuilder)
 	{
-		foreach (var item in weights)
-			ReplicateWeights(library, item, getTag);
+		foreach (var item in packedWeights)
+		{
+			var weights = ReplicateWeights(library, item, getTag);
+			weightsLookupBuilder.Add(item.Id, weights);
+		}
 	}
 }

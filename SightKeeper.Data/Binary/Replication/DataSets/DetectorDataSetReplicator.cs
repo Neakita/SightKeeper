@@ -38,11 +38,11 @@ internal sealed class DetectorDataSetReplicator : DataSetReplicator
 		}
 	}
 
-	protected override void ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag)
+	protected override PlainWeights<DetectorTag> ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag)
 	{
 		var typedLibrary = (WeightsLibrary<DetectorTag>)library;
 		var typedWeights = (PackablePlainWeights)weights;
 		var tags = typedWeights.TagIds.Select(id => getTag(id)).Cast<DetectorTag>();
-		typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
+		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
 	}
 }

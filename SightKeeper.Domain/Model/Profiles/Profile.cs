@@ -17,21 +17,21 @@ public sealed class Profile
 		Name = name;
 	}
 
-	public DetectorModule CreateModule(Weights<DetectorTag> weights)
+	public DetectorModule CreateModule(PlainWeights<DetectorTag> weights)
 	{
 		DetectorModule module = new(this, weights);
 		_modules.Add(module);
 		return module;
 	}
 
-	public ClassifierModule CreateModule(Weights<ClassifierTag> weights)
+	public ClassifierModule CreateModule(PlainWeights<ClassifierTag> weights)
 	{
 		ClassifierModule module = new(this, weights);
 		_modules.Add(module);
 		return module;
 	}
 
-	public Poser2DModule CreateModule(Weights<Poser2DTag, KeyPointTag2D> weights)
+	public Poser2DModule CreateModule(PoserWeights<Poser2DTag, KeyPointTag2D> weights)
 	{
 		Poser2DModule module = new(this, weights);
 		_modules.Add(module);

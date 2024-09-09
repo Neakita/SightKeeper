@@ -7,7 +7,7 @@ namespace SightKeeper.Application;
 
 public abstract class WeightsDataAccess
 {
-	public Weights<TTag> CreateWeights<TTag>(
+	public PlainWeights<TTag> CreateWeights<TTag>(
 		WeightsLibrary<TTag> library,
 		byte[] data,
 		DateTime creationDate,
@@ -21,7 +21,7 @@ public abstract class WeightsDataAccess
 		return weights;
 	}
 
-	public Weights<TTag, TKeyPointTag> CreateWeights<TTag, TKeyPointTag>(
+	public PoserWeights<TTag, TKeyPointTag> CreateWeights<TTag, TKeyPointTag>(
 		WeightsLibrary<TTag, TKeyPointTag> library,
 		byte[] data,
 		DateTime creationDate,
@@ -37,13 +37,13 @@ public abstract class WeightsDataAccess
 		return weights;
 	}
 
-	public void RemoveWeights<TTag>(Weights<TTag> weights) where TTag : Tag, MinimumTagsCount
+	public void RemoveWeights<TTag>(PlainWeights<TTag> weights) where TTag : Tag, MinimumTagsCount
 	{
 		weights.Library.RemoveWeights(weights);
 		RemoveWeightsData(weights);
 	}
 
-	public void RemoveWeights<TTag, TKeyPointTag>(Weights<TTag, TKeyPointTag> weights)
+	public void RemoveWeights<TTag, TKeyPointTag>(PoserWeights<TTag, TKeyPointTag> weights)
 		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{

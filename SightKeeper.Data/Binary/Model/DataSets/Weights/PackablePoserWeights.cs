@@ -6,7 +6,7 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 namespace SightKeeper.Data.Binary.Model.DataSets.Weights;
 
 /// <summary>
-/// MemoryPackable version of <see cref="Weights{TTag,TKeyPointTag}"/>
+/// MemoryPackable version of <see cref="PoserWeights{TTag,TKeyPointTag}"/>
 /// </summary>
 [MemoryPackable]
 internal sealed partial class PackablePoserWeights : PackableWeights
@@ -14,12 +14,13 @@ internal sealed partial class PackablePoserWeights : PackableWeights
 	public ImmutableDictionary<byte, ImmutableArray<byte>> Tags { get; }
 
 	public PackablePoserWeights(
+		ushort id,
 		DateTime creationDate,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
 		ImmutableDictionary<byte, ImmutableArray<byte>> tags)
-		: base(creationDate, modelSize, metrics, resolution)
+		: base(id, creationDate, modelSize, metrics, resolution)
 	{
 		Tags = tags;
 	}

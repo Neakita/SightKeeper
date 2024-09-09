@@ -29,12 +29,12 @@ internal abstract class PoserDataSetReplicator<TTag, TKeyPointTag> : DataSetRepl
 		return tag;
 	}
 	
-	protected sealed override void ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag)
+	protected sealed override PoserWeights ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag)
 	{
 		var typedLibrary = (WeightsLibrary<TTag, TKeyPointTag>)library;
 		var typedWeights = (PackablePoserWeights)weights;
 		var tags = GetTags(typedWeights, getTag);
-		typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
+		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
 	}
 
 	private static IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> GetTags(PackablePoserWeights weights, TagGetter getTag)

@@ -9,7 +9,6 @@ using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
@@ -80,14 +79,5 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 		PackablePoser2DItem ConvertItem(Poser2DItem item) => new(getTagId(item.Tag), item.Bounding, ConvertKeyPoints(item.KeyPoints), item.Properties);
 		ImmutableArray<PackableKeyPoint2D> ConvertKeyPoints(IEnumerable<Vector2<double>> keyPoints) =>
 			keyPoints.Select(position => new PackableKeyPoint2D(position)).ToImmutableArray();
-	}
-
-	protected override ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId)
-	{
-		var convertedWeights = weights
-			.Cast<Weights<Poser2DTag, KeyPointTag2D>>()
-			.Select(weightsItem => ConvertWeights(weightsItem, getTagId))
-			.ToImmutableArray();
-		return ImmutableArray<PackableWeights>.CastUp(convertedWeights);
 	}
 }

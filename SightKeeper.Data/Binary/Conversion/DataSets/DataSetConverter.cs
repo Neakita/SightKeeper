@@ -21,7 +21,10 @@ internal abstract class DataSetConverter
 		ScreenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public PackableDataSet Convert(DataSet dataSet, ConversionSession session)
+	public PackableDataSet Convert(
+		DataSet dataSet,
+		ConversionSession session,
+		ImmutableDictionary<Weights, ushort>.Builder weightsLookupBuilder)
 	{
 		Guard.IsNotNull(session.GameIds);
 
@@ -30,7 +33,7 @@ internal abstract class DataSetConverter
 		ImmutableArray<PackableScreenshot> screenshots = ConvertScreenshots(dataSet.ScreenshotsLibrary);
 		ImmutableArray<PackableTag> tags = ConvertTags(dataSet.TagsLibrary.Tags, out var lookup);
 		ImmutableArray<PackableAsset> assets = ConvertAssets(dataSet.AssetsLibrary.Assets, GetTagId);
-		ImmutableArray<PackableWeights> weights = ConvertWeights(dataSet.WeightsLibrary.Weights, GetTagId);
+		ImmutableArray<PackableWeights> weights = ConvertWeights(dataSet.WeightsLibrary.Weights, session, weightsLookupBuilder, GetTagId);
 		return CreatePackableDataSet(
 			dataSet.Name,
 			dataSet.Description,
@@ -64,9 +67,26 @@ internal abstract class DataSetConverter
 
 	protected abstract ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup);
 	protected abstract ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId);
-	protected abstract ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId);
-	protected static PackablePlainWeights ConvertWeights(Weights item, ImmutableArray<byte> tagIds) =>
-		new(item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, tagIds);
+
+	protected virtual ImmutableArray<PackableWeights> ConvertWeights(
+		IReadOnlyCollection<Weights> weights,
+		ConversionSession session,
+		ImmutableDictionary<Weights, ushort>.Builder lookupBuilder,
+		Func<Tag, byte> getTagId)
+	{
+		var resultBuilder = ImmutableArray.CreateBuilder<PackableWeights>(weights.Count);
+		foreach (var item in weights.Cast<PlainWeights>())
+		{
+			var id = session.WeightsIdCounter++;
+			resultBuilder.Add(ConvertWeights(id, item, ConvertWeightsTags(item.Tags)));
+			lookupBuilder.Add(item, id);
+		}
+		return ImmutableArray<PackableWeights>.CastUp(resultBuilder.DrainToImmutable());
+		ImmutableArray<byte> ConvertWeightsTags(IEnumerable<Tag> tags) => tags.Select(getTagId).ToImmutableArray();
+	}
+
+	private static PackablePlainWeights ConvertWeights(ushort id, Weights item, ImmutableArray<byte> tagIds) =>
+		new(id, item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, tagIds);
 
 	private static PackableTransparentComposition? ConvertComposition(Composition? composition)
 	{

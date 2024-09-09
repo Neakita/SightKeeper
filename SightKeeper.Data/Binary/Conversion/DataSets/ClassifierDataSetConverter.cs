@@ -8,7 +8,6 @@ using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
@@ -56,15 +55,5 @@ internal sealed class ClassifierDataSetConverter : DataSetConverter
 			asset.Usage,
 			ScreenshotsDataAccess.GetId(asset.Screenshot),
 			getTagId(asset.Tag));
-	}
-
-	protected override ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights, Func<Tag, byte> getTagId)
-	{
-		var convertedWeights = weights
-			.Cast<Weights<ClassifierTag>>()
-			.Select(item => ConvertWeights(item, ConvertWeightsTags(item.Tags)))
-			.ToImmutableArray();
-		return ImmutableArray<PackableWeights>.CastUp(convertedWeights);
-		ImmutableArray<byte> ConvertWeightsTags(IEnumerable<Tag> tags) => tags.Select(getTagId).ToImmutableArray();
 	}
 }

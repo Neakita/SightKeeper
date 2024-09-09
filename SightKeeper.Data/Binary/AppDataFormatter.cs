@@ -1,9 +1,11 @@
-﻿using MemoryPack;
+﻿using System.Collections.Immutable;
+using MemoryPack;
 using SightKeeper.Data.Binary.Conversion;
 using SightKeeper.Data.Binary.Conversion.DataSets;
 using SightKeeper.Data.Binary.Replication;
 using SightKeeper.Data.Binary.Replication.DataSets;
 using SightKeeper.Data.Binary.Services;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary;
 
@@ -23,10 +25,14 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			return;
 		}
 		ConversionSession session = new();
+		var games = GamesConverter.Convert(value.Games, session);
+		var weightsLookupBuilder = ImmutableDictionary.CreateBuilder<Weights, ushort>();
+		var dataSets = _dataSetConverter.Convert(value.DataSets, session, weightsLookupBuilder);
+		session.WeightsIds = weightsLookupBuilder.ToImmutable();
 		PackableAppData raw = new(
 			value.ApplicationSettings,
-			GamesConverter.Convert(value.Games, session),
-			_dataSetConverter.Convert(value.DataSets, session));
+			games,
+			dataSets);
 		writer.WritePackable(raw);
 	}
 
@@ -45,10 +51,12 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			return;
 		}
 		ReplicationSession session = new();
-		value = new AppData(
-			GameReplicator.Replicate(packable.Games, session),
-			_dataSetReplicator.Replicate(packable.DataSets, session),
-			packable.ApplicationSettings);
+
+		var games = GameReplicator.Replicate(packable.Games, session);
+		var weightsLookupBuilder = ImmutableDictionary.CreateBuilder<ushort, Weights>();
+		var dataSets = _dataSetReplicator.Replicate(packable.DataSets, session, weightsLookupBuilder);
+		session.Weights = weightsLookupBuilder.ToImmutable();
+		value = new AppData(games, dataSets, packable.ApplicationSettings);
 	}
 
 	private readonly MultiDataSetConverter _dataSetConverter;
