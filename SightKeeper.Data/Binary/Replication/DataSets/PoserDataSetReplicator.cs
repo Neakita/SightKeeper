@@ -8,9 +8,10 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets;
 
-internal abstract class PoserDataSetReplicator<TTag, TKeyPointTag> : DataSetReplicator
+internal abstract class PoserDataSetReplicator<TTag, TKeyPointTag, TDataSet> : DataSetReplicator<TDataSet>
 	where TTag : PoserTag
 	where TKeyPointTag : KeyPointTag<TTag>
+	where TDataSet : DataSet, new()
 {
 	protected PoserDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{

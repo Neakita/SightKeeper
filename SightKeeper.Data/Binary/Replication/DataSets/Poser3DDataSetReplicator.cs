@@ -2,7 +2,6 @@ using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
@@ -11,22 +10,10 @@ using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets;
 
-internal sealed class Poser3DDataSetReplicator : PoserDataSetReplicator<Poser3DTag, KeyPointTag3D>
+internal sealed class Poser3DDataSetReplicator : PoserDataSetReplicator<Poser3DTag, KeyPointTag3D, Poser3DDataSet>
 {
 	public Poser3DDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
-	}
-
-
-	protected override Poser3DDataSet CreateDataSet(string name, string description, Game? game, Composition? composition)
-	{
-		return new Poser3DDataSet
-		{
-			Name = name,
-			Description = description,
-			Game = game,
-			Composition = composition
-		};
 	}
 
 	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed, ReplicationSession session)

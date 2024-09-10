@@ -7,7 +7,6 @@ using SightKeeper.Data.Binary.Model.DataSets.Compositions;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
@@ -16,37 +15,42 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets;
 
-internal abstract class DataSetReplicator
+internal abstract class DataSetReplicator<TDataSet>
+	where TDataSet : DataSet, new()
 {
 	public DataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public DataSet Replicate(PackableDataSet packed, ReplicationSession session)
+	public TDataSet Replicate(PackableDataSet packable, ReplicationSession session)
 	{
 		Guard.IsNotNull(session.Games);
-		var game = packed.GameId == null ? null : session.Games[packed.GameId.Value];
-		var composition = ReplicateComposition(packed.Composition);
-		var dataSet = CreateDataSet(packed.Name, packed.Description, game, composition);
-		var screenshotsLookup = ReplicateScreenshots(dataSet.ScreenshotsLibrary, packed.Screenshots);
-		ReplicateTags(dataSet.TagsLibrary, packed.GetTags(), session);
+		var game = packable.GameId == null ? null : session.Games[packable.GameId.Value];
+		var composition = ReplicateComposition(packable.Composition);
+		var dataSet = new TDataSet
+		{
+			Name = packable.Name,
+			Description = packable.Description,
+			Game = game,
+			Composition = composition
+		};
+		var screenshotsLookup = ReplicateScreenshots(dataSet.ScreenshotsLibrary, packable.Screenshots);
+		ReplicateTags(dataSet.TagsLibrary, packable.GetTags(), session);
 		ReplicateAssets(
 			dataSet.AssetsLibrary,
-			packed.GetAssets(),
+			packable.GetAssets(),
 			screenshotId => screenshotsLookup[screenshotId],
 			session);
-		if (packed.MaxScreenshotsWithoutAsset != null)
+		if (packable.MaxScreenshotsWithoutAsset != null)
 		{
 			var screenshotsWithoutAssets = dataSet.ScreenshotsLibrary.Screenshots.Count - dataSet.AssetsLibrary.Assets.Count;
-			Guard.IsLessThanOrEqualTo(screenshotsWithoutAssets, packed.MaxScreenshotsWithoutAsset.Value);
-			dataSet.ScreenshotsLibrary.MaxQuantity = packed.MaxScreenshotsWithoutAsset;
+			Guard.IsLessThanOrEqualTo(screenshotsWithoutAssets, packable.MaxScreenshotsWithoutAsset.Value);
+			dataSet.ScreenshotsLibrary.MaxQuantity = packable.MaxScreenshotsWithoutAsset;
 		}
-		ReplicateWeights(dataSet.WeightsLibrary, packed.GetWeights(), session);
+		ReplicateWeights(dataSet.WeightsLibrary, packable.GetWeights(), session);
 		return dataSet;
 	}
-
-	protected abstract DataSet CreateDataSet(string name, string description, Game? game, Composition? composition);
 
 	protected virtual Tag ReplicateTag(
 		TagsLibrary library,
