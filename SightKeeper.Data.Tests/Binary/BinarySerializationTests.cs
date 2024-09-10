@@ -15,11 +15,19 @@ using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviors;
+using Xunit.Abstractions;
 
 namespace SightKeeper.Data.Tests.Binary;
 
 public sealed class BinarySerializationTests
 {
+	private readonly ITestOutputHelper _testOutputHelper;
+
+	public BinarySerializationTests(ITestOutputHelper testOutputHelper)
+	{
+		_testOutputHelper = testOutputHelper;
+	}
+
 	private static readonly byte[] SampleImageData = File.ReadAllBytes("sample.png");
 	private static readonly Vector2<ushort> SampleImageResolution = new(320, 320);
 
@@ -41,7 +49,7 @@ public sealed class BinarySerializationTests
 		dataAccess.Save();
 		var data = dataAccess.Data;
 		dataAccess.Load();
-		dataAccess.Data.Should().BeEquivalentTo(data, options => options.IgnoringCyclicReferences());
+		dataAccess.Data.Should().BeEquivalentTo(data, options => options.IgnoringCyclicReferences().RespectingRuntimeTypes().AllowingInfiniteRecursion());
 		Directory.Delete(screenshotsDataAccess.DirectoryPath, true);
 	}
 
