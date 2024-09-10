@@ -37,7 +37,8 @@ public sealed class BinarySerializationTests
 		var profile = CreateProfile(
 			dataAccess.Data.DataSets.OfType<ClassifierDataSet>().Single().WeightsLibrary.Weights.Single(),
 			dataAccess.Data.DataSets.OfType<DetectorDataSet>().Single().WeightsLibrary.Weights.Single(),
-			dataAccess.Data.DataSets.OfType<Poser2DDataSet>().Single().WeightsLibrary.Weights.Single());
+			dataAccess.Data.DataSets.OfType<Poser2DDataSet>().Single().WeightsLibrary.Weights.Single(),
+			dataAccess.Data.DataSets.OfType<Poser3DDataSet>().Single().WeightsLibrary.Weights.Single());
 		dataAccess.Data.Profiles.Add(profile);
 		dataAccess.Save();
 		var data = dataAccess.Data;
@@ -51,7 +52,11 @@ public sealed class BinarySerializationTests
 		return options
 			.RespectingRuntimeTypes()
 			.IgnoringCyclicReferences()
-			.AllowingInfiniteRecursion();
+			.AllowingInfiniteRecursion()
+			.Using(new ImmutableDictionaryComparer<Tag, AimBehavior.TagOptions>(TagComparer.Instance, AimBehaviorTagOptionsComparer.Instance))
+			.Using(new ImmutableDictionaryComparer<Tag, AimAssistBehavior.TagOptions>(TagComparer.Instance, AimAssistBehaviorTagOptionsComparer.Instance))
+			.Using(new ImmutableDictionaryComparer<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>(TagComparer.Instance, new ImmutableHashSetComparer<KeyPointTag2D>(TagComparer.Instance)))
+			.Using(new ImmutableDictionaryComparer<Poser3DTag, ImmutableHashSet<KeyPointTag3D>>(TagComparer.Instance, new ImmutableHashSetComparer<KeyPointTag3D>(TagComparer.Instance)));
 	}
 
 	private static IEnumerable<DataSet> CreateDataSets(ScreenshotsDataAccess screenshotsDataAccess, Game game)
@@ -180,7 +185,8 @@ public sealed class BinarySerializationTests
 	private static Profile CreateProfile(
 		PlainWeights<ClassifierTag> classifierWeights,
 		PlainWeights<DetectorTag> detectorWeights,
-		PoserWeights<Poser2DTag, KeyPointTag2D> poser2DWeights)
+		PoserWeights<Poser2DTag, KeyPointTag2D> poser2DWeights,
+		PoserWeights<Poser3DTag, KeyPointTag3D> poser3DWeights)
 	{
 		Profile profile = new("Test profile");
 		profile.CreateModule(classifierWeights);
@@ -192,8 +198,15 @@ public sealed class BinarySerializationTests
 				Tag (tag) => tag,
 				_ => new AimBehavior.TagOptions(0, -0.1f));
 		var poser2DModule = profile.CreateModule(poser2DWeights);
-		var aimAssistBehavior = poser2DModule.SetBehavior<AimAssistBehavior>();
-		aimAssistBehavior.Tags = poser2DWeights
+		var poser2DAimAssistBehavior = poser2DModule.SetBehavior<AimAssistBehavior>();
+		poser2DAimAssistBehavior.Tags = poser2DWeights
+			.Tags
+			.ToImmutableDictionary(
+				Tag (pair) => pair.Key,
+				_ => new AimAssistBehavior.TagOptions(0, new Vector2<float>(0.1f, 0.05f), -0.1f));
+		var poser3DModule = profile.CreateModule(poser3DWeights);
+		var poser3DAimAssistBehavior = poser3DModule.SetBehavior<AimAssistBehavior>();
+		poser3DAimAssistBehavior.Tags = poser3DWeights
 			.Tags
 			.ToImmutableDictionary(
 				Tag (pair) => pair.Key,

@@ -15,19 +15,6 @@ public abstract class Tag
 	public abstract DataSet DataSet { get; }
 	public abstract bool IsInUse { get; }
 
-	public override bool Equals(object? obj)
-	{
-		if (obj is null) return false;
-		if (ReferenceEquals(this, obj)) return true;
-		if (obj.GetType() != GetType()) return false;
-		return Equals((Tag)obj);
-	}
-
-	public override int GetHashCode()
-	{
-		return HashCode.Combine(Name, Color, DataSet);
-	}
-
 	public abstract void Delete();
 
 	/// <param name="name">Initial name</param>
@@ -38,11 +25,6 @@ public abstract class Tag
 	}
 
 	protected abstract IEnumerable<Tag> Siblings { get; }
-
-	protected bool Equals(Tag other)
-	{
-		return Name == other.Name && Color == other.Color && DataSet.Equals(other.DataSet);
-	}
 
 	private string _name;
 
