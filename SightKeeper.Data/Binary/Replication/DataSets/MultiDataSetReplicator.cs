@@ -7,19 +7,18 @@ namespace SightKeeper.Data.Binary.Replication.DataSets;
 
 internal sealed class MultiDataSetReplicator
 {
-	public MultiDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess)
+	public MultiDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess, ReplicationSession session)
 	{
-		_classifierReplicator = new ClassifierDataSetReplicator(screenshotsDataAccess);
-		_detectorReplicator = new DetectorDataSetReplicator(screenshotsDataAccess);
-		_poser2DReplicator = new Poser2DDataSetReplicator(screenshotsDataAccess);
-		_poser3DReplicator = new Poser3DDataSetReplicator(screenshotsDataAccess);
+		_classifierReplicator = new ClassifierDataSetReplicator(screenshotsDataAccess, session);
+		_detectorReplicator = new DetectorDataSetReplicator(screenshotsDataAccess, session);
+		_poser2DReplicator = new Poser2DDataSetReplicator(screenshotsDataAccess, session);
+		_poser3DReplicator = new Poser3DDataSetReplicator(screenshotsDataAccess, session);
 	}
 
 	public HashSet<DataSet> Replicate(
-		ImmutableArray<PackableDataSet> packableDataSets,
-		ReplicationSession session)
+		ImmutableArray<PackableDataSet> packableDataSets)
 	{
-		return packableDataSets.Select(dataSet => Replicate(dataSet, session)).ToHashSet();
+		return packableDataSets.Select(Replicate).ToHashSet();
 	}
 
 	private readonly ClassifierDataSetReplicator _classifierReplicator;
@@ -27,14 +26,14 @@ internal sealed class MultiDataSetReplicator
 	private readonly Poser2DDataSetReplicator _poser2DReplicator;
 	private readonly Poser3DDataSetReplicator _poser3DReplicator;
 
-	private DataSet Replicate(PackableDataSet packableDataSet, ReplicationSession session)
+	private DataSet Replicate(PackableDataSet packableDataSet)
 	{
 		return packableDataSet switch
 		{
-			PackableClassifierDataSet classifierDataSet => _classifierReplicator.Replicate(classifierDataSet, session),
-			PackableDetectorDataSet detectorDataSet => _detectorReplicator.Replicate(detectorDataSet, session),
-			PackablePoser2DDataSet poser2DDataSet => _poser2DReplicator.Replicate(poser2DDataSet, session),
-			PackablePoser3DDataSet poser3DDataSet => _poser3DReplicator.Replicate(poser3DDataSet, session),
+			PackableClassifierDataSet classifierDataSet => _classifierReplicator.Replicate(classifierDataSet),
+			PackableDetectorDataSet detectorDataSet => _detectorReplicator.Replicate(detectorDataSet),
+			PackablePoser2DDataSet poser2DDataSet => _poser2DReplicator.Replicate(poser2DDataSet),
+			PackablePoser3DDataSet poser3DDataSet => _poser3DReplicator.Replicate(poser3DDataSet),
 			_ => throw new ArgumentOutOfRangeException(nameof(packableDataSet))
 		};
 	}

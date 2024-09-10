@@ -12,13 +12,13 @@ namespace SightKeeper.Data.Binary.Replication.DataSets;
 
 internal sealed class Poser3DDataSetReplicator : PoserDataSetReplicator<Poser3DTag, KeyPointTag3D, Poser3DDataSet>
 {
-	public Poser3DDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
+	public Poser3DDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess, ReplicationSession session) : base(screenshotsDataAccess, session)
 	{
 	}
 
-	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed, ReplicationSession session)
+	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed)
 	{
-		var tag = (Poser3DTag)base.ReplicateTag(library, packed, session);
+		var tag = (Poser3DTag)base.ReplicateTag(library, packed);
 		var typedPackedTag = (PackablePoser3DTag)packed;
 		foreach (var property in typedPackedTag.NumericProperties)
 			tag.CreateNumericProperty(property.Name, property.MinimumValue, property.MaximumValue);
@@ -27,14 +27,14 @@ internal sealed class Poser3DDataSetReplicator : PoserDataSetReplicator<Poser3DT
 		return tag;
 	}
 
-	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, ReplicationSession session)
+	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot)
 	{
 		var typedLibrary = (AssetsLibrary<Poser3DAsset>)library;
 		var typedPackedAsset = (PackableItemsAsset<PackablePoser3DItem>)packedAsset;
 		var asset = typedLibrary.MakeAsset((Screenshot<Poser3DAsset>)screenshot);
 		foreach (var packedItem in typedPackedAsset.Items)
 		{
-			var itemTag = (Poser3DTag)session.Tags[(library.DataSet, packedItem.TagId)];
+			var itemTag = (Poser3DTag)Session.Tags[(library.DataSet, packedItem.TagId)];
 			asset.CreateItem(
 				itemTag,
 				packedItem.Bounding,

@@ -10,27 +10,27 @@ namespace SightKeeper.Data.Binary.Replication.DataSets;
 
 internal sealed class DetectorDataSetReplicator : DataSetReplicator<DetectorDataSet>
 {
-	public DetectorDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
+	public DetectorDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess, ReplicationSession session) : base(screenshotsDataAccess, session)
 	{
 	}
 
-	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, ReplicationSession session)
+	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot)
 	{
 		var typedLibrary = (AssetsLibrary<DetectorAsset>)library;
 		var typedPackedAsset = (PackableItemsAsset<PackableDetectorItem>)packedAsset;
 		var asset = typedLibrary.MakeAsset((Screenshot<DetectorAsset>)screenshot);
 		foreach (var packedItem in typedPackedAsset.Items)
 		{
-			var itemTag = (DetectorTag)session.Tags[(library.DataSet, packedItem.TagId)];
+			var itemTag = (DetectorTag)Session.Tags[(library.DataSet, packedItem.TagId)];
 			asset.CreateItem(itemTag, packedItem.Bounding);
 		}
 	}
 
-	protected override PlainWeights<DetectorTag> ReplicateWeights(WeightsLibrary library, PackableWeights weights, ReplicationSession session)
+	protected override PlainWeights<DetectorTag> ReplicateWeights(WeightsLibrary library, PackableWeights weights)
 	{
 		var typedLibrary = (WeightsLibrary<DetectorTag>)library;
 		var typedWeights = (PackablePlainWeights)weights;
-		var tags = typedWeights.TagIds.Select(id => session.Tags[(library.DataSet, id)]).Cast<DetectorTag>();
+		var tags = typedWeights.TagIds.Select(id => Session.Tags[(library.DataSet, id)]).Cast<DetectorTag>();
 		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
 	}
 }

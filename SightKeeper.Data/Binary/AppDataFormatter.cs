@@ -15,7 +15,6 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 	public AppDataFormatter(FileSystemScreenshotsDataAccess screenshotsDataAccess)
 	{
 		_screenshotsDataAccess = screenshotsDataAccess;
-		_dataSetReplicator = new MultiDataSetReplicator(screenshotsDataAccess);
 	}
 	
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref AppData? value)
@@ -55,12 +54,12 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		ReplicationSession session = new();
 
 		var games = GameReplicator.Replicate(packed.Games, session);
-		var dataSets = _dataSetReplicator.Replicate(packed.DataSets, session);
+		MultiDataSetReplicator dataSetReplicator = new(_screenshotsDataAccess, session);
+		var dataSets = dataSetReplicator.Replicate(packed.DataSets);
 		var profiles = ProfileReplicator.Replicate(packed.Profiles, session).ToHashSet();
 		value = new AppData(games, dataSets, profiles, packed.ApplicationSettings);
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
-	private readonly MultiDataSetReplicator _dataSetReplicator;
 	private readonly ProfileConverter _profileConverter = new();
 }

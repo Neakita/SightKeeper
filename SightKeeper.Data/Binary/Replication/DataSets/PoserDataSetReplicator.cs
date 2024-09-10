@@ -13,37 +13,37 @@ internal abstract class PoserDataSetReplicator<TTag, TKeyPointTag, TDataSet> : D
 	where TKeyPointTag : KeyPointTag<TTag>
 	where TDataSet : DataSet, new()
 {
-	protected PoserDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
+	protected PoserDataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess, ReplicationSession session) : base(screenshotsDataAccess, session)
 	{
 	}
 
-	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed, ReplicationSession session)
+	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed)
 	{
 		var typedPackedTag = (PackablePoserTag)packed;
-		var tag = (PoserTag)base.ReplicateTag(library, packed, session);
+		var tag = (PoserTag)base.ReplicateTag(library, packed);
 		foreach (var packedKeyPointTag in typedPackedTag.KeyPointTags)
 		{
 			var keyPointTag = tag.CreateKeyPoint(typedPackedTag.Name);
 			keyPointTag.Color = packedKeyPointTag.Color;
-			session.Tags.Add((library.DataSet, packedKeyPointTag.Id), keyPointTag);
+			Session.Tags.Add((library.DataSet, packedKeyPointTag.Id), keyPointTag);
 		}
 		return tag;
 	}
 	
-	protected sealed override PoserWeights ReplicateWeights(WeightsLibrary library, PackableWeights weights, ReplicationSession session)
+	protected sealed override PoserWeights ReplicateWeights(WeightsLibrary library, PackableWeights weights)
 	{
 		var typedLibrary = (WeightsLibrary<TTag, TKeyPointTag>)library;
 		var typedWeights = (PackablePoserWeights)weights;
-		var tags = GetTags(library.DataSet, typedWeights, session);
+		var tags = GetTags(library.DataSet, typedWeights);
 		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
 	}
 
-	private static IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> GetTags(DataSet dataSet, PackablePoserWeights weights, ReplicationSession session)
+	private IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> GetTags(DataSet dataSet, PackablePoserWeights weights)
 	{
 		foreach (var (tagId, keyPointTagIds) in weights.Tags)
 		{
-			var tag = (TTag)session.Tags[(dataSet, tagId)];
-			var keyPointTags = GetKeyPointTags(keyPointTagIds, dataSet, session);
+			var tag = (TTag)Session.Tags[(dataSet, tagId)];
+			var keyPointTags = GetKeyPointTags(keyPointTagIds, dataSet, Session);
 			yield return (tag, keyPointTags);
 		}
 	}

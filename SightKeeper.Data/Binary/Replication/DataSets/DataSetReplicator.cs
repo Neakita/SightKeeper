@@ -18,15 +18,10 @@ namespace SightKeeper.Data.Binary.Replication.DataSets;
 internal abstract class DataSetReplicator<TDataSet>
 	where TDataSet : DataSet, new()
 {
-	public DataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess)
+	public TDataSet Replicate(PackableDataSet packable)
 	{
-		_screenshotsDataAccess = screenshotsDataAccess;
-	}
-
-	public TDataSet Replicate(PackableDataSet packable, ReplicationSession session)
-	{
-		Guard.IsNotNull(session.Games);
-		var game = packable.GameId == null ? null : session.Games[packable.GameId.Value];
+		Guard.IsNotNull(Session.Games);
+		var game = packable.GameId == null ? null : Session.Games[packable.GameId.Value];
 		var composition = ReplicateComposition(packable.Composition);
 		var dataSet = new TDataSet
 		{
@@ -36,35 +31,41 @@ internal abstract class DataSetReplicator<TDataSet>
 			Composition = composition
 		};
 		var screenshotsLookup = ReplicateScreenshots(dataSet.ScreenshotsLibrary, packable.Screenshots);
-		ReplicateTags(dataSet.TagsLibrary, packable.GetTags(), session);
+		ReplicateTags(dataSet.TagsLibrary, packable.GetTags());
 		ReplicateAssets(
 			dataSet.AssetsLibrary,
 			packable.GetAssets(),
-			screenshotId => screenshotsLookup[screenshotId],
-			session);
+			screenshotId => screenshotsLookup[screenshotId]);
 		if (packable.MaxScreenshotsWithoutAsset != null)
 		{
 			var screenshotsWithoutAssets = dataSet.ScreenshotsLibrary.Screenshots.Count - dataSet.AssetsLibrary.Assets.Count;
 			Guard.IsLessThanOrEqualTo(screenshotsWithoutAssets, packable.MaxScreenshotsWithoutAsset.Value);
 			dataSet.ScreenshotsLibrary.MaxQuantity = packable.MaxScreenshotsWithoutAsset;
 		}
-		ReplicateWeights(dataSet.WeightsLibrary, packable.GetWeights(), session);
+		ReplicateWeights(dataSet.WeightsLibrary, packable.GetWeights());
 		return dataSet;
+	}
+
+	protected ReplicationSession Session { get; }
+
+	protected DataSetReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess, ReplicationSession session)
+	{
+		Session = session;
+		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
 	protected virtual Tag ReplicateTag(
 		TagsLibrary library,
-		PackableTag packedTag,
-		ReplicationSession session)
+		PackableTag packedTag)
 	{
 		var tag = library.CreateTag(packedTag.Name);
-		session.Tags.Add((library.DataSet, packedTag.Id), tag);
+		Session.Tags.Add((library.DataSet, packedTag.Id), tag);
 		tag.Color = packedTag.Color;
 		return tag;
 	}
 
-	protected abstract void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, ReplicationSession session);
-	protected abstract Weights ReplicateWeights(WeightsLibrary library, PackableWeights weights, ReplicationSession session);
+	protected abstract void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot);
+	protected abstract Weights ReplicateWeights(WeightsLibrary library, PackableWeights weights);
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
@@ -94,24 +95,24 @@ internal abstract class DataSetReplicator<TDataSet>
 		return builder.ToImmutable();
 	}
 
-	private void ReplicateTags(TagsLibrary library, ImmutableArray<PackableTag> tags, ReplicationSession session)
+	private void ReplicateTags(TagsLibrary library, ImmutableArray<PackableTag> tags)
 	{
 		foreach (var packedTag in tags)
-			ReplicateTag(library, packedTag, session);
+			ReplicateTag(library, packedTag);
 	}
 
-	private void ReplicateAssets(AssetsLibrary library, ImmutableArray<PackableAsset> assets, Func<Id, Screenshot> getScreenshot, ReplicationSession session)
+	private void ReplicateAssets(AssetsLibrary library, ImmutableArray<PackableAsset> assets, Func<Id, Screenshot> getScreenshot)
 	{
 		foreach (var asset in assets)
-			ReplicateAsset(library, asset, getScreenshot(asset.ScreenshotId), session);
+			ReplicateAsset(library, asset, getScreenshot(asset.ScreenshotId));
 	}
 
-	private void ReplicateWeights(WeightsLibrary library, ImmutableArray<PackableWeights> packedWeights, ReplicationSession session)
+	private void ReplicateWeights(WeightsLibrary library, ImmutableArray<PackableWeights> packedWeights)
 	{
 		foreach (var item in packedWeights)
 		{
-			var weights = ReplicateWeights(library, item, session);
-			session.Weights.Add(item.Id, weights);
+			var weights = ReplicateWeights(library, item);
+			Session.Weights.Add(item.Id, weights);
 		}
 	}
 }
