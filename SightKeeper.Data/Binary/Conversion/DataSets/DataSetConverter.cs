@@ -7,6 +7,7 @@ using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
@@ -99,4 +100,28 @@ internal abstract class DataSetConverter<TPackableDataSet>
 			screenshot.CreationDate,
 			screenshot.Resolution);
 	}
+}
+
+internal abstract class DataSetConverter<TTag, TAsset, TWeights, TDataSet> : DataSetConverter<TDataSet>
+	where TTag : PackableTag
+	where TAsset : PackableAsset
+	where TWeights : PackableWeights
+	where TDataSet : PackableDataSet<TTag, TAsset, TWeights>, new()
+{
+	public sealed override TDataSet Convert(DataSet dataSet)
+	{
+		var packable = base.Convert(dataSet);
+		packable.Tags = ConvertTags(dataSet.TagsLibrary.Tags);
+		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets);
+		packable.Weights = ConvertWeights(dataSet.WeightsLibrary.Weights);
+		return packable;
+	}
+
+	protected DataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session) : base(screenshotsDataAccess, session)
+	{
+	}
+
+	protected abstract ImmutableArray<TTag> ConvertTags(IReadOnlyCollection<Tag> tags);
+	protected abstract ImmutableArray<TAsset> ConvertAssets(IReadOnlyCollection<Asset> assets);
+	protected abstract ImmutableArray<TWeights> ConvertWeights(IReadOnlyCollection<Weights> weights);
 }

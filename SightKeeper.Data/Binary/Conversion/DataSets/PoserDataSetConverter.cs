@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
+using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
@@ -9,8 +10,10 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal abstract class PoserDataSetConverter<TPackableDataSet> : DataSetConverter<TPackableDataSet>
-	where TPackableDataSet : PackableDataSet, new()
+internal abstract class PoserDataSetConverter<TTag, TAsset, TDataSet> : DataSetConverter<TTag, TAsset, PackablePoserWeights, TDataSet>
+	where TTag : PackableTag
+	where TAsset : PackableAsset
+	where TDataSet : PackablePoserDataSet<TTag, TAsset>, new()
 {
 	protected PoserDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session) : base(screenshotsDataAccess, session)
 	{

@@ -3,27 +3,19 @@ using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
+using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
 using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal sealed class Poser3DDataSetConverter : PoserDataSetConverter<PackablePoser3DDataSet>
+internal sealed class Poser3DDataSetConverter : PoserDataSetConverter<PackablePoser3DTag, PackableItemsAsset<PackablePoser3DItem>, PackablePoser3DDataSet>
 {
 	public Poser3DDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session) : base(screenshotsDataAccess, session)
 	{
-	}
-
-	public override PackablePoser3DDataSet Convert(DataSet dataSet)
-	{
-		var packable = base.Convert(dataSet);
-		packable.Tags = ConvertPoserTags(dataSet.TagsLibrary.Tags);
-		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets);
-		packable.Weights = ConvertPoserWeights(dataSet.WeightsLibrary.Weights);
-		return packable;
 	}
 
 	private ImmutableArray<PackablePoser3DTag> ConvertPoserTags(IReadOnlyCollection<Tag> tags)
@@ -60,7 +52,12 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter<PackablePo
 		return resultBuilder.ToImmutable();
 	}
 
-	private ImmutableArray<PackableItemsAsset<PackablePoser3DItem>> ConvertAssets(IReadOnlyCollection<Asset> assets)
+	protected override ImmutableArray<PackablePoser3DTag> ConvertTags(IReadOnlyCollection<Tag> tags)
+	{
+		return ConvertPoserTags(tags);
+	}
+
+	protected override ImmutableArray<PackableItemsAsset<PackablePoser3DItem>> ConvertAssets(IReadOnlyCollection<Asset> assets)
 	{
 		return assets.Cast<Poser3DAsset>().Select(ConvertAsset).ToImmutableArray();
 		PackableItemsAsset<PackablePoser3DItem> ConvertAsset(Poser3DAsset asset) =>
@@ -69,6 +66,11 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter<PackablePo
 		PackablePoser3DItem ConvertItem(Poser3DItem item) => new(Session.TagsIds[item.Tag], item.Bounding, ConvertKeyPoints(item.KeyPoints), item.NumericProperties, item.BooleanProperties);
 		ImmutableArray<PackableKeyPoint3D> ConvertKeyPoints(IEnumerable<KeyPoint3D> keyPoints) =>
 			keyPoints.Select(keyPoint => new PackableKeyPoint3D(keyPoint.Position, keyPoint.IsVisible)).ToImmutableArray();
+	}
+
+	protected override ImmutableArray<PackablePoserWeights> ConvertWeights(IReadOnlyCollection<Weights> weights)
+	{
+		throw new NotImplementedException();
 	}
 
 	protected override ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(IDictionary tags)
