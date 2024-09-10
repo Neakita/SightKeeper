@@ -11,11 +11,11 @@ namespace SightKeeper.Data.Binary.Model.Profiles.PassiveWalkingOptions;
 internal sealed partial class PackableIterativeWalkingOptions : PackablePassiveWalkingOptions
 {
 	public Vector2<float> OffsetStep { get; }
-	public Vector2<byte> MaximumSteps { get; }
+	public Vector2<byte> StepsCount { get; }
 
-	public PackableIterativeWalkingOptions(Vector2<float> offsetStep, Vector2<byte> maximumSteps)
+	public PackableIterativeWalkingOptions(Vector2<float> offsetStep, Vector2<byte> stepsCount)
 	{
 		OffsetStep = offsetStep;
-		MaximumSteps = maximumSteps;
+		StepsCount = stepsCount;
 	}
 }

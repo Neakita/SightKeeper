@@ -28,23 +28,23 @@ internal sealed class Poser2DDataSetReplicator : PoserDataSetReplicator<Poser2DT
 		};
 	}
 
-	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed, ImmutableDictionary<(byte, byte?), Tag>.Builder lookupBuilder)
+	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed, ReplicationSession session)
 	{
-		var tag = (Poser2DTag)base.ReplicateTag(library, packed, lookupBuilder);
+		var tag = (Poser2DTag)base.ReplicateTag(library, packed, session);
 		var typedPackedTag = (PackablePoser2DTag)packed;
 		foreach (var property in typedPackedTag.NumericProperties)
 			tag.CreateProperty(property.Name, property.MinimumValue, property.MaximumValue);
 		return tag;
 	}
 
-	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, TagGetter getTag)
+	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, ReplicationSession session)
 	{
 		var typedLibrary = (AssetsLibrary<Poser2DAsset>)library;
 		var typedPackedAsset = (PackableItemsAsset<PackablePoser2DItem>)packedAsset;
 		var asset = typedLibrary.MakeAsset((Screenshot<Poser2DAsset>)screenshot);
 		foreach (var packedItem in typedPackedAsset.Items)
 		{
-			var itemTag = (Poser2DTag)getTag(packedItem.TagId);
+			var itemTag = (Poser2DTag)session.Tags[(library.DataSet, packedItem.TagId)];
 			asset.CreateItem(
 				itemTag,
 				packedItem.Bounding,

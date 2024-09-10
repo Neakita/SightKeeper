@@ -1,11 +1,9 @@
 using System.Collections;
 using System.Collections.Immutable;
-using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
@@ -19,14 +17,14 @@ internal abstract class PoserDataSetConverter : DataSetConverter
 	protected static void BuildKeyPoints(
 		IEnumerable<KeyPointTag> keyPointTags,
 		ref byte indexCounter,
-		ImmutableDictionary<Tag, byte>.Builder lookupBuilder,
-		ImmutableArray<PackableTag>.Builder keyPointTagsBuilder)
+		ConversionSession session,
+		ImmutableArray<PackableTag>.Builder builder)
 	{
 		foreach (var keyPointTag in keyPointTags)
 		{
-			var keyPointTagId = indexCounter++;
-			lookupBuilder.Add(keyPointTag, keyPointTagId);
-			keyPointTagsBuilder.Add(ConvertPlainTag(keyPointTagId, keyPointTag));
+			session.TagsIds.Add(keyPointTag, indexCounter);
+			builder.Add(ConvertPlainTag(indexCounter, keyPointTag));
+			indexCounter++;
 		}
 	}
 
@@ -46,20 +44,19 @@ internal abstract class PoserDataSetConverter : DataSetConverter
 
 	protected sealed override ImmutableArray<PackableWeights> ConvertWeights(
 		IReadOnlyCollection<Weights> weights,
-		ConversionSession session,
-		ImmutableDictionary<Weights, ushort>.Builder lookupBuilder,
-		Func<Tag, byte> getTagId)
+		ConversionSession session)
 	{
 		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoserWeights>();
 		foreach (var item in weights.Cast<PoserWeights>())
 		{
-			resultBuilder.Add(ConvertWeights(session.WeightsIdCounter++, item, getTagId));
-			lookupBuilder.Add(item, session.WeightsIdCounter++);
+			resultBuilder.Add(ConvertWeights(session.WeightsIdCounter, item, session));
+			session.WeightsIds.Add(item, session.WeightsIdCounter);
+			session.WeightsIdCounter++;
 		}
 		return ImmutableArray<PackableWeights>.CastUp(resultBuilder.DrainToImmutable());
 	}
 	
-	private static PackablePoserWeights ConvertWeights(ushort id, PoserWeights item, Func<Tag, byte> getTagId)
+	private PackablePoserWeights ConvertWeights(ushort id, PoserWeights item, ConversionSession session)
 	{
 		return new PackablePoserWeights(
 			id,
@@ -67,14 +64,10 @@ internal abstract class PoserDataSetConverter : DataSetConverter
 			item.ModelSize,
 			item.Metrics,
 			item.Resolution,
-			ConvertWeightsTags(item.Tags));
-
-		ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(
-			IDictionary tags) =>
-			tags.Cast<DictionaryEntry>().ToImmutableDictionary(entry => getTagId((PoserTag)entry.Key), entry =>
-			{
-				Guard.IsNotNull(entry.Value);
-				return ((IReadOnlyCollection<KeyPointTag>)entry.Value).Select(getTagId).ToImmutableArray();
-			});
+			ConvertWeightsTags(item.Tags, session));
 	}
+
+	protected abstract ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(
+		IDictionary tags,
+		ConversionSession session);
 }

@@ -16,18 +16,18 @@ public sealed class IterativeWalkingOptions : PassiveWalkingOptions
 		}
 	}
 
-	public Vector2<byte> MaximumSteps
+	public Vector2<byte> StepsCount
 	{
-		get => _maximumOffset;
+		get => _stepsCount;
 		set
 		{
 			const byte minimumValue = 1;
 			Guard.IsGreaterThanOrEqualTo(value.X, minimumValue);
 			Guard.IsGreaterThanOrEqualTo(value.Y, minimumValue);
-			_maximumOffset = value;
+			_stepsCount = value;
 		}
 	}
 
 	private Vector2<float> _offsetStep = new(1, 1);
-	private Vector2<byte> _maximumOffset = new(2, 2);
+	private Vector2<byte> _stepsCount = new(2, 2);
 }

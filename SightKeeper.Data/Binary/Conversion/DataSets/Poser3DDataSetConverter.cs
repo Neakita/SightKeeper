@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
@@ -40,21 +41,21 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter
 			weights.CastArray<PackablePoserWeights>());
 	}
 
-	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup)
+	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, ConversionSession session)
 	{
-		var lookupBuilder = ImmutableDictionary.CreateBuilder<Tag, byte>();
 		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoser3DTag>(tags.Count);
 		var keyPointTagsBuilder = ImmutableArray.CreateBuilder<PackableTag>();
 		var numericItemPropertiesBuilder = ImmutableArray.CreateBuilder<PackableNumericItemProperty>();
 		var booleanItemPropertiesBuilder = ImmutableArray.CreateBuilder<PackableBooleanItemProperty>();
-		byte tagIndex = 0;
+		byte tagCounter = 0;
 		foreach (var tag in tags.Cast<Poser3DTag>())
 		{
+			var tagId = tagCounter++;
+			session.TagsIds.Add(tag, tagId);
 			keyPointTagsBuilder.Capacity = tag.KeyPoints.Count;
 			numericItemPropertiesBuilder.Capacity = tag.NumericProperties.Count;
 			booleanItemPropertiesBuilder.Capacity = tag.BooleanProperties.Count;
-			byte keyPointTagIndex = 0;
-			BuildKeyPoints(tag.KeyPoints, ref keyPointTagIndex, lookupBuilder, keyPointTagsBuilder);
+			BuildKeyPoints(tag.KeyPoints, ref tagCounter, session, keyPointTagsBuilder);
 			BuildNumericProperties(tag.NumericProperties, numericItemPropertiesBuilder);
 			foreach (var property in tag.BooleanProperties)
 			{
@@ -62,7 +63,6 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter
 					property.Name);
 				booleanItemPropertiesBuilder.Add(convertedProperty);
 			}
-			var tagId = tagIndex++;
 			PackablePoser3DTag convertedTag = new(
 				tagId,
 				tag.Name,
@@ -71,21 +71,28 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter
 				numericItemPropertiesBuilder.DrainToImmutable(),
 				booleanItemPropertiesBuilder.DrainToImmutable());
 			resultBuilder.Add(convertedTag);
-			lookupBuilder.Add(tag, tagId);
 		}
-		lookup = lookupBuilder.ToImmutable();
 		return ImmutableArray<PackableTag>.CastUp(resultBuilder.ToImmutable());
 	}
 
-	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)
+	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
 	{
 		var convertedAssets = assets.Cast<Poser3DAsset>().Select(ConvertAsset).ToImmutableArray();
 		return ImmutableArray<PackableAsset>.CastUp(convertedAssets);
 		PackableItemsAsset<PackablePoser3DItem> ConvertAsset(Poser3DAsset asset) =>
 			new(asset.Usage, ScreenshotsDataAccess.GetId(asset.Screenshot), ConvertItems(asset.Items));
 		ImmutableArray<PackablePoser3DItem> ConvertItems(IEnumerable<Poser3DItem> items) => items.Select(ConvertItem).ToImmutableArray();
-		PackablePoser3DItem ConvertItem(Poser3DItem item) => new(getTagId(item.Tag), item.Bounding, ConvertKeyPoints(item.KeyPoints), item.NumericProperties, item.BooleanProperties);
+		PackablePoser3DItem ConvertItem(Poser3DItem item) => new(session.TagsIds[item.Tag], item.Bounding, ConvertKeyPoints(item.KeyPoints), item.NumericProperties, item.BooleanProperties);
 		ImmutableArray<PackableKeyPoint3D> ConvertKeyPoints(IEnumerable<KeyPoint3D> keyPoints) =>
 			keyPoints.Select(keyPoint => new PackableKeyPoint3D(keyPoint.Position, keyPoint.IsVisible)).ToImmutableArray();
+	}
+
+	protected override ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(IDictionary tags, ConversionSession session)
+	{
+		return tags
+			.Cast<KeyValuePair<Poser3DTag, ImmutableHashSet<KeyPointTag3D>>>()
+			.ToImmutableDictionary(
+				pair => session.TagsIds[pair.Key],
+				pair => pair.Value.Select(tag => session.TagsIds[tag]).ToImmutableArray());
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SightKeeper.Domain.Model.DataSets.Poser3D;
 using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles.Modules;
 
@@ -17,13 +18,6 @@ public sealed class Profile
 		Name = name;
 	}
 
-	public DetectorModule CreateModule(PlainWeights<DetectorTag> weights)
-	{
-		DetectorModule module = new(this, weights);
-		_modules.Add(module);
-		return module;
-	}
-
 	public ClassifierModule CreateModule(PlainWeights<ClassifierTag> weights)
 	{
 		ClassifierModule module = new(this, weights);
@@ -31,9 +25,23 @@ public sealed class Profile
 		return module;
 	}
 
+	public DetectorModule CreateModule(PlainWeights<DetectorTag> weights)
+	{
+		DetectorModule module = new(this, weights);
+		_modules.Add(module);
+		return module;
+	}
+
 	public Poser2DModule CreateModule(PoserWeights<Poser2DTag, KeyPointTag2D> weights)
 	{
 		Poser2DModule module = new(this, weights);
+		_modules.Add(module);
+		return module;
+	}
+
+	public Poser3DModule CreateModule(PoserWeights<Poser3DTag, KeyPointTag3D> weights)
+	{
+		Poser3DModule module = new(this, weights);
 		_modules.Add(module);
 		return module;
 	}

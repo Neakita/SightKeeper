@@ -6,7 +6,6 @@ using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
-using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
@@ -22,23 +21,21 @@ internal sealed class MultiDataSetConverter
 
 	public ImmutableArray<PackableDataSet> Convert(
 		IEnumerable<DataSet> dataSets,
-		ConversionSession session,
-		ImmutableDictionary<Weights, ushort>.Builder weightsLookupBuilder)
+		ConversionSession session)
 	{
-		return dataSets.Select(dataSet => Convert(dataSet, session, weightsLookupBuilder)).ToImmutableArray();
+		return dataSets.Select(dataSet => Convert(dataSet, session)).ToImmutableArray();
 	}
 
 	public PackableDataSet Convert(
 		DataSet dataSet,
-		ConversionSession session,
-		ImmutableDictionary<Weights, ushort>.Builder weightsLookupBuilder)
+		ConversionSession session)
 	{
 		return dataSet switch
 		{
-			ClassifierDataSet classifierDataSet => _classifierConverter.Convert(classifierDataSet, session, weightsLookupBuilder),
-			DetectorDataSet detectorDataSet => _detectorConverter.Convert(detectorDataSet, session, weightsLookupBuilder),
-			Poser2DDataSet poser2DDataSet => _poser2DConverter.Convert(poser2DDataSet, session, weightsLookupBuilder),
-			Poser3DDataSet poser3DDataSet => _poser3DConverter.Convert(poser3DDataSet, session, weightsLookupBuilder),
+			ClassifierDataSet classifierDataSet => _classifierConverter.Convert(classifierDataSet, session),
+			DetectorDataSet detectorDataSet => _detectorConverter.Convert(detectorDataSet, session),
+			Poser2DDataSet poser2DDataSet => _poser2DConverter.Convert(poser2DDataSet, session),
+			Poser3DDataSet poser3DDataSet => _poser3DConverter.Convert(poser3DDataSet, session),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
 		};
 	}

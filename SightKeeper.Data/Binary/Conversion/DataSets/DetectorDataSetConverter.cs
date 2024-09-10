@@ -7,7 +7,6 @@ using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
@@ -40,14 +39,7 @@ internal sealed class DetectorDataSetConverter : DataSetConverter
 			weights.CastArray<PackablePlainWeights>());
 	}
 
-	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup)
-	{
-		lookup = tags.Select((tag, index) => (tag, index))
-			.ToImmutableDictionary(tuple => tuple.tag, tuple => (byte)tuple.index);
-		return tags.Select((tag, index) => ConvertPlainTag((byte)index, tag)).ToImmutableArray();
-	}
-
-	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)
+	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
 	{
 		var convertedAssets = assets.Cast<DetectorAsset>().Select(ConvertAsset).ToImmutableArray();
 		return ImmutableArray<PackableAsset>.CastUp(convertedAssets);
@@ -55,6 +47,6 @@ internal sealed class DetectorDataSetConverter : DataSetConverter
 			asset.Usage,
 			ScreenshotsDataAccess.GetId(asset.Screenshot),
 			asset.Items.Select(ConvertItem).ToImmutableArray());
-		PackableDetectorItem ConvertItem(DetectorItem item) => new(getTagId(item.Tag), item.Bounding);
+		PackableDetectorItem ConvertItem(DetectorItem item) => new(session.TagsIds[item.Tag], item.Bounding);
 	}
 }

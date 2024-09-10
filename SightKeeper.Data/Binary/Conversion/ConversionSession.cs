@@ -8,7 +8,7 @@ namespace SightKeeper.Data.Binary.Conversion;
 internal sealed class ConversionSession
 {
 	public ImmutableDictionary<Game, ushort>? GameIds { get; set; }
-	public Dictionary<Tag, (byte TagId, byte? KeyPointTagId)> TagsIds { get; } = new();
-	public ImmutableDictionary<Weights, ushort>? WeightsIds { get; set; }
+	public Dictionary<Tag, byte> TagsIds { get; } = new();
+	public Dictionary<Weights, ushort> WeightsIds { get; } = new();
 	public ushort WeightsIdCounter { get; set; }
 }

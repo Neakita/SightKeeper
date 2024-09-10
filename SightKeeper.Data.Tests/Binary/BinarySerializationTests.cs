@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Immutable;
+using FluentAssertions;
 using MemoryPack;
 using SightKeeper.Application;
 using SightKeeper.Data.Binary;
@@ -10,6 +11,10 @@ using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model.Profiles.Behaviors;
 
 namespace SightKeeper.Data.Tests.Binary;
 
@@ -28,6 +33,11 @@ public sealed class BinarySerializationTests
 		dataAccess.Data.Games.Add(game);
 		foreach (var dataSet in CreateDataSets(screenshotsDataAccess, game))
 			dataAccess.Data.DataSets.Add(dataSet);
+		var profile = CreateProfile(
+			dataAccess.Data.DataSets.OfType<ClassifierDataSet>().Single().WeightsLibrary.Weights.Single(),
+			dataAccess.Data.DataSets.OfType<DetectorDataSet>().Single().WeightsLibrary.Weights.Single(),
+			dataAccess.Data.DataSets.OfType<Poser2DDataSet>().Single().WeightsLibrary.Weights.Single());
+		dataAccess.Data.Profiles.Add(profile);
 		dataAccess.Save();
 		var data = dataAccess.Data;
 		dataAccess.Load();
@@ -58,6 +68,12 @@ public sealed class BinarySerializationTests
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.Tag = shootTag;
 		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
+		dataSet.WeightsLibrary.CreateWeights(
+			DateTime.Now,
+			ModelSize.Nano,
+			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
+			new Vector2<ushort>(320, 320),
+			dataSet.TagsLibrary.Tags);
 		return dataSet;
 	}
 
@@ -79,6 +95,12 @@ public sealed class BinarySerializationTests
 		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8));
 		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9));
 		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
+		dataSet.WeightsLibrary.CreateWeights(
+			DateTime.Now,
+			ModelSize.Nano,
+			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
+			new Vector2<ushort>(320, 320),
+			dataSet.TagsLibrary.Tags);
 		return dataSet;
 	}
 
@@ -104,6 +126,12 @@ public sealed class BinarySerializationTests
 		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [new Vector2<double>(0.3, 0.2)], [20]);
 		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [new Vector2<double>(0.4, 0.3)], [25]);
 		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
+		dataSet.WeightsLibrary.CreateWeights(
+			DateTime.Now,
+			ModelSize.Nano,
+			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
+			new Vector2<ushort>(320, 320),
+			dataSet.TagsLibrary.Tags.Select(tag => (tag, (IEnumerable<KeyPointTag2D>)tag.KeyPoints)));
 		return dataSet;
 	}
 
@@ -131,6 +159,36 @@ public sealed class BinarySerializationTests
 		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [new KeyPoint3D(new Vector2<double>(0.3, 0.2), true)], [20], [true]);
 		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [new KeyPoint3D(new Vector2<double>(0.4, 0.3), false)], [25], [false]);
 		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
+		dataSet.WeightsLibrary.CreateWeights(
+			DateTime.Now,
+			ModelSize.Nano,
+			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
+			new Vector2<ushort>(320, 320),
+			dataSet.TagsLibrary.Tags.Select(tag => (tag, (IEnumerable<KeyPointTag3D>)tag.KeyPoints)));
 		return dataSet;
+	}
+
+	private static Profile CreateProfile(
+		PlainWeights<ClassifierTag> classifierWeights,
+		PlainWeights<DetectorTag> detectorWeights,
+		PoserWeights<Poser2DTag, KeyPointTag2D> poser2DWeights)
+	{
+		Profile profile = new("Test profile");
+		profile.CreateModule(classifierWeights);
+		// TODO trigger actions
+		var detectorModule = profile.CreateModule(detectorWeights);
+		detectorModule.SetBehavior<AimBehavior>().Tags = detectorWeights
+			.Tags
+			.ToImmutableDictionary(
+				Tag (tag) => tag,
+				_ => new AimBehavior.TagOptions(0, -0.1f));
+		var poser2DModule = profile.CreateModule(poser2DWeights);
+		var aimAssistBehavior = poser2DModule.SetBehavior<AimAssistBehavior>();
+		aimAssistBehavior.Tags = poser2DWeights
+			.Tags
+			.ToImmutableDictionary(
+				Tag (pair) => pair.Key,
+				_ => new AimAssistBehavior.TagOptions(0, new Vector2<float>(0.1f, 0.05f), -0.1f));
+		return profile;
 	}
 }

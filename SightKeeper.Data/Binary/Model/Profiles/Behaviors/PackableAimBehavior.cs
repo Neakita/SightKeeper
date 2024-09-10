@@ -10,9 +10,9 @@ namespace SightKeeper.Data.Binary.Model.Profiles.Behaviors;
 [MemoryPackable]
 internal sealed partial class PackableAimBehavior : PackableBehavior
 {
-	public ImmutableDictionary<(byte TagId, byte? KeyPointTagId), PackableAimBehaviorTagOptions> Tags { get; }
+	public ImmutableDictionary<byte, PackableAimBehaviorTagOptions> Tags { get; }
 
-	public PackableAimBehavior(ImmutableDictionary<(byte TagId, byte? KeyPointTagId), PackableAimBehaviorTagOptions> tags)
+	public PackableAimBehavior(ImmutableDictionary<byte, PackableAimBehaviorTagOptions> tags)
 	{
 		Tags = tags;
 	}

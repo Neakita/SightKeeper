@@ -1,7 +1,7 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
@@ -16,40 +16,39 @@ internal abstract class PoserDataSetReplicator<TTag, TKeyPointTag> : DataSetRepl
 	{
 	}
 
-	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed, ImmutableDictionary<(byte, byte?), Tag>.Builder lookupBuilder)
+	protected override PoserTag ReplicateTag(TagsLibrary library, PackableTag packed, ReplicationSession session)
 	{
 		var typedPackedTag = (PackablePoserTag)packed;
-		var tag = (PoserTag)base.ReplicateTag(library, packed, lookupBuilder);
+		var tag = (PoserTag)base.ReplicateTag(library, packed, session);
 		foreach (var packedKeyPointTag in typedPackedTag.KeyPointTags)
 		{
 			var keyPointTag = tag.CreateKeyPoint(typedPackedTag.Name);
 			keyPointTag.Color = packedKeyPointTag.Color;
-			lookupBuilder.Add((typedPackedTag.Id, packedKeyPointTag.Id), keyPointTag);
+			session.Tags.Add((library.DataSet, packedKeyPointTag.Id), keyPointTag);
 		}
 		return tag;
 	}
 	
-	protected sealed override PoserWeights ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag)
+	protected sealed override PoserWeights ReplicateWeights(WeightsLibrary library, PackableWeights weights, ReplicationSession session)
 	{
 		var typedLibrary = (WeightsLibrary<TTag, TKeyPointTag>)library;
 		var typedWeights = (PackablePoserWeights)weights;
-		var tags = GetTags(typedWeights, getTag);
+		var tags = GetTags(library.DataSet, typedWeights, session);
 		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
 	}
 
-	private static IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> GetTags(PackablePoserWeights weights, TagGetter getTag)
+	private static IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> GetTags(DataSet dataSet, PackablePoserWeights weights, ReplicationSession session)
 	{
 		foreach (var (tagId, keyPointTagIds) in weights.Tags)
 		{
-			var tag = (TTag)getTag(tagId);
-			var keyPointTags = GetKeyPointTags(tagId, keyPointTagIds, getTag);
+			var tag = (TTag)session.Tags[(dataSet, tagId)];
+			var keyPointTags = GetKeyPointTags(keyPointTagIds, dataSet, session);
 			yield return (tag, keyPointTags);
 		}
 	}
 
-	private static IEnumerable<TKeyPointTag> GetKeyPointTags(byte tagId, IEnumerable<byte> keyPointTagIds, TagGetter getTag)
+	private static IEnumerable<TKeyPointTag> GetKeyPointTags(IEnumerable<byte> keyPointTagIds, DataSet dataSet, ReplicationSession session)
 	{
-		foreach (var keyPointTagId in keyPointTagIds)
-			yield return (TKeyPointTag)getTag(tagId, keyPointTagId);
+		return keyPointTagIds.Select(keyPointTagId => (TKeyPointTag)session.Tags[(dataSet, keyPointTagId)]);
 	}
 }

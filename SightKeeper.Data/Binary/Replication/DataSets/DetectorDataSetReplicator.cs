@@ -26,23 +26,23 @@ internal sealed class DetectorDataSetReplicator : DataSetReplicator
 		};
 	}
 
-	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, TagGetter getTag)
+	protected override void ReplicateAsset(AssetsLibrary library, PackableAsset packedAsset, Screenshot screenshot, ReplicationSession session)
 	{
 		var typedLibrary = (AssetsLibrary<DetectorAsset>)library;
 		var typedPackedAsset = (PackableItemsAsset<PackableDetectorItem>)packedAsset;
 		var asset = typedLibrary.MakeAsset((Screenshot<DetectorAsset>)screenshot);
 		foreach (var packedItem in typedPackedAsset.Items)
 		{
-			var itemTag = (DetectorTag)getTag(packedItem.TagId);
+			var itemTag = (DetectorTag)session.Tags[(library.DataSet, packedItem.TagId)];
 			asset.CreateItem(itemTag, packedItem.Bounding);
 		}
 	}
 
-	protected override PlainWeights<DetectorTag> ReplicateWeights(WeightsLibrary library, PackableWeights weights, TagGetter getTag)
+	protected override PlainWeights<DetectorTag> ReplicateWeights(WeightsLibrary library, PackableWeights weights, ReplicationSession session)
 	{
 		var typedLibrary = (WeightsLibrary<DetectorTag>)library;
 		var typedWeights = (PackablePlainWeights)weights;
-		var tags = typedWeights.TagIds.Select(id => getTag(id)).Cast<DetectorTag>();
+		var tags = typedWeights.TagIds.Select(id => session.Tags[(library.DataSet, id)]).Cast<DetectorTag>();
 		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
 	}
 }

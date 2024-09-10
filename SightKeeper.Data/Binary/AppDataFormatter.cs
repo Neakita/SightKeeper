@@ -2,10 +2,11 @@
 using MemoryPack;
 using SightKeeper.Data.Binary.Conversion;
 using SightKeeper.Data.Binary.Conversion.DataSets;
+using SightKeeper.Data.Binary.Conversion.Profiles;
 using SightKeeper.Data.Binary.Replication;
 using SightKeeper.Data.Binary.Replication.DataSets;
+using SightKeeper.Data.Binary.Replication.Profiles;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary;
 
@@ -26,14 +27,14 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		}
 		ConversionSession session = new();
 		var games = GamesConverter.Convert(value.Games, session);
-		var weightsLookupBuilder = ImmutableDictionary.CreateBuilder<Weights, ushort>();
-		var dataSets = _dataSetConverter.Convert(value.DataSets, session, weightsLookupBuilder);
-		session.WeightsIds = weightsLookupBuilder.ToImmutable();
-		PackableAppData raw = new(
-			value.ApplicationSettings,
+		var dataSets = _dataSetConverter.Convert(value.DataSets, session);
+		var profiles = _profileConverter.Convert(value.Profiles, session).ToImmutableArray();
+		PackableAppData packed = new(
 			games,
-			dataSets);
-		writer.WritePackable(raw);
+			dataSets,
+			profiles,
+			value.ApplicationSettings);
+		writer.WritePackable(packed);
 	}
 
 	public override void Deserialize(ref MemoryPackReader reader, scoped ref AppData? value)
@@ -44,21 +45,21 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			value = null;
 			return;
 		}
-		var packable = reader.ReadPackable<PackableAppData>();
-		if (packable == null)
+		var packed = reader.ReadPackable<PackableAppData>();
+		if (packed == null)
 		{
 			value = null;
 			return;
 		}
 		ReplicationSession session = new();
 
-		var games = GameReplicator.Replicate(packable.Games, session);
-		var weightsLookupBuilder = ImmutableDictionary.CreateBuilder<ushort, Weights>();
-		var dataSets = _dataSetReplicator.Replicate(packable.DataSets, session, weightsLookupBuilder);
-		session.Weights = weightsLookupBuilder.ToImmutable();
-		value = new AppData(games, dataSets, packable.ApplicationSettings);
+		var games = GameReplicator.Replicate(packed.Games, session);
+		var dataSets = _dataSetReplicator.Replicate(packed.DataSets, session);
+		var profiles = ProfileReplicator.Replicate(packed.Profiles, session).ToHashSet();
+		value = new AppData(games, dataSets, profiles, packed.ApplicationSettings);
 	}
 
 	private readonly MultiDataSetConverter _dataSetConverter;
 	private readonly MultiDataSetReplicator _dataSetReplicator;
+	private readonly ProfileConverter _profileConverter = new();
 }

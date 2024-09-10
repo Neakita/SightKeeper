@@ -45,7 +45,7 @@ internal abstract class ModuleConverter
 	private static PackablePassiveWalkingOptions? ConvertPassiveWalkingOptions(PassiveWalkingOptions? options) => options switch
 	{
 		null => null,
-		IterativeWalkingOptions iterativeWalkingOptions => new PackableIterativeWalkingOptions(iterativeWalkingOptions.OffsetStep, iterativeWalkingOptions.MaximumSteps),
+		IterativeWalkingOptions iterativeWalkingOptions => new PackableIterativeWalkingOptions(iterativeWalkingOptions.OffsetStep, iterativeWalkingOptions.StepsCount),
 		_ => throw new ArgumentOutOfRangeException(nameof(options))
 	};
 }

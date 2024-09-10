@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
@@ -41,21 +42,20 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 			weights.CastArray<PackablePoserWeights>());
 	}
 
-	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, out ImmutableDictionary<Tag, byte> lookup)
+	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, ConversionSession session)
 	{
-		var lookupBuilder = ImmutableDictionary.CreateBuilder<Tag, byte>();
 		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoser2DTag>(tags.Count);
 		var keyPointTagsBuilder = ImmutableArray.CreateBuilder<PackableTag>();
 		var numericItemPropertiesBuilder = ImmutableArray.CreateBuilder<PackableNumericItemProperty>();
-		byte tagIndex = 0;
+		byte tagCounter = 0;
 		foreach (var tag in tags.Cast<Poser2DTag>())
 		{
+			var tagId = tagCounter++;
+			session.TagsIds.Add(tag, tagId);
 			keyPointTagsBuilder.Capacity = tag.KeyPoints.Count;
 			numericItemPropertiesBuilder.Capacity = tag.Properties.Count;
-			byte keyPointTagIndex = 0;
-			BuildKeyPoints(tag.KeyPoints, ref keyPointTagIndex, lookupBuilder, keyPointTagsBuilder);
+			BuildKeyPoints(tag.KeyPoints, ref tagCounter, session, keyPointTagsBuilder);
 			BuildNumericProperties(tag.Properties, numericItemPropertiesBuilder);
-			var tagId = tagIndex++;
 			PackablePoser2DTag convertedTag = new(
 				tagId,
 				tag.Name,
@@ -63,21 +63,28 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 				keyPointTagsBuilder.DrainToImmutable(),
 				numericItemPropertiesBuilder.DrainToImmutable());
 			resultBuilder.Add(convertedTag);
-			lookupBuilder.Add(tag, tagId);
 		}
-		lookup = lookupBuilder.ToImmutable();
 		return ImmutableArray<PackableTag>.CastUp(resultBuilder.ToImmutable());
 	}
 
-	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, Func<Tag, byte> getTagId)
+	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
 	{
 		var convertedAssets = assets.Cast<Poser2DAsset>().Select(ConvertAsset).ToImmutableArray();
 		return ImmutableArray<PackableAsset>.CastUp(convertedAssets);
 		PackableItemsAsset<PackablePoser2DItem> ConvertAsset(Poser2DAsset asset) =>
 			new(asset.Usage, ScreenshotsDataAccess.GetId(asset.Screenshot), ConvertItems(asset.Items));
 		ImmutableArray<PackablePoser2DItem> ConvertItems(IEnumerable<Poser2DItem> items) => items.Select(ConvertItem).ToImmutableArray();
-		PackablePoser2DItem ConvertItem(Poser2DItem item) => new(getTagId(item.Tag), item.Bounding, ConvertKeyPoints(item.KeyPoints), item.Properties);
+		PackablePoser2DItem ConvertItem(Poser2DItem item) => new(session.TagsIds[item.Tag], item.Bounding, ConvertKeyPoints(item.KeyPoints), item.Properties);
 		ImmutableArray<PackableKeyPoint2D> ConvertKeyPoints(IEnumerable<Vector2<double>> keyPoints) =>
 			keyPoints.Select(position => new PackableKeyPoint2D(position)).ToImmutableArray();
+	}
+
+	protected override ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(IDictionary tags, ConversionSession session)
+	{
+		return tags
+			.Cast<KeyValuePair<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>>()
+			.ToImmutableDictionary(
+				pair => session.TagsIds[pair.Key],
+				pair => pair.Value.Select(tag => session.TagsIds[tag]).ToImmutableArray());
 	}
 }

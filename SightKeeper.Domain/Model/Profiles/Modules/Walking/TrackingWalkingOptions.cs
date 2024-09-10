@@ -15,5 +15,10 @@ public sealed class TrackingWalkingOptions : ActiveWalkingOptions
 		}
 	}
 
+	public TrackingWalkingOptions(Vector2<float> maximumOffset)
+	{
+		MaximumOffset = maximumOffset;
+	}
+
 	private Vector2<float> _maximumOffset;
 }

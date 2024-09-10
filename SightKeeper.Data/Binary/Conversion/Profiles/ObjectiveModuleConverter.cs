@@ -70,7 +70,7 @@ internal abstract class ObjectiveModuleConverter : ModuleConverter
 	private static PackableAimBehavior ConvertAimBehavior(AimBehavior behavior, ConversionSession session)
 	{
 		return new PackableAimBehavior(ConvertTags(behavior.Tags));
-		ImmutableDictionary<(byte TagId, byte? KeyPointTagId), PackableAimBehaviorTagOptions> ConvertTags(
+		ImmutableDictionary<byte, PackableAimBehaviorTagOptions> ConvertTags(
 			ImmutableDictionary<Tag, AimBehavior.TagOptions> tags) =>
 			tags.ToImmutableDictionary(
 				pair => session.TagsIds[pair.Key],
@@ -87,7 +87,7 @@ internal abstract class ObjectiveModuleConverter : ModuleConverter
 			behavior.DirectionCorrectionFactor,
 			behavior.GainFactor,
 			behavior.AttenuationFactor);
-		ImmutableDictionary<(byte TagId, byte? KeyPointTagId), PackableAimAssistBehaviorTagOptions> ConvertTags(
+		ImmutableDictionary<byte, PackableAimAssistBehaviorTagOptions> ConvertTags(
 			ImmutableDictionary<Tag, AimAssistBehavior.TagOptions> tags) => 
 			tags.ToImmutableDictionary(
 				pair => session.TagsIds[pair.Key],
