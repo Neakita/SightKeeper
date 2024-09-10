@@ -1,48 +1,32 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Data.Binary.Model.DataSets.Compositions;
-using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal sealed class DetectorDataSetConverter : DataSetConverter
+internal sealed class DetectorDataSetConverter : DataSetConverter<PackableDetectorDataSet>
 {
 	public DetectorDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
 	}
 
-	protected override PackableDetectorDataSet CreatePackableDataSet(
-		string name,
-		string description,
-		ushort? gameId,
-		PackableComposition? composition,
-		ushort? maxScreenshotsWithoutAsset,
-		ImmutableArray<PackableScreenshot> screenshots,
-		ImmutableArray<PackableTag> tags,
-		ImmutableArray<PackableAsset> assets,
-		ImmutableArray<PackableWeights> weights)
+	public override PackableDetectorDataSet Convert(DataSet dataSet, ConversionSession session)
 	{
-		return new PackableDetectorDataSet(
-			name,
-			description,
-			gameId,
-			composition,
-			maxScreenshotsWithoutAsset,
-			screenshots,
-			tags,
-			assets.CastArray<PackableItemsAsset<PackableDetectorItem>>(),
-			weights.CastArray<PackablePlainWeights>());
+		var packable = base.Convert(dataSet, session);
+		packable.Tags = ConvertPlainTags(dataSet.TagsLibrary.Tags, session);
+		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets, session);
+		packable.Weights = ConvertPlainWeights(dataSet.WeightsLibrary.Weights, session).CastArray<PackablePlainWeights>();
+		return packable;
 	}
 
-	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
+	private ImmutableArray<PackableItemsAsset<PackableDetectorItem>> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
 	{
-		var convertedAssets = assets.Cast<DetectorAsset>().Select(ConvertAsset).ToImmutableArray();
-		return ImmutableArray<PackableAsset>.CastUp(convertedAssets);
+		return assets.Cast<DetectorAsset>().Select(ConvertAsset).ToImmutableArray();
 		PackableItemsAsset<PackableDetectorItem> ConvertAsset(DetectorAsset asset) => new(
 			asset.Usage,
 			ScreenshotsDataAccess.GetId(asset.Screenshot),

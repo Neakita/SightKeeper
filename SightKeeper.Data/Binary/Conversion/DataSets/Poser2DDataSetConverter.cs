@@ -2,47 +2,32 @@ using System.Collections;
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Data.Binary.Model.DataSets.Compositions;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
-using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
+internal sealed class Poser2DDataSetConverter : PoserDataSetConverter<PackablePoser2DDataSet>
 {
 	public Poser2DDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
 	}
 
-	protected override PackablePoser2DDataSet CreatePackableDataSet(
-		string name,
-		string description,
-		ushort? gameId,
-		PackableComposition? composition,
-		ushort? maxScreenshotsWithoutAsset,
-		ImmutableArray<PackableScreenshot> screenshots,
-		ImmutableArray<PackableTag> tags,
-		ImmutableArray<PackableAsset> assets,
-		ImmutableArray<PackableWeights> weights)
+	public override PackablePoser2DDataSet Convert(DataSet dataSet, ConversionSession session)
 	{
-		return new PackablePoser2DDataSet(
-			name,
-			description,
-			gameId,
-			composition,
-			maxScreenshotsWithoutAsset,
-			screenshots,
-			tags.CastArray<PackablePoser2DTag>(),
-			assets.CastArray<PackableItemsAsset<PackablePoser2DItem>>(),
-			weights.CastArray<PackablePoserWeights>());
+		var packable = base.Convert(dataSet, session);
+		packable.Tags = ConvertTags(dataSet.TagsLibrary.Tags, session);
+		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets, session);
+		packable.Weights = ConvertPoserWeights(dataSet.WeightsLibrary.Weights, session);
+		return packable;
 	}
 
-	protected override ImmutableArray<PackableTag> ConvertTags(IReadOnlyCollection<Tag> tags, ConversionSession session)
+	private ImmutableArray<PackablePoser2DTag> ConvertTags(IReadOnlyCollection<Tag> tags, ConversionSession session)
 	{
 		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoser2DTag>(tags.Count);
 		var keyPointTagsBuilder = ImmutableArray.CreateBuilder<PackableTag>();
@@ -64,13 +49,12 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter
 				numericItemPropertiesBuilder.DrainToImmutable());
 			resultBuilder.Add(convertedTag);
 		}
-		return ImmutableArray<PackableTag>.CastUp(resultBuilder.ToImmutable());
+		return resultBuilder.DrainToImmutable();
 	}
 
-	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
+	private ImmutableArray<PackableItemsAsset<PackablePoser2DItem>> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
 	{
-		var convertedAssets = assets.Cast<Poser2DAsset>().Select(ConvertAsset).ToImmutableArray();
-		return ImmutableArray<PackableAsset>.CastUp(convertedAssets);
+		return assets.Cast<Poser2DAsset>().Select(ConvertAsset).ToImmutableArray();
 		PackableItemsAsset<PackablePoser2DItem> ConvertAsset(Poser2DAsset asset) =>
 			new(asset.Usage, ScreenshotsDataAccess.GetId(asset.Screenshot), ConvertItems(asset.Items));
 		ImmutableArray<PackablePoser2DItem> ConvertItems(IEnumerable<Poser2DItem> items) => items.Select(ConvertItem).ToImmutableArray();

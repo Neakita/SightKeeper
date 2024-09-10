@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Immutable;
+using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
@@ -8,7 +9,8 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal abstract class PoserDataSetConverter : DataSetConverter
+internal abstract class PoserDataSetConverter<TPackableDataSet> : DataSetConverter<TPackableDataSet>
+	where TPackableDataSet : PackableDataSet, new()
 {
 	protected PoserDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
@@ -42,7 +44,7 @@ internal abstract class PoserDataSetConverter : DataSetConverter
 		}
 	}
 
-	protected sealed override ImmutableArray<PackableWeights> ConvertWeights(
+	protected ImmutableArray<PackablePoserWeights> ConvertPoserWeights(
 		IReadOnlyCollection<Weights> weights,
 		ConversionSession session)
 	{
@@ -53,7 +55,7 @@ internal abstract class PoserDataSetConverter : DataSetConverter
 			session.WeightsIds.Add(item, session.WeightsIdCounter);
 			session.WeightsIdCounter++;
 		}
-		return ImmutableArray<PackableWeights>.CastUp(resultBuilder.DrainToImmutable());
+		return resultBuilder.DrainToImmutable();
 	}
 	
 	private PackablePoserWeights ConvertWeights(ushort id, PoserWeights item, ConversionSession session)

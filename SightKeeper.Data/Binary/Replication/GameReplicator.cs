@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model;
-using SightKeeper.Data.Binary.Replication.DataSets;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Data.Binary.Replication;

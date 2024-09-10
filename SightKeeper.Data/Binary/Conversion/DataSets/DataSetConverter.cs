@@ -1,48 +1,42 @@
 using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Binary.Model.DataSets;
-using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Compositions;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal abstract class DataSetConverter
+internal abstract class DataSetConverter<TPackableDataSet>
+	where TPackableDataSet : PackableDataSet, new()
 {
 	protected DataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess)
 	{
 		ScreenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public PackableDataSet Convert(
+	public virtual TPackableDataSet Convert(
 		DataSet dataSet,
 		ConversionSession session)
 	{
 		Guard.IsNotNull(session.GameIds);
-
 		ushort? gameId = dataSet.Game == null ? null : session.GameIds[dataSet.Game];
 		PackableComposition? composition = ConvertComposition(dataSet.Composition);
 		ImmutableArray<PackableScreenshot> screenshots = ConvertScreenshots(dataSet.ScreenshotsLibrary);
-		ImmutableArray<PackableTag> tags = ConvertTags(dataSet.TagsLibrary.Tags, session);
-		ImmutableArray<PackableAsset> assets = ConvertAssets(dataSet.AssetsLibrary.Assets, session);
-		ImmutableArray<PackableWeights> weights = ConvertWeights(dataSet.WeightsLibrary.Weights, session);
-		return CreatePackableDataSet(
-			dataSet.Name,
-			dataSet.Description,
-			gameId,
-			composition,
-			dataSet.ScreenshotsLibrary.MaxQuantity,
-			screenshots,
-			tags,
-			assets,
-			weights);
+		return new TPackableDataSet
+		{
+			Name = dataSet.Name,
+			Description = dataSet.Description,
+			GameId = gameId,
+			Composition = composition,
+			MaxScreenshotsWithoutAsset = dataSet.ScreenshotsLibrary.MaxQuantity,
+			Screenshots = screenshots
+		};
 	}
 
 	protected FileSystemScreenshotsDataAccess ScreenshotsDataAccess { get; }
@@ -52,17 +46,7 @@ internal abstract class DataSetConverter
 		return new PackableTag(id, tag.Name, tag.Color);
 	}
 
-	protected abstract PackableDataSet CreatePackableDataSet(string name,
-		string description,
-		ushort? gameId,
-		PackableComposition? composition,
-		ushort? maxScreenshotsWithoutAsset,
-		ImmutableArray<PackableScreenshot> screenshots,
-		ImmutableArray<PackableTag> tags,
-		ImmutableArray<PackableAsset> assets,
-		ImmutableArray<PackableWeights> weights);
-
-	protected virtual ImmutableArray<PackableTag> ConvertTags(
+	protected virtual ImmutableArray<PackableTag> ConvertPlainTags(
 		IReadOnlyCollection<Tag> tags,
 		ConversionSession session)
 	{
@@ -76,11 +60,8 @@ internal abstract class DataSetConverter
 		}
 		return builder.DrainToImmutable();
 	}
-	protected abstract ImmutableArray<PackableAsset> ConvertAssets(
-		IReadOnlyCollection<Asset> assets,
-		ConversionSession session);
 
-	protected virtual ImmutableArray<PackableWeights> ConvertWeights(
+	protected ImmutableArray<PackablePlainWeights> ConvertPlainWeights(
 		IReadOnlyCollection<Weights> weights,
 		ConversionSession session)
 	{
@@ -91,7 +72,7 @@ internal abstract class DataSetConverter
 			resultBuilder.Add(ConvertWeights(id, item, ConvertWeightsTags(item.Tags)));
 			session.WeightsIds.Add(item, id);
 		}
-		return ImmutableArray<PackableWeights>.CastUp(resultBuilder.DrainToImmutable());
+		return resultBuilder.DrainToImmutable();
 		ImmutableArray<byte> ConvertWeightsTags(IEnumerable<Tag> tags) => tags
 			.Select(tag => session.TagsIds[tag])
 			.ToImmutableArray();

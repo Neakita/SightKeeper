@@ -1,48 +1,31 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Data.Binary.Model.DataSets.Compositions;
-using SightKeeper.Data.Binary.Model.DataSets.Tags;
-using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
+using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal sealed class ClassifierDataSetConverter : DataSetConverter
+internal sealed class ClassifierDataSetConverter : DataSetConverter<PackableClassifierDataSet>
 {
 	public ClassifierDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
 	{
 	}
 
-	protected override PackableClassifierDataSet CreatePackableDataSet(
-		string name,
-		string description,
-		ushort? gameId,
-		PackableComposition? composition,
-		ushort? maxScreenshotsWithoutAsset,
-		ImmutableArray<PackableScreenshot> screenshots,
-		ImmutableArray<PackableTag> tags,
-		ImmutableArray<PackableAsset> assets,
-		ImmutableArray<PackableWeights> weights)
+	public override PackableClassifierDataSet Convert(DataSet dataSet, ConversionSession session)
 	{
-		return new PackableClassifierDataSet(
-			name,
-			description,
-			gameId,
-			composition,
-			maxScreenshotsWithoutAsset,
-			screenshots,
-			tags,
-			assets.CastArray<PackableClassifierAsset>(),
-			weights.CastArray<PackablePlainWeights>());
+		var packable = base.Convert(dataSet, session);
+		packable.Tags = ConvertPlainTags(dataSet.TagsLibrary.Tags, session);
+		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets, session);
+		packable.Weights = ConvertPlainWeights(dataSet.WeightsLibrary.Weights, session);
+		return packable;
 	}
 
-	protected override ImmutableArray<PackableAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
+	private ImmutableArray<PackableClassifierAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
 	{
-		var convertedAssets = assets.Cast<ClassifierAsset>().Select(ConvertAsset).ToImmutableArray();
-		return ImmutableArray<PackableAsset>.CastUp(convertedAssets);
+		return assets.Cast<ClassifierAsset>().Select(ConvertAsset).ToImmutableArray();
 		PackableClassifierAsset ConvertAsset(ClassifierAsset asset) => new(
 			asset.Usage,
 			ScreenshotsDataAccess.GetId(asset.Screenshot),

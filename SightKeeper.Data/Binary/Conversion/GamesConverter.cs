@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Conversion.DataSets;
 using SightKeeper.Data.Binary.Model;
 using SightKeeper.Domain.Model;
 

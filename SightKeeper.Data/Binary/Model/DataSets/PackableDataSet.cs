@@ -18,28 +18,12 @@ namespace SightKeeper.Data.Binary.Model.DataSets;
 [MemoryPackUnion(3, typeof(PackablePoser3DDataSet))]
 internal abstract partial class PackableDataSet
 {
-	public string Name { get; }
-	public string Description { get; }
-	public ushort? GameId { get; }
-	public PackableComposition? Composition { get; }
-	public ushort? MaxScreenshotsWithoutAsset { get; }
-	public ImmutableArray<PackableScreenshot> Screenshots { get; }
-
-	public PackableDataSet(
-		string name,
-		string description,
-		ushort? gameId,
-		PackableComposition? composition,
-		ushort? maxScreenshotsWithoutAsset,
-		ImmutableArray<PackableScreenshot> screenshots)
-	{
-		Name = name;
-		Description = description;
-		GameId = gameId;
-		Composition = composition;
-		MaxScreenshotsWithoutAsset = maxScreenshotsWithoutAsset;
-		Screenshots = screenshots;
-	}
+	public string Name { get; set; } = string.Empty;
+	public string Description { get; set; } = string.Empty;
+	public ushort? GameId { get; set; }
+	public PackableComposition? Composition { get; set; }
+	public ushort? MaxScreenshotsWithoutAsset { get; set; }
+	public ImmutableArray<PackableScreenshot> Screenshots { get; set; }
 
 	public abstract ImmutableArray<PackableTag> GetTags();
 	public abstract ImmutableArray<PackableAsset> GetAssets();
@@ -54,26 +38,9 @@ internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSe
 	where TAsset : PackableAsset
 	where TWeights : PackableWeights
 {
-	public ImmutableArray<TTag> Tags { get; }
-	public ImmutableArray<TAsset> Assets { get; }
-	public ImmutableArray<TWeights> Weights { get; }
-
-	public PackableDataSet(
-		string name,
-		string description,
-		ushort? gameId,
-		PackableComposition? composition,
-		ushort? maxScreenshotsWithoutAsset,
-		ImmutableArray<PackableScreenshot> screenshots,
-		ImmutableArray<TTag> tags,
-		ImmutableArray<TAsset> assets,
-		ImmutableArray<TWeights> weights)
-		: base(name, description, gameId, composition, maxScreenshotsWithoutAsset, screenshots)
-	{
-		Tags = tags;
-		Assets = assets;
-		Weights = weights;
-	}
+	public ImmutableArray<TTag> Tags { get; set; }
+	public ImmutableArray<TAsset> Assets { get; set; }
+	public ImmutableArray<TWeights> Weights { get; set; }
 
 	public sealed override ImmutableArray<PackableTag> GetTags()
 	{
