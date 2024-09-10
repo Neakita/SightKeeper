@@ -10,25 +10,25 @@ namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal sealed class ClassifierDataSetConverter : DataSetConverter<PackableClassifierDataSet>
 {
-	public ClassifierDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
+	public ClassifierDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session) : base(screenshotsDataAccess, session)
 	{
 	}
 
-	public override PackableClassifierDataSet Convert(DataSet dataSet, ConversionSession session)
+	public override PackableClassifierDataSet Convert(DataSet dataSet)
 	{
-		var packable = base.Convert(dataSet, session);
-		packable.Tags = ConvertPlainTags(dataSet.TagsLibrary.Tags, session);
-		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets, session);
-		packable.Weights = ConvertPlainWeights(dataSet.WeightsLibrary.Weights, session);
+		var packable = base.Convert(dataSet);
+		packable.Tags = ConvertPlainTags(dataSet.TagsLibrary.Tags);
+		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets);
+		packable.Weights = ConvertPlainWeights(dataSet.WeightsLibrary.Weights);
 		return packable;
 	}
 
-	private ImmutableArray<PackableClassifierAsset> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
+	private ImmutableArray<PackableClassifierAsset> ConvertAssets(IReadOnlyCollection<Asset> assets)
 	{
 		return assets.Cast<ClassifierAsset>().Select(ConvertAsset).ToImmutableArray();
 		PackableClassifierAsset ConvertAsset(ClassifierAsset asset) => new(
 			asset.Usage,
 			ScreenshotsDataAccess.GetId(asset.Screenshot),
-			session.TagsIds[asset.Tag]);
+			Session.TagsIds[asset.Tag]);
 	}
 }

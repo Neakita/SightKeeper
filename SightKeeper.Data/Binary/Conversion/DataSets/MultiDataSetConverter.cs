@@ -11,31 +11,30 @@ namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal sealed class MultiDataSetConverter
 {
-	public MultiDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess)
+	public MultiDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session)
 	{
-		_classifierConverter = new ClassifierDataSetConverter(screenshotsDataAccess);
-		_detectorConverter = new DetectorDataSetConverter(screenshotsDataAccess);
-		_poser2DConverter = new Poser2DDataSetConverter(screenshotsDataAccess);
-		_poser3DConverter = new Poser3DDataSetConverter(screenshotsDataAccess);
+		_classifierConverter = new ClassifierDataSetConverter(screenshotsDataAccess, session);
+		_detectorConverter = new DetectorDataSetConverter(screenshotsDataAccess, session);
+		_poser2DConverter = new Poser2DDataSetConverter(screenshotsDataAccess, session);
+		_poser3DConverter = new Poser3DDataSetConverter(screenshotsDataAccess, session);
 	}
 
 	public ImmutableArray<PackableDataSet> Convert(
 		IEnumerable<DataSet> dataSets,
 		ConversionSession session)
 	{
-		return dataSets.Select(dataSet => Convert(dataSet, session)).ToImmutableArray();
+		return dataSets.Select(Convert).ToImmutableArray();
 	}
 
 	public PackableDataSet Convert(
-		DataSet dataSet,
-		ConversionSession session)
+		DataSet dataSet)
 	{
 		return dataSet switch
 		{
-			ClassifierDataSet classifierDataSet => _classifierConverter.Convert(classifierDataSet, session),
-			DetectorDataSet detectorDataSet => _detectorConverter.Convert(detectorDataSet, session),
-			Poser2DDataSet poser2DDataSet => _poser2DConverter.Convert(poser2DDataSet, session),
-			Poser3DDataSet poser3DDataSet => _poser3DConverter.Convert(poser3DDataSet, session),
+			ClassifierDataSet classifierDataSet => _classifierConverter.Convert(classifierDataSet),
+			DetectorDataSet detectorDataSet => _detectorConverter.Convert(detectorDataSet),
+			Poser2DDataSet poser2DDataSet => _poser2DConverter.Convert(poser2DDataSet),
+			Poser3DDataSet poser3DDataSet => _poser3DConverter.Convert(poser3DDataSet),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
 		};
 	}

@@ -13,20 +13,20 @@ namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal sealed class Poser3DDataSetConverter : PoserDataSetConverter<PackablePoser3DDataSet>
 {
-	public Poser3DDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
+	public Poser3DDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session) : base(screenshotsDataAccess, session)
 	{
 	}
 
-	public override PackablePoser3DDataSet Convert(DataSet dataSet, ConversionSession session)
+	public override PackablePoser3DDataSet Convert(DataSet dataSet)
 	{
-		var packable = base.Convert(dataSet, session);
-		packable.Tags = ConvertPoserTags(dataSet.TagsLibrary.Tags, session);
-		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets, session);
-		packable.Weights = ConvertPoserWeights(dataSet.WeightsLibrary.Weights, session);
+		var packable = base.Convert(dataSet);
+		packable.Tags = ConvertPoserTags(dataSet.TagsLibrary.Tags);
+		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets);
+		packable.Weights = ConvertPoserWeights(dataSet.WeightsLibrary.Weights);
 		return packable;
 	}
 
-	private static ImmutableArray<PackablePoser3DTag> ConvertPoserTags(IReadOnlyCollection<Tag> tags, ConversionSession session)
+	private ImmutableArray<PackablePoser3DTag> ConvertPoserTags(IReadOnlyCollection<Tag> tags)
 	{
 		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoser3DTag>(tags.Count);
 		var keyPointTagsBuilder = ImmutableArray.CreateBuilder<PackableTag>();
@@ -36,11 +36,11 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter<PackablePo
 		foreach (var tag in tags.Cast<Poser3DTag>())
 		{
 			var tagId = tagCounter++;
-			session.TagsIds.Add(tag, tagId);
+			Session.TagsIds.Add(tag, tagId);
 			keyPointTagsBuilder.Capacity = tag.KeyPoints.Count;
 			numericItemPropertiesBuilder.Capacity = tag.NumericProperties.Count;
 			booleanItemPropertiesBuilder.Capacity = tag.BooleanProperties.Count;
-			BuildKeyPoints(tag.KeyPoints, ref tagCounter, session, keyPointTagsBuilder);
+			BuildKeyPoints(tag.KeyPoints, ref tagCounter, keyPointTagsBuilder);
 			BuildNumericProperties(tag.NumericProperties, numericItemPropertiesBuilder);
 			foreach (var property in tag.BooleanProperties)
 			{
@@ -60,23 +60,23 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter<PackablePo
 		return resultBuilder.ToImmutable();
 	}
 
-	private ImmutableArray<PackableItemsAsset<PackablePoser3DItem>> ConvertAssets(IReadOnlyCollection<Asset> assets, ConversionSession session)
+	private ImmutableArray<PackableItemsAsset<PackablePoser3DItem>> ConvertAssets(IReadOnlyCollection<Asset> assets)
 	{
 		return assets.Cast<Poser3DAsset>().Select(ConvertAsset).ToImmutableArray();
 		PackableItemsAsset<PackablePoser3DItem> ConvertAsset(Poser3DAsset asset) =>
 			new(asset.Usage, ScreenshotsDataAccess.GetId(asset.Screenshot), ConvertItems(asset.Items));
 		ImmutableArray<PackablePoser3DItem> ConvertItems(IEnumerable<Poser3DItem> items) => items.Select(ConvertItem).ToImmutableArray();
-		PackablePoser3DItem ConvertItem(Poser3DItem item) => new(session.TagsIds[item.Tag], item.Bounding, ConvertKeyPoints(item.KeyPoints), item.NumericProperties, item.BooleanProperties);
+		PackablePoser3DItem ConvertItem(Poser3DItem item) => new(Session.TagsIds[item.Tag], item.Bounding, ConvertKeyPoints(item.KeyPoints), item.NumericProperties, item.BooleanProperties);
 		ImmutableArray<PackableKeyPoint3D> ConvertKeyPoints(IEnumerable<KeyPoint3D> keyPoints) =>
 			keyPoints.Select(keyPoint => new PackableKeyPoint3D(keyPoint.Position, keyPoint.IsVisible)).ToImmutableArray();
 	}
 
-	protected override ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(IDictionary tags, ConversionSession session)
+	protected override ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(IDictionary tags)
 	{
 		return tags
 			.Cast<KeyValuePair<Poser3DTag, ImmutableHashSet<KeyPointTag3D>>>()
 			.ToImmutableDictionary(
-				pair => session.TagsIds[pair.Key],
-				pair => pair.Value.Select(tag => session.TagsIds[tag]).ToImmutableArray());
+				pair => Session.TagsIds[pair.Key],
+				pair => pair.Value.Select(tag => Session.TagsIds[tag]).ToImmutableArray());
 	}
 }

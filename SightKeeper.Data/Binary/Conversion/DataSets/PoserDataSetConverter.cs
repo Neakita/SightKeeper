@@ -12,19 +12,18 @@ namespace SightKeeper.Data.Binary.Conversion.DataSets;
 internal abstract class PoserDataSetConverter<TPackableDataSet> : DataSetConverter<TPackableDataSet>
 	where TPackableDataSet : PackableDataSet, new()
 {
-	protected PoserDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess) : base(screenshotsDataAccess)
+	protected PoserDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session) : base(screenshotsDataAccess, session)
 	{
 	}
 
-	protected static void BuildKeyPoints(
+	protected void BuildKeyPoints(
 		IEnumerable<KeyPointTag> keyPointTags,
 		ref byte indexCounter,
-		ConversionSession session,
 		ImmutableArray<PackableTag>.Builder builder)
 	{
 		foreach (var keyPointTag in keyPointTags)
 		{
-			session.TagsIds.Add(keyPointTag, indexCounter);
+			Session.TagsIds.Add(keyPointTag, indexCounter);
 			builder.Add(ConvertPlainTag(indexCounter, keyPointTag));
 			indexCounter++;
 		}
@@ -45,20 +44,19 @@ internal abstract class PoserDataSetConverter<TPackableDataSet> : DataSetConvert
 	}
 
 	protected ImmutableArray<PackablePoserWeights> ConvertPoserWeights(
-		IReadOnlyCollection<Weights> weights,
-		ConversionSession session)
+		IReadOnlyCollection<Weights> weights)
 	{
 		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoserWeights>();
 		foreach (var item in weights.Cast<PoserWeights>())
 		{
-			resultBuilder.Add(ConvertWeights(session.WeightsIdCounter, item, session));
-			session.WeightsIds.Add(item, session.WeightsIdCounter);
-			session.WeightsIdCounter++;
+			resultBuilder.Add(ConvertWeights(Session.WeightsIdCounter, item));
+			Session.WeightsIds.Add(item, Session.WeightsIdCounter);
+			Session.WeightsIdCounter++;
 		}
 		return resultBuilder.DrainToImmutable();
 	}
 	
-	private PackablePoserWeights ConvertWeights(ushort id, PoserWeights item, ConversionSession session)
+	private PackablePoserWeights ConvertWeights(ushort id, PoserWeights item)
 	{
 		return new PackablePoserWeights(
 			id,
@@ -66,10 +64,8 @@ internal abstract class PoserDataSetConverter<TPackableDataSet> : DataSetConvert
 			item.ModelSize,
 			item.Metrics,
 			item.Resolution,
-			ConvertWeightsTags(item.Tags, session));
+			ConvertWeightsTags(item.Tags));
 	}
 
-	protected abstract ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(
-		IDictionary tags,
-		ConversionSession session);
+	protected abstract ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(IDictionary tags);
 }
