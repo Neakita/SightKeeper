@@ -11,7 +11,7 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal sealed class DetectorDataSetConverter : DataSetConverter<PackableTag, PackableItemsAsset<PackableDetectorItem>, PackablePlainWeights, PackableDetectorDataSet>
+internal sealed class DetectorDataSetConverter : PlainDataSetConverter<PackableItemsAsset<PackableDetectorItem>, PackableDetectorDataSet>
 {
 	public DetectorDataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session) : base(screenshotsDataAccess, session)
 	{

@@ -34,6 +34,7 @@ internal abstract class DataSetConverter<TPackableDataSet>
 		};
 	}
 
+	protected FileSystemScreenshotsDataAccess ScreenshotsDataAccess { get; }
 	protected ConversionSession Session { get; }
 
 	protected DataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session)
@@ -42,43 +43,10 @@ internal abstract class DataSetConverter<TPackableDataSet>
 		Session = session;
 	}
 
-	protected FileSystemScreenshotsDataAccess ScreenshotsDataAccess { get; }
-
 	protected static PackableTag ConvertPlainTag(byte id, Tag tag)
 	{
 		return new PackableTag(id, tag.Name, tag.Color);
 	}
-
-	protected ImmutableArray<PackableTag> ConvertPlainTags(IReadOnlyCollection<Tag> tags)
-	{
-		var builder = ImmutableArray.CreateBuilder<PackableTag>(tags.Count);
-		byte index = 0;
-		foreach (var tag in tags)
-		{
-			Session.TagsIds.Add(tag, index);
-			builder.Add(ConvertPlainTag(index, tag));
-			index++;
-		}
-		return builder.DrainToImmutable();
-	}
-
-	protected ImmutableArray<PackablePlainWeights> ConvertPlainWeights(IReadOnlyCollection<Weights> weights)
-	{
-		var resultBuilder = ImmutableArray.CreateBuilder<PackablePlainWeights>(weights.Count);
-		foreach (var item in weights.Cast<PlainWeights>())
-		{
-			var id = Session.WeightsIdCounter++;
-			resultBuilder.Add(ConvertWeights(id, item, ConvertWeightsTags(item.Tags)));
-			Session.WeightsIds.Add(item, id);
-		}
-		return resultBuilder.DrainToImmutable();
-		ImmutableArray<byte> ConvertWeightsTags(IEnumerable<Tag> tags) => tags
-			.Select(tag => Session.TagsIds[tag])
-			.ToImmutableArray();
-	}
-
-	private static PackablePlainWeights ConvertWeights(ushort id, Weights item, ImmutableArray<byte> tagIds) =>
-		new(id, item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, tagIds);
 
 	private static PackableTransparentComposition? ConvertComposition(Composition? composition)
 	{
