@@ -23,7 +23,7 @@ internal abstract class PoserDataSetReplicator<TTag, TKeyPointTag, TDataSet> : D
 		var tag = (PoserTag)base.ReplicateTag(library, packed);
 		foreach (var packedKeyPointTag in typedPackedTag.KeyPointTags)
 		{
-			var keyPointTag = tag.CreateKeyPoint(typedPackedTag.Name);
+			var keyPointTag = tag.CreateKeyPoint(packedKeyPointTag.Name);
 			keyPointTag.Color = packedKeyPointTag.Color;
 			Session.Tags.Add((library.DataSet, packedKeyPointTag.Id), keyPointTag);
 		}
