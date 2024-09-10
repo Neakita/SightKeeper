@@ -46,7 +46,7 @@ internal abstract class PoserDataSetConverter<TTag, TAsset, TDataSet> : DataSetC
 		}
 	}
 
-	protected ImmutableArray<PackablePoserWeights> ConvertPoserWeights(
+	protected sealed override ImmutableArray<PackablePoserWeights> ConvertWeights(
 		IReadOnlyCollection<Weights> weights)
 	{
 		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoserWeights>();
@@ -58,7 +58,7 @@ internal abstract class PoserDataSetConverter<TTag, TAsset, TDataSet> : DataSetC
 		}
 		return resultBuilder.DrainToImmutable();
 	}
-	
+
 	private PackablePoserWeights ConvertWeights(ushort id, PoserWeights item)
 	{
 		return new PackablePoserWeights(
