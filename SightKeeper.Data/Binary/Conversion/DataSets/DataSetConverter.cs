@@ -46,7 +46,7 @@ internal abstract class DataSetConverter<TPackableDataSet>
 		return new PackableTag(id, tag.Name, tag.Color);
 	}
 
-	protected virtual ImmutableArray<PackableTag> ConvertPlainTags(
+	protected static ImmutableArray<PackableTag> ConvertPlainTags(
 		IReadOnlyCollection<Tag> tags,
 		ConversionSession session)
 	{
@@ -61,7 +61,7 @@ internal abstract class DataSetConverter<TPackableDataSet>
 		return builder.DrainToImmutable();
 	}
 
-	protected ImmutableArray<PackablePlainWeights> ConvertPlainWeights(
+	protected static ImmutableArray<PackablePlainWeights> ConvertPlainWeights(
 		IReadOnlyCollection<Weights> weights,
 		ConversionSession session)
 	{
