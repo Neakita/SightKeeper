@@ -35,7 +35,7 @@ public sealed class IterativeScalingOptionsTests
 	{
 		IterativeScalingOptions options = new();
 		Assert.ThrowsAny<Exception>(() => options.Initial = 0.99f);
-		options.Initial.Should().BeGreaterOrEqualTo(1);
+		options.Initial.Should().BeGreaterThanOrEqualTo(1);
 	}
 
 	[Fact]

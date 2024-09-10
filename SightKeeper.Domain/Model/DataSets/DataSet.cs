@@ -19,6 +19,24 @@ public abstract class DataSet
 	public abstract WeightsLibrary WeightsLibrary { get; }
 
 	public override string ToString() => Name;
+
+	public override bool Equals(object? obj)
+	{
+		if (obj is null) return false;
+		if (ReferenceEquals(this, obj)) return true;
+		if (obj.GetType() != GetType()) return false;
+		return Equals((DataSet)obj);
+	}
+
+	public override int GetHashCode()
+	{
+		return HashCode.Combine(Name, Description);
+	}
+
+	protected bool Equals(DataSet other)
+	{
+		return Name == other.Name && Description == other.Description;
+	}
 }
 
 public class DataSet<TTag, TAsset> : DataSet

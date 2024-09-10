@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using FluentAssertions;
+using FluentAssertions.Equivalency;
 using MemoryPack;
 using SightKeeper.Application;
 using SightKeeper.Data.Binary;
@@ -15,19 +16,11 @@ using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviors;
-using Xunit.Abstractions;
 
 namespace SightKeeper.Data.Tests.Binary;
 
 public sealed class BinarySerializationTests
 {
-	private readonly ITestOutputHelper _testOutputHelper;
-
-	public BinarySerializationTests(ITestOutputHelper testOutputHelper)
-	{
-		_testOutputHelper = testOutputHelper;
-	}
-
 	private static readonly byte[] SampleImageData = File.ReadAllBytes("sample.png");
 	private static readonly Vector2<ushort> SampleImageResolution = new(320, 320);
 
@@ -49,8 +42,16 @@ public sealed class BinarySerializationTests
 		dataAccess.Save();
 		var data = dataAccess.Data;
 		dataAccess.Load();
-		dataAccess.Data.Should().BeEquivalentTo(data, options => options.IgnoringCyclicReferences().RespectingRuntimeTypes().AllowingInfiniteRecursion());
+		dataAccess.Data.Should().BeEquivalentTo(data, ConfigureEquivalencyAssertion);
 		Directory.Delete(screenshotsDataAccess.DirectoryPath, true);
+	}
+
+	private static EquivalencyAssertionOptions<AppData> ConfigureEquivalencyAssertion(EquivalencyAssertionOptions<AppData> options)
+	{
+		return options
+			.RespectingRuntimeTypes()
+			.IgnoringCyclicReferences()
+			.AllowingInfiniteRecursion();
 	}
 
 	private static IEnumerable<DataSet> CreateDataSets(ScreenshotsDataAccess screenshotsDataAccess, Game game)
@@ -65,7 +66,7 @@ public sealed class BinarySerializationTests
 	{
 		ClassifierDataSet dataSet = new()
 		{
-			Name = "PD2",
+			Name = "PD2Classifier",
 			Description = "Test dataset",
 			Game = game
 		};
@@ -89,7 +90,7 @@ public sealed class BinarySerializationTests
 	{
 		DetectorDataSet dataSet = new()
 		{
-			Name = "PD2",
+			Name = "PD2Detector",
 			Description = "Test dataset",
 			Game = game
 		};
@@ -116,7 +117,7 @@ public sealed class BinarySerializationTests
 	{
 		Poser2DDataSet dataSet = new()
 		{
-			Name = "PD2",
+			Name = "PD2Poser",
 			Description = "Test dataset",
 			Game = game
 		};
@@ -147,7 +148,7 @@ public sealed class BinarySerializationTests
 	{
 		Poser3DDataSet dataSet = new()
 		{
-			Name = "PD2",
+			Name = "PD2Poser3D",
 			Description = "Test dataset",
 			Game = game
 		};
