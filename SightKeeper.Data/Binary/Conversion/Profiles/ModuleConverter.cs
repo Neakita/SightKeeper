@@ -12,21 +12,27 @@ namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
 internal abstract class ModuleConverter
 {
-	public PackableModule Convert(Module module, ConversionSession session)
+	public ModuleConverter(ConversionSession session)
 	{
-		Guard.IsNotNull(session.WeightsIds);
-		var weightsId = session.WeightsIds[module.Weights];
+		Session = session;
+	}
+
+	public PackableModule Convert(Module module)
+	{
+		Guard.IsNotNull(Session.WeightsIds);
+		var weightsId = Session.WeightsIds[module.Weights];
 		var passiveScalingOptions = ConvertPassiveScalingOptions(module.PassiveScalingOptions);
 		var passiveWalkingOptions = ConvertPassiveWalkingOptions(module.PassiveWalkingOptions);
-		return CreateModule(module, weightsId, passiveScalingOptions, passiveWalkingOptions, session);
+		return CreateModule(module, weightsId, passiveScalingOptions, passiveWalkingOptions);
 	}
+
+	protected ConversionSession Session { get; }
 
 	protected abstract PackableModule CreateModule(
 		Module module,
 		ushort weightsId,
 		PackablePassiveScalingOptions? passiveScalingOptions,
-		PackablePassiveWalkingOptions? passiveWalkingOptions,
-		ConversionSession session);
+		PackablePassiveWalkingOptions? passiveWalkingOptions);
 
 	protected static PackableTriggerBehavior ConvertTriggerBehavior(TriggerBehavior behavior)
 	{

@@ -14,17 +14,20 @@ namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
 internal abstract class ObjectiveModuleConverter : ModuleConverter
 {
+	protected ObjectiveModuleConverter(ConversionSession session) : base(session)
+	{
+	}
+
 	protected sealed override PackableObjectiveModule CreateModule(
 		Module module,
 		ushort weightsId,
 		PackablePassiveScalingOptions? passiveScalingOptions,
-		PackablePassiveWalkingOptions? passiveWalkingOptions,
-		ConversionSession session)
+		PackablePassiveWalkingOptions? passiveWalkingOptions)
 	{
 		var typedModule = (ObjectiveModule)module;
 		var activeScalingOptions = ConvertActiveScalingOptions(typedModule.ActiveScalingOptions);
 		var activeWalkingOptions = ConvertActiveWalkingOptions(typedModule.ActiveWalkingOptions);
-		var behavior = ConvertBehavior(typedModule.Behavior, session);
+		var behavior = ConvertBehavior(typedModule.Behavior);
 		return CreateModule(
 			typedModule,
 			weightsId,
@@ -58,25 +61,25 @@ internal abstract class ObjectiveModuleConverter : ModuleConverter
 		_ => throw new ArgumentOutOfRangeException(nameof(options))
 	};
 
-	private static PackableBehavior ConvertBehavior(Behavior behavior, ConversionSession session) => behavior switch
+	private PackableBehavior ConvertBehavior(Behavior behavior) => behavior switch
 	{
 		TriggerBehavior triggerBehavior => ConvertTriggerBehavior(triggerBehavior),
-		AimBehavior aimBehavior => ConvertAimBehavior(aimBehavior, session),
-		AimAssistBehavior aimAssistBehavior => ConvertAimAssistBehavior(aimAssistBehavior, session),
+		AimBehavior aimBehavior => ConvertAimBehavior(aimBehavior),
+		AimAssistBehavior aimAssistBehavior => ConvertAimAssistBehavior(aimAssistBehavior),
 		_ => throw new ArgumentOutOfRangeException(nameof(behavior))
 	};
 
-	private static PackableAimBehavior ConvertAimBehavior(AimBehavior behavior, ConversionSession session)
+	private PackableAimBehavior ConvertAimBehavior(AimBehavior behavior)
 	{
 		return new PackableAimBehavior(ConvertTags(behavior.Tags));
 		ImmutableArray<PackableAimBehaviorTagOptions> ConvertTags(
 			IEnumerable<AimBehavior.TagOptions> tagsOptions) =>
 			tagsOptions.Select(ConvertOptions).ToImmutableArray();
 		PackableAimBehaviorTagOptions ConvertOptions(AimBehavior.TagOptions options) =>
-			new(session.TagsIds[options.Tag], options.Priority, options.VerticalOffset);
+			new(Session.TagsIds[options.Tag], options.Priority, options.VerticalOffset);
 	}
 
-	private static PackableAimAssistBehavior ConvertAimAssistBehavior(AimAssistBehavior behavior, ConversionSession session)
+	private PackableAimAssistBehavior ConvertAimAssistBehavior(AimAssistBehavior behavior)
 	{
 		return new PackableAimAssistBehavior(
 			ConvertTags(behavior.Tags),
@@ -87,6 +90,6 @@ internal abstract class ObjectiveModuleConverter : ModuleConverter
 			ImmutableArray<AimAssistBehavior.TagOptions> tags) => 
 			tags.Select(ConvertOptions).ToImmutableArray();
 		PackableAimAssistBehaviorTagOptions ConvertOptions(AimAssistBehavior.TagOptions options) =>
-			new(session.TagsIds[options.Tag], options.Priority, options.TargetAreaScale, options.VerticalOffset);
+			new(Session.TagsIds[options.Tag], options.Priority, options.TargetAreaScale, options.VerticalOffset);
 	}
 }

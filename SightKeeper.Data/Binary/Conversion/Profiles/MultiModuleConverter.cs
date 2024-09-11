@@ -5,25 +5,25 @@ namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
 internal sealed class MultiModuleConverter
 {
-	public MultiModuleConverter()
+	public MultiModuleConverter(ConversionSession session)
 	{
-		_classifierConverter = new ClassifierModuleConverter();
-		_detectorConverter = new DetectorModuleConverter();
-		_poser2DConverter = new Poser2DModuleConverter();
-		_poser3DConverter = new Poser3DModuleConverter();
+		_classifierConverter = new ClassifierModuleConverter(session);
+		_detectorConverter = new DetectorModuleConverter(session);
+		_poser2DConverter = new Poser2DModuleConverter(session);
+		_poser3DConverter = new Poser3DModuleConverter(session);
 	}
 
-	public IEnumerable<PackableModule> Convert(IEnumerable<Module> modules, ConversionSession session)
+	public IEnumerable<PackableModule> Convert(IEnumerable<Module> modules)
 	{
-		return modules.Select(module => Convert(module, session));
+		return modules.Select(Convert);
 	}
 
-	private PackableModule Convert(Module module, ConversionSession session) => module switch
+	private PackableModule Convert(Module module) => module switch
 	{
-		ClassifierModule classifierModule => _classifierConverter.Convert(classifierModule, session),
-		DetectorModule detectorModule => _detectorConverter.Convert(detectorModule, session),
-		Poser2DModule poser2DModule => _poser2DConverter.Convert(poser2DModule, session),
-		Poser3DModule poser3DModule => _poser3DConverter.Convert(poser3DModule, session),
+		ClassifierModule classifierModule => _classifierConverter.Convert(classifierModule),
+		DetectorModule detectorModule => _detectorConverter.Convert(detectorModule),
+		Poser2DModule poser2DModule => _poser2DConverter.Convert(poser2DModule),
+		Poser3DModule poser3DModule => _poser3DConverter.Convert(poser3DModule),
 		_ => throw new ArgumentOutOfRangeException(nameof(module))
 	};
 

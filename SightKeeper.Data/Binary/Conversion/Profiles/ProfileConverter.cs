@@ -6,16 +6,21 @@ namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
 internal sealed class ProfileConverter
 {
-	public IEnumerable<PackableProfile> Convert(IEnumerable<Profile> profiles, ConversionSession session)
+	public ProfileConverter(ConversionSession session)
 	{
-		return profiles.Select(profile => Convert(profile, session));
+		_modulesConverter = new MultiModuleConverter(session);
 	}
 
-	private PackableProfile Convert(Profile profile, ConversionSession session)
+	public IEnumerable<PackableProfile> Convert(IEnumerable<Profile> profiles)
 	{
-		var modules = _modulesConverter.Convert(profile.Modules, session).ToImmutableArray();
+		return profiles.Select(Convert);
+	}
+
+	private PackableProfile Convert(Profile profile)
+	{
+		var modules = _modulesConverter.Convert(profile.Modules).ToImmutableArray();
 		return new PackableProfile(profile.Name, profile.Description, modules);
 	}
 
-	private readonly MultiModuleConverter _modulesConverter = new();
+	private readonly MultiModuleConverter _modulesConverter;
 }

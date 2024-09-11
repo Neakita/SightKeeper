@@ -7,12 +7,15 @@ namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
 internal sealed class ClassifierModuleConverter : ModuleConverter
 {
+	public ClassifierModuleConverter(ConversionSession session) : base(session)
+	{
+	}
+
 	protected override PackableClassifierModule CreateModule(
 		Module module,
 		ushort weightsId,
 		PackablePassiveScalingOptions? passiveScalingOptions,
-		PackablePassiveWalkingOptions? passiveWalkingOptions,
-		ConversionSession session)
+		PackablePassiveWalkingOptions? passiveWalkingOptions)
 	{
 		var typedModule = (ClassifierModule)module;
 		var behavior = ConvertTriggerBehavior(typedModule.Behavior);

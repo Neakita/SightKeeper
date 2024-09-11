@@ -28,7 +28,8 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		var games = GamesConverter.Convert(value.Games, session);
 		MultiDataSetConverter dataSetConverter = new(_screenshotsDataAccess, session);
 		var dataSets = dataSetConverter.Convert(value.DataSets);
-		var profiles = _profileConverter.Convert(value.Profiles, session).ToImmutableArray();
+		ProfileConverter profileConverter = new(session);
+		var profiles = profileConverter.Convert(value.Profiles).ToImmutableArray();
 		PackableAppData packed = new(
 			games,
 			dataSets,
@@ -61,5 +62,4 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
-	private readonly ProfileConverter _profileConverter = new();
 }

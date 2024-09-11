@@ -10,6 +10,10 @@ namespace SightKeeper.Data.Binary.Conversion.Profiles;
 
 internal sealed class Poser2DModuleConverter : ObjectiveModuleConverter
 {
+	public Poser2DModuleConverter(ConversionSession session) : base(session)
+	{
+	}
+
 	protected override PackablePoser2DModule CreateModule(
 		ObjectiveModule module,
 		ushort weightsId,
