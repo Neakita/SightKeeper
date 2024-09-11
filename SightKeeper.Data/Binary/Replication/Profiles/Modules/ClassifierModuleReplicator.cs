@@ -8,9 +8,13 @@ namespace SightKeeper.Data.Binary.Replication.Profiles.Modules;
 
 internal sealed class ClassifierModuleReplicator : ModuleReplicator
 {
-	public override Module Replicate(Profile profile, PackableModule packedModule, ReplicationSession session)
+	public ClassifierModuleReplicator(ReplicationSession session) : base(session)
 	{
-		var module = (ClassifierModule)base.Replicate(profile, packedModule, session);
+	}
+
+	public override Module Replicate(Profile profile, PackableModule packedModule)
+	{
+		var module = (ClassifierModule)base.Replicate(profile, packedModule);
 		// TODO behavior actions
 		return module;
 	}

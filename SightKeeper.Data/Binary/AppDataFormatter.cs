@@ -57,7 +57,7 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		var games = GameReplicator.Replicate(packed.Games, session);
 		MultiDataSetReplicator dataSetReplicator = new(_screenshotsDataAccess, session);
 		var dataSets = dataSetReplicator.Replicate(packed.DataSets);
-		var profiles = ProfileReplicator.Replicate(packed.Profiles, session).ToHashSet();
+		var profiles = new ProfileReplicator(session).Replicate(packed.Profiles).ToHashSet();
 		value = new AppData(games, dataSets, profiles, packed.ApplicationSettings);
 	}
 

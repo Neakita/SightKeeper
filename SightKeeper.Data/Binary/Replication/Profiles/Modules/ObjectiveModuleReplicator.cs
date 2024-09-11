@@ -15,14 +15,18 @@ namespace SightKeeper.Data.Binary.Replication.Profiles.Modules;
 
 internal abstract class ObjectiveModuleReplicator : ModuleReplicator
 {
-	public override ObjectiveModule Replicate(Profile profile, PackableModule packedModule, ReplicationSession session)
+	public override ObjectiveModule Replicate(Profile profile, PackableModule packedModule)
 	{
-		var module = (ObjectiveModule)base.Replicate(profile, packedModule, session);
+		var module = (ObjectiveModule)base.Replicate(profile, packedModule);
 		var typedPackedModule = (PackableObjectiveModule)packedModule;
 		module.ActiveScalingOptions = ConvertActiveScalingOptions(typedPackedModule.ActiveScalingOptions);
 		module.ActiveWalkingOptions = ConvertActiveWalkingOptions(typedPackedModule.ActiveWalkingOptions);
-		ReplicateBehavior(module, typedPackedModule.Behavior, session);
+		ReplicateBehavior(module, typedPackedModule.Behavior);
 		return module;
+	}
+
+	protected ObjectiveModuleReplicator(ReplicationSession session) : base(session)
+	{
 	}
 
 	protected abstract override ObjectiveModule CreateModule(Profile profile, Weights weights);
@@ -45,30 +49,29 @@ internal abstract class ObjectiveModuleReplicator : ModuleReplicator
 		_ => throw new ArgumentOutOfRangeException(nameof(options))
 	};
 
-	private static void ReplicateBehavior(ObjectiveModule module, PackableBehavior packedBehavior, ReplicationSession session)
+	private void ReplicateBehavior(ObjectiveModule module, PackableBehavior packedBehavior)
 	{
 		Behavior _ = packedBehavior switch
 		{
 			PackableTriggerBehavior triggerBehavior => ReplicateTriggerBehavior(module, triggerBehavior),
-			PackableAimBehavior aimBehavior => ReplicateAimBehavior(module, aimBehavior, session),
-			PackableAimAssistBehavior aimAssistBehavior => ReplicateAimAssistBehavior(module, aimAssistBehavior, session),
+			PackableAimBehavior aimBehavior => ReplicateAimBehavior(module, aimBehavior),
+			PackableAimAssistBehavior aimAssistBehavior => ReplicateAimAssistBehavior(module, aimAssistBehavior),
 			_ => throw new ArgumentOutOfRangeException(nameof(packedBehavior))
 		};
 	}
 
-	private static TriggerBehavior ReplicateTriggerBehavior(ObjectiveModule module, PackableTriggerBehavior packedBehavior)
+	private TriggerBehavior ReplicateTriggerBehavior(ObjectiveModule module, PackableTriggerBehavior packedBehavior)
 	{
 		var behavior = module.SetBehavior<TriggerBehavior>();
 		// TODO actions
 		return behavior;
 	}
 
-	private static AimBehavior ReplicateAimBehavior(
+	private AimBehavior ReplicateAimBehavior(
 		ObjectiveModule module,
-		PackableAimBehavior packedAimBehavior,
-		ReplicationSession session)
+		PackableAimBehavior packedAimBehavior)
 	{
-		Guard.IsNotNull(session.Tags);
+		Guard.IsNotNull(Session.Tags);
 		var behavior = module.SetBehavior<AimBehavior>();
 		behavior.Tags = packedAimBehavior.TagsOptions
 			.Select(ReplicateTagOptions)
@@ -76,16 +79,15 @@ internal abstract class ObjectiveModuleReplicator : ModuleReplicator
 		return behavior;
 		AimBehavior.TagOptions ReplicateTagOptions(PackableAimBehaviorTagOptions options)
 		{
-			return new AimBehavior.TagOptions(session.Tags[(module.Weights.DataSet, options.TagId)], options.Priority, options.VerticalOffset);
+			return new AimBehavior.TagOptions(Session.Tags[(module.Weights.DataSet, options.TagId)], options.Priority, options.VerticalOffset);
 		}
 	}
 
-	private static AimAssistBehavior ReplicateAimAssistBehavior(
+	private AimAssistBehavior ReplicateAimAssistBehavior(
 		ObjectiveModule module,
-		PackableAimAssistBehavior packedAimBehavior,
-		ReplicationSession session)
+		PackableAimAssistBehavior packedAimBehavior)
 	{
-		Guard.IsNotNull(session.Tags);
+		Guard.IsNotNull(Session.Tags);
 		var behavior = module.SetBehavior<AimAssistBehavior>();
 		behavior.Tags = packedAimBehavior.Tags
 			.Select(ReplicateTagOptions)
@@ -93,7 +95,7 @@ internal abstract class ObjectiveModuleReplicator : ModuleReplicator
 		return behavior;
 		AimAssistBehavior.TagOptions ReplicateTagOptions(PackableAimAssistBehaviorTagOptions options)
 		{
-			return new AimAssistBehavior.TagOptions(session.Tags[(module.Weights.DataSet, options.TagId)], options.Priority, options.TargetAreaScale, options.VerticalOffset);
+			return new AimAssistBehavior.TagOptions(Session.Tags[(module.Weights.DataSet, options.TagId)], options.Priority, options.TargetAreaScale, options.VerticalOffset);
 		}
 	}
 }

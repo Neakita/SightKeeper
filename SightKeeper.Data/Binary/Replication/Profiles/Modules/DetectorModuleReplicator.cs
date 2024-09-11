@@ -7,6 +7,10 @@ namespace SightKeeper.Data.Binary.Replication.Profiles.Modules;
 
 internal sealed class DetectorModuleReplicator : ObjectiveModuleReplicator
 {
+	public DetectorModuleReplicator(ReplicationSession session) : base(session)
+	{
+	}
+
 	protected override DetectorModule CreateModule(Profile profile, Weights weights)
 	{
 		var typedWeights = (PlainWeights<DetectorTag>)weights;

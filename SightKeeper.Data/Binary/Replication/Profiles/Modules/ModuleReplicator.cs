@@ -12,15 +12,22 @@ namespace SightKeeper.Data.Binary.Replication.Profiles.Modules;
 
 internal abstract class ModuleReplicator
 {
-	public virtual Module Replicate(Profile profile, PackableModule packedModule, ReplicationSession session)
+	public ModuleReplicator(ReplicationSession session)
 	{
-		Guard.IsNotNull(session.Weights);
-		var weights = session.Weights[packedModule.WeightsId];
+		Session = session;
+	}
+
+	public virtual Module Replicate(Profile profile, PackableModule packedModule)
+	{
+		Guard.IsNotNull(Session.Weights);
+		var weights = Session.Weights[packedModule.WeightsId];
 		var module = CreateModule(profile, weights);
 		module.PassiveScalingOptions = ConvertPassiveScalingOptions(packedModule.PassiveScalingOptions);
 		module.PassiveWalkingOptions = ConvertPassiveWalkingOptions(packedModule.PassiveWalkingOptions);
 		return module;
 	}
+
+	protected ReplicationSession Session { get; }
 
 	protected abstract Module CreateModule(Profile profile, Weights weights);
 

@@ -7,6 +7,10 @@ namespace SightKeeper.Data.Binary.Replication.Profiles.Modules;
 
 internal sealed class Poser3DModuleReplicator : ObjectiveModuleReplicator
 {
+	public Poser3DModuleReplicator(ReplicationSession session) : base(session)
+	{
+	}
+
 	protected override Poser3DModule CreateModule(Profile profile, Weights weights)
 	{
 		return profile.CreateModule((PoserWeights<Poser3DTag, KeyPointTag3D>)weights);
