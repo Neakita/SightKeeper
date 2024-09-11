@@ -8,19 +8,21 @@ namespace SightKeeper.Domain.Model.Profiles.Behaviors;
 
 public sealed class TriggerBehavior : Behavior, BehaviorFactory<TriggerBehavior>
 {
+	public sealed record TagOptions(Tag Tag, Action Action);
+
 	public static TriggerBehavior CreateBehavior(Module module)
 	{
 		return new TriggerBehavior(module);
 	}
 
-	public ImmutableDictionary<Tag, Action> Actions
+	public ImmutableArray<TagOptions> Tags
 	{
-		get => _actions;
+		get => _tags;
 		set
 		{
-			foreach (var tag in value.Keys)
-				Guard.IsTrue(Module.Weights.Contains(tag));
-			_actions = value;
+			foreach (var options in value)
+				Guard.IsTrue(Module.Weights.Contains(options.Tag));
+			_tags = value;
 		}
 	}
 
@@ -30,8 +32,8 @@ public sealed class TriggerBehavior : Behavior, BehaviorFactory<TriggerBehavior>
 
 	internal override void RemoveInappropriateTags()
 	{
-		Actions = Actions.Where(pair => Module.Weights.Contains(pair.Key)).ToImmutableDictionary();
+		Tags = Tags.RemoveAll(options => !Module.Weights.Contains(options.Tag));
 	}
 
-	private ImmutableDictionary<Tag, Action> _actions = ImmutableDictionary<Tag, Action>.Empty;
+	private ImmutableArray<TagOptions> _tags = ImmutableArray<TagOptions>.Empty;
 }
