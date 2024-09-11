@@ -16,7 +16,7 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviors;
 
-namespace SightKeeper.Data.Tests.Binary;
+namespace SightKeeper.Data.Tests;
 
 public sealed class BinarySerializationTests
 {
