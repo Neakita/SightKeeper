@@ -200,16 +200,14 @@ public sealed class BinarySerializationTests
 		var poser2DAimAssistBehavior = poser2DModule.SetBehavior<AimAssistBehavior>();
 		poser2DAimAssistBehavior.Tags = poser2DWeights
 			.Tags
-			.ToImmutableDictionary(
-				Tag (pair) => pair.Key,
-				_ => new AimAssistBehavior.TagOptions(0, new Vector2<float>(0.1f, 0.05f), -0.1f));
+			.Select(pair => new AimAssistBehavior.TagOptions(pair.Key, 0, new Vector2<float>(0.1f, 0.05f), -0.1f))
+			.ToImmutableArray();
 		var poser3DModule = profile.CreateModule(poser3DWeights);
 		var poser3DAimAssistBehavior = poser3DModule.SetBehavior<AimAssistBehavior>();
 		poser3DAimAssistBehavior.Tags = poser3DWeights
 			.Tags
-			.ToImmutableDictionary(
-				Tag (pair) => pair.Key,
-				_ => new AimAssistBehavior.TagOptions(0, new Vector2<float>(0.1f, 0.05f), -0.1f));
+			.Select(pair => new AimAssistBehavior.TagOptions(pair.Key, 0, new Vector2<float>(0.1f, 0.05f), -0.1f))
+			.ToImmutableArray();
 		return profile;
 	}
 }

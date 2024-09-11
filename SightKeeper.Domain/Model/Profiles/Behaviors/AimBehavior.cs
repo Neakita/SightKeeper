@@ -15,6 +15,8 @@ public sealed class AimBehavior : Behavior, BehaviorFactory<AimBehavior>
 	public sealed record TagOptions(Tag Tag, byte Priority, float VerticalOffset);
 	private sealed class TagOptionsComparer : IEqualityComparer<TagOptions>
 	{
+		public static TagOptionsComparer Instance { get; } = new();
+
 		public bool Equals(TagOptions? x, TagOptions? y)
 		{
 			if (ReferenceEquals(x, y)) return true;
@@ -36,7 +38,7 @@ public sealed class AimBehavior : Behavior, BehaviorFactory<AimBehavior>
 		{
 			foreach (var options in value)
 				Guard.IsTrue(Module.Weights.Contains(options.Tag));
-			Guard.IsFalse(value.HasDuplicates(new TagOptionsComparer()));
+			Guard.IsFalse(value.HasDuplicates(TagOptionsComparer.Instance));
 			_tags = value;
 		}
 	}

@@ -10,13 +10,13 @@ namespace SightKeeper.Data.Binary.Model.Profiles.Behaviors;
 [MemoryPackable]
 internal sealed partial class PackableAimAssistBehavior : PackableBehavior
 {
-	public ImmutableDictionary<byte, PackableAimAssistBehaviorTagOptions> Tags { get; }
+	public ImmutableArray<PackableAimAssistBehaviorTagOptions> Tags { get; }
 	public float DirectionCorrectionFactor { get; }
 	public float GainFactor { get; }
 	public float AttenuationFactor { get; }
 
 	public PackableAimAssistBehavior(
-		ImmutableDictionary<byte, PackableAimAssistBehaviorTagOptions> tags,
+		ImmutableArray<PackableAimAssistBehaviorTagOptions> tags,
 		float directionCorrectionFactor,
 		float gainFactor,
 		float attenuationFactor)

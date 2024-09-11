@@ -12,15 +12,33 @@ public sealed class AimAssistBehavior : Behavior, BehaviorFactory<AimAssistBehav
 		return new AimAssistBehavior(module);
 	}
 
-	public record TagOptions(byte Priority, Vector2<float> TargetAreaScale, float VerticalOffset);
+	public sealed record TagOptions(Tag Tag, byte Priority, Vector2<float> TargetAreaScale, float VerticalOffset);
+	private sealed class TagOptionsComparer : IEqualityComparer<TagOptions>
+	{
+		public static TagOptionsComparer Instance { get; } = new();
 
-	public ImmutableDictionary<Tag, TagOptions> Tags
+		public bool Equals(TagOptions? x, TagOptions? y)
+		{
+			if (ReferenceEquals(x, y)) return true;
+			if (x is null) return false;
+			if (y is null) return false;
+			return x.Tag.Equals(y.Tag);
+		}
+
+		public int GetHashCode(TagOptions obj)
+		{
+			return obj.Tag.GetHashCode();
+		}
+	}
+
+	public ImmutableArray<TagOptions> Tags
 	{
 		get => _tags;
 		set
 		{
-			foreach (var tag in value.Keys)
-				Guard.IsTrue(Module.Weights.Contains(tag));
+			foreach (var options in value)
+				Guard.IsTrue(Module.Weights.Contains(options.Tag));
+			Guard.IsFalse(value.HasDuplicates(TagOptionsComparer.Instance));
 			_tags = value;
 		}
 	}
@@ -61,10 +79,10 @@ public sealed class AimAssistBehavior : Behavior, BehaviorFactory<AimAssistBehav
 
 	internal override void RemoveInappropriateTags()
 	{
-		Tags = Tags.Where(pair => Module.Weights.Contains(pair.Key)).ToImmutableDictionary();
+		Tags = Tags.RemoveAll(options => !Module.Weights.Contains(options.Tag));
 	}
 
-	private ImmutableDictionary<Tag, TagOptions> _tags = ImmutableDictionary<Tag, TagOptions>.Empty;
+	private ImmutableArray<TagOptions> _tags = ImmutableArray<TagOptions>.Empty;
 	private float _directionCorrectionFactor;
 	private float _gainFactor;
 	private float _attenuationFactor;

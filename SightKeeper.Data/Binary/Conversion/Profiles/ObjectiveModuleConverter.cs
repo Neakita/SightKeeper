@@ -5,7 +5,6 @@ using SightKeeper.Data.Binary.Model.Profiles.Behaviors;
 using SightKeeper.Data.Binary.Model.Profiles.Modules;
 using SightKeeper.Data.Binary.Model.Profiles.PassiveScalingOptions;
 using SightKeeper.Data.Binary.Model.Profiles.PassiveWalkingOptions;
-using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.Profiles.Behaviors;
 using SightKeeper.Domain.Model.Profiles.Modules;
 using SightKeeper.Domain.Model.Profiles.Modules.Scaling;
@@ -84,12 +83,10 @@ internal abstract class ObjectiveModuleConverter : ModuleConverter
 			behavior.DirectionCorrectionFactor,
 			behavior.GainFactor,
 			behavior.AttenuationFactor);
-		ImmutableDictionary<byte, PackableAimAssistBehaviorTagOptions> ConvertTags(
-			ImmutableDictionary<Tag, AimAssistBehavior.TagOptions> tags) => 
-			tags.ToImmutableDictionary(
-				pair => session.TagsIds[pair.Key],
-				pair => ConvertOptions(pair.Value));
-		static PackableAimAssistBehaviorTagOptions ConvertOptions(AimAssistBehavior.TagOptions options) =>
-			new(options.Priority, options.TargetAreaScale, options.VerticalOffset);
+		ImmutableArray<PackableAimAssistBehaviorTagOptions> ConvertTags(
+			ImmutableArray<AimAssistBehavior.TagOptions> tags) => 
+			tags.Select(ConvertOptions).ToImmutableArray();
+		PackableAimAssistBehaviorTagOptions ConvertOptions(AimAssistBehavior.TagOptions options) =>
+			new(session.TagsIds[options.Tag], options.Priority, options.TargetAreaScale, options.VerticalOffset);
 	}
 }
