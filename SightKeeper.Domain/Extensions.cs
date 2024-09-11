@@ -1,17 +1,9 @@
 ﻿using System.Collections.Immutable;
-using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain;
 
 internal static class Extensions
 {
-	public static ImmutableHashSet<T> ToImmutableHashSetThrowOnDuplicate<T>(this IEnumerable<T> enumerable)
-	{
-		var tagsBuilder = ImmutableHashSet.CreateBuilder<T>();
-		Guard.IsTrue(enumerable.All(tagsBuilder.Add));
-		return tagsBuilder.ToImmutable();
-	}
-
 	public static IEnumerable<(ImmutableArray<T>, int start, int end)> ToRanges<T>(this IEnumerable<T> enumerable, Func<T, int> indexSelector)
 	{
 		using var enumerator = enumerable.GetEnumerator();
