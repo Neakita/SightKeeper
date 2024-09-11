@@ -70,17 +70,18 @@ internal abstract class DataSetConverter<TPackableDataSet>
 	}
 }
 
-internal abstract class DataSetConverter<TTag, TAsset, TWeights, TDataSet> : DataSetConverter<TDataSet>
+internal abstract class DataSetConverter<TTag, TAsset, TDataSet> : DataSetConverter<TDataSet>
 	where TTag : PackableTag
 	where TAsset : PackableAsset
-	where TWeights : PackableWeights
-	where TDataSet : PackableDataSet<TTag, TAsset, TWeights>, new()
+	where TDataSet : PackableDataSet<TTag, TAsset>, new()
 {
 	public sealed override TDataSet Convert(DataSet dataSet)
 	{
 		var packable = base.Convert(dataSet);
 		packable.Tags = ConvertTags(dataSet.TagsLibrary.Tags);
 		packable.Assets = ConvertAssets(dataSet.AssetsLibrary.Assets);
+		// ConvertWeights can be used in DataSetConverter<TDataSet>
+		// except that its version of Convert method can't call ConvertTags to process tags ids in time
 		packable.Weights = ConvertWeights(dataSet.WeightsLibrary.Weights);
 		return packable;
 	}
@@ -89,7 +90,8 @@ internal abstract class DataSetConverter<TTag, TAsset, TWeights, TDataSet> : Dat
 	{
 	}
 
+	protected abstract ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights);
+
 	protected abstract ImmutableArray<TTag> ConvertTags(IReadOnlyCollection<Tag> tags);
 	protected abstract ImmutableArray<TAsset> ConvertAssets(IReadOnlyCollection<Asset> assets);
-	protected abstract ImmutableArray<TWeights> ConvertWeights(IReadOnlyCollection<Weights> weights);
 }

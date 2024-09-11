@@ -9,7 +9,7 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal abstract class PlainDataSetConverter<TAsset, TDataSet> : DataSetConverter<PackableTag, TAsset, PackablePlainWeights, TDataSet>
+internal abstract class PlainDataSetConverter<TAsset, TDataSet> : DataSetConverter<PackableTag, TAsset, TDataSet>
 	where TAsset : PackableAsset
 	where TDataSet : PackablePlainDataSet<TAsset>, new()
 {
@@ -30,9 +30,9 @@ internal abstract class PlainDataSetConverter<TAsset, TDataSet> : DataSetConvert
 		return builder.DrainToImmutable();
 	}
 
-	protected ImmutableArray<PackablePlainWeights> ConvertPlainWeights(IReadOnlyCollection<Weights> weights)
+	protected sealed override ImmutableArray<PackableWeights> ConvertWeights(IReadOnlyCollection<Weights> weights)
 	{
-		var resultBuilder = ImmutableArray.CreateBuilder<PackablePlainWeights>(weights.Count);
+		var resultBuilder = ImmutableArray.CreateBuilder<PackableWeights>(weights.Count);
 		foreach (var item in weights.Cast<PlainWeights>())
 		{
 			var id = Session.WeightsIdCounter++;
@@ -45,6 +45,6 @@ internal abstract class PlainDataSetConverter<TAsset, TDataSet> : DataSetConvert
 			.ToImmutableArray();
 	}
 
-	private static PackablePlainWeights ConvertWeights(ushort id, Weights item, ImmutableArray<byte> tagIds) =>
+	private static PackableWeights ConvertWeights(ushort id, Weights item, ImmutableArray<byte> tagIds) =>
 		new(id, item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, tagIds);
 }

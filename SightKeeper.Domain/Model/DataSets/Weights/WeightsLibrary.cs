@@ -57,9 +57,10 @@ public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags)
+		IEnumerable<TTag> tags,
+		IEnumerable<TKeyPointTag> keyPointTags)
 	{
-		PoserWeights<TTag, TKeyPointTag> weights = new(creationDate, modelSize, metrics, resolution, tags, this);
+		PoserWeights<TTag, TKeyPointTag> weights = new(creationDate, modelSize, metrics, resolution, tags, keyPointTags, this);
 		Guard.IsTrue(_weights.Add(weights));
 		return weights;
 	}

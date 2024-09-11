@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
@@ -33,23 +34,30 @@ internal abstract class PoserDataSetReplicator<TTag, TKeyPointTag, TDataSet> : D
 	protected sealed override PoserWeights ReplicateWeights(WeightsLibrary library, PackableWeights weights)
 	{
 		var typedLibrary = (WeightsLibrary<TTag, TKeyPointTag>)library;
-		var typedWeights = (PackablePoserWeights)weights;
-		var tags = GetTags(library.DataSet, typedWeights);
-		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
+		GetTags(library.DataSet, weights, out var tags, out var keyPointTags);
+		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags, keyPointTags);
 	}
 
-	private IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> GetTags(DataSet dataSet, PackablePoserWeights weights)
+	private void GetTags(DataSet dataSet, PackableWeights weights, out ImmutableArray<TTag> tags, out ImmutableArray<TKeyPointTag> keyPointTags)
 	{
-		foreach (var (tagId, keyPointTagIds) in weights.Tags)
+		var tagsBuilder = ImmutableArray.CreateBuilder<TTag>();
+		var keyPointTagsBuilder = ImmutableArray.CreateBuilder<TKeyPointTag>();
+		foreach (var tagId in weights.TagIds)
 		{
-			var tag = (TTag)Session.Tags[(dataSet, tagId)];
-			var keyPointTags = GetKeyPointTags(keyPointTagIds, dataSet, Session);
-			yield return (tag, keyPointTags);
+			var tag = Session.Tags[(dataSet, tagId)];
+			switch (tag)
+			{
+				case TTag poserTag:
+					tagsBuilder.Add(poserTag);
+					break;
+				case TKeyPointTag keyPointTag:
+					keyPointTagsBuilder.Add(keyPointTag);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(tag), tag, null);
+			}
 		}
-	}
-
-	private static IEnumerable<TKeyPointTag> GetKeyPointTags(IEnumerable<byte> keyPointTagIds, DataSet dataSet, ReplicationSession session)
-	{
-		return keyPointTagIds.Select(keyPointTagId => (TKeyPointTag)session.Tags[(dataSet, keyPointTagId)]);
+		tags = tagsBuilder.DrainToImmutable();
+		keyPointTags = keyPointTagsBuilder.DrainToImmutable();
 	}
 }

@@ -28,11 +28,12 @@ public abstract class WeightsDataAccess
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags)
+		IEnumerable<TTag> tags,
+		IEnumerable<TKeyPointTag> keyPointTags)
 		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{
-		var weights = library.CreateWeights(creationDate, modelSize, metrics, resolution, tags);
+		var weights = library.CreateWeights(creationDate, modelSize, metrics, resolution, tags, keyPointTags);
 		SaveWeightsData(weights, data);
 		return weights;
 	}

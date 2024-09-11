@@ -12,7 +12,6 @@ using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
-using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviors;
@@ -52,11 +51,7 @@ public sealed class BinarySerializationTests
 		return options
 			.RespectingRuntimeTypes()
 			.IgnoringCyclicReferences()
-			.AllowingInfiniteRecursion()
-			.Using(new ImmutableDictionaryComparer<Tag, AimBehavior.TagOptions>(TagComparer.Instance, AimBehaviorTagOptionsComparer.Instance))
-			.Using(new ImmutableDictionaryComparer<Tag, AimAssistBehavior.TagOptions>(TagComparer.Instance, AimAssistBehaviorTagOptionsComparer.Instance))
-			.Using(new ImmutableDictionaryComparer<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>(TagComparer.Instance, new ImmutableHashSetComparer<KeyPointTag2D>(TagComparer.Instance)))
-			.Using(new ImmutableDictionaryComparer<Poser3DTag, ImmutableHashSet<KeyPointTag3D>>(TagComparer.Instance, new ImmutableHashSetComparer<KeyPointTag3D>(TagComparer.Instance)));
+			.AllowingInfiniteRecursion();
 	}
 
 	private static IEnumerable<DataSet> CreateDataSets(ScreenshotsDataAccess screenshotsDataAccess, Game game)
@@ -145,7 +140,8 @@ public sealed class BinarySerializationTests
 			ModelSize.Nano,
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
-			dataSet.TagsLibrary.Tags.Select(tag => (tag, (IEnumerable<KeyPointTag2D>)tag.KeyPoints)));
+			dataSet.TagsLibrary.Tags,
+			dataSet.TagsLibrary.Tags.SelectMany(tag => tag.KeyPoints));
 		return dataSet;
 	}
 
@@ -178,7 +174,8 @@ public sealed class BinarySerializationTests
 			ModelSize.Nano,
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
-			dataSet.TagsLibrary.Tags.Select(tag => (tag, (IEnumerable<KeyPointTag3D>)tag.KeyPoints)));
+			dataSet.TagsLibrary.Tags,
+			dataSet.TagsLibrary.Tags.SelectMany(tag => tag.KeyPoints));
 		return dataSet;
 	}
 
@@ -200,13 +197,13 @@ public sealed class BinarySerializationTests
 		var poser2DAimAssistBehavior = poser2DModule.SetBehavior<AimAssistBehavior>();
 		poser2DAimAssistBehavior.Tags = poser2DWeights
 			.Tags
-			.Select(pair => new AimAssistBehavior.TagOptions(pair.Key, 0, new Vector2<float>(0.1f, 0.05f), -0.1f))
+			.Select(tag => new AimAssistBehavior.TagOptions(tag, 0, new Vector2<float>(0.1f, 0.05f), -0.1f))
 			.ToImmutableArray();
 		var poser3DModule = profile.CreateModule(poser3DWeights);
 		var poser3DAimAssistBehavior = poser3DModule.SetBehavior<AimAssistBehavior>();
 		poser3DAimAssistBehavior.Tags = poser3DWeights
 			.Tags
-			.Select(pair => new AimAssistBehavior.TagOptions(pair.Key, 0, new Vector2<float>(0.1f, 0.05f), -0.1f))
+			.Select(tag => new AimAssistBehavior.TagOptions(tag, 0, new Vector2<float>(0.1f, 0.05f), -0.1f))
 			.ToImmutableArray();
 		return profile;
 	}

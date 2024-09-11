@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
@@ -6,11 +5,12 @@ using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
-internal abstract class PoserDataSetConverter<TTag, TAsset, TDataSet> : DataSetConverter<TTag, TAsset, PackablePoserWeights, TDataSet>
+internal abstract class PoserDataSetConverter<TTag, TAsset, TDataSet> : DataSetConverter<TTag, TAsset, TDataSet>
 	where TTag : PackableTag
 	where TAsset : PackableAsset
 	where TDataSet : PackablePoserDataSet<TTag, TAsset>, new()
@@ -46,10 +46,10 @@ internal abstract class PoserDataSetConverter<TTag, TAsset, TDataSet> : DataSetC
 		}
 	}
 
-	protected sealed override ImmutableArray<PackablePoserWeights> ConvertWeights(
+	protected sealed override ImmutableArray<PackableWeights> ConvertWeights(
 		IReadOnlyCollection<Weights> weights)
 	{
-		var resultBuilder = ImmutableArray.CreateBuilder<PackablePoserWeights>();
+		var resultBuilder = ImmutableArray.CreateBuilder<PackableWeights>();
 		foreach (var item in weights.Cast<PoserWeights>())
 		{
 			resultBuilder.Add(ConvertWeights(Session.WeightsIdCounter, item));
@@ -59,16 +59,25 @@ internal abstract class PoserDataSetConverter<TTag, TAsset, TDataSet> : DataSetC
 		return resultBuilder.DrainToImmutable();
 	}
 
-	private PackablePoserWeights ConvertWeights(ushort id, PoserWeights item)
+	private PackableWeights ConvertWeights(ushort id, PoserWeights item)
 	{
-		return new PackablePoserWeights(
+		return new PackableWeights(
 			id,
 			item.CreationDate,
 			item.ModelSize,
 			item.Metrics,
 			item.Resolution,
-			ConvertWeightsTags(item.Tags));
+			ConvertWeightsTags(item.Tags, item.KeyPointTags));
 	}
 
-	protected abstract ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(IDictionary tags);
+	private ImmutableArray<byte> ConvertWeightsTags(
+		IReadOnlyCollection<PoserTag> tags,
+		IReadOnlyCollection<KeyPointTag> keyPointTags)
+	{
+		var builder = ImmutableArray.CreateBuilder<byte>(tags.Count + keyPointTags.Count);
+		builder.AddRange(tags.Select(GetTagId));
+		builder.AddRange(keyPointTags.Select(GetTagId));
+		byte GetTagId(Tag tag) => Session.TagsIds[tag];
+		return builder.DrainToImmutable();
+	}
 }

@@ -20,8 +20,7 @@ internal sealed class MultiDataSetConverter
 	}
 
 	public ImmutableArray<PackableDataSet> Convert(
-		IEnumerable<DataSet> dataSets,
-		ConversionSession session)
+		IEnumerable<DataSet> dataSets)
 	{
 		return dataSets.Select(Convert).ToImmutableArray();
 	}

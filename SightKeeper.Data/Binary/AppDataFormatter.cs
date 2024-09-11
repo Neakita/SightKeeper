@@ -27,7 +27,7 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		ConversionSession session = new();
 		var games = GamesConverter.Convert(value.Games, session);
 		MultiDataSetConverter dataSetConverter = new(_screenshotsDataAccess, session);
-		var dataSets = dataSetConverter.Convert(value.DataSets, session);
+		var dataSets = dataSetConverter.Convert(value.DataSets);
 		var profiles = _profileConverter.Convert(value.Profiles, session).ToImmutableArray();
 		PackableAppData packed = new(
 			games,

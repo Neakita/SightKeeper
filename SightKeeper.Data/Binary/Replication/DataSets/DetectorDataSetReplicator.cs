@@ -29,8 +29,7 @@ internal sealed class DetectorDataSetReplicator : DataSetReplicator<DetectorData
 	protected override PlainWeights<DetectorTag> ReplicateWeights(WeightsLibrary library, PackableWeights weights)
 	{
 		var typedLibrary = (WeightsLibrary<DetectorTag>)library;
-		var typedWeights = (PackablePlainWeights)weights;
-		var tags = typedWeights.TagIds.Select(id => Session.Tags[(library.DataSet, id)]).Cast<DetectorTag>();
+		var tags = weights.TagIds.Select(id => Session.Tags[(library.DataSet, id)]).Cast<DetectorTag>();
 		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
 	}
 }

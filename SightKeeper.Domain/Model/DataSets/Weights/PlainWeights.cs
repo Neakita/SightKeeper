@@ -20,7 +20,7 @@ public abstract class PlainWeights : Weights
 
 public sealed class PlainWeights<TTag> : PlainWeights where TTag : Tag, MinimumTagsCount
 {
-	public override ImmutableHashSet<TTag> Tags { get; }
+	public override ImmutableList<TTag> Tags { get; }
 	public override WeightsLibrary<TTag> Library { get; }
 
 	public override bool Contains(Tag tag)
@@ -37,7 +37,8 @@ public sealed class PlainWeights<TTag> : PlainWeights where TTag : Tag, MinimumT
 		WeightsLibrary<TTag> library)
 		: base(creationDate, size, metrics, resolution)
 	{
-		Tags = tags.ToImmutableHashSetThrowOnDuplicate();
+		Tags = tags.ToImmutableList();
+		Guard.IsFalse(Tags.HasDuplicates());
 		Library = library;
 		ValidateTags();
 	}

@@ -25,8 +25,7 @@ internal sealed class ClassifierDataSetReplicator : DataSetReplicator<Classifier
 	protected override PlainWeights<ClassifierTag> ReplicateWeights(WeightsLibrary library, PackableWeights weights)
 	{
 		var typedLibrary = (WeightsLibrary<ClassifierTag>)library;
-		var typedWeights = (PackablePlainWeights)weights;
-		var tags = typedWeights.TagIds.Select(id => Session.Tags[(library.DataSet, id)]).Cast<ClassifierTag>();
+		var tags = weights.TagIds.Select(id => Session.Tags[(library.DataSet, id)]).Cast<ClassifierTag>();
 		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
 	}
 }

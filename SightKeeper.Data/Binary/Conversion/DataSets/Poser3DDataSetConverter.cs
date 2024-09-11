@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
@@ -64,14 +63,5 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter<PackablePo
 		PackablePoser3DItem ConvertItem(Poser3DItem item) => new(Session.TagsIds[item.Tag], item.Bounding, ConvertKeyPoints(item.KeyPoints), item.NumericProperties, item.BooleanProperties);
 		ImmutableArray<PackableKeyPoint3D> ConvertKeyPoints(IEnumerable<KeyPoint3D> keyPoints) =>
 			keyPoints.Select(keyPoint => new PackableKeyPoint3D(keyPoint.Position, keyPoint.IsVisible)).ToImmutableArray();
-	}
-
-	protected override ImmutableDictionary<byte, ImmutableArray<byte>> ConvertWeightsTags(IDictionary tags)
-	{
-		return tags
-			.Cast<KeyValuePair<Poser3DTag, ImmutableHashSet<KeyPointTag3D>>>()
-			.ToImmutableDictionary(
-				pair => Session.TagsIds[pair.Key],
-				pair => pair.Value.Select(tag => Session.TagsIds[tag]).ToImmutableArray());
 	}
 }

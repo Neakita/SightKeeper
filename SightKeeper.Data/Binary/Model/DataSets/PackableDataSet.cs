@@ -24,6 +24,7 @@ internal abstract partial class PackableDataSet
 	public PackableComposition? Composition { get; set; }
 	public ushort? MaxScreenshotsWithoutAsset { get; set; }
 	public ImmutableArray<PackableScreenshot> Screenshots { get; set; }
+	public ImmutableArray<PackableWeights> Weights { get; set; }
 
 	public abstract ImmutableArray<PackableTag> GetTags();
 	public abstract ImmutableArray<PackableAsset> GetAssets();
@@ -33,14 +34,12 @@ internal abstract partial class PackableDataSet
 /// <summary>
 /// MemoryPackable version of <see cref="DataSet{TTag,TAsset}"/>
 /// </summary>
-internal abstract class PackableDataSet<TTag, TAsset, TWeights> : PackableDataSet
+internal abstract class PackableDataSet<TTag, TAsset> : PackableDataSet
 	where TTag : PackableTag
 	where TAsset : PackableAsset
-	where TWeights : PackableWeights
 {
 	public ImmutableArray<TTag> Tags { get; set; }
 	public ImmutableArray<TAsset> Assets { get; set; }
-	public ImmutableArray<TWeights> Weights { get; set; }
 
 	public sealed override ImmutableArray<PackableTag> GetTags()
 	{

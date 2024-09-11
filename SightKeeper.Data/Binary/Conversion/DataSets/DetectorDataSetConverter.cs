@@ -2,12 +2,10 @@ using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
-using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
@@ -30,10 +28,5 @@ internal sealed class DetectorDataSetConverter : PlainDataSetConverter<PackableI
 			ScreenshotsDataAccess.GetId(asset.Screenshot),
 			asset.Items.Select(ConvertItem).ToImmutableArray());
 		PackableDetectorItem ConvertItem(DetectorItem item) => new(Session.TagsIds[item.Tag], item.Bounding);
-	}
-
-	protected override ImmutableArray<PackablePlainWeights> ConvertWeights(IReadOnlyCollection<Weights> weights)
-	{
-		return ConvertPlainWeights(weights);
 	}
 }

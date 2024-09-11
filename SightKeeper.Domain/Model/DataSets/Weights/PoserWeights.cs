@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Poser;
@@ -8,7 +7,8 @@ namespace SightKeeper.Domain.Model.DataSets.Weights;
 
 public abstract class PoserWeights : Weights
 {
-	public abstract IDictionary Tags { get; }
+	public abstract IReadOnlyCollection<PoserTag> Tags { get; }
+	public abstract IReadOnlyCollection<KeyPointTag> KeyPointTags { get; }
 
 	protected PoserWeights(DateTime creationDate, ModelSize size, WeightsMetrics metrics, Vector2<ushort> resolution) : base(creationDate, size, metrics, resolution)
 	{
@@ -19,15 +19,16 @@ public sealed class PoserWeights<TTag, TKeyPointTag> : PoserWeights
 	where TTag : PoserTag
 	where TKeyPointTag : KeyPointTag<TTag>
 {
-	public override ImmutableDictionary<TTag, ImmutableHashSet<TKeyPointTag>> Tags { get; }
+	public override ImmutableList<TTag> Tags { get; }
+	public override ImmutableList<TKeyPointTag> KeyPointTags { get; }
 	public override WeightsLibrary<TTag, TKeyPointTag> Library { get; }
 
 	public override bool Contains(Tag tag)
 	{
 		return tag switch
 		{
-			TTag typedTag => Tags.ContainsKey(typedTag),
-			TKeyPointTag keyPointTag => Tags.TryGetValue(keyPointTag.PoserTag, out var keyPointTags) && keyPointTags.Contains(keyPointTag),
+			TTag typedTag => Tags.Contains(typedTag),
+			TKeyPointTag keyPointTag => KeyPointTags.Contains(keyPointTag),
 			_ => false
 		};
 	}
@@ -37,14 +38,13 @@ public sealed class PoserWeights<TTag, TKeyPointTag> : PoserWeights
 		ModelSize size,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		IEnumerable<(TTag, IEnumerable<TKeyPointTag>)> tags,
+		IEnumerable<TTag> tags,
+		IEnumerable<TKeyPointTag> keyPointTags,
 		WeightsLibrary<TTag, TKeyPointTag> library)
 		: base(creationDate, size, metrics, resolution)
 	{
-		var builder = ImmutableDictionary.CreateBuilder<TTag, ImmutableHashSet<TKeyPointTag>>();
-		foreach (var (tag, keyPointTags) in tags)
-			builder.Add(tag, ImmutableHashSet.CreateRange(keyPointTags));
-		Tags = builder.ToImmutable();
+		Tags = tags.ToImmutableList();
+		KeyPointTags = keyPointTags.ToImmutableList();
 		Library = library;
 		ValidateTags();
 	}
@@ -52,11 +52,12 @@ public sealed class PoserWeights<TTag, TKeyPointTag> : PoserWeights
 	private void ValidateTags()
 	{
 		Guard.IsGreaterThanOrEqualTo(Tags.Count, 1);
-		foreach (var (tag, keyPointTags) in Tags)
-		{
+		foreach (var tag in Tags)
 			Guard.IsReferenceEqualTo(tag.DataSet, DataSet);
-			foreach (var keyPointTag in keyPointTags)
-				Guard.IsReferenceEqualTo(keyPointTag.PoserTag, tag);
+		foreach (var keyPointTag in KeyPointTags)
+		{
+			Guard.IsReferenceEqualTo(keyPointTag.DataSet, DataSet);
+			Guard.IsTrue(Tags.Contains(keyPointTag.PoserTag));
 		}
 	}
 }

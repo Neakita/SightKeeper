@@ -1,9 +1,12 @@
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
-using SightKeeper.Data.Binary.Model.DataSets.Weights;
+using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Data.Binary.Model.DataSets;
 
-internal abstract class PackablePoserDataSet<TTag, TAsset> : PackableDataSet<TTag, TAsset, PackablePoserWeights>
+/// <summary>
+/// MemoryPackable version of <see cref="DataSet{TTag,TKeyPointTag,TAsset}"/>
+/// </summary>
+internal abstract class PackablePoserDataSet<TTag, TAsset> : PackableDataSet<TTag, TAsset>
 	where TTag : PackableTag
 	where TAsset : PackableAsset;
