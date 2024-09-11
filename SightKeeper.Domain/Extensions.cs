@@ -38,4 +38,11 @@ internal static class Extensions
 		if (itemsBuilder.Count != 0)
 			yield return (itemsBuilder.ToImmutable(), currentRangeStart, previousIndex);
 	}
+
+	public static bool HasDuplicates<T>(this IEnumerable<T> source, IEqualityComparer<T>? comparer = null)
+	{
+		source.TryGetNonEnumeratedCount(out var count);
+		HashSet<T> set = new(count, comparer);
+		return !source.All(set.Add);
+	}
 }

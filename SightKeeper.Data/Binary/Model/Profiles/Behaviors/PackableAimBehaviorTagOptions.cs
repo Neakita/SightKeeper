@@ -9,11 +9,13 @@ namespace SightKeeper.Data.Binary.Model.Profiles.Behaviors;
 [MemoryPackable]
 public sealed partial class PackableAimBehaviorTagOptions
 {
+	public byte TagId { get; }
 	public byte Priority { get; }
 	public float VerticalOffset { get; }
 
-	public PackableAimBehaviorTagOptions(byte priority, float verticalOffset)
+	public PackableAimBehaviorTagOptions(byte tagId, byte priority, float verticalOffset)
 	{
+		TagId = tagId;
 		Priority = priority;
 		VerticalOffset = verticalOffset;
 	}

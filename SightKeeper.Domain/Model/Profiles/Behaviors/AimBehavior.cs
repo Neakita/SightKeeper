@@ -12,15 +12,31 @@ public sealed class AimBehavior : Behavior, BehaviorFactory<AimBehavior>
 		return new AimBehavior(module);
 	}
 
-	public record TagOptions(byte Priority, float VerticalOffset);
+	public sealed record TagOptions(Tag Tag, byte Priority, float VerticalOffset);
+	private sealed class TagOptionsComparer : IEqualityComparer<TagOptions>
+	{
+		public bool Equals(TagOptions? x, TagOptions? y)
+		{
+			if (ReferenceEquals(x, y)) return true;
+			if (x is null) return false;
+			if (y is null) return false;
+			return x.Tag.Equals(y.Tag);
+		}
 
-	public ImmutableDictionary<Tag, TagOptions> Tags
+		public int GetHashCode(TagOptions obj)
+		{
+			return obj.Tag.GetHashCode();
+		}
+	}
+
+	public ImmutableArray<TagOptions> Tags
 	{
 		get => _tags;
 		set
 		{
-			foreach (var tag in value.Keys)
-				Guard.IsTrue(Module.Weights.Contains(tag));
+			foreach (var options in value)
+				Guard.IsTrue(Module.Weights.Contains(options.Tag));
+			Guard.IsFalse(value.HasDuplicates(new TagOptionsComparer()));
 			_tags = value;
 		}
 	}
@@ -31,8 +47,8 @@ public sealed class AimBehavior : Behavior, BehaviorFactory<AimBehavior>
 
 	internal override void RemoveInappropriateTags()
 	{
-		Tags = Tags.Where(pair => Module.Weights.Contains(pair.Key)).ToImmutableDictionary();
+		Tags = Tags.RemoveAll(options => !Module.Weights.Contains(options.Tag));
 	}
 
-	private ImmutableDictionary<Tag, TagOptions> _tags = ImmutableDictionary<Tag, TagOptions>.Empty;
+	private ImmutableArray<TagOptions> _tags = ImmutableArray<TagOptions>.Empty;
 }

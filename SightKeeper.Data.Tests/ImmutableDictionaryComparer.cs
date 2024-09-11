@@ -18,9 +18,11 @@ internal sealed class ImmutableDictionaryComparer<TKey, TValue> : IEqualityCompa
 		if (ReferenceEquals(x, y)) return true;
 		if (x is null) return false;
 		if (y is null) return false;
+		var sequenceEqual = x.Keys.SequenceEqual(y.Keys, _keyComparer);
+		var equal = x.Values.SequenceEqual(y.Values, _valueComparer);
 		return x.Count == y.Count &&
-		       x.Keys.ScrambledEquals(y.Keys, _keyComparer) &&
-		       x.Values.ScrambledEquals(y.Values, _valueComparer);
+		       sequenceEqual &&
+		       equal;
 	}
 
 	public int GetHashCode(ImmutableDictionary<TKey, TValue> dictionary)

@@ -70,14 +70,11 @@ internal abstract class ObjectiveModuleConverter : ModuleConverter
 	private static PackableAimBehavior ConvertAimBehavior(AimBehavior behavior, ConversionSession session)
 	{
 		return new PackableAimBehavior(ConvertTags(behavior.Tags));
-		ImmutableDictionary<byte, PackableAimBehaviorTagOptions> ConvertTags(
-			ImmutableDictionary<Tag, AimBehavior.TagOptions> tags) =>
-			tags.ToImmutableDictionary(
-				pair => session.TagsIds[pair.Key],
-				pair => ConvertOptions(pair.Value));
-
-		static PackableAimBehaviorTagOptions ConvertOptions(AimBehavior.TagOptions options) =>
-			new(options.Priority, options.VerticalOffset);
+		ImmutableArray<PackableAimBehaviorTagOptions> ConvertTags(
+			IEnumerable<AimBehavior.TagOptions> tagsOptions) =>
+			tagsOptions.Select(ConvertOptions).ToImmutableArray();
+		PackableAimBehaviorTagOptions ConvertOptions(AimBehavior.TagOptions options) =>
+			new(session.TagsIds[options.Tag], options.Priority, options.VerticalOffset);
 	}
 
 	private static PackableAimAssistBehavior ConvertAimAssistBehavior(AimAssistBehavior behavior, ConversionSession session)

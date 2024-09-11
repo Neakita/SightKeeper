@@ -194,9 +194,8 @@ public sealed class BinarySerializationTests
 		var detectorModule = profile.CreateModule(detectorWeights);
 		detectorModule.SetBehavior<AimBehavior>().Tags = detectorWeights
 			.Tags
-			.ToImmutableDictionary(
-				Tag (tag) => tag,
-				_ => new AimBehavior.TagOptions(0, -0.1f));
+			.Select(tag => new AimBehavior.TagOptions(tag, 0, -0.1f))
+			.ToImmutableArray();
 		var poser2DModule = profile.CreateModule(poser2DWeights);
 		var poser2DAimAssistBehavior = poser2DModule.SetBehavior<AimAssistBehavior>();
 		poser2DAimAssistBehavior.Tags = poser2DWeights

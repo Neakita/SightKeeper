@@ -70,13 +70,13 @@ internal abstract class ObjectiveModuleReplicator : ModuleReplicator
 	{
 		Guard.IsNotNull(session.Tags);
 		var behavior = module.SetBehavior<AimBehavior>();
-		behavior.Tags = packedAimBehavior.Tags.ToImmutableDictionary(
-			pair => session.Tags[(module.Weights.DataSet, pair.Key)],
-			pair => ReplicateTagOptions(pair.Value));
+		behavior.Tags = packedAimBehavior.TagsOptions
+			.Select(ReplicateTagOptions)
+			.ToImmutableArray();
 		return behavior;
-		static AimBehavior.TagOptions ReplicateTagOptions(PackableAimBehaviorTagOptions options)
+		AimBehavior.TagOptions ReplicateTagOptions(PackableAimBehaviorTagOptions options)
 		{
-			return new AimBehavior.TagOptions(options.Priority, options.VerticalOffset);
+			return new AimBehavior.TagOptions(session.Tags[(module.Weights.DataSet, options.TagId)], options.Priority, options.VerticalOffset);
 		}
 	}
 
