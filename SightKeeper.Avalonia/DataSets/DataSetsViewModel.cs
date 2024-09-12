@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Material.Icons;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
@@ -9,11 +11,12 @@ using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets;
 
-internal partial class DataSetsViewModel : ViewModel
+internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 {
 	public IReadOnlyCollection<DataSetViewModel> DataSets { get; }
 
@@ -21,24 +24,27 @@ internal partial class DataSetsViewModel : ViewModel
 		DataSetsListViewModel dataSetsListViewModel,
 		DialogManager dialogManager,
 		GamesDataAccess gamesDataAccess,
-		ReadDataAccess<DataSet> dataSetsDataAccess,
+		ReadDataAccess<DataSet> readDataSetsDataAccess,
 		DataSetCreator dataSetCreator,
-		DataSetEditor dataSetEditor)
+		DataSetEditor dataSetEditor,
+		WriteDataAccess<DataSet> writeDataSetsDataAccess)
 	{
 		_dialogManager = dialogManager;
 		_gamesDataAccess = gamesDataAccess;
-		_dataSetsDataAccess = dataSetsDataAccess;
+		_readDataSetsDataAccess = readDataSetsDataAccess;
 		_dataSetCreator = dataSetCreator;
 		_dataSetEditor = dataSetEditor;
+		_writeDataSetsDataAccess = writeDataSetsDataAccess;
 		DataSets = dataSetsListViewModel.DataSets;
-		_newDataSetDataValidator = new NewDataSetDataValidator(new DataSetDataValidator(), dataSetsDataAccess);
+		_newDataSetDataValidator = new NewDataSetDataValidator(new DataSetDataValidator(), readDataSetsDataAccess);
 	}
 
 	private readonly DialogManager _dialogManager;
 	private readonly GamesDataAccess _gamesDataAccess;
-	private readonly ReadDataAccess<DataSet> _dataSetsDataAccess;
+	private readonly ReadDataAccess<DataSet> _readDataSetsDataAccess;
 	private readonly DataSetCreator _dataSetCreator;
 	private readonly DataSetEditor _dataSetEditor;
+	private readonly WriteDataAccess<DataSet> _writeDataSetsDataAccess;
 	private readonly NewDataSetDataValidator _newDataSetDataValidator;
 
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
@@ -57,8 +63,25 @@ internal partial class DataSetsViewModel : ViewModel
 	[RelayCommand]
 	private async Task EditDataSetAsync(DataSet dataSet)
 	{
-		using EditDataSetViewModel dialog = new(dataSet, new DataSetEditorViewModel(_gamesDataAccess, new ExistingDataSetDataValidator(dataSet, new DataSetDataValidator(), _dataSetsDataAccess), dataSet));
+		using EditDataSetViewModel dialog = new(dataSet, new DataSetEditorViewModel(_gamesDataAccess, new ExistingDataSetDataValidator(dataSet, new DataSetDataValidator(), _readDataSetsDataAccess), dataSet));
 		if (await _dialogManager.ShowDialogAsync(dialog))
 			_dataSetEditor.Edit(dataSet, dialog.DataSetEditor, dialog.TagsEditor.Tags);
 	}
+
+	[RelayCommand]
+	private async Task DeleteDataSetAsync(DataSet dataSet)
+	{
+		MessageBoxButtonDefinition deletionButton = new("Delete", MaterialIconKind.Delete);
+		MessageBoxDialogViewModel dialog = new(
+			"Data set deletion confirmation",
+			$"Are you sure you want to permanently delete the dataset \"{dataSet.Name}\"?",
+			deletionButton,
+			new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel));
+		if (await _dialogManager.ShowDialogAsync(dialog) == deletionButton)
+			_writeDataSetsDataAccess.Remove(dataSet);
+	}
+
+	ICommand IDataSetsViewModel.CreateDataSetCommand => CreateDataSetCommand;
+	ICommand IDataSetsViewModel.EditDataSetCommand => EditDataSetCommand;
+	ICommand IDataSetsViewModel.DeleteDataSetCommand => DeleteDataSetCommand;
 }

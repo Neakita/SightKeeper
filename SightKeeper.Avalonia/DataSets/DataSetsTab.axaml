@@ -6,14 +6,21 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.DataSets.DataSetsTab"
-             x:DataType="local:DataSetsViewModel">
-	<UserControl.Resources>
+             x:DataType="local:IDataSetsViewModel">
+    <Design.DataContext>
+        <local:DesignDataSetsViewModel/>
+    </Design.DataContext>
+    <UserControl.Resources>
 		<local:TreeDataGridDataSetsConverter x:Key="DataSetsConverter"/>
         <DataTemplate x:Key="DataSetActions" DataType="local:DataSetViewModel">
             <StackPanel Orientation="Horizontal" Classes="regular-spacing">
                 <Button Classes="square"
-                        Content="{icons:MaterialIconExt Pen}"
-                        Command="{Binding $parent[TreeDataGrid].((local:DataSetsViewModel)DataContext).EditDataSetCommand}"
+                        Content="{icons:MaterialIconExt Edit}"
+                        Command="{Binding $parent[TreeDataGrid].((local:IDataSetsViewModel)DataContext).EditDataSetCommand}"
+                        CommandParameter="{Binding DataSet}"/>
+                <Button Classes="square"
+                        Content="{icons:MaterialIconExt Delete}"
+                        Command="{Binding $parent[TreeDataGrid].((local:IDataSetsViewModel)DataContext).DeleteDataSetCommand}"
                         CommandParameter="{Binding DataSet}"/>
             </StackPanel>
         </DataTemplate>
