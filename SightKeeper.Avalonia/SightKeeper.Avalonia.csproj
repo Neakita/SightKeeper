@@ -8,6 +8,10 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <AssemblyTitle>Sight Keeper</AssemblyTitle>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    </PropertyGroup>
+
+    <!--Previewer doesn't support AOT https://github.com/AvaloniaUI/Avalonia/issues/13760#issuecomment-1829411762-->
+    <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
         <PublishAot>true</PublishAot>
     </PropertyGroup>
 
