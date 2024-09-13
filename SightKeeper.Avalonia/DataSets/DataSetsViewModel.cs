@@ -74,7 +74,7 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 		MessageBoxButtonDefinition deletionButton = new("Delete", MaterialIconKind.Delete);
 		MessageBoxDialogViewModel dialog = new(
 			"Data set deletion confirmation",
-			$"Are you sure you want to permanently delete the data set \"{dataSet.Name}\"?",
+			$"Are you sure you want to permanently delete the data set '{dataSet.Name}'? You will not be able to recover it.",
 			deletionButton,
 			new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel));
 		if (await _dialogManager.ShowDialogAsync(dialog) == deletionButton)
