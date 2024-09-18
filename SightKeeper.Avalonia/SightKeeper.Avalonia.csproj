@@ -41,6 +41,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls.PropertyGrid\Sightful.Avalonia.Controls.PropertyGrid.csproj" OutputItemType="Analyzer" />
+      <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls\Sightful.Avalonia.Controls.csproj" />
       <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj" />
       <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid\Sightful.Avalonia.TreeDataGrid.csproj" />
       <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj" />

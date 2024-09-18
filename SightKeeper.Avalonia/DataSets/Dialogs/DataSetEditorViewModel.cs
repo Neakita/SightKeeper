@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FluentValidation;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.Games;
+using SightKeeper.Avalonia.DataSets.Compositions;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
@@ -21,6 +22,13 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, I
 	}
 
 	public IReadOnlyCollection<Game> Games { get; }
+
+	public IReadOnlyCollection<CompositionViewModel> Compositions { get; } =
+	[
+		new FixedTransparentCompositionViewModel(),
+		new FloatingTransparentCompositionViewModel()
+	];
+
 	public bool HasErrors => _validator.HasErrors;
 
 	public DataSetEditorViewModel(GamesDataAccess gamesDataAccess, IValidator<DataSetData> validator)
@@ -35,7 +43,7 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, I
 		_name = dataSet.Name;
 		_description = dataSet.Description;
 		_game = dataSet.Game;
-		_composition = dataSet.Composition;
+		_composition = CompositionViewModel.Create(dataSet.Composition);
 		_validator = new ViewModelValidator<DataSetData>(validator, this, this);
 	}
 
@@ -54,5 +62,7 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, I
 	[ObservableProperty] private string _name = string.Empty;
 	[ObservableProperty] private string _description = string.Empty;
 	[ObservableProperty] private Game? _game;
-	[ObservableProperty] private Composition? _composition;
+	[ObservableProperty] private CompositionViewModel? _composition;
+
+	Composition? DataSetData.Composition => Composition?.ToComposition();
 }

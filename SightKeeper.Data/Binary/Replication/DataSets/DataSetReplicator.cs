@@ -75,7 +75,7 @@ internal abstract class DataSetReplicator<TDataSet>
 		{
 			null => null,
 			PackableTransparentComposition transparentComposition =>
-				new TransparentComposition(
+				new FixedTransparentComposition(
 					transparentComposition.MaximumScreenshotsDelay,
 					transparentComposition.Opacities),
 			_ => throw new ArgumentOutOfRangeException(nameof(composition))

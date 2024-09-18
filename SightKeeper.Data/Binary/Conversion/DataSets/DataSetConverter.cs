@@ -53,7 +53,7 @@ internal abstract class DataSetConverter<TPackableDataSet>
 		return composition switch
 		{
 			null => null,
-			TransparentComposition transparentComposition => new PackableTransparentComposition(
+			FixedTransparentComposition transparentComposition => new PackableTransparentComposition(
 				transparentComposition.MaximumScreenshotsDelay,
 				transparentComposition.Opacities),
 			_ => throw new ArgumentOutOfRangeException()

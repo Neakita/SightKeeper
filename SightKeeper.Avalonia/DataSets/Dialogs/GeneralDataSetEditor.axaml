@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
+             xmlns:compositions="clr-namespace:SightKeeper.Avalonia.DataSets.Compositions"
+             xmlns:controls="clr-namespace:Sightful.Avalonia.Controls;assembly=Sightful.Avalonia.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.GeneralDataSetEditor"
              x:DataType="local:DataSetEditorViewModel">
@@ -17,5 +19,52 @@
 			<ComboBox SelectedItem="{Binding Game}"
 			          ItemsSource="{Binding Games}"/>
 		</HeaderedContentControl>
+        <HeaderedContentControl Header="Composition">
+            <StackPanel Classes="regular-spacing">
+                <ComboBox SelectedItem="{Binding Composition}"
+                          ItemsSource="{Binding Compositions}"
+                          DisplayMemberBinding="{Binding DisplayName}"/>
+                <Slider
+                    Value="{Binding Composition.MaximumScreenshotsDelayInMilliseconds}"
+                    Minimum="10"
+                    Maximum="200"
+                    TickFrequency="10"
+                    IsVisible="{Binding Composition, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                <ContentControl Content="{Binding Composition}">
+                    <ContentControl.DataTemplates>
+                        <DataTemplate DataType="compositions:FixedTransparentCompositionViewModel">
+                            <StackPanel Classes="regular-spacing">
+                                <Slider
+                                    Value="{Binding ScreenshotsCount}"
+                                    Minimum="2"
+                                    Maximum="8"
+                                    TickFrequency="1"
+                                    IsSnapToTickEnabled="True"/>
+                                <controls:MultiSlider
+                                    Values="{Binding Opacities}"
+                                    Increment="0.05"
+                                    MinimumValue="0.05"/>
+                            </StackPanel>
+                        </DataTemplate>
+                        <DataTemplate DataType="compositions:FloatingTransparentCompositionViewModel">
+                            <StackPanel Classes="regular-spacing">
+                                <Slider
+                                    Value="{Binding SeriesDurationInMilliseconds}"
+                                    Minimum="100"
+                                    Maximum="1000"
+                                    TickFrequency="50"
+                                    IsSnapToTickEnabled="True"/>
+                                <Slider
+                                    Value="{Binding MinimumOpacity}"
+                                    Minimum="0"
+                                    Maximum="90"
+                                    TickFrequency="5"
+                                    IsSnapToTickEnabled="True"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
+            </StackPanel>
+        </HeaderedContentControl>
 	</StackPanel>
 </UserControl>
