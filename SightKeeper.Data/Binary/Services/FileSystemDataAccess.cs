@@ -17,6 +17,12 @@ internal sealed class FileSystemDataAccess<T> where T : notnull
 		return _ids[item];
 	}
 
+	public FileStream OpenStream(T item)
+	{
+		var filePath = GetFilePath(item);
+		return File.OpenRead(filePath);
+	}
+
 	public byte[] ReadAllBytes(T item)
 	{
 		var filePath = GetFilePath(item);

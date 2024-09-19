@@ -9,6 +9,7 @@ using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using GamesDataAccess = SightKeeper.Application.Games.GamesDataAccess;
 
 namespace SightKeeper.Avalonia.Setup;
@@ -36,7 +37,7 @@ internal static class ServicesBootstrapper
 		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess));
 		AppDataAccess appDataAccess = new();
 		appDataAccess.Load();
-		builder.RegisterInstance(screenshotsDataAccess);
+		builder.RegisterInstance(screenshotsDataAccess).AsSelf().As<ScreenshotsDataAccess>().As<ObservableDataAccess<Screenshot>>();
 		builder.RegisterInstance(weightsDataAccess).As<WeightsDataAccess>();
 		builder.RegisterInstance(appDataAccess).AsSelf().As<ApplicationSettingsProvider>().OnRelease(dataAccess => dataAccess.Save());
 	}

@@ -12,9 +12,9 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		set => _dataAccess.DirectoryPath = value;
 	}
 
-	public override byte[] LoadImage(Screenshot screenshot)
+	public override FileStream LoadImage(Screenshot screenshot)
 	{
-		return _dataAccess.ReadAllBytes(screenshot);
+		return _dataAccess.OpenStream(screenshot);
 	}
 
 	public Id GetId(Screenshot screenshot)

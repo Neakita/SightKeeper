@@ -12,7 +12,11 @@ public abstract class ScreenshotsLibrary
 	/// </summary>
 	public ushort? MaxQuantity { get; set; }
 	public abstract DataSet DataSet { get; }
-	public abstract IReadOnlyCollection<Screenshot> Screenshots { get; }
+
+	/// <remarks>
+	/// Sorted by date: first is the earliest, last is the latest
+	/// </remarks>
+	public abstract IReadOnlyList<Screenshot> Screenshots { get; }
 
 	public abstract Screenshot CreateScreenshot(DateTime creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots);
 }
@@ -20,7 +24,7 @@ public abstract class ScreenshotsLibrary
 public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary where TAsset : Asset
 {
     public override DataSet DataSet { get; }
-    public override IReadOnlyCollection<Screenshot<TAsset>> Screenshots => _screenshots;
+    public override IReadOnlyList<Screenshot<TAsset>> Screenshots => _screenshots;
 
     public ScreenshotsLibrary(DataSet dataSet)
     {

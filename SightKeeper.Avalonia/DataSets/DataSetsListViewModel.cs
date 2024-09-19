@@ -19,7 +19,7 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
             .DisposeMany()
             .AddKey(viewModel => viewModel.DataSet)
             .Bind(out var dataSets)
-            .PopulateInto(_cache)
+            .Subscribe()
             .DisposeWith(_disposable);
         DataSets = dataSets;
     }
@@ -27,9 +27,7 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
     public void Dispose()
     {
 	    _disposable.Dispose();
-	    _cache.Dispose();
     }
 
     private readonly CompositeDisposable _disposable = new();
-    private readonly SourceCache<DataSetViewModel, DataSet> _cache = new(viewModel => viewModel.DataSet);
 }
