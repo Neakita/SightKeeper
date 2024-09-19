@@ -30,6 +30,7 @@ internal sealed class DetectorDataSetReplicator : DataSetReplicator<DetectorData
 	{
 		var typedLibrary = (WeightsLibrary<DetectorTag>)library;
 		var tags = weights.TagIds.Select(id => Session.Tags[(library.DataSet, id)]).Cast<DetectorTag>();
-		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
+		var composition = ReplicateComposition(weights.Composition);
+		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags, composition);
 	}
 }

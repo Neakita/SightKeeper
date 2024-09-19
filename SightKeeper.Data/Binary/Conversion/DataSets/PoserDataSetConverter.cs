@@ -67,7 +67,8 @@ internal abstract class PoserDataSetConverter<TTag, TAsset, TDataSet> : DataSetC
 			item.ModelSize,
 			item.Metrics,
 			item.Resolution,
-			ConvertWeightsTags(item.Tags, item.KeyPointTags));
+			ConvertWeightsTags(item.Tags, item.KeyPointTags),
+			ConvertComposition(item.Composition));
 	}
 
 	private ImmutableArray<byte> ConvertWeightsTags(

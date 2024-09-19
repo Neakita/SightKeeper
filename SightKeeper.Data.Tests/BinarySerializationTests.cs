@@ -82,7 +82,8 @@ public sealed class BinarySerializationTests
 			ModelSize.Nano,
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
-			dataSet.TagsLibrary.Tags);
+			dataSet.TagsLibrary.Tags,
+			null);
 		return dataSet;
 	}
 
@@ -109,7 +110,8 @@ public sealed class BinarySerializationTests
 			ModelSize.Nano,
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
-			dataSet.TagsLibrary.Tags);
+			dataSet.TagsLibrary.Tags,
+			null);
 		return dataSet;
 	}
 
@@ -141,7 +143,8 @@ public sealed class BinarySerializationTests
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
 			dataSet.TagsLibrary.Tags,
-			dataSet.TagsLibrary.Tags.SelectMany(tag => tag.KeyPoints));
+			dataSet.TagsLibrary.Tags.SelectMany(tag => tag.KeyPoints),
+			null);
 		return dataSet;
 	}
 
@@ -175,7 +178,8 @@ public sealed class BinarySerializationTests
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
 			dataSet.TagsLibrary.Tags,
-			dataSet.TagsLibrary.Tags.SelectMany(tag => tag.KeyPoints));
+			dataSet.TagsLibrary.Tags.SelectMany(tag => tag.KeyPoints),
+			null);
 		return dataSet;
 	}
 

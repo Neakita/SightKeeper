@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using MemoryPack;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Data.Binary.Model.DataSets.Compositions;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.DataSets;
@@ -21,7 +20,6 @@ internal abstract partial class PackableDataSet
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
 	public ushort? GameId { get; set; }
-	public PackableComposition? Composition { get; set; }
 	public ushort? MaxScreenshotsWithoutAsset { get; set; }
 	public ImmutableArray<PackableScreenshot> Screenshots { get; set; }
 	public ImmutableArray<PackableWeights> Weights { get; set; }

@@ -1,5 +1,6 @@
 ﻿using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
@@ -14,9 +15,10 @@ public abstract class WeightsDataAccess
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		IEnumerable<TTag> tags) where TTag : Tag, MinimumTagsCount
+		IEnumerable<TTag> tags,
+		Composition? composition) where TTag : Tag, MinimumTagsCount
 	{
-		var weights = library.CreateWeights(creationDate, modelSize, metrics, resolution, tags);
+		var weights = library.CreateWeights(creationDate, modelSize, metrics, resolution, tags, composition);
 		SaveWeightsData(weights, data);
 		return weights;
 	}
@@ -29,11 +31,12 @@ public abstract class WeightsDataAccess
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
 		IEnumerable<TTag> tags,
-		IEnumerable<TKeyPointTag> keyPointTags)
+		IEnumerable<TKeyPointTag> keyPointTags,
+		Composition? composition)
 		where TTag : PoserTag
 		where TKeyPointTag : KeyPointTag<TTag>
 	{
-		var weights = library.CreateWeights(creationDate, modelSize, metrics, resolution, tags, keyPointTags);
+		var weights = library.CreateWeights(creationDate, modelSize, metrics, resolution, tags, keyPointTags, composition);
 		SaveWeightsData(weights, data);
 		return weights;
 	}

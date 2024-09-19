@@ -13,7 +13,7 @@ public sealed class Poser2DWeightsLibraryTests
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag], []);
+		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag], [], null);
 		dataSet.WeightsLibrary.Weights.Should().Contain(weights);
 	}
 
@@ -21,7 +21,7 @@ public sealed class Poser2DWeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		Poser2DDataSet dataSet = new();
-		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [], []));
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [], [], null));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 
@@ -35,7 +35,7 @@ public sealed class Poser2DWeightsLibraryTests
 		var keyPoint2 = tag2.CreateKeyPoint("2.1");
 		var tagsBuilder = ImmutableDictionary.CreateBuilder<Poser2DTag, ImmutableHashSet<KeyPointTag2D>>();
 		tagsBuilder.Add(tag1, ImmutableHashSet.Create(keyPoint2));
-		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1], [keyPoint2]));
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1], [keyPoint2], null));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 }

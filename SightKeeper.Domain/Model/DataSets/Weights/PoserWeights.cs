@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Weights;
@@ -10,7 +11,13 @@ public abstract class PoserWeights : Weights
 	public abstract IReadOnlyCollection<PoserTag> Tags { get; }
 	public abstract IReadOnlyCollection<KeyPointTag> KeyPointTags { get; }
 
-	protected PoserWeights(DateTime creationDate, ModelSize size, WeightsMetrics metrics, Vector2<ushort> resolution) : base(creationDate, size, metrics, resolution)
+	protected PoserWeights(
+		DateTime creationDate,
+		ModelSize size,
+		WeightsMetrics metrics,
+		Vector2<ushort> resolution,
+		Composition? composition)
+		: base(creationDate, size, metrics, resolution, composition)
 	{
 	}
 }
@@ -40,8 +47,9 @@ public sealed class PoserWeights<TTag, TKeyPointTag> : PoserWeights
 		Vector2<ushort> resolution,
 		IEnumerable<TTag> tags,
 		IEnumerable<TKeyPointTag> keyPointTags,
-		WeightsLibrary<TTag, TKeyPointTag> library)
-		: base(creationDate, size, metrics, resolution)
+		WeightsLibrary<TTag, TKeyPointTag> library,
+		Composition? composition)
+		: base(creationDate, size, metrics, resolution, composition)
 	{
 		Tags = tags.ToImmutableList();
 		KeyPointTags = keyPointTags.ToImmutableList();

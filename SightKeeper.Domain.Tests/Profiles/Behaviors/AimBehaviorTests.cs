@@ -15,7 +15,7 @@ public sealed class AimBehaviorTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
+		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag], null);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		var tagsBuilder = ImmutableArray.CreateBuilder<AimBehavior.TagOptions>();
@@ -30,10 +30,10 @@ public sealed class AimBehaviorTests
 	{
 		DetectorDataSet dataSet1 = new();
 		var tag1 = dataSet1.TagsLibrary.CreateTag("");
-		var weights1 = dataSet1.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1]);
+		var weights1 = dataSet1.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1], null);
 		DetectorDataSet dataSet2 = new();
 		var tag2 = dataSet2.TagsLibrary.CreateTag("");
-		dataSet2.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag2]);
+		dataSet2.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag2], null);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
 		var tagsBuilder = ImmutableArray.CreateBuilder<AimBehavior.TagOptions>();

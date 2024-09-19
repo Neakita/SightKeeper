@@ -22,13 +22,11 @@ internal abstract class DataSetReplicator<TDataSet>
 	{
 		Guard.IsNotNull(Session.Games);
 		var game = packable.GameId == null ? null : Session.Games[packable.GameId.Value];
-		var composition = ReplicateComposition(packable.Composition);
 		var dataSet = new TDataSet
 		{
 			Name = packable.Name,
 			Description = packable.Description,
-			Game = game,
-			Composition = composition
+			Game = game
 		};
 		var screenshotsLookup = ReplicateScreenshots(dataSet.ScreenshotsLibrary, packable.Screenshots);
 		ReplicateTags(dataSet.TagsLibrary, packable.GetTags());
@@ -38,10 +36,12 @@ internal abstract class DataSetReplicator<TDataSet>
 			screenshotId => screenshotsLookup[screenshotId]);
 		if (packable.MaxScreenshotsWithoutAsset != null)
 		{
-			var screenshotsWithoutAssets = dataSet.ScreenshotsLibrary.Screenshots.Count - dataSet.AssetsLibrary.Assets.Count;
+			var screenshotsWithoutAssets =
+				dataSet.ScreenshotsLibrary.Screenshots.Count - dataSet.AssetsLibrary.Assets.Count;
 			Guard.IsLessThanOrEqualTo(screenshotsWithoutAssets, packable.MaxScreenshotsWithoutAsset.Value);
 			dataSet.ScreenshotsLibrary.MaxQuantity = packable.MaxScreenshotsWithoutAsset;
 		}
+
 		ReplicateWeights(dataSet.WeightsLibrary, packable.GetWeights());
 		return dataSet;
 	}
@@ -53,6 +53,22 @@ internal abstract class DataSetReplicator<TDataSet>
 		Session = session;
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
+
+	protected static Composition? ReplicateComposition(PackableComposition? composition) => composition switch
+	{
+		null => null,
+		PackableFixedTransparentComposition fixedTransparent =>
+			new FixedTransparentComposition(
+				fixedTransparent.MaximumScreenshotsDelay,
+				fixedTransparent.Opacities),
+		PackableFloatingTransparentComposition floatingTransparent =>
+			new FloatingTransparentComposition(
+				floatingTransparent.MaximumScreenshotsDelay,
+				floatingTransparent.SeriesDuration,
+				floatingTransparent.PrimaryOpacity,
+				floatingTransparent.MinimumOpacity),
+		_ => throw new ArgumentOutOfRangeException(nameof(composition))
+	};
 
 	protected virtual Tag ReplicateTag(
 		TagsLibrary library,
@@ -69,29 +85,19 @@ internal abstract class DataSetReplicator<TDataSet>
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
-	private static Composition? ReplicateComposition(PackableComposition? composition)
-	{
-		return composition switch
-		{
-			null => null,
-			PackableFixedTransparentComposition transparentComposition =>
-				new FixedTransparentComposition(
-					transparentComposition.MaximumScreenshotsDelay,
-					transparentComposition.Opacities),
-			_ => throw new ArgumentOutOfRangeException(nameof(composition))
-		};
-	}
-
-	private ImmutableDictionary<Id, Screenshot> ReplicateScreenshots(ScreenshotsLibrary library, ImmutableArray<PackableScreenshot> screenshots)
+	private ImmutableDictionary<Id, Screenshot> ReplicateScreenshots(ScreenshotsLibrary library,
+		ImmutableArray<PackableScreenshot> screenshots)
 	{
 		var builder = ImmutableDictionary.CreateBuilder<Id, Screenshot>();
 		foreach (var packedScreenshot in screenshots)
 		{
-			var screenshot = library.CreateScreenshot(packedScreenshot.CreationDate, packedScreenshot.Resolution, out var removedScreenshots);
+			var screenshot = library.CreateScreenshot(packedScreenshot.CreationDate, packedScreenshot.Resolution,
+				out var removedScreenshots);
 			Guard.IsTrue(removedScreenshots.IsEmpty);
 			_screenshotsDataAccess.AssociateId(screenshot, packedScreenshot.Id);
 			builder.Add(packedScreenshot.Id, screenshot);
 		}
+
 		return builder.ToImmutable();
 	}
 
@@ -101,7 +107,8 @@ internal abstract class DataSetReplicator<TDataSet>
 			ReplicateTag(library, packedTag);
 	}
 
-	private void ReplicateAssets(AssetsLibrary library, ImmutableArray<PackableAsset> assets, Func<Id, Screenshot> getScreenshot)
+	private void ReplicateAssets(AssetsLibrary library, ImmutableArray<PackableAsset> assets,
+		Func<Id, Screenshot> getScreenshot)
 	{
 		foreach (var asset in assets)
 			ReplicateAsset(library, asset, getScreenshot(asset.ScreenshotId));

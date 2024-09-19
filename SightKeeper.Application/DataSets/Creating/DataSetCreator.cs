@@ -37,7 +37,6 @@ public sealed class DataSetCreator
 	{
 		dataSet.Name = data.Name;
 		dataSet.Description = data.Description;
-		dataSet.Composition = data.Composition;
 		dataSet.Game = data.Game;
 	}
 

@@ -46,5 +46,5 @@ internal abstract class PlainDataSetConverter<TAsset, TDataSet> : DataSetConvert
 	}
 
 	private static PackableWeights ConvertWeights(ushort id, Weights item, ImmutableArray<byte> tagIds) =>
-		new(id, item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, tagIds);
+		new(id, item.CreationDate, item.ModelSize, item.Metrics, item.Resolution, tagIds, ConvertComposition(item.Composition));
 }

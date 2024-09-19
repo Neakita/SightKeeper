@@ -26,6 +26,7 @@ internal sealed class ClassifierDataSetReplicator : DataSetReplicator<Classifier
 	{
 		var typedLibrary = (WeightsLibrary<ClassifierTag>)library;
 		var tags = weights.TagIds.Select(id => Session.Tags[(library.DataSet, id)]).Cast<ClassifierTag>();
-		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags);
+		var composition = ReplicateComposition(weights.Composition);
+		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags, composition);
 	}
 }

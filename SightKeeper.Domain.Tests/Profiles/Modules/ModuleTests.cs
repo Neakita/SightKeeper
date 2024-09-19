@@ -15,7 +15,7 @@ public sealed class ModuleTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag]);
+		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag], null);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
 		module.PassiveScalingOptions = new IterativeScalingOptions();

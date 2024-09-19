@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using MemoryPack;
+using SightKeeper.Data.Binary.Model.DataSets.Compositions;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
@@ -17,6 +18,7 @@ internal sealed partial class PackableWeights
 	public WeightsMetrics Metrics { get; }
 	public Vector2<ushort> Resolution { get; }
 	public ImmutableArray<byte> TagIds { get; }
+	public PackableComposition? Composition { get; }
 
 	public PackableWeights(
 		ushort id,
@@ -24,7 +26,8 @@ internal sealed partial class PackableWeights
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		ImmutableArray<byte> tagIds)
+		ImmutableArray<byte> tagIds,
+		PackableComposition? composition)
 	{
 		Id = id;
 		CreationDate = creationDate;
@@ -32,5 +35,6 @@ internal sealed partial class PackableWeights
 		Metrics = metrics;
 		Resolution = resolution;
 		TagIds = tagIds;
+		Composition = composition;
 	}
 }

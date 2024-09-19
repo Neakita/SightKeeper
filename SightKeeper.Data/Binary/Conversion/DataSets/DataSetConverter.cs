@@ -21,14 +21,12 @@ internal abstract class DataSetConverter<TPackableDataSet>
 	{
 		Guard.IsNotNull(Session.GameIds);
 		ushort? gameId = dataSet.Game == null ? null : Session.GameIds[dataSet.Game];
-		PackableComposition? composition = ConvertComposition(dataSet.Composition);
 		ImmutableArray<PackableScreenshot> screenshots = ConvertScreenshots(dataSet.ScreenshotsLibrary);
 		return new TPackableDataSet
 		{
 			Name = dataSet.Name,
 			Description = dataSet.Description,
 			GameId = gameId,
-			Composition = composition,
 			MaxScreenshotsWithoutAsset = dataSet.ScreenshotsLibrary.MaxQuantity,
 			Screenshots = screenshots
 		};
@@ -43,12 +41,7 @@ internal abstract class DataSetConverter<TPackableDataSet>
 		Session = session;
 	}
 
-	protected static PackableTag ConvertPlainTag(byte id, Tag tag)
-	{
-		return new PackableTag(id, tag.Name, tag.Color);
-	}
-
-	private static PackableComposition? ConvertComposition(Composition? composition) => composition switch
+	protected static PackableComposition? ConvertComposition(Composition? composition) => composition switch
 	{
 		null => null,
 		FixedTransparentComposition fixedTransparent => new PackableFixedTransparentComposition(
@@ -61,6 +54,11 @@ internal abstract class DataSetConverter<TPackableDataSet>
 			floatingTransparent.MinimumOpacity),
 		_ => throw new ArgumentOutOfRangeException()
 	};
+
+	protected static PackableTag ConvertPlainTag(byte id, Tag tag)
+	{
+		return new PackableTag(id, tag.Name, tag.Color);
+	}
 
 	private ImmutableArray<PackableScreenshot> ConvertScreenshots(ScreenshotsLibrary library)
 	{

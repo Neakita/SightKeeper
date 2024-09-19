@@ -35,7 +35,8 @@ internal abstract class PoserDataSetReplicator<TTag, TKeyPointTag, TDataSet> : D
 	{
 		var typedLibrary = (WeightsLibrary<TTag, TKeyPointTag>)library;
 		GetTags(library.DataSet, weights, out var tags, out var keyPointTags);
-		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags, keyPointTags);
+		var composition = ReplicateComposition(weights.Composition);
+		return typedLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, tags, keyPointTags, composition);
 	}
 
 	private void GetTags(DataSet dataSet, PackableWeights weights, out ImmutableArray<TTag> tags, out ImmutableArray<TKeyPointTag> keyPointTags)

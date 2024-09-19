@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Weights;
@@ -25,9 +26,10 @@ public sealed class WeightsLibrary<TTag> : WeightsLibrary where TTag : Tag, Mini
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		IEnumerable<TTag> tags)
+		IEnumerable<TTag> tags,
+		Composition? composition)
 	{
-		PlainWeights<TTag> weights = new(creationDate, modelSize, metrics, resolution, tags, this);
+		PlainWeights<TTag> weights = new(creationDate, modelSize, metrics, resolution, tags, this, composition);
 		Guard.IsTrue(_weights.Add(weights));
 		return weights;
 	}
@@ -58,9 +60,10 @@ public sealed class WeightsLibrary<TTag, TKeyPointTag> : WeightsLibrary
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
 		IEnumerable<TTag> tags,
-		IEnumerable<TKeyPointTag> keyPointTags)
+		IEnumerable<TKeyPointTag> keyPointTags,
+		Composition? composition)
 	{
-		PoserWeights<TTag, TKeyPointTag> weights = new(creationDate, modelSize, metrics, resolution, tags, keyPointTags, this);
+		PoserWeights<TTag, TKeyPointTag> weights = new(creationDate, modelSize, metrics, resolution, tags, keyPointTags, this, composition);
 		Guard.IsTrue(_weights.Add(weights));
 		return weights;
 	}

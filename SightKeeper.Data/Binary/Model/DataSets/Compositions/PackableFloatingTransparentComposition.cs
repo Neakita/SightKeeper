@@ -1,3 +1,4 @@
+using MemoryPack;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Compositions;
@@ -5,7 +6,8 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Compositions;
 /// <summary>
 /// MemoryPackable version of <see cref="FloatingTransparentComposition"/>
 /// </summary>
-internal sealed class PackableFloatingTransparentComposition : PackableComposition
+[MemoryPackable]
+internal sealed partial class PackableFloatingTransparentComposition : PackableComposition
 {
 	public TimeSpan SeriesDuration { get; }
 	public float PrimaryOpacity { get; }

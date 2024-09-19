@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Weights;
@@ -12,8 +13,9 @@ public abstract class PlainWeights : Weights
 		DateTime creationDate,
 		ModelSize size,
 		WeightsMetrics metrics,
-		Vector2<ushort> resolution)
-		: base(creationDate, size, metrics, resolution)
+		Vector2<ushort> resolution,
+		Composition? composition)
+		: base(creationDate, size, metrics, resolution, composition)
 	{
 	}
 }
@@ -34,8 +36,9 @@ public sealed class PlainWeights<TTag> : PlainWeights where TTag : Tag, MinimumT
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
 		IEnumerable<TTag> tags,
-		WeightsLibrary<TTag> library)
-		: base(creationDate, size, metrics, resolution)
+		WeightsLibrary<TTag> library,
+		Composition? composition)
+		: base(creationDate, size, metrics, resolution, composition)
 	{
 		Tags = tags.ToImmutableList();
 		Guard.IsFalse(Tags.HasDuplicates());

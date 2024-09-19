@@ -29,7 +29,6 @@ public sealed class DataSetEditor : IDisposable
 	{
 		dataSet.Name = data.Name;
 		dataSet.Description = data.Description;
-		dataSet.Composition = data.Composition;
 		dataSet.Game = data.Game;
 	}
 
