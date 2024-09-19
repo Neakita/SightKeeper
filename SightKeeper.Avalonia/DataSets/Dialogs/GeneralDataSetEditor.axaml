@@ -29,6 +29,7 @@
                     Minimum="10"
                     Maximum="200"
                     TickFrequency="10"
+                    IsSnapToTickEnabled="True"
                     IsVisible="{Binding Composition, Converter={x:Static ObjectConverters.IsNotNull}}"/>
                 <ContentControl Content="{Binding Composition}">
                     <ContentControl.DataTemplates>
@@ -55,9 +56,15 @@
                                     TickFrequency="50"
                                     IsSnapToTickEnabled="True"/>
                                 <Slider
+                                    Value="{Binding PrimaryOpacity}"
+                                    Minimum="0"
+                                    Maximum="95"
+                                    TickFrequency="5"
+                                    IsSnapToTickEnabled="True"/>
+                                <Slider
                                     Value="{Binding MinimumOpacity}"
                                     Minimum="0"
-                                    Maximum="90"
+                                    Maximum="95"
                                     TickFrequency="5"
                                     IsSnapToTickEnabled="True"/>
                             </StackPanel>

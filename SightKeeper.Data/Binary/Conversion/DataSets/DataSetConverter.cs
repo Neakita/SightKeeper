@@ -48,21 +48,24 @@ internal abstract class DataSetConverter<TPackableDataSet>
 		return new PackableTag(id, tag.Name, tag.Color);
 	}
 
-	private static PackableTransparentComposition? ConvertComposition(Composition? composition)
+	private static PackableComposition? ConvertComposition(Composition? composition) => composition switch
 	{
-		return composition switch
-		{
-			null => null,
-			FixedTransparentComposition transparentComposition => new PackableTransparentComposition(
-				transparentComposition.MaximumScreenshotsDelay,
-				transparentComposition.Opacities),
-			_ => throw new ArgumentOutOfRangeException()
-		};
-	}
+		null => null,
+		FixedTransparentComposition fixedTransparent => new PackableFixedTransparentComposition(
+			fixedTransparent.MaximumScreenshotsDelay,
+			fixedTransparent.Opacities),
+		FloatingTransparentComposition floatingTransparent => new PackableFloatingTransparentComposition(
+			floatingTransparent.MaximumScreenshotsDelay,
+			floatingTransparent.SeriesDuration,
+			floatingTransparent.PrimaryOpacity,
+			floatingTransparent.MinimumOpacity),
+		_ => throw new ArgumentOutOfRangeException()
+	};
 
 	private ImmutableArray<PackableScreenshot> ConvertScreenshots(ScreenshotsLibrary library)
 	{
 		return library.Screenshots.Select(ConvertScreenshot).ToImmutableArray();
+
 		PackableScreenshot ConvertScreenshot(Screenshot screenshot) => new(
 			ScreenshotsDataAccess.GetId(screenshot),
 			screenshot.CreationDate,
@@ -86,7 +89,8 @@ internal abstract class DataSetConverter<TTag, TAsset, TDataSet> : DataSetConver
 		return packable;
 	}
 
-	protected DataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session) : base(screenshotsDataAccess, session)
+	protected DataSetConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session) : base(
+		screenshotsDataAccess, session)
 	{
 	}
 

@@ -8,11 +8,11 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Compositions;
 /// MemoryPackable version of <see cref="FixedTransparentComposition"/>
 /// </summary>
 [MemoryPackable]
-internal sealed partial class PackableTransparentComposition : PackableComposition
+internal sealed partial class PackableFixedTransparentComposition : PackableComposition
 {
 	public ImmutableArray<float> Opacities { get; }
 
-	public PackableTransparentComposition(TimeSpan maximumScreenshotsDelay, ImmutableArray<float> opacities) : base(maximumScreenshotsDelay)
+	public PackableFixedTransparentComposition(TimeSpan maximumScreenshotsDelay, ImmutableArray<float> opacities) : base(maximumScreenshotsDelay)
 	{
 		Opacities = opacities;
 	}

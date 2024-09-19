@@ -22,9 +22,10 @@ internal sealed partial class FloatingTransparentCompositionViewModel : Composit
 
 	public override FloatingTransparentComposition ToComposition()
 	{
-		return new FloatingTransparentComposition(MaximumScreenshotsDelay, SeriesDuration, MinimumOpacity);
+		return new FloatingTransparentComposition(MaximumScreenshotsDelay, SeriesDuration, PrimaryOpacity, MinimumOpacity);
 	}
 
 	[ObservableProperty] private ushort _seriesDurationInMilliseconds;
-	[ObservableProperty] private float _minimumOpacity;
+	[ObservableProperty] private float _primaryOpacity = 0.5f;
+	[ObservableProperty] private float _minimumOpacity = 0.1f;
 }

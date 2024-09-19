@@ -74,7 +74,7 @@ internal abstract class DataSetReplicator<TDataSet>
 		return composition switch
 		{
 			null => null,
-			PackableTransparentComposition transparentComposition =>
+			PackableFixedTransparentComposition transparentComposition =>
 				new FixedTransparentComposition(
 					transparentComposition.MaximumScreenshotsDelay,
 					transparentComposition.Opacities),
