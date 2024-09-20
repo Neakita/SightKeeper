@@ -11,4 +11,8 @@
       <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.Numerics.Tensors" Version="9.0.0-rc.1.24431.7" />
+    </ItemGroup>
+
 </Project>

@@ -1,3 +1,4 @@
+using System.Numerics.Tensors;
 using System.Runtime.InteropServices;
 using SightKeeper.Application.Linux.Natives;
 using SightKeeper.Domain.Model;
@@ -23,10 +24,14 @@ internal sealed class SharedImageMemorySegment<TPixel> : IDisposable
 
 	public unsafe void FetchData(int screen, Vector2<ushort> offset)
 	{
-		const int allPlanes = ~0;
-		UIntPtr allPlanes2 = new(unchecked((uint)allPlanes));
+		const ulong allPlanes = unchecked((ulong)~0);
 		var drawable = (UIntPtr)LibX.XRootWindow(_display, screen);
-		LibXExt.XShmGetImage(_display, drawable, _image.ximage, offset.X, offset.Y, allPlanes2);
+		LibXExt.XShmGetImage(_display, drawable, _image.ximage, offset.X, offset.Y, allPlanes);
+		
+		// xlib doesn't use most significant byte but fills it with zeros
+		// because of that ImageSharp treats it as fully transparent Bgra32
+		Span<uint> span = new(_image.data, Resolution.X * Resolution.Y);
+		TensorPrimitives.BitwiseOr(span, 0xFF_00_00_00, span);
 	}
 
 	public void Dispose()

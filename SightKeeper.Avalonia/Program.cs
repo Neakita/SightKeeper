@@ -1,12 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Threading;
 using Serilog;
-using SightKeeper.Application.Linux;
-using SightKeeper.Domain.Model;
-using SixLabors.ImageSharp;
 
 namespace SightKeeper.Avalonia;
 
@@ -18,26 +14,6 @@ internal static class Program
 	[STAThread]
 	public static void Main(string[] args)
 	{
-		X11ScreenCapture screenCapture = new();
-		using var initial = screenCapture.Capture(new Vector2<ushort>(640, 640), null);
-		if (File.Exists("Test.png"))
-			File.Delete("Test.png");
-		Image.Load(initial).Save("Test.png");
-		// warmup
-		for (int i = 0; i < 200; i++)
-		{
-			using var stream = screenCapture.Capture(new Vector2<ushort>(640, 640), null);
-		}
-		DateTime start = DateTime.UtcNow;
-		const int samples = 1000;
-		for (int i = 0; i < samples; i++)
-		{
-			using var stream = screenCapture.Capture(new Vector2<ushort>(640, 640), null);
-		}
-		var end = DateTime.UtcNow - start;
-		Console.WriteLine($"Elapsed {end.TotalMilliseconds / samples}ms per capture");
-		Console.ReadKey(true);
-		return;
 		SetupLogger();
 		AppBuilder? appBuilder = null;
 		try
