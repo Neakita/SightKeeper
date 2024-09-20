@@ -1,19 +1,17 @@
 using SightKeeper.Application.Linux.Natives;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Linux;
 
 // https://stackoverflow.com/questions/34176795/any-efficient-way-of-converting-ximage-data-to-pixel-map-e-g-array-of-rgb-quad
 internal static class XLibShm
 {
-	private const int IPC_PRIVATE = 0; // or long?
-	private const int BPP = 4; // Bytes per pixel?
-	private const int IPC_CREAT = 01000; // wha?
 	private const int IPC_RMID = 0;
 
 	public static unsafe void createimage(IntPtr dsp, ShmImage* image, int width, int height)
 	{
 		// Create a shared memory area 
-		image->shminfo.shmid = LibC.shmget(LibC.IPC_PRIVATE, width * height * BPP, LibC.IPC_CREAT | 0600);
+		image->shminfo.shmid = LibC.shmget(LibC.IPC_PRIVATE, width * height * sizeof(Bgra32), LibC.IPC_CREAT | 0600);
 		if (image->shminfo.shmid == -1)
 		{
 			throw new Exception();

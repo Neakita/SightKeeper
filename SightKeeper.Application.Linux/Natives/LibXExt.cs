@@ -13,12 +13,12 @@ internal static unsafe partial class LibXExt
 	[LibraryImport(DllName)]
 	public static partial int XShmGetImage(IntPtr display, UIntPtr drawable, XImage* image, int x, int y, UIntPtr plane_mask);
 
-	[DllImport(DllName, SetLastError = true)]
-	public static extern int XShmQueryExtension(IntPtr display);
+	[LibraryImport(DllName, SetLastError = true)]
+	public static partial int XShmQueryExtension(IntPtr display);
 
-	[DllImport(DllName, SetLastError = true)]
-	public static extern int XShmAttach(IntPtr display, XShmSegmentInfo* shminfo);
+	[LibraryImport(DllName, SetLastError = true)]
+	public static partial int XShmAttach(IntPtr display, XShmSegmentInfo* shminfo);
 
-	[DllImport(DllName, SetLastError = true)]
-	public static extern IntPtr XShmCreateImage(IntPtr display, IntPtr visual, uint depth, int format, IntPtr data, XShmSegmentInfo* shminfo, uint width, uint height);
+	[LibraryImport(DllName, SetLastError = true)]
+	public static partial IntPtr XShmCreateImage(IntPtr display, IntPtr visual, uint depth, int format, IntPtr data, XShmSegmentInfo* shminfo, uint width, uint height);
 }

@@ -23,6 +23,11 @@ internal static class Program
 		if (File.Exists("Test.png"))
 			File.Delete("Test.png");
 		Image.Load(initial).Save("Test.png");
+		// warmup
+		for (int i = 0; i < 200; i++)
+		{
+			using var stream = screenCapture.Capture(new Vector2<ushort>(640, 640), null);
+		}
 		DateTime start = DateTime.UtcNow;
 		const int samples = 1000;
 		for (int i = 0; i < samples; i++)
