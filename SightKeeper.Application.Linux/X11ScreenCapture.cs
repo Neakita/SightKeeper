@@ -1,4 +1,5 @@
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Application.Linux.Natives;
 using SightKeeper.Domain.Model;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
@@ -13,12 +14,12 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 
 	public X11ScreenCapture()
 	{
-		_display = XLib.XOpenDisplay(null);
-		_screen = XLib.XDefaultScreen(_display);
-		_window = XLib.XRootWindow(_display, _screen);
-		if (XShm.XShmQueryExtension(_display) == 0)
+		_display = LibX.XOpenDisplay(null);
+		_screen = LibX.XDefaultScreen(_display);
+		_window = LibX.XRootWindow(_display, _screen);
+		if (LibXExt.XShmQueryExtension(_display) == 0)
 		{
-			XLib.XCloseDisplay(_display);
+			LibX.XCloseDisplay(_display);
 			throw new Exception("xserver doesn't support shm");
 		}
 	}
@@ -30,7 +31,7 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 		MemoryStream stream = new();
 		ShmImage image = new();
 		XLibShm.createimage(_display, &image, resolution.X, resolution.Y);;
-		LibXExt.XShmGetImage(_display, (UIntPtr)XLib.XRootWindow(_display, _screen), image.ximage, 0, 0, AllPlanes2);
+		LibXExt.XShmGetImage(_display, (UIntPtr)LibX.XRootWindow(_display, _screen), image.ximage, 0, 0, AllPlanes2);
 		ReadOnlySpan<Bgra32> data = new(image.data, resolution.X * resolution.Y);
 		var array = data.ToArray();
 		var sum = array.Sum(x => x.PackedValue);
@@ -53,7 +54,7 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 
 	private unsafe XImage* GetXImage(Vector2<ushort> resolution, Vector2<ushort> offset)
 	{
-		return XLib.XGetImage(
+		return LibX.XGetImage(
 			_display,
 			_window,
 			offset.X,
@@ -66,7 +67,7 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 
 	private void ReleaseUnmanagedResources()
 	{
-		XLib.XCloseDisplay(_display);
+		LibX.XCloseDisplay(_display);
 	}
 
 	~X11ScreenCapture()

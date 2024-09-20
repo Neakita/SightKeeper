@@ -1,3 +1,5 @@
+using SightKeeper.Application.Linux.Natives;
+
 namespace SightKeeper.Application.Linux;
 
 // https://stackoverflow.com/questions/34176795/any-efficient-way-of-converting-ximage-data-to-pixel-map-e-g-array-of-rgb-quad
@@ -32,8 +34,8 @@ internal static class XLibShm
 		LibC.shmctl(image->shminfo.shmid, IPC_RMID, 0);
 
 		// Allocate the memory needed for the XImage structure
-		image->ximage = (XImage*)XShm.XShmCreateImage(dsp, XLib.XDefaultVisual(dsp, XLib.XDefaultScreen(dsp)),
-			XLib.XDefaultDepth(dsp, XLib.XDefaultScreen(dsp)), (int)PixmapFormat.ZPixmap, 0,
+		image->ximage = (XImage*)LibXExt.XShmCreateImage(dsp, LibX.XDefaultVisual(dsp, LibX.XDefaultScreen(dsp)),
+			LibX.XDefaultDepth(dsp, LibX.XDefaultScreen(dsp)), (int)PixmapFormat.ZPixmap, 0,
 			&image->shminfo, 0, 0);
 		if (image->ximage is null)
 		{
@@ -46,8 +48,8 @@ internal static class XLibShm
 		image->ximage->height = height;
 
 		// Ask the X server to attach the shared memory segment and sync
-		XShm.XShmAttach(dsp, &image->shminfo);
-		XLib.XSync(dsp, false);
+		LibXExt.XShmAttach(dsp, &image->shminfo);
+		LibX.XSync(dsp, false);
 	}
 
 	public static unsafe void destroyimage(nint dsp, ShmImage* image)
@@ -55,7 +57,7 @@ internal static class XLibShm
 		if (image->ximage is null)
 		{
 			LibXExt.XShmDetach(dsp, &image->shminfo);
-			XLib.XDestroyImage((IntPtr)image->ximage);
+			LibX.XDestroyImage((IntPtr)image->ximage);
 			image->ximage = null;
 		}
 
