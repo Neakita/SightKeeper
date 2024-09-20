@@ -1,60 +1,65 @@
+using System.Runtime.InteropServices;
 using SightKeeper.Application.Linux.Natives;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Linux;
 
-// https://stackoverflow.com/questions/34176795/any-efficient-way-of-converting-ximage-data-to-pixel-map-e-g-array-of-rgb-quad
 internal static class XLibShm
 {
-	private const int IPC_RMID = 0;
-
-	public static unsafe void createimage(IntPtr dsp, ShmImage* image, int width, int height)
+	public static unsafe void CreateImageSharedMemorySegment(IntPtr display, ShmImage* image, int width, int height)
 	{
-		// Create a shared memory area 
-		image->shminfo.shmid = LibC.shmget(LibC.IPC_PRIVATE, width * height * sizeof(Bgra32), LibC.IPC_CREAT | 0600);
-		if (image->shminfo.shmid == -1)
-		{
-			throw new Exception();
-		}
+		CreateSharedMemorySegment(ref image->shminfo, width * height * sizeof(uint));
+		image->data = MapSharedMemorySegment(ref image->shminfo);
+		MarkSharedMemorySegmentForRemoval(image->shminfo);
+		AllocateImageMemory(display, image, width, height);
+		LibXExt.XShmAttach(display, &image->shminfo);
+		LibX.XSync(display, false);
+	}
 
-		// Map the shared memory segment into the address space of this process
-		image->shminfo.shmaddr = (char*)LibC.shmat(image->shminfo.shmid, 0, 0);
-		if (image->shminfo.shmaddr == (char*)-1)
-		{
-			throw new Exception();
-		}
-
-		image->data = (uint*)image->shminfo.shmaddr;
-		image->shminfo.readOnly = false;
-
-		// Mark the shared memory segment for removal
-		// It will be removed even if this program crashes
-		LibC.shmctl(image->shminfo.shmid, IPC_RMID, 0);
-
-		// Allocate the memory needed for the XImage structure
-		image->ximage = (XImage*)LibXExt.XShmCreateImage(dsp, LibX.XDefaultVisual(dsp, LibX.XDefaultScreen(dsp)),
-			LibX.XDefaultDepth(dsp, LibX.XDefaultScreen(dsp)), (int)PixmapFormat.ZPixmap, 0,
-			&image->shminfo, 0, 0);
+	private static unsafe void AllocateImageMemory(IntPtr display, ShmImage* image, int width, int height)
+	{
+		var screen = LibX.XDefaultScreen(display);
+		var visual = LibX.XDefaultVisual(display, screen);
+		var depth = LibX.XDefaultDepth(display, screen);
+		image->ximage = (XImage*)LibXExt.XShmCreateImage(
+			display, visual, depth, (int)PixmapFormat.ZPixmap, 0, &image->shminfo, 0, 0);
 		if (image->ximage is null)
 		{
-			destroyimage(dsp, image);
+			DestroyImage(display, image);
 			throw new Exception("could not allocate the XImage structure");
 		}
-
 		image->ximage->data = (IntPtr)image->data;
 		image->ximage->width = width;
 		image->ximage->height = height;
-
-		// Ask the X server to attach the shared memory segment and sync
-		LibXExt.XShmAttach(dsp, &image->shminfo);
-		LibX.XSync(dsp, false);
 	}
 
-	public static unsafe void destroyimage(nint dsp, ShmImage* image)
+	private static void MarkSharedMemorySegmentForRemoval(XShmSegmentInfo segmentInfo)
 	{
-		if (image->ximage is null)
+		LibC.shmctl(segmentInfo.shmid, LibC.IPC_RMID, 0);
+	}
+
+	private static unsafe uint* MapSharedMemorySegment(ref XShmSegmentInfo segmentInfo)
+	{
+		segmentInfo.shmaddr = (char*)LibC.shmat(segmentInfo.shmid, 0, 0);
+		if (segmentInfo.shmaddr == (char*)-1)
 		{
-			LibXExt.XShmDetach(dsp, &image->shminfo);
+			throw new Exception();
+		}
+		segmentInfo.readOnly = false;
+		return (uint*)segmentInfo.shmaddr;
+	}
+
+	private static void CreateSharedMemorySegment(ref XShmSegmentInfo segmentInfo, nint size)
+	{
+		segmentInfo.shmid = LibC.shmget(LibC.IPC_PRIVATE, size, LibC.IPC_CREAT | 0600);
+		if (segmentInfo.shmid == -1)
+			throw new Exception(Marshal.GetLastPInvokeErrorMessage());
+	}
+
+	public static unsafe void DestroyImage(nint display, ShmImage* image)
+	{
+		if (image->ximage is not null)
+		{
+			LibXExt.XShmDetach(display, &image->shminfo);
 			LibX.XDestroyImage((IntPtr)image->ximage);
 			image->ximage = null;
 		}

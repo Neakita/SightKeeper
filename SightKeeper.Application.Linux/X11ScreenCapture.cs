@@ -1,4 +1,3 @@
-using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Linux.Natives;
 using SightKeeper.Domain.Model;
 using SixLabors.ImageSharp;
@@ -16,7 +15,6 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 	{
 		_display = LibX.XOpenDisplay(null);
 		_screen = LibX.XDefaultScreen(_display);
-		_window = LibX.XRootWindow(_display, _screen);
 		if (LibXExt.XShmQueryExtension(_display) == 0)
 		{
 			LibX.XCloseDisplay(_display);
@@ -26,44 +24,23 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 
 	public unsafe Stream Capture(Vector2<ushort> resolution, Game? game)
 	{
-		int AllPlanes = ~0;
-		UIntPtr AllPlanes2 = new UIntPtr((uint)AllPlanes);
+		if (_memorySegment?.Resolution != resolution)
+		{
+			_memorySegment?.Dispose();
+			_memorySegment = new SharedImageMemorySegment<Bgra32>(_display, resolution);
+		}
+		_memorySegment.FetchData(_screen, new Vector2<ushort>());
 		MemoryStream stream = new();
 		ShmImage image = new();
-		XLibShm.createimage(_display, &image, resolution.X, resolution.Y);;
-		LibXExt.XShmGetImage(_display, (UIntPtr)LibX.XRootWindow(_display, _screen), image.ximage, 0, 0, AllPlanes2);
-		ReadOnlySpan<Bgra32> data = new(image.data, resolution.X * resolution.Y);
-		var array = data.ToArray();
-		var sum = array.Sum(x => x.PackedValue);
-		Guard.IsGreaterThan(sum, 0);
-		Image.LoadPixelData(data, resolution.X, resolution.Y).Save(stream, Encoder);
-		XLibShm.destroyimage(_display, &image);
+		Image.LoadPixelData(_memorySegment.Data, resolution.X, resolution.Y).Save(stream, Encoder);
+		XLibShm.DestroyImage(_display, &image);
 		stream.Position = 0;
 		return stream;
 	}
 
-	public void Dispose()
-	{
-		ReleaseUnmanagedResources();
-		GC.SuppressFinalize(this);
-	}
-
 	private readonly nint _display;
 	private readonly int _screen;
-	private readonly IntPtr _window;
-
-	private unsafe XImage* GetXImage(Vector2<ushort> resolution, Vector2<ushort> offset)
-	{
-		return LibX.XGetImage(
-			_display,
-			_window,
-			offset.X,
-			offset.Y,
-			resolution.X,
-			resolution.Y,
-			(ulong)Planes.AllPlanes,
-			PixmapFormat.ZPixmap);
-	}
+	private SharedImageMemorySegment<Bgra32>? _memorySegment;
 
 	private void ReleaseUnmanagedResources()
 	{
@@ -72,6 +49,19 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 
 	~X11ScreenCapture()
 	{
+		Dispose(false);
+	}
+
+	private void Dispose(bool disposing)
+	{
 		ReleaseUnmanagedResources();
+		if (disposing)
+			_memorySegment?.Dispose();
+	}
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
 	}
 }

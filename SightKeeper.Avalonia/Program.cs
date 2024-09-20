@@ -32,8 +32,6 @@ internal static class Program
 		const int samples = 1000;
 		for (int i = 0; i < samples; i++)
 		{
-			if (i % 100 == 0 && i != 0)
-				Console.WriteLine($"{i} Elapsed {(DateTime.UtcNow - start).TotalMilliseconds / i}ms per capture");
 			using var stream = screenCapture.Capture(new Vector2<ushort>(640, 640), null);
 		}
 		var end = DateTime.UtcNow - start;

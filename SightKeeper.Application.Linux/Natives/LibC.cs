@@ -6,6 +6,7 @@ internal static partial class LibC
 {
 	public const int IPC_CREAT = 01000;
 	public const int IPC_PRIVATE = 0;
+	public const int IPC_RMID = 0;
 	private const string DllName = "libc";
 
 	[LibraryImport(DllName, SetLastError = true)]
@@ -13,10 +14,10 @@ internal static partial class LibC
 
 	[LibraryImport(DllName, SetLastError = true)]
 	public static partial int shmget(int key, IntPtr size, int shmflg);
-	
-	[LibraryImport(DllName)] 
-	public static partial int shmctl(int shmid, int cmd, int buf); 
-	
+
+	[LibraryImport(DllName)]
+	public static partial int shmctl(int shmid, int cmd, int buf);
+
 	[LibraryImport(DllName, SetLastError = true)]
 	public static partial int shmdt(IntPtr shmaddr);
 }
