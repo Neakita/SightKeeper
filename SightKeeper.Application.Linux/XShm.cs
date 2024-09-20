@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using X11;
 
 namespace SightKeeper.Application.Linux;
 

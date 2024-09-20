@@ -11,8 +11,4 @@
       <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="X11" Version="1.0.6" />
-    </ItemGroup>
-
 </Project>

@@ -4,7 +4,6 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.PixelFormats;
-using X11;
 
 namespace SightKeeper.Application.Linux;
 
@@ -14,12 +13,12 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 
 	public X11ScreenCapture()
 	{
-		_display = Xlib.XOpenDisplay(null);
-		_screen = Xlib.XDefaultScreen(_display);
-		_window = Xlib.XRootWindow(_display, _screen);
+		_display = XLib.XOpenDisplay(null);
+		_screen = XLib.XDefaultScreen(_display);
+		_window = XLib.XRootWindow(_display, _screen);
 		if (XShm.XShmQueryExtension(_display) == 0)
 		{
-			Xlib.XCloseDisplay(_display);
+			XLib.XCloseDisplay(_display);
 			throw new Exception("xserver doesn't support shm");
 		}
 	}
@@ -50,11 +49,11 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 
 	private readonly nint _display;
 	private readonly int _screen;
-	private readonly Window _window;
+	private readonly IntPtr _window;
 
-	private XImage GetXImage(Vector2<ushort> resolution, Vector2<ushort> offset)
+	private unsafe XImage* GetXImage(Vector2<ushort> resolution, Vector2<ushort> offset)
 	{
-		return Xlib.XGetImage(
+		return XLib.XGetImage(
 			_display,
 			_window,
 			offset.X,
@@ -67,7 +66,7 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 
 	private void ReleaseUnmanagedResources()
 	{
-		Xlib.XCloseDisplay(_display);
+		XLib.XCloseDisplay(_display);
 	}
 
 	~X11ScreenCapture()

@@ -1,5 +1,3 @@
-using X11;
-
 namespace SightKeeper.Application.Linux;
 
 // https://stackoverflow.com/questions/34176795/any-efficient-way-of-converting-ximage-data-to-pixel-map-e-g-array-of-rgb-quad
@@ -34,8 +32,8 @@ internal static class XLibShm
 		LibC.shmctl(image->shminfo.shmid, IPC_RMID, 0);
 
 		// Allocate the memory needed for the XImage structure
-		image->ximage = (XImage*)XShm.XShmCreateImage(dsp, Xlib.XDefaultVisual(dsp, Xlib.XDefaultScreen(dsp)),
-			XLib.XDefaultDepth(dsp, Xlib.XDefaultScreen(dsp)), (int)PixmapFormat.ZPixmap, 0,
+		image->ximage = (XImage*)XShm.XShmCreateImage(dsp, XLib.XDefaultVisual(dsp, XLib.XDefaultScreen(dsp)),
+			XLib.XDefaultDepth(dsp, XLib.XDefaultScreen(dsp)), (int)PixmapFormat.ZPixmap, 0,
 			&image->shminfo, 0, 0);
 		if (image->ximage is null)
 		{

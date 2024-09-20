@@ -1,5 +1,3 @@
-using X11;
-
 namespace SightKeeper.Application.Linux;
 
 internal struct ShmImage
