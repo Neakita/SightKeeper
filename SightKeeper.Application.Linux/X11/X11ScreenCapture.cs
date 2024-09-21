@@ -1,9 +1,9 @@
-using SightKeeper.Application.Linux.Natives;
+using SightKeeper.Application.Linux.X11.Natives;
 using SightKeeper.Domain.Model;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Application.Linux;
+namespace SightKeeper.Application.Linux.X11;
 
 public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 {

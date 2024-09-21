@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
-using SightKeeper.Application.Linux.Natives;
+using SightKeeper.Application.Linux.X11.Natives;
 
-namespace SightKeeper.Application.Linux;
+namespace SightKeeper.Application.Linux.X11;
 
 internal static class XLibShm
 {

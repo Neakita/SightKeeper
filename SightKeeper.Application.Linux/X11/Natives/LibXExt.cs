@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace SightKeeper.Application.Linux.Natives;
+namespace SightKeeper.Application.Linux.X11.Natives;
 
 internal static unsafe partial class LibXExt
 {

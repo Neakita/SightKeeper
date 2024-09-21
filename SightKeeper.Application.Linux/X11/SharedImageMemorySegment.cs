@@ -1,10 +1,10 @@
 using System.Numerics.Tensors;
 using System.Runtime.InteropServices;
-using SightKeeper.Application.Linux.Natives;
+using SightKeeper.Application.Linux.X11.Natives;
 using SightKeeper.Domain.Model;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Application.Linux;
+namespace SightKeeper.Application.Linux.X11;
 
 internal sealed class SharedImageMemorySegment<TPixel> : IDisposable
 	where TPixel : unmanaged, IPixel<TPixel>

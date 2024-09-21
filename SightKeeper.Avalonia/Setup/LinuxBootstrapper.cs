@@ -1,6 +1,6 @@
 using Autofac;
 using SightKeeper.Application;
-using SightKeeper.Application.Linux;
+using SightKeeper.Application.Linux.X11;
 
 namespace SightKeeper.Avalonia.Setup;
 
