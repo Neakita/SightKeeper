@@ -6,9 +6,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
-    <SplitView PanePlacement="Left">
-        <SplitView.Pane>
-            <local:ScreenshotsBar DataContext="{Binding Screenshots}"/>
-        </SplitView.Pane>
-    </SplitView>
+    <Grid ColumnDefinitions="* 4* *">
+        <local:ScreenshotsBar
+            Grid.Column="0"
+            DataContext="{Binding Screenshots}"/>
+        <local:ScreenshottingSettings
+            Grid.Column="2"
+            DataContext="{Binding ScreenshottingSettings}"/>
+    </Grid>
 </UserControl>

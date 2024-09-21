@@ -4,6 +4,8 @@ namespace SightKeeper.Domain.Model.Profiles.Modules.Scaling;
 
 public sealed class ConstantScalingOptions : PassiveScalingOptions
 {
+	public const float DefaultFactor = 2;
+
 	public float Factor
 	{
 		get => _factor;
@@ -16,7 +18,7 @@ public sealed class ConstantScalingOptions : PassiveScalingOptions
 
 	private float _factor;
 
-	public ConstantScalingOptions(float factor = 2)
+	public ConstantScalingOptions(float factor = DefaultFactor)
 	{
 		_factor = factor;
 	}
