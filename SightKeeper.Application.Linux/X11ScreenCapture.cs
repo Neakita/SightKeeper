@@ -18,14 +18,14 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 		}
 	}
 
-	public Image Capture(Vector2<ushort> resolution, Game? game)
+	public Image Capture(Vector2<ushort> resolution, Vector2<ushort> offset, Game? game)
 	{
 		if (_memorySegment?.Resolution != resolution)
 		{
 			_memorySegment?.Dispose();
 			_memorySegment = new SharedImageMemorySegment<Bgra32>(_display, resolution);
 		}
-		_memorySegment.FetchData(_screen, new Vector2<ushort>());
+		_memorySegment.FetchData(_screen, offset);
 		return Image.LoadPixelData(_memorySegment.Data, resolution.X, resolution.Y);
 	}
 

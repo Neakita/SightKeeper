@@ -5,5 +5,5 @@ namespace SightKeeper.Application;
 
 public interface ScreenCapture
 {
-	Image Capture(Vector2<ushort> resolution, Game? game);
+	Image Capture(Vector2<ushort> resolution, Vector2<ushort> offset, Game? game);
 }
