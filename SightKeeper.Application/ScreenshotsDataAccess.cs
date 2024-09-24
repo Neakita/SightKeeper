@@ -16,7 +16,7 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 	public Screenshot CreateScreenshot(
 		ScreenshotsLibrary library,
 		byte[] data,
-		DateTime creationDate,
+		DateTimeOffset creationDate,
 		Vector2<ushort> resolution)
 	{
 		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);
@@ -30,7 +30,7 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 	public Screenshot<TAsset> CreateScreenshot<TAsset>(
 		ScreenshotsLibrary<TAsset> library,
 		byte[] data,
-		DateTime creationDate,
+		DateTimeOffset creationDate,
 		Vector2<ushort> resolution)
 		where TAsset : Asset
 	{

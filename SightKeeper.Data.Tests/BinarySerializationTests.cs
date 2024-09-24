@@ -73,10 +73,10 @@ public sealed class BinarySerializationTests
 		dataSet.TagsLibrary.CreateTag("Don't Shoot");
 		var shootTag = dataSet.TagsLibrary.CreateTag("shoot");
 		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTimeOffset.Now, SampleImageResolution);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.Tag = shootTag;
-		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now, SampleImageResolution);
+		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTimeOffset.Now, SampleImageResolution);
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
 			ModelSize.Nano,

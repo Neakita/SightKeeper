@@ -12,10 +12,10 @@ namespace SightKeeper.Data.Binary.Model.DataSets;
 internal sealed partial class PackableScreenshot
 {
 	public Id Id { get; }
-	public DateTime CreationDate { get; }
+	public DateTimeOffset CreationDate { get; }
 	public Vector2<ushort> Resolution { get; }
 
-	public PackableScreenshot(Id id, DateTime creationDate, Vector2<ushort> resolution)
+	public PackableScreenshot(Id id, DateTimeOffset creationDate, Vector2<ushort> resolution)
 	{
 		Id = id;
 		CreationDate = creationDate;

@@ -5,13 +5,13 @@ namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 
 public abstract class Screenshot
 {
-	public DateTime CreationDate { get; }
+	public DateTimeOffset CreationDate { get; }
 	public abstract Asset? Asset { get; }
 	public abstract ScreenshotsLibrary Library { get; }
 	public DataSet DataSet => Library.DataSet;
 	public Vector2<ushort> Resolution { get; }
 
-	protected Screenshot(DateTime creationDate, Vector2<ushort> resolution)
+	protected Screenshot(DateTimeOffset creationDate, Vector2<ushort> resolution)
 	{
 		CreationDate = creationDate;
 		Guard.IsGreaterThan<ushort>(resolution.X, 0);
@@ -27,7 +27,7 @@ public sealed class Screenshot<TAsset> : Screenshot where TAsset : Asset
 	public override TAsset? Asset => _asset;
 	public override ScreenshotsLibrary<TAsset> Library { get; }
 
-	public Screenshot(ScreenshotsLibrary<TAsset> library, DateTime creationDate, Vector2<ushort> resolution)
+	public Screenshot(ScreenshotsLibrary<TAsset> library, DateTimeOffset creationDate, Vector2<ushort> resolution)
 		: base(creationDate, resolution)
 	{
 		Library = library;

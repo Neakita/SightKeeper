@@ -18,7 +18,7 @@ public abstract class ScreenshotsLibrary
 	/// </remarks>
 	public abstract IReadOnlyList<Screenshot> Screenshots { get; }
 
-	public abstract Screenshot CreateScreenshot(DateTime creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots);
+	public abstract Screenshot CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots);
 }
 
 public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary where TAsset : Asset
@@ -31,7 +31,7 @@ public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary where TAsset
 	    DataSet = dataSet;
     }
 
-    public override Screenshot<TAsset> CreateScreenshot(DateTime creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots)
+    public override Screenshot<TAsset> CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots)
     {
 	    Screenshot<TAsset> screenshot = new(this, creationDate, resolution);
 	    if (_screenshots.Count != 0)

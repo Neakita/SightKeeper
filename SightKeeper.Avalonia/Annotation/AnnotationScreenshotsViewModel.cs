@@ -37,7 +37,7 @@ internal sealed class AnnotationScreenshotsViewModel : ViewModel
 			.Subscribe()
 			.DisposeWith(_disposable);
 		_screenshotsSource.Connect()
-			.Transform(screenshot => screenshot.CreationDate)
+			.Transform(screenshot => screenshot.CreationDate.Date)
 			.Transform(DateOnly.FromDateTime)
 			.DistinctValues(date => date)
 			.Bind(out var dates)
