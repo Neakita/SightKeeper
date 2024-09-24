@@ -18,7 +18,7 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 		}
 	}
 
-	public Image Capture(Vector2<ushort> resolution, Vector2<ushort> offset, Game? game)
+	public Image Capture(Vector2<ushort> resolution, Vector2<ushort> offset)
 	{
 		if (_memorySegment?.Resolution != resolution)
 		{
