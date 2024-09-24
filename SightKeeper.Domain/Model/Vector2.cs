@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.Model;
 
-public readonly struct Vector2<T> where T : INumber<T>
+public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>
 {
 	public static bool operator ==(Vector2<T> left, Vector2<T> right)
 	{
