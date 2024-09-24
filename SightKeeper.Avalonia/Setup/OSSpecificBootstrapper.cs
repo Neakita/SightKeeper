@@ -8,6 +8,8 @@ internal static class OSSpecificBootstrapper
 	{
 #if (OS_WINDOWS)
 		WindowsBootstrapper.Setup(builder);
+#elif (OS_LINUX)
+		LinuxBootstrapper.Setup(builder);
 #endif
 	}
 }
