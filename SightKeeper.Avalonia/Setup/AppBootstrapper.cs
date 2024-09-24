@@ -11,6 +11,7 @@ internal static class AppBootstrapper
 		ViewModelsBootstrapper.Setup(builder);
 		ServicesBootstrapper.Setup(builder);
 		OSSpecificBootstrapper.Setup(builder);
+		HotKeysBootstrapper.Setup(builder);
 		return builder.Build();
 	}
 }

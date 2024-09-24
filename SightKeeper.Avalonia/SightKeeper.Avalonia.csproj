@@ -40,6 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\HotKeys\HotKeys\HotKeys.csproj" />
         <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls.PropertyGrid\Sightful.Avalonia.Controls.PropertyGrid.csproj" OutputItemType="Analyzer"/>
         <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls\Sightful.Avalonia.Controls.csproj"/>
         <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj"/>
