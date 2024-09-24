@@ -14,7 +14,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 
 	public override FileStream LoadImage(Screenshot screenshot)
 	{
-		return _dataAccess.OpenStream(screenshot);
+		return _dataAccess.OpenReadStream(screenshot);
 	}
 
 	public Id GetId(Screenshot screenshot)
