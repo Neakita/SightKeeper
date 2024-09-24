@@ -15,12 +15,13 @@ using SightKeeper.Domain.Model.DataSets.Poser3D;
 using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviors;
+using SixLabors.ImageSharp;
 
 namespace SightKeeper.Data.Tests;
 
 public sealed class BinarySerializationTests
 {
-	private static readonly byte[] SampleImageData = File.ReadAllBytes("sample.png");
+	private static readonly Image SampleImageData = Image.Load("sample.png");
 	private static readonly Vector2<ushort> SampleImageResolution = new(320, 320);
 
 	[Fact]

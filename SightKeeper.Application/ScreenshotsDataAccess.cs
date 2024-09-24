@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application;
 
@@ -15,21 +16,21 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 
 	public Screenshot CreateScreenshot(
 		ScreenshotsLibrary library,
-		byte[] data,
+		Image image,
 		DateTimeOffset creationDate,
 		Vector2<ushort> resolution)
 	{
 		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);
 		foreach (var removedScreenshot in removedScreenshots)
 			DeleteScreenshotData(removedScreenshot);
-		SaveScreenshotData(screenshot, data);
+		SaveScreenshotData(screenshot, image);
 		_added.OnNext(screenshot);
 		return screenshot;
 	}
 
 	public Screenshot<TAsset> CreateScreenshot<TAsset>(
 		ScreenshotsLibrary<TAsset> library,
-		byte[] data,
+		Image image,
 		DateTimeOffset creationDate,
 		Vector2<ushort> resolution)
 		where TAsset : Asset
@@ -37,7 +38,7 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);
 		foreach (var removedScreenshot in removedScreenshots)
 			DeleteScreenshotData(removedScreenshot);
-		SaveScreenshotData(screenshot, data);
+		SaveScreenshotData(screenshot, image);
 		_added.OnNext(screenshot);
 		return screenshot;
 	}
@@ -55,7 +56,7 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 		_removed.Dispose();
 	}
 
-	protected abstract void SaveScreenshotData(Screenshot screenshot, byte[] data);
+	protected abstract void SaveScreenshotData(Screenshot screenshot, Image image);
 	protected abstract void DeleteScreenshotData(Screenshot screenshot);
 
 	private readonly Subject<Screenshot> _added = new();

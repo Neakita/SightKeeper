@@ -1,6 +1,8 @@
 ﻿using FlakeId;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
 
 namespace SightKeeper.Data.Binary.Services;
 
@@ -27,9 +29,10 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		_dataAccess.AssociateId(screenshot, id);
 	}
 
-	protected override void SaveScreenshotData(Screenshot screenshot, byte[] data)
+	protected override void SaveScreenshotData(Screenshot screenshot, Image image)
 	{
-		_dataAccess.WriteAllBytes(screenshot, data);
+		using var stream = _dataAccess.OpenWriteStream(screenshot);
+		image.Save(stream, PngFormat.Instance);
 	}
 
 	protected override void DeleteScreenshotData(Screenshot screenshot)

@@ -38,6 +38,15 @@ internal sealed class FileSystemDataAccess<T> where T : notnull
 		File.WriteAllBytes(filePath, data);
 	}
 
+	public FileStream OpenWriteStream(T item)
+	{
+		var id = Id.Create();
+		_ids.Add(item, id);
+		var filePath = GetFilePath(id);
+		Directory.CreateDirectory(DirectoryPath);
+		return File.OpenWrite(filePath);
+	}
+
 	public void AssociateId(T item, Id id)
 	{
 		Guard.IsTrue(File.Exists(GetFilePath(id)));
