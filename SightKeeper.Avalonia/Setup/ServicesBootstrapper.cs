@@ -28,6 +28,7 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<DataSetsDataAccess>().As<ObservableDataAccess<DataSet>>().As<ReadDataAccess<DataSet>>().As<WriteDataAccess<DataSet>>().SingleInstance();
 		builder.RegisterType<DataSetCreator>();
 		builder.RegisterType<DataSetEditor>().SingleInstance();
+		builder.RegisterType<SharpHookScreenBoundsProvider>().As<ScreenBoundsProvider>();
 	}
 
 	private static void SetupBinarySerialization(ContainerBuilder builder)

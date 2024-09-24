@@ -4,6 +4,6 @@ namespace SightKeeper.Application;
 
 public interface ScreenBoundsProvider
 {
-	Vector2<int> MainScreenSize { get; }
-	Vector2<int> MainScreenCenter => MainScreenSize / 2;
+	Vector2<ushort> MainScreenSize { get; }
+	Vector2<ushort> MainScreenCenter => MainScreenSize / 2;
 }

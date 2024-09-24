@@ -21,7 +21,7 @@ internal sealed partial class ScreenshottingSettingsViewModel : ViewModel
 		get => _resolutionWidth;
 		set
 		{
-			Guard.IsGreaterThan(value, MinimumResolution);
+			Guard.IsGreaterThanOrEqualTo(value, MinimumResolution);
 			SetProperty(ref _resolutionWidth, value);
 		}
 	}
@@ -31,13 +31,13 @@ internal sealed partial class ScreenshottingSettingsViewModel : ViewModel
 		get => _resolutionHeight;
 		set
 		{
-			Guard.IsGreaterThan(value, MinimumResolution);
+			Guard.IsGreaterThanOrEqualTo(value, MinimumResolution);
 			SetProperty(ref _resolutionHeight, value);
 		}
 	}
 
-	public ushort MaximumWidth => (ushort)_screenBoundsProvider.MainScreenSize.X;
-	public ushort MaximumHeight => (ushort)_screenBoundsProvider.MainScreenSize.Y;
+	public ushort MaximumWidth => _screenBoundsProvider.MainScreenSize.X;
+	public ushort MaximumHeight => _screenBoundsProvider.MainScreenSize.Y;
 
 	public ScreenshottingSettingsViewModel(ScreenBoundsProvider screenBoundsProvider)
 	{
