@@ -8,22 +8,27 @@ public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>
 	{
 		return left.Equals(right);
 	}
+
 	public static bool operator !=(Vector2<T> left, Vector2<T> right)
 	{
 		return !left.Equals(right);
 	}
+
 	public static Vector2<T> operator +(Vector2<T> first, Vector2<T> second)
 	{
 		return new Vector2<T>(first.X + second.X, first.Y + second.Y);
 	}
+
 	public static Vector2<T> operator -(Vector2<T> first, Vector2<T> second)
 	{
 		return new Vector2<T>(first.X - second.X, first.Y - second.Y);
 	}
+
 	public static Vector2<T> operator *(Vector2<T> first, T second)
 	{
 		return new Vector2<T>(first.X * second, first.Y * second);
 	}
+
 	public static Vector2<T> operator /(Vector2<T> first, T second)
 	{
 		return new Vector2<T>(first.X / second, first.Y / second);
@@ -52,10 +57,12 @@ public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>
 	{
 		return EqualityComparer<T>.Default.Equals(X, other.X) && EqualityComparer<T>.Default.Equals(Y, other.Y);
 	}
+
 	public override bool Equals(object? obj)
 	{
 		return obj is Vector2<T> other && Equals(other);
 	}
+
 	public override int GetHashCode()
 	{
 		return HashCode.Combine(X, Y);
