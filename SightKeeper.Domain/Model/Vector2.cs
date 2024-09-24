@@ -37,6 +37,17 @@ public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>
 		X = x;
 		Y = y;
 	}
+
+	public Vector2<T> WithX(T value)
+	{
+		return new Vector2<T>(value, Y);
+	}
+
+	public Vector2<T> WithY(T value)
+	{
+		return new Vector2<T>(X, value);
+	}
+
 	public bool Equals(Vector2<T> other)
 	{
 		return EqualityComparer<T>.Default.Equals(X, other.X) && EqualityComparer<T>.Default.Equals(Y, other.Y);
