@@ -21,10 +21,12 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 		ScreenshottingSettings = screenshottingSettings;
 	}
 
-	[ObservableProperty] private DataSetViewModel? _dataSet;
+	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
 
-	partial void OnDataSetChanged(DataSetViewModel? value)
+	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
-		Screenshots.Library = value?.DataSet.ScreenshotsLibrary;
+		var screenshotsLibrary = value?.DataSet.ScreenshotsLibrary;
+		Screenshots.Library = screenshotsLibrary;
+		ScreenshottingSettings.Library = screenshotsLibrary;
 	}
 }

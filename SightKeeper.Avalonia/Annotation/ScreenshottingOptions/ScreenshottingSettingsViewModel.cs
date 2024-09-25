@@ -1,13 +1,17 @@
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
 using HotKeys.Gestures;
 using SightKeeper.Application;
-using SightKeeper.Avalonia.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 
-internal sealed partial class ScreenshottingSettingsViewModel : ViewModel
+internal sealed class ScreenshottingSettingsViewModel : ViewModel
 {
+	public ScreenshotsLibrary? Library
+	{
+		get => _screenshoter.Library;
+		set => SetProperty(_screenshoter.Library, value, _screenshoter, static (screenshoter, newValue) => screenshoter.Library = newValue);
+	}
+
 	public bool IsEnabled
 	{
 		get => _screenshoter.IsEnabled;
@@ -40,21 +44,13 @@ internal sealed partial class ScreenshottingSettingsViewModel : ViewModel
 
 	public ushort MaximumWidth => _screenBoundsProvider.MainScreenSize.X;
 	public ushort MaximumHeight => _screenBoundsProvider.MainScreenSize.Y;
-	public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 
-	public ScreenshottingSettingsViewModel(ScreenBoundsProvider screenBoundsProvider, Screenshoter screenshoter, DataSetsListViewModel dataSets)
+	public ScreenshottingSettingsViewModel(ScreenBoundsProvider screenBoundsProvider, Screenshoter screenshoter)
 	{
 		_screenBoundsProvider = screenBoundsProvider;
 		_screenshoter = screenshoter;
-		DataSets = dataSets.DataSets;
 	}
 
 	private readonly ScreenBoundsProvider _screenBoundsProvider;
 	private readonly Screenshoter _screenshoter;
-	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
-
-	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
-	{
-		_screenshoter.Library = value?.DataSet.ScreenshotsLibrary;
-	}
 }

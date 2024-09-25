@@ -7,9 +7,6 @@
              x:Class="SightKeeper.Avalonia.Annotation.ScreenshottingSettings"
              x:DataType="screenshottingOptions:ScreenshottingSettingsViewModel">
     <StackPanel>
-        <ComboBox SelectedItem="{Binding SelectedDataSet}"
-                  ItemsSource="{Binding DataSets}"
-                  DisplayMemberBinding="{Binding Name}"/>
         <ToggleSwitch IsChecked="{Binding IsEnabled}"/>
         <Slider Maximum="{Binding MaximumWidth}"
                 Value="{Binding ResolutionWidth}"
