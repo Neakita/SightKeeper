@@ -7,15 +7,16 @@
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
     <Border Classes="regular-padding">
-        <Grid ColumnDefinitions="* 4* *">
+        <Grid ColumnDefinitions="* 4* Auto">
             <local:Screenshots
                 Grid.Column="0"
                 DataContext="{Binding Screenshots}"/>
             <Border Grid.Column="2" Classes="outer wide-padding" VerticalAlignment="Top">
-                <StackPanel>
+                <StackPanel Classes="regular-spacing">
                     <ComboBox SelectedItem="{Binding SelectedDataSet}"
                               ItemsSource="{Binding DataSets}"
-                              DisplayMemberBinding="{Binding Name}"/>
+                              DisplayMemberBinding="{Binding Name}"
+                              PlaceholderText="Select data set"/>
                     <local:ScreenshottingSettings DataContext="{Binding ScreenshottingSettings}"/>
                 </StackPanel>
             </Border>
