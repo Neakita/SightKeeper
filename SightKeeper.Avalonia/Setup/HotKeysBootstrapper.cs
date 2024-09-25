@@ -15,10 +15,11 @@ internal static class HotKeysBootstrapper
 		hook.RunAsync();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
 		SharpHookKeyboardKeyManager keyboardManager = new(hook);
-		builder.RegisterInstance(keyboardManager).As<KeyManager<FormattedKeyCode>>();
+		KeyManagerFilter<FormattedKeyCode> keyboardFilter = new(keyboardManager);
+		builder.RegisterInstance(keyboardFilter).As<KeyManager<FormattedKeyCode>>();
 		SharpHookMouseButtonsManager mouseButtonsManager = new(hook);
 		builder.RegisterInstance(mouseButtonsManager).As<KeyManager<FormattedSharpButton>>();
-		AggregateKeyManager aggregateKeyManager = new([keyboardManager, mouseButtonsManager]);
+		AggregateKeyManager aggregateKeyManager = new([keyboardFilter, mouseButtonsManager]);
 		builder.RegisterInstance(aggregateKeyManager).As<KeyManager>();
 		builder.RegisterType<GestureManager>().SingleInstance();
 		builder.RegisterType<BindingsManager>().SingleInstance();
