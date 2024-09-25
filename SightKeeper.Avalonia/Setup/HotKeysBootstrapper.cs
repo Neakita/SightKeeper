@@ -18,8 +18,9 @@ internal static class HotKeysBootstrapper
 		KeyManagerFilter<FormattedKeyCode> keyboardFilter = new(keyboardManager);
 		builder.RegisterInstance(keyboardFilter).As<KeyManager<FormattedKeyCode>>();
 		SharpHookMouseButtonsManager mouseButtonsManager = new(hook);
-		builder.RegisterInstance(mouseButtonsManager).As<KeyManager<FormattedSharpButton>>();
-		AggregateKeyManager aggregateKeyManager = new([keyboardFilter, mouseButtonsManager]);
+		KeyManager<FormattedSharpButton> mouseFilter = new KeyManagerFilter<FormattedSharpButton>(mouseButtonsManager);
+		builder.RegisterInstance(mouseFilter).As<KeyManager<FormattedSharpButton>>();
+		AggregateKeyManager aggregateKeyManager = new([keyboardFilter, mouseFilter]);
 		builder.RegisterInstance(aggregateKeyManager).As<KeyManager>();
 		builder.RegisterType<GestureManager>().SingleInstance();
 		builder.RegisterType<BindingsManager>().SingleInstance();
