@@ -11,18 +11,19 @@ internal static class HotKeysBootstrapper
 {
 	public static void Setup(ContainerBuilder builder)
 	{
+		// create instances in place instead of registering types to prevent issues when app launches and there is key released which was pressed before app started or instances created
 		SimpleReactiveGlobalHook hook = new();
+		KeyManagerFilter<FormattedKeyCode> keyboardFilter = new(new SharpHookKeyboardKeyManager(hook));
+		KeyManager<FormattedSharpButton> mouseFilter = new KeyManagerFilter<FormattedSharpButton>(new SharpHookMouseButtonsManager(hook));
+		AggregateKeyManager aggregateKeyManager = new([keyboardFilter, mouseFilter]);
+		GestureManager gestureManager = new(aggregateKeyManager);
+		BindingsManager bindingsManager = new(gestureManager);
 		hook.RunAsync();
 		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
-		SharpHookKeyboardKeyManager keyboardManager = new(hook);
-		KeyManagerFilter<FormattedKeyCode> keyboardFilter = new(keyboardManager);
 		builder.RegisterInstance(keyboardFilter).As<KeyManager<FormattedKeyCode>>();
-		SharpHookMouseButtonsManager mouseButtonsManager = new(hook);
-		KeyManager<FormattedSharpButton> mouseFilter = new KeyManagerFilter<FormattedSharpButton>(mouseButtonsManager);
 		builder.RegisterInstance(mouseFilter).As<KeyManager<FormattedSharpButton>>();
-		AggregateKeyManager aggregateKeyManager = new([keyboardFilter, mouseFilter]);
 		builder.RegisterInstance(aggregateKeyManager).As<KeyManager>();
-		builder.RegisterType<GestureManager>().SingleInstance();
-		builder.RegisterType<BindingsManager>().SingleInstance();
+		builder.RegisterInstance(gestureManager);
+		builder.RegisterInstance(bindingsManager);
 	}
 }
