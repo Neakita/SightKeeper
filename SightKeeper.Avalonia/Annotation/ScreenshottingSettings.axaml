@@ -12,21 +12,21 @@
             Content="Make Screenshots"
             IsEnabled="{Binding Library, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         <DockPanel>
-            <TextBox Text="{Binding ResolutionWidth}" DockPanel.Dock="Right"/>
+            <TextBox Text="{Binding ResolutionWidth}" DockPanel.Dock="Right" MinWidth="70"/>
             <Slider Maximum="{Binding MaximumWidth}"
                     Value="{Binding ResolutionWidth}"
-                    TickFrequency="32"
+                    TickFrequency="40"
+                    Minimum="40"
                     IsSnapToTickEnabled="True"
-                    Minimum="32"
                     VerticalAlignment="Center"/>
         </DockPanel>
         <DockPanel>
-            <TextBox Text="{Binding ResolutionHeight}" DockPanel.Dock="Right"/>
+            <TextBox Text="{Binding ResolutionHeight}" DockPanel.Dock="Right" MinWidth="70"/>
             <Slider Maximum="{Binding MaximumHeight}"
                     Value="{Binding ResolutionHeight}"
-                    TickFrequency="32"
+                    TickFrequency="40"
+                    Minimum="40"
                     IsSnapToTickEnabled="True"
-                    Minimum="32"
                     VerticalAlignment="Center"/>
         </DockPanel>
     </StackPanel>
