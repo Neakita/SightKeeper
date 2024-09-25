@@ -11,7 +11,7 @@
             <local:ScreenshotsBar
                 Grid.Column="0"
                 DataContext="{Binding Screenshots}"/>
-            <Border Grid.Column="2" Classes="outer wide-padding">
+            <Border Grid.Column="2" Classes="outer wide-padding" VerticalAlignment="Top">
                 <StackPanel>
                     <ComboBox SelectedItem="{Binding SelectedDataSet}"
                               ItemsSource="{Binding DataSets}"
