@@ -6,12 +6,19 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
-    <Grid ColumnDefinitions="* 4* *">
-        <local:ScreenshotsBar
-            Grid.Column="0"
-            DataContext="{Binding Screenshots}"/>
-        <local:ScreenshottingSettings
-            Grid.Column="2"
-            DataContext="{Binding ScreenshottingSettings}"/>
-    </Grid>
+    <Border Classes="regular-padding">
+        <Grid ColumnDefinitions="* 4* *">
+            <local:ScreenshotsBar
+                Grid.Column="0"
+                DataContext="{Binding Screenshots}"/>
+            <Border Grid.Column="2" Classes="outer wide-padding">
+                <StackPanel>
+                    <ComboBox SelectedItem="{Binding SelectedDataSet}"
+                              ItemsSource="{Binding DataSets}"
+                              DisplayMemberBinding="{Binding Name}"/>
+                    <local:ScreenshottingSettings DataContext="{Binding ScreenshottingSettings}"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
 </UserControl>
