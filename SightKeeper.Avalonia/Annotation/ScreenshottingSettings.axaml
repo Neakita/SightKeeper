@@ -6,8 +6,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.ScreenshottingSettings"
              x:DataType="screenshottingOptions:ScreenshottingSettingsViewModel">
-    <StackPanel>
-        <ToggleSwitch IsChecked="{Binding IsEnabled}"/>
+    <StackPanel Classes="regular-spacing">
+        <ToggleSwitch
+            IsChecked="{Binding IsEnabled}"
+            Content="Make Screenshots"
+            IsEnabled="{Binding Library, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         <Slider Maximum="{Binding MaximumWidth}"
                 Value="{Binding ResolutionWidth}"
                 TickFrequency="32"
