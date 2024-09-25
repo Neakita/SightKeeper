@@ -11,15 +11,15 @@
                   ItemsSource="{Binding DataSets}"
                   DisplayMemberBinding="{Binding Name}"/>
         <ToggleSwitch IsChecked="{Binding IsEnabled}"/>
-        <Slider Value="{Binding ResolutionWidth}"
+        <Slider Maximum="{Binding MaximumWidth}"
+                Value="{Binding ResolutionWidth}"
                 TickFrequency="32"
                 IsSnapToTickEnabled="True"
-                Minimum="32"
-                Maximum="{Binding MaximumWidth}"/>
-        <Slider Value="{Binding ResolutionHeight}"
+                Minimum="32"/>
+        <Slider Maximum="{Binding MaximumHeight}"
+                Value="{Binding ResolutionHeight}"
                 TickFrequency="32"
                 IsSnapToTickEnabled="True"
-                Minimum="32"
-                Maximum="{Binding MaximumHeight}"/>
+                Minimum="32"/>
     </StackPanel>
 </UserControl>
