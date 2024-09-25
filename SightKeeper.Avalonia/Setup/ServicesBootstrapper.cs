@@ -29,7 +29,7 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<DataSetCreator>();
 		builder.RegisterType<DataSetEditor>().SingleInstance();
 		builder.RegisterType<SharpHookScreenBoundsProvider>().As<ScreenBoundsProvider>();
-		builder.RegisterType<Screenshoter>();
+		builder.RegisterType<Screenshotter>();
 	}
 
 	private static void SetupBinarySerialization(ContainerBuilder builder)

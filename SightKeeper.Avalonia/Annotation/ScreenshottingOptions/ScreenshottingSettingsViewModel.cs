@@ -8,49 +8,49 @@ internal sealed class ScreenshottingSettingsViewModel : ViewModel
 {
 	public ScreenshotsLibrary? Library
 	{
-		get => _screenshoter.Library;
-		set => SetProperty(_screenshoter.Library, value, _screenshoter, static (screenshoter, newValue) => screenshoter.Library = newValue);
+		get => _screenshotter.Library;
+		set => SetProperty(_screenshotter.Library, value, _screenshotter, static (screenshotter, newValue) => screenshotter.Library = newValue);
 	}
 
 	public bool IsEnabled
 	{
-		get => _screenshoter.IsEnabled;
-		set => SetProperty(_screenshoter.IsEnabled, value, _screenshoter, static (screenshoter, newValue) => screenshoter.IsEnabled = newValue);
+		get => _screenshotter.IsEnabled;
+		set => SetProperty(_screenshotter.IsEnabled, value, _screenshotter, static (screenshotter, newValue) => screenshotter.IsEnabled = newValue);
 	}
 
 	public float FPS
 	{
-		get => _screenshoter.FPS;
-		set => SetProperty(_screenshoter.FPS, value, _screenshoter, static (screenshoter, newValue) => screenshoter.FPS = newValue);
+		get => _screenshotter.FPS;
+		set => SetProperty(_screenshotter.FPS, value, _screenshotter, static (screenshotter, newValue) => screenshotter.FPS = newValue);
 	}
 
 	public ushort ResolutionWidth
 	{
-		get => _screenshoter.Resolution.X;
-		set => SetProperty(_screenshoter.Resolution.X, value, _screenshoter, static (screenshoter, newValue) => screenshoter.Resolution = screenshoter.Resolution.WithX(newValue));
+		get => _screenshotter.Resolution.X;
+		set => SetProperty(_screenshotter.Resolution.X, value, _screenshotter, static (screenshotter, newValue) => screenshotter.Resolution = screenshotter.Resolution.WithX(newValue));
 	}
 
 	public ushort ResolutionHeight
 	{
-		get => _screenshoter.Resolution.Y;
-		set => SetProperty(_screenshoter.Resolution.Y, value, _screenshoter, static (screenshoter, newValue) => screenshoter.Resolution = screenshoter.Resolution.WithY(newValue));
+		get => _screenshotter.Resolution.Y;
+		set => SetProperty(_screenshotter.Resolution.Y, value, _screenshotter, static (screenshotter, newValue) => screenshotter.Resolution = screenshotter.Resolution.WithY(newValue));
 	}
 
 	public Gesture Gesture
 	{
-		get => _screenshoter.Gesture;
-		set => SetProperty(_screenshoter.Gesture, value, _screenshoter, static (screenshoter, newValue) => screenshoter.Gesture = newValue);
+		get => _screenshotter.Gesture;
+		set => SetProperty(_screenshotter.Gesture, value, _screenshotter, static (screenshotter, newValue) => screenshotter.Gesture = newValue);
 	}
 
 	public ushort MaximumWidth => _screenBoundsProvider.MainScreenSize.X;
 	public ushort MaximumHeight => _screenBoundsProvider.MainScreenSize.Y;
 
-	public ScreenshottingSettingsViewModel(ScreenBoundsProvider screenBoundsProvider, Screenshoter screenshoter)
+	public ScreenshottingSettingsViewModel(ScreenBoundsProvider screenBoundsProvider, Screenshotter screenshotter)
 	{
 		_screenBoundsProvider = screenBoundsProvider;
-		_screenshoter = screenshoter;
+		_screenshotter = screenshotter;
 	}
 
 	private readonly ScreenBoundsProvider _screenBoundsProvider;
-	private readonly Screenshoter _screenshoter;
+	private readonly Screenshotter _screenshotter;
 }

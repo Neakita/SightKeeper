@@ -10,7 +10,7 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Application;
 
-public sealed class Screenshoter
+public sealed class Screenshotter
 {
 	public bool IsEnabled
 	{
@@ -59,7 +59,7 @@ public sealed class Screenshoter
 
 	public Gesture Gesture { get; set; } = new([new FormattedSharpButton(MouseButton.Button1)]);
 
-	public Screenshoter(
+	public Screenshotter(
 		ScreenCapture screenCapture,
 		ScreenshotsDataAccess screenshotsDataAccess,
 		ScreenBoundsProvider screenBoundsProvider,
