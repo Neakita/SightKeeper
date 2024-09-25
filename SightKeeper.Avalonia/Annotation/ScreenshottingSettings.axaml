@@ -11,15 +11,23 @@
             IsChecked="{Binding IsEnabled}"
             Content="Make Screenshots"
             IsEnabled="{Binding Library, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-        <Slider Maximum="{Binding MaximumWidth}"
-                Value="{Binding ResolutionWidth}"
-                TickFrequency="32"
-                IsSnapToTickEnabled="True"
-                Minimum="32"/>
-        <Slider Maximum="{Binding MaximumHeight}"
-                Value="{Binding ResolutionHeight}"
-                TickFrequency="32"
-                IsSnapToTickEnabled="True"
-                Minimum="32"/>
+        <DockPanel>
+            <TextBox Text="{Binding ResolutionWidth}" DockPanel.Dock="Right"/>
+            <Slider Maximum="{Binding MaximumWidth}"
+                    Value="{Binding ResolutionWidth}"
+                    TickFrequency="32"
+                    IsSnapToTickEnabled="True"
+                    Minimum="32"
+                    VerticalAlignment="Center"/>
+        </DockPanel>
+        <DockPanel>
+            <TextBox Text="{Binding ResolutionHeight}" DockPanel.Dock="Right"/>
+            <Slider Maximum="{Binding MaximumHeight}"
+                    Value="{Binding ResolutionHeight}"
+                    TickFrequency="32"
+                    IsSnapToTickEnabled="True"
+                    Minimum="32"
+                    VerticalAlignment="Center"/>
+        </DockPanel>
     </StackPanel>
 </UserControl>
