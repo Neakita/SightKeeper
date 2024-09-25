@@ -10,7 +10,7 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-internal sealed class AnnotationScreenshotsViewModel : ViewModel
+internal sealed class ScreenshotsViewModel : ViewModel
 {
 	public ScreenshotsLibrary? Library
 	{
@@ -29,7 +29,7 @@ internal sealed class AnnotationScreenshotsViewModel : ViewModel
 	public IReadOnlyCollection<ScreenshotViewModel> DisplayScreenshots { get; }
 	public IReadOnlyCollection<DateOnly> Dates { get; }
 
-	public AnnotationScreenshotsViewModel(ObservableDataAccess<Screenshot> observableDataAccess, ScreenshotsDataAccess screenshotsDataAccess)
+	public ScreenshotsViewModel(ObservableDataAccess<Screenshot> observableDataAccess, ScreenshotsDataAccess screenshotsDataAccess)
 	{
 		_screenshotsSource.Connect()
 			.Transform(screenshot => new ScreenshotViewModel(screenshot, screenshotsDataAccess))

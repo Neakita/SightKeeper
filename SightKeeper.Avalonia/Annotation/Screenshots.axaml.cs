@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-public partial class ScreenshotsBar : UserControl
+public partial class Screenshots : UserControl
 {
-	public ScreenshotsBar()
+	public Screenshots()
 	{
 		InitializeComponent();
 	}

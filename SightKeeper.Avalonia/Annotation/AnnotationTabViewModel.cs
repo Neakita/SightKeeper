@@ -8,12 +8,12 @@ namespace SightKeeper.Avalonia.Annotation;
 internal sealed partial class AnnotationTabViewModel : ViewModel
 {
 	public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
-	public AnnotationScreenshotsViewModel Screenshots { get; }
+	public ScreenshotsViewModel Screenshots { get; }
 	public ScreenshottingSettingsViewModel ScreenshottingSettings { get; }
 
 	public AnnotationTabViewModel(
 		DataSetsListViewModel dataSets,
-		AnnotationScreenshotsViewModel screenshots,
+		ScreenshotsViewModel screenshots,
 		ScreenshottingSettingsViewModel screenshottingSettings)
 	{
 		DataSets = dataSets.DataSets;

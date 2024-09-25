@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Annotation.ScreenshotsBar"
-             x:DataType="local:AnnotationScreenshotsViewModel">
+             x:Class="SightKeeper.Avalonia.Annotation.Screenshots"
+             x:DataType="local:ScreenshotsViewModel">
     <ListBox ItemsSource="{Binding DisplayScreenshots}">
         <ListBox.ItemTemplate>
             <DataTemplate>

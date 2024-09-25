@@ -8,7 +8,7 @@
              x:DataType="local:AnnotationTabViewModel">
     <Border Classes="regular-padding">
         <Grid ColumnDefinitions="* 4* *">
-            <local:ScreenshotsBar
+            <local:Screenshots
                 Grid.Column="0"
                 DataContext="{Binding Screenshots}"/>
             <Border Grid.Column="2" Classes="outer wide-padding" VerticalAlignment="Top">
