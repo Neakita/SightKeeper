@@ -53,8 +53,6 @@ public sealed class Screenshoter
 		{
 			Guard.IsGreaterThanOrEqualTo(value.X, MinimumResolutionDimension);
 			Guard.IsGreaterThanOrEqualTo(value.Y, MinimumResolutionDimension);
-			Guard.IsTrue(value.X % 32 == 0);
-			Guard.IsTrue(value.Y % 32 == 0);
 			_resolution = value;
 		}
 	}
