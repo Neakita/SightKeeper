@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
       <PackageReference Include="System.Drawing.Common" Version="8.0.7" />
     </ItemGroup>
 
