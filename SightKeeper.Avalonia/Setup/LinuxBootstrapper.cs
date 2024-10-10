@@ -1,3 +1,4 @@
+#if OS_LINUX
 using Autofac;
 using SightKeeper.Application;
 using SightKeeper.Application.Linux.X11;
@@ -11,3 +12,4 @@ internal static class LinuxBootstrapper
 		builder.RegisterType<X11ScreenCapture>().As<ScreenCapture>();
 	}
 }
+#endif
