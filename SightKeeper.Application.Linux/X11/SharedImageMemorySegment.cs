@@ -1,5 +1,6 @@
 using System.Numerics.Tensors;
 using System.Runtime.InteropServices;
+using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.Linux.X11.Natives;
 using SightKeeper.Domain.Model;
 using SixLabors.ImageSharp.PixelFormats;
@@ -10,7 +11,7 @@ internal sealed class SharedImageMemorySegment<TPixel> : IDisposable
 	where TPixel : unmanaged, IPixel<TPixel>
 {
 	public Vector2<ushort> Resolution { get; }
-	public unsafe ReadOnlySpan<TPixel> Data => new(_image.data, Resolution.X * Resolution.Y);
+	public unsafe ReadOnlySpan2D<TPixel> Data => new(_image.data, Resolution.Y, Resolution.X, 0);
 
 	public unsafe SharedImageMemorySegment(nint display, Vector2<ushort> resolution)
 	{

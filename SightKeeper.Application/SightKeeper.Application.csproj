@@ -24,6 +24,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\HotKeys\HotKeys.SharpHook\HotKeys.SharpHook.csproj" />
       <ProjectReference Include="..\..\HotKeys\HotKeys\HotKeys.csproj" />
+      <ProjectReference Include="..\..\Yolo\Yolo\Yolo.csproj" />
       <ProjectReference Include="..\SightKeeper.Domain\SightKeeper.Domain.csproj" />
     </ItemGroup>
 

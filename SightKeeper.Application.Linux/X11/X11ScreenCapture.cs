@@ -1,6 +1,6 @@
+using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.Linux.X11.Natives;
 using SightKeeper.Domain.Model;
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Linux.X11;
@@ -18,7 +18,7 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 		}
 	}
 
-	public Image Capture(Vector2<ushort> resolution, Vector2<ushort> offset)
+	public ReadOnlySpan2D<Bgra32> Capture(Vector2<ushort> resolution, Vector2<ushort> offset)
 	{
 		if (_memorySegment?.Resolution != resolution)
 		{
@@ -26,7 +26,7 @@ public sealed class X11ScreenCapture : ScreenCapture, IDisposable
 			_memorySegment = new SharedImageMemorySegment<Bgra32>(_display, resolution);
 		}
 		_memorySegment.FetchData(_screen, offset);
-		return Image.LoadPixelData(_memorySegment.Data, resolution.X, resolution.Y);
+		return _memorySegment.Data;
 	}
 
 	private readonly nint _display;

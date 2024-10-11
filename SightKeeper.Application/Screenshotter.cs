@@ -1,4 +1,5 @@
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.HighPerformance;
 using HotKeys;
 using HotKeys.ActionRunners;
 using HotKeys.Bindings;
@@ -7,6 +8,9 @@ using HotKeys.SharpHook;
 using SharpHook.Native;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application;
 
@@ -104,9 +108,24 @@ public sealed class Screenshotter
 		while (!contextEliminated && IsEnabled)
 		{
 			Guard.IsNotNull(Library);
-			using var image = _screenCapture.Capture(Resolution, Offset);
+			var imageData = _screenCapture.Capture(Resolution, Offset);
+			using var image = LoadImage(imageData);
 			_screenshotsDataAccess.CreateScreenshot(Library, image, DateTimeOffset.Now, Resolution);
 			contextEliminated = context.WaitForElimination(Timeout);
 		}
+	}
+
+	private static Image<Bgra32> LoadImage(ReadOnlySpan2D<Bgra32> imageData)
+	{
+		if (imageData.TryGetSpan(out var span))
+			return Image.LoadPixelData(span, imageData.Width, imageData.Height);
+		Image<Bgra32> image = new(imageData.Width, imageData.Height);
+		for (int i = 0; i < imageData.Height; i++)
+		{
+			var source = imageData.GetRowSpan(i);
+			var target = image.DangerousGetPixelRowMemory(i);
+			source.CopyTo(target.Span);
+		}
+		return image;
 	}
 }
