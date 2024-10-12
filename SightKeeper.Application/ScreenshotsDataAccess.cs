@@ -16,21 +16,21 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 
 	public Screenshot CreateScreenshot(
 		ScreenshotsLibrary library,
-		Image imageData,
+		Image image,
 		DateTimeOffset creationDate,
 		Vector2<ushort> resolution)
 	{
 		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);
 		foreach (var removedScreenshot in removedScreenshots)
 			DeleteScreenshotData(removedScreenshot);
-		SaveScreenshotData(screenshot, imageData);
+		SaveScreenshotData(screenshot, image);
 		_added.OnNext(screenshot);
 		return screenshot;
 	}
 
 	public Screenshot<TAsset> CreateScreenshot<TAsset>(
 		ScreenshotsLibrary<TAsset> library,
-		Image imageData,
+		Image image,
 		DateTimeOffset creationDate,
 		Vector2<ushort> resolution)
 		where TAsset : Asset
@@ -38,7 +38,7 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);
 		foreach (var removedScreenshot in removedScreenshots)
 			DeleteScreenshotData(removedScreenshot);
-		SaveScreenshotData(screenshot, imageData);
+		SaveScreenshotData(screenshot, image);
 		_added.OnNext(screenshot);
 		return screenshot;
 	}

@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.HighPerformance;
 using SightKeeper.Domain.Model;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application;
 
-public interface ScreenCapture
+public interface ScreenCapture<TPixel>
 {
-	ReadOnlySpan2D<Bgra32> Capture(Vector2<ushort> resolution, Vector2<ushort> offset);
+	ReadOnlySpan2D<TPixel> Capture(Vector2<ushort> resolution, Vector2<ushort> offset);
 }

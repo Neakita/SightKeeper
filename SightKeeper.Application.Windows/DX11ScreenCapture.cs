@@ -11,7 +11,7 @@ using Resource = SharpDX.DXGI.Resource;
 
 namespace SightKeeper.Application.Windows;
 
-public sealed class DX11ScreenCapture : ScreenCapture, IDisposable
+public sealed class DX11ScreenCapture : ScreenCapture<Bgra32>, IDisposable
 {
 	public DX11ScreenCapture()
 	{

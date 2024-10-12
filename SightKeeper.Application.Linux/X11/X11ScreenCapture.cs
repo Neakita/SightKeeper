@@ -5,7 +5,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Linux.X11;
 
-public sealed class X11ScreenCapture : ScreenCapture, IDisposable
+public sealed class X11ScreenCapture : ScreenCapture<Bgra32>, IDisposable
 {
 	public X11ScreenCapture()
 	{
