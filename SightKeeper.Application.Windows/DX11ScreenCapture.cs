@@ -54,9 +54,12 @@ public sealed class DX11ScreenCapture : ScreenCapture<Bgra32>, IDisposable
 
 	private unsafe ReadOnlySpan2D<Bgra32> Capture()
 	{
-		_device.ImmediateContext.UnmapSubresource(_screenTexture, 0);
-		_screenResource?.Dispose();
-		_outputDuplication.ReleaseFrame();
+		if (_screenResource != null)
+		{
+			_device.ImmediateContext.UnmapSubresource(_screenTexture, 0);
+			_screenResource.Dispose();
+			_outputDuplication.ReleaseFrame();
+		}
 		_outputDuplication.TryAcquireNextFrame(1000, out _, out _screenResource).CheckError();
 		using (var screenTexture2D = _screenResource.QueryInterface<Texture2D>())
 			_device.ImmediateContext.CopyResource(screenTexture2D, _screenTexture);
