@@ -10,6 +10,7 @@ using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SixLabors.ImageSharp.PixelFormats;
 using GamesDataAccess = SightKeeper.Application.Games.GamesDataAccess;
 
 namespace SightKeeper.Avalonia.Setup;
@@ -29,7 +30,7 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<DataSetCreator>();
 		builder.RegisterType<DataSetEditor>().SingleInstance();
 		builder.RegisterType<SharpHookScreenBoundsProvider>().As<ScreenBoundsProvider>();
-		builder.RegisterType<Screenshotter>();
+		builder.RegisterType<Screenshotter<Bgra32>>().As<Screenshotter>();
 	}
 
 	private static void SetupBinarySerialization(ContainerBuilder builder)
