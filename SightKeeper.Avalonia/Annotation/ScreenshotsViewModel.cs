@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
@@ -10,7 +11,7 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-internal sealed class ScreenshotsViewModel : ViewModel
+internal sealed partial class ScreenshotsViewModel : ViewModel
 {
 	public ScreenshotsLibrary? Library
 	{
@@ -58,4 +59,5 @@ internal sealed class ScreenshotsViewModel : ViewModel
 	private readonly CompositeDisposable _disposable = new();
 	private readonly SourceList<Screenshot> _screenshotsSource = new();
 	private ScreenshotsLibrary? _library;
+	[ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
 }

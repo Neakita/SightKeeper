@@ -1,25 +1,32 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
-             x:DataType="local:AnnotationTabViewModel">
-    <Border Classes="regular-padding">
-        <Grid ColumnDefinitions="* 4* Auto">
-            <local:Screenshots
-                Grid.Column="0"
-                DataContext="{Binding Screenshots}"/>
-            <Border Grid.Column="2" Classes="outer wide-padding" VerticalAlignment="Top">
-                <StackPanel Classes="regular-spacing">
-                    <ComboBox SelectedItem="{Binding SelectedDataSet}"
-                              ItemsSource="{Binding DataSets}"
-                              DisplayMemberBinding="{Binding Name}"
-                              PlaceholderText="Select data set"/>
-                    <local:ScreenshottingSettings DataContext="{Binding ScreenshottingSettings}"/>
-                </StackPanel>
-            </Border>
-        </Grid>
-    </Border>
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
+			mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
+			x:DataType="local:AnnotationTabViewModel">
+	<Border Classes="regular-padding">
+		<Grid ColumnDefinitions="* 4* Auto">
+			<local:Screenshots
+				Grid.Column="0"
+				DataContext="{Binding Screenshots}"/>
+			<Image
+				Grid.Column="1"
+				Source="{Binding Screenshots.SelectedScreenshot.Image}"/>
+			<Border
+				Grid.Column="2"
+				Classes="outer wide-padding"
+				VerticalAlignment="Top">
+				<StackPanel Classes="regular-spacing">
+					<ComboBox
+						SelectedItem="{Binding SelectedDataSet}"
+						ItemsSource="{Binding DataSets}"
+						DisplayMemberBinding="{Binding Name}"
+						PlaceholderText="Select data set"/>
+					<local:ScreenshottingSettings DataContext="{Binding ScreenshottingSettings}"/>
+				</StackPanel>
+			</Border>
+		</Grid>
+	</Border>
 </UserControl>

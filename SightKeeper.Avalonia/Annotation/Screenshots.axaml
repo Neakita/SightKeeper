@@ -6,7 +6,9 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Screenshots"
              x:DataType="local:ScreenshotsViewModel">
-    <ListBox ItemsSource="{Binding DisplayScreenshots}">
+    <ListBox
+		ItemsSource="{Binding DisplayScreenshots}"
+		SelectedItem="{Binding SelectedScreenshot}">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Image Source="{Binding Image}"/>
