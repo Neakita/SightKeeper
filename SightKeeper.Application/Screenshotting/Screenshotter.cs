@@ -8,7 +8,7 @@ using SharpHook.Native;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Screenshotting;
 
 public abstract class Screenshotter
 {

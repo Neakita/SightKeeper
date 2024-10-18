@@ -5,7 +5,7 @@ using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SixLabors.ImageSharp;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Screenshotting;
 
 public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, IDisposable
 {
@@ -17,9 +17,9 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 	public Screenshot CreateScreenshot(
 		ScreenshotsLibrary library,
 		Image image,
-		DateTimeOffset creationDate,
-		Vector2<ushort> resolution)
+		DateTimeOffset creationDate)
 	{
+		Vector2<ushort> resolution = new((ushort)image.Width, (ushort)image.Height);
 		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);
 		foreach (var removedScreenshot in removedScreenshots)
 			DeleteScreenshotData(removedScreenshot);
@@ -31,10 +31,10 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 	public Screenshot<TAsset> CreateScreenshot<TAsset>(
 		ScreenshotsLibrary<TAsset> library,
 		Image image,
-		DateTimeOffset creationDate,
-		Vector2<ushort> resolution)
+		DateTimeOffset creationDate)
 		where TAsset : Asset
 	{
+		Vector2<ushort> resolution = new((ushort)image.Width, (ushort)image.Height);
 		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);
 		foreach (var removedScreenshot in removedScreenshots)
 			DeleteScreenshotData(removedScreenshot);

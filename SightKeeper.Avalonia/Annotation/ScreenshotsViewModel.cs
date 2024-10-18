@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
+using SightKeeper.Application.Screenshotting;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation;

@@ -5,6 +5,8 @@ using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Games;
+using SightKeeper.Application.Screenshotting;
+using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Services;
@@ -31,6 +33,7 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<DataSetEditor>().SingleInstance();
 		builder.RegisterType<SharpHookScreenBoundsProvider>().As<ScreenBoundsProvider>();
 		builder.RegisterType<Screenshotter<Bgra32>>().As<Screenshotter>();
+		builder.RegisterGeneric(typeof(BufferedScreenshotsSaver<>)).As(typeof(ScreenshotsSaver<>));
 	}
 
 	private static void SetupBinarySerialization(ContainerBuilder builder)

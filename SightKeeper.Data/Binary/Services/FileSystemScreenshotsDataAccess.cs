@@ -1,5 +1,5 @@
 ﻿using FlakeId;
-using SightKeeper.Application;
+using SightKeeper.Application.Screenshotting;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;

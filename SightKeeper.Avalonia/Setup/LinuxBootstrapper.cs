@@ -1,7 +1,7 @@
 #if OS_LINUX
 using Autofac;
-using SightKeeper.Application;
 using SightKeeper.Application.Linux.X11;
+using SightKeeper.Application.Screenshotting;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Avalonia.Setup;

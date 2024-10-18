@@ -1,5 +1,5 @@
 using Avalonia.Media.Imaging;
-using SightKeeper.Application;
+using SightKeeper.Application.Screenshotting;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation;
