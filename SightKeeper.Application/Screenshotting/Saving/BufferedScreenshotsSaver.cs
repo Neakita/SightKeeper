@@ -31,8 +31,9 @@ public sealed class BufferedScreenshotsSaver<TPixel> : ScreenshotsSaver<TPixel>
 	{
 		while (_screenshots.TryDequeue(out var data))
 		{
-			var image = WrapSpanAsImage(data.ImageData, data.ImageSize);
+			using var image = WrapSpanAsImage(data.ImageData, data.ImageSize);
 			_screenshotsDataAccess.CreateScreenshot(data.Library, image, data.CreationDate);
+			data.Dispose();
 		}
 	}
 
