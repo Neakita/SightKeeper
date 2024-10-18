@@ -78,7 +78,7 @@ public abstract class Screenshotter
 	private const ushort MinimumResolutionDimension = 32;
 	private readonly ScreenBoundsProvider _screenBoundsProvider;
 	private readonly BindingsManager _bindingsManager;
-	private float _fps = 10;
+	private float _fps = 60;
 	private Vector2<ushort> _resolution = new(320, 320);
 	private bool _isEnabled;
 	private Binding? _binding;
