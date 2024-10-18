@@ -7,6 +7,10 @@ namespace SightKeeper.Avalonia.Annotation;
 internal sealed class ScreenshotViewModel : ViewModel
 {
 	public Bitmap Image => new(_screenshotsDataAccess.LoadImage(_screenshot));
+	public Bitmap PreviewImage => Bitmap.DecodeToWidth(
+		_screenshotsDataAccess.LoadImage(_screenshot),
+		100,
+		BitmapInterpolationMode.LowQuality);
 
 	public ScreenshotViewModel(Screenshot screenshot, ScreenshotsDataAccess screenshotsDataAccess)
 	{

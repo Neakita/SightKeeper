@@ -36,13 +36,14 @@ public abstract class Screenshotter
 		}
 	}
 
-	public float FPS
+	public float? MaximumFPS
 	{
-		get => _fps;
+		get => _maximumFPS;
 		set
 		{
-			Guard.IsGreaterThan(value, 0);
-			_fps = value;
+			if (value != null)
+				Guard.IsGreaterThan(value.Value, 0);
+			_maximumFPS = value;
 		}
 	}
 
@@ -60,7 +61,7 @@ public abstract class Screenshotter
 	public Gesture Gesture { get; set; } = new([new FormattedSharpButton(MouseButton.Button1)]);
 
 	protected ScreenshotsDataAccess ScreenshotsDataAccess { get; }
-	protected TimeSpan Timeout => TimeSpan.FromSeconds(1) / FPS;
+	protected TimeSpan? Timeout => TimeSpan.FromSeconds(1) / MaximumFPS;
 	protected Vector2<ushort> Offset => _screenBoundsProvider.MainScreenCenter - _resolution / 2;
 
 	protected Screenshotter(
@@ -78,7 +79,7 @@ public abstract class Screenshotter
 	private const ushort MinimumResolutionDimension = 32;
 	private readonly ScreenBoundsProvider _screenBoundsProvider;
 	private readonly BindingsManager _bindingsManager;
-	private float _fps = 60;
+	private float? _maximumFPS;
 	private Vector2<ushort> _resolution = new(320, 320);
 	private bool _isEnabled;
 	private Binding? _binding;

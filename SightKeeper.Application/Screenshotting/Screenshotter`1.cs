@@ -1,10 +1,8 @@
-﻿using CommunityToolkit.Diagnostics;
-using CommunityToolkit.HighPerformance;
+﻿using System.Diagnostics;
+using CommunityToolkit.Diagnostics;
 using HotKeys.ActionRunners;
 using HotKeys.Bindings;
 using SightKeeper.Application.Screenshotting.Saving;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Screenshotting;
@@ -33,23 +31,15 @@ public sealed class Screenshotter<TPixel> : Screenshotter
 		while (!contextEliminated && IsEnabled)
 		{
 			Guard.IsNotNull(Library);
+			var stopwatch = Stopwatch.StartNew();
 			var imageData = _screenCapture.Capture(Resolution, Offset);
 			_screenshotsSaver.CreateScreenshot(Library, imageData, DateTimeOffset.Now);
-			contextEliminated = context.WaitForElimination(Timeout);
+			if (Timeout != null)
+				contextEliminated = context.WaitForElimination(Timeout.Value - stopwatch.Elapsed);
+			else
+				contextEliminated = !context.Alive;
+			stopwatch.Stop();
+			Console.WriteLine($"Elapsed: {stopwatch.Elapsed.TotalMilliseconds:N1}ms");
 		}
-	}
-
-	private static Image<TPixel> LoadImage(ReadOnlySpan2D<TPixel> imageData)
-	{
-		if (imageData.TryGetSpan(out var span))
-			return Image.LoadPixelData(span, imageData.Width, imageData.Height);
-		Image<TPixel> image = new(imageData.Width, imageData.Height);
-		for (int i = 0; i < imageData.Height; i++)
-		{
-			var source = imageData.GetRowSpan(i);
-			var target = image.DangerousGetPixelRowMemory(i);
-			source.CopyTo(target.Span);
-		}
-		return image;
 	}
 }

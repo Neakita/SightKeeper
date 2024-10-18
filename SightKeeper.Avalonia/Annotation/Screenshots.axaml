@@ -6,12 +6,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Screenshots"
              x:DataType="local:ScreenshotsViewModel">
-    <ListBox
-		ItemsSource="{Binding DisplayScreenshots}"
-		SelectedItem="{Binding SelectedScreenshot}">
+    <ListBox ItemsSource="{Binding DisplayScreenshots}"
+             SelectedItem="{Binding SelectedScreenshot}">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <Image Source="{Binding Image}"/>
+                <Image Source="{Binding PreviewImage}"/>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
