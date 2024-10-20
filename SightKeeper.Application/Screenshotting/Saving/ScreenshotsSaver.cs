@@ -1,15 +1,16 @@
-using CommunityToolkit.HighPerformance;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Screenshotting.Saving;
 
 public abstract class ScreenshotsSaver<TPixel> : IDisposable
-	where TPixel : unmanaged
+	where TPixel : unmanaged, IPixel<TPixel>
 {
-	public abstract void CreateScreenshot(
-		ScreenshotsLibrary library,
-		ReadOnlySpan2D<TPixel> imageData,
-		DateTimeOffset creationDate);
+	public abstract Vector2<ushort> ImageSize { get; set; }
+
+	public abstract ScreenshotsSaverSession<TPixel> AcquireSession(ScreenshotsLibrary library);
+	public abstract void ReleaseSession(ScreenshotsSaverSession<TPixel> session);
 
 	public abstract void Dispose();
 }

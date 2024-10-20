@@ -47,7 +47,7 @@ public abstract class Screenshotter
 		}
 	}
 
-	public Vector2<ushort> Resolution
+	public virtual Vector2<ushort> Resolution
 	{
 		get => _resolution;
 		set
@@ -85,14 +85,14 @@ public abstract class Screenshotter
 	private Binding? _binding;
 	private ScreenshotsLibrary? _library;
 
-	private void Enable()
+	protected virtual void Enable()
 	{
 		Guard.IsNull(_binding);
 		_binding = _bindingsManager.CreateBinding(MakeScreenshots, InputTypes.Hold);
 		_bindingsManager.SetGesture(_binding, Gesture);
 	}
 
-	private void Disable()
+	protected virtual void Disable()
 	{
 		Guard.IsNotNull(_binding);
 		_binding.Dispose();

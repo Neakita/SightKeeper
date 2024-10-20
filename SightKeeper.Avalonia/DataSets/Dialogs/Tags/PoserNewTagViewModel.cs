@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using FluentValidation;
+using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;

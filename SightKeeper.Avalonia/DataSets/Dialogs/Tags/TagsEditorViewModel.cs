@@ -6,6 +6,7 @@ using System.Reactive.Subjects;
 using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.Model.DataSets.Tags;

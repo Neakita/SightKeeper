@@ -1,9 +1,8 @@
-using System;
 using System.Reactive.Subjects;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Application;
 
-internal sealed class BehaviorObservable<T> : IObservable<T>
+public sealed class BehaviorObservable<T> : IObservable<T>
 {
 	public static implicit operator T(BehaviorObservable<T> observable)
 	{
