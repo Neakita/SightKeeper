@@ -58,7 +58,7 @@ public abstract class Screenshotter
 		}
 	}
 
-	public Gesture Gesture { get; set; } = new([new FormattedSharpButton(MouseButton.Button1)]);
+	public Gesture Gesture { get; set; } = new([new FormattedButton(MouseButton.Button1)]);
 
 	protected ScreenshotsDataAccess ScreenshotsDataAccess { get; }
 	protected TimeSpan? Timeout => TimeSpan.FromSeconds(1) / MaximumFPS;
