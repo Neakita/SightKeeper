@@ -15,11 +15,7 @@ internal sealed class WriteableBitmapPool : IDisposable
 		BitmapArchetype archetype = new(size, format);
 		var bag = GetOrCreateBag(archetype);
 		if (bag.TryTake(out var bitmap))
-		{
-			Console.WriteLine($"Rented: {archetype}");
 			return bitmap;
-		}
-		Console.WriteLine($"Allocated: {archetype}");
 		return new WriteableBitmap(size, DPI, format);
 	}
 
@@ -28,7 +24,6 @@ internal sealed class WriteableBitmapPool : IDisposable
 		BitmapArchetype archetype = new(bitmap.PixelSize, bitmap.Format);
 		var bag = GetOrCreateBag(archetype);
 		bag.Add(bitmap);
-		Console.WriteLine($"Returned: {archetype}");
 	}
 
 	private static readonly Vector DPI = new(96, 96);

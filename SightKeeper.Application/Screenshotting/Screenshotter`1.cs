@@ -74,7 +74,6 @@ public sealed class Screenshotter<TPixel> : Screenshotter
 			else
 				contextEliminated = !context.Alive;
 			stopwatch.Stop();
-			Console.WriteLine($"Elapsed: {stopwatch.Elapsed.TotalMilliseconds:N1}ms");
 		}
 	}
 }
