@@ -43,7 +43,7 @@ internal sealed partial class ScreenshotViewModel : ViewModel
 		return bitmap;
 	}
 
-	private unsafe WriteableBitmap LoadImage(int maximumLargestDimension)
+	internal unsafe WriteableBitmap LoadImage(int maximumLargestDimension)
 	{
 		PixelSize size = ComputeThumbnailSize(maximumLargestDimension);
 		WriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
