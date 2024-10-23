@@ -10,7 +10,7 @@ using SightKeeper.Application.Screenshotting;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
-using Yolo;
+using Yolo.InputProcessing;
 
 namespace SightKeeper.Avalonia.Annotation;
 
@@ -37,20 +37,9 @@ internal sealed partial class ScreenshotViewModel : ViewModel
 	{
 		PixelSize size = new(_screenshot.ImageSize.X, _screenshot.ImageSize.Y);
 		WriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
-		using var buffer = bitmap.Lock();
-		
-		Span<Rgba32> span = new((void*)buffer.Address, _screenshot.ImageSize.X * _screenshot.ImageSize.Y);
-		Span<byte> bytesSpan = MemoryMarshal.AsBytes(span);
-		using var stream = _screenshotsDataAccess.LoadImage(_screenshot);
-		var bytesRead = 0;
-		while (stream.CanRead)
-		{
-			var read = stream.Read(bytesSpan[bytesRead..]);
-			if (read == 0)
-				break;
-			bytesRead += read;
-		}
-
+		using var bitmapBuffer = bitmap.Lock();
+		Span<Rgba32> bitmapSpan = new((void*)bitmapBuffer.Address, _screenshot.ImageSize.X * _screenshot.ImageSize.Y);
+		ReadImageData(bitmapSpan);
 		return bitmap;
 	}
 
@@ -58,22 +47,27 @@ internal sealed partial class ScreenshotViewModel : ViewModel
 	{
 		PixelSize size = ComputeThumbnailSize(maximumLargestDimension);
 		WriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
-		using var buffer = bitmap.Lock();
-		Span<Rgba32> span = new((void*)buffer.Address, size.Width * size.Height);
-		var arrayBuffer = ArrayPool<Rgba32>.Shared.Rent(_screenshot.ImageSize.X * _screenshot.ImageSize.Y);
-		Span<byte> bytesSpan = MemoryMarshal.AsBytes(arrayBuffer.AsSpan());
+		using var bitmapBuffer = bitmap.Lock();
+		Span<Rgba32> bitmapSpan = new((void*)bitmapBuffer.Address, size.Width * size.Height);
+		var intermediateBuffer = ArrayPool<Rgba32>.Shared.Rent(_screenshot.ImageSize.X * _screenshot.ImageSize.Y);
+		ReadImageData(intermediateBuffer);
+		NearestNeighbourImageResizer.Resize(intermediateBuffer.AsSpan().AsSpan2D(_screenshot.ImageSize.Y, _screenshot.ImageSize.X), bitmapSpan.AsSpan2D(size.Height, size.Width));
+		ArrayPool<Rgba32>.Shared.Return(intermediateBuffer);
+		return bitmap;
+	}
+
+	private void ReadImageData(Span<Rgba32> target)
+	{
+		Span<byte> targetAsBytes = MemoryMarshal.AsBytes(target);
 		using var stream = _screenshotsDataAccess.LoadImage(_screenshot);
 		var bytesRead = 0;
 		while (stream.CanRead)
 		{
-			var read = stream.Read(bytesSpan[bytesRead..]);
+			var read = stream.Read(targetAsBytes[bytesRead..]);
 			if (read == 0)
 				break;
 			bytesRead += read;
 		}
-		NearestNeighbourImageResizer.Resize(arrayBuffer.AsSpan().AsSpan2D(_screenshot.ImageSize.Y, _screenshot.ImageSize.X), span.AsSpan2D(size.Height, size.Width));
-		ArrayPool<Rgba32>.Shared.Return(arrayBuffer);
-		return bitmap;
 	}
 
 	private PixelSize ComputeThumbnailSize(int maximumLargestDimension)
