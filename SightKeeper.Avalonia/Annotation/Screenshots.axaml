@@ -3,14 +3,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Screenshots"
              x:DataType="local:ScreenshotsViewModel">
     <ListBox ItemsSource="{Binding DisplayScreenshots}"
-             SelectedItem="{Binding SelectedScreenshot}">
+             SelectedItem="{Binding SelectedScreenshot}"
+             Name="ListBox"
+             Classes="square-items">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel/>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <Image Source="{Binding PreviewImage}"/>
+                <Image Name="Image"
+                       Source="{Binding Thumbnail}"
+                       Stretch="UniformToFill">
+                    <Interaction.Behaviors>
+                        <behaviors:ExecuteCommandOnSourceChanged Command="{Binding ReturnBitmapToPoolCommand}"/>
+                    </Interaction.Behaviors>
+                </Image>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>

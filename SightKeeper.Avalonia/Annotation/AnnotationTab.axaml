@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
@@ -11,7 +13,11 @@
             <local:Screenshots Grid.Column="0"
                                DataContext="{Binding Screenshots}"/>
             <Image Grid.Column="1"
-                   Source="{Binding Screenshots.SelectedScreenshot.Image}"/>
+                   Source="{Binding Screenshots.SelectedScreenshot.Image}">
+                <Interaction.Behaviors>
+                    <behaviors:ExecuteCommandOnSourceChanged Command="{Binding ReturnBitmapToPoolCommand}"/>
+                </Interaction.Behaviors>
+            </Image>
             <Border Grid.Column="2"
                     Classes="outer wide-padding"
                     VerticalAlignment="Top">
@@ -22,7 +28,8 @@
                               PlaceholderText="Select data set"/>
                     <local:ScreenshottingSettings DataContext="{Binding ScreenshottingSettings}"/>
                     <TextBlock Classes="p2"
-                               Text="{Binding PendingScreenshotsCount^, StringFormat=Pending screenshots: {0}}"/>
+                               Text="{Binding PendingScreenshotsCount^, StringFormat=Pending screenshots: {0}}"
+                               IsVisible="{Binding PendingScreenshotsCount^, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static system:UInt16.MinValue}}"/>
                 </StackPanel>
             </Border>
         </Grid>

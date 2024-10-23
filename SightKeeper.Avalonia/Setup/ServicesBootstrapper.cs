@@ -34,6 +34,8 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<SharpHookScreenBoundsProvider>().As<ScreenBoundsProvider>();
 		builder.RegisterType<Screenshotter<Bgra32>>().As<Screenshotter>();
 		builder.RegisterType<BufferedScreenshotsSaver<Bgra32>>().As<ScreenshotsSaver<Bgra32>>().As<PendingScreenshotsCountReporter>().SingleInstance();
+		builder.RegisterType<Bgra32ToRgba32PixelConverter>().As<PixelConverter<Bgra32, Rgba32>>();
+		builder.RegisterType<WriteableBitmapPool>().SingleInstance();
 	}
 
 	private static void SetupBinarySerialization(ContainerBuilder builder)

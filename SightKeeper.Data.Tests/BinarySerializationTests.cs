@@ -1,4 +1,6 @@
 ﻿using System.Collections.Immutable;
+using CommunityToolkit.Diagnostics;
+using CommunityToolkit.HighPerformance;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using MemoryPack;
@@ -16,12 +18,22 @@ using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
 using SightKeeper.Domain.Model.Profiles.Behaviors;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Tests;
 
 public sealed class BinarySerializationTests
 {
-	private static readonly Image SampleImage = Image.Load("sample.png");
+	private static readonly Image<Rgba32> SampleImage = Image.Load<Rgba32>("sample.png");
+
+	private static ReadOnlySpan2D<Rgba32> SampleImageData
+	{
+		get
+		{
+			Guard.IsTrue(SampleImage.DangerousTryGetSinglePixelMemory(out var memory));
+			return memory.Span.AsSpan2D(SampleImage.Height, SampleImage.Width);
+		}
+	}
 
 	[Fact]
 	public void ShouldSaveAndLoadAppData()
@@ -73,10 +85,10 @@ public sealed class BinarySerializationTests
 		dataSet.TagsLibrary.CreateTag("Don't Shoot");
 		var shootTag = dataSet.TagsLibrary.CreateTag("shoot");
 		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImage, DateTimeOffset.Now);
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTimeOffset.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.Tag = shootTag;
-		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImage, DateTimeOffset.Now);
+		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTimeOffset.Now);
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
 			ModelSize.Nano,
@@ -100,11 +112,11 @@ public sealed class BinarySerializationTests
 		var bulldozerTag = dataSet.TagsLibrary.CreateTag("Bulldozer");
 		bulldozerTag.Color = 456;
 		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImage, DateTime.Now);
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8));
 		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9));
-		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImage, DateTime.Now);
+		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
 			ModelSize.Nano,
@@ -132,11 +144,11 @@ public sealed class BinarySerializationTests
 		bulldozerTag.CreateKeyPoint("Face");
 		bulldozerTag.CreateProperty("Distance", 0, 200);
 		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImage, DateTime.Now);
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [new Vector2<double>(0.3, 0.2)], [20]);
 		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [new Vector2<double>(0.4, 0.3)], [25]);
-		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImage, DateTime.Now);
+		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
 			ModelSize.Nano,
@@ -167,11 +179,11 @@ public sealed class BinarySerializationTests
 		bulldozerTag.CreateNumericProperty("Distance", 0, 200);
 		bulldozerTag.CreateBooleanProperty("ShouldShoot");
 		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImage, DateTime.Now);
+		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [new KeyPoint3D(new Vector2<double>(0.3, 0.2), true)], [20], [true]);
 		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [new KeyPoint3D(new Vector2<double>(0.4, 0.3), false)], [25], [false]);
-		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImage, DateTime.Now);
+		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
 			ModelSize.Nano,

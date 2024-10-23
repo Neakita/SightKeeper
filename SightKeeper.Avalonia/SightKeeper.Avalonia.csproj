@@ -14,6 +14,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <AssemblyTitle>Sight Keeper</AssemblyTitle>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <!--Previewer doesn't support AOT https://github.com/AvaloniaUI/Avalonia/issues/13760#issuecomment-1829411762-->

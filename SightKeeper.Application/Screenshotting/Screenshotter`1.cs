@@ -4,34 +4,31 @@ using HotKeys.ActionRunners;
 using HotKeys.Bindings;
 using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Domain.Model;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Screenshotting;
 
 public sealed class Screenshotter<TPixel> : Screenshotter
-	where TPixel : unmanaged, IPixel<TPixel>
 {
-	public override Vector2<ushort> Resolution
+	public override Vector2<ushort> ImageSize
 	{
-		get => base.Resolution;
+		get => base.ImageSize;
 		set
 		{
-			base.Resolution = value;
-			_screenshotsSaver.ImageSize = value;
+			base.ImageSize = value;
+			_screenshotsSaver.MaximumImageSize = value;
 		}
 	}
 
 	public Screenshotter(
 		ScreenCapture<TPixel> screenCapture,
-		ScreenshotsDataAccess screenshotsDataAccess,
 		ScreenBoundsProvider screenBoundsProvider,
 		BindingsManager bindingsManager,
 		ScreenshotsSaver<TPixel> screenshotsSaver)
-		: base(screenshotsDataAccess, screenBoundsProvider, bindingsManager)
+		: base(screenBoundsProvider, bindingsManager)
 	{
 		_screenCapture = screenCapture;
 		_screenshotsSaver = screenshotsSaver;
-		_screenshotsSaver.ImageSize = Resolution;
+		_screenshotsSaver.MaximumImageSize = ImageSize;
 	}
 
 	private readonly ScreenCapture<TPixel> _screenCapture;
@@ -57,12 +54,20 @@ public sealed class Screenshotter<TPixel> : Screenshotter
 	protected override void MakeScreenshots(ActionContext context)
 	{
 		var contextEliminated = false;
-		Guard.IsNotNull(_session);
 		var session = _session;
+		Guard.IsNotNull(session);
+		Task[] waitTasks = [Task.CompletedTask, context.Elimination];
+		var offset = Offset;
 		while (!contextEliminated && IsEnabled)
 		{
+			if (_session is LimitedSession limitedSession)
+			{
+				waitTasks[0] = limitedSession.Limit;
+				if (Task.WaitAny(waitTasks) == 1)
+					return;
+			}
 			var stopwatch = Stopwatch.StartNew();
-			var imageData = _screenCapture.Capture(Resolution, Offset);
+			var imageData = _screenCapture.Capture(ImageSize, offset);
 			session.CreateScreenshot(imageData, DateTimeOffset.Now);
 			if (Timeout != null)
 				contextEliminated = context.WaitForElimination(Timeout.Value - stopwatch.Elapsed);

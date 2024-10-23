@@ -1,8 +1,10 @@
-﻿using FlakeId;
+﻿using System.IO.Compression;
+using System.Runtime.InteropServices;
+using CommunityToolkit.HighPerformance;
+using FlakeId;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Binary.Services;
 
@@ -14,9 +16,9 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		set => _dataAccess.DirectoryPath = value;
 	}
 
-	public override FileStream LoadImage(Screenshot screenshot)
+	public override Stream LoadImage(Screenshot screenshot)
 	{
-		return _dataAccess.OpenReadStream(screenshot);
+		return new ZLibStream(_dataAccess.OpenReadStream(screenshot), CompressionMode.Decompress);
 	}
 
 	public Id GetId(Screenshot screenshot)
@@ -29,10 +31,21 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		_dataAccess.AssociateId(screenshot, id);
 	}
 
-	protected override void SaveScreenshotData(Screenshot screenshot, Image image)
+	protected override void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> imageData)
 	{
-		using var stream = _dataAccess.OpenWriteStream(screenshot);
-		image.Save(stream, PngFormat.Instance);
+		using var stream = new ZLibStream(_dataAccess.OpenWriteStream(screenshot), CompressionLevel.SmallestSize);
+		if (imageData.TryGetSpan(out var contiguousData))
+		{
+			var bytes = MemoryMarshal.AsBytes(contiguousData);
+			stream.Write(bytes);
+			return;
+		}
+		for (int i = 0; i < imageData.Height; i++)
+		{
+			var rowData = imageData.GetRowSpan(i);
+			var bytes = MemoryMarshal.AsBytes(rowData);
+			stream.Write(bytes);
+		}
 	}
 
 	protected override void DeleteScreenshotData(Screenshot screenshot)
@@ -40,5 +53,5 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		_dataAccess.Delete(screenshot);
 	}
 
-	private readonly FileSystemDataAccess<Screenshot> _dataAccess = new(".png");
+	private readonly FileSystemDataAccess<Screenshot> _dataAccess = new(".bin");
 }

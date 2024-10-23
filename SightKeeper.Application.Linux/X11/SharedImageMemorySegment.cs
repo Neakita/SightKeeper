@@ -1,4 +1,3 @@
-using System.Numerics.Tensors;
 using System.Runtime.InteropServices;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.Linux.X11.Natives;
@@ -28,11 +27,15 @@ internal sealed class SharedImageMemorySegment<TPixel> : IDisposable
 		const ulong allPlanes = unchecked((ulong)~0);
 		var drawable = (UIntPtr)LibX.XRootWindow(_display, screen);
 		LibXExt.XShmGetImage(_display, drawable, _image.ximage, offset.X, offset.Y, allPlanes);
-		
 		// xlib doesn't use most significant byte but fills it with zeros
-		// because of that ImageSharp treats it as fully transparent Bgra32
+		// because of that ImageSharp treats it as fully transparent Bgra32.
+		// If the pipeline does not require the significance of this byte, it's possible to leave it with zeros
+		/*
+		// use MemoryMarshal.Cast instead?
 		Span<uint> span = new(_image.data, Resolution.X * Resolution.Y);
+		// Use TensorPrimitives.Add instead?
 		TensorPrimitives.BitwiseOr(span, 0xFF_00_00_00, span);
+		*/
 	}
 
 	public void Dispose()

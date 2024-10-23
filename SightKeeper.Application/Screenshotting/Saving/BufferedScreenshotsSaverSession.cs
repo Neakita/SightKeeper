@@ -3,34 +3,51 @@ using System.Collections.Concurrent;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Screenshotting.Saving;
 
-public sealed class BufferedScreenshotsSaverSession<TPixel> : ScreenshotsSaverSession<TPixel>
-	where TPixel : unmanaged, IPixel<TPixel>
+public sealed class BufferedScreenshotsSaverSession<TPixel> : ScreenshotsSaverSession<TPixel>, LimitedSession
 {
+	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
 	public BehaviorObservable<ushort> PendingScreenshotsCount => _pendingScreenshotsCount;
+
+	public ushort MaximumAllowedPendingScreenshots
+	{
+		get => _maximumAllowedPendingScreenshots;
+		set
+		{
+			Guard.IsGreaterThan<ushort>(value, 0);
+			_maximumAllowedPendingScreenshots = value;
+		}
+	}
+
+	public bool IsLimitExceeded => _limit != null;
+
+	public Task Limit => _limit?.Task ?? Task.CompletedTask;
 
 	public BufferedScreenshotsSaverSession(
 		ScreenshotsLibrary screenshotsLibrary,
 		ScreenshotsDataAccess screenshotsDataAccess,
-		ArrayPool<TPixel> arrayPool)
+		ArrayPool<TPixel> rawPixelsArrayPool,
+		ArrayPool<Rgba32> convertedPixelsArrayPool,
+		PixelConverter<TPixel, Rgba32> pixelConverter)
 		: base(screenshotsLibrary, screenshotsDataAccess)
 	{
-		ArrayPool = arrayPool;
+		_pixelConverter = pixelConverter;
+		RawPixelsArrayPool = rawPixelsArrayPool;
+		ConvertedPixelsArrayPool = convertedPixelsArrayPool;
 	}
 
 	public override void CreateScreenshot(ReadOnlySpan2D<TPixel> imageData, DateTimeOffset creationDate)
 	{
-		ScreenshotData<TPixel> data = new(creationDate, imageData, ArrayPool);
+		Guard.IsFalse(IsLimitExceeded);
+		var data = new ScreenshotData<TPixel>(creationDate, imageData, RawPixelsArrayPool);
 		_pendingScreenshots.Enqueue(data);
 		if (_processingTask.IsCompleted)
 			_processingTask = Task.Run(ProcessScreenshots);
-		UpdatePendingScreenshotsCount();
+		OnScreenshotsCountChanged();
 	}
 
 	public override void Dispose()
@@ -42,34 +59,48 @@ public sealed class BufferedScreenshotsSaverSession<TPixel> : ScreenshotsSaverSe
 		_pendingScreenshotsCount.Dispose();
 	}
 
-	internal ArrayPool<TPixel> ArrayPool { get; set; }
+	internal ArrayPool<TPixel> RawPixelsArrayPool { get; set; }
+	internal ArrayPool<Rgba32> ConvertedPixelsArrayPool { get; set; }
 
 	private readonly ConcurrentQueue<ScreenshotData<TPixel>> _pendingScreenshots = new();
 	private readonly BehaviorSubject<ushort> _pendingScreenshotsCount = new(0);
 	private Task _processingTask = Task.CompletedTask;
+	private ushort _maximumAllowedPendingScreenshots = 10;
+	private TaskCompletionSource? _limit;
 
 	private void ProcessScreenshots()
 	{
 		while (_pendingScreenshots.TryDequeue(out var data))
 		{
-			using var image = WrapSpanAsImage(data.ImageData, data.ImageSize);
-			ScreenshotsDataAccess.CreateScreenshot(Library, image, data.CreationDate);
-			data.Dispose();
-			UpdatePendingScreenshotsCount();
+			OnScreenshotsCountChanged();
+			var buffer = ConvertedPixelsArrayPool.Rent(data.ImageSize.X * data.ImageSize.Y);
+			try
+			{
+				var buffer2D = buffer.AsSpan().AsSpan2D(data.ImageSize.Y, data.ImageSize.X);
+				_pixelConverter.Convert(data.ImageData2D, buffer2D);
+				ScreenshotsDataAccess.CreateScreenshot(Library, buffer2D, data.CreationDate);
+			}
+			finally
+			{
+				ConvertedPixelsArrayPool.Return(buffer, true);
+				data.Dispose();
+			}
 		}
 	}
 
-	private static unsafe Image<TPixel> WrapSpanAsImage(ReadOnlySpan<TPixel> span, Vector2<ushort> imageSize)
+	private void OnScreenshotsCountChanged()
 	{
-		fixed (TPixel* spanPointer = span)
+		var count = (ushort)_pendingScreenshots.Count;
+		if (count > MaximumAllowedPendingScreenshots)
 		{
-			var bufferSizeInBytes = sizeof(TPixel) * span.Length;
-			return Image.WrapMemory<TPixel>(spanPointer, bufferSizeInBytes, imageSize.X, imageSize.Y);
+			Guard.IsNull(_limit);
+			_limit = new TaskCompletionSource();
 		}
-	}
-
-	private void UpdatePendingScreenshotsCount()
-	{
-		_pendingScreenshotsCount.OnNext((ushort)_pendingScreenshots.Count);
+		else if (count == 0 && _limit != null)
+		{
+			_limit.SetResult();
+			_limit = null;
+		}
+		_pendingScreenshotsCount.OnNext(count);
 	}
 }

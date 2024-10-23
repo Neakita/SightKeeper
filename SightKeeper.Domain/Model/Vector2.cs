@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.Model;
 
-public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>
+public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>, IConvertible
 {
 	public static bool operator ==(Vector2<T> left, Vector2<T> right)
 	{
@@ -51,6 +51,27 @@ public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>
 	public Vector2<T> WithY(T value)
 	{
 		return new Vector2<T>(X, value);
+	}
+
+	public Vector2<ushort> ToUInt16(IFormatProvider? provider = null)
+	{
+		var x = X.ToUInt16(provider);
+		var y = Y.ToUInt16(provider);
+		return new Vector2<ushort>(x, y);
+	}
+
+	public Vector2<int> ToInt32(IFormatProvider? provider = null)
+	{
+		var x = X.ToInt32(provider);
+		var y = Y.ToInt32(provider);
+		return new Vector2<int>(x, y);
+	}
+
+	public Vector2<uint> ToUInt32(IFormatProvider? provider = null)
+	{
+		var x = X.ToUInt32(provider);
+		var y = Y.ToUInt32(provider);
+		return new Vector2<uint>(x, y);
 	}
 
 	public bool Equals(Vector2<T> other)

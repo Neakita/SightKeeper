@@ -31,10 +31,13 @@ internal sealed partial class ScreenshotsViewModel : ViewModel
 	public IReadOnlyCollection<ScreenshotViewModel> DisplayScreenshots { get; }
 	public IReadOnlyCollection<DateOnly> Dates { get; }
 
-	public ScreenshotsViewModel(ObservableDataAccess<Screenshot> observableDataAccess, ScreenshotsDataAccess screenshotsDataAccess)
+	public ScreenshotsViewModel(
+		ObservableDataAccess<Screenshot> observableDataAccess,
+		ScreenshotsDataAccess screenshotsDataAccess,
+		WriteableBitmapPool bitmapPool)
 	{
 		_screenshotsSource.Connect()
-			.Transform(screenshot => new ScreenshotViewModel(screenshot, screenshotsDataAccess))
+			.Transform(screenshot => new ScreenshotViewModel(screenshot, screenshotsDataAccess, bitmapPool))
 			.Bind(out var screenshots)
 			.Subscribe()
 			.DisposeWith(_disposable);

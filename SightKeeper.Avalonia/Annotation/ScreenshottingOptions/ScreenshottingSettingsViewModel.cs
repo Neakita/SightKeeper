@@ -27,14 +27,14 @@ internal sealed class ScreenshottingSettingsViewModel : ViewModel
 
 	public ushort ResolutionWidth
 	{
-		get => _screenshotter.Resolution.X;
-		set => SetProperty(_screenshotter.Resolution.X, value, _screenshotter, static (screenshotter, newValue) => screenshotter.Resolution = screenshotter.Resolution.WithX(newValue));
+		get => _screenshotter.ImageSize.X;
+		set => SetProperty(_screenshotter.ImageSize.X, value, _screenshotter, static (screenshotter, newValue) => screenshotter.ImageSize = screenshotter.ImageSize.WithX(newValue));
 	}
 
 	public ushort ResolutionHeight
 	{
-		get => _screenshotter.Resolution.Y;
-		set => SetProperty(_screenshotter.Resolution.Y, value, _screenshotter, static (screenshotter, newValue) => screenshotter.Resolution = screenshotter.Resolution.WithY(newValue));
+		get => _screenshotter.ImageSize.Y;
+		set => SetProperty(_screenshotter.ImageSize.Y, value, _screenshotter, static (screenshotter, newValue) => screenshotter.ImageSize = screenshotter.ImageSize.WithY(newValue));
 	}
 
 	public Gesture Gesture
@@ -50,6 +50,8 @@ internal sealed class ScreenshottingSettingsViewModel : ViewModel
 	{
 		_screenBoundsProvider = screenBoundsProvider;
 		_screenshotter = screenshotter;
+		ResolutionWidth = MaximumWidth;
+		ResolutionHeight = MaximumHeight;
 	}
 
 	private readonly ScreenBoundsProvider _screenBoundsProvider;

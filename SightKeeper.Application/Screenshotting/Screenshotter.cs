@@ -47,7 +47,7 @@ public abstract class Screenshotter
 		}
 	}
 
-	public virtual Vector2<ushort> Resolution
+	public virtual Vector2<ushort> ImageSize
 	{
 		get => _resolution;
 		set
@@ -60,16 +60,13 @@ public abstract class Screenshotter
 
 	public Gesture Gesture { get; set; } = new([new FormattedButton(MouseButton.Button1)]);
 
-	protected ScreenshotsDataAccess ScreenshotsDataAccess { get; }
 	protected TimeSpan? Timeout => TimeSpan.FromSeconds(1) / MaximumFPS;
 	protected Vector2<ushort> Offset => _screenBoundsProvider.MainScreenCenter - _resolution / 2;
 
 	protected Screenshotter(
-		ScreenshotsDataAccess screenshotsDataAccess,
 		ScreenBoundsProvider screenBoundsProvider,
 		BindingsManager bindingsManager)
 	{
-		ScreenshotsDataAccess = screenshotsDataAccess;
 		_screenBoundsProvider = screenBoundsProvider;
 		_bindingsManager = bindingsManager;
 	}

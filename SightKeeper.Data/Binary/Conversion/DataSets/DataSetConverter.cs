@@ -67,7 +67,7 @@ internal abstract class DataSetConverter<TPackableDataSet>
 		PackableScreenshot ConvertScreenshot(Screenshot screenshot) => new(
 			ScreenshotsDataAccess.GetId(screenshot),
 			screenshot.CreationDate,
-			screenshot.Resolution);
+			screenshot.ImageSize.ToUInt16());
 	}
 }
 

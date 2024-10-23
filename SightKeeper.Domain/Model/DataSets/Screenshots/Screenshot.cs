@@ -9,14 +9,14 @@ public abstract class Screenshot
 	public abstract Asset? Asset { get; }
 	public abstract ScreenshotsLibrary Library { get; }
 	public DataSet DataSet => Library.DataSet;
-	public Vector2<ushort> Resolution { get; }
+	public Vector2<ushort> ImageSize { get; }
 
-	protected Screenshot(DateTimeOffset creationDate, Vector2<ushort> resolution)
+	protected Screenshot(DateTimeOffset creationDate, Vector2<ushort> imageSize)
 	{
 		CreationDate = creationDate;
-		Guard.IsGreaterThan<ushort>(resolution.X, 0);
-		Guard.IsGreaterThan<ushort>(resolution.Y, 0);
-		Resolution = resolution;
+		Guard.IsGreaterThan<ushort>(imageSize.X, 0);
+		Guard.IsGreaterThan<ushort>(imageSize.Y, 0);
+		ImageSize = imageSize;
 	}
 
 	public abstract void DeleteFromLibrary();
@@ -27,8 +27,8 @@ public sealed class Screenshot<TAsset> : Screenshot where TAsset : Asset
 	public override TAsset? Asset => _asset;
 	public override ScreenshotsLibrary<TAsset> Library { get; }
 
-	public Screenshot(ScreenshotsLibrary<TAsset> library, DateTimeOffset creationDate, Vector2<ushort> resolution)
-		: base(creationDate, resolution)
+	public Screenshot(ScreenshotsLibrary<TAsset> library, DateTimeOffset creationDate, Vector2<ushort> imageSize)
+		: base(creationDate, imageSize)
 	{
 		Library = library;
 	}
