@@ -13,7 +13,8 @@
             <local:Screenshots Grid.Column="0"
                                DataContext="{Binding Screenshots}"/>
             <Image Grid.Column="1"
-                   Source="{Binding Screenshots.SelectedScreenshot.Image}">
+                   Source="{Binding Screenshots.SelectedScreenshot.Image}"
+                   Classes="regular-margin">
                 <Interaction.Behaviors>
                     <behaviors:ExecuteCommandOnSourceChanged Command="{Binding ReturnBitmapToPoolCommand}"/>
                 </Interaction.Behaviors>
