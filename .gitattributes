@@ -1,3 +1,0 @@
-*.dll filter=lfs diff=lfs merge=lfs -text
-SightKeeper.Data/Defaults/v8l filter=lfs diff=lfs merge=lfs -text
-SightKeeper.Data/Defaults/v8x filter=lfs diff=lfs merge=lfs -text
