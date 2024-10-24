@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Threading;
 using Serilog;
 
 namespace SightKeeper.Avalonia;
@@ -37,8 +36,7 @@ internal static class Program
 
 	private static void OnTaskSchedulerUnobservedException(object? sender, UnobservedTaskExceptionEventArgs e)
 	{
-		// TODO should it really use dispatcher?
-		Dispatcher.UIThread.InvokeAsync(() => LogUnhandledExceptions(e.Exception, nameof(TaskScheduler)), DispatcherPriority.Normal);
+		LogUnhandledExceptions(e.Exception, nameof(TaskScheduler));
 	}
 
 	// Avalonia configuration, don't remove; also used by visual designer.
