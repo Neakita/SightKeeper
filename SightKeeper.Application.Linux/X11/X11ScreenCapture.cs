@@ -30,6 +30,13 @@ public sealed class X11ScreenCapture : ScreenCapture<Bgra32>, IDisposable
 		return _memorySegment.Data;
 	}
 
+	public void Dispose()
+	{
+		_memorySegment?.Dispose();
+		ReleaseUnmanagedResources();
+		GC.SuppressFinalize(this);
+	}
+
 	private readonly nint _display;
 	private readonly int _screen;
 	private SharedImageMemorySegment<Bgra32>? _memorySegment;
@@ -41,19 +48,6 @@ public sealed class X11ScreenCapture : ScreenCapture<Bgra32>, IDisposable
 
 	~X11ScreenCapture()
 	{
-		Dispose(false);
-	}
-
-	private void Dispose(bool disposing)
-	{
-		ReleaseUnmanagedResources();
-		if (disposing)
-			_memorySegment?.Dispose();
-	}
-
-	public void Dispose()
-	{
-		Dispose(true);
-		GC.SuppressFinalize(this);
+		Dispose();
 	}
 }
