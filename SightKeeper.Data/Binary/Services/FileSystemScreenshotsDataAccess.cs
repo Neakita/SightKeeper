@@ -1,8 +1,10 @@
-﻿using System.IO.Compression;
+﻿using System.Collections.Immutable;
+using System.IO.Compression;
 using System.Runtime.InteropServices;
 using CommunityToolkit.HighPerformance;
 using FlakeId;
 using SightKeeper.Application.Screenshotting;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -12,28 +14,53 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 {
 	public string DirectoryPath
 	{
-		get => _dataAccess.DirectoryPath;
-		set => _dataAccess.DirectoryPath = value;
+		get => _screenshotsDataAccess.DirectoryPath;
+		set => _screenshotsDataAccess.DirectoryPath = value;
+	}
+
+	public FileSystemScreenshotsDataAccess(AppDataAccess appDataAccess, object locker)
+	{
+		_appDataAccess = appDataAccess;
+		_locker = locker;
 	}
 
 	public override Stream LoadImage(Screenshot screenshot)
 	{
-		return new ZLibStream(_dataAccess.OpenReadStream(screenshot), CompressionMode.Decompress);
+		return new ZLibStream(_screenshotsDataAccess.OpenReadStream(screenshot), CompressionMode.Decompress);
 	}
 
 	public Id GetId(Screenshot screenshot)
 	{
-		return _dataAccess.GetId(screenshot);
+		return _screenshotsDataAccess.GetId(screenshot);
 	}
 
 	internal void AssociateId(Screenshot screenshot, Id id)
 	{
-		_dataAccess.AssociateId(screenshot, id);
+		_screenshotsDataAccess.AssociateId(screenshot, id);
+	}
+
+	internal void DeleteAllScreenshotsData(ScreenshotsLibrary library)
+	{
+		foreach (var screenshot in library.Screenshots)
+			DeleteScreenshotData(screenshot);
+	}
+
+	protected override Screenshot CreateScreenshotInLibrary(
+		ScreenshotsLibrary library,
+		DateTimeOffset creationDate,
+		Vector2<ushort> resolution,
+		out ImmutableArray<Screenshot> removedScreenshots)
+	{
+		Screenshot screenshot;
+		lock (_locker)
+			screenshot = base.CreateScreenshotInLibrary(library, creationDate, resolution, out removedScreenshots);
+		_appDataAccess.SetDataChanged();
+		return screenshot;
 	}
 
 	protected override void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> imageData)
 	{
-		using var stream = new ZLibStream(_dataAccess.OpenWriteStream(screenshot), CompressionLevel.SmallestSize);
+		using var stream = new ZLibStream(_screenshotsDataAccess.OpenWriteStream(screenshot), CompressionLevel.SmallestSize);
 		if (imageData.TryGetSpan(out var contiguousData))
 		{
 			var bytes = MemoryMarshal.AsBytes(contiguousData);
@@ -48,10 +75,19 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		}
 	}
 
-	protected override void DeleteScreenshotData(Screenshot screenshot)
+	protected override void DeleteScreenshotFromLibrary(Screenshot screenshot)
 	{
-		_dataAccess.Delete(screenshot);
+		lock (_locker)
+			base.DeleteScreenshotFromLibrary(screenshot);
+		_appDataAccess.SetDataChanged();
 	}
 
-	private readonly FileSystemDataAccess<Screenshot> _dataAccess = new(".bin");
+	protected override void DeleteScreenshotData(Screenshot screenshot)
+	{
+		_screenshotsDataAccess.Delete(screenshot);
+	}
+
+	private readonly AppDataAccess _appDataAccess;
+	private readonly object _locker;
+	private readonly FileSystemDataAccess<Screenshot> _screenshotsDataAccess = new(".bin");
 }

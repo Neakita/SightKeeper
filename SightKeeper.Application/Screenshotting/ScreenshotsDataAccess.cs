@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System.Collections.Immutable;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Domain.Model;
@@ -21,7 +22,7 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 		DateTimeOffset creationDate)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
-		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);
+		var screenshot = CreateScreenshotInLibrary(library, creationDate, resolution, out var removedScreenshots);
 		foreach (var removedScreenshot in removedScreenshots)
 		{
 			DeleteScreenshotData(removedScreenshot);
@@ -30,6 +31,11 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 		SaveScreenshotData(screenshot, imageData);
 		_added.OnNext(screenshot);
 		return screenshot;
+	}
+
+	protected virtual Screenshot CreateScreenshotInLibrary(ScreenshotsLibrary library, DateTimeOffset creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots)
+	{
+		return library.CreateScreenshot(creationDate, resolution, out removedScreenshots);
 	}
 
 	public Screenshot<TAsset> CreateScreenshot<TAsset>(
@@ -49,7 +55,7 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 
 	public void DeleteScreenshot(Screenshot screenshot)
 	{
-		screenshot.DeleteFromLibrary();
+		DeleteScreenshotFromLibrary(screenshot);
 		DeleteScreenshotData(screenshot);
 		_removed.OnNext(screenshot);
 	}
@@ -58,6 +64,11 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 	{
 		_added.Dispose();
 		_removed.Dispose();
+	}
+
+	protected virtual void DeleteScreenshotFromLibrary(Screenshot screenshot)
+	{
+		screenshot.DeleteFromLibrary();
 	}
 
 	protected abstract void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> image);

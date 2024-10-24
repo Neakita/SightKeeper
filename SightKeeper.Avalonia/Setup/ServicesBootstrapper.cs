@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using FluentValidation;
 using MemoryPack;
 using SightKeeper.Application;
@@ -22,13 +23,11 @@ internal static class ServicesBootstrapper
 	public static void Setup(ContainerBuilder builder)
 	{
 		SetupBinarySerialization(builder);
-		builder.RegisterType<Data.Binary.Services.GamesDataAccess>().As<GamesDataAccess>().SingleInstance();
 		builder.RegisterType<ProcessesAvailableGamesProvider>();
 		builder.RegisterType<GameDataValidator>().As<IValidator<GameData>>();
 		builder.RegisterType<GameCreator>();
 		builder.RegisterType<DialogManager>().SingleInstance();
 		builder.RegisterGeneric(typeof(ObservableRepository<>)).SingleInstance();
-		builder.RegisterType<DataSetsDataAccess>().As<ObservableDataAccess<DataSet>>().As<ReadDataAccess<DataSet>>().As<WriteDataAccess<DataSet>>().SingleInstance();
 		builder.RegisterType<DataSetCreator>();
 		builder.RegisterType<DataSetEditor>().SingleInstance();
 		builder.RegisterType<SharpHookScreenBoundsProvider>().As<ScreenBoundsProvider>();
@@ -40,13 +39,20 @@ internal static class ServicesBootstrapper
 
 	private static void SetupBinarySerialization(ContainerBuilder builder)
 	{
-		FileSystemScreenshotsDataAccess screenshotsDataAccess = new();
-		FileSystemWeightsDataAccess weightsDataAccess = new();
-		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess));
 		AppDataAccess appDataAccess = new();
+		object locker = new();
+		FileSystemScreenshotsDataAccess screenshotsDataAccess = new(appDataAccess, locker);
+		FileSystemWeightsDataAccess weightsDataAccess = new(appDataAccess, locker);
+		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, locker));
 		appDataAccess.Load();
 		builder.RegisterInstance(screenshotsDataAccess).AsSelf().As<ScreenshotsDataAccess>().As<ObservableDataAccess<Screenshot>>();
 		builder.RegisterInstance(weightsDataAccess).As<WeightsDataAccess>();
-		builder.RegisterInstance(appDataAccess).AsSelf().As<ApplicationSettingsProvider>().OnRelease(dataAccess => dataAccess.Save());
+		builder.RegisterInstance(appDataAccess).AsSelf().As<ApplicationSettingsProvider>();
+		DataSetsDataAccess dataSetsDataAccess = new(appDataAccess, locker, screenshotsDataAccess);
+		builder.RegisterInstance(dataSetsDataAccess).As<ObservableDataAccess<DataSet>>().As<ReadDataAccess<DataSet>>().As<WriteDataAccess<DataSet>>();
+		Data.Binary.Services.GamesDataAccess gamesDataAccess = new(appDataAccess, locker);
+		builder.RegisterInstance(gamesDataAccess).As<GamesDataAccess>();
+		PeriodicAppDataSaver periodicAppDataSaver = new(appDataAccess);
+		builder.RegisterInstance(periodicAppDataSaver).As<IDisposable>();
 	}
 }

@@ -1,22 +1,19 @@
-﻿using System.Collections.Immutable;
-using MemoryPack;
+﻿using MemoryPack;
 using SightKeeper.Data.Binary.Conversion;
-using SightKeeper.Data.Binary.Conversion.DataSets;
-using SightKeeper.Data.Binary.Conversion.Profiles;
 using SightKeeper.Data.Binary.Replication;
-using SightKeeper.Data.Binary.Replication.DataSets;
-using SightKeeper.Data.Binary.Replication.Profiles;
 using SightKeeper.Data.Binary.Services;
 
 namespace SightKeeper.Data.Binary;
 
 public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {
-	public AppDataFormatter(FileSystemScreenshotsDataAccess screenshotsDataAccess)
+	public AppDataFormatter(FileSystemScreenshotsDataAccess screenshotsDataAccess, object conversionLock)
 	{
-		_screenshotsDataAccess = screenshotsDataAccess;
+		_conversionLock = conversionLock;
+		_converter = new AppDataConverter(screenshotsDataAccess);
+		_replicator = new AppDataReplicator(screenshotsDataAccess);
 	}
-	
+
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref AppData? value)
 	{
 		if (value == null)
@@ -24,17 +21,9 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			writer.WriteNullObjectHeader();
 			return;
 		}
-		ConversionSession session = new();
-		var games = GamesConverter.Convert(value.Games, session);
-		MultiDataSetConverter dataSetConverter = new(_screenshotsDataAccess, session);
-		var dataSets = dataSetConverter.Convert(value.DataSets);
-		ProfileConverter profileConverter = new(session);
-		var profiles = profileConverter.Convert(value.Profiles).ToImmutableArray();
-		PackableAppData packed = new(
-			games,
-			dataSets,
-			profiles,
-			value.ApplicationSettings);
+		PackableAppData packed;
+		lock (_conversionLock)
+			packed = _converter.Convert(value);
 		writer.WritePackable(packed);
 	}
 
@@ -52,14 +41,10 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			value = null;
 			return;
 		}
-		ReplicationSession session = new();
-
-		var games = GameReplicator.Replicate(packed.Games, session);
-		MultiDataSetReplicator dataSetReplicator = new(_screenshotsDataAccess, session);
-		var dataSets = dataSetReplicator.Replicate(packed.DataSets);
-		var profiles = new ProfileReplicator(session).Replicate(packed.Profiles).ToHashSet();
-		value = new AppData(games, dataSets, profiles, packed.ApplicationSettings);
+		value = _replicator.Replicate(packed);
 	}
 
-	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
+	private readonly object _conversionLock;
+	private readonly AppDataConverter _converter;
+	private readonly AppDataReplicator _replicator;
 }

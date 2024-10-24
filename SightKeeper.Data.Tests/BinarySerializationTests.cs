@@ -39,8 +39,9 @@ public sealed class BinarySerializationTests
 	public void ShouldSaveAndLoadAppData()
 	{
 		AppDataAccess dataAccess = new();
-		FileSystemScreenshotsDataAccess screenshotsDataAccess = new();
-		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess));
+		object locker = new();
+		FileSystemScreenshotsDataAccess screenshotsDataAccess = new(dataAccess, locker);
+		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, locker));
 		Game game = new("PayDay 2", "payday2");
 		dataAccess.Data.Games.Add(game);
 		foreach (var dataSet in CreateDataSets(screenshotsDataAccess, game))
