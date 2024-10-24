@@ -19,11 +19,11 @@ internal static class HotKeysBootstrapper
 		GestureManager gestureManager = new(aggregateKeyManager);
 		BindingsManager bindingsManager = new(gestureManager);
 		hook.RunAsync();
-		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
 		builder.RegisterInstance(keyboardFilter).As<KeyManager<FormattedKeyCode>>();
 		builder.RegisterInstance(mouseFilter).As<KeyManager<FormattedButton>>();
 		builder.RegisterInstance(aggregateKeyManager).As<KeyManager>();
 		builder.RegisterInstance(gestureManager);
 		builder.RegisterInstance(bindingsManager);
+		builder.RegisterInstance(hook).As<IReactiveGlobalHook>();
 	}
 }
