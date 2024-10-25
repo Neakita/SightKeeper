@@ -18,10 +18,10 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		set => _screenshotsDataAccess.DirectoryPath = value;
 	}
 
-	public FileSystemScreenshotsDataAccess(AppDataAccess appDataAccess, object locker)
+	public FileSystemScreenshotsDataAccess(AppDataAccess appDataAccess, AppDataEditingLock editingLock)
 	{
 		_appDataAccess = appDataAccess;
-		_locker = locker;
+		_editingLock = editingLock;
 	}
 
 	public override Stream LoadImage(Screenshot screenshot)
@@ -52,7 +52,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		out ImmutableArray<Screenshot> removedScreenshots)
 	{
 		Screenshot screenshot;
-		lock (_locker)
+		lock (_editingLock)
 			screenshot = base.CreateScreenshotInLibrary(library, creationDate, resolution, out removedScreenshots);
 		_appDataAccess.SetDataChanged();
 		return screenshot;
@@ -77,7 +77,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 
 	protected override void DeleteScreenshotFromLibrary(Screenshot screenshot)
 	{
-		lock (_locker)
+		lock (_editingLock)
 			base.DeleteScreenshotFromLibrary(screenshot);
 		_appDataAccess.SetDataChanged();
 	}
@@ -88,6 +88,6 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 	}
 
 	private readonly AppDataAccess _appDataAccess;
-	private readonly object _locker;
+	private readonly AppDataEditingLock _editingLock;
 	private readonly FileSystemDataAccess<Screenshot> _screenshotsDataAccess = new(".bin");
 }

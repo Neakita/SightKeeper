@@ -39,7 +39,7 @@ public sealed class BinarySerializationTests
 	public void ShouldSaveAndLoadAppData()
 	{
 		AppDataAccess dataAccess = new();
-		object locker = new();
+		AppDataEditingLock locker = new();
 		FileSystemScreenshotsDataAccess screenshotsDataAccess = new(dataAccess, locker);
 		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, locker));
 		Game game = new("PayDay 2", "payday2");

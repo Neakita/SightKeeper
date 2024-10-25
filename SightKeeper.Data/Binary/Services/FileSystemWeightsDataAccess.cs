@@ -14,10 +14,10 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 		set => _weightsDataAccess.DirectoryPath = value;
 	}
 
-	public FileSystemWeightsDataAccess(AppDataAccess appDataAccess, object locker)
+	public FileSystemWeightsDataAccess(AppDataAccess appDataAccess, AppDataEditingLock editingLock)
 	{
 		_appDataAccess = appDataAccess;
-		_locker = locker;
+		_editingLock = editingLock;
 	}
 
 	public override byte[] LoadWeightsData(Weights weights)
@@ -38,7 +38,7 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 	protected override PlainWeights<TTag> CreateWeightsInLibrary<TTag>(WeightsLibrary<TTag> library, DateTime creationDate, ModelSize modelSize,
 		WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<TTag> tags, Composition? composition)
 	{
-		lock (_locker)
+		lock (_editingLock)
 			return base.CreateWeightsInLibrary(library, creationDate, modelSize, metrics, resolution, tags, composition);
 	}
 
@@ -46,7 +46,7 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 		ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<TTag> tags, IEnumerable<TKeyPointTag> keyPointTags,
 		Composition? composition)
 	{
-		lock (_locker)
+		lock (_editingLock)
 			return base.CreateWeightsInLibrary(library, creationDate, modelSize, metrics, resolution, tags, keyPointTags, composition);
 	}
 
@@ -57,14 +57,14 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 
 	protected override void DeleteWeightsFromLibrary<TTag>(PlainWeights<TTag> weights)
 	{
-		lock (_locker)
+		lock (_editingLock)
 			base.DeleteWeightsFromLibrary(weights);
 		_appDataAccess.SetDataChanged();
 	}
 
 	protected override void DeleteWeightsFromLibrary<TTag, TKeyPointTag>(PoserWeights<TTag, TKeyPointTag> weights)
 	{
-		lock (_locker)
+		lock (_editingLock)
 			base.DeleteWeightsFromLibrary(weights);
 		_appDataAccess.SetDataChanged();
 	}
@@ -75,6 +75,6 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 	}
 
 	private readonly AppDataAccess _appDataAccess;
-	private readonly object _locker;
+	private readonly AppDataEditingLock _editingLock;
 	private readonly FileSystemDataAccess<Weights> _weightsDataAccess = new(".pt");
 }

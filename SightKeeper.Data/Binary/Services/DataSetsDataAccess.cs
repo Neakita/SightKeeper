@@ -13,17 +13,17 @@ public sealed class DataSetsDataAccess : ReadDataAccess<DataSet>, ObservableData
 	public IObservable<DataSet> Added => _added.AsObservable();
 	public IObservable<DataSet> Removed => _removed.AsObservable();
 
-	public DataSetsDataAccess(AppDataAccess appDataAccess, object locker, FileSystemScreenshotsDataAccess screenshotsDataAccess)
+	public DataSetsDataAccess(AppDataAccess appDataAccess, AppDataEditingLock editingLock, FileSystemScreenshotsDataAccess screenshotsDataAccess)
 	{
 		_appDataAccess = appDataAccess;
-		_locker = locker;
+		_editingLock = editingLock;
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
 	public void Add(DataSet dataSet)
 	{
 		bool isAdded;
-		lock (_locker)
+		lock (_editingLock)
 			isAdded = _appDataAccess.Data.DataSets.Add(dataSet);
 		Guard.IsTrue(isAdded);
 		_appDataAccess.SetDataChanged();
@@ -33,7 +33,7 @@ public sealed class DataSetsDataAccess : ReadDataAccess<DataSet>, ObservableData
 	public void Remove(DataSet dataSet)
 	{
 		bool isRemoved;
-		lock (_locker)
+		lock (_editingLock)
 			isRemoved = _appDataAccess.Data.DataSets.Remove(dataSet);
 		_screenshotsDataAccess.DeleteAllScreenshotsData(dataSet.ScreenshotsLibrary);
 		Guard.IsTrue(isRemoved);
@@ -42,7 +42,7 @@ public sealed class DataSetsDataAccess : ReadDataAccess<DataSet>, ObservableData
 	}
 
 	private readonly AppDataAccess _appDataAccess;
-	private readonly object _locker;
+	private readonly AppDataEditingLock _editingLock;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly Subject<DataSet> _added = new();
 	private readonly Subject<DataSet> _removed = new();

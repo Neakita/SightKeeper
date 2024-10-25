@@ -8,11 +8,11 @@ using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
-public sealed class DataSetEditor : IDisposable
+public class DataSetEditor : IDisposable
 {
 	public IObservable<DataSet> DataSetEdited => _dataSetEdited.AsObservable();
 
-	public void Edit(DataSet dataSet, DataSetData data, IReadOnlyCollection<TagData> tagsData)
+	public virtual void Edit(DataSet dataSet, DataSetData data, IReadOnlyCollection<TagData> tagsData)
 	{
 		SetGeneralData(dataSet, data);
 		UpdateTags(dataSet, tagsData);

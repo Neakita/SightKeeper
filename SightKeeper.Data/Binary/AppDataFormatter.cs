@@ -7,9 +7,9 @@ namespace SightKeeper.Data.Binary;
 
 public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {
-	public AppDataFormatter(FileSystemScreenshotsDataAccess screenshotsDataAccess, object conversionLock)
+	public AppDataFormatter(FileSystemScreenshotsDataAccess screenshotsDataAccess, AppDataEditingLock editingLock)
 	{
-		_conversionLock = conversionLock;
+		_editingLock = editingLock;
 		_converter = new AppDataConverter(screenshotsDataAccess);
 		_replicator = new AppDataReplicator(screenshotsDataAccess);
 	}
@@ -22,7 +22,7 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			return;
 		}
 		PackableAppData packed;
-		lock (_conversionLock)
+		lock (_editingLock)
 			packed = _converter.Convert(value);
 		writer.WritePackable(packed);
 	}
@@ -44,7 +44,7 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 		value = _replicator.Replicate(packed);
 	}
 
-	private readonly object _conversionLock;
+	private readonly AppDataEditingLock _editingLock;
 	private readonly AppDataConverter _converter;
 	private readonly AppDataReplicator _replicator;
 }
