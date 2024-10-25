@@ -16,13 +16,13 @@
                 <Interaction.Behaviors>
                     <behaviors:ExecuteCommandAndClearOnKeyDown
                         Key="Enter"
-                        Command="{Binding AddTagCommand}"
+                        Command="{Binding CreateTagCommand}"
                         CommandParameter="{Binding #TagNameTextBox.Text}"/>
                 </Interaction.Behaviors>
             </TextBox>
             <Button Grid.Column="2"
                     Content="Add"
-                    Command="{Binding AddTagCommand}"
+                    Command="{Binding CreateTagCommand}"
                     CommandParameter="{Binding #TagNameTextBox.Text}">
                 <Interaction.Behaviors>
                     <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>

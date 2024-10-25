@@ -70,8 +70,8 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 	private readonly AvaloniaList<TagDataViewModel> _tags = new();
 	private readonly List<RemovedTag> _removedTags = new();
 
-	[RelayCommand(CanExecute = nameof(CanAddTag))]
-	private void AddTag(string name)
+	[RelayCommand(CanExecute = nameof(CanCreateTag))]
+	private void CreateTag(string name)
 	{
 		TagDataViewModel newTag = CreateTagViewModel(name, Validator);
 		newTag.PropertyChanged += OnTagPropertyChanged;
@@ -79,7 +79,7 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 		_tags.Add(newTag);
 	}
 
-	private bool CanAddTag(string name)
+	private bool CanCreateTag(string name)
 	{
 		return !string.IsNullOrWhiteSpace(name) && Tags.All(tag => tag.Name != name);
 	}
