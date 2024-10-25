@@ -58,7 +58,12 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 
 	protected void AddTags(IEnumerable<TagDataViewModel> tags)
 	{
-		_tags.AddRange(tags);
+		foreach (var tag in tags)
+		{
+			tag.PropertyChanged += OnTagPropertyChanged;
+			tag.ErrorsChanged += OnTagErrorsChanged;
+			_tags.Add(tag);
+		}
 	}
 
 	private readonly BehaviorSubject<bool> _isValid = new(true);
