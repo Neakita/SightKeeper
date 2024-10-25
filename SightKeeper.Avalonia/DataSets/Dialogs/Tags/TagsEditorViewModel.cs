@@ -23,9 +23,8 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 		Validator = new NewTagDataIndividualValidator(Tags);
 	}
 
-	public TagsEditorViewModel(IEnumerable<Tag> existingTags)
+	public TagsEditorViewModel(IEnumerable<Tag> existingTags) : this()
 	{
-		Validator = new NewTagDataValidator(Tags);
 		AddTags(existingTags.Select(existingTag => new EditedTagViewModel(Validator, existingTag)));
 	}
 
