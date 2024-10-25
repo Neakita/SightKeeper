@@ -7,7 +7,6 @@ using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
-using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.Model.DataSets.Tags;
 
@@ -21,7 +20,7 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 
 	public TagsEditorViewModel()
 	{
-		Validator = new NewTagDataValidator(Tags);
+		Validator = new NewTagDataIndividualValidator(Tags);
 	}
 
 	public TagsEditorViewModel(IEnumerable<Tag> existingTags)
@@ -39,9 +38,9 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 		}
 	}
 
-	protected readonly NewTagDataValidator Validator;
+	protected readonly NewTagDataIndividualValidator Validator;
 
-	protected virtual TagDataViewModel CreateTagViewModel(string name, NewTagDataValidator validator)
+	protected virtual TagDataViewModel CreateTagViewModel(string name, NewTagDataIndividualValidator validator)
 	{
 		return new TagDataViewModel(name, validator);
 	}

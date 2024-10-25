@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
-using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
@@ -20,7 +19,7 @@ internal sealed class PoserTagsEditorViewModel : TagsEditorViewModel
 		AddTags(tagsToAdd);
 	}
 
-	protected override TagDataViewModel CreateTagViewModel(string name, NewTagDataValidator validator)
+	protected override TagDataViewModel CreateTagViewModel(string name, NewTagDataIndividualValidator validator)
 	{
 		PoserNewTagViewModel newTag = new(name, validator);
 		newTag.IsKeyPointsValid.Subscribe(_ => UpdateIsValid()).DisposeWith(_disposable);
