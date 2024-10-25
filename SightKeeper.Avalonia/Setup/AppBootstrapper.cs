@@ -12,6 +12,8 @@ internal static class AppBootstrapper
 		ServicesBootstrapper.Setup(builder);
 		OSSpecificBootstrapper.Setup(builder);
 		HotKeysBootstrapper.Setup(builder);
-		return builder.Build();
+		var container = builder.Build();
+		ServicesBootstrapper.Initialize(container);
+		return container;
 	}
 }
