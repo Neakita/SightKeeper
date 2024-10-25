@@ -38,7 +38,7 @@
                                 <Button Grid.Column="0" Content="{icons:MaterialIconExt Kind=Plus}"
                                         Classes="square"
                                         ToolTip.Tip="Create keypoint tag"
-                                        Command="{Binding AddKeyPointTagCommand}"
+                                        Command="{Binding CreateKeyPointTagCommand}"
                                         CommandParameter="{Binding #TagNameTextBox.Text}">
                                     <Interaction.Behaviors>
                                         <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>

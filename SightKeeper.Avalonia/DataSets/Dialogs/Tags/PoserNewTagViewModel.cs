@@ -11,7 +11,7 @@ internal class PoserNewTagViewModel : TagDataViewModel, NewPoserTagData, IDispos
 {
 	IReadOnlyCollection<NewTagData> NewPoserTagData.KeyPointTags => _tagsEditor.Tags;
 
-	public ICommand AddKeyPointTagCommand => _tagsEditor.AddTagCommand;
+	public ICommand CreateKeyPointTagCommand => _tagsEditor.CreateTagCommand;
 	public IReadOnlyCollection<TagDataViewModel> KeyPointTags => _tagsEditor.Tags;
 	public BehaviorObservable<bool> IsKeyPointsValid => _tagsEditor.IsValid;
 
