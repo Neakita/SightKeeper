@@ -19,10 +19,10 @@ internal sealed class ScreenshottingSettingsViewModel : ViewModel
 		set => SetProperty(_screenshotter.IsEnabled, value, _screenshotter, static (screenshotter, newValue) => screenshotter.IsEnabled = newValue);
 	}
 
-	public float? FPS
+	public float? FPSLimit
 	{
-		get => _screenshotter.MaximumFPS;
-		set => SetProperty(_screenshotter.MaximumFPS, value, _screenshotter, static (screenshotter, newValue) => screenshotter.MaximumFPS = newValue);
+		get => _screenshotter.FPSLimit;
+		set => SetProperty(_screenshotter.FPSLimit, value, _screenshotter, static (screenshotter, newValue) => screenshotter.FPSLimit = newValue);
 	}
 
 	public ushort ResolutionWidth

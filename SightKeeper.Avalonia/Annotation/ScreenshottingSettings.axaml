@@ -3,31 +3,62 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:screenshottingOptions="clr-namespace:SightKeeper.Avalonia.Annotation.ScreenshottingOptions"
+             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.ScreenshottingSettings"
              x:DataType="screenshottingOptions:ScreenshottingSettingsViewModel">
     <StackPanel Classes="regular-spacing">
-        <ToggleSwitch
-            IsChecked="{Binding IsEnabled}"
-            Content="Make Screenshots"
-            IsEnabled="{Binding Library, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-        <DockPanel>
-            <TextBox Text="{Binding ResolutionWidth}" DockPanel.Dock="Right" MinWidth="70"/>
-            <Slider Maximum="{Binding MaximumWidth}"
-                    Value="{Binding ResolutionWidth}"
-                    TickFrequency="40"
-                    Minimum="40"
-                    IsSnapToTickEnabled="True"
-                    VerticalAlignment="Center"/>
-        </DockPanel>
-        <DockPanel>
-            <TextBox Text="{Binding ResolutionHeight}" DockPanel.Dock="Right" MinWidth="70"/>
-            <Slider Maximum="{Binding MaximumHeight}"
-                    Value="{Binding ResolutionHeight}"
-                    TickFrequency="40"
-                    Minimum="40"
-                    IsSnapToTickEnabled="True"
-                    VerticalAlignment="Center"/>
-        </DockPanel>
+        <ToggleSwitch IsChecked="{Binding IsEnabled}"
+                      Content="Make Screenshots"
+                      IsEnabled="{Binding Library, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        <HeaderedContentControl Header="Width">
+            <Grid ColumnDefinitions="80 8 140">
+                <Slider Grid.Column="0" Maximum="{Binding MaximumWidth}"
+                        Value="{Binding ResolutionWidth}"
+                        TickFrequency="40"
+                        Minimum="40"
+                        IsSnapToTickEnabled="True"
+                        VerticalAlignment="Center"/>
+                <NumericUpDown Grid.Column="2" Value="{Binding ResolutionWidth}"
+                               DockPanel.Dock="Right"
+                               MinWidth="70"
+                               Minimum="40"
+                               Increment="40"
+                               ClipValueToMinMax="True"
+                               Maximum="{Binding MaximumWidth}"/>
+            </Grid>
+        </HeaderedContentControl>
+        <HeaderedContentControl Header="Height">
+            <Grid ColumnDefinitions="80 8 140">
+                <Slider Grid.Column="0" Maximum="{Binding MaximumHeight}"
+                        Value="{Binding ResolutionHeight}"
+                        TickFrequency="40"
+                        Minimum="40"
+                        IsSnapToTickEnabled="True"
+                        VerticalAlignment="Center"/>
+                <NumericUpDown Grid.Column="2" Value="{Binding ResolutionHeight}"
+                               DockPanel.Dock="Right"
+                               MinWidth="70"
+                               Minimum="40"
+                               Increment="40"
+                               ClipValueToMinMax="True"
+                               Maximum="{Binding MaximumHeight}"/>
+            </Grid>
+        </HeaderedContentControl>
+        <HeaderedContentControl Header="FPS Limit">
+            <NumericUpDown Value="{Binding FPSLimit}"
+                           DockPanel.Dock="Right"
+                           Minimum="0.01"
+                           Maximum="60"
+                           Watermark="Unlimited"
+                           FormatString="0.##">
+                <Interaction.Behaviors>
+                    <root:ExponentialNumericUpDownIncrementBehavior Increment="1"/>
+                </Interaction.Behaviors>
+                <NumericUpDown.InnerRightContent>
+                    <TextBlock IsVisible="{Binding $parent[NumericUpDown].Value, Converter={x:Static ObjectConverters.IsNotNull}}" Text="f/s" ToolTip.Tip="Frames per second"/>
+                </NumericUpDown.InnerRightContent>
+            </NumericUpDown>
+        </HeaderedContentControl>
     </StackPanel>
 </UserControl>
