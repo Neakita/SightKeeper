@@ -15,10 +15,10 @@ internal sealed class MultiDataSetReplicator
 		_poser3DReplicator = new Poser3DDataSetReplicator(screenshotsDataAccess, session);
 	}
 
-	public HashSet<DataSet> Replicate(
+	public IEnumerable<DataSet> Replicate(
 		ImmutableArray<PackableDataSet> packableDataSets)
 	{
-		return packableDataSets.Select(Replicate).ToHashSet();
+		return packableDataSets.Select(Replicate);
 	}
 
 	private readonly ClassifierDataSetReplicator _classifierReplicator;

@@ -7,9 +7,9 @@ namespace SightKeeper.Data.Binary;
 
 public sealed class AppData : ApplicationSettingsProvider
 {
-	public HashSet<Game> Games { get; }
-	public HashSet<DataSet> DataSets { get; }
-	public HashSet<Profile> Profiles { get; }
+	public List<Game> Games { get; }
+	public List<DataSet> DataSets { get; }
+	public List<Profile> Profiles { get; }
 	public ApplicationSettings ApplicationSettings { get; }
 
 	public bool CustomDecorations
@@ -19,9 +19,9 @@ public sealed class AppData : ApplicationSettingsProvider
 	}
 
 	internal AppData(
-		HashSet<Game> games,
-		HashSet<DataSet> dataSets,
-		HashSet<Profile> profiles,
+		List<Game> games,
+		List<DataSet> dataSets,
+		List<Profile> profiles,
 		ApplicationSettings applicationSettings)
 	{
 		Games = games;
@@ -32,9 +32,9 @@ public sealed class AppData : ApplicationSettingsProvider
 
 	internal AppData()
 	{
-		Games = new HashSet<Game>();
-		DataSets = new HashSet<DataSet>();
-		Profiles = new HashSet<Profile>();
+		Games = new List<Game>();
+		DataSets = new List<DataSet>();
+		Profiles = new List<Profile>();
 		ApplicationSettings = new ApplicationSettings();
 	}
 }

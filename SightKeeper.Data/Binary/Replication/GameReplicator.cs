@@ -6,10 +6,10 @@ namespace SightKeeper.Data.Binary.Replication;
 
 internal static class GameReplicator
 {
-	public static HashSet<Game> Replicate(IEnumerable<PackableGame> packedGames, ReplicationSession session)
+	public static List<Game> Replicate(IEnumerable<PackableGame> packedGames, ReplicationSession session)
 	{
 		var lookupBuilder = ImmutableDictionary.CreateBuilder<ushort, Game>();
-		HashSet<Game> games = new();
+		List<Game> games = new();
 		foreach (var packedGame in packedGames)
 		{
 			Game game = new(packedGame.Title, packedGame.ProcessName, packedGame.ExecutablePath);
