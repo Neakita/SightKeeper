@@ -7,7 +7,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Application.Screenshotting;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation;
@@ -16,10 +15,10 @@ internal sealed partial class ScreenshotsViewModel : ViewModel
 {
 	public ScreenshotsLibrary? Library
 	{
-		get => _library;
+		get;
 		set
 		{
-			if (!SetProperty(ref _library, value))
+			if (!SetProperty(ref field, value))
 				return;
 			_screenshotsSource.Clear();
 			if (value == null)
@@ -61,6 +60,5 @@ internal sealed partial class ScreenshotsViewModel : ViewModel
 
 	private readonly CompositeDisposable _disposable = new();
 	private readonly SourceList<Screenshot> _screenshotsSource = new();
-	private ScreenshotsLibrary? _library;
 	[ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
 }
