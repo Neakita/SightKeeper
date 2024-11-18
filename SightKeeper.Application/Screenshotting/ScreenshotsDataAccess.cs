@@ -42,7 +42,7 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 		ScreenshotsLibrary<TAsset> library,
 		ReadOnlySpan2D<Rgba32> imageData,
 		DateTimeOffset creationDate)
-		where TAsset : Asset
+		where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
 		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);

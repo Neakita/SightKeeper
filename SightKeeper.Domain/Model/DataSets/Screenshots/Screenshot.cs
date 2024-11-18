@@ -8,7 +8,7 @@ public abstract class Screenshot
 	public DateTimeOffset CreationDate { get; }
 	public abstract Asset? Asset { get; }
 	public abstract ScreenshotsLibrary Library { get; }
-	public DataSet DataSet => Library.DataSet;
+	public abstract DataSet DataSet { get; }
 	public Vector2<ushort> ImageSize { get; }
 
 	protected Screenshot(DateTimeOffset creationDate, Vector2<ushort> imageSize)
@@ -22,10 +22,12 @@ public abstract class Screenshot
 	public abstract void DeleteFromLibrary();
 }
 
-public sealed class Screenshot<TAsset> : Screenshot where TAsset : Asset
+public sealed class Screenshot<TAsset> : Screenshot
+	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 {
 	public override TAsset? Asset => _asset;
 	public override ScreenshotsLibrary<TAsset> Library { get; }
+	public override DataSet<TAsset> DataSet => Library.DataSet;
 
 	public Screenshot(ScreenshotsLibrary<TAsset> library, DateTimeOffset creationDate, Vector2<ushort> imageSize)
 		: base(creationDate, imageSize)
