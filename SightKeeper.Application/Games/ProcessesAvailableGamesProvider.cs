@@ -7,7 +7,7 @@ public sealed class ProcessesAvailableGamesProvider
 {
 	public IEnumerable<Game> AvailableGames => GetAvailableGames();
 
-    public ProcessesAvailableGamesProvider(GamesDataAccess gamesDataAccess)
+    public ProcessesAvailableGamesProvider(ReadDataAccess<Game> gamesDataAccess)
     {
         _gamesDataAccess = gamesDataAccess;
     }
@@ -16,11 +16,11 @@ public sealed class ProcessesAvailableGamesProvider
     {
 	    return Process.GetProcesses()
 		    .Where(IsValidProcess)
-		    .ExceptBy(_gamesDataAccess.Games.Select(ProcessDescription.Extract), ProcessDescription.Extract)
+		    .ExceptBy(_gamesDataAccess.Items.Select(ProcessDescription.Extract), ProcessDescription.Extract)
 		    .Select(process => new Game(process.MainWindowTitle, process.ProcessName, process.MainModule?.FileName ?? string.Empty));
     }
 
-    private readonly GamesDataAccess _gamesDataAccess;
+    private readonly ReadDataAccess<Game> _gamesDataAccess;
 
     private static bool IsValidProcess(Process process) =>
 	    process.MainWindowHandle != IntPtr.Zero &&

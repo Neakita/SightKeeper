@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Autofac;
 using CommunityToolkit.Mvvm.Input;
 using Material.Icons;
+using SightKeeper.Application;
 using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
@@ -20,7 +21,7 @@ internal sealed partial class GamesSettingsViewModel : ViewModel, SettingsSectio
 		GamesRepositoryViewModel gamesRepository,
 		DialogManager dialogManager,
 		GameCreator gameCreator,
-		GamesDataAccess gamesDataAccess)
+		WriteDataAccess<Game> gamesDataAccess)
 	{
 		_context = context;
 		_dialogManager = dialogManager;
@@ -32,7 +33,7 @@ internal sealed partial class GamesSettingsViewModel : ViewModel, SettingsSectio
 	private readonly IComponentContext _context;
 	private readonly DialogManager _dialogManager;
 	private readonly GameCreator _gameCreator;
-	private readonly GamesDataAccess _gamesDataAccess;
+	private readonly WriteDataAccess<Game> _gamesDataAccess;
 
 	[RelayCommand]
 	private async Task AddGame()
@@ -55,6 +56,6 @@ internal sealed partial class GamesSettingsViewModel : ViewModel, SettingsSectio
 			confirmButton, cancelButton);
 		var messageBoxResult = await _dialogManager.ShowDialogAsync(messageBox);
 		if (messageBoxResult == confirmButton)
-			_gamesDataAccess.RemoveGame(game);
+			_gamesDataAccess.Remove(game);
 	}
 }

@@ -5,7 +5,7 @@ namespace SightKeeper.Application.Games;
 
 public sealed class GameCreator
 {
-	public GameCreator(IValidator<GameData> validator, GamesDataAccess dataAccess)
+	public GameCreator(IValidator<GameData> validator, WriteDataAccess<Game> dataAccess)
 	{
 		_validator = validator;
 		_dataAccess = dataAccess;
@@ -15,10 +15,10 @@ public sealed class GameCreator
 	{
 		_validator.ValidateAndThrow(data);
 		Game game = new(data.Title, data.ProcessName, data.ExecutablePath);
-		_dataAccess.AddGame(game);
+		_dataAccess.Add(game);
 		return game;
 	}
 
 	private readonly IValidator<GameData> _validator;
-	private readonly GamesDataAccess _dataAccess;
+	private readonly WriteDataAccess<Game> _dataAccess;
 }

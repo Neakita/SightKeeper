@@ -1,14 +1,17 @@
 ﻿using System.Reactive.Subjects;
-using SightKeeper.Application.Games;
+using SightKeeper.Application;
 using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Data.Binary.Services;
 
-public sealed class AppDataGamesDataAccess : GamesDataAccess
+public sealed class AppDataGamesDataAccess :
+	ReadDataAccess<Game>,
+	ObservableDataAccess<Game>,
+	WriteDataAccess<Game>
 {
-	public IObservable<Game> GameAdded => _gameAdded;
-	public IObservable<Game> GameRemoved => _gameRemoved;
-	public IReadOnlyCollection<Game> Games => _appDataAccess.Data.Games;
+	public IObservable<Game> Added => _gameAdded;
+	public IObservable<Game> Removed => _gameRemoved;
+	public IReadOnlyCollection<Game> Items => _appDataAccess.Data.Games;
 
 	public AppDataGamesDataAccess(AppDataAccess appDataAccess, AppDataEditingLock editingLock)
 	{
@@ -16,7 +19,7 @@ public sealed class AppDataGamesDataAccess : GamesDataAccess
 		_editingLock = editingLock;
 	}
 
-	public void AddGame(Game game)
+	public void Add(Game game)
 	{
 		lock (_editingLock)
 			_appDataAccess.Data.AddGame(game);
@@ -24,7 +27,7 @@ public sealed class AppDataGamesDataAccess : GamesDataAccess
 		_gameAdded.OnNext(game);
 	}
 
-	public void RemoveGame(Game game)
+	public void Remove(Game game)
 	{
 		lock (_editingLock)
 			_appDataAccess.Data.RemoveGame(game);

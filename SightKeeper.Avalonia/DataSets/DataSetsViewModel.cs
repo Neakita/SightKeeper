@@ -8,10 +8,10 @@ using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
-using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets;
@@ -23,7 +23,7 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 	public DataSetsViewModel(
 		DataSetsListViewModel dataSetsListViewModel,
 		DialogManager dialogManager,
-		GamesDataAccess gamesDataAccess,
+		ReadDataAccess<Game> gamesDataAccess,
 		ReadDataAccess<DataSet> readDataSetsDataAccess,
 		DataSetCreator dataSetCreator,
 		DataSetEditor dataSetEditor,
@@ -40,7 +40,7 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 	}
 
 	private readonly DialogManager _dialogManager;
-	private readonly GamesDataAccess _gamesDataAccess;
+	private readonly ReadDataAccess<Game> _gamesDataAccess;
 	private readonly ReadDataAccess<DataSet> _readDataSetsDataAccess;
 	private readonly DataSetCreator _dataSetCreator;
 	private readonly DataSetEditor _dataSetEditor;

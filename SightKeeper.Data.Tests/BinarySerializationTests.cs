@@ -44,7 +44,7 @@ public sealed class BinarySerializationTests
 		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, locker));
 		Game game = new("PayDay 2", "payday2");
 		AppDataGamesDataAccess gamesDataAccess = new(appDataAccess, new AppDataEditingLock());
-		gamesDataAccess.AddGame(game);
+		gamesDataAccess.Add(game);
 		AppDataDataSetsDataAccess appDataDataSetsDataAccess = new(appDataAccess, new AppDataEditingLock(), screenshotsDataAccess);
 		foreach (var dataSet in CreateDataSets(screenshotsDataAccess, game))
 			appDataDataSetsDataAccess.Add(dataSet);

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentValidation;
+using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
-using SightKeeper.Application.Games;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets;
 
@@ -23,15 +23,15 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, I
 
 	public bool HasErrors => _validator.HasErrors;
 
-	public DataSetEditorViewModel(GamesDataAccess gamesDataAccess, IValidator<DataSetData> validator)
+	public DataSetEditorViewModel(ReadDataAccess<Game> gamesDataAccess, IValidator<DataSetData> validator)
 	{
-		Games = gamesDataAccess.Games;
+		Games = gamesDataAccess.Items;
 		_validator = new ViewModelValidator<DataSetData>(validator, this, this);
 	}
 
-	public DataSetEditorViewModel(GamesDataAccess gamesDataAccess, IValidator<DataSetData> validator, DataSet dataSet)
+	public DataSetEditorViewModel(ReadDataAccess<Game> gamesDataAccess, IValidator<DataSetData> validator, DataSet dataSet)
 	{
-		Games = gamesDataAccess.Games;
+		Games = gamesDataAccess.Items;
 		_name = dataSet.Name;
 		_description = dataSet.Description;
 		_game = dataSet.Game;
