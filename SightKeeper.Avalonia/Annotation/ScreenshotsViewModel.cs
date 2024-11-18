@@ -33,11 +33,10 @@ internal sealed partial class ScreenshotsViewModel : ViewModel
 
 	public ScreenshotsViewModel(
 		ObservableDataAccess<Screenshot> observableDataAccess,
-		ScreenshotsDataAccess screenshotsDataAccess,
-		WriteableBitmapPool bitmapPool)
+		ScreenshotImageLoader imageLoader)
 	{
 		_screenshotsSource.Connect()
-			.Transform(screenshot => new ScreenshotViewModel(screenshot, screenshotsDataAccess, bitmapPool))
+			.Transform(screenshot => new ScreenshotViewModel(screenshot, imageLoader))
 			.Bind(out var screenshots)
 			.Subscribe()
 			.DisposeWith(_disposable);

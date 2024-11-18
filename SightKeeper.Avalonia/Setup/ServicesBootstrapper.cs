@@ -5,6 +5,7 @@ using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.Games;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Application.Screenshotting.Saving;
+using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Dialogs;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -26,6 +27,7 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<BufferedScreenshotsSaver<Bgra32>>().As<ScreenshotsSaver<Bgra32>>().As<PendingScreenshotsCountReporter>().SingleInstance();
 		builder.RegisterType<Bgra32ToRgba32PixelConverter>().As<PixelConverter<Bgra32, Rgba32>>();
 		builder.RegisterType<WriteableBitmapPool>().SingleInstance();
+		builder.RegisterType<ScreenshotImageLoader>().SingleInstance();
 	}
 
 	public static void Initialize(IComponentContext context)
