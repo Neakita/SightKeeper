@@ -38,24 +38,27 @@ public sealed class BinarySerializationTests
 	[Fact]
 	public void ShouldSaveAndLoadAppData()
 	{
-		AppDataAccess dataAccess = new();
+		AppDataAccess appDataAccess = new();
 		AppDataEditingLock locker = new();
-		FileSystemScreenshotsDataAccess screenshotsDataAccess = new(dataAccess, locker);
+		FileSystemScreenshotsDataAccess screenshotsDataAccess = new(appDataAccess, locker);
 		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, locker));
 		Game game = new("PayDay 2", "payday2");
-		dataAccess.Data.Games.Add(game);
+		AppDataGamesDataAccess gamesDataAccess = new(appDataAccess, new AppDataEditingLock());
+		gamesDataAccess.AddGame(game);
+		AppDataDataSetsDataAccess appDataDataSetsDataAccess = new(appDataAccess, new AppDataEditingLock(), screenshotsDataAccess);
 		foreach (var dataSet in CreateDataSets(screenshotsDataAccess, game))
-			dataAccess.Data.DataSets.Add(dataSet);
+			appDataDataSetsDataAccess.Add(dataSet);
 		var profile = CreateProfile(
-			dataAccess.Data.DataSets.OfType<ClassifierDataSet>().Single().WeightsLibrary.Weights.Single(),
-			dataAccess.Data.DataSets.OfType<DetectorDataSet>().Single().WeightsLibrary.Weights.Single(),
-			dataAccess.Data.DataSets.OfType<Poser2DDataSet>().Single().WeightsLibrary.Weights.Single(),
-			dataAccess.Data.DataSets.OfType<Poser3DDataSet>().Single().WeightsLibrary.Weights.Single());
-		dataAccess.Data.Profiles.Add(profile);
-		dataAccess.Save();
-		var data = dataAccess.Data;
-		dataAccess.Load();
-		dataAccess.Data.Should().BeEquivalentTo(data, ConfigureEquivalencyAssertion);
+			appDataAccess.Data.DataSets.OfType<ClassifierDataSet>().Single().WeightsLibrary.Weights.Single(),
+			appDataAccess.Data.DataSets.OfType<DetectorDataSet>().Single().WeightsLibrary.Weights.Single(),
+			appDataAccess.Data.DataSets.OfType<Poser2DDataSet>().Single().WeightsLibrary.Weights.Single(),
+			appDataAccess.Data.DataSets.OfType<Poser3DDataSet>().Single().WeightsLibrary.Weights.Single());
+		AppDataProfilesDataAccess profilesDataAccess = new(appDataAccess, new AppDataEditingLock());
+		profilesDataAccess.Add(profile);
+		appDataAccess.Save();
+		var data = appDataAccess.Data;
+		appDataAccess.Load();
+		appDataAccess.Data.Should().BeEquivalentTo(data, ConfigureEquivalencyAssertion);
 		Directory.Delete(screenshotsDataAccess.DirectoryPath, true);
 	}
 

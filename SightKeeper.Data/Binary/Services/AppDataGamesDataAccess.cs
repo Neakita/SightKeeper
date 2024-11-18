@@ -1,5 +1,4 @@
 ﻿using System.Reactive.Subjects;
-using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Games;
 using SightKeeper.Domain.Model;
 
@@ -19,20 +18,16 @@ public sealed class AppDataGamesDataAccess : GamesDataAccess
 
 	public void AddGame(Game game)
 	{
-		bool isAdded;
 		lock (_editingLock)
-			isAdded = _appDataAccess.Data.Games.Add(game);
-		Guard.IsTrue(isAdded);
+			_appDataAccess.Data.AddGame(game);
 		_appDataAccess.SetDataChanged();
 		_gameAdded.OnNext(game);
 	}
 
 	public void RemoveGame(Game game)
 	{
-		bool isRemoved;
 		lock (_editingLock)
-			isRemoved = _appDataAccess.Data.Games.Remove(game);
-		Guard.IsTrue(isRemoved);
+			_appDataAccess.Data.RemoveGame(game);
 		_appDataAccess.SetDataChanged();
 		_gameRemoved.OnNext(game);
 	}
