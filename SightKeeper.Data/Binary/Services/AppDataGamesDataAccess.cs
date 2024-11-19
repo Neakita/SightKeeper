@@ -7,7 +7,8 @@ namespace SightKeeper.Data.Binary.Services;
 public sealed class AppDataGamesDataAccess :
 	ReadDataAccess<Game>,
 	ObservableDataAccess<Game>,
-	WriteDataAccess<Game>
+	WriteDataAccess<Game>,
+	IDisposable
 {
 	public IObservable<Game> Added => _gameAdded;
 	public IObservable<Game> Removed => _gameRemoved;
@@ -33,6 +34,12 @@ public sealed class AppDataGamesDataAccess :
 			_appDataAccess.Data.RemoveGame(game);
 		_appDataAccess.SetDataChanged();
 		_gameRemoved.OnNext(game);
+	}
+
+	public void Dispose()
+	{
+		_gameAdded.Dispose();
+		_gameRemoved.Dispose();
 	}
 
 	private readonly AppDataAccess _appDataAccess;

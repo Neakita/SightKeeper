@@ -7,7 +7,8 @@ namespace SightKeeper.Data.Binary.Services;
 public sealed class AppDataProfilesDataAccess :
 	ReadDataAccess<Profile>,
 	ObservableDataAccess<Profile>,
-	WriteDataAccess<Profile>
+	WriteDataAccess<Profile>,
+	IDisposable
 {
 	public IReadOnlyCollection<Profile> Items => throw new NotImplementedException();
 
@@ -35,6 +36,12 @@ public sealed class AppDataProfilesDataAccess :
 			_appDataAccess.Data.RemoveProfile(profile);
 		_appDataAccess.SetDataChanged();
 		_removed.OnNext(profile);
+	}
+
+	public void Dispose()
+	{
+		_added.Dispose();
+		_removed.Dispose();
 	}
 
 	private readonly AppDataAccess _appDataAccess;

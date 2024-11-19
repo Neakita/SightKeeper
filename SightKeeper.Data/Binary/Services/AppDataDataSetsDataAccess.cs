@@ -9,7 +9,8 @@ namespace SightKeeper.Data.Binary.Services;
 public sealed class AppDataDataSetsDataAccess :
 	ReadDataAccess<DataSet>,
 	ObservableDataAccess<DataSet>,
-	WriteDataAccess<DataSet>
+	WriteDataAccess<DataSet>,
+	IDisposable
 {
 	public IReadOnlyCollection<DataSet> Items => _appDataAccess.Data.DataSets;
 	public IObservable<DataSet> Added => _added.AsObservable();
@@ -37,6 +38,12 @@ public sealed class AppDataDataSetsDataAccess :
 		_screenshotsDataAccess.DeleteAllScreenshotsData(dataSet.ScreenshotsLibrary);
 		_appDataAccess.SetDataChanged();
 		_removed.OnNext(dataSet);
+	}
+
+	public void Dispose()
+	{
+		_added.Dispose();
+		_removed.Dispose();
 	}
 
 	private readonly AppDataAccess _appDataAccess;
