@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
-             xmlns:instance="clr-namespace:SightKeeper.Avalonia"
+             xmlns:root="clr-namespace:SightKeeper.Avalonia"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Screenshots"
              x:DataType="local:ScreenshotsViewModel">
-    <ListBox ItemsSource="{Binding DisplayScreenshots}"
+    <ListBox ItemsSource="{Binding Screenshots}"
              SelectedItem="{Binding SelectedScreenshot}"
-             Name="ListBox"
-             Classes="square-items">
+             Name="ListBox">
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel/>
@@ -19,20 +19,39 @@
         </ListBox.ItemsPanel>
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <Decorator Name="ImageContainer">
-                    <Image Name="Image"
-                           Stretch="UniformToFill">
-                        <Interaction.Behaviors>
-                            <behaviors:ExecuteCommandOnSourceChanged Command="{Binding ReturnBitmapToPoolCommand}"/>
-                        </Interaction.Behaviors>
-                        <Image.Source>
-                            <MultiBinding Converter="{x:Static instance:ScreenshotToScaledBitmapConverter.Instance}">
-                                <Binding/>
-                                <Binding Path="#ImageContainer.Bounds.Size"/>
-                            </MultiBinding>
-                        </Image.Source>
-                    </Image>
-                </Decorator>
+                <Grid RowDefinitions="Auto 12 Auto">
+                    <Border Grid.Row="0"
+                               Name="ImageContainer"
+                               Height="{Binding $self.Bounds.Width}"
+                               CornerRadius="12"
+                               BoxShadow="{DynamicResource BoxShadow}">
+                        <Border CornerRadius="12"
+                                ClipToBounds="True">
+                            <Image Name="Image"
+                                   Stretch="UniformToFill">
+                                <Interaction.Behaviors>
+                                    <behaviors:ExecuteCommandOnSourceChanged Command="{Binding ReturnBitmapToPoolCommand}"/>
+                                </Interaction.Behaviors>
+                                <Image.Source>
+                                    <MultiBinding Converter="{x:Static root:ScreenshotToScaledBitmapConverter.Instance}">
+                                        <Binding/>
+                                        <Binding Path="#ImageContainer.Bounds.Size"/>
+                                    </MultiBinding>
+                                </Image.Source>
+                            </Image>
+                        </Border>
+                    </Border>
+                    <StackPanel Grid.Row="2" Classes="regular-spacing">
+                        <StackPanel Orientation="Horizontal" Classes="small-spacing">
+                            <icons:MaterialIcon Kind="Calendar" Width="12" Height="12" VerticalAlignment="Center"/>
+                            <TextBlock FontSize="12" VerticalAlignment="Center">
+                                <Interaction.Behaviors>
+                                    <root:DisplayRelativeDateTimeBehavior DateTime="{Binding Screenshot.CreationDate}"/>
+                                </Interaction.Behaviors>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
