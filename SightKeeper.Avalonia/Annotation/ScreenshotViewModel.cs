@@ -4,7 +4,7 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-internal sealed partial class ScreenshotViewModel : ViewModel
+internal abstract partial class ScreenshotViewModel : ViewModel
 {
 	public Screenshot Screenshot { get; }
 	public WriteableBitmap Image => _imageLoader.LoadImage(Screenshot);

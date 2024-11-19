@@ -12,7 +12,7 @@ public sealed class ClassifierAsset : Asset, AssetsFactory<ClassifierAsset>, Ass
 		return new ClassifierAsset(
 			screenshot,
 			(ClassifierTag)screenshot.DataSet.TagsLibrary.Tags.First(),
-			(AssetsLibrary<ClassifierAsset>)screenshot.DataSet.AssetsLibrary);
+			screenshot.DataSet.AssetsLibrary);
 	}
 
 	public static void Destroy(ClassifierAsset asset)

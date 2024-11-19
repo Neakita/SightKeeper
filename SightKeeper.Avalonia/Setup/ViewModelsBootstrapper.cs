@@ -21,7 +21,6 @@ internal static class ViewModelsBootstrapper
 		builder.RegisterType<AddGameViewModel>();
 		builder.RegisterType<DataSetsListViewModel>().SingleInstance();
 		builder.RegisterType<AnnotationTabViewModel>();
-		builder.RegisterType<ScreenshotsViewModel>();
 		builder.RegisterType<ScreenshottingSettingsViewModel>();
 	}
 }
