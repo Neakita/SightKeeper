@@ -1,6 +1,6 @@
 using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation.Assets;
-using SightKeeper.Avalonia.Annotation.Drawers;
+using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Domain.Model.DataSets.Classifier;
