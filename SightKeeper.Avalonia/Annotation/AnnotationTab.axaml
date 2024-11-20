@@ -9,11 +9,17 @@
              xmlns:toolBars="clr-namespace:SightKeeper.Avalonia.Annotation.ToolBars"
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:avalonia="clr-namespace:SightKeeper.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
     <Border Classes="regular-padding">
-        <Grid ColumnDefinitions="* 4* Auto">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="180"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <screenshots:Screenshots Grid.Column="0"
                                      DataContext="{Binding Context.Screenshots}"/>
             <Panel Grid.Column="1"
@@ -30,7 +36,19 @@
                         <behaviors:ExecuteCommandOnSourceChanged Command="{Binding ReturnBitmapToPoolCommand}"/>
                     </Interaction.Behaviors>
                 </Image>
-                <drawing:Drawer DataContext="{Binding Context.Drawer}"/>
+                <Panel>
+                    <Panel.IsVisible>
+                        <MultiBinding Converter="{x:Static avalonia:AndConverter.Instance}">
+                            <Binding Path="Context"
+                                     Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                            <Binding Path="Context.Drawer"
+                                     Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                            <Binding Path="Context.Screenshots.SelectedScreenshot"
+                                     Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                        </MultiBinding>
+                    </Panel.IsVisible>
+                    <drawing:Drawer DataContext="{Binding Context.Drawer}"/>
+                </Panel>
             </Panel>
             <Border Grid.Column="2"
                     Classes="outer wide-padding"

@@ -18,6 +18,8 @@ public readonly struct Bounding
 	public double Right => Position.X + Size.X;
 	public double Top => Position.Y;
 	public double Bottom => Position.Y + Size.Y;
+	public double Width => Size.X;
+	public double Height => Size.Y;
 
 	public Bounding()
 	{

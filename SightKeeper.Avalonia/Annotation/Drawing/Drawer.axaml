@@ -9,9 +9,27 @@
     <ListBox ItemsSource="{Binding Items}">
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-                <Canvas Name="Canvas"/>
+                <Canvas Name="Canvas"
+                        Background="Transparent">
+                    <Interaction.Behaviors>
+                        <local:DrawingBehavior>
+                            <local:DrawingBehavior.DrawingItemTemplate>
+                                <DataTemplate>
+                                    <Rectangle Stroke="Red" StrokeThickness="1"/>
+                                </DataTemplate>
+                            </local:DrawingBehavior.DrawingItemTemplate>
+                        </local:DrawingBehavior>
+                    </Interaction.Behaviors>
+                </Canvas>
             </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
+        <ListBox.Template>
+            <ControlTemplate>
+                <ItemsPresenter Name="PART_ItemsPresenter"
+                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                Margin="{TemplateBinding Padding}"/>
+            </ControlTemplate>
+        </ListBox.Template>
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Border>

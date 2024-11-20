@@ -11,6 +11,9 @@
             <DataTemplate DataType="local:ClassifierToolBarViewModel">
                 <local:ClassifierToolBar/>
             </DataTemplate>
+            <DataTemplate DataType="local:DetectorToolBarViewModel">
+                <local:DetectorToolBar/>
+            </DataTemplate>
         </ContentControl.DataTemplates>
     </ContentControl>
 </UserControl>

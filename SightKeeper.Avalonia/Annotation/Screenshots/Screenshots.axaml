@@ -37,12 +37,11 @@
                         </Style>
                     </Grid.Styles>
                     <Border Grid.Row="0"
-                            Name="ImageContainer"
                             CornerRadius="12"
                             BoxShadow="{DynamicResource BoxShadow}">
                         <Border CornerRadius="12"
                                 ClipToBounds="True">
-                            <Panel>
+                            <Panel Name="ImageContainer">
                                 <Image Name="Image"
                                        Stretch="UniformToFill">
                                     <Interaction.Behaviors>
