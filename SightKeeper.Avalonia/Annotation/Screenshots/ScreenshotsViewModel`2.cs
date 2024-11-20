@@ -27,6 +27,7 @@ internal sealed class ScreenshotsViewModel<TAssetViewModel, TAsset> : Screenshot
 		ScreenshotImageLoader imageLoader)
 	{
 		Library = library;
+		_screenshotsSource.AddRange(library.Screenshots);
 		_screenshotsSource.Connect()
 			.Transform(screenshot => new ScreenshotViewModel<TAssetViewModel, TAsset>(imageLoader, screenshot))
 			.Bind(out var screenshots)
