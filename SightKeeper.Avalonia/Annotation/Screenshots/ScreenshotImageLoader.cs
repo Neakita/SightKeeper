@@ -11,7 +11,7 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
 using Yolo.InputProcessing;
 
-namespace SightKeeper.Avalonia.Annotation;
+namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
 internal sealed class ScreenshotImageLoader
 {

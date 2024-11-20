@@ -2,13 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:assets="clr-namespace:SightKeeper.Avalonia.Annotation.Assets"
+             xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Annotation.Screenshots"
-             x:DataType="local:ScreenshotsViewModel">
+             x:Class="SightKeeper.Avalonia.Annotation.Screenshots.Screenshots"
+             x:DataType="screenshots:ScreenshotsViewModel">
     <ListBox ItemsSource="{Binding Screenshots}"
              SelectedItem="{Binding SelectedScreenshot}"
              Name="ListBox">
@@ -41,15 +42,33 @@
                             </Image>
                         </Border>
                     </Border>
-                    <StackPanel Grid.Row="2" Classes="regular-spacing">
+                    <StackPanel Grid.Row="2" Classes="small-spacing">
+                        <StackPanel.Styles>
+                            <Style Selector="TextBlock">
+                                <Setter Property="FontSize" Value="12"/>
+                            </Style>
+                        </StackPanel.Styles>
                         <StackPanel Orientation="Horizontal" Classes="small-spacing">
                             <icons:MaterialIcon Kind="Calendar" Width="12" Height="12" VerticalAlignment="Center"/>
-                            <TextBlock FontSize="12" VerticalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center">
                                 <Interaction.Behaviors>
-                                    <root:DisplayRelativeDateTimeBehavior DateTime="{Binding Screenshot.CreationDate}"/>
+                                    <root:DisplayRelativeDateTimeBehavior DateTime="{Binding Value.CreationDate}"/>
                                 </Interaction.Behaviors>
                             </TextBlock>
                         </StackPanel>
+                        <ContentControl Content="{Binding Asset}"
+                                        IsVisible="{Binding Asset, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate DataType="assets:ClassifierAssetViewModel">
+                                    <StackPanel Orientation="Horizontal"
+                                                Classes="small-spacing">
+                                        <icons:MaterialIcon Kind="Tag" Width="12" Height="12" VerticalAlignment="Center"/>
+                                        <TextBlock VerticalAlignment="Center"
+                                                   Text="{Binding Tag.Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
                     </StackPanel>
                 </Grid>
             </DataTemplate>

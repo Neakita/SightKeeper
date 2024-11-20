@@ -5,15 +5,17 @@
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
+             xmlns:toolBars="clr-namespace:SightKeeper.Avalonia.Annotation.ToolBars"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
     <Border Classes="regular-padding">
         <Grid ColumnDefinitions="* 4* Auto">
-            <local:Screenshots Grid.Column="0"
-                               DataContext="{Binding Screenshots}"/>
+            <screenshots:Screenshots Grid.Column="0"
+                                     DataContext="{Binding Context.Screenshots}"/>
             <Image Grid.Column="1"
-                   Source="{Binding Screenshots.SelectedScreenshot.Image}"
+                   Source="{Binding Context.Screenshots.SelectedScreenshot.Image}"
                    Classes="regular-margin">
                 <Interaction.Behaviors>
                     <behaviors:ExecuteCommandOnSourceChanged Command="{Binding ReturnBitmapToPoolCommand}"/>
@@ -31,6 +33,7 @@
                     <TextBlock Classes="p2"
                                Text="{Binding PendingScreenshotsCount^, StringFormat=Pending screenshots: {0}}"
                                IsVisible="{Binding PendingScreenshotsCount^, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static system:UInt16.MinValue}}"/>
+                    <toolBars:AdaptiveToolBar DataContext="{Binding Context.ToolBar}"/>
                 </StackPanel>
             </Border>
         </Grid>

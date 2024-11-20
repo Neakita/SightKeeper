@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Avalonia.Annotation;
+namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
 internal abstract partial class ScreenshotsViewModel : ViewModel
 {

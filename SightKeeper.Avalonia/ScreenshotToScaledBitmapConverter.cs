@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
-using SightKeeper.Avalonia.Annotation;
+using ScreenshotViewModel = SightKeeper.Avalonia.Annotation.Screenshots.ScreenshotViewModel;
 
 namespace SightKeeper.Avalonia;
 

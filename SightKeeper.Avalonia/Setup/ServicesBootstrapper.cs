@@ -5,8 +5,9 @@ using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.Games;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Application.Screenshotting.Saving;
-using SightKeeper.Avalonia.Annotation;
+using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Data.Binary.Services;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Avalonia.Setup;
@@ -28,6 +29,7 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<Bgra32ToRgba32PixelConverter>().As<PixelConverter<Bgra32, Rgba32>>();
 		builder.RegisterType<WriteableBitmapPool>().SingleInstance();
 		builder.RegisterType<ScreenshotImageLoader>().SingleInstance();
+		builder.RegisterType<AppDataClassifierAnnotator>().As<ClassifierAnnotator>();
 	}
 
 	public static void Initialize(IComponentContext context)

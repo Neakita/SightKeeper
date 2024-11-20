@@ -35,6 +35,13 @@ public sealed class Screenshot<TAsset> : Screenshot
 		Library = library;
 	}
 
+	public TAsset MakeAsset() => DataSet.AssetsLibrary.MakeAsset(this);
+	public void DeleteAsset()
+	{
+		Guard.IsNotNull(Asset);
+		DataSet.AssetsLibrary.DeleteAsset(Asset);
+	}
+
 	internal void SetAsset(TAsset? asset)
 	{
 		_asset = asset;

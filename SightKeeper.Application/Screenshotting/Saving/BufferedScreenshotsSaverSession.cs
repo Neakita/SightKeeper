@@ -82,7 +82,7 @@ public sealed class BufferedScreenshotsSaverSession<TPixel> : ScreenshotsSaverSe
 			}
 			finally
 			{
-				ConvertedPixelsArrayPool.Return(buffer, true);
+				ConvertedPixelsArrayPool.Return(buffer);
 				data.Dispose();
 			}
 		}

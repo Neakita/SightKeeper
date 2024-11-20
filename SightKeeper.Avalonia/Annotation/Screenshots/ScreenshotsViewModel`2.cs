@@ -11,15 +11,14 @@ using SightKeeper.Avalonia.Annotation.Assets;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Avalonia.Annotation;
+namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
-internal sealed class ScreenshotsViewModel<TAssetViewModel, TAsset> : ScreenshotsViewModel
-	where TAssetViewModel : AssetViewModel<TAsset>
+internal sealed class ScreenshotsViewModel<TAssetViewModel, TAsset> : ScreenshotsViewModel<TAssetViewModel>
+	where TAssetViewModel : AssetViewModel<TAsset>, AssetViewModelFactory<TAssetViewModel, TAsset>
 	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
 {
 	public override ScreenshotsLibrary<TAsset> Library { get; }
 	public override IReadOnlyCollection<ScreenshotViewModel<TAssetViewModel>> Screenshots { get; }
-
 	public override IReadOnlyCollection<DateOnly> Dates => _dates;
 
 	public ScreenshotsViewModel(
@@ -29,7 +28,7 @@ internal sealed class ScreenshotsViewModel<TAssetViewModel, TAsset> : Screenshot
 	{
 		Library = library;
 		_screenshotsSource.Connect()
-			.Transform(screenshot => new ScreenshotViewModel<TAssetViewModel>(screenshot, imageLoader))
+			.Transform(screenshot => new ScreenshotViewModel<TAssetViewModel, TAsset>(imageLoader, screenshot))
 			.Bind(out var screenshots)
 			.Subscribe()
 			.DisposeWith(_disposable);
