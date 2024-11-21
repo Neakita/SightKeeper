@@ -79,6 +79,9 @@ internal sealed class DrawingBehavior : Behavior<Canvas>
 		Guard.IsTrue(isRemoved);
 		_drawingItem = null;
 		var finalPosition = e.GetPosition(AssociatedObject);
+		finalPosition = new Point(
+			Math.Clamp(finalPosition.X, 0, AssociatedObject.Bounds.Width),
+			Math.Clamp(finalPosition.Y, 0, AssociatedObject.Bounds.Height));
 		Bounding bounding = CreateBounding(_initialPosition, finalPosition);
 		if (Command?.CanExecute(bounding) == true)
 			Command.Execute(bounding);

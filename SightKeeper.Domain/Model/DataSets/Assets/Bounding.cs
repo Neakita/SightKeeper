@@ -11,6 +11,11 @@ public readonly struct Bounding
 		return !left.Equals(right);
 	}
 
+	public static Bounding operator /(Bounding bounding, Vector2<double> vector)
+	{
+		return new Bounding(bounding.Position / vector, bounding.Size / vector);
+	}
+
 	public Vector2<double> Position { get; }
 	public Vector2<double> Size { get; }
 	public Vector2<double> Center => Position + Size / 2;
