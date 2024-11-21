@@ -9,7 +9,7 @@ public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>, AssetsFactory<Poser3
 {
 	public static Poser3DAsset Create(Screenshot<Poser3DAsset> screenshot)
 	{
-		Poser3DAsset asset = new(screenshot, (AssetsLibrary<Poser3DAsset>)screenshot.DataSet.AssetsLibrary);
+		Poser3DAsset asset = new(screenshot, screenshot.DataSet.AssetsLibrary);
 		screenshot.SetAsset(asset);
 		return asset;
 	}
@@ -32,6 +32,7 @@ public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>, AssetsFactory<Poser3
 		ImmutableList<double> numericProperties,
 		ImmutableList<bool> booleanProperties)
 	{
+		bounding.EnsureNormalized();
 		Guard.IsEqualTo(keyPoints.Count, tag.KeyPoints.Count);
 		Poser3DItem item = new(tag, bounding, keyPoints, numericProperties, booleanProperties, this);
 		AddItem(item);

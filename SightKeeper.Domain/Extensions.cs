@@ -1,4 +1,6 @@
 ﻿using System.Collections.Immutable;
+using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Assets;
 
 namespace SightKeeper.Domain;
 
@@ -36,5 +38,18 @@ internal static class Extensions
 		source.TryGetNonEnumeratedCount(out var count);
 		HashSet<T> set = new(count, comparer);
 		return !source.All(set.Add);
+	}
+
+	public static void EnsureNormalized(this Bounding bounding)
+	{
+		EnsureNormalized(bounding.Left);
+		EnsureNormalized(bounding.Top);
+		EnsureNormalized(bounding.Right);
+		EnsureNormalized(bounding.Bottom);
+	}
+
+	private static void EnsureNormalized(double value)
+	{
+		Guard.IsBetweenOrEqualTo(value, 0, 1);
 	}
 }

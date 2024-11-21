@@ -30,6 +30,7 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<WriteableBitmapPool>().SingleInstance();
 		builder.RegisterType<ScreenshotImageLoader>().SingleInstance();
 		builder.RegisterType<AppDataClassifierAnnotator>().As<ClassifierAnnotator>();
+		builder.RegisterType<AppDataDetectorAnnotator>().As<DetectorAnnotator>();
 	}
 
 	public static void Initialize(IComponentContext context)

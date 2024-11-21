@@ -23,7 +23,7 @@ internal sealed class ClassifierToolBarViewModel : ToolBarViewModel<ClassifierAs
 		}
 	}
 
-	public override ScreenshotViewModel<ClassifierAssetViewModel, ClassifierAsset>? Screenshot
+	public ScreenshotViewModel<ClassifierAssetViewModel, ClassifierAsset>? Screenshot
 	{
 		get;
 		set

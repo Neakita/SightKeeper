@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Collections;
+using CommunityToolkit.Diagnostics;
+using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation.Assets;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Domain.Model.DataSets.Assets;
@@ -9,24 +12,44 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Detector;
 
 internal sealed class DetectorDrawerViewModel : DrawerViewModel<DetectorAssetViewModel, DetectorAsset>
 {
-	public override ScreenshotViewModel<DetectorAssetViewModel, DetectorAsset>? Screenshot
+	public override IReadOnlyCollection<DetectorItemViewModel> Items => _items;
+	public override DetectorTag? Tag => _tag;
+
+	public DetectorDrawerViewModel(DetectorAnnotator annotator)
+	{
+		_annotator = annotator;
+	}
+
+	internal ScreenshotViewModel<DetectorAssetViewModel, DetectorAsset>? Screenshot
 	{
 		get;
 		set
 		{
-			if (field == value)
-				return;
 			field = value;
-			OnPropertyChanged();
+			_items.Clear();
+			var asset = Screenshot?.Value.Asset;
+			if (asset != null)
+				_items.AddRange(asset.Items.Select(item => new DetectorItemViewModel(item)));
 		}
 	}
 
-	public override IReadOnlyCollection<DetectorItemViewModel> Items => _items;
+	internal void SetTag(DetectorTag? tag)
+	{
+		OnPropertyChanging(nameof(Tag));
+		_tag = tag;
+		OnPropertyChanged(nameof(Tag));
+	}
 
 	protected override void CreateItem(Bounding bounding)
 	{
-		
+		Guard.IsNotNull(Screenshot);
+		Guard.IsNotNull(Tag);
+		var item = _annotator.CreateItem(Screenshot.Value, Tag, bounding);
+		DetectorItemViewModel itemViewModel = new(item);
+		_items.Add(itemViewModel);
 	}
 
 	private readonly AvaloniaList<DetectorItemViewModel> _items = new();
+	private readonly DetectorAnnotator _annotator;
+	private DetectorTag? _tag;
 }

@@ -18,7 +18,8 @@ internal abstract class DataSetContextViewModel : ViewModel
 		DataSet? dataSet,
 		ObservableDataAccess<Screenshot> observableScreenshotsDataAccess,
 		ScreenshotImageLoader imageLoader,
-		ClassifierAnnotator classifierAnnotator) =>
+		ClassifierAnnotator classifierAnnotator,
+		DetectorAnnotator detectorAnnotator) =>
 		dataSet switch
 		{
 			null => null,
@@ -30,7 +31,8 @@ internal abstract class DataSetContextViewModel : ViewModel
 			DetectorDataSet detector => new DetectorContextViewModel(
 				detector,
 				observableScreenshotsDataAccess,
-				imageLoader),
+				imageLoader,
+				detectorAnnotator),
 			Poser2DDataSet poser2D => throw new NotImplementedException(),
 			Poser3DDataSet poser3D => throw new NotImplementedException(),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet), dataSet, null)

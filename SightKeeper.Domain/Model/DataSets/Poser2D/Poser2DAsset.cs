@@ -9,7 +9,7 @@ public sealed class Poser2DAsset : ItemsAsset<Poser2DItem>, AssetsFactory<Poser2
 {
 	public static Poser2DAsset Create(Screenshot<Poser2DAsset> screenshot)
 	{
-		Poser2DAsset asset = new(screenshot, (AssetsLibrary<Poser2DAsset>)screenshot.DataSet.AssetsLibrary);
+		Poser2DAsset asset = new(screenshot, screenshot.DataSet.AssetsLibrary);
 		screenshot.SetAsset(asset);
 		return asset;
 	}
@@ -27,6 +27,7 @@ public sealed class Poser2DAsset : ItemsAsset<Poser2DItem>, AssetsFactory<Poser2
 
 	public Poser2DItem CreateItem(Poser2DTag tag, Bounding bounding, ImmutableList<Vector2<double>> keyPoints, ImmutableList<double> properties)
 	{
+		bounding.EnsureNormalized();
 		Guard.IsEqualTo(keyPoints.Count, tag.KeyPoints.Count);
 		Guard.IsEqualTo(properties.Count, tag.Properties.Count);
 		Poser2DItem item = new(tag, bounding, keyPoints, properties, this);

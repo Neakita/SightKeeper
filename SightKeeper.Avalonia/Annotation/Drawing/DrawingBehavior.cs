@@ -6,6 +6,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
@@ -48,6 +49,8 @@ internal sealed class DrawingBehavior : Behavior<Canvas>
 	private void OnAssociatedObjectPointerPressed(object? sender, PointerPressedEventArgs e)
 	{
 		Guard.IsNotNull(AssociatedObject);
+		if (!IsEnabled)
+			return;
 		AssociatedObject.PointerMoved += OnAssociatedObjectPointerMoved;
 		AssociatedObject.PointerReleased += OnAssociatedObjectPointerReleased;
 		_initialPosition = e.GetPosition(AssociatedObject);
@@ -83,8 +86,10 @@ internal sealed class DrawingBehavior : Behavior<Canvas>
 			Math.Clamp(finalPosition.X, 0, AssociatedObject.Bounds.Width),
 			Math.Clamp(finalPosition.Y, 0, AssociatedObject.Bounds.Height));
 		Bounding bounding = CreateBounding(_initialPosition, finalPosition);
-		if (Command?.CanExecute(bounding) == true)
-			Command.Execute(bounding);
+		var associatedObjectSize = new Vector2<double>(AssociatedObject.Bounds.Width, AssociatedObject.Bounds.Height);
+		var normalizedBounding = bounding / associatedObjectSize;
+		if (Command?.CanExecute(normalizedBounding) == true)
+			Command.Execute(normalizedBounding);
 	}
 
 	private void UpdateDrawingItemBounding(Point position)

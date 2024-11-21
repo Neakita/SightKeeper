@@ -7,7 +7,7 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>, AssetsFactory<Dete
 {
 	public static DetectorAsset Create(Screenshot<DetectorAsset> screenshot)
 	{
-		DetectorAsset asset = new(screenshot, (AssetsLibrary<DetectorAsset>)screenshot.DataSet.AssetsLibrary);
+		DetectorAsset asset = new(screenshot, screenshot.DataSet.AssetsLibrary);
 		screenshot.SetAsset(asset);
 		return asset;
 	}
@@ -25,6 +25,7 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>, AssetsFactory<Dete
 	
     public DetectorItem CreateItem(DetectorTag tag, Bounding bounding)
     {
+	    bounding.EnsureNormalized();
         DetectorItem item = new(tag, bounding, this);
         AddItem(item);
         return item;
@@ -43,7 +44,7 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>, AssetsFactory<Dete
 	    base.ClearItems();
     }
 
-    internal DetectorAsset(Screenshot<DetectorAsset> screenshot, AssetsLibrary<DetectorAsset> library)
+    private DetectorAsset(Screenshot<DetectorAsset> screenshot, AssetsLibrary<DetectorAsset> library)
     {
 	    Screenshot = screenshot;
 	    Library = library;
