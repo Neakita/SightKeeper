@@ -1,3 +1,4 @@
+using SightKeeper.Application;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
@@ -7,10 +8,19 @@ internal sealed class DetectorItemViewModel : DrawerItemViewModel
 {
 	public DetectorItem Value { get; }
 	public override DetectorTag Tag => Value.Tag;
-	public override Bounding Bounding => Value.Bounding;
 
-	public DetectorItemViewModel(DetectorItem value)
+	public override Bounding Bounding
 	{
-		Value = value;
+		get => Value.Bounding;
+		set => _annotator.SetBounding(Value, value);
 	}
+
+	public DetectorItemViewModel(DetectorItem value, DetectorAnnotator annotator)
+	{
+		_annotator = annotator;
+		Value = value;
+		Bounding = Value.Bounding;
+	}
+
+	private readonly DetectorAnnotator _annotator;
 }

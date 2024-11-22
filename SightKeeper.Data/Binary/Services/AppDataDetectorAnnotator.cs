@@ -22,6 +22,13 @@ public sealed class AppDataDetectorAnnotator : DetectorAnnotator
 		return item;
 	}
 
+	public override void SetBounding(DetectorItem item, Bounding bounding)
+	{
+		lock (_locker)
+			base.SetBounding(item, bounding);
+		_appDataAccess.SetDataChanged();
+	}
+
 	private readonly AppDataAccess _appDataAccess;
 	private readonly AppDataEditingLock _locker;
 }

@@ -18,7 +18,16 @@ public sealed class DetectorItem : AssetItem
 		}
 	}
 
-	public Bounding Bounding { get; set; }
+	public Bounding Bounding
+	{
+		get;
+		set
+		{
+			value.EnsureNormalized();
+			field = value;
+		}
+	}
+
 	public DetectorAsset Asset { get; }
 	public DataSet DataSet => Asset.DataSet;
 	

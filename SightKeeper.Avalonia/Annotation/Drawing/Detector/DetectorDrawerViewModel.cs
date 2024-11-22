@@ -29,7 +29,7 @@ internal sealed class DetectorDrawerViewModel : DrawerViewModel<DetectorAssetVie
 			_items.Clear();
 			var asset = Screenshot?.Value.Asset;
 			if (asset != null)
-				_items.AddRange(asset.Items.Select(item => new DetectorItemViewModel(item)));
+				_items.AddRange(asset.Items.Select(item => new DetectorItemViewModel(item, _annotator)));
 		}
 	}
 
@@ -45,7 +45,7 @@ internal sealed class DetectorDrawerViewModel : DrawerViewModel<DetectorAssetVie
 		Guard.IsNotNull(Screenshot);
 		Guard.IsNotNull(Tag);
 		var item = _annotator.CreateItem(Screenshot.Value, Tag, bounding);
-		DetectorItemViewModel itemViewModel = new(item);
+		DetectorItemViewModel itemViewModel = new(item, _annotator);
 		_items.Add(itemViewModel);
 	}
 

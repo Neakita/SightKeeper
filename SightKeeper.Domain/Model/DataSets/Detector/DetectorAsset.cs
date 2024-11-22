@@ -25,7 +25,6 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>, AssetsFactory<Dete
 	
     public DetectorItem CreateItem(DetectorTag tag, Bounding bounding)
     {
-	    bounding.EnsureNormalized();
         DetectorItem item = new(tag, bounding, this);
         AddItem(item);
         return item;

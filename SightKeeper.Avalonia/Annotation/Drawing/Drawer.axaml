@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
+             xmlns:boundingTransform="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
              x:DataType="local:DrawerViewModel">
@@ -45,27 +46,28 @@
         </ListBox.ItemContainerTheme>
         <ListBox.Styles>
             <Style Selector="ListBoxItem">
+                <Setter Property="ClipToBounds" Value="False"/>
                 <Setter Property="Canvas.Left">
                     <MultiBinding Converter="{x:Static root:MultiplyConverter.Instance}">
-                        <Binding Path="(local:DrawerItemViewModel).Bounding.Left"/>
+                        <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Left"/>
                         <Binding Path="#ListBox.Bounds.Width"/>
                     </MultiBinding>
                 </Setter>
                 <Setter Property="Canvas.Top">
                     <MultiBinding Converter="{x:Static root:MultiplyConverter.Instance}">
-                        <Binding Path="(local:DrawerItemViewModel).Bounding.Top"/>
+                        <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Top"/>
                         <Binding Path="#ListBox.Bounds.Height"/>
                     </MultiBinding>
                 </Setter>
                 <Setter Property="Width">
                     <MultiBinding Converter="{x:Static root:MultiplyConverter.Instance}">
-                        <Binding Path="(local:DrawerItemViewModel).Bounding.Width"/>
+                        <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Width"/>
                         <Binding Path="#ListBox.Bounds.Width"/>
                     </MultiBinding>
                 </Setter>
                 <Setter Property="Height">
                     <MultiBinding Converter="{x:Static root:MultiplyConverter.Instance}">
-                        <Binding Path="(local:DrawerItemViewModel).Bounding.Height"/>
+                        <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Height"/>
                         <Binding Path="#ListBox.Bounds.Height"/>
                     </MultiBinding>
                 </Setter>
@@ -75,18 +77,73 @@
             <DataTemplate>
                 <Border BorderBrush="Red" BorderThickness="2">
                     <Interaction.Behaviors>
-                        <local:DragableBoundingBehavior Canvas="Canvas"
-                                                        TopLeftThumb="TopLeftThumb"
-                                                        TopRightThumb="TopRightThumb"
-                                                        BottomLeftThumb="BottomLeftThumb"
-                                                        BottomRightThumb="BottomRightThumb"
-                                                        Bounding="{Binding Bounding}"/>
+                        <boundingTransform:DragableBoundingBehavior
+                            Container="ListBox"
+                            ActualBounding="{Binding Bounding}"
+                            TopLeftThumb="TopLeftThumb"
+                            TopRightThumb="TopRightThumb"
+                            BottomRightThumb="BottomRightThumb"
+                            BottomLeftThumb="BottomLeftThumb"
+                            LeftThumb="LeftThumb"
+                            TopThumb="TopThumb"
+                            RightThumb="RightThumb"
+                            BottomThumb="BottomThumb"
+                            HorizontalMoveThumb="HorizontalThumb"
+                            VerticalMoveThumb="VerticalThumb"
+                            MoveThumb="CentralThumb"
+                            DisplayBounding="{Binding DisplayBounding}"/>
                     </Interaction.Behaviors>
-                    <Panel>
-                        <Thumb Name="TopLeftThumb"/>
-                        <Thumb Name="TopRightThumb"/>
-                        <Thumb Name="BottomLeftThumb"/>
-                        <Thumb Name="BottomRightThumb"/>
+                    <Panel Margin="-7">
+                        <Panel.Styles>
+                            <Style Selector="Thumb">
+                                <Setter Property="Margin" Value="-10"/>
+                                <Setter Property="Template">
+                                    <ControlTemplate>
+                                        <Ellipse Width="10"
+                                                 Height="10"
+                                                 Stroke="{DynamicResource HighAccentButtonBackground}"
+                                                 Fill="{DynamicResource LowAccentButtonBackground}"
+                                                 StrokeThickness="1"/>
+                                    </ControlTemplate>
+                                </Setter>
+                            </Style>
+                        </Panel.Styles>
+                        <Thumb Name="TopLeftThumb"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"/>
+                        <Thumb Name="TopRightThumb"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Right"/>
+                        <Thumb Name="BottomRightThumb"
+                               VerticalAlignment="Bottom"
+                               HorizontalAlignment="Right"/>
+                        <Thumb Name="BottomLeftThumb"
+                               VerticalAlignment="Bottom"
+                               HorizontalAlignment="Left"/>
+                        <Thumb Name="LeftThumb"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                        <Thumb Name="TopThumb"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Center"/>
+                        <Thumb Name="RightThumb"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"/>
+                        <Thumb Name="BottomThumb"
+                               VerticalAlignment="Bottom"
+                               HorizontalAlignment="Center"/>
+                        <Thumb Name="HorizontalThumb"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Top"
+                               Margin="0 -50 0 0"/>
+                        <Thumb Name="VerticalThumb"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Stretch"
+                               Margin="-50 0 0 0"/>
+                        <Thumb Name="CentralThumb"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+
                         <TextBlock Text="{Binding Tag.Name}"/>
                     </Panel>
                 </Border>

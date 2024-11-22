@@ -11,4 +11,9 @@ public abstract class DetectorAnnotator
 		var asset = screenshot.Asset ?? screenshot.MakeAsset();
 		return asset.CreateItem(tag, bounding);
 	}
+
+	public virtual void SetBounding(DetectorItem item, Bounding bounding)
+	{
+		item.Bounding = bounding;
+	}
 }
