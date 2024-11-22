@@ -7,8 +7,6 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform.Corners;
-using SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform.Sides;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
@@ -179,7 +177,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		thumb.DragDelta += OnThumbDragDelta;
 		thumb.DragCompleted += OnThumbDragCompleted;
 		Guard.IsNull(_transformer);
-		_transformer = CreateTransformer(ActualBounding, thumb.HorizontalAlignment, thumb.VerticalAlignment);
+		_transformer = CreateTransformer(thumb.HorizontalAlignment, thumb.VerticalAlignment);
 		var containerSize = Container.Bounds.Size;
 		_transformer.MinimumSize = new Vector2<double>(1 / containerSize.Width * 20, 1 / containerSize.Height * 20);
 	}
@@ -189,7 +187,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		Guard.IsNotNull(_transformer);
 		Guard.IsNotNull(Container);
 		var containerSize = Container.Bounds.Size;
-		DisplayBounding = _transformer.Transform(new Vector(e.Vector.X / containerSize.Width, e.Vector.Y / containerSize.Height));
+		DisplayBounding = _transformer.Transform(DisplayBounding, new Vector2<double>(e.Vector.X / containerSize.Width, e.Vector.Y / containerSize.Height));
 	}
 
 	private void OnThumbDragCompleted(object? sender, VectorEventArgs e)
@@ -203,22 +201,21 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 	}
 
 	private static BoundingTransformer CreateTransformer(
-		Bounding bounding,
 		HorizontalAlignment horizontalAlignment,
 		VerticalAlignment verticalAlignment) =>
 		(horizontalAlignment, verticalAlignment) switch
 		{
-			(HorizontalAlignment.Left, VerticalAlignment.Top) => new TopLeftCornerBoundingTransformer(bounding),
-			(HorizontalAlignment.Right, VerticalAlignment.Top) => new TopRightCornerBoundingTransformer(bounding),
-			(HorizontalAlignment.Left, VerticalAlignment.Bottom) => new BottomLeftCornerBoundingTransformer(bounding),
-			(HorizontalAlignment.Right, VerticalAlignment.Bottom) => new BottomRightCornerBoundingTransformer(bounding),
-			(HorizontalAlignment.Left, VerticalAlignment.Center) => new LeftSideBoundingTransformer(bounding),
-			(HorizontalAlignment.Center, VerticalAlignment.Top) => new TopSideBoundingTransformer(bounding),
-			(HorizontalAlignment.Right, VerticalAlignment.Center) => new RightSideBoundingTransformer(bounding),
-			(HorizontalAlignment.Center, VerticalAlignment.Bottom) => new BottomSideBoundingTransformer(bounding),
-			(HorizontalAlignment.Stretch, VerticalAlignment.Top or VerticalAlignment.Center or VerticalAlignment.Bottom) => new HorizontalMoveBoundingTransformer(bounding),
-			(HorizontalAlignment.Left or HorizontalAlignment.Center or HorizontalAlignment.Right, VerticalAlignment.Stretch) => new VerticalMoveBoundingTransformer(bounding),
-			(HorizontalAlignment.Center,VerticalAlignment.Center) or (HorizontalAlignment.Stretch, VerticalAlignment.Stretch) => new MoveBoundingTransformer(bounding),
+			(HorizontalAlignment.Left, VerticalAlignment.Top) => new AggregateBoundingTransformer(new BoundingSideTransformer(Side.Left), new BoundingSideTransformer(Side.Top)),
+			(HorizontalAlignment.Right, VerticalAlignment.Top) => new AggregateBoundingTransformer(new BoundingSideTransformer(Side.Right), new BoundingSideTransformer(Side.Top)),
+			(HorizontalAlignment.Left, VerticalAlignment.Bottom) => new AggregateBoundingTransformer(new BoundingSideTransformer(Side.Left), new BoundingSideTransformer(Side.Bottom)),
+			(HorizontalAlignment.Right, VerticalAlignment.Bottom) => new AggregateBoundingTransformer(new BoundingSideTransformer(Side.Right), new BoundingSideTransformer(Side.Bottom)),
+			(HorizontalAlignment.Left, VerticalAlignment.Center) => new BoundingSideTransformer(Side.Left),
+			(HorizontalAlignment.Center, VerticalAlignment.Top) => new BoundingSideTransformer(Side.Top),
+			(HorizontalAlignment.Right, VerticalAlignment.Center) => new BoundingSideTransformer(Side.Right),
+			(HorizontalAlignment.Center, VerticalAlignment.Bottom) => new BoundingSideTransformer(Side.Bottom),
+			(HorizontalAlignment.Stretch, VerticalAlignment.Top or VerticalAlignment.Center or VerticalAlignment.Bottom) => new HorizontalMoveBoundingTransformer(),
+			(HorizontalAlignment.Left or HorizontalAlignment.Center or HorizontalAlignment.Right, VerticalAlignment.Stretch) => new VerticalMoveBoundingTransformer(),
+			(HorizontalAlignment.Center,VerticalAlignment.Center) or (HorizontalAlignment.Stretch, VerticalAlignment.Stretch) => new MoveBoundingTransformer(),
 			_ => throw new ArgumentOutOfRangeException()
 		};
 

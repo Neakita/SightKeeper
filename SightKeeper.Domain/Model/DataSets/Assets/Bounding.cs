@@ -28,7 +28,11 @@ public readonly struct Bounding
 	public double Left
 	{
 		get => Position.X;
-		init => Position = Position with { X = value };
+		init
+		{
+			Width -= value - Position.X;
+			Position = Position with { X = value };
+		}
 	}
 
 	public double Right
@@ -40,7 +44,11 @@ public readonly struct Bounding
 	public double Top
 	{
 		get => Position.Y;
-		init => Position = Position with { Y = value };
+		init
+		{
+			Height -= value - Position.Y;
+			Position = Position with { Y = value };
+		}
 	}
 
 	public double Bottom

@@ -6,19 +6,11 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 
 internal sealed class VerticalMoveBoundingTransformer : BoundingTransformer
 {
-	public VerticalMoveBoundingTransformer(Bounding bounding)
-	{
-		_bounding = bounding;
-	}
-
-	protected override Bounding Transform(Vector2<double> delta)
+	public override Bounding Transform(Bounding bounding, Vector2<double> delta)
 	{
 		Vector2<double> position = new(
-			_bounding.Left,
-			Math.Clamp(_bounding.Top + delta.Y, 0, 1 - _bounding.Height));
-		_bounding = new Bounding(position, _bounding.Size);
-		return _bounding;
+			bounding.Left,
+			Math.Clamp(bounding.Top + delta.Y, 0, 1 - bounding.Height));
+		return new Bounding(position, bounding.Size);
 	}
-
-	private Bounding _bounding;
 }

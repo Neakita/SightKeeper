@@ -1,4 +1,3 @@
-using System;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
@@ -6,19 +5,20 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 
 internal sealed class MoveBoundingTransformer : BoundingTransformer
 {
-	public MoveBoundingTransformer(Bounding bounding)
+	public override Vector2<double> MinimumSize
 	{
-		_bounding = bounding;
+		get => base.MinimumSize;
+		set
+		{
+			base.MinimumSize = value;
+			_transformer.MinimumSize = value;
+		}
 	}
 
-	protected override Bounding Transform(Vector2<double> delta)
+	public override Bounding Transform(Bounding bounding, Vector2<double> delta)
 	{
-		Vector2<double> position = new(
-			Math.Clamp(_bounding.Left + delta.X, 0, 1 - _bounding.Width),
-			Math.Clamp(_bounding.Top + delta.Y, 0, 1 - _bounding.Height));
-		_bounding = new Bounding(position, _bounding.Size);
-		return _bounding;
+		return _transformer.Transform(bounding, delta);
 	}
 
-	private Bounding _bounding;
+	private readonly AggregateBoundingTransformer _transformer = new(new HorizontalMoveBoundingTransformer(), new VerticalMoveBoundingTransformer());
 }
