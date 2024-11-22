@@ -9,7 +9,8 @@
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
              x:DataType="local:DrawerViewModel">
     <ListBox ItemsSource="{Binding Items}"
-             Name="ListBox">
+             Name="ListBox"
+             ClipToBounds="False">
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
                 <Canvas Name="Canvas"
