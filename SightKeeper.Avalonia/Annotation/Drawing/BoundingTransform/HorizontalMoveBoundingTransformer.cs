@@ -1,3 +1,4 @@
+using System;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
@@ -12,8 +13,10 @@ internal sealed class HorizontalMoveBoundingTransformer : BoundingTransformer
 
 	protected override Bounding Transform(Vector2<double> delta)
 	{
-		delta = delta with { Y = 0 };
-		_bounding = new Bounding(_bounding.Position + delta, _bounding.Size);
+		Vector2<double> position = new(
+			Math.Clamp(_bounding.Left + delta.X, 0, 1 - _bounding.Width),
+			_bounding.Top);
+		_bounding = new Bounding(position, _bounding.Size);
 		return _bounding;
 	}
 
