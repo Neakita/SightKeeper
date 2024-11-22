@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -118,29 +119,25 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	private static BoundingTransformer CreateTransformer(
 		HorizontalAlignment horizontalAlignment,
-		VerticalAlignment verticalAlignment) =>
-		(horizontalAlignment, verticalAlignment) switch
-		{
-			(HorizontalAlignment.Left, VerticalAlignment.Top) => new AggregateBoundingTransformer(
-				new BoundingSideTransformer(Side.Left), new BoundingSideTransformer(Side.Top)),
-			(HorizontalAlignment.Right, VerticalAlignment.Top) => new AggregateBoundingTransformer(
-				new BoundingSideTransformer(Side.Right), new BoundingSideTransformer(Side.Top)),
-			(HorizontalAlignment.Left, VerticalAlignment.Bottom) => new AggregateBoundingTransformer(
-				new BoundingSideTransformer(Side.Left), new BoundingSideTransformer(Side.Bottom)),
-			(HorizontalAlignment.Right, VerticalAlignment.Bottom) => new AggregateBoundingTransformer(
-				new BoundingSideTransformer(Side.Right), new BoundingSideTransformer(Side.Bottom)),
-			(HorizontalAlignment.Left, VerticalAlignment.Center) => new BoundingSideTransformer(Side.Left),
-			(HorizontalAlignment.Center, VerticalAlignment.Top) => new BoundingSideTransformer(Side.Top),
-			(HorizontalAlignment.Right, VerticalAlignment.Center) => new BoundingSideTransformer(Side.Right),
-			(HorizontalAlignment.Center, VerticalAlignment.Bottom) => new BoundingSideTransformer(Side.Bottom),
-			(HorizontalAlignment.Stretch, VerticalAlignment.Top or VerticalAlignment.Center or VerticalAlignment.Bottom)
-				=> new HorizontalMoveBoundingTransformer(),
-			(HorizontalAlignment.Left or HorizontalAlignment.Center or HorizontalAlignment.Right, VerticalAlignment
-				.Stretch) => new VerticalMoveBoundingTransformer(),
-			(HorizontalAlignment.Center, VerticalAlignment.Center)
-				or (HorizontalAlignment.Stretch, VerticalAlignment.Stretch) => new MoveBoundingTransformer(),
-			_ => throw new ArgumentOutOfRangeException()
-		};
+		VerticalAlignment verticalAlignment)
+	{
+		List<BoundingTransformer> transformers = new(2);
+		if (horizontalAlignment == HorizontalAlignment.Stretch)
+			transformers.Add(new HorizontalMoveBoundingTransformer());
+		if (verticalAlignment == VerticalAlignment.Stretch)
+			transformers.Add(new VerticalMoveBoundingTransformer());
+		if (transformers.Count > 0)
+			return new AggregateBoundingTransformer(transformers);
+		var horizontalSide = horizontalAlignment.ToOptionalSide();
+		var verticalSide = verticalAlignment.ToOptionalSide();
+		if (horizontalSide != null)
+			transformers.Add(new BoundingSideTransformer(horizontalSide.Value));
+		if (verticalSide != null)
+			transformers.Add(new BoundingSideTransformer(verticalSide.Value));
+		if (transformers.Count > 1)
+			return new AggregateBoundingTransformer(transformers);
+		return transformers.Single();
+	}
 
 	private BoundingTransformer? _transformer;
 
@@ -157,7 +154,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		foreach (var horizontalAlignment in horizontalAlignments)
 		foreach (var verticalAlignment in verticalAlignments)
 		{
-			if (horizontalAlignment == HorizontalAlignment.Stretch && verticalAlignment == VerticalAlignment.Stretch)
+			if (horizontalAlignment == HorizontalAlignment.Center && verticalAlignment == VerticalAlignment.Center)
 				continue;
 			if (horizontalAlignment == HorizontalAlignment.Stretch && verticalAlignment is VerticalAlignment.Center or VerticalAlignment.Bottom)
 				continue;

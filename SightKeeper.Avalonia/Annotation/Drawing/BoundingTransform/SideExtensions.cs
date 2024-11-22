@@ -18,4 +18,18 @@ internal static class SideExtensions
 		VerticalAlignment.Bottom => Side.Bottom,
 		_ => throw new ArgumentOutOfRangeException(nameof(alignment), alignment, null)
 	};
+
+	public static Side? ToOptionalSide(this HorizontalAlignment alignment) => alignment switch
+	{
+		HorizontalAlignment.Left => Side.Left,
+		HorizontalAlignment.Right => Side.Right,
+		_ => null
+	};
+
+	public static Side? ToOptionalSide(this VerticalAlignment alignment) => alignment switch
+	{
+		VerticalAlignment.Top => Side.Top,
+		VerticalAlignment.Bottom => Side.Bottom,
+		_ => null
+	};
 }
