@@ -79,16 +79,10 @@
                 <Border BorderBrush="Red" BorderThickness="2">
                     <Interaction.Behaviors>
                         <boundingTransform:DragableBoundingBehavior
-                            Container="ListBox"
+                            Canvas="ListBox"
                             ActualBounding="{Binding Bounding}"
                             DisplayBounding="{Binding DisplayBounding}"
-                            ThumbsPanel="Panel">
-                            <boundingTransform:DragableBoundingBehavior.ThumbTemplate>
-                                <DataTemplate>
-                                    <Thumb/>
-                                </DataTemplate>
-                            </boundingTransform:DragableBoundingBehavior.ThumbTemplate>
-                        </boundingTransform:DragableBoundingBehavior>
+                            ThumbsPanel="Panel"/>
                     </Interaction.Behaviors>
                     <Panel Margin="-7" Name="Panel">
                         <Panel.Styles>

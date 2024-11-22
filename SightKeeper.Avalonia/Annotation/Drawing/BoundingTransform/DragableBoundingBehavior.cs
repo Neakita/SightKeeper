@@ -3,7 +3,6 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -16,8 +15,11 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 
 internal sealed class DragableBoundingBehavior : Behavior<Control>
 {
-	public static readonly StyledProperty<Control?> ContainerProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Control?>(nameof(Container));
+	public static readonly StyledProperty<Control?> CanvasProperty =
+		AvaloniaProperty.Register<DragableBoundingBehavior, Control?>(nameof(Canvas));
+
+	public static readonly StyledProperty<Panel?> ThumbsPanelProperty =
+		AvaloniaProperty.Register<DragableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
 
 	public static readonly StyledProperty<Bounding> ActualBoundingProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, Bounding>(nameof(ActualBounding),
@@ -26,12 +28,6 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 	public static readonly StyledProperty<Bounding> DisplayBoundingProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, Bounding>(nameof(DisplayBounding),
 			defaultBindingMode: BindingMode.OneWayToSource);
-
-	public static readonly StyledProperty<IDataTemplate?> ThumbTemplateProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, IDataTemplate?>(nameof(ThumbTemplate));
-
-	public static readonly StyledProperty<Panel?> ThumbsPanelProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
 
 	protected override void OnAttachedToVisualTree()
 	{
@@ -47,10 +43,17 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 	}
 
 	[ResolveByName]
-	public Control? Container
+	public Control? Canvas
 	{
-		get => GetValue(ContainerProperty);
-		set => SetValue(ContainerProperty, value);
+		get => GetValue(CanvasProperty);
+		set => SetValue(CanvasProperty, value);
+	}
+
+	[ResolveByName]
+	public Panel? ThumbsPanel
+	{
+		get => GetValue(ThumbsPanelProperty);
+		set => SetValue(ThumbsPanelProperty, value);
 	}
 
 	public Bounding ActualBounding
@@ -63,19 +66,6 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 	{
 		get => GetValue(DisplayBoundingProperty);
 		set => SetValue(DisplayBoundingProperty, value);
-	}
-
-	public IDataTemplate? ThumbTemplate
-	{
-		get => GetValue(ThumbTemplateProperty);
-		set => SetValue(ThumbTemplateProperty, value);
-	}
-
-	[ResolveByName]
-	public Panel? ThumbsPanel
-	{
-		get => GetValue(ThumbsPanelProperty);
-		set => SetValue(ThumbsPanelProperty, value);
 	}
 
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -103,15 +93,15 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		thumb.DragCompleted += OnThumbDragCompleted;
 		Guard.IsNull(_transformer);
 		_transformer = CreateTransformer(thumb.HorizontalAlignment, thumb.VerticalAlignment);
-		var containerSize = Container.Bounds.Size;
+		var containerSize = Canvas.Bounds.Size;
 		_transformer.MinimumSize = new Vector2<double>(1 / containerSize.Width * 20, 1 / containerSize.Height * 20);
 	}
 
 	private void OnThumbDragDelta(object? sender, VectorEventArgs e)
 	{
 		Guard.IsNotNull(_transformer);
-		Guard.IsNotNull(Container);
-		var containerSize = Container.Bounds.Size;
+		Guard.IsNotNull(Canvas);
+		var containerSize = Canvas.Bounds.Size;
 		DisplayBounding = _transformer.Transform(DisplayBounding,
 			new Vector2<double>(e.Vector.X / containerSize.Width, e.Vector.Y / containerSize.Height));
 	}
@@ -173,7 +163,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 				continue;
 			if (verticalAlignment == VerticalAlignment.Stretch && horizontalAlignment is HorizontalAlignment.Center or HorizontalAlignment.Right)
 				continue;
-			var thumb = (Thumb)ThumbTemplate.Build(null);
+			Thumb thumb = new();
 			thumb.DragStarted += OnThumbDragStarted;
 			thumb.HorizontalAlignment = horizontalAlignment;
 			thumb.VerticalAlignment = verticalAlignment;
