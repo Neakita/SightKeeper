@@ -81,20 +81,16 @@
                         <boundingTransform:DragableBoundingBehavior
                             Container="ListBox"
                             ActualBounding="{Binding Bounding}"
-                            TopLeftThumb="TopLeftThumb"
-                            TopRightThumb="TopRightThumb"
-                            BottomRightThumb="BottomRightThumb"
-                            BottomLeftThumb="BottomLeftThumb"
-                            LeftThumb="LeftThumb"
-                            TopThumb="TopThumb"
-                            RightThumb="RightThumb"
-                            BottomThumb="BottomThumb"
-                            HorizontalMoveThumb="HorizontalThumb"
-                            VerticalMoveThumb="VerticalThumb"
-                            MoveThumb="CentralThumb"
-                            DisplayBounding="{Binding DisplayBounding}"/>
+                            DisplayBounding="{Binding DisplayBounding}"
+                            ThumbsPanel="Panel">
+                            <boundingTransform:DragableBoundingBehavior.ThumbTemplate>
+                                <DataTemplate>
+                                    <Thumb/>
+                                </DataTemplate>
+                            </boundingTransform:DragableBoundingBehavior.ThumbTemplate>
+                        </boundingTransform:DragableBoundingBehavior>
                     </Interaction.Behaviors>
-                    <Panel Margin="-7">
+                    <Panel Margin="-7" Name="Panel">
                         <Panel.Styles>
                             <Style Selector="Thumb">
                                 <Setter Property="Margin" Value="-10"/>
@@ -109,42 +105,6 @@
                                 </Setter>
                             </Style>
                         </Panel.Styles>
-                        <Thumb Name="TopLeftThumb"
-                               VerticalAlignment="Top"
-                               HorizontalAlignment="Left"/>
-                        <Thumb Name="TopRightThumb"
-                               VerticalAlignment="Top"
-                               HorizontalAlignment="Right"/>
-                        <Thumb Name="BottomRightThumb"
-                               VerticalAlignment="Bottom"
-                               HorizontalAlignment="Right"/>
-                        <Thumb Name="BottomLeftThumb"
-                               VerticalAlignment="Bottom"
-                               HorizontalAlignment="Left"/>
-                        <Thumb Name="LeftThumb"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"/>
-                        <Thumb Name="TopThumb"
-                               VerticalAlignment="Top"
-                               HorizontalAlignment="Center"/>
-                        <Thumb Name="RightThumb"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Right"/>
-                        <Thumb Name="BottomThumb"
-                               VerticalAlignment="Bottom"
-                               HorizontalAlignment="Center"/>
-                        <Thumb Name="HorizontalThumb"
-                               HorizontalAlignment="Stretch"
-                               VerticalAlignment="Top"
-                               Margin="0 -50 0 0"/>
-                        <Thumb Name="VerticalThumb"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Stretch"
-                               Margin="-50 0 0 0"/>
-                        <Thumb Name="CentralThumb"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
-
                         <TextBlock Text="{Binding Tag.Name}"/>
                     </Panel>
                 </Border>

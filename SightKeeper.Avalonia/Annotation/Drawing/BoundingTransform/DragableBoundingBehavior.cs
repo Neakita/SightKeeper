@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -17,39 +19,6 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 	public static readonly StyledProperty<Control?> ContainerProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, Control?>(nameof(Container));
 
-	public static readonly StyledProperty<Thumb?> LeftThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(LeftThumb));
-
-	public static readonly StyledProperty<Thumb?> TopLeftThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(TopLeftThumb));
-
-	public static readonly StyledProperty<Thumb?> TopThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(TopThumb));
-
-	public static readonly StyledProperty<Thumb?> TopRightThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(TopRightThumb));
-
-	public static readonly StyledProperty<Thumb?> RightThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(RightThumb));
-
-	public static readonly StyledProperty<Thumb?> BottomRightThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(BottomRightThumb));
-
-	public static readonly StyledProperty<Thumb?> BottomThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(BottomThumb));
-
-	public static readonly StyledProperty<Thumb?> BottomLeftThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(BottomLeftThumb));
-
-	public static readonly StyledProperty<Thumb?> HorizontalMoveThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(HorizontalMoveThumb));
-
-	public static readonly StyledProperty<Thumb?> VerticalMoveThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(VerticalMoveThumb));
-
-	public static readonly StyledProperty<Thumb?> MoveThumbProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Thumb?>(nameof(MoveThumb));
-
 	public static readonly StyledProperty<Bounding> ActualBoundingProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, Bounding>(nameof(ActualBounding),
 			defaultBindingMode: BindingMode.TwoWay);
@@ -58,88 +27,30 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		AvaloniaProperty.Register<DragableBoundingBehavior, Bounding>(nameof(DisplayBounding),
 			defaultBindingMode: BindingMode.OneWayToSource);
 
+	public static readonly StyledProperty<IDataTemplate?> ThumbTemplateProperty =
+		AvaloniaProperty.Register<DragableBoundingBehavior, IDataTemplate?>(nameof(ThumbTemplate));
+
+	public static readonly StyledProperty<Panel?> ThumbsPanelProperty =
+		AvaloniaProperty.Register<DragableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
+
+	protected override void OnAttachedToVisualTree()
+	{
+		GenerateThumbs();
+	}
+
+	protected override void OnDetachedFromVisualTree()
+	{
+		foreach (var thumb in ThumbsPanel.Children.OfType<Thumb>())
+		{
+			thumb.DragStarted -= OnThumbDragStarted;
+		}
+	}
+
 	[ResolveByName]
 	public Control? Container
 	{
 		get => GetValue(ContainerProperty);
 		set => SetValue(ContainerProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? LeftThumb
-	{
-		get => GetValue(LeftThumbProperty);
-		set => SetValue(LeftThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? TopLeftThumb
-	{
-		get => GetValue(TopLeftThumbProperty);
-		set => SetValue(TopLeftThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? TopThumb
-	{
-		get => GetValue(TopThumbProperty);
-		set => SetValue(TopThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? TopRightThumb
-	{
-		get => GetValue(TopRightThumbProperty);
-		set => SetValue(TopRightThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? RightThumb
-	{
-		get => GetValue(RightThumbProperty);
-		set => SetValue(RightThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? BottomRightThumb
-	{
-		get => GetValue(BottomRightThumbProperty);
-		set => SetValue(BottomRightThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? BottomThumb
-	{
-		get => GetValue(BottomThumbProperty);
-		set => SetValue(BottomThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? BottomLeftThumb
-	{
-		get => GetValue(BottomLeftThumbProperty);
-		set => SetValue(BottomLeftThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? HorizontalMoveThumb
-	{
-		get => GetValue(HorizontalMoveThumbProperty);
-		set => SetValue(HorizontalMoveThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? VerticalMoveThumb
-	{
-		get => GetValue(VerticalMoveThumbProperty);
-		set => SetValue(VerticalMoveThumbProperty, value);
-	}
-
-	[ResolveByName]
-	public Thumb? MoveThumb
-	{
-		get => GetValue(MoveThumbProperty);
-		set => SetValue(MoveThumbProperty, value);
 	}
 
 	public Bounding ActualBounding
@@ -154,6 +65,19 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		set => SetValue(DisplayBoundingProperty, value);
 	}
 
+	public IDataTemplate? ThumbTemplate
+	{
+		get => GetValue(ThumbTemplateProperty);
+		set => SetValue(ThumbTemplateProperty, value);
+	}
+
+	[ResolveByName]
+	public Panel? ThumbsPanel
+	{
+		get => GetValue(ThumbsPanelProperty);
+		set => SetValue(ThumbsPanelProperty, value);
+	}
+
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
 	{
 		base.OnPropertyChanged(change);
@@ -166,6 +90,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 			if (newThumb != null)
 				newThumb.DragStarted += OnThumbDragStarted;
 		}
+
 		if (change.Property == ActualBoundingProperty)
 			DisplayBounding = ActualBounding;
 	}
@@ -187,7 +112,8 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		Guard.IsNotNull(_transformer);
 		Guard.IsNotNull(Container);
 		var containerSize = Container.Bounds.Size;
-		DisplayBounding = _transformer.Transform(DisplayBounding, new Vector2<double>(e.Vector.X / containerSize.Width, e.Vector.Y / containerSize.Height));
+		DisplayBounding = _transformer.Transform(DisplayBounding,
+			new Vector2<double>(e.Vector.X / containerSize.Width, e.Vector.Y / containerSize.Height));
 	}
 
 	private void OnThumbDragCompleted(object? sender, VectorEventArgs e)
@@ -205,19 +131,53 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		VerticalAlignment verticalAlignment) =>
 		(horizontalAlignment, verticalAlignment) switch
 		{
-			(HorizontalAlignment.Left, VerticalAlignment.Top) => new AggregateBoundingTransformer(new BoundingSideTransformer(Side.Left), new BoundingSideTransformer(Side.Top)),
-			(HorizontalAlignment.Right, VerticalAlignment.Top) => new AggregateBoundingTransformer(new BoundingSideTransformer(Side.Right), new BoundingSideTransformer(Side.Top)),
-			(HorizontalAlignment.Left, VerticalAlignment.Bottom) => new AggregateBoundingTransformer(new BoundingSideTransformer(Side.Left), new BoundingSideTransformer(Side.Bottom)),
-			(HorizontalAlignment.Right, VerticalAlignment.Bottom) => new AggregateBoundingTransformer(new BoundingSideTransformer(Side.Right), new BoundingSideTransformer(Side.Bottom)),
+			(HorizontalAlignment.Left, VerticalAlignment.Top) => new AggregateBoundingTransformer(
+				new BoundingSideTransformer(Side.Left), new BoundingSideTransformer(Side.Top)),
+			(HorizontalAlignment.Right, VerticalAlignment.Top) => new AggregateBoundingTransformer(
+				new BoundingSideTransformer(Side.Right), new BoundingSideTransformer(Side.Top)),
+			(HorizontalAlignment.Left, VerticalAlignment.Bottom) => new AggregateBoundingTransformer(
+				new BoundingSideTransformer(Side.Left), new BoundingSideTransformer(Side.Bottom)),
+			(HorizontalAlignment.Right, VerticalAlignment.Bottom) => new AggregateBoundingTransformer(
+				new BoundingSideTransformer(Side.Right), new BoundingSideTransformer(Side.Bottom)),
 			(HorizontalAlignment.Left, VerticalAlignment.Center) => new BoundingSideTransformer(Side.Left),
 			(HorizontalAlignment.Center, VerticalAlignment.Top) => new BoundingSideTransformer(Side.Top),
 			(HorizontalAlignment.Right, VerticalAlignment.Center) => new BoundingSideTransformer(Side.Right),
 			(HorizontalAlignment.Center, VerticalAlignment.Bottom) => new BoundingSideTransformer(Side.Bottom),
-			(HorizontalAlignment.Stretch, VerticalAlignment.Top or VerticalAlignment.Center or VerticalAlignment.Bottom) => new HorizontalMoveBoundingTransformer(),
-			(HorizontalAlignment.Left or HorizontalAlignment.Center or HorizontalAlignment.Right, VerticalAlignment.Stretch) => new VerticalMoveBoundingTransformer(),
-			(HorizontalAlignment.Center,VerticalAlignment.Center) or (HorizontalAlignment.Stretch, VerticalAlignment.Stretch) => new MoveBoundingTransformer(),
+			(HorizontalAlignment.Stretch, VerticalAlignment.Top or VerticalAlignment.Center or VerticalAlignment.Bottom)
+				=> new HorizontalMoveBoundingTransformer(),
+			(HorizontalAlignment.Left or HorizontalAlignment.Center or HorizontalAlignment.Right, VerticalAlignment
+				.Stretch) => new VerticalMoveBoundingTransformer(),
+			(HorizontalAlignment.Center, VerticalAlignment.Center)
+				or (HorizontalAlignment.Stretch, VerticalAlignment.Stretch) => new MoveBoundingTransformer(),
 			_ => throw new ArgumentOutOfRangeException()
 		};
 
 	private BoundingTransformer? _transformer;
+
+	private void GenerateThumbs()
+	{
+		ReadOnlySpan<HorizontalAlignment> horizontalAlignments =
+		[
+			HorizontalAlignment.Stretch, HorizontalAlignment.Left, HorizontalAlignment.Center, HorizontalAlignment.Right
+		];
+		ReadOnlySpan<VerticalAlignment> verticalAlignments =
+		[
+			VerticalAlignment.Stretch, VerticalAlignment.Top, VerticalAlignment.Center, VerticalAlignment.Bottom
+		];
+		foreach (var horizontalAlignment in horizontalAlignments)
+		foreach (var verticalAlignment in verticalAlignments)
+		{
+			if (horizontalAlignment == HorizontalAlignment.Stretch && verticalAlignment == VerticalAlignment.Stretch)
+				continue;
+			if (horizontalAlignment == HorizontalAlignment.Stretch && verticalAlignment is VerticalAlignment.Center or VerticalAlignment.Bottom)
+				continue;
+			if (verticalAlignment == VerticalAlignment.Stretch && horizontalAlignment is HorizontalAlignment.Center or HorizontalAlignment.Right)
+				continue;
+			var thumb = (Thumb)ThumbTemplate.Build(null);
+			thumb.DragStarted += OnThumbDragStarted;
+			thumb.HorizontalAlignment = horizontalAlignment;
+			thumb.VerticalAlignment = verticalAlignment;
+			ThumbsPanel.Children.Add(thumb);
+		}
+	}
 }
