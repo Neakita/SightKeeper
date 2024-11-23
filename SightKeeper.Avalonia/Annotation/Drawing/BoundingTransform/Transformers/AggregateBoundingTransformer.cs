@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
+namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform.Transformers;
 
 internal sealed class AggregateBoundingTransformer : BoundingTransformer
 {

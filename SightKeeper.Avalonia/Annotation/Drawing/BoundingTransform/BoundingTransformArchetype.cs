@@ -23,6 +23,7 @@ internal sealed class BoundingTransformArchetype
 				sourceIndex += 4;
 			result.Add(sides[sourceIndex]);
 		}
+
 		return result;
 	}
 
@@ -36,7 +37,7 @@ internal sealed class BoundingTransformArchetype
 		bounding => bounding.Bottom
 	];
 
-	private static IReadOnlyList<Func<Bounding, double, Bounding>> SideTransforms { get; } =
+	private static IReadOnlyList<Func<Bounding, double, Bounding>> SideSetters { get; } =
 	[
 		(bounding, value) => bounding with { Left = value },
 		(bounding, value) => bounding with { Top = value },
@@ -53,7 +54,7 @@ internal sealed class BoundingTransformArchetype
 	private static Func<Bounding, double, Bounding> GetSideSetter(Side side)
 	{
 		var index = GetIndex(side);
-		return SideTransforms[index];
+		return SideSetters[index];
 	}
 
 	private static byte GetIndex(Side side)
@@ -61,55 +62,49 @@ internal sealed class BoundingTransformArchetype
 		return (byte)side;
 	}
 
-	public static double GetSide(Bounding bounding, Side side)
+	private static bool IsNearSide(Side side)
 	{
-		return GetSideGetter(side).Invoke(bounding);
+		return side <= Side.Top;
 	}
 
-	public static Bounding SetSide(Bounding bounding, Side side, double value)
+	private static BoundingSideAccessor CreateAccessor(Side side)
 	{
-		return GetSideSetter(side).Invoke(bounding, value);
+		var getter = GetSideGetter(side);
+		var setter = GetSideSetter(side);
+		return new BoundingSideAccessor(getter, setter);
 	}
 
-	public static double GetVectorValue(Side side, Vector2<double> vector)
+	public double GetVectorValue(Vector2<double> vector)
 	{
-		return GetIndex(side) % 2 == 0 ? vector.X : vector.Y;
-	}
-
-	public static bool IsOpposite(Side side)
-	{
-		return side > Side.Top;
+		return _vectorValueGetter(vector);
 	}
 
 	public Bounding AddToChangingSide(Bounding bounding, double delta, double minimumSize)
 	{
-		var value = GetSideGetter(ChangingSide).Invoke(bounding);
+		var value = _changingBoundingSideAccessor.GetValue(bounding);
 		value += delta;
 		value = Clamp(bounding, value, minimumSize);
-		return GetSideSetter(ChangingSide).Invoke(bounding, value);
+		return _changingBoundingSideAccessor.SetValue(bounding, value);
 	}
 
-	public Side ChangingSide { get; }
-	public Side PerpendicularSide1 { get; }
-	public Side OppositeSide { get; }
-	public Side PerpendicularSide2 { get; }
+	private readonly Side _changingSide;
+	private readonly BoundingSideAccessor _changingBoundingSideAccessor;
+	private readonly BoundingSideAccessor _oppositeBoundingSideAccessor;
+	private readonly Func<Vector2<double>, double> _vectorValueGetter;
 
-	public double Clamp(Bounding bounding, double value, double minimumSize)
+	private double Clamp(Bounding bounding, double value, double minimumSize)
 	{
-		if (!IsOpposite(ChangingSide))
-		{
-			var oppositeSide = GetSideGetter(OppositeSide).Invoke(bounding);
-			var clamp = Math.Clamp(value, 0, oppositeSide - minimumSize);
-			return clamp;
-		}
-		return Math.Clamp(value, GetSideGetter(OppositeSide).Invoke(bounding) + minimumSize, 1);
+		var oppositeSideValue = _oppositeBoundingSideAccessor.GetValue(bounding);
+		return IsNearSide(_changingSide)
+			? Math.Clamp(value, 0, oppositeSideValue - minimumSize)
+			: Math.Clamp(value, oppositeSideValue + minimumSize, 1);
 	}
-	
+
 	private BoundingTransformArchetype(List<Side> sides)
 	{
-		ChangingSide = sides[0];
-		PerpendicularSide1 = sides[1];
-		OppositeSide = sides[2];
-		PerpendicularSide2 = sides[3];
+		_changingSide = sides[0];
+		_changingBoundingSideAccessor = CreateAccessor(_changingSide);
+		_oppositeBoundingSideAccessor = CreateAccessor(sides[2]);
+		_vectorValueGetter = GetIndex(_changingSide) % 2 == 0 ? vector => vector.X : vector => vector.Y;
 	}
 }

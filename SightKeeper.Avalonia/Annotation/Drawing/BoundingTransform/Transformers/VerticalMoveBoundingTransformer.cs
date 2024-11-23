@@ -2,15 +2,15 @@ using System;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
+namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform.Transformers;
 
-internal sealed class HorizontalMoveBoundingTransformer : BoundingTransformer
+internal sealed class VerticalMoveBoundingTransformer : BoundingTransformer
 {
 	public override Bounding Transform(Bounding bounding, Vector2<double> delta)
 	{
 		Vector2<double> position = new(
-			Math.Clamp(bounding.Left + delta.X, 0, 1 - bounding.Width),
-			bounding.Top);
+			bounding.Left,
+			Math.Clamp(bounding.Top + delta.Y, 0, 1 - bounding.Height));
 		return new Bounding(position, bounding.Size);
 	}
 }
