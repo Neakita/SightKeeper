@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -31,17 +31,34 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		AvaloniaProperty.Register<DragableBoundingBehavior, Bounding>(nameof(DisplayBounding),
 			defaultBindingMode: BindingMode.OneWayToSource);
 
+	public static readonly StyledProperty<double> MinimumBoundingSizeProperty =
+		AvaloniaProperty.Register<DragableBoundingBehavior, double>(nameof(MinimumBoundingSize), 20);
+
+	public static readonly AttachedProperty<ThumbSideMode> SideModeProperty =
+		AvaloniaProperty.RegisterAttached<Thumb, ThumbSideMode>("SideMode", typeof(DragableBoundingBehavior));
+
+	public static void SetSideMode(Thumb element, ThumbSideMode value)
+	{
+		element.SetValue(SideModeProperty, value);
+	}
+
+	public static ThumbSideMode GetSideMode(Thumb element)
+	{
+		return element.GetValue(SideModeProperty);
+	}
+
 	protected override void OnAttachedToVisualTree()
 	{
-		GenerateThumbs();
+		foreach (var thumb in ThumbsPanel.Children.OfType<Thumb>())
+			SubscribeOnThumb(thumb);
+		ThumbsPanel.Children.CollectionChanged += OnThumbsPanelChildrenChanged;
 	}
 
 	protected override void OnDetachedFromVisualTree()
 	{
+		ThumbsPanel.Children.CollectionChanged -= OnThumbsPanelChildrenChanged;
 		foreach (var thumb in ThumbsPanel.Children.OfType<Thumb>())
-		{
-			thumb.DragStarted -= OnThumbDragStarted;
-		}
+			UnsubscribeFromThumb(thumb);
 	}
 
 	[ResolveByName]
@@ -70,22 +87,20 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		set => SetValue(DisplayBoundingProperty, value);
 	}
 
+	public double MinimumBoundingSize
+	{
+		get => GetValue(MinimumBoundingSizeProperty);
+		set => SetValue(MinimumBoundingSizeProperty, value);
+	}
+
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
 	{
 		base.OnPropertyChanged(change);
-		if (change is AvaloniaPropertyChangedEventArgs<Thumb?> thumbChange)
-		{
-			var oldThumb = thumbChange.OldValue.Value;
-			if (oldThumb != null)
-				oldThumb.DragStarted -= OnThumbDragStarted;
-			var newThumb = thumbChange.NewValue.Value;
-			if (newThumb != null)
-				newThumb.DragStarted += OnThumbDragStarted;
-		}
-
 		if (change.Property == ActualBoundingProperty)
 			DisplayBounding = ActualBounding;
 	}
+
+	private BoundingTransformer? _transformer;
 
 	private void OnThumbDragStarted(object? sender, VectorEventArgs e)
 	{
@@ -94,9 +109,11 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		thumb.DragDelta += OnThumbDragDelta;
 		thumb.DragCompleted += OnThumbDragCompleted;
 		Guard.IsNull(_transformer);
-		_transformer = CreateTransformer(thumb.HorizontalAlignment, thumb.VerticalAlignment);
+		var sideMode = GetSideMode(thumb);
+		_transformer = CreateTransformer(thumb.HorizontalAlignment, thumb.VerticalAlignment, sideMode);
 		var containerSize = Canvas.Bounds.Size;
-		_transformer.MinimumSize = new Vector2<double>(1 / containerSize.Width * 20, 1 / containerSize.Height * 20);
+		_transformer.MinimumSize = new Vector2<double>(1 / containerSize.Width * MinimumBoundingSize,
+			1 / containerSize.Height * MinimumBoundingSize);
 	}
 
 	private void OnThumbDragDelta(object? sender, VectorEventArgs e)
@@ -120,15 +137,20 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	private static BoundingTransformer CreateTransformer(
 		HorizontalAlignment horizontalAlignment,
-		VerticalAlignment verticalAlignment)
+		VerticalAlignment verticalAlignment,
+		ThumbSideMode sideMode)
 	{
 		List<BoundingTransformer> transformers = new(2);
-		if (horizontalAlignment == HorizontalAlignment.Stretch)
-			transformers.Add(new HorizontalMoveBoundingTransformer());
-		if (verticalAlignment == VerticalAlignment.Stretch)
-			transformers.Add(new VerticalMoveBoundingTransformer());
-		if (transformers.Count > 0)
-			return new AggregateBoundingTransformer(transformers);
+		if (sideMode == ThumbSideMode.MoveAlong)
+		{
+			if (horizontalAlignment == HorizontalAlignment.Stretch)
+				transformers.Add(new HorizontalMoveBoundingTransformer());
+			if (verticalAlignment == VerticalAlignment.Stretch)
+				transformers.Add(new VerticalMoveBoundingTransformer());
+			if (transformers.Count > 1)
+				return new AggregateBoundingTransformer(transformers);
+			return transformers.Single();
+		}
 		var horizontalSide = horizontalAlignment.ToOptionalSide();
 		var verticalSide = verticalAlignment.ToOptionalSide();
 		if (horizontalSide != null)
@@ -140,32 +162,24 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		return transformers.Single();
 	}
 
-	private BoundingTransformer? _transformer;
-
-	private void GenerateThumbs()
+	private void OnThumbsPanelChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	{
-		ReadOnlySpan<HorizontalAlignment> horizontalAlignments =
-		[
-			HorizontalAlignment.Stretch, HorizontalAlignment.Left, HorizontalAlignment.Center, HorizontalAlignment.Right
-		];
-		ReadOnlySpan<VerticalAlignment> verticalAlignments =
-		[
-			VerticalAlignment.Stretch, VerticalAlignment.Top, VerticalAlignment.Center, VerticalAlignment.Bottom
-		];
-		foreach (var horizontalAlignment in horizontalAlignments)
-		foreach (var verticalAlignment in verticalAlignments)
-		{
-			if (horizontalAlignment == HorizontalAlignment.Center && verticalAlignment == VerticalAlignment.Center)
-				continue;
-			if (horizontalAlignment == HorizontalAlignment.Stretch && verticalAlignment is VerticalAlignment.Center or VerticalAlignment.Bottom)
-				continue;
-			if (verticalAlignment == VerticalAlignment.Stretch && horizontalAlignment is HorizontalAlignment.Center or HorizontalAlignment.Right)
-				continue;
-			Thumb thumb = new();
-			thumb.DragStarted += OnThumbDragStarted;
-			thumb.HorizontalAlignment = horizontalAlignment;
-			thumb.VerticalAlignment = verticalAlignment;
-			ThumbsPanel.Children.Add(thumb);
-		}
+		Guard.IsFalse(e.Action == NotifyCollectionChangedAction.Reset);
+		if (e.NewItems != null)
+			foreach (var thumb in e.NewItems.OfType<Thumb>())
+				SubscribeOnThumb(thumb);
+		if (e.OldItems != null)
+			foreach (var thumb in e.OldItems.OfType<Thumb>())
+				UnsubscribeFromThumb(thumb);
+	}
+
+	private void SubscribeOnThumb(Thumb thumb)
+	{
+		thumb.DragStarted += OnThumbDragStarted;
+	}
+
+	private void UnsubscribeFromThumb(Thumb thumb)
+	{
+		thumb.DragStarted -= OnThumbDragStarted;
 	}
 }

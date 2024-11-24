@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
-             xmlns:boundingTransform="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
              x:DataType="local:DrawerViewModel">
@@ -76,32 +75,7 @@
         </ListBox.Styles>
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <Border BorderBrush="Red" BorderThickness="2">
-                    <Interaction.Behaviors>
-                        <boundingTransform:DragableBoundingBehavior
-                            Canvas="ListBox"
-                            ActualBounding="{Binding Bounding}"
-                            DisplayBounding="{Binding DisplayBounding}"
-                            ThumbsPanel="Panel"/>
-                    </Interaction.Behaviors>
-                    <Panel Margin="-7" Name="Panel">
-                        <Panel.Styles>
-                            <Style Selector="Thumb">
-                                <Setter Property="Margin" Value="-10"/>
-                                <Setter Property="Template">
-                                    <ControlTemplate>
-                                        <Ellipse Width="10"
-                                                 Height="10"
-                                                 Stroke="{DynamicResource HighAccentButtonBackground}"
-                                                 Fill="{DynamicResource LowAccentButtonBackground}"
-                                                 StrokeThickness="1"/>
-                                    </ControlTemplate>
-                                </Setter>
-                            </Style>
-                        </Panel.Styles>
-                        <TextBlock Text="{Binding Tag.Name}"/>
-                    </Panel>
-                </Border>
+                <local:DrawerItem/>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
