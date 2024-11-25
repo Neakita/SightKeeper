@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:boundingTransform="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.DrawerItem"
              x:DataType="drawing:DrawerItemViewModel">
@@ -104,5 +105,42 @@
                HorizontalAlignment="Left" VerticalAlignment="Bottom"
                Classes="corner"
                Cursor="BottomLeftCorner"/>
+        <Thumb Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
+               HorizontalAlignment="Left" VerticalAlignment="Stretch"
+               Margin="-10 0 0 0"
+               boundingTransform:DragableBoundingBehavior.SideMode="MoveAlong"
+               Cursor="SizeNorthSouth">
+            <Thumb.Template>
+                <ControlTemplate>
+                    <StackPanel VerticalAlignment="Center" Background="Transparent">
+                        <icons:MaterialIcon Kind="ArrowUpThin" Foreground="Red" Width="10" Height="10"/>
+                        <icons:MaterialIcon Kind="ArrowDownThin" Foreground="Red" Width="10" Height="10"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Thumb.Template>
+        </Thumb>
+        <Thumb Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+               HorizontalAlignment="Stretch" VerticalAlignment="Top"
+               Margin="0 -10 0 0"
+               boundingTransform:DragableBoundingBehavior.SideMode="MoveAlong"
+               Cursor="SizeWestEast">
+            <Thumb.Template>
+                <ControlTemplate>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Background="Transparent">
+                        <icons:MaterialIcon Kind="ArrowLeftThin" Foreground="Red" Width="10" Height="10"/>
+                        <icons:MaterialIcon Kind="ArrowRightThin" Foreground="Red" Width="10" Height="10"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Thumb.Template>
+        </Thumb>
+        <Thumb Grid.Row="1" Grid.Column="1"
+               boundingTransform:DragableBoundingBehavior.SideMode="MoveAlong"
+               Cursor="SizeAll">
+            <Thumb.Template>
+                <ControlTemplate>
+                    <Border Background="Transparent"/>
+                </ControlTemplate>
+            </Thumb.Template>
+        </Thumb>
     </Grid>
 </UserControl>
