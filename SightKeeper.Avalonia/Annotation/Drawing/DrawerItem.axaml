@@ -39,7 +39,6 @@
                 </Setter>
             </Style>
             <Style Selector="Thumb.vertical">
-                <Setter Property="Cursor" Value="SizeWestEast"/>
                 <Setter Property="Template">
                     <ControlTemplate>
                         <Border Background="Transparent"
@@ -54,7 +53,6 @@
                 </Setter>
             </Style>
             <Style Selector="Thumb.horizontal">
-                <Setter Property="Cursor" Value="SizeNorthSouth"/>
                 <Setter Property="Template">
                     <ControlTemplate>
                         <Border Background="Transparent"
@@ -73,30 +71,38 @@
         <Thumb Grid.Row="1" Grid.Column="0"
                HorizontalAlignment="Left"
                VerticalAlignment="Stretch"
-               Classes="vertical"/>
+               Classes="vertical"
+               Cursor="LeftSide"/>
         <Thumb Grid.Row="0" Grid.Column="0"
                HorizontalAlignment="Left" VerticalAlignment="Top"
-               Classes="corner"/>
+               Classes="corner"
+               Cursor="TopLeftCorner"/>
         <Thumb Grid.Row="0" Grid.Column="1"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Top"
-               Classes="horizontal"/>
+               Classes="horizontal"
+               Cursor="TopSide"/>
         <Thumb Grid.Row="0" Grid.Column="2"
                HorizontalAlignment="Right" VerticalAlignment="Top"
-               Classes="corner"/>
+               Classes="corner"
+               Cursor="TopRightCorner"/>
         <Thumb Grid.Row="1" Grid.Column="2"
                HorizontalAlignment="Right"
                VerticalAlignment="Stretch"
-               Classes="vertical"/>
+               Classes="vertical"
+               Cursor="RightSide"/>
         <Thumb Grid.Row="2" Grid.Column="2"
                HorizontalAlignment="Right" VerticalAlignment="Bottom"
-               Classes="corner"/>
+               Classes="corner"
+               Cursor="BottomRightCorner"/>
         <Thumb Grid.Row="2" Grid.Column="1"
                HorizontalAlignment="Stretch"
                VerticalAlignment="Bottom"
-               Classes="horizontal"/>
+               Classes="horizontal"
+               Cursor="BottomSide"/>
         <Thumb Grid.Row="2" Grid.Column="0"
                HorizontalAlignment="Left" VerticalAlignment="Bottom"
-               Classes="corner"/>
+               Classes="corner"
+               Cursor="BottomLeftCorner"/>
     </Grid>
 </UserControl>
