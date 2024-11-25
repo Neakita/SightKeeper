@@ -68,7 +68,7 @@
                 </Setter>
             </Style>
         </Grid.Styles>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Tag.Name}" FontSize="12" Foreground="{DynamicResource SecondaryForeground}"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Tag.Name}" FontSize="12"/>
         <Thumb Grid.Row="1" Grid.Column="0"
                HorizontalAlignment="Left"
                VerticalAlignment="Stretch"
