@@ -68,7 +68,9 @@
                 </Setter>
             </Style>
         </Grid.Styles>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Tag.Name}" FontSize="12"/>
+        <TextBlock Grid.Row="1" Grid.Column="1"
+                   Text="{Binding Tag.Name}"
+                   FontSize="12"/>
         <Thumb Grid.Row="1" Grid.Column="0"
                HorizontalAlignment="Left"
                VerticalAlignment="Stretch"
@@ -112,9 +114,14 @@
                Cursor="SizeNorthSouth">
             <Thumb.Template>
                 <ControlTemplate>
-                    <StackPanel VerticalAlignment="Center" Background="Transparent">
-                        <icons:MaterialIcon Kind="ArrowUpThin" Foreground="Red" Width="10" Height="10"/>
-                        <icons:MaterialIcon Kind="ArrowDownThin" Foreground="Red" Width="10" Height="10"/>
+                    <StackPanel VerticalAlignment="Center"
+                                Background="Transparent">
+                        <icons:MaterialIcon Kind="ArrowUpThin"
+                                            Foreground="Red"
+                                            Width="10" Height="10"/>
+                        <icons:MaterialIcon Kind="ArrowDownThin"
+                                            Foreground="Red"
+                                            Width="10" Height="10"/>
                     </StackPanel>
                 </ControlTemplate>
             </Thumb.Template>
@@ -126,9 +133,15 @@
                Cursor="SizeWestEast">
             <Thumb.Template>
                 <ControlTemplate>
-                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Background="Transparent">
-                        <icons:MaterialIcon Kind="ArrowLeftThin" Foreground="Red" Width="10" Height="10"/>
-                        <icons:MaterialIcon Kind="ArrowRightThin" Foreground="Red" Width="10" Height="10"/>
+                    <StackPanel HorizontalAlignment="Center"
+                                Orientation="Horizontal"
+                                Background="Transparent">
+                        <icons:MaterialIcon Kind="ArrowLeftThin"
+                                            Foreground="Red"
+                                            Width="10" Height="10"/>
+                        <icons:MaterialIcon Kind="ArrowRightThin"
+                                            Foreground="Red"
+                                            Width="10" Height="10"/>
                     </StackPanel>
                 </ControlTemplate>
             </Thumb.Template>
