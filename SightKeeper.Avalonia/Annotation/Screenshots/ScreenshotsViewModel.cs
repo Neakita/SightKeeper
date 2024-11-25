@@ -10,6 +10,12 @@ internal abstract partial class ScreenshotsViewModel : ViewModel
 	public abstract ScreenshotsLibrary Library { get; }
 	public abstract IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
 	public abstract IReadOnlyCollection<DateOnly> Dates { get; }
+	public ScreenshotImageLoader ImageLoader { get; }
+
+	protected ScreenshotsViewModel(ScreenshotImageLoader imageLoader)
+	{
+		ImageLoader = imageLoader;
+	}
 
 	[ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
 }

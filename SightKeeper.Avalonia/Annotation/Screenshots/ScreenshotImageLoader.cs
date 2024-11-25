@@ -66,7 +66,7 @@ internal sealed class ScreenshotImageLoader
 		}
 	}
 
-	private PixelSize ComputeThumbnailSize(Screenshot screenshot, int maximumLargestDimension)
+	private static PixelSize ComputeThumbnailSize(Screenshot screenshot, int maximumLargestDimension)
 	{
 		var sourceLargestDimension = Math.Max(screenshot.ImageSize.X, screenshot.ImageSize.Y);
 		if (sourceLargestDimension < maximumLargestDimension)

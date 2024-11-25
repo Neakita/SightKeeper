@@ -24,12 +24,12 @@ internal sealed class ScreenshotsViewModel<TAssetViewModel, TAsset> : Screenshot
 	public ScreenshotsViewModel(
 		ScreenshotsLibrary<TAsset> library,
 		ObservableDataAccess<Screenshot> observableDataAccess,
-		ScreenshotImageLoader imageLoader)
+		ScreenshotImageLoader imageLoader) : base(imageLoader)
 	{
 		Library = library;
 		_screenshotsSource.AddRange(library.Screenshots);
 		_screenshotsSource.Connect()
-			.Transform(screenshot => new ScreenshotViewModel<TAssetViewModel, TAsset>(imageLoader, screenshot))
+			.Transform(screenshot => new ScreenshotViewModel<TAssetViewModel, TAsset>(screenshot))
 			.Bind(out var screenshots)
 			.Subscribe()
 			.DisposeWith(_disposable);

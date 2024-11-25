@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
-             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
              xmlns:toolBars="clr-namespace:SightKeeper.Avalonia.Annotation.ToolBars"
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
@@ -31,9 +30,11 @@
                                     RenderTransform="scale(0.5)"
                                     Foreground="{StaticResource WatermarkSecondary}"
                                     Opacity="0.05"/>
-                <Image Source="{Binding Context.Screenshots.SelectedScreenshot.Image}">
+                <Image>
                     <Interaction.Behaviors>
-                        <behaviors:ExecuteCommandOnSourceChanged Command="{Binding ReturnBitmapToPoolCommand}"/>
+                        <screenshots:RecyclableScreenshotImageBinding
+                            Screenshot="{Binding Context.Screenshots.SelectedScreenshot.Value}"
+                            ImageLoader="{Binding Context.Screenshots.ImageLoader}"/>
                     </Interaction.Behaviors>
                 </Image>
                 <Panel>

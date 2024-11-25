@@ -2,14 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
-             xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:assets="clr-namespace:SightKeeper.Avalonia.Annotation.Assets"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Screenshots.Screenshots"
-             x:DataType="screenshots:ScreenshotsViewModel">
+             x:DataType="local:ScreenshotsViewModel">
     <ListBox ItemsSource="{Binding Screenshots}"
              SelectedItem="{Binding SelectedScreenshot}"
              Name="ListBox"
@@ -45,16 +44,11 @@
                                 <Image Name="Image"
                                        Stretch="UniformToFill">
                                     <Interaction.Behaviors>
-                                        <behaviors:ExecuteCommandOnSourceChanged
-                                            Command="{Binding ReturnBitmapToPoolCommand}"/>
+                                        <local:RecyclableScreenshotImageBinding
+                                            Screenshot="{Binding Value}"
+                                            TargetSize="{Binding #ImageContainer.Bounds.Size}"
+                                            ImageLoader="{Binding #ListBox.((local:ScreenshotsViewModel)DataContext).ImageLoader}"/>
                                     </Interaction.Behaviors>
-                                    <Image.Source>
-                                        <MultiBinding
-                                            Converter="{x:Static root:ScreenshotToScaledBitmapConverter.Instance}">
-                                            <Binding/>
-                                            <Binding Path="#ImageContainer.Bounds.Size"/>
-                                        </MultiBinding>
-                                    </Image.Source>
                                 </Image>
                                 <ContentControl Content="{Binding Asset}"
                                                 IsVisible="{Binding Asset, Converter={x:Static ObjectConverters.IsNotNull}}"

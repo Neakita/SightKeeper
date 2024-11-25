@@ -7,4 +7,8 @@ internal abstract class ScreenshotsViewModel<TAssetViewModel> : ScreenshotsViewM
 	where TAssetViewModel : AssetViewModel
 {
 	public abstract override IReadOnlyCollection<ScreenshotViewModel<TAssetViewModel>> Screenshots { get; }
+
+	protected ScreenshotsViewModel(ScreenshotImageLoader imageLoader) : base(imageLoader)
+	{
+	}
 }

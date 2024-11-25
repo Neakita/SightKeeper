@@ -11,7 +11,7 @@ internal sealed class ScreenshotViewModel<TAssetViewModel, TAsset> : ScreenshotV
 	public override Screenshot<TAsset> Value { get; }
 	public override TAssetViewModel? Asset => _asset;
 
-	public ScreenshotViewModel(ScreenshotImageLoader imageLoader, Screenshot<TAsset> value) : base(imageLoader)
+	public ScreenshotViewModel(Screenshot<TAsset> value)
 	{
 		Value = value;
 	}
