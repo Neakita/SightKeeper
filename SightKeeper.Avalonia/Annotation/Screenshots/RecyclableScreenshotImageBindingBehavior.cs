@@ -8,25 +8,25 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
-internal sealed class RecyclableScreenshotImageBinding : Behavior<Image>
+internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 {
 	public static readonly StyledProperty<Screenshot?> ScreenshotProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBinding, Screenshot?>(nameof(Screenshot));
+		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, Screenshot?>(nameof(Screenshot));
 
 	public static readonly StyledProperty<ScreenshotImageLoader?> ImageLoaderProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBinding, ScreenshotImageLoader?>(nameof(ImageLoader));
+		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, ScreenshotImageLoader?>(nameof(ImageLoader));
 
 	public static readonly StyledProperty<Size> TargetSizeProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBinding, Size>(nameof(TargetSize));
+		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, Size>(nameof(TargetSize));
 
 	public static readonly StyledProperty<int> SizeStepProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBinding, int>(nameof(SizeStep), 20);
+		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, int>(nameof(SizeStep), 20);
 
 	public static readonly StyledProperty<int> MinimumSizeProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBinding, int>(nameof(MinimumSize), 20);
+		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, int>(nameof(MinimumSize), 20);
 
 	public static readonly StyledProperty<NoTargetSizeBehavior> NoTargetSizeBehaviorProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBinding, NoTargetSizeBehavior>(nameof(NoTargetSizeBehavior));
+		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, NoTargetSizeBehavior>(nameof(NoTargetSizeBehavior));
 
 	public Screenshot? Screenshot
 	{

@@ -44,7 +44,7 @@
                                 <Image Name="Image"
                                        Stretch="UniformToFill">
                                     <Interaction.Behaviors>
-                                        <local:RecyclableScreenshotImageBinding
+                                        <local:RecyclableScreenshotImageBindingBehavior
                                             Screenshot="{Binding Value}"
                                             TargetSize="{Binding #ImageContainer.Bounds.Size}"
                                             ImageLoader="{Binding #ListBox.((local:ScreenshotsViewModel)DataContext).ImageLoader}"

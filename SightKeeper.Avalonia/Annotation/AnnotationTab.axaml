@@ -32,7 +32,7 @@
                                     Opacity="0.05"/>
                 <Image>
                     <Interaction.Behaviors>
-                        <screenshots:RecyclableScreenshotImageBinding
+                        <screenshots:RecyclableScreenshotImageBindingBehavior
                             Screenshot="{Binding Context.Screenshots.SelectedScreenshot.Value}"
                             ImageLoader="{Binding Context.Screenshots.ImageLoader}"/>
                     </Interaction.Behaviors>
