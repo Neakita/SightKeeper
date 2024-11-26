@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
@@ -86,6 +87,14 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 	{
 		Guard.IsNotNull(AssociatedObject);
 		AssociatedObject.Source = _bitmap;
+		AssociatedObject.Loaded += OnAssociatedObjectLoaded;
+	}
+
+	private void OnAssociatedObjectLoaded(object? sender, RoutedEventArgs e)
+	{
+		Guard.IsNotNull(AssociatedObject);
+		AssociatedObject.Loaded -= OnAssociatedObjectLoaded;
+		UpdateSource();
 	}
 
 	protected override void OnDetachedFromVisualTree()
@@ -107,7 +116,7 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 			oldImageLoader.ReturnBitmapToPool(_bitmap);
 		}
 		_bitmap = null;
-		if (AssociatedObject == null)
+		if (AssociatedObject?.IsLoaded != true)
 			return;
 		if (Screenshot != null && ImageLoader != null)
 		{
