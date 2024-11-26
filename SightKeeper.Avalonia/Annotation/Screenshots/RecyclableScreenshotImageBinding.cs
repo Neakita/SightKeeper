@@ -25,6 +25,9 @@ internal sealed class RecyclableScreenshotImageBinding : Behavior<Image>
 	public static readonly StyledProperty<int> MinimumSizeProperty =
 		AvaloniaProperty.Register<RecyclableScreenshotImageBinding, int>(nameof(MinimumSize), 20);
 
+	public static readonly StyledProperty<NoTargetSizeBehavior> NoTargetSizeBehaviorProperty =
+		AvaloniaProperty.Register<RecyclableScreenshotImageBinding, NoTargetSizeBehavior>(nameof(NoTargetSizeBehavior));
+
 	public Screenshot? Screenshot
 	{
 		get => GetValue(ScreenshotProperty);
@@ -55,9 +58,21 @@ internal sealed class RecyclableScreenshotImageBinding : Behavior<Image>
 		set => SetValue(MinimumSizeProperty, value);
 	}
 
+	public NoTargetSizeBehavior NoTargetSizeBehavior
+	{
+		get => GetValue(NoTargetSizeBehaviorProperty);
+		set => SetValue(NoTargetSizeBehaviorProperty, value);
+	}
+
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
 	{
 		base.OnPropertyChanged(change);
+		if (change.Property == TargetSizeProperty)
+		{
+			var (oldSize, newSize) = change.GetOldAndNewValue<Size>();
+			if (Math.Abs(Math.Max(oldSize.Width, oldSize.Height) - Math.Max(newSize.Width, newSize.Height)) < 1)
+				return;
+		}
 		if (change.Property != ImageLoaderProperty)
 			UpdateSource();
 		else
@@ -69,7 +84,8 @@ internal sealed class RecyclableScreenshotImageBinding : Behavior<Image>
 
 	protected override void OnAttachedToVisualTree()
 	{
-		UpdateSource();
+		Guard.IsNotNull(AssociatedObject);
+		AssociatedObject.Source = _bitmap;
 	}
 
 	protected override void OnDetachedFromVisualTree()
@@ -91,14 +107,16 @@ internal sealed class RecyclableScreenshotImageBinding : Behavior<Image>
 			oldImageLoader.ReturnBitmapToPool(_bitmap);
 		}
 		_bitmap = null;
+		if (AssociatedObject == null)
+			return;
 		if (Screenshot != null && ImageLoader != null)
 		{
 			var maximumLargestDimension = RoundSize(Math.Max(TargetSize.Width, TargetSize.Height));
-			_bitmap = TargetSize == default
-				? ImageLoader.LoadImage(Screenshot)
-				: ImageLoader.LoadImage(Screenshot, maximumLargestDimension);
+			if (TargetSize != default)
+				_bitmap = ImageLoader.LoadImage(Screenshot, maximumLargestDimension);
+			else if (NoTargetSizeBehavior == NoTargetSizeBehavior.LoadFull)
+				_bitmap = ImageLoader.LoadImage(Screenshot);
 		}
-		Guard.IsNotNull(AssociatedObject);
 		AssociatedObject.Source = _bitmap;
 	}
 

@@ -47,7 +47,8 @@
                                         <local:RecyclableScreenshotImageBinding
                                             Screenshot="{Binding Value}"
                                             TargetSize="{Binding #ImageContainer.Bounds.Size}"
-                                            ImageLoader="{Binding #ListBox.((local:ScreenshotsViewModel)DataContext).ImageLoader}"/>
+                                            ImageLoader="{Binding #ListBox.((local:ScreenshotsViewModel)DataContext).ImageLoader}"
+                                            NoTargetSizeBehavior="DoNotLoad"/>
                                     </Interaction.Behaviors>
                                 </Image>
                                 <ContentControl Content="{Binding Asset}"
