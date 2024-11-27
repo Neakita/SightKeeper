@@ -98,6 +98,7 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 		_bitmap = TargetSize == 0
 			? ImageLoader.LoadImage(Screenshot)
 			: ImageLoader.LoadImage(Screenshot, TargetSize);
+		AssociatedObject.Source = null; // TODO some kind of bug in the framework, because of which Image control does not update the rendering when manually assigning the source under certain conditions
 		AssociatedObject.Source = _bitmap;
 	}
 }
