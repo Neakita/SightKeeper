@@ -26,11 +26,11 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center">
                 <icons:MaterialIcon Kind="Image"
-                                    IsVisible="{Binding Context.Screenshots.SelectedScreenshot, Converter={x:Static ObjectConverters.IsNull}}"
+                                    IsVisible="{Binding #Image.Source, Converter={x:Static ObjectConverters.IsNull}}"
                                     RenderTransform="scale(0.5)"
                                     Foreground="{StaticResource WatermarkSecondary}"
                                     Opacity="0.05"/>
-                <Image>
+                <Image Name="Image">
                     <Interaction.Behaviors>
                         <screenshots:RecyclableScreenshotImageBindingBehavior
                             Screenshot="{Binding Context.Screenshots.SelectedScreenshot.Value}"
