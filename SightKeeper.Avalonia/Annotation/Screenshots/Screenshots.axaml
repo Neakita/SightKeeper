@@ -43,10 +43,15 @@
                             <Panel Name="ImageContainer">
                                 <Image Name="Image"
                                        Stretch="UniformToFill">
+                                    <Image.Resources>
+                                        <ResourceDictionary>
+                                            <local:SizeToImageTargetSizeConverter x:Key="SizeToImageTargetSizeConverter" MinimumSize="20" SizeStep="20"/>
+                                        </ResourceDictionary>
+                                    </Image.Resources>
                                     <Interaction.Behaviors>
                                         <local:RecyclableScreenshotImageBindingBehavior
                                             Screenshot="{Binding Value}"
-                                            TargetSize="{Binding #ImageContainer.Bounds.Size}"
+                                            TargetSize="{Binding #ImageContainer.Bounds.Size.Width, Converter={StaticResource SizeToImageTargetSizeConverter}}"
                                             ImageLoader="{Binding #ListBox.((local:ScreenshotsViewModel)DataContext).ImageLoader}"/>
                                     </Interaction.Behaviors>
                                 </Image>
