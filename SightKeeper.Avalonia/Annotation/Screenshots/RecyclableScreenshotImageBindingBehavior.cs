@@ -19,14 +19,8 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 	public static readonly StyledProperty<ScreenshotImageLoader?> ImageLoaderProperty =
 		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, ScreenshotImageLoader?>(nameof(ImageLoader));
 
-	public static readonly StyledProperty<Size> TargetSizeProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, Size>(nameof(TargetSize));
-
-	public static readonly StyledProperty<int> SizeStepProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, int>(nameof(SizeStep), 20);
-
-	public static readonly StyledProperty<int> MinimumSizeProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, int>(nameof(MinimumSize), 20);
+	public static readonly StyledProperty<int> TargetSizeProperty =
+		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, int>(nameof(TargetSize));
 
 	public Screenshot? Screenshot
 	{
@@ -40,40 +34,22 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 		set => SetValue(ImageLoaderProperty, value);
 	}
 
-	public Size TargetSize
+	public int TargetSize
 	{
 		get => GetValue(TargetSizeProperty);
 		set => SetValue(TargetSizeProperty, value);
 	}
 
-	public int SizeStep
-	{
-		get => GetValue(SizeStepProperty);
-		set => SetValue(SizeStepProperty, value);
-	}
-
-	public int MinimumSize
-	{
-		get => GetValue(MinimumSizeProperty);
-		set => SetValue(MinimumSizeProperty, value);
-	}
-
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
 	{
 		base.OnPropertyChanged(change);
-		if (change.Property == TargetSizeProperty)
-		{
-			var (oldSize, newSize) = change.GetOldAndNewValue<Size>();
-			if (Math.Abs(Math.Max(oldSize.Width, oldSize.Height) - Math.Max(newSize.Width, newSize.Height)) < 1)
-				return;
-		}
-		if (change.Property != ImageLoaderProperty)
-			UpdateSourceAsyncOrThrow();
-		else
+		if (change.Property == ImageLoaderProperty)
 		{
 			var oldImageLoader = change.GetOldValue<ScreenshotImageLoader?>();
 			UpdateSourceAsyncOrThrow(oldImageLoader);
+			return;
 		}
+		UpdateSourceAsyncOrThrow();
 	}
 
 	protected override void OnAttachedToVisualTree()
@@ -102,73 +78,44 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 	private WriteableBitmap? _bitmap;
 	private CancellationTokenSource? _cancellationTokenSource;
 
-	private async void UpdateSourceAsyncOrThrow(ScreenshotImageLoader? oldImageLoader = null)
+	private async void UpdateSourceAsyncOrThrow(ScreenshotImageLoader? imageLoader = null)
 	{
-		try
-		{
-			await UpdateSourceAsync(oldImageLoader);
-		}
-		catch (Exception exception)
-		{
-			Console.WriteLine(exception);
-			throw;
-		}
-	}
-
-	private async Task UpdateSourceAsync(ScreenshotImageLoader? oldImageLoader = null)
-	{
-		RecycleBitmap(oldImageLoader);
-		if (AssociatedObject?.IsLoaded != true)
-			return;
 		if (_cancellationTokenSource != null)
 		{
 			await _cancellationTokenSource.CancelAsync();
 			_cancellationTokenSource = null;
 		}
-		if (Screenshot != null && ImageLoader != null)
-		{
-			Guard.IsNull(_cancellationTokenSource);
-			_cancellationTokenSource = new CancellationTokenSource();
-			if (TargetSize == default)
-				_bitmap = await ImageLoader.LoadImageAsync(Screenshot, _cancellationTokenSource.Token);
-			else
-			{
-				var maximumLargestDimension = RoundSize(Math.Max(TargetSize.Width, TargetSize.Height));
-				_bitmap = await ImageLoader.LoadImageAsync(Screenshot, maximumLargestDimension, _cancellationTokenSource.Token);
-			}
-			_cancellationTokenSource = null;
-		}
-
-		if (AssociatedObject == null)
-		{
-			if (_bitmap != null)
-			{
-				Guard.IsNotNull(ImageLoader);
-				ImageLoader.ReturnBitmapToPool(_bitmap);
-				_bitmap = null;
-			}
-		}
-		else
-		{
-			AssociatedObject.Source = null; // image doesn't update under some circumstances without it
-			AssociatedObject.Source = _bitmap;
-		}
+		_cancellationTokenSource = new CancellationTokenSource();
+		await UpdateSourceAsync(imageLoader, _cancellationTokenSource.Token);
 	}
 
-	private void RecycleBitmap(ScreenshotImageLoader? oldImageLoader)
+	private Task UpdateSourceAsync(ScreenshotImageLoader? oldImageLoader, CancellationToken cancellationToken)
 	{
-		oldImageLoader ??= ImageLoader;
+		RecycleBitmap(oldImageLoader);
+		return LoadImageAsync(cancellationToken);
+	}
+
+	private void RecycleBitmap(ScreenshotImageLoader? imageLoader)
+	{
+		imageLoader ??= ImageLoader;
 		if (_bitmap != null)
 		{
-			Guard.IsNotNull(oldImageLoader);
-			oldImageLoader.ReturnBitmapToPool(_bitmap);
+			Guard.IsNotNull(imageLoader);
+			imageLoader.ReturnBitmapToPool(_bitmap);
 		}
 		_bitmap = null;
 	}
 
-	private int RoundSize(double size)
+	private async Task LoadImageAsync(CancellationToken cancellationToken)
 	{
-		var rounded = (int)Math.Round(size / SizeStep) * SizeStep;
-		return Math.Max(rounded, MinimumSize);
+		if (AssociatedObject?.IsLoaded != true ||
+		    Screenshot == null ||
+		    ImageLoader == null)
+			return;
+		_bitmap = TargetSize == 0
+			? await ImageLoader.LoadImageAsync(Screenshot, cancellationToken)
+			: await ImageLoader.LoadImageAsync(Screenshot, TargetSize, cancellationToken);
+		AssociatedObject.Source = null; // TODO some kind of bug in the framework, because of which Image control does not update the rendering when manually assigning the source under certain conditions
+		AssociatedObject.Source = _bitmap;
 	}
 }
