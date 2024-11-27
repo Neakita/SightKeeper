@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -95,14 +94,13 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 		return LoadImageAsync(cancellationToken);
 	}
 
-	private void RecycleBitmap(ScreenshotImageLoader? imageLoader)
+	private void RecycleBitmap(ScreenshotImageLoader? imageLoader = null)
 	{
+		if (_bitmap == null)
+			return;
 		imageLoader ??= ImageLoader;
-		if (_bitmap != null)
-		{
-			Guard.IsNotNull(imageLoader);
-			imageLoader.ReturnBitmapToPool(_bitmap);
-		}
+		Guard.IsNotNull(imageLoader);
+		imageLoader.ReturnBitmapToPool(_bitmap);
 		_bitmap = null;
 	}
 
@@ -115,6 +113,12 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 		_bitmap = TargetSize == 0
 			? await ImageLoader.LoadImageAsync(Screenshot, cancellationToken)
 			: await ImageLoader.LoadImageAsync(Screenshot, TargetSize, cancellationToken);
+		if (AssociatedObject == null)
+		{
+			if (_bitmap != null)
+				RecycleBitmap();
+			return;
+		}
 		AssociatedObject.Source = null; // TODO some kind of bug in the framework, because of which Image control does not update the rendering when manually assigning the source under certain conditions
 		AssociatedObject.Source = _bitmap;
 	}
