@@ -10,10 +10,14 @@ internal sealed class WriteableBitmapPool : IDisposable
 {
 	private readonly record struct BitmapArchetype(PixelSize Size, PixelFormat? Format);
 
+	private int _rented;
+
 	public WriteableBitmap Rent(PixelSize size, PixelFormat? format = null)
 	{
 		BitmapArchetype archetype = new(size, format);
 		var bag = GetOrCreateBag(archetype);
+		_rented++;
+		Console.WriteLine(_rented);
 		if (bag.TryTake(out var bitmap))
 			return bitmap;
 		return new WriteableBitmap(size, DPI, format);
@@ -21,6 +25,8 @@ internal sealed class WriteableBitmapPool : IDisposable
 
 	public void Return(WriteableBitmap bitmap)
 	{
+		_rented--;
+		Console.WriteLine(_rented);
 		BitmapArchetype archetype = new(bitmap.PixelSize, bitmap.Format);
 		var bag = GetOrCreateBag(archetype);
 		bag.Add(bitmap);

@@ -36,11 +36,23 @@
                         </Style>
                     </Grid.Styles>
                     <Border Grid.Row="0"
-                            CornerRadius="12"
-                            BoxShadow="{DynamicResource BoxShadow}">
+                            CornerRadius="12">
+                        <Border.BoxShadow>
+                            <MultiBinding Converter="{x:Static local:BooleanToBoxShadowConverter.Instance}">
+                                <Binding Path="#Image.Source" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                                <DynamicResource ResourceKey="BoxShadow"/>
+                            </MultiBinding>
+                        </Border.BoxShadow>
                         <Border CornerRadius="12"
                                 ClipToBounds="True">
                             <Panel Name="ImageContainer">
+                                <icons:MaterialIcon Kind="Image"
+                                                    IsVisible="{Binding #Image.Source, Converter={x:Static ObjectConverters.IsNull}}"
+                                                    Foreground="{StaticResource WatermarkSecondary}"
+                                                    RenderTransform="scale(0.5)"
+                                                    Opacity="0.05"
+                                                    Width="NaN"
+                                                    Height="NaN"/>
                                 <Image Name="Image"
                                        Stretch="UniformToFill">
                                     <Interaction.Behaviors>

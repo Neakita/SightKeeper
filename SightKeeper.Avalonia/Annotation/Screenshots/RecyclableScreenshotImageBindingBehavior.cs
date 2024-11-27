@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -65,13 +67,12 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 			if (Math.Abs(Math.Max(oldSize.Width, oldSize.Height) - Math.Max(newSize.Width, newSize.Height)) < 1)
 				return;
 		}
-
 		if (change.Property != ImageLoaderProperty)
-			UpdateSource();
+			UpdateSourceAsyncOrThrow();
 		else
 		{
 			var oldImageLoader = change.GetOldValue<ScreenshotImageLoader?>();
-			UpdateSource(oldImageLoader);
+			UpdateSourceAsyncOrThrow(oldImageLoader);
 		}
 	}
 
@@ -86,11 +87,12 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 	{
 		Guard.IsNotNull(AssociatedObject);
 		AssociatedObject.Loaded -= OnAssociatedObjectLoaded;
-		UpdateSource();
+		UpdateSourceAsyncOrThrow();
 	}
 
 	protected override void OnDetachedFromVisualTree()
 	{
+		_cancellationTokenSource?.Cancel();
 		if (_bitmap == null)
 			return;
 		Guard.IsNotNull(ImageLoader);
@@ -98,11 +100,59 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 	}
 
 	private WriteableBitmap? _bitmap;
+	private CancellationTokenSource? _cancellationTokenSource;
 
-	private void UpdateSource(ScreenshotImageLoader? oldImageLoader = null)
+	private async void UpdateSourceAsyncOrThrow(ScreenshotImageLoader? oldImageLoader = null)
+	{
+		try
+		{
+			await UpdateSourceAsync(oldImageLoader);
+		}
+		catch (Exception exception)
+		{
+			Console.WriteLine(exception);
+			throw;
+		}
+	}
+
+	private async Task UpdateSourceAsync(ScreenshotImageLoader? oldImageLoader = null)
 	{
 		RecycleBitmap(oldImageLoader);
-		LoadImage();
+		if (AssociatedObject?.IsLoaded != true)
+			return;
+		if (_cancellationTokenSource != null)
+		{
+			await _cancellationTokenSource.CancelAsync();
+			_cancellationTokenSource = null;
+		}
+		if (Screenshot != null && ImageLoader != null)
+		{
+			Guard.IsNull(_cancellationTokenSource);
+			_cancellationTokenSource = new CancellationTokenSource();
+			if (TargetSize == default)
+				_bitmap = await ImageLoader.LoadImageAsync(Screenshot, _cancellationTokenSource.Token);
+			else
+			{
+				var maximumLargestDimension = RoundSize(Math.Max(TargetSize.Width, TargetSize.Height));
+				_bitmap = await ImageLoader.LoadImageAsync(Screenshot, maximumLargestDimension, _cancellationTokenSource.Token);
+			}
+			_cancellationTokenSource = null;
+		}
+
+		if (AssociatedObject == null)
+		{
+			if (_bitmap != null)
+			{
+				Guard.IsNotNull(ImageLoader);
+				ImageLoader.ReturnBitmapToPool(_bitmap);
+				_bitmap = null;
+			}
+		}
+		else
+		{
+			AssociatedObject.Source = null; // image doesn't update under some circumstances without it
+			AssociatedObject.Source = _bitmap;
+		}
 	}
 
 	private void RecycleBitmap(ScreenshotImageLoader? oldImageLoader)
@@ -116,25 +166,9 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 		_bitmap = null;
 	}
 
-	private void LoadImage()
-	{
-		if (AssociatedObject?.IsLoaded != true)
-			return;
-		if (Screenshot != null && ImageLoader != null)
-		{
-			var maximumLargestDimension = RoundSize(Math.Max(TargetSize.Width, TargetSize.Height));
-			_bitmap = TargetSize != default
-				? ImageLoader.LoadImage(Screenshot, maximumLargestDimension)
-				: ImageLoader.LoadImage(Screenshot);
-		}
-		AssociatedObject.Source = _bitmap;
-	}
-
 	private int RoundSize(double size)
 	{
 		var rounded = (int)Math.Round(size / SizeStep) * SizeStep;
-		if (rounded < MinimumSize)
-			return MinimumSize;
-		return rounded;
+		return Math.Max(rounded, MinimumSize);
 	}
 }
