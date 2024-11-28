@@ -109,7 +109,11 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 		if (AssociatedObject?.IsLoaded != true ||
 		    Screenshot == null ||
 		    ImageLoader == null)
+		{
+			if (AssociatedObject != null)
+				AssociatedObject.Source = null;
 			return;
+		}
 		_bitmap = await ImageLoader.LoadImageAsync(Screenshot, TargetSize, cancellationToken);
 		if (AssociatedObject == null)
 		{
