@@ -1,5 +1,7 @@
 using System;
 using System.Buffers;
+using Avalonia;
+using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.Extensions;
 
@@ -17,5 +19,10 @@ internal static class Extensions
 			span[i] = buffer[scrolledIndex];
 		}
 		ArrayPool<T>.Shared.Return(buffer);
+	}
+
+	public static PixelSize ToPixelSize(this Vector2<ushort> vector)
+	{
+		return new PixelSize(vector.X, vector.Y);
 	}
 }

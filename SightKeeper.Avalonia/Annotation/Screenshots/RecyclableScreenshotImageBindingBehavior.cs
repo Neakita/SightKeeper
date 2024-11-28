@@ -18,8 +18,8 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 	public static readonly StyledProperty<ScreenshotImageLoader?> ImageLoaderProperty =
 		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, ScreenshotImageLoader?>(nameof(ImageLoader));
 
-	public static readonly StyledProperty<int> TargetSizeProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, int>(nameof(TargetSize));
+	public static readonly StyledProperty<int?> TargetSizeProperty =
+		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, int?>(nameof(TargetSize));
 
 	public Screenshot? Screenshot
 	{
@@ -33,7 +33,7 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 		set => SetValue(ImageLoaderProperty, value);
 	}
 
-	public int TargetSize
+	public int? TargetSize
 	{
 		get => GetValue(TargetSizeProperty);
 		set => SetValue(TargetSizeProperty, value);
@@ -110,9 +110,7 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 		    Screenshot == null ||
 		    ImageLoader == null)
 			return;
-		_bitmap = TargetSize == 0
-			? await ImageLoader.LoadImageAsync(Screenshot, cancellationToken)
-			: await ImageLoader.LoadImageAsync(Screenshot, TargetSize, cancellationToken);
+		_bitmap = await ImageLoader.LoadImageAsync(Screenshot, TargetSize, cancellationToken);
 		if (AssociatedObject == null)
 		{
 			if (_bitmap != null)

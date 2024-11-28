@@ -1,6 +1,5 @@
 using System;
 using System.Buffers;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -8,6 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.Screenshotting;
+using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
@@ -23,56 +23,20 @@ internal sealed class ScreenshotImageLoader
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public WriteableBitmap LoadImage(Screenshot screenshot)
+	public async Task<WriteableBitmap?> LoadImageAsync(
+		Screenshot screenshot,
+		int? maximumLargestDimension,
+		CancellationToken cancellationToken)
 	{
-		PixelSize size = new(screenshot.ImageSize.X, screenshot.ImageSize.Y);
+		PixelSize size = maximumLargestDimension == null
+			? screenshot.ImageSize.ToPixelSize()
+			: ComputeSize(screenshot, maximumLargestDimension.Value);
 		WriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
-		using WriteableBitmapMemoryManager<Rgba32> bitmapMemoryManager = new(bitmap);
-		ReadImageData(screenshot, bitmapMemoryManager.GetSpan());
-		return bitmap;
-	}
-
-	public WriteableBitmap LoadImage(Screenshot screenshot, int maximumLargestDimension)
-	{
-		PixelSize size = ComputeThumbnailSize(screenshot, maximumLargestDimension);
-		WriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
-		using WriteableBitmapMemoryManager<Rgba32> bitmapMemoryManager = new(bitmap);
-		using var intermediateBuffer = MemoryPool<Rgba32>.Shared.Rent(screenshot.ImageSize.X * screenshot.ImageSize.Y);
-		ReadImageData(screenshot, intermediateBuffer.Memory.Span);
-		NearestNeighbourImageResizer.Resize(
-			intermediateBuffer.Memory.Span.AsSpan2D(screenshot.ImageSize.Y, screenshot.ImageSize.X),
-			bitmapMemoryManager.GetSpan().AsSpan2D(size.Height, size.Width));
-		return bitmap;
-	}
-
-	public async Task<WriteableBitmap?> LoadImageAsync(Screenshot screenshot, CancellationToken cancellationToken)
-	{
-		PixelSize size = new(screenshot.ImageSize.X, screenshot.ImageSize.Y);
-		WriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
-		using WriteableBitmapMemoryManager<Rgba32> bitmapMemoryManager = new(bitmap);
-		bool read = await ReadImageDataAsync(screenshot, bitmapMemoryManager.Memory, cancellationToken);
-		if (read)
+		bool isRead = await ReadImageDataToBitmapAsync(screenshot, bitmap, cancellationToken);
+		if (isRead)
 			return bitmap;
 		ReturnBitmapToPool(bitmap);
 		return null;
-	}
-
-	public async Task<WriteableBitmap?> LoadImageAsync(Screenshot screenshot, int maximumLargestDimension, CancellationToken cancellationToken)
-	{
-		PixelSize size = ComputeThumbnailSize(screenshot, maximumLargestDimension);
-		WriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
-		using WriteableBitmapMemoryManager<Rgba32> bitmapMemoryManager = new(bitmap);
-		using var intermediateBuffer = MemoryPool<Rgba32>.Shared.Rent(screenshot.ImageSize.X * screenshot.ImageSize.Y);
-		bool read = await ReadImageDataAsync(screenshot, intermediateBuffer.Memory, cancellationToken);
-		if (!read)
-		{
-			ReturnBitmapToPool(bitmap);
-			return null;
-		}
-		NearestNeighbourImageResizer.Resize(
-			intermediateBuffer.Memory.Span.AsSpan2D(screenshot.ImageSize.Y, screenshot.ImageSize.X),
-			bitmapMemoryManager.GetSpan().AsSpan2D(size.Height, size.Width));
-		return bitmap;
 	}
 
 	public void ReturnBitmapToPool(WriteableBitmap bitmap)
@@ -83,20 +47,30 @@ internal sealed class ScreenshotImageLoader
 	private readonly WriteableBitmapPool _bitmapPool;
 	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
 
-	private void ReadImageData(Screenshot screenshot, Span<Rgba32> target)
+	private async Task<bool> ReadImageDataToBitmapAsync(
+		Screenshot screenshot,
+		WriteableBitmap bitmap,
+		CancellationToken cancellationToken)
 	{
-		Span<byte> targetAsBytes = MemoryMarshal.AsBytes(target);
-		using var stream = _screenshotsDataAccess.LoadImage(screenshot);
-		int totalBytesRead = 0;
-		int lastBytesRead;
-		do
-		{
-			lastBytesRead = stream.Read(targetAsBytes[totalBytesRead..]);
-			totalBytesRead += lastBytesRead;
-		} while (lastBytesRead > 0);
+		using WriteableBitmapMemoryManager<Rgba32> bitmapMemoryManager = new(bitmap);
+		var screenshotSize = screenshot.ImageSize.ToPixelSize();
+		if (screenshotSize == bitmap.PixelSize)
+			return await ReadImageDataAsync(screenshot, bitmapMemoryManager.Memory, cancellationToken);
+		var pixelsCount = screenshotSize.Width * screenshotSize.Height;
+		using var buffer = MemoryPool<Rgba32>.Shared.Rent(pixelsCount);
+		bool isRead = await ReadImageDataAsync(screenshot, buffer.Memory, cancellationToken);
+		if (!isRead)
+			return false;
+		NearestNeighbourImageResizer.Resize(
+			buffer.Memory.Span.AsSpan2D(screenshotSize.Height, screenshotSize.Width),
+			bitmapMemoryManager.Memory.Span.AsSpan2D(bitmap.PixelSize.Height, bitmap.PixelSize.Width));
+		return true;
 	}
 
-	private async Task<bool> ReadImageDataAsync(Screenshot screenshot, Memory<Rgba32> target, CancellationToken cancellationToken)
+	private async Task<bool> ReadImageDataAsync(
+		Screenshot screenshot,
+		Memory<Rgba32> target,
+		CancellationToken cancellationToken)
 	{
 		Memory<byte> targetAsBytes = target.Cast<Rgba32, byte>();
 		await using var stream = _screenshotsDataAccess.LoadImage(screenshot);
@@ -104,15 +78,19 @@ internal sealed class ScreenshotImageLoader
 		int lastBytesRead;
 		do
 		{
+			// ReadAsync method will throw exception on await if token is canceled and thus degrade performance,
+			// so it's better to manually check the token and return boolean value instead of re-throwing or whatever.
 			if (cancellationToken.IsCancellationRequested)
 				return false;
+			// CancellationToken.None passed as parameter to suppress analyzer.
 			lastBytesRead = await stream.ReadAsync(targetAsBytes[totalBytesRead..], CancellationToken.None);
 			totalBytesRead += lastBytesRead;
 		} while (lastBytesRead > 0);
+
 		return true;
 	}
 
-	private static PixelSize ComputeThumbnailSize(Screenshot screenshot, int maximumLargestDimension)
+	private static PixelSize ComputeSize(Screenshot screenshot, int maximumLargestDimension)
 	{
 		var sourceLargestDimension = Math.Max(screenshot.ImageSize.X, screenshot.ImageSize.Y);
 		if (sourceLargestDimension < maximumLargestDimension)
