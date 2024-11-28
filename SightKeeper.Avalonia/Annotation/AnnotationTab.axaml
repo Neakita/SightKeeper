@@ -37,19 +37,19 @@
                             ImageLoader="{Binding Context.Screenshots.ImageLoader}"/>
                     </Interaction.Behaviors>
                 </Image>
-                <Panel>
-                    <Panel.IsVisible>
+                <Decorator>
+                    <Decorator.IsVisible>
                         <MultiBinding Converter="{x:Static avalonia:AndConverter.Instance}">
                             <Binding Path="Context"
                                      Converter="{x:Static ObjectConverters.IsNotNull}"/>
                             <Binding Path="Context.Drawer"
                                      Converter="{x:Static ObjectConverters.IsNotNull}"/>
-                            <Binding Path="Context.Screenshots.SelectedScreenshot"
+                            <Binding Path="#Image.Source"
                                      Converter="{x:Static ObjectConverters.IsNotNull}"/>
                         </MultiBinding>
-                    </Panel.IsVisible>
+                    </Decorator.IsVisible>
                     <drawing:Drawer DataContext="{Binding Context.Drawer}"/>
-                </Panel>
+                </Decorator>
             </Panel>
             <Border Grid.Column="2"
                     Classes="outer wide-padding"
