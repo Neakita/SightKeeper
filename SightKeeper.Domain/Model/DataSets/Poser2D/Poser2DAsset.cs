@@ -25,12 +25,11 @@ public sealed class Poser2DAsset : ItemsAsset<Poser2DItem>, AssetsFactory<Poser2
 	public override AssetsLibrary<Poser2DAsset> Library { get; }
 	public override DataSet DataSet => Library.DataSet;
 
-	public Poser2DItem CreateItem(Poser2DTag tag, Bounding bounding, ImmutableList<Vector2<double>> keyPoints, ImmutableList<double> properties)
+	public Poser2DItem CreateItem(Poser2DTag tag, Bounding bounding, ImmutableList<double> properties)
 	{
 		bounding.EnsureNormalized();
-		Guard.IsEqualTo(keyPoints.Count, tag.KeyPoints.Count);
 		Guard.IsEqualTo(properties.Count, tag.Properties.Count);
-		Poser2DItem item = new(tag, bounding, keyPoints, properties, this);
+		Poser2DItem item = new(tag, bounding, properties, this);
 		AddItem(item);
 		return item;
 	}

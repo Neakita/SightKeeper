@@ -29,28 +29,31 @@ public class Poser2DTagTests
 	}
 
 	[Fact]
-	public void ShouldNotAddNewPointToTagWithAssociatedItems()
+	public void ShouldAddNewKeyPointTagToPoserTagWithAssociatedItems()
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.CreateItem(tag, new Bounding(), [], []);
-		Assert.ThrowsAny<Exception>(() => tag.CreateKeyPoint(""));
-		tag.KeyPoints.Should().BeEmpty();
+		asset.CreateItem(tag, new Bounding(), []);
+		var keyPointTag = tag.CreateKeyPoint("");
+		tag.KeyPoints.Should().Contain(keyPointTag);
 	}
 
 	[Fact]
-	public void ShouldNotDeletePointOfTagWithAssociatedItems()
+	public void ShouldDeleteKeyPointTagWithAssociatedKeyPoints()
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var keyPoint = tag.CreateKeyPoint("");
+		var keyPointTag1 = tag.CreateKeyPoint("1");
+		var keyPointTag2 = tag.CreateKeyPoint("2");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.CreateItem(tag, new Bounding(), [new Vector2<double>()], []);
-		Assert.ThrowsAny<Exception>(() => tag.DeleteKeyPoint(keyPoint));
-		tag.KeyPoints.Should().Contain(keyPoint);
+		var item = asset.CreateItem(tag, new Bounding(), []);
+		var keyPoint1 = item.CreateKeyPoint(keyPointTag1, new Vector2<double>(0.1, 0.2));
+		var keyPoint2 = item.CreateKeyPoint(keyPointTag2, new Vector2<double>(0.3, 0.4));
+		tag.DeleteKeyPoint(keyPointTag1);
+		item.KeyPoints.Should().Contain(keyPoint2).And.NotContain(keyPoint1);
 	}
 
 	[Fact]
@@ -61,7 +64,7 @@ public class Poser2DTagTests
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.CreateItem(tag1, new Bounding(), [], []);
+		asset.CreateItem(tag1, new Bounding(), []);
 		var keyPoint = tag2.CreateKeyPoint("");
 		tag2.KeyPoints.Should().Contain(keyPoint);
 	}
@@ -75,7 +78,7 @@ public class Poser2DTagTests
 		var keyPoint2 = tag2.CreateKeyPoint("");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.CreateItem(tag1, new Bounding(), [], []);
+		asset.CreateItem(tag1, new Bounding(), []);
 		tag2.DeleteKeyPoint(keyPoint2);
 		tag2.KeyPoints.Should().BeEmpty();
 	}

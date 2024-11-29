@@ -1,19 +1,16 @@
 using MemoryPack;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets.Poser2D;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 
-// TODO ISSUE KeyPoint2D actually doesn't exist right now
 /// <summary>
 /// MemoryPackable version of <see cref="KeyPoint2D"/>
 /// </summary>
 [MemoryPackable]
-internal sealed partial class PackableKeyPoint2D
+internal sealed partial class PackableKeyPoint2D : PackableKeyPoint
 {
-	public Vector2<double> Position { get; }
-
-	public PackableKeyPoint2D(Vector2<double> position)
+	public PackableKeyPoint2D(int index, Vector2<double> position) : base(index, position)
 	{
-		Position = position;
 	}
 }

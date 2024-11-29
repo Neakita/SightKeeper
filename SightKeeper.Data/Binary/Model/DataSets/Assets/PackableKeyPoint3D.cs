@@ -8,14 +8,12 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 /// MemoryPackable version of <see cref="KeyPoint3D"/>
 /// </summary>
 [MemoryPackable]
-internal sealed partial class PackableKeyPoint3D
+internal sealed partial class PackableKeyPoint3D : PackableKeyPoint
 {
-	public Vector2<double> Position { get; }
 	public bool IsVisible { get; }
 
-	public PackableKeyPoint3D(Vector2<double> position, bool isVisible)
+	public PackableKeyPoint3D(int index, Vector2<double> position, bool isVisible) : base(index, position)
 	{
-		Position = position;
 		IsVisible = isVisible;
 	}
 }

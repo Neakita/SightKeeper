@@ -51,7 +51,7 @@ public class Poser2DTagsLibraryTests
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.CreateItem(tag, new Bounding(0, 0, 1, 1), [], []);
+		asset.CreateItem(tag, new Bounding(0, 0, 1, 1), []);
 		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.DeleteTag(tag));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);
 	}

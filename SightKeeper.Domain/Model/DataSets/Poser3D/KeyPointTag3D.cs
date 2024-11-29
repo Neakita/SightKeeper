@@ -12,7 +12,7 @@ public sealed class KeyPointTag3D : KeyPointTag<Poser3DTag>
 		PoserTag.DeleteKeyPoint(this);
 	}
 
-	internal KeyPointTag3D(string name, Poser3DTag poserTag) : base(name, poserTag.KeyPoints)
+	internal KeyPointTag3D(string name, int index, Poser3DTag poserTag) : base(name, poserTag.KeyPoints, index)
 	{
 		PoserTag = poserTag;
 	}

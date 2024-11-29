@@ -21,7 +21,8 @@ public sealed class Poser3DTag : PoserTag, TagsFactory<Poser3DTag>
 	public override KeyPointTag3D CreateKeyPoint(string name)
 	{
 		Guard.IsEmpty(Items);
-		KeyPointTag3D tag = new(name, this);
+		var newTagIndex = _keyPoints.Count;
+		KeyPointTag3D tag = new(name, newTagIndex, this);
 		_keyPoints.Add(tag);
 		return tag;
 	}

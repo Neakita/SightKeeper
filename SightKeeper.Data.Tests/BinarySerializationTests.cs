@@ -141,17 +141,19 @@ public sealed class BinarySerializationTests
 		};
 		var copTag = dataSet.TagsLibrary.CreateTag("Cop");
 		copTag.Color = 123;
-		copTag.CreateKeyPoint("Head");
+		var copHeadKeyPoint = copTag.CreateKeyPoint("Head");
 		copTag.CreateProperty("Distance", 0, 200);
 		var bulldozerTag = dataSet.TagsLibrary.CreateTag("Bulldozer");
 		bulldozerTag.Color = 456;
-		bulldozerTag.CreateKeyPoint("Face");
+		var bulldozerFaceKeyPoint = bulldozerTag.CreateKeyPoint("Face");
 		bulldozerTag.CreateProperty("Distance", 0, 200);
 		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [new Vector2<double>(0.3, 0.2)], [20]);
-		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [new Vector2<double>(0.4, 0.3)], [25]);
+		var copItem = asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [20]);
+		copItem.CreateKeyPoint(copHeadKeyPoint, new Vector2<double>(0.3, 0.2));
+		var bulldozerItem = asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [25]);
+		bulldozerItem.CreateKeyPoint(bulldozerFaceKeyPoint, new Vector2<double>(0.4, 0.3));
 		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
@@ -174,19 +176,21 @@ public sealed class BinarySerializationTests
 		};
 		var copTag = dataSet.TagsLibrary.CreateTag("Cop");
 		copTag.Color = 123;
-		copTag.CreateKeyPoint("Head");
+		var copHeadKeyPoint = copTag.CreateKeyPoint("Head");
 		copTag.CreateNumericProperty("Distance", 0, 200);
 		copTag.CreateBooleanProperty("ShouldShoot");
 		var bulldozerTag = dataSet.TagsLibrary.CreateTag("Bulldozer");
 		bulldozerTag.Color = 456;
-		bulldozerTag.CreateKeyPoint("Face");
+		var bulldozerFaceKeyPoint = bulldozerTag.CreateKeyPoint("Face");
 		bulldozerTag.CreateNumericProperty("Distance", 0, 200);
 		bulldozerTag.CreateBooleanProperty("ShouldShoot");
 		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [new KeyPoint3D(new Vector2<double>(0.3, 0.2), true)], [20], [true]);
-		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [new KeyPoint3D(new Vector2<double>(0.4, 0.3), false)], [25], [false]);
+		var copItem = asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [20], [true]);
+		copItem.CreateKeyPoint(copHeadKeyPoint, new Vector2<double>(0.3, 0.2), true);
+		var bulldozerItem = asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [25], [false]);
+		bulldozerItem.CreateKeyPoint(bulldozerFaceKeyPoint, new Vector2<double>(0.4, 0.3), false);
 		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,

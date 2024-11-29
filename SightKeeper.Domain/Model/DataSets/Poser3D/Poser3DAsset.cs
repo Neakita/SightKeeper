@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
@@ -28,13 +27,11 @@ public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>, AssetsFactory<Poser3
 	public Poser3DItem CreateItem(
 		Poser3DTag tag,
 		Bounding bounding,
-		IReadOnlyCollection<KeyPoint3D> keyPoints,
 		ImmutableList<double> numericProperties,
 		ImmutableList<bool> booleanProperties)
 	{
 		bounding.EnsureNormalized();
-		Guard.IsEqualTo(keyPoints.Count, tag.KeyPoints.Count);
-		Poser3DItem item = new(tag, bounding, keyPoints, numericProperties, booleanProperties, this);
+		Poser3DItem item = new(tag, bounding, numericProperties, booleanProperties, this);
 		AddItem(item);
 		return item;
 	}

@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Services;
@@ -33,11 +32,15 @@ internal sealed class Poser2DDataSetReplicator : PoserDataSetReplicator<Poser2DT
 		foreach (var packedItem in typedPackedAsset.Items)
 		{
 			var itemTag = (Poser2DTag)Session.Tags[(library.DataSet, packedItem.TagId)];
-			asset.CreateItem(
+			var item = asset.CreateItem(
 				itemTag,
 				packedItem.Bounding,
-				packedItem.KeyPoints.Select(keyPoint => keyPoint.Position).ToImmutableList(),
 				packedItem.NumericProperties);
+			foreach (var packedKeyPoint in packedItem.KeyPoints)
+			{
+				var keyPointTag = itemTag.KeyPoints[packedKeyPoint.Index];
+				item.CreateKeyPoint(keyPointTag, packedKeyPoint.Position);
+			}
 		}
 	}
 }

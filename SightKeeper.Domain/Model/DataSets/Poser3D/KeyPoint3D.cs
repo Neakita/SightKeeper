@@ -1,13 +1,17 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Poser3D;
+﻿using SightKeeper.Domain.Model.DataSets.Poser;
 
-public sealed class KeyPoint3D
+namespace SightKeeper.Domain.Model.DataSets.Poser3D;
+
+public sealed class KeyPoint3D : KeyPoint
 {
-	public Vector2<double> Position { get; set; }
+	public override Poser3DItem Item { get; }
+	public override KeyPointTag3D Tag { get; }
 	public bool IsVisible { get; set; }
 
-	public KeyPoint3D(Vector2<double> position, bool isVisible)
+	internal KeyPoint3D(Vector2<double> position, Poser3DItem item, KeyPointTag3D tag, bool isVisible) : base(position)
 	{
-		Position = position;
+		Item = item;
+		Tag = tag;
 		IsVisible = isVisible;
 	}
 }

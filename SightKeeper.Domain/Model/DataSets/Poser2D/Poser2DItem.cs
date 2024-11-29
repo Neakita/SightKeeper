@@ -17,20 +17,11 @@ public sealed class Poser2DItem : PoserItem
 			_tag?.RemoveItem(this);
 			_tag = value;
 			_tag.AddItem(this);
+			_keyPoints.Clear();
 		}
 	}
 
-	public Bounding Bounding { get; set; }
-
-	public ImmutableList<Vector2<double>> KeyPoints
-	{
-		get => _keyPoints;
-		[MemberNotNull(nameof(_keyPoints))] set
-		{
-			Guard.IsEqualTo(value.Count, Tag.KeyPoints.Count);
-			_keyPoints = value;
-		}
-	}
+	public override IReadOnlyCollection<KeyPoint2D> KeyPoints => _keyPoints.Values;
 
 	public Poser2DAsset Asset { get; }
 	public DataSet DataSet => Asset.DataSet;
@@ -45,16 +36,30 @@ public sealed class Poser2DItem : PoserItem
 		}
 	}
 
-	internal Poser2DItem(Poser2DTag tag, Bounding bounding, ImmutableList<Vector2<double>> keyPoints, ImmutableList<double> properties, Poser2DAsset asset)
+	public KeyPoint2D CreateKeyPoint(KeyPointTag2D tag, Vector2<double> position)
+	{
+		KeyPoint2D keyPoint = new(position, this, tag);
+		_keyPoints.Add(tag, keyPoint);
+		tag.AddKeyPoint(keyPoint);
+		return keyPoint;
+	}
+
+	public void DeleteKeyPoint(KeyPoint2D keyPoint)
+	{
+		bool isRemoved = _keyPoints.Remove(keyPoint.Tag, out var removedKeyPoint);
+		Guard.IsTrue(isRemoved);
+		Guard.IsNotNull(removedKeyPoint);
+		Guard.IsReferenceEqualTo(keyPoint, removedKeyPoint);
+	}
+
+	internal Poser2DItem(Poser2DTag tag, Bounding bounding, ImmutableList<double> properties, Poser2DAsset asset) : base(bounding)
 	{
 		Asset = asset;
 		Tag = tag;
-		Bounding = bounding;
 		Properties = properties;
-		KeyPoints = keyPoints;
 	}
 
+	private readonly Dictionary<KeyPointTag2D, KeyPoint2D> _keyPoints = new();
 	private ImmutableList<double> _properties;
 	private Poser2DTag _tag;
-	private ImmutableList<Vector2<double>> _keyPoints;
 }

@@ -62,6 +62,6 @@ internal sealed class Poser3DDataSetConverter : PoserDataSetConverter<PackablePo
 		ImmutableArray<PackablePoser3DItem> ConvertItems(IEnumerable<Poser3DItem> items) => items.Select(ConvertItem).ToImmutableArray();
 		PackablePoser3DItem ConvertItem(Poser3DItem item) => new(Session.TagsIds[item.Tag], item.Bounding, ConvertKeyPoints(item.KeyPoints), item.NumericProperties, item.BooleanProperties);
 		ImmutableArray<PackableKeyPoint3D> ConvertKeyPoints(IEnumerable<KeyPoint3D> keyPoints) =>
-			keyPoints.Select(keyPoint => new PackableKeyPoint3D(keyPoint.Position, keyPoint.IsVisible)).ToImmutableArray();
+			keyPoints.Select(keyPoint => new PackableKeyPoint3D(keyPoint.Index, keyPoint.Position, keyPoint.IsVisible)).ToImmutableArray();
 	}
 }

@@ -14,7 +14,7 @@ public sealed class Poser2DAssetTests
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		var item = asset.CreateItem(tag, new Bounding(), [], []);
+		var item = asset.CreateItem(tag, new Bounding(), []);
 		asset.Items.Should().Contain(item);
 	}
 
@@ -25,8 +25,8 @@ public sealed class Poser2DAssetTests
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		var item1 = asset.CreateItem(tag, new Bounding(0, 0, 0.5, 0.5), [], []);
-		var item2 = asset.CreateItem(tag, new Bounding(0, 0, 1, 1), [], []);
+		var item1 = asset.CreateItem(tag, new Bounding(0, 0, 0.5, 0.5), []);
+		var item2 = asset.CreateItem(tag, new Bounding(0, 0, 1, 1), []);
 		asset.Items.Should().Contain([item1, item2]);
 	}
 
@@ -38,34 +38,24 @@ public sealed class Poser2DAssetTests
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		var item1 = asset.CreateItem(tag1, new Bounding(), [], []);
-		var item2 = asset.CreateItem(tag2, new Bounding(), [], []);
+		var item1 = asset.CreateItem(tag1, new Bounding(), []);
+		var item2 = asset.CreateItem(tag2, new Bounding(), []);
 		asset.Items.Should().Contain([item1, item2]);
 	}
 
 	[Fact]
-	public void ShouldCreateItemWithKeyPoints()
+	public void ShouldCreateKeyPoints()
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		tag.CreateKeyPoint("1");
-		tag.CreateKeyPoint("2");
+		var firstKeyPointTag = tag.CreateKeyPoint("1");
+		var secondKeyPointTag = tag.CreateKeyPoint("2");
 		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		var item = asset.CreateItem(tag, new Bounding(), [new Vector2<double>(), new Vector2<double>()], []);
+		var item = asset.CreateItem(tag, new Bounding(), []);
+		var firstKeyPoint = item.CreateKeyPoint(firstKeyPointTag, new Vector2<double>(0.1, 0.2));
+		var secondKeyPoint = item.CreateKeyPoint(secondKeyPointTag, new Vector2<double>(0.3, 0.4));
 		asset.Items.Should().Contain(item);
-	}
-
-	[Fact]
-	public void ShouldNotCreateItemWithNotEqualAmountOfKeyPoints()
-	{
-		Poser2DDataSet dataSet = new();
-		var tag = dataSet.TagsLibrary.CreateTag("");
-		tag.CreateKeyPoint("1");
-		tag.CreateKeyPoint("2");
-		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
-		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		Assert.ThrowsAny<Exception>(() => asset.CreateItem(tag, new Bounding(), [new Vector2<double>()], []));
-		asset.Items.Should().BeEmpty();
+		item.KeyPoints.Should().Contain(firstKeyPoint).And.Contain(secondKeyPoint);
 	}
 }

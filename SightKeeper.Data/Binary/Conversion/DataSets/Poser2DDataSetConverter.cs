@@ -3,7 +3,6 @@ using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Tags;
@@ -48,7 +47,7 @@ internal sealed class Poser2DDataSetConverter : PoserDataSetConverter<PackablePo
 			new(asset.Usage, ScreenshotsDataAccess.GetId(asset.Screenshot), ConvertItems(asset.Items));
 		ImmutableArray<PackablePoser2DItem> ConvertItems(IEnumerable<Poser2DItem> items) => items.Select(ConvertItem).ToImmutableArray();
 		PackablePoser2DItem ConvertItem(Poser2DItem item) => new(Session.TagsIds[item.Tag], item.Bounding, ConvertKeyPoints(item.KeyPoints), item.Properties);
-		ImmutableArray<PackableKeyPoint2D> ConvertKeyPoints(IEnumerable<Vector2<double>> keyPoints) =>
-			keyPoints.Select(position => new PackableKeyPoint2D(position)).ToImmutableArray();
+		ImmutableArray<PackableKeyPoint2D> ConvertKeyPoints(IEnumerable<KeyPoint2D> keyPoints) =>
+			keyPoints.Select(keyPoint => new PackableKeyPoint2D(keyPoint.Index, keyPoint.Position)).ToImmutableArray();
 	}
 }

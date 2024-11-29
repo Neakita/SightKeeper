@@ -19,16 +19,20 @@ public sealed class Poser2DTag : PoserTag, TagsFactory<Poser2DTag>
 
 	public override KeyPointTag2D CreateKeyPoint(string name)
 	{
-		Guard.IsEmpty(Items);
-		KeyPointTag2D tag = new(name, this);
+		var newTagIndex = _keyPoints.Count;
+		KeyPointTag2D tag = new(name, newTagIndex, this);
 		_keyPoints.Add(tag);
 		return tag;
 	}
 
 	public void DeleteKeyPoint(KeyPointTag2D tag)
 	{
-		Guard.IsEmpty(Items);
 		Guard.IsTrue(_keyPoints.Remove(tag));
+		foreach (var keyPoint in tag.KeyPoints)
+		{
+			var item = keyPoint.Item;
+			item.DeleteKeyPoint(keyPoint);
+		}
 	}
 
 	public NumericItemProperty CreateProperty(string name, double minimumValue, double maximumValue)

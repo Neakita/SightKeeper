@@ -18,24 +18,13 @@ public sealed class DetectorItem : AssetItem
 		}
 	}
 
-	public Bounding Bounding
-	{
-		get;
-		set
-		{
-			value.EnsureNormalized();
-			field = value;
-		}
-	}
-
 	public DetectorAsset Asset { get; }
 	public DataSet DataSet => Asset.DataSet;
 	
-	internal DetectorItem(DetectorTag tag, Bounding bounding, DetectorAsset asset)
+	internal DetectorItem(DetectorTag tag, Bounding bounding, DetectorAsset asset) : base(bounding)
 	{
 		Asset = asset;
 		Tag = tag;
-		Bounding = bounding;
 	}
 
 	private DetectorTag _tag;

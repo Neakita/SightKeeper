@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Services;
@@ -35,12 +34,16 @@ internal sealed class Poser3DDataSetReplicator : PoserDataSetReplicator<Poser3DT
 		foreach (var packedItem in typedPackedAsset.Items)
 		{
 			var itemTag = (Poser3DTag)Session.Tags[(library.DataSet, packedItem.TagId)];
-			asset.CreateItem(
+			var item = asset.CreateItem(
 				itemTag,
 				packedItem.Bounding,
-				packedItem.KeyPoints.Select(keyPoint => new KeyPoint3D(keyPoint.Position, keyPoint.IsVisible)).ToImmutableList(),
 				packedItem.NumericProperties,
 				packedItem.BooleanProperties);
+			foreach (var packedKeyPoint in packedItem.KeyPoints)
+			{
+				var keyPointTag = itemTag.KeyPoints[packedKeyPoint.Index];
+				item.CreateKeyPoint(keyPointTag, packedKeyPoint.Position, packedKeyPoint.IsVisible);
+			}
 		}
 	}
 }

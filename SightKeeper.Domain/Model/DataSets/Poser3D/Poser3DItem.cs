@@ -20,8 +20,7 @@ public sealed class Poser3DItem : PoserItem
 		}
 	}
 
-	public Bounding Bounding { get; set; }
-	public IReadOnlyList<KeyPoint3D> KeyPoints { get; }
+	public override IReadOnlyCollection<KeyPoint3D> KeyPoints => _keyPoints.Values;
 	public Poser3DAsset Asset { get; }
 	public DataSet DataSet => Asset.DataSet;
 
@@ -45,18 +44,22 @@ public sealed class Poser3DItem : PoserItem
 		}
 	}
 
+	public KeyPoint3D CreateKeyPoint(KeyPointTag3D tag, Vector2<double> position, bool isVisible)
+	{
+		KeyPoint3D keyPoint = new(position, this, tag, isVisible);
+		_keyPoints.Add(tag, keyPoint);
+		return keyPoint;
+	}
+
 	internal Poser3DItem(
 		Poser3DTag tag,
 		Bounding bounding,
-		IEnumerable<KeyPoint3D> keyPoints,
 		ImmutableList<double> numericProperties,
 		ImmutableList<bool> booleanProperties,
-		Poser3DAsset asset)
+		Poser3DAsset asset) : base(bounding)
 	{
 		Asset = asset;
 		Tag = tag;
-		Bounding = bounding;
-		KeyPoints = keyPoints.ToImmutableList();
 		NumericProperties = numericProperties;
 		BooleanProperties = booleanProperties;
 	}
@@ -64,4 +67,5 @@ public sealed class Poser3DItem : PoserItem
 	private ImmutableList<double> _numericProperties;
 	private ImmutableList<bool> _booleanProperties;
 	private Poser3DTag _tag;
+	private Dictionary<KeyPointTag3D, KeyPoint3D> _keyPoints = new();
 }
