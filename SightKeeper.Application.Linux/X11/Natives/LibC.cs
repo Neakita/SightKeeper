@@ -1,5 +1,7 @@
 using System.Runtime.InteropServices;
 
+// ReSharper disable InconsistentNaming
+
 namespace SightKeeper.Application.Linux.X11.Natives;
 
 internal static partial class LibC

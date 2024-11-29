@@ -1,3 +1,4 @@
+// ReSharper disable InconsistentNaming
 namespace SightKeeper.Application.Linux.X11;
 
 internal struct ShmImage
