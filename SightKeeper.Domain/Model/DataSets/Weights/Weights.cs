@@ -21,5 +21,6 @@ public abstract class Weights
 		ModelSize = size;
 		Metrics = metrics;
 		Resolution = resolution;
+		Composition = composition;
 	}
 }
