@@ -25,16 +25,20 @@ public sealed class AppDataProfilesDataAccess :
 	public void Add(Profile profile)
 	{
 		lock (_editingLock)
+		{
 			_appDataAccess.Data.AddProfile(profile);
-		_appDataAccess.SetDataChanged();
+			_appDataAccess.SetDataChanged();
+		}
 		_added.OnNext(profile);
 	}
 
 	public void Remove(Profile profile)
 	{
 		lock (_editingLock)
+		{
 			_appDataAccess.Data.RemoveProfile(profile);
-		_appDataAccess.SetDataChanged();
+			_appDataAccess.SetDataChanged();
+		}
 		_removed.OnNext(profile);
 	}
 

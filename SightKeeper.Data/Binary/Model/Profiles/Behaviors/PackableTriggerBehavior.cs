@@ -1,4 +1,6 @@
+using System.Collections.Immutable;
 using MemoryPack;
+using SightKeeper.Data.Binary.Model.Profiles.Behaviors.Actions;
 using SightKeeper.Domain.Model.Profiles.Behaviors;
 
 namespace SightKeeper.Data.Binary.Model.Profiles.Behaviors;
@@ -9,5 +11,10 @@ namespace SightKeeper.Data.Binary.Model.Profiles.Behaviors;
 [MemoryPackable]
 internal sealed partial class PackableTriggerBehavior : PackableBehavior
 {
-	// TODO Actions
+	public ImmutableArray<PackableAction> Actions { get; }
+
+	public PackableTriggerBehavior(ImmutableArray<PackableAction> actions)
+	{
+		Actions = actions;
+	}
 }

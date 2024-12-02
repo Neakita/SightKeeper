@@ -1,9 +1,11 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Immutable;
+using FluentAssertions;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
-using SightKeeper.Domain.Model.Profiles.Behaviors;
+using Action = SightKeeper.Domain.Model.Profiles.Actions.Action;
 
 namespace SightKeeper.Domain.Tests.Profiles.Behaviors;
 
@@ -18,8 +20,8 @@ public sealed class TriggerBehaviorTests
 		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag1, tag2], null);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights);
-		module.Behavior.Tags = [new TriggerBehavior.TagOptions(tag2, new FakeAction())];
-		module.Behavior.Tags.Single().Tag.Should().Be(tag2);
+		module.Behavior.Actions = ImmutableDictionary.CreateRange([new KeyValuePair<Tag, Action>(tag2, new FakeAction())]);
+		module.Behavior.Actions.Single().Key.Should().Be(tag2);
 	}
 
 	[Fact]
@@ -35,6 +37,6 @@ public sealed class TriggerBehaviorTests
 		dataSet2.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag3, tag4], null);
 		Profile profile = new("");
 		var module = profile.CreateModule(weights1);
-		Assert.ThrowsAny<Exception>(() => module.Behavior.Tags = [new TriggerBehavior.TagOptions(tag3, new FakeAction())]);
+		Assert.ThrowsAny<Exception>(() => module.Behavior.Actions = ImmutableDictionary.CreateRange([new KeyValuePair<Tag, Action>(tag3, new FakeAction())]));
 	}
 }

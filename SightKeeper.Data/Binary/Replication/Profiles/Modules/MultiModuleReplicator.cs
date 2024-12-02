@@ -1,6 +1,5 @@
 using SightKeeper.Data.Binary.Model.Profiles.Modules;
 using SightKeeper.Domain.Model.Profiles;
-using SightKeeper.Domain.Model.Profiles.Modules;
 
 namespace SightKeeper.Data.Binary.Replication.Profiles.Modules;
 
@@ -22,14 +21,26 @@ internal class MultiModuleReplicator
 			Replicate(profile, module);
 	}
 
-	private Module Replicate(Profile profile, PackableModule module) => module switch
+	private void Replicate(Profile profile, PackableModule module)
 	{
-		PackableClassifierModule classifierModule => _classifierReplicator.Replicate(profile, classifierModule),
-		PackableDetectorModule detectorModule => _detectorReplicator.Replicate(profile, detectorModule),
-		PackablePoser2DModule poser2DModule => _poser2DReplicator.Replicate(profile, poser2DModule),
-		PackablePoser3DModule poser3DModule => _poser3DReplicator.Replicate(profile, poser3DModule),
-		_ => throw new ArgumentOutOfRangeException(nameof(module))
-	};
+		switch (module)
+		{
+			case PackableClassifierModule classifierModule:
+				_classifierReplicator.Replicate(profile, classifierModule);
+				return;
+			case PackableDetectorModule detectorModule:
+				_detectorReplicator.Replicate(profile, detectorModule);
+				return;
+			case PackablePoser2DModule poser2DModule:
+				_poser2DReplicator.Replicate(profile, poser2DModule);
+				return;
+			case PackablePoser3DModule poser3DModule:
+				_poser3DReplicator.Replicate(profile, poser3DModule);
+				return;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(module));
+		}
+	}
 
 	private readonly ClassifierModuleReplicator _classifierReplicator;
 	private readonly DetectorModuleReplicator _detectorReplicator;

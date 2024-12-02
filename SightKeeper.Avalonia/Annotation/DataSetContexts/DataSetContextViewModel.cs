@@ -6,8 +6,6 @@ using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Poser2D;
-using SightKeeper.Domain.Model.DataSets.Poser3D;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.DataSetContexts;
@@ -33,8 +31,6 @@ internal abstract class DataSetContextViewModel : ViewModel
 				observableScreenshotsDataAccess,
 				imageLoader,
 				detectorAnnotator),
-			Poser2DDataSet poser2D => throw new NotImplementedException(),
-			Poser3DDataSet poser3D => throw new NotImplementedException(),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet), dataSet, null)
 		};
 

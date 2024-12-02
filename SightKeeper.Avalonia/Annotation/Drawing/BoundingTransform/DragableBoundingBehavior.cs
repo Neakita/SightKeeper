@@ -49,6 +49,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	protected override void OnAttachedToVisualTree()
 	{
+		Guard.IsNotNull(ThumbsPanel);
 		foreach (var thumb in ThumbsPanel.Children.OfType<Thumb>())
 			SubscribeOnThumb(thumb);
 		ThumbsPanel.Children.CollectionChanged += OnThumbsPanelChildrenChanged;
@@ -56,6 +57,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	protected override void OnDetachedFromVisualTree()
 	{
+		Guard.IsNotNull(ThumbsPanel);
 		ThumbsPanel.Children.CollectionChanged -= OnThumbsPanelChildrenChanged;
 		foreach (var thumb in ThumbsPanel.Children.OfType<Thumb>())
 			UnsubscribeFromThumb(thumb);
@@ -111,6 +113,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		Guard.IsNull(_transformer);
 		var sideMode = GetSideMode(thumb);
 		_transformer = CreateTransformer(thumb.HorizontalAlignment, thumb.VerticalAlignment, sideMode);
+		Guard.IsNotNull(Canvas);
 		var containerSize = Canvas.Bounds.Size;
 		_transformer.MinimumSize = new Vector2<double>(1 / containerSize.Width * MinimumBoundingSize,
 			1 / containerSize.Height * MinimumBoundingSize);

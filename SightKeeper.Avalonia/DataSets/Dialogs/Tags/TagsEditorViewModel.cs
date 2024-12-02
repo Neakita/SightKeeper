@@ -16,7 +16,6 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 {
 	public BehaviorObservable<bool> IsValid => _isValid;
 	public IReadOnlyCollection<TagDataViewModel> Tags => _tags;
-	public IReadOnlyCollection<RemovedTag> RemovedTags => _removedTags;
 
 	public TagsEditorViewModel()
 	{
@@ -68,7 +67,6 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 
 	private readonly BehaviorSubject<bool> _isValid = new(true);
 	private readonly AvaloniaList<TagDataViewModel> _tags = new();
-	private readonly List<RemovedTag> _removedTags = new();
 
 	[RelayCommand(CanExecute = nameof(CanCreateTag))]
 	private void CreateTag(string name)

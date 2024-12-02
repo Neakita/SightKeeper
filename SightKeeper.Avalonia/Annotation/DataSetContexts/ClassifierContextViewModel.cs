@@ -14,7 +14,7 @@ internal sealed class ClassifierContextViewModel : DataSetContextViewModel<Class
 {
 	public override ScreenshotsViewModel<ClassifierAssetViewModel, ClassifierAsset> Screenshots { get; }
 	public override ClassifierToolBarViewModel ToolBar { get; }
-	public override DrawerViewModel<ClassifierAssetViewModel>? Drawer => null;
+	public override DrawerViewModel? Drawer => null;
 
 	public ClassifierContextViewModel(
 		ClassifierDataSet dataSet,

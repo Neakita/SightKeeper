@@ -9,6 +9,6 @@ internal abstract class DataSetContextViewModel<TAssetViewModel> : DataSetContex
 	where TAssetViewModel : AssetViewModel
 {
 	public abstract override ScreenshotsViewModel<TAssetViewModel> Screenshots { get; }
-	public abstract override ToolBarViewModel<TAssetViewModel> ToolBar { get; }
-	public abstract override DrawerViewModel<TAssetViewModel>? Drawer { get; }
+	public abstract override ToolBarViewModel ToolBar { get; }
+	public abstract override DrawerViewModel? Drawer { get; }
 }

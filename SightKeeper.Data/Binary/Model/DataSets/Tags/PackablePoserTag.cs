@@ -6,7 +6,7 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Tags;
 /// <summary>
 /// MemoryPackable version of <see cref="PoserTag"/>
 /// </summary>
-internal abstract partial class PackablePoserTag : PackableTag
+internal abstract class PackablePoserTag : PackableTag
 {
 	public ImmutableArray<PackableTag> KeyPointTags { get; }
 

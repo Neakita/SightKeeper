@@ -3,13 +3,17 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Binary.Model.Profiles.ActiveScalingOptions;
 using SightKeeper.Data.Binary.Model.Profiles.ActiveWalkingOptions;
 using SightKeeper.Data.Binary.Model.Profiles.Behaviors;
+using SightKeeper.Data.Binary.Model.Profiles.Behaviors.Actions;
 using SightKeeper.Data.Binary.Model.Profiles.Modules;
+using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.Profiles;
+using SightKeeper.Domain.Model.Profiles.Actions;
 using SightKeeper.Domain.Model.Profiles.Behaviors;
 using SightKeeper.Domain.Model.Profiles.Modules;
 using SightKeeper.Domain.Model.Profiles.Modules.Scaling;
 using SightKeeper.Domain.Model.Profiles.Modules.Walking;
+using Action = SightKeeper.Domain.Model.Profiles.Actions.Action;
 
 namespace SightKeeper.Data.Binary.Replication.Profiles.Modules;
 
@@ -63,8 +67,22 @@ internal abstract class ObjectiveModuleReplicator : ModuleReplicator
 	private TriggerBehavior ReplicateTriggerBehavior(ObjectiveModule module, PackableTriggerBehavior packedBehavior)
 	{
 		var behavior = module.SetBehavior<TriggerBehavior>();
-		// TODO actions
+		behavior.Actions = packedBehavior.Actions.Select(ReplicateActionPair).ToImmutableDictionary();
 		return behavior;
+		KeyValuePair<Tag, Action> ReplicateActionPair(PackableAction packedAction)
+		{
+			var tag = Session.Tags[(module.Weights.DataSet, packedAction.Tag)];
+			var action = ReplicateAction(packedAction);
+			return new KeyValuePair<Tag, Action>(tag, action);
+		}
+		Action ReplicateAction(PackableAction action)
+		{
+			return action switch
+			{
+				PackablePressKeyAction pressKey => new PressKeyAction(pressKey.Type, pressKey.KeyCode),
+				_ => throw new ArgumentOutOfRangeException(nameof(action))
+			};
+		}
 	}
 
 	private AimBehavior ReplicateAimBehavior(
