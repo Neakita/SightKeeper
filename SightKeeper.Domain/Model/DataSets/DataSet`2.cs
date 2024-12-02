@@ -6,7 +6,7 @@ namespace SightKeeper.Domain.Model.DataSets;
 
 public abstract class DataSet<TTag, TAsset> : DataSet<TAsset>
 	where TTag : Tag, TagsFactory<TTag>, MinimumTagsCount
-	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
+	where TAsset : Asset
 {
 	public override TagsLibrary<TTag> TagsLibrary { get; }
 	public override WeightsLibrary<TTag> WeightsLibrary { get; }

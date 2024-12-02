@@ -3,25 +3,11 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
-public sealed class DetectorAsset : ItemsAsset<DetectorItem>, AssetsFactory<DetectorAsset>, AssetsDestroyer<DetectorAsset>
+public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 {
-	public static DetectorAsset Create(Screenshot<DetectorAsset> screenshot)
-	{
-		DetectorAsset asset = new(screenshot, screenshot.DataSet.AssetsLibrary);
-		screenshot.SetAsset(asset);
-		return asset;
-	}
-
-	public static void Destroy(DetectorAsset asset)
-	{
-		asset.Screenshot.SetAsset(null);
-		foreach (var item in asset.Items)
-			item.Tag.RemoveItem(item);
-	}
-
 	public override Screenshot<DetectorAsset> Screenshot { get; }
-	public override AssetsLibrary<DetectorAsset> Library { get; }
-	public override DataSet DataSet => Library.DataSet;
+	public override DetectorAssetsLibrary Library { get; }
+	public override DetectorDataSet DataSet => Library.DataSet;
 	
     public DetectorItem CreateItem(DetectorTag tag, Bounding bounding)
     {
@@ -43,7 +29,7 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>, AssetsFactory<Dete
 	    base.ClearItems();
     }
 
-    private DetectorAsset(Screenshot<DetectorAsset> screenshot, AssetsLibrary<DetectorAsset> library)
+    internal DetectorAsset(Screenshot<DetectorAsset> screenshot, DetectorAssetsLibrary library)
     {
 	    Screenshot = screenshot;
 	    Library = library;

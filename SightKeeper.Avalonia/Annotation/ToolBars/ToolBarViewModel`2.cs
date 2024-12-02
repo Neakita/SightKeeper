@@ -5,4 +5,4 @@ namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
 internal abstract class ToolBarViewModel<TAssetViewModel, TAsset> : ToolBarViewModel
 	where TAssetViewModel : AssetViewModel<TAsset>, AssetViewModelFactory<TAssetViewModel, TAsset>
-	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>;
+	where TAsset : Asset;

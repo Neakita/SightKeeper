@@ -9,31 +9,28 @@ public abstract class AssetsLibrary
 	public abstract IReadOnlyCollection<Asset> Assets { get; }
 }
 
-public sealed class AssetsLibrary<TAsset> : AssetsLibrary
-	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
+public abstract class AssetsLibrary<TAsset> : AssetsLibrary where TAsset : Asset
 {
-	public override DataSet DataSet { get; }
+	public abstract override DataSet<TAsset> DataSet { get; }
 	public override IReadOnlyCollection<TAsset> Assets => _assets;
-
-	public AssetsLibrary(DataSet dataSet)
-	{
-		DataSet = dataSet;
-	}
 
 	public TAsset MakeAsset(Screenshot<TAsset> screenshot)
 	{
 		Guard.IsNull(screenshot.Asset);
-		var asset = TAsset.Create(screenshot);
-		Guard.IsTrue(_assets.Add(asset));
+		var asset = CreateAsset(screenshot);
+		var isAdded = _assets.Add(asset);
+		Guard.IsTrue(isAdded);
 		screenshot.SetAsset(asset);
 		return asset;
 	}
 
-	public void DeleteAsset(TAsset asset)
+	public virtual void DeleteAsset(TAsset asset)
 	{
-		Guard.IsTrue(_assets.Remove(asset));
-		TAsset.Destroy(asset);
+		var isRemoved = _assets.Remove(asset);
+		Guard.IsTrue(isRemoved);
 	}
+
+	protected abstract TAsset CreateAsset(Screenshot<TAsset> screenshot);
 
 	private readonly HashSet<TAsset> _assets = new();
 }

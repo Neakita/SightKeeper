@@ -21,8 +21,7 @@ public abstract class ScreenshotsLibrary
 	public abstract Screenshot CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots);
 }
 
-public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary
-	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
+public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary where TAsset : Asset
 {
     public override DataSet<TAsset> DataSet { get; }
     public override IReadOnlyList<Screenshot<TAsset>> Screenshots => _screenshots;

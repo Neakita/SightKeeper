@@ -22,8 +22,7 @@ public abstract class Screenshot
 	public abstract void DeleteFromLibrary();
 }
 
-public sealed class Screenshot<TAsset> : Screenshot
-	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
+public sealed class Screenshot<TAsset> : Screenshot where TAsset : Asset
 {
 	public override TAsset? Asset => _asset;
 	public override ScreenshotsLibrary<TAsset> Library { get; }

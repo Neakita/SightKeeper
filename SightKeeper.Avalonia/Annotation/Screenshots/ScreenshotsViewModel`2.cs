@@ -15,7 +15,7 @@ namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
 internal sealed class ScreenshotsViewModel<TAssetViewModel, TAsset> : ScreenshotsViewModel<TAssetViewModel>
 	where TAssetViewModel : AssetViewModel<TAsset>, AssetViewModelFactory<TAssetViewModel, TAsset>
-	where TAsset : Asset, AssetsFactory<TAsset>, AssetsDestroyer<TAsset>
+	where TAsset : Asset
 {
 	public override ScreenshotsLibrary<TAsset> Library { get; }
 	public override IReadOnlyCollection<ScreenshotViewModel<TAssetViewModel>> Screenshots { get; }

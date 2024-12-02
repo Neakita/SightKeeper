@@ -5,22 +5,8 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Model.DataSets.Classifier;
 
-public sealed class ClassifierAsset : Asset, AssetsFactory<ClassifierAsset>, AssetsDestroyer<ClassifierAsset>
+public sealed class ClassifierAsset : Asset
 {
-	public static ClassifierAsset Create(Screenshot<ClassifierAsset> screenshot)
-	{
-		return new ClassifierAsset(
-			screenshot,
-			(ClassifierTag)screenshot.DataSet.TagsLibrary.Tags.First(),
-			screenshot.DataSet.AssetsLibrary);
-	}
-
-	public static void Destroy(ClassifierAsset asset)
-	{
-		asset.Screenshot.SetAsset(null);
-		asset.Tag.RemoveAsset(asset);
-	}
-
 	public ClassifierTag Tag
 	{
 		get => _tag;
@@ -34,10 +20,10 @@ public sealed class ClassifierAsset : Asset, AssetsFactory<ClassifierAsset>, Ass
 	}
 
 	public override Screenshot<ClassifierAsset> Screenshot { get; }
-	public override AssetsLibrary<ClassifierAsset> Library { get; }
-	public override DataSet DataSet => Library.DataSet;
+	public override ClassifierAssetsLibrary Library { get; }
+	public override ClassifierDataSet DataSet => Library.DataSet;
 
-	internal ClassifierAsset(Screenshot<ClassifierAsset> screenshot, ClassifierTag tag, AssetsLibrary<ClassifierAsset> library)
+	internal ClassifierAsset(Screenshot<ClassifierAsset> screenshot, ClassifierTag tag, ClassifierAssetsLibrary library)
 	{
 		Screenshot = screenshot;
 		Library = library;

@@ -4,25 +4,11 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser3D;
 
-public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>, AssetsFactory<Poser3DAsset>, AssetsDestroyer<Poser3DAsset>
+public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>
 {
-	public static Poser3DAsset Create(Screenshot<Poser3DAsset> screenshot)
-	{
-		Poser3DAsset asset = new(screenshot, screenshot.DataSet.AssetsLibrary);
-		screenshot.SetAsset(asset);
-		return asset;
-	}
-
-	public static void Destroy(Poser3DAsset asset)
-	{
-		asset.Screenshot.SetAsset(null);
-		foreach (var item in asset.Items)
-			item.Tag.RemoveItem(item);
-	}
-
 	public override Screenshot<Poser3DAsset> Screenshot { get; }
-	public override AssetsLibrary<Poser3DAsset> Library { get; }
-	public override DataSet DataSet => Library.DataSet;
+	public override Poser3DAssetsLibrary Library { get; }
+	public override Poser3DDataSet DataSet => Library.DataSet;
 
 	public Poser3DItem CreateItem(
 		Poser3DTag tag,
@@ -49,7 +35,7 @@ public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>, AssetsFactory<Poser3
 		base.ClearItems();
 	}
 
-	internal Poser3DAsset(Screenshot<Poser3DAsset> screenshot, AssetsLibrary<Poser3DAsset> library)
+	internal Poser3DAsset(Screenshot<Poser3DAsset> screenshot, Poser3DAssetsLibrary library)
 	{
 		Screenshot = screenshot;
 		Library = library;
