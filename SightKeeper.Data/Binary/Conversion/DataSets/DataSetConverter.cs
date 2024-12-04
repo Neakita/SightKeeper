@@ -27,7 +27,7 @@ internal abstract class DataSetConverter<TPackableDataSet>
 			Name = dataSet.Name,
 			Description = dataSet.Description,
 			GameId = gameId,
-			MaxScreenshotsWithoutAsset = dataSet.ScreenshotsLibrary.MaxQuantity,
+			MaxScreenshotsWithoutAsset = dataSet.ScreenshotsLibrary.MaxLiabilityQuantity,
 			Screenshots = screenshots
 		};
 	}

@@ -1,43 +1,23 @@
-﻿using System.Collections.Immutable;
-using SightKeeper.Domain.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+﻿using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser3D;
 
 public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>
 {
-	public override Screenshot<Poser3DAsset> Screenshot { get; }
-	public override Poser3DAssetsLibrary Library { get; }
-	public override Poser3DDataSet DataSet => Library.DataSet;
-
-	public Poser3DItem CreateItem(
-		Poser3DTag tag,
-		Bounding bounding,
-		ImmutableList<double> numericProperties,
-		ImmutableList<bool> booleanProperties)
+	public Poser3DItem CreateItem(PoserTag tag, Bounding bounding)
 	{
-		bounding.EnsureNormalized();
-		Poser3DItem item = new(tag, bounding, numericProperties, booleanProperties, this);
+		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
+		Poser3DItem item = new(bounding, tag);
 		AddItem(item);
 		return item;
 	}
 
-	public override void DeleteItem(Poser3DItem item)
+	internal Poser3DAsset(TagsOwner tagsOwner)
 	{
-		base.DeleteItem(item);
-		item.Tag.RemoveItem(item);
+		_tagsOwner = tagsOwner;
 	}
 
-	public override void ClearItems()
-	{
-		foreach (var item in Items)
-			item.Tag.RemoveItem(item);
-		base.ClearItems();
-	}
-
-	internal Poser3DAsset(Screenshot<Poser3DAsset> screenshot, Poser3DAssetsLibrary library)
-	{
-		Screenshot = screenshot;
-		Library = library;
-	}
+	private readonly TagsOwner _tagsOwner;
 }

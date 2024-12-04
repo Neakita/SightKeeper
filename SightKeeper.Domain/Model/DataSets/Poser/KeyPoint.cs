@@ -1,25 +1,39 @@
-using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser;
 
-public abstract class KeyPoint
+public class KeyPoint
 {
-	public abstract PoserItem Item { get; }
-	public abstract KeyPointTag Tag { get; }
-	public int Index => Tag.Index;
+	public Tag Tag { get; }
+
 	public Vector2<double> Position
 	{
-		get => field;
+		get;
 		set
 		{
-			Guard.IsBetweenOrEqualTo(value.X, 0, 1);
-			Guard.IsBetweenOrEqualTo(value.Y, 0, 1);
+			if (!IsDimensionsNormalized(value))
+			{
+				const string? keyPointPositionConstraintExceptionMessage =
+					"Both aspects of the position vector must be normalized, i.e. be in the inclusive range from 0 to 1";
+				throw new KeyPointPositionConstraintException(keyPointPositionConstraintExceptionMessage, this, value);
+			}
 			field = value;
 		}
 	}
 
-	protected KeyPoint(Vector2<double> position)
+	internal KeyPoint(Tag tag, Vector2<double> position)
 	{
+		Tag = tag;
 		Position = position;
+	}
+
+	private static bool IsDimensionsNormalized(Vector2<double> vector)
+	{
+		return IsNormalized(vector.X) && IsNormalized(vector.Y);
+	}
+
+	private static bool IsNormalized(double value)
+	{
+		return value is >= 0 and <= 1;
 	}
 }

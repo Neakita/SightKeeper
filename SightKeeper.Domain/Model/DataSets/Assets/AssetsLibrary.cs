@@ -5,32 +5,31 @@ namespace SightKeeper.Domain.Model.DataSets.Assets;
 
 public abstract class AssetsLibrary
 {
-	public abstract DataSet DataSet { get; }
 	public abstract IReadOnlyCollection<Asset> Assets { get; }
 }
 
-public abstract class AssetsLibrary<TAsset> : AssetsLibrary where TAsset : Asset
+public sealed class AssetsLibrary<TAsset> : AssetsLibrary where TAsset : Asset
 {
-	public abstract override DataSet<TAsset> DataSet { get; }
-	public override IReadOnlyCollection<TAsset> Assets => _assets;
+	public override IReadOnlyCollection<TAsset> Assets => _assets.Values;
 
-	public TAsset MakeAsset(Screenshot<TAsset> screenshot)
+	public TAsset MakeAsset(Screenshot screenshot)
 	{
-		Guard.IsNull(screenshot.Asset);
-		var asset = CreateAsset(screenshot);
-		var isAdded = _assets.Add(asset);
-		Guard.IsTrue(isAdded);
-		screenshot.SetAsset(asset);
+		var asset = _assetsFactory.CreateAsset();
+		_assets.Add(screenshot, asset);
 		return asset;
 	}
 
-	public virtual void DeleteAsset(TAsset asset)
+	public void DeleteAsset(Screenshot screenshot)
 	{
-		var isRemoved = _assets.Remove(asset);
+		var isRemoved = _assets.Remove(screenshot);
 		Guard.IsTrue(isRemoved);
 	}
 
-	protected abstract TAsset CreateAsset(Screenshot<TAsset> screenshot);
+	internal AssetsLibrary(AssetsFactory<TAsset> assetsFactory)
+	{
+		_assetsFactory = assetsFactory;
+	}
 
-	private readonly HashSet<TAsset> _assets = new();
+	private readonly AssetsFactory<TAsset> _assetsFactory;
+	private readonly Dictionary<Screenshot, TAsset> _assets = new();
 }

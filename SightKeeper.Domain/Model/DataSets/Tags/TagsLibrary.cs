@@ -2,43 +2,45 @@
 
 namespace SightKeeper.Domain.Model.DataSets.Tags;
 
-public abstract class TagsLibrary : TagsHolder
+public abstract class TagsLibrary : TagsOwner
 {
-	public abstract DataSet DataSet { get; }
 	public abstract IReadOnlyCollection<Tag> Tags { get; }
 
 	public abstract Tag CreateTag(string name);
 }
 
-public sealed class TagsLibrary<TTag> : TagsLibrary where TTag : Tag, TagsFactory<TTag>
+public sealed class TagsLibrary<TTag> : TagsLibrary where TTag : Tag
 {
-	public override DataSet DataSet { get; }
 	public override IReadOnlyCollection<TTag> Tags => _tags;
 
-	public TagsLibrary(DataSet dataSet)
+	public TagsLibrary(TagsFactory<TTag> tagsFactory, TagsUsageProvider tagsUsageProvider)
 	{
-		DataSet = dataSet;
+		_tagsFactory = tagsFactory;
+		_tagsUsageProvider = tagsUsageProvider;
 	}
 
 	public override TTag CreateTag(string name)
 	{
-		var tag = TTag.Create(name, this);
+		var tag = _tagsFactory.CreateTag(this, name);
 		AddTag(tag);
 		return tag;
 	}
 
 	public void DeleteTag(TTag tag)
 	{
-		Guard.IsFalse(tag.IsInUse);
-		Guard.IsTrue(_tags.Remove(tag));
+		bool isTagInUse = _tagsUsageProvider.IsInUse(tag);
+		Guard.IsFalse(isTagInUse);
+		var isRemoved = _tags.Remove(tag);
+		Guard.IsTrue(isRemoved);
 	}
 
 	private void AddTag(TTag tag)
 	{
-		foreach (var existingTag in _tags)
-			Guard.IsNotEqualTo(existingTag.Name, tag.Name);
-		_tags.Add(tag);
+		bool isAdded = _tags.Add(tag);
+		Guard.IsTrue(isAdded);
 	}
 
-	private readonly List<TTag> _tags = new();
+	private readonly TagsFactory<TTag> _tagsFactory;
+	private readonly TagsUsageProvider _tagsUsageProvider;
+	private readonly HashSet<TTag> _tags = new();
 }

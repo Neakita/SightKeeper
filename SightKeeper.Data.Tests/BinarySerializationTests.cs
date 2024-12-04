@@ -88,7 +88,7 @@ public sealed class BinarySerializationTests
 		};
 		dataSet.TagsLibrary.CreateTag("Don't Shoot");
 		var shootTag = dataSet.TagsLibrary.CreateTag("shoot");
-		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
+		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 1;
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTimeOffset.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.Tag = shootTag;
@@ -115,7 +115,7 @@ public sealed class BinarySerializationTests
 		copTag.Color = 123;
 		var bulldozerTag = dataSet.TagsLibrary.CreateTag("Bulldozer");
 		bulldozerTag.Color = 456;
-		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
+		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 1;
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8));
@@ -147,7 +147,7 @@ public sealed class BinarySerializationTests
 		bulldozerTag.Color = 456;
 		var bulldozerFaceKeyPoint = bulldozerTag.CreateKeyPoint("Face");
 		bulldozerTag.CreateProperty("Distance", 0, 200);
-		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
+		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 1;
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		var copItem = asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [20]);
@@ -184,7 +184,7 @@ public sealed class BinarySerializationTests
 		var bulldozerFaceKeyPoint = bulldozerTag.CreateKeyPoint("Face");
 		bulldozerTag.CreateNumericProperty("Distance", 0, 200);
 		bulldozerTag.CreateBooleanProperty("ShouldShoot");
-		dataSet.ScreenshotsLibrary.MaxQuantity = 1;
+		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 1;
 		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		var copItem = asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [20], [true]);

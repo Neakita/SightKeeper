@@ -1,37 +1,27 @@
 ﻿using SightKeeper.Domain.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
 public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 {
-	public override Screenshot<DetectorAsset> Screenshot { get; }
-	public override DetectorAssetsLibrary Library { get; }
-	public override DetectorDataSet DataSet => Library.DataSet;
-	
-    public DetectorItem CreateItem(DetectorTag tag, Bounding bounding)
-    {
-        DetectorItem item = new(tag, bounding, this);
-        AddItem(item);
-        return item;
-    }
+	public DetectorItem CreateItem(Tag tag, Bounding bounding)
+	{
+		if (tag.Owner != _tagsOwner)
+		{
+			const string unexpectedTagsOwnerExceptionMessage =
+				"When creating a new asset item, a tag from the associated dataset must be used";
+			throw new UnexpectedTagsOwnerException(unexpectedTagsOwnerExceptionMessage, _tagsOwner, tag);
+		}
+		DetectorItem item = new(bounding, tag);
+		AddItem(item);
+		return item;
+	}
 
-    public override void DeleteItem(DetectorItem item)
-    {
-	    base.DeleteItem(item);
-	    item.Tag.RemoveItem(item);
-    }
+	internal DetectorAsset(TagsOwner tagsOwner)
+	{
+		_tagsOwner = tagsOwner;
+	}
 
-    public override void ClearItems()
-    {
-	    foreach (var item in Items)
-		    item.Tag.RemoveItem(item);
-	    base.ClearItems();
-    }
-
-    internal DetectorAsset(Screenshot<DetectorAsset> screenshot, DetectorAssetsLibrary library)
-    {
-	    Screenshot = screenshot;
-	    Library = library;
-    }
+	private readonly TagsOwner _tagsOwner;
 }

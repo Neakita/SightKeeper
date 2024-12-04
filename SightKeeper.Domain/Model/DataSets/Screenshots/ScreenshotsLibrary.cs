@@ -1,76 +1,25 @@
-﻿using System.Collections.Immutable;
-using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets.Assets;
+﻿namespace SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Domain.Model.DataSets.Screenshots;
-
-public abstract class ScreenshotsLibrary
+public sealed class ScreenshotsLibrary
 {
-	/// <summary>
-	/// The maximum number of screenshots without asset that can be contained in this library.
-	/// If not specified (null), an unlimited number can be stored.
-	/// </summary>
-	public ushort? MaxQuantity { get; set; }
-	public abstract DataSet DataSet { get; }
-
 	/// <remarks>
 	/// Sorted by date: first is the earliest, last is the latest
 	/// </remarks>
-	public abstract IReadOnlyList<Screenshot> Screenshots { get; }
+	public IReadOnlyList<Screenshot> Screenshots => _screenshots;
 
-	public abstract Screenshot CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots);
-}
+	public Screenshot CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> resolution)
+	{
+		if (_screenshots.Count > 0 && creationDate <= _screenshots[^1].CreationDate)
+		{
+			throw new InconsistentScreenshotCreationDateException(
+				"An attempt was made to create a new screenshot earlier than the date of the last screenshot in the library. " +
+				"Check that the time synchronization is correct and/or delete incorrectly created screenshots",
+				creationDate, this);
+		}
+		Screenshot screenshot = new(creationDate, resolution);
+		_screenshots.Add(screenshot);
+		return screenshot;
+	}
 
-public sealed class ScreenshotsLibrary<TAsset> : ScreenshotsLibrary where TAsset : Asset
-{
-    public override DataSet<TAsset> DataSet { get; }
-    public override IReadOnlyList<Screenshot<TAsset>> Screenshots => _screenshots;
-
-    public ScreenshotsLibrary(DataSet<TAsset> dataSet)
-    {
-	    DataSet = dataSet;
-    }
-
-    public override Screenshot<TAsset> CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots)
-    {
-	    Screenshot<TAsset> screenshot = new(this, creationDate, resolution);
-	    if (_screenshots.Count != 0)
-			Guard.IsGreaterThan(creationDate, _screenshots[^1].CreationDate);
-	    _screenshots.Add(screenshot);
-	    removedScreenshots = ClearExceed();
-	    return screenshot;
-    }
-
-    internal void DeleteScreenshot(Screenshot<TAsset> screenshot)
-    {
-        Guard.IsTrue(_screenshots.Remove(screenshot));
-    }
-
-    private ImmutableArray<Screenshot> ClearExceed()
-    {
-	    if (MaxQuantity == null)
-		    return ImmutableArray<Screenshot>.Empty;
-	    var screenshotWithoutAssetCount = _screenshots.Count - DataSet.AssetsLibrary.Assets.Count;
-	    var exceedAmount = screenshotWithoutAssetCount - MaxQuantity.Value;
-	    if (exceedAmount <= 0)
-		    return ImmutableArray<Screenshot>.Empty;
-	    var builder = ImmutableArray.CreateBuilder<Screenshot>(exceedAmount);
-	    var screenshotsToDelete =
-		    _screenshots
-			    .Select((screenshot, index) => (screenshot, index))
-			    .Where(tuple => tuple.screenshot.Asset == null)
-			    .Take(exceedAmount)
-			    .ToRanges(tuple => tuple.index)
-			    .OrderByDescending(tuple => tuple.start);
-	    foreach (var (tuples, start, end) in screenshotsToDelete)
-	    {
-		    _screenshots.RemoveRange(start, end - start + 1);
-		    builder.Capacity += tuples.Length;
-		    foreach (var (screenshot, _) in tuples)
-			    builder.Add(screenshot);
-	    }
-	    return builder.ToImmutable();
-    }
-
-    private readonly List<Screenshot<TAsset>> _screenshots = new();
+	private readonly List<Screenshot> _screenshots = new();
 }

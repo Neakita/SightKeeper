@@ -6,12 +6,13 @@ public abstract class ItemsAsset<TItem> : Asset
 {
 	public IReadOnlyCollection<TItem> Items => _items.AsReadOnly();
 
-	public virtual void DeleteItem(TItem item)
+	public void DeleteItem(TItem item)
 	{
-		Guard.IsTrue(_items.Remove(item));
+		var isRemoved = _items.Remove(item);
+		Guard.IsTrue(isRemoved);
 	}
 
-	public virtual void ClearItems()
+	public void ClearItems()
 	{
 		_items.Clear();
 	}

@@ -1,31 +1,22 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets.Assets;
+﻿using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Detector;
 
 public sealed class DetectorItem : AssetItem
 {
-	public DetectorTag Tag
+	public Tag Tag
 	{
-		get => _tag;
-		[MemberNotNull(nameof(_tag))] set
+		get;
+		set
 		{
-			Guard.IsReferenceEqualTo(value.DataSet, DataSet);
-			_tag?.RemoveItem(this);
-			_tag = value;
-			_tag.AddItem(this);
+			InappropriateTagsOwnerChangeException.ThrowIfOwnerChanged(field, value);
+			field = value;
 		}
 	}
 
-	public DetectorAsset Asset { get; }
-	public DataSet DataSet => Asset.DataSet;
-	
-	internal DetectorItem(DetectorTag tag, Bounding bounding, DetectorAsset asset) : base(bounding)
+	internal DetectorItem(Bounding bounding, Tag tag) : base(bounding)
 	{
-		Asset = asset;
 		Tag = tag;
 	}
-
-	private DetectorTag _tag;
 }

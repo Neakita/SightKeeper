@@ -1,17 +1,30 @@
-﻿using SightKeeper.Domain.Model.DataSets.Tags;
+﻿using CommunityToolkit.Diagnostics;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser;
 
-public abstract class PoserTag : ItemTag, TagsHolder
+public sealed class PoserTag : Tag, TagsOwner
 {
-	Tag TagsHolder.CreateTag(string name) => CreateKeyPoint(name);
+	public IReadOnlyCollection<Tag> KeyPointTags => _keyPointTags.AsReadOnly();
+	IReadOnlyCollection<Tag> TagsOwner.Tags => KeyPointTags;
 
-	public abstract override IReadOnlyCollection<PoserItem> Items { get; }
-	public abstract IReadOnlyCollection<KeyPointTag> KeyPoints { get; }
+	public Tag CreateKeyPointTag(string name)
+	{
+		Tag tag = new(this, name);
+		_keyPointTags.Add(tag);
+		return tag;
+	}
 
-	public abstract KeyPointTag CreateKeyPoint(string name);
+	public void DeleteKeyPointTag(Tag tag)
+	{
+		var isRemoved = _keyPointTags.Remove(tag);
+		Guard.IsTrue(isRemoved);
+	}
 
-	protected PoserTag(string name, IEnumerable<Tag> siblings) : base(name, siblings)
+	internal PoserTag(TagsOwner owner, string name) : base(owner, name)
 	{
 	}
+
+
+	private readonly List<Tag> _keyPointTags = new();
 }

@@ -39,7 +39,7 @@ internal abstract class DataSetReplicator<TDataSet>
 			var screenshotsWithoutAssets =
 				dataSet.ScreenshotsLibrary.Screenshots.Count - dataSet.AssetsLibrary.Assets.Count;
 			Guard.IsLessThanOrEqualTo(screenshotsWithoutAssets, packable.MaxScreenshotsWithoutAsset.Value);
-			dataSet.ScreenshotsLibrary.MaxQuantity = packable.MaxScreenshotsWithoutAsset;
+			dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = packable.MaxScreenshotsWithoutAsset;
 		}
 
 		ReplicateWeights(dataSet.WeightsLibrary, packable.GetWeights());

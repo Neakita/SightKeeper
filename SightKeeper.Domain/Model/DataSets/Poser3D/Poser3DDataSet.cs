@@ -1,11 +1,22 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Poser3D;
+﻿using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.Model.DataSets.Weights;
 
-public sealed class Poser3DDataSet : DataSet<Poser3DTag, KeyPointTag3D, Poser3DAsset>
+namespace SightKeeper.Domain.Model.DataSets.Poser3D;
+
+public sealed class Poser3DDataSet : DataSet
 {
-	public override Poser3DAssetsLibrary AssetsLibrary { get; }
+	public override TagsLibrary<PoserTag> TagsLibrary { get; }
+	public override AssetsLibrary<Poser3DAsset> AssetsLibrary { get; }
+	public override PoserWeightsLibrary WeightsLibrary { get; }
 
 	public Poser3DDataSet()
 	{
-		AssetsLibrary = new Poser3DAssetsLibrary(this);
+		PoserIterativeTagsUsageProvider<Poser3DItem> tagsUsageProvider = new();
+		TagsLibrary = new TagsLibrary<PoserTag>(PoserTagsFactory.Instance, tagsUsageProvider);
+		Poser3DAssetsFactory assetsFactory = new(TagsLibrary);
+		AssetsLibrary = new AssetsLibrary<Poser3DAsset>(assetsFactory);
+		WeightsLibrary = new PoserWeightsLibrary(TagsLibrary);
 	}
 }

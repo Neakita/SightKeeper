@@ -1,6 +1,6 @@
-﻿namespace SightKeeper.Domain.Model.DataSets.Tags;
+namespace SightKeeper.Domain.Model.DataSets.Tags;
 
-public interface TagsFactory<TTag> where TTag : Tag, TagsFactory<TTag>
+public abstract class TagsFactory<TTag> where TTag : Tag
 {
-	static abstract TTag Create(string name, TagsLibrary<TTag> library);
+	public abstract TTag CreateTag(TagsOwner owner, string name);
 }

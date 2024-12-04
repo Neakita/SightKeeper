@@ -1,12 +1,12 @@
 ﻿using System.Collections.Immutable;
-using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
 namespace SightKeeper.Domain;
 
 internal static class Extensions
 {
-	public static IEnumerable<(ImmutableArray<T>, int start, int end)> ToRanges<T>(this IEnumerable<T> enumerable, Func<T, int> indexSelector)
+	public static IEnumerable<(ImmutableArray<T>, int start, int end)> ToRanges<T>(this IEnumerable<T> enumerable,
+		Func<T, int> indexSelector)
 	{
 		using var enumerator = enumerable.GetEnumerator();
 		if (!enumerator.MoveNext())
@@ -25,6 +25,7 @@ internal static class Extensions
 				yield return (itemsBuilder.DrainToImmutable(), currentRangeStart, previousIndex);
 				currentRangeStart = index;
 			}
+
 			itemsBuilder.Add(item);
 			previousIndex = index;
 		}
@@ -40,16 +41,16 @@ internal static class Extensions
 		return !source.All(set.Add);
 	}
 
-	public static void EnsureNormalized(this Bounding bounding)
+	public static bool IsNormalized(this Bounding bounding)
 	{
-		EnsureNormalized(bounding.Left);
-		EnsureNormalized(bounding.Top);
-		EnsureNormalized(bounding.Right);
-		EnsureNormalized(bounding.Bottom);
+		return IsNormalized(bounding.Left) &&
+		       IsNormalized(bounding.Top) &&
+		       IsNormalized(bounding.Right) &&
+		       IsNormalized(bounding.Bottom);
 	}
 
-	private static void EnsureNormalized(double value)
+	private static bool IsNormalized(double value)
 	{
-		Guard.IsBetweenOrEqualTo(value, 0, 1);
+		return value is >= 0 and <= 1;
 	}
 }

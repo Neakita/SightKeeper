@@ -4,7 +4,6 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
@@ -98,7 +97,7 @@ public class DataSetEditor : IDisposable
 	{
 		foreach (var keyPointTagData in data.KeyPointTags)
 		{
-			var keyPointTag = tag.CreateKeyPoint(keyPointTagData.Name);
+			var keyPointTag = tag.CreateKeyPointTag(keyPointTagData.Name);
 			keyPointTag.Color = keyPointTagData.Color;
 		}
 	}

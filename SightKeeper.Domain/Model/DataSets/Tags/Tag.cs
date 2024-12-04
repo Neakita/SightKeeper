@@ -1,40 +1,28 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CommunityToolkit.Diagnostics;
+﻿namespace SightKeeper.Domain.Model.DataSets.Tags;
 
-namespace SightKeeper.Domain.Model.DataSets.Tags;
-
-public abstract class Tag
+public class Tag
 {
+	public TagsOwner Owner { get; }
 	public string Name
 	{
-		get => _name;
-		set => SetName(value, Siblings);
+		get;
+		set
+		{
+			const string tagsConflictingNameExceptionMessage =
+				"An attempt has been made to assign a name already occupied by another tag. " +
+				"Before setting a new name, " +
+				"make sure that this name is not occupied by another tag in the appropriate context (dataset or key point tag)";
+			foreach (var sibling in Owner.Tags)
+				if (sibling.Name == value && sibling != this)
+					throw new TagsConflictingNameException(tagsConflictingNameExceptionMessage, this, value, sibling);
+			field = value;
+		}
 	}
-
 	public uint Color { get; set; }
-	public abstract DataSet DataSet { get; }
-	public abstract bool IsInUse { get; }
 
-	public abstract void Delete();
-
-	/// <param name="name">Initial name</param>
-	/// <param name="siblings">A collection of siblings for initial name validation</param>
-	internal Tag(string name, IEnumerable<Tag> siblings)
+	internal Tag(TagsOwner owner, string name)
 	{
-		SetName(name, siblings);
-	}
-
-	protected abstract IEnumerable<Tag> Siblings { get; }
-
-	private string _name;
-
-	[MemberNotNull(nameof(_name))]
-	private void SetName(string value, IEnumerable<Tag> siblings)
-	{
-		if (_name == value)
-			return;
-		foreach (var sibling in siblings)
-			Guard.IsNotEqualTo(value, sibling.Name);
-		_name = value;
+		Owner = owner;
+		Name = name;
 	}
 }

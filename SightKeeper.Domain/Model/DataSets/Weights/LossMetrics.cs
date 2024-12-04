@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.Model.DataSets.Weights;
 
-public readonly struct LossMetrics
+public readonly struct LossMetrics : IEquatable<LossMetrics>
 {
 	public static bool operator ==(LossMetrics left, LossMetrics right)
 	{

@@ -55,7 +55,7 @@ public sealed class DataSetCreator
 	{
 		foreach (var keyPointTagData in data.KeyPointTags)
 		{
-			var keyPointTag = tag.CreateKeyPoint(keyPointTagData.Name);
+			var keyPointTag = tag.CreateKeyPointTag(keyPointTagData.Name);
 			keyPointTag.Color = keyPointTagData.Color;
 		}
 	}

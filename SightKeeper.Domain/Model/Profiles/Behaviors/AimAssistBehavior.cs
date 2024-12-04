@@ -33,43 +33,43 @@ public sealed class AimAssistBehavior : Behavior, BehaviorFactory<AimAssistBehav
 
 	public ImmutableArray<TagOptions> Tags
 	{
-		get => _tags;
+		get;
 		set
 		{
 			foreach (var options in value)
 				Guard.IsTrue(Module.Weights.Contains(options.Tag));
 			Guard.IsFalse(value.HasDuplicates(TagOptionsComparer.Instance));
-			_tags = value;
+			field = value;
 		}
-	}
-	
+	} = ImmutableArray<TagOptions>.Empty;
+
 	public float DirectionCorrectionFactor
 	{
-		get => _directionCorrectionFactor;
+		get;
 		set
 		{
 			Guard.IsBetweenOrEqualTo(value, 0, 1);
-			_directionCorrectionFactor = value;
+			field = value;
 		}
 	}
 
 	public float GainFactor
 	{
-		get => _gainFactor;
+		get;
 		set
 		{
 			Guard.IsGreaterThanOrEqualTo(value, 0);
-			_gainFactor = value;
+			field = value;
 		}
 	}
 
 	public float AttenuationFactor
 	{
-		get => _attenuationFactor;
+		get;
 		set
 		{
 			Guard.IsBetweenOrEqualTo(value, 0, 1);
-			_attenuationFactor = value;
+			field = value;
 		}
 	}
 
@@ -79,11 +79,6 @@ public sealed class AimAssistBehavior : Behavior, BehaviorFactory<AimAssistBehav
 
 	internal override void RemoveInappropriateTags()
 	{
-		Tags = Tags.RemoveAll(options => !Module.Weights.Contains(options.Tag));
+		Tags = Tags.RemoveAll(options => !Module.Weights.Contains());
 	}
-
-	private ImmutableArray<TagOptions> _tags = ImmutableArray<TagOptions>.Empty;
-	private float _directionCorrectionFactor;
-	private float _gainFactor;
-	private float _attenuationFactor;
 }

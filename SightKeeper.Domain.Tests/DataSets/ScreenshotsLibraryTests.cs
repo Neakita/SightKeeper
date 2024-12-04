@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using SightKeeper.Domain.Model;
+﻿using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Detector;
 
 namespace SightKeeper.Domain.Tests.DataSets;
@@ -10,7 +9,7 @@ public sealed class ScreenshotsLibraryTests
 	public void ShouldDeleteExceedScreenshot()
 	{
 		DetectorDataSet dataSet = new();
-		dataSet.ScreenshotsLibrary.MaxQuantity = 2;
+		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 2;
 		var screenshot1 = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out var removedScreenshots);
 		removedScreenshots.Should().BeEmpty();
 		var screenshot2 = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out removedScreenshots);
@@ -25,7 +24,7 @@ public sealed class ScreenshotsLibraryTests
 	public void ShouldNotDeleteScreenshotWithAsset()
 	{
 		DetectorDataSet dataSet = new();
-		dataSet.ScreenshotsLibrary.MaxQuantity = 2;
+		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 2;
 		var screenshot1 = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out var removedScreenshots);
 		removedScreenshots.Should().BeEmpty();
 		var screenshot2 = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out removedScreenshots);
