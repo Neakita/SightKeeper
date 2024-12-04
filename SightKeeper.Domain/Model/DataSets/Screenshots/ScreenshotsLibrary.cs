@@ -2,10 +2,17 @@
 
 public sealed class ScreenshotsLibrary
 {
+	public string Name { get; set; }
+
 	/// <remarks>
 	/// Sorted by date: first is the earliest, last is the latest
 	/// </remarks>
 	public IReadOnlyList<Screenshot> Screenshots => _screenshots;
+
+	public ScreenshotsLibrary(string name)
+	{
+		Name = name;
+	}
 
 	public Screenshot CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> resolution)
 	{
