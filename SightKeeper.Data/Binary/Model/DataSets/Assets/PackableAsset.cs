@@ -8,12 +8,6 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 /// </summary>
 internal abstract class PackableAsset
 {
-	public AssetUsage Usage { get; }
-	public Id ScreenshotId { get; }
-
-	protected PackableAsset(AssetUsage usage, Id screenshotId)
-	{
-		Usage = usage;
-		ScreenshotId = screenshotId;
-	}
+	public required AssetUsage Usage { get; init; }
+	public required Id ScreenshotId { get; init; }
 }

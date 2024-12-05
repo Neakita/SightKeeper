@@ -16,7 +16,7 @@ public sealed class DetectorDataSet : DataSet
 		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance, tagsUsageProvider);
 		DetectorAssetsFactory assetsFactory = new(TagsLibrary);
 		AssetsLibrary = new AssetsLibrary<DetectorAsset>(assetsFactory);
-		tagsUsageProvider.AssetsSource = AssetsLibrary.Assets;
+		tagsUsageProvider.AssetsSource = AssetsLibrary.Assets.Values;
 		WeightsLibrary = new PlainWeightsLibrary(1, TagsLibrary);
 	}
 }

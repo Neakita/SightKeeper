@@ -9,19 +9,7 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Compositions;
 [MemoryPackable]
 internal sealed partial class PackableFloatingTransparentComposition : PackableComposition
 {
-	public TimeSpan SeriesDuration { get; }
-	public float PrimaryOpacity { get; }
-	public float MinimumOpacity { get; }
-
-	public PackableFloatingTransparentComposition(
-		TimeSpan maximumScreenshotsDelay,
-		TimeSpan seriesDuration,
-		float primaryOpacity,
-		float minimumOpacity)
-		: base(maximumScreenshotsDelay)
-	{
-		SeriesDuration = seriesDuration;
-		PrimaryOpacity = primaryOpacity;
-		MinimumOpacity = minimumOpacity;
-	}
+	public required TimeSpan SeriesDuration { get; init; }
+	public required float PrimaryOpacity { get; init; }
+	public required float MinimumOpacity { get; init; }
 }

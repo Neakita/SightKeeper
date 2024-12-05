@@ -3,14 +3,11 @@ using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Model.DataSets.Assets;
 
-public abstract class AssetsLibrary
-{
-	public abstract IReadOnlyCollection<Asset> Assets { get; }
-}
+public abstract class AssetsLibrary;
 
 public sealed class AssetsLibrary<TAsset> : AssetsLibrary where TAsset : Asset
 {
-	public override IReadOnlyCollection<TAsset> Assets => _assets.Values;
+	public IReadOnlyDictionary<Screenshot, TAsset> Assets => _assets.AsReadOnly();
 
 	public TAsset MakeAsset(Screenshot screenshot)
 	{

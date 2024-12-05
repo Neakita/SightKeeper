@@ -17,7 +17,7 @@ public sealed class Poser2DDataSet : DataSet
 		TagsLibrary = new TagsLibrary<PoserTag>(PoserTagsFactory.Instance, tagsUsageProvider);
 		Poser2DAssetsFactory assetsFactory = new(TagsLibrary);
 		AssetsLibrary = new AssetsLibrary<Poser2DAsset>(assetsFactory);
-		tagsUsageProvider.AssetsSource = AssetsLibrary.Assets;
+		tagsUsageProvider.AssetsSource = AssetsLibrary.Assets.Values;
 		WeightsLibrary = new PoserWeightsLibrary(TagsLibrary);
 	}
 }

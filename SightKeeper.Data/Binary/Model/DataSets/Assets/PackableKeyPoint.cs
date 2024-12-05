@@ -1,3 +1,4 @@
+using MemoryPack;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
@@ -6,14 +7,9 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 /// <summary>
 /// MemoryPackable version of <see cref="KeyPoint"/>
 /// </summary>
-internal abstract class PackableKeyPoint
+[MemoryPackable]
+internal partial class PackableKeyPoint
 {
-	public int Index { get; }
-	public Vector2<double> Position { get; }
-
-	protected PackableKeyPoint(int index, Vector2<double> position)
-	{
-		Index = index;
-		Position = position;
-	}
+	public required byte Id { get; init; }
+	public required Vector2<double> Position { get; init; }
 }

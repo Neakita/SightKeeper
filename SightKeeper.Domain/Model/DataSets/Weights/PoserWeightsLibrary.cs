@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
@@ -15,10 +15,11 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags,
+		ReadOnlyDictionary<PoserTag, ReadOnlyCollection<Tag>> tags,
 		Composition? composition)
 	{
-		tags = tags.ToImmutableDictionary();
+		// Prevent caller from changing collections after the call
+		tags = tags.ToDictionary().AsReadOnly();
 		foreach (var (poserTag, keyPointTags) in tags)
 		{
 			UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, poserTag);

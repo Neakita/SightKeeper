@@ -15,7 +15,7 @@ public sealed class ClassifierDataSet : DataSet
 		ClassifierIterativeTagsUsageProvider tagsUsageProvider = new();
 		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance, tagsUsageProvider);
 		AssetsLibrary = new AssetsLibrary<ClassifierAsset>(new ClassifierAssetsFactory(TagsLibrary));
-		tagsUsageProvider.AssetsSource = AssetsLibrary.Assets;
+		tagsUsageProvider.AssetsSource = AssetsLibrary.Assets.Values;
 		WeightsLibrary = new PlainWeightsLibrary(2, TagsLibrary);
 	}
 }

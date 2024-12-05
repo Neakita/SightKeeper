@@ -9,14 +9,7 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Tags;
 [MemoryPackable]
 internal partial class PackableTag
 {
-	public byte Id { get; }
-	public string Name { get; }
-	public uint Color { get; }
-
-	public PackableTag(byte id, string name, uint color)
-	{
-		Id = id;
-		Name = name;
-		Color = color;
-	}
+	public required byte Id { get; init; }
+	public required string Name { get; init; }
+	public required uint Color { get; init; }
 }

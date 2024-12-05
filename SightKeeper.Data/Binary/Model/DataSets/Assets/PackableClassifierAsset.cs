@@ -1,6 +1,4 @@
-using FlakeId;
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
@@ -11,10 +9,5 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 [MemoryPackable]
 internal sealed partial class PackableClassifierAsset : PackableAsset
 {
-	public byte TagId { get; }
-
-	public PackableClassifierAsset(AssetUsage usage, Id screenshotId, byte tagId) : base(usage, screenshotId)
-	{
-		TagId = tagId;
-	}
+	public required byte TagId { get; init; }
 }
