@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Tags;
@@ -37,19 +36,19 @@ internal sealed class PoserWeightsConverter
 		};
 	}
 
-	private ReadOnlyDictionary<byte, ReadOnlyCollection<byte>> ConvertTags(ReadOnlyDictionary<PoserTag, ReadOnlyCollection<Tag>> tags)
+	private IReadOnlyDictionary<byte, IReadOnlyCollection<byte>> ConvertTags(IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
 		return tags.Select(ConvertTags).ToDictionary().AsReadOnly();
 	}
 
-	private KeyValuePair<byte, ReadOnlyCollection<byte>> ConvertTags(KeyValuePair<PoserTag, ReadOnlyCollection<Tag>> tags)
+	private KeyValuePair<byte, IReadOnlyCollection<byte>> ConvertTags(KeyValuePair<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
 		var poserTagId = GetTagId(tags.Key);
 		var keyPointTags = ConvertTags(tags.Value).ToList().AsReadOnly();
-		return new KeyValuePair<byte, ReadOnlyCollection<byte>>(poserTagId, keyPointTags);
+		return new KeyValuePair<byte, IReadOnlyCollection<byte>>(poserTagId, keyPointTags);
 	}
 
-	private IEnumerable<byte> ConvertTags(ReadOnlyCollection<Tag> tags)
+	private IEnumerable<byte> ConvertTags(IReadOnlyCollection<Tag> tags)
 	{
 		return tags.Select(GetTagId);
 	}

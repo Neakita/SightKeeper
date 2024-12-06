@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using SightKeeper.Data.Binary.Conversion.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Tags;
@@ -19,9 +18,9 @@ internal static class PoserWeightsReplicator
 		}
 	}
 
-	private static ReadOnlyDictionary<PoserTag, ReadOnlyCollection<Tag>> ReplicateTags(TagsLibrary<PoserTag> tagsLibrary, ReadOnlyDictionary<byte, ReadOnlyCollection<byte>> tagsIndexes)
+	private static Dictionary<PoserTag, IReadOnlyCollection<Tag>> ReplicateTags(TagsLibrary<PoserTag> tagsLibrary, IReadOnlyDictionary<byte, IReadOnlyCollection<byte>> tagsIndexes)
 	{
-		Dictionary<PoserTag, ReadOnlyCollection<Tag>> tags = new();
+		Dictionary<PoserTag, IReadOnlyCollection<Tag>> tags = new();
 		foreach (var (poserTagIndex, keyPointTagsIndexes) in tagsIndexes)
 		{
 			var poserTag = tagsLibrary.Tags[poserTagIndex];
@@ -31,8 +30,8 @@ internal static class PoserWeightsReplicator
 				var keyPointTag = poserTag.KeyPointTags[keyPointIndex];
 				keyPointTags.Add(keyPointTag);
 			}
-			tags.Add(poserTag, keyPointTags.AsReadOnly());
+			tags.Add(poserTag, keyPointTags);
 		}
-		return tags.AsReadOnly();
+		return tags;
 	}
 }

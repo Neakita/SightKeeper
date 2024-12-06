@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
@@ -16,10 +15,13 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
 		Composition? composition,
-		ReadOnlyDictionary<PoserTag, ReadOnlyCollection<Tag>> tags)
+		IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
-		// Prevent caller from changing collections after the call
-		tags = tags.ToDictionary().AsReadOnly();
+		tags = tags
+			.ToDictionary(
+				pair => pair.Key,
+				IReadOnlyCollection<Tag> (pair) => pair.Value.ToList().AsReadOnly())
+			.AsReadOnly();
 		foreach (var (poserTag, keyPointTags) in tags)
 		{
 			UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, poserTag);
