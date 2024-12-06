@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 
@@ -11,7 +10,7 @@ internal sealed class ClassifierAssetsReplicator
 		_session = session;
 	}
 
-	public void ReplicateAssets(ClassifierDataSet dataSet, ImmutableArray<PackableClassifierAsset> packableAssets)
+	public void ReplicateAssets(ClassifierDataSet dataSet, IReadOnlyCollection<PackableClassifierAsset> packableAssets)
 	{
 		foreach (var packableAsset in packableAssets)
 		{

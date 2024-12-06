@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using MemoryPack;
 using SightKeeper.Domain.Model.DataSets.Assets;
 
@@ -10,5 +9,5 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 [MemoryPackable]
 internal sealed partial class PackableItemsAsset<TItem> : PackableAsset
 {
-	public required ImmutableArray<TItem> Items { get; init; }
+	public required IReadOnlyCollection<TItem> Items { get; init; }
 }

@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using MemoryPack;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
@@ -13,5 +12,5 @@ internal sealed partial class PackablePoser3DItem
 {
 	public required byte TagIndex { get; init; }
 	public required Bounding Bounding { get; init; }
-	public required ImmutableArray<PackableKeyPoint3D> KeyPoints { get; init; }
+	public required IReadOnlyCollection<PackableKeyPoint3D> KeyPoints { get; init; }
 }

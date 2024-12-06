@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Domain.Model.DataSets.Poser;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Tags;
@@ -8,5 +7,5 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Tags;
 /// </summary>
 internal sealed class PackablePoserTag : PackableTag
 {
-	public required ImmutableArray<PackableTag> KeyPointTags { get; init; }
+	public required IReadOnlyCollection<PackableTag> KeyPointTags { get; init; }
 }

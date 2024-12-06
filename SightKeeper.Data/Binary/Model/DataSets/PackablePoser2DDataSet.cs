@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using MemoryPack;
 using SightKeeper.Data.Binary.Conversion.DataSets.Poser;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
@@ -13,7 +12,7 @@ namespace SightKeeper.Data.Binary.Model.DataSets;
 [MemoryPackable]
 internal sealed partial class PackablePoser2DDataSet : PackableDataSet
 {
-	public required ImmutableArray<PackablePoserTag> Tags { get; init; }
-	public required ImmutableArray<PackableItemsAsset<PackablePoser2DItem>> Assets { get; init; }
-	public required ImmutableArray<PackablePoserWeights> Weights { get; init; }
+	public required IReadOnlyCollection<PackablePoserTag> Tags { get; init; }
+	public required IReadOnlyCollection<PackableItemsAsset<PackablePoser2DItem>> Assets { get; init; }
+	public required IReadOnlyCollection<PackablePoserWeights> Weights { get; init; }
 }

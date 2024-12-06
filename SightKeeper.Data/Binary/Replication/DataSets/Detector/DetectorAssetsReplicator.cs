@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
 using SightKeeper.Domain.Model.DataSets.Tags;
@@ -12,7 +11,7 @@ internal sealed class DetectorAssetsReplicator
 		_session = session;
 	}
 
-	public void ReplicateAssets(DetectorDataSet dataSet, ImmutableArray<PackableItemsAsset<PackableDetectorItem>> packableAssets)
+	public void ReplicateAssets(DetectorDataSet dataSet, IReadOnlyCollection<PackableItemsAsset<PackableDetectorItem>> packableAssets)
 	{
 		foreach (var packableAsset in packableAssets)
 		{
@@ -24,7 +23,7 @@ internal sealed class DetectorAssetsReplicator
 
 	private readonly ReplicationSession _session;
 
-	private void ReplicateItems(TagsLibrary<Tag> tagsLibrary, DetectorAsset asset, ImmutableArray<PackableDetectorItem> packableItems)
+	private static void ReplicateItems(TagsLibrary<Tag> tagsLibrary, DetectorAsset asset, IReadOnlyCollection<PackableDetectorItem> packableItems)
 	{
 		foreach (var packableItem in packableItems)
 		{

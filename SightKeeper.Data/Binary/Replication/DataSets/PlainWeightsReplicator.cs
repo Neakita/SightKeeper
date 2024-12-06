@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
@@ -7,7 +6,7 @@ namespace SightKeeper.Data.Binary.Replication.DataSets;
 
 internal static class PlainWeightsReplicator
 {
-	public static void ReplicateWeights(PlainWeightsLibrary weightsLibrary, TagsLibrary<Tag> tagsLibrary, ImmutableArray<PackablePlainWeights> packableWeights)
+	public static void ReplicateWeights(PlainWeightsLibrary weightsLibrary, TagsLibrary<Tag> tagsLibrary, IReadOnlyCollection<PackablePlainWeights> packableWeights)
 	{
 		foreach (var weights in packableWeights)
 		{
@@ -17,7 +16,7 @@ internal static class PlainWeightsReplicator
 		}
 	}
 
-	private static IEnumerable<Tag> ReplicateTags(TagsLibrary<Tag> tagsLibrary, ImmutableArray<byte> tagsIndexes)
+	private static IEnumerable<Tag> ReplicateTags(TagsLibrary<Tag> tagsLibrary, IReadOnlyCollection<byte> tagsIndexes)
 	{
 		return tagsIndexes.Select(index => tagsLibrary.Tags[index]);
 	}

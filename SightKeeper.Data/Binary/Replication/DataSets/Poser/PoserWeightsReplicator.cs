@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Conversion.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Tags;
@@ -8,7 +7,7 @@ namespace SightKeeper.Data.Binary.Replication.DataSets.Poser;
 
 internal static class PoserWeightsReplicator
 {
-	public static void ReplicateWeights(PoserWeightsLibrary weightsLibrary, TagsLibrary<PoserTag> tagsLibrary, ImmutableArray<PackablePoserWeights> packableWeights)
+	public static void ReplicateWeights(PoserWeightsLibrary weightsLibrary, TagsLibrary<PoserTag> tagsLibrary, IEnumerable<PackablePoserWeights> packableWeights)
 	{
 		foreach (var weights in packableWeights)
 		{

@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
@@ -13,7 +12,7 @@ internal sealed class Poser3DAssetsReplicator
 		_session = session;
 	}
 
-	public void ReplicateAssets(Poser3DDataSet dataSet, ImmutableArray<PackableItemsAsset<PackablePoser3DItem>> packableAssets)
+	public void ReplicateAssets(Poser3DDataSet dataSet, IReadOnlyCollection<PackableItemsAsset<PackablePoser3DItem>> packableAssets)
 	{
 		foreach (var packableAsset in packableAssets)
 		{
@@ -25,7 +24,7 @@ internal sealed class Poser3DAssetsReplicator
 
 	private readonly ReplicationSession _session;
 
-	private static void ReplicateItems(TagsLibrary<PoserTag> tagsLibrary, Poser3DAsset asset, ImmutableArray<PackablePoser3DItem> packableItems)
+	private static void ReplicateItems(TagsLibrary<PoserTag> tagsLibrary, Poser3DAsset asset, IReadOnlyCollection<PackablePoser3DItem> packableItems)
 	{
 		foreach (var packableItem in packableItems)
 		{
@@ -35,7 +34,7 @@ internal sealed class Poser3DAssetsReplicator
 		}
 	}
 
-	private static void ReplicateKeyPoints(Poser3DItem item, ImmutableArray<PackableKeyPoint3D> packableKeyPoints)
+	private static void ReplicateKeyPoints(Poser3DItem item, IReadOnlyCollection<PackableKeyPoint3D> packableKeyPoints)
 	{
 		foreach (var packableKeyPoint in packableKeyPoints)
 		{

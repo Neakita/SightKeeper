@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Tags;
@@ -7,7 +6,7 @@ namespace SightKeeper.Data.Binary.Replication.DataSets.Poser;
 
 internal static class PoserTagsReplicator
 {
-	public static void ReplicateTags(TagsLibrary<PoserTag> library, ImmutableArray<PackablePoserTag> packableTags)
+	public static void ReplicateTags(TagsLibrary<PoserTag> library, IReadOnlyCollection<PackablePoserTag> packableTags)
 	{
 		foreach (var packableTag in packableTags)
 		{
@@ -17,7 +16,7 @@ internal static class PoserTagsReplicator
 		}
 	}
 
-	private static void ReplicateKeyPointTags(PoserTag poserTag, ImmutableArray<PackableTag> packableTags)
+	private static void ReplicateKeyPointTags(PoserTag poserTag, IReadOnlyCollection<PackableTag> packableTags)
 	{
 		foreach (var packableTag in packableTags)
 		{

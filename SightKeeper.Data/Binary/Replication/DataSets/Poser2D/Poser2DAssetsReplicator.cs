@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
@@ -13,7 +12,7 @@ internal sealed class Poser2DAssetsReplicator
 		_session = session;
 	}
 
-	public void ReplicateAssets(Poser2DDataSet dataSet, ImmutableArray<PackableItemsAsset<PackablePoser2DItem>> packableAssets)
+	public void ReplicateAssets(Poser2DDataSet dataSet, IReadOnlyCollection<PackableItemsAsset<PackablePoser2DItem>> packableAssets)
 	{
 		foreach (var packableAsset in packableAssets)
 		{
@@ -25,7 +24,7 @@ internal sealed class Poser2DAssetsReplicator
 
 	private readonly ReplicationSession _session;
 
-	private static void ReplicateItems(TagsLibrary<PoserTag> tagsLibrary, Poser2DAsset asset, ImmutableArray<PackablePoser2DItem> packableItems)
+	private static void ReplicateItems(TagsLibrary<PoserTag> tagsLibrary, Poser2DAsset asset, IReadOnlyCollection<PackablePoser2DItem> packableItems)
 	{
 		foreach (var packableItem in packableItems)
 		{
@@ -35,7 +34,7 @@ internal sealed class Poser2DAssetsReplicator
 		}
 	}
 
-	private static void ReplicateKeyPoints(Poser2DItem item, ImmutableArray<PackableKeyPoint> packableKeyPoints)
+	private static void ReplicateKeyPoints(Poser2DItem item, IReadOnlyCollection<PackableKeyPoint> packableKeyPoints)
 	{
 		foreach (var packableKeyPoint in packableKeyPoints)
 		{
