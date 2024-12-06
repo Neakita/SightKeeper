@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using SightKeeper.Data.Binary.Conversion.DataSets;
 using SightKeeper.Data.Binary.Services;
 
 namespace SightKeeper.Data.Binary.Conversion;
@@ -12,11 +14,12 @@ internal sealed class AppDataConverter
 	public PackableAppData Convert(AppData data)
 	{
 		ConversionSession session = new();
-		MultiDataSetConverter dataSetConverter = new(_screenshotsDataAccess, session);
-		var dataSets = dataSetConverter.Convert(data.DataSets);
-		ProfileConverter profileConverter = new(session);
-		var profiles = profileConverter.Convert(data.Profiles).ToImmutableArray();
-		return new PackableAppData(games, dataSets, profiles, data.ApplicationSettings);
+		DataSetsConverter dataSetsConverter = new(session, _screenshotsDataAccess);
+		return new PackableAppData
+		{
+			DataSets = dataSetsConverter.ConvertDataSets(data.DataSets).ToImmutableArray(),
+			ApplicationSettings = data.ApplicationSettings
+		};
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
