@@ -1,22 +1,15 @@
 using System.Collections.Immutable;
-using FlakeId;
 using MemoryPack;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 
-namespace SightKeeper.Data.Binary.Model.Screenshots;
+namespace SightKeeper.Data.Binary.Model;
 
 /// <summary>
 /// MemoryPackable version of <see cref="ScreenshotsLibrary"/>
 /// </summary>
 [MemoryPackable]
-public partial class PackableScreenshotsLibrary
+internal partial class PackableScreenshotsLibrary
 {
-	public string Name { get; }
-	public ImmutableArray<Id> Screenshots { get; }
-
-	public PackableScreenshotsLibrary(string name, ImmutableArray<Id> screenshots)
-	{
-		Name = name;
-		Screenshots = screenshots;
-	}
+	public required string Name { get; init; }
+	public required ImmutableArray<PackableScreenshot> Screenshots { get; init; }
 }

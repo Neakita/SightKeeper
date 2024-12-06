@@ -14,11 +14,13 @@ internal sealed class AppDataConverter
 	public PackableAppData Convert(AppData data)
 	{
 		ConversionSession session = new();
+		ScreenshotsLibraryConverter screenshotsConverter = new(_screenshotsDataAccess);
 		DataSetsConverter dataSetsConverter = new(session, _screenshotsDataAccess);
 		return new PackableAppData
 		{
+			ScreenshotsLibraries = screenshotsConverter.ConvertScreenshotsLibraries(data.ScreenshotsLibraries).ToImmutableArray(),
 			DataSets = dataSetsConverter.ConvertDataSets(data.DataSets).ToImmutableArray(),
-			ApplicationSettings = data.ApplicationSettings
+			ApplicationSettings = data.ApplicationSettings,
 		};
 	}
 

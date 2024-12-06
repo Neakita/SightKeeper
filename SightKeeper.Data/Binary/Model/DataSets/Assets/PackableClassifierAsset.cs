@@ -9,5 +9,5 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 [MemoryPackable]
 internal sealed partial class PackableClassifierAsset : PackableAsset
 {
-	public required byte TagId { get; init; }
+	public required byte TagIndex { get; init; }
 }

@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
-using FlakeId;
-using SightKeeper.Data.Binary.Model.Screenshots;
+using SightKeeper.Data.Binary.Model;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
+using PackableScreenshotsLibrary = SightKeeper.Data.Binary.Model.PackableScreenshotsLibrary;
 
 namespace SightKeeper.Data.Binary.Conversion;
 
@@ -13,22 +13,31 @@ internal sealed class ScreenshotsLibraryConverter
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public PackableScreenshotsLibrary ConvertScreenshotsLibrary(ScreenshotsLibrary library)
+	public IEnumerable<PackableScreenshotsLibrary> ConvertScreenshotsLibraries(IEnumerable<ScreenshotsLibrary> packableLibraries)
 	{
-		return new PackableScreenshotsLibrary(library.Name, ConvertScreenshots(library.Screenshots));
+		return packableLibraries.Select(ConvertScreenshotsLibrary);
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
-	private ImmutableArray<Id> ConvertScreenshots(IReadOnlyCollection<Screenshot> screenshots)
+	private PackableScreenshotsLibrary ConvertScreenshotsLibrary(ScreenshotsLibrary packableLibrary) => new()
 	{
-		var builder = ImmutableArray.CreateBuilder<Id>(screenshots.Count);
-		foreach (var screenshot in screenshots)
-		{
-			var screenshotId = _screenshotsDataAccess.GetId(screenshot);
-			builder.Add(screenshotId);
-		}
+		Name = packableLibrary.Name,
+		Screenshots = ConvertScreenshots(packableLibrary.Screenshots).ToImmutableArray()
+	};
 
-		return builder.DrainToImmutable();
+	private IEnumerable<PackableScreenshot> ConvertScreenshots(IEnumerable<Screenshot> screenshots)
+	{
+		return screenshots.Select(ConvertScreenshot);
+	}
+
+	private PackableScreenshot ConvertScreenshot(Screenshot screenshot)
+	{
+		return new PackableScreenshot
+		{
+			Id = _screenshotsDataAccess.GetId(screenshot),
+			CreationDate = screenshot.CreationDate,
+			ImageSize = screenshot.ImageSize
+		};
 	}
 }

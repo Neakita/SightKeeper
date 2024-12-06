@@ -21,11 +21,9 @@ internal sealed class TagsConverter
 	private PackableTag ConvertTag(int index, Tag tag)
 	{
 		Guard.IsLessThanOrEqualTo(index, byte.MaxValue);
-		var id = (byte)index;
-		_session.TagsIds.Add(tag, id);
+		_session.TagsIndexes.Add(tag, (byte)index);
 		return new PackableTag
 		{
-			Id = id,
 			Name = tag.Name,
 			Color = tag.Color
 		};

@@ -5,8 +5,8 @@ namespace SightKeeper.Domain.Model.DataSets.Poser;
 
 public sealed class PoserTag : Tag, TagsOwner
 {
-	public IReadOnlyCollection<Tag> KeyPointTags => _keyPointTags.AsReadOnly();
-	IReadOnlyCollection<Tag> TagsOwner.Tags => KeyPointTags;
+	public IReadOnlyList<Tag> KeyPointTags => _keyPointTags.AsReadOnly();
+	IReadOnlyList<Tag> TagsOwner.Tags => KeyPointTags;
 
 	public Tag CreateKeyPointTag(string name)
 	{

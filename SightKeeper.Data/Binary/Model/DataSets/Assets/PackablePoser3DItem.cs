@@ -11,7 +11,7 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 [MemoryPackable]
 internal sealed partial class PackablePoser3DItem
 {
-	public required byte TagId { get; init; }
+	public required byte TagIndex { get; init; }
 	public required Bounding Bounding { get; init; }
 	public required ImmutableArray<PackableKeyPoint3D> KeyPoints { get; init; }
 }

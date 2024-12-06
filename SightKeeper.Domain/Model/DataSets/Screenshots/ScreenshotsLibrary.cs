@@ -14,7 +14,7 @@ public sealed class ScreenshotsLibrary
 		Name = name;
 	}
 
-	public Screenshot CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> resolution)
+	public Screenshot CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> imageSize)
 	{
 		if (_screenshots.Count > 0 && creationDate <= _screenshots[^1].CreationDate)
 		{
@@ -23,7 +23,7 @@ public sealed class ScreenshotsLibrary
 				"Check that the time synchronization is correct and/or delete incorrectly created screenshots",
 				creationDate, this);
 		}
-		Screenshot screenshot = new(creationDate, resolution);
+		Screenshot screenshot = new(creationDate, imageSize);
 		_screenshots.Add(screenshot);
 		return screenshot;
 	}

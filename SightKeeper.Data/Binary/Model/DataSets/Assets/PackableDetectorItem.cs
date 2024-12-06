@@ -10,12 +10,12 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 [MemoryPackable]
 internal sealed partial class PackableDetectorItem
 {
-	public byte TagId { get; }
+	public byte TagIndex { get; }
 	public Bounding Bounding { get; }
 
-	public PackableDetectorItem(byte tagId, Bounding bounding)
+	public PackableDetectorItem(byte tagIndex, Bounding bounding)
 	{
-		TagId = tagId;
+		TagIndex = tagIndex;
 		Bounding = bounding;
 	}
 }

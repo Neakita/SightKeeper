@@ -31,12 +31,12 @@ internal sealed class PlainWeightsConverter
 			Metrics = weights.Metrics,
 			Resolution = weights.Resolution,
 			Composition = CompositionConverter.ConvertComposition(weights.Composition),
-			TagIds = ConvertTagsToIds(weights.Tags).ToImmutableArray()
+			TagsIndexes = ConvertTagsToIds(weights.Tags).ToImmutableArray()
 		};
 	}
 
 	private IEnumerable<byte> ConvertTagsToIds(IEnumerable<Tag> tags)
 	{
-		return tags.Select(tag => _session.TagsIds[tag]);
+		return tags.Select(tag => _session.TagsIndexes[tag]);
 	}
 }

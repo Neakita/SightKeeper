@@ -1,5 +1,4 @@
 using SightKeeper.Data.Binary.Replication.DataSets;
-using SightKeeper.Data.Binary.Replication.Profiles;
 using SightKeeper.Data.Binary.Services;
 
 namespace SightKeeper.Data.Binary.Replication;
@@ -11,14 +10,14 @@ internal class AppDataReplicator
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public AppData Replicate(PackableAppData packed)
+	public AppData Replicate(PackableAppData packable)
 	{
 		ReplicationSession session = new();
-		var games = GameReplicator.Replicate(packed.Games, session);
-		MultiDataSetReplicator dataSetReplicator = new(_screenshotsDataAccess, session);
-		var dataSets = dataSetReplicator.Replicate(packed.DataSets);
-		var profiles = new ProfileReplicator(session).Replicate(packed.Profiles).ToHashSet();
-		return new AppData(games, dataSets, profiles, packed.ApplicationSettings);
+		ScreenshotsLibraryReplicator screenshotsReplicator = new(session, _screenshotsDataAccess);
+		DataSetsReplicator dataSetReplicator = new(session);
+		var screenshotsLibraries = screenshotsReplicator.ReplicateScreenshotsLibraries(packable.ScreenshotsLibraries);
+		var dataSets = dataSetReplicator.ReplicateDataSets(packable.DataSets);
+		return new AppData(screenshotsLibraries.ToHashSet(), dataSets.ToHashSet(), packable.ApplicationSettings);
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;

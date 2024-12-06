@@ -11,12 +11,12 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 	public override IReadOnlyCollection<PoserWeights> Weights => _weights;
 
 	public PoserWeights CreateWeights(
-		DateTime creationDate,
+		DateTimeOffset creationDate,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		ReadOnlyDictionary<PoserTag, ReadOnlyCollection<Tag>> tags,
-		Composition? composition)
+		Composition? composition,
+		ReadOnlyDictionary<PoserTag, ReadOnlyCollection<Tag>> tags)
 	{
 		// Prevent caller from changing collections after the call
 		tags = tags.ToDictionary().AsReadOnly();

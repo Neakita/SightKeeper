@@ -41,7 +41,7 @@ internal sealed class Poser2DAssetsConverter
 
 	private PackablePoser2DItem ConvertItem(Poser2DItem item) => new()
 	{
-		TagId = _session.TagsIds[item.Tag],
+		TagIndex = _session.TagsIndexes[item.Tag],
 		Bounding = item.Bounding,
 		KeyPoints = ConvertKeyPoints(item.KeyPoints).ToImmutableArray()
 	};
@@ -53,7 +53,7 @@ internal sealed class Poser2DAssetsConverter
 
 	private PackableKeyPoint ConvertKeyPoint(KeyPoint keyPoint) => new()
 	{
-		Id = _session.TagsIds[keyPoint.Tag],
+		TagIndex = _session.TagsIndexes[keyPoint.Tag],
 		Position = keyPoint.Position
 	};
 }

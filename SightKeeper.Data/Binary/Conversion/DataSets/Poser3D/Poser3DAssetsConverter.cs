@@ -40,7 +40,7 @@ internal sealed class Poser3DAssetsConverter
 
 	private PackablePoser3DItem ConvertItem(Poser3DItem item) => new()
 	{
-		TagId = _session.TagsIds[item.Tag],
+		TagIndex = _session.TagsIndexes[item.Tag],
 		Bounding = item.Bounding,
 		KeyPoints = ConvertKeyPoints(item.KeyPoints).ToImmutableArray()
 	};
@@ -52,7 +52,7 @@ internal sealed class Poser3DAssetsConverter
 
 	private PackableKeyPoint3D ConvertKeyPoint(KeyPoint3D keyPoint) => new()
 	{
-		Id = _session.TagsIds[keyPoint.Tag],
+		TagIndex = _session.TagsIndexes[keyPoint.Tag],
 		Position = keyPoint.Position,
 		IsVisible = keyPoint.IsVisible
 	};

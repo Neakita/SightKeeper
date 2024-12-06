@@ -26,7 +26,7 @@ internal sealed class ClassifierAssetsConverter
 		var (screenshot, asset) = assetPair;
 		return new PackableClassifierAsset
 		{
-			TagId = _session.TagsIds[asset.Tag],
+			TagIndex = _session.TagsIndexes[asset.Tag],
 			Usage = asset.Usage,
 			ScreenshotId = _screenshotsDataAccess.GetId(screenshot)
 		};

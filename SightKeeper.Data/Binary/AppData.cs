@@ -1,11 +1,13 @@
 ﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Data.Binary;
 
 public sealed class AppData : ApplicationSettingsProvider
 {
+	public IReadOnlySet<ScreenshotsLibrary> ScreenshotsLibraries => _screenshotsLibraries;
 	public IReadOnlySet<DataSet> DataSets => _dataSets;
 	public ApplicationSettings ApplicationSettings { get; }
 
@@ -16,15 +18,18 @@ public sealed class AppData : ApplicationSettingsProvider
 	}
 
 	internal AppData(
+		HashSet<ScreenshotsLibrary> screenshotsLibraries,
 		HashSet<DataSet> dataSets,
 		ApplicationSettings applicationSettings)
 	{
+		_screenshotsLibraries = screenshotsLibraries;
 		_dataSets = dataSets;
 		ApplicationSettings = applicationSettings;
 	}
 
 	internal AppData()
 	{
+		_screenshotsLibraries = new HashSet<ScreenshotsLibrary>();
 		_dataSets = new HashSet<DataSet>();
 		ApplicationSettings = new ApplicationSettings();
 	}
@@ -41,5 +46,6 @@ public sealed class AppData : ApplicationSettingsProvider
 		Guard.IsTrue(isRemoved);
 	}
 
+	private readonly HashSet<ScreenshotsLibrary> _screenshotsLibraries;
 	private readonly HashSet<DataSet> _dataSets;
 }

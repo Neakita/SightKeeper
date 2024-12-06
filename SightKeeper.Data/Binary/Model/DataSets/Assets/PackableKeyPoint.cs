@@ -10,6 +10,6 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 [MemoryPackable]
 internal partial class PackableKeyPoint
 {
-	public required byte Id { get; init; }
+	public required byte TagIndex { get; init; }
 	public required Vector2<double> Position { get; init; }
 }

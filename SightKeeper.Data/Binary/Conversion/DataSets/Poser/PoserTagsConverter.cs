@@ -21,12 +21,10 @@ internal sealed class PoserTagsConverter
 
 	private PackablePoserTag ConvertTag(int index, PoserTag tag)
 	{
-		var id = (byte)index;
-		_session.TagsIds.Add(tag, id);
+		_session.TagsIndexes.Add(tag, (byte)index);
 		return new PackablePoserTag
 		{
 			KeyPointTags = _tagsConverter.ConvertTags(tag.KeyPointTags).ToImmutableArray(),
-			Id = id,
 			Name = tag.Name,
 			Color = tag.Color
 		};

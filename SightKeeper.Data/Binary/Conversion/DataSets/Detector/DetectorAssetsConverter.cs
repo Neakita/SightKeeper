@@ -40,7 +40,7 @@ internal sealed class DetectorAssetsConverter
 
 	private PackableDetectorItem ConvertItem(DetectorItem item)
 	{
-		var tagId = _session.TagsIds[item.Tag];
+		var tagId = _session.TagsIndexes[item.Tag];
 		return new PackableDetectorItem(tagId, item.Bounding);
 	}
 }

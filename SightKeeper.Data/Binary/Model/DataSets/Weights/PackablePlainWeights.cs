@@ -10,5 +10,5 @@ namespace SightKeeper.Data.Binary.Model.DataSets.Weights;
 [MemoryPackable]
 internal partial class PackablePlainWeights : PackableWeights
 {
-	public required ImmutableArray<byte> TagIds { get; init; }
+	public required ImmutableArray<byte> TagsIndexes { get; init; }
 }
