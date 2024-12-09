@@ -3,6 +3,7 @@
 public sealed class ScreenshotsLibrary
 {
 	public string Name { get; set; } = string.Empty;
+	public string Description { get; set; } = string.Empty;
 
 	/// <remarks>
 	/// Sorted by date: first is the earliest, last is the latest
