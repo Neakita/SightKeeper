@@ -2,17 +2,12 @@
 
 public sealed class ScreenshotsLibrary
 {
-	public string Name { get; set; }
+	public string Name { get; set; } = string.Empty;
 
 	/// <remarks>
 	/// Sorted by date: first is the earliest, last is the latest
 	/// </remarks>
 	public IReadOnlyList<Screenshot> Screenshots => _screenshots;
-
-	public ScreenshotsLibrary(string name)
-	{
-		Name = name;
-	}
 
 	public Screenshot CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> imageSize)
 	{
@@ -26,6 +21,11 @@ public sealed class ScreenshotsLibrary
 		Screenshot screenshot = new(creationDate, imageSize);
 		_screenshots.Add(screenshot);
 		return screenshot;
+	}
+
+	public void RemoveScreenshotsRange(int index, int count)
+	{
+		_screenshots.RemoveRange(index, count);
 	}
 
 	private readonly List<Screenshot> _screenshots = new();

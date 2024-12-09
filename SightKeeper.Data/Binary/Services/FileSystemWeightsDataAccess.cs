@@ -1,7 +1,9 @@
 ﻿using FlakeId;
 using SightKeeper.Application;
 using SightKeeper.Domain.Model;
+using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Services;
@@ -35,19 +37,16 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 		_weightsDataAccess.AssociateId(weights, id);
 	}
 
-	protected override PlainWeights<TTag> CreateWeightsInLibrary<TTag>(WeightsLibrary<TTag> library, DateTime creationDate, ModelSize modelSize,
-		WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<TTag> tags, Composition? composition)
+	protected override PlainWeights CreateWeights(PlainWeightsLibrary library, DateTimeOffset creationDate, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<Tag> tags, Composition? composition)
 	{
 		lock (_editingLock)
-			return base.CreateWeightsInLibrary(library, creationDate, modelSize, metrics, resolution, tags, composition);
+			return base.CreateWeights(library, creationDate, modelSize, metrics, resolution, tags, composition);
 	}
 
-	protected override PoserWeights<TTag, TKeyPointTag> CreateWeightsInLibrary<TTag, TKeyPointTag>(WeightsLibrary<TTag, TKeyPointTag> library, DateTime creationDate,
-		ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<TTag> tags, IEnumerable<TKeyPointTag> keyPointTags,
-		Composition? composition)
+	protected override PoserWeights CreateWeights(PoserWeightsLibrary library, DateTimeOffset creationDate, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, Composition? composition, IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
 		lock (_editingLock)
-			return base.CreateWeightsInLibrary(library, creationDate, modelSize, metrics, resolution, tags, keyPointTags, composition);
+			return base.CreateWeights(library, creationDate, modelSize, metrics, resolution, composition, tags);
 	}
 
 	protected override void SaveWeightsData(Weights weights, byte[] data)
@@ -55,17 +54,17 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 		_weightsDataAccess.WriteAllBytes(weights, data);
 	}
 
-	protected override void DeleteWeightsFromLibrary<TTag>(PlainWeights<TTag> weights)
+	protected override void RemoveWeights(PlainWeightsLibrary library, PlainWeights weights)
 	{
 		lock (_editingLock)
-			base.DeleteWeightsFromLibrary(weights);
+			base.RemoveWeights(library, weights);
 		_appDataAccess.SetDataChanged();
 	}
 
-	protected override void DeleteWeightsFromLibrary<TTag, TKeyPointTag>(PoserWeights<TTag, TKeyPointTag> weights)
+	protected override void RemoveWeights(PoserWeightsLibrary library, PoserWeights weights)
 	{
 		lock (_editingLock)
-			base.DeleteWeightsFromLibrary(weights);
+			base.RemoveWeights(library, weights);
 		_appDataAccess.SetDataChanged();
 	}
 

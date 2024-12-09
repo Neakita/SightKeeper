@@ -16,6 +16,8 @@ public sealed class PlainWeightsLibrary : WeightsLibrary
 		Composition? composition,
 		IEnumerable<Tag> tags)
 	{
+		tags = tags.ToList().AsReadOnly();
+		DuplicateTagsException.ThrowIfContainsDuplicates(tags);
 		PlainWeights weights = new(creationDate, modelSize, metrics, resolution, composition, tags.ToList().AsReadOnly());
 		Guard.IsGreaterThanOrEqualTo(weights.Tags.Count, _minimumTagsCount);
 		foreach (var tag in weights.Tags)

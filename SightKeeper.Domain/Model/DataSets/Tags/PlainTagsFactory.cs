@@ -1,6 +1,6 @@
 namespace SightKeeper.Domain.Model.DataSets.Tags;
 
-public sealed class PlainTagsFactory : TagsFactory<Tag>
+internal sealed class PlainTagsFactory : TagsFactory<Tag>
 {
 	public static PlainTagsFactory Instance { get; } = new();
 	

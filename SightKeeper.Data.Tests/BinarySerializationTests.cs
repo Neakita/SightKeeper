@@ -1,10 +1,8 @@
-﻿using System.Collections.Immutable;
-using CommunityToolkit.Diagnostics;
+﻿using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using MemoryPack;
-using SightKeeper.Application.Screenshotting;
 using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model;
@@ -12,11 +10,12 @@ using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Classifier;
 using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
 using SightKeeper.Domain.Model.DataSets.Poser3D;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;
-using SightKeeper.Domain.Model.Profiles;
-using SightKeeper.Domain.Model.Profiles.Behaviors;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -39,22 +38,19 @@ public sealed class BinarySerializationTests
 	public void ShouldSaveAndLoadAppData()
 	{
 		AppDataAccess appDataAccess = new();
-		AppDataEditingLock locker = new();
-		FileSystemScreenshotsDataAccess screenshotsDataAccess = new(appDataAccess, locker);
-		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, locker));
-		Game game = new("PayDay 2", "payday2");
-		AppDataGamesDataAccess gamesDataAccess = new(appDataAccess, new AppDataEditingLock());
-		gamesDataAccess.Add(game);
-		AppDataDataSetsDataAccess appDataDataSetsDataAccess = new(appDataAccess, new AppDataEditingLock(), screenshotsDataAccess);
-		foreach (var dataSet in CreateDataSets(screenshotsDataAccess, game))
+		AppDataEditingLock editingLock = new();
+		AppDataScreenshotsLibrariesDataAccess screenshotsLibrariesDataAccess = new(appDataAccess, editingLock);
+		FileSystemScreenshotsDataAccess screenshotsDataAccess = new(appDataAccess, editingLock);
+		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, editingLock));
+		ScreenshotsLibrary screenshotsLibrary = new()
+		{
+			Name = "PD2"
+		};
+		screenshotsLibrariesDataAccess.Add(screenshotsLibrary);
+		var screenshot = screenshotsDataAccess.CreateScreenshot(screenshotsLibrary, SampleImageData, DateTimeOffset.Now);
+		AppDataDataSetsDataAccess appDataDataSetsDataAccess = new(appDataAccess, new AppDataEditingLock());
+		foreach (var dataSet in CreateDataSets(screenshot))
 			appDataDataSetsDataAccess.Add(dataSet);
-		var profile = CreateProfile(
-			appDataAccess.Data.DataSets.OfType<ClassifierDataSet>().Single().WeightsLibrary.Weights.Single(),
-			appDataAccess.Data.DataSets.OfType<DetectorDataSet>().Single().WeightsLibrary.Weights.Single(),
-			appDataAccess.Data.DataSets.OfType<Poser2DDataSet>().Single().WeightsLibrary.Weights.Single(),
-			appDataAccess.Data.DataSets.OfType<Poser3DDataSet>().Single().WeightsLibrary.Weights.Single());
-		AppDataProfilesDataAccess profilesDataAccess = new(appDataAccess, new AppDataEditingLock());
-		profilesDataAccess.Add(profile);
 		appDataAccess.Save();
 		var data = appDataAccess.Data;
 		appDataAccess.Load();
@@ -62,173 +58,130 @@ public sealed class BinarySerializationTests
 		Directory.Delete(screenshotsDataAccess.DirectoryPath, true);
 	}
 
-	private static EquivalencyAssertionOptions<AppData> ConfigureEquivalencyAssertion(EquivalencyAssertionOptions<AppData> options)
+	private static EquivalencyAssertionOptions<AppData> ConfigureEquivalencyAssertion(
+		EquivalencyAssertionOptions<AppData> options)
 	{
 		return options
 			.RespectingRuntimeTypes()
-			.IgnoringCyclicReferences()
-			.AllowingInfiniteRecursion();
+			.Excluding(info => info.Type.Name.Contains("Dictionary")); // https://github.com/fluentassertions/fluentassertions/issues/1136
 	}
 
-	private static IEnumerable<DataSet> CreateDataSets(ScreenshotsDataAccess screenshotsDataAccess, Game game)
+	private static IEnumerable<DataSet> CreateDataSets(Screenshot screenshot)
 	{
-		yield return CreateClassifierDataSet(screenshotsDataAccess, game);
-		yield return CreateDetectorDataSet(screenshotsDataAccess, game);
-		yield return CreatePoser2DDataSet(screenshotsDataAccess, game);
-		yield return CreatePoser3DDataSet(screenshotsDataAccess, game);
+		yield return CreateClassifierDataSet(screenshot);
+		yield return CreateDetectorDataSet(screenshot);
+		yield return CreatePoser2DDataSet(screenshot);
+		yield return CreatePoser3DDataSet(screenshot);
 	}
 
-	private static ClassifierDataSet CreateClassifierDataSet(ScreenshotsDataAccess screenshotsDataAccess, Game game)
+	private static ClassifierDataSet CreateClassifierDataSet(Screenshot screenshot)
 	{
 		ClassifierDataSet dataSet = new()
 		{
 			Name = "PD2Classifier",
-			Description = "Test dataset",
-			Game = game
+			Description = "Test dataset"
 		};
 		dataSet.TagsLibrary.CreateTag("Don't Shoot");
 		var shootTag = dataSet.TagsLibrary.CreateTag("shoot");
-		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 1;
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTimeOffset.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.Tag = shootTag;
-		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTimeOffset.Now);
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
 			ModelSize.Nano,
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
-			dataSet.TagsLibrary.Tags,
-			null);
+			null,
+			dataSet.TagsLibrary.Tags);
 		return dataSet;
 	}
 
-	private static DetectorDataSet CreateDetectorDataSet(ScreenshotsDataAccess screenshotsDataAccess, Game game)
+	private static DetectorDataSet CreateDetectorDataSet(Screenshot screenshot)
 	{
 		DetectorDataSet dataSet = new()
 		{
 			Name = "PD2Detector",
-			Description = "Test dataset",
-			Game = game
+			Description = "Test dataset"
 		};
 		var copTag = dataSet.TagsLibrary.CreateTag("Cop");
 		copTag.Color = 123;
 		var bulldozerTag = dataSet.TagsLibrary.CreateTag("Bulldozer");
 		bulldozerTag.Color = 456;
-		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 1;
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8));
 		asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9));
-		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
 			ModelSize.Nano,
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
-			dataSet.TagsLibrary.Tags,
-			null);
+			null,
+			dataSet.TagsLibrary.Tags);
 		return dataSet;
 	}
 
-	private static Poser2DDataSet CreatePoser2DDataSet(ScreenshotsDataAccess screenshotsDataAccess, Game game)
+	private static Poser2DDataSet CreatePoser2DDataSet(Screenshot screenshot)
 	{
 		Poser2DDataSet dataSet = new()
 		{
 			Name = "PD2Poser",
-			Description = "Test dataset",
-			Game = game
+			Description = "Test dataset"
 		};
 		var copTag = dataSet.TagsLibrary.CreateTag("Cop");
 		copTag.Color = 123;
-		var copHeadKeyPoint = copTag.CreateKeyPoint("Head");
-		copTag.CreateProperty("Distance", 0, 200);
+		var copHeadKeyPoint = copTag.CreateKeyPointTag("Head");
 		var bulldozerTag = dataSet.TagsLibrary.CreateTag("Bulldozer");
 		bulldozerTag.Color = 456;
-		var bulldozerFaceKeyPoint = bulldozerTag.CreateKeyPoint("Face");
-		bulldozerTag.CreateProperty("Distance", 0, 200);
-		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 1;
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
+		var bulldozerFaceKeyPoint = bulldozerTag.CreateKeyPointTag("Face");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		var copItem = asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [20]);
+		var copItem = asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8));
 		copItem.CreateKeyPoint(copHeadKeyPoint, new Vector2<double>(0.3, 0.2));
-		var bulldozerItem = asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [25]);
+		var bulldozerItem = asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9));
 		bulldozerItem.CreateKeyPoint(bulldozerFaceKeyPoint, new Vector2<double>(0.4, 0.3));
-		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
+		Dictionary<PoserTag, IReadOnlyCollection<Tag>> weightsTags = new()
+		{
+			{ copTag, copTag.KeyPointTags },
+			{ bulldozerTag, bulldozerTag.KeyPointTags }
+		};
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
 			ModelSize.Nano,
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
-			dataSet.TagsLibrary.Tags,
-			dataSet.TagsLibrary.Tags.SelectMany(tag => tag.KeyPoints),
-			null);
+			null,
+			weightsTags);
 		return dataSet;
 	}
 
-	private static Poser3DDataSet CreatePoser3DDataSet(ScreenshotsDataAccess screenshotsDataAccess, Game game)
+	private static Poser3DDataSet CreatePoser3DDataSet(Screenshot screenshot)
 	{
 		Poser3DDataSet dataSet = new()
 		{
 			Name = "PD2Poser3D",
-			Description = "Test dataset",
-			Game = game
+			Description = "Test dataset"
 		};
 		var copTag = dataSet.TagsLibrary.CreateTag("Cop");
 		copTag.Color = 123;
-		var copHeadKeyPoint = copTag.CreateKeyPoint("Head");
-		copTag.CreateNumericProperty("Distance", 0, 200);
-		copTag.CreateBooleanProperty("ShouldShoot");
+		var copHeadKeyPoint = copTag.CreateKeyPointTag("Head");
 		var bulldozerTag = dataSet.TagsLibrary.CreateTag("Bulldozer");
 		bulldozerTag.Color = 456;
-		var bulldozerFaceKeyPoint = bulldozerTag.CreateKeyPoint("Face");
-		bulldozerTag.CreateNumericProperty("Distance", 0, 200);
-		bulldozerTag.CreateBooleanProperty("ShouldShoot");
-		dataSet.ScreenshotsLibrary.MaxLiabilityQuantity = 1;
-		var screenshot = screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
+		var bulldozerFaceKeyPoint = bulldozerTag.CreateKeyPointTag("Face");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		var copItem = asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8), [20], [true]);
-		copItem.CreateKeyPoint(copHeadKeyPoint, new Vector2<double>(0.3, 0.2), true);
-		var bulldozerItem = asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9), [25], [false]);
+		var copItem = asset.CreateItem(copTag, new Bounding(0.1, 0.15, 0.5, 0.8));
+		copItem.CreateKeyPoint(copHeadKeyPoint, new Vector2<double>(0.3, 0.2));
+		var bulldozerItem = asset.CreateItem(bulldozerTag, new Bounding(0.2, 0.2, 0.6, 0.9));
 		bulldozerItem.CreateKeyPoint(bulldozerFaceKeyPoint, new Vector2<double>(0.4, 0.3), false);
-		screenshotsDataAccess.CreateScreenshot(dataSet.ScreenshotsLibrary, SampleImageData, DateTime.Now);
+		Dictionary<PoserTag, IReadOnlyCollection<Tag>> weightsTags = new()
+		{
+			{ copTag, copTag.KeyPointTags },
+			{ bulldozerTag, bulldozerTag.KeyPointTags }
+		};
 		dataSet.WeightsLibrary.CreateWeights(
 			DateTime.Now,
 			ModelSize.Nano,
 			new WeightsMetrics(100, new LossMetrics(0.1f, 0.2f, 0.3f)),
 			new Vector2<ushort>(320, 320),
-			dataSet.TagsLibrary.Tags,
-			dataSet.TagsLibrary.Tags.SelectMany(tag => tag.KeyPoints),
-			null);
+			null,
+			weightsTags);
 		return dataSet;
-	}
-
-	private static Profile CreateProfile(
-		PlainWeights<ClassifierTag> classifierWeights,
-		PlainWeights<DetectorTag> detectorWeights,
-		PoserWeights<Poser2DTag, KeyPointTag2D> poser2DWeights,
-		PoserWeights<Poser3DTag, KeyPointTag3D> poser3DWeights)
-	{
-		Profile profile = new("Test profile");
-		profile.CreateModule(classifierWeights);
-		// TODO trigger actions
-		var detectorModule = profile.CreateModule(detectorWeights);
-		detectorModule.SetBehavior<AimBehavior>().Tags = detectorWeights
-			.Tags
-			.Select(tag => new AimBehavior.TagOptions(tag, 0, -0.1f))
-			.ToImmutableArray();
-		var poser2DModule = profile.CreateModule(poser2DWeights);
-		var poser2DAimAssistBehavior = poser2DModule.SetBehavior<AimAssistBehavior>();
-		poser2DAimAssistBehavior.Tags = poser2DWeights
-			.Tags
-			.Select(tag => new AimAssistBehavior.TagOptions(tag, 0, new Vector2<float>(0.1f, 0.05f), -0.1f))
-			.ToImmutableArray();
-		var poser3DModule = profile.CreateModule(poser3DWeights);
-		var poser3DAimAssistBehavior = poser3DModule.SetBehavior<AimAssistBehavior>();
-		poser3DAimAssistBehavior.Tags = poser3DWeights
-			.Tags
-			.Select(tag => new AimAssistBehavior.TagOptions(tag, 0, new Vector2<float>(0.1f, 0.05f), -0.1f))
-			.ToImmutableArray();
-		return profile;
 	}
 }

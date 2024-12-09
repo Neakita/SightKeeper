@@ -7,16 +7,18 @@ public sealed class DetectorItem : AssetItem
 {
 	public Tag Tag
 	{
-		get;
+		get => _tag;
 		set
 		{
-			InappropriateTagsOwnerChangeException.ThrowIfOwnerChanged(field, value);
-			field = value;
+			InappropriateTagsOwnerChangeException.ThrowIfOwnerChanged(_tag, value);
+			_tag = value;
 		}
 	}
 
 	internal DetectorItem(Bounding bounding, Tag tag) : base(bounding)
 	{
-		Tag = tag;
+		_tag = tag;
 	}
+
+	private Tag _tag;
 }

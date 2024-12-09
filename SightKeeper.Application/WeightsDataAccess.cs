@@ -8,92 +8,68 @@ namespace SightKeeper.Application;
 
 public abstract class WeightsDataAccess
 {
-	public PlainWeights<TTag> CreateWeights<TTag>(
-		WeightsLibrary<TTag> library,
+	public PlainWeights CreateWeights(
+		PlainWeightsLibrary library,
 		byte[] data,
-		DateTime creationDate,
+		DateTimeOffset creationDate,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		IEnumerable<TTag> tags,
-		Composition? composition) where TTag : Tag, MinimumTagsCount
-	{
-		var weights = CreateWeightsInLibrary(library, creationDate, modelSize, metrics, resolution, tags, composition);
-		SaveWeightsData(weights, data);
-		return weights;
-	}
-
-	public PoserWeights<TTag, TKeyPointTag> CreateWeights<TTag, TKeyPointTag>(
-		WeightsLibrary<TTag, TKeyPointTag> library,
-		byte[] data,
-		DateTime creationDate,
-		ModelSize modelSize,
-		WeightsMetrics metrics,
-		Vector2<ushort> resolution,
-		IEnumerable<TTag> tags,
-		IEnumerable<TKeyPointTag> keyPointTags,
+		IEnumerable<Tag> tags,
 		Composition? composition)
-		where TTag : PoserTag
-		where TKeyPointTag : KeyPointTag<TTag>
 	{
-		var weights = CreateWeightsInLibrary(library, creationDate, modelSize, metrics, resolution, tags, keyPointTags, composition);
+		var weights = CreateWeights(library, creationDate, modelSize, metrics, resolution, tags, composition);
 		SaveWeightsData(weights, data);
 		return weights;
 	}
 
-	public void RemoveWeights<TTag>(PlainWeights<TTag> weights) where TTag : Tag, MinimumTagsCount
+	public PoserWeights CreateWeights(
+		PoserWeightsLibrary library,
+		byte[] data,
+		DateTimeOffset creationDate,
+		ModelSize modelSize,
+		WeightsMetrics metrics,
+		Vector2<ushort> resolution,
+		Composition? composition,
+		IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
-		DeleteWeightsFromLibrary(weights);
+		var weights = CreateWeights(library, creationDate, modelSize, metrics, resolution, composition, tags);
+		SaveWeightsData(weights, data);
+		return weights;
+	}
+
+	public void DeleteWeights(PlainWeightsLibrary library, PlainWeights weights)
+	{
+		RemoveWeights(library, weights);
 		RemoveWeightsData(weights);
 	}
 
-	public void RemoveWeights<TTag, TKeyPointTag>(PoserWeights<TTag, TKeyPointTag> weights)
-		where TTag : PoserTag
-		where TKeyPointTag : KeyPointTag<TTag>
+	public void DeleteWeights(PoserWeightsLibrary library, PoserWeights weights)
 	{
-		DeleteWeightsFromLibrary(weights);
+		RemoveWeights(library, weights);
 		RemoveWeightsData(weights);
 	}
 
 	public abstract byte[] LoadWeightsData(Weights weights);
 
-	protected virtual PlainWeights<TTag> CreateWeightsInLibrary<TTag>(
-		WeightsLibrary<TTag> library,
-		DateTime creationDate,
-		ModelSize modelSize,
-		WeightsMetrics metrics,
-		Vector2<ushort> resolution,
-		IEnumerable<TTag> tags,
-		Composition? composition)
-		where TTag : Tag, MinimumTagsCount
+	protected virtual PlainWeights CreateWeights(PlainWeightsLibrary library, DateTimeOffset creationDate, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<Tag> tags, Composition? composition)
 	{
-		return library.CreateWeights(creationDate, modelSize, metrics, resolution, tags, composition);
+		return library.CreateWeights(creationDate, modelSize, metrics, resolution, composition, tags);
 	}
 
-	protected virtual PoserWeights<TTag, TKeyPointTag> CreateWeightsInLibrary<TTag, TKeyPointTag>(
-		WeightsLibrary<TTag, TKeyPointTag> library,
-		DateTime creationDate,
-		ModelSize modelSize,
-		WeightsMetrics metrics,
-		Vector2<ushort> resolution,
-		IEnumerable<TTag> tags,
-		IEnumerable<TKeyPointTag> keyPointTags,
-		Composition? composition)
-		where TTag : PoserTag where TKeyPointTag : KeyPointTag<TTag>
+	protected virtual PoserWeights CreateWeights(PoserWeightsLibrary library, DateTimeOffset creationDate, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, Composition? composition, IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
-		return library.CreateWeights(creationDate, modelSize, metrics, resolution, tags, keyPointTags, composition);
+		return library.CreateWeights(creationDate, modelSize, metrics, resolution, composition, tags);
 	}
 
-	protected virtual void DeleteWeightsFromLibrary<TTag>(PlainWeights<TTag> weights)
-		where TTag : Tag, MinimumTagsCount
+	protected virtual void RemoveWeights(PlainWeightsLibrary library, PlainWeights weights)
 	{
-		weights.Library.RemoveWeights(weights);
+		library.RemoveWeights(weights);
 	}
 
-	protected virtual void DeleteWeightsFromLibrary<TTag, TKeyPointTag>(PoserWeights<TTag, TKeyPointTag> weights)
-		where TTag : PoserTag where TKeyPointTag : KeyPointTag<TTag>
+	protected virtual void RemoveWeights(PoserWeightsLibrary library, PoserWeights weights)
 	{
-		weights.Library.RemoveWeights(weights);
+		library.RemoveWeights(weights);
 	}
 
 	protected abstract void SaveWeightsData(Weights weights, byte[] data);

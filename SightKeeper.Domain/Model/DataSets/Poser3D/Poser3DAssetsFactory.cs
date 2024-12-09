@@ -3,7 +3,7 @@ using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Domain.Model.DataSets.Poser3D;
 
-public sealed class Poser3DAssetsFactory : AssetsFactory<Poser3DAsset>
+internal sealed class Poser3DAssetsFactory : AssetsFactory<Poser3DAsset>
 {
 	public Poser3DAssetsFactory(TagsOwner tagsOwner)
 	{

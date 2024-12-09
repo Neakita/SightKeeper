@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Tests.DataSets.Classifier;
 
@@ -46,13 +47,14 @@ public sealed class ClassifierTagsLibraryTests
 	[Fact]
 	public void ShouldNotDeleteTagWithAssociatedAsset()
 	{
+		ScreenshotsLibrary screenshotsLibrary = new();
+		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.DeleteTag(tag));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);
-		dataSet.AssetsLibrary.Assets.Should().Contain(asset);
+		dataSet.AssetsLibrary.Assets.Should().ContainValue(asset);
 		asset.Tag.Should().Be(tag);
 	}
 }

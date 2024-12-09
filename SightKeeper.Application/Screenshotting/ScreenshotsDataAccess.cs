@@ -1,9 +1,7 @@
-﻿using System.Collections.Immutable;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -16,59 +14,24 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 
 	public abstract Stream LoadImage(Screenshot screenshot);
 
-	public Screenshot CreateScreenshot(
-		ScreenshotsLibrary library,
-		ReadOnlySpan2D<Rgba32> imageData,
-		DateTimeOffset creationDate)
+	public Screenshot CreateScreenshot(ScreenshotsLibrary library, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationDate)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
-		var screenshot = CreateScreenshotInLibrary(library, creationDate, resolution, out var removedScreenshots);
-		foreach (var removedScreenshot in removedScreenshots)
-		{
-			DeleteScreenshotData(removedScreenshot);
-			_removed.OnNext(removedScreenshot);
-		}
+		var screenshot = CreateScreenshot(library, creationDate, resolution);
 		SaveScreenshotData(screenshot, imageData);
 		_added.OnNext(screenshot);
 		return screenshot;
 	}
 
-	protected virtual Screenshot CreateScreenshotInLibrary(ScreenshotsLibrary library, DateTimeOffset creationDate, Vector2<ushort> resolution, out ImmutableArray<Screenshot> removedScreenshots)
+	protected virtual Screenshot CreateScreenshot(ScreenshotsLibrary library, DateTimeOffset creationDate, Vector2<ushort> resolution)
 	{
-		return library.CreateScreenshot(creationDate, resolution, out removedScreenshots);
-	}
-
-	public Screenshot<TAsset> CreateScreenshot<TAsset>(
-		ScreenshotsLibrary<TAsset> library,
-		ReadOnlySpan2D<Rgba32> imageData,
-		DateTimeOffset creationDate)
-		where TAsset : Asset
-	{
-		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
-		var screenshot = library.CreateScreenshot(creationDate, resolution, out var removedScreenshots);
-		foreach (var removedScreenshot in removedScreenshots)
-			DeleteScreenshotData(removedScreenshot);
-		SaveScreenshotData(screenshot, imageData);
-		_added.OnNext(screenshot);
-		return screenshot;
-	}
-
-	public void DeleteScreenshot(Screenshot screenshot)
-	{
-		DeleteScreenshotFromLibrary(screenshot);
-		DeleteScreenshotData(screenshot);
-		_removed.OnNext(screenshot);
+		return library.CreateScreenshot(creationDate, resolution);
 	}
 
 	public void Dispose()
 	{
 		_added.Dispose();
 		_removed.Dispose();
-	}
-
-	protected virtual void DeleteScreenshotFromLibrary(Screenshot screenshot)
-	{
-		screenshot.DeleteFromLibrary();
 	}
 
 	protected abstract void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> image);

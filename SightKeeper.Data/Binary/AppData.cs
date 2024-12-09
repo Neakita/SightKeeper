@@ -34,6 +34,18 @@ public sealed class AppData : ApplicationSettingsProvider
 		ApplicationSettings = new ApplicationSettings();
 	}
 
+	internal void AddScreenshotsLibrary(ScreenshotsLibrary library)
+	{
+		bool isAdded = _screenshotsLibraries.Add(library);
+		Guard.IsTrue(isAdded);
+	}
+
+	internal void RemoveScreenshotsLibrary(ScreenshotsLibrary library)
+	{
+		bool isRemoved = _screenshotsLibraries.Remove(library);
+		Guard.IsTrue(isRemoved);
+	}
+
 	internal void AddDataSet(DataSet dataSet)
 	{
 		bool isAdded = _dataSets.Add(dataSet);

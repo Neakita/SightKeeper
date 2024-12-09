@@ -37,7 +37,6 @@ public sealed class DataSetCreator
 	{
 		dataSet.Name = data.Name;
 		dataSet.Description = data.Description;
-		dataSet.Game = data.Game;
 	}
 
 	private static void AddTags(DataSet dataSet, IReadOnlyCollection<NewTagData> tagsData)

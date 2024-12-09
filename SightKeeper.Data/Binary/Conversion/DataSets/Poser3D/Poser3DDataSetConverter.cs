@@ -17,6 +17,8 @@ internal sealed class Poser3DDataSetConverter
 
 	public PackablePoser3DDataSet ConvertDataSet(Poser3DDataSet dataSet) => new()
 	{
+		Name = dataSet.Name,
+		Description = dataSet.Description,
 		Tags = _tagsConverter.ConvertTags(dataSet.TagsLibrary.Tags).ToImmutableArray(),
 		Assets = _assetsConverter.ConvertAssets(dataSet.AssetsLibrary.Assets).ToImmutableArray(),
 		Weights = _weightsConverter.ConvertWeights(dataSet.WeightsLibrary.Weights).ToImmutableArray()

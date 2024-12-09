@@ -13,12 +13,6 @@ public sealed class TagsLibrary<TTag> : TagsLibrary where TTag : Tag
 {
 	public override IReadOnlyList<TTag> Tags => _tags.AsReadOnly();
 
-	public TagsLibrary(TagsFactory<TTag> tagsFactory, TagsUsageProvider tagsUsageProvider)
-	{
-		_tagsFactory = tagsFactory;
-		_tagsUsageProvider = tagsUsageProvider;
-	}
-
 	public override TTag CreateTag(string name)
 	{
 		var tag = _tagsFactory.CreateTag(this, name);
@@ -29,9 +23,16 @@ public sealed class TagsLibrary<TTag> : TagsLibrary where TTag : Tag
 	public void DeleteTag(TTag tag)
 	{
 		bool isTagInUse = _tagsUsageProvider.IsInUse(tag);
-		Guard.IsFalse(isTagInUse);
+		if (isTagInUse)
+			TagIsInUseException.ThrowForDeletion(tag);
 		var isRemoved = _tags.Remove(tag);
 		Guard.IsTrue(isRemoved);
+	}
+
+	internal TagsLibrary(TagsFactory<TTag> tagsFactory, TagsUsageProvider tagsUsageProvider)
+	{
+		_tagsFactory = tagsFactory;
+		_tagsUsageProvider = tagsUsageProvider;
 	}
 
 	private readonly TagsFactory<TTag> _tagsFactory;

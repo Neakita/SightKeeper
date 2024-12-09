@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Runtime.InteropServices;
 using CommunityToolkit.HighPerformance;
 using FlakeId;
@@ -39,21 +38,14 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		_screenshotsDataAccess.AssociateId(screenshot, id);
 	}
 
-	internal void DeleteAllScreenshotsData(ScreenshotsLibrary library)
-	{
-		foreach (var screenshot in library.Screenshots)
-			DeleteScreenshotData(screenshot);
-	}
-
-	protected override Screenshot CreateScreenshotInLibrary(
+	protected override Screenshot CreateScreenshot(
 		ScreenshotsLibrary library,
 		DateTimeOffset creationDate,
-		Vector2<ushort> resolution,
-		out ImmutableArray<Screenshot> removedScreenshots)
+		Vector2<ushort> resolution)
 	{
 		Screenshot screenshot;
 		lock (_editingLock)
-			screenshot = base.CreateScreenshotInLibrary(library, creationDate, resolution, out removedScreenshots);
+			screenshot = base.CreateScreenshot(library, creationDate, resolution);
 		_appDataAccess.SetDataChanged();
 		return screenshot;
 	}
@@ -73,13 +65,6 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 			var bytes = MemoryMarshal.AsBytes(rowData);
 			stream.Write(bytes);
 		}
-	}
-
-	protected override void DeleteScreenshotFromLibrary(Screenshot screenshot)
-	{
-		lock (_editingLock)
-			base.DeleteScreenshotFromLibrary(screenshot);
-		_appDataAccess.SetDataChanged();
 	}
 
 	protected override void DeleteScreenshotData(Screenshot screenshot)

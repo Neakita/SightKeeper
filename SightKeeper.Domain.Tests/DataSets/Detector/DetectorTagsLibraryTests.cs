@@ -2,6 +2,7 @@
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
 
@@ -47,9 +48,10 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldNotDeleteTagWithItems()
 	{
+		ScreenshotsLibrary screenshotsLibrary = new();
+		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
 		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.DeleteTag(tag));
@@ -59,10 +61,11 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldDeleteTagWithoutItems()
 	{
+		ScreenshotsLibrary screenshotsLibrary = new();
+		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
-		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(tag1, new Bounding(0, 0, 1, 1));
 		dataSet.TagsLibrary.DeleteTag(tag2);

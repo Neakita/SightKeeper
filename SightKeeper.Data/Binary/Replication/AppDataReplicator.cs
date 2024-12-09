@@ -15,9 +15,9 @@ internal class AppDataReplicator
 		ReplicationSession session = new();
 		ScreenshotsLibraryReplicator screenshotsReplicator = new(session, _screenshotsDataAccess);
 		DataSetsReplicator dataSetReplicator = new(session);
-		var screenshotsLibraries = screenshotsReplicator.ReplicateScreenshotsLibraries(packable.ScreenshotsLibraries);
-		var dataSets = dataSetReplicator.ReplicateDataSets(packable.DataSets);
-		return new AppData(screenshotsLibraries.ToHashSet(), dataSets.ToHashSet(), packable.ApplicationSettings);
+		var screenshotsLibraries = screenshotsReplicator.ReplicateScreenshotsLibraries(packable.ScreenshotsLibraries).ToHashSet();
+		var dataSets = dataSetReplicator.ReplicateDataSets(packable.DataSets).ToHashSet();
+		return new AppData(screenshotsLibraries, dataSets, packable.ApplicationSettings);
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;

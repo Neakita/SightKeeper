@@ -2,7 +2,6 @@
 
 public class Tag
 {
-	public TagsOwner Owner { get; }
 	public string Name
 	{
 		get;
@@ -19,6 +18,8 @@ public class Tag
 		}
 	}
 	public uint Color { get; set; }
+
+	internal TagsOwner Owner { get; }
 
 	internal Tag(TagsOwner owner, string name)
 	{

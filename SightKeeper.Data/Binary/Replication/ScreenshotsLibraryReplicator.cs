@@ -2,7 +2,7 @@ using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.Model.DataSets.Screenshots;
 using PackableScreenshotsLibrary = SightKeeper.Data.Binary.Model.PackableScreenshotsLibrary;
 
-namespace SightKeeper.Data.Binary.Replication.DataSets;
+namespace SightKeeper.Data.Binary.Replication;
 
 internal sealed class ScreenshotsLibraryReplicator
 {
@@ -22,7 +22,10 @@ internal sealed class ScreenshotsLibraryReplicator
 
 	private ScreenshotsLibrary ReplicateScreenshotsLibrary(PackableScreenshotsLibrary packableLibrary)
 	{
-		ScreenshotsLibrary library = new(packableLibrary.Name);
+		ScreenshotsLibrary library = new()
+		{
+			Name = packableLibrary.Name
+		};
 		foreach (var packableScreenshot in packableLibrary.Screenshots)
 		{
 			var screenshot = library.CreateScreenshot(packableScreenshot.CreationDate, packableScreenshot.ImageSize);

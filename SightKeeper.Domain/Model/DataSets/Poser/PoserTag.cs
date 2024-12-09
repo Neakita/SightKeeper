@@ -17,14 +17,18 @@ public sealed class PoserTag : Tag, TagsOwner
 
 	public void DeleteKeyPointTag(Tag tag)
 	{
+		var isTagInUse = _usageProvider.IsInUse(tag);
+		if (isTagInUse)
+			TagIsInUseException.ThrowForDeletion(tag);
 		var isRemoved = _keyPointTags.Remove(tag);
 		Guard.IsTrue(isRemoved);
 	}
 
-	internal PoserTag(TagsOwner owner, string name) : base(owner, name)
+	internal PoserTag(TagsOwner owner, string name, TagsUsageProvider usageProvider) : base(owner, name)
 	{
+		_usageProvider = usageProvider;
 	}
 
-
+	private readonly TagsUsageProvider _usageProvider;
 	private readonly List<Tag> _keyPointTags = new();
 }

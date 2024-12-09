@@ -7,11 +7,11 @@ public abstract class PoserItem : AssetItem
 {
 	public PoserTag Tag
 	{
-		get;
+		get => _tag;
 		set
 		{
-			InappropriateTagsOwnerChangeException.ThrowIfOwnerChanged(field, value);
-			field = value;
+			InappropriateTagsOwnerChangeException.ThrowIfOwnerChanged(_tag, value);
+			_tag = value;
 		}
 	}
 
@@ -19,6 +19,8 @@ public abstract class PoserItem : AssetItem
 
 	protected PoserItem(Bounding bounding, PoserTag tag) : base(bounding)
 	{
-		Tag = tag;
+		_tag = tag;
 	}
+
+	private PoserTag _tag;
 }

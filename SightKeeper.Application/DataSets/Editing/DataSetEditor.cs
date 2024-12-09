@@ -1,9 +1,9 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets;
 using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.Model.DataSets.Tags;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
@@ -28,7 +28,6 @@ public class DataSetEditor : IDisposable
 	{
 		dataSet.Name = data.Name;
 		dataSet.Description = data.Description;
-		dataSet.Game = data.Game;
 	}
 
 	private static void UpdateTags(DataSet dataSet, IReadOnlyCollection<TagData> tagsData)
@@ -36,27 +35,25 @@ public class DataSetEditor : IDisposable
 		var orderedData = tagsData.Order(TagDataOperationPriorityComparer.Instance);
 		foreach (var tagData in orderedData)
 		{
-			GuardDataSetEquality(dataSet, tagData);
 			if (tagData is EditedTagData editedTagData)
 				EditTag(editedTagData);
 			else if (tagData is ExistingTagData existingTagData)
-				RemoveTag(existingTagData);
+				RemoveTag(dataSet.TagsLibrary, existingTagData);
 			else if (tagData is NewTagData newTagData)
 				CreateNewTag(dataSet.TagsLibrary, newTagData);
 			else
-				throw new ArgumentOutOfRangeException(nameof(tagData));
+				throw new ArgumentOutOfRangeException(nameof(tagData), tagData, null);
 		}
 	}
 
-	private static void GuardDataSetEquality(DataSet dataSet, TagData tagData)
+	private static void RemoveTag(TagsLibrary tagsLibrary, ExistingTagData existingTagData)
 	{
-		if (tagData is ExistingTagData existingTagData)
-			Guard.IsReferenceEqualTo(existingTagData.Tag.DataSet, dataSet);
-	}
-
-	private static void RemoveTag(ExistingTagData existingTagData)
-	{
-		existingTagData.Tag.Delete();
+		if (tagsLibrary is TagsLibrary<Tag> plainTagsLibrary)
+			plainTagsLibrary.DeleteTag(existingTagData.Tag);
+		else if (tagsLibrary is TagsLibrary<PoserTag> poserTagsLibrary)
+		{
+			poserTagsLibrary.DeleteTag((PoserTag)existingTagData.Tag);
+		}
 	}
 
 	private static void EditTag(EditedTagData editedTagData)
@@ -73,21 +70,20 @@ public class DataSetEditor : IDisposable
 		var orderedData = tagsData.Order(TagDataOperationPriorityComparer.Instance);
 		foreach (var tagData in orderedData)
 		{
-			GuardDataSetEquality(poserTag.DataSet, tagData);
 			if (tagData is EditedTagData editedTagData)
 				EditTag(editedTagData);
 			else if (tagData is ExistingTagData existingTagData)
-				RemoveTag(existingTagData);
+				poserTag.DeleteKeyPointTag(existingTagData.Tag);
 			else if (tagData is NewTagData newTagData)
-				CreateNewTag(poserTag, newTagData);
+				CreateKeyPointTag(poserTag, newTagData);
 			else
 				throw new ArgumentOutOfRangeException(nameof(tagData));
 		}
 	}
 
-	private static void CreateNewTag(TagsHolder tagsHolder, NewTagData tagData)
+	private static void CreateNewTag(TagsLibrary tagsLibrary, NewTagData tagData)
 	{
-		var tag = tagsHolder.CreateTag(tagData.Name);
+		var tag = tagsLibrary.CreateTag(tagData.Name);
 		tag.Color = tagData.Color;
 		if (tag is PoserTag poserTag)
 			CreateKeyPointTags(poserTag, (NewPoserTagData)tagData);
@@ -100,5 +96,11 @@ public class DataSetEditor : IDisposable
 			var keyPointTag = tag.CreateKeyPointTag(keyPointTagData.Name);
 			keyPointTag.Color = keyPointTagData.Color;
 		}
+	}
+
+	private static void CreateKeyPointTag(PoserTag poserTag, NewTagData data)
+	{
+		var keyPointTag = poserTag.CreateKeyPointTag(data.Name);
+		keyPointTag.Color = data.Color;
 	}
 }

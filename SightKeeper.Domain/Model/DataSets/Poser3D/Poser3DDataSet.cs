@@ -14,7 +14,8 @@ public sealed class Poser3DDataSet : DataSet
 	public Poser3DDataSet()
 	{
 		PoserIterativeTagsUsageProvider<Poser3DItem> tagsUsageProvider = new();
-		TagsLibrary = new TagsLibrary<PoserTag>(PoserTagsFactory.Instance, tagsUsageProvider);
+		PoserTagsFactory tagsFactory = new(tagsUsageProvider);
+		TagsLibrary = new TagsLibrary<PoserTag>(tagsFactory, tagsUsageProvider);
 		Poser3DAssetsFactory assetsFactory = new(TagsLibrary);
 		AssetsLibrary = new AssetsLibrary<Poser3DAsset>(assetsFactory);
 		WeightsLibrary = new PoserWeightsLibrary(TagsLibrary);

@@ -2,6 +2,7 @@
 using SightKeeper.Domain.Model;
 using SightKeeper.Domain.Model.DataSets.Assets;
 using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SightKeeper.Domain.Model.DataSets.Screenshots;
 
 namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 
@@ -47,11 +48,12 @@ public class Poser2DTagsLibraryTests
 	[Fact]
 	public void ShouldNotDeleteTagWithItems()
 	{
+		ScreenshotsLibrary screenshotsLibrary = new();
+		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var screenshot = dataSet.ScreenshotsLibrary.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320), out _);
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.CreateItem(tag, new Bounding(0, 0, 1, 1), []);
+		asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
 		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.DeleteTag(tag));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);
 	}

@@ -12,7 +12,7 @@ public sealed class DetectorWeightsLibraryTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag], null);
+		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, [tag]);
 		dataSet.WeightsLibrary.Weights.Should().Contain(weights);
 	}
 
@@ -20,7 +20,7 @@ public sealed class DetectorWeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		DetectorDataSet dataSet = new();
-		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [], null));
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, []));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 
@@ -29,7 +29,7 @@ public sealed class DetectorWeightsLibraryTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), [tag, tag], null));
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, [tag, tag]));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 }

@@ -1,4 +1,5 @@
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Data.Binary.Model.DataSets.Weights;
 using SightKeeper.Domain.Model.DataSets.Poser;
 using SightKeeper.Domain.Model.DataSets.Tags;
 using SightKeeper.Domain.Model.DataSets.Weights;

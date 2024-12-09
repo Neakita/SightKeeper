@@ -7,6 +7,8 @@ namespace SightKeeper.Domain.Model.DataSets.Weights;
 
 public sealed class PoserWeightsLibrary : WeightsLibrary
 {
+	private const int MinimumTagsCount = 1;
+
 	public override IReadOnlyCollection<PoserWeights> Weights => _weights;
 
 	public PoserWeights CreateWeights(
@@ -22,6 +24,7 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 				pair => pair.Key,
 				IReadOnlyCollection<Tag> (pair) => pair.Value.ToList().AsReadOnly())
 			.AsReadOnly();
+		Guard.IsGreaterThanOrEqualTo(tags.Count, MinimumTagsCount);
 		foreach (var (poserTag, keyPointTags) in tags)
 		{
 			UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, poserTag);

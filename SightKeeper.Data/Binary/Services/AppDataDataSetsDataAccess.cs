@@ -16,11 +16,10 @@ public sealed class AppDataDataSetsDataAccess :
 	public IObservable<DataSet> Added => _added.AsObservable();
 	public IObservable<DataSet> Removed => _removed.AsObservable();
 
-	public AppDataDataSetsDataAccess(AppDataAccess appDataAccess, AppDataEditingLock editingLock, FileSystemScreenshotsDataAccess screenshotsDataAccess)
+	public AppDataDataSetsDataAccess(AppDataAccess appDataAccess, AppDataEditingLock editingLock)
 	{
 		_appDataAccess = appDataAccess;
 		_editingLock = editingLock;
-		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
 	public void Add(DataSet dataSet)
@@ -35,7 +34,6 @@ public sealed class AppDataDataSetsDataAccess :
 	{
 		lock (_editingLock)
 			_appDataAccess.Data.RemoveDataSet(dataSet);
-		_screenshotsDataAccess.DeleteAllScreenshotsData(dataSet.ScreenshotsLibrary);
 		_appDataAccess.SetDataChanged();
 		_removed.OnNext(dataSet);
 	}
@@ -48,7 +46,6 @@ public sealed class AppDataDataSetsDataAccess :
 
 	private readonly AppDataAccess _appDataAccess;
 	private readonly AppDataEditingLock _editingLock;
-	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly Subject<DataSet> _added = new();
 	private readonly Subject<DataSet> _removed = new();
 }
