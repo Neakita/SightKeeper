@@ -15,7 +15,7 @@ internal sealed partial class ClassifierToolBarViewModel : ToolBarViewModel<Clas
 
 	public Tag? Tag
 	{
-		get => throw new NotImplementedException();
+		get => null;
 		set => throw new NotImplementedException();
 	}
 
