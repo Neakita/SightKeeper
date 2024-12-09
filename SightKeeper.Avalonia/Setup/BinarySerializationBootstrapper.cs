@@ -6,7 +6,6 @@ using SightKeeper.Application.Screenshotting;
 using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Services;
 using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Setup;
 
@@ -16,7 +15,7 @@ internal static class BinarySerializationBootstrapper
 	{
 		builder.RegisterType<AppDataEditingLock>().SingleInstance();
 		builder.RegisterType<AppDataFormatter>();
-		builder.RegisterType<FileSystemScreenshotsDataAccess>().AsSelf().As<ScreenshotsDataAccess>().As<ObservableDataAccess<Screenshot>>().SingleInstance();
+		builder.RegisterType<FileSystemScreenshotsDataAccess>().AsSelf().As<ScreenshotsDataAccess>().As<ObservableScreenshotsDataAccess>().SingleInstance();
 		builder.RegisterType<FileSystemWeightsDataAccess>().AsSelf().As<WeightsDataAccess>().SingleInstance();
 		builder.RegisterType<AppDataAccess>().AsSelf().As<ApplicationSettingsProvider>().SingleInstance();
 		builder.RegisterType<AppDataDataSetsDataAccess>().As<ObservableDataAccess<DataSet>>().As<ReadDataAccess<DataSet>>().As<WriteDataAccess<DataSet>>().SingleInstance();

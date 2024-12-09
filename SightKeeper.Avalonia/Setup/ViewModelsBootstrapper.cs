@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using SightKeeper.Avalonia.Annotation;
+using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Settings;
@@ -18,5 +19,6 @@ internal static class ViewModelsBootstrapper
 		builder.RegisterType<DataSetsListViewModel>().SingleInstance();
 		builder.RegisterType<AnnotationTabViewModel>();
 		builder.RegisterType<ScreenshottingSettingsViewModel>();
+		builder.RegisterType<ScreenshotsViewModel>();
 	}
 }

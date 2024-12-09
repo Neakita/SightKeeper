@@ -11,20 +11,29 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
-internal abstract partial class ScreenshotsViewModel : ViewModel
+internal sealed partial class ScreenshotsViewModel : ViewModel
 {
-	public ScreenshotsLibrary? Library { get; set; }
+	public ScreenshotsLibrary? Library
+	{
+		get;
+		set
+		{
+			if (!SetProperty(ref field, value))
+				return;
+			_screenshotsSource.Clear();
+			if (value != null)
+				_screenshotsSource.AddRange(value.Screenshots);
+		}
+	}
+
 	public IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
 	public ScreenshotImageLoader ImageLoader { get; }
 
 	public ScreenshotsViewModel(
-		ScreenshotsLibrary library,
 		ObservableScreenshotsDataAccess observableDataAccess,
 		ScreenshotImageLoader imageLoader)
 	{
-		Library = library;
 		ImageLoader = imageLoader;
-		_screenshotsSource.AddRange(library.Screenshots);
 		_screenshotsSource.Connect()
 			.Transform(screenshot => new ScreenshotViewModel(screenshot))
 			.Bind(out var screenshots)
