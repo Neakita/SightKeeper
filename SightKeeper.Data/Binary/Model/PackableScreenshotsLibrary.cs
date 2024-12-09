@@ -10,5 +10,6 @@ namespace SightKeeper.Data.Binary.Model;
 internal partial class PackableScreenshotsLibrary
 {
 	public required string Name { get; init; }
+	public required string Description { get; init; }
 	public required IReadOnlyCollection<PackableScreenshot> Screenshots { get; init; }
 }

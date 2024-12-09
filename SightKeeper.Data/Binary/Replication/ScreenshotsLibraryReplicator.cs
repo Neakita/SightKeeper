@@ -24,7 +24,8 @@ internal sealed class ScreenshotsLibraryReplicator
 	{
 		ScreenshotsLibrary library = new()
 		{
-			Name = packableLibrary.Name
+			Name = packableLibrary.Name,
+			Description = packableLibrary.Description
 		};
 		foreach (var packableScreenshot in packableLibrary.Screenshots)
 		{

@@ -13,17 +13,18 @@ internal sealed class ScreenshotsLibraryConverter
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public IEnumerable<PackableScreenshotsLibrary> ConvertScreenshotsLibraries(IEnumerable<ScreenshotsLibrary> packableLibraries)
+	public IEnumerable<PackableScreenshotsLibrary> ConvertScreenshotsLibraries(IEnumerable<ScreenshotsLibrary> libraries)
 	{
-		return packableLibraries.Select(ConvertScreenshotsLibrary);
+		return libraries.Select(ConvertScreenshotsLibrary);
 	}
 
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
-	private PackableScreenshotsLibrary ConvertScreenshotsLibrary(ScreenshotsLibrary packableLibrary) => new()
+	private PackableScreenshotsLibrary ConvertScreenshotsLibrary(ScreenshotsLibrary library) => new()
 	{
-		Name = packableLibrary.Name,
-		Screenshots = ConvertScreenshots(packableLibrary.Screenshots).ToImmutableArray()
+		Name = library.Name,
+		Description = library.Description,
+		Screenshots = ConvertScreenshots(library.Screenshots).ToImmutableArray()
 	};
 
 	private IEnumerable<PackableScreenshot> ConvertScreenshots(IEnumerable<Screenshot> screenshots)
