@@ -1,8 +1,8 @@
-﻿using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets.Weights;
+﻿using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Application;
 

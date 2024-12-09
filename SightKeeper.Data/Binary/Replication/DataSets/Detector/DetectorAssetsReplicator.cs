@@ -1,6 +1,6 @@
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets.Detector;
 

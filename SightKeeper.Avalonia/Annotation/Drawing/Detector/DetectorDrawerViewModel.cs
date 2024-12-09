@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation.Assets;
 using SightKeeper.Avalonia.Annotation.Screenshots;
-using SightKeeper.Domain.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Detector;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Detector;
 

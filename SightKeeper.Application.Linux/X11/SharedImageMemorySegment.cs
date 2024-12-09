@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.Linux.X11.Natives;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Linux.X11;

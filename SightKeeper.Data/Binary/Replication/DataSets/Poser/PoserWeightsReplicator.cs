@@ -1,7 +1,7 @@
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
-using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets.Poser;
 

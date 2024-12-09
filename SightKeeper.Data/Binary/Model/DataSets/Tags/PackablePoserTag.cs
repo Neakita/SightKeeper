@@ -1,5 +1,5 @@
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Tags;
 

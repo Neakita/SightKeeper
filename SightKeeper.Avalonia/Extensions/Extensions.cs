@@ -1,7 +1,7 @@
 using System;
 using System.Buffers;
 using Avalonia;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain;
 
 namespace SightKeeper.Avalonia.Extensions;
 

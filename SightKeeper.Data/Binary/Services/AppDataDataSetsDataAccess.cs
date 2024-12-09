@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using SightKeeper.Application;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Data.Binary.Services;
 

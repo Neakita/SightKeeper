@@ -3,7 +3,7 @@ using CommunityToolkit.HighPerformance;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SightKeeper.Application.Screenshotting;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain;
 using SixLabors.ImageSharp.PixelFormats;
 using Yolo;
 using Device = SharpDX.Direct3D11.Device;

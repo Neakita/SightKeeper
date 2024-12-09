@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 

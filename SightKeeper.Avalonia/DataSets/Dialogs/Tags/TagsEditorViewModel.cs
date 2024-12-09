@@ -8,7 +8,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 

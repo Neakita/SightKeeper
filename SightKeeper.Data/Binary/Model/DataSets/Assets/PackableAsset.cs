@@ -1,5 +1,5 @@
 using FlakeId;
-using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 

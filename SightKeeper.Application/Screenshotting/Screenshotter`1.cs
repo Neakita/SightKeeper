@@ -3,7 +3,7 @@ using CommunityToolkit.Diagnostics;
 using HotKeys.ActionRunners;
 using HotKeys.Bindings;
 using SightKeeper.Application.Screenshotting.Saving;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain;
 
 namespace SightKeeper.Application.Screenshotting;
 

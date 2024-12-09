@@ -1,6 +1,6 @@
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Poser3D;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Poser3D;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 

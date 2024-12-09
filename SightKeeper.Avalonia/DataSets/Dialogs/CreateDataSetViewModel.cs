@@ -1,6 +1,6 @@
 ﻿using System;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 

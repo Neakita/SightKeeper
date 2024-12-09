@@ -10,8 +10,8 @@ using Avalonia.Layout;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform.Transformers;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 

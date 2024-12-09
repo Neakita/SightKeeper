@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets.Poser3D;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.DataSets.Poser3D;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser3D;
 

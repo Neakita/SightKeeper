@@ -10,7 +10,7 @@ using SightKeeper.Avalonia.Annotation.DataSetContexts;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 using SightKeeper.Avalonia.DataSets;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation;
 

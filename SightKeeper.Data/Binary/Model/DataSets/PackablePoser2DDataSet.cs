@@ -2,7 +2,7 @@ using MemoryPack;
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
 using SightKeeper.Data.Binary.Model.DataSets.Weights;
-using SightKeeper.Domain.Model.DataSets.Poser2D;
+using SightKeeper.Domain.DataSets.Poser2D;
 
 namespace SightKeeper.Data.Binary.Model.DataSets;
 

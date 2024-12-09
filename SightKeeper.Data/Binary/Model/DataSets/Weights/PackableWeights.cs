@@ -1,7 +1,7 @@
 using MemoryPack;
 using SightKeeper.Data.Binary.Model.DataSets.Compositions;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Weights;
 

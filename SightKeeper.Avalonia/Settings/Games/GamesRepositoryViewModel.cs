@@ -5,8 +5,6 @@ using CommunityToolkit.Diagnostics;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Application.Games;
-using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.Settings.Games;
 

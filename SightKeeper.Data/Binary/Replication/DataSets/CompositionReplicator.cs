@@ -1,5 +1,5 @@
 using SightKeeper.Data.Binary.Model.DataSets.Compositions;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets;
 

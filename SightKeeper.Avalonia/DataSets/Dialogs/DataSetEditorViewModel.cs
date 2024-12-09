@@ -6,8 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 

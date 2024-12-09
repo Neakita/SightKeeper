@@ -1,6 +1,6 @@
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Detector;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 

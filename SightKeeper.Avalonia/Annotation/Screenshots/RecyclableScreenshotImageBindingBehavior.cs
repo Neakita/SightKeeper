@@ -6,7 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 

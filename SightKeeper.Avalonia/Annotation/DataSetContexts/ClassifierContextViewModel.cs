@@ -5,8 +5,8 @@ using SightKeeper.Avalonia.Annotation.Assets;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ToolBars;
-using SightKeeper.Domain.Model.DataSets.Classifier;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.DataSetContexts;
 

@@ -8,8 +8,8 @@ using Avalonia.Platform;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain;
+using SightKeeper.Domain.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
 using Yolo.InputProcessing;
 

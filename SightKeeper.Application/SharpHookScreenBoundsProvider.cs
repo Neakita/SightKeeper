@@ -1,5 +1,5 @@
 using SharpHook.Providers;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain;
 
 namespace SightKeeper.Application;
 

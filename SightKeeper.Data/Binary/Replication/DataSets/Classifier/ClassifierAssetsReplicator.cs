@@ -1,5 +1,5 @@
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets.Classifier;
 

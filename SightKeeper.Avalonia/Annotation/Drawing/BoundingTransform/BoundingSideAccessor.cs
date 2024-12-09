@@ -1,5 +1,5 @@
 using System;
-using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 

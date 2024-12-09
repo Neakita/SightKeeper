@@ -1,6 +1,6 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.DataSets.Compositions;
 

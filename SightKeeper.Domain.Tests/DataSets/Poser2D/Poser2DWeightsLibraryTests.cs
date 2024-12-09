@@ -1,10 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using FluentAssertions;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Poser2D;
-using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Poser2D;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 

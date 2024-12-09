@@ -1,7 +1,7 @@
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets.Classifier;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
 

@@ -1,5 +1,5 @@
 using SightKeeper.Data.Binary.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Detector;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets.Detector;
 

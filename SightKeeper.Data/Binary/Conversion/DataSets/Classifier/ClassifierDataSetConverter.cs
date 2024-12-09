@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
 

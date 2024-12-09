@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
 

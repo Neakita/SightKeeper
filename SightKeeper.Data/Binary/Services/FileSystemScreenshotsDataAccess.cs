@@ -3,8 +3,8 @@ using System.Runtime.InteropServices;
 using CommunityToolkit.HighPerformance;
 using FlakeId;
 using SightKeeper.Application.Screenshotting;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain;
+using SightKeeper.Domain.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Binary.Services;

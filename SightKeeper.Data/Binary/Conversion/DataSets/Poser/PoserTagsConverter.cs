@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser;
 

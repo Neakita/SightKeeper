@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation.Assets;
 using SightKeeper.Avalonia.Annotation.Screenshots;
-using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Application.DataSets.Creating;
 

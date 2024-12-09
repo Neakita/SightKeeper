@@ -4,8 +4,8 @@ using SightKeeper.Avalonia.Annotation.Assets;
 using SightKeeper.Avalonia.Annotation.Drawing.Detector;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ToolBars;
-using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.DataSetContexts;
 

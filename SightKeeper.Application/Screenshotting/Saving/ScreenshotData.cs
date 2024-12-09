@@ -1,6 +1,6 @@
 using System.Buffers;
 using CommunityToolkit.HighPerformance;
-using SightKeeper.Domain.Model;
+using SightKeeper.Domain;
 
 namespace SightKeeper.Application.Screenshotting.Saving;
 

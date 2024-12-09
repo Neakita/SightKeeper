@@ -5,8 +5,8 @@ using HotKeys.Bindings;
 using HotKeys.Gestures;
 using HotKeys.SharpHook;
 using SharpHook.Native;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Application.Screenshotting;
 

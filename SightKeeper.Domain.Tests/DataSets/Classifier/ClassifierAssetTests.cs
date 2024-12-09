@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Classifier;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Domain.Tests.DataSets.Classifier;
 

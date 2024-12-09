@@ -6,8 +6,8 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 

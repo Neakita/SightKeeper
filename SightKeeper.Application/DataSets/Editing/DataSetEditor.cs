@@ -1,9 +1,9 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using SightKeeper.Application.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.DataSets.Editing;
 

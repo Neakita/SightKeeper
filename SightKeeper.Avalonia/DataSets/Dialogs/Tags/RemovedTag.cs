@@ -1,5 +1,5 @@
 using SightKeeper.Application.DataSets.Editing;
-using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 

@@ -1,7 +1,7 @@
 using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Poser3D;
-using SightKeeper.Domain.Model.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Poser3D;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets.Poser3D;
 

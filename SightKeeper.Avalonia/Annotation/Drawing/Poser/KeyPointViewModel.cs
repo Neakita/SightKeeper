@@ -1,5 +1,4 @@
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Poser;
+using SightKeeper.Domain;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 

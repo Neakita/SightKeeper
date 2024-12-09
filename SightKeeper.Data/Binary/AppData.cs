@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Data.Binary;
 

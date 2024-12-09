@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Binary.Model;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Screenshots;
 using PackableScreenshotsLibrary = SightKeeper.Data.Binary.Model.PackableScreenshotsLibrary;
 
 namespace SightKeeper.Data.Binary.Conversion;

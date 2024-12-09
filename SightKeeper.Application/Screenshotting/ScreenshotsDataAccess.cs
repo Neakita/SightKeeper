@@ -1,8 +1,8 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.HighPerformance;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain;
+using SightKeeper.Domain.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Screenshotting;

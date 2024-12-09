@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using SightKeeper.Domain.Model.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Domain;
 

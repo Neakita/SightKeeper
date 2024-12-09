@@ -1,5 +1,5 @@
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Weights;
 

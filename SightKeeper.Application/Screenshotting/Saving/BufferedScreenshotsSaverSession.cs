@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
+using SightKeeper.Domain.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Screenshotting.Saving;

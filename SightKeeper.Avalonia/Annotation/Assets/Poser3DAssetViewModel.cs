@@ -1,4 +1,4 @@
-using SightKeeper.Domain.Model.DataSets.Poser3D;
+using SightKeeper.Domain.DataSets.Poser3D;
 
 namespace SightKeeper.Avalonia.Annotation.Assets;
 

@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
-using SightKeeper.Application.Games;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Domain.Model;
 
 namespace SightKeeper.Avalonia.Settings.Games;
 

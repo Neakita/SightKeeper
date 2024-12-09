@@ -1,6 +1,5 @@
-using SightKeeper.Application;
-using SightKeeper.Domain.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Detector;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Detector;
 

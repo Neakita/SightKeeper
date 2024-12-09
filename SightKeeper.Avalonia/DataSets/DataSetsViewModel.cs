@@ -11,8 +11,7 @@ using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets;
 

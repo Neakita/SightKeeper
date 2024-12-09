@@ -3,7 +3,7 @@ using SightKeeper.Data.Binary.Replication.DataSets.Classifier;
 using SightKeeper.Data.Binary.Replication.DataSets.Detector;
 using SightKeeper.Data.Binary.Replication.DataSets.Poser2D;
 using SightKeeper.Data.Binary.Replication.DataSets.Poser3D;
-using SightKeeper.Domain.Model.DataSets;
+using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets;
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Avalonia.Annotation.Assets;
-using SightKeeper.Domain.Model.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Detector;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 

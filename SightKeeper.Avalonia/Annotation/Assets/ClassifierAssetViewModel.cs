@@ -1,4 +1,4 @@
-using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Avalonia.Annotation.Assets;
 

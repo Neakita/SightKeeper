@@ -1,6 +1,6 @@
 using SightKeeper.Data.Binary.Model.DataSets;
 using SightKeeper.Data.Binary.Replication.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Poser3D;
+using SightKeeper.Domain.DataSets.Poser3D;
 
 namespace SightKeeper.Data.Binary.Replication.DataSets.Poser3D;
 

@@ -5,17 +5,17 @@ using FluentAssertions.Equivalency;
 using MemoryPack;
 using SightKeeper.Data.Binary;
 using SightKeeper.Data.Binary.Services;
-using SightKeeper.Domain.Model;
-using SightKeeper.Domain.Model.DataSets;
-using SightKeeper.Domain.Model.DataSets.Assets;
-using SightKeeper.Domain.Model.DataSets.Classifier;
-using SightKeeper.Domain.Model.DataSets.Detector;
-using SightKeeper.Domain.Model.DataSets.Poser;
-using SightKeeper.Domain.Model.DataSets.Poser2D;
-using SightKeeper.Domain.Model.DataSets.Poser3D;
-using SightKeeper.Domain.Model.DataSets.Screenshots;
-using SightKeeper.Domain.Model.DataSets.Tags;
-using SightKeeper.Domain.Model.DataSets.Weights;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Poser2D;
+using SightKeeper.Domain.DataSets.Poser3D;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
+using SightKeeper.Domain.Screenshots;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -63,6 +63,7 @@ public sealed class BinarySerializationTests
 	{
 		return options
 			.RespectingRuntimeTypes()
+			.AllowingInfiniteRecursion()
 			.Excluding(info => info.Type.Name.Contains("Dictionary")); // https://github.com/fluentassertions/fluentassertions/issues/1136
 	}
 

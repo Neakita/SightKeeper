@@ -1,5 +1,5 @@
 using MemoryPack;
-using SightKeeper.Domain.Model.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
 
