@@ -13,9 +13,5 @@
 		<HeaderedContentControl Header="Description">
 			<TextBox Text="{Binding Description}"/>
 		</HeaderedContentControl>
-		<HeaderedContentControl Header="Game">
-			<ComboBox SelectedItem="{Binding Game}"
-			          ItemsSource="{Binding Games}"/>
-		</HeaderedContentControl>
 	</StackPanel>
 </UserControl>

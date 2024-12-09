@@ -20,7 +20,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <screenshots:Screenshots Grid.Column="0"
-                                     DataContext="{Binding Context.Screenshots}"/>
+                                     DataContext="{Binding Screenshots}"/>
             <Panel Grid.Column="1"
                    Classes="regular-margin"
                    VerticalAlignment="Center"
@@ -33,8 +33,8 @@
                 <Image Name="Image">
                     <Interaction.Behaviors>
                         <screenshots:RecyclableScreenshotImageBindingBehavior
-                            Screenshot="{Binding Context.Screenshots.SelectedScreenshot.Value}"
-                            ImageLoader="{Binding Context.Screenshots.ImageLoader}"/>
+                            Screenshot="{Binding Screenshots.SelectedScreenshot.Value}"
+                            ImageLoader="{Binding Screenshots.ImageLoader}"/>
                     </Interaction.Behaviors>
                 </Image>
                 <Decorator>

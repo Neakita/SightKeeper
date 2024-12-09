@@ -1,8 +1,6 @@
 ﻿using Autofac;
-using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Creating;
-using SightKeeper.Application.Games;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Avalonia.Annotation.Screenshots;
@@ -17,9 +15,6 @@ internal static class ServicesBootstrapper
 	public static void Setup(ContainerBuilder builder)
 	{
 		BinarySerializationBootstrapper.Setup(builder);
-		builder.RegisterType<ProcessesAvailableGamesProvider>();
-		builder.RegisterType<GameDataValidator>().As<IValidator<GameData>>();
-		builder.RegisterType<GameCreator>();
 		builder.RegisterType<DialogManager>().SingleInstance();
 		builder.RegisterGeneric(typeof(ObservableRepository<>)).SingleInstance();
 		builder.RegisterType<DataSetCreator>();

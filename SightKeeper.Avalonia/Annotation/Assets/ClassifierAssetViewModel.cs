@@ -1,4 +1,5 @@
 using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Assets;
 
@@ -9,7 +10,7 @@ internal sealed class ClassifierAssetViewModel : AssetViewModel<ClassifierAsset>
 		return new ClassifierAssetViewModel(value);
 	}
 
-	public ClassifierTag Tag => Value.Tag;
+	public Tag Tag => Value.Tag;
 
 	public ClassifierAssetViewModel(ClassifierAsset value) : base(value)
 	{

@@ -5,7 +5,6 @@
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:assets="clr-namespace:SightKeeper.Avalonia.Annotation.Assets"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Screenshots.Screenshots"
              x:DataType="local:ScreenshotsViewModel">
@@ -67,7 +66,7 @@
                                             ImageLoader="{Binding #ListBox.((local:ScreenshotsViewModel)DataContext).ImageLoader}"/>
                                     </Interaction.Behaviors>
                                 </Image>
-                                <ContentControl Content="{Binding Asset}"
+                                <!--<ContentControl Content="{Binding Asset}"
                                                 IsVisible="{Binding Asset, Converter={x:Static ObjectConverters.IsNotNull}}"
                                                 Margin="4">
                                     <ContentControl.DataTemplates>
@@ -83,7 +82,7 @@
                                             </Border>
                                         </DataTemplate>
                                     </ContentControl.DataTemplates>
-                                </ContentControl>
+                                </ContentControl>-->
                             </Panel>
                         </Border>
                     </Border>

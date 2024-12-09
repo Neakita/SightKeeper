@@ -22,14 +22,12 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 	public DataSetsViewModel(
 		DataSetsListViewModel dataSetsListViewModel,
 		DialogManager dialogManager,
-		ReadDataAccess<Game> gamesDataAccess,
 		ReadDataAccess<DataSet> readDataSetsDataAccess,
 		DataSetCreator dataSetCreator,
 		DataSetEditor dataSetEditor,
 		WriteDataAccess<DataSet> writeDataSetsDataAccess)
 	{
 		_dialogManager = dialogManager;
-		_gamesDataAccess = gamesDataAccess;
 		_readDataSetsDataAccess = readDataSetsDataAccess;
 		_dataSetCreator = dataSetCreator;
 		_dataSetEditor = dataSetEditor;
@@ -39,7 +37,6 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 	}
 
 	private readonly DialogManager _dialogManager;
-	private readonly ReadDataAccess<Game> _gamesDataAccess;
 	private readonly ReadDataAccess<DataSet> _readDataSetsDataAccess;
 	private readonly DataSetCreator _dataSetCreator;
 	private readonly DataSetEditor _dataSetEditor;
@@ -51,7 +48,7 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 	[RelayCommand]
 	private async Task CreateDataSetAsync()
 	{
-		using CreateDataSetViewModel dialog = new(new DataSetEditorViewModel(_gamesDataAccess, _newDataSetDataValidator));
+		using CreateDataSetViewModel dialog = new(new DataSetEditorViewModel(_newDataSetDataValidator));
 		if (await _dialogManager.ShowDialogAsync(dialog))
 			_dataSetCreator.Create(
 				dialog.DataSetEditor,
@@ -62,7 +59,7 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 	[RelayCommand]
 	private async Task EditDataSetAsync(DataSet dataSet)
 	{
-		using EditDataSetViewModel dialog = new(dataSet, new DataSetEditorViewModel(_gamesDataAccess, new ExistingDataSetDataValidator(dataSet, new DataSetDataValidator(), _readDataSetsDataAccess), dataSet));
+		using EditDataSetViewModel dialog = new(dataSet, new DataSetEditorViewModel(new ExistingDataSetDataValidator(dataSet, new DataSetDataValidator(), _readDataSetsDataAccess), dataSet));
 		if (await _dialogManager.ShowDialogAsync(dialog))
 			_dataSetEditor.Edit(dataSet, dialog.DataSetEditor, dialog.TagsEditor.Tags);
 	}

@@ -17,13 +17,13 @@
                 <Button Classes="square"
                         Content="{icons:MaterialIconExt Edit}"
                         Command="{Binding $parent[TreeDataGrid].((local:IDataSetsViewModel)DataContext).EditDataSetCommand}"
-                        CommandParameter="{Binding DataSet}"
-                        ToolTip.Tip="{Binding DataSet.Name, StringFormat=Edit \'{0}\'}"/>
+                        CommandParameter="{Binding Value}"
+                        ToolTip.Tip="{Binding Value.Name, StringFormat=Edit \'{0}\'}"/>
                 <Button Classes="square"
                         Content="{icons:MaterialIconExt Delete}"
                         Command="{Binding $parent[TreeDataGrid].((local:IDataSetsViewModel)DataContext).DeleteDataSetCommand}"
-                        CommandParameter="{Binding DataSet}"
-                        ToolTip.Tip="{Binding DataSet.Name, StringFormat=Delete \'{0}\'}"/>
+                        CommandParameter="{Binding Value}"
+                        ToolTip.Tip="{Binding Value.Name, StringFormat=Delete \'{0}\'}"/>
             </StackPanel>
         </DataTemplate>
 	</UserControl.Resources>

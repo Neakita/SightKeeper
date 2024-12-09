@@ -17,7 +17,7 @@ internal sealed class DataSetsListViewModel : ViewModel, IDisposable
         observableRepository.DataSetsSource.Connect()
             .Transform(dataSet => new DataSetViewModel(dataSet))
             .DisposeMany()
-            .AddKey(viewModel => viewModel.DataSet)
+            .AddKey(viewModel => viewModel.Value)
             .Bind(out var dataSets)
             .Subscribe()
             .DisposeWith(_disposable);

@@ -7,10 +7,10 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Screenshotting;
 
-public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, IDisposable
+public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, IDisposable
 {
-	public IObservable<Screenshot> Added => _added.AsObservable();
-	public IObservable<Screenshot> Removed => _removed.AsObservable();
+	public IObservable<(ScreenshotsLibrary library, Screenshot screenshot)> Added => _added.AsObservable();
+	public IObservable<(ScreenshotsLibrary library, Screenshot screenshot)> Removed => _removed.AsObservable();
 
 	public abstract Stream LoadImage(Screenshot screenshot);
 
@@ -19,7 +19,7 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
 		var screenshot = CreateScreenshot(library, creationDate, resolution);
 		SaveScreenshotData(screenshot, imageData);
-		_added.OnNext(screenshot);
+		_added.OnNext((library, screenshot));
 		return screenshot;
 	}
 
@@ -37,6 +37,6 @@ public abstract class ScreenshotsDataAccess : ObservableDataAccess<Screenshot>, 
 	protected abstract void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> image);
 	protected abstract void DeleteScreenshotData(Screenshot screenshot);
 
-	private readonly Subject<Screenshot> _added = new();
-	private readonly Subject<Screenshot> _removed = new();
+	private readonly Subject<(ScreenshotsLibrary library, Screenshot screenshot)> _added = new();
+	private readonly Subject<(ScreenshotsLibrary library, Screenshot screenshot)> _removed = new();
 }

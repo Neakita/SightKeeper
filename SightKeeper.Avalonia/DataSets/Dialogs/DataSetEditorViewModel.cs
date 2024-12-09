@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentValidation;
-using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Domain.DataSets;
 
@@ -18,22 +16,17 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, I
 		remove => _validator.ErrorsChanged -= value;
 	}
 
-	public IReadOnlyCollection<Game> Games { get; }
-
 	public bool HasErrors => _validator.HasErrors;
 
-	public DataSetEditorViewModel(ReadDataAccess<Game> gamesDataAccess, IValidator<DataSetData> validator)
+	public DataSetEditorViewModel(IValidator<DataSetData> validator)
 	{
-		Games = gamesDataAccess.Items;
 		_validator = new ViewModelValidator<DataSetData>(validator, this, this);
 	}
 
-	public DataSetEditorViewModel(ReadDataAccess<Game> gamesDataAccess, IValidator<DataSetData> validator, DataSet dataSet)
+	public DataSetEditorViewModel(IValidator<DataSetData> validator, DataSet dataSet)
 	{
-		Games = gamesDataAccess.Items;
 		_name = dataSet.Name;
 		_description = dataSet.Description;
-		_game = dataSet.Game;
 		_validator = new ViewModelValidator<DataSetData>(validator, this, this);
 	}
 
@@ -51,5 +44,4 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, I
 
 	[ObservableProperty] private string _name = string.Empty;
 	[ObservableProperty] private string _description = string.Empty;
-	[ObservableProperty] private Game? _game;
 }

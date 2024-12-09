@@ -1,12 +1,14 @@
+using SightKeeper.Application;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Detector;
 
 internal sealed class DetectorItemViewModel : DrawerItemViewModel
 {
 	public DetectorItem Value { get; }
-	public override DetectorTag Tag => Value.Tag;
+	public override Tag Tag => Value.Tag;
 
 	public override Bounding Bounding
 	{
