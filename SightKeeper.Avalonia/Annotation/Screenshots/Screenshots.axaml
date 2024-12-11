@@ -11,7 +11,8 @@
     <ListBox ItemsSource="{Binding Screenshots}"
              SelectedItem="{Binding SelectedScreenshot}"
              Name="ListBox"
-             Classes="square-items">
+             Classes="square-items"
+             ScrollViewer.VerticalScrollBarVisibility="Visible">
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel/>
