@@ -11,7 +11,6 @@ using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Screenshots;
-using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation;
 
@@ -48,7 +47,7 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 
 	private readonly WriteableBitmapPool _bitmapPool;
 	private readonly IComponentContext _componentContext;
-	[ObservableProperty] private ScreenshotsLibrary? _selectedScreenshotsLibrary;
+	[ObservableProperty] private ScreenshotsLibraryViewModel? _selectedScreenshotsLibrary;
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
 
 	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
@@ -69,9 +68,9 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 		return bitmap != null;
 	}
 
-	partial void OnSelectedScreenshotsLibraryChanged(ScreenshotsLibrary? value)
+	partial void OnSelectedScreenshotsLibraryChanged(ScreenshotsLibraryViewModel? value)
 	{
-		Screenshots.Library = value;
-		ScreenshottingSettings.Library = value;
+		Screenshots.Library = value?.Value;
+		ScreenshottingSettings.Library = value?.Value;
 	}
 }
