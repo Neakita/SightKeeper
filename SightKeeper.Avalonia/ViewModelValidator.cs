@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -72,7 +72,7 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 	private readonly IValidator<TValidatable> _validator;
 	private readonly ViewModel _viewModel;
 	private readonly TValidatable _validatable;
-	private System.Collections.Generic.IDictionary<string, string[]> _errors = ImmutableDictionary<string, string[]>.Empty;
+	private System.Collections.Generic.IDictionary<string, string[]> _errors = new Dictionary<string, string[]>();
 	private bool _validateOnPropertyChanged = true;
 
 	private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)

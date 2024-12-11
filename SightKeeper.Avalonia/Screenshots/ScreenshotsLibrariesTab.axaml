@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Screenshots"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Screenshots.ScreenshotsLibrariesTab"
+             x:DataType="local:IScreenshotsLibrariesViewModel">
+    <Design.DataContext>
+        <local:DesignScreenshotsLibrariesViewModel/>
+    </Design.DataContext>
+    <UserControl.Resources>
+        <local:TreeDataGridScreenshotsLibrariesConverter x:Key="ScreenshotsLibrariesConverter"/>
+        <DataTemplate x:Key="ScreenshotsLibraryActions" DataType="local:ScreenshotsLibraryViewModel">
+            <StackPanel Orientation="Horizontal" Classes="regular-spacing">
+                <Button Classes="square"
+                        Content="{icons:MaterialIconExt Edit}"
+                        Command="{Binding $parent[TreeDataGrid].((local:IScreenshotsLibrariesViewModel)DataContext).EditScreenshotsLibraryCommand}"
+                        CommandParameter="{Binding Value}"
+                        ToolTip.Tip="{Binding Value.Name, StringFormat=Edit \'{0}\'}"/>
+                <Button Classes="square"
+                        Content="{icons:MaterialIconExt Delete}"
+                        Command="{Binding $parent[TreeDataGrid].((local:IScreenshotsLibrariesViewModel)DataContext).DeleteScreenshotsLibraryCommand}"
+                        CommandParameter="{Binding Value}"
+                        ToolTip.Tip="{Binding Value.Name, StringFormat=Delete \'{0}\'}"/>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <ScrollViewer Classes="regular-padding">
+        <StackPanel Classes="regular-spacing">
+            <Border Classes="outer wide-padding">
+                <Button Content="Create library" Command="{Binding CreateScreenshotsLibraryCommand}"/>
+            </Border>
+            <Border Classes="outer wide-padding">
+                <TreeDataGrid Source="{Binding ScreenshotsLibraries, Converter={StaticResource ScreenshotsLibrariesConverter}}"/>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

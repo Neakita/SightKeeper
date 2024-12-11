@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Creating;
+using SightKeeper.Application.ScreenshotsLibraries.Creating;
+using SightKeeper.Application.ScreenshotsLibraries.Editing;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Avalonia.Annotation.Screenshots;
@@ -16,7 +18,7 @@ internal static class ServicesBootstrapper
 	{
 		BinarySerializationBootstrapper.Setup(builder);
 		builder.RegisterType<DialogManager>().SingleInstance();
-		builder.RegisterGeneric(typeof(ObservableRepository<>)).SingleInstance();
+		builder.RegisterGeneric(typeof(DataAccessObservableRepository<>)).As(typeof(ObservableRepository<>)).SingleInstance();
 		builder.RegisterType<DataSetCreator>();
 		builder.RegisterType<SharpHookScreenBoundsProvider>().As<ScreenBoundsProvider>();
 		builder.RegisterType<Screenshotter<Bgra32>>().As<Screenshotter>();
@@ -26,6 +28,8 @@ internal static class ServicesBootstrapper
 		builder.RegisterType<ScreenshotImageLoader>().SingleInstance();
 		builder.RegisterType<AppDataClassifierAnnotator>().As<ClassifierAnnotator>();
 		builder.RegisterType<AppDataDetectorAnnotator>().As<DetectorAnnotator>();
+		builder.RegisterType<ScreenshotsLibraryCreator>();
+		builder.RegisterType<ScreenshotsLibraryEditor>().SingleInstance();
 	}
 
 	public static void Initialize(IComponentContext context)

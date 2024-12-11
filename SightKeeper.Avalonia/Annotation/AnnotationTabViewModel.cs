@@ -10,11 +10,14 @@ using SightKeeper.Avalonia.Annotation.DataSetContexts;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 using SightKeeper.Avalonia.DataSets;
+using SightKeeper.Avalonia.Screenshots;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation;
 
 internal sealed partial class AnnotationTabViewModel : ViewModel
 {
+	public ReadOnlyObservableCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; }
 	public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 	public ScreenshotsViewModel Screenshots { get; }
 	public ScreenshottingSettingsViewModel ScreenshottingSettings { get; }
@@ -26,23 +29,26 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 	}
 
 	public AnnotationTabViewModel(
-		DataSetsListViewModel dataSets,
+		DataSetViewModelsObservableRepository dataSets,
 		ScreenshottingSettingsViewModel screenshottingSettings,
 		PendingScreenshotsCountReporter? pendingScreenshotsReporter,
 		WriteableBitmapPool bitmapPool,
 		IComponentContext componentContext,
-		ScreenshotsViewModel screenshots)
+		ScreenshotsViewModel screenshots,
+		ScreenshotsLibraryViewModelsObservableRepository screenshotsLibraries)
 	{
 		_bitmapPool = bitmapPool;
 		_componentContext = componentContext;
 		Screenshots = screenshots;
-		DataSets = dataSets.DataSets;
+		DataSets = dataSets.Items;
 		ScreenshottingSettings = screenshottingSettings;
 		PendingScreenshotsCount = pendingScreenshotsReporter?.PendingScreenshotsCount ?? Observable.Empty<ushort>();
+		ScreenshotsLibraries = screenshotsLibraries.Items;
 	}
 
 	private readonly WriteableBitmapPool _bitmapPool;
 	private readonly IComponentContext _componentContext;
+	[ObservableProperty] private ScreenshotsLibrary? _selectedScreenshotsLibrary;
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
 
 	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
@@ -61,5 +67,11 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 	private static bool CanReturnBitmapToPool(WriteableBitmap? bitmap)
 	{
 		return bitmap != null;
+	}
+
+	partial void OnSelectedScreenshotsLibraryChanged(ScreenshotsLibrary? value)
+	{
+		Screenshots.Library = value;
+		ScreenshottingSettings.Library = value;
 	}
 }

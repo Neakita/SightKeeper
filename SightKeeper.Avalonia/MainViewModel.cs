@@ -6,6 +6,7 @@ using Material.Icons;
 using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Avalonia.Screenshots;
 using SightKeeper.Avalonia.Settings.Appearance;
 using SettingsViewModel = SightKeeper.Avalonia.Settings.SettingsViewModel;
 
@@ -26,6 +27,7 @@ internal sealed partial class MainViewModel : ViewModel, DialogHost
 		AppearanceSettings = appearanceSettings;
 		Tabs =
 		[
+			CreateTab<ScreenshotsLibrariesViewModel>(context, MaterialIconKind.FolderMultipleImage, "Screenshots"),
 			CreateTab<DataSetsViewModel>(context, MaterialIconKind.ImageAlbum, "Datasets"),
 			CreateTab<AnnotationTabViewModel>(context, MaterialIconKind.ImageEdit, "Annotation"),
 			CreateTab<SettingsViewModel>(context, MaterialIconKind.Cog, "Settings")

@@ -66,6 +66,13 @@
       <UpToDateCheckInput Remove="Settings\Games\GamesSettings.axaml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Screenshots\ScreenshotsLibrariesTab.axaml.cs">
+        <DependentUpon>ScreenshotsLibrariesTab.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
         <DefineConstants>OS_WINDOWS</DefineConstants>
     </PropertyGroup>

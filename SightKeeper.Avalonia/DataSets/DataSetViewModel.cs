@@ -4,12 +4,12 @@ namespace SightKeeper.Avalonia.DataSets;
 
 internal sealed class DataSetViewModel : ViewModel
 {
-    public DataSet Value { get; }
-    public string Name => Value.Name;
-    public string Description => Value.Description;
+	public DataSet Value { get; }
+	public string Name => Value.Name;
+	public string Description => Value.Description;
 
-    public DataSetViewModel(DataSet value)
-    {
-	    Value = value;
-    }
+	public DataSetViewModel(DataSet value)
+	{
+		Value = value;
+	}
 }

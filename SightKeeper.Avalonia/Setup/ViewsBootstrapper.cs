@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
+using SightKeeper.Avalonia.Screenshots;
 
 namespace SightKeeper.Avalonia.Setup;
 
@@ -14,6 +15,7 @@ internal static class ViewsBootstrapper
 		[
 			CreateDataTemplate<MessageBox, MessageBoxDialogViewModel>(),
 			CreateDataTemplate<DataSetDialog, DataSetDialogViewModel>(),
+			CreateDataTemplate<ScreenshotsLibraryDialog, ScreenshotsLibraryDialogViewModel>()
 		];
 	}
 

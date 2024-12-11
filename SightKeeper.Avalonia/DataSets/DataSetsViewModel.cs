@@ -20,7 +20,7 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 	public IReadOnlyCollection<DataSetViewModel> DataSets { get; }
 
 	public DataSetsViewModel(
-		DataSetsListViewModel dataSetsListViewModel,
+		DataSetViewModelsObservableRepository dataSetsObservableRepository,
 		DialogManager dialogManager,
 		ReadDataAccess<DataSet> readDataSetsDataAccess,
 		DataSetCreator dataSetCreator,
@@ -32,7 +32,7 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 		_dataSetCreator = dataSetCreator;
 		_dataSetEditor = dataSetEditor;
 		_writeDataSetsDataAccess = writeDataSetsDataAccess;
-		DataSets = dataSetsListViewModel.DataSets;
+		DataSets = dataSetsObservableRepository.Items;
 		_newDataSetDataValidator = new NewDataSetDataValidator(new DataSetDataValidator(), readDataSetsDataAccess);
 	}
 

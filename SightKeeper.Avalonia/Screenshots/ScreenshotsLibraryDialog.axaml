@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Screenshots"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Screenshots.ScreenshotsLibraryDialog"
+             x:DataType="local:ScreenshotsLibraryDialogViewModel"
+             HorizontalAlignment="Center"
+             MinWidth="500">
+    <ScrollViewer>
+        <StackPanel Classes="regular-spacing">
+            <StackPanel Classes="regular-spacing">
+                <HeaderedContentControl Header="Name">
+                    <TextBox Text="{Binding Name}"/>
+                </HeaderedContentControl>
+                <HeaderedContentControl Header="Description">
+                    <TextBox Text="{Binding Description}"/>
+                </HeaderedContentControl>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        Classes="regular-spacing"
+                        HorizontalAlignment="Right">
+                <Button Command="{Binding ApplyCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <icons:MaterialIcon Kind="Check"/>
+                        <TextBlock Text="Apply"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding CloseCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <icons:MaterialIcon Kind="Close"/>
+                        <TextBlock Text="Cancel"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

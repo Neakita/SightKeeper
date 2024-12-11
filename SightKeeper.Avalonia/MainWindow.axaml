@@ -4,18 +4,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:assists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
         xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        xmlns:local="clr-namespace:SightKeeper.Avalonia"
+        xmlns:root="clr-namespace:SightKeeper.Avalonia"
         xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.Dialogs"
         xmlns:dataSets="clr-namespace:SightKeeper.Avalonia.DataSets"
         xmlns:settings="clr-namespace:SightKeeper.Avalonia.Settings"
         xmlns:annotation="clr-namespace:SightKeeper.Avalonia.Annotation"
+        xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Screenshots"
         mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="320"
         x:Class="SightKeeper.Avalonia.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Sight Keeper"
         MinWidth="480"
         MinHeight="320"
-        x:DataType="local:MainViewModel"
+        x:DataType="root:MainViewModel"
         ExtendClientAreaToDecorationsHint="{Binding AppearanceSettings.CustomDecorations}">
 	<assists:WindowAssist.OverlayContent>
 		<dialogs:DialogHostPresenter/>
@@ -26,7 +27,7 @@
 		          Theme="{DynamicResource VerticalButtonsTabStripTheme}">
 			<TabStrip.Styles>
 				<Style Selector="TabStripItem">
-					<Setter Property="ToolTip.Tip" Value="{Binding (local:TabItemViewModel).Header}"/>
+					<Setter Property="ToolTip.Tip" Value="{Binding (root:TabItemViewModel).Header}"/>
 				</Style>
 			</TabStrip.Styles>
 			<TabStrip.ItemTemplate>
@@ -45,7 +46,10 @@
 	</assists:WindowAssist.TopContent>
 	<ContentControl Content="{Binding SelectedTab.Content}">
 		<ContentControl.DataTemplates>
-			<DataTemplate x:DataType="dataSets:DataSetsViewModel">
+            <DataTemplate x:DataType="screenshots:ScreenshotsLibrariesViewModel">
+                <screenshots:ScreenshotsLibrariesTab/>
+            </DataTemplate>
+            <DataTemplate x:DataType="dataSets:DataSetsViewModel">
 				<dataSets:DataSetsTab/>
 			</DataTemplate>
             <DataTemplate x:DataType="annotation:AnnotationTabViewModel">
