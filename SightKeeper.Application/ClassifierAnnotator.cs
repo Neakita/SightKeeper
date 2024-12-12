@@ -13,8 +13,7 @@ public class ClassifierAnnotator : ObservableAnnotator, IDisposable
 
 	public virtual void SetTag(AssetsLibrary<ClassifierAsset> assetsLibrary, Screenshot screenshot, Tag tag)
 	{
-		if (!assetsLibrary.Assets.TryGetValue(screenshot, out var asset))
-			asset = assetsLibrary.MakeAsset(screenshot);
+		var asset = assetsLibrary.GetOrMakeAsset(screenshot);
 		asset.Tag = tag;
 	}
 

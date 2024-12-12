@@ -9,6 +9,13 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary where TAsset : Asset
 {
 	public IReadOnlyDictionary<Screenshot, TAsset> Assets => _assets.AsReadOnly();
 
+	public TAsset GetOrMakeAsset(Screenshot screenshot)
+	{
+		if (_assets.TryGetValue(screenshot, out var asset))
+			return asset;
+		return MakeAsset(screenshot);
+	}
+
 	public TAsset MakeAsset(Screenshot screenshot)
 	{
 		var asset = _assetsFactory.CreateAsset();

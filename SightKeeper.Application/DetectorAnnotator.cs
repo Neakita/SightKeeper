@@ -7,9 +7,10 @@ namespace SightKeeper.Application;
 
 public class DetectorAnnotator
 {
-	public virtual DetectorItem CreateItem(Screenshot screenshot, Tag tag, Bounding bounding)
+	public virtual DetectorItem CreateItem(AssetsLibrary<DetectorAsset> assetsLibrary, Screenshot screenshot, Tag tag, Bounding bounding)
 	{
-		throw new NotImplementedException();
+		var asset = assetsLibrary.GetOrMakeAsset(screenshot);
+		return asset.CreateItem(tag, bounding);
 	}
 
 	public virtual void SetBounding(DetectorItem item, Bounding bounding)

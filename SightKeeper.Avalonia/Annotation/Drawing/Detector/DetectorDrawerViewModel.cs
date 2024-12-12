@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
-using SightKeeper.Avalonia.Annotation.Assets;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
@@ -11,14 +10,15 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Detector;
 
-internal sealed class DetectorDrawerViewModel : DrawerViewModel<DetectorAssetViewModel, DetectorAsset>
+internal sealed class DetectorDrawerViewModel : DrawerViewModel
 {
 	public override IReadOnlyCollection<DetectorItemViewModel> Items => _items;
 	public override Tag? Tag => _tag;
 
-	public DetectorDrawerViewModel(DetectorAnnotator annotator)
+	public DetectorDrawerViewModel(DetectorAnnotator annotator, DetectorDataSet dataSet)
 	{
 		_annotator = annotator;
+		_assetsLibrary = dataSet.AssetsLibrary;
 	}
 
 	internal ScreenshotViewModel? Screenshot
@@ -28,10 +28,8 @@ internal sealed class DetectorDrawerViewModel : DrawerViewModel<DetectorAssetVie
 		{
 			field = value;
 			_items.Clear();
-			throw new NotImplementedException();
-			/*var asset = Screenshot?.Value.Asset;
-			if (asset != null)
-				_items.AddRange(asset.Items.Select(item => new DetectorItemViewModel(item, _annotator)));*/
+			if (value != null && _assetsLibrary.Assets.TryGetValue(value.Value, out var asset))
+				_items.AddRange(asset.Items.Select(item => new DetectorItemViewModel(item, _annotator)));
 		}
 	}
 
@@ -46,12 +44,13 @@ internal sealed class DetectorDrawerViewModel : DrawerViewModel<DetectorAssetVie
 	{
 		Guard.IsNotNull(Screenshot);
 		Guard.IsNotNull(Tag);
-		var item = _annotator.CreateItem(Screenshot.Value, Tag, bounding);
+		var item = _annotator.CreateItem(_assetsLibrary, Screenshot.Value, Tag, bounding);
 		DetectorItemViewModel itemViewModel = new(item, _annotator);
 		_items.Add(itemViewModel);
 	}
 
 	private readonly AvaloniaList<DetectorItemViewModel> _items = new();
 	private readonly DetectorAnnotator _annotator;
+	private readonly AssetsLibrary<DetectorAsset> _assetsLibrary;
 	private Tag? _tag;
 }
