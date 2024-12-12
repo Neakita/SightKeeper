@@ -67,29 +67,14 @@
                                             ImageLoader="{Binding #ListBox.((local:ScreenshotsViewModel)DataContext).ImageLoader}"/>
                                     </Interaction.Behaviors>
                                 </Image>
-                                <!--<ContentControl Content="{Binding Asset}"
-                                                IsVisible="{Binding Asset, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                Margin="4">
-                                    <ContentControl.DataTemplates>
-                                        <DataTemplate DataType="assets:ClassifierAssetViewModel">
-                                            <Border Classes="outer label"
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Bottom">
-                                                <StackPanel Orientation="Horizontal"
-                                                            Classes="small-spacing">
-                                                    <icons:MaterialIcon Kind="Tag"/>
-                                                    <TextBlock Text="{Binding Tag.Name}"/>
-                                                </StackPanel>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ContentControl.DataTemplates>
-                                </ContentControl>-->
                             </Panel>
                         </Border>
                     </Border>
                     <StackPanel Grid.Row="2"
                                 Orientation="Horizontal"
-                                Classes="small-spacing">
+                                Classes="small-spacing"
+                                ToolTip.Tip="{Binding Value.CreationDate}"
+                                Background="Transparent">
                         <icons:MaterialIcon Kind="Calendar"/>
                         <TextBlock>
                             <Interaction.Behaviors>

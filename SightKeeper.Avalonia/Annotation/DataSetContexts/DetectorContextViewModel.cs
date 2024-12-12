@@ -1,13 +1,12 @@
 using System.ComponentModel;
 using SightKeeper.Application;
-using SightKeeper.Avalonia.Annotation.Assets;
 using SightKeeper.Avalonia.Annotation.Drawing.Detector;
 using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Domain.DataSets.Detector;
 
 namespace SightKeeper.Avalonia.Annotation.DataSetContexts;
 
-internal sealed class DetectorContextViewModel : DataSetContextViewModel<DetectorAssetViewModel, DetectorAsset>
+internal sealed class DetectorContextViewModel : DataSetContextViewModel
 {
 	public override DetectorToolBarViewModel ToolBar { get; }
 	public override DetectorDrawerViewModel Drawer { get; }

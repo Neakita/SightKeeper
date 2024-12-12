@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Avalonia.Annotation.Assets;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
-internal sealed partial class DetectorToolBarViewModel : ToolBarViewModel<DetectorAssetViewModel, DetectorAsset>
+internal sealed partial class DetectorToolBarViewModel : ToolBarViewModel
 {
 	public IReadOnlyCollection<Tag> Tags { get; }
 

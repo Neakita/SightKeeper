@@ -20,7 +20,8 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <screenshots:Screenshots Grid.Column="0"
-                                     DataContext="{Binding Screenshots}"/>
+                                     DataContext="{Binding Screenshots}"
+                                     IsVisible="{Binding !!Screenshots.Count}"/>
             <Panel Grid.Column="1"
                    Classes="regular-margin"
                    VerticalAlignment="Center"

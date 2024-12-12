@@ -3,6 +3,7 @@ using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.DataSetContexts;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
+using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Screenshots;
 using SightKeeper.Avalonia.Settings;
@@ -22,9 +23,10 @@ internal static class ViewModelsBootstrapper
 		builder.RegisterType<ScreenshotsLibraryViewModelsObservableRepository>().SingleInstance();
 		builder.RegisterType<AnnotationTabViewModel>();
 		builder.RegisterType<ScreenshottingSettingsViewModel>();
-		builder.RegisterType<ScreenshotsViewModel>();
+		builder.RegisterType<ScreenshotsViewModel>().SingleInstance();
 		builder.RegisterType<ClassifierContextViewModel>();
 		builder.RegisterType<DetectorContextViewModel>();
 		builder.RegisterType<ScreenshotsLibrariesViewModel>();
+		builder.RegisterType<ClassifierToolBarViewModel>();
 	}
 }

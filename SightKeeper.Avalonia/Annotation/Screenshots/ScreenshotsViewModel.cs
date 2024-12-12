@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
@@ -28,16 +30,19 @@ internal sealed partial class ScreenshotsViewModel : ViewModel
 
 	public IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
 	public ScreenshotImageLoader ImageLoader { get; }
+	public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
 
 	public ScreenshotsViewModel(
 		ObservableScreenshotsDataAccess observableDataAccess,
-		ScreenshotImageLoader imageLoader)
+		ScreenshotImageLoader imageLoader,
+		IEnumerable<ObservableAnnotator> observableAnnotators)
 	{
 		ImageLoader = imageLoader;
 		_screenshotsSource.Connect()
 			.Transform(screenshot => new ScreenshotViewModel(screenshot))
+			.AddKey(viewModel => viewModel.Value)
 			.Bind(out var screenshots)
-			.Subscribe()
+			.PopulateInto(_screenshotsCache)
 			.DisposeWith(_disposable);
 		Screenshots = screenshots;
 		observableDataAccess.Added
@@ -51,10 +56,27 @@ internal sealed partial class ScreenshotsViewModel : ViewModel
 			.Select(_screenshotsSource.Remove)
 			.Subscribe(isRemoved => Guard.IsTrue(isRemoved))
 			.DisposeWith(_disposable);
+		observableAnnotators
+			.Select(annotator => annotator.AssetsChanged)
+			.Merge()
+			.Subscribe(OnScreenshotAssetsChanged)
+			.DisposeWith(_disposable);
 	}
-
-	[ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
 
 	private readonly CompositeDisposable _disposable = new();
 	private readonly SourceList<Screenshot> _screenshotsSource = new();
+	private readonly SourceCache<ScreenshotViewModel, Screenshot> _screenshotsCache = new(viewModel => viewModel.Value);
+	private readonly Subject<ScreenshotViewModel?> _selectedScreenshotChanged = new();
+	[ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
+
+	private void OnScreenshotAssetsChanged(Screenshot screenshot)
+	{
+		var screenshotViewModel = _screenshotsCache.Lookup(screenshot).Value;
+		screenshotViewModel.NotifyAssetsChanged();
+	}
+
+	partial void OnSelectedScreenshotChanged(ScreenshotViewModel? value)
+	{
+		_selectedScreenshotChanged.OnNext(value);
+	}
 }

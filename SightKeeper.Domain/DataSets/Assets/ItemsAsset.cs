@@ -2,9 +2,14 @@
 
 namespace SightKeeper.Domain.DataSets.Assets;
 
-public abstract class ItemsAsset<TItem> : Asset
+public abstract class ItemsAsset : Asset
 {
-	public IReadOnlyCollection<TItem> Items => _items.AsReadOnly();
+	public abstract IReadOnlyCollection<AssetItem> Items { get; }
+}
+
+public abstract class ItemsAsset<TItem> : ItemsAsset where TItem : AssetItem
+{
+	public override IReadOnlyCollection<TItem> Items => _items.AsReadOnly();
 
 	public void DeleteItem(TItem item)
 	{
