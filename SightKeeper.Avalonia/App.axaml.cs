@@ -17,17 +17,10 @@ internal sealed class App : global::Avalonia.Application
 
 	public override void OnFrameworkInitializationCompleted()
 	{
-		switch (ApplicationLifetime)
-		{
-			case IClassicDesktopStyleApplicationLifetime desktop:
-				desktop.MainWindow = Composition.MainWindow;
-				break;
-			default:
-				throw new ArgumentOutOfRangeException(nameof(ApplicationLifetime), ApplicationLifetime, null);
-		}
-		if (ApplicationLifetime is IControlledApplicationLifetime controlledApplicationLifetime)
-			controlledApplicationLifetime.Exit += (_, _) => Composition.Dispose();
-
+		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+			desktopLifetime.MainWindow = Composition.MainWindow;
+		if (ApplicationLifetime is IControlledApplicationLifetime controlledLifetime)
+			controlledLifetime.Exit += (_, _) => Composition.Dispose();
 		base.OnFrameworkInitializationCompleted();
 	}
 }
