@@ -1,9 +1,9 @@
-using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Model.DataSets.Assets;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
+namespace SightKeeper.Data.Conversion.DataSets.Classifier;
 
 internal sealed class ClassifierAssetsConverter
 {

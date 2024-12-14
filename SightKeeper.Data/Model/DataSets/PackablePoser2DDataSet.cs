@@ -1,10 +1,10 @@
 using MemoryPack;
-using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Data.Binary.Model.DataSets.Tags;
-using SightKeeper.Data.Binary.Model.DataSets.Weights;
+using SightKeeper.Data.Model.DataSets.Assets;
+using SightKeeper.Data.Model.DataSets.Tags;
+using SightKeeper.Data.Model.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Poser2D;
 
-namespace SightKeeper.Data.Binary.Model.DataSets;
+namespace SightKeeper.Data.Model.DataSets;
 
 /// <summary>
 /// MemoryPackable version of <see cref="Poser2DDataSet"/>

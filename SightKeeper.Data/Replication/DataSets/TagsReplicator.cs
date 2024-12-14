@@ -1,7 +1,7 @@
-using SightKeeper.Data.Binary.Model.DataSets.Tags;
+using SightKeeper.Data.Model.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Binary.Replication.DataSets;
+namespace SightKeeper.Data.Replication.DataSets;
 
 internal static class TagsReplicator
 {

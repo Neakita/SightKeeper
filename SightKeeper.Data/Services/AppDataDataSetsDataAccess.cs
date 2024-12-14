@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using SightKeeper.Application;
 using SightKeeper.Domain.DataSets;
 
-namespace SightKeeper.Data.Binary.Services;
+namespace SightKeeper.Data.Services;
 
 // C-C-Combo!
 public sealed class AppDataDataSetsDataAccess :

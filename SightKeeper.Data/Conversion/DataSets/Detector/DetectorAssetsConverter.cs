@@ -1,10 +1,10 @@
 using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Model.DataSets.Assets;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Model.DataSets.Assets;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets.Detector;
+namespace SightKeeper.Data.Conversion.DataSets.Detector;
 
 internal sealed class DetectorAssetsConverter
 {

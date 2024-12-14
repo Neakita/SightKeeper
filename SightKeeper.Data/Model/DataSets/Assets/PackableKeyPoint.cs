@@ -2,7 +2,7 @@ using MemoryPack;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Poser;
 
-namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
+namespace SightKeeper.Data.Model.DataSets.Assets;
 
 /// <summary>
 /// MemoryPackable version of <see cref="KeyPoint"/>

@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Avalonia.Data.Converters;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Converters;
 
 internal sealed class AndConverter : IMultiValueConverter
 {

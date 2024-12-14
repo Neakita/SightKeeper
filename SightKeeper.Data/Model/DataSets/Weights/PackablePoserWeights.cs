@@ -1,6 +1,6 @@
 using MemoryPack;
 
-namespace SightKeeper.Data.Binary.Model.DataSets.Weights;
+namespace SightKeeper.Data.Model.DataSets.Weights;
 
 [MemoryPackable]
 internal sealed partial class PackablePoserWeights : PackableWeights

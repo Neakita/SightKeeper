@@ -12,7 +12,7 @@ using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Screenshots;
 using SightKeeper.Avalonia.Settings;
 using SightKeeper.Avalonia.Settings.Appearance;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;

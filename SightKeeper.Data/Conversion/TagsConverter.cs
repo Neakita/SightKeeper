@@ -1,8 +1,8 @@
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Data.Binary.Model.DataSets.Tags;
+using SightKeeper.Data.Model.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Conversion;
 
 internal sealed class TagsConverter
 {

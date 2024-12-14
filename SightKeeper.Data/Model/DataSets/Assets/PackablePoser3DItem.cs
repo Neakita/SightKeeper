@@ -2,7 +2,7 @@ using MemoryPack;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Poser3D;
 
-namespace SightKeeper.Data.Binary.Model.DataSets.Assets;
+namespace SightKeeper.Data.Model.DataSets.Assets;
 
 /// <summary>
 /// MemoryPackable version of <see cref="Poser3DItem"/>

@@ -7,7 +7,7 @@ using SightKeeper.Domain;
 using SightKeeper.Domain.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Data.Binary.Services;
+namespace SightKeeper.Data.Services;
 
 public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 {

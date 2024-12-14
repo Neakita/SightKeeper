@@ -1,7 +1,7 @@
-using SightKeeper.Data.Binary.Replication.DataSets;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Replication.DataSets;
+using SightKeeper.Data.Services;
 
-namespace SightKeeper.Data.Binary.Replication;
+namespace SightKeeper.Data.Replication;
 
 internal class AppDataReplicator
 {

@@ -1,11 +1,11 @@
-using SightKeeper.Data.Binary.Model.DataSets;
-using SightKeeper.Data.Binary.Replication.DataSets.Classifier;
-using SightKeeper.Data.Binary.Replication.DataSets.Detector;
-using SightKeeper.Data.Binary.Replication.DataSets.Poser2D;
-using SightKeeper.Data.Binary.Replication.DataSets.Poser3D;
+using SightKeeper.Data.Model.DataSets;
+using SightKeeper.Data.Replication.DataSets.Classifier;
+using SightKeeper.Data.Replication.DataSets.Detector;
+using SightKeeper.Data.Replication.DataSets.Poser2D;
+using SightKeeper.Data.Replication.DataSets.Poser3D;
 using SightKeeper.Domain.DataSets;
 
-namespace SightKeeper.Data.Binary.Replication.DataSets;
+namespace SightKeeper.Data.Replication.DataSets;
 
 internal sealed class DataSetsReplicator
 {

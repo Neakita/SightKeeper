@@ -1,8 +1,8 @@
-using SightKeeper.Data.Binary.Model.DataSets.Tags;
+using SightKeeper.Data.Model.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Binary.Replication.DataSets.Poser;
+namespace SightKeeper.Data.Replication.DataSets.Poser;
 
 internal static class PoserTagsReplicator
 {

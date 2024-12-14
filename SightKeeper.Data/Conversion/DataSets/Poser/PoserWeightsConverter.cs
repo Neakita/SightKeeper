@@ -1,10 +1,10 @@
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Data.Binary.Model.DataSets.Weights;
+using SightKeeper.Data.Model.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser;
+namespace SightKeeper.Data.Conversion.DataSets.Poser;
 
 internal sealed class PoserWeightsConverter
 {

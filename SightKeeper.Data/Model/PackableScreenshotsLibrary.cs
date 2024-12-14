@@ -1,7 +1,7 @@
 using MemoryPack;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary.Model;
+namespace SightKeeper.Data.Model;
 
 /// <summary>
 /// MemoryPackable version of <see cref="ScreenshotsLibrary"/>

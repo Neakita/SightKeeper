@@ -1,3 +1,3 @@
-namespace SightKeeper.Data.Binary;
+namespace SightKeeper.Data;
 
 public sealed class AppDataEditingLock;

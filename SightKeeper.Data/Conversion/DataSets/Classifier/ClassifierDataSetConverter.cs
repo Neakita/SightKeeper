@@ -1,9 +1,9 @@
 using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Model.DataSets;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Model.DataSets;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Classifier;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets.Classifier;
+namespace SightKeeper.Data.Conversion.DataSets.Classifier;
 
 internal sealed class ClassifierDataSetConverter
 {

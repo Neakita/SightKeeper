@@ -1,7 +1,7 @@
 using MemoryPack;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.Binary.Model.DataSets.Weights;
+namespace SightKeeper.Data.Model.DataSets.Weights;
 
 /// <summary>
 /// MemoryPackable version of <see cref="PlainWeights"/>

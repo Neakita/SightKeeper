@@ -1,10 +1,10 @@
 using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Model;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Model;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.Screenshots;
-using PackableScreenshotsLibrary = SightKeeper.Data.Binary.Model.PackableScreenshotsLibrary;
+using PackableScreenshotsLibrary = SightKeeper.Data.Model.PackableScreenshotsLibrary;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Conversion;
 
 internal sealed class ScreenshotsLibraryConverter
 {

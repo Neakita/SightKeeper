@@ -3,7 +3,7 @@ using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets;
 
-namespace SightKeeper.Data.Binary.Services;
+namespace SightKeeper.Data.Services;
 
 public sealed class AppDataDataSetEditor : DataSetEditor
 {

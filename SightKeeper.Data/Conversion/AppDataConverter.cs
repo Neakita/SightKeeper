@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Conversion.DataSets;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Conversion.DataSets;
+using SightKeeper.Data.Services;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Conversion;
 
 internal sealed class AppDataConverter
 {

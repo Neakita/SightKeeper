@@ -1,7 +1,7 @@
-using SightKeeper.Data.Binary.Model.DataSets;
+using SightKeeper.Data.Model.DataSets;
 using SightKeeper.Domain.DataSets.Detector;
 
-namespace SightKeeper.Data.Binary.Replication.DataSets.Detector;
+namespace SightKeeper.Data.Replication.DataSets.Detector;
 
 internal sealed class DetectorDataSetReplicator
 {

@@ -1,9 +1,9 @@
 using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Model.DataSets.Weights;
+using SightKeeper.Data.Model.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets;
+namespace SightKeeper.Data.Conversion.DataSets;
 
 internal sealed class PlainWeightsConverter
 {

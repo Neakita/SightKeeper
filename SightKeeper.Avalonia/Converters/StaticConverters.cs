@@ -2,9 +2,9 @@
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Converters;
 
-internal static class Converters
+internal static class StaticConverters
 {
 	public static FuncValueConverter<object, double> ContentToOpacityConverter { get; } =
 		new(value => value == null ? 0 : 1);
@@ -15,12 +15,11 @@ internal static class Converters
 		new(objects =>
 		{
 			var objectsList = objects.ToList();
-			var height = objectsList[0] as double?;
-			var isCustom = objectsList[1] as bool?;
-			if (height == null || isCustom == null)
+			if (objectsList[0] is not double height ||
+			    objectsList[1] is not bool isCustom)
 				return new GridLength(0);
-			if (isCustom.Value)
-				return new GridLength(height.Value);
+			if (isCustom)
+				return new GridLength(height);
 			return new GridLength(0);
 		});
 }

@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary.Services;
+namespace SightKeeper.Data.Services;
 
 public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 {

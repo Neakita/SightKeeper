@@ -1,9 +1,9 @@
-using SightKeeper.Data.Binary.Model.DataSets.Assets;
+using SightKeeper.Data.Model.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser3D;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Binary.Replication.DataSets.Poser3D;
+namespace SightKeeper.Data.Replication.DataSets.Poser3D;
 
 internal sealed class Poser3DAssetsReplicator
 {

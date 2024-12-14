@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:screenshottingOptions="clr-namespace:SightKeeper.Avalonia.Annotation.ScreenshottingOptions"
-             xmlns:root="clr-namespace:SightKeeper.Avalonia"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.ScreenshottingSettings"
              x:DataType="screenshottingOptions:ScreenshottingSettingsViewModel">
@@ -53,7 +53,7 @@
                            Watermark="Unlimited"
                            FormatString="0.##">
                 <Interaction.Behaviors>
-                    <root:ExponentialNumericUpDownIncrementBehavior Increment="1"/>
+                    <behaviors:ExponentialNumericUpDownIncrementBehavior Increment="1"/>
                 </Interaction.Behaviors>
                 <NumericUpDown.InnerRightContent>
                     <TextBlock IsVisible="{Binding $parent[NumericUpDown].Value, Converter={x:Static ObjectConverters.IsNotNull}}" Text="f/s" ToolTip.Tip="Frames per second"/>

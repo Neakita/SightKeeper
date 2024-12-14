@@ -7,7 +7,7 @@ using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Behaviors;
 
 internal sealed class ExponentialNumericUpDownIncrementBehavior : Behavior<NumericUpDown>
 {

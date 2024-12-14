@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Model.DataSets.Tags;
+using SightKeeper.Data.Model.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Poser;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser;
+namespace SightKeeper.Data.Conversion.DataSets.Poser;
 
 internal sealed class PoserTagsConverter
 {

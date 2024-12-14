@@ -8,7 +8,7 @@
              xmlns:toolBars="clr-namespace:SightKeeper.Avalonia.Annotation.ToolBars"
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:avalonia="clr-namespace:SightKeeper.Avalonia"
+             xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
@@ -40,7 +40,7 @@
                 </Image>
                 <Decorator>
                     <Decorator.IsVisible>
-                        <MultiBinding Converter="{x:Static avalonia:AndConverter.Instance}">
+                        <MultiBinding Converter="{x:Static converters:AndConverter.Instance}">
                             <Binding Path="Context"
                                      Converter="{x:Static ObjectConverters.IsNotNull}"/>
                             <Binding Path="Context.Drawer"

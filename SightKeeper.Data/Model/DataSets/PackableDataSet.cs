@@ -1,7 +1,7 @@
 using MemoryPack;
 using SightKeeper.Domain.DataSets;
 
-namespace SightKeeper.Data.Binary.Model.DataSets;
+namespace SightKeeper.Data.Model.DataSets;
 
 /// <summary>
 /// MemoryPackable version of <see cref="DataSet"/>

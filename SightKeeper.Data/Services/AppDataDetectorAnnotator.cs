@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary.Services;
+namespace SightKeeper.Data.Services;
 
 public sealed class AppDataDetectorAnnotator : DetectorAnnotator
 {

@@ -3,7 +3,7 @@ using SightKeeper.Application;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary;
+namespace SightKeeper.Data;
 
 public sealed class AppData : ApplicationSettingsProvider
 {

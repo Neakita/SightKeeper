@@ -3,7 +3,7 @@ using MemoryPack;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary.Model.DataSets;
+namespace SightKeeper.Data.Model.DataSets;
 
 /// <summary>
 /// MemoryPackable version of <see cref="Screenshot"/>

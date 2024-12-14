@@ -1,8 +1,8 @@
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.Screenshots;
-using PackableScreenshotsLibrary = SightKeeper.Data.Binary.Model.PackableScreenshotsLibrary;
+using PackableScreenshotsLibrary = SightKeeper.Data.Model.PackableScreenshotsLibrary;
 
-namespace SightKeeper.Data.Binary.Replication;
+namespace SightKeeper.Data.Replication;
 
 internal sealed class ScreenshotsLibraryReplicator
 {

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using FlakeId;
 
-namespace SightKeeper.Data.Binary.Services;
+namespace SightKeeper.Data.Services;
 
 internal sealed class FileSystemDataAccess<T> where T : notnull
 {

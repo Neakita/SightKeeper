@@ -1,7 +1,7 @@
-using SightKeeper.Data.Binary.Model.DataSets.Assets;
+using SightKeeper.Data.Model.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 
-namespace SightKeeper.Data.Binary.Replication.DataSets.Classifier;
+namespace SightKeeper.Data.Replication.DataSets.Classifier;
 
 internal sealed class ClassifierAssetsReplicator
 {

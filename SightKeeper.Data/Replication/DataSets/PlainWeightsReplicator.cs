@@ -1,8 +1,8 @@
-using SightKeeper.Data.Binary.Model.DataSets.Weights;
+using SightKeeper.Data.Model.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.Binary.Replication.DataSets;
+namespace SightKeeper.Data.Replication.DataSets;
 
 internal static class PlainWeightsReplicator
 {

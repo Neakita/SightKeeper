@@ -1,4 +1,4 @@
-namespace SightKeeper.Data.Binary.Services;
+namespace SightKeeper.Data.Services;
 
 public sealed class PeriodicAppDataSaver : IDisposable
 {

@@ -4,13 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Dialogs.DialogHostPresenter"
-             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Dialogs"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:themeAssists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              x:DataType="local:DialogHost"
-             Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static root:Converters.ContentToOpacityConverter}}">
+             Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static converters:StaticConverters.ContentToOpacityConverter}}">
 	<Interaction.Behaviors>
 		<BehaviorCollection>
 			<behaviors:DisableHitTestWhenOpacityIsZeroBehavior/>
@@ -30,7 +30,7 @@
 			<Grid.RowDefinitions>
 				<RowDefinition>
 					<RowDefinition.Height>
-						<MultiBinding Converter="{x:Static root:Converters.TitleBarToGridLengthConverter}">
+						<MultiBinding Converter="{x:Static converters:StaticConverters.TitleBarToGridLengthConverter}">
 							<Binding Path="$parent[Window].ExtendClientAreaTitleBarHeightHint"/>
 							<Binding Path="$parent[Window].ExtendClientAreaToDecorationsHint"/>
 						</MultiBinding>
@@ -39,7 +39,7 @@
 				<RowDefinition/>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="{Binding $parent[Window].(themeAssists:WindowAssist.LeftContentWidth), Converter={x:Static root:Converters.DoubleToGridLengthConvert}}"/>
+				<ColumnDefinition Width="{Binding $parent[Window].(themeAssists:WindowAssist.LeftContentWidth), Converter={x:Static converters:StaticConverters.DoubleToGridLengthConvert}}"/>
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 			<Border Grid.Row="0" Grid.Column="0" Background="#7F000000"/>

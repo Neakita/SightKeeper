@@ -1,8 +1,8 @@
 ﻿using MemoryPack;
-using SightKeeper.Data.Binary.Model;
-using SightKeeper.Data.Binary.Model.DataSets;
+using SightKeeper.Data.Model;
+using SightKeeper.Data.Model.DataSets;
 
-namespace SightKeeper.Data.Binary;
+namespace SightKeeper.Data;
 
 [MemoryPackable]
 internal sealed partial class PackableAppData

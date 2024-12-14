@@ -9,7 +9,7 @@ using CommunityToolkit.Diagnostics;
 using Humanizer;
 using Timer = System.Timers.Timer;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Behaviors;
 
 internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 {

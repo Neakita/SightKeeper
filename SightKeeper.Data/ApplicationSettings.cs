@@ -1,7 +1,7 @@
 ﻿using MemoryPack;
 using SightKeeper.Application;
 
-namespace SightKeeper.Data.Binary;
+namespace SightKeeper.Data;
 
 // In fact, it is not required to implement this interface,
 // but this way you can automatically delegate the implementation of this interface

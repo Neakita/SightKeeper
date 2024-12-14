@@ -1,9 +1,9 @@
 ﻿using MemoryPack;
-using SightKeeper.Data.Binary.Conversion;
-using SightKeeper.Data.Binary.Replication;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Conversion;
+using SightKeeper.Data.Replication;
+using SightKeeper.Data.Services;
 
-namespace SightKeeper.Data.Binary;
+namespace SightKeeper.Data;
 
 public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Data.Converters;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Converters;
 
 internal sealed class MultiplyConverter : IMultiValueConverter
 {

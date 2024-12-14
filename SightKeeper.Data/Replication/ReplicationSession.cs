@@ -1,7 +1,7 @@
 using FlakeId;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary.Replication;
+namespace SightKeeper.Data.Replication;
 
 internal sealed class ReplicationSession
 {

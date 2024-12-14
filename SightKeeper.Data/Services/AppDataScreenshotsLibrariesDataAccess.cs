@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using SightKeeper.Application;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary.Services;
+namespace SightKeeper.Data.Services;
 
 public sealed class AppDataScreenshotsLibrariesDataAccess :
 	ReadDataAccess<ScreenshotsLibrary>,

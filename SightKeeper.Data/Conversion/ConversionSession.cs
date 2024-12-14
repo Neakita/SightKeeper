@@ -1,7 +1,7 @@
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.Binary.Conversion;
+namespace SightKeeper.Data.Conversion;
 
 internal sealed class ConversionSession
 {

@@ -1,7 +1,7 @@
-using SightKeeper.Data.Binary.Model.DataSets.Compositions;
+using SightKeeper.Data.Model.DataSets.Compositions;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets;
+namespace SightKeeper.Data.Conversion.DataSets;
 
 internal static class CompositionConverter
 {

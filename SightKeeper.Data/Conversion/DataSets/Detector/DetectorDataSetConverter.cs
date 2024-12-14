@@ -1,9 +1,9 @@
 using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Model.DataSets;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Model.DataSets;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Detector;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets.Detector;
+namespace SightKeeper.Data.Conversion.DataSets.Detector;
 
 internal sealed class DetectorDataSetConverter
 {

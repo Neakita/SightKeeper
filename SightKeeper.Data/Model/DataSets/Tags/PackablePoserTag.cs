@@ -1,7 +1,7 @@
 using MemoryPack;
 using SightKeeper.Domain.DataSets.Poser;
 
-namespace SightKeeper.Data.Binary.Model.DataSets.Tags;
+namespace SightKeeper.Data.Model.DataSets.Tags;
 
 /// <summary>
 /// MemoryPackable version of <see cref="PoserTag"/>

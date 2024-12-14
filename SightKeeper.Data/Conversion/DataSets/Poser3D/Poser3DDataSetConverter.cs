@@ -1,10 +1,10 @@
 using System.Collections.Immutable;
-using SightKeeper.Data.Binary.Conversion.DataSets.Poser;
-using SightKeeper.Data.Binary.Model.DataSets;
-using SightKeeper.Data.Binary.Services;
+using SightKeeper.Data.Conversion.DataSets.Poser;
+using SightKeeper.Data.Model.DataSets;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Poser3D;
 
-namespace SightKeeper.Data.Binary.Conversion.DataSets.Poser3D;
+namespace SightKeeper.Data.Conversion.DataSets.Poser3D;
 
 internal sealed class Poser3DDataSetConverter
 {
