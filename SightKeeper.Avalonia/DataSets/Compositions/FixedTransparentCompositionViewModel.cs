@@ -29,12 +29,12 @@ internal sealed partial class FixedTransparentCompositionViewModel : Composition
 		_opacities = [0.1m, 0.2m, 0.7m];
 	}
 
-	public FixedTransparentCompositionViewModel(FixedTransparentComposition composition) : base(composition)
+	public FixedTransparentCompositionViewModel(FixedTransparentImageComposition imageComposition) : base(imageComposition)
 	{
-		_opacities = composition.Opacities.Select(opacity => (decimal)opacity).ToImmutableList();
+		_opacities = imageComposition.Opacities.Select(opacity => (decimal)opacity).ToImmutableList();
 	}
 
-	public override FixedTransparentComposition ToComposition() =>
+	public override FixedTransparentImageComposition ToComposition() =>
 		new(MaximumScreenshotsDelay, 
 			Opacities.Select(opacity => (float)opacity).ToImmutableArray());
 

@@ -28,8 +28,6 @@ internal static class Program
 		}
 		finally
 		{
-			if (appBuilder?.Instance is IDisposable disposable)
-				disposable.Dispose();
 			Log.CloseAndFlush();
 		}
 	}

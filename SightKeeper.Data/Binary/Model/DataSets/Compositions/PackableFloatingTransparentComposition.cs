@@ -4,7 +4,7 @@ using SightKeeper.Domain.Screenshots;
 namespace SightKeeper.Data.Binary.Model.DataSets.Compositions;
 
 /// <summary>
-/// MemoryPackable version of <see cref="FloatingTransparentComposition"/>
+/// MemoryPackable version of <see cref="FloatingTransparentImageComposition"/>
 /// </summary>
 [MemoryPackable]
 internal sealed partial class PackableFloatingTransparentComposition : PackableComposition

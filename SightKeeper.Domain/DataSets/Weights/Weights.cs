@@ -8,9 +8,9 @@ public abstract class Weights
 	public ModelSize ModelSize { get; }
 	public WeightsMetrics Metrics { get; }
 	public Vector2<ushort> Resolution { get; }
-	public Composition? Composition { get; }
+	public ImageComposition? Composition { get; }
 
-	protected Weights(DateTimeOffset creationDate, ModelSize size, WeightsMetrics metrics, Vector2<ushort> resolution, Composition? composition)
+	protected Weights(DateTimeOffset creationDate, ModelSize size, WeightsMetrics metrics, Vector2<ushort> resolution, ImageComposition? composition)
 	{
 		CreationDate = creationDate;
 		ModelSize = size;

@@ -4,7 +4,7 @@ using SightKeeper.Domain.Screenshots;
 namespace SightKeeper.Data.Binary.Model.DataSets.Compositions;
 
 /// <summary>
-/// MemoryPackable version of <see cref="Composition"/>
+/// MemoryPackable version of <see cref="ImageComposition"/>
 /// </summary>
 [MemoryPackable]
 [MemoryPackUnion(0, typeof(PackableFixedTransparentComposition))]

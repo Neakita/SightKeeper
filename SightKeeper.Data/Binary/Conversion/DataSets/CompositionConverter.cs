@@ -5,15 +5,15 @@ namespace SightKeeper.Data.Binary.Conversion.DataSets;
 
 internal static class CompositionConverter
 {
-	public static PackableComposition? ConvertComposition(Composition? composition) => composition switch
+	public static PackableComposition? ConvertComposition(ImageComposition? composition) => composition switch
 	{
 		null => null,
-		FixedTransparentComposition fixedTransparent => new PackableFixedTransparentComposition
+		FixedTransparentImageComposition fixedTransparent => new PackableFixedTransparentComposition
 		{
 			MaximumScreenshotsDelay = fixedTransparent.MaximumScreenshotsDelay,
 			Opacities = fixedTransparent.Opacities
 		},
-		FloatingTransparentComposition floatingTransparent => new PackableFloatingTransparentComposition
+		FloatingTransparentImageComposition floatingTransparent => new PackableFloatingTransparentComposition
 		{
 			MaximumScreenshotsDelay = floatingTransparent.MaximumScreenshotsDelay,
 			SeriesDuration = floatingTransparent.SeriesDuration,

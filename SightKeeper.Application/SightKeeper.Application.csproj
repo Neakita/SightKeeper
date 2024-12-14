@@ -9,7 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="8.1.1" />
         <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.3.2" />
         <PackageReference Include="DynamicData" Version="9.0.4" />
         <PackageReference Include="FluentValidation" Version="11.10.0" />

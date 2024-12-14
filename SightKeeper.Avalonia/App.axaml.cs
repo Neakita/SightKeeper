@@ -1,36 +1,33 @@
 using System;
-using Autofac;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SightKeeper.Avalonia.Setup;
 
 namespace SightKeeper.Avalonia;
 
-public sealed class App : global::Avalonia.Application, IDisposable
+internal sealed class App : global::Avalonia.Application
 {
+	public Composition Composition =>
+		(Composition?)Resources[nameof(Composition)] ??
+		throw new NullReferenceException("Unable to get Composition from application resources");
+
 	public override void Initialize()
 	{
 		AvaloniaXamlLoader.Load(this);
-		DataTemplates.AddRange(ViewsBootstrapper.GetDataTemplates());
 	}
 
 	public override void OnFrameworkInitializationCompleted()
 	{
-		_container = AppBootstrapper.Setup();
-		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+		switch (ApplicationLifetime)
 		{
-			desktop.MainWindow = new MainWindow
-			{
-				DataContext = _container.Resolve<MainViewModel>()
-			};
+			case IClassicDesktopStyleApplicationLifetime desktop:
+				desktop.MainWindow = Composition.MainWindow;
+				break;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(ApplicationLifetime), ApplicationLifetime, null);
 		}
+		if (ApplicationLifetime is IControlledApplicationLifetime controlledApplicationLifetime)
+			controlledApplicationLifetime.Exit += (_, _) => Composition.Dispose();
+
 		base.OnFrameworkInitializationCompleted();
 	}
-
-	public void Dispose()
-	{
-		_container?.Dispose();
-	}
-
-	private IContainer? _container;
 }

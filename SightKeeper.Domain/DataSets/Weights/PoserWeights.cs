@@ -13,7 +13,7 @@ public sealed class PoserWeights : Weights
 		ModelSize size,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		Composition? composition,
+		ImageComposition? composition,
 		IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 		: base(creationDate, size, metrics, resolution, composition)
 	{

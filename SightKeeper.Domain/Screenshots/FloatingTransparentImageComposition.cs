@@ -2,7 +2,7 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Screenshots;
 
-public sealed class FloatingTransparentComposition : Composition
+public sealed class FloatingTransparentImageComposition : ImageComposition
 {
 	public TimeSpan SeriesDuration
 	{
@@ -34,7 +34,7 @@ public sealed class FloatingTransparentComposition : Composition
 		}
 	}
 
-	public FloatingTransparentComposition(
+	public FloatingTransparentImageComposition(
 		TimeSpan maximumScreenshotsDelay,
 		TimeSpan seriesDuration,
 		float primaryOpacity,

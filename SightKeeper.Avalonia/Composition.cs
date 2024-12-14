@@ -1,0 +1,94 @@
+using HotKeys;
+using HotKeys.SharpHook;
+using Material.Icons;
+using Pure.DI;
+using SharpHook.Reactive;
+using SightKeeper.Application;
+using SightKeeper.Application.Screenshotting;
+using SightKeeper.Application.Screenshotting.Saving;
+using SightKeeper.Avalonia.Annotation;
+using SightKeeper.Avalonia.Annotation.DataSetContexts;
+using SightKeeper.Avalonia.DataSets;
+using SightKeeper.Avalonia.Screenshots;
+using SightKeeper.Avalonia.Settings;
+using SightKeeper.Avalonia.Settings.Appearance;
+using SightKeeper.Data.Binary.Services;
+using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.Screenshots;
+using SixLabors.ImageSharp.PixelFormats;
+#if OS_LINUX
+using SightKeeper.Application.Linux.X11;
+#endif
+#if OS_WINDOWS
+using SightKeeper.Application.Windows;
+#endif
+
+namespace SightKeeper.Avalonia;
+
+internal sealed partial class Composition
+{
+	private void Setup() => DI.Setup(nameof(Composition))
+		.Hint(Hint.Resolve, "Off")
+		.Bind<ApplicationSettingsProvider>().As(Lifetime.Singleton).To<AppDataAccess>()
+		.Bind<ScreenshotsDataAccess>().Bind<ObservableScreenshotsDataAccess>().As(Lifetime.Singleton)
+		.To<FileSystemScreenshotsDataAccess>()
+		.Bind<ReadDataAccess<ScreenshotsLibrary>>().Bind<ObservableDataAccess<ScreenshotsLibrary>>()
+		.Bind<WriteDataAccess<ScreenshotsLibrary>>().As(Lifetime.Singleton).To<AppDataScreenshotsLibrariesDataAccess>()
+		.Bind<ReadDataAccess<DataSet>>().Bind<ObservableDataAccess<DataSet>>().Bind<WriteDataAccess<DataSet>>()
+		.As(Lifetime.Singleton).To<AppDataDataSetsDataAccess>()
+		.Bind<PendingScreenshotsCountReporter>().Bind<ScreenshotsSaver<Bgra32>>().As(Lifetime.Singleton)
+		.To<BufferedScreenshotsSaver<Bgra32>>()
+		.Bind<ObservableRepository<TT>>().To<DataAccessObservableRepository<TT>>()
+		.Bind<ScreenBoundsProvider>().To<SharpHookScreenBoundsProvider>()
+		.Bind<Screenshotter>().To<Screenshotter<Bgra32>>()
+		.Bind<PixelConverter<Bgra32, Rgba32>>().To<Bgra32ToRgba32PixelConverter>()
+#if OS_WINDOWS
+		.Bind<ScreenCapture<Bgra32>>().To<DX11ScreenCapture>()
+#elif OS_LINUX
+		.Bind<ScreenCapture<Bgra32>>().To<X11ScreenCapture>()
+#endif
+		.Bind<IReactiveGlobalHook>().To<SimpleReactiveGlobalHook>(_ =>
+		{
+			SimpleReactiveGlobalHook hook = new();
+			hook.RunAsync();
+			return hook;
+		})
+		.Bind<KeyManager>().As(Lifetime.Singleton).To(context =>
+		{
+			context.Inject(out IReactiveGlobalHook hook);
+			KeyManagerFilter<FormattedKeyCode> keyboardManager = new(new SharpHookKeyboardKeyManager(hook));
+			KeyManagerFilter<FormattedButton> mouseManager = new(new SharpHookMouseButtonsManager(hook));
+			AggregateKeyManager keyManager = new([keyboardManager, mouseManager]);
+			return keyManager;
+		})
+		.Bind<TabItemViewModel>().To(context =>
+		{
+			context.Inject(out ScreenshotsLibrariesViewModel viewModel);
+			return new TabItemViewModel(MaterialIconKind.FolderMultipleImage, "Screenshots", viewModel);
+		})
+		.Bind<TabItemViewModel>(2).To(context =>
+		{
+			context.Inject(out DataSetsViewModel viewModel);
+			return new TabItemViewModel(MaterialIconKind.ImageAlbum, "Datasets", viewModel);
+		})
+		.Bind<TabItemViewModel>(3).To(context =>
+		{
+			context.Inject(out AnnotationTabViewModel viewModel);
+			return new TabItemViewModel(MaterialIconKind.ImageEdit, "Annotation", viewModel);
+		})
+		.Bind<TabItemViewModel>(4).To(context =>
+		{
+			context.Inject(out SettingsViewModel viewModel);
+			return new TabItemViewModel(MaterialIconKind.Cog, "Settings", viewModel);
+		})
+		.Bind<SettingsSection>().To<AppearanceSettingsViewModel>()
+		.RootBind<MainWindow>(nameof(MainWindow)).To(context =>
+		{
+			context.Inject(out MainViewModel viewModel);
+			return new MainWindow { DataContext = viewModel };
+		})
+		.RootBind<ClassifierAnnotationContextViewModel>(nameof(ClassifierAnnotationContextViewModel))
+		.To<ClassifierAnnotationContextViewModel>()
+		.RootBind<DetectorAnnotationContextViewModel>(nameof(DetectorAnnotationContextViewModel))
+		.To<DetectorAnnotationContextViewModel>();
+}

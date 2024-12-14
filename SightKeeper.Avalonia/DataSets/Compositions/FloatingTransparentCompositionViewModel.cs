@@ -15,14 +15,14 @@ internal sealed partial class FloatingTransparentCompositionViewModel : Composit
 		_seriesDurationInMilliseconds = 500;
 	}
 
-	public FloatingTransparentCompositionViewModel(FloatingTransparentComposition composition) : base(composition)
+	public FloatingTransparentCompositionViewModel(FloatingTransparentImageComposition imageComposition) : base(imageComposition)
 	{
-		_seriesDurationInMilliseconds = (ushort)composition.SeriesDuration.TotalMilliseconds;
+		_seriesDurationInMilliseconds = (ushort)imageComposition.SeriesDuration.TotalMilliseconds;
 	}
 
-	public override FloatingTransparentComposition ToComposition()
+	public override FloatingTransparentImageComposition ToComposition()
 	{
-		return new FloatingTransparentComposition(MaximumScreenshotsDelay, SeriesDuration, PrimaryOpacity, MinimumOpacity);
+		return new FloatingTransparentImageComposition(MaximumScreenshotsDelay, SeriesDuration, PrimaryOpacity, MinimumOpacity);
 	}
 
 	[ObservableProperty] private ushort _seriesDurationInMilliseconds;

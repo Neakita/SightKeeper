@@ -16,7 +16,7 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		Composition? composition,
+		ImageComposition? composition,
 		IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
 		tags = tags

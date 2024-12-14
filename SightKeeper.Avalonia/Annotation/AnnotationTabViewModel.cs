@@ -1,7 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using Autofac;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -21,7 +20,7 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 	public ScreenshotsViewModel Screenshots { get; }
 	public ScreenshottingSettingsViewModel ScreenshottingSettings { get; }
 	public IObservable<ushort> PendingScreenshotsCount { get; }
-	public DataSetContextViewModel? Context
+	public DataSetAnnotationContextViewModel? Context
 	{
 		get;
 		private set => SetProperty(ref field, value);
@@ -32,12 +31,12 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 		ScreenshottingSettingsViewModel screenshottingSettings,
 		PendingScreenshotsCountReporter? pendingScreenshotsReporter,
 		WriteableBitmapPool bitmapPool,
-		IComponentContext componentContext,
 		ScreenshotsViewModel screenshots,
-		ScreenshotsLibraryViewModelsObservableRepository screenshotsLibraries)
+		ScreenshotsLibraryViewModelsObservableRepository screenshotsLibraries,
+		Composition composition)
 	{
 		_bitmapPool = bitmapPool;
-		_componentContext = componentContext;
+		_composition = composition;
 		Screenshots = screenshots;
 		DataSets = dataSets.Items;
 		ScreenshottingSettings = screenshottingSettings;
@@ -46,7 +45,7 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 	}
 
 	private readonly WriteableBitmapPool _bitmapPool;
-	private readonly IComponentContext _componentContext;
+	private readonly Composition _composition;
 	[ObservableProperty] private ScreenshotsLibraryViewModel? _selectedScreenshotsLibrary;
 	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
 
@@ -54,7 +53,7 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 	{
 		if (Context is IDisposable disposable)
 			disposable.Dispose();
-		Context = DataSetContextViewModel.Create(value?.Value, _componentContext);
+		Context = DataSetAnnotationContextViewModel.Create(value?.Value, _composition);
 	}
 
 	[RelayCommand(CanExecute = nameof(CanReturnBitmapToPool))]

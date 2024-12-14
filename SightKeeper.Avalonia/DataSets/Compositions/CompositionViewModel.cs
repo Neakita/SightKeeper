@@ -8,26 +8,26 @@ internal abstract partial class CompositionViewModel : ViewModel
 {
 	public abstract string DisplayName { get; }
 
-	public static CompositionViewModel? Create(Composition? composition) => composition switch
+	public static CompositionViewModel? Create(ImageComposition? composition) => composition switch
 	{
 		null => null,
-		FixedTransparentComposition fixedTransparent => new FixedTransparentCompositionViewModel(fixedTransparent),
-		FloatingTransparentComposition floatingTransparent => new FloatingTransparentCompositionViewModel(floatingTransparent),
+		FixedTransparentImageComposition fixedTransparent => new FixedTransparentCompositionViewModel(fixedTransparent),
+		FloatingTransparentImageComposition floatingTransparent => new FloatingTransparentCompositionViewModel(floatingTransparent),
 		_ => throw new ArgumentOutOfRangeException(nameof(composition))
 	};
 
 	public TimeSpan MaximumScreenshotsDelay => TimeSpan.FromMilliseconds(MaximumScreenshotsDelayInMilliseconds);
 
-	public abstract Composition ToComposition();
+	public abstract ImageComposition ToComposition();
 
 	protected CompositionViewModel()
 	{
 		_maximumScreenshotsDelayInMilliseconds = 50;
 	}
 
-	protected CompositionViewModel(Composition composition)
+	protected CompositionViewModel(ImageComposition imageComposition)
 	{
-		_maximumScreenshotsDelayInMilliseconds = (ushort)composition.MaximumScreenshotsDelay.TotalMilliseconds;
+		_maximumScreenshotsDelayInMilliseconds = (ushort)imageComposition.MaximumScreenshotsDelay.TotalMilliseconds;
 	}
 
 	[ObservableProperty] private ushort _maximumScreenshotsDelayInMilliseconds;

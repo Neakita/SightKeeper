@@ -16,7 +16,7 @@ public abstract class WeightsDataAccess
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
 		IEnumerable<Tag> tags,
-		Composition? composition)
+		ImageComposition? composition)
 	{
 		var weights = CreateWeights(library, creationDate, modelSize, metrics, resolution, tags, composition);
 		SaveWeightsData(weights, data);
@@ -30,7 +30,7 @@ public abstract class WeightsDataAccess
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		Composition? composition,
+		ImageComposition? composition,
 		IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
 		var weights = CreateWeights(library, creationDate, modelSize, metrics, resolution, composition, tags);
@@ -52,12 +52,12 @@ public abstract class WeightsDataAccess
 
 	public abstract byte[] LoadWeightsData(Weights weights);
 
-	protected virtual PlainWeights CreateWeights(PlainWeightsLibrary library, DateTimeOffset creationDate, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<Tag> tags, Composition? composition)
+	protected virtual PlainWeights CreateWeights(PlainWeightsLibrary library, DateTimeOffset creationDate, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<Tag> tags, ImageComposition? composition)
 	{
 		return library.CreateWeights(creationDate, modelSize, metrics, resolution, composition, tags);
 	}
 
-	protected virtual PoserWeights CreateWeights(PoserWeightsLibrary library, DateTimeOffset creationDate, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, Composition? composition, IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
+	protected virtual PoserWeights CreateWeights(PoserWeightsLibrary library, DateTimeOffset creationDate, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, ImageComposition? composition, IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
 		return library.CreateWeights(creationDate, modelSize, metrics, resolution, composition, tags);
 	}

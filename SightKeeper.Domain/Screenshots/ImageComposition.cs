@@ -2,7 +2,7 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Screenshots;
 
-public abstract class Composition
+public abstract class ImageComposition
 {	
 	public TimeSpan MaximumScreenshotsDelay
 	{
@@ -14,7 +14,7 @@ public abstract class Composition
 		}
 	}
 
-	protected Composition(TimeSpan maximumScreenshotsDelay)
+	protected ImageComposition(TimeSpan maximumScreenshotsDelay)
 	{
 		MaximumScreenshotsDelay = maximumScreenshotsDelay;
 	}

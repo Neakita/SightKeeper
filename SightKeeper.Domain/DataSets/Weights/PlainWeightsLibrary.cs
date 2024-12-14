@@ -13,7 +13,7 @@ public sealed class PlainWeightsLibrary : WeightsLibrary
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		Composition? composition,
+		ImageComposition? composition,
 		IEnumerable<Tag> tags)
 	{
 		tags = tags.ToList().AsReadOnly();

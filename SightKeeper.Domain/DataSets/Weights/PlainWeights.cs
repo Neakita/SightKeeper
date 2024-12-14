@@ -12,7 +12,7 @@ public sealed class PlainWeights : Weights
 		ModelSize size,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
-		Composition? composition,
+		ImageComposition? composition,
 		IReadOnlyCollection<Tag> tags)
 		: base(creationDate, size, metrics, resolution, composition)
 	{

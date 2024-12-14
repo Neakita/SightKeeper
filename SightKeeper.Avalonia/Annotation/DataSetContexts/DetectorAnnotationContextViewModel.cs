@@ -8,12 +8,12 @@ using SightKeeper.Domain.DataSets.Detector;
 
 namespace SightKeeper.Avalonia.Annotation.DataSetContexts;
 
-internal sealed class DetectorContextViewModel : DataSetContextViewModel, IDisposable
+internal sealed class DetectorAnnotationContextViewModel : DataSetAnnotationContextViewModel, IDisposable
 {
 	public override DetectorToolBarViewModel ToolBar { get; }
 	public override DetectorDrawerViewModel Drawer { get; }
 
-	public DetectorContextViewModel(
+	public DetectorAnnotationContextViewModel(
 		DetectorDataSet dataSet,
 		DetectorAnnotator detectorAnnotator,
 		ScreenshotsViewModel screenshotsViewModel)

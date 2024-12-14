@@ -10,8 +10,8 @@ internal sealed class DialogManager : ObservableObject
 {
 	public Dialog? CurrentDialog
 	{
-		get => _currentDialog;
-		private set => SetProperty(ref _currentDialog, value);
+		get;
+		private set => SetProperty(ref field, value);
 	}
 
 	public async Task ShowDialogAsync(Dialog dialog)
@@ -34,7 +34,6 @@ internal sealed class DialogManager : ObservableObject
 	}
 
 	private readonly Stack<Dialog> _pendingDialogs = new();
-	private Dialog? _currentDialog;
 
 	private void CloseDialog(Dialog dialog)
 	{

@@ -3,7 +3,7 @@ using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Domain.Screenshots;
 
-public sealed class FixedTransparentComposition : Composition
+public sealed class FixedTransparentImageComposition : ImageComposition
 {
 	public ImmutableArray<float> Opacities
 	{
@@ -15,7 +15,7 @@ public sealed class FixedTransparentComposition : Composition
 		}
 	}
 
-	public FixedTransparentComposition(
+	public FixedTransparentImageComposition(
 		TimeSpan maximumScreenshotsDelay,
 		ImmutableArray<float> opacities)
 		: base(maximumScreenshotsDelay)
