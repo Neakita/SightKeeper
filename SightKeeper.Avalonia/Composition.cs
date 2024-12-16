@@ -8,7 +8,9 @@ using SightKeeper.Application.Screenshotting;
 using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.DataSetContexts;
+using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.DataSets;
+using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Screenshots;
 using SightKeeper.Avalonia.Settings;
 using SightKeeper.Avalonia.Settings.Appearance;
@@ -47,7 +49,7 @@ internal sealed partial class Composition
 #elif OS_LINUX
 		.Bind<ScreenCapture<Bgra32>>().To<X11ScreenCapture>()
 #endif
-		.Bind<IReactiveGlobalHook>().To<SimpleReactiveGlobalHook>(_ =>
+		.Bind<IReactiveGlobalHook>().As(Lifetime.Singleton).To<SimpleReactiveGlobalHook>(_ =>
 		{
 			SimpleReactiveGlobalHook hook = new();
 			hook.RunAsync();
@@ -61,6 +63,7 @@ internal sealed partial class Composition
 			AggregateKeyManager keyManager = new([keyboardManager, mouseManager]);
 			return keyManager;
 		})
+		.Bind().As(Lifetime.Singleton).To<DialogManager>()
 		.Bind<TabItemViewModel>().To(context =>
 		{
 			context.Inject(out ScreenshotsLibrariesViewModel viewModel);
@@ -82,13 +85,16 @@ internal sealed partial class Composition
 			return new TabItemViewModel(MaterialIconKind.Cog, "Settings", viewModel);
 		})
 		.Bind<SettingsSection>().To<AppearanceSettingsViewModel>()
+		.Bind().As(Lifetime.Singleton).To<MainViewModel>()
 		.RootBind<MainWindow>(nameof(MainWindow)).To(context =>
 		{
 			context.Inject(out MainViewModel viewModel);
 			return new MainWindow { DataContext = viewModel };
 		})
-		.RootBind<ClassifierAnnotationContextViewModel>(nameof(ClassifierAnnotationContextViewModel))
-		.To<ClassifierAnnotationContextViewModel>()
-		.RootBind<DetectorAnnotationContextViewModel>(nameof(DetectorAnnotationContextViewModel))
-		.To<DetectorAnnotationContextViewModel>();
+		.Root<ClassifierAnnotationContextViewModel>(nameof(ClassifierAnnotationContextViewModel))
+		.Root<DetectorAnnotationContextViewModel>(nameof(DetectorAnnotationContextViewModel))
+		.Bind().As(Lifetime.Singleton).To<WriteableBitmapPool>()
+		.Root<ScreenshotImageLoader>(nameof(ScreenshotImageLoader))
+		.Bind().As(Lifetime.Singleton).To<PeriodicAppDataSaver>()
+		.Root<PeriodicAppDataSaver>(nameof(PeriodicAppDataSaver));
 }

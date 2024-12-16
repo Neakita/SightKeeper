@@ -9,6 +9,7 @@
              xmlns:themeAssists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
+             xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Screenshots"
              x:DataType="local:DialogHost"
              Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static converters:StaticConverters.ContentToOpacityConverter}}">
 	<Interaction.Behaviors>
@@ -102,6 +103,11 @@
 					</PageSlide.SlideOutEasing>
 				</PageSlide>
 			</TransitioningContentControl.PageTransition>
+            <TransitioningContentControl.DataTemplates>
+                <DataTemplate DataType="screenshots:ScreenshotsLibraryDialogViewModel">
+                    <screenshots:ScreenshotsLibraryDialog/>
+                </DataTemplate>
+            </TransitioningContentControl.DataTemplates>
 		</TransitioningContentControl>
 	</Panel>
 </UserControl>

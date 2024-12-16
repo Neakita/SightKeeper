@@ -4,37 +4,72 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Screenshots"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Screenshots.ScreenshotsLibrariesTab"
              x:DataType="local:IScreenshotsLibrariesViewModel">
     <Design.DataContext>
         <local:DesignScreenshotsLibrariesViewModel/>
     </Design.DataContext>
-    <UserControl.Resources>
-        <local:TreeDataGridScreenshotsLibrariesConverter x:Key="ScreenshotsLibrariesConverter"/>
-        <DataTemplate x:Key="ScreenshotsLibraryActions" DataType="local:ScreenshotsLibraryViewModel">
-            <StackPanel Orientation="Horizontal" Classes="regular-spacing">
-                <Button Classes="square"
-                        Content="{icons:MaterialIconExt Edit}"
-                        Command="{Binding $parent[TreeDataGrid].((local:IScreenshotsLibrariesViewModel)DataContext).EditScreenshotsLibraryCommand}"
-                        CommandParameter="{Binding Value}"
-                        ToolTip.Tip="{Binding Value.Name, StringFormat=Edit \'{0}\'}"/>
-                <Button Classes="square"
-                        Content="{icons:MaterialIconExt Delete}"
-                        Command="{Binding $parent[TreeDataGrid].((local:IScreenshotsLibrariesViewModel)DataContext).DeleteScreenshotsLibraryCommand}"
-                        CommandParameter="{Binding Value}"
-                        ToolTip.Tip="{Binding Value.Name, StringFormat=Delete \'{0}\'}"/>
-            </StackPanel>
-        </DataTemplate>
-    </UserControl.Resources>
     <ScrollViewer Classes="regular-padding">
-        <StackPanel Classes="regular-spacing">
-            <Border Classes="outer wide-padding">
-                <Button Content="Create library" Command="{Binding CreateScreenshotsLibraryCommand}"/>
+        <StackPanel Classes="medium-spacing">
+            <Border Classes="outer regular-padding">
+                <Button Content="{icons:MaterialIconExt Plus}" Classes="square low-accent"
+                        Command="{Binding CreateScreenshotsLibraryCommand}"/>
             </Border>
-            <Border Classes="outer wide-padding">
-                <TreeDataGrid Source="{Binding ScreenshotsLibraries, Converter={StaticResource ScreenshotsLibrariesConverter}}"/>
-            </Border>
+            <ItemsControl ItemsSource="{Binding ScreenshotsLibraries}"
+                          Margin="-8">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Width="180" Height="240" Margin="8"
+                                Background="{DynamicResource OuterBackground}"
+                                Classes="small-padding no-icon-constraint"
+                                VerticalContentAlignment="Stretch"
+                                Foreground="{DynamicResource PrimaryForeground}"
+                                CornerRadius="16"
+                                Theme="{StaticResource ButtonTheme}">
+                            <Button.ContextMenu>
+                                <ContextMenu Width="120">
+                                    <MenuItem
+                                        Header="Delete"
+                                        Icon="{icons:MaterialIconExt TrashCanOutline}"
+                                        Classes="red-accent"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                            <StackPanel>
+                                <Border BoxShadow="0 3 3 0 #20000000"
+                                        Height="156"
+                                        CornerRadius="20"
+                                        Background="{DynamicResource ControlBackground}">
+                                    <Panel>
+                                        <icons:MaterialIcon Kind="ImageOutline"
+                                                            Foreground="{StaticResource WatermarkSecondary}"
+                                                            Margin="12"
+                                                            Opacity="0.2"/>
+                                        <Border CornerRadius="20"
+                                                ClipToBounds="True">
+                                            <Image Stretch="UniformToFill">
+                                                <Interaction.Behaviors>
+                                                    <behaviors:RecyclableScreenshotImageBindingBehavior
+                                                        TargetSize="156"
+                                                        Screenshot="{Binding PreviewScreenshot}"
+                                                        Composition="{StaticResource Composition}"/>
+                                                </Interaction.Behaviors>
+                                            </Image>
+                                        </Border>
+                                    </Panel>
+                                </Border>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

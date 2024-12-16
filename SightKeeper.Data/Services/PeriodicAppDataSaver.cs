@@ -2,12 +2,6 @@ namespace SightKeeper.Data.Services;
 
 public sealed class PeriodicAppDataSaver : IDisposable
 {
-	public TimeSpan Period
-	{
-		get => _timer.Period;
-		set => _timer.Period = value;
-	}
-
 	public PeriodicAppDataSaver(AppDataAccess appDataAccess)
 	{
 		_appDataAccess = appDataAccess;

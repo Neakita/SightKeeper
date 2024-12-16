@@ -17,6 +17,8 @@ internal sealed class App : global::Avalonia.Application
 
 	public override void OnFrameworkInitializationCompleted()
 	{
+		// just instantiate
+		_ = Composition.PeriodicAppDataSaver;
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
 			desktopLifetime.MainWindow = Composition.MainWindow;
 		if (ApplicationLifetime is IControlledApplicationLifetime controlledLifetime)

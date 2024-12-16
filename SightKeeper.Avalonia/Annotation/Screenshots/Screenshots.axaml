@@ -61,10 +61,10 @@
                                         </ResourceDictionary>
                                     </Image.Resources>
                                     <Interaction.Behaviors>
-                                        <local:RecyclableScreenshotImageBindingBehavior
+                                        <behaviors:RecyclableScreenshotImageBindingBehavior
                                             Screenshot="{Binding Value}"
                                             TargetSize="{Binding #ImageContainer.Bounds.Size.Width, Converter={StaticResource SizeToImageTargetSizeConverter}}"
-                                            ImageLoader="{Binding #ListBox.((local:ScreenshotsViewModel)DataContext).ImageLoader}"/>
+                                            Composition="{StaticResource Composition}"/>
                                     </Interaction.Behaviors>
                                 </Image>
                             </Panel>

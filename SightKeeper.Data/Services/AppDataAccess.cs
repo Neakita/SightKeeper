@@ -39,7 +39,7 @@ public sealed class AppDataAccess : ApplicationSettingsProvider
 
 	internal void SetDataChanged()
 	{
-		_dataChangedSinceLastSave = true;
+		 _dataChangedSinceLastSave = true;
 	}
 
 	private bool _dataChangedSinceLastSave;

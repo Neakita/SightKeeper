@@ -9,6 +9,7 @@
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
@@ -33,9 +34,9 @@
                                     Opacity="0.05"/>
                 <Image Name="Image">
                     <Interaction.Behaviors>
-                        <screenshots:RecyclableScreenshotImageBindingBehavior
+                        <behaviors:RecyclableScreenshotImageBindingBehavior
                             Screenshot="{Binding Screenshots.SelectedScreenshot.Value}"
-                            ImageLoader="{Binding Screenshots.ImageLoader}"/>
+                            Composition="{StaticResource Composition}"/>
                     </Interaction.Behaviors>
                 </Image>
                 <Decorator>
