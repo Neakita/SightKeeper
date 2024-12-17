@@ -14,6 +14,7 @@ using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Screenshots;
 using SightKeeper.Avalonia.Settings;
 using SightKeeper.Avalonia.Settings.Appearance;
+using SightKeeper.Data;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Screenshots;
@@ -31,8 +32,8 @@ internal sealed partial class Composition
 {
 	private void Setup() => DI.Setup(nameof(Composition))
 		.Hint(Hint.Resolve, "Off")
-		.Bind<ApplicationSettingsProvider>().As(Lifetime.Singleton).To<AppDataAccess>()
-		.Bind<ScreenshotsDataAccess>().Bind<ObservableScreenshotsDataAccess>().As(Lifetime.Singleton)
+		.RootBind<AppDataAccess>(nameof(AppDataAccess)).Bind<ApplicationSettingsProvider>().As(Lifetime.Singleton).To<AppDataAccess>()
+		.Bind().Bind<ScreenshotsDataAccess>().Bind<ObservableScreenshotsDataAccess>().As(Lifetime.Singleton)
 		.To<FileSystemScreenshotsDataAccess>()
 		.Bind<ReadDataAccess<ScreenshotsLibrary>>().Bind<ObservableDataAccess<ScreenshotsLibrary>>()
 		.Bind<WriteDataAccess<ScreenshotsLibrary>>().As(Lifetime.Singleton).To<AppDataScreenshotsLibrariesDataAccess>()
@@ -96,5 +97,7 @@ internal sealed partial class Composition
 		.Bind().As(Lifetime.Singleton).To<WriteableBitmapPool>()
 		.Root<ScreenshotImageLoader>(nameof(ScreenshotImageLoader))
 		.Bind().As(Lifetime.Singleton).To<PeriodicAppDataSaver>()
-		.Root<PeriodicAppDataSaver>(nameof(PeriodicAppDataSaver));
+		.Root<PeriodicAppDataSaver>(nameof(PeriodicAppDataSaver))
+		.Root<AppDataFormatter>(nameof(AppDataFormatter))
+		.Bind().As(Lifetime.Singleton).To<AppDataEditingLock>();
 }
