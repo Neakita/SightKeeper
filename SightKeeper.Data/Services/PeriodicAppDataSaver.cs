@@ -5,6 +5,10 @@ public sealed class PeriodicAppDataSaver : IDisposable
 	public PeriodicAppDataSaver(AppDataAccess appDataAccess)
 	{
 		_appDataAccess = appDataAccess;
+	}
+
+	public void Start()
+	{
 		new TaskFactory().StartNew(SavePeriodically, TaskCreationOptions.LongRunning);
 	}
 

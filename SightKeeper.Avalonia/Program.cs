@@ -14,11 +14,10 @@ internal static class Program
 	public static void Main(string[] args)
 	{
 		SetupLogger();
-		AppBuilder? appBuilder = null;
 		try
 		{
 			TaskScheduler.UnobservedTaskException += OnTaskSchedulerUnobservedException;
-			appBuilder = BuildAvaloniaApp();
+			var appBuilder = BuildAvaloniaApp();
 			appBuilder.StartWithClassicDesktopLifetime(args);
 		}
 		catch (Exception exception)
@@ -38,7 +37,7 @@ internal static class Program
 	}
 
 	// Avalonia configuration, don't remove; also used by visual designer.
-	public static AppBuilder BuildAvaloniaApp()
+	private static AppBuilder BuildAvaloniaApp()
 		=> AppBuilder.Configure<App>()
 			.UsePlatformDetect()
 			.LogToTrace();
