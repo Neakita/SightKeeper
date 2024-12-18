@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using CommunityToolkit.HighPerformance;
 using FlakeId;
+using SightKeeper.Application;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Screenshots;
@@ -17,10 +18,10 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		set => _screenshotsDataAccess.DirectoryPath = value;
 	}
 
-	public FileSystemScreenshotsDataAccess(AppDataAccess appDataAccess, AppDataEditingLock editingLock)
+	public FileSystemScreenshotsDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
-		_editingLock = editingLock;
+		_appDataLock = appDataLock;
 	}
 
 	public override Stream LoadImage(Screenshot screenshot)
@@ -44,7 +45,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		Vector2<ushort> resolution)
 	{
 		Screenshot screenshot;
-		lock (_editingLock)
+		lock (_appDataLock)
 			screenshot = base.CreateScreenshot(library, creationDate, resolution);
 		_appDataAccess.SetDataChanged();
 		return screenshot;
@@ -73,6 +74,6 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 	}
 
 	private readonly AppDataAccess _appDataAccess;
-	private readonly AppDataEditingLock _editingLock;
+	private readonly Lock _appDataLock;
 	private readonly FileSystemDataAccess<Screenshot> _screenshotsDataAccess = new(".bin");
 }

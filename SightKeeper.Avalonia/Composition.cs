@@ -19,6 +19,7 @@ using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
+using TagAttribute = SightKeeper.Application.TagAttribute;
 #if OS_LINUX
 using SightKeeper.Application.Linux.X11;
 #endif
@@ -100,4 +101,5 @@ internal sealed partial class Composition
 		.Root<PeriodicAppDataSaver>(nameof(PeriodicAppDataSaver))
 		.Root<AppDataFormatter>(nameof(AppDataFormatter))
 		.Bind().As(Lifetime.Singleton).To<AppDataEditingLock>();
+		.Bind(typeof(AppData)).As(Lifetime.Singleton).To<Lock>()
 }

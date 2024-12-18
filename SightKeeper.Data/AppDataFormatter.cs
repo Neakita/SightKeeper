@@ -1,4 +1,5 @@
 ﻿using MemoryPack;
+using SightKeeper.Application;
 using SightKeeper.Data.Conversion;
 using SightKeeper.Data.Replication;
 using SightKeeper.Data.Services;
@@ -7,7 +8,7 @@ namespace SightKeeper.Data;
 
 public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {
-	public AppDataFormatter(FileSystemScreenshotsDataAccess screenshotsDataAccess, AppDataEditingLock editingLock)
+	public AppDataFormatter(FileSystemScreenshotsDataAccess screenshotsDataAccess, [Tag(typeof(AppData))] Lock editingLock)
 	{
 		_editingLock = editingLock;
 		_converter = new AppDataConverter(screenshotsDataAccess);
@@ -21,10 +22,10 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			writer.WriteNullObjectHeader();
 			return;
 		}
-		PackableAppData packed;
+		PackableAppData packable;
 		lock (_editingLock)
-			packed = _converter.Convert(value);
-		writer.WritePackable(packed);
+			packable = _converter.Convert(value);
+		writer.WritePackable(packable);
 	}
 
 	public override void Deserialize(ref MemoryPackReader reader, scoped ref AppData? value)
@@ -35,16 +36,16 @@ public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 			value = null;
 			return;
 		}
-		var packed = reader.ReadPackable<PackableAppData>();
-		if (packed == null)
+		var packable = reader.ReadPackable<PackableAppData>();
+		if (packable == null)
 		{
 			value = null;
 			return;
 		}
-		value = _replicator.Replicate(packed);
+		value = _replicator.Replicate(packable);
 	}
 
-	private readonly AppDataEditingLock _editingLock;
+	private readonly Lock _editingLock;
 	private readonly AppDataConverter _converter;
 	private readonly AppDataReplicator _replicator;
 }

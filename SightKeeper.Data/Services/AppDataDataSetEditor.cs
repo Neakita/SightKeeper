@@ -1,3 +1,4 @@
+using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.DataSets.Tags;
@@ -7,15 +8,15 @@ namespace SightKeeper.Data.Services;
 
 public sealed class AppDataDataSetEditor : DataSetEditor
 {
-	public AppDataDataSetEditor(AppDataAccess appDataAccess, AppDataEditingLock locker)
+	public AppDataDataSetEditor(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
-		_locker = locker;
+		_appDataLock = appDataLock;
 	}
 
 	public override void Edit(DataSet dataSet, DataSetData data, IReadOnlyCollection<TagData> tagsData)
 	{
-		lock (_locker)
+		lock (_appDataLock)
 		{
 			base.Edit(dataSet, data, tagsData);
 			_appDataAccess.SetDataChanged();
@@ -23,5 +24,5 @@ public sealed class AppDataDataSetEditor : DataSetEditor
 	}
 
 	private readonly AppDataAccess _appDataAccess;
-	private readonly AppDataEditingLock _locker;
+	private readonly Lock _appDataLock;
 }

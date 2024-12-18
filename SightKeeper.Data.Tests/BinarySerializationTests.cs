@@ -37,17 +37,17 @@ public sealed class BinarySerializationTests
 	public void ShouldSaveAndLoadAppData()
 	{
 		AppDataAccess appDataAccess = new();
-		AppDataEditingLock editingLock = new();
-		AppDataScreenshotsLibrariesDataAccess screenshotsLibrariesDataAccess = new(appDataAccess, editingLock);
-		FileSystemScreenshotsDataAccess screenshotsDataAccess = new(appDataAccess, editingLock);
-		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, editingLock));
+		Lock appDataLock = new();
+		AppDataScreenshotsLibrariesDataAccess screenshotsLibrariesDataAccess = new(appDataAccess, appDataLock);
+		FileSystemScreenshotsDataAccess screenshotsDataAccess = new(appDataAccess, appDataLock);
+		MemoryPackFormatterProvider.Register(new AppDataFormatter(screenshotsDataAccess, appDataLock));
 		ScreenshotsLibrary screenshotsLibrary = new()
 		{
 			Name = "PD2"
 		};
 		screenshotsLibrariesDataAccess.Add(screenshotsLibrary);
 		var screenshot = screenshotsDataAccess.CreateScreenshot(screenshotsLibrary, SampleImageData, DateTimeOffset.Now);
-		AppDataDataSetsDataAccess appDataDataSetsDataAccess = new(appDataAccess, new AppDataEditingLock());
+		AppDataDataSetsDataAccess appDataDataSetsDataAccess = new(appDataAccess, appDataLock);
 		foreach (var dataSet in CreateDataSets(screenshot))
 			appDataDataSetsDataAccess.Add(dataSet);
 		appDataAccess.Save();
