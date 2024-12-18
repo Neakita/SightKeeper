@@ -25,15 +25,18 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreen
 		ReadDataAccess<ScreenshotsLibrary> readScreenshotsLibrariesDataAccess,
 		ScreenshotsLibraryCreator screenshotsLibraryCreator,
 		ScreenshotsLibraryEditor screenshotsLibraryEditor,
-		WriteDataAccess<ScreenshotsLibrary> writeScreenshotsLibrariesDataAccess)
+		WriteDataAccess<ScreenshotsLibrary> writeScreenshotsLibrariesDataAccess,
+		[Tag("new")] IValidator<ScreenshotsLibraryData> newScreenshotsLibraryDataValidator,
+		IValidator<ScreenshotsLibraryData> screenshotsLibraryDataValidator)
 	{
 		_dialogManager = dialogManager;
 		_readScreenshotsLibrariesDataAccess = readScreenshotsLibrariesDataAccess;
 		_screenshotsLibraryCreator = screenshotsLibraryCreator;
 		_screenshotsLibraryEditor = screenshotsLibraryEditor;
 		_writeScreenshotsLibrariesDataAccess = writeScreenshotsLibrariesDataAccess;
+		_newScreenshotsLibraryDataValidator = newScreenshotsLibraryDataValidator;
+		_screenshotsLibraryDataValidator = screenshotsLibraryDataValidator;
 		ScreenshotsLibraries = screenshotsLibrariesObservableRepository.Items;
-		_newScreenshotsLibraryDataValidator = new NewScreenshotsLibraryDataValidator(new ScreenshotsLibraryDataValidator(), readScreenshotsLibrariesDataAccess);
 	}
 
 	private readonly DialogManager _dialogManager;
@@ -41,7 +44,8 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreen
 	private readonly ScreenshotsLibraryCreator _screenshotsLibraryCreator;
 	private readonly ScreenshotsLibraryEditor _screenshotsLibraryEditor;
 	private readonly WriteDataAccess<ScreenshotsLibrary> _writeScreenshotsLibrariesDataAccess;
-	private readonly NewScreenshotsLibraryDataValidator _newScreenshotsLibraryDataValidator;
+	private readonly IValidator<ScreenshotsLibraryData> _newScreenshotsLibraryDataValidator;
+	private readonly IValidator<ScreenshotsLibraryData> _screenshotsLibraryDataValidator;
 
 	[ObservableProperty] private ScreenshotsLibraryViewModel? _selectedScreenshotsLibrary;
 
@@ -57,8 +61,7 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreen
 	private async Task EditScreenshotsLibraryAsync(ScreenshotsLibrary screenshotsLibrary)
 	{
 		var header = $"Edit screenshots library '{screenshotsLibrary.Name}'";
-		IValidator<ScreenshotsLibraryData> validator = new ExistingScreenshotsLibraryDataValidator(screenshotsLibrary,
-			new ScreenshotsLibraryDataValidator(), _readScreenshotsLibrariesDataAccess);
+		IValidator<ScreenshotsLibraryData> validator = new ExistingScreenshotsLibraryDataValidator(screenshotsLibrary, _screenshotsLibraryDataValidator, _readScreenshotsLibrariesDataAccess);
 		using ScreenshotsLibraryDialogViewModel dialog = new(header, validator, screenshotsLibrary.Name, screenshotsLibrary.Description);
 		if (await _dialogManager.ShowDialogAsync(dialog))
 			_screenshotsLibraryEditor.EditLibrary(screenshotsLibrary, dialog);

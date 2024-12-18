@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading;
+using FluentValidation;
 using HotKeys;
 using HotKeys.SharpHook;
 using Material.Icons;
@@ -7,6 +8,8 @@ using Pure.DI;
 using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application;
+using SightKeeper.Application.ScreenshotsLibraries;
+using SightKeeper.Application.ScreenshotsLibraries.Creating;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Avalonia.Annotation;
@@ -105,5 +108,7 @@ internal sealed partial class Composition
 		.Root<AppDataFormatter>(nameof(AppDataFormatter))
 		.Bind(typeof(AppData)).As(Lifetime.Singleton).To<Lock>()
 		.TagAttribute<TagAttribute>()
-		.Bind<ILogger>().To(context => Log.ForContext(context.ConsumerTypes.Single()));
+		.Bind<ILogger>().To(context => Log.ForContext(context.ConsumerTypes.Single()))
+		.Bind<IValidator<ScreenshotsLibraryData>>().To<ScreenshotsLibraryDataValidator>()
+		.Bind<IValidator<ScreenshotsLibraryData>>("new").To<NewScreenshotsLibraryDataValidator>();
 }
