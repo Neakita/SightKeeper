@@ -12,9 +12,9 @@ internal sealed class WriteableBitmapPool : IDisposable
 {
 	private readonly record struct BitmapArchetype(PixelSize Size, PixelFormat? Format);
 
-	public WriteableBitmapPool()
+	public WriteableBitmapPool(ILogger logger)
 	{
-		_logger = Log.Logger;
+		_logger = logger;
 	}
 
 	public WriteableBitmap Rent(PixelSize size, PixelFormat? format = null)

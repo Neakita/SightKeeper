@@ -1,7 +1,10 @@
+using System.Linq;
+using System.Threading;
 using HotKeys;
 using HotKeys.SharpHook;
 using Material.Icons;
 using Pure.DI;
+using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application;
 using SightKeeper.Application.Screenshotting;
@@ -100,6 +103,7 @@ internal sealed partial class Composition
 		.Bind().As(Lifetime.Singleton).To<PeriodicAppDataSaver>()
 		.Root<PeriodicAppDataSaver>(nameof(PeriodicAppDataSaver))
 		.Root<AppDataFormatter>(nameof(AppDataFormatter))
-		.Bind().As(Lifetime.Singleton).To<AppDataEditingLock>();
 		.Bind(typeof(AppData)).As(Lifetime.Singleton).To<Lock>()
+		.TagAttribute<TagAttribute>()
+		.Bind<ILogger>().To(context => Log.ForContext(context.ConsumerTypes.Single()));
 }
