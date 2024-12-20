@@ -1,7 +1,7 @@
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 namespace SightKeeper.Domain.DataSets.Weights;
 

@@ -1,5 +1,5 @@
 using SightKeeper.Data.Model.DataSets.Compositions;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 namespace SightKeeper.Data.Conversion.DataSets;
 

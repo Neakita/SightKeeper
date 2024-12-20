@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Screenshots;
+namespace SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 public sealed class FixedTransparentImageComposition : ImageComposition
 {

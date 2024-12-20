@@ -1,16 +1,16 @@
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Screenshots;
+namespace SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 public abstract class ImageComposition
-{	
+{
 	public TimeSpan MaximumScreenshotsDelay
 	{
-		get => _maximumScreenshotsDelay;
+		get;
 		set
 		{
 			Guard.IsGreaterThan(value, TimeSpan.Zero);
-			_maximumScreenshotsDelay = value;
+			field = value;
 		}
 	}
 
@@ -18,6 +18,4 @@ public abstract class ImageComposition
 	{
 		MaximumScreenshotsDelay = maximumScreenshotsDelay;
 	}
-
-	private TimeSpan _maximumScreenshotsDelay;
 }

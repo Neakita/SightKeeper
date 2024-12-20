@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using MemoryPack;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 namespace SightKeeper.Data.Model.DataSets.Compositions;
 

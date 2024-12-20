@@ -4,7 +4,7 @@ using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 namespace SightKeeper.Data.Services;
 

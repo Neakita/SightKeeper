@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 namespace SightKeeper.Avalonia.DataSets.Compositions;
 

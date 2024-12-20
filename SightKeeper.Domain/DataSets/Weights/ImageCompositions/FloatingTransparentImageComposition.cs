@@ -1,6 +1,6 @@
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Domain.Screenshots;
+namespace SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 public sealed class FloatingTransparentImageComposition : ImageComposition
 {
