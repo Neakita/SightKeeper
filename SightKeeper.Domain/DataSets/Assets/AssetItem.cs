@@ -7,7 +7,7 @@ public abstract class AssetItem
 		get;
 		set
 		{
-			if (!value.IsNormalized())
+			if (!IsNormalized(value))
 			{
 				const string boundingConstraintExceptionMessage =
 					"Bounding must be normalized, i.e. it must not have side coordinates less than 0 or greater than 1";
@@ -20,5 +20,18 @@ public abstract class AssetItem
 	protected AssetItem(Bounding bounding)
 	{
 		Bounding = bounding;
+	}
+
+	private static bool IsNormalized(Bounding bounding)
+	{
+		return IsNormalized(bounding.Left) &&
+		       IsNormalized(bounding.Top) &&
+		       IsNormalized(bounding.Right) &&
+		       IsNormalized(bounding.Bottom);
+	}
+
+	private static bool IsNormalized(double value)
+	{
+		return value is >= 0 and <= 1;
 	}
 }
