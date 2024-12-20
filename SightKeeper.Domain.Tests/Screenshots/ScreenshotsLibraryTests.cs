@@ -1,7 +1,7 @@
 ﻿using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Domain.Tests.DataSets;
+namespace SightKeeper.Domain.Tests.Screenshots;
 
 public sealed class ScreenshotsLibraryTests
 {
