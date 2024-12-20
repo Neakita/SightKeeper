@@ -1,6 +1,6 @@
 using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
-namespace SightKeeper.Domain.Tests.DataSets.Screenshots;
+namespace SightKeeper.Domain.Tests.Screenshots;
 
 public sealed class FixedTransparentImageCompositionTests
 {
@@ -26,5 +26,26 @@ public sealed class FixedTransparentImageCompositionTests
 	public void ShouldNotCreateWithOpacitiesSumNotEqualToOne()
 	{
 		Assert.ThrowsAny<Exception>(() => new FixedTransparentImageComposition(TimeSpan.FromMilliseconds(50), [0.1f, 0.3f, 0.5f]));
+	}
+
+	[Fact]
+	public void ShouldNotSetNegativeDelay()
+	{
+		FixedTransparentImageComposition composition = new(TimeSpan.FromMilliseconds(1), [0.5f, 0.5f]);
+		Assert.ThrowsAny<Exception>(() => composition.MaximumScreenshotsDelay = TimeSpan.FromMilliseconds(-1));
+	}
+
+	[Fact]
+	public void ShouldNotSetOnlyOneOpacity()
+	{
+		FixedTransparentImageComposition composition = new(TimeSpan.FromMilliseconds(1), [0.5f, 0.5f]);
+		Assert.ThrowsAny<Exception>(() => composition.Opacities = [1]);
+	}
+
+	[Fact]
+	public void ShouldNotSetOpacitiesSumNotEqualToOne()
+	{
+		FixedTransparentImageComposition composition = new(TimeSpan.FromMilliseconds(1), [0.5f, 0.5f]);
+		Assert.ThrowsAny<Exception>(() => composition.Opacities = [0.1f, 0.2f]);
 	}
 }

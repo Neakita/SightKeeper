@@ -7,11 +7,12 @@ public sealed class FixedTransparentImageComposition : ImageComposition
 {
 	public ImmutableArray<float> Opacities
 	{
-		get => _opacities;
+		get;
 		set
 		{
+			Guard.IsGreaterThanOrEqualTo(value.Length, 2);
 			Guard.IsEqualTo(value.Sum(), 1);
-			_opacities = value;
+			field = value;
 		}
 	}
 
@@ -20,9 +21,6 @@ public sealed class FixedTransparentImageComposition : ImageComposition
 		ImmutableArray<float> opacities)
 		: base(maximumScreenshotsDelay)
 	{
-		Guard.IsGreaterThanOrEqualTo(opacities.Length, 2);
 		Opacities = opacities;
 	}
-
-	private ImmutableArray<float> _opacities;
 }
