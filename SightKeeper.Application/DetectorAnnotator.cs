@@ -5,7 +5,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Application;
 
-public class DetectorAnnotator
+public abstract class DetectorAnnotator
 {
 	public virtual DetectorItem CreateItem(AssetsLibrary<DetectorAsset> assetsLibrary, Screenshot screenshot, Tag tag, Bounding bounding)
 	{

@@ -1,7 +1,5 @@
 using System;
-using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation.Drawing;
-using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Domain.DataSets.Classifier;
 
@@ -12,9 +10,19 @@ internal sealed class ClassifierAnnotationContextViewModel : DataSetAnnotationCo
 	public override ClassifierToolBarViewModel ToolBar { get; }
 	public override DrawerViewModel? Drawer => null;
 
-	public ClassifierAnnotationContextViewModel(ClassifierDataSet dataSet, ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
+	public ClassifierDataSet? DataSet
 	{
-		ToolBar = new ClassifierToolBarViewModel(dataSet, annotator, screenshotsViewModel);
+		get;
+		set
+		{
+			field = value;
+			ToolBar.DataSet = value;
+		}
+	}
+
+	public ClassifierAnnotationContextViewModel(ClassifierToolBarViewModel toolBar)
+	{
+		ToolBar = toolBar;
 	}
 
 	public void Dispose()

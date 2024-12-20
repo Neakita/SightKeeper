@@ -13,4 +13,9 @@ internal sealed class ScreenshotsLibraryViewModel : ViewModel
 	{
 		Value = value;
 	}
+
+	internal void NotifyPropertiesChanged()
+	{
+		OnPropertyChanged(nameof(Name));
+	}
 }

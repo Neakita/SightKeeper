@@ -18,7 +18,17 @@ internal sealed class DetectorDrawerViewModel : DrawerViewModel
 	public DetectorDrawerViewModel(DetectorAnnotator annotator, DetectorDataSet dataSet)
 	{
 		_annotator = annotator;
-		_assetsLibrary = dataSet.AssetsLibrary;
+		AssetsLibrary = dataSet.AssetsLibrary;
+	}
+
+	internal AssetsLibrary<DetectorAsset>? AssetsLibrary
+	{
+		get;
+		set
+		{
+			field = value;
+			UpdateItems();
+		}
 	}
 
 	internal ScreenshotViewModel? Screenshot
@@ -27,9 +37,7 @@ internal sealed class DetectorDrawerViewModel : DrawerViewModel
 		set
 		{
 			field = value;
-			_items.Clear();
-			if (value != null && _assetsLibrary.Assets.TryGetValue(value.Value, out var asset))
-				_items.AddRange(asset.Items.Select(item => new DetectorItemViewModel(item, _annotator)));
+			UpdateItems();
 		}
 	}
 
@@ -42,15 +50,30 @@ internal sealed class DetectorDrawerViewModel : DrawerViewModel
 
 	protected override void CreateItem(Bounding bounding)
 	{
+		Guard.IsNotNull(AssetsLibrary);
 		Guard.IsNotNull(Screenshot);
 		Guard.IsNotNull(Tag);
-		var item = _annotator.CreateItem(_assetsLibrary, Screenshot.Value, Tag, bounding);
+		var item = _annotator.CreateItem(AssetsLibrary, Screenshot.Value, Tag, bounding);
 		DetectorItemViewModel itemViewModel = new(item, _annotator);
 		_items.Add(itemViewModel);
 	}
 
 	private readonly AvaloniaList<DetectorItemViewModel> _items = new();
 	private readonly DetectorAnnotator _annotator;
-	private readonly AssetsLibrary<DetectorAsset> _assetsLibrary;
 	private Tag? _tag;
+
+	private void UpdateItems()
+	{
+		_items.Clear();
+		if (AssetsLibrary == null ||
+		    Screenshot == null ||
+		    !AssetsLibrary.Assets.TryGetValue(Screenshot.Value, out var asset))
+			return;
+		_items.AddRange(asset.Items.Select(CreateItemViewModel));
+	}
+
+	private DetectorItemViewModel CreateItemViewModel(DetectorItem item)
+	{
+		return new DetectorItemViewModel(item, _annotator);
+	}
 }

@@ -30,6 +30,7 @@ internal sealed partial class ScreenshotsViewModel : ViewModel
 
 	public IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
 	public ScreenshotImageLoader ImageLoader { get; }
+	[ObservableProperty] public partial ScreenshotViewModel? SelectedScreenshot { get; set; }
 	public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
 
 	public ScreenshotsViewModel(
@@ -67,7 +68,6 @@ internal sealed partial class ScreenshotsViewModel : ViewModel
 	private readonly SourceList<Screenshot> _screenshotsSource = new();
 	private readonly SourceCache<ScreenshotViewModel, Screenshot> _screenshotsCache = new(viewModel => viewModel.Value);
 	private readonly Subject<ScreenshotViewModel?> _selectedScreenshotChanged = new();
-	[ObservableProperty] private ScreenshotViewModel? _selectedScreenshot;
 
 	private void OnScreenshotAssetsChanged(Screenshot screenshot)
 	{

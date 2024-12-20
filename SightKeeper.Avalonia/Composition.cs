@@ -8,6 +8,7 @@ using Pure.DI;
 using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application;
+using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ScreenshotsLibraries;
 using SightKeeper.Application.ScreenshotsLibraries.Creating;
 using SightKeeper.Application.Screenshotting;
@@ -110,5 +111,10 @@ internal sealed partial class Composition
 		.TagAttribute<TagAttribute>()
 		.Bind<ILogger>().To(context => Log.ForContext(context.ConsumerTypes.Single()))
 		.Bind<IValidator<ScreenshotsLibraryData>>().To<ScreenshotsLibraryDataValidator>()
-		.Bind<IValidator<ScreenshotsLibraryData>>("new").To<NewScreenshotsLibraryDataValidator>();
+		.Bind<IValidator<ScreenshotsLibraryData>>("new").To<NewScreenshotsLibraryDataValidator>()
+		.Bind<ScreenshotsLibrariesDeleter>().To<LockingScreenshotsLibrariesDeleter>()
+		.Bind<ScreenshotsViewModel>().As(Lifetime.Singleton).To<ScreenshotsViewModel>()
+		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
+		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
+		.Bind<DetectorAnnotator>().To<AppDataDetectorAnnotator>();
 }

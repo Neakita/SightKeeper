@@ -20,11 +20,6 @@ internal static class Program
 			var appBuilder = BuildAvaloniaApp();
 			appBuilder.StartWithClassicDesktopLifetime(args);
 		}
-		catch (Exception exception)
-		{
-			LogUnhandledExceptions(exception, $"{nameof(Program)}.{nameof(Main)}");
-			throw;
-		}
 		finally
 		{
 			Log.CloseAndFlush();

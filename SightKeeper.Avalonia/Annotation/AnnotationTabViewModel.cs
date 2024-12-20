@@ -51,9 +51,7 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 
 	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
-		if (Context is IDisposable disposable)
-			disposable.Dispose();
-		Context = DataSetAnnotationContextViewModel.Create(value?.Value, _composition);
+		Context = DataSetAnnotationContextViewModel.ReuseContextOrCreateNew(Context, value?.Value, _composition);
 	}
 
 	[RelayCommand(CanExecute = nameof(CanReturnBitmapToPool))]

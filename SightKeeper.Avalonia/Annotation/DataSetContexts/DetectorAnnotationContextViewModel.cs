@@ -1,25 +1,37 @@
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation.Drawing.Detector;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.DataSetContexts;
 
 internal sealed class DetectorAnnotationContextViewModel : DataSetAnnotationContextViewModel, IDisposable
 {
+	public DetectorDataSet? DataSet
+	{
+		get;
+		set
+		{
+			field = value;
+			ToolBar.Tags = value?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
+			Drawer.AssetsLibrary = value?.AssetsLibrary;
+		}
+	}
+
 	public override DetectorToolBarViewModel ToolBar { get; }
 	public override DetectorDrawerViewModel Drawer { get; }
 
 	public DetectorAnnotationContextViewModel(
-		DetectorDataSet dataSet,
-		DetectorAnnotator detectorAnnotator,
+		DetectorToolBarViewModel toolBar,
+		DetectorDrawerViewModel drawer,
 		ScreenshotsViewModel screenshotsViewModel)
 	{
-		ToolBar = new DetectorToolBarViewModel(dataSet.TagsLibrary.Tags);
-		Drawer = new DetectorDrawerViewModel(detectorAnnotator, dataSet);
+		ToolBar = toolBar;
+		Drawer = drawer;
 		ToolBar.PropertyChanged += OnToolBarPropertyChanged;
 		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(OnScreenshotChanged);
 		Drawer.Screenshot = screenshotsViewModel.SelectedScreenshot;

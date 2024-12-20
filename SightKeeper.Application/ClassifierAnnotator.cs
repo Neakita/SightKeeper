@@ -7,7 +7,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Application;
 
-public class ClassifierAnnotator : ObservableAnnotator, IDisposable
+public abstract class ClassifierAnnotator : ObservableAnnotator, IDisposable
 {
 	public IObservable<Screenshot> AssetsChanged => _assetsChanged.AsObservable();
 

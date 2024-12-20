@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application;
@@ -12,13 +13,26 @@ namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
 internal sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisposable
 {
-	public IReadOnlyCollection<Tag> Tags { get; }
+	public ClassifierDataSet? DataSet
+	{
+		get;
+		set
+		{
+			field = value;
+			_assetsLibrary = value?.AssetsLibrary;
+			Tags = value?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
+		}
+	}
+
+	[ObservableProperty]
+	public partial IReadOnlyCollection<Tag> Tags { get; private set; } = ReadOnlyCollection<Tag>.Empty;
 
 	public Tag? Tag
 	{
 		get => Asset?.Tag;
 		set
 		{
+			Guard.IsNotNull(_assetsLibrary);
 			Guard.IsNotNull(Screenshot);
 			var screenshot = Screenshot.Value;
 			if (value == null)
@@ -28,13 +42,11 @@ internal sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDi
 		}
 	}
 
-	public ClassifierToolBarViewModel(ClassifierDataSet dataSet, ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
+	public ClassifierToolBarViewModel(ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
 	{
 		_annotator = annotator;
-		_assetsLibrary = dataSet.AssetsLibrary;
-		Tags = dataSet.TagsLibrary.Tags;
 		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(screenshot => Screenshot = screenshot);
-		_screenshot = screenshotsViewModel.SelectedScreenshot;
+        Screenshot = screenshotsViewModel.SelectedScreenshot;
 	}
 
 	public void Dispose()
@@ -42,11 +54,12 @@ internal sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDi
 		_disposable.Dispose();
 	}
 
+	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tag))]
+	internal partial ScreenshotViewModel? Screenshot { get; set; }
 
 	private readonly ClassifierAnnotator _annotator;
-	private readonly AssetsLibrary<ClassifierAsset> _assetsLibrary;
+	private AssetsLibrary<ClassifierAsset>? _assetsLibrary;
 	private readonly IDisposable _disposable;
-	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tag))]
-	private ScreenshotViewModel? _screenshot;
-	private ClassifierAsset? Asset => Screenshot == null ? null : _assetsLibrary.Assets.GetValueOrDefault(Screenshot.Value);
+
+    private ClassifierAsset? Asset => Screenshot == null ? null : _assetsLibrary?.Assets.GetValueOrDefault(Screenshot.Value);
 }

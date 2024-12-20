@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
 using Material.Icons;
@@ -25,17 +24,17 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreen
 		ReadDataAccess<ScreenshotsLibrary> readScreenshotsLibrariesDataAccess,
 		ScreenshotsLibraryCreator screenshotsLibraryCreator,
 		ScreenshotsLibraryEditor screenshotsLibraryEditor,
-		WriteDataAccess<ScreenshotsLibrary> writeScreenshotsLibrariesDataAccess,
 		[Tag("new")] IValidator<ScreenshotsLibraryData> newScreenshotsLibraryDataValidator,
-		IValidator<ScreenshotsLibraryData> screenshotsLibraryDataValidator)
+		IValidator<ScreenshotsLibraryData> screenshotsLibraryDataValidator,
+		ScreenshotsLibrariesDeleter screenshotsLibrariesDeleter)
 	{
 		_dialogManager = dialogManager;
 		_readScreenshotsLibrariesDataAccess = readScreenshotsLibrariesDataAccess;
 		_screenshotsLibraryCreator = screenshotsLibraryCreator;
 		_screenshotsLibraryEditor = screenshotsLibraryEditor;
-		_writeScreenshotsLibrariesDataAccess = writeScreenshotsLibrariesDataAccess;
 		_newScreenshotsLibraryDataValidator = newScreenshotsLibraryDataValidator;
 		_screenshotsLibraryDataValidator = screenshotsLibraryDataValidator;
+		_screenshotsLibrariesDeleter = screenshotsLibrariesDeleter;
 		ScreenshotsLibraries = screenshotsLibrariesObservableRepository.Items;
 	}
 
@@ -43,16 +42,15 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreen
 	private readonly ReadDataAccess<ScreenshotsLibrary> _readScreenshotsLibrariesDataAccess;
 	private readonly ScreenshotsLibraryCreator _screenshotsLibraryCreator;
 	private readonly ScreenshotsLibraryEditor _screenshotsLibraryEditor;
-	private readonly WriteDataAccess<ScreenshotsLibrary> _writeScreenshotsLibrariesDataAccess;
 	private readonly IValidator<ScreenshotsLibraryData> _newScreenshotsLibraryDataValidator;
 	private readonly IValidator<ScreenshotsLibraryData> _screenshotsLibraryDataValidator;
-
-	[ObservableProperty] private ScreenshotsLibraryViewModel? _selectedScreenshotsLibrary;
+	private readonly ScreenshotsLibrariesDeleter _screenshotsLibrariesDeleter;
 
 	[RelayCommand]
 	private async Task CreateScreenshotsLibraryAsync()
 	{
-		using ScreenshotsLibraryDialogViewModel dialog = new("Create screenshots library", _newScreenshotsLibraryDataValidator);
+		using ScreenshotsLibraryDialogViewModel dialog = new("Create screenshots library",
+			_newScreenshotsLibraryDataValidator);
 		if (await _dialogManager.ShowDialogAsync(dialog))
 			_screenshotsLibraryCreator.Create(dialog);
 	}
@@ -61,8 +59,10 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreen
 	private async Task EditScreenshotsLibraryAsync(ScreenshotsLibrary screenshotsLibrary)
 	{
 		var header = $"Edit screenshots library '{screenshotsLibrary.Name}'";
-		IValidator<ScreenshotsLibraryData> validator = new ExistingScreenshotsLibraryDataValidator(screenshotsLibrary, _screenshotsLibraryDataValidator, _readScreenshotsLibrariesDataAccess);
-		using ScreenshotsLibraryDialogViewModel dialog = new(header, validator, screenshotsLibrary.Name, screenshotsLibrary.Description);
+		IValidator<ScreenshotsLibraryData> validator = new ExistingScreenshotsLibraryDataValidator(screenshotsLibrary,
+			_screenshotsLibraryDataValidator, _readScreenshotsLibrariesDataAccess);
+		using ScreenshotsLibraryDialogViewModel dialog = new(header, validator, screenshotsLibrary.Name,
+			screenshotsLibrary.Description);
 		if (await _dialogManager.ShowDialogAsync(dialog))
 			_screenshotsLibraryEditor.EditLibrary(screenshotsLibrary, dialog);
 	}
@@ -70,14 +70,26 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreen
 	[RelayCommand]
 	private async Task DeleteScreenshotsLibraryAsync(ScreenshotsLibrary screenshotsLibrary)
 	{
-		MessageBoxButtonDefinition deletionButton = new("Delete", MaterialIconKind.Delete);
-		MessageBoxDialogViewModel dialog = new(
+		if (!_screenshotsLibrariesDeleter.CanDelete(screenshotsLibrary))
+		{
+			var message =
+				$"The library '{screenshotsLibrary.Name}' cannot be deleted as some dataset references it as asset. " +
+				$"Delete all associated assets to be able delete the library.";
+			MessageBoxButtonDefinition closeButton = new("Close", MaterialIconKind.Close, true);
+			MessageBoxDialogViewModel dialog = new("The library cannot be deleted", message, closeButton);
+			await _dialogManager.ShowDialogAsync(dialog);
+			return;
+		}
+
+		MessageBoxButtonDefinition deleteButton = new("Delete", MaterialIconKind.Delete);
+		MessageBoxButtonDefinition cancelButton = new("Cancel", MaterialIconKind.Close, true);
+		MessageBoxDialogViewModel deletionConfirmationDialog = new(
 			"Screenshots library deletion confirmation",
 			$"Are you sure you want to permanently delete the screenshots library '{screenshotsLibrary.Name}'? You will not be able to recover it.",
-			deletionButton,
+			deleteButton, cancelButton,
 			new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel));
-		if (await _dialogManager.ShowDialogAsync(dialog) == deletionButton)
-			_writeScreenshotsLibrariesDataAccess.Remove(screenshotsLibrary);
+		if (await _dialogManager.ShowDialogAsync(deletionConfirmationDialog) == deleteButton)
+			_screenshotsLibrariesDeleter.Delete(screenshotsLibrary);
 	}
 
 	ICommand IScreenshotsLibrariesViewModel.CreateScreenshotsLibraryCommand => CreateScreenshotsLibraryCommand;
