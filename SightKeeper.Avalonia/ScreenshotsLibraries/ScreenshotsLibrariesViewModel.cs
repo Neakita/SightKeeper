@@ -12,7 +12,7 @@ using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Avalonia.Screenshots;
+namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
 internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreenshotsLibrariesViewModel
 {

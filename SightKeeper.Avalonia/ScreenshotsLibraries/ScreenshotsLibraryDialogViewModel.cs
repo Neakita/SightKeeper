@@ -7,7 +7,7 @@ using FluentValidation;
 using SightKeeper.Application.ScreenshotsLibraries;
 using SightKeeper.Avalonia.Dialogs;
 
-namespace SightKeeper.Avalonia.Screenshots;
+namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
 internal sealed partial class ScreenshotsLibraryDialogViewModel : DialogViewModel<bool>, ScreenshotsLibraryData, INotifyDataErrorInfo, IDisposable
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace SightKeeper.Avalonia.Screenshots;
+namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
 internal interface IScreenshotsLibrariesViewModel
 {

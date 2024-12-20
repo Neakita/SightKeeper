@@ -4,7 +4,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Data.Converters;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Avalonia.Screenshots;
+namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
 internal sealed class TreeDataGridScreenshotsLibrariesConverter : FuncValueConverter<IReadOnlyCollection<ScreenshotsLibraryViewModel>, ITreeDataGridSource<ScreenshotsLibraryViewModel>>
 {

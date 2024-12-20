@@ -3,7 +3,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Avalonia.Screenshots;
+namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
 internal class DesignScreenshotsLibrariesViewModel : IScreenshotsLibrariesViewModel
 {

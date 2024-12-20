@@ -1,7 +1,7 @@
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Avalonia.Screenshots;
+namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
 internal sealed class ScreenshotsLibraryViewModel : ViewModel
 {

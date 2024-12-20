@@ -9,7 +9,7 @@ using SightKeeper.Avalonia.Annotation.DataSetContexts;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 using SightKeeper.Avalonia.DataSets;
-using SightKeeper.Avalonia.Screenshots;
+using SightKeeper.Avalonia.ScreenshotsLibraries;
 
 namespace SightKeeper.Avalonia.Annotation;
 

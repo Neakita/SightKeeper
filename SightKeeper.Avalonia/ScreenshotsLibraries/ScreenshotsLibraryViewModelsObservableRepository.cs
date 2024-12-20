@@ -5,7 +5,7 @@ using SightKeeper.Application;
 using SightKeeper.Application.ScreenshotsLibraries.Editing;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Avalonia.Screenshots;
+namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
 internal sealed class ScreenshotsLibraryViewModelsObservableRepository : ObservableRepository<ScreenshotsLibraryViewModel>, IDisposable
 {

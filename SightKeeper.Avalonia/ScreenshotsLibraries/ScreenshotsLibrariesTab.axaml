@@ -2,14 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia.Screenshots"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:screenshotsLibraries="clr-namespace:SightKeeper.Avalonia.ScreenshotsLibraries"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Screenshots.ScreenshotsLibrariesTab"
-             x:DataType="local:IScreenshotsLibrariesViewModel">
+             x:Class="SightKeeper.Avalonia.ScreenshotsLibraries.ScreenshotsLibrariesTab"
+             x:DataType="screenshotsLibraries:IScreenshotsLibrariesViewModel">
     <Design.DataContext>
-        <local:DesignScreenshotsLibrariesViewModel/>
+        <screenshotsLibraries:DesignScreenshotsLibrariesViewModel/>
     </Design.DataContext>
     <ScrollViewer Classes="regular-padding" Name="Root">
         <StackPanel Classes="medium-spacing">
@@ -38,13 +38,13 @@
                                     <MenuItem
                                         Header="Edit"
                                         Icon="{icons:MaterialIconExt Pencil}"
-                                        Command="{Binding #Root.((local:IScreenshotsLibrariesViewModel)DataContext).EditScreenshotsLibraryCommand}"
+                                        Command="{Binding #Root.((screenshotsLibraries:IScreenshotsLibrariesViewModel)DataContext).EditScreenshotsLibraryCommand}"
                                         CommandParameter="{Binding Value}"/>
                                     <MenuItem
                                         Header="Delete"
                                         Icon="{icons:MaterialIconExt TrashCanOutline}"
                                         Classes="red-accent"
-                                        Command="{Binding #Root.((local:IScreenshotsLibrariesViewModel)DataContext).DeleteScreenshotsLibraryCommand}"
+                                        Command="{Binding #Root.((screenshotsLibraries:IScreenshotsLibrariesViewModel)DataContext).DeleteScreenshotsLibraryCommand}"
                                         CommandParameter="{Binding Value}"/>
                                 </ContextMenu>
                             </Button.ContextMenu>

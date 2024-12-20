@@ -18,7 +18,6 @@ using SightKeeper.Avalonia.Annotation.DataSetContexts;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Avalonia.Screenshots;
 using SightKeeper.Avalonia.Settings;
 using SightKeeper.Avalonia.Settings.Appearance;
 using SightKeeper.Data;
@@ -26,6 +25,7 @@ using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Screenshots;
 using SixLabors.ImageSharp.PixelFormats;
+using ScreenshotsLibrariesViewModel = SightKeeper.Avalonia.ScreenshotsLibraries.ScreenshotsLibrariesViewModel;
 using TagAttribute = SightKeeper.Application.TagAttribute;
 #if OS_LINUX
 using SightKeeper.Application.Linux.X11;

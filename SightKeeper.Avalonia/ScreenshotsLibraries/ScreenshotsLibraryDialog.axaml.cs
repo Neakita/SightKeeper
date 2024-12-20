@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace SightKeeper.Avalonia.Screenshots;
+namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
 public partial class ScreenshotsLibraryDialog : UserControl
 {

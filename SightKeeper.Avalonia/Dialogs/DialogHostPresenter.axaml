@@ -9,9 +9,9 @@
              xmlns:themeAssists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
-             xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Screenshots"
              xmlns:messageBox="clr-namespace:SightKeeper.Avalonia.Dialogs.MessageBox"
              xmlns:dataSets="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
+             xmlns:screenshotsLibraries="clr-namespace:SightKeeper.Avalonia.ScreenshotsLibraries"
              x:DataType="local:DialogHost"
              Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static converters:StaticConverters.ContentToOpacityConverter}}">
 	<Interaction.Behaviors>
@@ -106,8 +106,8 @@
 				</PageSlide>
 			</TransitioningContentControl.PageTransition>
             <TransitioningContentControl.DataTemplates>
-                <DataTemplate DataType="screenshots:ScreenshotsLibraryDialogViewModel">
-                    <screenshots:ScreenshotsLibraryDialog/>
+                <DataTemplate DataType="screenshotsLibraries:ScreenshotsLibraryDialogViewModel">
+                    <screenshotsLibraries:ScreenshotsLibraryDialog/>
                 </DataTemplate>
                 <DataTemplate DataType="messageBox:MessageBoxDialogViewModel">
                     <messageBox:MessageBox/>
