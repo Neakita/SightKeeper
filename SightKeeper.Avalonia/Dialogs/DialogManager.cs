@@ -39,8 +39,8 @@ internal sealed class DialogManager : ObservableObject
 	{
 		Guard.IsNotNull(CurrentDialog);
 		Guard.IsReferenceEqualTo(dialog, CurrentDialog);
-		if (_pendingDialogs.Any())
-			CurrentDialog = _pendingDialogs.Pop();
+		if (_pendingDialogs.TryPop(out var newDialog))
+			CurrentDialog = newDialog;
 		else
 			CurrentDialog = null;
 	}
