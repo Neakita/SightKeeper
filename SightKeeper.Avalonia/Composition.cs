@@ -18,8 +18,6 @@ using SightKeeper.Avalonia.Annotation.DataSetContexts;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Avalonia.Settings;
-using SightKeeper.Avalonia.Settings.Appearance;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
@@ -88,12 +86,6 @@ internal sealed partial class Composition
 			context.Inject(out AnnotationTabViewModel viewModel);
 			return new TabItemViewModel(MaterialIconKind.ImageEdit, "Annotation", viewModel);
 		})
-		.Bind<TabItemViewModel>(4).To(context =>
-		{
-			context.Inject(out SettingsViewModel viewModel);
-			return new TabItemViewModel(MaterialIconKind.Cog, "Settings", viewModel);
-		})
-		.Bind<SettingsSection>().To<AppearanceSettingsViewModel>()
 		.Bind().As(Lifetime.Singleton).To<MainViewModel>()
 		.RootBind<MainWindow>(nameof(MainWindow)).To(context =>
 		{

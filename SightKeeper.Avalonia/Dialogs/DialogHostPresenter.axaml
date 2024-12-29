@@ -6,7 +6,6 @@
              x:Class="SightKeeper.Avalonia.Dialogs.DialogHostPresenter"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Dialogs"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:themeAssists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              xmlns:messageBox="clr-namespace:SightKeeper.Avalonia.Dialogs.MessageBox"
@@ -29,39 +28,20 @@
 		</Transitions>
 	</UserControl.Transitions>
 	<Panel>
-		<Grid>
-			<Grid.RowDefinitions>
-				<RowDefinition>
-					<RowDefinition.Height>
-						<MultiBinding Converter="{x:Static converters:StaticConverters.TitleBarToGridLengthConverter}">
-							<Binding Path="$parent[Window].ExtendClientAreaTitleBarHeightHint"/>
-							<Binding Path="$parent[Window].ExtendClientAreaToDecorationsHint"/>
-						</MultiBinding>
-					</RowDefinition.Height>
-				</RowDefinition>
-				<RowDefinition/>
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="{Binding $parent[Window].(themeAssists:WindowAssist.LeftContentWidth), Converter={x:Static converters:StaticConverters.DoubleToGridLengthConvert}}"/>
-				<ColumnDefinition/>
-			</Grid.ColumnDefinitions>
-			<Border Grid.Row="0" Grid.Column="0" Background="#7F000000"/>
-			<Border Grid.Row="0" Grid.Column="1" Background="#7F000000" IsHitTestVisible="False"/>
-			<Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="#7F000000"
-			        Command="{Binding DialogManager.CurrentDialog.CloseCommand}">
-				<Button.Theme>
-					<ControlTheme TargetType="Button">
-						<Setter Property="Template">
-							<ControlTemplate>
-								<Border Background="{TemplateBinding Background}"
-								        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-								        VerticalAlignment="{TemplateBinding HorizontalAlignment}"/>
-							</ControlTemplate>
-						</Setter>
-					</ControlTheme>
-				</Button.Theme>
-			</Button>
-		</Grid>
+        <Button Background="#7F000000"
+                Command="{Binding DialogManager.CurrentDialog.CloseCommand}">
+            <Button.Theme>
+                <ControlTheme TargetType="Button">
+                    <Setter Property="Template">
+                        <ControlTemplate>
+                            <Border Background="{TemplateBinding Background}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                    VerticalAlignment="{TemplateBinding HorizontalAlignment}"/>
+                        </ControlTemplate>
+                    </Setter>
+                </ControlTheme>
+            </Button.Theme>
+        </Button>
 		<TransitioningContentControl
 			Content="{Binding DialogManager.CurrentDialog}"
 			Padding="48">

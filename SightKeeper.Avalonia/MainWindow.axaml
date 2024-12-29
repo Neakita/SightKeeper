@@ -7,7 +7,6 @@
         xmlns:root="clr-namespace:SightKeeper.Avalonia"
         xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.Dialogs"
         xmlns:dataSets="clr-namespace:SightKeeper.Avalonia.DataSets"
-        xmlns:settings="clr-namespace:SightKeeper.Avalonia.Settings"
         xmlns:annotation="clr-namespace:SightKeeper.Avalonia.Annotation"
         xmlns:screenshotsLibraries="clr-namespace:SightKeeper.Avalonia.ScreenshotsLibraries"
         mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="320"
@@ -16,8 +15,7 @@
         Title="Sight Keeper"
         MinWidth="480"
         MinHeight="320"
-        x:DataType="root:MainViewModel"
-        ExtendClientAreaToDecorationsHint="{Binding AppearanceSettings.CustomDecorations}">
+        x:DataType="root:MainViewModel">
 	<assists:WindowAssist.OverlayContent>
 		<dialogs:DialogHostPresenter/>
 	</assists:WindowAssist.OverlayContent>
@@ -55,9 +53,6 @@
             <DataTemplate x:DataType="annotation:AnnotationTabViewModel">
                 <annotation:AnnotationTab/>
             </DataTemplate>
-            <DataTemplate x:DataType="settings:SettingsViewModel">
-				<settings:SettingsTab/>
-			</DataTemplate>
 		</ContentControl.DataTemplates>
 	</ContentControl>
 </Window>
