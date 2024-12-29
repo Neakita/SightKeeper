@@ -10,7 +10,7 @@
     <ItemGroup>
         <PackageReference Include="FlakeId" Version="1.2.1" />
         <PackageReference Include="MemoryPack" Version="1.21.3" />
-        <PackageReference Include="Serilog" Version="4.1.0" />
+        <PackageReference Include="Serilog" Version="4.2.0" />
     </ItemGroup>
 
     <ItemGroup>
