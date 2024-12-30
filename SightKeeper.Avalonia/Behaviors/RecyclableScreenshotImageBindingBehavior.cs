@@ -114,7 +114,7 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 				RecycleBitmap();
 			return;
 		}
-		AssociatedObject.Source = null; // TODO some kind of bug in the framework, because of which Image control does not update the rendering when manually assigning the source under certain conditions
 		AssociatedObject.Source = _bitmap;
+		AssociatedObject.InvalidateVisual();
 	}
 }
