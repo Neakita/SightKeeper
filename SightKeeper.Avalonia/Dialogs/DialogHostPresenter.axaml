@@ -16,6 +16,7 @@
 	<Interaction.Behaviors>
 		<BehaviorCollection>
 			<behaviors:DisableHitTestWhenOpacityIsZeroBehavior/>
+            <behaviors:HideContentWhenOpacityIsZeroBehavior/>
 		</BehaviorCollection>
 	</Interaction.Behaviors>
 	<UserControl.Transitions>
