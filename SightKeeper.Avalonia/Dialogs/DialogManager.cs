@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SightKeeper.Avalonia.Dialogs;
 
-internal sealed class DialogManager : ObservableObject
+public sealed class DialogManager : ObservableObject
 {
 	public Dialog? CurrentDialog
 	{

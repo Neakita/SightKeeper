@@ -5,7 +5,7 @@ using SightKeeper.Avalonia.Dialogs;
 
 namespace SightKeeper.Avalonia;
 
-internal sealed partial class MainViewModel : ViewModel, DialogHost
+public sealed partial class MainViewModel : ViewModel, DialogHost
 {
 	public DialogManager DialogManager { get; }
 	public IReadOnlyCollection<TabItemViewModel> Tabs { get; }

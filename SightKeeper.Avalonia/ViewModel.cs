@@ -2,4 +2,4 @@
 
 namespace SightKeeper.Avalonia;
 
-internal abstract class ViewModel : ObservableObject;
+public abstract class ViewModel : ObservableObject;

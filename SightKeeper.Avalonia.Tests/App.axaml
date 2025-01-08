@@ -1,0 +1,12 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SightKeeper.Avalonia.Tests.TestApp"
+             RequestedThemeVariant="Dark">
+
+    <Application.Styles>
+        <StyleInclude Source="avares://Sightful.Avalonia/DefaultTheme.axaml"/>
+        <StyleInclude Source="avares://Sightful.Avalonia.TreeDataGrid/SightfulTreeDataGridTheme.axaml"/>
+        <StyleInclude Source="avares://Sightful.Avalonia.Controls/MultiSlider.axaml"/>
+    </Application.Styles>
+
+</Application>
