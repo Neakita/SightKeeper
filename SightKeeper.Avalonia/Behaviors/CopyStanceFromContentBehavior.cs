@@ -65,6 +65,7 @@ internal sealed class CopyStanceFromContentBehavior : Behavior<Layoutable>
 		Guard.IsNull(_disposable);
 		_disposable = ContentControl.ContentProperty.Changed.Subscribe(OnContentChanged);
 		ContentControl.Loaded += OnContentControlLoaded;
+		ContentControl.PropertyChanged += OnContentControlPropertyChanged;
 	}
 
 	protected override void OnDetachedFromVisualTree()
@@ -73,6 +74,7 @@ internal sealed class CopyStanceFromContentBehavior : Behavior<Layoutable>
 		Guard.IsNotNull(ContentControl);
 		_disposable.Dispose();
 		ContentControl.Loaded -= OnContentControlLoaded;
+		ContentControl.PropertyChanged -= OnContentControlPropertyChanged;
 	}
 
 	private IDisposable? _disposable;
@@ -89,11 +91,18 @@ internal sealed class CopyStanceFromContentBehavior : Behavior<Layoutable>
 		UpdateValues();
 	}
 
+	private void OnContentControlPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+	{
+		UpdateValues();
+	}
+
 	private void UpdateValues()
 	{
 		Guard.IsNotNull(AssociatedObject);
 		Guard.IsNotNull(ContentControl);
-		var presenter = (ContentPresenter)ContentControl.GetVisualChildren().Single();
+		var presenter = (ContentPresenter?)ContentControl.GetVisualChildren().SingleOrDefault();
+		if (presenter == null)
+			return;
 		var content = presenter.Child;
 		if (content != null)
 		{
