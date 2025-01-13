@@ -3,6 +3,7 @@ using SightKeeper.Avalonia.Annotation.Contexts;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Poser2D;
 
 namespace SightKeeper.Avalonia.Tests.Annotation;
 
@@ -18,6 +19,12 @@ public sealed class DataSetAnnotationContextsFactoryTests
 	public void ShouldGetDetectorContext()
 	{
 		ShouldGetAnnotationContextOfType<DetectorAnnotationContext>(new DetectorDataSet());
+	}
+
+	[Fact]
+	public void ShouldGetPoser2DContext()
+	{
+		ShouldGetAnnotationContextOfType<Poser2DAnnotationContext>(new Poser2DDataSet());
 	}
 
 	private static void ShouldGetAnnotationContextOfType<TContext>(DataSet dataSet) where TContext : DataSetAnnotationContext

@@ -108,5 +108,6 @@ public sealed partial class Composition
 		.Bind<ScreenshotsViewModel>().As(Lifetime.Singleton).To<ScreenshotsViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
-		.Bind<DetectorAnnotator>().To<AppDataDetectorAnnotator>();
+		.Bind<DetectorAnnotator>().To<AppDataDetectorAnnotator>()
+		.Root<Poser2DAnnotationContext>(nameof(Poser2DAnnotationContext));
 }

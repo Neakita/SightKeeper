@@ -2,6 +2,7 @@ using System;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Poser2D;
 
 namespace SightKeeper.Avalonia.Annotation.Contexts;
 
@@ -42,6 +43,15 @@ public sealed class DataSetAnnotationContextFactory
 				}
 				detectorContext.DataSet = detectorDataSet;
 				return detectorContext;
+			case Poser2DDataSet poser2DDataSet:
+				if (context is not Poser2DAnnotationContext poser2DContext)
+				{
+					if (context is IDisposable disposable)
+						disposable.Dispose();
+					poser2DContext = _composition.Poser2DAnnotationContext;
+				}
+				poser2DContext.DataSet = poser2DDataSet;
+				return poser2DContext;
 			default:
 				throw new ArgumentOutOfRangeException(nameof(dataSet), dataSet, null);
 		}
