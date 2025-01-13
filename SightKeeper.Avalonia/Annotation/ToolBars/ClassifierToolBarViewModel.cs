@@ -13,32 +13,22 @@ namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
 public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisposable
 {
-	public ClassifierDataSet? DataSet
-	{
-		get;
-		set
-		{
-			field = value;
-			_assetsLibrary = value?.AssetsLibrary;
-			Tags = value?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
-		}
-	}
-
-	[ObservableProperty]
-	public partial IReadOnlyCollection<Tag> Tags { get; private set; } = ReadOnlyCollection<Tag>.Empty;
+	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
+	public partial ClassifierDataSet? DataSet { get; set; }
+	public IReadOnlyCollection<Tag> Tags => DataSet?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
 
 	public Tag? Tag
 	{
 		get => Asset?.Tag;
 		set
 		{
-			Guard.IsNotNull(_assetsLibrary);
+			Guard.IsNotNull(AssetsLibrary);
 			Guard.IsNotNull(Screenshot);
 			var screenshot = Screenshot.Value;
 			if (value == null)
-				_annotator.DeleteAsset(_assetsLibrary, screenshot);
+				_annotator.DeleteAsset(AssetsLibrary, screenshot);
 			else
-				_annotator.SetTag(_assetsLibrary, screenshot, value);
+				_annotator.SetTag(AssetsLibrary, screenshot, value);
 		}
 	}
 
@@ -46,7 +36,7 @@ public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisp
 	{
 		_annotator = annotator;
 		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(screenshot => Screenshot = screenshot);
-        Screenshot = screenshotsViewModel.SelectedScreenshot;
+		Screenshot = screenshotsViewModel.SelectedScreenshot;
 	}
 
 	public void Dispose()
@@ -58,8 +48,9 @@ public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisp
 	internal partial ScreenshotViewModel? Screenshot { get; set; }
 
 	private readonly ClassifierAnnotator _annotator;
-	private AssetsLibrary<ClassifierAsset>? _assetsLibrary;
+	private AssetsLibrary<ClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
 	private readonly IDisposable _disposable;
 
-    private ClassifierAsset? Asset => Screenshot == null ? null : _assetsLibrary?.Assets.GetValueOrDefault(Screenshot.Value);
+	private ClassifierAsset? Asset =>
+		Screenshot == null ? null : AssetsLibrary?.Assets.GetValueOrDefault(Screenshot.Value);
 }
