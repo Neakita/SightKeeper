@@ -19,5 +19,11 @@ public sealed class Poser3DAnnotationContextTests
 		Context.Drawer.Should().BeOfType<Poser3DDrawerViewModel>();
 	}
 
+	[Fact]
+	public void ShouldNotHaveDataSetByDefault()
+	{
+		Context.DataSet.Should().BeNull();
+	}
+
 	private static Poser3DAnnotationContext Context => new Composition().Poser3DAnnotationContext;
 }
