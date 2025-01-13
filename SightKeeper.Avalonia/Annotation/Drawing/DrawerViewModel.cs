@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-internal abstract partial class DrawerViewModel : ViewModel
+public abstract partial class DrawerViewModel : ViewModel
 {
 	public abstract IReadOnlyCollection<DrawerItemViewModel> Items { get; }
 	public abstract Tag? Tag { get; }

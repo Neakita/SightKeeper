@@ -3,9 +3,9 @@ using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Domain.DataSets.Classifier;
 
-namespace SightKeeper.Avalonia.Annotation.DataSetContexts;
+namespace SightKeeper.Avalonia.Annotation.Contexts;
 
-internal sealed class ClassifierAnnotationContextViewModel : DataSetAnnotationContextViewModel, IDisposable
+public sealed class ClassifierAnnotationContext : DataSetAnnotationContext, IDisposable
 {
 	public override ClassifierToolBarViewModel ToolBar { get; }
 	public override DrawerViewModel? Drawer => null;
@@ -20,7 +20,7 @@ internal sealed class ClassifierAnnotationContextViewModel : DataSetAnnotationCo
 		}
 	}
 
-	public ClassifierAnnotationContextViewModel(ClassifierToolBarViewModel toolBar)
+	public ClassifierAnnotationContext(ClassifierToolBarViewModel toolBar)
 	{
 		ToolBar = toolBar;
 	}

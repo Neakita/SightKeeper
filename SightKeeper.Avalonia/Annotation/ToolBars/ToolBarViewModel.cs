@@ -1,3 +1,3 @@
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
-internal abstract class ToolBarViewModel : ViewModel;
+public abstract class ToolBarViewModel : ViewModel;

@@ -5,7 +5,7 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Screenshotting.Saving;
-using SightKeeper.Avalonia.Annotation.DataSetContexts;
+using SightKeeper.Avalonia.Annotation.Contexts;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 using SightKeeper.Avalonia.DataSets;
@@ -20,11 +20,14 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 	public ScreenshotsViewModel Screenshots { get; }
 	public ScreenshottingSettingsViewModel ScreenshottingSettings { get; }
 	public IObservable<ushort> PendingScreenshotsCount { get; }
-	public DataSetAnnotationContextViewModel? Context
+
+	public DataSetAnnotationContext? Context
 	{
 		get;
 		private set => SetProperty(ref field, value);
 	}
+	[ObservableProperty] public partial DataSetViewModel? SelectedDataSet { get; set; }
+	[ObservableProperty] public partial ScreenshotsLibraryViewModel? SelectedScreenshotsLibrary { get; set; }
 
 	public AnnotationTabViewModel(
 		DataSetViewModelsObservableRepository dataSets,
@@ -33,10 +36,10 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 		WriteableBitmapPool bitmapPool,
 		ScreenshotsViewModel screenshots,
 		ScreenshotsLibraryViewModelsObservableRepository screenshotsLibraries,
-		Composition composition)
+		DataSetAnnotationContextFactory contextFactory)
 	{
 		_bitmapPool = bitmapPool;
-		_composition = composition;
+		_contextFactory = contextFactory;
 		Screenshots = screenshots;
 		DataSets = dataSets.Items;
 		ScreenshottingSettings = screenshottingSettings;
@@ -45,13 +48,11 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 	}
 
 	private readonly WriteableBitmapPool _bitmapPool;
-	private readonly Composition _composition;
-	[ObservableProperty] private ScreenshotsLibraryViewModel? _selectedScreenshotsLibrary;
-	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
+	private readonly DataSetAnnotationContextFactory _contextFactory;
 
 	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
-		Context = DataSetAnnotationContextViewModel.ReuseContextOrCreateNew(Context, value?.Value, _composition);
+		Context = _contextFactory.ReuseContextOrCreateNew(Context, value?.Value);
 	}
 
 	[RelayCommand(CanExecute = nameof(CanReturnBitmapToPool))]

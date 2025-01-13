@@ -15,7 +15,7 @@ using Yolo.InputProcessing;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
-internal sealed class ScreenshotImageLoader
+public sealed class ScreenshotImageLoader
 {
 	public ScreenshotImageLoader(WriteableBitmapPool bitmapPool, ScreenshotsDataAccess screenshotsDataAccess)
 	{

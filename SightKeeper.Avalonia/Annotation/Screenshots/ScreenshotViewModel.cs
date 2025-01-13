@@ -4,7 +4,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
-internal sealed class ScreenshotViewModel : ViewModel
+public sealed class ScreenshotViewModel : ViewModel
 {
 	public Screenshot Value { get; }
 	public IReadOnlyCollection<Asset> Assets => Value.Assets;

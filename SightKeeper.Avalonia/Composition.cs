@@ -14,7 +14,7 @@ using SightKeeper.Application.ScreenshotsLibraries.Creating;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Avalonia.Annotation;
-using SightKeeper.Avalonia.Annotation.DataSetContexts;
+using SightKeeper.Avalonia.Annotation.Contexts;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
@@ -34,7 +34,7 @@ using SightKeeper.Application.Windows;
 
 namespace SightKeeper.Avalonia;
 
-internal sealed partial class Composition
+public sealed partial class Composition
 {
 	private void Setup() => DI.Setup(nameof(Composition))
 		.Hint(Hint.Resolve, "Off")
@@ -92,8 +92,8 @@ internal sealed partial class Composition
 			context.Inject(out MainViewModel viewModel);
 			return new MainWindow { DataContext = viewModel };
 		})
-		.Root<ClassifierAnnotationContextViewModel>(nameof(ClassifierAnnotationContextViewModel))
-		.Root<DetectorAnnotationContextViewModel>(nameof(DetectorAnnotationContextViewModel))
+		.Root<ClassifierAnnotationContext>(nameof(ClassifierAnnotationContext))
+		.Root<DetectorAnnotationContext>(nameof(DetectorAnnotationContext))
 		.Bind().As(Lifetime.Singleton).To<WriteableBitmapPool>()
 		.Root<ScreenshotImageLoader>(nameof(ScreenshotImageLoader))
 		.Bind().As(Lifetime.Singleton).To<PeriodicAppDataSaver>()

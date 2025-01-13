@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
-internal sealed partial class DetectorToolBarViewModel : ToolBarViewModel
+public sealed partial class DetectorToolBarViewModel : ToolBarViewModel
 {
 	[ObservableProperty] public partial IReadOnlyCollection<Tag> Tags { get; set; }
 	[ObservableProperty] public partial Tag? Tag { get; set; }

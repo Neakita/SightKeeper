@@ -10,7 +10,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Detector;
 
-internal sealed class DetectorDrawerViewModel : DrawerViewModel
+public sealed class DetectorDrawerViewModel : DrawerViewModel
 {
 	public override IReadOnlyCollection<DetectorItemViewModel> Items => _items;
 	public override Tag? Tag => _tag;

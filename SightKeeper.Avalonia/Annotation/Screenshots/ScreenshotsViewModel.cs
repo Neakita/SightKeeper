@@ -13,7 +13,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
-internal sealed partial class ScreenshotsViewModel : ViewModel
+public sealed partial class ScreenshotsViewModel : ViewModel
 {
 	public ScreenshotsLibrary? Library
 	{

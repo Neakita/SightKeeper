@@ -11,7 +11,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
-internal sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisposable
+public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisposable
 {
 	public ClassifierDataSet? DataSet
 	{

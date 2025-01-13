@@ -8,7 +8,7 @@ using Serilog;
 
 namespace SightKeeper.Avalonia;
 
-internal sealed class WriteableBitmapPool : IDisposable
+public sealed class WriteableBitmapPool : IDisposable
 {
 	private readonly record struct BitmapArchetype(PixelSize Size, PixelFormat? Format);
 

@@ -7,9 +7,9 @@ using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.DataSetContexts;
+namespace SightKeeper.Avalonia.Annotation.Contexts;
 
-internal sealed class DetectorAnnotationContextViewModel : DataSetAnnotationContextViewModel, IDisposable
+public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDisposable
 {
 	public DetectorDataSet? DataSet
 	{
@@ -25,7 +25,7 @@ internal sealed class DetectorAnnotationContextViewModel : DataSetAnnotationCont
 	public override DetectorToolBarViewModel ToolBar { get; }
 	public override DetectorDrawerViewModel Drawer { get; }
 
-	public DetectorAnnotationContextViewModel(
+	public DetectorAnnotationContext(
 		DetectorToolBarViewModel toolBar,
 		DetectorDrawerViewModel drawer,
 		ScreenshotsViewModel screenshotsViewModel)
