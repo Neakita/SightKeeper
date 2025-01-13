@@ -15,14 +15,14 @@
                 <Canvas Name="Canvas"
                         Background="Transparent">
                     <Interaction.Behaviors>
-                        <local:DrawingBehavior Command="{Binding CreateItemCommand}"
+                        <local:BoundingDrawingBehavior Command="{Binding CreateItemCommand}"
                                                IsEnabled="{Binding Tag, Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <local:DrawingBehavior.DrawingItemTemplate>
+                            <local:BoundingDrawingBehavior.DrawingItemTemplate>
                                 <DataTemplate>
                                     <Rectangle Stroke="Red" StrokeThickness="1"/>
                                 </DataTemplate>
-                            </local:DrawingBehavior.DrawingItemTemplate>
-                        </local:DrawingBehavior>
+                            </local:BoundingDrawingBehavior.DrawingItemTemplate>
+                        </local:BoundingDrawingBehavior>
                     </Interaction.Behaviors>
                 </Canvas>
             </ItemsPanelTemplate>

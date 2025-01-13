@@ -11,13 +11,13 @@ using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-internal sealed class DrawingBehavior : Behavior<Canvas>
+internal sealed class BoundingDrawingBehavior : Behavior<Canvas>
 {
 	public static readonly StyledProperty<ICommand?> CommandProperty =
-		AvaloniaProperty.Register<DrawingBehavior, ICommand?>(nameof(Command));
+		AvaloniaProperty.Register<BoundingDrawingBehavior, ICommand?>(nameof(Command));
 
 	public static readonly StyledProperty<IDataTemplate?> DrawingItemTemplateProperty =
-		AvaloniaProperty.Register<DrawingBehavior, IDataTemplate?>(nameof(DrawingItemTemplate));
+		AvaloniaProperty.Register<BoundingDrawingBehavior, IDataTemplate?>(nameof(DrawingItemTemplate));
 
 	public ICommand? Command
 	{
