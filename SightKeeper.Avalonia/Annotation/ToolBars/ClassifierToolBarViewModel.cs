@@ -8,6 +8,7 @@ using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
@@ -24,19 +25,21 @@ public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisp
 		{
 			Guard.IsNotNull(AssetsLibrary);
 			Guard.IsNotNull(Screenshot);
-			var screenshot = Screenshot.Value;
 			if (value == null)
-				_annotator.DeleteAsset(AssetsLibrary, screenshot);
+				_annotator.DeleteAsset(AssetsLibrary, Screenshot);
 			else
-				_annotator.SetTag(AssetsLibrary, screenshot, value);
+				_annotator.SetTag(AssetsLibrary, Screenshot, value);
 		}
 	}
+
+	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tag))]
+	public partial Screenshot? Screenshot { get; set; }
 
 	public ClassifierToolBarViewModel(ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
 	{
 		_annotator = annotator;
-		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(screenshot => Screenshot = screenshot);
-		Screenshot = screenshotsViewModel.SelectedScreenshot;
+		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(screenshot => Screenshot = screenshot?.Value);
+		Screenshot = screenshotsViewModel.SelectedScreenshot?.Value;
 	}
 
 	public void Dispose()
@@ -44,13 +47,10 @@ public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisp
 		_disposable.Dispose();
 	}
 
-	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tag))]
-	internal partial ScreenshotViewModel? Screenshot { get; set; }
-
 	private readonly ClassifierAnnotator _annotator;
 	private AssetsLibrary<ClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
 	private readonly IDisposable _disposable;
 
 	private ClassifierAsset? Asset =>
-		Screenshot == null ? null : AssetsLibrary?.Assets.GetValueOrDefault(Screenshot.Value);
+		Screenshot == null ? null : AssetsLibrary?.Assets.GetValueOrDefault(Screenshot);
 }
