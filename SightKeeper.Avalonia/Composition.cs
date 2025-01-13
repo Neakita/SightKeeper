@@ -109,5 +109,6 @@ public sealed partial class Composition
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
 		.Bind<DetectorAnnotator>().To<AppDataDetectorAnnotator>()
-		.Root<Poser2DAnnotationContext>(nameof(Poser2DAnnotationContext));
+		.Root<Poser2DAnnotationContext>(nameof(Poser2DAnnotationContext))
+		.Root<Poser3DAnnotationContext>(nameof(Poser3DAnnotationContext));
 }
