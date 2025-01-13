@@ -51,12 +51,12 @@ internal sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		Guard.IsNotNull(AssociatedObject);
 		if (!IsEnabled)
 			return;
-		AssociatedObject.PointerMoved += OnAssociatedObjectPointerMoved;
-		AssociatedObject.PointerReleased += OnAssociatedObjectPointerReleased;
-		_initialPosition = e.GetPosition(AssociatedObject);
 		_drawingItem = DrawingItemTemplate?.Build(null);
 		if (_drawingItem == null)
 			return;
+		AssociatedObject.PointerMoved += OnAssociatedObjectPointerMoved;
+		AssociatedObject.PointerReleased += OnAssociatedObjectPointerReleased;
+		_initialPosition = e.GetPosition(AssociatedObject);
 		AssociatedObject.Children.Add(_drawingItem);
 		UpdateDrawingItemBounding(_initialPosition);
 	}
