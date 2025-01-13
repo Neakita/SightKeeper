@@ -7,9 +7,9 @@ using SightKeeper.Domain.DataSets.Poser3D;
 
 namespace SightKeeper.Avalonia.Annotation.Contexts;
 
-public sealed class DataSetAnnotationContextFactory
+public sealed class AnnotationContextFactory
 {
-	public DataSetAnnotationContextFactory(Composition composition)
+	public AnnotationContextFactory(Composition composition)
 	{
 		_composition = composition;
 	}

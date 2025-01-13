@@ -8,7 +8,7 @@ using SightKeeper.Domain.DataSets.Poser3D;
 
 namespace SightKeeper.Avalonia.Tests.Annotation;
 
-public sealed class DataSetAnnotationContextsFactoryTests
+public sealed class AnnotationContextFactoryTests
 {
 	[Fact]
 	public void ShouldGetClassifierContext()
@@ -37,7 +37,7 @@ public sealed class DataSetAnnotationContextsFactoryTests
 	private static void ShouldGetAnnotationContextOfType<TContext>(DataSet dataSet) where TContext : DataSetAnnotationContext
 	{
 		Composition composition = new();
-		DataSetAnnotationContextFactory factory = new(composition);
+		AnnotationContextFactory factory = new(composition);
 		var context = factory.ReuseContextOrCreateNew(null, dataSet);
 		context.Should().BeOfType<TContext>();
 	}

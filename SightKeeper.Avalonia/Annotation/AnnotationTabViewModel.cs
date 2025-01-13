@@ -36,7 +36,7 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 		WriteableBitmapPool bitmapPool,
 		ScreenshotsViewModel screenshots,
 		ScreenshotsLibraryViewModelsObservableRepository screenshotsLibraries,
-		DataSetAnnotationContextFactory contextFactory)
+		AnnotationContextFactory contextFactory)
 	{
 		_bitmapPool = bitmapPool;
 		_contextFactory = contextFactory;
@@ -48,7 +48,7 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 	}
 
 	private readonly WriteableBitmapPool _bitmapPool;
-	private readonly DataSetAnnotationContextFactory _contextFactory;
+	private readonly AnnotationContextFactory _contextFactory;
 
 	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
