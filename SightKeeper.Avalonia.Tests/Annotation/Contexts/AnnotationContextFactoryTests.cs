@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Poser3D;
 
-namespace SightKeeper.Avalonia.Tests.Annotation;
+namespace SightKeeper.Avalonia.Tests.Annotation.Contexts;
 
 public sealed class AnnotationContextFactoryTests
 {
