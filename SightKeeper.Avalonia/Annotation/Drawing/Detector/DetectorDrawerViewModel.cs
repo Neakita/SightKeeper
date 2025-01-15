@@ -3,10 +3,10 @@ using System.Linq;
 using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
-using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Detector;
 
@@ -15,33 +15,33 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 	public override IReadOnlyCollection<DetectorItemViewModel> Items => _items;
 	public override Tag? Tag => _tag;
 
+	public AssetsLibrary<DetectorAsset>? AssetsLibrary
+	{
+		get;
+		set
+		{
+			field = value;
+			UpdateItems();
+		}
+	}
+
+	public Screenshot? Screenshot
+	{
+		get;
+		set
+		{
+			field = value;
+			UpdateItems();
+		}
+	}
+
 	public DetectorDrawerViewModel(DetectorAnnotator annotator, DetectorDataSet dataSet)
 	{
 		_annotator = annotator;
 		AssetsLibrary = dataSet.AssetsLibrary;
 	}
 
-	internal AssetsLibrary<DetectorAsset>? AssetsLibrary
-	{
-		get;
-		set
-		{
-			field = value;
-			UpdateItems();
-		}
-	}
-
-	internal ScreenshotViewModel? Screenshot
-	{
-		get;
-		set
-		{
-			field = value;
-			UpdateItems();
-		}
-	}
-
-	internal void SetTag(Tag? tag)
+	public void SetTag(Tag? tag)
 	{
 		OnPropertyChanging(nameof(Tag));
 		_tag = tag;
@@ -53,7 +53,7 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 		Guard.IsNotNull(AssetsLibrary);
 		Guard.IsNotNull(Screenshot);
 		Guard.IsNotNull(Tag);
-		var item = _annotator.CreateItem(AssetsLibrary, Screenshot.Value, Tag, bounding);
+		var item = _annotator.CreateItem(AssetsLibrary, Screenshot, Tag, bounding);
 		DetectorItemViewModel itemViewModel = new(item, _annotator);
 		_items.Add(itemViewModel);
 	}
@@ -67,7 +67,7 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 		_items.Clear();
 		if (AssetsLibrary == null ||
 		    Screenshot == null ||
-		    !AssetsLibrary.Assets.TryGetValue(Screenshot.Value, out var asset))
+		    !AssetsLibrary.Assets.TryGetValue(Screenshot, out var asset))
 			return;
 		_items.AddRange(asset.Items.Select(CreateItemViewModel));
 	}

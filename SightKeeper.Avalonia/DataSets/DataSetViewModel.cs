@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Avalonia.DataSets;
 
-internal sealed class DataSetViewModel : ViewModel
+public sealed class DataSetViewModel : ViewModel
 {
 	public DataSet Value { get; }
 	public string Name => Value.Name;

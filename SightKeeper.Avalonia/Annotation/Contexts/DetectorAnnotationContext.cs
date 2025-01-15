@@ -34,7 +34,7 @@ public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDispo
 		Drawer = drawer;
 		ToolBar.PropertyChanged += OnToolBarPropertyChanged;
 		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(OnScreenshotChanged);
-		Drawer.Screenshot = screenshotsViewModel.SelectedScreenshot;
+		Drawer.Screenshot = screenshotsViewModel.SelectedScreenshot?.Value;
 	}
 
 	public void Dispose()
@@ -52,6 +52,6 @@ public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDispo
 
 	private void OnScreenshotChanged(ScreenshotViewModel? screenshot)
 	{
-		Drawer.Screenshot = screenshot;
+		Drawer.Screenshot = screenshot?.Value;
 	}
 }

@@ -5,7 +5,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 
-internal sealed class ScreenshottingSettingsViewModel : ViewModel
+public sealed class ScreenshottingSettingsViewModel : ViewModel
 {
 	public ScreenshotsLibrary? Library
 	{

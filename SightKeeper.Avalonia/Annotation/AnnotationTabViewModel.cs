@@ -13,7 +13,7 @@ using SightKeeper.Avalonia.ScreenshotsLibraries;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-internal sealed partial class AnnotationTabViewModel : ViewModel
+public sealed partial class AnnotationTabViewModel : ViewModel
 {
 	public ReadOnlyObservableCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; }
 	public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
@@ -29,7 +29,7 @@ internal sealed partial class AnnotationTabViewModel : ViewModel
 	[ObservableProperty] public partial DataSetViewModel? SelectedDataSet { get; set; }
 	[ObservableProperty] public partial ScreenshotsLibraryViewModel? SelectedScreenshotsLibrary { get; set; }
 
-	public AnnotationTabViewModel(
+	internal AnnotationTabViewModel(
 		DataSetViewModelsObservableRepository dataSets,
 		ScreenshottingSettingsViewModel screenshottingSettings,
 		PendingScreenshotsCountReporter? pendingScreenshotsReporter,
