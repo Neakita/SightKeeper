@@ -35,10 +35,9 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 		}
 	}
 
-	public DetectorDrawerViewModel(DetectorAnnotator annotator, DetectorDataSet dataSet)
+	public DetectorDrawerViewModel(DetectorAnnotator annotator)
 	{
 		_annotator = annotator;
-		AssetsLibrary = dataSet.AssetsLibrary;
 	}
 
 	public void SetTag(Tag? tag)
