@@ -7,8 +7,4 @@
         <LangVersion>preview</LangVersion>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE</DefineConstants>
-    </PropertyGroup>
-
 </Project>
