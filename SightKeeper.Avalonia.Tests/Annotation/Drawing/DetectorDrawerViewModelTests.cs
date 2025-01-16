@@ -24,8 +24,7 @@ public sealed class DetectorDrawerViewModelTests
 	[Fact]
 	public void ShouldHaveItemsFromScreenshotAssociatedAsset()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, ImageSize);
+		var screenshot = CreateScreenshot();
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -39,8 +38,7 @@ public sealed class DetectorDrawerViewModelTests
 	[Fact]
 	public void ShouldCreateItem()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, ImageSize);
+		var screenshot = CreateScreenshot();
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var drawer = Drawer;
@@ -55,8 +53,7 @@ public sealed class DetectorDrawerViewModelTests
 	[Fact]
 	public void ShouldNotCreateItemWithoutAssetsLibrary()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, ImageSize);
+		var screenshot = CreateScreenshot();
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var drawer = Drawer;
@@ -79,8 +76,7 @@ public sealed class DetectorDrawerViewModelTests
 	[Fact]
 	public void ShouldNotCreateItemWithoutTag()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, ImageSize);
+		var screenshot = CreateScreenshot();
 		DetectorDataSet dataSet = new();
 		var drawer = Drawer;
 		drawer.AssetsLibrary = dataSet.AssetsLibrary;
@@ -91,8 +87,7 @@ public sealed class DetectorDrawerViewModelTests
 	[Fact]
 	public void ShouldClearItemsAfterChangingAssetsLibrary()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, ImageSize);
+		var screenshot = CreateScreenshot();
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -107,8 +102,7 @@ public sealed class DetectorDrawerViewModelTests
 	[Fact]
 	public void ShouldClearItemsAfterChangingScreenshot()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, ImageSize);
+		var screenshot = CreateScreenshot();
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -116,11 +110,18 @@ public sealed class DetectorDrawerViewModelTests
 		var drawer = Drawer;
 		drawer.AssetsLibrary = dataSet.AssetsLibrary;
 		drawer.Screenshot = screenshot;
-		drawer.Screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, ImageSize);
+		drawer.Screenshot = CreateScreenshot();
 		drawer.Items.Should().BeEmpty();
 	}
 
 	private static Vector2<ushort> ImageSize => new(320, 320);
 	private static Bounding Bounding => new(0.1, 0.1, 0.9, 0.9);
 	private static DetectorDrawerViewModel Drawer => new Composition().DetectorAnnotationContext.Drawer;
+
+	private static Screenshot CreateScreenshot()
+	{
+		ScreenshotsLibrary screenshotsLibrary = new();
+		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, ImageSize);
+		return screenshot;
+	}
 }
