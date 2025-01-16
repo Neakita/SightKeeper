@@ -12,13 +12,15 @@ public sealed class DetectorDrawerViewModelTests
 	[Fact]
 	public void ShouldNotHaveItemsByDefault()
 	{
-		Drawer.Items.Should().BeEmpty();
+		var drawer = CreateDrawer();
+		drawer.Items.Should().BeEmpty();
 	}
 
 	[Fact]
 	public void ShouldNotHaveSelectedTagByDefault()
 	{
-		Drawer.Tag.Should().BeNull();
+		var drawer = CreateDrawer();
+		drawer.Tag.Should().BeNull();
 	}
 
 	[Fact]
@@ -29,7 +31,7 @@ public sealed class DetectorDrawerViewModelTests
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		var item = asset.CreateItem(tag, Bounding);
-		var drawer = Drawer;
+		var drawer = CreateDrawer();
 		drawer.AssetsLibrary = dataSet.AssetsLibrary;
 		drawer.Screenshot = screenshot;
 		drawer.Items.Should().Contain(itemViewModel => itemViewModel.Value == item);
@@ -41,7 +43,7 @@ public sealed class DetectorDrawerViewModelTests
 		var screenshot = CreateScreenshot();
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
-		var drawer = Drawer;
+		var drawer = CreateDrawer();
 		drawer.AssetsLibrary = dataSet.AssetsLibrary;
 		drawer.Screenshot = screenshot;
 		drawer.SetTag(tag);
@@ -56,7 +58,7 @@ public sealed class DetectorDrawerViewModelTests
 		var screenshot = CreateScreenshot();
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
-		var drawer = Drawer;
+		var drawer = CreateDrawer();
 		drawer.Screenshot = screenshot;
 		drawer.SetTag(tag);
 		Assert.ThrowsAny<Exception>(() => drawer.CreateItemCommand.Execute(Bounding));
@@ -67,7 +69,7 @@ public sealed class DetectorDrawerViewModelTests
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
-		var drawer = Drawer;
+		var drawer = CreateDrawer();
 		drawer.AssetsLibrary = dataSet.AssetsLibrary;
 		drawer.SetTag(tag);
 		Assert.ThrowsAny<Exception>(() => drawer.CreateItemCommand.Execute(Bounding));
@@ -78,7 +80,7 @@ public sealed class DetectorDrawerViewModelTests
 	{
 		var screenshot = CreateScreenshot();
 		DetectorDataSet dataSet = new();
-		var drawer = Drawer;
+		var drawer = CreateDrawer();
 		drawer.AssetsLibrary = dataSet.AssetsLibrary;
 		drawer.Screenshot = screenshot;
 		Assert.ThrowsAny<Exception>(() => drawer.CreateItemCommand.Execute(Bounding));
@@ -92,7 +94,7 @@ public sealed class DetectorDrawerViewModelTests
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(tag, Bounding);
-		var drawer = Drawer;
+		var drawer = CreateDrawer();
 		drawer.AssetsLibrary = dataSet.AssetsLibrary;
 		drawer.Screenshot = screenshot;
 		drawer.AssetsLibrary = new DetectorDataSet().AssetsLibrary;
@@ -107,7 +109,7 @@ public sealed class DetectorDrawerViewModelTests
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.CreateItem(tag, Bounding);
-		var drawer = Drawer;
+		var drawer = CreateDrawer();
 		drawer.AssetsLibrary = dataSet.AssetsLibrary;
 		drawer.Screenshot = screenshot;
 		drawer.Screenshot = CreateScreenshot();
@@ -116,7 +118,6 @@ public sealed class DetectorDrawerViewModelTests
 
 	private static Vector2<ushort> ImageSize => new(320, 320);
 	private static Bounding Bounding => new(0.1, 0.1, 0.9, 0.9);
-	private static DetectorDrawerViewModel Drawer => new Composition().DetectorAnnotationContext.Drawer;
 
 	private static Screenshot CreateScreenshot()
 	{
@@ -124,4 +125,6 @@ public sealed class DetectorDrawerViewModelTests
 		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, ImageSize);
 		return screenshot;
 	}
+
+	private static DetectorDrawerViewModel CreateDrawer() => new Composition().DetectorAnnotationContext.Drawer;
 }
