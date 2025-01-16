@@ -110,5 +110,6 @@ public sealed partial class Composition
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
 		.Bind<DetectorAnnotator>().To<AppDataDetectorAnnotator>()
 		.Root<Poser2DAnnotationContext>(nameof(Poser2DAnnotationContext))
-		.Root<Poser3DAnnotationContext>(nameof(Poser3DAnnotationContext));
+		.Root<Poser3DAnnotationContext>(nameof(Poser3DAnnotationContext))
+		.Bind<Poser3DAnnotator>().To<AppDataPoser3DAnnotator>();
 }
