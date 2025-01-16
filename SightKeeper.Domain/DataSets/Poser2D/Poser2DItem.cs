@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Diagnostics;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
@@ -14,14 +14,15 @@ public sealed class Poser2DItem : PoserItem
 		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(Tag, tag);
 		KeyPoint keyPoint = new(tag, position);
 		bool isAdded = _keyPoints.Add(keyPoint);
-		Guard.IsTrue(isAdded);
+		Debug.Assert(isAdded);
 		return keyPoint;
 	}
 
 	public void DeleteKeyPoint(KeyPoint tag)
 	{
 		bool isRemoved = _keyPoints.Remove(tag);
-		Guard.IsTrue(isRemoved);
+		if (!isRemoved)
+			throw new ArgumentException("Specified key point tag was not found and therefore not deleted", nameof(tag));
 	}
 
 	internal Poser2DItem(Bounding bounding, PoserTag tag) : base(bounding, tag)

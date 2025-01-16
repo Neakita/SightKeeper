@@ -1,4 +1,5 @@
-using CommunityToolkit.Diagnostics;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
@@ -19,28 +20,20 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 		ImageComposition? composition,
 		IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
-		tags = tags
-			.ToDictionary(
-				pair => pair.Key,
-				IReadOnlyCollection<Tag> (pair) => pair.Value.ToList().AsReadOnly())
-			.AsReadOnly();
-		Guard.IsGreaterThanOrEqualTo(tags.Count, MinimumTagsCount);
-		foreach (var (poserTag, keyPointTags) in tags)
-		{
-			UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, poserTag);
-			foreach (var keyPointTag in keyPointTags)
-				UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(poserTag, keyPointTag);
-		}
+		tags = PreventExternalEditing(tags);
+		ValidateTagsQuantity(tags);
+		ValidateTagsOwners(tags);
 		PoserWeights weights = new(creationDate, modelSize, metrics, resolution, composition, tags);
 		var isAdded = _weights.Add(weights);
-		Guard.IsTrue(isAdded);
+		Debug.Assert(isAdded);
 		return weights;
 	}
 
 	public void RemoveWeights(PoserWeights weights)
 	{
 		var isRemoved = _weights.Remove(weights);
-		Guard.IsTrue(isRemoved);
+		if (!isRemoved)
+			throw new ArgumentException("Specified weights was not found and therefore not deleted");
 	}
 
 	internal PoserWeightsLibrary(TagsOwner tagsOwner)
@@ -50,4 +43,29 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 
 	private readonly TagsOwner _tagsOwner;
 	private readonly SortedSet<PoserWeights> _weights = new(WeightsDateComparer.Instance);
+
+	private static ReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> PreventExternalEditing(IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
+	{
+		return tags
+			.ToDictionary(
+				pair => pair.Key,
+				IReadOnlyCollection<Tag> (pair) => pair.Value.ToList().AsReadOnly())
+			.AsReadOnly();
+	}
+
+	private static void ValidateTagsQuantity(IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
+	{
+		if (tags.Count < MinimumTagsCount)
+			throw new ArgumentException($"Should specify at least {MinimumTagsCount} tags, but was {tags.Count}");
+	}
+
+	private void ValidateTagsOwners(IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
+	{
+		foreach (var (poserTag, keyPointTags) in tags)
+		{
+			UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, poserTag);
+			foreach (var keyPointTag in keyPointTags)
+				UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(poserTag, keyPointTag);
+		}
+	}
 }

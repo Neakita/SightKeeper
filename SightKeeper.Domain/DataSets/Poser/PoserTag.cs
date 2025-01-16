@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.DataSets.Tags;
+﻿using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser;
 
@@ -21,7 +20,8 @@ public sealed class PoserTag : Tag, TagsOwner
 		if (isTagInUse)
 			TagIsInUseException.ThrowForDeletion(tag);
 		var isRemoved = _keyPointTags.Remove(tag);
-		Guard.IsTrue(isRemoved);
+		if (!isRemoved)
+			throw new ArgumentException("Specified tag was not found and therefore not deleted", nameof(tag));
 	}
 
 	internal PoserTag(TagsOwner owner, string name, TagsUsageProvider usageProvider) : base(owner, name)

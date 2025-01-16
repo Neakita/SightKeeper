@@ -1,5 +1,3 @@
-using CommunityToolkit.Diagnostics;
-
 namespace SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 public abstract class ImageComposition
@@ -9,7 +7,8 @@ public abstract class ImageComposition
 		get;
 		set
 		{
-			Guard.IsGreaterThan(value, TimeSpan.Zero);
+			if (value <= TimeSpan.Zero)
+				throw new ArgumentException($"{nameof(MaximumScreenshotsDelay)} value should be greater than zero, but was {value}", nameof(value));
 			field = value;
 		}
 	}

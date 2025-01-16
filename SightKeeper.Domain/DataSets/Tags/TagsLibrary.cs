@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
-
-namespace SightKeeper.Domain.DataSets.Tags;
+﻿namespace SightKeeper.Domain.DataSets.Tags;
 
 public abstract class TagsLibrary : TagsOwner
 {
@@ -26,7 +24,8 @@ public sealed class TagsLibrary<TTag> : TagsLibrary where TTag : Tag
 		if (isTagInUse)
 			TagIsInUseException.ThrowForDeletion(tag);
 		var isRemoved = _tags.Remove(tag);
-		Guard.IsTrue(isRemoved);
+		if (!isRemoved)
+			throw new ArgumentException("Specified tag was not found and therefore not deleted", nameof(tag));
 	}
 
 	internal TagsLibrary(TagsFactory<TTag> tagsFactory, TagsUsageProvider tagsUsageProvider)

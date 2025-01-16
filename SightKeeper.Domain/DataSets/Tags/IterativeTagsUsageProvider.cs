@@ -1,4 +1,3 @@
-using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Domain.DataSets.Tags;
@@ -9,7 +8,6 @@ internal abstract class IterativeTagsUsageProvider<TAsset> : TagsUsageProvider w
 
 	public override bool IsInUse(Tag tag)
 	{
-		Guard.IsNotNull(AssetsSource);
 		return AssetsSource.Any(asset => IsInUse(asset, tag));
 	}
 

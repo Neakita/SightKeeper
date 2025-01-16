@@ -1,4 +1,5 @@
-using CommunityToolkit.Diagnostics;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
@@ -16,21 +17,19 @@ public sealed class PlainWeightsLibrary : WeightsLibrary
 		ImageComposition? composition,
 		IEnumerable<Tag> tags)
 	{
-		tags = tags.ToList().AsReadOnly();
-		DuplicateTagsException.ThrowIfContainsDuplicates(tags);
-		PlainWeights weights = new(creationDate, modelSize, metrics, resolution, composition, tags.ToList().AsReadOnly());
-		Guard.IsGreaterThanOrEqualTo(weights.Tags.Count, _minimumTagsCount);
-		foreach (var tag in weights.Tags)
-			Guard.IsReferenceEqualTo(tag.Owner, _tagsOwner);
+		var tagsList = tags.ToList().AsReadOnly();
+		ValidateTags(tagsList, nameof(tags));
+		PlainWeights weights = new(creationDate, modelSize, metrics, resolution, composition, tagsList);
 		var isAdded = _weights.Add(weights);
-		Guard.IsTrue(isAdded);
+		Debug.Assert(isAdded);
 		return weights;
 	}
 
 	public void RemoveWeights(PlainWeights weights)
 	{
 		var isRemoved = _weights.Remove(weights);
-		Guard.IsTrue(isRemoved);
+		if (!isRemoved)
+			throw new ArgumentException("Specified weights was not found and therefore not deleted");
 	}
 
 	internal PlainWeightsLibrary(int minimumTagsCount, TagsOwner tagsOwner)
@@ -42,4 +41,23 @@ public sealed class PlainWeightsLibrary : WeightsLibrary
 	private readonly int _minimumTagsCount;
 	private readonly TagsOwner _tagsOwner;
 	private readonly SortedSet<PlainWeights> _weights = new(WeightsDateComparer.Instance);
+
+	private void ValidateTags(ReadOnlyCollection<Tag> tagsList, string paramName)
+	{
+		DuplicateTagsException.ThrowIfContainsDuplicates(tagsList);
+		ValidateTagsQuantity(tagsList, paramName);
+		ValidateTagOwners(tagsList);
+	}
+
+	private void ValidateTagsQuantity(ReadOnlyCollection<Tag> tagsList, string paramName)
+	{
+		if (tagsList.Count < _minimumTagsCount)
+			throw new ArgumentException($"Should specify at least {_minimumTagsCount} tags", paramName);
+	}
+
+	private void ValidateTagOwners(ReadOnlyCollection<Tag> tagsList)
+	{
+		foreach (var tag in tagsList)
+			UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
+	}
 }

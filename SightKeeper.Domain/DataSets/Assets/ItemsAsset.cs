@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
-
-namespace SightKeeper.Domain.DataSets.Assets;
+﻿namespace SightKeeper.Domain.DataSets.Assets;
 
 public abstract class ItemsAsset : Asset
 {
@@ -14,7 +12,8 @@ public abstract class ItemsAsset<TItem> : ItemsAsset where TItem : AssetItem
 	public void DeleteItem(TItem item)
 	{
 		var isRemoved = _items.Remove(item);
-		Guard.IsTrue(isRemoved);
+		if (!isRemoved)
+			throw new ArgumentException("Specified item was not found and therefore not deleted", nameof(item));
 	}
 
 	public void ClearItems()

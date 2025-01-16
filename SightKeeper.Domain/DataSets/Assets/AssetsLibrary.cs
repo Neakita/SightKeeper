@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Diagnostics;
+﻿using System.Diagnostics;
 using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Domain.DataSets.Assets;
@@ -30,8 +30,9 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary where TAsset : Asset
 	public void DeleteAsset(Screenshot screenshot)
 	{
 		var isRemoved = _assets.Remove(screenshot, out var asset);
-		Guard.IsTrue(isRemoved);
-		Guard.IsNotNull(asset);
+		if (!isRemoved)
+			throw new ArgumentException("The asset associated with the specified screenshot was not found", nameof(screenshot));
+		Debug.Assert(asset != null);
 		screenshot.RemoveAsset(asset);
 	}
 

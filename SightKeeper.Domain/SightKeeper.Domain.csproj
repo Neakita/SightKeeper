@@ -11,8 +11,4 @@
       <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.4.0" />
-    </ItemGroup>
-
 </Project>
