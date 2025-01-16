@@ -40,7 +40,7 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="Humanizer.Core" Version="2.14.1" />
         <PackageReference Include="Material.Icons.Avalonia" Version="2.1.10"/>
-        <PackageReference Include="Pure.DI" Version="2.1.48">
+        <PackageReference Include="Pure.DI" Version="2.1.50">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

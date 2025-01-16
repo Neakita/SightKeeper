@@ -57,11 +57,11 @@ public sealed class BinarySerializationTests
 		Directory.Delete(screenshotsDataAccess.DirectoryPath, true);
 	}
 
-	private static EquivalencyAssertionOptions<AppData> ConfigureEquivalencyAssertion(
-		EquivalencyAssertionOptions<AppData> options)
+	private static EquivalencyOptions<AppData> ConfigureEquivalencyAssertion(
+		EquivalencyOptions<AppData> options)
 	{
 		return options
-			.RespectingRuntimeTypes()
+			.PreferringRuntimeMemberTypes()
 			.AllowingInfiniteRecursion()
 			.Excluding(info => info.Type.Name.Contains("Dictionary")); // https://github.com/fluentassertions/fluentassertions/issues/1136
 	}
