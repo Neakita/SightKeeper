@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.DataSets.Assets;
 
-public readonly struct Bounding
+public readonly struct Bounding : IEquatable<Bounding>
 {
 	public static Bounding FromPoints(Vector2<double> point1, Vector2<double> point2)
 	{
