@@ -18,7 +18,7 @@ public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisp
 	public partial ClassifierDataSet? DataSet { get; set; }
 	public IReadOnlyCollection<Tag> Tags => DataSet?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
 
-	public Tag? Tag
+	public Tag? SelectedTag
 	{
 		get => Asset?.Tag;
 		set
@@ -32,7 +32,7 @@ public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisp
 		}
 	}
 
-	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tag))]
+	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag))]
 	public partial Screenshot? Screenshot { get; set; }
 
 	public ClassifierToolBarViewModel(ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)

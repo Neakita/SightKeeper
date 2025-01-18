@@ -1,116 +1,105 @@
+using Avalonia.Controls;
+using Avalonia.Headless.XUnit;
+using Avalonia.VisualTree;
+using CommunityToolkit.Diagnostics;
 using FluentAssertions;
 using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.ToolBars;
 
 public sealed class ClassifierToolBarTests
 {
-	[Fact]
-	public void TagsShouldBeEmptyByDefault()
+	[AvaloniaFact]
+	public void ListBoxShouldBeEmptyByDefault()
 	{
-		ToolBar.Tags.Should().BeEmpty();
-	}
-	
-	[Fact]
-	public void ShouldSetTagsFromDataSet()
-	{
-		var toolBar = ToolBar;
-		ClassifierDataSet dataSet = new();
-		var tag1 = dataSet.TagsLibrary.CreateTag("Tag1");
-		var tag2 = dataSet.TagsLibrary.CreateTag("Tag2");
-		toolBar.DataSet = dataSet;
-		toolBar.Tags.Should().Contain([tag1, tag2]);
+		var (_, listBox) = PrepareToolBar();
+		listBox.Items.Should().BeEmpty();
 	}
 
-	[Fact]
-	public void ShouldNotifyTagsChangeWhenDataSetChanged()
+	[AvaloniaFact]
+	public void ListBoxShouldContainTagFromDataSet()
 	{
-		var subjectToolBar = ToolBar;
-		ClassifierDataSet dataSet = new();
-		dataSet.TagsLibrary.CreateTag("Tag");
-		using var monitoredToolBar = subjectToolBar.Monitor();
-		subjectToolBar.DataSet = dataSet;
-		monitoredToolBar.Should().RaisePropertyChangeFor(toolBar => toolBar.Tags);
+		var (viewModel, listBox) = PrepareToolBar();
+		var tag = SetDataSetWithTag(viewModel);
+		listBox.Items.Should().Contain(tag);
 	}
 
-	[Fact]
-	public void ShouldNotSetTagWithoutDataSet()
+	[AvaloniaFact]
+	public void ListBoxShouldBeDisabledWhenNoScreenshotSetInViewModel()
 	{
-		var toolBar = ToolBar;
-		var tag = new ClassifierDataSet().TagsLibrary.CreateTag("TestTag");
-		Assert.ThrowsAny<Exception>(() => toolBar.Tag = tag);
+		var (viewModel, listBox) = PrepareToolBar();
+		SetDataSetWithTag(viewModel);
+		listBox.IsEffectivelyEnabled.Should().BeFalse();
 	}
 
-	[Fact]
-	public void ShouldNotSetTagWithoutScreenshot()
+	[AvaloniaFact]
+	public void ListBoxShouldBeEnabled()
 	{
-		var toolBar = ToolBar;
-		ClassifierDataSet dataSet = new();
-		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
-		toolBar.DataSet = dataSet;
-		Assert.ThrowsAny<Exception>(() => toolBar.Tag = tag);
+		var (viewModel, listBox) = PrepareToolBar();
+		SetDataSetWithTag(viewModel);
+		viewModel.Screenshot = CreateScreenshot();
+		listBox.IsEffectivelyEnabled.Should().BeTrue();
 	}
 
-	[Fact]
-	public void ShouldNotSetTagWithDifferentDataSet()
+	[AvaloniaFact]
+	public void ListBoxShouldSetSelectedTag()
 	{
-		var toolBar = ToolBar;
-		ClassifierDataSet dataSet = new();
-		var tag = new ClassifierDataSet().TagsLibrary.CreateTag("TestTag");
-		toolBar.DataSet = dataSet;
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		toolBar.Screenshot = screenshot;
-		Assert.ThrowsAny<Exception>(() => toolBar.Tag = tag);
+		var (viewModel, listBox) = PrepareToolBar();
+		var tag = SetDataSetWithTag(viewModel);
+		viewModel.Screenshot = CreateScreenshot();
+		listBox.Selection.Select(0);
+		viewModel.SelectedTag.Should().Be(tag);
 	}
 
-	[Fact]
-	public void ShouldSetTag()
+	private static (ClassifierToolBarViewModel viewModel, ListBox listBox) PrepareToolBar()
 	{
-		var toolBar = ToolBar;
-		ClassifierDataSet dataSet = new();
-		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
-		toolBar.DataSet = dataSet;
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		toolBar.Screenshot = screenshot;
-		toolBar.Tag = tag;
-		dataSet.AssetsLibrary.Assets.Should().ContainKey(screenshot).WhoseValue.Tag.Should().Be(tag);
+		ClassifierToolBarViewModel viewModel = CreateViewModel();
+		ClassifierToolBar toolBar = new()
+		{
+			DataContext = viewModel
+		};
+		Window window = new()
+		{
+			Content = toolBar
+		};
+		window.Show();
+		var listBox = GetListBox(toolBar);
+		return (viewModel, listBox);
 	}
 
-	[Fact]
-	public void ShouldSetTagFromScreenshot()
+	private static ClassifierToolBarViewModel CreateViewModel()
 	{
-		var toolBar = ToolBar;
-		ClassifierDataSet dataSet = new();
-		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.Tag = tag;
-		toolBar.DataSet = dataSet;
-		toolBar.Screenshot = screenshot;
-		toolBar.Tag.Should().Be(tag);
+		return new Composition().ClassifierAnnotationContext.ToolBar;
 	}
 
-	[Fact]
-	public void ShouldNotifyTagChangeWhenScreenshotSet()
+	private static ListBox GetListBox(ClassifierToolBar toolBar)
 	{
-		var subjectToolBar = ToolBar;
+		var listBox = toolBar.FindDescendantOfType<ListBox>();
+		Guard.IsNotNull(listBox);
+		return listBox;
+	}
+
+	private static Tag SetDataSetWithTag(ClassifierToolBarViewModel viewModel)
+	{
+		var (dataSet, tag) = CreateDataSetWithTag();
+		viewModel.DataSet = dataSet;
+		return tag;
+	}
+
+	private static (ClassifierDataSet dataSet, Tag tag) CreateDataSetWithTag()
+	{
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		asset.Tag = tag;
-		subjectToolBar.DataSet = dataSet;
-		using var monitoredToolBar = subjectToolBar.Monitor();
-		subjectToolBar.Screenshot = screenshot;
-		monitoredToolBar.Should().RaisePropertyChangeFor(toolBar => toolBar.Tag);
+		return (dataSet, tag);
 	}
 
-	private static ClassifierToolBarViewModel ToolBar => new Composition().ClassifierAnnotationContext.ToolBar;
+	private static Screenshot CreateScreenshot()
+	{
+		ScreenshotsLibrary library = new();
+		return library.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+	}
 }
