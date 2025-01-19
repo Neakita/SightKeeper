@@ -6,18 +6,18 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.ToolBars;
 
-public sealed class ClassifierToolBarViewModelTests
+public sealed class ClassifierAnnotationViewModelTests
 {
 	[Fact]
 	public void TagsShouldBeEmptyByDefault()
 	{
-		ToolBar.Tags.Should().BeEmpty();
+		Annotation.Tags.Should().BeEmpty();
 	}
 	
 	[Fact]
 	public void ShouldSetTagsFromDataSet()
 	{
-		var toolBar = ToolBar;
+		var toolBar = Annotation;
 		ClassifierDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("Tag1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("Tag2");
@@ -28,7 +28,7 @@ public sealed class ClassifierToolBarViewModelTests
 	[Fact]
 	public void ShouldNotifyTagsChangeWhenDataSetChanged()
 	{
-		var subjectToolBar = ToolBar;
+		var subjectToolBar = Annotation;
 		ClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("Tag");
 		using var monitoredToolBar = subjectToolBar.Monitor();
@@ -39,7 +39,7 @@ public sealed class ClassifierToolBarViewModelTests
 	[Fact]
 	public void ShouldNotSetTagWithoutDataSet()
 	{
-		var toolBar = ToolBar;
+		var toolBar = Annotation;
 		var tag = new ClassifierDataSet().TagsLibrary.CreateTag("TestTag");
 		Assert.ThrowsAny<Exception>(() => toolBar.SelectedTag = tag);
 	}
@@ -47,7 +47,7 @@ public sealed class ClassifierToolBarViewModelTests
 	[Fact]
 	public void ShouldNotSetTagWithoutScreenshot()
 	{
-		var toolBar = ToolBar;
+		var toolBar = Annotation;
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		toolBar.DataSet = dataSet;
@@ -57,7 +57,7 @@ public sealed class ClassifierToolBarViewModelTests
 	[Fact]
 	public void ShouldNotSetTagWithDifferentDataSet()
 	{
-		var toolBar = ToolBar;
+		var toolBar = Annotation;
 		ClassifierDataSet dataSet = new();
 		var tag = new ClassifierDataSet().TagsLibrary.CreateTag("TestTag");
 		toolBar.DataSet = dataSet;
@@ -70,7 +70,7 @@ public sealed class ClassifierToolBarViewModelTests
 	[Fact]
 	public void ShouldSetTag()
 	{
-		var toolBar = ToolBar;
+		var toolBar = Annotation;
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		toolBar.DataSet = dataSet;
@@ -84,7 +84,7 @@ public sealed class ClassifierToolBarViewModelTests
 	[Fact]
 	public void ShouldSetTagFromScreenshot()
 	{
-		var toolBar = ToolBar;
+		var toolBar = Annotation;
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		ScreenshotsLibrary screenshotsLibrary = new();
@@ -99,7 +99,7 @@ public sealed class ClassifierToolBarViewModelTests
 	[Fact]
 	public void ShouldNotifyTagChangeWhenScreenshotSet()
 	{
-		var subjectToolBar = ToolBar;
+		var subjectToolBar = Annotation;
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		ScreenshotsLibrary screenshotsLibrary = new();
@@ -112,5 +112,5 @@ public sealed class ClassifierToolBarViewModelTests
 		monitoredToolBar.Should().RaisePropertyChangeFor(toolBar => toolBar.SelectedTag);
 	}
 
-	private static ClassifierToolBarViewModel ToolBar => new Composition().ClassifierAnnotationContext.ToolBar;
+	private static ClassifierAnnotationViewModel Annotation => new Composition().ClassifierAnnotationContext.Annotation;
 }

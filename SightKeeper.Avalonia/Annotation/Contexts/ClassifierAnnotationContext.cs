@@ -7,7 +7,7 @@ namespace SightKeeper.Avalonia.Annotation.Contexts;
 
 public sealed class ClassifierAnnotationContext : DataSetAnnotationContext, IDisposable
 {
-	public override ClassifierToolBarViewModel ToolBar { get; }
+	public override ClassifierAnnotationViewModel Annotation { get; }
 	public override DrawerViewModel? Drawer => null;
 
 	public ClassifierDataSet? DataSet
@@ -16,17 +16,17 @@ public sealed class ClassifierAnnotationContext : DataSetAnnotationContext, IDis
 		set
 		{
 			field = value;
-			ToolBar.DataSet = value;
+			Annotation.DataSet = value;
 		}
 	}
 
-	public ClassifierAnnotationContext(ClassifierToolBarViewModel toolBar)
+	public ClassifierAnnotationContext(ClassifierAnnotationViewModel annotation)
 	{
-		ToolBar = toolBar;
+		Annotation = annotation;
 	}
 
 	public void Dispose()
 	{
-		ToolBar.Dispose();
+		Annotation.Dispose();
 	}
 }

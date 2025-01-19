@@ -55,9 +55,9 @@ public sealed class ClassifierToolBarTests
 		viewModel.SelectedTag.Should().Be(tag);
 	}
 
-	private static (ClassifierToolBarViewModel viewModel, ListBox listBox) PrepareToolBar()
+	private static (ClassifierAnnotationViewModel viewModel, ListBox listBox) PrepareToolBar()
 	{
-		ClassifierToolBarViewModel viewModel = CreateViewModel();
+		ClassifierAnnotationViewModel viewModel = CreateViewModel();
 		ClassifierToolBar toolBar = new()
 		{
 			DataContext = viewModel
@@ -71,9 +71,9 @@ public sealed class ClassifierToolBarTests
 		return (viewModel, listBox);
 	}
 
-	private static ClassifierToolBarViewModel CreateViewModel()
+	private static ClassifierAnnotationViewModel CreateViewModel()
 	{
-		return new Composition().ClassifierAnnotationContext.ToolBar;
+		return new Composition().ClassifierAnnotationContext.Annotation;
 	}
 
 	private static ListBox GetListBox(ClassifierToolBar toolBar)
@@ -83,7 +83,7 @@ public sealed class ClassifierToolBarTests
 		return listBox;
 	}
 
-	private static Tag SetDataSetWithTag(ClassifierToolBarViewModel viewModel)
+	private static Tag SetDataSetWithTag(ClassifierAnnotationViewModel viewModel)
 	{
 		var (dataSet, tag) = CreateDataSetWithTag();
 		viewModel.DataSet = dataSet;

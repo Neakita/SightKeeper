@@ -10,7 +10,7 @@ public sealed class Poser3DAnnotationContextTests
 	[Fact]
 	public void ShouldHavePoserToolBar()
 	{
-		Context.ToolBar.Should().BeOfType<PoserToolBarViewModel>();
+		Context.Annotation.Should().BeOfType<PoserToolBarViewModel>();
 	}
 
 	[Fact]

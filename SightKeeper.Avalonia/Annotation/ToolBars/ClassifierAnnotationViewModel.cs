@@ -12,7 +12,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
-public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisposable
+public sealed partial class ClassifierAnnotationViewModel : ToolBarViewModel, IDisposable
 {
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
 	public partial ClassifierDataSet? DataSet { get; set; }
@@ -35,7 +35,7 @@ public sealed partial class ClassifierToolBarViewModel : ToolBarViewModel, IDisp
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag))]
 	public partial Screenshot? Screenshot { get; set; }
 
-	public ClassifierToolBarViewModel(ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
+	public ClassifierAnnotationViewModel(ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
 	{
 		_annotator = annotator;
 		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(screenshot => Screenshot = screenshot?.Value);

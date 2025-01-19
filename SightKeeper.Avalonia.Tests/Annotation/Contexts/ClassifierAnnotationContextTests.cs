@@ -9,7 +9,7 @@ public sealed class ClassifierAnnotationContextTests
 	[Fact]
 	public void ShouldHaveClassifierToolBar()
 	{
-		Context.ToolBar.Should().BeOfType<ClassifierToolBarViewModel>();
+		Context.Annotation.Should().BeOfType<ClassifierAnnotationViewModel>();
 	}
 
 	[Fact]
