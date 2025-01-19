@@ -3,9 +3,9 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.ToolBars;
+namespace SightKeeper.Avalonia.Annotation.SideBars;
 
-public sealed partial class TagSelectionViewModel : ViewModel, TagSelectionToolBarDataContext
+public sealed partial class TagSelectionViewModel : ViewModel, TagSelectionSideBarDataContext
 {
 	public bool IsEnabled => true;
 	[ObservableProperty] public partial IReadOnlyCollection<Tag> Tags { get; set; } = ReadOnlyCollection<Tag>.Empty;

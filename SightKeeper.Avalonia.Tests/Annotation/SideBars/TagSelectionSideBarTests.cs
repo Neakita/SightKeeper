@@ -4,25 +4,25 @@ using Avalonia.Headless.XUnit;
 using Avalonia.VisualTree;
 using CommunityToolkit.Diagnostics;
 using FluentAssertions;
-using SightKeeper.Avalonia.Annotation.ToolBars;
+using SightKeeper.Avalonia.Annotation.SideBars;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Tests.Annotation.ToolBars;
+namespace SightKeeper.Avalonia.Tests.Annotation.SideBars;
 
-public sealed class TagSelectionToolBarTests
+public sealed class TagSelectionSideBarTests
 {
 	[AvaloniaFact]
 	public void ShouldBeEmptyByDefault()
 	{
-		var (_, listBox) = PrepareToolBar();
+		var (_, listBox) = PrepareSideBar();
 		listBox.Items.Should().BeEmpty();
 	}
 
 	[AvaloniaFact]
 	public void ShouldContainTagViewModel()
 	{
-		var (viewModel, listBox) = PrepareToolBar();
+		var (viewModel, listBox) = PrepareSideBar();
 		var tag = CreateDataSetWithTag();
 		viewModel.Tags = [tag];
 		listBox.Items.Should().Contain(tag);
@@ -31,7 +31,7 @@ public sealed class TagSelectionToolBarTests
 	[AvaloniaFact]
 	public void ShouldSetSelectedTag()
 	{
-		var (viewModel, listBox) = PrepareToolBar();
+		var (viewModel, listBox) = PrepareSideBar();
 		var tag = CreateDataSetWithTag();
 		viewModel.Tags = [tag];
 		listBox.Selection.Select(0);
@@ -41,7 +41,7 @@ public sealed class TagSelectionToolBarTests
 	[AvaloniaFact]
 	public void ShouldClearSelectedTag()
 	{
-		var (viewModel, listBox) = PrepareToolBar();
+		var (viewModel, listBox) = PrepareSideBar();
 		var tag = CreateDataSetWithTag();
 		viewModel.Tags = [tag];
 		listBox.Selection.Select(0);
@@ -49,19 +49,19 @@ public sealed class TagSelectionToolBarTests
 		viewModel.SelectedTag.Should().BeNull();
 	}
 
-	private static (TagSelectionViewModel viewModel, ListBox listBox) PrepareToolBar()
+	private static (TagSelectionViewModel viewModel, ListBox listBox) PrepareSideBar()
 	{
 		TagSelectionViewModel viewModel = new();
-		TagSelectionToolBar toolBar = new()
+		TagSelectionSideBar sideBar = new()
 		{
 			DataContext = viewModel
 		};
 		Window window = new()
 		{
-			Content = toolBar
+			Content = sideBar
 		};
 		window.Show();
-		var listBox = toolBar.FindDescendantOfType<ListBox>();
+		var listBox = sideBar.FindDescendantOfType<ListBox>();
 		Guard.IsNotNull(listBox);
 		return (viewModel, listBox);
 	}

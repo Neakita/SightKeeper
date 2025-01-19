@@ -1,15 +1,15 @@
 using FluentAssertions;
 using SightKeeper.Avalonia.Annotation.Contexts;
-using SightKeeper.Avalonia.Annotation.ToolBars;
+using SightKeeper.Avalonia.Annotation.SideBars;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Contexts;
 
 public sealed class ClassifierAnnotationContextTests
 {
 	[Fact]
-	public void ShouldHaveClassifierToolBar()
+	public void ShouldHaveClassifierSideBar()
 	{
-		Context.ToolBar.Should().BeOfType<ClassifierAnnotationViewModel>();
+		Context.SideBar.Should().BeOfType<ClassifierAnnotationViewModel>();
 	}
 
 	[Fact]

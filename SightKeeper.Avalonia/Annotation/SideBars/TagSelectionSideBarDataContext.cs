@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.ToolBars;
+namespace SightKeeper.Avalonia.Annotation.SideBars;
 
-public interface TagSelectionToolBarDataContext
+public interface TagSelectionSideBarDataContext
 {
 	bool IsEnabled { get; }
 	IReadOnlyCollection<Tag> Tags { get; }

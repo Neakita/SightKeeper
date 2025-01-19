@@ -1,13 +1,13 @@
 using System;
 using SightKeeper.Avalonia.Annotation.Drawing;
-using SightKeeper.Avalonia.Annotation.ToolBars;
 using SightKeeper.Domain.DataSets.Classifier;
+using ClassifierAnnotationViewModel = SightKeeper.Avalonia.Annotation.SideBars.ClassifierAnnotationViewModel;
 
 namespace SightKeeper.Avalonia.Annotation.Contexts;
 
 public sealed class ClassifierAnnotationContext : DataSetAnnotationContext, IDisposable
 {
-	public override ClassifierAnnotationViewModel ToolBar { get; }
+	public override ClassifierAnnotationViewModel SideBar { get; }
 	public override DrawerViewModel? Drawer => null;
 
 	public ClassifierDataSet? DataSet
@@ -16,17 +16,17 @@ public sealed class ClassifierAnnotationContext : DataSetAnnotationContext, IDis
 		set
 		{
 			field = value;
-			ToolBar.DataSet = value;
+			SideBar.DataSet = value;
 		}
 	}
 
-	public ClassifierAnnotationContext(ClassifierAnnotationViewModel toolBar)
+	public ClassifierAnnotationContext(ClassifierAnnotationViewModel sideBar)
 	{
-		ToolBar = toolBar;
+		SideBar = sideBar;
 	}
 
 	public void Dispose()
 	{
-		ToolBar.Dispose();
+		SideBar.Dispose();
 	}
 }

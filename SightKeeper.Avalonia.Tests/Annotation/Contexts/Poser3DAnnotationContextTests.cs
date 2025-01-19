@@ -1,16 +1,16 @@
 using FluentAssertions;
 using SightKeeper.Avalonia.Annotation.Contexts;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
-using SightKeeper.Avalonia.Annotation.ToolBars;
+using SightKeeper.Avalonia.Annotation.SideBars;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Contexts;
 
 public sealed class Poser3DAnnotationContextTests
 {
 	[Fact]
-	public void ShouldHavePoserToolBar()
+	public void ShouldHavePoserSideBar()
 	{
-		Context.ToolBar.Should().BeOfType<PoserToolBarViewModel>();
+		Context.SideBar.Should().BeOfType<PoserSideBarViewModel>();
 	}
 
 	[Fact]

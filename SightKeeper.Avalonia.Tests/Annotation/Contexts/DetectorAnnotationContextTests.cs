@@ -1,16 +1,16 @@
 using FluentAssertions;
 using SightKeeper.Avalonia.Annotation.Contexts;
 using SightKeeper.Avalonia.Annotation.Drawing.Detector;
-using SightKeeper.Avalonia.Annotation.ToolBars;
+using SightKeeper.Avalonia.Annotation.SideBars;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Contexts;
 
 public sealed class DetectorAnnotationContextTests
 {
 	[Fact]
-	public void ShouldHaveDetectorToolBar()
+	public void ShouldHaveDetectorSideBar()
 	{
-		Context.ToolBar.Should().BeOfType<TagSelectionViewModel>();
+		Context.SideBar.Should().BeOfType<TagSelectionViewModel>();
 	}
 
 	[Fact]

@@ -4,9 +4,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.ToolBars;
+namespace SightKeeper.Avalonia.Annotation.SideBars;
 
-public sealed partial class PoserToolBarViewModel : ViewModel
+public sealed partial class PoserSideBarViewModel : ViewModel
 {
 	[ObservableProperty]
 	public partial IReadOnlyCollection<PoserTag> Tags { get; set; } = ReadOnlyCollection<PoserTag>.Empty;

@@ -5,11 +5,11 @@
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
-             xmlns:toolBars="clr-namespace:SightKeeper.Avalonia.Annotation.ToolBars"
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:sideBars="clr-namespace:SightKeeper.Avalonia.Annotation.SideBars"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
@@ -72,7 +72,7 @@
                                   ItemsSource="{Binding DataSets}"
                                   DisplayMemberBinding="{Binding Name}"
                                   PlaceholderText="Select data set"/>
-                        <toolBars:AdaptiveToolBar DataContext="{Binding Context.ToolBar}"/>
+                        <sideBars:AdaptiveSideBar DataContext="{Binding Context.SideBar}"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

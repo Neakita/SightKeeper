@@ -1,18 +1,18 @@
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
-using SightKeeper.Avalonia.Annotation.ToolBars;
+using SightKeeper.Avalonia.Annotation.SideBars;
 using SightKeeper.Domain.DataSets.Poser2D;
 
 namespace SightKeeper.Avalonia.Annotation.Contexts;
 
 public sealed class Poser2DAnnotationContext : DataSetAnnotationContext
 {
-	public override PoserToolBarViewModel ToolBar { get; }
+	public override PoserSideBarViewModel SideBar { get; }
 	public override Poser2DDrawerViewModel Drawer { get; }
 	public Poser2DDataSet? DataSet { get; set; }
 
-	public Poser2DAnnotationContext(PoserToolBarViewModel toolBar, Poser2DDrawerViewModel drawer)
+	public Poser2DAnnotationContext(PoserSideBarViewModel sideBar, Poser2DDrawerViewModel drawer)
 	{
-		ToolBar = toolBar;
+		SideBar = sideBar;
 		Drawer = drawer;
 	}
 }

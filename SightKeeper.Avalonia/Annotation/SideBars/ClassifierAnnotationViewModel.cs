@@ -10,9 +10,9 @@ using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Avalonia.Annotation.ToolBars;
+namespace SightKeeper.Avalonia.Annotation.SideBars;
 
-public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelectionToolBarDataContext, IDisposable
+public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelectionSideBarDataContext, IDisposable
 {
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
 	public partial ClassifierDataSet? DataSet { get; set; }
