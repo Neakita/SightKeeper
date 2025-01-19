@@ -5,7 +5,7 @@
              xmlns:sideBars="clr-namespace:SightKeeper.Avalonia.Annotation.SideBars"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.SideBars.TagSelectionSideBar"
-             x:DataType="sideBars:TagSelectionSideBarDataContext">
+             x:DataType="sideBars:TagSelection">
     <ListBox IsEnabled="{Binding IsEnabled}"
              ItemsSource="{Binding Tags}"
              SelectedItem="{Binding SelectedTag}"

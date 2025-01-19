@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.SideBars;
 
-public sealed partial class TagSelectionViewModel : ViewModel, TagSelectionSideBarDataContext
+public sealed partial class TagSelectionViewModel : ViewModel, TagSelection
 {
 	public bool IsEnabled => true;
 	[ObservableProperty] public partial IReadOnlyCollection<Tag> Tags { get; set; } = ReadOnlyCollection<Tag>.Empty;

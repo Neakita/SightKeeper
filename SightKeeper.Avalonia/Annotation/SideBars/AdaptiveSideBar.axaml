@@ -9,7 +9,7 @@
              x:DataType="root:ViewModel">
     <ContentControl Content="{Binding}">
         <ContentControl.DataTemplates>
-            <DataTemplate DataType="sideBars:TagSelectionSideBarDataContext">
+            <DataTemplate DataType="sideBars:TagSelection">
                 <sideBars:TagSelectionSideBar/>
             </DataTemplate>
             <DataTemplate DataType="sideBars:PoserSideBarViewModel">
