@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
-public sealed partial class PoserToolBarViewModel : ToolBarViewModel
+public sealed partial class PoserToolBarViewModel : ViewModel
 {
 	[ObservableProperty]
 	public partial IReadOnlyCollection<PoserTag> Tags { get; set; } = ReadOnlyCollection<PoserTag>.Empty;

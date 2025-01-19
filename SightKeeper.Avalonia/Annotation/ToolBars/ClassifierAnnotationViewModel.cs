@@ -12,7 +12,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
-public sealed partial class ClassifierAnnotationViewModel : ToolBarViewModel, TagSelectionToolBarDataContext, IDisposable
+public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelectionToolBarDataContext, IDisposable
 {
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
 	public partial ClassifierDataSet? DataSet { get; set; }
