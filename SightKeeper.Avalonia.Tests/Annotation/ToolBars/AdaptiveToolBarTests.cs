@@ -11,30 +11,30 @@ namespace SightKeeper.Avalonia.Tests.Annotation.ToolBars;
 public sealed class AdaptiveToolBarTests
 {
 	[AvaloniaFact]
-	public void ShouldShowClassifierToolBar()
+	public void ShouldShowTagSelectionToolBarForClassifierAnnotationViewModel()
 	{
-		var toolBar = PrepareToolBar();
-		toolBar.DataContext = CreateClassifierToolBarViewModel();
-		AssertPresentsControl<ClassifierToolBar>(toolBar);
+		var adaptiveToolBar = PrepareAdaptiveToolBar();
+		adaptiveToolBar.DataContext = CreateClassifierAnnotationViewModel();
+		AssertPresentsControl<TagSelectionToolBar>(adaptiveToolBar);
 	}
 
 	[AvaloniaFact]
-	public void ShouldShowDetectorToolBar()
+	public void ShouldShowTagSelectionToolBarForTagSelectionViewModel()
 	{
-		var toolBar = PrepareToolBar();
-		toolBar.DataContext = CreateDetectorToolBarViewModel();
-		AssertPresentsControl<DetectorToolBar>(toolBar);
+		var toolBar = PrepareAdaptiveToolBar();
+		toolBar.DataContext = CreateTagSelectionViewModel();
+		AssertPresentsControl<TagSelectionToolBar>(toolBar);
 	}
 
 	[AvaloniaFact]
 	public void ShouldShowPoserToolBar()
 	{
-		var toolBar = PrepareToolBar();
+		var toolBar = PrepareAdaptiveToolBar();
 		toolBar.DataContext = CreatePoserToolBarViewModel();
 		AssertPresentsControl<PoserToolBar>(toolBar);
 	}
 
-	private static AdaptiveToolBar PrepareToolBar()
+	private static AdaptiveToolBar PrepareAdaptiveToolBar()
 	{
 		AdaptiveToolBar toolBar = new();
 		Window window = new()
@@ -45,17 +45,17 @@ public sealed class AdaptiveToolBarTests
 		return toolBar;
 	}
 
-	private static ClassifierAnnotationViewModel CreateClassifierToolBarViewModel()
+	private static ClassifierAnnotationViewModel CreateClassifierAnnotationViewModel()
 	{
 		return new Composition().ClassifierAnnotationContext.ToolBar;
 	}
 
-	private DetectorToolBarViewModel CreateDetectorToolBarViewModel()
+	private static TagSelectionViewModel CreateTagSelectionViewModel()
 	{
-		return new DetectorToolBarViewModel();
+		return new TagSelectionViewModel();
 	}
 
-	private PoserToolBarViewModel CreatePoserToolBarViewModel()
+	private static PoserToolBarViewModel CreatePoserToolBarViewModel()
 	{
 		return new PoserToolBarViewModel();
 	}

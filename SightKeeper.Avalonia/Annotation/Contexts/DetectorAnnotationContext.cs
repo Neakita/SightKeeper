@@ -22,11 +22,11 @@ public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDispo
 		}
 	}
 
-	public override DetectorToolBarViewModel ToolBar { get; }
+	public override TagSelectionViewModel ToolBar { get; }
 	public override DetectorDrawerViewModel Drawer { get; }
 
 	public DetectorAnnotationContext(
-		DetectorToolBarViewModel toolBar,
+		TagSelectionViewModel toolBar,
 		DetectorDrawerViewModel drawer,
 		ScreenshotsViewModel screenshotsViewModel)
 	{

@@ -8,11 +8,8 @@
              x:DataType="local:ToolBarViewModel">
     <ContentControl Content="{Binding}">
         <ContentControl.DataTemplates>
-            <DataTemplate DataType="local:ClassifierAnnotationViewModel">
-                <local:ClassifierToolBar/>
-            </DataTemplate>
-            <DataTemplate DataType="local:DetectorToolBarViewModel">
-                <local:DetectorToolBar/>
+            <DataTemplate DataType="local:TagSelectionToolBarDataContext">
+                <local:TagSelectionToolBar/>
             </DataTemplate>
             <DataTemplate DataType="local:PoserToolBarViewModel">
                 <local:PoserToolBar/>
