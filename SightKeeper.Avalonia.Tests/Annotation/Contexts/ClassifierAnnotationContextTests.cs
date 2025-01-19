@@ -7,7 +7,7 @@ namespace SightKeeper.Avalonia.Tests.Annotation.Contexts;
 public sealed class ClassifierAnnotationContextTests
 {
 	[Fact]
-	public void ShouldHaveClassifierSideBar()
+	public void ShouldHaveClassifierAnnotationSideBar()
 	{
 		Context.SideBar.Should().BeOfType<ClassifierAnnotationViewModel>();
 	}

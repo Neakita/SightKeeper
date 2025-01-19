@@ -8,7 +8,7 @@ namespace SightKeeper.Avalonia.Tests.Annotation.Contexts;
 public sealed class DetectorAnnotationContextTests
 {
 	[Fact]
-	public void ShouldHaveDetectorSideBar()
+	public void ShouldHaveTagSelectionSideBar()
 	{
 		Context.SideBar.Should().BeOfType<TagSelectionViewModel>();
 	}
