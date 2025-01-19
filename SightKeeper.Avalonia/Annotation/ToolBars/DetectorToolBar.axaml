@@ -7,6 +7,6 @@
              x:Class="SightKeeper.Avalonia.Annotation.ToolBars.DetectorToolBar"
              x:DataType="toolBars:DetectorToolBarViewModel">
     <ListBox ItemsSource="{Binding Tags}"
-             SelectedItem="{Binding Tag}"
+             SelectedItem="{Binding SelectedTag}"
              DisplayMemberBinding="{Binding Name}"/>
 </UserControl>

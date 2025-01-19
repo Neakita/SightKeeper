@@ -46,8 +46,8 @@ public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDispo
 
 	private void OnToolBarPropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
-		if (e.PropertyName == nameof(ToolBar.Tag))
-			Drawer.SetTag(ToolBar.Tag);
+		if (e.PropertyName == nameof(ToolBar.SelectedTag))
+			Drawer.SetTag(ToolBar.SelectedTag);
 	}
 
 	private void OnScreenshotChanged(ScreenshotViewModel? screenshot)

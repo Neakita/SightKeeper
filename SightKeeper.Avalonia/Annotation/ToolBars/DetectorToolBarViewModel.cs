@@ -8,5 +8,5 @@ namespace SightKeeper.Avalonia.Annotation.ToolBars;
 public sealed partial class DetectorToolBarViewModel : ToolBarViewModel
 {
 	[ObservableProperty] public partial IReadOnlyCollection<Tag> Tags { get; set; } = ReadOnlyCollection<Tag>.Empty;
-	[ObservableProperty] public partial Tag? Tag { get; set; }
+	[ObservableProperty] public partial Tag? SelectedTag { get; set; }
 }
