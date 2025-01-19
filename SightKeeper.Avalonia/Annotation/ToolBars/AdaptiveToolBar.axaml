@@ -14,6 +14,9 @@
             <DataTemplate DataType="local:DetectorToolBarViewModel">
                 <local:DetectorToolBar/>
             </DataTemplate>
+            <DataTemplate DataType="local:PoserToolBarViewModel">
+                <local:PoserToolBar/>
+            </DataTemplate>
         </ContentControl.DataTemplates>
     </ContentControl>
 </UserControl>
