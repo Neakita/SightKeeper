@@ -12,10 +12,11 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.ToolBars;
 
-public sealed partial class ClassifierAnnotationViewModel : ToolBarViewModel, IDisposable
+public sealed partial class ClassifierAnnotationViewModel : ToolBarViewModel, TagSelectionToolBarDataContext, IDisposable
 {
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
 	public partial ClassifierDataSet? DataSet { get; set; }
+
 	public IReadOnlyCollection<Tag> Tags => DataSet?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
 
 	public Tag? SelectedTag
@@ -32,8 +33,10 @@ public sealed partial class ClassifierAnnotationViewModel : ToolBarViewModel, ID
 		}
 	}
 
-	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag))]
+	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag), nameof(IsEnabled))]
 	public partial Screenshot? Screenshot { get; set; }
+
+	public bool IsEnabled => Screenshot != null;
 
 	public ClassifierAnnotationViewModel(ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
 	{
