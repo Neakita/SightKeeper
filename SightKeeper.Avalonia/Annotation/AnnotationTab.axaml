@@ -72,7 +72,7 @@
                                   ItemsSource="{Binding DataSets}"
                                   DisplayMemberBinding="{Binding Name}"
                                   PlaceholderText="Select data set"/>
-                        <toolBars:AdaptiveToolBar DataContext="{Binding Context.Annotation}"/>
+                        <toolBars:AdaptiveToolBar DataContext="{Binding Context.ToolBar}"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

@@ -17,22 +17,22 @@ public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDispo
 		set
 		{
 			field = value;
-			Annotation.Tags = value?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
+			ToolBar.Tags = value?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
 			Drawer.AssetsLibrary = value?.AssetsLibrary;
 		}
 	}
 
-	public override DetectorToolBarViewModel Annotation { get; }
+	public override DetectorToolBarViewModel ToolBar { get; }
 	public override DetectorDrawerViewModel Drawer { get; }
 
 	public DetectorAnnotationContext(
-		DetectorToolBarViewModel annotation,
+		DetectorToolBarViewModel toolBar,
 		DetectorDrawerViewModel drawer,
 		ScreenshotsViewModel screenshotsViewModel)
 	{
-		Annotation = annotation;
+		ToolBar = toolBar;
 		Drawer = drawer;
-		Annotation.PropertyChanged += OnAnnotationPropertyChanged;
+		ToolBar.PropertyChanged += OnToolBarPropertyChanged;
 		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(OnScreenshotChanged);
 		Drawer.Screenshot = screenshotsViewModel.SelectedScreenshot?.Value;
 	}
@@ -44,10 +44,10 @@ public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDispo
 
 	private readonly IDisposable _disposable;
 
-	private void OnAnnotationPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	private void OnToolBarPropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
-		if (e.PropertyName == nameof(Annotation.SelectedTag))
-			Drawer.SetTag(Annotation.SelectedTag);
+		if (e.PropertyName == nameof(ToolBar.SelectedTag))
+			Drawer.SetTag(ToolBar.SelectedTag);
 	}
 
 	private void OnScreenshotChanged(ScreenshotViewModel? screenshot)

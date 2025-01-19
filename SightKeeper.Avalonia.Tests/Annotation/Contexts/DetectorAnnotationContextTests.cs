@@ -10,7 +10,7 @@ public sealed class DetectorAnnotationContextTests
 	[Fact]
 	public void ShouldHaveDetectorToolBar()
 	{
-		Context.Annotation.Should().BeOfType<DetectorToolBarViewModel>();
+		Context.ToolBar.Should().BeOfType<DetectorToolBarViewModel>();
 	}
 
 	[Fact]

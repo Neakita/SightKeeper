@@ -73,7 +73,7 @@ public sealed class ClassifierToolBarTests
 
 	private static ClassifierAnnotationViewModel CreateViewModel()
 	{
-		return new Composition().ClassifierAnnotationContext.Annotation;
+		return new Composition().ClassifierAnnotationContext.ToolBar;
 	}
 
 	private static ListBox GetListBox(ClassifierToolBar toolBar)

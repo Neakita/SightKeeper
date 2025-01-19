@@ -6,14 +6,14 @@ namespace SightKeeper.Avalonia.Annotation.Contexts;
 
 public sealed class Poser3DAnnotationContext : DataSetAnnotationContext
 {
-	public override PoserToolBarViewModel Annotation { get; }
+	public override PoserToolBarViewModel ToolBar { get; }
 	public override Poser3DDrawerViewModel Drawer { get; }
 
 	public Poser3DDataSet? DataSet { get; set; }
 
-	public Poser3DAnnotationContext(PoserToolBarViewModel annotation, Poser3DDrawerViewModel drawer)
+	public Poser3DAnnotationContext(PoserToolBarViewModel toolBar, Poser3DDrawerViewModel drawer)
 	{
-		Annotation = annotation;
+		ToolBar = toolBar;
 		Drawer = drawer;
 	}
 }

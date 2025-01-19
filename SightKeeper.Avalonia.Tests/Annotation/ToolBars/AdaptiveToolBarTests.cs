@@ -47,7 +47,7 @@ public sealed class AdaptiveToolBarTests
 
 	private static ClassifierAnnotationViewModel CreateClassifierToolBarViewModel()
 	{
-		return new Composition().ClassifierAnnotationContext.Annotation;
+		return new Composition().ClassifierAnnotationContext.ToolBar;
 	}
 
 	private DetectorToolBarViewModel CreateDetectorToolBarViewModel()

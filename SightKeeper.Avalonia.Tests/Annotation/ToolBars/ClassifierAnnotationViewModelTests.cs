@@ -112,5 +112,5 @@ public sealed class ClassifierAnnotationViewModelTests
 		monitoredToolBar.Should().RaisePropertyChangeFor(toolBar => toolBar.SelectedTag);
 	}
 
-	private static ClassifierAnnotationViewModel Annotation => new Composition().ClassifierAnnotationContext.Annotation;
+	private static ClassifierAnnotationViewModel Annotation => new Composition().ClassifierAnnotationContext.ToolBar;
 }

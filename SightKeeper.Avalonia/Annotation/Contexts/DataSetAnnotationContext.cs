@@ -5,6 +5,6 @@ namespace SightKeeper.Avalonia.Annotation.Contexts;
 
 public abstract class DataSetAnnotationContext : ViewModel
 {
-	public abstract ToolBarViewModel? Annotation { get; }
+	public abstract ToolBarViewModel? ToolBar { get; }
 	public abstract DrawerViewModel? Drawer { get; }
 }
