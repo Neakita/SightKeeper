@@ -4,79 +4,97 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
              x:DataType="local:DrawerViewModel">
-    <ListBox ItemsSource="{Binding Items}"
-             Name="ListBox"
-             ClipToBounds="False">
-        <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas Name="Canvas"
-                        Background="Transparent">
-                    <Interaction.Behaviors>
-                        <local:BoundingDrawingBehavior Command="{Binding CreateItemCommand}"
-                                               IsEnabled="{Binding Tag, Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <local:BoundingDrawingBehavior.DrawingItemTemplate>
-                                <DataTemplate>
-                                    <Rectangle Stroke="Red" StrokeThickness="1"/>
-                                </DataTemplate>
-                            </local:BoundingDrawingBehavior.DrawingItemTemplate>
-                        </local:BoundingDrawingBehavior>
-                    </Interaction.Behaviors>
-                </Canvas>
-            </ItemsPanelTemplate>
-        </ListBox.ItemsPanel>
-        <ListBox.Template>
-            <ControlTemplate>
-                <ItemsPresenter Name="PART_ItemsPresenter"
-                                ItemsPanel="{TemplateBinding ItemsPanel}"
-                                Margin="{TemplateBinding Padding}"/>
-            </ControlTemplate>
-        </ListBox.Template>
-        <ListBox.ItemContainerTheme>
-            <ControlTheme TargetType="ListBoxItem">
-                <Setter Property="Template">
-                    <ControlTemplate>
-                        <ContentPresenter Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"/>
-                    </ControlTemplate>
-                </Setter>
-            </ControlTheme>
-        </ListBox.ItemContainerTheme>
-        <ListBox.Styles>
-            <Style Selector="ListBoxItem">
-                <Setter Property="ClipToBounds" Value="False"/>
-                <Setter Property="Canvas.Left">
-                    <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                        <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Left"/>
-                        <Binding Path="#ListBox.Bounds.Width"/>
-                    </MultiBinding>
-                </Setter>
-                <Setter Property="Canvas.Top">
-                    <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                        <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Top"/>
-                        <Binding Path="#ListBox.Bounds.Height"/>
-                    </MultiBinding>
-                </Setter>
-                <Setter Property="Width">
-                    <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                        <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Width"/>
-                        <Binding Path="#ListBox.Bounds.Width"/>
-                    </MultiBinding>
-                </Setter>
-                <Setter Property="Height">
-                    <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                        <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Height"/>
-                        <Binding Path="#ListBox.Bounds.Height"/>
-                    </MultiBinding>
-                </Setter>
-            </Style>
-        </ListBox.Styles>
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <local:DrawerItem/>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
+    <Panel Classes="regular-margin"
+           VerticalAlignment="Center"
+           HorizontalAlignment="Center">
+        <icons:MaterialIcon Kind="Image"
+                            IsVisible="{Binding #Image.Source, Converter={x:Static ObjectConverters.IsNull}}"
+                            RenderTransform="scale(0.5)"
+                            Foreground="{StaticResource WatermarkSecondary}"
+                            Opacity="0.05"/>
+        <Image Name="Image">
+            <Interaction.Behaviors>
+                <behaviors:RecyclableScreenshotImageBindingBehavior
+                    Screenshot="{Binding Screenshot}"
+                    Composition="{StaticResource Composition}"/>
+            </Interaction.Behaviors>
+        </Image>
+        <ListBox ItemsSource="{Binding Items}"
+                 Name="ListBox"
+                 ClipToBounds="False">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Name="Canvas"
+                            Background="Transparent">
+                        <Interaction.Behaviors>
+                            <local:BoundingDrawingBehavior Command="{Binding CreateItemCommand}"
+                                                           IsEnabled="{Binding Tag, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <local:BoundingDrawingBehavior.DrawingItemTemplate>
+                                    <DataTemplate>
+                                        <Rectangle Stroke="Red" StrokeThickness="1"/>
+                                    </DataTemplate>
+                                </local:BoundingDrawingBehavior.DrawingItemTemplate>
+                            </local:BoundingDrawingBehavior>
+                        </Interaction.Behaviors>
+                    </Canvas>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.Template>
+                <ControlTemplate>
+                    <ItemsPresenter Name="PART_ItemsPresenter"
+                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    Margin="{TemplateBinding Padding}"/>
+                </ControlTemplate>
+            </ListBox.Template>
+            <ListBox.ItemContainerTheme>
+                <ControlTheme TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <ControlTemplate>
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                        </ControlTemplate>
+                    </Setter>
+                </ControlTheme>
+            </ListBox.ItemContainerTheme>
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="ClipToBounds" Value="False"/>
+                    <Setter Property="Canvas.Left">
+                        <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
+                            <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Left"/>
+                            <Binding Path="#ListBox.Bounds.Width"/>
+                        </MultiBinding>
+                    </Setter>
+                    <Setter Property="Canvas.Top">
+                        <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
+                            <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Top"/>
+                            <Binding Path="#ListBox.Bounds.Height"/>
+                        </MultiBinding>
+                    </Setter>
+                    <Setter Property="Width">
+                        <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
+                            <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Width"/>
+                            <Binding Path="#ListBox.Bounds.Width"/>
+                        </MultiBinding>
+                    </Setter>
+                    <Setter Property="Height">
+                        <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
+                            <Binding Path="(local:DrawerItemViewModel).DisplayBounding.Height"/>
+                            <Binding Path="#ListBox.Bounds.Height"/>
+                        </MultiBinding>
+                    </Setter>
+                </Style>
+            </ListBox.Styles>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:DrawerItem/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Panel>
 </UserControl>

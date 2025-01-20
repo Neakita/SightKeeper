@@ -6,9 +6,6 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
-             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
-             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:sideBars="clr-namespace:SightKeeper.Avalonia.Annotation.SideBars"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
@@ -23,36 +20,7 @@
             <screenshots:Screenshots Grid.Column="0"
                                      DataContext="{Binding Screenshots}"
                                      IsVisible="{Binding !!Screenshots.Count}"/>
-            <Panel Grid.Column="1"
-                   Classes="regular-margin"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center">
-                <icons:MaterialIcon Kind="Image"
-                                    IsVisible="{Binding #Image.Source, Converter={x:Static ObjectConverters.IsNull}}"
-                                    RenderTransform="scale(0.5)"
-                                    Foreground="{StaticResource WatermarkSecondary}"
-                                    Opacity="0.05"/>
-                <Image Name="Image">
-                    <Interaction.Behaviors>
-                        <behaviors:RecyclableScreenshotImageBindingBehavior
-                            Screenshot="{Binding Screenshots.SelectedScreenshot.Value}"
-                            Composition="{StaticResource Composition}"/>
-                    </Interaction.Behaviors>
-                </Image>
-                <Decorator>
-                    <Decorator.IsVisible>
-                        <MultiBinding Converter="{x:Static converters:AndConverter.Instance}">
-                            <Binding Path="Context"
-                                     Converter="{x:Static ObjectConverters.IsNotNull}"/>
-                            <Binding Path="Context.Drawer"
-                                     Converter="{x:Static ObjectConverters.IsNotNull}"/>
-                            <Binding Path="#Image.Source"
-                                     Converter="{x:Static ObjectConverters.IsNotNull}"/>
-                        </MultiBinding>
-                    </Decorator.IsVisible>
-                    <drawing:Drawer DataContext="{Binding Context.Drawer}"/>
-                </Decorator>
-            </Panel>
+            <drawing:Drawer Grid.Column="1" DataContext="{Binding Context.Drawer}"/>
             <StackPanel Grid.Column="2" Classes="regular-spacing">
                 <Border Classes="outer wide-padding">
                     <StackPanel Classes="regular-spacing">
