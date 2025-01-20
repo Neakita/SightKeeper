@@ -29,16 +29,13 @@ public sealed partial class ScreenshotsViewModel : ViewModel
 	}
 
 	public IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
-	public ScreenshotImageLoader ImageLoader { get; }
 	[ObservableProperty] public partial ScreenshotViewModel? SelectedScreenshot { get; set; }
 	public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
 
 	public ScreenshotsViewModel(
 		ObservableScreenshotsDataAccess observableDataAccess,
-		ScreenshotImageLoader imageLoader,
 		IEnumerable<ObservableAnnotator> observableAnnotators)
 	{
-		ImageLoader = imageLoader;
 		_screenshotsSource.Connect()
 			.Transform(screenshot => new ScreenshotViewModel(screenshot))
 			.AddKey(viewModel => viewModel.Value)
