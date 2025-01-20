@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
-             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:sideBars="clr-namespace:SightKeeper.Avalonia.Annotation.SideBars"
@@ -21,29 +20,7 @@
                                      DataContext="{Binding Screenshots}"
                                      IsVisible="{Binding !!Screenshots.Count}"/>
             <drawing:Drawer Grid.Column="1" DataContext="{Binding Context.Drawer}"/>
-            <StackPanel Grid.Column="2" Classes="regular-spacing">
-                <Border Classes="outer wide-padding">
-                    <StackPanel Classes="regular-spacing">
-                        <ComboBox SelectedItem="{Binding SelectedScreenshotsLibrary}"
-                                  ItemsSource="{Binding ScreenshotsLibraries}"
-                                  DisplayMemberBinding="{Binding Name}"
-                                  PlaceholderText="Select screenshots library"/>
-                        <local:ScreenshottingSettings DataContext="{Binding ScreenshottingSettings}"/>
-                        <TextBlock Classes="p2"
-                                   Text="{Binding PendingScreenshotsCount^, StringFormat=Pending screenshots: {0}}"
-                                   IsVisible="{Binding PendingScreenshotsCount^, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static system:UInt16.MinValue}}"/>
-                    </StackPanel>
-                </Border>
-                <Border Classes="outer wide-padding">
-                    <StackPanel Classes="regular-spacing">
-                        <ComboBox SelectedItem="{Binding SelectedDataSet}"
-                                  ItemsSource="{Binding DataSets}"
-                                  DisplayMemberBinding="{Binding Name}"
-                                  PlaceholderText="Select data set"/>
-                        <sideBars:AdaptiveSideBar DataContext="{Binding Context.SideBar}"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
+            <sideBars:SideBar Grid.Column="2"/>
         </Grid>
     </Border>
 </UserControl>

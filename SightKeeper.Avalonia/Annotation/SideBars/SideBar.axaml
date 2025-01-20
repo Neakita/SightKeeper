@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:annotation="clr-namespace:SightKeeper.Avalonia.Annotation"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.SideBars"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Annotation.SideBars.SideBar"
+             x:DataType="annotation:AnnotationTabViewModel">
+    <StackPanel Classes="regular-spacing">
+        <Border Classes="outer wide-padding">
+            <StackPanel Classes="regular-spacing">
+                <ComboBox SelectedItem="{Binding SelectedScreenshotsLibrary}"
+                          ItemsSource="{Binding ScreenshotsLibraries}"
+                          DisplayMemberBinding="{Binding Name}"
+                          PlaceholderText="Select screenshots library"/>
+                <annotation:ScreenshottingSettings DataContext="{Binding ScreenshottingSettings}"/>
+                <TextBlock Classes="p2"
+                           Text="{Binding PendingScreenshotsCount^, StringFormat=Pending screenshots: {0}}"
+                           IsVisible="{Binding PendingScreenshotsCount^, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static system:UInt16.MinValue}}"/>
+            </StackPanel>
+        </Border>
+        <Border Classes="outer wide-padding">
+            <StackPanel Classes="regular-spacing">
+                <ComboBox SelectedItem="{Binding SelectedDataSet}"
+                          ItemsSource="{Binding DataSets}"
+                          DisplayMemberBinding="{Binding Name}"
+                          PlaceholderText="Select data set"/>
+                <local:AdaptiveSideBar DataContext="{Binding Context.SideBar}"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>
