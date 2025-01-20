@@ -22,9 +22,12 @@ public sealed partial class ScreenshotsViewModel : ViewModel
 		{
 			if (!SetProperty(ref field, value))
 				return;
-			_screenshotsSource.Clear();
-			if (value != null)
-				_screenshotsSource.AddRange(value.Screenshots);
+			_screenshotsSource.Edit(source =>
+			{
+				source.Clear();
+				if (value != null)
+					source.AddRange(value.Screenshots);
+			});
 		}
 	}
 
