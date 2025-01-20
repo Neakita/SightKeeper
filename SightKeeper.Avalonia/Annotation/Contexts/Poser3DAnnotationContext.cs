@@ -1,6 +1,6 @@
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
-using SightKeeper.Avalonia.Annotation.SideBars;
 using SightKeeper.Domain.DataSets.Poser3D;
+using PoserSideBarViewModel = SightKeeper.Avalonia.Annotation.Tooling.PoserSideBarViewModel;
 
 namespace SightKeeper.Avalonia.Annotation.Contexts;
 

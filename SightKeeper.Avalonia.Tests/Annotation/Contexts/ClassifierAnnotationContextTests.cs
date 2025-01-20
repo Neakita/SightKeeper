@@ -1,6 +1,6 @@
 using FluentAssertions;
 using SightKeeper.Avalonia.Annotation.Contexts;
-using SightKeeper.Avalonia.Annotation.SideBars;
+using SightKeeper.Avalonia.Annotation.Tooling;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Contexts;
 

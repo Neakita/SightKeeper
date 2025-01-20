@@ -3,17 +3,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
-             xmlns:sideBars="clr-namespace:SightKeeper.Avalonia.Annotation.SideBars"
+             xmlns:tooling="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Annotation.SideBars.AdaptiveSideBar"
+             x:Class="SightKeeper.Avalonia.Annotation.Tooling.AdaptiveSideBar"
              x:DataType="root:ViewModel">
     <ContentControl Content="{Binding}">
         <ContentControl.DataTemplates>
-            <DataTemplate DataType="sideBars:TagSelection">
-                <sideBars:TagSelectionSideBar/>
+            <DataTemplate DataType="tooling:TagSelection">
+                <tooling:TagSelectionSideBar/>
             </DataTemplate>
-            <DataTemplate DataType="sideBars:PoserSideBarViewModel">
-                <sideBars:PoserSideBar/>
+            <DataTemplate DataType="tooling:PoserSideBarViewModel">
+                <tooling:PoserSideBar/>
             </DataTemplate>
         </ContentControl.DataTemplates>
     </ContentControl>

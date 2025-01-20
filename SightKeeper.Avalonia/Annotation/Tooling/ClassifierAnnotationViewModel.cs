@@ -10,7 +10,7 @@ using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Avalonia.Annotation.SideBars;
+namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelection, IDisposable
 {

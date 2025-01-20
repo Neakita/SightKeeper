@@ -1,5 +1,5 @@
 using FluentAssertions;
-using SightKeeper.Avalonia.Annotation.SideBars;
+using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.Screenshots;

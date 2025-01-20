@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace SightKeeper.Avalonia.Annotation.SideBars;
+namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public partial class TagSelectionSideBar : UserControl
 {

@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:annotation="clr-namespace:SightKeeper.Avalonia.Annotation"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.SideBars"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:tooling="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Annotation.SideBars.SideBar"
+             x:Class="SightKeeper.Avalonia.Annotation.Tooling.SideBar"
              x:DataType="annotation:AnnotationTabViewModel">
     <StackPanel Classes="regular-spacing">
         <Border Classes="outer wide-padding">
@@ -27,7 +27,7 @@
                           ItemsSource="{Binding DataSets}"
                           DisplayMemberBinding="{Binding Name}"
                           PlaceholderText="Select data set"/>
-                <local:AdaptiveSideBar DataContext="{Binding Context.SideBar}"/>
+                <tooling:AdaptiveSideBar DataContext="{Binding Context.SideBar}"/>
             </StackPanel>
         </Border>
     </StackPanel>

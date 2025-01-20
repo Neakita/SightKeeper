@@ -1,7 +1,7 @@
 using System;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Domain.DataSets.Classifier;
-using ClassifierAnnotationViewModel = SightKeeper.Avalonia.Annotation.SideBars.ClassifierAnnotationViewModel;
+using ClassifierAnnotationViewModel = SightKeeper.Avalonia.Annotation.Tooling.ClassifierAnnotationViewModel;
 
 namespace SightKeeper.Avalonia.Annotation.Contexts;
 

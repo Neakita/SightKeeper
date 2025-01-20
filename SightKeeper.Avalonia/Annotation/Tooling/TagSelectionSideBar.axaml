@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:sideBars="clr-namespace:SightKeeper.Avalonia.Annotation.SideBars"
+             xmlns:tooling="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Annotation.SideBars.TagSelectionSideBar"
-             x:DataType="sideBars:TagSelection">
+             x:Class="SightKeeper.Avalonia.Annotation.Tooling.TagSelectionSideBar"
+             x:DataType="tooling:TagSelection">
     <ListBox IsEnabled="{Binding IsEnabled}"
              ItemsSource="{Binding Tags}"
              SelectedItem="{Binding SelectedTag}"

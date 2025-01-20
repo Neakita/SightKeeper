@@ -5,7 +5,7 @@ using SightKeeper.Avalonia.Annotation.Drawing.Detector;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
-using TagSelectionViewModel = SightKeeper.Avalonia.Annotation.SideBars.TagSelectionViewModel;
+using TagSelectionViewModel = SightKeeper.Avalonia.Annotation.Tooling.TagSelectionViewModel;
 
 namespace SightKeeper.Avalonia.Annotation.Contexts;
 

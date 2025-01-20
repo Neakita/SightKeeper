@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.SideBars;
+namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public sealed partial class PoserSideBarViewModel : ViewModel
 {

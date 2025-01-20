@@ -5,7 +5,7 @@
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
              xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
-             xmlns:sideBars="clr-namespace:SightKeeper.Avalonia.Annotation.SideBars"
+             xmlns:tooling="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
@@ -20,7 +20,7 @@
                                      DataContext="{Binding Screenshots}"
                                      IsVisible="{Binding !!Screenshots.Count}"/>
             <drawing:Drawer Grid.Column="1" DataContext="{Binding Context.Drawer}"/>
-            <sideBars:SideBar Grid.Column="2"/>
+            <tooling:SideBar Grid.Column="2"/>
         </Grid>
     </Border>
 </UserControl>

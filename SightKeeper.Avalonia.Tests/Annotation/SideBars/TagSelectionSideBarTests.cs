@@ -4,7 +4,7 @@ using Avalonia.Headless.XUnit;
 using Avalonia.VisualTree;
 using CommunityToolkit.Diagnostics;
 using FluentAssertions;
-using SightKeeper.Avalonia.Annotation.SideBars;
+using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
