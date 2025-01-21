@@ -24,14 +24,9 @@ public sealed class ScreenshotsLibrary
 		return screenshot;
 	}
 
-	public void RemoveScreenshotsRange(int index, int count)
+	public void RemoveScreenshotAt(int index)
 	{
-		for (int i = index; i < index + count; i++)
-		{
-			var screenshot = _screenshots[i];
-			ScreenshotIsInUseException.ThrowForDeletionIfInUse(this, screenshot);
-		}
-		_screenshots.RemoveRange(index, count);
+		_screenshots.RemoveAt(index);
 	}
 
 	private readonly List<Screenshot> _screenshots = new();
