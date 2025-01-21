@@ -4,7 +4,7 @@ using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Avalonia.Tests.Annotation.SideBars;
+namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 
 public sealed class ClassifierAnnotationViewModelTests
 {

@@ -6,7 +6,7 @@ using CommunityToolkit.Diagnostics;
 using FluentAssertions;
 using SightKeeper.Avalonia.Annotation.Tooling;
 
-namespace SightKeeper.Avalonia.Tests.Annotation.SideBars;
+namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 
 public sealed class AdaptiveSideBarTests
 {
