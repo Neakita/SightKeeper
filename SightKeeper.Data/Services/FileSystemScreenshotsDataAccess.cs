@@ -14,8 +14,8 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 {
 	public string DirectoryPath
 	{
-		get => _screenshotsDataAccess.DirectoryPath;
-		set => _screenshotsDataAccess.DirectoryPath = value;
+		get => _fileSystemDataAccess.DirectoryPath;
+		set => _fileSystemDataAccess.DirectoryPath = value;
 	}
 
 	public FileSystemScreenshotsDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
@@ -26,17 +26,24 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 
 	public override Stream LoadImage(Screenshot screenshot)
 	{
-		return new ZLibStream(_screenshotsDataAccess.OpenReadStream(screenshot), CompressionMode.Decompress);
+		return new ZLibStream(_fileSystemDataAccess.OpenReadStream(screenshot), CompressionMode.Decompress);
 	}
 
 	public Id GetId(Screenshot screenshot)
 	{
-		return _screenshotsDataAccess.GetId(screenshot);
+		return _fileSystemDataAccess.GetId(screenshot);
+	}
+
+	public override void DeleteScreenshot(ScreenshotsLibrary library, int index)
+	{
+		lock (_appDataLock)
+			base.DeleteScreenshot(library, index);
+		_appDataAccess.SetDataChanged();
 	}
 
 	internal void AssociateId(Screenshot screenshot, Id id)
 	{
-		_screenshotsDataAccess.AssociateId(screenshot, id);
+		_fileSystemDataAccess.AssociateId(screenshot, id);
 	}
 
 	protected override Screenshot CreateScreenshot(
@@ -53,7 +60,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 
 	protected override void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> imageData)
 	{
-		using var stream = new ZLibStream(_screenshotsDataAccess.OpenWriteStream(screenshot), CompressionLevel.SmallestSize);
+		using var stream = new ZLibStream(_fileSystemDataAccess.OpenWriteStream(screenshot), CompressionLevel.SmallestSize);
 		if (imageData.TryGetSpan(out var contiguousData))
 		{
 			var bytes = MemoryMarshal.AsBytes(contiguousData);
@@ -70,10 +77,10 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 
 	protected override void DeleteScreenshotData(Screenshot screenshot)
 	{
-		_screenshotsDataAccess.Delete(screenshot);
+		_fileSystemDataAccess.Delete(screenshot);
 	}
 
 	private readonly AppDataAccess _appDataAccess;
 	private readonly Lock _appDataLock;
-	private readonly FileSystemDataAccess<Screenshot> _screenshotsDataAccess = new(".bin");
+	private readonly FileSystemDataAccess<Screenshot> _fileSystemDataAccess = new(".bin");
 }

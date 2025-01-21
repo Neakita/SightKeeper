@@ -23,15 +23,22 @@ public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, I
 		return screenshot;
 	}
 
-	protected virtual Screenshot CreateScreenshot(ScreenshotsLibrary library, DateTimeOffset creationDate, Vector2<ushort> resolution)
+	public virtual void DeleteScreenshot(ScreenshotsLibrary library, int index)
 	{
-		return library.CreateScreenshot(creationDate, resolution);
+		var screenshot = library.Screenshots[index];
+		library.RemoveScreenshotAt(index);
+		DeleteScreenshotData(screenshot);
 	}
 
 	public void Dispose()
 	{
 		_added.Dispose();
 		_removed.Dispose();
+	}
+
+	protected virtual Screenshot CreateScreenshot(ScreenshotsLibrary library, DateTimeOffset creationDate, Vector2<ushort> resolution)
+	{
+		return library.CreateScreenshot(creationDate, resolution);
 	}
 
 	protected abstract void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> image);
