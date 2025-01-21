@@ -26,6 +26,8 @@ public sealed class ScreenshotsLibrary
 
 	public void RemoveScreenshotAt(int index)
 	{
+		var screenshot = _screenshots[index];
+		ScreenshotIsInUseException.ThrowForDeletionIfInUse(this, screenshot);
 		_screenshots.RemoveAt(index);
 	}
 
