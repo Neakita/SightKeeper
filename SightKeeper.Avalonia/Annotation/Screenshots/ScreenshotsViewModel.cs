@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -32,8 +33,10 @@ public sealed partial class ScreenshotsViewModel : ViewModel
 	}
 
 	public IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
-	[ObservableProperty] public partial ScreenshotViewModel? SelectedScreenshot { get; set; }
-	public IObservable<ScreenshotViewModel?> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
+	[ObservableProperty] public partial int SelectedScreenshotIndex { get; set; } = -1;
+	public Screenshot? SelectedScreenshot => SelectedScreenshotIndex >= 0 ? _screenshotsSource.Items[SelectedScreenshotIndex] : null;
+	public ScreenshotViewModel? SelectedScreenshotViewModel => SelectedScreenshot != null ? _screenshotsCache.Lookup(SelectedScreenshot).Value : null;
+	public IObservable<Unit> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
 
 	public ScreenshotsViewModel(
 		ObservableScreenshotsDataAccess observableDataAccess,
@@ -67,7 +70,7 @@ public sealed partial class ScreenshotsViewModel : ViewModel
 	private readonly CompositeDisposable _disposable = new();
 	private readonly SourceList<Screenshot> _screenshotsSource = new();
 	private readonly SourceCache<ScreenshotViewModel, Screenshot> _screenshotsCache = new(viewModel => viewModel.Value);
-	private readonly Subject<ScreenshotViewModel?> _selectedScreenshotChanged = new();
+	private readonly Subject<Unit> _selectedScreenshotChanged = new();
 
 	private void OnScreenshotAssetsChanged(Screenshot screenshot)
 	{
@@ -75,8 +78,8 @@ public sealed partial class ScreenshotsViewModel : ViewModel
 		screenshotViewModel.NotifyAssetsChanged();
 	}
 
-	partial void OnSelectedScreenshotChanged(ScreenshotViewModel? value)
+	partial void OnSelectedScreenshotIndexChanged(int value)
 	{
-		_selectedScreenshotChanged.OnNext(value);
+		_selectedScreenshotChanged.OnNext(Unit.Default);
 	}
 }

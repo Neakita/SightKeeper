@@ -41,8 +41,8 @@ public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelect
 	public ClassifierAnnotationViewModel(ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
 	{
 		_annotator = annotator;
-		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(screenshot => Screenshot = screenshot?.Value);
-		Screenshot = screenshotsViewModel.SelectedScreenshot?.Value;
+		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(_ => Screenshot = screenshotsViewModel.SelectedScreenshot);
+		Screenshot = screenshotsViewModel.SelectedScreenshot;
 	}
 
 	public void Dispose()

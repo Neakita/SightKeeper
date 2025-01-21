@@ -9,7 +9,7 @@
              x:Class="SightKeeper.Avalonia.Annotation.Screenshots.Screenshots"
              x:DataType="local:ScreenshotsViewModel">
     <ListBox ItemsSource="{Binding Screenshots}"
-             SelectedItem="{Binding SelectedScreenshot}"
+             SelectedIndex="{Binding SelectedScreenshotIndex}"
              Name="ListBox"
              Classes="square-items"
              ScrollViewer.VerticalScrollBarVisibility="Visible">

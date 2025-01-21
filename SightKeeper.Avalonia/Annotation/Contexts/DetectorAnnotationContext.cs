@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Reactive;
 using SightKeeper.Avalonia.Annotation.Drawing.Detector;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Domain.DataSets.Detector;
@@ -11,6 +12,8 @@ namespace SightKeeper.Avalonia.Annotation.Contexts;
 
 public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDisposable
 {
+	private readonly ScreenshotsViewModel _screenshotsViewModel;
+
 	public DetectorDataSet? DataSet
 	{
 		get;
@@ -30,11 +33,12 @@ public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDispo
 		DetectorDrawerViewModel drawer,
 		ScreenshotsViewModel screenshotsViewModel)
 	{
+		_screenshotsViewModel = screenshotsViewModel;
 		SideBar = sideBar;
 		Drawer = drawer;
 		SideBar.PropertyChanged += OnSideBarPropertyChanged;
 		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(OnScreenshotChanged);
-		Drawer.Screenshot = screenshotsViewModel.SelectedScreenshot?.Value;
+		Drawer.Screenshot = screenshotsViewModel.SelectedScreenshot;
 	}
 
 	public void Dispose()
@@ -50,8 +54,8 @@ public sealed class DetectorAnnotationContext : DataSetAnnotationContext, IDispo
 			Drawer.SetTag(SideBar.SelectedTag);
 	}
 
-	private void OnScreenshotChanged(ScreenshotViewModel? screenshot)
+	private void OnScreenshotChanged(Unit value)
 	{
-		Drawer.Screenshot = screenshot?.Value;
+		Drawer.Screenshot = _screenshotsViewModel.SelectedScreenshot;
 	}
 }
