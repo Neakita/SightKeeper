@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.DataSets.Assets;
 
-public abstract class AssetItem
+public abstract class BoundedItem
 {
 	public Bounding Bounding
 	{
@@ -17,7 +17,7 @@ public abstract class AssetItem
 		}
 	}
 
-	protected AssetItem(Bounding bounding)
+	protected BoundedItem(Bounding bounding)
 	{
 		Bounding = bounding;
 	}

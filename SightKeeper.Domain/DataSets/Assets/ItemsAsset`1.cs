@@ -1,6 +1,6 @@
 namespace SightKeeper.Domain.DataSets.Assets;
 
-public abstract class ItemsAsset<TItem> : ItemsAsset where TItem : AssetItem
+public abstract class ItemsAsset<TItem> : ItemsAsset where TItem : BoundedItem
 {
 	public override IReadOnlyCollection<TItem> Items => _items.AsReadOnly();
 

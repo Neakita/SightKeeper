@@ -2,5 +2,5 @@
 
 public abstract class ItemsAsset : Asset
 {
-	public abstract IReadOnlyCollection<AssetItem> Items { get; }
+	public abstract IReadOnlyCollection<BoundedItem> Items { get; }
 }
