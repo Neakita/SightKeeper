@@ -9,7 +9,7 @@ public sealed class Poser2DItem : PoserItem
 {
 	public override IReadOnlyCollection<KeyPoint> KeyPoints => _keyPoints;
 
-	public KeyPoint CreateKeyPoint(Tag tag, Vector2<double> position)
+	public override KeyPoint CreateKeyPoint(Tag tag, Vector2<double> position)
 	{
 		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(Tag, tag);
 		KeyPoint keyPoint = new(tag, position);
@@ -18,11 +18,11 @@ public sealed class Poser2DItem : PoserItem
 		return keyPoint;
 	}
 
-	public void DeleteKeyPoint(KeyPoint tag)
+	public override void DeleteKeyPoint(KeyPoint keyPoint)
 	{
-		bool isRemoved = _keyPoints.Remove(tag);
+		bool isRemoved = _keyPoints.Remove(keyPoint);
 		if (!isRemoved)
-			throw new ArgumentException("Specified key point tag was not found and therefore not deleted", nameof(tag));
+			throw new ArgumentException("Specified key point tag was not found and therefore not deleted", nameof(keyPoint));
 	}
 
 	internal Poser2DItem(Bounding bounding, PoserTag tag) : base(bounding, tag)
