@@ -10,7 +10,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 
-public sealed class TagSelectionSideBarTests
+public sealed class TagSelectionToolingTests
 {
 	[AvaloniaFact]
 	public void ShouldBeEmptyByDefault()
@@ -52,16 +52,16 @@ public sealed class TagSelectionSideBarTests
 	private static (TagSelectionViewModel viewModel, ListBox listBox) PrepareSideBar()
 	{
 		TagSelectionViewModel viewModel = new();
-		TagSelectionSideBar sideBar = new()
+		TagSelectionTooling tooling = new()
 		{
 			DataContext = viewModel
 		};
 		Window window = new()
 		{
-			Content = sideBar
+			Content = tooling
 		};
 		window.Show();
-		var listBox = sideBar.FindDescendantOfType<ListBox>();
+		var listBox = tooling.FindDescendantOfType<ListBox>();
 		Guard.IsNotNull(listBox);
 		return (viewModel, listBox);
 	}

@@ -8,14 +8,14 @@ using SightKeeper.Avalonia.Annotation.Tooling;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 
-public sealed class AdaptiveSideBarTests
+public sealed class AdaptiveToolingTests
 {
 	[AvaloniaFact]
 	public void ShouldShowTagSelectionSideBarForClassifierAnnotationViewModel()
 	{
 		var adaptiveSideBar = PrepareAdaptiveSideBar();
 		adaptiveSideBar.DataContext = CreateClassifierAnnotationViewModel();
-		AssertPresentsControl<TagSelectionSideBar>(adaptiveSideBar);
+		AssertPresentsControl<TagSelectionTooling>(adaptiveSideBar);
 	}
 
 	[AvaloniaFact]
@@ -23,7 +23,7 @@ public sealed class AdaptiveSideBarTests
 	{
 		var sideBar = PrepareAdaptiveSideBar();
 		sideBar.DataContext = CreateTagSelectionViewModel();
-		AssertPresentsControl<TagSelectionSideBar>(sideBar);
+		AssertPresentsControl<TagSelectionTooling>(sideBar);
 	}
 
 	[AvaloniaFact]
@@ -34,9 +34,9 @@ public sealed class AdaptiveSideBarTests
 		AssertPresentsControl<PoserSideBar>(sideBar);
 	}
 
-	private static AdaptiveSideBar PrepareAdaptiveSideBar()
+	private static AdaptiveTooling PrepareAdaptiveSideBar()
 	{
-		AdaptiveSideBar sideBar = new();
+		AdaptiveTooling sideBar = new();
 		Window window = new()
 		{
 			Content = sideBar
@@ -60,7 +60,7 @@ public sealed class AdaptiveSideBarTests
 		return new PoserSideBarViewModel();
 	}
 
-	private static void AssertPresentsControl<T>(AdaptiveSideBar sideBar)
+	private static void AssertPresentsControl<T>(AdaptiveTooling sideBar)
 	{
 		var contentControl = sideBar.FindDescendantOfType<ContentControl>();
 		Guard.IsNotNull(contentControl);

@@ -27,7 +27,7 @@
                           ItemsSource="{Binding DataSets}"
                           DisplayMemberBinding="{Binding Name}"
                           PlaceholderText="Select data set"/>
-                <local:AdaptiveSideBar DataContext="{Binding AdditionalTooling}"/>
+                <local:AdaptiveTooling DataContext="{Binding AdditionalTooling}"/>
             </StackPanel>
         </Border>
     </StackPanel>

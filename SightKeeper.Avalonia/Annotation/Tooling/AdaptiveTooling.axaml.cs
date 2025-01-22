@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public partial class AdaptiveSideBar : UserControl
+public partial class AdaptiveTooling : UserControl
 {
-	public AdaptiveSideBar()
+	public AdaptiveTooling()
 	{
 		InitializeComponent();
 	}

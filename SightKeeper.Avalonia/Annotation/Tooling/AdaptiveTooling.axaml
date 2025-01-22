@@ -5,12 +5,12 @@
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
              xmlns:tooling="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Annotation.Tooling.AdaptiveSideBar"
+             x:Class="SightKeeper.Avalonia.Annotation.Tooling.AdaptiveTooling"
              x:DataType="root:ViewModel">
     <ContentControl Content="{Binding}">
         <ContentControl.DataTemplates>
             <DataTemplate DataType="tooling:TagSelection">
-                <tooling:TagSelectionSideBar/>
+                <tooling:TagSelectionTooling/>
             </DataTemplate>
             <DataTemplate DataType="tooling:PoserSideBarViewModel">
                 <tooling:PoserSideBar/>
