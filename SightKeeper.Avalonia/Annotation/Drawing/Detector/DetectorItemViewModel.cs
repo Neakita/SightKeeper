@@ -13,15 +13,15 @@ public sealed class DetectorItemViewModel : DrawerItemViewModel
 	public override Bounding Bounding
 	{
 		get => Value.Bounding;
-		set => _annotator.SetBounding(Value, value);
+		set => _boundingEditor.SetBounding(Value, value);
 	}
 
-	public DetectorItemViewModel(DetectorItem value, DetectorAnnotator annotator)
+	public DetectorItemViewModel(DetectorItem value, BoundingEditor boundingEditor)
 	{
-		_annotator = annotator;
+		_boundingEditor = boundingEditor;
 		Value = value;
 		Bounding = Value.Bounding;
 	}
 
-	private readonly DetectorAnnotator _annotator;
+	private readonly BoundingEditor _boundingEditor;
 }

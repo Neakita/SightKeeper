@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Detector;
 
-public sealed class DetectorAsset : ItemsAsset<DetectorItem>
+public sealed class DetectorAsset : ItemsAsset<DetectorItem>, ItemsCreator
 {
 	public DetectorItem CreateItem(Tag tag, Bounding bounding)
 	{
@@ -17,6 +17,8 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>
 		AddItem(item);
 		return item;
 	}
+
+	BoundedItem ItemsCreator.CreateItem(Tag tag, Bounding bounding) => CreateItem(tag, bounding);
 
 	internal DetectorAsset(TagsOwner tagsOwner)
 	{

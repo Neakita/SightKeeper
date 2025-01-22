@@ -108,11 +108,12 @@ public sealed partial class Composition
 		.RootBind<ScreenshotsViewModel>(nameof(ScreenshotsViewModel)).Bind<ScreenshotSelection>().As(Lifetime.Singleton).To<ScreenshotsViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
-		.Bind<DetectorAnnotator>().To<AppDataDetectorAnnotator>()
 		.Bind<Poser3DAnnotator>().To<AppDataPoser3DAnnotator>()
 		.Root<DetectorDrawerViewModel>(nameof(DetectorDrawerViewModel))
 		.Root<ClassifierAnnotationViewModel>(nameof(ClassifierAnnotationViewModel))
 		.Root<TagSelectionViewModel>(nameof(TagSelectionViewModel))
 		.Root<Poser3DDrawerViewModel>(nameof(Poser3DDrawerViewModel))
-		.Root<Poser2DDrawerViewModel>(nameof(Poser2DDrawerViewModel));
+		.Root<Poser2DDrawerViewModel>(nameof(Poser2DDrawerViewModel))
+		.Bind<BoundingAnnotator>().To<AppDataBoundingAnnotator>()
+		.Bind<BoundingEditor>().To<AppDataBoundingEditor>();
 }

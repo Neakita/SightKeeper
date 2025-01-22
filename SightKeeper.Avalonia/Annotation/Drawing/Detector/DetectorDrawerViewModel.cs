@@ -24,9 +24,10 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 		}
 	}
 
-	public DetectorDrawerViewModel(DetectorAnnotator annotator)
+	public DetectorDrawerViewModel(BoundingAnnotator boundingAnnotator, BoundingEditor boundingEditor)
 	{
-		_annotator = annotator;
+		_boundingAnnotator = boundingAnnotator;
+		_boundingEditor = boundingEditor;
 	}
 
 	public void SetTag(Tag? tag)
@@ -41,8 +42,8 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 		Guard.IsNotNull(AssetsLibrary);
 		Guard.IsNotNull(Screenshot);
 		Guard.IsNotNull(Tag);
-		var item = _annotator.CreateItem(AssetsLibrary, Screenshot, Tag, bounding);
-		DetectorItemViewModel itemViewModel = new(item, _annotator);
+		var item = (DetectorItem)_boundingAnnotator.CreateItem(AssetsLibrary, Screenshot, Tag, bounding);
+		DetectorItemViewModel itemViewModel = new(item, _boundingEditor);
 		_items.Add(itemViewModel);
 	}
 
@@ -52,7 +53,8 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 	}
 
 	private readonly AvaloniaList<DetectorItemViewModel> _items = new();
-	private readonly DetectorAnnotator _annotator;
+	private readonly BoundingAnnotator _boundingAnnotator;
+	private readonly BoundingEditor _boundingEditor;
 	private Tag? _tag;
 
 	private void UpdateItems()
@@ -67,6 +69,6 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 
 	private DetectorItemViewModel CreateItemViewModel(DetectorItem item)
 	{
-		return new DetectorItemViewModel(item, _annotator);
+		return new DetectorItemViewModel(item, _boundingEditor);
 	}
 }
