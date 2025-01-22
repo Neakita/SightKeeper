@@ -9,6 +9,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using SightKeeper.Application;
+using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Screenshots;
 

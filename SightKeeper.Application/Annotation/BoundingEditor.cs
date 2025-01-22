@@ -1,6 +1,6 @@
 using SightKeeper.Domain.DataSets.Assets;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Annotation;
 
 public interface BoundingEditor
 {

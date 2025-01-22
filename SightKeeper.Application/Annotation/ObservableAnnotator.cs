@@ -1,6 +1,6 @@
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Annotation;
 
 public interface ObservableAnnotator
 {

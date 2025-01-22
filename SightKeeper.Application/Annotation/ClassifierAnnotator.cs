@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Annotation;
 
 public abstract class ClassifierAnnotator : ObservableAnnotator, IDisposable
 {

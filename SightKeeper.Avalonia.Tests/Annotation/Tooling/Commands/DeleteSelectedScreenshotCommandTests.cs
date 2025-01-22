@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using System.Windows.Input;
 using FluentAssertions;
 using NSubstitute;
-using SightKeeper.Application;
+using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.Tooling.Commands;

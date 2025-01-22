@@ -1,4 +1,5 @@
 using SightKeeper.Application;
+using SightKeeper.Application.Annotation;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;

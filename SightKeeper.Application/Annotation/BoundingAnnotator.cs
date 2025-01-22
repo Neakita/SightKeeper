@@ -2,7 +2,7 @@ using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Screenshots;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Annotation;
 
 public interface BoundingAnnotator
 {

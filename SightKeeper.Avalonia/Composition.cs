@@ -8,6 +8,7 @@ using Pure.DI;
 using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application;
+using SightKeeper.Application.Annotation;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ScreenshotsLibraries;
 using SightKeeper.Application.ScreenshotsLibraries.Creating;

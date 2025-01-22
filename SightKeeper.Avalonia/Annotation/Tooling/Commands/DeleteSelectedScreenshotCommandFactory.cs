@@ -5,7 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application;
+using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Avalonia.Annotation.Screenshots;
