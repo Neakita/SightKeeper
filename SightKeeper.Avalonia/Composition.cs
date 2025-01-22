@@ -15,8 +15,6 @@ using SightKeeper.Application.ScreenshotsLibraries.Creating;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Avalonia.Annotation;
-using SightKeeper.Avalonia.Annotation.Drawing.Detector;
-using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.DataSets;
@@ -109,11 +107,8 @@ public sealed partial class Composition
 		.RootBind<ScreenshotsViewModel>(nameof(ScreenshotsViewModel)).Bind<ScreenshotSelection>().As(Lifetime.Singleton).To<ScreenshotsViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
-		.Root<DetectorDrawerViewModel>(nameof(DetectorDrawerViewModel))
 		.Root<ClassifierAnnotationViewModel>(nameof(ClassifierAnnotationViewModel))
 		.Root<TagSelectionViewModel>(nameof(TagSelectionViewModel))
-		.Root<Poser3DDrawerViewModel>(nameof(Poser3DDrawerViewModel))
-		.Root<Poser2DDrawerViewModel>(nameof(Poser2DDrawerViewModel))
 		.Bind<BoundingAnnotator>().To<AppDataBoundingAnnotator>()
 		.Bind<BoundingEditor>().To<AppDataBoundingEditor>();
 }
