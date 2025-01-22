@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:annotation="clr-namespace:SightKeeper.Avalonia.Annotation"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
-             xmlns:tooling="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Tooling.SideBar"
-             x:DataType="annotation:AnnotationTabViewModel">
+             x:DataType="local:SideBarViewModel">
     <StackPanel Classes="regular-spacing">
         <Border Classes="outer wide-padding">
             <StackPanel Classes="regular-spacing">
@@ -27,7 +27,7 @@
                           ItemsSource="{Binding DataSets}"
                           DisplayMemberBinding="{Binding Name}"
                           PlaceholderText="Select data set"/>
-                <tooling:AdaptiveSideBar DataContext="{Binding Context.SideBar}"/>
+                <local:AdaptiveSideBar DataContext="{Binding AdditionalTooling}"/>
             </StackPanel>
         </Border>
     </StackPanel>

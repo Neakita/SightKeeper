@@ -7,7 +7,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
-internal sealed class ScreenshotsLibraryViewModelsObservableRepository : ObservableRepository<ScreenshotsLibraryViewModel>, IDisposable
+public sealed class ScreenshotsLibraryViewModelsObservableRepository : ObservableRepository<ScreenshotsLibraryViewModel>, IDisposable
 {
 	public override ReadOnlyObservableCollection<ScreenshotsLibraryViewModel> Items { get; }
 	public override IObservableList<ScreenshotsLibraryViewModel> Source { get; }

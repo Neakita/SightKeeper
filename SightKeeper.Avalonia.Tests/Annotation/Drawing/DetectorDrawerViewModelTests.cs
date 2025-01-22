@@ -126,5 +126,5 @@ public sealed class DetectorDrawerViewModelTests
 		return screenshot;
 	}
 
-	private static DetectorDrawerViewModel CreateDrawer() => new Composition().DetectorAnnotationContext.Drawer;
+	private static DetectorDrawerViewModel CreateDrawer() => new Composition().DetectorDrawerViewModel;
 }

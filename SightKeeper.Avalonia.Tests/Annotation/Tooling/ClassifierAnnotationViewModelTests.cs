@@ -112,5 +112,5 @@ public sealed class ClassifierAnnotationViewModelTests
 		monitoredSideBar.Should().RaisePropertyChangeFor(sideBar => sideBar.SelectedTag);
 	}
 
-	private static ClassifierAnnotationViewModel Annotation => new Composition().ClassifierAnnotationContext.SideBar;
+	private static ClassifierAnnotationViewModel Annotation => new Composition().ClassifierAnnotationViewModel;
 }

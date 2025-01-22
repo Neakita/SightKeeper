@@ -126,5 +126,5 @@ public sealed class Poser3DDrawerViewModelTests
 		return screenshot;
 	}
 
-	private static Poser3DDrawerViewModel CreateDrawer() => new Composition().Poser3DAnnotationContext.Drawer;
+	private static Poser3DDrawerViewModel CreateDrawer() => new Composition().Poser3DDrawerViewModel;
 }

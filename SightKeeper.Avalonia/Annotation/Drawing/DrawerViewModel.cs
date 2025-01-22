@@ -15,4 +15,13 @@ public abstract partial class DrawerViewModel : ViewModel
 
 	[RelayCommand]
 	protected abstract void CreateItem(Bounding bounding);
+
+	protected virtual void OnScreenshotChanged()
+	{
+	}
+
+	partial void OnScreenshotChanged(Screenshot? value)
+	{
+		OnScreenshotChanged();
+	}
 }

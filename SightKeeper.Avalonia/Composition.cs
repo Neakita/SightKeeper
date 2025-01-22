@@ -14,8 +14,10 @@ using SightKeeper.Application.ScreenshotsLibraries.Creating;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Avalonia.Annotation;
-using SightKeeper.Avalonia.Annotation.Contexts;
+using SightKeeper.Avalonia.Annotation.Drawing.Detector;
+using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Screenshots;
+using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Data;
@@ -92,8 +94,6 @@ public sealed partial class Composition
 			context.Inject(out MainViewModel viewModel);
 			return new MainWindow { DataContext = viewModel };
 		})
-		.Root<ClassifierAnnotationContext>(nameof(ClassifierAnnotationContext))
-		.Root<DetectorAnnotationContext>(nameof(DetectorAnnotationContext))
 		.Bind().As(Lifetime.Singleton).To<WriteableBitmapPool>()
 		.Root<ScreenshotImageLoader>(nameof(ScreenshotImageLoader))
 		.Bind().As(Lifetime.Singleton).To<PeriodicAppDataSaver>()
@@ -109,7 +109,10 @@ public sealed partial class Composition
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
 		.Bind<DetectorAnnotator>().To<AppDataDetectorAnnotator>()
-		.Root<Poser2DAnnotationContext>(nameof(Poser2DAnnotationContext))
-		.Root<Poser3DAnnotationContext>(nameof(Poser3DAnnotationContext))
-		.Bind<Poser3DAnnotator>().To<AppDataPoser3DAnnotator>();
+		.Bind<Poser3DAnnotator>().To<AppDataPoser3DAnnotator>()
+		.Root<DetectorDrawerViewModel>(nameof(DetectorDrawerViewModel))
+		.Root<ClassifierAnnotationViewModel>(nameof(ClassifierAnnotationViewModel))
+		.Root<TagSelectionViewModel>(nameof(TagSelectionViewModel))
+		.Root<Poser3DDrawerViewModel>(nameof(Poser3DDrawerViewModel))
+		.Root<Poser2DDrawerViewModel>(nameof(Poser2DDrawerViewModel));
 }

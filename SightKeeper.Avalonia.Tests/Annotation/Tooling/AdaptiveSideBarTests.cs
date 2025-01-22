@@ -47,7 +47,7 @@ public sealed class AdaptiveSideBarTests
 
 	private static ClassifierAnnotationViewModel CreateClassifierAnnotationViewModel()
 	{
-		return new Composition().ClassifierAnnotationContext.SideBar;
+		return new Composition().ClassifierAnnotationViewModel;
 	}
 
 	private static TagSelectionViewModel CreateTagSelectionViewModel()

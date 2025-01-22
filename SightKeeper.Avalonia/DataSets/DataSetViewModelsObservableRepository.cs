@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets;
 
-internal sealed class DataSetViewModelsObservableRepository : ObservableRepository<DataSetViewModel>, IDisposable
+public sealed class DataSetViewModelsObservableRepository : ObservableRepository<DataSetViewModel>, IDisposable
 {
 	public override ReadOnlyObservableCollection<DataSetViewModel> Items { get; }
 	public override IObservableList<DataSetViewModel> Source => _source.AsObservableList();

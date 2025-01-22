@@ -6,7 +6,6 @@ using SightKeeper.Application;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Detector;
 
@@ -16,16 +15,6 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 	public override Tag? Tag => _tag;
 
 	public AssetsLibrary<DetectorAsset>? AssetsLibrary
-	{
-		get;
-		set
-		{
-			field = value;
-			UpdateItems();
-		}
-	}
-
-	public Screenshot? Screenshot
 	{
 		get;
 		set
@@ -55,6 +44,11 @@ public sealed class DetectorDrawerViewModel : DrawerViewModel
 		var item = _annotator.CreateItem(AssetsLibrary, Screenshot, Tag, bounding);
 		DetectorItemViewModel itemViewModel = new(item, _annotator);
 		_items.Add(itemViewModel);
+	}
+
+	protected override void OnScreenshotChanged()
+	{
+		UpdateItems();
 	}
 
 	private readonly AvaloniaList<DetectorItemViewModel> _items = new();
