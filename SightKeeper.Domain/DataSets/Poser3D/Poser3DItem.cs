@@ -16,6 +16,13 @@ public sealed class Poser3DItem : PoserItem
 		return keyPoint;
 	}
 
+	public KeyPoint3D CreateKeyPoint(Tag tag, Vector2<double> position, bool isVisible)
+	{
+		var keyPoint = CreateKeyPoint(tag, position);
+		keyPoint.IsVisible = isVisible;
+		return keyPoint;
+	}
+
 	public void DeleteKeyPoint(KeyPoint3D keyPoint)
 	{
 		bool isRemoved = _keyPoints.Remove(keyPoint);
