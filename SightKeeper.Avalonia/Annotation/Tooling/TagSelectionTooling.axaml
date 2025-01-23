@@ -9,5 +9,6 @@
     <ListBox IsEnabled="{Binding IsEnabled}"
              ItemsSource="{Binding Tags}"
              SelectedItem="{Binding SelectedTag}"
-             DisplayMemberBinding="{Binding Name}"/>
+             DisplayMemberBinding="{Binding Name}"
+             Classes="compact"/>
 </UserControl>
