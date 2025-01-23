@@ -1,5 +1,4 @@
 using System;
-using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.Tooling;
@@ -7,17 +6,19 @@ using SightKeeper.Avalonia.ScreenshotsLibraries;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-public sealed partial class AnnotationTabViewModel : ViewModel
+public sealed class AnnotationTabViewModel : ViewModel
 {
 	public ScreenshotsViewModel Screenshots { get; }
-	[ObservableProperty] public partial DrawerViewModel? Drawer { get; private set; }
+	public DrawerViewModel Drawer { get; }
 	public SideBarViewModel SideBar { get; }
 
 	internal AnnotationTabViewModel(
 		ScreenshotsViewModel screenshots,
+		DrawerViewModel drawer,
 		SideBarViewModel sideBar)
 	{
 		SideBar = sideBar;
+		Drawer = drawer;
 		Screenshots = screenshots;
 		SideBar.SelectedScreenshotsLibraryChanged.Subscribe(OnSelectedScreenshotsLibraryChanged);
 	}
