@@ -22,6 +22,7 @@ public sealed partial class SideBarViewModel : ViewModel
 	public IObservable<ScreenshotsLibraryViewModel?> SelectedScreenshotsLibraryChanged => _selectedScreenshotsLibraryChanged.AsObservable();
 	public IObservable<DataSetViewModel?> SelectedDataSetChanged => _selectedDataSetChanged.AsObservable();
 	[ObservableProperty] public partial ViewModel? AdditionalTooling { get; private set; }
+	public IObservable<ViewModel?> AdditionalToolingChanged => _additionalToolingChanged.AsObservable();
 
 	public SideBarViewModel(
 		DataSetViewModelsObservableRepository dataSets,
@@ -49,6 +50,12 @@ public sealed partial class SideBarViewModel : ViewModel
 		AdditionalTooling = _toolingViewModelFactory.CreateToolingViewModel(value?.Value);
 	}
 
+	partial void OnAdditionalToolingChanged(ViewModel? value)
+	{
+		_additionalToolingChanged.OnNext(value);
+	}
+
 	private readonly Subject<ScreenshotsLibraryViewModel?> _selectedScreenshotsLibraryChanged = new();
 	private readonly Subject<DataSetViewModel?> _selectedDataSetChanged = new();
+	private readonly Subject<ViewModel?> _additionalToolingChanged = new();
 }

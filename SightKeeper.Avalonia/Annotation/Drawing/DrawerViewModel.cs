@@ -10,7 +10,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 public sealed partial class DrawerViewModel : ViewModel
 {
 	[ObservableProperty] public partial Screenshot? Screenshot { get; set; }
-	public Tag? Tag { get; set; }
+	[ObservableProperty] public partial Tag? Tag { get; set; }
 
 	public AssetsOwner<ItemsOwner>? AssetsLibrary
 	{
