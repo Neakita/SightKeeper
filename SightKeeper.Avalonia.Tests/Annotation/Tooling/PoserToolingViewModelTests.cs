@@ -13,7 +13,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 
-public class PoserToolingTests
+public sealed class PoserToolingViewModelTests
 {
 	[Fact]
 	public void SelectionShouldGetKeyPointTagsFromProvidedItem()
@@ -99,17 +99,17 @@ public class PoserToolingTests
 		return (keyPointTag, item);
 	}
 
-	private static PoserTooling CreateTooling(out Subject<(PoserItem item, KeyPoint keyPoint)> keyPointCreatedSubject)
+	private static PoserToolingViewModel CreateTooling(out Subject<(PoserItem item, KeyPoint keyPoint)> keyPointCreatedSubject)
 	{
 		keyPointCreatedSubject = new Subject<(PoserItem item, KeyPoint keyPoint)>();
 		var observablePoserAnnotator = Substitute.For<ObservablePoserAnnotator>();
 		observablePoserAnnotator.KeyPointCreated.Returns(keyPointCreatedSubject);
-		return new PoserTooling(Substitute.For<PoserAnnotator>(), observablePoserAnnotator);
+		return new PoserToolingViewModel(Substitute.For<PoserAnnotator>(), observablePoserAnnotator);
 	}
 
-	private static PoserTooling CreateTooling()
+	private static PoserToolingViewModel CreateTooling()
 	{
-		return new Composition().PoserTooling;
+		return new Composition().PoserToolingViewModel;
 	}
 
 	private static KeyPoint CreateKeyPoint(Poser2DItem item, Tag keyPointTag)

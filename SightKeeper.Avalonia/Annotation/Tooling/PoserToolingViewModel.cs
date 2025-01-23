@@ -10,9 +10,10 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public sealed partial class PoserTooling : ViewModel, IDisposable
+public sealed partial class PoserToolingViewModel : ViewModel, IDisposable
 {
-	public TagSelection TagSelection => _tagSelection;
+	public TagSelectionViewModel TagSelection { get; } = new();
+
 	public TagSelection KeyPointTagSelection => _keyPointTagSelection;
 
 	public PoserItem? SelectedItem
@@ -26,7 +27,7 @@ public sealed partial class PoserTooling : ViewModel, IDisposable
 		}
 	}
 
-	public PoserTooling(PoserAnnotator poserAnnotator, ObservablePoserAnnotator observablePoserAnnotator)
+	public PoserToolingViewModel(PoserAnnotator poserAnnotator, ObservablePoserAnnotator observablePoserAnnotator)
 	{
 		_poserAnnotator = poserAnnotator;
 		_disposable = observablePoserAnnotator.KeyPointCreated
@@ -40,7 +41,6 @@ public sealed partial class PoserTooling : ViewModel, IDisposable
 		_disposable.Dispose();
 	}
 
-	private readonly TagSelectionViewModel _tagSelection = new();
 	private readonly TagSelectionViewModel _keyPointTagSelection = new();
 	private readonly PoserAnnotator _poserAnnotator;
 	private readonly IDisposable _disposable;
