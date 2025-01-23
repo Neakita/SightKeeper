@@ -20,7 +20,7 @@
                                      DataContext="{Binding Screenshots}"
                                      IsVisible="{Binding !!Screenshots.Count}"/>
             <drawing:Drawer Grid.Column="1" DataContext="{Binding Drawer}"/>
-            <tooling:SideBar Grid.Column="2"/>
+            <tooling:SideBar Grid.Column="2" DataContext="{Binding SideBar}"/>
         </Grid>
     </Border>
 </UserControl>
