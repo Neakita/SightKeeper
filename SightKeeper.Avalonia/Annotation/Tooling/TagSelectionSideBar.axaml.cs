@@ -2,7 +2,7 @@ using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public partial class TagSelectionTooling : UserControl
+public sealed partial class TagSelectionTooling : UserControl
 {
 	public TagSelectionTooling()
 	{
