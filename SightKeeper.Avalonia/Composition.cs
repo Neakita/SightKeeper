@@ -110,5 +110,7 @@ public sealed partial class Composition
 		.Root<ClassifierAnnotationViewModel>(nameof(ClassifierAnnotationViewModel))
 		.Root<TagSelectionViewModel>(nameof(TagSelectionViewModel))
 		.Bind<BoundingAnnotator>().Bind<ObservableBoundingAnnotator>().As(Lifetime.Singleton).To<AppDataBoundingAnnotator>()
-		.Bind<BoundingEditor>().To<AppDataBoundingEditor>();
+		.Bind<BoundingEditor>().To<AppDataBoundingEditor>()
+		.Root<PoserTooling>(nameof(PoserTooling))
+		.Bind<PoserAnnotator>().Bind<ObservablePoserAnnotator>().As(Lifetime.Singleton).To<AppDataPoserAnnotator>();
 }
