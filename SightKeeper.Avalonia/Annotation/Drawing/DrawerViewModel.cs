@@ -1,27 +1,43 @@
 using System.Collections.Generic;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public abstract partial class DrawerViewModel : ViewModel
+public sealed partial class DrawerViewModel : ViewModel
 {
 	[ObservableProperty] public partial Screenshot? Screenshot { get; set; }
-	public abstract IReadOnlyCollection<DrawerItemViewModel> Items { get; }
-	public abstract Tag? Tag { get; }
+	public Tag? Tag { get; set; }
 
-	[RelayCommand]
-	protected abstract void CreateItem(Bounding bounding);
-
-	protected virtual void OnScreenshotChanged()
+	public AssetsOwner<ItemsOwner>? AssetsLibrary
 	{
+		get;
+		set
+		{
+			field = value;
+			_boundingDrawer.AssetsLibrary = value;
+			_itemsViewModel.AssetsLibrary = value;
+		}
 	}
+
+	public IReadOnlyCollection<DrawerItemViewModel> Items => _itemsViewModel.Items;
+	public ICommand CreateItemCommand => _boundingDrawer.CreateItemCommand;
+
+	public DrawerViewModel(BoundingDrawerViewModel boundingDrawer, DrawerItemsViewModel itemsViewModel)
+	{
+		_boundingDrawer = boundingDrawer;
+		_itemsViewModel = itemsViewModel;
+	}
+
+	private readonly BoundingDrawerViewModel _boundingDrawer;
+	private readonly DrawerItemsViewModel _itemsViewModel;
 
 	partial void OnScreenshotChanged(Screenshot? value)
 	{
-		OnScreenshotChanged();
+		_boundingDrawer.Screenshot = value;
+		_itemsViewModel.Screenshot = value;
 	}
 }
