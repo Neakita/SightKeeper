@@ -2,6 +2,7 @@ using System;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Poser2D;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
@@ -26,6 +27,10 @@ public sealed class ToolingViewModelFactory
 				var tagSelection = _composition.TagSelectionViewModel;
 				tagSelection.Tags = detectorDataSet.TagsLibrary.Tags;
 				return tagSelection;
+			case Poser2DDataSet poser2DDataSet:
+				var poserTooling = _composition.PoserToolingViewModel;
+				poserTooling.TagSelection.Tags = poser2DDataSet.TagsLibrary.Tags;
+				return poserTooling;
 			default:
 				throw new ArgumentOutOfRangeException(nameof(dataSet));
 		}
