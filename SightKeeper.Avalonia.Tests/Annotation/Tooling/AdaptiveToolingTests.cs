@@ -30,8 +30,8 @@ public sealed class AdaptiveToolingTests
 	public void ShouldShowPoserSideBar()
 	{
 		var sideBar = PrepareAdaptiveSideBar();
-		sideBar.DataContext = CreatePoserSideBarViewModel();
-		AssertPresentsControl<PoserSideBar>(sideBar);
+		sideBar.DataContext = CreatePoserToolingModel();
+		AssertPresentsControl<PoserTooling>(sideBar);
 	}
 
 	private static AdaptiveTooling PrepareAdaptiveSideBar()
@@ -55,9 +55,9 @@ public sealed class AdaptiveToolingTests
 		return new TagSelectionViewModel();
 	}
 
-	private static PoserSideBarViewModel CreatePoserSideBarViewModel()
+	private static PoserToolingViewModel CreatePoserToolingModel()
 	{
-		return new PoserSideBarViewModel();
+		return new Composition().PoserToolingViewModel;
 	}
 
 	private static void AssertPresentsControl<T>(AdaptiveTooling sideBar)

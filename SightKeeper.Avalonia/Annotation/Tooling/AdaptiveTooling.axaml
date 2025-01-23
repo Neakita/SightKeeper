@@ -12,8 +12,8 @@
             <DataTemplate DataType="tooling:TagSelection">
                 <tooling:TagSelectionTooling/>
             </DataTemplate>
-            <DataTemplate DataType="tooling:PoserSideBarViewModel">
-                <tooling:PoserSideBar/>
+            <DataTemplate DataType="tooling:PoserToolingViewModel">
+                <tooling:PoserTooling/>
             </DataTemplate>
         </ContentControl.DataTemplates>
     </ContentControl>
