@@ -40,4 +40,9 @@ public sealed partial class DrawerViewModel : ViewModel
 		_boundingDrawer.Screenshot = value;
 		_itemsViewModel.Screenshot = value;
 	}
+
+	partial void OnTagChanged(Tag? value)
+	{
+		_boundingDrawer.Tag = value;
+	}
 }
