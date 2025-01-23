@@ -3,7 +3,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Domain.DataSets.Assets;
 
-public sealed class AssetsLibrary<TAsset> : AssetsLibrary, AssetsMaker<TAsset> where TAsset : Asset
+public sealed class AssetsLibrary<TAsset> : AssetsLibrary, AssetsOwner<TAsset> where TAsset : Asset
 {
 	public IReadOnlyDictionary<Screenshot, TAsset> Assets => _assets.AsReadOnly();
 
@@ -41,6 +41,12 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary, AssetsMaker<TAsset> w
 	public override bool Contains(Screenshot screenshot)
 	{
 		return _assets.ContainsKey(screenshot);
+	}
+
+	public TAsset? GetOptionalAsset(Screenshot screenshot)
+	{
+		_assets.TryGetValue(screenshot, out var asset);
+		return asset;
 	}
 
 	internal AssetsLibrary(AssetsFactory<TAsset> assetsFactory)
