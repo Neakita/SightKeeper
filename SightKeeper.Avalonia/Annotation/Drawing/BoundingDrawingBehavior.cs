@@ -80,6 +80,12 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 	private void OnAssociatedObjectPointerReleased(object? sender, PointerReleasedEventArgs e)
 	{
 		Guard.IsNotNull(AssociatedObject);
+		if (_drawingItem != null)
+		{
+			bool isRemoved = AssociatedObject.Children.Remove(_drawingItem);
+			Guard.IsTrue(isRemoved);
+			_drawingItem = null;
+		}
 		AssociatedObject.PointerMoved -= OnAssociatedObjectPointerMoved;
 		AssociatedObject.PointerReleased -= OnAssociatedObjectPointerReleased;
 		var finalPosition = e.GetPosition(AssociatedObject);
@@ -92,11 +98,6 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		Guard.IsNotNull(Command);
 		Guard.IsTrue(Command.CanExecute(normalizedBounding));
 		Command.Execute(normalizedBounding);
-		if (_drawingItem == null)
-			return;
-		bool isRemoved = AssociatedObject.Children.Remove(_drawingItem);
-		Guard.IsTrue(isRemoved);
-		_drawingItem = null;
 	}
 
 	private void UpdateDrawingItemBounding(Point position)
