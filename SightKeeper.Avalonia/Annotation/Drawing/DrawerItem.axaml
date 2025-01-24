@@ -19,7 +19,8 @@
             <boundingTransform:DragableBoundingBehavior
                 CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
                 Bounding="{Binding Bounding}"
-                ThumbsPanel="Panel"/>
+                ThumbsPanel="Panel"
+                ItemContainer="{Binding $parent[ListBoxItem]}"/>
         </Interaction.Behaviors>
         <Grid.Styles>
             <Style Selector="Thumb">

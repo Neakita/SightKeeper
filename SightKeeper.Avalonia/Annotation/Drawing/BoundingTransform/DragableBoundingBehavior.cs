@@ -34,6 +34,9 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 	public static readonly AttachedProperty<ThumbSideMode> SideModeProperty =
 		AvaloniaProperty.RegisterAttached<Thumb, ThumbSideMode>("SideMode", typeof(DragableBoundingBehavior));
 
+	public static readonly StyledProperty<Layoutable?> ItemContainerProperty =
+		AvaloniaProperty.Register<DragableBoundingBehavior, Layoutable?>(nameof(ItemContainer));
+
 	public static void SetSideMode(Thumb element, ThumbSideMode value)
 	{
 		element.SetValue(SideModeProperty, value);
@@ -85,6 +88,12 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		set => SetValue(MinimumBoundingSizeProperty, value);
 	}
 
+	public Layoutable? ItemContainer
+	{
+		get => GetValue(ItemContainerProperty);
+		set => SetValue(ItemContainerProperty, value);
+	}
+
 	private Bounding _bounding;
 	private BoundingTransformer? _transformer;
 
@@ -112,12 +121,12 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	private void UpdateItemPreview()
 	{
-		var item = AssociatedObject.FindAncestorOfType<ListBoxItem>();
-		Guard.IsNotNull(item);
-		item.Width = _bounding.Width * CanvasSize.Width;
-		item.Height = _bounding.Height * CanvasSize.Height;
-		Canvas.SetLeft(item, _bounding.Left * CanvasSize.Width);
-		Canvas.SetTop(item, _bounding.Top * CanvasSize.Height);
+		var container = ItemContainer;
+		Guard.IsNotNull(container);
+		container.Width = _bounding.Width * CanvasSize.Width;
+		container.Height = _bounding.Height * CanvasSize.Height;
+		Canvas.SetLeft(container, _bounding.Left * CanvasSize.Width);
+		Canvas.SetTop(container, _bounding.Top * CanvasSize.Height);
 	}
 
 	private void OnThumbDragCompleted(object? sender, VectorEventArgs e)
