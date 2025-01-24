@@ -4,9 +4,9 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-internal sealed class DesignDrawerItemViewModel : DrawerItemViewModel
+internal sealed class DesignDrawerItemViewModel : DrawerItemDataContext
 {
-	public override Tag Tag
+	public Tag Tag
 	{
 		get
 		{
@@ -15,5 +15,5 @@ internal sealed class DesignDrawerItemViewModel : DrawerItemViewModel
 		}
 	}
 
-	public override Bounding Bounding { get; set; } = new(0.1, 0.1, 0.9, 0.9);
+	public Bounding Bounding { get; set; } = new(0.1, 0.1, 0.9, 0.9);
 }
