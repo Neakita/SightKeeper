@@ -18,8 +18,7 @@
         <Interaction.Behaviors>
             <boundingTransform:DragableBoundingBehavior
                 Canvas="{Binding $parent[ListBox]}"
-                ActualBounding="{Binding Bounding}"
-                DisplayBounding="{Binding DisplayBounding}"
+                Bounding="{Binding Bounding}"
                 ThumbsPanel="Panel"/>
         </Interaction.Behaviors>
         <Grid.Styles>

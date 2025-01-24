@@ -13,7 +13,8 @@ public sealed class DetectorItemViewModel : DrawerItemViewModel
 	public override Bounding Bounding
 	{
 		get => Value.Bounding;
-		set => _boundingEditor.SetBounding(Value, value);
+		set => SetProperty(Value.Bounding, value, this,
+			(viewModel, bounding) => viewModel._boundingEditor.SetBounding(viewModel.Value, bounding));
 	}
 
 	public DetectorItemViewModel(DetectorItem value, BoundingEditor boundingEditor)
