@@ -17,7 +17,7 @@
           Margin="-6">
         <Interaction.Behaviors>
             <boundingTransform:DragableBoundingBehavior
-                Canvas="{Binding $parent[ListBox]}"
+                CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
                 Bounding="{Binding Bounding}"
                 ThumbsPanel="Panel"/>
         </Interaction.Behaviors>

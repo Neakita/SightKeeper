@@ -18,8 +18,8 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 
 internal sealed class DragableBoundingBehavior : Behavior<Control>
 {
-	public static readonly StyledProperty<Control?> CanvasProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Control?>(nameof(Canvas));
+	public static readonly StyledProperty<Size> CanvasSizeProperty =
+		AvaloniaProperty.Register<DragableBoundingBehavior, Size>(nameof(CanvasSize));
 
 	public static readonly StyledProperty<Panel?> ThumbsPanelProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
@@ -60,11 +60,10 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 			UnsubscribeFromThumb(thumb);
 	}
 
-	[ResolveByName]
-	public Control? Canvas
+	public Size CanvasSize
 	{
-		get => GetValue(CanvasProperty);
-		set => SetValue(CanvasProperty, value);
+		get => GetValue(CanvasSizeProperty);
+		set => SetValue(CanvasSizeProperty, value);
 	}
 
 	[ResolveByName]
@@ -76,8 +75,8 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	public Bounding Bounding
 	{
-		get => GetValue(ActualBoundingProperty);
-		set => SetValue(ActualBoundingProperty, value);
+		get => GetValue(BoundingProperty);
+		set => SetValue(BoundingProperty, value);
 	}
 
 	public double MinimumBoundingSize
@@ -98,33 +97,27 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		Guard.IsNull(_transformer);
 		var sideMode = GetSideMode(thumb);
 		_transformer = CreateTransformer(thumb.HorizontalAlignment, thumb.VerticalAlignment, sideMode);
-		Guard.IsNotNull(Canvas);
-		var containerSize = Canvas.Bounds.Size;
-		_transformer.MinimumSize = new Vector2<double>(1 / containerSize.Width * MinimumBoundingSize,
-			1 / containerSize.Height * MinimumBoundingSize);
+		_transformer.MinimumSize = new Vector2<double>(1 / CanvasSize.Width * MinimumBoundingSize,
+			1 / CanvasSize.Height * MinimumBoundingSize);
 		_bounding = Bounding;
 	}
 
 	private void OnThumbDragDelta(object? sender, VectorEventArgs e)
 	{
 		Guard.IsNotNull(_transformer);
-		Guard.IsNotNull(Canvas);
-		var containerSize = Canvas.Bounds.Size;
 		_bounding = _transformer.Transform(_bounding,
-			new Vector2<double>(e.Vector.X / containerSize.Width, e.Vector.Y / containerSize.Height));
+			new Vector2<double>(e.Vector.X / CanvasSize.Width, e.Vector.Y / CanvasSize.Height));
 		UpdateItemPreview();
 	}
 
 	private void UpdateItemPreview()
 	{
-		Guard.IsNotNull(Canvas);
-		var containerSize = Canvas.Bounds.Size;
 		var item = AssociatedObject.FindAncestorOfType<ListBoxItem>();
 		Guard.IsNotNull(item);
-		item.Width = _bounding.Width * containerSize.Width;
-		item.Height = _bounding.Height * containerSize.Height;
-		global::Avalonia.Controls.Canvas.SetLeft(item, _bounding.Left * containerSize.Width);
-		global::Avalonia.Controls.Canvas.SetTop(item, _bounding.Top * containerSize.Height);
+		item.Width = _bounding.Width * CanvasSize.Width;
+		item.Height = _bounding.Height * CanvasSize.Height;
+		Canvas.SetLeft(item, _bounding.Left * CanvasSize.Width);
+		Canvas.SetTop(item, _bounding.Top * CanvasSize.Height);
 	}
 
 	private void OnThumbDragCompleted(object? sender, VectorEventArgs e)
@@ -144,8 +137,8 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		Guard.IsNotNull(item);
 		item.ClearValue(Layoutable.WidthProperty);
 		item.ClearValue(Layoutable.HeightProperty);
-		item.ClearValue(global::Avalonia.Controls.Canvas.LeftProperty);
-		item.ClearValue(global::Avalonia.Controls.Canvas.TopProperty);
+		item.ClearValue(Canvas.LeftProperty);
+		item.ClearValue(Canvas.TopProperty);
 	}
 
 	private static BoundingTransformer CreateTransformer(
