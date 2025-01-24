@@ -24,7 +24,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 	public static readonly StyledProperty<Panel?> ThumbsPanelProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
 
-	public static readonly StyledProperty<Bounding> ActualBoundingProperty =
+	public static readonly StyledProperty<Bounding> BoundingProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, Bounding>(nameof(Bounding),
 			defaultBindingMode: BindingMode.TwoWay);
 
