@@ -29,7 +29,7 @@ public sealed class ToolingViewModelFactory
 				return tagSelection;
 			case Poser2DDataSet poser2DDataSet:
 				var poserTooling = _composition.PoserToolingViewModel;
-				poserTooling.TagSelection.Tags = poser2DDataSet.TagsLibrary.Tags;
+				poserTooling.TagsSource = poser2DDataSet.TagsLibrary;
 				return poserTooling;
 			default:
 				throw new ArgumentOutOfRangeException(nameof(dataSet));

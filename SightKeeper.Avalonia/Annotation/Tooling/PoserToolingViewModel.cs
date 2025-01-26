@@ -10,11 +10,20 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public sealed partial class PoserToolingViewModel : ViewModel, IDisposable
+public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataContext, TagSelection, ObservableTagSelection, IDisposable
 {
-	public TagSelectionViewModel TagSelection { get; } = new();
+	public TagSelectionToolingDataContext TagSelection => _tagSelection;
+	public TagSelectionToolingDataContext KeyPointTagSelection => _keyPointTagSelection;
 
-	public TagSelection KeyPointTagSelection => _keyPointTagSelection;
+	public TagsContainer<PoserTag>? TagsSource
+	{
+		get;
+		set
+		{
+			field = value;
+			_tagSelection.Tags = TagsSource?.Tags ?? ReadOnlyCollection<PoserTag>.Empty;
+		}
+	}
 
 	public PoserItem? SelectedItem
 	{
@@ -27,6 +36,14 @@ public sealed partial class PoserToolingViewModel : ViewModel, IDisposable
 		}
 	}
 
+	public Tag? SelectedTag => TagSelection.SelectedTag ?? KeyPointTagSelection.SelectedTag;
+
+	public IObservable<Tag?> SelectedTagChanged =>
+		_tagSelection.SelectedTagChanged
+			.Merge(_keyPointTagSelection.SelectedTagChanged)
+			.Select(_ => SelectedTag)
+			.DistinctUntilChanged();
+
 	public PoserToolingViewModel(PoserAnnotator poserAnnotator, ObservablePoserAnnotator observablePoserAnnotator)
 	{
 		_poserAnnotator = poserAnnotator;
@@ -34,6 +51,8 @@ public sealed partial class PoserToolingViewModel : ViewModel, IDisposable
 			.Merge(observablePoserAnnotator.KeyPointDeleted)
 			.Where(data => data.item == SelectedItem)
 			.Subscribe(_ => DeleteKeyPointCommand.NotifyCanExecuteChanged());
+		_tagSelection.SelectedTagChanged.Where(tag => tag != null).Subscribe(_ => _keyPointTagSelection.SelectedTag = null);
+		_keyPointTagSelection.SelectedTagChanged.Where(tag => tag != null).Subscribe(_ => _tagSelection.SelectedTag = null);
 	}
 
 	public void Dispose()
@@ -41,6 +60,7 @@ public sealed partial class PoserToolingViewModel : ViewModel, IDisposable
 		_disposable.Dispose();
 	}
 
+	private readonly TagSelectionViewModel _tagSelection = new();
 	private readonly TagSelectionViewModel _keyPointTagSelection = new();
 	private readonly PoserAnnotator _poserAnnotator;
 	private readonly IDisposable _disposable;

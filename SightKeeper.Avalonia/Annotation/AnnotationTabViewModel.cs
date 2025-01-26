@@ -1,7 +1,5 @@
 using System;
-using System.ComponentModel;
 using System.Reactive.Disposables;
-using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Screenshots;
@@ -67,17 +65,13 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 	{
 		_tagSelectionDisposable?.Dispose();
 		_tagSelectionDisposable = null;
-		if (value is not TagSelectionViewModel tagSelection)
-			return;
-		tagSelection.PropertyChanged += OnTagSelectionPropertyChanged;
-		_tagSelectionDisposable = Disposable.Create(() => tagSelection.PropertyChanged -= OnTagSelectionPropertyChanged);
-		return;
-		void OnTagSelectionPropertyChanged(object? sender, PropertyChangedEventArgs args)
+		if (value is TagSelection selection)
 		{
-			Guard.IsNotNull(sender);
-			var tagSelectionViewModel = (TagSelectionViewModel)sender;
-			if (args.PropertyName == nameof(tagSelection.SelectedTag))
-				Drawer.Tag = tagSelectionViewModel.SelectedTag;
+			Drawer.Tag = selection.SelectedTag;
+		}
+		if (value is ObservableTagSelection observableSelection)
+		{
+			_tagSelectionDisposable = observableSelection.SelectedTagChanged.Subscribe(tag => Drawer.Tag = tag);
 		}
 	}
 }

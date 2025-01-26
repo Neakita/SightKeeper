@@ -24,6 +24,7 @@ public sealed partial class DrawerViewModel : ViewModel
 	}
 
 	public IReadOnlyCollection<DrawerItemViewModel> Items => _itemsViewModel.Items;
+	[ObservableProperty] public partial DrawerItemViewModel? SelectedItem { get; set; }
 	public ICommand CreateItemCommand => _boundingDrawer.CreateItemCommand;
 
 	public DrawerViewModel(BoundingDrawerViewModel boundingDrawer, DrawerItemsViewModel itemsViewModel)

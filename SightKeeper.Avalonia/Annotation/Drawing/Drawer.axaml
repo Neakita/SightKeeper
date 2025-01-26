@@ -25,6 +25,7 @@
             </Interaction.Behaviors>
         </Image>
         <ListBox ItemsSource="{Binding Items}"
+                 SelectedItem="{Binding SelectedItem}"
                  Name="ListBox"
                  ClipToBounds="False">
             <ListBox.ItemsPanel>

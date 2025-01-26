@@ -9,7 +9,7 @@
              x:DataType="root:ViewModel">
     <ContentControl Content="{Binding}">
         <ContentControl.DataTemplates>
-            <DataTemplate DataType="tooling:TagSelection">
+            <DataTemplate DataType="tooling:TagSelectionToolingDataContext">
                 <tooling:TagSelectionTooling/>
             </DataTemplate>
             <DataTemplate DataType="tooling:PoserToolingViewModel">

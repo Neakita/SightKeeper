@@ -1,6 +1,7 @@
 using System;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing.Detector;
+using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser2D;
@@ -18,7 +19,7 @@ public sealed class DrawerItemsFactory
 	public DrawerItemViewModel CreateItemViewModel(BoundedItem item) => item switch
 	{
 		DetectorItem detectorItem => new DetectorItemViewModel(detectorItem, _boundingEditor),
-		Poser2DItem poser2DItem => throw new NotImplementedException(),
+		Poser2DItem poser2DItem => new Poser2DItemViewModel(poser2DItem, _boundingEditor),
 		Poser3DItem poser3DItem => throw new NotImplementedException(),
 		_ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
 	};
