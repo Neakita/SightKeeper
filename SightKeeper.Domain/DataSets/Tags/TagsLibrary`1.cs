@@ -1,8 +1,9 @@
 namespace SightKeeper.Domain.DataSets.Tags;
 
-public sealed class TagsLibrary<TTag> : TagsLibrary where TTag : Tag
+public sealed class TagsLibrary<TTag> : TagsLibrary, TagsContainer<TTag> where TTag : Tag
 {
 	public override IReadOnlyList<TTag> Tags => _tags.AsReadOnly();
+	IReadOnlyCollection<TTag> TagsContainer<TTag>.Tags => Tags;
 
 	public override TTag CreateTag(string name)
 	{
