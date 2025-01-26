@@ -1,10 +1,12 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Annotation;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -47,12 +49,12 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 	public PoserToolingViewModel(PoserAnnotator poserAnnotator, ObservablePoserAnnotator observablePoserAnnotator)
 	{
 		_poserAnnotator = poserAnnotator;
-		_disposable = observablePoserAnnotator.KeyPointCreated
+		observablePoserAnnotator.KeyPointCreated
 			.Merge(observablePoserAnnotator.KeyPointDeleted)
 			.Where(data => data.item == SelectedItem)
-			.Subscribe(_ => DeleteKeyPointCommand.NotifyCanExecuteChanged());
-		_tagSelection.SelectedTagChanged.Where(tag => tag != null).Subscribe(_ => _keyPointTagSelection.SelectedTag = null);
-		_keyPointTagSelection.SelectedTagChanged.Where(tag => tag != null).Subscribe(_ => _tagSelection.SelectedTag = null);
+			.Subscribe(_ => DeleteKeyPointCommand.NotifyCanExecuteChanged())
+			.DisposeWith(_disposable);
+		MakeSureOnlyOneTagSelected();
 	}
 
 	public void Dispose()
@@ -63,7 +65,19 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 	private readonly TagSelectionViewModel _tagSelection = new();
 	private readonly TagSelectionViewModel _keyPointTagSelection = new();
 	private readonly PoserAnnotator _poserAnnotator;
-	private readonly IDisposable _disposable;
+	private readonly CompositeDisposable _disposable = new();
+
+	private void MakeSureOnlyOneTagSelected()
+	{
+		_tagSelection.SelectedTagChanged
+			.Where(tag => tag != null)
+			.Subscribe(_ => _keyPointTagSelection.SelectedTag = null)
+			.DisposeWith(_disposable);
+		_keyPointTagSelection.SelectedTagChanged
+			.Where(tag => tag != null)
+			.Subscribe(_ => _tagSelection.SelectedTag = null)
+			.DisposeWith(_disposable);
+	}
 
 	[RelayCommand(CanExecute = nameof(CanDeleteKeyPoint))]
 	private void DeleteKeyPoint(Tag tag)
