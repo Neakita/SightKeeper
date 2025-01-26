@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public interface TagSelectionToolingDataContext
+public interface TagSelectionToolingDataContext : INotifyPropertyChanged
 {
 	bool IsEnabled { get; }
-	IReadOnlyCollection<Tag> Tags { get; }
-	Tag? SelectedTag { get; set; }
+	IReadOnlyCollection<Named> Tags { get; }
+	Named? SelectedTag { get; set; }
 }

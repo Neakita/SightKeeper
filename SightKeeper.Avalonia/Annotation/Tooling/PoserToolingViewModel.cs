@@ -38,7 +38,7 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 		}
 	}
 
-	public Tag? SelectedTag => TagSelection.SelectedTag ?? KeyPointTagSelection.SelectedTag;
+	public Tag? SelectedTag => _tagSelection.SelectedTag ?? _keyPointTagSelection.SelectedTag;
 
 	public IObservable<Tag?> SelectedTagChanged =>
 		_tagSelection.SelectedTagChanged

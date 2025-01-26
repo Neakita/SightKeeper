@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.DataSets.Tags;
 
-public class Tag
+public class Tag : Named
 {
 	public string Name
 	{

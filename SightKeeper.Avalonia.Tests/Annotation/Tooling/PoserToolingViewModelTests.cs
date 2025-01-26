@@ -16,6 +16,18 @@ namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 public sealed class PoserToolingViewModelTests
 {
 	[Fact]
+	public void TagSelectionShouldContainTagsFromProvidedSource()
+	{
+		var tooling = CreateTooling();
+		var tag1 = Substitute.For<PoserTag>();
+		var tag2 = Substitute.For<PoserTag>();
+		var tagsContainer = Substitute.For<TagsContainer<PoserTag>>();
+		tagsContainer.Tags.Returns([tag1, tag2]);
+		tooling.TagsSource = tagsContainer;
+		tooling.TagSelection.Tags.Should().Contain(tagsContainer.Tags);
+	}
+
+	[Fact]
 	public void SelectionShouldGetKeyPointTagsFromProvidedItem()
 	{
 		var screenshot = CreateScreenshot();

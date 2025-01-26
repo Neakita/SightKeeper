@@ -19,6 +19,8 @@ public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelect
 
 	public IReadOnlyCollection<Tag> Tags => DataSet?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
 
+	IReadOnlyCollection<Named> TagSelectionToolingDataContext.Tags => Tags;
+
 	public Tag? SelectedTag
 	{
 		get => Asset?.Tag;
@@ -31,6 +33,12 @@ public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelect
 			else
 				_annotator.SetTag(AssetsLibrary, Screenshot, value);
 		}
+	}
+
+	Named? TagSelectionToolingDataContext.SelectedTag
+	{
+		get => SelectedTag;
+		set => SelectedTag = (Tag?)value;
 	}
 
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag), nameof(IsEnabled))]

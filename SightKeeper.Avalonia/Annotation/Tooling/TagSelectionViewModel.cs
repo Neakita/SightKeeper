@@ -11,8 +11,19 @@ namespace SightKeeper.Avalonia.Annotation.Tooling;
 public sealed partial class TagSelectionViewModel : ViewModel, TagSelectionToolingDataContext, TagSelection, ObservableTagSelection
 {
 	public bool IsEnabled => true;
+
 	[ObservableProperty] public partial IReadOnlyCollection<Tag> Tags { get; set; } = ReadOnlyCollection<Tag>.Empty;
+
+	IReadOnlyCollection<Named> TagSelectionToolingDataContext.Tags => Tags;
+
 	[ObservableProperty] public partial Tag? SelectedTag { get; set; }
+
+	Named? TagSelectionToolingDataContext.SelectedTag
+	{
+		get => SelectedTag;
+		set => SelectedTag = (Tag?)value;
+	}
+
 	public IObservable<Tag?> SelectedTagChanged => _selectedTagChanged.AsObservable();
 
 	private readonly Subject<Tag?> _selectedTagChanged = new();
