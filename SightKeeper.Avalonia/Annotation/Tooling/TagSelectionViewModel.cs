@@ -8,27 +8,28 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public sealed partial class TagSelectionViewModel : ViewModel, TagSelectionToolingDataContext, TagSelection, ObservableTagSelection
+public sealed partial class TagSelectionViewModel<TTag> : ViewModel, TagSelectionToolingDataContext, TagSelection<TTag>, ObservableTagSelection<TTag>
+	where TTag : Named
 {
 	public bool IsEnabled => true;
 
-	[ObservableProperty] public partial IReadOnlyCollection<Tag> Tags { get; set; } = ReadOnlyCollection<Tag>.Empty;
+	[ObservableProperty] public partial IReadOnlyCollection<TTag> Tags { get; set; } = ReadOnlyCollection<TTag>.Empty;
 
-	IReadOnlyCollection<Named> TagSelectionToolingDataContext.Tags => Tags;
+	IReadOnlyCollection<Named> TagSelectionToolingDataContext.Tags => (IReadOnlyCollection<Named>)Tags;
 
-	[ObservableProperty] public partial Tag? SelectedTag { get; set; }
+	[ObservableProperty] public partial TTag? SelectedTag { get; set; }
 
 	Named? TagSelectionToolingDataContext.SelectedTag
 	{
 		get => SelectedTag;
-		set => SelectedTag = (Tag?)value;
+		set => SelectedTag = (TTag?)value;
 	}
 
-	public IObservable<Tag?> SelectedTagChanged => _selectedTagChanged.AsObservable();
+	public IObservable<TTag?> SelectedTagChanged => _selectedTagChanged.AsObservable();
 
-	private readonly Subject<Tag?> _selectedTagChanged = new();
+	private readonly Subject<TTag?> _selectedTagChanged = new();
 
-	partial void OnSelectedTagChanged(Tag? value)
+	partial void OnSelectedTagChanged(TTag? value)
 	{
 		_selectedTagChanged.OnNext(value);
 	}

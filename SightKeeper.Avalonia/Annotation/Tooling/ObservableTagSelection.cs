@@ -1,9 +1,8 @@
 using System;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public interface ObservableTagSelection
+public interface ObservableTagSelection<out TTag>
 {
-	IObservable<Tag?> SelectedTagChanged { get; }
+	IObservable<TTag?> SelectedTagChanged { get; }
 }

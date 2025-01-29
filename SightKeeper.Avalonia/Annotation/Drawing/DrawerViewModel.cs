@@ -10,7 +10,19 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 public sealed partial class DrawerViewModel : ViewModel
 {
 	[ObservableProperty] public partial Screenshot? Screenshot { get; set; }
-	[ObservableProperty] public partial Tag? Tag { get; set; }
+	public bool IsEnabled => Tag != null;
+
+	public Tag? Tag
+	{
+		get;
+		set
+		{
+			OnPropertyChanging(nameof(IsEnabled));
+			field = value;
+			_boundingDrawer.Tag = value;
+			OnPropertyChanged(nameof(IsEnabled));
+		}
+	}
 
 	public AssetsOwner<ItemsOwner>? AssetsLibrary
 	{
@@ -40,10 +52,5 @@ public sealed partial class DrawerViewModel : ViewModel
 	{
 		_boundingDrawer.Screenshot = value;
 		_itemsViewModel.Screenshot = value;
-	}
-
-	partial void OnTagChanged(Tag? value)
-	{
-		_boundingDrawer.Tag = value;
 	}
 }

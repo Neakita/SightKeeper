@@ -19,8 +19,8 @@ public sealed class PoserToolingViewModelTests
 	public void TagSelectionShouldContainTagsFromProvidedSource()
 	{
 		var tooling = CreateTooling();
-		var tag1 = Substitute.For<PoserTag>();
-		var tag2 = Substitute.For<PoserTag>();
+		var tag1 = CreatePoserTag();
+		var tag2 = CreatePoserTag();
 		var tagsContainer = Substitute.For<TagsContainer<PoserTag>>();
 		tagsContainer.Tags.Returns([tag1, tag2]);
 		tooling.TagsSource = tagsContainer;
@@ -127,5 +127,11 @@ public sealed class PoserToolingViewModelTests
 	private static KeyPoint CreateKeyPoint(Poser2DItem item, Tag keyPointTag)
 	{
 		return item.CreateKeyPoint(keyPointTag, new Vector2<double>(0.12, 0.34));
+	}
+
+	private static PoserTag CreatePoserTag()
+	{
+		Poser2DDataSet dataSet = new();
+		return dataSet.TagsLibrary.CreateTag(string.Empty);
 	}
 }

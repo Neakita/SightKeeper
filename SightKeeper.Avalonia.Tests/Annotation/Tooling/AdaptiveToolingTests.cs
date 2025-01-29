@@ -5,6 +5,7 @@ using Avalonia.VisualTree;
 using CommunityToolkit.Diagnostics;
 using FluentAssertions;
 using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 
@@ -50,9 +51,9 @@ public sealed class AdaptiveToolingTests
 		return new Composition().ClassifierAnnotationViewModel;
 	}
 
-	private static TagSelectionViewModel CreateTagSelectionViewModel()
+	private static TagSelectionViewModel<Tag> CreateTagSelectionViewModel()
 	{
-		return new TagSelectionViewModel();
+		return new TagSelectionViewModel<Tag>();
 	}
 
 	private static PoserToolingViewModel CreatePoserToolingModel()

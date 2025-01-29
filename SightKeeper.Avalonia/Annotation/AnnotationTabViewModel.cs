@@ -7,6 +7,7 @@ using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.ScreenshotsLibraries;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation;
 
@@ -65,13 +66,18 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 	{
 		_tagSelectionDisposable?.Dispose();
 		_tagSelectionDisposable = null;
-		if (value is TagSelection selection)
+		if (value is TagSelection<Tag> selection)
 		{
-			Drawer.Tag = selection.SelectedTag;
+			SetDrawerTag(selection.SelectedTag);
 		}
-		if (value is ObservableTagSelection observableSelection)
+		if (value is ObservableTagSelection<Tag> observableSelection)
 		{
-			_tagSelectionDisposable = observableSelection.SelectedTagChanged.Subscribe(tag => Drawer.Tag = tag);
+			_tagSelectionDisposable = observableSelection.SelectedTagChanged.Subscribe(SetDrawerTag);
 		}
+	}
+
+	private void SetDrawerTag(Tag? tag)
+	{
+		Drawer.Tag = tag;
 	}
 }

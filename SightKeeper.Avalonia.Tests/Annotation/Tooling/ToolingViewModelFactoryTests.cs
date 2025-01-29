@@ -3,6 +3,7 @@ using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser2D;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 
@@ -21,7 +22,7 @@ public sealed class ToolingViewModelFactoryTests
 	{
 		var factory = CreateFactory();
 		var tooling = factory.CreateToolingViewModel(new DetectorDataSet());
-		tooling.Should().BeOfType<TagSelectionViewModel>();
+		tooling.Should().BeOfType<TagSelectionViewModel<Tag>>();
 	}
 
 	[Fact]
