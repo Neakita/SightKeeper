@@ -8,7 +8,7 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
-             x:DataType="local:DrawerViewModel">
+             x:DataType="local:DrawerDataContext">
     <Panel Classes="regular-margin"
            VerticalAlignment="Center"
            HorizontalAlignment="Center">
@@ -34,7 +34,7 @@
                             Background="Transparent">
                         <Interaction.Behaviors>
                             <local:BoundingDrawingBehavior Command="{Binding CreateItemCommand}"
-                                                           IsEnabled="{Binding Tag, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                                           IsEnabled="{Binding IsEnabled}">
                                 <local:BoundingDrawingBehavior.DrawingItemTemplate>
                                     <DataTemplate>
                                         <Rectangle Stroke="Red" StrokeThickness="1"/>
@@ -67,25 +67,25 @@
                     <Setter Property="ClipToBounds" Value="False"/>
                     <Setter Property="Canvas.Left">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemViewModel).Bounding.Left"/>
+                            <Binding Path="(local:DrawerItemDataContext).Bounding.Left"/>
                             <Binding Path="#ListBox.Bounds.Width"/>
                         </MultiBinding>
                     </Setter>
                     <Setter Property="Canvas.Top">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemViewModel).Bounding.Top"/>
+                            <Binding Path="(local:DrawerItemDataContext).Bounding.Top"/>
                             <Binding Path="#ListBox.Bounds.Height"/>
                         </MultiBinding>
                     </Setter>
                     <Setter Property="Width">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemViewModel).Bounding.Width"/>
+                            <Binding Path="(local:DrawerItemDataContext).Bounding.Width"/>
                             <Binding Path="#ListBox.Bounds.Width"/>
                         </MultiBinding>
                     </Setter>
                     <Setter Property="Height">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemViewModel).Bounding.Height"/>
+                            <Binding Path="(local:DrawerItemDataContext).Bounding.Height"/>
                             <Binding Path="#ListBox.Bounds.Height"/>
                         </MultiBinding>
                     </Setter>

@@ -7,7 +7,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed partial class DrawerViewModel : ViewModel
+public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 {
 	[ObservableProperty] public partial Screenshot? Screenshot { get; set; }
 	public bool IsEnabled => Tag != null;
@@ -35,8 +35,8 @@ public sealed partial class DrawerViewModel : ViewModel
 		}
 	}
 
-	public IReadOnlyCollection<DrawerItemViewModel> Items => _itemsViewModel.Items;
-	[ObservableProperty] public partial DrawerItemViewModel? SelectedItem { get; set; }
+	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
+	[ObservableProperty] public partial DrawerItemDataContext? SelectedItem { get; set; }
 	public ICommand CreateItemCommand => _boundingDrawer.CreateItemCommand;
 
 	public DrawerViewModel(BoundingDrawerViewModel boundingDrawer, DrawerItemsViewModel itemsViewModel)
