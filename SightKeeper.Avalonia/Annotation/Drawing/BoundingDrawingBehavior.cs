@@ -6,6 +6,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 
@@ -19,6 +20,9 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 	public static readonly StyledProperty<IDataTemplate?> DrawingItemTemplateProperty =
 		AvaloniaProperty.Register<BoundingDrawingBehavior, IDataTemplate?>(nameof(DrawingItemTemplate));
 
+	public static readonly StyledProperty<double> MinimumBoundingSizeProperty =
+		DragableBoundingBehavior.MinimumBoundingSizeProperty.AddOwner<BoundingDrawingBehavior>();
+
 	public ICommand? Command
 	{
 		get => GetValue(CommandProperty);
@@ -29,6 +33,12 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 	{
 		get => GetValue(DrawingItemTemplateProperty);
 		set => SetValue(DrawingItemTemplateProperty, value);
+	}
+
+	public double MinimumBoundingSize
+	{
+		get => GetValue(MinimumBoundingSizeProperty);
+		set => SetValue(MinimumBoundingSizeProperty, value);
 	}
 
 	protected override void OnAttached()
@@ -92,12 +102,19 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		finalPosition = new Point(
 			Math.Clamp(finalPosition.X, 0, AssociatedObject.Bounds.Width),
 			Math.Clamp(finalPosition.Y, 0, AssociatedObject.Bounds.Height));
-		Bounding bounding = CreateBounding(_initialPosition, finalPosition);
+		var bounding = CreateBounding(_initialPosition, finalPosition);
+		if (!ShouldAnItemBeCreated(bounding))
+			return;
 		var associatedObjectSize = new Vector2<double>(AssociatedObject.Bounds.Width, AssociatedObject.Bounds.Height);
 		var normalizedBounding = bounding / associatedObjectSize;
 		Guard.IsNotNull(Command);
 		Guard.IsTrue(Command.CanExecute(normalizedBounding));
 		Command.Execute(normalizedBounding);
+	}
+
+	private bool ShouldAnItemBeCreated(Bounding bounding)
+	{
+		return bounding.Width > MinimumBoundingSize && bounding.Height > MinimumBoundingSize;
 	}
 
 	private void UpdateDrawingItemBounding(Point position)
