@@ -12,38 +12,38 @@ namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 public sealed class AdaptiveToolingTests
 {
 	[AvaloniaFact]
-	public void ShouldShowTagSelectionSideBarForClassifierAnnotationViewModel()
+	public void ShouldShowTagSelectionToolingForClassifierAnnotationViewModel()
 	{
-		var adaptiveSideBar = PrepareAdaptiveSideBar();
-		adaptiveSideBar.DataContext = CreateClassifierAnnotationViewModel();
-		AssertPresentsControl<TagSelectionTooling>(adaptiveSideBar);
+		var adaptiveTooling = PrepareAdaptiveTooling();
+		adaptiveTooling.DataContext = CreateClassifierAnnotationViewModel();
+		AssertPresentsControl<TagSelectionTooling>(adaptiveTooling);
 	}
 
 	[AvaloniaFact]
-	public void ShouldShowTagSelectionSideBarForTagSelectionViewModel()
+	public void ShouldShowTagSelectionToolingForTagSelectionViewModel()
 	{
-		var sideBar = PrepareAdaptiveSideBar();
-		sideBar.DataContext = CreateTagSelectionViewModel();
-		AssertPresentsControl<TagSelectionTooling>(sideBar);
+		var adaptiveTooling = PrepareAdaptiveTooling();
+		adaptiveTooling.DataContext = CreateTagSelectionViewModel();
+		AssertPresentsControl<TagSelectionTooling>(adaptiveTooling);
 	}
 
 	[AvaloniaFact]
-	public void ShouldShowPoserSideBar()
+	public void ShouldShowPoserTooling()
 	{
-		var sideBar = PrepareAdaptiveSideBar();
-		sideBar.DataContext = CreatePoserToolingModel();
-		AssertPresentsControl<PoserTooling>(sideBar);
+		var adaptiveTooling = PrepareAdaptiveTooling();
+		adaptiveTooling.DataContext = CreatePoserToolingModel();
+		AssertPresentsControl<PoserTooling>(adaptiveTooling);
 	}
 
-	private static AdaptiveTooling PrepareAdaptiveSideBar()
+	private static AdaptiveTooling PrepareAdaptiveTooling()
 	{
-		AdaptiveTooling sideBar = new();
+		AdaptiveTooling tooling = new();
 		Window window = new()
 		{
-			Content = sideBar
+			Content = tooling
 		};
 		window.Show();
-		return sideBar;
+		return tooling;
 	}
 
 	private static ClassifierAnnotationViewModel CreateClassifierAnnotationViewModel()
