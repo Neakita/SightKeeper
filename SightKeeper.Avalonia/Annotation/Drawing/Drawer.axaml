@@ -57,7 +57,10 @@
                     <Setter Property="Template">
                         <ControlTemplate>
                             <ContentPresenter Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Background="{TemplateBinding Background}"
+                                              BorderBrush="{TemplateBinding BorderBrush}"
+                                              BorderThickness="{TemplateBinding BorderThickness}"/>
                         </ControlTemplate>
                     </Setter>
                 </ControlTheme>
@@ -89,6 +92,39 @@
                             <Binding Path="#ListBox.Bounds.Height"/>
                         </MultiBinding>
                     </Setter>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush">
+                        <MultiBinding>
+                            <MultiBinding.Converter>
+                                <local:ModifyBrushOpacityConverter Opacity="0.4"/>
+                            </MultiBinding.Converter>
+                            <Binding Path="(local:DrawerItemDataContext).Tag.Color"
+                                     Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
+                        </MultiBinding>
+                    </Setter>
+                    <Style Selector="^:pointerover">
+                        <Setter Property="Background">
+                            <MultiBinding>
+                                <MultiBinding.Converter>
+                                    <local:ModifyBrushOpacityConverter Opacity="0.1"/>
+                                </MultiBinding.Converter>
+                                <Binding Path="(local:DrawerItemDataContext).Tag.Color"
+                                         Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
+                            </MultiBinding>
+                        </Setter>
+                    </Style>
+                    <Style Selector="^:selected">
+                        <Setter Property="BorderBrush">
+                            <MultiBinding>
+                                <MultiBinding.Converter>
+                                    <local:ModifyBrushOpacityConverter Opacity="0.8"/>
+                                </MultiBinding.Converter>
+                                <Binding Path="(local:DrawerItemDataContext).Tag.Color"
+                                         Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
+                            </MultiBinding>
+                        </Setter>
+                    </Style>
                 </Style>
             </ListBox.Styles>
             <ListBox.ItemTemplate>

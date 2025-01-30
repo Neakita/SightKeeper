@@ -7,9 +7,9 @@ using Avalonia.Media.Immutable;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-internal sealed class FromUIntToBrushConverter : IValueConverter
+internal sealed class UIntToBrushConverter : IValueConverter
 {
-	public static FromUIntToBrushConverter Instance { get; } = new();
+	public static UIntToBrushConverter Instance { get; } = new();
 
 	public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
