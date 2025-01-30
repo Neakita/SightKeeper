@@ -6,6 +6,7 @@
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
              x:DataType="local:DrawerDataContext">
@@ -117,6 +118,7 @@
                         </Setter>
                     </Style>
                     <Style Selector="^:selected">
+                        <Setter Property="ZIndex" Value="{x:Static system:Int32.MaxValue}"/>
                         <Setter Property="BorderBrush">
                             <MultiBinding>
                                 <MultiBinding.Converter>
