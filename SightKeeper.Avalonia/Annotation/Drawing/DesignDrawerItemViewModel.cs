@@ -1,3 +1,4 @@
+using Avalonia.Media;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
@@ -11,7 +12,9 @@ internal sealed class DesignDrawerItemViewModel : DrawerItemDataContext
 		get
 		{
 			DetectorDataSet dataSet = new();
-			return dataSet.TagsLibrary.CreateTag("Cop");
+			var tag = dataSet.TagsLibrary.CreateTag("Cop");
+			tag.Color = Color.FromRgb(0xF0, 0x22, 0x22).ToUInt32();
+			return tag;
 		}
 	}
 

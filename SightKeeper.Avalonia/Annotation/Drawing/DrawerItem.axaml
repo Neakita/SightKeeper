@@ -2,158 +2,97 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:boundingTransform="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform"
-             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.DrawerItem"
-             x:DataType="drawing:DrawerItemDataContext">
+             x:DataType="local:DrawerItemDataContext">
     <Design.DataContext>
-        <drawing:DesignDrawerItemViewModel/>
+        <local:DesignDrawerItemViewModel/>
     </Design.DataContext>
-    <Grid Name="Panel"
-          RowDefinitions="13 * 13"
-          ColumnDefinitions="13 * 13"
-          Margin="-6">
-        <Interaction.Behaviors>
-            <boundingTransform:DragableBoundingBehavior
-                CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
-                Bounding="{Binding Bounding}"
-                ThumbsPanel="Panel"
-                ItemContainer="{Binding $parent[ListBoxItem]}"/>
-        </Interaction.Behaviors>
-        <Grid.Styles>
-            <Style Selector="Thumb">
-                <Setter Property="ClipToBounds" Value="False"/>
-                <Setter Property="UseLayoutRounding" Value="False"/>
-            </Style>
-            <Style Selector="Thumb.corner">
-                <Setter Property="Template">
-                    <ControlTemplate>
-                        <Border Width="13" Height="13"
-                                Background="Transparent">
-                            <Ellipse Width="13" Height="13"
-                                     Stroke="Red"
-                                     StrokeThickness="1"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter>
-            </Style>
-            <Style Selector="Thumb.vertical">
-                <Setter Property="Template">
-                    <ControlTemplate>
-                        <Border Background="Transparent"
-                                Width="13">
-                            <Line Stroke="Red"
-                                  StrokeThickness="1"
-                                  StartPoint="0 0" EndPoint="0 1"
-                                  Stretch="Fill"
-                                  HorizontalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter>
-            </Style>
-            <Style Selector="Thumb.horizontal">
-                <Setter Property="Template">
-                    <ControlTemplate>
-                        <Border Background="Transparent"
-                                Height="13">
-                            <Line Stroke="Red"
-                                  StrokeThickness="1"
-                                  StartPoint="0 0" EndPoint="1 0"
-                                  Stretch="Fill"
-                                  VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter>
-            </Style>
-        </Grid.Styles>
-        <TextBlock Grid.Row="1" Grid.Column="1"
-                   Text="{Binding Tag.Name}"
-                   FontSize="12"/>
-        <Thumb Grid.Row="1" Grid.Column="0"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Stretch"
-               Classes="vertical"
-               Cursor="LeftSide"/>
-        <Thumb Grid.Row="0" Grid.Column="0"
-               HorizontalAlignment="Left" VerticalAlignment="Top"
-               Classes="corner"
-               Cursor="TopLeftCorner"/>
-        <Thumb Grid.Row="0" Grid.Column="1"
-               HorizontalAlignment="Stretch"
-               VerticalAlignment="Top"
-               Classes="horizontal"
-               Cursor="TopSide"/>
-        <Thumb Grid.Row="0" Grid.Column="2"
-               HorizontalAlignment="Right" VerticalAlignment="Top"
-               Classes="corner"
-               Cursor="TopRightCorner"/>
-        <Thumb Grid.Row="1" Grid.Column="2"
-               HorizontalAlignment="Right"
-               VerticalAlignment="Stretch"
-               Classes="vertical"
-               Cursor="RightSide"/>
-        <Thumb Grid.Row="2" Grid.Column="2"
-               HorizontalAlignment="Right" VerticalAlignment="Bottom"
-               Classes="corner"
-               Cursor="BottomRightCorner"/>
-        <Thumb Grid.Row="2" Grid.Column="1"
-               HorizontalAlignment="Stretch"
-               VerticalAlignment="Bottom"
-               Classes="horizontal"
-               Cursor="BottomSide"/>
-        <Thumb Grid.Row="2" Grid.Column="0"
-               HorizontalAlignment="Left" VerticalAlignment="Bottom"
-               Classes="corner"
-               Cursor="BottomLeftCorner"/>
-        <Thumb Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
-               HorizontalAlignment="Left" VerticalAlignment="Stretch"
-               Margin="-10 0 0 0"
-               boundingTransform:DragableBoundingBehavior.SideMode="MoveAlong"
-               Cursor="SizeNorthSouth">
-            <Thumb.Template>
-                <ControlTemplate>
-                    <StackPanel VerticalAlignment="Center"
-                                Background="Transparent">
-                        <icons:MaterialIcon Kind="ArrowUpThin"
-                                            Foreground="Red"
-                                            Width="10" Height="10"/>
-                        <icons:MaterialIcon Kind="ArrowDownThin"
-                                            Foreground="Red"
-                                            Width="10" Height="10"/>
-                    </StackPanel>
-                </ControlTemplate>
-            </Thumb.Template>
-        </Thumb>
-        <Thumb Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
-               HorizontalAlignment="Stretch" VerticalAlignment="Top"
-               Margin="0 -10 0 0"
-               boundingTransform:DragableBoundingBehavior.SideMode="MoveAlong"
-               Cursor="SizeWestEast">
-            <Thumb.Template>
-                <ControlTemplate>
-                    <StackPanel HorizontalAlignment="Center"
-                                Orientation="Horizontal"
-                                Background="Transparent">
-                        <icons:MaterialIcon Kind="ArrowLeftThin"
-                                            Foreground="Red"
-                                            Width="10" Height="10"/>
-                        <icons:MaterialIcon Kind="ArrowRightThin"
-                                            Foreground="Red"
-                                            Width="10" Height="10"/>
-                    </StackPanel>
-                </ControlTemplate>
-            </Thumb.Template>
-        </Thumb>
-        <Thumb Grid.Row="1" Grid.Column="1"
-               boundingTransform:DragableBoundingBehavior.SideMode="MoveAlong"
-               Cursor="SizeAll">
-            <Thumb.Template>
-                <ControlTemplate>
-                    <Border Background="Transparent"/>
-                </ControlTemplate>
-            </Thumb.Template>
-        </Thumb>
-    </Grid>
+    <Border BorderBrush="{Binding Tag.Color, Converter={x:Static local:FromUIntToBrushConverter.Instance}}"
+            BorderThickness="1"
+            Margin="-1">
+        <Panel>
+            <Border Background="{Binding Tag.Color, Converter={x:Static local:FromUIntToBrushConverter.Instance}}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Padding="1">
+                <TextBlock Text="{Binding Tag.Name}"
+                           FontSize="12"/>
+            </Border>
+            <Grid Name="Panel"
+                  RowDefinitions="9 * 9"
+                  ColumnDefinitions="9 * 9"
+                  Margin="-5">
+                <Interaction.Behaviors>
+                    <boundingTransform:DragableBoundingBehavior
+                        CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
+                        Bounding="{Binding Bounding}"
+                        ThumbsPanel="Panel"
+                        ItemContainer="{Binding $parent[ListBoxItem]}"/>
+                </Interaction.Behaviors>
+                <Grid.Styles>
+                    <Style Selector="Thumb">
+                        <Setter Property="ClipToBounds" Value="False"/>
+                        <Setter Property="UseLayoutRounding" Value="False"/>
+                        <Style.Resources>
+                            <local:MultiplyBrushSaturationConverter x:Key="ModifyBrushSaturationConverter"
+                                                                    SaturationMultiplier="0.5"/>
+                        </Style.Resources>
+                        <Setter Property="Template">
+                            <ControlTemplate>
+                                <Border
+                                    BorderBrush="{Binding Tag.Color, Converter={x:Static local:FromUIntToBrushConverter.Instance}}"
+                                    BorderThickness="1"
+                                    Width="9" Height="9"
+                                    CornerRadius="3">
+                                    <Border.Background>
+                                        <MultiBinding Converter="{StaticResource ModifyBrushSaturationConverter}">
+                                            <Binding Path="Tag.Color"
+                                                     Converter="{x:Static local:FromUIntToBrushConverter.Instance}"/>
+                                        </MultiBinding>
+                                    </Border.Background>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter>
+                    </Style>
+                </Grid.Styles>
+                <Thumb Grid.Row="1" Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Cursor="LeftSide"/>
+                <Thumb Grid.Row="0" Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Cursor="TopLeftCorner"/>
+                <Thumb Grid.Row="0" Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"
+                       Classes="horizontal"
+                       Cursor="TopSide"/>
+                <Thumb Grid.Row="0" Grid.Column="2"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Top"
+                       Cursor="TopRightCorner"/>
+                <Thumb Grid.Row="1" Grid.Column="2"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       Cursor="RightSide"/>
+                <Thumb Grid.Row="2" Grid.Column="2"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       Cursor="BottomRightCorner"/>
+                <Thumb Grid.Row="2" Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Classes="horizontal"
+                       Cursor="BottomSide"/>
+                <Thumb Grid.Row="2" Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom"
+                       Cursor="BottomLeftCorner"/>
+            </Grid>
+        </Panel>
+    </Border>
 </UserControl>
