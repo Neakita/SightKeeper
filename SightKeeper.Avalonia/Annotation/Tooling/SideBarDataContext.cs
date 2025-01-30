@@ -10,7 +10,7 @@ namespace SightKeeper.Avalonia.Annotation.Tooling;
 public interface SideBarDataContext
 {
 	IReadOnlyCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; }
-	ScreenshotsLibraryViewModel? SelectedScreenshotsLibrary { get; }
+	ScreenshotsLibraryViewModel? SelectedScreenshotsLibrary { get; set; }
 	ScreenshottingSettingsViewModel ScreenshottingSettings { get; }
 	IObservable<ushort> PendingScreenshotsCount { get; }
 	ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
