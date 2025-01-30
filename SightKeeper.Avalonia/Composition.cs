@@ -104,7 +104,7 @@ public sealed partial class Composition
 		.Bind<IValidator<ScreenshotsLibraryData>>().To<ScreenshotsLibraryDataValidator>()
 		.Bind<IValidator<ScreenshotsLibraryData>>("new").To<NewScreenshotsLibraryDataValidator>()
 		.Bind<ScreenshotsLibrariesDeleter>().To<LockingScreenshotsLibrariesDeleter>()
-		.RootBind<ScreenshotsViewModel>(nameof(ScreenshotsViewModel)).Bind<ScreenshotSelection>().As(Lifetime.Singleton).To<ScreenshotsViewModel>()
+		.RootBind<ScreenshotsViewModel>(nameof(ScreenshotsViewModel)).Bind<AnnotationScreenshotsComponent>().Bind<ScreenshotSelection>().As(Lifetime.Singleton).To<ScreenshotsViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
 		.Root<ClassifierAnnotationViewModel>(nameof(ClassifierAnnotationViewModel))

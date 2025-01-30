@@ -15,7 +15,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
-public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelection
+public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelection, AnnotationScreenshotsComponent
 {
 	public ScreenshotsLibrary? Library
 	{

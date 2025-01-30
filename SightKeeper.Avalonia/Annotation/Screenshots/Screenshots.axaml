@@ -7,7 +7,7 @@
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Screenshots.Screenshots"
-             x:DataType="local:ScreenshotsViewModel">
+             x:DataType="local:ScreenshotsDataContext">
     <ListBox ItemsSource="{Binding Screenshots}"
              SelectedIndex="{Binding SelectedScreenshotIndex}"
              Name="ListBox"
