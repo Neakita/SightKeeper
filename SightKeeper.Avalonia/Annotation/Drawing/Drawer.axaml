@@ -30,6 +30,9 @@
                  Name="ListBox"
                  ClipToBounds="False"
                  SelectionMode="Toggle">
+            <Interaction.Behaviors>
+                <local:DeselectListBoxItemOnClickOutsideOfItemBehavior/>
+            </Interaction.Behaviors>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Name="Canvas"
