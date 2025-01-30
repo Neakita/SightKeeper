@@ -7,12 +7,14 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
+using SightKeeper.Avalonia.Annotation.Drawing;
+using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataContext, TagSelection<Tag>, ObservableTagSelection<Tag>, IDisposable
+public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataContext, TagSelection<Tag>, ObservableTagSelection<Tag>, SelectedItemConsumer, IDisposable
 {
 	public TagSelectionToolingDataContext TagSelection => _tagSelection;
 	public TagSelectionToolingDataContext KeyPointTagSelection => _keyPointTagSelection;
@@ -36,6 +38,11 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 			_keyPointTagSelection.Tags = value?.Tag.KeyPointTags ?? ReadOnlyCollection<Tag>.Empty;
 			DeleteKeyPointCommand.NotifyCanExecuteChanged();
 		}
+	}
+
+	DrawerItemDataContext? SelectedItemConsumer.SelectedItem
+	{
+		set => SelectedItem = ((PoserItemViewModel?)value)?.Item;
 	}
 
 	public Tag? SelectedTag => _tagSelection.SelectedTag ?? _keyPointTagSelection.SelectedTag;

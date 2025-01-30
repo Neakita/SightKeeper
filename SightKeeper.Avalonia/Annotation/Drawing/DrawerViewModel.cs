@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.DataSets.Assets;
@@ -38,6 +41,7 @@ public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerCompone
 	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
 	[ObservableProperty] public partial DrawerItemDataContext? SelectedItem { get; set; }
 	public ICommand CreateItemCommand => _boundingDrawer.CreateItemCommand;
+	public IObservable<DrawerItemDataContext?> SelectedItemChanged => _selectedItemChanged.AsObservable();
 
 	public DrawerViewModel(BoundingDrawerViewModel boundingDrawer, DrawerItemsViewModel itemsViewModel)
 	{
@@ -47,10 +51,16 @@ public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerCompone
 
 	private readonly BoundingDrawerViewModel _boundingDrawer;
 	private readonly DrawerItemsViewModel _itemsViewModel;
+	private readonly Subject<DrawerItemDataContext?> _selectedItemChanged = new();
 
 	partial void OnScreenshotChanged(Screenshot? value)
 	{
 		_boundingDrawer.Screenshot = value;
 		_itemsViewModel.Screenshot = value;
+	}
+
+	partial void OnSelectedItemChanged(DrawerItemDataContext? value)
+	{
+		_selectedItemChanged.OnNext(value);
 	}
 }

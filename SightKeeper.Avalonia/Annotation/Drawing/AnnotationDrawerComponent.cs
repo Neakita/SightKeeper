@@ -1,3 +1,4 @@
+using System;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Screenshots;
@@ -10,4 +11,5 @@ public interface AnnotationDrawerComponent : DrawerDataContext
 	new Screenshot? Screenshot { get; set; }
 	Screenshot? DrawerDataContext.Screenshot => Screenshot;
 	public Tag? Tag { set; }
+	IObservable<DrawerItemDataContext?> SelectedItemChanged { get; }
 }

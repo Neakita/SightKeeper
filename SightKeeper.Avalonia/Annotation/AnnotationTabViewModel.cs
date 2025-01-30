@@ -17,12 +17,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 	public AnnotationDrawerComponent Drawer { get; }
 	public AnnotationSideBarComponent SideBar { get; }
 
-	public void Dispose()
-	{
-		_disposable.Dispose();
-	}
-
-	internal AnnotationTabViewModel(
+	public AnnotationTabViewModel(
 		AnnotationScreenshotsComponent screenshots,
 		AnnotationDrawerComponent drawer,
 		AnnotationSideBarComponent sideBar)
@@ -44,8 +39,13 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 			.DisposeWith(_disposable);
 	}
 
+	public void Dispose()
+	{
+		_disposable.Dispose();
+	}
+
 	private readonly CompositeDisposable _disposable = new();
-	private IDisposable? _tagSelectionDisposable;
+	private CompositeDisposable? _additionalToolingDisposable;
 
 	private void OnSelectedScreenshotsLibraryChanged(ScreenshotsLibraryViewModel? value)
 	{
@@ -64,16 +64,23 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 
 	private void OnAdditionalToolingChanged(object? value)
 	{
-		_tagSelectionDisposable?.Dispose();
-		_tagSelectionDisposable = null;
+		_additionalToolingDisposable?.Dispose();
+		_additionalToolingDisposable = null;
+		CompositeDisposable disposable = new();
 		if (value is TagSelection<Tag> selection)
 		{
 			SetDrawerTag(selection.SelectedTag);
 		}
 		if (value is ObservableTagSelection<Tag> observableSelection)
 		{
-			_tagSelectionDisposable = observableSelection.SelectedTagChanged.Subscribe(SetDrawerTag);
+			observableSelection.SelectedTagChanged.Subscribe(SetDrawerTag).DisposeWith(disposable);
 		}
+		if (value is SelectedItemConsumer selectedItemConsumer)
+		{
+			selectedItemConsumer.SelectedItem = Drawer.SelectedItem;
+			Drawer.SelectedItemChanged.Subscribe(item => selectedItemConsumer.SelectedItem = item);
+		}
+		_additionalToolingDisposable = _disposable;
 	}
 
 	private void SetDrawerTag(Tag? tag)
