@@ -31,21 +31,8 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 	public static readonly StyledProperty<double> MinimumBoundingSizeProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, double>(nameof(MinimumBoundingSize), 20);
 
-	public static readonly AttachedProperty<ThumbSideMode> SideModeProperty =
-		AvaloniaProperty.RegisterAttached<Thumb, ThumbSideMode>("SideMode", typeof(DragableBoundingBehavior));
-
 	public static readonly StyledProperty<Layoutable?> ItemContainerProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, Layoutable?>(nameof(ItemContainer));
-
-	public static void SetSideMode(Thumb element, ThumbSideMode value)
-	{
-		element.SetValue(SideModeProperty, value);
-	}
-
-	public static ThumbSideMode GetSideMode(Thumb element)
-	{
-		return element.GetValue(SideModeProperty);
-	}
 
 	protected override void OnAttachedToVisualTree()
 	{
@@ -104,8 +91,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		thumb.DragDelta += OnThumbDragDelta;
 		thumb.DragCompleted += OnThumbDragCompleted;
 		Guard.IsNull(_transformer);
-		var sideMode = GetSideMode(thumb);
-		_transformer = CreateTransformer(thumb.HorizontalAlignment, thumb.VerticalAlignment, sideMode);
+		_transformer = CreateTransformer(thumb.HorizontalAlignment, thumb.VerticalAlignment);
 		_transformer.MinimumSize = new Vector2<double>(1 / CanvasSize.Width * MinimumBoundingSize,
 			1 / CanvasSize.Height * MinimumBoundingSize);
 		_bounding = Bounding;
@@ -152,20 +138,9 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	private static BoundingTransformer CreateTransformer(
 		HorizontalAlignment horizontalAlignment,
-		VerticalAlignment verticalAlignment,
-		ThumbSideMode sideMode)
+		VerticalAlignment verticalAlignment)
 	{
 		List<BoundingTransformer> transformers = new(2);
-		if (sideMode == ThumbSideMode.MoveAlong)
-		{
-			if (horizontalAlignment == HorizontalAlignment.Stretch)
-				transformers.Add(new HorizontalMoveBoundingTransformer());
-			if (verticalAlignment == VerticalAlignment.Stretch)
-				transformers.Add(new VerticalMoveBoundingTransformer());
-			if (transformers.Count > 1)
-				return new AggregateBoundingTransformer(transformers);
-			return transformers.Single();
-		}
 		var horizontalSide = horizontalAlignment.ToOptionalSide();
 		var verticalSide = verticalAlignment.ToOptionalSide();
 		if (horizontalSide != null)
