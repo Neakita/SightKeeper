@@ -7,7 +7,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
+public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerComponent
 {
 	[ObservableProperty] public partial Screenshot? Screenshot { get; set; }
 	public bool IsEnabled => Tag != null;

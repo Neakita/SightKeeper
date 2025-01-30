@@ -14,7 +14,7 @@ namespace SightKeeper.Avalonia.Annotation;
 public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 {
 	public AnnotationScreenshotsComponent Screenshots { get; }
-	public DrawerViewModel Drawer { get; }
+	public AnnotationDrawerComponent Drawer { get; }
 	public SideBarViewModel SideBar { get; }
 
 	public void Dispose()
@@ -24,7 +24,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 
 	internal AnnotationTabViewModel(
 		AnnotationScreenshotsComponent screenshots,
-		DrawerViewModel drawer,
+		AnnotationDrawerComponent drawer,
 		SideBarViewModel sideBar)
 	{
 		SideBar = sideBar;
