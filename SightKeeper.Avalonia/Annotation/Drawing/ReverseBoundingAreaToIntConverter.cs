@@ -18,7 +18,7 @@ internal sealed class ReverseBoundingAreaToIntConverter : IValueConverter
 		Guard.IsBetweenOrEqualTo(bounding.Width, 0, 1);
 		Guard.IsBetweenOrEqualTo(bounding.Height, 0, 1);
 		var area = bounding.Width * bounding.Height;
-		return MaxValue * (1 - area);
+		return (int)(MaxValue * (1 - area));
 	}
 
 	public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
