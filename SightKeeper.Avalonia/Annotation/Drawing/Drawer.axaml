@@ -103,6 +103,8 @@
                                      Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
                         </MultiBinding>
                     </Setter>
+                    <Setter Property="ZIndex"
+                            Value="{Binding (local:DrawerItemDataContext).Bounding, Converter={x:Static local:ReverseBoundingAreaToIntConverter.Instance}}"/>
                     <Style Selector="^:pointerover">
                         <Setter Property="Background">
                             <MultiBinding>
