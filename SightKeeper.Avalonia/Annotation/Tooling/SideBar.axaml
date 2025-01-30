@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Tooling.SideBar"
-             x:DataType="local:SideBarViewModel">
+             x:DataType="local:SideBarDataContext">
     <StackPanel Classes="regular-spacing">
         <Border Classes="outer wide-padding">
             <StackPanel Classes="regular-spacing">

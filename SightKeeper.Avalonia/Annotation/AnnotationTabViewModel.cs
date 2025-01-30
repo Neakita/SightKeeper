@@ -62,7 +62,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 		Drawer.Screenshot = Screenshots.SelectedScreenshot;
 	}
 
-	private void OnAdditionalToolingChanged(ViewModel? value)
+	private void OnAdditionalToolingChanged(object? value)
 	{
 		_tagSelectionDisposable?.Dispose();
 		_tagSelectionDisposable = null;
