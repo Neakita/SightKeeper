@@ -39,23 +39,27 @@
                 <Style Selector="Thumb">
                     <Setter Property="ClipToBounds" Value="False"/>
                     <Setter Property="UseLayoutRounding" Value="False"/>
+                    <Setter Property="Background">
+                        <MultiBinding>
+                            <MultiBinding.Converter>
+                                <local:MultiplyBrushSaturationConverter SaturationMultiplier="0.5"/>
+                            </MultiBinding.Converter>
+                            <Binding Path="Tag.Color"
+                                     Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
+                        </MultiBinding>
+                    </Setter>
+                    <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={x:Static local:UIntToBrushConverter.Instance}}"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Width" Value="9"/>
+                    <Setter Property="Height" Value="9"/>
+                    <Setter Property="CornerRadius" Value="3"/>
                     <Setter Property="Template">
                         <ControlTemplate>
                             <Border
-                                BorderBrush="{Binding Tag.Color, Converter={x:Static local:UIntToBrushConverter.Instance}}"
-                                BorderThickness="1"
-                                Width="9" Height="9"
-                                CornerRadius="3">
-                                <Border.Background>
-                                    <MultiBinding>
-                                        <MultiBinding.Converter>
-                                            <local:MultiplyBrushSaturationConverter SaturationMultiplier="0.5"/>
-                                        </MultiBinding.Converter>
-                                        <Binding Path="Tag.Color"
-                                                 Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
-                                    </MultiBinding>
-                                </Border.Background>
-                            </Border>
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Background="{TemplateBinding Background}"/>
                         </ControlTemplate>
                     </Setter>
                 </Style>
