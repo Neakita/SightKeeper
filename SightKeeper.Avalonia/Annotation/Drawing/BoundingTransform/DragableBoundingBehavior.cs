@@ -95,6 +95,13 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		_transformer.MinimumSize = new Vector2<double>(1 / CanvasSize.Width * MinimumBoundingSize,
 			1 / CanvasSize.Height * MinimumBoundingSize);
 		_bounding = Bounding;
+		HideThumbs();
+	}
+
+	private void HideThumbs()
+	{
+		Guard.IsNotNull(ThumbsPanel);
+		ThumbsPanel.Opacity = 0;
 	}
 
 	private void OnThumbDragDelta(object? sender, VectorEventArgs e)
@@ -124,6 +131,13 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		Bounding = _bounding;
 		_transformer = null;
 		ClearItemDisplayValues();
+		ShowThumbs();
+	}
+
+	private void ShowThumbs()
+	{
+		Guard.IsNotNull(ThumbsPanel);
+		ThumbsPanel.ClearValue(Visual.OpacityProperty);
 	}
 
 	private void ClearItemDisplayValues()
