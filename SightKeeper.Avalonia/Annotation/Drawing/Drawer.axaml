@@ -28,7 +28,8 @@
         <ListBox ItemsSource="{Binding Items}"
                  SelectedItem="{Binding SelectedItem}"
                  Name="ListBox"
-                 ClipToBounds="False">
+                 ClipToBounds="False"
+                 SelectionMode="Toggle">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Name="Canvas"
