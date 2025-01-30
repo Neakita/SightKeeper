@@ -11,7 +11,7 @@ using SightKeeper.Avalonia.ScreenshotsLibraries;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public sealed partial class SideBarViewModel : ViewModel, SideBarDataContext
+public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarComponent
 {
 	private readonly ToolingViewModelFactory _toolingViewModelFactory;
 	public IReadOnlyCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; }

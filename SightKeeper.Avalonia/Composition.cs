@@ -113,5 +113,6 @@ public sealed partial class Composition
 		.Bind<BoundingEditor>().To<AppDataBoundingEditor>()
 		.Root<PoserToolingViewModel>(nameof(PoserToolingViewModel))
 		.Bind<PoserAnnotator>().Bind<ObservablePoserAnnotator>().As(Lifetime.Singleton).To<AppDataPoserAnnotator>()
-		.Bind<AnnotationDrawerComponent>().To<DrawerViewModel>();
+		.Bind<AnnotationDrawerComponent>().To<DrawerViewModel>()
+		.Bind<AnnotationSideBarComponent>().To<SideBarViewModel>();
 }

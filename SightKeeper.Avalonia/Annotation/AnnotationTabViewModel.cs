@@ -15,7 +15,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 {
 	public AnnotationScreenshotsComponent Screenshots { get; }
 	public AnnotationDrawerComponent Drawer { get; }
-	public SideBarViewModel SideBar { get; }
+	public AnnotationSideBarComponent SideBar { get; }
 
 	public void Dispose()
 	{
@@ -25,7 +25,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 	internal AnnotationTabViewModel(
 		AnnotationScreenshotsComponent screenshots,
 		AnnotationDrawerComponent drawer,
-		SideBarViewModel sideBar)
+		AnnotationSideBarComponent sideBar)
 	{
 		SideBar = sideBar;
 		Drawer = drawer;
