@@ -5,7 +5,7 @@
              RequestedThemeVariant="Dark">
 
     <Application.Styles>
-        <StyleInclude Source="avares://Sightful.Avalonia/DefaultTheme.axaml"/>
+        <StyleInclude Source="avares://Sightful.Avalonia/SightfulTheme.axaml"/>
         <StyleInclude Source="avares://Sightful.Avalonia.TreeDataGrid/SightfulTreeDataGridTheme.axaml"/>
         <StyleInclude Source="avares://Sightful.Avalonia.Controls/MultiSlider.axaml"/>
     </Application.Styles>
