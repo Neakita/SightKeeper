@@ -12,6 +12,7 @@ using CommunityToolkit.Diagnostics;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Avalonia.Annotation.Drawing;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Drawing;
@@ -71,6 +72,20 @@ public sealed class BoundingDrawingBehaviorTests
 		Bounding bounding = new(0.1, 0.2, 0.3, 0.4);
 		BeginDrawBoundingAtCanvas(bounding);
 		_canvas.Children.Should().NotContain(control => IsDisplays(control, bounding));
+	}
+
+	[AvaloniaFact]
+	public void ShouldNotExecuteWhenBelowMinimumSize()
+	{
+		var command = Substitute.For<ICommand>();
+		command.CanExecute(Arg.Any<Bounding>()).Returns(true);
+		var behavior = CreateBehavior(command);
+		behavior.MinimumBoundingSize = 20;
+		_canvas = CreateCanvas(behavior);
+		_window = PrepareWindow(_canvas);
+		var bounding = CreateBounding(new Vector2<double>(5, 10));
+		DrawBoundingAtCanvas(bounding);
+		command.DidNotReceive().Execute(Arg.Any<Bounding>());
 	}
 
 	private Canvas? _canvas;
@@ -170,5 +185,12 @@ public sealed class BoundingDrawingBehaviorTests
 			control.Bounds.Bottom / canvasHeight);
 		BoundingApproximateEqualityComparer comparer = new();
 		return comparer.Equals(bounding, displayedBounding);
+	}
+
+	private Bounding CreateBounding(Vector2<double> absoluteSize)
+	{
+		Guard.IsNotNull(_canvas);
+		var normalizedSize = absoluteSize / new Vector2<double>(_canvas.Width, _canvas.Height);
+		return new Bounding(new Vector2<double>(0.1, 0.2), normalizedSize);
 	}
 }
