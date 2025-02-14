@@ -91,7 +91,8 @@ public sealed class BoundingDrawingBehaviorTests
 		BoundingDrawingBehavior behavior = new()
 		{
 			Command = command,
-			DrawingItemTemplate = drawingItemTemplate
+			DrawingItemTemplate = drawingItemTemplate,
+			MinimumBoundingSize = 0
 		};
 		return behavior;
 	}
