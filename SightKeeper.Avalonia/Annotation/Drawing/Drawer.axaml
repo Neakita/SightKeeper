@@ -32,6 +32,11 @@
                  SelectionMode="Toggle">
             <Interaction.Behaviors>
                 <local:DeselectListBoxItemOnClickOutsideOfItemBehavior/>
+                <behaviors:AddPseudoClassOnGesturePressed ClassName="clickable-items">
+                    <behaviors:AddPseudoClassOnGesturePressed.Gesture>
+                        <KeyGesture>LeftCtrl</KeyGesture>
+                    </behaviors:AddPseudoClassOnGesturePressed.Gesture>
+                </behaviors:AddPseudoClassOnGesturePressed>
             </Interaction.Behaviors>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -71,6 +76,9 @@
                 </ControlTheme>
             </ListBox.ItemContainerTheme>
             <ListBox.Styles>
+                <Style Selector="ListBox:not(.clickable-items) ListBoxItem">
+                    <Setter Property="IsHitTestVisible" Value="False"/>
+                </Style>
                 <Style Selector=":is(Panel)#ThumbsPanel">
                     <Setter Property="IsVisible" Value="False"/>
                 </Style>

@@ -1,5 +1,6 @@
 ﻿<Solution>
   <Folder Name="/HotKeys/">
+    <Project Path="..\HotKeys\HotKeys.Avalonia\HotKeys.Avalonia.csproj" Type="Classic C#" />
     <Project Path="..\HotKeys\HotKeys.SharpHook\HotKeys.SharpHook.csproj" Type="Classic C#" />
     <Project Path="..\HotKeys\HotKeys\HotKeys.csproj" Type="Classic C#" />
   </Folder>
