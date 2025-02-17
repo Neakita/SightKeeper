@@ -2,18 +2,16 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 using HotKeys;
 using HotKeys.Avalonia;
 using HotKeys.Bindings;
 using HotKeys.Gestures;
-using Binding = HotKeys.Bindings.Binding;
 
 namespace SightKeeper.Avalonia.Behaviors;
 
-internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>
+internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>, ContinuousHandler
 {
 	public static readonly StyledProperty<object?> GestureProperty =
 		AvaloniaProperty.Register<AddPseudoClassOnGesturePressed, object?>(nameof(Gesture));
@@ -33,6 +31,19 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>
 		set => SetValue(ClassNameProperty, value);
 	}
 
+	public void Begin()
+	{
+		Guard.IsNotNull(AssociatedObject);
+		AssociatedObject.Classes.Add(ClassName);
+	}
+
+	public void End()
+	{
+		Guard.IsNotNull(AssociatedObject);
+		bool isRemoved = AssociatedObject.Classes.Remove(ClassName);
+		Guard.IsTrue(isRemoved);
+	}
+
 	protected override void OnAttachedToVisualTree()
 	{
 		Guard.IsNotNull(AssociatedObject);
@@ -40,12 +51,6 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>
 		Guard.IsNotNull(topLevel);
 		var observableGesture = topLevel.ObserveInputStates().Filter().ToGesture();
 		_bindingsManager = new BindingsManager(observableGesture);
-		_binding = _bindingsManager.CreateBinding(context =>
-		{
-			Dispatcher.UIThread.Invoke(() => AssociatedObject.Classes.Add(ClassName));
-			context.WaitForElimination();
-			Dispatcher.UIThread.Invoke(() => AssociatedObject.Classes.Remove(ClassName));
-		}, InputTypes.Hold);
 		UpdateBinding();
 	}
 
@@ -71,18 +76,20 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>
 	}
 
 	private BindingsManager? _bindingsManager;
-	private Binding? _binding;
+	private IDisposable? _binding;
 
 	private void UpdateBinding()
 	{
-		if (_bindingsManager == null || _binding == null)
+		_binding?.Dispose();
+		if (_bindingsManager == null)
 			return;
-		Gesture gesture = Gesture switch
+		if (Gesture == null)
+			return;
+		var gesture = Gesture switch
 		{
 			KeyGesture keyGesture => new Gesture(keyGesture.Key),
-			null => HotKeys.Gestures.Gesture.Empty,
 			_ => throw new ArgumentOutOfRangeException(nameof(Gesture), Gesture, null)
 		};
-		_bindingsManager.SetGesture(_binding, gesture);
+		_binding = _bindingsManager.Bind(gesture, this);
 	}
 }

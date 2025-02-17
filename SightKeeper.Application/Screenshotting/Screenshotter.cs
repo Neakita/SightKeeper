@@ -1,9 +1,7 @@
 using CommunityToolkit.Diagnostics;
-using HotKeys;
-using HotKeys.ActionRunners;
 using HotKeys.Bindings;
 using HotKeys.Gestures;
-using HotKeys.SharpHook;
+using HotKeys.Handlers.Contextual;
 using SharpHook.Native;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Screenshots;
@@ -58,7 +56,7 @@ public abstract class Screenshotter
 		}
 	}
 
-	public Gesture Gesture { get; set; } = new([new FormattedButton(MouseButton.Button1)]);
+	public Gesture Gesture { get; set; } = new(MouseButton.Button1);
 
 	protected TimeSpan? Timeout => TimeSpan.FromSeconds(1) / FPSLimit;
 	protected Vector2<ushort> Offset => _screenBoundsProvider.MainScreenCenter - _resolution / 2;
@@ -69,6 +67,7 @@ public abstract class Screenshotter
 	{
 		_screenBoundsProvider = screenBoundsProvider;
 		_bindingsManager = bindingsManager;
+		_handler = new ContextualizedHandler(MakeScreenshots);
 	}
 
 	protected abstract void MakeScreenshots(ActionContext context);
@@ -76,17 +75,17 @@ public abstract class Screenshotter
 	private const ushort MinimumResolutionDimension = 32;
 	private readonly ScreenBoundsProvider _screenBoundsProvider;
 	private readonly BindingsManager _bindingsManager;
+	private readonly ContextualizedHandler _handler;
 	private float? _fpsLimit;
 	private Vector2<ushort> _resolution = new(320, 320);
 	private bool _isEnabled;
-	private Binding? _binding;
+	private IDisposable? _binding;
 	private ScreenshotsLibrary? _library;
 
 	protected virtual void Enable()
 	{
 		Guard.IsNull(_binding);
-		_binding = _bindingsManager.CreateBinding(MakeScreenshots, InputTypes.Hold);
-		_bindingsManager.SetGesture(_binding, Gesture);
+		_binding = _bindingsManager.Bind(Gesture, _handler);
 	}
 
 	protected virtual void Disable()

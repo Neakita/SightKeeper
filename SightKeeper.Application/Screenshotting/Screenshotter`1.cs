@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Diagnostics;
-using HotKeys.ActionRunners;
 using HotKeys.Bindings;
+using HotKeys.Handlers.Contextual;
 using SightKeeper.Application.Screenshotting.Saving;
 using SightKeeper.Domain;
 
@@ -70,9 +70,9 @@ public sealed class Screenshotter<TPixel> : Screenshotter
 			var imageData = _screenCapture.Capture(ImageSize, offset);
 			session.CreateScreenshot(imageData, DateTimeOffset.Now);
 			if (Timeout != null)
-				contextEliminated = context.WaitForElimination(Timeout.Value - stopwatch.Elapsed);
+				contextEliminated = context.IsEliminatedAfter(Timeout.Value - stopwatch.Elapsed);
 			else
-				contextEliminated = !context.Alive;
+				contextEliminated = !context.IsAlive;
 			stopwatch.Stop();
 		}
 	}
