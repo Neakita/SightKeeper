@@ -40,10 +40,10 @@ public sealed class BufferedScreenshotsSaverSession<TPixel> : ScreenshotsSaverSe
 		ConvertedPixelsArrayPool = convertedPixelsArrayPool;
 	}
 
-	public override void CreateScreenshot(ReadOnlySpan2D<TPixel> imageData, DateTimeOffset creationDate)
+	public override void CreateScreenshot(ReadOnlySpan2D<TPixel> imageData)
 	{
 		Guard.IsFalse(IsLimitExceeded);
-		var data = new ScreenshotData<TPixel>(creationDate, imageData, RawPixelsArrayPool);
+		var data = new ScreenshotData<TPixel>(imageData, RawPixelsArrayPool);
 		_pendingScreenshots.Enqueue(data);
 		if (_processingTask.IsCompleted)
 			_processingTask = Task.Run(ProcessScreenshots);
