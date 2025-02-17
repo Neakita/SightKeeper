@@ -38,10 +38,8 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>
 		Guard.IsNotNull(AssociatedObject);
 		var topLevel = TopLevel.GetTopLevel(AssociatedObject);
 		Guard.IsNotNull(topLevel);
-		InputElementKeyManager keyManager = new(topLevel);
-		InputElementMouseButtonManager mouseButtonManager = new(topLevel);
-		_gestureManager = new GestureManager(new AggregateKeyManager(new KeyManagerFilter<Key>(keyManager), new KeyManagerFilter<MouseButton>(mouseButtonManager)));
-		_bindingsManager = new BindingsManager(_gestureManager);
+		var observableGesture = topLevel.ObserveInputStates().Filter().ToGesture();
+		_bindingsManager = new BindingsManager(observableGesture);
 		_binding = _bindingsManager.CreateBinding(context =>
 		{
 			Dispatcher.UIThread.Invoke(() => AssociatedObject.Classes.Add(ClassName));
@@ -70,11 +68,8 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>
 		_binding.Dispose();
 		Guard.IsNotNull(_bindingsManager);
 		_bindingsManager.Dispose();
-		Guard.IsNotNull(_gestureManager);
-		_gestureManager.Dispose();
 	}
 
-	private GestureManager? _gestureManager;
 	private BindingsManager? _bindingsManager;
 	private Binding? _binding;
 
@@ -84,7 +79,7 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>
 			return;
 		Gesture gesture = Gesture switch
 		{
-			KeyGesture keyGesture => new(keyGesture.Key),
+			KeyGesture keyGesture => new Gesture(keyGesture.Key),
 			null => HotKeys.Gestures.Gesture.Empty,
 			_ => throw new ArgumentOutOfRangeException(nameof(Gesture), Gesture, null)
 		};

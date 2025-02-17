@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading;
 using FluentValidation;
 using HotKeys;
+using HotKeys.Bindings;
 using HotKeys.SharpHook;
 using Material.Icons;
 using Pure.DI;
@@ -64,13 +65,11 @@ public sealed partial class Composition
 			hook.RunAsync();
 			return hook;
 		})
-		.Bind<KeyManager>().As(Lifetime.Singleton).To(context =>
+		.Bind<BindingsManager>().As(Lifetime.Singleton).To(context =>
 		{
 			context.Inject(out IReactiveGlobalHook hook);
-			KeyManagerFilter<FormattedKeyCode> keyboardManager = new(new SharpHookKeyboardKeyManager(hook));
-			KeyManagerFilter<FormattedButton> mouseManager = new(new SharpHookMouseButtonsManager(hook));
-			AggregateKeyManager keyManager = new([keyboardManager, mouseManager]);
-			return keyManager;
+			var observableGesture = hook.ObserveInputStates().ToGesture();
+			return new BindingsManager(observableGesture);
 		})
 		.Bind().As(Lifetime.Singleton).To<DialogManager>()
 		.Bind<TabItemViewModel>().To(context =>

@@ -43,6 +43,7 @@ public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelectio
 		ObservableScreenshotsDataAccess observableDataAccess,
 		IEnumerable<ObservableAnnotator> observableAnnotators)
 	{
+		_screenshotsSource = new SourceList<Screenshot>();
 		_screenshotsSource.Connect()
 			.Transform(screenshot => new ScreenshotViewModel(screenshot))
 			.AddKey(viewModel => viewModel.Value)
@@ -69,7 +70,7 @@ public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelectio
 	}
 
 	private readonly CompositeDisposable _disposable = new();
-	private readonly SourceList<Screenshot> _screenshotsSource = new();
+	private readonly SourceList<Screenshot> _screenshotsSource;
 	private readonly SourceCache<ScreenshotViewModel, Screenshot> _screenshotsCache = new(viewModel => viewModel.Value);
 	private readonly Subject<Unit> _selectedScreenshotChanged = new();
 
