@@ -53,21 +53,17 @@ public sealed class Screenshotter<TPixel> : Screenshotter
 
 	protected override void MakeScreenshots(ActionContext context)
 	{
-		var isContextAlive = false;
 		var session = _session;
 		Guard.IsNotNull(session);
-		while (isContextAlive && IsEnabled)
+		var processingStopwatch = Stopwatch.StartNew();
+		do
 		{
 			if (session is LimitedSession limitedSession && context.IsEliminatedAfterCompletion(limitedSession.Limit))
 				return;
-			var stopwatch = Stopwatch.StartNew();
+			processingStopwatch.Restart();
 			var imageData = _screenCapture.Capture(ImageSize, Offset);
 			session.CreateScreenshot(imageData);
-			if (Timeout != null)
-				isContextAlive = !context.IsEliminatedAfter(Timeout.Value - stopwatch.Elapsed);
-			else
-				isContextAlive = context.IsAlive;
-			stopwatch.Stop();
-		}
+		} while (IsEnabled && context.IsAliveAfter(Timeout - processingStopwatch.Elapsed));
+		processingStopwatch.Stop();
 	}
 }

@@ -58,7 +58,7 @@ public abstract class Screenshotter
 
 	public Gesture Gesture { get; set; } = new(MouseButton.Button1);
 
-	protected TimeSpan? Timeout => TimeSpan.FromSeconds(1) / FPSLimit;
+	protected TimeSpan Timeout => FPSLimit == null ? TimeSpan.Zero : TimeSpan.FromSeconds(1) / FPSLimit.Value;
 	protected Vector2<ushort> Offset => _screenBoundsProvider.MainScreenCenter - _resolution / 2;
 
 	protected Screenshotter(
