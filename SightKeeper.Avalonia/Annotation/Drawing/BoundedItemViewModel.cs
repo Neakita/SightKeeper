@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public abstract class DrawerItemViewModel : ViewModel, DrawerItemDataContext
+public abstract class BoundedItemViewModel : ViewModel, BoundedItemDataContext
 {
 	public abstract Tag Tag { get; }
 	public abstract BoundedItem Item { get; }
@@ -16,7 +16,7 @@ public abstract class DrawerItemViewModel : ViewModel, DrawerItemDataContext
 			(viewModel, bounding) => viewModel._boundingEditor.SetBounding(viewModel.Item, bounding));
 	}
 
-	protected DrawerItemViewModel(BoundingEditor boundingEditor)
+	protected BoundedItemViewModel(BoundingEditor boundingEditor)
 	{
 		_boundingEditor = boundingEditor;
 	}

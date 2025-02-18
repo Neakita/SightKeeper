@@ -89,25 +89,25 @@
                     <Setter Property="ClipToBounds" Value="False"/>
                     <Setter Property="Canvas.Left">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemDataContext).Bounding.Left"/>
+                            <Binding Path="(local:BoundedItemDataContext).Bounding.Left"/>
                             <Binding Path="#ListBox.Bounds.Width"/>
                         </MultiBinding>
                     </Setter>
                     <Setter Property="Canvas.Top">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemDataContext).Bounding.Top"/>
+                            <Binding Path="(local:BoundedItemDataContext).Bounding.Top"/>
                             <Binding Path="#ListBox.Bounds.Height"/>
                         </MultiBinding>
                     </Setter>
                     <Setter Property="Width">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemDataContext).Bounding.Width"/>
+                            <Binding Path="(local:BoundedItemDataContext).Bounding.Width"/>
                             <Binding Path="#ListBox.Bounds.Width"/>
                         </MultiBinding>
                     </Setter>
                     <Setter Property="Height">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemDataContext).Bounding.Height"/>
+                            <Binding Path="(local:BoundedItemDataContext).Bounding.Height"/>
                             <Binding Path="#ListBox.Bounds.Height"/>
                         </MultiBinding>
                     </Setter>
@@ -118,19 +118,19 @@
                             <MultiBinding.Converter>
                                 <local:ModifyBrushOpacityConverter Opacity="0.4"/>
                             </MultiBinding.Converter>
-                            <Binding Path="(local:DrawerItemDataContext).Tag.Color"
+                            <Binding Path="(local:BoundedItemDataContext).Tag.Color"
                                      Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
                         </MultiBinding>
                     </Setter>
                     <Setter Property="ZIndex"
-                            Value="{Binding (local:DrawerItemDataContext).Bounding, Converter={x:Static local:ReverseBoundingAreaToIntConverter.Instance}}"/>
+                            Value="{Binding (local:BoundedItemDataContext).Bounding, Converter={x:Static local:ReverseBoundingAreaToIntConverter.Instance}}"/>
                     <Style Selector="^:pointerover">
                         <Setter Property="Background">
                             <MultiBinding>
                                 <MultiBinding.Converter>
                                     <local:ModifyBrushOpacityConverter Opacity="0.1"/>
                                 </MultiBinding.Converter>
-                                <Binding Path="(local:DrawerItemDataContext).Tag.Color"
+                                <Binding Path="(local:BoundedItemDataContext).Tag.Color"
                                          Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
                             </MultiBinding>
                         </Setter>
@@ -142,7 +142,7 @@
                                 <MultiBinding.Converter>
                                     <local:ModifyBrushOpacityConverter Opacity="0.8"/>
                                 </MultiBinding.Converter>
-                                <Binding Path="(local:DrawerItemDataContext).Tag.Color"
+                                <Binding Path="(local:BoundedItemDataContext).Tag.Color"
                                          Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
                             </MultiBinding>
                         </Setter>

@@ -4,5 +4,5 @@ namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public interface SelectedItemConsumer
 {
-	DrawerItemDataContext? SelectedItem { set; }
+	BoundedItemDataContext? SelectedItem { set; }
 }

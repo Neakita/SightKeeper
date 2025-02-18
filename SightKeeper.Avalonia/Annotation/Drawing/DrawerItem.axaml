@@ -6,9 +6,9 @@
              xmlns:boundingTransform="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.DrawerItem"
-             x:DataType="local:DrawerItemDataContext">
+             x:DataType="local:BoundedItemDataContext">
     <Design.DataContext>
-        <local:DesignDrawerItemViewModel/>
+        <local:DesignBoundedItemViewModel/>
     </Design.DataContext>
     <Panel>
         <Border HorizontalAlignment="Left"

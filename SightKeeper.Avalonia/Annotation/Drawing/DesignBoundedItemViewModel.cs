@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-internal sealed class DesignDrawerItemViewModel : DrawerItemDataContext
+internal sealed class DesignBoundedItemViewModel : BoundedItemDataContext
 {
 	public Tag Tag
 	{

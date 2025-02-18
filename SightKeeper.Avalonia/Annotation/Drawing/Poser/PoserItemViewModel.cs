@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
-public abstract class PoserItemViewModel : DrawerItemViewModel
+public abstract class PoserItemViewModel : BoundedItemViewModel
 {
 	public abstract override PoserItem Item { get; }
 	public abstract override PoserTag Tag { get; }

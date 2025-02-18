@@ -16,7 +16,7 @@ public sealed class DrawerItemsFactory
 		_boundingEditor = boundingEditor;
 	}
 
-	public DrawerItemViewModel CreateItemViewModel(BoundedItem item) => item switch
+	public BoundedItemViewModel CreateItemViewModel(BoundedItem item) => item switch
 	{
 		DetectorItem detectorItem => new DetectorItemViewModel(detectorItem, _boundingEditor),
 		Poser2DItem poser2DItem => new Poser2DItemViewModel(poser2DItem, _boundingEditor),

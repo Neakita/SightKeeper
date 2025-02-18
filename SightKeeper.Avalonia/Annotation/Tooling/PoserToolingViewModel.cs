@@ -40,7 +40,7 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 		}
 	}
 
-	DrawerItemDataContext? SelectedItemConsumer.SelectedItem
+	BoundedItemDataContext? SelectedItemConsumer.SelectedItem
 	{
 		set => SelectedItem = ((PoserItemViewModel?)value)?.Item;
 	}

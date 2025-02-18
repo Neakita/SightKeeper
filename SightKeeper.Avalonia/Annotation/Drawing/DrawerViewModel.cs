@@ -38,10 +38,10 @@ public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerCompone
 		}
 	}
 
-	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
-	[ObservableProperty] public partial DrawerItemDataContext? SelectedItem { get; set; }
+	public IReadOnlyCollection<BoundedItemDataContext> Items => _itemsViewModel.Items;
+	[ObservableProperty] public partial BoundedItemDataContext? SelectedItem { get; set; }
 	public ICommand CreateItemCommand => _boundingDrawer.CreateItemCommand;
-	public IObservable<DrawerItemDataContext?> SelectedItemChanged => _selectedItemChanged.AsObservable();
+	public IObservable<BoundedItemDataContext?> SelectedItemChanged => _selectedItemChanged.AsObservable();
 
 	public DrawerViewModel(BoundingDrawerViewModel boundingDrawer, DrawerItemsViewModel itemsViewModel)
 	{
@@ -51,7 +51,7 @@ public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerCompone
 
 	private readonly BoundingDrawerViewModel _boundingDrawer;
 	private readonly DrawerItemsViewModel _itemsViewModel;
-	private readonly Subject<DrawerItemDataContext?> _selectedItemChanged = new();
+	private readonly Subject<BoundedItemDataContext?> _selectedItemChanged = new();
 
 	partial void OnScreenshotChanged(Screenshot? value)
 	{
@@ -59,7 +59,7 @@ public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerCompone
 		_itemsViewModel.Screenshot = value;
 	}
 
-	partial void OnSelectedItemChanged(DrawerItemDataContext? value)
+	partial void OnSelectedItemChanged(BoundedItemDataContext? value)
 	{
 		_selectedItemChanged.OnNext(value);
 	}

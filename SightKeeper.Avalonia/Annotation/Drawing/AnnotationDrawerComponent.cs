@@ -11,5 +11,5 @@ public interface AnnotationDrawerComponent : DrawerDataContext
 	new Screenshot? Screenshot { get; set; }
 	Screenshot? DrawerDataContext.Screenshot => Screenshot;
 	public Tag? Tag { set; }
-	IObservable<DrawerItemDataContext?> SelectedItemChanged { get; }
+	IObservable<BoundedItemDataContext?> SelectedItemChanged { get; }
 }

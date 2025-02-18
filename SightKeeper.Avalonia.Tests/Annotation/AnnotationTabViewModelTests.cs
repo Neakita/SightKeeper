@@ -19,7 +19,7 @@ public sealed class AnnotationTabViewModelTests
 		var selectedItemConsumer = Substitute.For<SelectedItemConsumer>();
 		toolingChangedSubject.OnNext(selectedItemConsumer);
 
-		var item = Substitute.For<DrawerItemDataContext>();
+		var item = Substitute.For<BoundedItemDataContext>();
 		itemChangedSubject.OnNext(item);
 
 		selectedItemConsumer.Received().SelectedItem = item;
@@ -33,10 +33,10 @@ public sealed class AnnotationTabViewModelTests
 		return (sideBar, toolingChangedSubject);
 	}
 
-	private static (AnnotationDrawerComponent drawer, Subject<DrawerItemDataContext> itemChangedSubject) CreateDrawer()
+	private static (AnnotationDrawerComponent drawer, Subject<BoundedItemDataContext> itemChangedSubject) CreateDrawer()
 	{
 		var drawer = Substitute.For<AnnotationDrawerComponent>();
-		Subject<DrawerItemDataContext> itemChangedSubject = new();
+		Subject<BoundedItemDataContext> itemChangedSubject = new();
 		drawer.SelectedItemChanged.Returns(itemChangedSubject);
 		return (drawer, itemChangedSubject);
 	}
