@@ -33,7 +33,8 @@
                     CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
                     Bounding="{Binding Bounding}"
                     ThumbsPanel="ThumbsPanel"
-                    ItemContainer="{Binding $parent[ListBoxItem]}"/>
+                    ItemContainer="{Binding $parent[ListBoxItem]}"
+                    Item="{Binding $parent[UserControl]}"/>
             </Interaction.Behaviors>
             <Panel.Styles>
                 <Style Selector="Thumb">

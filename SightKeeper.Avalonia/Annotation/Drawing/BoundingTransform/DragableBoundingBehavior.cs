@@ -7,7 +7,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
-using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform.Transformers;
@@ -33,6 +32,9 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	public static readonly StyledProperty<Layoutable?> ItemContainerProperty =
 		AvaloniaProperty.Register<DragableBoundingBehavior, Layoutable?>(nameof(ItemContainer));
+
+	public static readonly StyledProperty<Control?> ItemProperty =
+		AvaloniaProperty.Register<DragableBoundingBehavior, Control?>(nameof(Item));
 
 	protected override void OnAttachedToVisualTree()
 	{
@@ -81,6 +83,12 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		set => SetValue(ItemContainerProperty, value);
 	}
 
+	public Control? Item
+	{
+		get => GetValue(ItemProperty);
+		set => SetValue(ItemProperty, value);
+	}
+
 	private Bounding _bounding;
 	private BoundingTransformer? _transformer;
 
@@ -116,10 +124,12 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 	{
 		var container = ItemContainer;
 		Guard.IsNotNull(container);
-		container.Width = _bounding.Width * CanvasSize.Width;
-		container.Height = _bounding.Height * CanvasSize.Height;
 		Canvas.SetLeft(container, _bounding.Left * CanvasSize.Width);
 		Canvas.SetTop(container, _bounding.Top * CanvasSize.Height);
+		var item = Item;
+		Guard.IsNotNull(item);
+		item.Width = _bounding.Width * CanvasSize.Width;
+		item.Height = _bounding.Height * CanvasSize.Height;
 	}
 
 	private void OnThumbDragCompleted(object? sender, VectorEventArgs e)
@@ -142,12 +152,14 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	private void ClearItemDisplayValues()
 	{
-		var item = AssociatedObject.FindAncestorOfType<ListBoxItem>();
+		var container = ItemContainer;
+		Guard.IsNotNull(container);
+		container.ClearValue(Canvas.LeftProperty);
+		container.ClearValue(Canvas.TopProperty);
+		var item = Item;
 		Guard.IsNotNull(item);
 		item.ClearValue(Layoutable.WidthProperty);
 		item.ClearValue(Layoutable.HeightProperty);
-		item.ClearValue(Canvas.LeftProperty);
-		item.ClearValue(Canvas.TopProperty);
 	}
 
 	private static BoundingTransformer CreateTransformer(
