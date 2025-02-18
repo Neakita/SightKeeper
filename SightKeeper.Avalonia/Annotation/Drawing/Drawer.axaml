@@ -89,13 +89,13 @@
                     <Setter Property="ClipToBounds" Value="False"/>
                     <Setter Property="Canvas.Left">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:BoundedItemDataContext).Bounding.Left"/>
+                            <Binding Path="(local:DrawerItemDataContext).Position.X"/>
                             <Binding Path="#ListBox.Bounds.Width"/>
                         </MultiBinding>
                     </Setter>
                     <Setter Property="Canvas.Top">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:BoundedItemDataContext).Bounding.Top"/>
+                            <Binding Path="(local:DrawerItemDataContext).Position.Y"/>
                             <Binding Path="#ListBox.Bounds.Height"/>
                         </MultiBinding>
                     </Setter>
