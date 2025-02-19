@@ -4,9 +4,57 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:boundingTransform="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.DrawerItem"
              x:DataType="local:BoundedItemDataContext">
+    <Interaction.Behaviors>
+        <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
+            <behaviors:AddStylesBehavior.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="ZIndex"
+                            Value="{Binding Bounding, Converter={x:Static local:ReverseBoundingAreaToIntConverter.Instance}}"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush">
+                        <MultiBinding>
+                            <MultiBinding.Converter>
+                                <local:ModifyBrushOpacityConverter Opacity="0.4"/>
+                            </MultiBinding.Converter>
+                            <Binding Path="Tag.Color"
+                                     Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
+                        </MultiBinding>
+                    </Setter>
+                    <Style Selector="^:pointerover">
+                        <Setter Property="Background">
+                            <MultiBinding>
+                                <MultiBinding.Converter>
+                                    <local:ModifyBrushOpacityConverter Opacity="0.1"/>
+                                </MultiBinding.Converter>
+                                <Binding Path="Tag.Color"
+                                         Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
+                            </MultiBinding>
+                        </Setter>
+                        <Style Selector="^ :is(Panel)#ThumbsPanel">
+                            <Setter Property="IsVisible" Value="True"/>
+                        </Style>
+                    </Style>
+                    <Style Selector="^:selected">
+                        <Setter Property="ZIndex" Value="{x:Static local:DrawerZIndexes.SelectedItemZIndex}"/>
+                        <Setter Property="BorderBrush">
+                            <MultiBinding>
+                                <MultiBinding.Converter>
+                                    <local:ModifyBrushOpacityConverter Opacity="0.8"/>
+                                </MultiBinding.Converter>
+                                <Binding Path="Tag.Color"
+                                         Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
+                            </MultiBinding>
+                        </Setter>
+                    </Style>
+                </Style>
+            </behaviors:AddStylesBehavior.Styles>
+        </behaviors:AddStylesBehavior>
+    </Interaction.Behaviors>
     <Design.DataContext>
         <local:DesignBoundedItemViewModel/>
     </Design.DataContext>
@@ -37,6 +85,9 @@
                     Item="{Binding $parent[UserControl]}"/>
             </Interaction.Behaviors>
             <Panel.Styles>
+                <Style Selector="Panel#ThumbsPanel">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
                 <Style Selector="Thumb">
                     <Setter Property="ClipToBounds" Value="False"/>
                     <Setter Property="UseLayoutRounding" Value="False"/>
