@@ -68,7 +68,7 @@ public sealed partial class Composition
 		.Bind<BindingsManager>().As(Lifetime.Singleton).To(context =>
 		{
 			context.Inject(out IReactiveGlobalHook hook);
-			var observableGesture = hook.ObserveInputStates().ToGesture();
+			var observableGesture = hook.ObserveInputStates().Filter().ToGesture();
 			return new BindingsManager(observableGesture);
 		})
 		.Bind().As(Lifetime.Singleton).To<DialogManager>()
