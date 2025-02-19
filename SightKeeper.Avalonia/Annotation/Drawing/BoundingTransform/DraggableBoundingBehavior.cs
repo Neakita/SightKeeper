@@ -36,6 +36,9 @@ internal sealed class DraggableBoundingBehavior : Behavior<Control>
 	public static readonly StyledProperty<Control?> ItemProperty =
 		AvaloniaProperty.Register<DraggableBoundingBehavior, Control?>(nameof(Item));
 
+	public static readonly StyledProperty<ListBox?> ListBoxProperty =
+		AvaloniaProperty.Register<DraggableBoundingBehavior, ListBox?>(nameof(ListBox));
+
 	protected override void OnAttachedToVisualTree()
 	{
 		Guard.IsNotNull(ThumbsPanel);
@@ -89,6 +92,12 @@ internal sealed class DraggableBoundingBehavior : Behavior<Control>
 		set => SetValue(ItemProperty, value);
 	}
 
+	public ListBox? ListBox
+	{
+		get => GetValue(ListBoxProperty);
+		set => SetValue(ListBoxProperty, value);
+	}
+
 	private Bounding _bounding;
 	private BoundingTransformer? _transformer;
 	private Cursor? _hiddenCursor;
@@ -107,6 +116,37 @@ internal sealed class DraggableBoundingBehavior : Behavior<Control>
 		HideThumbs();
 		_hiddenCursor = thumb.Cursor;
 		thumb.Cursor = new Cursor(StandardCursorType.None);
+		HideOtherItems();
+	}
+
+	private static BoundingTransformer CreateTransformer(
+		HorizontalAlignment horizontalAlignment,
+		VerticalAlignment verticalAlignment)
+	{
+		List<BoundingTransformer> transformers = new(2);
+		var horizontalSide = horizontalAlignment.ToOptionalSide();
+		var verticalSide = verticalAlignment.ToOptionalSide();
+		if (horizontalSide != null)
+			transformers.Add(new BoundingSideTransformer(horizontalSide.Value));
+		if (verticalSide != null)
+			transformers.Add(new BoundingSideTransformer(verticalSide.Value));
+		if (transformers.Count > 1)
+			return new AggregateBoundingTransformer(transformers);
+		return transformers.Single();
+	}
+
+	private void HideOtherItems()
+	{
+		if (ListBox == null)
+			return;
+		for (int i = 0; i < ListBox.Items.Count; i++)
+		{
+			var container = ListBox.ContainerFromIndex(i);
+			Guard.IsNotNull(container);
+			if (container == ItemContainer)
+				continue;
+			container.IsVisible = false;
+		}
 	}
 
 	private void HideThumbs()
@@ -147,12 +187,7 @@ internal sealed class DraggableBoundingBehavior : Behavior<Control>
 		ShowThumbs();
 		thumb.Cursor = _hiddenCursor;
 		_hiddenCursor = null;
-	}
-
-	private void ShowThumbs()
-	{
-		Guard.IsNotNull(ThumbsPanel);
-		ThumbsPanel.ClearValue(Visual.OpacityProperty);
+		ShowHiddenItems();
 	}
 
 	private void ClearItemDisplayValues()
@@ -167,20 +202,24 @@ internal sealed class DraggableBoundingBehavior : Behavior<Control>
 		item.ClearValue(Layoutable.HeightProperty);
 	}
 
-	private static BoundingTransformer CreateTransformer(
-		HorizontalAlignment horizontalAlignment,
-		VerticalAlignment verticalAlignment)
+	private void ShowThumbs()
 	{
-		List<BoundingTransformer> transformers = new(2);
-		var horizontalSide = horizontalAlignment.ToOptionalSide();
-		var verticalSide = verticalAlignment.ToOptionalSide();
-		if (horizontalSide != null)
-			transformers.Add(new BoundingSideTransformer(horizontalSide.Value));
-		if (verticalSide != null)
-			transformers.Add(new BoundingSideTransformer(verticalSide.Value));
-		if (transformers.Count > 1)
-			return new AggregateBoundingTransformer(transformers);
-		return transformers.Single();
+		Guard.IsNotNull(ThumbsPanel);
+		ThumbsPanel.ClearValue(Visual.OpacityProperty);
+	}
+
+	private void ShowHiddenItems()
+	{
+		if (ListBox == null)
+			return;
+		for (int i = 0; i < ListBox.Items.Count; i++)
+		{
+			var container = ListBox.ContainerFromIndex(i);
+			Guard.IsNotNull(container);
+			if (container == ItemContainer)
+				continue;
+			container.ClearValue(Visual.IsVisibleProperty);
+		}
 	}
 
 	private void OnThumbsPanelChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)

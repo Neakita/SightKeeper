@@ -58,7 +58,8 @@
                     Bounding="{Binding Bounding}"
                     ThumbsPanel="ThumbsPanel"
                     ItemContainer="{Binding $parent[ListBoxItem]}"
-                    Item="{Binding $parent[UserControl]}"/>
+                    Item="{Binding $parent[UserControl]}"
+                    ListBox="{Binding $parent[ListBox]}"/>
             </Interaction.Behaviors>
             <Panel.Styles>
                 <Style Selector="Panel#ThumbsPanel">

@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
@@ -22,6 +23,9 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 
 	public static readonly StyledProperty<Vector2<double>> PositionProperty =
 		AvaloniaProperty.Register<DraggableKeyPointBehavior, Vector2<double>>(nameof(Position), defaultBindingMode: BindingMode.TwoWay);
+
+	public static readonly StyledProperty<ListBox?> ListBoxProperty =
+		AvaloniaProperty.Register<DraggableKeyPointBehavior, ListBox?>(nameof(ListBox));
 
 	public Thumb? Thumb
 	{
@@ -45,6 +49,12 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 	{
 		get => GetValue(PositionProperty);
 		set => SetValue(PositionProperty, value);
+	}
+
+	public ListBox? ListBox
+	{
+		get => GetValue(ListBoxProperty);
+		set => SetValue(ListBoxProperty, value);
 	}
 
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -73,6 +83,21 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 	private void OnDragStarted(object? sender, VectorEventArgs args)
 	{
 		_position = Position * new Vector2<double>(CanvasSize.Width, CanvasSize.Height);
+		HideOtherItems();
+	}
+
+	private void HideOtherItems()
+	{
+		if (ListBox == null)
+			return;
+		for (int i = 0; i < ListBox.Items.Count; i++)
+		{
+			var container = ListBox.ContainerFromIndex(i);
+			Guard.IsNotNull(container);
+			if (container == Container)
+				continue;
+			container.IsVisible = false;
+		}
 	}
 
 	private void OnDragDelta(object? sender, VectorEventArgs args)
@@ -98,6 +123,7 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 		var normalizedPosition = _position / canvasSize;
 		SetCurrentValue(PositionProperty, normalizedPosition);
 		ClearPreview();
+		ShowHiddenItems();
 	}
 
 	private void ClearPreview()
@@ -106,5 +132,19 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 			return;
 		Container.ClearValue(Canvas.LeftProperty);
 		Container.ClearValue(Canvas.TopProperty);
+	}
+
+	private void ShowHiddenItems()
+	{
+		if (ListBox == null)
+			return;
+		for (int i = 0; i < ListBox.Items.Count; i++)
+		{
+			var container = ListBox.ContainerFromIndex(i);
+			Guard.IsNotNull(container);
+			if (container == Container)
+				continue;
+			container.ClearValue(Visual.IsVisibleProperty);
+		}
 	}
 }

@@ -35,7 +35,8 @@
         <poser:DraggableKeyPointBehavior Container="{Binding $parent[ListBoxItem]}"
                                          Thumb="{Binding #Thumb}"
                                          CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
-                                         Position="{Binding Position}"/>
+                                         Position="{Binding Position}"
+                                         ListBox="{Binding $parent[ListBox]}"/>
     </Interaction.Behaviors>
     <Design.DataContext>
         <poser:DesignKeyPointDataContext/>
