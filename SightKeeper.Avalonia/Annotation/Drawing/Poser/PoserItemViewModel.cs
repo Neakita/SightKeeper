@@ -10,6 +10,8 @@ public abstract class PoserItemViewModel : BoundedItemViewModel
 	public abstract override PoserTag Tag { get; }
 	public abstract IReadOnlyList<KeyPointViewModel> KeyPoints { get; }
 
+	internal abstract void RemoveKeyPoint(KeyPointViewModel keyPoint);
+
 	protected PoserItemViewModel(BoundingEditor boundingEditor) : base(boundingEditor)
 	{
 	}

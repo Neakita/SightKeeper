@@ -2,6 +2,7 @@ using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
+using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -21,9 +22,14 @@ public sealed class DrawerViewModelTests
 	private static DrawerViewModel CreateDrawerViewModel(out BoundingDrawerViewModel boundingDrawerViewModel)
 	{
 		boundingDrawerViewModel = new BoundingDrawerViewModel(Substitute.For<BoundingAnnotator>());
+		var drawerItemsFactory = new DrawerItemsFactory(Substitute.For<BoundingEditor>());
+		var keyPointViewModelFactory = new KeyPointViewModelFactory(Substitute.For<PoserAnnotator>());
 		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel,
-			new AssetItemsViewModel(new DrawerItemsFactory(Substitute.For<BoundingEditor>()),
-				Substitute.For<ObservableBoundingAnnotator>()));
+			new AssetItemsViewModel(
+				drawerItemsFactory,
+				keyPointViewModelFactory,
+				Substitute.For<ObservableBoundingAnnotator>(),
+				Substitute.For<ObservablePoserAnnotator>()));
 		return drawerViewModel;
 	}
 

@@ -23,6 +23,11 @@ public sealed class Poser3DItemViewModel : PoserItemViewModel
 		_keyPoints.Add(keyPoint);
 	}
 
+	internal override void RemoveKeyPoint(KeyPointViewModel keyPoint)
+	{
+		RemoveKeyPoint((KeyPoint3DViewModel)keyPoint);
+	}
+
 	internal void RemoveKeyPoint(KeyPoint3DViewModel keyPoint)
 	{
 		var isRemoved = _keyPoints.Remove(keyPoint);
