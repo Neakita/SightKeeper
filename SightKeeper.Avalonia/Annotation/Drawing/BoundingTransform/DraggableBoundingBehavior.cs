@@ -17,6 +17,8 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 
 internal sealed class DraggableBoundingBehavior : Behavior<Control>
 {
+	private const string DraggingStyleClass = "dragging";
+
 	public static readonly StyledProperty<Size> CanvasSizeProperty =
 		AvaloniaProperty.Register<DraggableBoundingBehavior, Size>(nameof(CanvasSize));
 
@@ -117,6 +119,8 @@ internal sealed class DraggableBoundingBehavior : Behavior<Control>
 		_hiddenCursor = thumb.Cursor;
 		thumb.Cursor = new Cursor(StandardCursorType.None);
 		HideOtherItems();
+		Item?.Classes.Add(DraggingStyleClass);
+		ItemContainer?.Classes.Add(DraggingStyleClass);
 	}
 
 	private static BoundingTransformer CreateTransformer(
@@ -188,6 +192,8 @@ internal sealed class DraggableBoundingBehavior : Behavior<Control>
 		thumb.Cursor = _hiddenCursor;
 		_hiddenCursor = null;
 		ShowHiddenItems();
+		Item?.Classes.Remove(DraggingStyleClass);
+		ItemContainer?.Classes.Remove(DraggingStyleClass);
 	}
 
 	private void ClearItemDisplayValues()
