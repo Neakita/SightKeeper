@@ -7,7 +7,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 public interface DrawerDataContext
 {
 	Screenshot? Screenshot { get; }
-	IReadOnlyCollection<BoundedItemDataContext> Items { get; }
+	IReadOnlyCollection<DrawerItemDataContext> Items { get; }
 	BoundedItemDataContext? SelectedItem { get; set; }
 	ICommand CreateItemCommand { get; }
 	bool IsEnabled { get; }

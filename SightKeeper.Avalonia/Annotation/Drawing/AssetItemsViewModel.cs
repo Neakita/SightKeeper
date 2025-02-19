@@ -30,7 +30,7 @@ public sealed class AssetItemsViewModel
 		}
 	}
 
-	public IReadOnlyCollection<BoundedItemViewModel> Items { get; }
+	public IReadOnlyCollection<DrawerItemDataContext> Items { get; }
 
 	public AssetItemsViewModel(DrawerItemsFactory drawerItemsFactory, ObservableBoundingAnnotator observableBoundingAnnotator)
 	{

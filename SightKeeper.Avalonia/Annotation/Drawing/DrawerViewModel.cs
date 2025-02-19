@@ -38,7 +38,7 @@ public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerCompone
 		}
 	}
 
-	public IReadOnlyCollection<BoundedItemDataContext> Items => _itemsViewModel.Items;
+	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
 	[ObservableProperty] public partial BoundedItemDataContext? SelectedItem { get; set; }
 	public ICommand CreateItemCommand => _boundingDrawer.CreateItemCommand;
 	public IObservable<BoundedItemDataContext?> SelectedItemChanged => _selectedItemChanged.AsObservable();
