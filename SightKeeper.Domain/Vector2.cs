@@ -29,6 +29,11 @@ public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>,
 		return new Vector2<T>(first.X * second, first.Y * second);
 	}
 
+	public static Vector2<T> operator *(Vector2<T> first, Vector2<T> second)
+	{
+		return new Vector2<T>(first.X * second.X, first.Y * second.Y);
+	}
+
 	public static Vector2<T> operator /(Vector2<T> first, T second)
 	{
 		return new Vector2<T>(first.X / second, first.Y / second);
