@@ -91,6 +91,7 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 
 	private Bounding _bounding;
 	private BoundingTransformer? _transformer;
+	private Cursor? _hiddenCursor;
 
 	private void OnThumbDragStarted(object? sender, VectorEventArgs e)
 	{
@@ -104,6 +105,8 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 			1 / CanvasSize.Height * MinimumBoundingSize);
 		_bounding = Bounding;
 		HideThumbs();
+		_hiddenCursor = thumb.Cursor;
+		thumb.Cursor = new Cursor(StandardCursorType.None);
 	}
 
 	private void HideThumbs()
@@ -142,6 +145,8 @@ internal sealed class DragableBoundingBehavior : Behavior<Control>
 		_transformer = null;
 		ClearItemDisplayValues();
 		ShowThumbs();
+		thumb.Cursor = _hiddenCursor;
+		_hiddenCursor = null;
 	}
 
 	private void ShowThumbs()
