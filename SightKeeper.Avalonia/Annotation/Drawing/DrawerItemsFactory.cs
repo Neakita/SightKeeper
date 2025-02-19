@@ -20,7 +20,7 @@ public sealed class DrawerItemsFactory
 	{
 		DetectorItem detectorItem => new DetectorItemViewModel(detectorItem, _boundingEditor),
 		Poser2DItem poser2DItem => new Poser2DItemViewModel(poser2DItem, _boundingEditor),
-		Poser3DItem poser3DItem => throw new NotImplementedException(),
+		Poser3DItem poser3DItem => new Poser3DItemViewModel(poser3DItem, _boundingEditor),
 		_ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
 	};
 
