@@ -7,9 +7,9 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 public abstract class KeyPointViewModel : ViewModel
 {
+	public abstract PoserItemViewModel Item { get; }
 	public abstract KeyPoint Value { get; }
 	public abstract Tag Tag { get; }
-	public abstract PoserItemViewModel Item { get; }
 
 	public Vector2<double> Position
 	{
