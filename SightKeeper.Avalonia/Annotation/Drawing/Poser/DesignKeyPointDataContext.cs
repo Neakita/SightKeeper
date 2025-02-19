@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -17,4 +18,6 @@ internal sealed class DesignKeyPointDataContext : KeyPointDataContext
 			return keyPointTag;
 		}
 	}
+
+	public Vector2<double> Position { get; set; }
 }

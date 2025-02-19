@@ -32,6 +32,10 @@
                 </Style>
             </behaviors:AddStylesBehavior.Styles>
         </behaviors:AddStylesBehavior>
+        <poser:DraggableKeyPointBehavior Container="{Binding $parent[ListBoxItem]}"
+                                         Thumb="{Binding #Thumb}"
+                                         CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
+                                         Position="{Binding Position}"/>
     </Interaction.Behaviors>
     <Design.DataContext>
         <poser:DesignKeyPointDataContext/>
@@ -49,6 +53,7 @@
                 <Setter Property="Height" Value="10"/>
                 <Setter Property="Margin" Value="-5"/>
                 <Setter Property="ToolTip.ShowDelay" Value="0"/>
+                <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Template">
                     <ControlTemplate>
                         <Border Background="{TemplateBinding Background}"
@@ -57,6 +62,10 @@
                                 CornerRadius="{TemplateBinding CornerRadius}"/>
                     </ControlTemplate>
                 </Setter>
+                <Style Selector="^:pointerover">
+                    <Setter Property="Background"
+                            Value="{Binding Tag.Color, Converter={StaticResource LoweredColorConverter}}"/>
+                </Style>
                 <Style Selector="^:pressed">
                     <Setter Property="Cursor" Value="None"/>
                     <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverter}}"/>
