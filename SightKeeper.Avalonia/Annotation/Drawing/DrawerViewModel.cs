@@ -43,14 +43,14 @@ public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerCompone
 	public ICommand CreateItemCommand => _boundingDrawer.CreateItemCommand;
 	public IObservable<BoundedItemDataContext?> SelectedItemChanged => _selectedItemChanged.AsObservable();
 
-	public DrawerViewModel(BoundingDrawerViewModel boundingDrawer, DrawerItemsViewModel itemsViewModel)
+	public DrawerViewModel(BoundingDrawerViewModel boundingDrawer, AssetItemsViewModel itemsViewModel)
 	{
 		_boundingDrawer = boundingDrawer;
 		_itemsViewModel = itemsViewModel;
 	}
 
 	private readonly BoundingDrawerViewModel _boundingDrawer;
-	private readonly DrawerItemsViewModel _itemsViewModel;
+	private readonly AssetItemsViewModel _itemsViewModel;
 	private readonly Subject<BoundedItemDataContext?> _selectedItemChanged = new();
 
 	partial void OnScreenshotChanged(Screenshot? value)

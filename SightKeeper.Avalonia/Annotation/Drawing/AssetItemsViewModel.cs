@@ -8,7 +8,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed class DrawerItemsViewModel
+public sealed class AssetItemsViewModel
 {
 	public Screenshot? Screenshot
 	{
@@ -32,7 +32,7 @@ public sealed class DrawerItemsViewModel
 
 	public IReadOnlyCollection<BoundedItemViewModel> Items { get; }
 
-	public DrawerItemsViewModel(DrawerItemsFactory drawerItemsFactory, ObservableBoundingAnnotator observableBoundingAnnotator)
+	public AssetItemsViewModel(DrawerItemsFactory drawerItemsFactory, ObservableBoundingAnnotator observableBoundingAnnotator)
 	{
 		_itemsSource.Connect()
 			.Transform(drawerItemsFactory.CreateItemViewModel)

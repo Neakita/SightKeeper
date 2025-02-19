@@ -22,7 +22,7 @@ public sealed class DrawerViewModelTests
 	{
 		boundingDrawerViewModel = new BoundingDrawerViewModel(Substitute.For<BoundingAnnotator>());
 		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel,
-			new DrawerItemsViewModel(new DrawerItemsFactory(Substitute.For<BoundingEditor>()),
+			new AssetItemsViewModel(new DrawerItemsFactory(Substitute.For<BoundingEditor>()),
 				Substitute.For<ObservableBoundingAnnotator>()));
 		return drawerViewModel;
 	}
