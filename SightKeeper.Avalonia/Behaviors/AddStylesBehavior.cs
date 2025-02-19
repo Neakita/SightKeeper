@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using Avalonia;
 using Avalonia.Styling;
 using Avalonia.Xaml.Interactivity;
-using CommunityToolkit.Diagnostics;
 
 namespace SightKeeper.Avalonia.Behaviors;
 
@@ -19,15 +18,13 @@ internal sealed class AddStylesBehavior : Behavior
 		set => SetValue(TargetProperty, value);
 	}
 
-	protected override void OnAttachedToVisualTree()
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
 	{
-		Guard.IsNotNull(Target);
-		Target.Styles.AddRange(Styles);
-	}
-
-	protected override void OnDetachedFromVisualTree()
-	{
-		Guard.IsNotNull(Target);
-		Target.Styles.RemoveAll(Styles);
+		base.OnPropertyChanged(change);
+		if (change.Property != TargetProperty)
+			return;
+		var (oldValue, newValue) = change.GetOldAndNewValue<StyledElement?>();
+		oldValue?.Styles.RemoveAll(Styles);
+		newValue?.Styles.AddRange(Styles);
 	}
 }
