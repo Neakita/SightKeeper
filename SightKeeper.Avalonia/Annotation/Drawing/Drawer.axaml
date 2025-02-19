@@ -66,6 +66,7 @@
             </ListBox.Template>
             <ListBox.ItemContainerTheme>
                 <ControlTheme TargetType="ListBoxItem">
+                    <Setter Property="Cursor" Value="Hand"/>
                     <Setter Property="Template">
                         <ControlTemplate>
                             <ContentPresenter Content="{TemplateBinding Content}"
