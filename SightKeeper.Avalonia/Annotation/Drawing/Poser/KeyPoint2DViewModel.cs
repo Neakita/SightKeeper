@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
-internal sealed class KeyPoint2DViewModel : KeyPointViewModel
+public sealed class KeyPoint2DViewModel : KeyPointViewModel
 {
 	public override Poser2DItemViewModel Item { get; }
 	public override KeyPoint Value { get; }
