@@ -12,44 +12,25 @@
         <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
             <behaviors:AddStylesBehavior.Styles>
                 <Style Selector="ListBoxItem">
+                    <Style.Resources>
+                        <local:UIntColorConverter x:Key="ColorConverterAlpha8" AlphaMultiplier="0.8"/>
+                        <local:UIntColorConverter x:Key="ColorConverterAlpha4" AlphaMultiplier="0.4"/>
+                        <local:UIntColorConverter x:Key="ColorConverterAlpha1" AlphaMultiplier="0.1"/>
+                    </Style.Resources>
                     <Setter Property="ZIndex"
                             Value="{Binding Bounding, Converter={x:Static local:ReverseBoundingAreaToIntConverter.Instance}}"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderThickness" Value="1"/>
-                    <Setter Property="BorderBrush">
-                        <MultiBinding>
-                            <MultiBinding.Converter>
-                                <local:ModifyBrushOpacityConverter Opacity="0.4"/>
-                            </MultiBinding.Converter>
-                            <Binding Path="Tag.Color"
-                                     Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
-                        </MultiBinding>
-                    </Setter>
+                    <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha4}}"/>
                     <Style Selector="^:pointerover">
-                        <Setter Property="Background">
-                            <MultiBinding>
-                                <MultiBinding.Converter>
-                                    <local:ModifyBrushOpacityConverter Opacity="0.1"/>
-                                </MultiBinding.Converter>
-                                <Binding Path="Tag.Color"
-                                         Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
-                            </MultiBinding>
-                        </Setter>
+                        <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha1}}"/>
                         <Style Selector="^ :is(Panel)#ThumbsPanel">
                             <Setter Property="IsVisible" Value="True"/>
                         </Style>
                     </Style>
                     <Style Selector="^:selected">
                         <Setter Property="ZIndex" Value="{x:Static local:DrawerZIndexes.SelectedItemZIndex}"/>
-                        <Setter Property="BorderBrush">
-                            <MultiBinding>
-                                <MultiBinding.Converter>
-                                    <local:ModifyBrushOpacityConverter Opacity="0.8"/>
-                                </MultiBinding.Converter>
-                                <Binding Path="Tag.Color"
-                                         Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
-                            </MultiBinding>
-                        </Setter>
+                        <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha8}}"/>
                     </Style>
                 </Style>
             </behaviors:AddStylesBehavior.Styles>
@@ -59,18 +40,13 @@
         <local:DesignBoundedItemViewModel/>
     </Design.DataContext>
     <Panel>
+        <Panel.Resources>
+            <local:UIntColorConverter x:Key="LoweredAlphaColorConverter" AlphaMultiplier="0.2"/>
+        </Panel.Resources>
         <Border HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Padding="1">
-            <Border.Background>
-                <MultiBinding>
-                    <MultiBinding.Converter>
-                        <local:ModifyBrushOpacityConverter Opacity="0.2"/>
-                    </MultiBinding.Converter>
-                    <Binding Path="Tag.Color"
-                             Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
-                </MultiBinding>
-            </Border.Background>
+                Padding="1"
+                Background="{Binding Tag.Color, Converter={StaticResource LoweredAlphaColorConverter}}">
             <TextBlock Text="{Binding Tag.Name}"
                        FontSize="12"/>
         </Border>
@@ -89,19 +65,19 @@
                     <Setter Property="IsVisible" Value="False"/>
                 </Style>
                 <Style Selector="Thumb">
+                    <Style.Resources>
+                        <local:UIntColorConverter x:Key="BorderColorConverter"
+                                                  SaturationMultiplier="0.9"
+                                                  ValueMultiplier="0.9"/>
+                        <local:UIntColorConverter x:Key="BackgroundColorConverter"
+                                                  SaturationMultiplier="0.8"
+                                                  ValueMultiplier="0.7"/>
+                    </Style.Resources>
                     <Setter Property="ClipToBounds" Value="False"/>
                     <Setter Property="UseLayoutRounding" Value="False"/>
-                    <Setter Property="Background">
-                        <MultiBinding>
-                            <MultiBinding.Converter>
-                                <local:MultiplyBrushSaturationConverter SaturationMultiplier="0.5"/>
-                            </MultiBinding.Converter>
-                            <Binding Path="Tag.Color"
-                                     Converter="{x:Static local:UIntToBrushConverter.Instance}"/>
-                        </MultiBinding>
-                    </Setter>
-                    <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={x:Static local:UIntToBrushConverter.Instance}}"/>
-                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource BackgroundColorConverter}}"/>
+                    <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={StaticResource BorderColorConverter}}"/>
+                    <Setter Property="BorderThickness" Value="2"/>
                     <Setter Property="Width" Value="9"/>
                     <Setter Property="Height" Value="9"/>
                     <Setter Property="CornerRadius" Value="3"/>
