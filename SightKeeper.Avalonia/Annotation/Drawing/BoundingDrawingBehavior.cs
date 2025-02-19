@@ -21,7 +21,7 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		AvaloniaProperty.Register<BoundingDrawingBehavior, IDataTemplate?>(nameof(DrawingItemTemplate));
 
 	public static readonly StyledProperty<double> MinimumBoundingSizeProperty =
-		DragableBoundingBehavior.MinimumBoundingSizeProperty.AddOwner<BoundingDrawingBehavior>();
+		DraggableBoundingBehavior.MinimumBoundingSizeProperty.AddOwner<BoundingDrawingBehavior>();
 
 	public ICommand? Command
 	{

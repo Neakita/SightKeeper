@@ -29,7 +29,7 @@
         <Panel Name="ThumbsPanel"
                Margin="-5">
             <Interaction.Behaviors>
-                <boundingTransform:DragableBoundingBehavior
+                <boundingTransform:DraggableBoundingBehavior
                     CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
                     Bounding="{Binding Bounding}"
                     ThumbsPanel="ThumbsPanel"

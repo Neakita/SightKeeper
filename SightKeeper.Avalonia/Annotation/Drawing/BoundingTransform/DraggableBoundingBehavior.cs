@@ -15,26 +15,26 @@ using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 
-internal sealed class DragableBoundingBehavior : Behavior<Control>
+internal sealed class DraggableBoundingBehavior : Behavior<Control>
 {
 	public static readonly StyledProperty<Size> CanvasSizeProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Size>(nameof(CanvasSize));
+		AvaloniaProperty.Register<DraggableBoundingBehavior, Size>(nameof(CanvasSize));
 
 	public static readonly StyledProperty<Panel?> ThumbsPanelProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
+		AvaloniaProperty.Register<DraggableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
 
 	public static readonly StyledProperty<Bounding> BoundingProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Bounding>(nameof(Bounding),
+		AvaloniaProperty.Register<DraggableBoundingBehavior, Bounding>(nameof(Bounding),
 			defaultBindingMode: BindingMode.TwoWay);
 
 	public static readonly StyledProperty<double> MinimumBoundingSizeProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, double>(nameof(MinimumBoundingSize), 20);
+		AvaloniaProperty.Register<DraggableBoundingBehavior, double>(nameof(MinimumBoundingSize), 20);
 
 	public static readonly StyledProperty<Layoutable?> ItemContainerProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Layoutable?>(nameof(ItemContainer));
+		AvaloniaProperty.Register<DraggableBoundingBehavior, Layoutable?>(nameof(ItemContainer));
 
 	public static readonly StyledProperty<Control?> ItemProperty =
-		AvaloniaProperty.Register<DragableBoundingBehavior, Control?>(nameof(Item));
+		AvaloniaProperty.Register<DraggableBoundingBehavior, Control?>(nameof(Item));
 
 	protected override void OnAttachedToVisualTree()
 	{
