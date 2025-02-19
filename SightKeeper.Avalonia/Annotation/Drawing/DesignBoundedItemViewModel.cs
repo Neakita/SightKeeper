@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
@@ -19,4 +20,5 @@ internal sealed class DesignBoundedItemViewModel : BoundedItemDataContext
 	}
 
 	public Bounding Bounding { get; set; } = new(0.1, 0.1, 0.9, 0.9);
+	public Vector2<double> Position => Bounding.Position;
 }
