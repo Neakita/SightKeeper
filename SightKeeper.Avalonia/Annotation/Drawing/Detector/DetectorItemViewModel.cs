@@ -6,12 +6,12 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Detector;
 
 public sealed class DetectorItemViewModel : BoundedItemViewModel
 {
-	public override DetectorItem Item { get; }
-	public override Tag Tag => Item.Tag;
+	public override DetectorItem Value { get; }
+	public override Tag Tag => Value.Tag;
 
 	public DetectorItemViewModel(DetectorItem item, BoundingEditor boundingEditor) : base(boundingEditor)
 	{
-		Item = item;
-		Bounding = Item.Bounding;
+		Value = item;
+		Bounding = Value.Bounding;
 	}
 }

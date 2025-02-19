@@ -8,15 +8,15 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 public abstract class BoundedItemViewModel : ViewModel, BoundedItemDataContext
 {
 	public abstract Tag Tag { get; }
-	public abstract BoundedItem Item { get; }
+	public abstract BoundedItem Value { get; }
 
 	public Bounding Bounding
 	{
-		get => Item.Bounding;
+		get => Value.Bounding;
 		set
 		{
 			if (SetProperty(Bounding, value, this,
-				(viewModel, bounding) => viewModel._boundingEditor.SetBounding(viewModel.Item, bounding)))
+				(viewModel, bounding) => viewModel._boundingEditor.SetBounding(viewModel.Value, bounding)))
 				OnPropertyChanged(nameof(Position));
 		}
 	}

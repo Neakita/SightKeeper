@@ -42,7 +42,7 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 
 	BoundedItemDataContext? SelectedItemConsumer.SelectedItem
 	{
-		set => SelectedItem = ((PoserItemViewModel?)value)?.Item;
+		set => SelectedItem = ((PoserItemViewModel?)value)?.Value;
 	}
 
 	public Tag? SelectedTag => _tagSelection.SelectedTag ?? _keyPointTagSelection.SelectedTag;
