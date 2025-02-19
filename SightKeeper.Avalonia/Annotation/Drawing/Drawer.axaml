@@ -6,7 +6,7 @@
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:poser="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Poser"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
              x:DataType="local:DrawerDataContext">
@@ -37,6 +37,8 @@
                         <KeyGesture>LeftCtrl</KeyGesture>
                     </behaviors:AddPseudoClassOnGesturePressed.Gesture>
                 </behaviors:AddPseudoClassOnGesturePressed>
+                <poser:AddClassToHoveredItemKeyPointsBehavior ClassName="item-hovered"/>
+                <poser:AddClassToSelectedItemKeyPointsBehavior ClassName="item-selected"/>
             </Interaction.Behaviors>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -115,6 +117,9 @@
                             </Style>
                         </local:DrawerItem.Styles>
                     </local:DrawerItem>
+                </DataTemplate>
+                <DataTemplate DataType="poser:KeyPointDataContext">
+                    <poser:KeyPointView/>
                 </DataTemplate>
             </ListBox.DataTemplates>
         </ListBox>

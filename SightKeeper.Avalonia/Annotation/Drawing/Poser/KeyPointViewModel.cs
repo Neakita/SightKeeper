@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
-public abstract class KeyPointViewModel : ViewModel, DrawerItemDataContext
+public abstract class KeyPointViewModel : ViewModel, KeyPointDataContext, DrawerItemDataContext
 {
 	public abstract PoserItemViewModel Item { get; }
 	public abstract KeyPoint Value { get; }
