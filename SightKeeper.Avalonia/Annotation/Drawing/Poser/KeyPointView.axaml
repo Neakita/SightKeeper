@@ -54,12 +54,14 @@
                 <Setter Property="Margin" Value="-5"/>
                 <Setter Property="ToolTip.ShowDelay" Value="0"/>
                 <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="BackgroundSizing" Value="InnerBorderEdge"/>
                 <Setter Property="Template">
                     <ControlTemplate>
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{TemplateBinding CornerRadius}"/>
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                BackgroundSizing="{TemplateBinding BackgroundSizing}"/>
                     </ControlTemplate>
                 </Setter>
                 <Style Selector="^:pointerover">
@@ -69,10 +71,9 @@
                 <Style Selector="^:pressed">
                     <Setter Property="Cursor" Value="None"/>
                     <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverter}}"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Width" Value="4"/>
-                    <Setter Property="Height" Value="4"/>
-                    <Setter Property="Margin" Value="-2"/>
+                    <Style Selector="^ /template/ Border">
+                        <Setter Property="RenderTransform" Value="scale(0.5)"/>
+                    </Style>
                 </Style>
                 <Style Selector="^:not(:pressed)">
                     <Setter Property="ToolTip.Tip" Value="{Binding Tag.Name}"/>
