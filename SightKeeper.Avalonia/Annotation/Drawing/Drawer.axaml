@@ -52,6 +52,18 @@
                                     </Template>
                                 </local:BoundingDrawingBehavior.DrawingItemTemplate>
                             </local:BoundingDrawingBehavior>
+                            <local:KeyPointDrawingBehavior CreateKeyPointCommand="{Binding KeyPointDrawer.CreateKeyPointCommand}"
+                                                           ExistingKeyPoint="{Binding KeyPointDrawer.ExistingKeyPoint}"
+                                                           ListBox="{Binding #ListBox}">
+                                <local:KeyPointDrawingBehavior.KeyPointTemplate>
+                                    <Template>
+                                        <Ellipse Width="6"
+                                                 Height="6"
+                                                 Fill="Red"
+                                                 Margin="-3"/>
+                                    </Template>
+                                </local:KeyPointDrawingBehavior.KeyPointTemplate>
+                            </local:KeyPointDrawingBehavior>
                         </Interaction.Behaviors>
                     </Canvas>
                 </ItemsPanelTemplate>

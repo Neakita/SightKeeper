@@ -9,4 +9,5 @@ public interface DrawerDataContext
 	IReadOnlyCollection<DrawerItemDataContext> Items { get; }
 	BoundedItemDataContext? SelectedItem { get; set; }
 	BoundingDrawerDataContext BoundingDrawer { get; }
+	KeyPointDrawerDataContext KeyPointDrawer { get; }
 }
