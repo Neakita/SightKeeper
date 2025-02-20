@@ -4,10 +4,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Domain;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing;
+namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 public sealed class KeyPointDrawingBehavior : Behavior<Canvas>
 {

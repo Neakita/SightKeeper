@@ -1,7 +1,6 @@
 using System.Windows.Input;
-using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing;
+namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 public interface KeyPointDrawerDataContext
 {

@@ -4,11 +4,10 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Annotation;
-using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing;
+namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 public sealed partial class KeyPointDrawerViewModel : ViewModel, KeyPointDrawerDataContext
 {

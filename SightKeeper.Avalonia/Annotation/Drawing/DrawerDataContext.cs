@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
