@@ -45,8 +45,7 @@
                     <Canvas Name="Canvas"
                             Background="Transparent">
                         <Interaction.Behaviors>
-                            <local:BoundingDrawingBehavior Command="{Binding CreateItemCommand}"
-                                                           IsEnabled="{Binding IsEnabled}">
+                            <local:BoundingDrawingBehavior Command="{Binding BoundingDrawer.CreateItemCommand}">
                                 <local:BoundingDrawingBehavior.DrawingItemTemplate>
                                     <DataTemplate>
                                         <Rectangle Stroke="Red" StrokeThickness="1"/>
