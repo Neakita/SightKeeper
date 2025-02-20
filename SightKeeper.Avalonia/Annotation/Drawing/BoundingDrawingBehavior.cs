@@ -22,6 +22,9 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 	public static readonly StyledProperty<double> MinimumBoundingSizeProperty =
 		DraggableBoundingBehavior.MinimumBoundingSizeProperty.AddOwner<BoundingDrawingBehavior>();
 
+	public static readonly StyledProperty<ListBox?> ListBoxProperty =
+		AvaloniaProperty.Register<BoundingDrawingBehavior, ListBox?>(nameof(ListBox));
+
 	public ICommand? Command
 	{
 		get => GetValue(CommandProperty);
@@ -38,6 +41,12 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 	{
 		get => GetValue(MinimumBoundingSizeProperty);
 		set => SetValue(MinimumBoundingSizeProperty, value);
+	}
+
+	public ListBox? ListBox
+	{
+		get => GetValue(ListBoxProperty);
+		set => SetValue(ListBoxProperty, value);
 	}
 
 	protected override void OnAttached()
@@ -66,7 +75,19 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		AssociatedObject.PointerMoved += OnAssociatedObjectPointerMoved;
 		AssociatedObject.PointerReleased += OnAssociatedObjectPointerReleased;
 		_initialPosition = e.GetPosition(AssociatedObject);
+		HideItems();
 		ShowPreview();
+	}
+
+	private void HideItems()
+	{
+		Guard.IsNotNull(ListBox);
+		for (int i = 0; i < ListBox.ItemCount; i++)
+		{
+			var container = ListBox.ContainerFromIndex(i);
+			Guard.IsNotNull(container);
+			container.IsVisible = false;
+		}
 	}
 
 	private void ShowPreview()
@@ -94,12 +115,8 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 	private void OnAssociatedObjectPointerReleased(object? sender, PointerReleasedEventArgs e)
 	{
 		Guard.IsNotNull(AssociatedObject);
-		if (_drawingItem != null)
-		{
-			bool isRemoved = AssociatedObject.Children.Remove(_drawingItem);
-			Guard.IsTrue(isRemoved);
-			_drawingItem = null;
-		}
+		RemovePreview();
+		ShowItems();
 		AssociatedObject.PointerMoved -= OnAssociatedObjectPointerMoved;
 		AssociatedObject.PointerReleased -= OnAssociatedObjectPointerReleased;
 		var finalPosition = e.GetPosition(AssociatedObject);
@@ -114,6 +131,27 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		Guard.IsNotNull(Command);
 		Guard.IsTrue(Command.CanExecute(normalizedBounding));
 		Command.Execute(normalizedBounding);
+	}
+
+	private void RemovePreview()
+	{
+		if (_drawingItem == null)
+			return;
+		Guard.IsNotNull(AssociatedObject);
+		bool isRemoved = AssociatedObject.Children.Remove(_drawingItem);
+		Guard.IsTrue(isRemoved);
+		_drawingItem = null;
+	}
+
+	private void ShowItems()
+	{
+		Guard.IsNotNull(ListBox);
+		for (int i = 0; i < ListBox.ItemCount; i++)
+		{
+			var container = ListBox.ContainerFromIndex(i);
+			Guard.IsNotNull(container);
+			container.ClearValue(Visual.IsVisibleProperty);
+		}
 	}
 
 	private bool ShouldAnItemBeCreated(Bounding bounding)

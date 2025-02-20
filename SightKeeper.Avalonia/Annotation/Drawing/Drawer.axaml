@@ -45,7 +45,8 @@
                     <Canvas Name="Canvas"
                             Background="Transparent">
                         <Interaction.Behaviors>
-                            <local:BoundingDrawingBehavior Command="{Binding BoundingDrawer.CreateItemCommand}">
+                            <local:BoundingDrawingBehavior Command="{Binding BoundingDrawer.CreateItemCommand}"
+                                                           ListBox="{Binding $parent[ListBox]}">
                                 <local:BoundingDrawingBehavior.DrawingItemTemplate>
                                     <Template>
                                         <Rectangle Stroke="Red" StrokeThickness="1"/>
