@@ -72,9 +72,7 @@
                 <Style Selector="^:pressed">
                     <Setter Property="Cursor" Value="None"/>
                     <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverter}}"/>
-                    <Style Selector="^ /template/ Border">
-                        <Setter Property="RenderTransform" Value="scale(0.5)"/>
-                    </Style>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
                 </Style>
                 <Style Selector="^:not(:pressed)">
                     <Setter Property="ToolTip.Tip" Value="{Binding Tag.Name}"/>
