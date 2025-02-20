@@ -94,6 +94,9 @@
                 <Style Selector="ListBox:not(.clickable-items) ListBoxItem">
                     <Setter Property="IsHitTestVisible" Value="False"/>
                 </Style>
+                <Style Selector="ListBox.hide-items ListBoxItem">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
                 <Style Selector="ListBoxItem">
                     <Setter Property="ClipToBounds" Value="False"/>
                     <Setter Property="Canvas.Left">

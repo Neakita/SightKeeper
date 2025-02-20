@@ -13,6 +13,8 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 {
+	private const string HideItemsStyleClass = "hide-items";
+
 	public static readonly StyledProperty<ICommand?> CommandProperty =
 		AvaloniaProperty.Register<BoundingDrawingBehavior, ICommand?>(nameof(Command));
 
@@ -75,19 +77,8 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		AssociatedObject.PointerMoved += OnAssociatedObjectPointerMoved;
 		AssociatedObject.PointerReleased += OnAssociatedObjectPointerReleased;
 		_initialPosition = e.GetPosition(AssociatedObject);
-		HideItems();
+		ListBox?.Classes.Add(HideItemsStyleClass);
 		ShowPreview();
-	}
-
-	private void HideItems()
-	{
-		Guard.IsNotNull(ListBox);
-		for (int i = 0; i < ListBox.ItemCount; i++)
-		{
-			var container = ListBox.ContainerFromIndex(i);
-			Guard.IsNotNull(container);
-			container.IsVisible = false;
-		}
 	}
 
 	private void ShowPreview()
@@ -116,7 +107,7 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 	{
 		Guard.IsNotNull(AssociatedObject);
 		RemovePreview();
-		ShowItems();
+		ListBox?.Classes.Remove(HideItemsStyleClass);
 		AssociatedObject.PointerMoved -= OnAssociatedObjectPointerMoved;
 		AssociatedObject.PointerReleased -= OnAssociatedObjectPointerReleased;
 		var finalPosition = e.GetPosition(AssociatedObject);
@@ -141,17 +132,6 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		bool isRemoved = AssociatedObject.Children.Remove(_drawingItem);
 		Guard.IsTrue(isRemoved);
 		_drawingItem = null;
-	}
-
-	private void ShowItems()
-	{
-		Guard.IsNotNull(ListBox);
-		for (int i = 0; i < ListBox.ItemCount; i++)
-		{
-			var container = ListBox.ContainerFromIndex(i);
-			Guard.IsNotNull(container);
-			container.ClearValue(Visual.IsVisibleProperty);
-		}
 	}
 
 	private bool ShouldAnItemBeCreated(Bounding bounding)
