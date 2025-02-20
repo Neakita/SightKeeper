@@ -2,7 +2,6 @@ using System;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
@@ -17,8 +16,8 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 	public static readonly StyledProperty<ICommand?> CommandProperty =
 		AvaloniaProperty.Register<BoundingDrawingBehavior, ICommand?>(nameof(Command));
 
-	public static readonly StyledProperty<IDataTemplate?> DrawingItemTemplateProperty =
-		AvaloniaProperty.Register<BoundingDrawingBehavior, IDataTemplate?>(nameof(DrawingItemTemplate));
+	public static readonly StyledProperty<ITemplate<Control>?> DrawingItemTemplateProperty =
+		AvaloniaProperty.Register<BoundingDrawingBehavior, ITemplate<Control>?>(nameof(DrawingItemTemplate));
 
 	public static readonly StyledProperty<double> MinimumBoundingSizeProperty =
 		DraggableBoundingBehavior.MinimumBoundingSizeProperty.AddOwner<BoundingDrawingBehavior>();
@@ -29,7 +28,7 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		set => SetValue(CommandProperty, value);
 	}
 
-	public IDataTemplate? DrawingItemTemplate
+	public ITemplate<Control>? DrawingItemTemplate
 	{
 		get => GetValue(DrawingItemTemplateProperty);
 		set => SetValue(DrawingItemTemplateProperty, value);
@@ -64,15 +63,20 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		Guard.IsNotNull(Command);
 		if (!Command.CanExecute(default(Bounding)))
 			return;
-		_drawingItem = DrawingItemTemplate?.Build(null);
 		AssociatedObject.PointerMoved += OnAssociatedObjectPointerMoved;
 		AssociatedObject.PointerReleased += OnAssociatedObjectPointerReleased;
 		_initialPosition = e.GetPosition(AssociatedObject);
-		if (_drawingItem == null)
+		ShowPreview();
+	}
+
+	private void ShowPreview()
+	{
+		if (DrawingItemTemplate == null)
 			return;
+		Guard.IsNotNull(AssociatedObject);
+		_drawingItem = DrawingItemTemplate.Build();
 		AssociatedObject.Children.Add(_drawingItem);
 		UpdateDrawingItemBounding(_initialPosition);
-
 	}
 
 	private void OnAssociatedObjectPointerMoved(object? sender, PointerEventArgs e)

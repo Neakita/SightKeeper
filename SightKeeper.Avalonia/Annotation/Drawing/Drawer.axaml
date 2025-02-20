@@ -47,9 +47,9 @@
                         <Interaction.Behaviors>
                             <local:BoundingDrawingBehavior Command="{Binding BoundingDrawer.CreateItemCommand}">
                                 <local:BoundingDrawingBehavior.DrawingItemTemplate>
-                                    <DataTemplate>
+                                    <Template>
                                         <Rectangle Stroke="Red" StrokeThickness="1"/>
-                                    </DataTemplate>
+                                    </Template>
                                 </local:BoundingDrawingBehavior.DrawingItemTemplate>
                             </local:BoundingDrawingBehavior>
                         </Interaction.Behaviors>
