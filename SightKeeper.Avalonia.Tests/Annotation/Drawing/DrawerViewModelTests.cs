@@ -24,12 +24,13 @@ public sealed class DrawerViewModelTests
 		boundingDrawerViewModel = new BoundingDrawerViewModel(Substitute.For<BoundingAnnotator>());
 		var drawerItemsFactory = new DrawerItemsFactory(Substitute.For<BoundingEditor>());
 		var keyPointViewModelFactory = new KeyPointViewModelFactory(Substitute.For<PoserAnnotator>());
-		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel,
-			new AssetItemsViewModel(
-				drawerItemsFactory,
-				keyPointViewModelFactory,
-				Substitute.For<ObservableBoundingAnnotator>(),
-				Substitute.For<ObservablePoserAnnotator>()));
+		var assetItemsViewModel = new AssetItemsViewModel(
+			drawerItemsFactory,
+			keyPointViewModelFactory,
+			Substitute.For<ObservableBoundingAnnotator>(),
+			Substitute.For<ObservablePoserAnnotator>());
+		var keyPointDrawerViewModel = new KeyPointDrawerViewModel(Substitute.For<PoserAnnotator>());
+		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel, assetItemsViewModel, keyPointDrawerViewModel);
 		return drawerViewModel;
 	}
 

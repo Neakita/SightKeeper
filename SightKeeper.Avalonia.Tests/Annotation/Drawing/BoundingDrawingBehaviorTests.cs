@@ -101,7 +101,7 @@ public sealed class BoundingDrawingBehaviorTests
 		return window;
 	}
 
-	private static BoundingDrawingBehavior CreateBehavior(ICommand command, IDataTemplate? drawingItemTemplate = null)
+	private static BoundingDrawingBehavior CreateBehavior(ICommand command, ITemplate<Control>? drawingItemTemplate = null)
 	{
 		BoundingDrawingBehavior behavior = new()
 		{
@@ -158,9 +158,9 @@ public sealed class BoundingDrawingBehaviorTests
 		command.Received().Execute(Arg.Is<Bounding>(drawnBounding => comparer.Equals(drawnBounding, bounding)));
 	}
 
-	private static IDataTemplate CreateDrawingItemTemplate()
+	private static ITemplate<Control> CreateDrawingItemTemplate()
 	{
-		return new FuncDataTemplate(_ => true, (_, _) => new Rectangle());
+		return new FuncTemplate<Control>(() => new Rectangle());
 	}
 
 	private void BeginDrawBoundingAtCanvas(Bounding bounding)
