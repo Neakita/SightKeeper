@@ -1,6 +1,6 @@
 namespace SightKeeper.Domain.DataSets.Tags;
 
-internal interface TagsOwner
+public interface TagsOwner
 {
 	IReadOnlyList<Tag> Tags { get; }
 }

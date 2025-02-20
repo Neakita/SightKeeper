@@ -19,7 +19,7 @@ public class Tag : Named
 	}
 	public uint Color { get; set; }
 
-	internal TagsOwner Owner { get; }
+	public TagsOwner Owner { get; }
 
 	internal Tag(TagsOwner owner, string name)
 	{
