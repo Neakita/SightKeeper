@@ -24,7 +24,7 @@
                     </Style>
                     <Style Selector="^.item-selected">
                         <Setter Property="ZIndex" Value="{x:Static drawing:DrawerZIndexes.SelectedItemKeyPointZIndex}"/>
-                        <Style Selector="^ Thumb">
+                        <Style Selector="^ Thumb:not(:pressed)">
                             <Setter Property="BorderBrush"
                                     Value="{Binding Tag.Color, Converter={StaticResource ColorConverter}}"/>
                         </Style>
