@@ -4,6 +4,8 @@ namespace SightKeeper.Domain;
 
 public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>, IConvertible
 {
+	public static Vector2<T> Zero => new(T.Zero, T.Zero);
+
 	public static bool operator ==(Vector2<T> left, Vector2<T> right)
 	{
 		return left.Equals(right);

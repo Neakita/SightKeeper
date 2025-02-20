@@ -17,6 +17,11 @@ public readonly struct Bounding : IEquatable<Bounding>
 		return !left.Equals(right);
 	}
 
+	public static Bounding operator *(Bounding bounding, Vector2<double> vector)
+	{
+		return new Bounding(bounding.Position * vector, bounding.Size * vector);
+	}
+
 	public static Bounding operator /(Bounding bounding, Vector2<double> vector)
 	{
 		return new Bounding(bounding.Position / vector, bounding.Size / vector);

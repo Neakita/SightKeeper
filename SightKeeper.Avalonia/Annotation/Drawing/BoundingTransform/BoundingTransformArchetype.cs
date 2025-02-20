@@ -45,7 +45,7 @@ internal sealed class BoundingTransformArchetype
 		(bounding, value) => bounding with { Bottom = value }
 	];
 
-	private static Func<Bounding, double> GetSideGetter(Side side)
+	internal static Func<Bounding, double> GetSideGetter(Side side)
 	{
 		var index = GetIndex(side);
 		return SideGetters[index];
@@ -64,7 +64,7 @@ internal sealed class BoundingTransformArchetype
 
 	private static bool IsNearSide(Side side)
 	{
-		return side <= Side.Top;
+		return side <= Side.Top; // matches 2 first enum values, i.e. Left and Top
 	}
 
 	private static BoundingSideAccessor CreateAccessor(Side side)

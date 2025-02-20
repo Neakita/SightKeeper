@@ -61,19 +61,22 @@
         <Panel Name="ThumbsPanel"
                Margin="-5">
             <Interaction.Behaviors>
-                <boundingTransform:DraggableBoundingBehavior
+                <!--<boundingTransform:DraggableBoundingBehavior
                     CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
                     Bounding="{Binding Bounding}"
                     ThumbsPanel="ThumbsPanel"
                     ItemContainer="{Binding $parent[ListBoxItem]}"
                     Item="{Binding $parent[UserControl]}"
-                    ListBox="{Binding $parent[ListBox]}"/>
+                    ListBox="{Binding $parent[ListBox]}"/>-->
+                <boundingTransform:ReDrawableBoundingBehavior DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                                              Bounding="{Binding Bounding}"
+                                                              ThumbsPanel="ThumbsPanel"/>
             </Interaction.Behaviors>
             <Panel.Styles>
                 <Style Selector="Panel#ThumbsPanel">
                     <Setter Property="IsVisible" Value="False"/>
                 </Style>
-                <Style Selector="Thumb">
+                <Style Selector="TemplatedControl">
                     <Style.Resources>
                         <local:UIntColorConverter x:Key="BorderColorConverter"
                                                   SaturationMultiplier="0.9"
@@ -101,32 +104,32 @@
                     </Setter>
                 </Style>
             </Panel.Styles>
-            <Thumb HorizontalAlignment="Left"
+            <TemplatedControl HorizontalAlignment="Left"
                    VerticalAlignment="Center"
                    Cursor="LeftSide"/>
-            <Thumb HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Cursor="TopLeftCorner"/>
-            <Thumb HorizontalAlignment="Center"
-                   VerticalAlignment="Top"
-                   Classes="horizontal"
-                   Cursor="TopSide"/>
-            <Thumb HorizontalAlignment="Right"
-                   VerticalAlignment="Top"
-                   Cursor="TopRightCorner"/>
-            <Thumb HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Cursor="RightSide"/>
-            <Thumb HorizontalAlignment="Right"
-                   VerticalAlignment="Bottom"
-                   Cursor="BottomRightCorner"/>
-            <Thumb HorizontalAlignment="Center"
-                   VerticalAlignment="Bottom"
-                   Classes="horizontal"
-                   Cursor="BottomSide"/>
-            <Thumb HorizontalAlignment="Left"
-                   VerticalAlignment="Bottom"
-                   Cursor="BottomLeftCorner"/>
+            <TemplatedControl HorizontalAlignment="Left"
+                              VerticalAlignment="Top"
+                              Cursor="TopLeftCorner"/>
+            <TemplatedControl HorizontalAlignment="Center"
+                              VerticalAlignment="Top"
+                              Classes="horizontal"
+                              Cursor="TopSide"/>
+            <TemplatedControl HorizontalAlignment="Right"
+                              VerticalAlignment="Top"
+                              Cursor="TopRightCorner"/>
+            <TemplatedControl HorizontalAlignment="Right"
+                              VerticalAlignment="Center"
+                              Cursor="RightSide"/>
+            <TemplatedControl HorizontalAlignment="Right"
+                              VerticalAlignment="Bottom"
+                              Cursor="BottomRightCorner"/>
+            <TemplatedControl HorizontalAlignment="Center"
+                              VerticalAlignment="Bottom"
+                              Classes="horizontal"
+                              Cursor="BottomSide"/>
+            <TemplatedControl HorizontalAlignment="Left"
+                              VerticalAlignment="Bottom"
+                              Cursor="BottomLeftCorner"/>
         </Panel>
     </Panel>
 </UserControl>
