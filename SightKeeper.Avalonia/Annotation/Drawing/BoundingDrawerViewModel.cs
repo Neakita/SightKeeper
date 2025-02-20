@@ -1,4 +1,5 @@
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Domain.DataSets.Assets;
@@ -9,35 +10,14 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed partial class BoundingDrawerViewModel : ViewModel
 {
-	public Tag? Tag
-	{
-		get;
-		set
-		{
-			field = value;
-			CreateItemCommand.NotifyCanExecuteChanged();
-		}
-	}
+	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(CreateItemCommand))]
+	public partial Tag? Tag { get; set; }
 
-	public Screenshot? Screenshot
-	{
-		get;
-		set
-		{
-			field = value;
-			CreateItemCommand.NotifyCanExecuteChanged();
-		}
-	}
+	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(CreateItemCommand))]
+	public partial Screenshot? Screenshot { get; set; }
 
-	public AssetsMaker<ItemsCreator>? AssetsLibrary
-	{
-		get;
-		set
-		{
-			field = value;
-			CreateItemCommand.NotifyCanExecuteChanged();
-		}
-	}
+	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(CreateItemCommand))]
+	public partial AssetsMaker<ItemsCreator>? AssetsLibrary { get; set; }
 
 	public BoundingDrawerViewModel(BoundingAnnotator annotator)
 	{
