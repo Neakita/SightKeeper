@@ -10,6 +10,8 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 public sealed class KeyPointDrawingBehavior : Behavior<Canvas>
 {
+	private const string HideItemsStyleClass = "hide-items";
+
 	public static readonly StyledProperty<ITemplate<Control>?> KeyPointTemplateProperty =
 		AvaloniaProperty.Register<KeyPointDrawingBehavior, ITemplate<Control>?>(nameof(KeyPointTemplate));
 
@@ -65,24 +67,13 @@ public sealed class KeyPointDrawingBehavior : Behavior<Canvas>
 		Guard.IsNotNull(CreateKeyPointCommand);
 		if (!CreateKeyPointCommand.CanExecute(default(Vector2<double>)))
 			return;
-		HideItems();
+		ListBox?.Classes.Add(HideItemsStyleClass);
 		ShowPreview();
 		Guard.IsNotNull(AssociatedObject);
 		AssociatedObject.PointerMoved += OnAssociatedObjectPointerMoved;
 		AssociatedObject.PointerReleased += OnAssociatedObjectPointerReleased;
 		var position = e.GetPosition(AssociatedObject);
 		UpdatePreviewPosition(position);
-	}
-
-	private void HideItems()
-	{
-		Guard.IsNotNull(ListBox);
-		for (int i = 0; i < ListBox.ItemCount; i++)
-		{
-			var container = ListBox.ContainerFromIndex(i);
-			Guard.IsNotNull(container);
-			container.IsVisible = false;
-		}
 	}
 
 	private void ShowPreview()
@@ -119,7 +110,7 @@ public sealed class KeyPointDrawingBehavior : Behavior<Canvas>
 			Guard.IsTrue(isRemoved);
 			_keyPointPreview = null;
 		}
-		ShowHiddenItems();
+		ListBox?.Classes.Remove(HideItemsStyleClass);
 		var position = e.GetPosition(AssociatedObject);
 		var associatedObjectSize = AssociatedObject.Bounds.Size;
 		Vector2<double> normalizedPosition = new(position.X / associatedObjectSize.Width, position.Y / associatedObjectSize.Height);
@@ -131,16 +122,5 @@ public sealed class KeyPointDrawingBehavior : Behavior<Canvas>
 		Guard.IsNotNull(CreateKeyPointCommand);
 		Guard.IsTrue(CreateKeyPointCommand.CanExecute(normalizedPosition));
 		CreateKeyPointCommand.Execute(normalizedPosition);
-	}
-
-	private void ShowHiddenItems()
-	{
-		Guard.IsNotNull(ListBox);
-		for (int i = 0; i < ListBox.ItemCount; i++)
-		{
-			var container = ListBox.ContainerFromIndex(i);
-			Guard.IsNotNull(container);
-			container.ClearValue(Visual.IsVisibleProperty);
-		}
 	}
 }
