@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
@@ -13,17 +12,14 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerComponent
 {
 	[ObservableProperty] public partial Screenshot? Screenshot { get; set; }
-	public bool IsEnabled => Tag != null;
 
 	public Tag? Tag
 	{
 		get;
 		set
 		{
-			OnPropertyChanging(nameof(IsEnabled));
 			field = value;
 			_boundingDrawer.Tag = value;
-			OnPropertyChanged(nameof(IsEnabled));
 		}
 	}
 
@@ -40,8 +36,8 @@ public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerCompone
 
 	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
 	[ObservableProperty] public partial BoundedItemDataContext? SelectedItem { get; set; }
-	public ICommand CreateItemCommand => _boundingDrawer.CreateItemCommand;
 	public IObservable<BoundedItemDataContext?> SelectedItemChanged => _selectedItemChanged.AsObservable();
+	public BoundingDrawerDataContext BoundingDrawer => _boundingDrawer;
 
 	public DrawerViewModel(BoundingDrawerViewModel boundingDrawer, AssetItemsViewModel itemsViewModel)
 	{

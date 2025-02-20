@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -8,7 +9,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed partial class BoundingDrawerViewModel : ViewModel
+public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerDataContext
 {
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(CreateItemCommand))]
 	public partial Tag? Tag { get; set; }
@@ -35,4 +36,6 @@ public sealed partial class BoundingDrawerViewModel : ViewModel
 		Guard.IsNotNull(AssetsLibrary);
 		_annotator.CreateItem(AssetsLibrary, Screenshot, Tag, bounding);
 	}
+
+	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;
 }
