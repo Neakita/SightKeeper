@@ -115,24 +115,7 @@
             </ListBox.Styles>
             <ListBox.DataTemplates>
                 <DataTemplate DataType="local:BoundedItemDataContext">
-                    <local:DrawerItem>
-                        <local:DrawerItem.Styles>
-                            <Style Selector="local|DrawerItem">
-                                <Setter Property="Width">
-                                    <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                                        <Binding Path="Bounding.Width"/>
-                                        <Binding Path="#ListBox.Bounds.Width"/>
-                                    </MultiBinding>
-                                </Setter>
-                                <Setter Property="Height">
-                                    <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                                        <Binding Path="Bounding.Height"/>
-                                        <Binding Path="#ListBox.Bounds.Height"/>
-                                    </MultiBinding>
-                                </Setter>
-                            </Style>
-                        </local:DrawerItem.Styles>
-                    </local:DrawerItem>
+                    <local:DrawerItem/>
                 </DataTemplate>
                 <DataTemplate DataType="poser:KeyPointDataContext">
                     <poser:KeyPointView/>

@@ -5,6 +5,7 @@
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:boundingTransform="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.DrawerItem"
              x:DataType="local:BoundedItemDataContext">
@@ -17,6 +18,18 @@
                         <local:UIntColorConverter x:Key="ColorConverterAlpha4" AlphaMultiplier="0.4"/>
                         <local:UIntColorConverter x:Key="ColorConverterAlpha1" AlphaMultiplier="0.1"/>
                     </Style.Resources>
+                    <Setter Property="Width">
+                        <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
+                            <Binding Path="Bounding.Width"/>
+                            <Binding Path="$parent[ListBox].Bounds.Width"/>
+                        </MultiBinding>
+                    </Setter>
+                    <Setter Property="Height">
+                        <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
+                            <Binding Path="Bounding.Height"/>
+                            <Binding Path="$parent[ListBox].Bounds.Height"/>
+                        </MultiBinding>
+                    </Setter>
                     <Setter Property="ZIndex"
                             Value="{Binding Bounding, Converter={x:Static local:ReverseBoundingAreaToIntConverter.Instance}}"/>
                     <Setter Property="Background" Value="Transparent"/>
