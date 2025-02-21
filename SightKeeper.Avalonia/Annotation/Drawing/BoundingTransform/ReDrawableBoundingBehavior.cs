@@ -6,6 +6,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain;
@@ -15,8 +16,8 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 
 internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 {
-	public static readonly StyledProperty<Panel?> CanvasProperty =
-		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Panel?>(nameof(Canvas));
+	public static readonly StyledProperty<Panel?> DrawingCanvasProperty =
+		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Panel?>(nameof(DrawingCanvas));
 
 	public static readonly StyledProperty<Panel?> ThumbsPanelProperty =
 		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
@@ -27,10 +28,10 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 	public static readonly StyledProperty<ITemplate<Control>?> PreviewTemplateProperty =
 		AvaloniaProperty.Register<ReDrawableBoundingBehavior, ITemplate<Control>?>(nameof(PreviewTemplate));
 
-	public Panel? Canvas
+	public Panel? DrawingCanvas
 	{
-		get => GetValue(CanvasProperty);
-		set => SetValue(CanvasProperty, value);
+		get => GetValue(DrawingCanvasProperty);
+		set => SetValue(DrawingCanvasProperty, value);
 	}
 
 	[ResolveByName]
@@ -59,16 +60,15 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 			HandleThumbsPanelChange(change);
 	}
 
-	private double _fixedX1;
-	private double _fixedY1;
+	private Vector2<double> _fixedPoint1;
 	private double? _fixedX2;
 	private double? _fixedY2;
 	private Control? _preview;
 	private bool _pointerMoved;
 
-	private void HandleThumbsPanelChange(AvaloniaPropertyChangedEventArgs change)
+	private void HandleThumbsPanelChange(AvaloniaPropertyChangedEventArgs args)
 	{
-		var (oldValue, newValue) = change.GetOldAndNewValue<Panel?>();
+		var (oldValue, newValue) = args.GetOldAndNewValue<Panel?>();
 		if (oldValue != null)
 		{
 			oldValue.Children.CollectionChanged -= OnThumbsPanelChildrenChanged;
@@ -103,92 +103,93 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 
 	private void OnThumbPointerPressed(object? sender, PointerPressedEventArgs e)
 	{
-		if (sender == null || Canvas == null)
+		if (sender == null || DrawingCanvas == null)
 			return;
-		e.Pointer.Capture(Canvas);
-		Canvas.PointerMoved += OnCanvasPointerMoved;
-		Canvas.PointerReleased += OnCanvasPointerReleased;
-		var thumb = (InputElement)sender;
+		e.Pointer.Capture(DrawingCanvas);
+		DrawingCanvas.PointerMoved += OnDrawingCanvasPointerMoved;
+		DrawingCanvas.PointerReleased += OnDrawingCanvasPointerReleased;
+		var canvasSize = DrawingCanvas.Bounds.Size.ToVector();
+		var sizedBounding = Bounding * canvasSize;
+		SetFixedPoints((Layoutable)sender, sizedBounding);
+		InitializePreview(sizedBounding);
+	}
+
+	private void SetFixedPoints(Layoutable thumb, Bounding sizedBounding)
+	{
 		var changingHorizontalSide = thumb.HorizontalAlignment.ToOptionalSide();
 		var changingVerticalSide = thumb.VerticalAlignment.ToOptionalSide();
-		var canvasSize = Canvas.Bounds.Size.ToVector();
-		var sizedBounding = Bounding * canvasSize;
+		double fixedX1, fixedY1;
 		if (changingHorizontalSide == null)
 		{
-			_fixedX1 = sizedBounding.Left;
+			fixedX1 = sizedBounding.Left;
 			_fixedX2 = sizedBounding.Right;
 		}
 		else
 		{
-			_fixedX1 = sizedBounding.Get(changingHorizontalSide.Value.Opposite());
+			fixedX1 = sizedBounding.Get(changingHorizontalSide.Value.Opposite());
 		}
 		if (changingVerticalSide == null)
 		{
-			_fixedY1 = sizedBounding.Top;
+			fixedY1 = sizedBounding.Top;
 			_fixedY2 = sizedBounding.Bottom;
 		}
 		else
 		{
-			_fixedY1 = sizedBounding.Get(changingVerticalSide.Value.Opposite());
+			fixedY1 = sizedBounding.Get(changingVerticalSide.Value.Opposite());
 		}
-		InitializePreview(sizedBounding);
+		_fixedPoint1 = new Vector2<double>(fixedX1, fixedY1);
 	}
 
 	private void InitializePreview(Bounding sizedBounding)
 	{
-		if (PreviewTemplate == null || Canvas == null)
+		if (PreviewTemplate == null || DrawingCanvas == null)
 			return;
 		_preview = PreviewTemplate.Build();
-		global::Avalonia.Controls.Canvas.SetLeft(_preview, sizedBounding.Left);
-		global::Avalonia.Controls.Canvas.SetTop(_preview, sizedBounding.Top);
-		_preview.Width = sizedBounding.Width;
-		_preview.Height = sizedBounding.Height;
-		Canvas.Children.Add(_preview);
+		SetPreviewBounds(sizedBounding);
+		DrawingCanvas.Children.Add(_preview);
 	}
 
-	private void OnCanvasPointerMoved(object? sender, PointerEventArgs e)
+	private void OnDrawingCanvasPointerMoved(object? sender, PointerEventArgs e)
 	{
 		_pointerMoved = true;
-		var position = e.GetPosition(Canvas);
+		var position = e.GetPosition(DrawingCanvas);
 		UpdatePreview(position);
 	}
 
 	private void UpdatePreview(Point position)
 	{
-		if (_preview == null || Canvas == null)
+		if (_preview == null || DrawingCanvas == null)
 			return;
-		var x1 = _fixedX1;
-		var y1 = _fixedY1;
-		var canvasSize = Canvas.Bounds.Size;
+		var canvasSize = DrawingCanvas.Bounds.Size;
 		var x2 = _fixedX2 ?? Math.Clamp(position.X, 0, canvasSize.Width);
 		var y2 = _fixedY2 ?? Math.Clamp(position.Y, 0, canvasSize.Height);
-		Sort(ref x1, ref x2);
-		Sort(ref y1, ref y2);
-		global::Avalonia.Controls.Canvas.SetLeft(_preview, x1);
-		global::Avalonia.Controls.Canvas.SetTop(_preview, y1);
-		_preview.Width = x2 - x1;
-		_preview.Height = y2 - y1;
+		Vector2<double> point2 = new(x2, y2);
+		var bounding = Bounding.FromPoints(_fixedPoint1, point2);
+		SetPreviewBounds(bounding);
 	}
 
-	private static void Sort(ref double lesser, ref double greater)
+	private void SetPreviewBounds(Bounding bounding)
 	{
-		if (lesser > greater)
-			(lesser, greater) = (greater, lesser);
+		if (_preview == null)
+			return;
+		Canvas.SetLeft(_preview, bounding.Left);
+		Canvas.SetTop(_preview, bounding.Top);
+		_preview.Width = bounding.Width;
+		_preview.Height = bounding.Height;
 	}
 
-	private void OnCanvasPointerReleased(object? sender, PointerReleasedEventArgs e)
+	private void OnDrawingCanvasPointerReleased(object? sender, PointerReleasedEventArgs e)
 	{
-		Guard.IsNotNull(Canvas);
-		Canvas.PointerMoved -= OnCanvasPointerMoved;
-		Canvas.PointerReleased -= OnCanvasPointerReleased;
+		Guard.IsNotNull(DrawingCanvas);
+		DrawingCanvas.PointerMoved -= OnDrawingCanvasPointerMoved;
+		DrawingCanvas.PointerReleased -= OnDrawingCanvasPointerReleased;
 		RemovePreview();
+		var canvasSize = DrawingCanvas.Bounds.Size.ToVector();
+		var position = e.GetPosition(DrawingCanvas).ToVector().Clamp(Vector2<double>.Zero, canvasSize);
+		Vector2<double> point2 = new(_fixedX2 ?? position.X, _fixedY2 ?? position.Y);
 		_fixedX2 = null;
 		_fixedY2 = null;
-		var canvasSize = Canvas.Bounds.Size.ToVector();
-		var position = e.GetPosition(Canvas).ToVector().Clamp(Vector2<double>.Zero, canvasSize);
-		Vector2<double> point1 = new(_fixedX1, _fixedY1);
-		Vector2<double> point2 = new(_fixedX2 ?? position.X, _fixedY2 ?? position.Y);
-		var bounding = Bounding.FromPoints(point1, point2);
+		var bounding = Bounding.FromPoints(_fixedPoint1, point2);
 		var normalizedBounding = bounding / canvasSize;
 		if (!_pointerMoved)
 			return;
@@ -198,9 +199,9 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 
 	private void RemovePreview()
 	{
-		if (_preview == null || Canvas == null)
+		if (_preview == null || DrawingCanvas == null)
 			return;
-		Canvas.Children.Remove(_preview);
+		DrawingCanvas.Children.Remove(_preview);
 		_preview = null;
 	}
 }

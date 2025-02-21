@@ -74,7 +74,7 @@
         <Panel Name="ThumbsPanel"
                Margin="-5">
             <Interaction.Behaviors>
-                <boundingTransform:ReDrawableBoundingBehavior Canvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
+                <boundingTransform:ReDrawableBoundingBehavior DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                               Bounding="{Binding Bounding}"
                                                               ThumbsPanel="ThumbsPanel">
                     <boundingTransform:ReDrawableBoundingBehavior.PreviewTemplate>
