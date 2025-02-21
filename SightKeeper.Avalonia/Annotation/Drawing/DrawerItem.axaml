@@ -35,9 +35,7 @@
                     <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha4}}"/>
                     <Style Selector="^:pointerover">
-                        <Style Selector="^:not(.dragging)">
-                            <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha1}}"/>
-                        </Style>
+                        <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha1}}"/>
                         <Style Selector="^ :is(Panel)#ThumbsPanel">
                             <Setter Property="IsVisible" Value="True"/>
                         </Style>
@@ -50,11 +48,6 @@
             </behaviors:AddStylesBehavior.Styles>
         </behaviors:AddStylesBehavior>
     </Interaction.Behaviors>
-    <UserControl.Styles>
-        <Style Selector="local|DrawerItem.dragging TextBlock#TagNameTextBlock">
-            <Setter Property="IsVisible" Value="False"/>
-        </Style>
-    </UserControl.Styles>
     <Design.DataContext>
         <local:DesignBoundedItemViewModel/>
     </Design.DataContext>
