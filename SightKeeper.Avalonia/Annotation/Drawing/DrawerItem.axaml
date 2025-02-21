@@ -76,7 +76,8 @@
             <Interaction.Behaviors>
                 <boundingTransform:ReDrawableBoundingBehavior DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                               Bounding="{Binding Bounding}"
-                                                              ThumbsPanel="ThumbsPanel">
+                                                              ThumbsPanel="ThumbsPanel"
+                                                              ListBox="{Binding $parent[ListBox]}">
                     <boundingTransform:ReDrawableBoundingBehavior.PreviewTemplate>
                         <Template>
                             <Rectangle Stroke="Red" StrokeThickness="1"/>

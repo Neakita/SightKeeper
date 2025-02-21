@@ -16,6 +16,8 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 
 internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 {
+	private const string HideItemsStyleClass = "hide-items";
+
 	public static readonly StyledProperty<Panel?> DrawingCanvasProperty =
 		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Panel?>(nameof(DrawingCanvas));
 
@@ -27,6 +29,9 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 
 	public static readonly StyledProperty<ITemplate<Control>?> PreviewTemplateProperty =
 		AvaloniaProperty.Register<ReDrawableBoundingBehavior, ITemplate<Control>?>(nameof(PreviewTemplate));
+
+	public static readonly StyledProperty<ListBox?> ListBoxProperty =
+		AvaloniaProperty.Register<ReDrawableBoundingBehavior, ListBox?>(nameof(ListBox));
 
 	public Panel? DrawingCanvas
 	{
@@ -51,6 +56,12 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 	{
 		get => GetValue(PreviewTemplateProperty);
 		set => SetValue(PreviewTemplateProperty, value);
+	}
+
+	public ListBox? ListBox
+	{
+		get => GetValue(ListBoxProperty);
+		set => SetValue(ListBoxProperty, value);
 	}
 
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -112,6 +123,7 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 		var sizedBounding = Bounding * canvasSize;
 		SetFixedPoints((Layoutable)sender, sizedBounding);
 		InitializePreview(sizedBounding);
+		ListBox?.Classes.Add(HideItemsStyleClass);
 	}
 
 	private void SetFixedPoints(Layoutable thumb, Bounding sizedBounding)
@@ -191,6 +203,7 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 		_fixedY2 = null;
 		var bounding = Bounding.FromPoints(_fixedPoint1, point2);
 		var normalizedBounding = bounding / canvasSize;
+		ListBox?.Classes.Remove(HideItemsStyleClass);
 		if (!_pointerMoved)
 			return;
 		_pointerMoved = false;
