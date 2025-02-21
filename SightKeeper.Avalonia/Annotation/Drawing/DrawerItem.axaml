@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
-             xmlns:boundingTransform="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
@@ -74,16 +73,16 @@
         <Panel Name="ThumbsPanel"
                Margin="-5">
             <Interaction.Behaviors>
-                <boundingTransform:ReDrawableBoundingBehavior DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
+                <local:ReDrawableBoundingBehavior DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                               Bounding="{Binding Bounding}"
                                                               ThumbsPanel="ThumbsPanel"
                                                               ListBox="{Binding $parent[ListBox]}">
-                    <boundingTransform:ReDrawableBoundingBehavior.PreviewTemplate>
+                    <local:ReDrawableBoundingBehavior.PreviewTemplate>
                         <Template>
                             <Rectangle Stroke="Red" StrokeThickness="1"/>
                         </Template>
-                    </boundingTransform:ReDrawableBoundingBehavior.PreviewTemplate>
-                </boundingTransform:ReDrawableBoundingBehavior>
+                    </local:ReDrawableBoundingBehavior.PreviewTemplate>
+                </local:ReDrawableBoundingBehavior>
             </Interaction.Behaviors>
             <Panel.Styles>
                 <Style Selector="Panel#ThumbsPanel">

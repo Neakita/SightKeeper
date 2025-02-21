@@ -12,7 +12,7 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
+namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 {

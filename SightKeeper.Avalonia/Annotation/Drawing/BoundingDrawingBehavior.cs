@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Avalonia.Annotation.Drawing.BoundingTransform;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 
@@ -22,7 +21,7 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		AvaloniaProperty.Register<BoundingDrawingBehavior, ITemplate<Control>?>(nameof(DrawingItemTemplate));
 
 	public static readonly StyledProperty<double> MinimumBoundingSizeProperty =
-		DraggableBoundingBehavior.MinimumBoundingSizeProperty.AddOwner<BoundingDrawingBehavior>();
+		AvaloniaProperty.Register<BoundingDrawingBehavior, double>(nameof(MinimumBoundingSize), 20);
 
 	public static readonly StyledProperty<ListBox?> ListBoxProperty =
 		AvaloniaProperty.Register<BoundingDrawingBehavior, ListBox?>(nameof(ListBox));
