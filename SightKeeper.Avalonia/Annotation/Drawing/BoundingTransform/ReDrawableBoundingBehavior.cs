@@ -25,7 +25,8 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
 
 	public static readonly StyledProperty<Bounding> BoundingProperty =
-		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Bounding>(nameof(Bounding), defaultBindingMode: BindingMode.TwoWay);
+		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Bounding>(nameof(Bounding),
+			defaultBindingMode: BindingMode.TwoWay);
 
 	public static readonly StyledProperty<ITemplate<Control>?> PreviewTemplateProperty =
 		AvaloniaProperty.Register<ReDrawableBoundingBehavior, ITemplate<Control>?>(nameof(PreviewTemplate));
@@ -85,6 +86,7 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 			oldValue.Children.CollectionChanged -= OnThumbsPanelChildrenChanged;
 			UnsubscribeFromThumbs(oldValue.Children);
 		}
+
 		if (newValue != null)
 		{
 			newValue.Children.CollectionChanged += OnThumbsPanelChildrenChanged;
@@ -128,28 +130,49 @@ internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
 
 	private void SetFixedPoints(Layoutable thumb, Bounding sizedBounding)
 	{
-		var changingHorizontalSide = thumb.HorizontalAlignment.ToOptionalSide();
-		var changingVerticalSide = thumb.VerticalAlignment.ToOptionalSide();
-		double fixedX1, fixedY1;
-		if (changingHorizontalSide == null)
+		if (!TryGetOppositeSide(sizedBounding, thumb.HorizontalAlignment, out var fixedX1))
 		{
 			fixedX1 = sizedBounding.Left;
 			_fixedX2 = sizedBounding.Right;
 		}
-		else
-		{
-			fixedX1 = sizedBounding.Get(changingHorizontalSide.Value.Opposite());
-		}
-		if (changingVerticalSide == null)
+		if (!TryGetOppositeSide(sizedBounding, thumb.VerticalAlignment, out var fixedY1))
 		{
 			fixedY1 = sizedBounding.Top;
 			_fixedY2 = sizedBounding.Bottom;
 		}
-		else
-		{
-			fixedY1 = sizedBounding.Get(changingVerticalSide.Value.Opposite());
-		}
 		_fixedPoint1 = new Vector2<double>(fixedX1, fixedY1);
+	}
+
+	private static bool TryGetOppositeSide(Bounding bounding, HorizontalAlignment alignment, out double value)
+	{
+		if (alignment == HorizontalAlignment.Left)
+		{
+			value = bounding.Right;
+			return true;
+		}
+		if (alignment == HorizontalAlignment.Right)
+		{
+			value = bounding.Left;
+			return true;
+		}
+		value = 0;
+		return false;
+	}
+
+	private static bool TryGetOppositeSide(Bounding bounding, VerticalAlignment alignment, out double value)
+	{
+		if (alignment == VerticalAlignment.Top)
+		{
+			value = bounding.Bottom;
+			return true;
+		}
+		if (alignment == VerticalAlignment.Bottom)
+		{
+			value = bounding.Top;
+			return true;
+		}
+		value = 0;
+		return false;
 	}
 
 	private void InitializePreview(Bounding sizedBounding)
