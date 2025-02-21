@@ -13,13 +13,22 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 internal sealed class AddClassToHoveredItemKeyPointsBehavior : Behavior<ListBox>
 {
-	public static readonly StyledProperty<string> ClassNameProperty =
-		AvaloniaProperty.Register<AddClassToSelectedItemKeyPointsBehavior, string>(nameof(ClassName));
+	public static readonly StyledProperty<string> KeyPointClassNameProperty =
+		AvaloniaProperty.Register<AddClassToSelectedItemKeyPointsBehavior, string>(nameof(KeyPointClassName));
 
-	public string ClassName
+	public static readonly StyledProperty<string> ItemClassNameProperty =
+		AvaloniaProperty.Register<AddClassToHoveredItemKeyPointsBehavior, string>(nameof(ItemClassName));
+
+	public string KeyPointClassName
 	{
-		get => GetValue(ClassNameProperty);
-		set => SetValue(ClassNameProperty, value);
+		get => GetValue(KeyPointClassNameProperty);
+		set => SetValue(KeyPointClassNameProperty, value);
+	}
+
+	public string ItemClassName
+	{
+		get => GetValue(ItemClassNameProperty);
+		set => SetValue(ItemClassNameProperty, value);
 	}
 
 	protected override void OnAttached()
@@ -45,23 +54,36 @@ internal sealed class AddClassToHoveredItemKeyPointsBehavior : Behavior<ListBox>
 	{
 		Guard.IsNotNull(AssociatedObject);
 		var item = AssociatedObject.ItemFromContainer(sender);
-		if (item is not PoserItemViewModel poserItem)
-			return;
-		var containers = GetAssociatedKeyPointContainers(poserItem);
-		foreach (var container in containers)
-			container.Classes.Add(ClassName);
+		if (item is PoserItemViewModel poserItem)
+		{
+			var containers = GetAssociatedKeyPointContainers(poserItem);
+			foreach (var container in containers)
+				container.Classes.Add(KeyPointClassName);
+		}
+		if (item is KeyPointViewModel keyPoint)
+		{
+			var container = GetAssociatedItemContainer(keyPoint);
+			container.Classes.Add(ItemClassName);
+		}
 	}
 
 	private void OnPointerExited(ListBoxItem sender, PointerEventArgs args)
 	{
 		Guard.IsNotNull(AssociatedObject);
 		var item = AssociatedObject.ItemFromContainer(sender);
-		if (item is not PoserItemViewModel poserItem)
-			return;
-		var containers = GetAssociatedKeyPointContainers(poserItem);
-		foreach (var container in containers)
+		if (item is PoserItemViewModel poserItem)
 		{
-			bool isRemoved = container.Classes.Remove(ClassName);
+			var containers = GetAssociatedKeyPointContainers(poserItem);
+			foreach (var container in containers)
+			{
+				bool isRemoved = container.Classes.Remove(KeyPointClassName);
+				Guard.IsTrue(isRemoved);
+			}
+		}
+		if (item is KeyPointViewModel keyPoint)
+		{
+			var container = GetAssociatedItemContainer(keyPoint);
+			var isRemoved = container.Classes.Remove(ItemClassName);
 			Guard.IsTrue(isRemoved);
 		}
 	}
@@ -74,6 +96,17 @@ internal sealed class AddClassToHoveredItemKeyPointsBehavior : Behavior<ListBox>
 			.Where(keyPoint => keyPoint.Item == item)
 			.Select(AssociatedObject.ContainerFromItem)
 			.Select(GuardNotNull);
+	}
+
+	private Control GetAssociatedItemContainer(KeyPointViewModel keyPoint)
+	{
+		Guard.IsNotNull(AssociatedObject);
+		var item = AssociatedObject.Items
+			.OfType<PoserItemViewModel>()
+			.Single(item => item.KeyPoints.Contains(keyPoint));
+		var itemContainer = AssociatedObject.ContainerFromItem(item);
+		Guard.IsNotNull(itemContainer);
+		return itemContainer;
 	}
 
 	private static Control GuardNotNull(Control? control)

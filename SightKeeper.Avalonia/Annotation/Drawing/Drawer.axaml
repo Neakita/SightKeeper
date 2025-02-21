@@ -37,7 +37,7 @@
                         <KeyGesture>LeftCtrl</KeyGesture>
                     </behaviors:AddPseudoClassOnGesturePressed.Gesture>
                 </behaviors:AddPseudoClassOnGesturePressed>
-                <poser:AddClassToHoveredItemKeyPointsBehavior ClassName="item-hovered"/>
+                <poser:AddClassToHoveredItemKeyPointsBehavior KeyPointClassName="item-hovered" ItemClassName="keypoint-hovered"/>
                 <poser:AddClassToSelectedItemKeyPointsBehavior ClassName="item-selected"/>
             </Interaction.Behaviors>
             <ListBox.ItemsPanel>

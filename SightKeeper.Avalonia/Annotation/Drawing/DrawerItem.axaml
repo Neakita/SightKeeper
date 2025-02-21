@@ -34,6 +34,9 @@
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha4}}"/>
+                    <Style Selector="^.keypoint-hovered">
+                        <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha1}}"/>
+                    </Style>
                     <Style Selector="^:pointerover">
                         <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha1}}"/>
                         <Style Selector="^ :is(Panel)#ThumbsPanel">
