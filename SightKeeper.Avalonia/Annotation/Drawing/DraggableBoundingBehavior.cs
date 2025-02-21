@@ -14,25 +14,25 @@ using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-internal sealed class ReDrawableBoundingBehavior : Behavior<Control>
+internal sealed class DraggableBoundingBehavior : Behavior<Control>
 {
 	private const string HideItemsStyleClass = "hide-items";
 
 	public static readonly StyledProperty<Panel?> DrawingCanvasProperty =
-		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Panel?>(nameof(DrawingCanvas));
+		AvaloniaProperty.Register<DraggableBoundingBehavior, Panel?>(nameof(DrawingCanvas));
 
 	public static readonly StyledProperty<Panel?> ThumbsPanelProperty =
-		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
+		AvaloniaProperty.Register<DraggableBoundingBehavior, Panel?>(nameof(ThumbsPanel));
 
 	public static readonly StyledProperty<Bounding> BoundingProperty =
-		AvaloniaProperty.Register<ReDrawableBoundingBehavior, Bounding>(nameof(Bounding),
+		AvaloniaProperty.Register<DraggableBoundingBehavior, Bounding>(nameof(Bounding),
 			defaultBindingMode: BindingMode.TwoWay);
 
 	public static readonly StyledProperty<ITemplate<Control>?> PreviewTemplateProperty =
-		AvaloniaProperty.Register<ReDrawableBoundingBehavior, ITemplate<Control>?>(nameof(PreviewTemplate));
+		AvaloniaProperty.Register<DraggableBoundingBehavior, ITemplate<Control>?>(nameof(PreviewTemplate));
 
 	public static readonly StyledProperty<ListBox?> ListBoxProperty =
-		AvaloniaProperty.Register<ReDrawableBoundingBehavior, ListBox?>(nameof(ListBox));
+		AvaloniaProperty.Register<DraggableBoundingBehavior, ListBox?>(nameof(ListBox));
 
 	public Panel? DrawingCanvas
 	{

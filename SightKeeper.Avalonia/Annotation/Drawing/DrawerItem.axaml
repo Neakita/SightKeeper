@@ -66,16 +66,16 @@
         <Panel Name="ThumbsPanel"
                Margin="-5">
             <Interaction.Behaviors>
-                <local:ReDrawableBoundingBehavior DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
+                <local:DraggableBoundingBehavior DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                               Bounding="{Binding Bounding}"
                                                               ThumbsPanel="ThumbsPanel"
                                                               ListBox="{Binding $parent[ListBox]}">
-                    <local:ReDrawableBoundingBehavior.PreviewTemplate>
+                    <local:DraggableBoundingBehavior.PreviewTemplate>
                         <Template>
                             <Rectangle Stroke="Red" StrokeThickness="1"/>
                         </Template>
-                    </local:ReDrawableBoundingBehavior.PreviewTemplate>
-                </local:ReDrawableBoundingBehavior>
+                    </local:DraggableBoundingBehavior.PreviewTemplate>
+                </local:DraggableBoundingBehavior>
             </Interaction.Behaviors>
             <Panel.Styles>
                 <Style Selector="Panel#ThumbsPanel">
