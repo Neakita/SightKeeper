@@ -224,12 +224,12 @@ internal sealed class DraggableBoundingBehavior : Behavior<Control>
 		Vector2<double> point2 = new(_fixedX2 ?? position.X, _fixedY2 ?? position.Y);
 		_fixedX2 = null;
 		_fixedY2 = null;
-		var bounding = Bounding.FromPoints(_fixedPoint1, point2);
-		var normalizedBounding = bounding / canvasSize;
 		ListBox?.Classes.Remove(HideItemsStyleClass);
 		if (!_pointerMoved)
 			return;
 		_pointerMoved = false;
+		var bounding = Bounding.FromPoints(_fixedPoint1, point2);
+		var normalizedBounding = bounding / canvasSize;
 		SetCurrentValue(BoundingProperty, normalizedBounding);
 	}
 
