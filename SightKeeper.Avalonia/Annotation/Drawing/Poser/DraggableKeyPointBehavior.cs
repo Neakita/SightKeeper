@@ -1,7 +1,5 @@
-using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
@@ -12,14 +10,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 internal sealed class DraggableKeyPointBehavior : Behavior
 {
-	public static readonly StyledProperty<Thumb?> ThumbProperty =
-		AvaloniaProperty.Register<DraggableKeyPointBehavior, Thumb?>(nameof(Thumb));
-
-	public static readonly StyledProperty<Size> CanvasSizeProperty =
-		AvaloniaProperty.Register<DraggableKeyPointBehavior, Size>(nameof(CanvasSize));
-
-	public static readonly StyledProperty<ListBoxItem?> ContainerProperty =
-		AvaloniaProperty.Register<DraggableKeyPointBehavior, ListBoxItem?>(nameof(Container));
+	private const string HideItemsStyleClass = "hide-items";
 
 	public static readonly StyledProperty<Vector2<double>> PositionProperty =
 		AvaloniaProperty.Register<DraggableKeyPointBehavior, Vector2<double>>(nameof(Position), defaultBindingMode: BindingMode.TwoWay);
@@ -27,23 +18,14 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 	public static readonly StyledProperty<ListBox?> ListBoxProperty =
 		AvaloniaProperty.Register<DraggableKeyPointBehavior, ListBox?>(nameof(ListBox));
 
-	public Thumb? Thumb
-	{
-		get => GetValue(ThumbProperty);
-		set => SetValue(ThumbProperty, value);
-	}
+	public static readonly StyledProperty<Panel?> DrawingCanvasProperty =
+		AvaloniaProperty.Register<DraggableKeyPointBehavior, Panel?>(nameof(DrawingCanvas));
 
-	public Size CanvasSize
-	{
-		get => GetValue(CanvasSizeProperty);
-		set => SetValue(CanvasSizeProperty, value);
-	}
+	public static readonly StyledProperty<ITemplate<Control>?> PreviewTemplateProperty =
+		AvaloniaProperty.Register<DraggableKeyPointBehavior, ITemplate<Control>?>(nameof(PreviewTemplate));
 
-	public ListBoxItem? Container
-	{
-		get => GetValue(ContainerProperty);
-		set => SetValue(ContainerProperty, value);
-	}
+	public static readonly StyledProperty<InputElement?> ThumbProperty =
+		AvaloniaProperty.Register<DraggableKeyPointBehavior, InputElement?>(nameof(Thumb));
 
 	public Vector2<double> Position
 	{
@@ -57,94 +39,96 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 		set => SetValue(ListBoxProperty, value);
 	}
 
+	public Panel? DrawingCanvas
+	{
+		get => GetValue(DrawingCanvasProperty);
+		set => SetValue(DrawingCanvasProperty, value);
+	}
+
+	public ITemplate<Control>? PreviewTemplate
+	{
+		get => GetValue(PreviewTemplateProperty);
+		set => SetValue(PreviewTemplateProperty, value);
+	}
+
+	[ResolveByName]
+	public InputElement? Thumb
+	{
+		get => GetValue(ThumbProperty);
+		set => SetValue(ThumbProperty, value);
+	}
+
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
 	{
 		base.OnPropertyChanged(change);
 		if (change.Property == ThumbProperty)
-		{
-			var (oldThumb, newThumb) = change.GetOldAndNewValue<Thumb?>();
-			if (oldThumb != null)
-			{
-				oldThumb.DragStarted -= OnDragStarted;
-				oldThumb.DragDelta -= OnDragDelta;
-				oldThumb.DragCompleted -= OnDragCompleted;
-			}
-			if (newThumb != null)
-			{
-				newThumb.DragStarted += OnDragStarted;
-				newThumb.DragDelta += OnDragDelta;
-				newThumb.DragCompleted += OnDragCompleted;
-			}
-		}
+			HandleThumbChange(change);
 	}
 
-	private Vector2<double> _position;
+	private Control? _preview;
 
-	private void OnDragStarted(object? sender, VectorEventArgs args)
+	private void HandleThumbChange(AvaloniaPropertyChangedEventArgs change)
 	{
-		_position = Position * new Vector2<double>(CanvasSize.Width, CanvasSize.Height);
-		HideOtherItems();
+		var (oldValue, newValue) = change.GetOldAndNewValue<InputElement?>();
+		if (oldValue != null)
+			oldValue.PointerPressed -= OnPointerPressed;
+		if (newValue != null)
+			newValue.PointerPressed += OnPointerPressed;
 	}
 
-	private void HideOtherItems()
+	private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
 	{
-		if (ListBox == null)
+		if (DrawingCanvas == null)
 			return;
-		for (int i = 0; i < ListBox.Items.Count; i++)
-		{
-			var container = ListBox.ContainerFromIndex(i);
-			Guard.IsNotNull(container);
-			if (container == Container)
-				continue;
-			container.IsVisible = false;
-		}
+		e.Pointer.Capture(DrawingCanvas);
+		DrawingCanvas.PointerMoved += OnPointerMoved;
+		DrawingCanvas.PointerReleased += OnPointerReleased;
+		ListBox?.Classes.Add(HideItemsStyleClass);
+		InitializePreview();
+		var canvasSize = DrawingCanvas.Bounds.Size.ToVector();
+		var sizedPosition = Position * canvasSize;
+		SetPreviewPosition(sizedPosition);
 	}
 
-	private void OnDragDelta(object? sender, VectorEventArgs args)
+	private void InitializePreview()
 	{
-		var delta = args.Vector;
-		_position = new Vector2<double>(
-			Math.Clamp(_position.X + delta.X, 0, CanvasSize.Width),
-			Math.Clamp(_position.Y + delta.Y, 0, CanvasSize.Height));
-		UpdatePreview();
-	}
-
-	private void UpdatePreview()
-	{
-		if (Container == null)
+		if (PreviewTemplate == null || DrawingCanvas == null)
 			return;
-		Canvas.SetLeft(Container, _position.X);
-		Canvas.SetTop(Container, _position.Y);
+		_preview = PreviewTemplate.Build();
+		DrawingCanvas.Children.Add(_preview);
 	}
 
-	private void OnDragCompleted(object? sender, VectorEventArgs args)
+	private void OnPointerMoved(object? sender, PointerEventArgs e)
 	{
-		Vector2<double> canvasSize = new(CanvasSize.Width, CanvasSize.Height);
-		var normalizedPosition = _position / canvasSize;
+		var position = e.GetPosition(DrawingCanvas).ToVector();
+		SetPreviewPosition(position);
+	}
+
+	private void SetPreviewPosition(Vector2<double> position)
+	{
+		if (_preview == null)
+			return;
+		Canvas.SetLeft(_preview, position.X);
+		Canvas.SetTop(_preview, position.Y);
+	}
+
+	private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
+	{
+		Guard.IsNotNull(DrawingCanvas);
+		DrawingCanvas.PointerMoved -= OnPointerMoved;
+		DrawingCanvas.PointerReleased -= OnPointerReleased;
+		var canvasSize = DrawingCanvas.Bounds.Size.ToVector();
+		var position = e.GetPosition(DrawingCanvas).ToVector();
+		RemovePreview();
+		ListBox?.Classes.Remove(HideItemsStyleClass);
+		var normalizedPosition = position / canvasSize;
 		SetCurrentValue(PositionProperty, normalizedPosition);
-		ClearPreview();
-		ShowHiddenItems();
 	}
 
-	private void ClearPreview()
+	private void RemovePreview()
 	{
-		if (Container == null)
+		if (DrawingCanvas == null || _preview == null)
 			return;
-		Container.ClearValue(Canvas.LeftProperty);
-		Container.ClearValue(Canvas.TopProperty);
-	}
-
-	private void ShowHiddenItems()
-	{
-		if (ListBox == null)
-			return;
-		for (int i = 0; i < ListBox.Items.Count; i++)
-		{
-			var container = ListBox.ContainerFromIndex(i);
-			Guard.IsNotNull(container);
-			if (container == Container)
-				continue;
-			container.ClearValue(Visual.IsVisibleProperty);
-		}
+		DrawingCanvas.Children.Remove(_preview);
 	}
 }

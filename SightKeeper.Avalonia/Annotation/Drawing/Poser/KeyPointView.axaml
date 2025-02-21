@@ -18,13 +18,13 @@
         <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
             <behaviors:AddStylesBehavior.Styles>
                 <Style Selector="ListBoxItem">
-                    <Style Selector="^.item-hovered Thumb">
+                    <Style Selector="^.item-hovered TemplatedControl">
                         <Setter Property="Background"
                                 Value="{Binding Tag.Color, Converter={StaticResource LoweredColorConverter}}"/>
                     </Style>
                     <Style Selector="^.item-selected">
                         <Setter Property="ZIndex" Value="{x:Static drawing:DrawerZIndexes.SelectedItemKeyPointZIndex}"/>
-                        <Style Selector="^ Thumb:not(:pressed)">
+                        <Style Selector="^ TemplatedControl">
                             <Setter Property="BorderBrush"
                                     Value="{Binding Tag.Color, Converter={StaticResource ColorConverter}}"/>
                         </Style>
@@ -32,18 +32,26 @@
                 </Style>
             </behaviors:AddStylesBehavior.Styles>
         </behaviors:AddStylesBehavior>
-        <poser:DraggableKeyPointBehavior Container="{Binding $parent[ListBoxItem]}"
-                                         Thumb="{Binding #Thumb}"
-                                         CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
-                                         Position="{Binding Position}"
-                                         ListBox="{Binding $parent[ListBox]}"/>
+        <poser:DraggableKeyPointBehavior Position="{Binding Position}"
+                                         ListBox="{Binding $parent[ListBox]}"
+                                         DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                         Thumb="Thumb">
+            <poser:DraggableKeyPointBehavior.PreviewTemplate>
+                <Template>
+                    <Ellipse Width="6"
+                             Height="6"
+                             Fill="Red"
+                             Margin="-3"/>
+                </Template>
+            </poser:DraggableKeyPointBehavior.PreviewTemplate>
+        </poser:DraggableKeyPointBehavior>
     </Interaction.Behaviors>
     <Design.DataContext>
         <poser:DesignKeyPointDataContext/>
     </Design.DataContext>
-    <Thumb Name="Thumb">
-        <Thumb.Theme>
-            <ControlTheme TargetType="Thumb">
+    <TemplatedControl Name="Thumb">
+        <TemplatedControl.Theme>
+            <ControlTheme TargetType="TemplatedControl">
                 <Setter Property="Background"
                         Value="{Binding Tag.Color, Converter={StaticResource TransparentLoweredColorConverter}}"/>
                 <Setter Property="BorderBrush"
@@ -69,15 +77,7 @@
                     <Setter Property="Background"
                             Value="{Binding Tag.Color, Converter={StaticResource LoweredColorConverter}}"/>
                 </Style>
-                <Style Selector="^:pressed">
-                    <Setter Property="Cursor" Value="None"/>
-                    <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverter}}"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                </Style>
-                <Style Selector="^:not(:pressed)">
-                    <Setter Property="ToolTip.Tip" Value="{Binding Tag.Name}"/>
-                </Style>
             </ControlTheme>
-        </Thumb.Theme>
-    </Thumb>
+        </TemplatedControl.Theme>
+    </TemplatedControl>
 </UserControl>
