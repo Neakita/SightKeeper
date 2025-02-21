@@ -66,6 +66,7 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 	}
 
 	private Control? _preview;
+	private bool _pointerMoved;
 
 	private void HandleThumbChange(AvaloniaPropertyChangedEventArgs change)
 	{
@@ -102,6 +103,7 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 	{
 		var position = e.GetPosition(DrawingCanvas).ToVector();
 		SetPreviewPosition(position);
+		_pointerMoved = true;
 	}
 
 	private void SetPreviewPosition(Vector2<double> position)
@@ -117,10 +119,13 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 		Guard.IsNotNull(DrawingCanvas);
 		DrawingCanvas.PointerMoved -= OnPointerMoved;
 		DrawingCanvas.PointerReleased -= OnPointerReleased;
-		var canvasSize = DrawingCanvas.Bounds.Size.ToVector();
-		var position = e.GetPosition(DrawingCanvas).ToVector();
 		RemovePreview();
 		ListBox?.Classes.Remove(HideItemsStyleClass);
+		if (!_pointerMoved)
+			return;
+		_pointerMoved = false;
+		var canvasSize = DrawingCanvas.Bounds.Size.ToVector();
+		var position = e.GetPosition(DrawingCanvas).ToVector();
 		var normalizedPosition = position / canvasSize;
 		SetCurrentValue(PositionProperty, normalizedPosition);
 	}
