@@ -74,16 +74,15 @@
         <Panel Name="ThumbsPanel"
                Margin="-5">
             <Interaction.Behaviors>
-                <!--<boundingTransform:DraggableBoundingBehavior
-                    CanvasSize="{Binding $parent[ListBox].Bounds.Size}"
-                    Bounding="{Binding Bounding}"
-                    ThumbsPanel="ThumbsPanel"
-                    ItemContainer="{Binding $parent[ListBoxItem]}"
-                    Item="{Binding $parent[UserControl]}"
-                    ListBox="{Binding $parent[ListBox]}"/>-->
-                <boundingTransform:ReDrawableBoundingBehavior DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
+                <boundingTransform:ReDrawableBoundingBehavior Canvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                               Bounding="{Binding Bounding}"
-                                                              ThumbsPanel="ThumbsPanel"/>
+                                                              ThumbsPanel="ThumbsPanel">
+                    <boundingTransform:ReDrawableBoundingBehavior.PreviewTemplate>
+                        <Template>
+                            <Rectangle Stroke="Red" StrokeThickness="1"/>
+                        </Template>
+                    </boundingTransform:ReDrawableBoundingBehavior.PreviewTemplate>
+                </boundingTransform:ReDrawableBoundingBehavior>
             </Interaction.Behaviors>
             <Panel.Styles>
                 <Style Selector="Panel#ThumbsPanel">
