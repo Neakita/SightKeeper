@@ -18,6 +18,7 @@
         <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
             <behaviors:AddStylesBehavior.Styles>
                 <Style Selector="ListBoxItem">
+                    <Setter Property="ZIndex" Value="{x:Static drawing:DrawerZIndexes.KeyPointZIndex}"/>
                     <Style Selector="^.item-hovered TemplatedControl">
                         <Setter Property="Background"
                                 Value="{Binding Tag.Color, Converter={StaticResource LoweredColorConverter}}"/>
