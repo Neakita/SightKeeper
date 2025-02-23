@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Avalonia.Media;
 using FluentValidation;
 using SightKeeper.Application.DataSets.Editing;
@@ -7,10 +8,12 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 
-internal sealed class EditedPoserTagViewModel : PoserNewTagViewModel, EditedTagData
+internal sealed class EditedPoserTagViewModel : PoserNewTagViewModel, EditedPoserTagData
 {
 	Tag ExistingTagData.Tag => Tag;
 	public PoserTag Tag { get; }
+
+	IReadOnlyCollection<TagData> EditedPoserTagData.KeyPointTags => KeyPointTags;
 
 	public EditedPoserTagViewModel(IValidator<NewTagData> validator, PoserTag tag) : base(tag.Name, validator)
 	{
