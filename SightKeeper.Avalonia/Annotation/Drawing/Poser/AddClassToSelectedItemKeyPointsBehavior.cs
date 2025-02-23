@@ -37,10 +37,7 @@ internal sealed class AddClassToSelectedItemKeyPointsBehavior : Behavior<ListBox
 		foreach (var container in args.SelectedItems.OfType<PoserItemViewModel>().SelectMany(GetAssociatedKeyPointViews))
 			container.Classes.Add(ClassName);
 		foreach (var container in args.DeselectedItems.OfType<PoserItemViewModel>().SelectMany(GetAssociatedKeyPointViews))
-		{
-			var isRemoved = container.Classes.Remove(ClassName);
-			Guard.IsTrue(isRemoved);
-		}
+			container.Classes.Remove(ClassName);
 	}
 
 	private IEnumerable<Control> GetAssociatedKeyPointViews(PoserItemViewModel item)
