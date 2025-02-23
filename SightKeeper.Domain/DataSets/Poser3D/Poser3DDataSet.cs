@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Domain.DataSets.Poser3D;
 
-public sealed class Poser3DDataSet : DataSet
+public sealed class Poser3DDataSet : PoserDataSet
 {
 	public override TagsLibrary<PoserTag> TagsLibrary { get; }
 	public override AssetsLibrary<Poser3DAsset> AssetsLibrary { get; }
