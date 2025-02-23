@@ -10,9 +10,23 @@ public sealed class KeyPoint3DViewModel : KeyPointViewModel
 	public override KeyPoint3D Value { get; }
 	public override Tag Tag => Value.Tag;
 
+	public bool IsVisible
+	{
+		get => Value.IsVisible;
+		set
+		{
+			OnPropertyChanging();
+			_annotator.SetKeyPointVisibility(Value, value);
+			OnPropertyChanged();
+		}
+	}
+
 	public KeyPoint3DViewModel(PoserAnnotator annotator, Poser3DItemViewModel item, KeyPoint3D value) : base(annotator)
 	{
+		_annotator = annotator;
 		Item = item;
 		Value = value;
 	}
+
+	private readonly PoserAnnotator _annotator;
 }

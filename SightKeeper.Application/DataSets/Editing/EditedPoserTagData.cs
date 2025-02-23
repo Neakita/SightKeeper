@@ -4,5 +4,5 @@ namespace SightKeeper.Application.DataSets.Editing;
 
 public interface EditedPoserTagData : EditedTagData
 {
-	IReadOnlyCollection<TagData> Tags { get; }
+	IReadOnlyCollection<TagData> KeyPointTags { get; }
 }

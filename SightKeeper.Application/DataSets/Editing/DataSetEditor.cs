@@ -62,7 +62,7 @@ public abstract class DataSetEditor : IDisposable
 		tag.Name = editedTagData.Name;
 		tag.Color = editedTagData.Color;
 		if (tag is PoserTag poserTag)
-			EditKeyPoints(poserTag, ((EditedPoserTagData)editedTagData).Tags);
+			EditKeyPoints(poserTag, ((EditedPoserTagData)editedTagData).KeyPointTags);
 	}
 
 	private static void EditKeyPoints(PoserTag poserTag, IReadOnlyCollection<TagData> tagsData)

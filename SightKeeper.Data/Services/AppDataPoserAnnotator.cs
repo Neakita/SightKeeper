@@ -4,6 +4,7 @@ using SightKeeper.Application;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Poser3D;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Services;
@@ -32,6 +33,13 @@ public sealed class AppDataPoserAnnotator : PoserAnnotator, ObservablePoserAnnot
 	{
 		lock (_appDataLock)
 			keyPoint.Position = position;
+		_appDataAccess.SetDataChanged();
+	}
+
+	public void SetKeyPointVisibility(KeyPoint3D keyPoint, bool isVisible)
+	{
+		lock (_appDataLock)
+			keyPoint.IsVisible = isVisible;
 		_appDataAccess.SetDataChanged();
 	}
 

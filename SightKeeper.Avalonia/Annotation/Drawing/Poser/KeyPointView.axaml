@@ -13,6 +13,7 @@
         <drawing:UIntColorConverter x:Key="LoweredColorConverter" SaturationMultiplier="0.8" ValueMultiplier="0.7"/>
         <drawing:UIntColorConverter x:Key="TransparentColorConverter" AlphaMultiplier="0.5"/>
         <drawing:UIntColorConverter x:Key="TransparentLoweredColorConverter" AlphaMultiplier="0.5" SaturationMultiplier="0.8" ValueMultiplier="0.7"/>
+        <drawing:UIntColorConverter x:Key="DarkenColorConverter" ValueMultiplier="0.2"/>
     </UserControl.Resources>
     <Interaction.Behaviors>
         <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
@@ -33,6 +34,8 @@
                 </Style>
             </behaviors:AddStylesBehavior.Styles>
         </behaviors:AddStylesBehavior>
+        <poser:KeyPointVisibilityBehavior DataContext="{Binding}"
+                                          Thumb="Thumb"/>
         <poser:DraggableKeyPointBehavior Position="{Binding Position}"
                                          ListBox="{Binding $parent[ListBox]}"
                                          DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
@@ -50,6 +53,11 @@
     <Design.DataContext>
         <poser:DesignKeyPointDataContext/>
     </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="poser|KeyPointView.invisible TemplatedControl">
+            <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource DarkenColorConverter}}"/>
+        </Style>
+    </UserControl.Styles>
     <TemplatedControl Name="Thumb">
         <TemplatedControl.Theme>
             <ControlTheme TargetType="TemplatedControl">
