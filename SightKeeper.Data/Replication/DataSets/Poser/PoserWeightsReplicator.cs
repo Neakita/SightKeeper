@@ -13,7 +13,7 @@ internal static class PoserWeightsReplicator
 		{
 			var composition = CompositionReplicator.ReplicateComposition(weights.Composition);
 			var tags = ReplicateTags(tagsLibrary, weights.TagsIndexes);
-			weightsLibrary.CreateWeights(weights.CreationDate, weights.ModelSize, weights.Metrics, weights.Resolution, composition, tags);
+			weightsLibrary.CreateWeights(weights.CreationTimestamp, weights.ModelSize, weights.Metrics, weights.Resolution, composition, tags);
 		}
 	}
 

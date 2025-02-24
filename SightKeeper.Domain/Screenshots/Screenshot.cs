@@ -4,14 +4,14 @@ namespace SightKeeper.Domain.Screenshots;
 
 public sealed class Screenshot
 {
-	public DateTimeOffset CreationDate { get; }
+	public DateTimeOffset CreationTimestamp { get; }
 	public Vector2<ushort> ImageSize { get; }
 	public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
 
-	internal Screenshot(DateTimeOffset creationDate, Vector2<ushort> imageSize)
+	internal Screenshot(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
 	{
 		ValidateImageSize(imageSize);
-		CreationDate = creationDate;
+		CreationTimestamp = creationTimestamp;
 		ImageSize = imageSize;
 	}
 

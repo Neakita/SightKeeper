@@ -37,7 +37,7 @@ internal sealed class ScreenshotsLibraryConverter
 		return new PackableScreenshot
 		{
 			Id = _screenshotsDataAccess.GetId(screenshot),
-			CreationDate = screenshot.CreationDate,
+			CreationTimestamp = screenshot.CreationTimestamp,
 			ImageSize = screenshot.ImageSize
 		};
 	}

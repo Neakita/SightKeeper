@@ -6,20 +6,20 @@ public sealed class ScreenshotsLibrary
 	public string Description { get; set; } = string.Empty;
 
 	/// <remarks>
-	/// Sorted by date: first is the earliest, last is the latest
+	/// Sorted by creation timestamp: first is the earliest, last is the latest
 	/// </remarks>
 	public IReadOnlyList<Screenshot> Screenshots => _screenshots;
 
-	public Screenshot CreateScreenshot(DateTimeOffset creationDate, Vector2<ushort> imageSize)
+	public Screenshot CreateScreenshot(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
 	{
-		if (_screenshots.Count > 0 && creationDate <= _screenshots[^1].CreationDate)
+		if (_screenshots.Count > 0 && creationTimestamp <= _screenshots[^1].CreationTimestamp)
 		{
-			throw new InconsistentScreenshotCreationDateException(
-				"An attempt was made to create a new screenshot earlier than the date of the last screenshot in the library. " +
+			throw new InconsistentScreenshotCreationTimestampException(
+				"An attempt was made to create a new screenshot earlier than the timestamp of the last screenshot in the library. " +
 				"Check that the time synchronization is correct and/or delete incorrectly created screenshots",
-				creationDate, this);
+				creationTimestamp, this);
 		}
-		Screenshot screenshot = new(creationDate, imageSize);
+		Screenshot screenshot = new(creationTimestamp, imageSize);
 		_screenshots.Add(screenshot);
 		return screenshot;
 	}

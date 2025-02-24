@@ -26,7 +26,7 @@ internal sealed class PlainWeightsConverter
 		return new PackablePlainWeights
 		{
 			Id = id,
-			CreationDate = weights.CreationDate,
+			CreationTimestamp = weights.CreationTimestamp,
 			ModelSize = weights.ModelSize,
 			Metrics = weights.Metrics,
 			Resolution = weights.Resolution,

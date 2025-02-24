@@ -29,7 +29,7 @@ internal sealed class PoserWeightsConverter
 		{
 			TagsIndexes = ConvertTags(weights.Tags),
 			Id = id,
-			CreationDate = weights.CreationDate,
+			CreationTimestamp = weights.CreationTimestamp,
 			ModelSize = weights.ModelSize,
 			Metrics = weights.Metrics,
 			Resolution = weights.Resolution,

@@ -6,7 +6,7 @@ namespace SightKeeper.Application.Screenshotting.Saving;
 
 internal sealed class ScreenshotData<TPixel> : IDisposable
 {
-	public DateTimeOffset CreationDate { get; } = DateTimeOffset.Now;
+	public DateTimeOffset CreationTimestamp { get; } = DateTimeOffset.Now;
 	public Vector2<ushort> ImageSize { get; }
 	public ReadOnlySpan<TPixel> ImageData => _imageData.AsSpan()[..ImageDataLength];
 	public ReadOnlySpan2D<TPixel> ImageData2D => ImageData.AsSpan2D(ImageSize.Y, ImageSize.X);

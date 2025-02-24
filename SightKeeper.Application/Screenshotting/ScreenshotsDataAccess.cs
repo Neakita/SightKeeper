@@ -14,10 +14,10 @@ public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, I
 
 	public abstract Stream LoadImage(Screenshot screenshot);
 
-	public Screenshot CreateScreenshot(ScreenshotsLibrary library, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationDate)
+	public Screenshot CreateScreenshot(ScreenshotsLibrary library, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
-		var screenshot = CreateScreenshot(library, creationDate, resolution);
+		var screenshot = CreateScreenshot(library, creationTimestamp, resolution);
 		SaveScreenshotData(screenshot, imageData);
 		_added.OnNext((library, screenshot));
 		return screenshot;
@@ -36,9 +36,9 @@ public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, I
 		_removed.Dispose();
 	}
 
-	protected virtual Screenshot CreateScreenshot(ScreenshotsLibrary library, DateTimeOffset creationDate, Vector2<ushort> resolution)
+	protected virtual Screenshot CreateScreenshot(ScreenshotsLibrary library, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
 	{
-		return library.CreateScreenshot(creationDate, resolution);
+		return library.CreateScreenshot(creationTimestamp, resolution);
 	}
 
 	protected abstract void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> image);

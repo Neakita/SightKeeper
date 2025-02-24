@@ -48,12 +48,12 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 
 	protected override Screenshot CreateScreenshot(
 		ScreenshotsLibrary library,
-		DateTimeOffset creationDate,
+		DateTimeOffset creationTimestamp,
 		Vector2<ushort> resolution)
 	{
 		Screenshot screenshot;
 		lock (_appDataLock)
-			screenshot = base.CreateScreenshot(library, creationDate, resolution);
+			screenshot = base.CreateScreenshot(library, creationTimestamp, resolution);
 		_appDataAccess.SetDataChanged();
 		return screenshot;
 	}

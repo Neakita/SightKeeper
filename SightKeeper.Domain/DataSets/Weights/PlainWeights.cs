@@ -8,13 +8,13 @@ public sealed class PlainWeights : Weights
 	public IReadOnlyCollection<Tag> Tags { get; }
 
 	internal PlainWeights(
-		DateTimeOffset creationDate,
+		DateTimeOffset creationTimestamp,
 		ModelSize size,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
 		ImageComposition? composition,
 		IReadOnlyCollection<Tag> tags)
-		: base(creationDate, size, metrics, resolution, composition)
+		: base(creationTimestamp, size, metrics, resolution, composition)
 	{
 		Tags = tags;
 	}

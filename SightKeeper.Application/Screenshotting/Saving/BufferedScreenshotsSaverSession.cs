@@ -78,7 +78,7 @@ public sealed class BufferedScreenshotsSaverSession<TPixel> : ScreenshotsSaverSe
 			{
 				var buffer2D = buffer.AsSpan().AsSpan2D(data.ImageSize.Y, data.ImageSize.X);
 				_pixelConverter.Convert(data.ImageData2D, buffer2D);
-				ScreenshotsDataAccess.CreateScreenshot(Library, buffer2D, data.CreationDate);
+				ScreenshotsDataAccess.CreateScreenshot(Library, buffer2D, data.CreationTimestamp);
 			}
 			finally
 			{

@@ -13,7 +13,7 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 	public override IReadOnlyCollection<PoserWeights> Weights => _weights;
 
 	public PoserWeights CreateWeights(
-		DateTimeOffset creationDate,
+		DateTimeOffset creationTimestamp,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
@@ -23,7 +23,7 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 		tags = PreventExternalEditing(tags);
 		ValidateTagsQuantity(tags);
 		ValidateTagsOwners(tags);
-		PoserWeights weights = new(creationDate, modelSize, metrics, resolution, composition, tags);
+		PoserWeights weights = new(creationTimestamp, modelSize, metrics, resolution, composition, tags);
 		var isAdded = _weights.Add(weights);
 		Debug.Assert(isAdded);
 		return weights;

@@ -73,13 +73,13 @@
                     <StackPanel Grid.Row="2"
                                 Orientation="Horizontal"
                                 Classes="small-spacing"
-                                ToolTip.Tip="{Binding Value.CreationDate}"
+                                ToolTip.Tip="{Binding Value.CreationTimestamp}"
                                 Background="Transparent">
                         <icons:MaterialIcon Kind="Calendar"/>
                         <TextBlock>
                             <Interaction.Behaviors>
                                 <behaviors:DisplayRelativeDateTimeBehavior
-                                    DateTime="{Binding Value.CreationDate}"/>
+                                    DateTime="{Binding Value.CreationTimestamp}"/>
                             </Interaction.Behaviors>
                         </TextBlock>
                     </StackPanel>

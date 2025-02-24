@@ -10,7 +10,7 @@ public sealed class PlainWeightsLibrary : WeightsLibrary
 	public override IReadOnlyCollection<PlainWeights> Weights => _weights;
 
 	public PlainWeights CreateWeights(
-		DateTimeOffset creationDate,
+		DateTimeOffset creationTimestamp,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
@@ -19,7 +19,7 @@ public sealed class PlainWeightsLibrary : WeightsLibrary
 	{
 		var tagsList = tags.ToList().AsReadOnly();
 		ValidateTags(tagsList, nameof(tags));
-		PlainWeights weights = new(creationDate, modelSize, metrics, resolution, composition, tagsList);
+		PlainWeights weights = new(creationTimestamp, modelSize, metrics, resolution, composition, tagsList);
 		var isAdded = _weights.Add(weights);
 		Debug.Assert(isAdded);
 		return weights;
