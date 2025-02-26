@@ -59,7 +59,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 
 	private void OnSelectedScreenshotChanged()
 	{
-		Drawer.Screenshot = Screenshots.SelectedScreenshot;
+		Drawer.Screenshot = Screenshots.SelectedImage;
 	}
 
 	private void OnAdditionalToolingChanged(object? value)

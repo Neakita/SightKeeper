@@ -9,12 +9,12 @@ namespace SightKeeper.Application.Screenshotting;
 
 public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, IDisposable
 {
-	public IObservable<(ScreenshotsLibrary library, Screenshot screenshot)> Added => _added.AsObservable();
-	public IObservable<(ScreenshotsLibrary library, Screenshot screenshot)> Removed => _removed.AsObservable();
+	public IObservable<(ScreenshotsLibrary library, Image screenshot)> Added => _added.AsObservable();
+	public IObservable<(ScreenshotsLibrary library, Image screenshot)> Removed => _removed.AsObservable();
 
-	public abstract Stream LoadImage(Screenshot screenshot);
+	public abstract Stream LoadImage(Image image);
 
-	public Screenshot CreateScreenshot(ScreenshotsLibrary library, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
+	public Image CreateScreenshot(ScreenshotsLibrary library, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
 		var screenshot = CreateScreenshot(library, creationTimestamp, resolution);
@@ -36,14 +36,14 @@ public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, I
 		_removed.Dispose();
 	}
 
-	protected virtual Screenshot CreateScreenshot(ScreenshotsLibrary library, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
+	protected virtual Image CreateScreenshot(ScreenshotsLibrary library, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
 	{
 		return library.CreateScreenshot(creationTimestamp, resolution);
 	}
 
-	protected abstract void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> image);
-	protected abstract void DeleteScreenshotData(Screenshot screenshot);
+	protected abstract void SaveScreenshotData(Image image, ReadOnlySpan2D<Rgba32> data);
+	protected abstract void DeleteScreenshotData(Image image);
 
-	private readonly Subject<(ScreenshotsLibrary library, Screenshot screenshot)> _added = new();
-	private readonly Subject<(ScreenshotsLibrary library, Screenshot screenshot)> _removed = new();
+	private readonly Subject<(ScreenshotsLibrary library, Image screenshot)> _added = new();
+	private readonly Subject<(ScreenshotsLibrary library, Image screenshot)> _removed = new();
 }

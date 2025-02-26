@@ -95,18 +95,18 @@ public sealed class PoserToolingViewModelTests
 		commandMonitor.Should().Raise(nameof(ICommand.CanExecuteChanged));
 	}
 
-	private static Screenshot CreateScreenshot()
+	private static Image CreateScreenshot()
 	{
 		ScreenshotsLibrary screenshotsLibrary = new();
 		return screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 	}
 
-	private static (Tag keyPointTag, Poser2DItem item) CreateKeyPointTagAndPoserItem(Screenshot screenshot)
+	private static (Tag keyPointTag, Poser2DItem item) CreateKeyPointTagAndPoserItem(Image image)
 	{
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var keyPointTag = tag.CreateKeyPointTag("TestKeyPointTag");
-		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var item = asset.CreateItem(tag, new Bounding(0.1, 0.2, 0.3, 0.4));
 		return (keyPointTag, item);
 	}

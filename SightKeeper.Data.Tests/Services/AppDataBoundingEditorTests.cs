@@ -36,7 +36,7 @@ public sealed class AppDataBoundingEditorTests
 		return asset.CreateItem(tag, new Bounding());
 	}
 
-	private static Screenshot PrepareScreenshot()
+	private static Image PrepareScreenshot()
 	{
 		ScreenshotsLibrary screenshotsLibrary = new();
 		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));

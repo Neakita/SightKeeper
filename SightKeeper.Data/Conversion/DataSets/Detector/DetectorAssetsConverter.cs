@@ -14,7 +14,7 @@ internal sealed class DetectorAssetsConverter
 		_session = session;
 	}
 
-	public IEnumerable<PackableItemsAsset<PackableDetectorItem>> ConvertAssets(IEnumerable<KeyValuePair<Screenshot, DetectorAsset>> assets)
+	public IEnumerable<PackableItemsAsset<PackableDetectorItem>> ConvertAssets(IEnumerable<KeyValuePair<Image, DetectorAsset>> assets)
 	{
 		return assets.Select(ConvertAsset);
 	}
@@ -22,7 +22,7 @@ internal sealed class DetectorAssetsConverter
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly ConversionSession _session;
 
-	private PackableItemsAsset<PackableDetectorItem> ConvertAsset(KeyValuePair<Screenshot, DetectorAsset> assetPair)
+	private PackableItemsAsset<PackableDetectorItem> ConvertAsset(KeyValuePair<Image, DetectorAsset> assetPair)
 	{
 		var (screenshot, asset) = assetPair;
 		return new PackableItemsAsset<PackableDetectorItem>

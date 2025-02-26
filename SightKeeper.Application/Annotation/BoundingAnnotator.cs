@@ -6,5 +6,5 @@ namespace SightKeeper.Application.Annotation;
 
 public interface BoundingAnnotator
 {
-	BoundedItem CreateItem(AssetsMaker<ItemsCreator> assetsLibrary, Screenshot screenshot, Tag tag, Bounding bounding);
+	BoundedItem CreateItem(AssetsMaker<ItemsCreator> assetsLibrary, Image image, Tag tag, Bounding bounding);
 }

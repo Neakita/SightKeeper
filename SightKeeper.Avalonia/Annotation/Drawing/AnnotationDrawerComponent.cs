@@ -8,8 +8,8 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 public interface AnnotationDrawerComponent : DrawerDataContext
 {
 	AssetsOwner<ItemsOwner>? AssetsLibrary { set; }
-	new Screenshot? Screenshot { get; set; }
-	Screenshot? DrawerDataContext.Screenshot => Screenshot;
+	new Image? Screenshot { get; set; }
+	Image? DrawerDataContext.Screenshot => Screenshot;
 	public Tag? Tag { set; }
 	IObservable<BoundedItemDataContext?> SelectedItemChanged { get; }
 }

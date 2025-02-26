@@ -13,7 +13,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerComponent
 {
-	[ObservableProperty] public partial Screenshot? Screenshot { get; set; }
+	[ObservableProperty] public partial Image? Screenshot { get; set; }
 
 	public Tag? Tag
 	{
@@ -59,7 +59,7 @@ public sealed partial class DrawerViewModel : ViewModel, AnnotationDrawerCompone
 	private readonly KeyPointDrawerViewModel _keyPointDrawer;
 	private readonly Subject<BoundedItemDataContext?> _selectedItemChanged = new();
 
-	partial void OnScreenshotChanged(Screenshot? value)
+	partial void OnScreenshotChanged(Image? value)
 	{
 		_boundingDrawer.Screenshot = value;
 		_itemsViewModel.Screenshot = value;

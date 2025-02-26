@@ -34,7 +34,7 @@ public sealed class DeleteSelectedScreenshotCommandFactory
 		_annotators
 			.Select(annotator => annotator.AssetsChanged)
 			.Merge()
-			.Where(screenshot => screenshot == _screenshots.SelectedScreenshot)
+			.Where(screenshot => screenshot == _screenshots.SelectedImage)
 			.Subscribe(_ => command.NotifyCanExecuteChanged())
 			.DisposeWith(disposable);
 		return new DisposableCommand(command, disposable);
@@ -44,7 +44,7 @@ public sealed class DeleteSelectedScreenshotCommandFactory
 	private readonly IReadOnlyCollection<ObservableAnnotator> _annotators;
 	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
 
-	private bool CanDeleteScreenshot => _screenshots.SelectedScreenshot?.Assets.Count == 0;
+	private bool CanDeleteScreenshot => _screenshots.SelectedImage?.Assets.Count == 0;
 
 	private void DeleteScreenshot()
 	{

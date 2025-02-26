@@ -8,5 +8,5 @@ public interface AnnotationScreenshotsComponent : ScreenshotsDataContext
 {
 	ScreenshotsLibrary? Library { set; }
 	IObservable<Unit> SelectedScreenshotChanged { get; }
-	Screenshot SelectedScreenshot { get; }
+	Image SelectedImage { get; }
 }

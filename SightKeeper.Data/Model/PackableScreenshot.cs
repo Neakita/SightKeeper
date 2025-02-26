@@ -6,7 +6,7 @@ using SightKeeper.Domain.Images;
 namespace SightKeeper.Data.Model;
 
 /// <summary>
-/// MemoryPackable version of <see cref="Screenshot"/>
+/// MemoryPackable version of <see cref="Image"/>
 /// </summary>
 [MemoryPackable]
 internal sealed partial class PackableScreenshot

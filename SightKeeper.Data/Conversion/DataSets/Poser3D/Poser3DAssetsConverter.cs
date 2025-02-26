@@ -14,7 +14,7 @@ internal sealed class Poser3DAssetsConverter
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public IEnumerable<PackableItemsAsset<PackablePoser3DItem>> ConvertAssets(IEnumerable<KeyValuePair<Screenshot, Poser3DAsset>> assets)
+	public IEnumerable<PackableItemsAsset<PackablePoser3DItem>> ConvertAssets(IEnumerable<KeyValuePair<Image, Poser3DAsset>> assets)
 	{
 		return assets.Select(ConvertAsset);
 	}
@@ -22,7 +22,7 @@ internal sealed class Poser3DAssetsConverter
 	private readonly ConversionSession _session;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
-	private PackableItemsAsset<PackablePoser3DItem> ConvertAsset(KeyValuePair<Screenshot, Poser3DAsset> assetPair)
+	private PackableItemsAsset<PackablePoser3DItem> ConvertAsset(KeyValuePair<Image, Poser3DAsset> assetPair)
 	{
 		var (screenshot, asset) = assetPair;
 		return new PackableItemsAsset<PackablePoser3DItem>

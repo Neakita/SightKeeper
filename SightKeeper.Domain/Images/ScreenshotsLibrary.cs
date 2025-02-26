@@ -8,9 +8,9 @@ public sealed class ScreenshotsLibrary
 	/// <remarks>
 	/// Sorted by creation timestamp: first is the earliest, last is the latest
 	/// </remarks>
-	public IReadOnlyList<Screenshot> Screenshots => _screenshots;
+	public IReadOnlyList<Image> Screenshots => _screenshots;
 
-	public Screenshot CreateScreenshot(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
+	public Image CreateScreenshot(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
 	{
 		if (_screenshots.Count > 0 && creationTimestamp <= _screenshots[^1].CreationTimestamp)
 		{
@@ -19,9 +19,9 @@ public sealed class ScreenshotsLibrary
 				"Check that the time synchronization is correct and/or delete incorrectly created screenshots",
 				creationTimestamp, this);
 		}
-		Screenshot screenshot = new(creationTimestamp, imageSize);
-		_screenshots.Add(screenshot);
-		return screenshot;
+		Image image = new(creationTimestamp, imageSize);
+		_screenshots.Add(image);
+		return image;
 	}
 
 	public void RemoveScreenshotAt(int index)
@@ -31,5 +31,5 @@ public sealed class ScreenshotsLibrary
 		_screenshots.RemoveAt(index);
 	}
 
-	private readonly List<Screenshot> _screenshots = new();
+	private readonly List<Image> _screenshots = new();
 }

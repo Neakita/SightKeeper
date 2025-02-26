@@ -30,7 +30,7 @@ public sealed class DrawerItemsFactoryTests
 		return asset.CreateItem(tag, new Bounding(0.1, 0.2, 0.3, 0.4));
 	}
 
-	private static Screenshot CreateScreenshot()
+	private static Image CreateScreenshot()
 	{
 		ScreenshotsLibrary screenshotsLibrary = new();
 		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));

@@ -6,10 +6,10 @@ namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
 public sealed class ScreenshotViewModel : ViewModel
 {
-	public Screenshot Value { get; }
+	public Image Value { get; }
 	public IReadOnlyCollection<Asset> Assets => Value.Assets;
 
-	public ScreenshotViewModel(Screenshot value)
+	public ScreenshotViewModel(Image value)
 	{
 		Value = value;
 	}

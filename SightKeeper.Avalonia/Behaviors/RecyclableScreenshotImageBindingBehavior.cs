@@ -1,19 +1,18 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.Images;
+using Image = SightKeeper.Domain.Images.Image;
 
 namespace SightKeeper.Avalonia.Behaviors;
 
-internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
+internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<global::Avalonia.Controls.Image>
 {
-	public static readonly StyledProperty<Screenshot?> ScreenshotProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, Screenshot?>(nameof(Screenshot));
+	public static readonly StyledProperty<Image?> ScreenshotProperty =
+		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, Image?>(nameof(Screenshot));
 
 	public static readonly StyledProperty<int?> TargetSizeProperty =
 		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, int?>(nameof(TargetSize));
@@ -21,7 +20,7 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<Image>
 	public static readonly StyledProperty<Composition?> CompositionProperty =
 		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, Composition?>(nameof(Composition));
 
-	public Screenshot? Screenshot
+	public Image? Screenshot
 	{
 		get => GetValue(ScreenshotProperty);
 		set => SetValue(ScreenshotProperty, value);

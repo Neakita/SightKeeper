@@ -85,10 +85,10 @@ public sealed class DeleteSelectedScreenshotCommandTests
 		return screenshotsLibrary;
 	}
 
-	private static ScreenshotsLibrary PrepareScreenshotsLibrary(out Screenshot screenshot)
+	private static ScreenshotsLibrary PrepareScreenshotsLibrary(out Image image)
 	{
 		ScreenshotsLibrary screenshotsLibrary = new();
-		screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		image = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return screenshotsLibrary;
 	}
 
@@ -97,7 +97,7 @@ public sealed class DeleteSelectedScreenshotCommandTests
 		var selectionSubstitute = Substitute.For<ScreenshotSelection>();
 		selectionSubstitute.Library.Returns(screenshotsLibrary);
 		selectionSubstitute.SelectedScreenshotIndex.Returns(screenshotIndex);
-		selectionSubstitute.SelectedScreenshot.Returns(screenshotsLibrary.Screenshots[screenshotIndex]);
+		selectionSubstitute.SelectedImage.Returns(screenshotsLibrary.Screenshots[screenshotIndex]);
 		return selectionSubstitute;
 	}
 
@@ -124,17 +124,17 @@ public sealed class DeleteSelectedScreenshotCommandTests
 		return screenshotsDataAccess;
 	}
 
-	private static (IObserver<Screenshot> observer, ObservableAnnotator annotator) PrepareAnnotator()
+	private static (IObserver<Image> observer, ObservableAnnotator annotator) PrepareAnnotator()
 	{
-		Subject<Screenshot> screenshotAssetsChanged = new();
+		Subject<Image> screenshotAssetsChanged = new();
 		var annotator = Substitute.For<ObservableAnnotator>();
 		annotator.AssetsChanged.Returns(screenshotAssetsChanged);
 		return (screenshotAssetsChanged.AsObserver(), annotator);
 	}
 
-	private static void MakeAsset(Screenshot screenshot)
+	private static void MakeAsset(Image image)
 	{
 		DetectorDataSet dataSet = new();
-		dataSet.AssetsLibrary.MakeAsset(screenshot);
+		dataSet.AssetsLibrary.MakeAsset(image);
 	}
 }

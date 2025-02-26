@@ -24,15 +24,15 @@ public sealed class ScreenshotImageLoader
 	}
 
 	public async Task<WriteableBitmap?> LoadImageAsync(
-		Screenshot screenshot,
+		Image image,
 		int? maximumLargestDimension,
 		CancellationToken cancellationToken)
 	{
 		PixelSize size = maximumLargestDimension == null
-			? screenshot.ImageSize.ToPixelSize()
-			: ComputeSize(screenshot, maximumLargestDimension.Value);
+			? image.ImageSize.ToPixelSize()
+			: ComputeSize(image, maximumLargestDimension.Value);
 		WriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
-		bool isRead = await ReadImageDataToBitmapAsync(screenshot, bitmap, cancellationToken);
+		bool isRead = await ReadImageDataToBitmapAsync(image, bitmap, cancellationToken);
 		if (isRead)
 			return bitmap;
 		ReturnBitmapToPool(bitmap);
@@ -48,17 +48,17 @@ public sealed class ScreenshotImageLoader
 	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
 
 	private async Task<bool> ReadImageDataToBitmapAsync(
-		Screenshot screenshot,
+		Image image,
 		WriteableBitmap bitmap,
 		CancellationToken cancellationToken)
 	{
 		using WriteableBitmapMemoryManager<Rgba32> bitmapMemoryManager = new(bitmap);
-		var screenshotSize = screenshot.ImageSize.ToPixelSize();
+		var screenshotSize = image.ImageSize.ToPixelSize();
 		if (screenshotSize == bitmap.PixelSize)
-			return await ReadImageDataAsync(screenshot, bitmapMemoryManager.Memory, cancellationToken);
+			return await ReadImageDataAsync(image, bitmapMemoryManager.Memory, cancellationToken);
 		var pixelsCount = screenshotSize.Width * screenshotSize.Height;
 		using var buffer = MemoryPool<Rgba32>.Shared.Rent(pixelsCount);
-		bool isRead = await ReadImageDataAsync(screenshot, buffer.Memory, cancellationToken);
+		bool isRead = await ReadImageDataAsync(image, buffer.Memory, cancellationToken);
 		if (!isRead)
 			return false;
 		NearestNeighbourImageResizer.Resize(
@@ -68,12 +68,12 @@ public sealed class ScreenshotImageLoader
 	}
 
 	private async Task<bool> ReadImageDataAsync(
-		Screenshot screenshot,
+		Image image,
 		Memory<Rgba32> target,
 		CancellationToken cancellationToken)
 	{
 		Memory<byte> targetAsBytes = target.Cast<Rgba32, byte>();
-		await using var stream = _screenshotsDataAccess.LoadImage(screenshot);
+		await using var stream = _screenshotsDataAccess.LoadImage(image);
 		int totalBytesRead = 0;
 		int lastBytesRead;
 		do
@@ -90,12 +90,12 @@ public sealed class ScreenshotImageLoader
 		return true;
 	}
 
-	private static PixelSize ComputeSize(Screenshot screenshot, int maximumLargestDimension)
+	private static PixelSize ComputeSize(Image image, int maximumLargestDimension)
 	{
-		var sourceLargestDimension = Math.Max(screenshot.ImageSize.X, screenshot.ImageSize.Y);
+		var sourceLargestDimension = Math.Max(image.ImageSize.X, image.ImageSize.Y);
 		if (sourceLargestDimension < maximumLargestDimension)
-			return new PixelSize(screenshot.ImageSize.X, screenshot.ImageSize.Y);
-		Vector2<int> size = screenshot.ImageSize.ToInt32() * maximumLargestDimension / sourceLargestDimension;
+			return new PixelSize(image.ImageSize.X, image.ImageSize.Y);
+		Vector2<int> size = image.ImageSize.ToInt32() * maximumLargestDimension / sourceLargestDimension;
 		return new PixelSize(size.X, size.Y);
 	}
 }

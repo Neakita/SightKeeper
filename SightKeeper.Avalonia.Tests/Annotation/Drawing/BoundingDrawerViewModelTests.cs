@@ -107,7 +107,7 @@ public sealed class BoundingDrawerViewModelTests
 		return (dataSet.AssetsLibrary, tag);
 	}
 
-	private static Screenshot CreateScreenshot()
+	private static Image CreateScreenshot()
 	{
 		ScreenshotsLibrary screenshotsLibrary = new();
 		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
@@ -118,7 +118,7 @@ public sealed class BoundingDrawerViewModelTests
 		BoundingAnnotator boundingAnnotator,
 		AssetsMaker<ItemsCreator>? assetsLibrary,
 		Tag? tag,
-		Screenshot? screenshot)
+		Image? screenshot)
 	{
 		BoundingDrawerViewModel drawerViewModel = new(boundingAnnotator)
 		{

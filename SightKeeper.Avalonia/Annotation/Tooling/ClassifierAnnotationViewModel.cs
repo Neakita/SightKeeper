@@ -42,15 +42,15 @@ public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelect
 	}
 
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag), nameof(IsEnabled))]
-	public partial Screenshot? Screenshot { get; set; }
+	public partial Image? Screenshot { get; set; }
 
 	public bool IsEnabled => Screenshot != null;
 
 	public ClassifierAnnotationViewModel(ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
 	{
 		_annotator = annotator;
-		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(_ => Screenshot = screenshotsViewModel.SelectedScreenshot);
-		Screenshot = screenshotsViewModel.SelectedScreenshot;
+		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(_ => Screenshot = screenshotsViewModel.SelectedImage);
+		Screenshot = screenshotsViewModel.SelectedImage;
 	}
 
 	public void Dispose()

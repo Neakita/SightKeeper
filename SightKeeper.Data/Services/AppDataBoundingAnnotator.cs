@@ -18,13 +18,13 @@ public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoun
 		_appDataAccess = appDataAccess;
 	}
 
-	public BoundedItem CreateItem(AssetsMaker<ItemsCreator> assetsLibrary, Screenshot screenshot, Tag tag, Bounding bounding)
+	public BoundedItem CreateItem(AssetsMaker<ItemsCreator> assetsLibrary, Image image, Tag tag, Bounding bounding)
 	{
 		BoundedItem item;
 		ItemsCreator asset;
 		lock (_appDataLock)
 		{
-			asset = assetsLibrary.GetOrMakeAsset(screenshot);
+			asset = assetsLibrary.GetOrMakeAsset(image);
 			item = asset.CreateItem(tag, bounding);
 		}
 		_appDataAccess.SetDataChanged();

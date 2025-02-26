@@ -24,14 +24,14 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		_appDataLock = appDataLock;
 	}
 
-	public override Stream LoadImage(Screenshot screenshot)
+	public override Stream LoadImage(Image image)
 	{
-		return new ZLibStream(_fileSystemDataAccess.OpenReadStream(screenshot), CompressionMode.Decompress);
+		return new ZLibStream(_fileSystemDataAccess.OpenReadStream(image), CompressionMode.Decompress);
 	}
 
-	public Id GetId(Screenshot screenshot)
+	public Id GetId(Image image)
 	{
-		return _fileSystemDataAccess.GetId(screenshot);
+		return _fileSystemDataAccess.GetId(image);
 	}
 
 	public override void DeleteScreenshot(ScreenshotsLibrary library, int index)
@@ -41,46 +41,46 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		_appDataAccess.SetDataChanged();
 	}
 
-	internal void AssociateId(Screenshot screenshot, Id id)
+	internal void AssociateId(Image image, Id id)
 	{
-		_fileSystemDataAccess.AssociateId(screenshot, id);
+		_fileSystemDataAccess.AssociateId(image, id);
 	}
 
-	protected override Screenshot CreateScreenshot(
+	protected override Image CreateScreenshot(
 		ScreenshotsLibrary library,
 		DateTimeOffset creationTimestamp,
 		Vector2<ushort> resolution)
 	{
-		Screenshot screenshot;
+		Image image;
 		lock (_appDataLock)
-			screenshot = base.CreateScreenshot(library, creationTimestamp, resolution);
+			image = base.CreateScreenshot(library, creationTimestamp, resolution);
 		_appDataAccess.SetDataChanged();
-		return screenshot;
+		return image;
 	}
 
-	protected override void SaveScreenshotData(Screenshot screenshot, ReadOnlySpan2D<Rgba32> imageData)
+	protected override void SaveScreenshotData(Image image, ReadOnlySpan2D<Rgba32> data)
 	{
-		using var stream = new ZLibStream(_fileSystemDataAccess.OpenWriteStream(screenshot), CompressionLevel.SmallestSize);
-		if (imageData.TryGetSpan(out var contiguousData))
+		using var stream = new ZLibStream(_fileSystemDataAccess.OpenWriteStream(image), CompressionLevel.SmallestSize);
+		if (data.TryGetSpan(out var contiguousData))
 		{
 			var bytes = MemoryMarshal.AsBytes(contiguousData);
 			stream.Write(bytes);
 			return;
 		}
-		for (int i = 0; i < imageData.Height; i++)
+		for (int i = 0; i < data.Height; i++)
 		{
-			var rowData = imageData.GetRowSpan(i);
+			var rowData = data.GetRowSpan(i);
 			var bytes = MemoryMarshal.AsBytes(rowData);
 			stream.Write(bytes);
 		}
 	}
 
-	protected override void DeleteScreenshotData(Screenshot screenshot)
+	protected override void DeleteScreenshotData(Image image)
 	{
-		_fileSystemDataAccess.Delete(screenshot);
+		_fileSystemDataAccess.Delete(image);
 	}
 
 	private readonly AppDataAccess _appDataAccess;
 	private readonly Lock _appDataLock;
-	private readonly FileSystemDataAccess<Screenshot> _fileSystemDataAccess = new(".bin");
+	private readonly FileSystemDataAccess<Image> _fileSystemDataAccess = new(".bin");
 }

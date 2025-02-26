@@ -27,18 +27,18 @@ internal sealed class ScreenshotsLibraryConverter
 		Screenshots = ConvertScreenshots(library.Screenshots).ToImmutableArray()
 	};
 
-	private IEnumerable<PackableScreenshot> ConvertScreenshots(IEnumerable<Screenshot> screenshots)
+	private IEnumerable<PackableScreenshot> ConvertScreenshots(IEnumerable<Image> screenshots)
 	{
 		return screenshots.Select(ConvertScreenshot);
 	}
 
-	private PackableScreenshot ConvertScreenshot(Screenshot screenshot)
+	private PackableScreenshot ConvertScreenshot(Image image)
 	{
 		return new PackableScreenshot
 		{
-			Id = _screenshotsDataAccess.GetId(screenshot),
-			CreationTimestamp = screenshot.CreationTimestamp,
-			ImageSize = screenshot.ImageSize
+			Id = _screenshotsDataAccess.GetId(image),
+			CreationTimestamp = image.CreationTimestamp,
+			ImageSize = image.ImageSize
 		};
 	}
 }

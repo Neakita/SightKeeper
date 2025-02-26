@@ -17,7 +17,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed class AssetItemsViewModel
 {
-	public Screenshot? Screenshot
+	public Image? Screenshot
 	{
 		get;
 		set

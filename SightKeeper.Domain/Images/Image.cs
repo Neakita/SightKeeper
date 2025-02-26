@@ -2,13 +2,13 @@
 
 namespace SightKeeper.Domain.Images;
 
-public sealed class Screenshot
+public sealed class Image
 {
 	public DateTimeOffset CreationTimestamp { get; }
 	public Vector2<ushort> ImageSize { get; }
 	public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
 
-	internal Screenshot(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
+	internal Image(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
 	{
 		ValidateImageSize(imageSize);
 		CreationTimestamp = creationTimestamp;

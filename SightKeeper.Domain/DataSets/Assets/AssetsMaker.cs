@@ -4,6 +4,6 @@ namespace SightKeeper.Domain.DataSets.Assets;
 
 public interface AssetsMaker<out TAsset>
 {
-	TAsset MakeAsset(Screenshot screenshot);
-	TAsset GetOrMakeAsset(Screenshot screenshot);
+	TAsset MakeAsset(Image image);
+	TAsset GetOrMakeAsset(Image image);
 }

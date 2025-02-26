@@ -35,15 +35,15 @@ public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelectio
 
 	public IReadOnlyCollection<ScreenshotViewModel> Screenshots { get; }
 	[ObservableProperty] public partial int SelectedScreenshotIndex { get; set; } = -1;
-	public Screenshot? SelectedScreenshot => SelectedScreenshotIndex >= 0 ? _screenshotsSource.Items[SelectedScreenshotIndex] : null;
-	public ScreenshotViewModel? SelectedScreenshotViewModel => SelectedScreenshot != null ? _screenshotsCache.Lookup(SelectedScreenshot).Value : null;
+	public Image? SelectedImage => SelectedScreenshotIndex >= 0 ? _screenshotsSource.Items[SelectedScreenshotIndex] : null;
+	public ScreenshotViewModel? SelectedScreenshotViewModel => SelectedImage != null ? _screenshotsCache.Lookup(SelectedImage).Value : null;
 	public IObservable<Unit> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
 
 	public ScreenshotsViewModel(
 		ObservableScreenshotsDataAccess observableDataAccess,
 		IEnumerable<ObservableAnnotator> observableAnnotators)
 	{
-		_screenshotsSource = new SourceList<Screenshot>();
+		_screenshotsSource = new SourceList<Image>();
 		_screenshotsSource.Connect()
 			.Transform(screenshot => new ScreenshotViewModel(screenshot))
 			.AddKey(viewModel => viewModel.Value)
@@ -70,13 +70,13 @@ public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelectio
 	}
 
 	private readonly CompositeDisposable _disposable = new();
-	private readonly SourceList<Screenshot> _screenshotsSource;
-	private readonly SourceCache<ScreenshotViewModel, Screenshot> _screenshotsCache = new(viewModel => viewModel.Value);
+	private readonly SourceList<Image> _screenshotsSource;
+	private readonly SourceCache<ScreenshotViewModel, Image> _screenshotsCache = new(viewModel => viewModel.Value);
 	private readonly Subject<Unit> _selectedScreenshotChanged = new();
 
-	private void OnScreenshotAssetsChanged(Screenshot screenshot)
+	private void OnScreenshotAssetsChanged(Image image)
 	{
-		var screenshotViewModel = _screenshotsCache.Lookup(screenshot).Value;
+		var screenshotViewModel = _screenshotsCache.Lookup(image).Value;
 		screenshotViewModel.NotifyAssetsChanged();
 	}
 

@@ -13,7 +13,7 @@ internal sealed class ClassifierAssetsConverter
 		_session = session;
 	}
 
-	public IEnumerable<PackableClassifierAsset> ConvertAssets(IEnumerable<KeyValuePair<Screenshot, ClassifierAsset>> assetsPairs)
+	public IEnumerable<PackableClassifierAsset> ConvertAssets(IEnumerable<KeyValuePair<Image, ClassifierAsset>> assetsPairs)
 	{
 		return assetsPairs.Select(ConvertAsset);
 	}
@@ -21,7 +21,7 @@ internal sealed class ClassifierAssetsConverter
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly ConversionSession _session;
 
-	private PackableClassifierAsset ConvertAsset(KeyValuePair<Screenshot, ClassifierAsset> assetPair)
+	private PackableClassifierAsset ConvertAsset(KeyValuePair<Image, ClassifierAsset> assetPair)
 	{
 		var (screenshot, asset) = assetPair;
 		return new PackableClassifierAsset

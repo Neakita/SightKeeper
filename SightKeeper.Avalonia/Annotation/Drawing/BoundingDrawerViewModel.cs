@@ -15,7 +15,7 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 	public partial Tag? Tag { get; set; }
 
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(CreateItemCommand))]
-	public partial Screenshot? Screenshot { get; set; }
+	public partial Image? Screenshot { get; set; }
 
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(CreateItemCommand))]
 	public partial AssetsMaker<ItemsCreator>? AssetsLibrary { get; set; }

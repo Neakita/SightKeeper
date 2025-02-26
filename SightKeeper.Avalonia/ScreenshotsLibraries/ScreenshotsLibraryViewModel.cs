@@ -7,7 +7,7 @@ public sealed class ScreenshotsLibraryViewModel : ViewModel
 {
 	public ScreenshotsLibrary Value { get; }
 	public string Name => Value.Name;
-	public Screenshot? PreviewScreenshot => Value.Screenshots.RandomOrDefault();
+	public Image? PreviewScreenshot => Value.Screenshots.RandomOrDefault();
 
 	public ScreenshotsLibraryViewModel(ScreenshotsLibrary value)
 	{

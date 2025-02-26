@@ -9,17 +9,17 @@ namespace SightKeeper.Application.Annotation;
 
 public abstract class ClassifierAnnotator : ObservableAnnotator, IDisposable
 {
-	public IObservable<Screenshot> AssetsChanged => _assetsChanged.AsObservable();
+	public IObservable<Image> AssetsChanged => _assetsChanged.AsObservable();
 
-	public virtual void SetTag(AssetsLibrary<ClassifierAsset> assetsLibrary, Screenshot screenshot, Tag tag)
+	public virtual void SetTag(AssetsLibrary<ClassifierAsset> assetsLibrary, Image image, Tag tag)
 	{
-		var asset = assetsLibrary.GetOrMakeAsset(screenshot);
+		var asset = assetsLibrary.GetOrMakeAsset(image);
 		asset.Tag = tag;
 	}
 
-	public virtual void DeleteAsset(AssetsLibrary<ClassifierAsset> assetsLibrary, Screenshot screenshot)
+	public virtual void DeleteAsset(AssetsLibrary<ClassifierAsset> assetsLibrary, Image image)
 	{
-		assetsLibrary.DeleteAsset(screenshot);
+		assetsLibrary.DeleteAsset(image);
 	}
 
 	public void Dispose()
@@ -27,5 +27,5 @@ public abstract class ClassifierAnnotator : ObservableAnnotator, IDisposable
 		_assetsChanged.Dispose();
 	}
 
-	private readonly Subject<Screenshot> _assetsChanged = new();
+	private readonly Subject<Image> _assetsChanged = new();
 }

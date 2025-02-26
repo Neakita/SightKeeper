@@ -46,7 +46,7 @@ public sealed class AppDataBoundingAnnotatorTests
 		return (dataSet, tag);
 	}
 
-	private static Screenshot PrepareScreenshot()
+	private static Image PrepareScreenshot()
 	{
 		ScreenshotsLibrary screenshotsLibrary = new();
 		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
