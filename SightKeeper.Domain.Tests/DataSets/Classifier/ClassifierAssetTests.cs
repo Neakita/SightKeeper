@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.DataSets.Classifier;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests.DataSets.Classifier;
 

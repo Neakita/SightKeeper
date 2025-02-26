@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 using SightKeeper.Data.Model.DataSets.Assets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Poser3D;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Conversion.DataSets.Poser3D;
 

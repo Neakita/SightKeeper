@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 using SightKeeper.Data.Model.DataSets.Assets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Detector;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Conversion.DataSets.Detector;
 

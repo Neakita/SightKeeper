@@ -4,7 +4,7 @@ using HotKeys.Gestures;
 using HotKeys.Handlers.Contextual;
 using SharpHook.Native;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Screenshotting;
 

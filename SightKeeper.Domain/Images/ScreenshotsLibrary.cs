@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.Screenshots;
+﻿namespace SightKeeper.Domain.Images;
 
 public sealed class ScreenshotsLibrary
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 

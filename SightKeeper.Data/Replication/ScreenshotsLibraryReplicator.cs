@@ -1,5 +1,5 @@
 using SightKeeper.Data.Services;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 using PackableScreenshotsLibrary = SightKeeper.Data.Model.PackableScreenshotsLibrary;
 
 namespace SightKeeper.Data.Replication;

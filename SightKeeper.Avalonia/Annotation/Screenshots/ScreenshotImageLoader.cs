@@ -9,7 +9,7 @@ using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 using Yolo.InputProcessing;
 

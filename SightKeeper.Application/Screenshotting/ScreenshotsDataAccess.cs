@@ -2,7 +2,7 @@
 using System.Reactive.Subjects;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Screenshotting;

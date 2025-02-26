@@ -10,7 +10,7 @@ using SightKeeper.Application.ScreenshotsLibraries.Creating;
 using SightKeeper.Application.ScreenshotsLibraries.Editing;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 

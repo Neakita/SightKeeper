@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.DataSets.Assets;
 

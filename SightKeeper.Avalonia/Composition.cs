@@ -24,7 +24,7 @@ using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 using ScreenshotsLibrariesViewModel = SightKeeper.Avalonia.ScreenshotsLibraries.ScreenshotsLibrariesViewModel;
 using TagAttribute = SightKeeper.Application.TagAttribute;

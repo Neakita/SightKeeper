@@ -1,5 +1,5 @@
 using FlakeId;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Replication;
 

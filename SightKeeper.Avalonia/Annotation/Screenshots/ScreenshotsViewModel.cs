@@ -11,7 +11,7 @@ using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 

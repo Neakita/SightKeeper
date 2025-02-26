@@ -2,7 +2,7 @@ using FluentAssertions;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Classifier;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Tooling;
 

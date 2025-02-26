@@ -11,7 +11,7 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Poser;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 

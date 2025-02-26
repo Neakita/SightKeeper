@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Poser2D;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 

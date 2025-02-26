@@ -9,7 +9,7 @@ using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.Tooling.Commands;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Detector;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Tooling.Commands;
 

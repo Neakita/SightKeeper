@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 

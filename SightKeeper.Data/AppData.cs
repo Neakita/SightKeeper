@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 

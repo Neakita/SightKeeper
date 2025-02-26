@@ -1,5 +1,5 @@
 using MemoryPack;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Model;
 

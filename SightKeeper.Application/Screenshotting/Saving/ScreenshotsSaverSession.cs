@@ -1,5 +1,5 @@
 using CommunityToolkit.HighPerformance;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Screenshotting.Saving;
 

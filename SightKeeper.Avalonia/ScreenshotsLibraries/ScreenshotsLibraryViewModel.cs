@@ -1,5 +1,5 @@
 using SightKeeper.Avalonia.Extensions;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 

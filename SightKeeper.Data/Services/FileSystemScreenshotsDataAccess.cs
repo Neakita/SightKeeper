@@ -5,7 +5,7 @@ using FlakeId;
 using SightKeeper.Application;
 using SightKeeper.Application.Screenshotting;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;

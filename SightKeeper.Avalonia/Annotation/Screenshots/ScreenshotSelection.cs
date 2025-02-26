@@ -1,6 +1,6 @@
 using System;
 using System.Reactive;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
 

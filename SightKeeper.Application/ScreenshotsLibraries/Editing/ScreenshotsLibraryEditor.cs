@@ -1,5 +1,5 @@
 using System.Reactive.Subjects;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenshotsLibraries.Editing;
 

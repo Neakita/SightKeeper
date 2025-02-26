@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using DynamicData;
 using SightKeeper.Application;
 using SightKeeper.Application.ScreenshotsLibraries.Editing;
-using SightKeeper.Domain.Screenshots;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
