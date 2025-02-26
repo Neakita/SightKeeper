@@ -78,33 +78,33 @@ public sealed class DeleteSelectedScreenshotCommandTests
 		commandMonitor.Should().Raise(nameof(ICommand.CanExecuteChanged));
 	}
 
-	private static ScreenshotsLibrary PrepareScreenshotsLibrary()
+	private static ImageSet PrepareScreenshotsLibrary()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		return screenshotsLibrary;
+		ImageSet imageSet = new();
+		imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		return imageSet;
 	}
 
-	private static ScreenshotsLibrary PrepareScreenshotsLibrary(out Image image)
+	private static ImageSet PrepareScreenshotsLibrary(out Image image)
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		image = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		return screenshotsLibrary;
+		ImageSet imageSet = new();
+		image = imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		return imageSet;
 	}
 
-	private static ScreenshotSelection PrepareSelectedScreenshot(ScreenshotsLibrary screenshotsLibrary, int screenshotIndex = 0)
+	private static ScreenshotSelection PrepareSelectedScreenshot(ImageSet imageSet, int screenshotIndex = 0)
 	{
 		var selectionSubstitute = Substitute.For<ScreenshotSelection>();
-		selectionSubstitute.Library.Returns(screenshotsLibrary);
+		selectionSubstitute.Library.Returns(imageSet);
 		selectionSubstitute.SelectedScreenshotIndex.Returns(screenshotIndex);
-		selectionSubstitute.SelectedImage.Returns(screenshotsLibrary.Screenshots[screenshotIndex]);
+		selectionSubstitute.SelectedImage.Returns(imageSet.Screenshots[screenshotIndex]);
 		return selectionSubstitute;
 	}
 
-	private static ScreenshotSelection PrepareNoSelectedScreenshot(ScreenshotsLibrary screenshotsLibrary)
+	private static ScreenshotSelection PrepareNoSelectedScreenshot(ImageSet imageSet)
 	{
 		var selectionSubstitute = Substitute.For<ScreenshotSelection>();
-		selectionSubstitute.Library.Returns(screenshotsLibrary);
+		selectionSubstitute.Library.Returns(imageSet);
 		selectionSubstitute.SelectedScreenshotIndex.Returns(-1);
 		return selectionSubstitute;
 	}
@@ -120,7 +120,7 @@ public sealed class DeleteSelectedScreenshotCommandTests
 	private static ScreenshotsDataAccess PrepareScreenshotsDataAccess()
 	{
 		var screenshotsDataAccess = Substitute.For<ScreenshotsDataAccess>();
-		screenshotsDataAccess.When(dataAccess => dataAccess.DeleteScreenshot(Arg.Any<ScreenshotsLibrary>(), Arg.Any<int>())).CallBase();
+		screenshotsDataAccess.When(dataAccess => dataAccess.DeleteScreenshot(Arg.Any<ImageSet>(), Arg.Any<int>())).CallBase();
 		return screenshotsDataAccess;
 	}
 

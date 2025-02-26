@@ -9,9 +9,9 @@ internal class DesignScreenshotsLibrariesDataContext : ScreenshotsLibrariesDataC
 {
 	public IReadOnlyCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; } =
 	[
-		new(new ScreenshotsLibrary { Name = "PD2" }),
-		new(new ScreenshotsLibrary { Name = "KF2" }),
-		new(new ScreenshotsLibrary { Name = "Some dataset specific library" })
+		new(new ImageSet { Name = "PD2" }),
+		new(new ImageSet { Name = "KF2" }),
+		new(new ImageSet { Name = "Some dataset specific library" })
 	];
 
 	public ICommand CreateScreenshotsLibraryCommand { get; } = new RelayCommand(() => { });

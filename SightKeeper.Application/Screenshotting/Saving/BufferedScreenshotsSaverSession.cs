@@ -28,12 +28,12 @@ public sealed class BufferedScreenshotsSaverSession<TPixel> : ScreenshotsSaverSe
 	public Task Limit => _limit?.Task ?? Task.CompletedTask;
 
 	public BufferedScreenshotsSaverSession(
-		ScreenshotsLibrary screenshotsLibrary,
+		ImageSet imageSet,
 		ScreenshotsDataAccess screenshotsDataAccess,
 		ArrayPool<TPixel> rawPixelsArrayPool,
 		ArrayPool<Rgba32> convertedPixelsArrayPool,
 		PixelConverter<TPixel, Rgba32> pixelConverter)
-		: base(screenshotsLibrary, screenshotsDataAccess)
+		: base(imageSet, screenshotsDataAccess)
 	{
 		_pixelConverter = pixelConverter;
 		RawPixelsArrayPool = rawPixelsArrayPool;

@@ -109,8 +109,8 @@ public sealed class BoundingDrawerViewModelTests
 
 	private static Image CreateScreenshot()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return screenshot;
 	}
 

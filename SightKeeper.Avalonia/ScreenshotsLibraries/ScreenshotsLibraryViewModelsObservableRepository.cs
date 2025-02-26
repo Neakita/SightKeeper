@@ -12,7 +12,7 @@ public sealed class ScreenshotsLibraryViewModelsObservableRepository : Observabl
 	public override ReadOnlyObservableCollection<ScreenshotsLibraryViewModel> Items { get; }
 	public override IObservableList<ScreenshotsLibraryViewModel> Source { get; }
 
-	public ScreenshotsLibraryViewModelsObservableRepository(ObservableRepository<ScreenshotsLibrary> repository, ScreenshotsLibraryEditor editor)
+	public ScreenshotsLibraryViewModelsObservableRepository(ObservableRepository<ImageSet> repository, ScreenshotsLibraryEditor editor)
 	{
 		Source = repository.Source.Connect()
 			.Transform(library => new ScreenshotsLibraryViewModel(library))
@@ -25,7 +25,7 @@ public sealed class ScreenshotsLibraryViewModelsObservableRepository : Observabl
 		editor.Edited.Subscribe(OnScreenshotsLibraryEdited);
 	}
 
-	private void OnScreenshotsLibraryEdited(ScreenshotsLibrary library)
+	private void OnScreenshotsLibraryEdited(ImageSet library)
 	{
 		var viewModel = _cache.Lookup(library).Value;
 		viewModel.NotifyPropertiesChanged();
@@ -36,5 +36,5 @@ public sealed class ScreenshotsLibraryViewModelsObservableRepository : Observabl
 		Source.Dispose();
 	}
 
-	private readonly IObservableCache<ScreenshotsLibraryViewModel, ScreenshotsLibrary> _cache;
+	private readonly IObservableCache<ScreenshotsLibraryViewModel, ImageSet> _cache;
 }

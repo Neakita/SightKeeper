@@ -9,8 +9,8 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldCreateAsset()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -20,8 +20,8 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldNotCreateDuplicateAsset()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -33,8 +33,8 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldDeleteAsset()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("");
 		dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -45,8 +45,8 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldNotDeleteAssetFromOtherDataSet()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet1 = new();
 		dataSet1.TagsLibrary.CreateTag("");
 		ClassifierDataSet dataSet2 = new();
@@ -58,8 +58,8 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldNotSetAssetTagToForeign()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		var properTag = dataSet.TagsLibrary.CreateTag("");
 		var foreignTag = new ClassifierDataSet().TagsLibrary.CreateTag("");
@@ -71,8 +71,8 @@ public sealed class ClassifierAssetLibraryTests
 	[Fact]
 	public void ShouldNotCreateAssetWithoutAvailableTags()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		Assert.ThrowsAny<Exception>(() => dataSet.AssetsLibrary.MakeAsset(screenshot));
 	}

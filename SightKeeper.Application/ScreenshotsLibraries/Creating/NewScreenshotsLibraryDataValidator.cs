@@ -7,7 +7,7 @@ public sealed class NewScreenshotsLibraryDataValidator : AbstractValidator<Scree
 {
 	public NewScreenshotsLibraryDataValidator(
 		IValidator<ScreenshotsLibraryData> screenshotsLibraryDataValidator,
-		ReadDataAccess<ScreenshotsLibrary> screenshotsLibrariesDataAccess)
+		ReadDataAccess<ImageSet> screenshotsLibrariesDataAccess)
 	{
 		_screenshotsLibrariesDataAccess = screenshotsLibrariesDataAccess;
 		Include(screenshotsLibraryDataValidator);
@@ -17,7 +17,7 @@ public sealed class NewScreenshotsLibraryDataValidator : AbstractValidator<Scree
 			.WithMessage("Name must be unique");
 	}
 
-	private readonly ReadDataAccess<ScreenshotsLibrary> _screenshotsLibrariesDataAccess;
+	private readonly ReadDataAccess<ImageSet> _screenshotsLibrariesDataAccess;
 
 	private bool IsNameFree(string name)
 	{

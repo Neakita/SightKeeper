@@ -8,6 +8,6 @@ public interface ScreenshotSelection
 {
 	int SelectedScreenshotIndex { get; }
 	IObservable<Unit> SelectedScreenshotChanged { get; }
-	ScreenshotsLibrary? Library { get; }
+	ImageSet? Library { get; }
 	Image? SelectedImage => SelectedScreenshotIndex >= 0 ? Library?.Screenshots[SelectedScreenshotIndex] : null;
 }

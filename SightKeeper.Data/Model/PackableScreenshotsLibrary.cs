@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 namespace SightKeeper.Data.Model;
 
 /// <summary>
-/// MemoryPackable version of <see cref="ScreenshotsLibrary"/>
+/// MemoryPackable version of <see cref="ImageSet"/>
 /// </summary>
 [MemoryPackable]
 internal partial class PackableScreenshotsLibrary

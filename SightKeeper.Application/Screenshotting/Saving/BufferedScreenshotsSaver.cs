@@ -36,7 +36,7 @@ public sealed class BufferedScreenshotsSaver<TPixel> : ScreenshotsSaver<TPixel>,
 		MaximumImageSize = new Vector2<ushort>(320, 320);
 	}
 
-	public override ScreenshotsSaverSession<TPixel> AcquireSession(ScreenshotsLibrary library)
+	public override ScreenshotsSaverSession<TPixel> AcquireSession(ImageSet library)
 	{
 		if (_sessions.TryGetValue(library, out var session))
 		{
@@ -82,7 +82,7 @@ public sealed class BufferedScreenshotsSaver<TPixel> : ScreenshotsSaver<TPixel>,
 	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
 	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
 	private readonly BehaviorSubject<ushort> _pendingScreenshotsCount = new(0);
-	private readonly Dictionary<ScreenshotsLibrary, BufferedScreenshotsSaverSession<TPixel>> _sessions = new();
+	private readonly Dictionary<ImageSet, BufferedScreenshotsSaverSession<TPixel>> _sessions = new();
 	private readonly Dictionary<BufferedScreenshotsSaverSession<TPixel>, IDisposable> _freeSessions = new();
 	private readonly WeakReference<ArrayPool<TPixel>> _rawPixelsArrayPool;
 	private readonly WeakReference<ArrayPool<Rgba32>> _convertedPixelsArrayPool;

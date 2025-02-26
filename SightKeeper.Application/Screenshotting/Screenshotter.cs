@@ -24,7 +24,7 @@ public abstract class Screenshotter
 		}
 	}
 
-	public ScreenshotsLibrary? Library
+	public ImageSet? Library
 	{
 		get => _library;
 		set
@@ -80,7 +80,7 @@ public abstract class Screenshotter
 	private Vector2<ushort> _resolution = new(320, 320);
 	private bool _isEnabled;
 	private IDisposable? _binding;
-	private ScreenshotsLibrary? _library;
+	private ImageSet? _library;
 
 	protected virtual void Enable()
 	{

@@ -8,20 +8,20 @@ public sealed class LockingScreenshotsLibrariesDeleter : ScreenshotsLibrariesDel
 {
 	public LockingScreenshotsLibrariesDeleter(
 		ReadDataAccess<DataSet> dataSetsDataAccess,
-		WriteDataAccess<ScreenshotsLibrary> librariesDataAccess,
+		WriteDataAccess<ImageSet> librariesDataAccess,
 		[Tag(typeof(AppData))] Lock appDataLock) :
 		base(dataSetsDataAccess, librariesDataAccess)
 	{
 		_appDataLock = appDataLock;
 	}
 
-	public override bool CanDelete(ScreenshotsLibrary library)
+	public override bool CanDelete(ImageSet library)
 	{
 		lock (_appDataLock)
 			return base.CanDelete(library);
 	}
 
-	public override void Delete(ScreenshotsLibrary library)
+	public override void Delete(ImageSet library)
 	{
 		lock (_appDataLock)
 			base.Delete(library);

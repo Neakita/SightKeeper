@@ -5,7 +5,7 @@ namespace SightKeeper.Application.ScreenshotsLibraries.Editing;
 
 public sealed class ExistingScreenshotsLibraryDataValidator : AbstractValidator<ScreenshotsLibraryData>
 {
-	public ExistingScreenshotsLibraryDataValidator(ScreenshotsLibrary library, IValidator<ScreenshotsLibraryData> baseValidator, ReadDataAccess<ScreenshotsLibrary> dataAccess)
+	public ExistingScreenshotsLibraryDataValidator(ImageSet library, IValidator<ScreenshotsLibraryData> baseValidator, ReadDataAccess<ImageSet> dataAccess)
 	{
 		_library = library;
 		_dataAccess = dataAccess;
@@ -16,8 +16,8 @@ public sealed class ExistingScreenshotsLibraryDataValidator : AbstractValidator<
 			.WithMessage("Name must be unique");
 	}
 
-	private readonly ScreenshotsLibrary _library;
-	private readonly ReadDataAccess<ScreenshotsLibrary> _dataAccess;
+	private readonly ImageSet _library;
+	private readonly ReadDataAccess<ImageSet> _dataAccess;
 
 	private bool IsNameFree(string name)
 	{

@@ -5,13 +5,13 @@ namespace SightKeeper.Application.ScreenshotsLibraries.Editing;
 
 public sealed class ScreenshotsLibraryEditor
 {
-	public IObservable<ScreenshotsLibrary> Edited => _edited;
+	public IObservable<ImageSet> Edited => _edited;
 
-	public void EditLibrary(ScreenshotsLibrary library, ScreenshotsLibraryData data)
+	public void EditLibrary(ImageSet library, ScreenshotsLibraryData data)
 	{
 		library.Name = data.Name;
 		library.Description = data.Description;
 	}
 
-	private readonly Subject<ScreenshotsLibrary> _edited = new();
+	private readonly Subject<ImageSet> _edited = new();
 }

@@ -12,7 +12,7 @@ internal sealed class ScreenshotsLibraryReplicator
 		_screenshotsDataAccess = screenshotsDataAccess;
 	}
 
-	public IEnumerable<ScreenshotsLibrary> ReplicateScreenshotsLibraries(IEnumerable<PackableScreenshotsLibrary> packableLibraries)
+	public IEnumerable<ImageSet> ReplicateScreenshotsLibraries(IEnumerable<PackableScreenshotsLibrary> packableLibraries)
 	{
 		return packableLibraries.Select(ReplicateScreenshotsLibrary);
 	}
@@ -20,9 +20,9 @@ internal sealed class ScreenshotsLibraryReplicator
 	private readonly ReplicationSession _session;
 	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
 
-	private ScreenshotsLibrary ReplicateScreenshotsLibrary(PackableScreenshotsLibrary packableLibrary)
+	private ImageSet ReplicateScreenshotsLibrary(PackableScreenshotsLibrary packableLibrary)
 	{
-		ScreenshotsLibrary library = new()
+		ImageSet library = new()
 		{
 			Name = packableLibrary.Name,
 			Description = packableLibrary.Description

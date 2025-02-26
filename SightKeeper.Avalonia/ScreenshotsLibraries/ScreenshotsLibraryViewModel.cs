@@ -5,11 +5,11 @@ namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
 public sealed class ScreenshotsLibraryViewModel : ViewModel
 {
-	public ScreenshotsLibrary Value { get; }
+	public ImageSet Value { get; }
 	public string Name => Value.Name;
 	public Image? PreviewScreenshot => Value.Screenshots.RandomOrDefault();
 
-	public ScreenshotsLibraryViewModel(ScreenshotsLibrary value)
+	public ScreenshotsLibraryViewModel(ImageSet value)
 	{
 		Value = value;
 	}

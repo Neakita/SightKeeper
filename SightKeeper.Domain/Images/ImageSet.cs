@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.Images;
 
-public sealed class ScreenshotsLibrary
+public sealed class ImageSet
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;

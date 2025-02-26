@@ -47,8 +47,8 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldNotDeleteTagWithItems()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -60,8 +60,8 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldDeleteTagWithoutItems()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");

@@ -10,8 +10,8 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldCreateItem()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -22,8 +22,8 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldCreateMultipleItemsWithSameTag()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -35,8 +35,8 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldCreateMultipleItemsWithSameBounding()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
@@ -49,8 +49,8 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldCreateKeyPoints()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var firstKeyPointTag = tag.CreateKeyPointTag("1");

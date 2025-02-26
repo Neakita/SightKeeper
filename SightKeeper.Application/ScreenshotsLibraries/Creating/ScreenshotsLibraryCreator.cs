@@ -4,14 +4,14 @@ namespace SightKeeper.Application.ScreenshotsLibraries.Creating;
 
 public sealed class ScreenshotsLibraryCreator
 {
-	public ScreenshotsLibraryCreator(WriteDataAccess<ScreenshotsLibrary> dataAccess)
+	public ScreenshotsLibraryCreator(WriteDataAccess<ImageSet> dataAccess)
 	{
 		_dataAccess = dataAccess;
 	}
 
-	public ScreenshotsLibrary Create(ScreenshotsLibraryData data)
+	public ImageSet Create(ScreenshotsLibraryData data)
 	{
-		ScreenshotsLibrary library = new()
+		ImageSet library = new()
 		{
 			Name = data.Name,
 			Description = data.Description
@@ -20,5 +20,5 @@ public sealed class ScreenshotsLibraryCreator
 		return library;
 	}
 
-	private readonly WriteDataAccess<ScreenshotsLibrary> _dataAccess;
+	private readonly WriteDataAccess<ImageSet> _dataAccess;
 }

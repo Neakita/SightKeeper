@@ -7,7 +7,7 @@ namespace SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 
 public sealed class ScreenshottingSettingsViewModel : ViewModel
 {
-	public ScreenshotsLibrary? Library
+	public ImageSet? Library
 	{
 		get => _screenshotter.Library;
 		set => SetProperty(_screenshotter.Library, value, _screenshotter, static (screenshotter, newValue) => screenshotter.Library = newValue);

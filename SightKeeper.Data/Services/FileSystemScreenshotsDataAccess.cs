@@ -34,7 +34,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		return _fileSystemDataAccess.GetId(image);
 	}
 
-	public override void DeleteScreenshot(ScreenshotsLibrary library, int index)
+	public override void DeleteScreenshot(ImageSet library, int index)
 	{
 		lock (_appDataLock)
 			base.DeleteScreenshot(library, index);
@@ -47,7 +47,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 	}
 
 	protected override Image CreateScreenshot(
-		ScreenshotsLibrary library,
+		ImageSet library,
 		DateTimeOffset creationTimestamp,
 		Vector2<ushort> resolution)
 	{

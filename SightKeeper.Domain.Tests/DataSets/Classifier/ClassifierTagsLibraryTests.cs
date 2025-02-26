@@ -46,8 +46,8 @@ public sealed class ClassifierTagsLibraryTests
 	[Fact]
 	public void ShouldNotDeleteTagWithAssociatedAsset()
 	{
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);

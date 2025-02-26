@@ -9,11 +9,11 @@ public abstract class ScreenshotsSaverSession<TPixel> : IDisposable
 
 	public abstract void Dispose();
 
-	internal ScreenshotsLibrary Library { get; }
+	internal ImageSet Library { get; }
 
 	protected ScreenshotsDataAccess ScreenshotsDataAccess { get; }
 
-	protected ScreenshotsSaverSession(ScreenshotsLibrary library, ScreenshotsDataAccess screenshotsDataAccess)
+	protected ScreenshotsSaverSession(ImageSet library, ScreenshotsDataAccess screenshotsDataAccess)
 	{
 		Library = library;
 		ScreenshotsDataAccess = screenshotsDataAccess;

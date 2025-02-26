@@ -21,7 +21,7 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, Screens
 	public ScreenshotsLibrariesViewModel(
 		ScreenshotsLibraryViewModelsObservableRepository screenshotsLibrariesObservableRepository,
 		DialogManager dialogManager,
-		ReadDataAccess<ScreenshotsLibrary> readScreenshotsLibrariesDataAccess,
+		ReadDataAccess<ImageSet> readScreenshotsLibrariesDataAccess,
 		ScreenshotsLibraryCreator screenshotsLibraryCreator,
 		ScreenshotsLibraryEditor screenshotsLibraryEditor,
 		[Tag("new")] IValidator<ScreenshotsLibraryData> newScreenshotsLibraryDataValidator,
@@ -39,7 +39,7 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, Screens
 	}
 
 	private readonly DialogManager _dialogManager;
-	private readonly ReadDataAccess<ScreenshotsLibrary> _readScreenshotsLibrariesDataAccess;
+	private readonly ReadDataAccess<ImageSet> _readScreenshotsLibrariesDataAccess;
 	private readonly ScreenshotsLibraryCreator _screenshotsLibraryCreator;
 	private readonly ScreenshotsLibraryEditor _screenshotsLibraryEditor;
 	private readonly IValidator<ScreenshotsLibraryData> _newScreenshotsLibraryDataValidator;
@@ -56,24 +56,24 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, Screens
 	}
 
 	[RelayCommand]
-	private async Task EditScreenshotsLibraryAsync(ScreenshotsLibrary screenshotsLibrary)
+	private async Task EditScreenshotsLibraryAsync(ImageSet imageSet)
 	{
-		var header = $"Edit screenshots library '{screenshotsLibrary.Name}'";
-		IValidator<ScreenshotsLibraryData> validator = new ExistingScreenshotsLibraryDataValidator(screenshotsLibrary,
+		var header = $"Edit screenshots library '{imageSet.Name}'";
+		IValidator<ScreenshotsLibraryData> validator = new ExistingScreenshotsLibraryDataValidator(imageSet,
 			_screenshotsLibraryDataValidator, _readScreenshotsLibrariesDataAccess);
-		using ScreenshotsLibraryDialogViewModel dialog = new(header, validator, screenshotsLibrary.Name,
-			screenshotsLibrary.Description);
+		using ScreenshotsLibraryDialogViewModel dialog = new(header, validator, imageSet.Name,
+			imageSet.Description);
 		if (await _dialogManager.ShowDialogAsync(dialog))
-			_screenshotsLibraryEditor.EditLibrary(screenshotsLibrary, dialog);
+			_screenshotsLibraryEditor.EditLibrary(imageSet, dialog);
 	}
 
 	[RelayCommand]
-	private async Task DeleteScreenshotsLibraryAsync(ScreenshotsLibrary screenshotsLibrary)
+	private async Task DeleteScreenshotsLibraryAsync(ImageSet imageSet)
 	{
-		if (!_screenshotsLibrariesDeleter.CanDelete(screenshotsLibrary))
+		if (!_screenshotsLibrariesDeleter.CanDelete(imageSet))
 		{
 			var message =
-				$"The library '{screenshotsLibrary.Name}' cannot be deleted as some dataset references it as asset. " +
+				$"The library '{imageSet.Name}' cannot be deleted as some dataset references it as asset. " +
 				$"Delete all associated assets to be able delete the library.";
 			MessageBoxButtonDefinition closeButton = new("Close", MaterialIconKind.Close, true);
 			MessageBoxDialogViewModel dialog = new("The library cannot be deleted", message, closeButton);
@@ -85,11 +85,11 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, Screens
 		MessageBoxButtonDefinition cancelButton = new("Cancel", MaterialIconKind.Close, true);
 		MessageBoxDialogViewModel deletionConfirmationDialog = new(
 			"Screenshots library deletion confirmation",
-			$"Are you sure you want to permanently delete the screenshots library '{screenshotsLibrary.Name}'? You will not be able to recover it.",
+			$"Are you sure you want to permanently delete the screenshots library '{imageSet.Name}'? You will not be able to recover it.",
 			deleteButton, cancelButton,
 			new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel));
 		if (await _dialogManager.ShowDialogAsync(deletionConfirmationDialog) == deleteButton)
-			_screenshotsLibrariesDeleter.Delete(screenshotsLibrary);
+			_screenshotsLibrariesDeleter.Delete(imageSet);
 	}
 
 	ICommand ScreenshotsLibrariesDataContext.CreateScreenshotsLibraryCommand => CreateScreenshotsLibraryCommand;

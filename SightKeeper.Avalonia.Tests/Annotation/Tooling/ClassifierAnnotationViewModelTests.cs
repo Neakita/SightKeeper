@@ -61,8 +61,8 @@ public sealed class ClassifierAnnotationViewModelTests
 		ClassifierDataSet dataSet = new();
 		var tag = new ClassifierDataSet().TagsLibrary.CreateTag("TestTag");
 		sideBar.DataSet = dataSet;
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		sideBar.Screenshot = screenshot;
 		Assert.ThrowsAny<Exception>(() => sideBar.SelectedTag = tag);
 	}
@@ -74,8 +74,8 @@ public sealed class ClassifierAnnotationViewModelTests
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		sideBar.DataSet = dataSet;
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		sideBar.Screenshot = screenshot;
 		sideBar.SelectedTag = tag;
 		dataSet.AssetsLibrary.Assets.Should().ContainKey(screenshot).WhoseValue.Tag.Should().Be(tag);
@@ -87,8 +87,8 @@ public sealed class ClassifierAnnotationViewModelTests
 		var sideBar = Annotation;
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.Tag = tag;
 		sideBar.DataSet = dataSet;
@@ -102,8 +102,8 @@ public sealed class ClassifierAnnotationViewModelTests
 		var subjectSideBar = Annotation;
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
-		ScreenshotsLibrary screenshotsLibrary = new();
-		var screenshot = screenshotsLibrary.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		ImageSet imageSet = new();
+		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.Tag = tag;
 		subjectSideBar.DataSet = dataSet;
