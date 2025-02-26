@@ -26,15 +26,15 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary, AssetsOwner<TAsset> w
 	{
 		var isRemoved = _assets.Remove(image, out var asset);
 		if (!isRemoved)
-			throw new ArgumentException("The asset associated with the specified screenshot was not found", nameof(image));
+			throw new ArgumentException("The asset associated with the specified image was not found", nameof(image));
 		Debug.Assert(asset != null);
 		image.RemoveAsset(asset);
 	}
 
 	public void ClearAssets()
 	{
-		foreach (var (screenshot, asset) in _assets)
-			screenshot.RemoveAsset(asset);
+		foreach (var (image, asset) in _assets)
+			image.RemoveAsset(asset);
 		_assets.Clear();
 	}
 
