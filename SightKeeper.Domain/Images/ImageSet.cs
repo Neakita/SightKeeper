@@ -27,7 +27,7 @@ public sealed class ImageSet
 	public void RemoveScreenshotAt(int index)
 	{
 		var screenshot = _images[index];
-		ScreenshotIsInUseException.ThrowForDeletionIfInUse(this, screenshot);
+		ImageIsInUseException.ThrowForDeletionIfInUse(this, screenshot);
 		_images.RemoveAt(index);
 	}
 
