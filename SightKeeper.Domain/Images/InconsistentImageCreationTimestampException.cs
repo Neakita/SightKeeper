@@ -2,12 +2,12 @@ namespace SightKeeper.Domain.Images;
 
 public sealed class InconsistentImageCreationTimestampException : Exception
 {
-	public DateTimeOffset NewScreenshotCreationTimestamp { get; }
-	public ImageSet AffectedLibrary { get; }
+	public DateTimeOffset NewImageCreationTimestamp { get; }
+	public ImageSet AffectedSet { get; }
 
-	public InconsistentImageCreationTimestampException(string? message, DateTimeOffset newScreenshotCreationTimestamp, ImageSet affectedLibrary) : base(message)
+	public InconsistentImageCreationTimestampException(string? message, DateTimeOffset newImageCreationTimestamp, ImageSet affectedSet) : base(message)
 	{
-		NewScreenshotCreationTimestamp = newScreenshotCreationTimestamp;
-		AffectedLibrary = affectedLibrary;
+		NewImageCreationTimestamp = newImageCreationTimestamp;
+		AffectedSet = affectedSet;
 	}
 }
