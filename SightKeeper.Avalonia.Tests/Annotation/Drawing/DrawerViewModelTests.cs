@@ -1,9 +1,12 @@
+using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Drawing;
@@ -24,11 +27,16 @@ public sealed class DrawerViewModelTests
 		boundingDrawerViewModel = new BoundingDrawerViewModel(Substitute.For<BoundingAnnotator>());
 		var drawerItemsFactory = new DrawerItemsFactory(Substitute.For<BoundingEditor>());
 		var keyPointViewModelFactory = new KeyPointViewModelFactory(Substitute.For<PoserAnnotator>());
+		var observableBoundingAnnotator = Substitute.For<ObservableBoundingAnnotator>();
+		observableBoundingAnnotator.ItemCreated.Returns(Observable.Empty<(ItemsCreator, BoundedItem)>());
+		var observablePoserAnnotator = Substitute.For<ObservablePoserAnnotator>();
+		observablePoserAnnotator.KeyPointCreated.Returns(Observable.Empty<(PoserItem, KeyPoint)>());
+		observablePoserAnnotator.KeyPointDeleted.Returns(Observable.Empty<(PoserItem, KeyPoint)>());
 		var assetItemsViewModel = new AssetItemsViewModel(
 			drawerItemsFactory,
 			keyPointViewModelFactory,
-			Substitute.For<ObservableBoundingAnnotator>(),
-			Substitute.For<ObservablePoserAnnotator>());
+			observableBoundingAnnotator,
+			observablePoserAnnotator);
 		var keyPointDrawerViewModel = new KeyPointDrawerViewModel(Substitute.For<PoserAnnotator>());
 		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel, assetItemsViewModel, keyPointDrawerViewModel);
 		return drawerViewModel;
