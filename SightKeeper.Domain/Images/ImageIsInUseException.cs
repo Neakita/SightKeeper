@@ -11,8 +11,8 @@ public sealed class ImageIsInUseException : Exception
 	private static void ThrowForDeletion(ImageSet set, Image image)
 	{
 		const string message =
-			"The screenshot is being used by some asset, so it cannot be deleted. " +
-			"Delete the related assets before trying to delete the screenshot";
+			"The image is being used by some asset, so it cannot be deleted. " +
+			"Delete the related assets before trying to delete the image";
 		throw new ImageIsInUseException(message, set, image);
 	}
 
