@@ -26,13 +26,9 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Width="180" Height="240" Margin="8"
-                                Background="{DynamicResource OuterBackground}"
-                                Classes="small-padding no-icon-constraint"
+                        <Button Margin="8"
                                 VerticalContentAlignment="Stretch"
-                                Foreground="{DynamicResource PrimaryForeground}"
-                                CornerRadius="16"
-                                Theme="{StaticResource ButtonTheme}">
+                                Theme="{StaticResource CardButtonTheme}">
                             <Button.ContextMenu>
                                 <ContextMenu Width="120">
                                     <MenuItem
