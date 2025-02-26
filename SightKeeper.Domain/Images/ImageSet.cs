@@ -10,7 +10,7 @@ public sealed class ImageSet
 	/// </remarks>
 	public IReadOnlyList<Image> Images => _images;
 
-	public Image CreateScreenshot(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
+	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
 	{
 		if (_images.Count > 0 && creationTimestamp <= _images[^1].CreationTimestamp)
 		{

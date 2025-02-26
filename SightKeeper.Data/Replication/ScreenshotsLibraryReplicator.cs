@@ -29,7 +29,7 @@ internal sealed class ScreenshotsLibraryReplicator
 		};
 		foreach (var packableScreenshot in packableLibrary.Screenshots)
 		{
-			var screenshot = library.CreateScreenshot(packableScreenshot.CreationTimestamp, packableScreenshot.ImageSize);
+			var screenshot = library.CreateImage(packableScreenshot.CreationTimestamp, packableScreenshot.ImageSize);
 			var screenshotId = packableScreenshot.Id;
 			_session.Screenshots.Add(screenshotId, screenshot);
 			_screenshotsDataAccess.AssociateId(screenshot, screenshotId);

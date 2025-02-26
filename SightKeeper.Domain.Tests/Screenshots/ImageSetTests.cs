@@ -9,7 +9,7 @@ public sealed class ImageSetTests
 	public void ShouldNotDeleteScreenshotWithAsset()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320));
+		var screenshot = imageSet.CreateImage(DateTime.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(screenshot);
 		Assert.ThrowsAny<Exception>(() => imageSet.RemoveScreenshotAt(0));
@@ -19,7 +19,7 @@ public sealed class ImageSetTests
 	public void ShouldDeleteScreenshotAfterAssetDeletion()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320));
+		var screenshot = imageSet.CreateImage(DateTime.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(screenshot);
 		dataSet.AssetsLibrary.DeleteAsset(screenshot);
@@ -30,7 +30,7 @@ public sealed class ImageSetTests
 	public void ShouldDeleteScreenshotAfterAssetsLibraryClear()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateScreenshot(DateTime.Now, new Vector2<ushort>(320, 320));
+		var screenshot = imageSet.CreateImage(DateTime.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(screenshot);
 		dataSet.AssetsLibrary.ClearAssets();

@@ -32,7 +32,7 @@ public class Poser2DTagTests
 	public void ShouldAddNewKeyPointTagToPoserTagWithAssociatedItems()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var screenshot = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
@@ -45,7 +45,7 @@ public class Poser2DTagTests
 	public void ShouldNotDeleteKeyPointTagWithAssociatedKeyPoint()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var screenshot = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag1 = tag.CreateKeyPointTag("1");
@@ -60,7 +60,7 @@ public class Poser2DTagTests
 	public void ShouldAddNewPointToTagWithoutAssociatedItems()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var screenshot = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
@@ -74,7 +74,7 @@ public class Poser2DTagTests
 	public void ShouldDeletePointOfTagWithoutAssociatedItems()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var screenshot = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");

@@ -33,7 +33,7 @@ public sealed class DrawerItemsFactoryTests
 	private static Image CreateScreenshot()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return screenshot;
 	}
 }

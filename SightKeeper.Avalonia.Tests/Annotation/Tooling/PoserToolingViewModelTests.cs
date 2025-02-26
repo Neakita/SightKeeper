@@ -98,7 +98,7 @@ public sealed class PoserToolingViewModelTests
 	private static Image CreateScreenshot()
 	{
 		ImageSet imageSet = new();
-		return imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		return imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 	}
 
 	private static (Tag keyPointTag, Poser2DItem item) CreateKeyPointTagAndPoserItem(Image image)

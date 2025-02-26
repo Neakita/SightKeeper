@@ -49,7 +49,7 @@ public sealed class AppDataBoundingAnnotatorTests
 	private static Image PrepareScreenshot()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return screenshot;
 	}
 }

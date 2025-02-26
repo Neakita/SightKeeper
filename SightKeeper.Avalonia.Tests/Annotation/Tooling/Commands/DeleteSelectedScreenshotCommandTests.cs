@@ -81,14 +81,14 @@ public sealed class DeleteSelectedScreenshotCommandTests
 	private static ImageSet PrepareScreenshotsLibrary()
 	{
 		ImageSet imageSet = new();
-		imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return imageSet;
 	}
 
 	private static ImageSet PrepareScreenshotsLibrary(out Image image)
 	{
 		ImageSet imageSet = new();
-		image = imageSet.CreateScreenshot(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return imageSet;
 	}
 

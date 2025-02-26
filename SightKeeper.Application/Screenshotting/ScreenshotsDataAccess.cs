@@ -38,7 +38,7 @@ public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, I
 
 	protected virtual Image CreateScreenshot(ImageSet library, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
 	{
-		return library.CreateScreenshot(creationTimestamp, resolution);
+		return library.CreateImage(creationTimestamp, resolution);
 	}
 
 	protected abstract void SaveScreenshotData(Image image, ReadOnlySpan2D<Rgba32> data);
