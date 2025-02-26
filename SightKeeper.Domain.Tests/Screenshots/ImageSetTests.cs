@@ -12,7 +12,7 @@ public sealed class ImageSetTests
 		var screenshot = imageSet.CreateImage(DateTime.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(screenshot);
-		Assert.ThrowsAny<Exception>(() => imageSet.RemoveScreenshotAt(0));
+		Assert.ThrowsAny<Exception>(() => imageSet.RemoveImageAt(0));
 	}
 
 	[Fact]
@@ -23,7 +23,7 @@ public sealed class ImageSetTests
 		DetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(screenshot);
 		dataSet.AssetsLibrary.DeleteAsset(screenshot);
-		imageSet.RemoveScreenshotAt(0);
+		imageSet.RemoveImageAt(0);
 	}
 
 	[Fact]
@@ -34,6 +34,6 @@ public sealed class ImageSetTests
 		DetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(screenshot);
 		dataSet.AssetsLibrary.ClearAssets();
-		imageSet.RemoveScreenshotAt(0);
+		imageSet.RemoveImageAt(0);
 	}
 }

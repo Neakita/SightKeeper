@@ -15,8 +15,8 @@ public sealed class ImageSet
 		if (_images.Count > 0 && creationTimestamp <= _images[^1].CreationTimestamp)
 		{
 			throw new InconsistentImageCreationTimestampException(
-				"An attempt was made to create a new screenshot earlier than the timestamp of the last screenshot in the library. " +
-				"Check that the time synchronization is correct and/or delete incorrectly created screenshots",
+				"An attempt was made to create a new image earlier than the timestamp of the last image in the library. " +
+				"Check that the time synchronization is correct and/or delete incorrectly created images",
 				creationTimestamp, this);
 		}
 		Image image = new(creationTimestamp, size);
@@ -24,10 +24,10 @@ public sealed class ImageSet
 		return image;
 	}
 
-	public void RemoveScreenshotAt(int index)
+	public void RemoveImageAt(int index)
 	{
-		var screenshot = _images[index];
-		ImageIsInUseException.ThrowForDeletionIfInUse(this, screenshot);
+		var image = _images[index];
+		ImageIsInUseException.ThrowForDeletionIfInUse(this, image);
 		_images.RemoveAt(index);
 	}
 
