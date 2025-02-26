@@ -16,43 +16,43 @@
         MinWidth="480"
         MinHeight="320"
         x:DataType="root:MainViewModel">
-	<assists:WindowAssist.OverlayContent>
-		<dialogs:DialogHostPresenter/>
-	</assists:WindowAssist.OverlayContent>
-	<assists:WindowAssist.LeftContent>
-		<TabStrip ItemsSource="{Binding Tabs}"
-		          SelectedItem="{Binding SelectedTab}"
-		          Theme="{DynamicResource VerticalButtonsTabStripTheme}">
-			<TabStrip.Styles>
-				<Style Selector="TabStripItem">
-					<Setter Property="ToolTip.Tip" Value="{Binding (root:TabItemViewModel).Header}"/>
-				</Style>
-			</TabStrip.Styles>
-			<TabStrip.ItemTemplate>
-				<DataTemplate>
-					<icons:MaterialIcon Kind="{Binding IconKind}"/>
-				</DataTemplate>
-			</TabStrip.ItemTemplate>
-		</TabStrip>
-	</assists:WindowAssist.LeftContent>
-	<assists:WindowAssist.TopContent>
-		<TextBlock Text="{Binding SelectedTab.Header}"
-		           FontSize="16"
-		           Margin="16 8"
-		           VerticalAlignment="Center"
-		           IsHitTestVisible="False"/>
-	</assists:WindowAssist.TopContent>
-	<ContentControl Content="{Binding SelectedTab.Content}">
-		<ContentControl.DataTemplates>
+    <assists:WindowAssist.OverlayContent>
+        <dialogs:DialogHostPresenter/>
+    </assists:WindowAssist.OverlayContent>
+    <assists:WindowAssist.LeftContent>
+        <TabStrip ItemsSource="{Binding Tabs}"
+                  SelectedItem="{Binding SelectedTab}"
+                  Theme="{DynamicResource VerticalButtonsTabStripTheme}">
+            <TabStrip.Styles>
+                <Style Selector="TabStripItem">
+                    <Setter Property="ToolTip.Tip" Value="{Binding (root:TabItemViewModel).Header}"/>
+                </Style>
+            </TabStrip.Styles>
+            <TabStrip.ItemTemplate>
+                <DataTemplate>
+                    <icons:MaterialIcon Kind="{Binding IconKind}"/>
+                </DataTemplate>
+            </TabStrip.ItemTemplate>
+        </TabStrip>
+    </assists:WindowAssist.LeftContent>
+    <assists:WindowAssist.TopContent>
+        <TextBlock Text="{Binding SelectedTab.Header}"
+                   FontSize="16"
+                   Margin="16 8"
+                   VerticalAlignment="Center"
+                   IsHitTestVisible="False"/>
+    </assists:WindowAssist.TopContent>
+    <ContentControl Content="{Binding SelectedTab.Content}">
+        <ContentControl.DataTemplates>
             <DataTemplate x:DataType="screenshotsLibraries:ScreenshotsLibrariesViewModel">
                 <screenshotsLibraries:ScreenshotsLibrariesTab/>
             </DataTemplate>
             <DataTemplate x:DataType="dataSets:DataSetsViewModel">
-				<dataSets:DataSetsTab/>
-			</DataTemplate>
+                <dataSets:DataSetsTab/>
+            </DataTemplate>
             <DataTemplate x:DataType="annotation:AnnotationTabViewModel">
                 <annotation:AnnotationTab/>
             </DataTemplate>
-		</ContentControl.DataTemplates>
-	</ContentControl>
+        </ContentControl.DataTemplates>
+    </ContentControl>
 </Window>
