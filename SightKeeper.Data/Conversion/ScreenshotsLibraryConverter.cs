@@ -38,7 +38,7 @@ internal sealed class ScreenshotsLibraryConverter
 		{
 			Id = _screenshotsDataAccess.GetId(image),
 			CreationTimestamp = image.CreationTimestamp,
-			ImageSize = image.ImageSize
+			ImageSize = image.Size
 		};
 	}
 }

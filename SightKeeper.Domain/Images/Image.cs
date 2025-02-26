@@ -5,14 +5,14 @@ namespace SightKeeper.Domain.Images;
 public sealed class Image
 {
 	public DateTimeOffset CreationTimestamp { get; }
-	public Vector2<ushort> ImageSize { get; }
+	public Vector2<ushort> Size { get; }
 	public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
 
-	internal Image(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
+	internal Image(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
-		ValidateImageSize(imageSize);
+		ValidateImageSize(size);
 		CreationTimestamp = creationTimestamp;
-		ImageSize = imageSize;
+		Size = size;
 	}
 
 	internal void AddAsset(Asset asset)

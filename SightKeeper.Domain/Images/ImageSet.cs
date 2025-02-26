@@ -10,7 +10,7 @@ public sealed class ImageSet
 	/// </remarks>
 	public IReadOnlyList<Image> Images => _images;
 
-	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> imageSize)
+	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		if (_images.Count > 0 && creationTimestamp <= _images[^1].CreationTimestamp)
 		{
@@ -19,7 +19,7 @@ public sealed class ImageSet
 				"Check that the time synchronization is correct and/or delete incorrectly created screenshots",
 				creationTimestamp, this);
 		}
-		Image image = new(creationTimestamp, imageSize);
+		Image image = new(creationTimestamp, size);
 		_images.Add(image);
 		return image;
 	}
