@@ -14,7 +14,7 @@ public sealed class ImageSet
 	{
 		if (_images.Count > 0 && creationTimestamp <= _images[^1].CreationTimestamp)
 		{
-			throw new InconsistentScreenshotCreationTimestampException(
+			throw new InconsistentImageCreationTimestampException(
 				"An attempt was made to create a new screenshot earlier than the timestamp of the last screenshot in the library. " +
 				"Check that the time synchronization is correct and/or delete incorrectly created screenshots",
 				creationTimestamp, this);
