@@ -5,7 +5,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
-internal class DesignScreenshotsLibrariesViewModel : IScreenshotsLibrariesViewModel
+internal class DesignScreenshotsLibrariesDataContext : ScreenshotsLibrariesDataContext
 {
 	public IReadOnlyCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; } =
 	[

@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
-internal interface IScreenshotsLibrariesViewModel
+internal interface ScreenshotsLibrariesDataContext
 {
 	IReadOnlyCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; }
 	ICommand CreateScreenshotsLibraryCommand { get; }

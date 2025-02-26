@@ -7,9 +7,9 @@
              xmlns:screenshotsLibraries="clr-namespace:SightKeeper.Avalonia.ScreenshotsLibraries"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.ScreenshotsLibraries.ScreenshotsLibrariesTab"
-             x:DataType="screenshotsLibraries:IScreenshotsLibrariesViewModel">
+             x:DataType="screenshotsLibraries:ScreenshotsLibrariesDataContext">
     <Design.DataContext>
-        <screenshotsLibraries:DesignScreenshotsLibrariesViewModel/>
+        <screenshotsLibraries:DesignScreenshotsLibrariesDataContext/>
     </Design.DataContext>
     <ScrollViewer Classes="regular-padding" Name="Root">
         <StackPanel Classes="medium-spacing">
@@ -34,13 +34,13 @@
                                     <MenuItem
                                         Header="Edit"
                                         Icon="{icons:MaterialIconExt Pencil}"
-                                        Command="{Binding #Root.((screenshotsLibraries:IScreenshotsLibrariesViewModel)DataContext).EditScreenshotsLibraryCommand}"
+                                        Command="{Binding #Root.((screenshotsLibraries:ScreenshotsLibrariesDataContext)DataContext).EditScreenshotsLibraryCommand}"
                                         CommandParameter="{Binding Value}"/>
                                     <MenuItem
                                         Header="Delete"
                                         Icon="{icons:MaterialIconExt TrashCanOutline}"
                                         Classes="red-accent"
-                                        Command="{Binding #Root.((screenshotsLibraries:IScreenshotsLibrariesViewModel)DataContext).DeleteScreenshotsLibraryCommand}"
+                                        Command="{Binding #Root.((screenshotsLibraries:ScreenshotsLibrariesDataContext)DataContext).DeleteScreenshotsLibraryCommand}"
                                         CommandParameter="{Binding Value}"/>
                                 </ContextMenu>
                             </Button.ContextMenu>

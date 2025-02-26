@@ -14,7 +14,7 @@ using SightKeeper.Domain.Screenshots;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
-internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreenshotsLibrariesViewModel
+internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, ScreenshotsLibrariesDataContext
 {
 	public IReadOnlyCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; }
 
@@ -92,7 +92,7 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, IScreen
 			_screenshotsLibrariesDeleter.Delete(screenshotsLibrary);
 	}
 
-	ICommand IScreenshotsLibrariesViewModel.CreateScreenshotsLibraryCommand => CreateScreenshotsLibraryCommand;
-	ICommand IScreenshotsLibrariesViewModel.EditScreenshotsLibraryCommand => EditScreenshotsLibraryCommand;
-	ICommand IScreenshotsLibrariesViewModel.DeleteScreenshotsLibraryCommand => DeleteScreenshotsLibraryCommand;
+	ICommand ScreenshotsLibrariesDataContext.CreateScreenshotsLibraryCommand => CreateScreenshotsLibraryCommand;
+	ICommand ScreenshotsLibrariesDataContext.EditScreenshotsLibraryCommand => EditScreenshotsLibraryCommand;
+	ICommand ScreenshotsLibrariesDataContext.DeleteScreenshotsLibraryCommand => DeleteScreenshotsLibraryCommand;
 }
