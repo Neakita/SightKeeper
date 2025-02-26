@@ -24,7 +24,7 @@ internal sealed class ScreenshotsLibraryConverter
 	{
 		Name = library.Name,
 		Description = library.Description,
-		Screenshots = ConvertScreenshots(library.Screenshots).ToImmutableArray()
+		Screenshots = ConvertScreenshots(library.Images).ToImmutableArray()
 	};
 
 	private IEnumerable<PackableScreenshot> ConvertScreenshots(IEnumerable<Image> screenshots)

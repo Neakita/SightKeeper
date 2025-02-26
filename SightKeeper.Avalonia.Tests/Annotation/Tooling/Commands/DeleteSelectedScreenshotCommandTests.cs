@@ -22,7 +22,7 @@ public sealed class DeleteSelectedScreenshotCommandTests
 		var selection = PrepareSelectedScreenshot(screenshotsLibrary);
 		var command = CreateCommand(selection);
 		command.Execute(null);
-		screenshotsLibrary.Screenshots.Should().BeEmpty();
+		screenshotsLibrary.Images.Should().BeEmpty();
 	}
 
 	[Fact]
@@ -97,7 +97,7 @@ public sealed class DeleteSelectedScreenshotCommandTests
 		var selectionSubstitute = Substitute.For<ScreenshotSelection>();
 		selectionSubstitute.Library.Returns(imageSet);
 		selectionSubstitute.SelectedScreenshotIndex.Returns(screenshotIndex);
-		selectionSubstitute.SelectedImage.Returns(imageSet.Screenshots[screenshotIndex]);
+		selectionSubstitute.SelectedImage.Returns(imageSet.Images[screenshotIndex]);
 		return selectionSubstitute;
 	}
 

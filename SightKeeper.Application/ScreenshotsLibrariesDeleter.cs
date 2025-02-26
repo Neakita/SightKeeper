@@ -10,7 +10,7 @@ public abstract class ScreenshotsLibrariesDeleter
 	{
 		var dataSets = _dataSetsDataAccess.Items;
 		foreach (var dataSet in dataSets)
-		foreach (var screenshot in library.Screenshots)
+		foreach (var screenshot in library.Images)
 			if (dataSet.AssetsLibrary.Contains(screenshot))
 				return false;
 		return true;

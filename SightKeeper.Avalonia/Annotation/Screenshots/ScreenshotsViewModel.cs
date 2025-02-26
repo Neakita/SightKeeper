@@ -28,7 +28,7 @@ public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelectio
 			{
 				source.Clear();
 				if (value != null)
-					source.AddRange(value.Screenshots);
+					source.AddRange(value.Images);
 			});
 		}
 	}

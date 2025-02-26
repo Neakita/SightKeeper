@@ -25,7 +25,7 @@ public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, I
 
 	public virtual void DeleteScreenshot(ImageSet library, int index)
 	{
-		var screenshot = library.Screenshots[index];
+		var screenshot = library.Images[index];
 		library.RemoveScreenshotAt(index);
 		DeleteScreenshotData(screenshot);
 	}
