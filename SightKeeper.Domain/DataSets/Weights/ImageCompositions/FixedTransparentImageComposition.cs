@@ -17,9 +17,9 @@ public sealed class FixedTransparentImageComposition : ImageComposition
 	}
 
 	public FixedTransparentImageComposition(
-		TimeSpan maximumScreenshotsDelay,
+		TimeSpan maximumDelay,
 		ImmutableArray<float> opacities)
-		: base(maximumScreenshotsDelay)
+		: base(maximumDelay)
 	{
 		Opacities = opacities;
 	}

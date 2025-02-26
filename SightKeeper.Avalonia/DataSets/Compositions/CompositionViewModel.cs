@@ -27,7 +27,7 @@ internal abstract partial class CompositionViewModel : ViewModel
 
 	protected CompositionViewModel(ImageComposition imageComposition)
 	{
-		_maximumScreenshotsDelayInMilliseconds = (ushort)imageComposition.MaximumScreenshotsDelay.TotalMilliseconds;
+		_maximumScreenshotsDelayInMilliseconds = (ushort)imageComposition.MaximumDelay.TotalMilliseconds;
 	}
 
 	[ObservableProperty] private ushort _maximumScreenshotsDelayInMilliseconds;

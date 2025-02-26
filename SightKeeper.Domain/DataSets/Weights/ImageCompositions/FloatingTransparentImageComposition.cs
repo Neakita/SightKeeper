@@ -35,11 +35,11 @@ public sealed class FloatingTransparentImageComposition : ImageComposition
 	}
 
 	public FloatingTransparentImageComposition(
-		TimeSpan maximumScreenshotsDelay,
+		TimeSpan maximumDelay,
 		TimeSpan seriesDuration,
 		float primaryOpacity,
 		float minimumOpacity)
-		: base(maximumScreenshotsDelay)
+		: base(maximumDelay)
 	{
 		SeriesDuration = seriesDuration;
 		PrimaryOpacity = primaryOpacity;

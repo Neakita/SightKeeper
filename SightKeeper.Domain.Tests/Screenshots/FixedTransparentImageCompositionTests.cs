@@ -32,7 +32,7 @@ public sealed class FixedTransparentImageCompositionTests
 	public void ShouldNotSetNegativeDelay()
 	{
 		FixedTransparentImageComposition composition = new(TimeSpan.FromMilliseconds(1), [0.5f, 0.5f]);
-		Assert.ThrowsAny<Exception>(() => composition.MaximumScreenshotsDelay = TimeSpan.FromMilliseconds(-1));
+		Assert.ThrowsAny<Exception>(() => composition.MaximumDelay = TimeSpan.FromMilliseconds(-1));
 	}
 
 	[Fact]

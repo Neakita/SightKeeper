@@ -2,19 +2,19 @@ namespace SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 public abstract class ImageComposition
 {
-	public TimeSpan MaximumScreenshotsDelay
+	public TimeSpan MaximumDelay
 	{
 		get;
 		set
 		{
 			if (value <= TimeSpan.Zero)
-				throw new ArgumentException($"{nameof(MaximumScreenshotsDelay)} value should be greater than zero, but was {value}", nameof(value));
+				throw new ArgumentException($"{nameof(MaximumDelay)} value should be greater than zero, but was {value}", nameof(value));
 			field = value;
 		}
 	}
 
-	protected ImageComposition(TimeSpan maximumScreenshotsDelay)
+	protected ImageComposition(TimeSpan maximumDelay)
 	{
-		MaximumScreenshotsDelay = maximumScreenshotsDelay;
+		MaximumDelay = maximumDelay;
 	}
 }
