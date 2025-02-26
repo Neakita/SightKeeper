@@ -50,7 +50,7 @@
                                         CornerRadius="20"
                                         Background="{DynamicResource ControlBackground}">
                                     <Panel>
-                                        <icons:MaterialIcon Kind="ImageOutline"
+                                        <icons:MaterialIcon Kind="Mountain"
                                                             Foreground="{StaticResource WatermarkSecondary}"
                                                             Margin="12"
                                                             Opacity="0.2"/>
