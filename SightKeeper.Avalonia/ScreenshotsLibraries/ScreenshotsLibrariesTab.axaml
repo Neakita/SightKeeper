@@ -47,7 +47,7 @@
                             <StackPanel>
                                 <Border BoxShadow="0 3 3 0 #20000000"
                                         Height="156"
-                                        CornerRadius="20"
+                                        CornerRadius="12"
                                         Background="{DynamicResource ControlBackground}">
                                     <Panel>
                                         <icons:MaterialIcon Kind="Mountain"
