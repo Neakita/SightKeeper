@@ -10,7 +10,7 @@ internal sealed class DetectorAssetsFactory : AssetsFactory<DetectorAsset>
 		_tagsOwner = tagsOwner;
 	}
 
-	public override DetectorAsset CreateAsset()
+	public DetectorAsset CreateAsset()
 	{
 		return new DetectorAsset(_tagsOwner);
 	}

@@ -10,7 +10,7 @@ internal sealed class Poser2DAssetsFactory : AssetsFactory<Poser2DAsset>
 		_tagsOwner = tagsOwner;
 	}
 
-	public override Poser2DAsset CreateAsset()
+	public Poser2DAsset CreateAsset()
 	{
 		return new Poser2DAsset(_tagsOwner);
 	}

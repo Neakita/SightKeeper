@@ -10,7 +10,7 @@ internal sealed class Poser3DAssetsFactory : AssetsFactory<Poser3DAsset>
 		_tagsOwner = tagsOwner;
 	}
 
-	public override Poser3DAsset CreateAsset()
+	public Poser3DAsset CreateAsset()
 	{
 		return new Poser3DAsset(_tagsOwner);
 	}
