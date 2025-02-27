@@ -17,7 +17,7 @@ namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
 public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelection, AnnotationScreenshotsComponent
 {
-	public ImageSet? Library
+	public ImageSet? Set
 	{
 		get;
 		set
@@ -52,13 +52,11 @@ public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelectio
 			.DisposeWith(_disposable);
 		Screenshots = screenshots;
 		observableDataAccess.Added
-			.Where(data => data.library == Library)
-			.Select(data => data.image)
+			.Where(image => image.Set == Set)
 			.Subscribe(_screenshotsSource.Add)
 			.DisposeWith(_disposable);
 		observableDataAccess.Removed
-			.Where(data => data.library == Library)
-			.Select(data => data.image)
+			.Where(image => image.Set == Set)
 			.Select(_screenshotsSource.Remove)
 			.Subscribe(isRemoved => Guard.IsTrue(isRemoved))
 			.DisposeWith(_disposable);

@@ -48,7 +48,7 @@ public sealed class DeleteSelectedScreenshotCommandFactory
 
 	private void DeleteScreenshot()
 	{
-		Guard.IsNotNull(_screenshots.Library);
-		_imageDataAccess.DeleteImage(_screenshots.Library, _screenshots.SelectedScreenshotIndex);
+		Guard.IsNotNull(_screenshots.Set);
+		_imageDataAccess.DeleteImage(_screenshots.Set, _screenshots.SelectedScreenshotIndex);
 	}
 }

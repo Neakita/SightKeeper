@@ -50,7 +50,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 
 	private void OnSelectedScreenshotsLibraryChanged(ScreenshotsLibraryViewModel? value)
 	{
-		Screenshots.Library = value?.Value;
+		Screenshots.Set = value?.Value;
 	}
 
 	private void OnSelectedDataSetChanged(DataSetViewModel? value)

@@ -10,8 +10,8 @@ namespace SightKeeper.Application.ScreenCapturing;
 
 public abstract class ImageDataAccess : ObservableImageDataAccess, IDisposable
 {
-	public IObservable<(ImageSet library, Image image)> Added => _added.AsObservable();
-	public IObservable<(ImageSet library, Image image)> Removed => _removed.AsObservable();
+	public IObservable<Image> Added => _added.AsObservable();
+	public IObservable<Image> Removed => _removed.AsObservable();
 
 	public abstract Stream LoadImage(Image image);
 
@@ -20,7 +20,7 @@ public abstract class ImageDataAccess : ObservableImageDataAccess, IDisposable
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
 		var image = CreateImage(library, creationTimestamp, resolution);
 		SaveImageData(image, imageData);
-		_added.OnNext((library, image));
+		_added.OnNext(image);
 		return image;
 	}
 
@@ -45,6 +45,6 @@ public abstract class ImageDataAccess : ObservableImageDataAccess, IDisposable
 	protected abstract void SaveImageData(Image image, ReadOnlySpan2D<Rgba32> data);
 	protected abstract void DeleteImageData(Image image);
 
-	private readonly Subject<(ImageSet library, Image image)> _added = new();
-	private readonly Subject<(ImageSet library, Image image)> _removed = new();
+	private readonly Subject<Image> _added = new();
+	private readonly Subject<Image> _removed = new();
 }

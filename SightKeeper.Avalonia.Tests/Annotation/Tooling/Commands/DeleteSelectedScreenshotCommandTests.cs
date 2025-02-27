@@ -95,7 +95,7 @@ public sealed class DeleteSelectedScreenshotCommandTests
 	private static ScreenshotSelection PrepareSelectedScreenshot(ImageSet imageSet, int screenshotIndex = 0)
 	{
 		var selectionSubstitute = Substitute.For<ScreenshotSelection>();
-		selectionSubstitute.Library.Returns(imageSet);
+		selectionSubstitute.Set.Returns(imageSet);
 		selectionSubstitute.SelectedScreenshotIndex.Returns(screenshotIndex);
 		selectionSubstitute.SelectedImage.Returns(imageSet.Images[screenshotIndex]);
 		return selectionSubstitute;
@@ -104,7 +104,7 @@ public sealed class DeleteSelectedScreenshotCommandTests
 	private static ScreenshotSelection PrepareNoSelectedScreenshot(ImageSet imageSet)
 	{
 		var selectionSubstitute = Substitute.For<ScreenshotSelection>();
-		selectionSubstitute.Library.Returns(imageSet);
+		selectionSubstitute.Set.Returns(imageSet);
 		selectionSubstitute.SelectedScreenshotIndex.Returns(-1);
 		return selectionSubstitute;
 	}

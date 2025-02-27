@@ -19,7 +19,7 @@ public sealed class ImageSet
 				"Check that the time synchronization is correct and/or delete incorrectly created images",
 				creationTimestamp, this);
 		}
-		Image image = new(creationTimestamp, size);
+		Image image = new(this, creationTimestamp, size);
 		_images.Add(image);
 		return image;
 	}
