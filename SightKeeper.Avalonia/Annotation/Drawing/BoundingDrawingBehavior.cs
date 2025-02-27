@@ -6,7 +6,7 @@ using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 

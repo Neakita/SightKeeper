@@ -1,6 +1,6 @@
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Domain.DataSets.Assets;
+namespace SightKeeper.Domain.DataSets.Assets.Items;
 
 public interface ItemsCreator
 {

@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 

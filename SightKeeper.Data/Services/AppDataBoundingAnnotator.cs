@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 

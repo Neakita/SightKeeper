@@ -1,6 +1,6 @@
 using SightKeeper.Application.Annotation;
 using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;

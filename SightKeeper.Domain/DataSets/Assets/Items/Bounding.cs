@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Domain.DataSets.Assets;
+﻿namespace SightKeeper.Domain.DataSets.Assets.Items;
 
 public readonly struct Bounding : IEquatable<Bounding>
 {

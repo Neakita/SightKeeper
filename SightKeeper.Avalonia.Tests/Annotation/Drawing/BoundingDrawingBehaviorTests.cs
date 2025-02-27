@@ -13,7 +13,7 @@ using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Drawing;
 

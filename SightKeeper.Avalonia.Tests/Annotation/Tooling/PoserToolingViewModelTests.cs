@@ -5,7 +5,7 @@ using NSubstitute;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Tags;

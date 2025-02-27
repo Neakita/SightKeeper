@@ -1,5 +1,5 @@
 using MemoryPack;
-using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser2D;
 
 namespace SightKeeper.Data.Model.DataSets.Assets;

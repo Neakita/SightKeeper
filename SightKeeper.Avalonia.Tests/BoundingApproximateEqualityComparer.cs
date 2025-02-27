@@ -1,4 +1,4 @@
-using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 
 namespace SightKeeper.Avalonia.Tests;
 
