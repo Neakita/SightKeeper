@@ -26,7 +26,7 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, Screens
 		ScreenshotsLibraryEditor screenshotsLibraryEditor,
 		[Tag("new")] IValidator<ScreenshotsLibraryData> newScreenshotsLibraryDataValidator,
 		IValidator<ScreenshotsLibraryData> screenshotsLibraryDataValidator,
-		ScreenshotsLibrariesDeleter screenshotsLibrariesDeleter)
+		ImageSetDeleter imageSetDeleter)
 	{
 		_dialogManager = dialogManager;
 		_readScreenshotsLibrariesDataAccess = readScreenshotsLibrariesDataAccess;
@@ -34,7 +34,7 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, Screens
 		_screenshotsLibraryEditor = screenshotsLibraryEditor;
 		_newScreenshotsLibraryDataValidator = newScreenshotsLibraryDataValidator;
 		_screenshotsLibraryDataValidator = screenshotsLibraryDataValidator;
-		_screenshotsLibrariesDeleter = screenshotsLibrariesDeleter;
+		_imageSetDeleter = imageSetDeleter;
 		ScreenshotsLibraries = screenshotsLibrariesObservableRepository.Items;
 	}
 
@@ -44,7 +44,7 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, Screens
 	private readonly ScreenshotsLibraryEditor _screenshotsLibraryEditor;
 	private readonly IValidator<ScreenshotsLibraryData> _newScreenshotsLibraryDataValidator;
 	private readonly IValidator<ScreenshotsLibraryData> _screenshotsLibraryDataValidator;
-	private readonly ScreenshotsLibrariesDeleter _screenshotsLibrariesDeleter;
+	private readonly ImageSetDeleter _imageSetDeleter;
 
 	[RelayCommand]
 	private async Task CreateScreenshotsLibraryAsync()
@@ -70,7 +70,7 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, Screens
 	[RelayCommand]
 	private async Task DeleteScreenshotsLibraryAsync(ImageSet imageSet)
 	{
-		if (!_screenshotsLibrariesDeleter.CanDelete(imageSet))
+		if (!_imageSetDeleter.CanDelete(imageSet))
 		{
 			var message =
 				$"The library '{imageSet.Name}' cannot be deleted as some dataset references it as asset. " +
@@ -89,7 +89,7 @@ internal sealed partial class ScreenshotsLibrariesViewModel : ViewModel, Screens
 			deleteButton, cancelButton,
 			new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel));
 		if (await _dialogManager.ShowDialogAsync(deletionConfirmationDialog) == deleteButton)
-			_screenshotsLibrariesDeleter.Delete(imageSet);
+			_imageSetDeleter.Delete(imageSet);
 	}
 
 	ICommand ScreenshotsLibrariesDataContext.CreateScreenshotsLibraryCommand => CreateScreenshotsLibraryCommand;

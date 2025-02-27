@@ -9,9 +9,9 @@ internal static class CompositionReplicator
 	{
 		null => null,
 		PackableFixedTransparentComposition fixedTransparent => new FixedTransparentImageComposition(
-			fixedTransparent.MaximumScreenshotsDelay, fixedTransparent.Opacities),
+			fixedTransparent.MaximumDelay, fixedTransparent.Opacities),
 		PackableFloatingTransparentComposition floatingTransparent => new FloatingTransparentImageComposition(
-			floatingTransparent.MaximumScreenshotsDelay, floatingTransparent.SeriesDuration,
+			floatingTransparent.MaximumDelay, floatingTransparent.SeriesDuration,
 			floatingTransparent.PrimaryOpacity, floatingTransparent.MinimumOpacity),
 		_ => throw new ArgumentOutOfRangeException(nameof(composition))
 	};

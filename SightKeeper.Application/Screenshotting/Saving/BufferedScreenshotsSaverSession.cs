@@ -29,11 +29,11 @@ public sealed class BufferedScreenshotsSaverSession<TPixel> : ScreenshotsSaverSe
 
 	public BufferedScreenshotsSaverSession(
 		ImageSet imageSet,
-		ScreenshotsDataAccess screenshotsDataAccess,
+		ImageDataAccess imageDataAccess,
 		ArrayPool<TPixel> rawPixelsArrayPool,
 		ArrayPool<Rgba32> convertedPixelsArrayPool,
 		PixelConverter<TPixel, Rgba32> pixelConverter)
-		: base(imageSet, screenshotsDataAccess)
+		: base(imageSet, imageDataAccess)
 	{
 		_pixelConverter = pixelConverter;
 		RawPixelsArrayPool = rawPixelsArrayPool;
@@ -78,7 +78,7 @@ public sealed class BufferedScreenshotsSaverSession<TPixel> : ScreenshotsSaverSe
 			{
 				var buffer2D = buffer.AsSpan().AsSpan2D(data.ImageSize.Y, data.ImageSize.X);
 				_pixelConverter.Convert(data.ImageData2D, buffer2D);
-				ScreenshotsDataAccess.CreateScreenshot(Library, buffer2D, data.CreationTimestamp);
+				ImageDataAccess.CreateScreenshot(Library, buffer2D, data.CreationTimestamp);
 			}
 			finally
 			{

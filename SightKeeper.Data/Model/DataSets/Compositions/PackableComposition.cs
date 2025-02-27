@@ -11,5 +11,5 @@ namespace SightKeeper.Data.Model.DataSets.Compositions;
 [MemoryPackUnion(1, typeof(PackableFloatingTransparentComposition))]
 internal abstract partial class PackableComposition
 {
-	public required TimeSpan MaximumScreenshotsDelay { get; init; }
+	public required TimeSpan MaximumDelay { get; init; }
 }

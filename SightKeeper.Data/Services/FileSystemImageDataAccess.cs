@@ -10,7 +10,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
+public sealed class FileSystemImageDataAccess : ImageDataAccess
 {
 	public string DirectoryPath
 	{
@@ -18,7 +18,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		set => _fileSystemDataAccess.DirectoryPath = value;
 	}
 
-	public FileSystemScreenshotsDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public FileSystemImageDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
 		_appDataLock = appDataLock;
@@ -34,10 +34,10 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		return _fileSystemDataAccess.GetId(image);
 	}
 
-	public override void DeleteScreenshot(ImageSet library, int index)
+	public override void DeleteImage(ImageSet set, int index)
 	{
 		lock (_appDataLock)
-			base.DeleteScreenshot(library, index);
+			base.DeleteImage(set, index);
 		_appDataAccess.SetDataChanged();
 	}
 
@@ -46,19 +46,19 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		_fileSystemDataAccess.AssociateId(image, id);
 	}
 
-	protected override Image CreateScreenshot(
-		ImageSet library,
+	protected override Image CreateImage(
+		ImageSet set,
 		DateTimeOffset creationTimestamp,
 		Vector2<ushort> resolution)
 	{
 		Image image;
 		lock (_appDataLock)
-			image = base.CreateScreenshot(library, creationTimestamp, resolution);
+			image = base.CreateImage(set, creationTimestamp, resolution);
 		_appDataAccess.SetDataChanged();
 		return image;
 	}
 
-	protected override void SaveScreenshotData(Image image, ReadOnlySpan2D<Rgba32> data)
+	protected override void SaveImageData(Image image, ReadOnlySpan2D<Rgba32> data)
 	{
 		using var stream = new ZLibStream(_fileSystemDataAccess.OpenWriteStream(image), CompressionLevel.SmallestSize);
 		if (data.TryGetSpan(out var contiguousData))
@@ -75,7 +75,7 @@ public sealed class FileSystemScreenshotsDataAccess : ScreenshotsDataAccess
 		}
 	}
 
-	protected override void DeleteScreenshotData(Image image)
+	protected override void DeleteImageData(Image image)
 	{
 		_fileSystemDataAccess.Delete(image);
 	}

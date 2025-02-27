@@ -8,10 +8,10 @@ namespace SightKeeper.Data.Conversion.DataSets.Poser3D;
 
 internal sealed class Poser3DAssetsConverter
 {
-	public Poser3DAssetsConverter(ConversionSession session, FileSystemScreenshotsDataAccess screenshotsDataAccess)
+	public Poser3DAssetsConverter(ConversionSession session, FileSystemImageDataAccess imageDataAccess)
 	{
 		_session = session;
-		_screenshotsDataAccess = screenshotsDataAccess;
+		_imageDataAccess = imageDataAccess;
 	}
 
 	public IEnumerable<PackableItemsAsset<PackablePoser3DItem>> ConvertAssets(IEnumerable<KeyValuePair<Image, Poser3DAsset>> assets)
@@ -20,16 +20,16 @@ internal sealed class Poser3DAssetsConverter
 	}
 
 	private readonly ConversionSession _session;
-	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
+	private readonly FileSystemImageDataAccess _imageDataAccess;
 
 	private PackableItemsAsset<PackablePoser3DItem> ConvertAsset(KeyValuePair<Image, Poser3DAsset> assetPair)
 	{
-		var (screenshot, asset) = assetPair;
+		var (image, asset) = assetPair;
 		return new PackableItemsAsset<PackablePoser3DItem>
 		{
 			Items = ConvertItems(asset.Items).ToImmutableArray(),
 			Usage = asset.Usage,
-			ScreenshotId = _screenshotsDataAccess.GetId(screenshot)
+			ImageId = _imageDataAccess.GetId(image)
 		};
 	}
 

@@ -11,11 +11,11 @@ public abstract class ScreenshotsSaverSession<TPixel> : IDisposable
 
 	internal ImageSet Library { get; }
 
-	protected ScreenshotsDataAccess ScreenshotsDataAccess { get; }
+	protected ImageDataAccess ImageDataAccess { get; }
 
-	protected ScreenshotsSaverSession(ImageSet library, ScreenshotsDataAccess screenshotsDataAccess)
+	protected ScreenshotsSaverSession(ImageSet library, ImageDataAccess imageDataAccess)
 	{
 		Library = library;
-		ScreenshotsDataAccess = screenshotsDataAccess;
+		ImageDataAccess = imageDataAccess;
 	}
 }

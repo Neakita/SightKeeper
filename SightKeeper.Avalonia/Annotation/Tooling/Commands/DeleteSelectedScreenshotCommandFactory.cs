@@ -17,11 +17,11 @@ public sealed class DeleteSelectedScreenshotCommandFactory
 	public DeleteSelectedScreenshotCommandFactory(
 		ScreenshotSelection screenshots,
 		IReadOnlyCollection<ObservableAnnotator> annotators,
-		ScreenshotsDataAccess screenshotsDataAccess)
+		ImageDataAccess imageDataAccess)
 	{
 		_screenshots = screenshots;
 		_annotators = annotators;
-		_screenshotsDataAccess = screenshotsDataAccess;
+		_imageDataAccess = imageDataAccess;
 	}
 
 	public DisposableCommand CreateCommand()
@@ -42,13 +42,13 @@ public sealed class DeleteSelectedScreenshotCommandFactory
 
 	private readonly ScreenshotSelection _screenshots;
 	private readonly IReadOnlyCollection<ObservableAnnotator> _annotators;
-	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
+	private readonly ImageDataAccess _imageDataAccess;
 
 	private bool CanDeleteScreenshot => _screenshots.SelectedImage?.Assets.Count == 0;
 
 	private void DeleteScreenshot()
 	{
 		Guard.IsNotNull(_screenshots.Library);
-		_screenshotsDataAccess.DeleteScreenshot(_screenshots.Library, _screenshots.SelectedScreenshotIndex);
+		_imageDataAccess.DeleteImage(_screenshots.Library, _screenshots.SelectedScreenshotIndex);
 	}
 }

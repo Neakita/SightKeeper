@@ -117,10 +117,10 @@ public sealed class DeleteSelectedScreenshotCommandTests
 		return command;
 	}
 
-	private static ScreenshotsDataAccess PrepareScreenshotsDataAccess()
+	private static ImageDataAccess PrepareScreenshotsDataAccess()
 	{
-		var screenshotsDataAccess = Substitute.For<ScreenshotsDataAccess>();
-		screenshotsDataAccess.When(dataAccess => dataAccess.DeleteScreenshot(Arg.Any<ImageSet>(), Arg.Any<int>())).CallBase();
+		var screenshotsDataAccess = Substitute.For<ImageDataAccess>();
+		screenshotsDataAccess.When(dataAccess => dataAccess.DeleteImage(Arg.Any<ImageSet>(), Arg.Any<int>())).CallBase();
 		return screenshotsDataAccess;
 	}
 

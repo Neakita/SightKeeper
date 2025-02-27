@@ -8,11 +8,11 @@ namespace SightKeeper.Data;
 
 public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {
-	public AppDataFormatter(FileSystemScreenshotsDataAccess screenshotsDataAccess, [Tag(typeof(AppData))] Lock editingLock)
+	public AppDataFormatter(FileSystemImageDataAccess imageDataAccess, [Tag(typeof(AppData))] Lock editingLock)
 	{
 		_editingLock = editingLock;
-		_converter = new AppDataConverter(screenshotsDataAccess);
-		_replicator = new AppDataReplicator(screenshotsDataAccess);
+		_converter = new AppDataConverter(imageDataAccess);
+		_replicator = new AppDataReplicator(imageDataAccess);
 	}
 
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref AppData? value)

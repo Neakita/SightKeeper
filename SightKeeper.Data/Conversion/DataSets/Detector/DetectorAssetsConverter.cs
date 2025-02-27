@@ -8,9 +8,9 @@ namespace SightKeeper.Data.Conversion.DataSets.Detector;
 
 internal sealed class DetectorAssetsConverter
 {
-	public DetectorAssetsConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess, ConversionSession session)
+	public DetectorAssetsConverter(FileSystemImageDataAccess imageDataAccess, ConversionSession session)
 	{
-		_screenshotsDataAccess = screenshotsDataAccess;
+		_imageDataAccess = imageDataAccess;
 		_session = session;
 	}
 
@@ -19,16 +19,16 @@ internal sealed class DetectorAssetsConverter
 		return assets.Select(ConvertAsset);
 	}
 
-	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
+	private readonly FileSystemImageDataAccess _imageDataAccess;
 	private readonly ConversionSession _session;
 
 	private PackableItemsAsset<PackableDetectorItem> ConvertAsset(KeyValuePair<Image, DetectorAsset> assetPair)
 	{
-		var (screenshot, asset) = assetPair;
+		var (image, asset) = assetPair;
 		return new PackableItemsAsset<PackableDetectorItem>
 		{
 			Usage = asset.Usage,
-			ScreenshotId = _screenshotsDataAccess.GetId(screenshot),
+			ImageId = _imageDataAccess.GetId(image),
 			Items = ConvertItems(asset.Items).ToImmutableArray()
 		};
 	}

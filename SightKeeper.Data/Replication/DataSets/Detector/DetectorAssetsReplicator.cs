@@ -15,8 +15,8 @@ internal sealed class DetectorAssetsReplicator
 	{
 		foreach (var packableAsset in packableAssets)
 		{
-			var screenshot = _session.Screenshots[packableAsset.ScreenshotId];
-			var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+			var image = _session.Images[packableAsset.ImageId];
+			var asset = dataSet.AssetsLibrary.MakeAsset(image);
 			ReplicateItems(dataSet.TagsLibrary, asset, packableAsset.Items);
 		}
 	}

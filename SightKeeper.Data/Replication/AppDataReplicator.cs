@@ -5,20 +5,20 @@ namespace SightKeeper.Data.Replication;
 
 internal class AppDataReplicator
 {
-	public AppDataReplicator(FileSystemScreenshotsDataAccess screenshotsDataAccess)
+	public AppDataReplicator(FileSystemImageDataAccess imageDataAccess)
 	{
-		_screenshotsDataAccess = screenshotsDataAccess;
+		_imageDataAccess = imageDataAccess;
 	}
 
 	public AppData Replicate(PackableAppData packable)
 	{
 		ReplicationSession session = new();
-		ScreenshotsLibraryReplicator screenshotsReplicator = new(session, _screenshotsDataAccess);
+		ImageSetReplicator imageSetReplicator = new(session, _imageDataAccess);
 		DataSetsReplicator dataSetReplicator = new(session);
-		var screenshotsLibraries = screenshotsReplicator.ReplicateScreenshotsLibraries(packable.ScreenshotsLibraries).ToHashSet();
+		var imageSets = imageSetReplicator.ReplicateImageSets(packable.ImageSets).ToHashSet();
 		var dataSets = dataSetReplicator.ReplicateDataSets(packable.DataSets).ToHashSet();
-		return new AppData(screenshotsLibraries, dataSets, packable.ApplicationSettings);
+		return new AppData(imageSets, dataSets, packable.ApplicationSettings);
 	}
 
-	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
+	private readonly FileSystemImageDataAccess _imageDataAccess;
 }

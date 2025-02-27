@@ -4,9 +4,9 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class LockingScreenshotsLibrariesDeleter : ScreenshotsLibrariesDeleter
+public sealed class LockingImageSetDeleter : ImageSetDeleter
 {
-	public LockingScreenshotsLibrariesDeleter(
+	public LockingImageSetDeleter(
 		ReadDataAccess<DataSet> dataSetsDataAccess,
 		WriteDataAccess<ImageSet> librariesDataAccess,
 		[Tag(typeof(AppData))] Lock appDataLock) :

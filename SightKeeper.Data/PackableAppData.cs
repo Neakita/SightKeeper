@@ -7,7 +7,7 @@ namespace SightKeeper.Data;
 [MemoryPackable]
 internal sealed partial class PackableAppData
 {
-	public required IReadOnlyCollection<PackableScreenshotsLibrary> ScreenshotsLibraries { get; init; }
+	public required IReadOnlyCollection<PackableImageSet> ImageSets { get; init; }
 	public required IReadOnlyCollection<PackableDataSet> DataSets { get; init; }
 	public required ApplicationSettings ApplicationSettings { get; init; }
 }

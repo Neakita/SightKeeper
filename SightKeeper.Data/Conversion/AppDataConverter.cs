@@ -6,23 +6,23 @@ namespace SightKeeper.Data.Conversion;
 
 internal sealed class AppDataConverter
 {
-	public AppDataConverter(FileSystemScreenshotsDataAccess screenshotsDataAccess)
+	public AppDataConverter(FileSystemImageDataAccess imageDataAccess)
 	{
-		_screenshotsDataAccess = screenshotsDataAccess;
+		_imageDataAccess = imageDataAccess;
 	}
 
 	public PackableAppData Convert(AppData data)
 	{
 		ConversionSession session = new();
-		ScreenshotsLibraryConverter screenshotsLibrariesConverter = new(_screenshotsDataAccess);
-		DataSetsConverter dataSetsConverter = new(session, _screenshotsDataAccess);
+		ImageSetConverter imageSetConverter = new(_imageDataAccess);
+		DataSetsConverter dataSetsConverter = new(session, _imageDataAccess);
 		return new PackableAppData
 		{
-			ScreenshotsLibraries = screenshotsLibrariesConverter.ConvertScreenshotsLibraries(data.ScreenshotsLibraries).ToImmutableArray(),
+			ImageSets = imageSetConverter.ConvertImageSets(data.ImageSets).ToImmutableArray(),
 			DataSets = dataSetsConverter.ConvertDataSets(data.DataSets).ToImmutableArray(),
 			ApplicationSettings = data.ApplicationSettings,
 		};
 	}
 
-	private readonly FileSystemScreenshotsDataAccess _screenshotsDataAccess;
+	private readonly FileSystemImageDataAccess _imageDataAccess;
 }

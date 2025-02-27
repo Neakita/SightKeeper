@@ -17,10 +17,10 @@ namespace SightKeeper.Avalonia.Annotation.Screenshots;
 
 public sealed class ScreenshotImageLoader
 {
-	public ScreenshotImageLoader(WriteableBitmapPool bitmapPool, ScreenshotsDataAccess screenshotsDataAccess)
+	public ScreenshotImageLoader(WriteableBitmapPool bitmapPool, ImageDataAccess imageDataAccess)
 	{
 		_bitmapPool = bitmapPool;
-		_screenshotsDataAccess = screenshotsDataAccess;
+		_imageDataAccess = imageDataAccess;
 	}
 
 	public async Task<WriteableBitmap?> LoadImageAsync(
@@ -45,7 +45,7 @@ public sealed class ScreenshotImageLoader
 	}
 
 	private readonly WriteableBitmapPool _bitmapPool;
-	private readonly ScreenshotsDataAccess _screenshotsDataAccess;
+	private readonly ImageDataAccess _imageDataAccess;
 
 	private async Task<bool> ReadImageDataToBitmapAsync(
 		Image image,
@@ -73,7 +73,7 @@ public sealed class ScreenshotImageLoader
 		CancellationToken cancellationToken)
 	{
 		Memory<byte> targetAsBytes = target.Cast<Rgba32, byte>();
-		await using var stream = _screenshotsDataAccess.LoadImage(image);
+		await using var stream = _imageDataAccess.LoadImage(image);
 		int totalBytesRead = 0;
 		int lastBytesRead;
 		do

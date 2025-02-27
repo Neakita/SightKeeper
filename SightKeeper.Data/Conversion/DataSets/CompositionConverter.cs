@@ -10,12 +10,12 @@ internal static class CompositionConverter
 		null => null,
 		FixedTransparentImageComposition fixedTransparent => new PackableFixedTransparentComposition
 		{
-			MaximumScreenshotsDelay = fixedTransparent.MaximumDelay,
+			MaximumDelay = fixedTransparent.MaximumDelay,
 			Opacities = fixedTransparent.Opacities
 		},
 		FloatingTransparentImageComposition floatingTransparent => new PackableFloatingTransparentComposition
 		{
-			MaximumScreenshotsDelay = floatingTransparent.MaximumDelay,
+			MaximumDelay = floatingTransparent.MaximumDelay,
 			SeriesDuration = floatingTransparent.SeriesDuration,
 			PrimaryOpacity = floatingTransparent.PrimaryOpacity,
 			MinimumOpacity = floatingTransparent.MinimumOpacity

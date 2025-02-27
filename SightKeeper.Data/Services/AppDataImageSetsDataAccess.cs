@@ -5,17 +5,17 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class AppDataScreenshotsLibrariesDataAccess :
+public sealed class AppDataImageSetsDataAccess :
 	ReadDataAccess<ImageSet>,
 	ObservableDataAccess<ImageSet>,
 	WriteDataAccess<ImageSet>,
 	IDisposable
 {
-	public IReadOnlyCollection<ImageSet> Items => _appDataAccess.Data.ScreenshotsLibraries;
+	public IReadOnlyCollection<ImageSet> Items => _appDataAccess.Data.ImageSets;
 	public IObservable<ImageSet> Added => _added.AsObservable();
 	public IObservable<ImageSet> Removed => _removed.AsObservable();
 
-	public AppDataScreenshotsLibrariesDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public AppDataImageSetsDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
 		_appDataLock = appDataLock;
@@ -24,7 +24,7 @@ public sealed class AppDataScreenshotsLibrariesDataAccess :
 	public void Add(ImageSet library)
 	{
 		lock (_appDataLock)
-			_appDataAccess.Data.AddScreenshotsLibrary(library);
+			_appDataAccess.Data.AddImageSet(library);
 		_appDataAccess.SetDataChanged();
 		_added.OnNext(library);
 	}
@@ -32,7 +32,7 @@ public sealed class AppDataScreenshotsLibrariesDataAccess :
 	public void Remove(ImageSet library)
 	{
 		lock (_appDataLock)
-			_appDataAccess.Data.RemoveScreenshotsLibrary(library);
+			_appDataAccess.Data.RemoveImageSet(library);
 		_appDataAccess.SetDataChanged();
 		_removed.OnNext(library);
 	}

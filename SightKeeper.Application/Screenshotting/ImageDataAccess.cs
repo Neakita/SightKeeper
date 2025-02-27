@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Screenshotting;
 
-public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, IDisposable
+public abstract class ImageDataAccess : ObservableScreenshotsDataAccess, IDisposable
 {
 	public IObservable<(ImageSet library, Image screenshot)> Added => _added.AsObservable();
 	public IObservable<(ImageSet library, Image screenshot)> Removed => _removed.AsObservable();
@@ -17,17 +17,17 @@ public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, I
 	public Image CreateScreenshot(ImageSet library, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
-		var screenshot = CreateScreenshot(library, creationTimestamp, resolution);
-		SaveScreenshotData(screenshot, imageData);
+		var screenshot = CreateImage(library, creationTimestamp, resolution);
+		SaveImageData(screenshot, imageData);
 		_added.OnNext((library, screenshot));
 		return screenshot;
 	}
 
-	public virtual void DeleteScreenshot(ImageSet library, int index)
+	public virtual void DeleteImage(ImageSet set, int index)
 	{
-		var screenshot = library.Images[index];
-		library.RemoveImageAt(index);
-		DeleteScreenshotData(screenshot);
+		var screenshot = set.Images[index];
+		set.RemoveImageAt(index);
+		DeleteImageData(screenshot);
 	}
 
 	public void Dispose()
@@ -36,13 +36,13 @@ public abstract class ScreenshotsDataAccess : ObservableScreenshotsDataAccess, I
 		_removed.Dispose();
 	}
 
-	protected virtual Image CreateScreenshot(ImageSet library, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
+	protected virtual Image CreateImage(ImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
 	{
-		return library.CreateImage(creationTimestamp, resolution);
+		return set.CreateImage(creationTimestamp, resolution);
 	}
 
-	protected abstract void SaveScreenshotData(Image image, ReadOnlySpan2D<Rgba32> data);
-	protected abstract void DeleteScreenshotData(Image image);
+	protected abstract void SaveImageData(Image image, ReadOnlySpan2D<Rgba32> data);
+	protected abstract void DeleteImageData(Image image);
 
 	private readonly Subject<(ImageSet library, Image screenshot)> _added = new();
 	private readonly Subject<(ImageSet library, Image screenshot)> _removed = new();

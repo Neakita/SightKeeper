@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application;
 
-public abstract class ScreenshotsLibrariesDeleter
+public abstract class ImageSetDeleter
 {
 	public virtual bool CanDelete(ImageSet library)
 	{
@@ -22,7 +22,7 @@ public abstract class ScreenshotsLibrariesDeleter
 		_librariesDataAccess.Remove(library);
 	}
 
-	protected ScreenshotsLibrariesDeleter(ReadDataAccess<DataSet> dataSetsDataAccess, WriteDataAccess<ImageSet> librariesDataAccess)
+	protected ImageSetDeleter(ReadDataAccess<DataSet> dataSetsDataAccess, WriteDataAccess<ImageSet> librariesDataAccess)
 	{
 		_dataSetsDataAccess = dataSetsDataAccess;
 		_librariesDataAccess = librariesDataAccess;

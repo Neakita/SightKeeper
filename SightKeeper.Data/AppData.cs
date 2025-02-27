@@ -7,7 +7,7 @@ namespace SightKeeper.Data;
 
 public sealed class AppData : ApplicationSettingsProvider
 {
-	public IReadOnlySet<ImageSet> ScreenshotsLibraries => _screenshotsLibraries;
+	public IReadOnlySet<ImageSet> ImageSets => _imageSets;
 	public IReadOnlySet<DataSet> DataSets => _dataSets;
 	public ApplicationSettings ApplicationSettings { get; }
 
@@ -18,31 +18,31 @@ public sealed class AppData : ApplicationSettingsProvider
 	}
 
 	internal AppData(
-		HashSet<ImageSet> screenshotsLibraries,
+		HashSet<ImageSet> imageSets,
 		HashSet<DataSet> dataSets,
 		ApplicationSettings applicationSettings)
 	{
-		_screenshotsLibraries = screenshotsLibraries;
+		_imageSets = imageSets;
 		_dataSets = dataSets;
 		ApplicationSettings = applicationSettings;
 	}
 
 	internal AppData()
 	{
-		_screenshotsLibraries = new HashSet<ImageSet>();
+		_imageSets = new HashSet<ImageSet>();
 		_dataSets = new HashSet<DataSet>();
 		ApplicationSettings = new ApplicationSettings();
 	}
 
-	internal void AddScreenshotsLibrary(ImageSet library)
+	internal void AddImageSet(ImageSet library)
 	{
-		bool isAdded = _screenshotsLibraries.Add(library);
+		bool isAdded = _imageSets.Add(library);
 		Guard.IsTrue(isAdded);
 	}
 
-	internal void RemoveScreenshotsLibrary(ImageSet library)
+	internal void RemoveImageSet(ImageSet library)
 	{
-		bool isRemoved = _screenshotsLibraries.Remove(library);
+		bool isRemoved = _imageSets.Remove(library);
 		Guard.IsTrue(isRemoved);
 	}
 
@@ -58,6 +58,6 @@ public sealed class AppData : ApplicationSettingsProvider
 		Guard.IsTrue(isRemoved);
 	}
 
-	private readonly HashSet<ImageSet> _screenshotsLibraries;
+	private readonly HashSet<ImageSet> _imageSets;
 	private readonly HashSet<DataSet> _dataSets;
 }
