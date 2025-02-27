@@ -48,10 +48,10 @@ public class Poser2DTagsLibraryTests
 	public void ShouldNotDeleteTagWithItems()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
 		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.DeleteTag(tag));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);

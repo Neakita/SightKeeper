@@ -47,10 +47,10 @@ public sealed class ClassifierTagsLibraryTests
 	public void ShouldNotDeleteTagWithAssociatedAsset()
 	{
 		ImageSet imageSet = new();
-		var screenshot = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.DeleteTag(tag));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);
 		dataSet.AssetsLibrary.Assets.Should().ContainValue(asset);

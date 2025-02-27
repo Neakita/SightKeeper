@@ -1,6 +1,6 @@
 using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
-namespace SightKeeper.Domain.Tests.Screenshots;
+namespace SightKeeper.Domain.Tests.Images;
 
 public sealed class FixedTransparentImageCompositionTests
 {
