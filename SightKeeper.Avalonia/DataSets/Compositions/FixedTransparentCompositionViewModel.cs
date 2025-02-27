@@ -9,7 +9,7 @@ internal sealed partial class FixedTransparentCompositionViewModel : Composition
 {
 	public override string DisplayName => "Fixed transparent";
 
-	public byte ScreenshotsCount
+	public byte ImagesCount
 	{
 		get => (byte)Opacities.Count;
 		set
@@ -35,7 +35,7 @@ internal sealed partial class FixedTransparentCompositionViewModel : Composition
 	}
 
 	public override FixedTransparentImageComposition ToComposition() =>
-		new(MaximumScreenshotsDelay, 
+		new(MaximumDelay, 
 			Opacities.Select(opacity => (float)opacity).ToImmutableArray());
 
 	[ObservableProperty] private ImmutableList<decimal> _opacities;

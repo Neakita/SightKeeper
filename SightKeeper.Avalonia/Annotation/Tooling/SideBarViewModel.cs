@@ -5,44 +5,43 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.ScreenCapturing.Saving;
-using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 using SightKeeper.Avalonia.DataSets;
-using SightKeeper.Avalonia.ScreenshotsLibraries;
+using SightKeeper.Avalonia.ImageSets;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarComponent
 {
 	private readonly ToolingViewModelFactory _toolingViewModelFactory;
-	public IReadOnlyCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; }
+	public IReadOnlyCollection<ImageSetViewModel> ImageSets { get; }
 	public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 	[ObservableProperty] public partial DataSetViewModel? SelectedDataSet { get; set; }
-	[ObservableProperty] public partial ScreenshotsLibraryViewModel? SelectedScreenshotsLibrary { get; set; }
-	public IObservable<ushort> PendingScreenshotsCount { get; }
-	public ScreenshottingSettingsViewModel ScreenshottingSettings { get; }
-	public IObservable<ScreenshotsLibraryViewModel?> SelectedScreenshotsLibraryChanged => _selectedScreenshotsLibraryChanged.AsObservable();
+	[ObservableProperty] public partial ImageSetViewModel? SelectedImageSet { get; set; }
+	public IObservable<ushort> PendingImagesCount { get; }
+	public ScreenCapturingSettingsViewModel ScreenCapturingSettings { get; }
+	public IObservable<ImageSetViewModel?> SelectedImageSetChanged => _selectedImageSetChanged.AsObservable();
 	public IObservable<DataSetViewModel?> SelectedDataSetChanged => _selectedDataSetChanged.AsObservable();
 	[ObservableProperty] public partial object? AdditionalTooling { get; private set; }
 	public IObservable<object?> AdditionalToolingChanged => _additionalToolingChanged.AsObservable();
 
 	public SideBarViewModel(
 		DataSetViewModelsObservableRepository dataSets,
-		ScreenshottingSettingsViewModel screenshottingSettings,
-		PendingImagesCountReporter? pendingScreenshotsReporter,
-		ScreenshotsLibraryViewModelsObservableRepository screenshotsLibraries,
+		ScreenCapturingSettingsViewModel screenCapturingSettings,
+		PendingImagesCountReporter? pendingImagesReporter,
+		ImageSetViewModelsObservableRepository imageSets,
 		ToolingViewModelFactory toolingViewModelFactory)
 	{
 		_toolingViewModelFactory = toolingViewModelFactory;
 		DataSets = dataSets.Items;
-		ScreenshottingSettings = screenshottingSettings;
-		PendingScreenshotsCount = pendingScreenshotsReporter?.PendingImagesCount ?? Observable.Empty<ushort>();
-		ScreenshotsLibraries = screenshotsLibraries.Items;
+		ScreenCapturingSettings = screenCapturingSettings;
+		PendingImagesCount = pendingImagesReporter?.PendingImagesCount ?? Observable.Empty<ushort>();
+		ImageSets = imageSets.Items;
 	}
 
-	partial void OnSelectedScreenshotsLibraryChanged(ScreenshotsLibraryViewModel? value)
+	partial void OnSelectedImageSetChanged(ImageSetViewModel? value)
 	{
-		_selectedScreenshotsLibraryChanged.OnNext(value);
-		ScreenshottingSettings.Library = value?.Value;
+		_selectedImageSetChanged.OnNext(value);
+		ScreenCapturingSettings.Set = value?.Value;
 	}
 
 	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
@@ -56,7 +55,7 @@ public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarCompo
 		_additionalToolingChanged.OnNext(value);
 	}
 
-	private readonly Subject<ScreenshotsLibraryViewModel?> _selectedScreenshotsLibraryChanged = new();
+	private readonly Subject<ImageSetViewModel?> _selectedImageSetChanged = new();
 	private readonly Subject<DataSetViewModel?> _selectedDataSetChanged = new();
 	private readonly Subject<object?> _additionalToolingChanged = new();
 }

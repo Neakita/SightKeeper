@@ -7,7 +7,7 @@ using FluentValidation;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Avalonia.Dialogs;
 
-namespace SightKeeper.Avalonia.ScreenshotsLibraries;
+namespace SightKeeper.Avalonia.ImageSets;
 
 internal sealed partial class ImageSetDialogViewModel : DialogViewModel<bool>, ImageSetData, INotifyDataErrorInfo, IDisposable
 {

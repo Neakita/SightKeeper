@@ -3,9 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
-             xmlns:screenshots="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:tooling="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
+             xmlns:images="clr-namespace:SightKeeper.Avalonia.Annotation.Images"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
@@ -16,9 +16,9 @@
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <screenshots:Screenshots Grid.Column="0"
-                                     DataContext="{Binding Screenshots}"
-                                     IsVisible="{Binding !!Screenshots.Count}"/>
+            <images:Images Grid.Column="0"
+                                     DataContext="{Binding Images}"
+                                     IsVisible="{Binding !!Images.Count}"/>
             <drawing:Drawer Grid.Column="1" DataContext="{Binding Drawer}"/>
             <tooling:SideBar Grid.Column="2" DataContext="{Binding SideBar}"/>
         </Grid>

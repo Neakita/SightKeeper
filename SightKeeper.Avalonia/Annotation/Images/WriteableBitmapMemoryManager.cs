@@ -4,7 +4,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Avalonia.Annotation.Screenshots;
+namespace SightKeeper.Avalonia.Annotation.Images;
 
 internal sealed class WriteableBitmapMemoryManager<T> : MemoryManager<T> where T : unmanaged
 {

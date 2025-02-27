@@ -6,7 +6,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public interface DrawerDataContext
 {
-	Image? Screenshot { get; }
+	Image? Image { get; }
 	IReadOnlyCollection<DrawerItemDataContext> Items { get; }
 	BoundedItemDataContext? SelectedItem { get; set; }
 	BoundingDrawerDataContext BoundingDrawer { get; }

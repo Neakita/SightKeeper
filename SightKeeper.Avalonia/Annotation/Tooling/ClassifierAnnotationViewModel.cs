@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Annotation;
-using SightKeeper.Avalonia.Annotation.Screenshots;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
@@ -27,11 +27,11 @@ public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelect
 		set
 		{
 			Guard.IsNotNull(AssetsLibrary);
-			Guard.IsNotNull(Screenshot);
+			Guard.IsNotNull(Image);
 			if (value == null)
-				_annotator.DeleteAsset(AssetsLibrary, Screenshot);
+				_annotator.DeleteAsset(AssetsLibrary, Image);
 			else
-				_annotator.SetTag(AssetsLibrary, Screenshot, value);
+				_annotator.SetTag(AssetsLibrary, Image, value);
 		}
 	}
 
@@ -42,15 +42,15 @@ public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelect
 	}
 
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag), nameof(IsEnabled))]
-	public partial Image? Screenshot { get; set; }
+	public partial Image? Image { get; set; }
 
-	public bool IsEnabled => Screenshot != null;
+	public bool IsEnabled => Image != null;
 
-	public ClassifierAnnotationViewModel(ClassifierAnnotator annotator, ScreenshotsViewModel screenshotsViewModel)
+	public ClassifierAnnotationViewModel(ClassifierAnnotator annotator, ImagesViewModel imagesViewModel)
 	{
 		_annotator = annotator;
-		_disposable = screenshotsViewModel.SelectedScreenshotChanged.Subscribe(_ => Screenshot = screenshotsViewModel.SelectedImage);
-		Screenshot = screenshotsViewModel.SelectedImage;
+		_disposable = imagesViewModel.SelectedImageChanged.Subscribe(_ => Image = imagesViewModel.SelectedImage);
+		Image = imagesViewModel.SelectedImage;
 	}
 
 	public void Dispose()
@@ -63,5 +63,5 @@ public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelect
 	private readonly IDisposable _disposable;
 
 	private ClassifierAsset? Asset =>
-		Screenshot == null ? null : AssetsLibrary?.Assets.GetValueOrDefault(Screenshot);
+		Image == null ? null : AssetsLibrary?.Assets.GetValueOrDefault(Image);
 }

@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace SightKeeper.Avalonia.Annotation.Screenshots;
+namespace SightKeeper.Avalonia.Annotation.Images;
 
 internal sealed class SizeToImageTargetSizeConverter : IValueConverter
 {

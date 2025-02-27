@@ -63,7 +63,7 @@ public sealed class ClassifierAnnotationViewModelTests
 		sideBar.DataSet = dataSet;
 		ImageSet imageSet = new();
 		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		sideBar.Screenshot = screenshot;
+		sideBar.Image = screenshot;
 		Assert.ThrowsAny<Exception>(() => sideBar.SelectedTag = tag);
 	}
 
@@ -76,7 +76,7 @@ public sealed class ClassifierAnnotationViewModelTests
 		sideBar.DataSet = dataSet;
 		ImageSet imageSet = new();
 		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		sideBar.Screenshot = screenshot;
+		sideBar.Image = screenshot;
 		sideBar.SelectedTag = tag;
 		dataSet.AssetsLibrary.Assets.Should().ContainKey(screenshot).WhoseValue.Tag.Should().Be(tag);
 	}
@@ -92,7 +92,7 @@ public sealed class ClassifierAnnotationViewModelTests
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		asset.Tag = tag;
 		sideBar.DataSet = dataSet;
-		sideBar.Screenshot = screenshot;
+		sideBar.Image = screenshot;
 		sideBar.SelectedTag.Should().Be(tag);
 	}
 
@@ -108,7 +108,7 @@ public sealed class ClassifierAnnotationViewModelTests
 		asset.Tag = tag;
 		subjectSideBar.DataSet = dataSet;
 		using var monitoredSideBar = subjectSideBar.Monitor();
-		subjectSideBar.Screenshot = screenshot;
+		subjectSideBar.Image = screenshot;
 		monitoredSideBar.Should().RaisePropertyChangeFor(sideBar => sideBar.SelectedTag);
 	}
 

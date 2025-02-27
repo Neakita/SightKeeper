@@ -8,7 +8,7 @@
         xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.Dialogs"
         xmlns:dataSets="clr-namespace:SightKeeper.Avalonia.DataSets"
         xmlns:annotation="clr-namespace:SightKeeper.Avalonia.Annotation"
-        xmlns:screenshotsLibraries="clr-namespace:SightKeeper.Avalonia.ScreenshotsLibraries"
+        xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
         mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="320"
         x:Class="SightKeeper.Avalonia.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -44,8 +44,8 @@
     </assists:WindowAssist.TopContent>
     <ContentControl Content="{Binding SelectedTab.Content}">
         <ContentControl.DataTemplates>
-            <DataTemplate x:DataType="screenshotsLibraries:ScreenshotsLibrariesViewModel">
-                <screenshotsLibraries:ScreenshotsLibrariesTab/>
+            <DataTemplate x:DataType="imageSets:ImageSetsViewModel">
+                <imageSets:ImageSetsTab/>
             </DataTemplate>
             <DataTemplate x:DataType="dataSets:DataSetsViewModel">
                 <dataSets:DataSetsTab/>

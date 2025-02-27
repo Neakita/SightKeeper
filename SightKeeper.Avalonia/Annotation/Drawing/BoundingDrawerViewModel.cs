@@ -16,7 +16,7 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 	public partial Tag? Tag { get; set; }
 
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(CreateItemCommand))]
-	public partial Image? Screenshot { get; set; }
+	public partial Image? Image { get; set; }
 
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(CreateItemCommand))]
 	public partial AssetsMaker<ItemsCreator>? AssetsLibrary { get; set; }
@@ -27,15 +27,15 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 	}
 
 	private readonly BoundingAnnotator _annotator;
-	private bool CanCreateItem => Tag != null && Screenshot != null && AssetsLibrary != null;
+	private bool CanCreateItem => Tag != null && Image != null && AssetsLibrary != null;
 
 	[RelayCommand(CanExecute = nameof(CanCreateItem))]
 	private void CreateItem(Bounding bounding)
 	{
 		Guard.IsNotNull(Tag);
-		Guard.IsNotNull(Screenshot);
+		Guard.IsNotNull(Image);
 		Guard.IsNotNull(AssetsLibrary);
-		_annotator.CreateItem(AssetsLibrary, Screenshot, Tag, bounding);
+		_annotator.CreateItem(AssetsLibrary, Image, Tag, bounding);
 	}
 
 	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;

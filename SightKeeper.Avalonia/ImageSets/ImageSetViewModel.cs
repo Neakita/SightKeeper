@@ -1,15 +1,15 @@
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Avalonia.ScreenshotsLibraries;
+namespace SightKeeper.Avalonia.ImageSets;
 
-public sealed class ScreenshotsLibraryViewModel : ViewModel
+public sealed class ImageSetViewModel : ViewModel
 {
 	public ImageSet Value { get; }
 	public string Name => Value.Name;
-	public Image? PreviewScreenshot => Value.Images.RandomOrDefault();
+	public Image? PreviewImage => Value.Images.RandomOrDefault();
 
-	public ScreenshotsLibraryViewModel(ImageSet value)
+	public ImageSetViewModel(ImageSet value)
 	{
 		Value = value;
 	}

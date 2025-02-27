@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 using SightKeeper.Avalonia.DataSets;
-using SightKeeper.Avalonia.ScreenshotsLibraries;
+using SightKeeper.Avalonia.ImageSets;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public interface SideBarDataContext
 {
-	IReadOnlyCollection<ScreenshotsLibraryViewModel> ScreenshotsLibraries { get; }
-	ScreenshotsLibraryViewModel? SelectedScreenshotsLibrary { get; set; }
-	ScreenshottingSettingsViewModel ScreenshottingSettings { get; }
-	IObservable<ushort> PendingScreenshotsCount { get; }
+	IReadOnlyCollection<ImageSetViewModel> ImageSets { get; }
+	ImageSetViewModel? SelectedImageSet { get; set; }
+	ScreenCapturingSettingsViewModel ScreenCapturingSettings { get; }
+	IObservable<ushort> PendingImagesCount { get; }
 	ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
 	DataSetViewModel? SelectedDataSet { get; set; }
 	object? AdditionalTooling { get; }

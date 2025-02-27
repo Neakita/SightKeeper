@@ -4,20 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
-             xmlns:screenshotsLibraries="clr-namespace:SightKeeper.Avalonia.ScreenshotsLibraries"
+             xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.ScreenshotsLibraries.ScreenshotsLibrariesTab"
-             x:DataType="screenshotsLibraries:ScreenshotsLibrariesDataContext">
+             x:Class="SightKeeper.Avalonia.ImageSets.ImageSetsTab"
+             x:DataType="imageSets:ImageSetsDataContext">
     <Design.DataContext>
-        <screenshotsLibraries:DesignScreenshotsLibrariesDataContext/>
+        <imageSets:DesignImageSetsDataContext/>
     </Design.DataContext>
     <ScrollViewer Classes="regular-padding" Name="Root">
         <StackPanel Classes="medium-spacing">
             <Border Classes="outer regular-padding">
                 <Button Content="{icons:MaterialIconExt Plus}" Classes="square low-accent"
-                        Command="{Binding CreateScreenshotsLibraryCommand}"/>
+                        Command="{Binding CreateImageSetCommand}"/>
             </Border>
-            <ItemsControl ItemsSource="{Binding ScreenshotsLibraries}"
+            <ItemsControl ItemsSource="{Binding ImageSets}"
                           Margin="-8">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -34,13 +34,13 @@
                                     <MenuItem
                                         Header="Edit"
                                         Icon="{icons:MaterialIconExt Pencil}"
-                                        Command="{Binding #Root.((screenshotsLibraries:ScreenshotsLibrariesDataContext)DataContext).EditScreenshotsLibraryCommand}"
+                                        Command="{Binding #Root.((imageSets:ImageSetsDataContext)DataContext).EditImageSetCommand}"
                                         CommandParameter="{Binding Value}"/>
                                     <MenuItem
                                         Header="Delete"
                                         Icon="{icons:MaterialIconExt TrashCanOutline}"
                                         Classes="red-accent"
-                                        Command="{Binding #Root.((screenshotsLibraries:ScreenshotsLibrariesDataContext)DataContext).DeleteScreenshotsLibraryCommand}"
+                                        Command="{Binding #Root.((imageSets:ImageSetsDataContext)DataContext).DeleteImageSetCommand}"
                                         CommandParameter="{Binding Value}"/>
                                 </ContextMenu>
                             </Button.ContextMenu>
@@ -58,9 +58,9 @@
                                                 ClipToBounds="True">
                                             <Image Stretch="UniformToFill">
                                                 <Interaction.Behaviors>
-                                                    <behaviors:RecyclableScreenshotImageBindingBehavior
+                                                    <behaviors:RecyclableImageBindingBehavior
                                                         TargetSize="156"
-                                                        Screenshot="{Binding PreviewScreenshot}"
+                                                        Image="{Binding PreviewImage}"
                                                         Composition="{StaticResource Composition}"/>
                                                 </Interaction.Behaviors>
                                             </Image>

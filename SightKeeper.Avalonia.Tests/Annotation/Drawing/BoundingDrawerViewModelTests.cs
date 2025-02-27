@@ -80,7 +80,7 @@ public sealed class BoundingDrawerViewModelTests
 		var (assetsLibrary, tag) = CreateDataSetWithTag();
 		var screenshot = CreateScreenshot();
 		var drawerViewModel = CreateBoundingDrawerViewModel(boundingAnnotator, assetsLibrary, tag, null);
-		drawerViewModel.Screenshot = screenshot;
+		drawerViewModel.Image = screenshot;
 		drawerViewModel.CreateItemCommand.CanExecute(default).Should().BeTrue();
 	}
 
@@ -92,7 +92,7 @@ public sealed class BoundingDrawerViewModelTests
 		var screenshot = CreateScreenshot();
 		var drawerViewModel = CreateBoundingDrawerViewModel(boundingAnnotator, assetsLibrary, tag, null);
 		using var commandMonitor = drawerViewModel.CreateItemCommand.Monitor();
-		drawerViewModel.Screenshot = screenshot;
+		drawerViewModel.Image = screenshot;
 		commandMonitor.Should().Raise(nameof(ICommand.CanExecuteChanged));
 	}
 
@@ -125,7 +125,7 @@ public sealed class BoundingDrawerViewModelTests
 		{
 			AssetsLibrary = assetsLibrary,
 			Tag = tag,
-			Screenshot = screenshot
+			Image = screenshot
 		};
 		return drawerViewModel;
 	}

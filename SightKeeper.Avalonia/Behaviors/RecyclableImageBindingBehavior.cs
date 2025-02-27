@@ -9,21 +9,21 @@ using Image = SightKeeper.Domain.Images.Image;
 
 namespace SightKeeper.Avalonia.Behaviors;
 
-internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<global::Avalonia.Controls.Image>
+internal sealed class RecyclableImageBindingBehavior : Behavior<global::Avalonia.Controls.Image>
 {
-	public static readonly StyledProperty<Image?> ScreenshotProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, Image?>(nameof(Screenshot));
+	public static readonly StyledProperty<Image?> ImageProperty =
+		AvaloniaProperty.Register<RecyclableImageBindingBehavior, Image?>(nameof(Image));
 
 	public static readonly StyledProperty<int?> TargetSizeProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, int?>(nameof(TargetSize));
+		AvaloniaProperty.Register<RecyclableImageBindingBehavior, int?>(nameof(TargetSize));
 
 	public static readonly StyledProperty<Composition?> CompositionProperty =
-		AvaloniaProperty.Register<RecyclableScreenshotImageBindingBehavior, Composition?>(nameof(Composition));
+		AvaloniaProperty.Register<RecyclableImageBindingBehavior, Composition?>(nameof(Composition));
 
-	public Image? Screenshot
+	public Image? Image
 	{
-		get => GetValue(ScreenshotProperty);
-		set => SetValue(ScreenshotProperty, value);
+		get => GetValue(ImageProperty);
+		set => SetValue(ImageProperty, value);
 	}
 
 	public int? TargetSize
@@ -64,7 +64,7 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<global
 		if (_bitmap == null)
 			return;
 		Guard.IsNotNull(Composition);
-		Composition.ScreenshotImageLoader.ReturnBitmapToPool(_bitmap);
+		Composition.ImageLoader.ReturnBitmapToPool(_bitmap);
 	}
 
 	private WriteableBitmap? _bitmap;
@@ -92,21 +92,21 @@ internal sealed class RecyclableScreenshotImageBindingBehavior : Behavior<global
 		if (_bitmap == null)
 			return;
 		Guard.IsNotNull(Composition);
-		Composition.ScreenshotImageLoader.ReturnBitmapToPool(_bitmap);
+		Composition.ImageLoader.ReturnBitmapToPool(_bitmap);
 		_bitmap = null;
 	}
 
 	private async Task LoadImageAsync(CancellationToken cancellationToken)
 	{
 		if (AssociatedObject?.IsLoaded != true ||
-		    Screenshot == null ||
+		    Image == null ||
 		    Composition == null)
 		{
 			if (AssociatedObject != null)
 				AssociatedObject.Source = null;
 			return;
 		}
-		_bitmap = await Composition.ScreenshotImageLoader.LoadImageAsync(Screenshot, TargetSize, cancellationToken);
+		_bitmap = await Composition.ImageLoader.LoadImageAsync(Image, TargetSize, cancellationToken);
 		if (AssociatedObject == null)
 		{
 			if (_bitmap != null)

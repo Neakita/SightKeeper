@@ -10,7 +10,7 @@
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              xmlns:messageBox="clr-namespace:SightKeeper.Avalonia.Dialogs.MessageBox"
              xmlns:dataSets="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
-             xmlns:screenshotsLibraries="clr-namespace:SightKeeper.Avalonia.ScreenshotsLibraries"
+             xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
              x:DataType="local:DialogHost"
              Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static converters:StaticConverters.ContentToOpacityConverter}}">
 	<Interaction.Behaviors>
@@ -87,8 +87,8 @@
 				</PageSlide>
 			</TransitioningContentControl.PageTransition>
             <TransitioningContentControl.DataTemplates>
-                <DataTemplate DataType="screenshotsLibraries:ImageSetDialogViewModel">
-                    <screenshotsLibraries:ScreenshotsLibraryDialog/>
+                <DataTemplate DataType="imageSets:ImageSetDialogViewModel">
+                    <imageSets:ImageSetDialog/>
                 </DataTemplate>
                 <DataTemplate DataType="messageBox:MessageBoxDialogViewModel">
                     <messageBox:MessageBox/>

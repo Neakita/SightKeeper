@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Avalonia.Annotation.Screenshots;
+namespace SightKeeper.Avalonia.Annotation.Images;
 
-public sealed class ScreenshotViewModel : ViewModel
+public sealed class ImageViewModel : ViewModel
 {
 	public Image Value { get; }
 	public IReadOnlyCollection<Asset> Assets => Value.Assets;
 
-	public ScreenshotViewModel(Image value)
+	public ImageViewModel(Image value)
 	{
 		Value = value;
 	}

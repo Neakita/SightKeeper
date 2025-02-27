@@ -2,7 +2,7 @@ using System.Reactive.Subjects;
 using NSubstitute;
 using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
-using SightKeeper.Avalonia.Annotation.Screenshots;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 
 namespace SightKeeper.Avalonia.Tests.Annotation;
@@ -43,6 +43,6 @@ public sealed class AnnotationTabViewModelTests
 
 	private static void InitializeAnnotationTab(AnnotationDrawerComponent drawer, AnnotationSideBarComponent sideBar)
 	{
-		_ = new AnnotationTabViewModel(Substitute.For<AnnotationScreenshotsComponent>(), drawer, sideBar);
+		_ = new AnnotationTabViewModel(Substitute.For<AnnotationImagesComponent>(), drawer, sideBar);
 	}
 }

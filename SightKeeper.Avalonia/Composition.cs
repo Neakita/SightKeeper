@@ -17,16 +17,16 @@ using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
-using SightKeeper.Avalonia.Annotation.Screenshots;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Avalonia.ImageSets;
 using SightKeeper.Data;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
-using ScreenshotsLibrariesViewModel = SightKeeper.Avalonia.ScreenshotsLibraries.ScreenshotsLibrariesViewModel;
 using TagAttribute = SightKeeper.Application.TagAttribute;
 #if OS_LINUX
 using SightKeeper.Application.Linux.X11;
@@ -74,8 +74,8 @@ public sealed partial class Composition
 		.Bind().As(Lifetime.Singleton).To<DialogManager>()
 		.Bind<TabItemViewModel>().To(context =>
 		{
-			context.Inject(out ScreenshotsLibrariesViewModel viewModel);
-			return new TabItemViewModel(MaterialIconKind.FolderMultipleImage, "Screenshots", viewModel);
+			context.Inject(out ImageSetsViewModel viewModel);
+			return new TabItemViewModel(MaterialIconKind.FolderMultipleImage, "Images", viewModel);
 		})
 		.Bind<TabItemViewModel>(2).To(context =>
 		{
@@ -94,7 +94,7 @@ public sealed partial class Composition
 			return new MainWindow { DataContext = viewModel };
 		})
 		.Bind().As(Lifetime.Singleton).To<WriteableBitmapPool>()
-		.Root<ScreenshotImageLoader>(nameof(ScreenshotImageLoader))
+		.Root<ImageLoader>(nameof(ImageLoader))
 		.Bind().As(Lifetime.Singleton).To<PeriodicAppDataSaver>()
 		.Root<PeriodicAppDataSaver>(nameof(PeriodicAppDataSaver))
 		.Root<AppDataFormatter>(nameof(AppDataFormatter))
@@ -104,7 +104,7 @@ public sealed partial class Composition
 		.Bind<IValidator<ImageSetData>>().To<ImageSetDataValidator>()
 		.Bind<IValidator<ImageSetData>>("new").To<NewImageSetDataValidator>()
 		.Bind<ImageSetDeleter>().To<LockingImageSetDeleter>()
-		.RootBind<ScreenshotsViewModel>(nameof(ScreenshotsViewModel)).Bind<AnnotationScreenshotsComponent>().Bind<ScreenshotSelection>().As(Lifetime.Singleton).To<ScreenshotsViewModel>()
+		.RootBind<ImagesViewModel>(nameof(ImagesViewModel)).Bind<AnnotationImagesComponent>().Bind<ImageSelection>().As(Lifetime.Singleton).To<ImagesViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
 		.Root<ClassifierAnnotationViewModel>(nameof(ClassifierAnnotationViewModel))

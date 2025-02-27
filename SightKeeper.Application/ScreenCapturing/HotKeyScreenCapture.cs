@@ -17,20 +17,20 @@ public abstract class HotKeyScreenCapture
 		{
 			if (_isEnabled == value)
 				return;
-			Guard.IsNotNull(Library);
+			Guard.IsNotNull(Set);
 			_isEnabled = value;
 			if (value) Enable();
 			else Disable();
 		}
 	}
 
-	public ImageSet? Library
+	public ImageSet? Set
 	{
-		get => _library;
+		get => _set;
 		set
 		{
 			Guard.IsFalse(IsEnabled);
-			_library = value;
+			_set = value;
 		}
 	}
 
@@ -80,7 +80,7 @@ public abstract class HotKeyScreenCapture
 	private Vector2<ushort> _resolution = new(320, 320);
 	private bool _isEnabled;
 	private IDisposable? _binding;
-	private ImageSet? _library;
+	private ImageSet? _set;
 
 	protected virtual void Enable()
 	{

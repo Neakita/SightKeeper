@@ -8,47 +8,47 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Application.ScreenCapturing;
-using SightKeeper.Avalonia.Annotation.Screenshots;
+using SightKeeper.Avalonia.Annotation.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Commands;
 
-public sealed class DeleteSelectedScreenshotCommandFactory
+public sealed class DeleteSelectedImageCommandFactory
 {
-	public DeleteSelectedScreenshotCommandFactory(
-		ScreenshotSelection screenshots,
+	public DeleteSelectedImageCommandFactory(
+		ImageSelection images,
 		IReadOnlyCollection<ObservableAnnotator> annotators,
 		ImageDataAccess imageDataAccess)
 	{
-		_screenshots = screenshots;
+		_images = images;
 		_annotators = annotators;
 		_imageDataAccess = imageDataAccess;
 	}
 
 	public DisposableCommand CreateCommand()
 	{
-		RelayCommand command = new(DeleteScreenshot, () => CanDeleteScreenshot);
+		RelayCommand command = new(DeleteImage, () => CanDeleteImage);
 		CompositeDisposable disposable = new(2);
-		_screenshots.SelectedScreenshotChanged
+		_images.SelectedImageChanged
 			.Subscribe(_ => command.NotifyCanExecuteChanged())
 			.DisposeWith(disposable);
 		_annotators
 			.Select(annotator => annotator.AssetsChanged)
 			.Merge()
-			.Where(screenshot => screenshot == _screenshots.SelectedImage)
+			.Where(image => image == _images.SelectedImage)
 			.Subscribe(_ => command.NotifyCanExecuteChanged())
 			.DisposeWith(disposable);
 		return new DisposableCommand(command, disposable);
 	}
 
-	private readonly ScreenshotSelection _screenshots;
+	private readonly ImageSelection _images;
 	private readonly IReadOnlyCollection<ObservableAnnotator> _annotators;
 	private readonly ImageDataAccess _imageDataAccess;
 
-	private bool CanDeleteScreenshot => _screenshots.SelectedImage?.Assets.Count == 0;
+	private bool CanDeleteImage => _images.SelectedImage?.Assets.Count == 0;
 
-	private void DeleteScreenshot()
+	private void DeleteImage()
 	{
-		Guard.IsNotNull(_screenshots.Set);
-		_imageDataAccess.DeleteImage(_screenshots.Set, _screenshots.SelectedScreenshotIndex);
+		Guard.IsNotNull(_images.Set);
+		_imageDataAccess.DeleteImage(_images.Set, _images.SelectedImageIndex);
 	}
 }

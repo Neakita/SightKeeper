@@ -5,7 +5,7 @@ using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 
-namespace SightKeeper.Avalonia.Annotation.Screenshots;
+namespace SightKeeper.Avalonia.Annotation.Images;
 
 internal sealed class BooleanToBoxShadowConverter : IMultiValueConverter
 {

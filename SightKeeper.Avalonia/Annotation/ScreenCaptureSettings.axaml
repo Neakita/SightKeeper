@@ -2,15 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:screenshottingOptions="clr-namespace:SightKeeper.Avalonia.Annotation.ScreenshottingOptions"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Annotation.ScreenshottingSettings"
-             x:DataType="screenshottingOptions:ScreenshottingSettingsViewModel">
+             x:Class="SightKeeper.Avalonia.Annotation.ScreenCaptureSettings"
+             x:DataType="local:ScreenCapturingSettingsViewModel">
     <StackPanel Classes="regular-spacing">
         <ToggleSwitch IsChecked="{Binding IsEnabled}"
-                      Content="Make Screenshots"
-                      IsEnabled="{Binding Library, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                      Content="Capture"
+                      IsEnabled="{Binding Set, Converter={x:Static ObjectConverters.IsNotNull}}"/>
         <HeaderedContentControl Header="Width">
             <Grid ColumnDefinitions="80 8 140">
                 <Slider Grid.Column="0" Maximum="{Binding MaximumWidth}"

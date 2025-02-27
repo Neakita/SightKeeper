@@ -5,7 +5,7 @@ using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.ScreenCapturing;
-using SightKeeper.Avalonia.Annotation.Screenshots;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling.Commands;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Detector;
@@ -92,27 +92,27 @@ public sealed class DeleteSelectedScreenshotCommandTests
 		return imageSet;
 	}
 
-	private static ScreenshotSelection PrepareSelectedScreenshot(ImageSet imageSet, int screenshotIndex = 0)
+	private static ImageSelection PrepareSelectedScreenshot(ImageSet imageSet, int screenshotIndex = 0)
 	{
-		var selectionSubstitute = Substitute.For<ScreenshotSelection>();
+		var selectionSubstitute = Substitute.For<ImageSelection>();
 		selectionSubstitute.Set.Returns(imageSet);
-		selectionSubstitute.SelectedScreenshotIndex.Returns(screenshotIndex);
+		selectionSubstitute.SelectedImageIndex.Returns(screenshotIndex);
 		selectionSubstitute.SelectedImage.Returns(imageSet.Images[screenshotIndex]);
 		return selectionSubstitute;
 	}
 
-	private static ScreenshotSelection PrepareNoSelectedScreenshot(ImageSet imageSet)
+	private static ImageSelection PrepareNoSelectedScreenshot(ImageSet imageSet)
 	{
-		var selectionSubstitute = Substitute.For<ScreenshotSelection>();
+		var selectionSubstitute = Substitute.For<ImageSelection>();
 		selectionSubstitute.Set.Returns(imageSet);
-		selectionSubstitute.SelectedScreenshotIndex.Returns(-1);
+		selectionSubstitute.SelectedImageIndex.Returns(-1);
 		return selectionSubstitute;
 	}
 
-	private static ICommand CreateCommand(ScreenshotSelection selectionSubstitute, params IReadOnlyCollection<ObservableAnnotator> observableAnnotators)
+	private static ICommand CreateCommand(ImageSelection selectionSubstitute, params IReadOnlyCollection<ObservableAnnotator> observableAnnotators)
 	{
 		var screenshotsDataAccess = PrepareScreenshotsDataAccess();
-		DeleteSelectedScreenshotCommandFactory commandFactory = new(selectionSubstitute, observableAnnotators, screenshotsDataAccess);
+		DeleteSelectedImageCommandFactory commandFactory = new(selectionSubstitute, observableAnnotators, screenshotsDataAccess);
 		var command = commandFactory.CreateCommand();
 		return command;
 	}

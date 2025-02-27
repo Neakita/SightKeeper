@@ -2,14 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Screenshots"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:images="clr-namespace:SightKeeper.Avalonia.Annotation.Images"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.Annotation.Screenshots.Screenshots"
-             x:DataType="local:ScreenshotsDataContext">
-    <ListBox ItemsSource="{Binding Screenshots}"
-             SelectedIndex="{Binding SelectedScreenshotIndex}"
+             x:Class="SightKeeper.Avalonia.Annotation.Images.Images"
+             x:DataType="images:ImagesDataContext">
+    <ListBox ItemsSource="{Binding Images}"
+             SelectedIndex="{Binding SelectedImageIndex}"
              Name="ListBox"
              Classes="square-items"
              ScrollViewer.VerticalScrollBarVisibility="Visible">
@@ -38,7 +38,7 @@
                     <Border Grid.Row="0"
                             CornerRadius="12">
                         <Border.BoxShadow>
-                            <MultiBinding Converter="{x:Static local:BooleanToBoxShadowConverter.Instance}">
+                            <MultiBinding Converter="{x:Static images:BooleanToBoxShadowConverter.Instance}">
                                 <Binding Path="#Image.Source" Converter="{x:Static ObjectConverters.IsNotNull}"/>
                                 <DynamicResource ResourceKey="BoxShadow"/>
                             </MultiBinding>
@@ -57,12 +57,12 @@
                                        Stretch="UniformToFill">
                                     <Image.Resources>
                                         <ResourceDictionary>
-                                            <local:SizeToImageTargetSizeConverter x:Key="SizeToImageTargetSizeConverter" MinimumSize="20" SizeStep="20"/>
+                                            <images:SizeToImageTargetSizeConverter x:Key="SizeToImageTargetSizeConverter" MinimumSize="20" SizeStep="20"/>
                                         </ResourceDictionary>
                                     </Image.Resources>
                                     <Interaction.Behaviors>
-                                        <behaviors:RecyclableScreenshotImageBindingBehavior
-                                            Screenshot="{Binding Value}"
+                                        <behaviors:RecyclableImageBindingBehavior
+                                            Image="{Binding Value}"
                                             TargetSize="{Binding #ImageContainer.Bounds.Size.Width, Converter={StaticResource SizeToImageTargetSizeConverter}}"
                                             Composition="{StaticResource Composition}"/>
                                     </Interaction.Behaviors>

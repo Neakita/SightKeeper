@@ -20,8 +20,8 @@
                             Opacity="0.05"/>
         <Image Name="Image">
             <Interaction.Behaviors>
-                <behaviors:RecyclableScreenshotImageBindingBehavior
-                    Screenshot="{Binding Screenshot}"
+                <behaviors:RecyclableImageBindingBehavior
+                    Image="{Binding Image}"
                     Composition="{StaticResource Composition}"/>
             </Interaction.Behaviors>
         </Image>

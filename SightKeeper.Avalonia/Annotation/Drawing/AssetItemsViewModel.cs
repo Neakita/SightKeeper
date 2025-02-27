@@ -18,7 +18,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed class AssetItemsViewModel
 {
-	public Image? Screenshot
+	public Image? Image
 	{
 		get;
 		set
@@ -61,7 +61,7 @@ public sealed class AssetItemsViewModel
 	private readonly KeyPointViewModelFactory _keyPointFactory;
 	private readonly AvaloniaList<DrawerItemDataContext> _items = new();
 	private readonly CompositeDisposable _disposable = new();
-	private ItemsContainer? Asset => Screenshot == null ? null : AssetsLibrary?.GetOptionalAsset(Screenshot);
+	private ItemsContainer? Asset => Image == null ? null : AssetsLibrary?.GetOptionalAsset(Image);
 
 	private void UpdateItems()
 	{

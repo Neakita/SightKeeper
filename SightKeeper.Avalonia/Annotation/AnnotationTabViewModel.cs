@@ -2,10 +2,10 @@ using System;
 using System.Reactive.Disposables;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing;
-using SightKeeper.Avalonia.Annotation.Screenshots;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.DataSets;
-using SightKeeper.Avalonia.ScreenshotsLibraries;
+using SightKeeper.Avalonia.ImageSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
@@ -14,26 +14,26 @@ namespace SightKeeper.Avalonia.Annotation;
 
 public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 {
-	public AnnotationScreenshotsComponent Screenshots { get; }
+	public AnnotationImagesComponent Images { get; }
 	public AnnotationDrawerComponent Drawer { get; }
 	public AnnotationSideBarComponent SideBar { get; }
 
 	public AnnotationTabViewModel(
-		AnnotationScreenshotsComponent screenshots,
+		AnnotationImagesComponent images,
 		AnnotationDrawerComponent drawer,
 		AnnotationSideBarComponent sideBar)
 	{
 		SideBar = sideBar;
 		Drawer = drawer;
-		Screenshots = screenshots;
-		SideBar.SelectedScreenshotsLibraryChanged
-			.Subscribe(OnSelectedScreenshotsLibraryChanged)
+		Images = images;
+		SideBar.SelectedImageSetChanged
+			.Subscribe(OnSelectedImageSetChanged)
 			.DisposeWith(_disposable);
 		SideBar.SelectedDataSetChanged
 			.Subscribe(OnSelectedDataSetChanged)
 			.DisposeWith(_disposable);
-		Screenshots.SelectedScreenshotChanged
-			.Subscribe(_ => OnSelectedScreenshotChanged())
+		Images.SelectedImageChanged
+			.Subscribe(_ => OnSelectedImageChanged())
 			.DisposeWith(_disposable);
 		SideBar.AdditionalToolingChanged
 			.Subscribe(OnAdditionalToolingChanged)
@@ -48,9 +48,9 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 	private readonly CompositeDisposable _disposable = new();
 	private CompositeDisposable? _additionalToolingDisposable;
 
-	private void OnSelectedScreenshotsLibraryChanged(ScreenshotsLibraryViewModel? value)
+	private void OnSelectedImageSetChanged(ImageSetViewModel? value)
 	{
-		Screenshots.Set = value?.Value;
+		Images.Set = value?.Value;
 	}
 
 	private void OnSelectedDataSetChanged(DataSetViewModel? value)
@@ -58,9 +58,9 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 		Drawer.AssetsLibrary = value?.Value.AssetsLibrary as AssetsOwner<ItemsOwner>;
 	}
 
-	private void OnSelectedScreenshotChanged()
+	private void OnSelectedImageChanged()
 	{
-		Drawer.Screenshot = Screenshots.SelectedImage;
+		Drawer.Image = Images.SelectedImage;
 	}
 
 	private void OnAdditionalToolingChanged(object? value)

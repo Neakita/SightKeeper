@@ -13,11 +13,11 @@ using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 using Yolo.InputProcessing;
 
-namespace SightKeeper.Avalonia.Annotation.Screenshots;
+namespace SightKeeper.Avalonia.Annotation.Images;
 
-public sealed class ScreenshotImageLoader
+public sealed class ImageLoader
 {
-	public ScreenshotImageLoader(WriteableBitmapPool bitmapPool, ImageDataAccess imageDataAccess)
+	public ImageLoader(WriteableBitmapPool bitmapPool, ImageDataAccess imageDataAccess)
 	{
 		_bitmapPool = bitmapPool;
 		_imageDataAccess = imageDataAccess;
@@ -53,16 +53,16 @@ public sealed class ScreenshotImageLoader
 		CancellationToken cancellationToken)
 	{
 		using WriteableBitmapMemoryManager<Rgba32> bitmapMemoryManager = new(bitmap);
-		var screenshotSize = image.Size.ToPixelSize();
-		if (screenshotSize == bitmap.PixelSize)
+		var imageSize = image.Size.ToPixelSize();
+		if (imageSize == bitmap.PixelSize)
 			return await ReadImageDataAsync(image, bitmapMemoryManager.Memory, cancellationToken);
-		var pixelsCount = screenshotSize.Width * screenshotSize.Height;
+		var pixelsCount = imageSize.Width * imageSize.Height;
 		using var buffer = MemoryPool<Rgba32>.Shared.Rent(pixelsCount);
 		bool isRead = await ReadImageDataAsync(image, buffer.Memory, cancellationToken);
 		if (!isRead)
 			return false;
 		NearestNeighbourImageResizer.Resize(
-			buffer.Memory.Span.AsSpan2D(screenshotSize.Height, screenshotSize.Width),
+			buffer.Memory.Span.AsSpan2D(imageSize.Height, imageSize.Width),
 			bitmapMemoryManager.Memory.Span.AsSpan2D(bitmap.PixelSize.Height, bitmap.PixelSize.Width));
 		return true;
 	}

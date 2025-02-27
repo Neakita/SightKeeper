@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-internal sealed partial class ScreenshottingSettings : UserControl
+internal sealed partial class ScreenCaptureSettings : UserControl
 {
-	public ScreenshottingSettings()
+	public ScreenCaptureSettings()
 	{
 		InitializeComponent();
 	}

@@ -16,19 +16,19 @@ internal abstract partial class CompositionViewModel : ViewModel
 		_ => throw new ArgumentOutOfRangeException(nameof(composition))
 	};
 
-	public TimeSpan MaximumScreenshotsDelay => TimeSpan.FromMilliseconds(MaximumScreenshotsDelayInMilliseconds);
+	public TimeSpan MaximumDelay => TimeSpan.FromMilliseconds(MaximumDelayInMilliseconds);
 
 	public abstract ImageComposition ToComposition();
 
 	protected CompositionViewModel()
 	{
-		_maximumScreenshotsDelayInMilliseconds = 50;
+		_maximumDelayInMilliseconds = 50;
 	}
 
 	protected CompositionViewModel(ImageComposition imageComposition)
 	{
-		_maximumScreenshotsDelayInMilliseconds = (ushort)imageComposition.MaximumDelay.TotalMilliseconds;
+		_maximumDelayInMilliseconds = (ushort)imageComposition.MaximumDelay.TotalMilliseconds;
 	}
 
-	[ObservableProperty] private ushort _maximumScreenshotsDelayInMilliseconds;
+	[ObservableProperty] private ushort _maximumDelayInMilliseconds;
 }

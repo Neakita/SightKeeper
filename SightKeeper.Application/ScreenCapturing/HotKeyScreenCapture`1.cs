@@ -38,9 +38,9 @@ public sealed class HotKeyScreenCapture<TPixel> : HotKeyScreenCapture
 	protected override void Enable()
 	{
 		base.Enable();
-		Guard.IsNotNull(Library);
+		Guard.IsNotNull(Set);
 		Guard.IsNull(_session);
-		_session = _imageSaver.AcquireSession(Library);
+		_session = _imageSaver.AcquireSession(Set);
 	}
 
 	protected override void Disable()
