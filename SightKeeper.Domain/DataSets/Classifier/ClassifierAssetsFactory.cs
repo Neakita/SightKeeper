@@ -12,7 +12,7 @@ internal sealed class ClassifierAssetsFactory : AssetsFactory<ClassifierAsset>
 
 	public override ClassifierAsset CreateAsset()
 	{
-		return new ClassifierAsset(_tagsLibrary.Tags.First());
+		return new ClassifierAsset(_tagsLibrary.Tags[0]);
 	}
 
 	private readonly TagsLibrary<Tag> _tagsLibrary;
