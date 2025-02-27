@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -8,7 +7,6 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
-using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Domain.Images;
@@ -40,8 +38,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImageSelection, Annotat
 	public IObservable<Unit> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
 	public ImagesViewModel(
-		ObservableImageDataAccess observableDataAccess,
-		IEnumerable<ObservableAnnotator> observableAnnotators)
+		ObservableImageDataAccess observableDataAccess)
 	{
 		_imagesSource = new SourceList<Image>();
 		_imagesSource.Connect()
@@ -60,23 +57,12 @@ public sealed partial class ImagesViewModel : ViewModel, ImageSelection, Annotat
 			.Select(_imagesSource.Remove)
 			.Subscribe(isRemoved => Guard.IsTrue(isRemoved))
 			.DisposeWith(_disposable);
-		observableAnnotators
-			.Select(annotator => annotator.AssetsChanged)
-			.Merge()
-			.Subscribe(OnImageAssetsChanged)
-			.DisposeWith(_disposable);
 	}
 
 	private readonly CompositeDisposable _disposable = new();
 	private readonly SourceList<Image> _imagesSource;
 	private readonly SourceCache<ImageViewModel, Image> _imagesCache = new(viewModel => viewModel.Value);
 	private readonly Subject<Unit> _selectedImageChanged = new();
-
-	private void OnImageAssetsChanged(Image image)
-	{
-		var imageViewModel = _imagesCache.Lookup(image).Value;
-		imageViewModel.NotifyAssetsChanged();
-	}
 
 	partial void OnSelectedImageIndexChanged(int value)
 	{
