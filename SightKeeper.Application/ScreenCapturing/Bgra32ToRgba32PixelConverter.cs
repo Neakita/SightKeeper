@@ -2,7 +2,7 @@ using System.Numerics.Tensors;
 using System.Runtime.InteropServices;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Application.Screenshotting;
+namespace SightKeeper.Application.ScreenCapturing;
 
 public class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32>
 {

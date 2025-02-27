@@ -2,7 +2,7 @@
 using CommunityToolkit.HighPerformance;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using SightKeeper.Application.Screenshotting;
+using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Domain;
 using SixLabors.ImageSharp.PixelFormats;
 using Yolo;

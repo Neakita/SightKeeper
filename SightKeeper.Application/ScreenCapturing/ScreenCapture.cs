@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.HighPerformance;
 using SightKeeper.Domain;
 
-namespace SightKeeper.Application.Screenshotting;
+namespace SightKeeper.Application.ScreenCapturing;
 
 public interface ScreenCapture<TPixel>
 {

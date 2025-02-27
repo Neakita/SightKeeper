@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using DynamicData;
 using SightKeeper.Application;
-using SightKeeper.Application.ScreenshotsLibraries.Editing;
+using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
@@ -12,7 +12,7 @@ public sealed class ScreenshotsLibraryViewModelsObservableRepository : Observabl
 	public override ReadOnlyObservableCollection<ScreenshotsLibraryViewModel> Items { get; }
 	public override IObservableList<ScreenshotsLibraryViewModel> Source { get; }
 
-	public ScreenshotsLibraryViewModelsObservableRepository(ObservableRepository<ImageSet> repository, ScreenshotsLibraryEditor editor)
+	public ScreenshotsLibraryViewModelsObservableRepository(ObservableRepository<ImageSet> repository, ImageSetEditor editor)
 	{
 		Source = repository.Source.Connect()
 			.Transform(library => new ScreenshotsLibraryViewModel(library))

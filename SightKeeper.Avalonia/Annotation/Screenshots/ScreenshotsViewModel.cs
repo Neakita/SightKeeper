@@ -8,9 +8,9 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
-using SightKeeper.Application;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
+using SightKeeper.Application.ImageSets;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Screenshots;
@@ -40,7 +40,7 @@ public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelectio
 	public IObservable<Unit> SelectedScreenshotChanged => _selectedScreenshotChanged.AsObservable();
 
 	public ScreenshotsViewModel(
-		ObservableScreenshotsDataAccess observableDataAccess,
+		ObservableImageDataAccess observableDataAccess,
 		IEnumerable<ObservableAnnotator> observableAnnotators)
 	{
 		_screenshotsSource = new SourceList<Image>();
@@ -53,12 +53,12 @@ public sealed partial class ScreenshotsViewModel : ViewModel, ScreenshotSelectio
 		Screenshots = screenshots;
 		observableDataAccess.Added
 			.Where(data => data.library == Library)
-			.Select(data => data.screenshot)
+			.Select(data => data.image)
 			.Subscribe(_screenshotsSource.Add)
 			.DisposeWith(_disposable);
 		observableDataAccess.Removed
 			.Where(data => data.library == Library)
-			.Select(data => data.screenshot)
+			.Select(data => data.image)
 			.Select(_screenshotsSource.Remove)
 			.Subscribe(isRemoved => Guard.IsTrue(isRemoved))
 			.DisposeWith(_disposable);

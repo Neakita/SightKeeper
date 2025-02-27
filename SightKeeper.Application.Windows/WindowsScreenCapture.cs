@@ -2,7 +2,7 @@
 using System.Drawing.Imaging;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
-using SightKeeper.Application.Screenshotting;
+using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Domain;
 using SixLabors.ImageSharp.PixelFormats;
 

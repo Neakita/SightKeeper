@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Application.Screenshotting.Saving;
+using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.Annotation.ScreenshottingOptions;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.ScreenshotsLibraries;
@@ -28,14 +28,14 @@ public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarCompo
 	public SideBarViewModel(
 		DataSetViewModelsObservableRepository dataSets,
 		ScreenshottingSettingsViewModel screenshottingSettings,
-		PendingScreenshotsCountReporter? pendingScreenshotsReporter,
+		PendingImagesCountReporter? pendingScreenshotsReporter,
 		ScreenshotsLibraryViewModelsObservableRepository screenshotsLibraries,
 		ToolingViewModelFactory toolingViewModelFactory)
 	{
 		_toolingViewModelFactory = toolingViewModelFactory;
 		DataSets = dataSets.Items;
 		ScreenshottingSettings = screenshottingSettings;
-		PendingScreenshotsCount = pendingScreenshotsReporter?.PendingScreenshotsCount ?? Observable.Empty<ushort>();
+		PendingScreenshotsCount = pendingScreenshotsReporter?.PendingImagesCount ?? Observable.Empty<ushort>();
 		ScreenshotsLibraries = screenshotsLibraries.Items;
 	}
 

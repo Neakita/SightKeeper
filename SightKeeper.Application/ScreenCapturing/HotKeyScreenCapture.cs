@@ -6,9 +6,9 @@ using SharpHook.Native;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Application.Screenshotting;
+namespace SightKeeper.Application.ScreenCapturing;
 
-public abstract class Screenshotter
+public abstract class HotKeyScreenCapture
 {
 	public bool IsEnabled
 	{
@@ -61,16 +61,16 @@ public abstract class Screenshotter
 	protected TimeSpan Timeout => FPSLimit == null ? TimeSpan.Zero : TimeSpan.FromSeconds(1) / FPSLimit.Value;
 	protected Vector2<ushort> Offset => _screenBoundsProvider.MainScreenCenter - _resolution / 2;
 
-	protected Screenshotter(
+	protected HotKeyScreenCapture(
 		ScreenBoundsProvider screenBoundsProvider,
 		BindingsManager bindingsManager)
 	{
 		_screenBoundsProvider = screenBoundsProvider;
 		_bindingsManager = bindingsManager;
-		_handler = new ContextualizedHandler(MakeScreenshots);
+		_handler = new ContextualizedHandler(MakeImages);
 	}
 
-	protected abstract void MakeScreenshots(ActionContext context);
+	protected abstract void MakeImages(ActionContext context);
 
 	private const ushort MinimumResolutionDimension = 32;
 	private readonly ScreenBoundsProvider _screenBoundsProvider;

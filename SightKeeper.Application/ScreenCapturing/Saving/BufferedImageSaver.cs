@@ -7,9 +7,9 @@ using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Application.Screenshotting.Saving;
+namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-public sealed class BufferedScreenshotsSaver<TPixel> : ScreenshotsSaver<TPixel>, PendingScreenshotsCountReporter, IDisposable
+public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, PendingImagesCountReporter, IDisposable
 {
 	public override Vector2<ushort> MaximumImageSize
 	{
@@ -25,9 +25,9 @@ public sealed class BufferedScreenshotsSaver<TPixel> : ScreenshotsSaver<TPixel>,
 		}
 	}
 
-	public BehaviorObservable<ushort> PendingScreenshotsCount => _pendingScreenshotsCount;
+	public BehaviorObservable<ushort> PendingImagesCount => _pendingImagesCount;
 
-	public BufferedScreenshotsSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter)
+	public BufferedImageSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter)
 	{
 		_rawPixelsArrayPool = new WeakReference<ArrayPool<TPixel>>(null!);
 		_convertedPixelsArrayPool = new WeakReference<ArrayPool<Rgba32>>(null!);
@@ -36,7 +36,7 @@ public sealed class BufferedScreenshotsSaver<TPixel> : ScreenshotsSaver<TPixel>,
 		MaximumImageSize = new Vector2<ushort>(320, 320);
 	}
 
-	public override ScreenshotsSaverSession<TPixel> AcquireSession(ImageSet library)
+	public override ImageSaverSession<TPixel> AcquireSession(ImageSet library)
 	{
 		if (_sessions.TryGetValue(library, out var session))
 		{
@@ -44,27 +44,27 @@ public sealed class BufferedScreenshotsSaver<TPixel> : ScreenshotsSaver<TPixel>,
 				subscription.Dispose();
 			return session;
 		}
-		session = new BufferedScreenshotsSaverSession<TPixel>(library, _imageDataAccess, RawPixelsArrayPool, ConvertedPixelsArrayPool, _pixelConverter);
+		session = new BufferedImageSaverSession<TPixel>(library, _imageDataAccess, RawPixelsArrayPool, ConvertedPixelsArrayPool, _pixelConverter);
 		_sessions.Add(library, session);
 		UpdateAggregateSubscription();
 		return session;
 	}
 
-	public override void ReleaseSession(ScreenshotsSaverSession<TPixel> session)
+	public override void ReleaseSession(ImageSaverSession<TPixel> session)
 	{
-		var bufferedSession = (BufferedScreenshotsSaverSession<TPixel>)session;
-		if (bufferedSession.PendingScreenshotsCount.Value == 0)
+		var bufferedSession = (BufferedImageSaverSession<TPixel>)session;
+		if (bufferedSession.PendingImagesCount.Value == 0)
 		{
-			Guard.IsTrue(_sessions.Remove(bufferedSession.Library));
+			Guard.IsTrue(_sessions.Remove(bufferedSession.Set));
 			bufferedSession.Dispose();
 			UpdateAggregateSubscription();
 			return;
 		}
-		var subscription = bufferedSession.PendingScreenshotsCount.Subscribe(count =>
+		var subscription = bufferedSession.PendingImagesCount.Subscribe(count =>
 		{
 			if (count != 0)
 				return;
-			Guard.IsTrue(_sessions.Remove(bufferedSession.Library));
+			Guard.IsTrue(_sessions.Remove(bufferedSession.Set));
 			Guard.IsTrue(_freeSessions.Remove(bufferedSession, out var subscription));
 			bufferedSession.Dispose();
 			subscription.Dispose();
@@ -76,14 +76,14 @@ public sealed class BufferedScreenshotsSaver<TPixel> : ScreenshotsSaver<TPixel>,
 	public override void Dispose()
 	{
 		Guard.IsEqualTo(_sessions.Count, 0);
-		_pendingScreenshotsCount.Dispose();
+		_pendingImagesCount.Dispose();
 	}
 
 	private readonly ImageDataAccess _imageDataAccess;
 	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
-	private readonly BehaviorSubject<ushort> _pendingScreenshotsCount = new(0);
-	private readonly Dictionary<ImageSet, BufferedScreenshotsSaverSession<TPixel>> _sessions = new();
-	private readonly Dictionary<BufferedScreenshotsSaverSession<TPixel>, IDisposable> _freeSessions = new();
+	private readonly BehaviorSubject<ushort> _pendingImagesCount = new(0);
+	private readonly Dictionary<ImageSet, BufferedImageSaverSession<TPixel>> _sessions = new();
+	private readonly Dictionary<BufferedImageSaverSession<TPixel>, IDisposable> _freeSessions = new();
 	private readonly WeakReference<ArrayPool<TPixel>> _rawPixelsArrayPool;
 	private readonly WeakReference<ArrayPool<Rgba32>> _convertedPixelsArrayPool;
 	private Vector2<ushort> _imageSize;
@@ -120,9 +120,9 @@ public sealed class BufferedScreenshotsSaver<TPixel> : ScreenshotsSaver<TPixel>,
 	{
 		_aggregateSubscription.Dispose();
 		_aggregateSubscription = _sessions
-			.Select(session => session.Value.PendingScreenshotsCount)
+			.Select(session => session.Value.PendingImagesCount)
 			.CombineLatest(counts => (ushort)counts.Sum(count => count))
-			.Subscribe(_pendingScreenshotsCount);
+			.Subscribe(_pendingImagesCount);
 	}
 
 	private void UpdateArrayPools()

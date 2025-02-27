@@ -4,7 +4,7 @@ using System.Windows.Input;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Annotation;
-using SightKeeper.Application.Screenshotting;
+using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 using SightKeeper.Avalonia.Annotation.Tooling.Commands;
 using SightKeeper.Domain;

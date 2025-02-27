@@ -4,12 +4,12 @@ using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
-using SightKeeper.Application.ScreenshotsLibraries;
+using SightKeeper.Application.ImageSets;
 using SightKeeper.Avalonia.Dialogs;
 
 namespace SightKeeper.Avalonia.ScreenshotsLibraries;
 
-internal sealed partial class ScreenshotsLibraryDialogViewModel : DialogViewModel<bool>, ScreenshotsLibraryData, INotifyDataErrorInfo, IDisposable
+internal sealed partial class ImageSetDialogViewModel : DialogViewModel<bool>, ImageSetData, INotifyDataErrorInfo, IDisposable
 {
 	public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
 	{
@@ -21,13 +21,13 @@ internal sealed partial class ScreenshotsLibraryDialogViewModel : DialogViewMode
 
 	public bool HasErrors => _viewModelValidator.HasErrors;
 
-	public ScreenshotsLibraryDialogViewModel(string header, IValidator<ScreenshotsLibraryData> validator, string initialName = "", string initialDescription = "")
+	public ImageSetDialogViewModel(string header, IValidator<ImageSetData> validator, string initialName = "", string initialDescription = "")
 	{
 		Header = header;
 		_validator = validator;
 		_name = initialName;
 		_description = initialDescription;
-		_viewModelValidator = new ViewModelValidator<ScreenshotsLibraryData>(validator, this, this);
+		_viewModelValidator = new ViewModelValidator<ImageSetData>(validator, this, this);
 		_viewModelValidator.ErrorsChanged += OnErrorsChanged;
 	}
 
@@ -44,8 +44,8 @@ internal sealed partial class ScreenshotsLibraryDialogViewModel : DialogViewMode
 
 	protected override bool DefaultResult => false;
 
-	private readonly IValidator<ScreenshotsLibraryData> _validator;
-	private readonly ViewModelValidator<ScreenshotsLibraryData> _viewModelValidator;
+	private readonly IValidator<ImageSetData> _validator;
+	private readonly ViewModelValidator<ImageSetData> _viewModelValidator;
 	[ObservableProperty] private string _name;
 	[ObservableProperty] private string _description;
 

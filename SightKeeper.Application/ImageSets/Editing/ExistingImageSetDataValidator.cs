@@ -1,17 +1,17 @@
 using FluentValidation;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Application.ScreenshotsLibraries.Editing;
+namespace SightKeeper.Application.ImageSets.Editing;
 
-public sealed class ExistingScreenshotsLibraryDataValidator : AbstractValidator<ScreenshotsLibraryData>
+public sealed class ExistingImageSetDataValidator : AbstractValidator<ImageSetData>
 {
-	public ExistingScreenshotsLibraryDataValidator(ImageSet library, IValidator<ScreenshotsLibraryData> baseValidator, ReadDataAccess<ImageSet> dataAccess)
+	public ExistingImageSetDataValidator(ImageSet library, IValidator<ImageSetData> baseValidator, ReadDataAccess<ImageSet> dataAccess)
 	{
 		_library = library;
 		_dataAccess = dataAccess;
 		Include(baseValidator);
 		RuleFor(data => data.Name)
-			.Must((_, dataSetName) => IsNameFree(dataSetName))
+			.Must((_, name) => IsNameFree(name))
 			.Unless(data => string.IsNullOrEmpty(data.Name))
 			.WithMessage("Name must be unique");
 	}

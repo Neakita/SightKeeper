@@ -7,7 +7,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Application.Screenshotting;
+using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Avalonia.Annotation.Screenshots;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Commands;

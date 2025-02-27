@@ -6,7 +6,7 @@
              xmlns:screenshotsLibraries="clr-namespace:SightKeeper.Avalonia.ScreenshotsLibraries"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.ScreenshotsLibraries.ScreenshotsLibraryDialog"
-             x:DataType="screenshotsLibraries:ScreenshotsLibraryDialogViewModel"
+             x:DataType="screenshotsLibraries:ImageSetDialogViewModel"
              HorizontalAlignment="Center"
              MinWidth="500">
     <ScrollViewer>

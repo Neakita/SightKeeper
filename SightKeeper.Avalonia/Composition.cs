@@ -11,10 +11,10 @@ using SharpHook.Reactive;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.DataSets.Editing;
-using SightKeeper.Application.ScreenshotsLibraries;
-using SightKeeper.Application.ScreenshotsLibraries.Creating;
-using SightKeeper.Application.Screenshotting;
-using SightKeeper.Application.Screenshotting.Saving;
+using SightKeeper.Application.ImageSets;
+using SightKeeper.Application.ImageSets.Creating;
+using SightKeeper.Application.ScreenCapturing;
+using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Screenshots;
@@ -42,17 +42,17 @@ public sealed partial class Composition
 	private void Setup() => DI.Setup(nameof(Composition))
 		.Hint(Hint.Resolve, "Off")
 		.RootBind<AppDataAccess>(nameof(AppDataAccess)).Bind<ApplicationSettingsProvider>().As(Lifetime.Singleton).To<AppDataAccess>()
-		.Bind().Bind<ImageDataAccess>().Bind<ObservableScreenshotsDataAccess>().As(Lifetime.Singleton)
+		.Bind().Bind<ImageDataAccess>().Bind<ObservableImageDataAccess>().As(Lifetime.Singleton)
 		.To<FileSystemImageDataAccess>()
 		.Bind<ReadDataAccess<ImageSet>>().Bind<ObservableDataAccess<ImageSet>>()
 		.Bind<WriteDataAccess<ImageSet>>().As(Lifetime.Singleton).To<AppDataImageSetsDataAccess>()
 		.Bind<ReadDataAccess<DataSet>>().Bind<ObservableDataAccess<DataSet>>().Bind<WriteDataAccess<DataSet>>()
 		.As(Lifetime.Singleton).To<AppDataDataSetsDataAccess>()
-		.Bind<PendingScreenshotsCountReporter>().Bind<ScreenshotsSaver<Bgra32>>().As(Lifetime.Singleton)
-		.To<BufferedScreenshotsSaver<Bgra32>>()
+		.Bind<PendingImagesCountReporter>().Bind<ImageSaver<Bgra32>>().As(Lifetime.Singleton)
+		.To<BufferedImageSaver<Bgra32>>()
 		.Bind<ObservableRepository<TT>>().To<DataAccessObservableRepository<TT>>()
 		.Bind<ScreenBoundsProvider>().To<SharpHookScreenBoundsProvider>()
-		.Bind<Screenshotter>().To<Screenshotter<Bgra32>>()
+		.Bind<HotKeyScreenCapture>().To<HotKeyScreenCapture<Bgra32>>()
 		.Bind<PixelConverter<Bgra32, Rgba32>>().To<Bgra32ToRgba32PixelConverter>()
 #if OS_WINDOWS
 		.Bind<ScreenCapture<Bgra32>>().To<DX11ScreenCapture>()
@@ -101,8 +101,8 @@ public sealed partial class Composition
 		.Bind(typeof(AppData)).As(Lifetime.Singleton).To<Lock>()
 		.TagAttribute<TagAttribute>()
 		.Bind<ILogger>().To(context => Log.ForContext(context.ConsumerTypes.Single()))
-		.Bind<IValidator<ScreenshotsLibraryData>>().To<ScreenshotsLibraryDataValidator>()
-		.Bind<IValidator<ScreenshotsLibraryData>>("new").To<NewScreenshotsLibraryDataValidator>()
+		.Bind<IValidator<ImageSetData>>().To<ImageSetDataValidator>()
+		.Bind<IValidator<ImageSetData>>("new").To<NewImageSetDataValidator>()
 		.Bind<ImageSetDeleter>().To<LockingImageSetDeleter>()
 		.RootBind<ScreenshotsViewModel>(nameof(ScreenshotsViewModel)).Bind<AnnotationScreenshotsComponent>().Bind<ScreenshotSelection>().As(Lifetime.Singleton).To<ScreenshotsViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()

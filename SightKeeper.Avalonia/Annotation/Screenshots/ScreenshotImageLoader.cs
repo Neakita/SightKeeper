@@ -6,7 +6,7 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.HighPerformance;
-using SightKeeper.Application.Screenshotting;
+using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;

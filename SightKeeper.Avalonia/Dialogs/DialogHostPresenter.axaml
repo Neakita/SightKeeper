@@ -87,7 +87,7 @@
 				</PageSlide>
 			</TransitioningContentControl.PageTransition>
             <TransitioningContentControl.DataTemplates>
-                <DataTemplate DataType="screenshotsLibraries:ScreenshotsLibraryDialogViewModel">
+                <DataTemplate DataType="screenshotsLibraries:ImageSetDialogViewModel">
                     <screenshotsLibraries:ScreenshotsLibraryDialog/>
                 </DataTemplate>
                 <DataTemplate DataType="messageBox:MessageBoxDialogViewModel">

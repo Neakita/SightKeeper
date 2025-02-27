@@ -1,15 +1,15 @@
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Application.ScreenshotsLibraries.Creating;
+namespace SightKeeper.Application.ImageSets.Creating;
 
-public sealed class ScreenshotsLibraryCreator
+public sealed class ImageSetCreator
 {
-	public ScreenshotsLibraryCreator(WriteDataAccess<ImageSet> dataAccess)
+	public ImageSetCreator(WriteDataAccess<ImageSet> dataAccess)
 	{
 		_dataAccess = dataAccess;
 	}
 
-	public ImageSet Create(ScreenshotsLibraryData data)
+	public ImageSet Create(ImageSetData data)
 	{
 		ImageSet library = new()
 		{

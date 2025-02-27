@@ -1,7 +1,7 @@
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
 
-namespace SightKeeper.Application.Screenshotting;
+namespace SightKeeper.Application.ScreenCapturing;
 
 public abstract class PixelConverter<TFrom, TTo>
 {

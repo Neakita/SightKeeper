@@ -2,7 +2,7 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.ImageSets;
 
 public abstract class ImageSetDeleter
 {
@@ -10,8 +10,8 @@ public abstract class ImageSetDeleter
 	{
 		var dataSets = _dataSetsDataAccess.Items;
 		foreach (var dataSet in dataSets)
-		foreach (var screenshot in library.Images)
-			if (dataSet.AssetsLibrary.Contains(screenshot))
+		foreach (var image in library.Images)
+			if (dataSet.AssetsLibrary.Contains(image))
 				return false;
 		return true;
 	}

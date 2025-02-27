@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using CommunityToolkit.HighPerformance;
 using FlakeId;
 using SightKeeper.Application;
-using SightKeeper.Application.Screenshotting;
+using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
