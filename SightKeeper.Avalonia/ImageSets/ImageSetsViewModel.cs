@@ -12,7 +12,7 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.ImageSets;
 
-internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext
+internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDisposable
 {
 	public ReadOnlyObservableList<ImageSetCardViewModel> ImageSets { get; }
 	IReadOnlyCollection<ImageSetCardDataContext> ImageSetsDataContext.ImageSets => ImageSets;
@@ -32,6 +32,11 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext
 		ImageSets.ToDictionary(imageSetViewModel => imageSetViewModel.ImageSet, out var imageSetCardViewModelsLookup);
 		_imageSetCardViewModelsLookup = imageSetCardViewModelsLookup;
 		imageSetEditor.Edited.Subscribe(OnImageSetEdited);
+	}
+
+	public void Dispose()
+	{
+		ImageSets.Dispose();
 	}
 
 	private readonly ICommand _editImageSetCommand;
