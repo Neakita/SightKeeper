@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Windows.Input;
+using SightKeeper.Avalonia.ImageSets.Card;
 
 namespace SightKeeper.Avalonia.ImageSets;
 
 internal interface ImageSetsDataContext
 {
-	IReadOnlyCollection<ImageSetViewModel> ImageSets { get; }
+	IReadOnlyCollection<ImageSetCardDataContext> ImageSets { get; }
 	ICommand CreateImageSetCommand { get; }
-	ICommand EditImageSetCommand { get; }
-	ICommand DeleteImageSetCommand { get; }
 }

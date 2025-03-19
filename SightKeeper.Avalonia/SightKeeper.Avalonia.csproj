@@ -63,6 +63,13 @@
         <ProjectReference Condition="$([MSBuild]::IsOSPlatform('Linux'))" Include="..\SightKeeper.Application.Linux\SightKeeper.Application.Linux.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="ImageSets\Card\ImageSetCard.axaml.cs">
+        <DependentUpon>ImageSetCard.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
         <DefineConstants>OS_WINDOWS</DefineConstants>
     </PropertyGroup>
