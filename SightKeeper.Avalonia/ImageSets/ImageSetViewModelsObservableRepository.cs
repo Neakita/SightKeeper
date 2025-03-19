@@ -1,40 +1,38 @@
 using System;
-using System.Collections.ObjectModel;
-using DynamicData;
+using System.Collections.Generic;
 using SightKeeper.Application;
 using SightKeeper.Application.ImageSets.Editing;
+using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.Images;
+using Vibrance;
+using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.ImageSets;
 
 public sealed class ImageSetViewModelsObservableRepository : ObservableRepository<ImageSetViewModel>, IDisposable
 {
-	public override ReadOnlyObservableCollection<ImageSetViewModel> Items { get; }
-	public override IObservableList<ImageSetViewModel> Source { get; }
+	public ReadOnlyObservableList<ImageSetViewModel> Items { get; }
 
 	public ImageSetViewModelsObservableRepository(ObservableRepository<ImageSet> repository, ImageSetEditor editor)
 	{
-		Source = repository.Source.Connect()
+		Items = repository.Items
 			.Transform(library => new ImageSetViewModel(library))
-			.Bind(out var items)
-			.AsObservableList();
-		Items = items;
-		_cache = Source.Connect()
-			.AddKey(viewModel => viewModel.Value)
-			.AsObservableCache();
+			.ToObservableList();
+		Items.ToDictionary(viewModel => viewModel.Value, out var viewModelsLookup);
+		_viewModelsLookup = viewModelsLookup;
 		editor.Edited.Subscribe(OnImageSetEdited);
 	}
 
 	private void OnImageSetEdited(ImageSet set)
 	{
-		var viewModel = _cache.Lookup(set).Value;
+		var viewModel = _viewModelsLookup[set];
 		viewModel.NotifyPropertiesChanged();
 	}
 
 	public void Dispose()
 	{
-		Source.Dispose();
+		Items.Dispose();
 	}
 
-	private readonly IObservableCache<ImageSetViewModel, ImageSet> _cache;
+	private readonly IReadOnlyDictionary<ImageSet, ImageSetViewModel> _viewModelsLookup;
 }

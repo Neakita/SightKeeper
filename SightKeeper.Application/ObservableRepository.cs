@@ -1,10 +1,8 @@
-using System.Collections.ObjectModel;
-using DynamicData;
+using Vibrance;
 
 namespace SightKeeper.Application;
 
-public abstract class ObservableRepository<T> where T : notnull
+public interface ObservableRepository<out T> where T : notnull
 {
-	public abstract ReadOnlyObservableCollection<T> Items { get; }
-	public abstract IObservableList<T> Source { get; }
+	ReadOnlyObservableList<T> Items { get; }
 }

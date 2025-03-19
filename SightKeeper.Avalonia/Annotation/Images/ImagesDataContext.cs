@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+using Vibrance;
 
 namespace SightKeeper.Avalonia.Annotation.Images;
 
 public interface ImagesDataContext
 {
-	IReadOnlyCollection<ImageViewModel> Images { get; }
+	ReadOnlyObservableList<ImageViewModel> Images { get; }
 	int SelectedImageIndex { get; set; }
 }

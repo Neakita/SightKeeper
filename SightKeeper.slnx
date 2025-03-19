@@ -19,6 +19,7 @@
     <Project Path="..\Yolo\Yolo.ImageSharp\Yolo.ImageSharp.csproj" Type="Classic C#" />
     <Project Path="..\Yolo\Yolo\Yolo.csproj" Type="Classic C#" />
   </Folder>
+  <Project Path="..\Vibrance\Vibrance\Vibrance.csproj" Type="Classic C#" />
   <Project Path="SightKeeper.Application.Linux\SightKeeper.Application.Linux.csproj" Type="Classic C#" />
   <Project Path="SightKeeper.Application.Windows\SightKeeper.Application.Windows.csproj" Type="Classic C#" />
   <Project Path="SightKeeper.Application\SightKeeper.Application.csproj" Type="Classic C#" />

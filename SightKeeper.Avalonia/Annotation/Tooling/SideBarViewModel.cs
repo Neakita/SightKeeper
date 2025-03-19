@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.ImageSets;
+using Vibrance;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
@@ -14,7 +14,7 @@ public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarCompo
 {
 	private readonly ToolingViewModelFactory _toolingViewModelFactory;
 	public IReadOnlyCollection<ImageSetViewModel> ImageSets { get; }
-	public ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
+	public ReadOnlyObservableList<DataSetViewModel> DataSets { get; }
 	[ObservableProperty] public partial DataSetViewModel? SelectedDataSet { get; set; }
 	[ObservableProperty] public partial ImageSetViewModel? SelectedImageSet { get; set; }
 	public IObservable<ushort> PendingImagesCount { get; }
@@ -25,14 +25,15 @@ public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarCompo
 	public IObservable<object?> AdditionalToolingChanged => _additionalToolingChanged.AsObservable();
 
 	public SideBarViewModel(
-		DataSetViewModelsObservableRepository dataSets,
+		DataSetViewModelsObservableRepository dataSetsRepository,
 		ScreenCapturingSettingsViewModel screenCapturingSettings,
 		PendingImagesCountReporter? pendingImagesReporter,
 		ImageSetViewModelsObservableRepository imageSets,
 		ToolingViewModelFactory toolingViewModelFactory)
 	{
 		_toolingViewModelFactory = toolingViewModelFactory;
-		DataSets = dataSets.Items;
+		DataSets = dataSetsRepository.Items;
+		
 		ScreenCapturingSettings = screenCapturingSettings;
 		PendingImagesCount = pendingImagesReporter?.PendingImagesCount ?? Observable.Empty<ushort>();
 		ImageSets = imageSets.Items;

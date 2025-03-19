@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.ImageSets;
+using Vibrance;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
@@ -12,7 +12,7 @@ public interface SideBarDataContext
 	ImageSetViewModel? SelectedImageSet { get; set; }
 	ScreenCapturingSettingsViewModel ScreenCapturingSettings { get; }
 	IObservable<ushort> PendingImagesCount { get; }
-	ReadOnlyObservableCollection<DataSetViewModel> DataSets { get; }
+	ReadOnlyObservableList<DataSetViewModel> DataSets { get; }
 	DataSetViewModel? SelectedDataSet { get; set; }
 	object? AdditionalTooling { get; }
 }

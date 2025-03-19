@@ -5,7 +5,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
-using DynamicData;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
@@ -71,7 +70,7 @@ public sealed class AssetItemsViewModel
 		var items = Asset.Items
 			.Select(_drawerItemsFactory.CreateItemViewModel)
 			.SelectMany(AddKeyPoints);
-		_items.Add(items);
+		_items.AddRange(items);
 	}
 
 	private IEnumerable<DrawerItemDataContext> AddKeyPoints(BoundedItemDataContext item)
