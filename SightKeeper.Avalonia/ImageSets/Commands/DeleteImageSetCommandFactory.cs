@@ -7,7 +7,7 @@ using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Avalonia.ImageSets;
+namespace SightKeeper.Avalonia.ImageSets.Commands;
 
 internal sealed class DeleteImageSetCommandFactory
 {

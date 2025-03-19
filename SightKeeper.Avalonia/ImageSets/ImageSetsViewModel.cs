@@ -5,6 +5,7 @@ using SightKeeper.Application;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ImageSets.Card;
+using SightKeeper.Avalonia.ImageSets.Commands;
 using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;

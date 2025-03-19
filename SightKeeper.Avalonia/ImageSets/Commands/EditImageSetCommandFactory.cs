@@ -8,7 +8,7 @@ using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Avalonia.ImageSets;
+namespace SightKeeper.Avalonia.ImageSets.Commands;
 
 internal sealed class EditImageSetCommandFactory
 {

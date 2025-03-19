@@ -7,7 +7,7 @@ using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Avalonia.Dialogs;
 
-namespace SightKeeper.Avalonia.ImageSets;
+namespace SightKeeper.Avalonia.ImageSets.Commands;
 
 internal sealed class CreateImageSetCommandFactory
 {
