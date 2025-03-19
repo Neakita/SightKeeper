@@ -7,7 +7,7 @@ using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;
 
-namespace SightKeeper.Avalonia.ImageSets;
+namespace SightKeeper.Avalonia.Annotation;
 
 public sealed class ImageSetViewModelsObservableRepository : ObservableRepository<ImageSetViewModel>, IDisposable
 {

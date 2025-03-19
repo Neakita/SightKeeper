@@ -1,6 +1,6 @@
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Avalonia.ImageSets;
+namespace SightKeeper.Avalonia.Annotation;
 
 public sealed class ImageSetViewModel : ViewModel
 {
