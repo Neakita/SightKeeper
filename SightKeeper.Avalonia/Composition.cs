@@ -13,6 +13,7 @@ using SightKeeper.Application.Annotation;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Creating;
+using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.Annotation;
@@ -113,5 +114,6 @@ public sealed partial class Composition
 		.Root<PoserToolingViewModel>(nameof(PoserToolingViewModel))
 		.Bind<PoserAnnotator>().Bind<ObservablePoserAnnotator>().As(Lifetime.Singleton).To<AppDataPoserAnnotator>()
 		.Bind<AnnotationDrawerComponent>().To<DrawerViewModel>()
-		.Bind<AnnotationSideBarComponent>().To<SideBarViewModel>();
+		.Bind<AnnotationSideBarComponent>().To<SideBarViewModel>()
+		.Bind<ImageSetEditor>().As(Lifetime.Singleton).To<AppDataImageSetEditor>();
 }
