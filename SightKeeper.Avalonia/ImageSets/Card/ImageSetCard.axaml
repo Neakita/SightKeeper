@@ -10,7 +10,8 @@
              x:DataType="card:ImageSetCardDataContext">
     <Button Margin="8"
             VerticalContentAlignment="Stretch"
-            Theme="{StaticResource CardButtonTheme}">
+            Theme="{StaticResource CardButtonTheme}"
+            Command="{Binding EditCommand}">
         <Button.ContextMenu>
             <ContextMenu Width="120">
                 <MenuItem
