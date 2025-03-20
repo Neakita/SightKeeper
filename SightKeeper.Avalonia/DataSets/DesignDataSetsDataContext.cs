@@ -8,7 +8,7 @@ using SightKeeper.Domain.DataSets.Poser3D;
 
 namespace SightKeeper.Avalonia.DataSets;
 
-internal sealed class DesignDataSetsViewModel : IDataSetsViewModel
+internal sealed class DesignDataSetsDataContext : DataSetsDataContext
 {
 	public IReadOnlyCollection<DataSetViewModel> DataSets { get; } =
 	[

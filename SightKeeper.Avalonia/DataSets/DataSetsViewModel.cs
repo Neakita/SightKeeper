@@ -15,7 +15,7 @@ using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets;
 
-internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
+internal partial class DataSetsViewModel : ViewModel, DataSetsDataContext
 {
 	public IReadOnlyCollection<DataSetViewModel> DataSets { get; }
 
@@ -77,7 +77,7 @@ internal partial class DataSetsViewModel : ViewModel, IDataSetsViewModel
 			_writeDataSetsDataAccess.Remove(dataSet);
 	}
 
-	ICommand IDataSetsViewModel.CreateDataSetCommand => CreateDataSetCommand;
-	ICommand IDataSetsViewModel.EditDataSetCommand => EditDataSetCommand;
-	ICommand IDataSetsViewModel.DeleteDataSetCommand => DeleteDataSetCommand;
+	ICommand DataSetsDataContext.CreateDataSetCommand => CreateDataSetCommand;
+	ICommand DataSetsDataContext.EditDataSetCommand => EditDataSetCommand;
+	ICommand DataSetsDataContext.DeleteDataSetCommand => DeleteDataSetCommand;
 }

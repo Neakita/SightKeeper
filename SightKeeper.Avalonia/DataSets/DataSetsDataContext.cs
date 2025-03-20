@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace SightKeeper.Avalonia.DataSets;
 
-internal interface IDataSetsViewModel
+internal interface DataSetsDataContext
 {
 	IReadOnlyCollection<DataSetViewModel> DataSets { get; }
 	ICommand CreateDataSetCommand { get; }
