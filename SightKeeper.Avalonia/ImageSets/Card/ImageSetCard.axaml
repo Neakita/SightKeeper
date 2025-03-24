@@ -8,9 +8,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.ImageSets.Card.ImageSetCard"
              x:DataType="card:ImageSetCardDataContext">
-    <Button Margin="8"
-            VerticalContentAlignment="Stretch"
-            Theme="{StaticResource CardButtonTheme}"
+    <Button Theme="{StaticResource CardButtonTheme}"
             Command="{Binding EditCommand}">
         <Button.ContextMenu>
             <ContextMenu Width="120">

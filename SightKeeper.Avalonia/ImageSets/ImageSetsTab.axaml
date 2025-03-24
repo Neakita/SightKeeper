@@ -27,7 +27,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <card:ImageSetCard/>
+                        <card:ImageSetCard Margin="8"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
