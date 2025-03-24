@@ -10,31 +10,29 @@
              x:DataType="local:DataSetDialogViewModel"
              HorizontalAlignment="Center"
              MinWidth="500">
-	<ScrollViewer>
-		<StackPanel Classes="regular-spacing">
-			<local:GeneralDataSetEditor DataContext="{Binding DataSetEditor}"/>
-			<ListBox SelectedItem="{Binding TypePicker.Type}"
-			         ItemsSource="{Binding TypePicker.Types}"
-			         Theme="{DynamicResource RadioButtonsListBoxTheme}"
-			         Classes="horizontal"
-                     IsVisible="{Binding TypePicker, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-			<tags:TagsEditor DataContext="{Binding TagsEditor}"/>
-            <StackPanel Orientation="Horizontal"
-                        Classes="regular-spacing"
-                        HorizontalAlignment="Right">
-                <Button Command="{Binding ApplyCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <icons:MaterialIcon Kind="Check"/>
-                        <TextBlock Text="Apply"/>
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding CloseCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <icons:MaterialIcon Kind="Close"/>
-                        <TextBlock Text="Cancel"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-		</StackPanel>
-	</ScrollViewer>
+    <StackPanel Classes="regular-spacing">
+        <local:GeneralDataSetEditor DataContext="{Binding DataSetEditor}"/>
+        <ListBox SelectedItem="{Binding TypePicker.Type}"
+                 ItemsSource="{Binding TypePicker.Types}"
+                 Theme="{DynamicResource RadioButtonsListBoxTheme}"
+                 Classes="horizontal"
+                 IsVisible="{Binding TypePicker, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+        <tags:TagsEditor DataContext="{Binding TagsEditor}"/>
+        <StackPanel Orientation="Horizontal"
+                    Classes="regular-spacing"
+                    HorizontalAlignment="Right">
+            <Button Command="{Binding ApplyCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <icons:MaterialIcon Kind="Check"/>
+                    <TextBlock Text="Apply"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding CloseCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <icons:MaterialIcon Kind="Close"/>
+                    <TextBlock Text="Cancel"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

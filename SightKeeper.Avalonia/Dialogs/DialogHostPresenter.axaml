@@ -69,34 +69,37 @@
 									        Classes="flat square"/>
 								</Grid>
 							</Border>
-							<ContentControl Name="DialogContentControl"
-							                Content="{Binding}"
-							                Classes="regular-padding"/>
-						</DockPanel>
+                            <ScrollViewer>
+                                <ContentControl Name="DialogContentControl"
+                                                Content="{Binding}"
+                                                Classes="regular-padding">
+                                    <ContentControl.DataTemplates>
+                                        <DataTemplate DataType="imageSets:ImageSetDialogViewModel">
+                                            <imageSets:ImageSetDialog/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="messageBox:MessageBoxDialogViewModel">
+                                            <messageBox:MessageBox/>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="dataSets:DataSetDialogViewModel">
+                                            <dataSets:DataSetDialog/>
+                                        </DataTemplate>
+                                    </ContentControl.DataTemplates>
+                                </ContentControl>
+                            </ScrollViewer>
+                        </DockPanel>
 					</Border>
 				</DataTemplate>
 			</TransitioningContentControl.ContentTemplate>
 			<TransitioningContentControl.PageTransition>
 				<PageSlide Orientation="Vertical" Duration="0:0:0.5">
 					<PageSlide.SlideInEasing>
-						<CircularEaseInOut/>
+						<CircularEaseOut/>
 					</PageSlide.SlideInEasing>
 					<PageSlide.SlideOutEasing>
-						<CircularEaseInOut/>
+						<CircularEaseIn/>
 					</PageSlide.SlideOutEasing>
 				</PageSlide>
 			</TransitioningContentControl.PageTransition>
-            <TransitioningContentControl.DataTemplates>
-                <DataTemplate DataType="imageSets:ImageSetDialogViewModel">
-                    <imageSets:ImageSetDialog/>
-                </DataTemplate>
-                <DataTemplate DataType="messageBox:MessageBoxDialogViewModel">
-                    <messageBox:MessageBox/>
-                </DataTemplate>
-                <DataTemplate DataType="dataSets:DataSetDialogViewModel">
-                    <dataSets:DataSetDialog/>
-                </DataTemplate>
-            </TransitioningContentControl.DataTemplates>
 		</TransitioningContentControl>
 	</Panel>
 </UserControl>

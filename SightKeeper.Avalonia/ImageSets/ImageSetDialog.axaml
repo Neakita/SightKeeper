@@ -9,32 +9,30 @@
              x:DataType="imageSets:ImageSetDialogViewModel"
              HorizontalAlignment="Center"
              MinWidth="500">
-    <ScrollViewer>
+    <StackPanel Classes="regular-spacing">
         <StackPanel Classes="regular-spacing">
-            <StackPanel Classes="regular-spacing">
-                <HeaderedContentControl Header="Name">
-                    <TextBox Text="{Binding Name}"/>
-                </HeaderedContentControl>
-                <HeaderedContentControl Header="Description">
-                    <TextBox Text="{Binding Description}"/>
-                </HeaderedContentControl>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal"
-                        Classes="regular-spacing"
-                        HorizontalAlignment="Right">
-                <Button Command="{Binding ApplyCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <icons:MaterialIcon Kind="Check"/>
-                        <TextBlock Text="Apply"/>
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding CloseCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <icons:MaterialIcon Kind="Close"/>
-                        <TextBlock Text="Cancel"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
+            <HeaderedContentControl Header="Name">
+                <TextBox Text="{Binding Name}"/>
+            </HeaderedContentControl>
+            <HeaderedContentControl Header="Description">
+                <TextBox Text="{Binding Description}"/>
+            </HeaderedContentControl>
         </StackPanel>
-    </ScrollViewer>
+        <StackPanel Orientation="Horizontal"
+                    Classes="regular-spacing"
+                    HorizontalAlignment="Right">
+            <Button Command="{Binding ApplyCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <icons:MaterialIcon Kind="Check"/>
+                    <TextBlock Text="Apply"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding CloseCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <icons:MaterialIcon Kind="Close"/>
+                    <TextBlock Text="Cancel"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </StackPanel>
 </UserControl>
