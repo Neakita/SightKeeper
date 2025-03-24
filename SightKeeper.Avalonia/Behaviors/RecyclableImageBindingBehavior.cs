@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Interactivity;
-using Avalonia.Media.Imaging;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 using Image = SightKeeper.Domain.Images.Image;
@@ -61,13 +60,10 @@ internal sealed class RecyclableImageBindingBehavior : Behavior<global::Avalonia
 	protected override void OnDetachedFromVisualTree()
 	{
 		_cancellationTokenSource?.Cancel();
-		if (_bitmap == null)
-			return;
-		Guard.IsNotNull(Composition);
-		Composition.ImageLoader.ReturnBitmapToPool(_bitmap);
+		RecycleBitmap();
 	}
 
-	private WriteableBitmap? _bitmap;
+	private PooledWriteableBitmap? _bitmap;
 	private CancellationTokenSource? _cancellationTokenSource;
 
 	private async void UpdateSourceAsyncOrThrow()
@@ -91,8 +87,7 @@ internal sealed class RecyclableImageBindingBehavior : Behavior<global::Avalonia
 	{
 		if (_bitmap == null)
 			return;
-		Guard.IsNotNull(Composition);
-		Composition.ImageLoader.ReturnBitmapToPool(_bitmap);
+		_bitmap.ReturnToPool();
 		_bitmap = null;
 	}
 

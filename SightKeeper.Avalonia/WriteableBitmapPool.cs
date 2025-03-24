@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using Avalonia;
-using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Serilog;
 
@@ -17,24 +16,16 @@ public sealed class WriteableBitmapPool : IDisposable
 		_logger = logger;
 	}
 
-	public WriteableBitmap Rent(PixelSize size, PixelFormat? format = null)
+	public PooledWriteableBitmap Rent(PixelSize size, PixelFormat format)
 	{
 		BitmapArchetype archetype = new(size, format);
 		var bag = GetOrCreateBag(archetype);
-		Interlocked.Increment(ref _rented);
 		if (!bag.TryTake(out var bitmap))
-			bitmap = new WriteableBitmap(size, DPI, format);
+			bitmap = new PooledWriteableBitmap(this, size, format);
+		bitmap.MarkAsRented();
+		Interlocked.Increment(ref _rented);
 		_logger.Verbose("Bitmap is rented from a pool. Total rented count: {rented}", _rented);
 		return bitmap;
-	}
-
-	public void Return(WriteableBitmap bitmap)
-	{
-		BitmapArchetype archetype = new(bitmap.PixelSize, bitmap.Format);
-		var bag = GetOrCreateBag(archetype);
-		bag.Add(bitmap);
-		Interlocked.Decrement(ref _rented);
-		_logger.Verbose("Bitmap is returned to a pool. Total rented count: {rented}", _rented);
 	}
 
 	public void Dispose()
@@ -45,13 +36,21 @@ public sealed class WriteableBitmapPool : IDisposable
 		_bags.Clear();
 	}
 
-	private static readonly Vector DPI = new(96, 96);
-	private readonly ConcurrentDictionary<BitmapArchetype, ConcurrentBag<WriteableBitmap>> _bags = new();
+	internal void Return(PooledWriteableBitmap bitmap)
+	{
+		BitmapArchetype archetype = new(bitmap.PixelSize, bitmap.Format);
+		var bag = GetOrCreateBag(archetype);
+		bag.Add(bitmap);
+		Interlocked.Decrement(ref _rented);
+		_logger.Verbose("Bitmap is returned to a pool. Total rented count: {rented}", _rented);
+	}
+
+	private readonly ConcurrentDictionary<BitmapArchetype, ConcurrentBag<PooledWriteableBitmap>> _bags = new();
 	private readonly ILogger _logger;
 	private int _rented;
 
-	private ConcurrentBag<WriteableBitmap> GetOrCreateBag(BitmapArchetype archetype)
+	private ConcurrentBag<PooledWriteableBitmap> GetOrCreateBag(BitmapArchetype archetype)
 	{
-		return _bags.GetOrAdd(archetype, static _ => new ConcurrentBag<WriteableBitmap>());
+		return _bags.GetOrAdd(archetype, static _ => new ConcurrentBag<PooledWriteableBitmap>());
 	}
 }

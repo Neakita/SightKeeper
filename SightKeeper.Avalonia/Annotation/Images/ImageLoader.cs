@@ -23,7 +23,7 @@ public sealed class ImageLoader
 		_imageDataAccess = imageDataAccess;
 	}
 
-	public async Task<WriteableBitmap?> LoadImageAsync(
+	public async Task<PooledWriteableBitmap?> LoadImageAsync(
 		Image image,
 		int? maximumLargestDimension,
 		CancellationToken cancellationToken)
@@ -31,17 +31,12 @@ public sealed class ImageLoader
 		PixelSize size = maximumLargestDimension == null
 			? image.Size.ToPixelSize()
 			: ComputeSize(image, maximumLargestDimension.Value);
-		WriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
+		PooledWriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
 		bool isRead = await ReadImageDataToBitmapAsync(image, bitmap, cancellationToken);
 		if (isRead)
 			return bitmap;
-		ReturnBitmapToPool(bitmap);
+		bitmap.ReturnToPool();
 		return null;
-	}
-
-	public void ReturnBitmapToPool(WriteableBitmap bitmap)
-	{
-		_bitmapPool.Return(bitmap);
 	}
 
 	private readonly WriteableBitmapPool _bitmapPool;
