@@ -62,7 +62,7 @@
                                     </Image.Resources>
                                     <Interaction.Behaviors>
                                         <behaviors:RecyclableImageBindingBehavior
-                                            Image="{Binding Value}"
+                                            Image="{Binding}"
                                             TargetSize="{Binding #ImageContainer.Bounds.Size.Width, Converter={StaticResource SizeToImageTargetSizeConverter}}"
                                             Composition="{StaticResource Composition}"/>
                                     </Interaction.Behaviors>
@@ -73,13 +73,13 @@
                     <StackPanel Grid.Row="2"
                                 Orientation="Horizontal"
                                 Classes="small-spacing"
-                                ToolTip.Tip="{Binding Value.CreationTimestamp}"
+                                ToolTip.Tip="{Binding CreationTimestamp}"
                                 Background="Transparent">
                         <icons:MaterialIcon Kind="Calendar"/>
                         <TextBlock>
                             <Interaction.Behaviors>
                                 <behaviors:DisplayRelativeDateTimeBehavior
-                                    DateTime="{Binding Value.CreationTimestamp}"/>
+                                    DateTime="{Binding CreationTimestamp}"/>
                             </Interaction.Behaviors>
                         </TextBlock>
                     </StackPanel>

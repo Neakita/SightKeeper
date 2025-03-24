@@ -10,7 +10,6 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Domain.Images;
 using Vibrance;
-using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.Annotation.Images;
 
@@ -27,19 +26,16 @@ public sealed partial class ImagesViewModel : ViewModel, ImageSelection, Annotat
 		}
 	}
 
-	public ReadOnlyObservableList<ImageViewModel> Images { get; }
+	public ReadOnlyObservableList<Image> Images => _images;
 	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
-	public Image? SelectedImage => SelectedImageIndex >= 0 ? Images[SelectedImageIndex].Value : null;
-	public ImageViewModel? SelectedImageViewModel => SelectedImage != null ? Images[SelectedImageIndex] : null;
+	public Image? SelectedImage => SelectedImageIndex >= 0 ? Images[SelectedImageIndex] : null;
+	public Image? SelectedImageViewModel => SelectedImage != null ? Images[SelectedImageIndex] : null;
 	public IObservable<Unit> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
 	public ImagesViewModel(
 		ObservableImageDataAccess observableDataAccess)
 	{
 		_images = new ObservableList<Image>();
-		Images = _images
-			.Transform(image => new ImageViewModel(image))
-			.ToObservableList();
 		observableDataAccess.Added
 			.Where(image => image.Set == Set)
 			.Subscribe(_images.Add)
