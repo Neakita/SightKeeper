@@ -5,7 +5,11 @@ namespace SightKeeper.Avalonia;
 
 internal sealed class ParametrizedCommandAdapter : ICommand
 {
-	public event EventHandler? CanExecuteChanged;
+	public event EventHandler? CanExecuteChanged
+	{
+		add => _command.CanExecuteChanged += value;
+		remove => _command.CanExecuteChanged -= value;
+	}
 
 	public ParametrizedCommandAdapter(ICommand command, object? parameter)
 	{
