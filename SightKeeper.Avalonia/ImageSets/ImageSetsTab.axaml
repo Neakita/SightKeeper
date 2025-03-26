@@ -11,7 +11,7 @@
     <Design.DataContext>
         <imageSets:DesignImageSetsDataContext/>
     </Design.DataContext>
-    <ScrollViewer Classes="regular-padding" Name="Root">
+    <ScrollViewer Classes="regular-padding">
         <StackPanel Classes="medium-spacing">
             <Border Classes="outer regular-padding">
                 <Button Content="{icons:MaterialIconExt Plus}" Classes="square low-accent"
