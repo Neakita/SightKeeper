@@ -5,9 +5,10 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:card="clr-namespace:SightKeeper.Avalonia.ImageSets.Card"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.ImageSets.Card.ImageSetCard"
-             x:DataType="card:ImageSetCardDataContext">
+             x:DataType="card:ImageSetCardDataContext"
+             d:DataContext="{x:Static card:DesignImageSetCardDataContext.Instance}">
     <Button Theme="{StaticResource CardButtonTheme}"
             Command="{Binding EditCommand}">
         <Button.ContextMenu>
@@ -37,7 +38,8 @@
                             ClipToBounds="True">
                         <Image Stretch="UniformToFill">
                             <Interaction.Behaviors>
-                                <behaviors:ImageDataContextBindingBehavior DataContext="{Binding PreviewImage}"/>
+                                <behaviors:ImageDataContextBindingBehavior DataContext="{Binding PreviewImage}"
+                                                                           TargetSize="156"/>
                             </Interaction.Behaviors>
                         </Image>
                     </Border>

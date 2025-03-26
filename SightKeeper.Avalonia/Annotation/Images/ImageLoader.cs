@@ -30,7 +30,7 @@ public sealed class ImageLoader
 	{
 		PixelSize size = maximumLargestDimension == null
 			? image.Size.ToPixelSize()
-			: ComputeSize(image, maximumLargestDimension.Value);
+			: ComputeSize(image.Size, maximumLargestDimension.Value);
 		PooledWriteableBitmap bitmap = _bitmapPool.Rent(size, PixelFormat.Rgb32);
 		bool isRead = await ReadImageDataToBitmapAsync(image, bitmap, cancellationToken);
 		if (isRead)
@@ -85,12 +85,12 @@ public sealed class ImageLoader
 		return true;
 	}
 
-	private static PixelSize ComputeSize(Image image, int maximumLargestDimension)
+	public static PixelSize ComputeSize(Vector2<ushort> imageSize, int maximumLargestDimension)
 	{
-		var sourceLargestDimension = Math.Max(image.Size.X, image.Size.Y);
+		var sourceLargestDimension = Math.Max(imageSize.X, imageSize.Y);
 		if (sourceLargestDimension < maximumLargestDimension)
-			return new PixelSize(image.Size.X, image.Size.Y);
-		Vector2<int> size = image.Size.ToInt32() * maximumLargestDimension / sourceLargestDimension;
+			return new PixelSize(imageSize.X, imageSize.Y);
+		Vector2<int> size = imageSize.ToInt32() * maximumLargestDimension / sourceLargestDimension;
 		return new PixelSize(size.X, size.Y);
 	}
 }
