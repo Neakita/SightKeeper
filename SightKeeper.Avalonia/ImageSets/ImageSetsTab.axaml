@@ -5,7 +5,7 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
              xmlns:card="clr-namespace:SightKeeper.Avalonia.ImageSets.Card"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.ImageSets.ImageSetsTab"
              x:DataType="imageSets:ImageSetsDataContext">
     <Design.DataContext>
