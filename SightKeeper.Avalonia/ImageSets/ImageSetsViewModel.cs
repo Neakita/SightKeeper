@@ -32,7 +32,7 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDis
 		_editImageSetCommand = editImageSetCommandFactory.CreateCommand();
 		_deleteImageSetCommand = deleteImageSetCommandFactory.CreateCommand();
 		ImageSets = imageSetsRepository.Items.Transform(CreateImageSetViewModel).ToObservableList();
-		ImageSets.ToDictionary(imageSetViewModel => imageSetViewModel.ImageSet, out var imageSetCardViewModelsLookup);
+		_disposable = ImageSets.ToDictionary(imageSetViewModel => imageSetViewModel.ImageSet, out var imageSetCardViewModelsLookup);
 		_imageSetCardViewModelsLookup = imageSetCardViewModelsLookup;
 		imageSetEditor.Edited.Subscribe(OnImageSetEdited);
 	}
@@ -40,12 +40,14 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDis
 	public void Dispose()
 	{
 		ImageSets.Dispose();
+		_disposable.Dispose();
 	}
 
 	private readonly ICommand _editImageSetCommand;
 	private readonly ICommand _deleteImageSetCommand;
 	private readonly Dictionary<ImageSet, ImageSetCardViewModel> _imageSetCardViewModelsLookup;
 	private readonly ImageLoader _imageLoader;
+	private readonly IDisposable _disposable;
 
 	private ImageSetCardViewModel CreateImageSetViewModel(ImageSet imageSet)
 	{
