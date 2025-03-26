@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using SightKeeper.Application;
 using SightKeeper.Application.ImageSets.Editing;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ImageSets.Card;
 using SightKeeper.Avalonia.ImageSets.Commands;
@@ -23,8 +24,10 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDis
 		EditImageSetCommandFactory editImageSetCommandFactory,
 		DeleteImageSetCommandFactory deleteImageSetCommandFactory,
 		ObservableRepository<ImageSet> imageSetsRepository,
-		ImageSetEditor imageSetEditor)
+		ImageSetEditor imageSetEditor,
+		ImageLoader imageLoader)
 	{
+		_imageLoader = imageLoader;
 		CreateImageSetCommand = createImageSetCommandFactory.CreateCommand();
 		_editImageSetCommand = editImageSetCommandFactory.CreateCommand();
 		_deleteImageSetCommand = deleteImageSetCommandFactory.CreateCommand();
@@ -42,12 +45,13 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDis
 	private readonly ICommand _editImageSetCommand;
 	private readonly ICommand _deleteImageSetCommand;
 	private readonly Dictionary<ImageSet, ImageSetCardViewModel> _imageSetCardViewModelsLookup;
+	private readonly ImageLoader _imageLoader;
 
 	private ImageSetCardViewModel CreateImageSetViewModel(ImageSet imageSet)
 	{
 		ParametrizedCommandAdapter editCommand = new(_editImageSetCommand, imageSet);
 		ParametrizedCommandAdapter deleteCommand = new(_deleteImageSetCommand, imageSet);
-		return new ImageSetCardViewModel(imageSet, editCommand, deleteCommand);
+		return new ImageSetCardViewModel(imageSet, editCommand, deleteCommand, _imageLoader);
 	}
 
 	private void OnImageSetEdited(ImageSet set)

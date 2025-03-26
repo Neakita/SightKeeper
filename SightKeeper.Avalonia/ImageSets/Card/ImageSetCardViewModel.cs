@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.Images;
 
@@ -8,15 +9,18 @@ internal sealed class ImageSetCardViewModel : ViewModel, ImageSetCardDataContext
 {
 	public ImageSet ImageSet { get; }
 	public string Name => ImageSet.Name;
-	public Image? PreviewImage => ImageSet.Images.RandomOrDefault();
+	public ImageDataContext? PreviewImage { get; }
 	public ICommand EditCommand { get; }
 	public ICommand DeleteCommand { get; }
 
-	public ImageSetCardViewModel(ImageSet value, ICommand editCommand, ICommand deleteCommand)
+	public ImageSetCardViewModel(ImageSet value, ICommand editCommand, ICommand deleteCommand, ImageLoader imageLoader)
 	{
 		ImageSet = value;
 		EditCommand = editCommand;
 		DeleteCommand = deleteCommand;
+		var image = ImageSet.Images.RandomOrDefault();
+		if (image != null)
+			PreviewImage = new ImageViewModel(imageLoader, image);
 	}
 
 	internal void NotifyPropertiesChanged()

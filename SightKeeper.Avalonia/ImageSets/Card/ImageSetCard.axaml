@@ -37,10 +37,7 @@
                             ClipToBounds="True">
                         <Image Stretch="UniformToFill">
                             <Interaction.Behaviors>
-                                <behaviors:RecyclableImageBindingBehavior
-                                    TargetSize="156"
-                                    Image="{Binding PreviewImage}"
-                                    Composition="{StaticResource Composition}"/>
+                                <behaviors:ImageDataContextBindingBehavior DataContext="{Binding PreviewImage}"/>
                             </Interaction.Behaviors>
                         </Image>
                     </Border>
