@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using SightKeeper.Application;
-using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.DataSets.Card;
 using SightKeeper.Avalonia.DataSets.Commands;
 using SightKeeper.Domain.DataSets;
@@ -15,12 +14,13 @@ internal class DataSetsViewModel : ViewModel, DataSetsDataContext, IDisposable
 	public IReadOnlyCollection<DataSetCardDataContext> DataSets { get; }
 	public ICommand CreateDataSetCommand { get; }
 
-	public DataSetsViewModel(ObservableRepository<DataSet> dataSetsObservableRepository, CreateDataSetCommandFactory createDataSetCommandFactory, EditDataSetCommandFactory editDataSetCommandFactory, DeleteDataSetCommandFactory deleteDataSetCommandFactory, ImageLoader imageLoader)
+	public DataSetsViewModel(
+		ObservableRepository<DataSet> dataSetsObservableRepository,
+		CreateDataSetCommandFactory createDataSetCommandFactory,
+		DataSetCardViewModelFactory dataSetCardViewModelFactory)
 	{
-		var editDataSetCommand = editDataSetCommandFactory.CreateCommand();
-		var deleteDataSetCommand = deleteDataSetCommandFactory.CreateCommand();
 		var dataSets = dataSetsObservableRepository.Items
-			.Transform(dataSet => new DataSetCardViewModel(dataSet, editDataSetCommand, deleteDataSetCommand, imageLoader))
+			.Transform(dataSetCardViewModelFactory.CreateDataSetCardViewModel)
 			.ToObservableList();
 		DataSets = dataSets;
 		_disposable = dataSets;
