@@ -29,7 +29,6 @@ public sealed partial class ImagesViewModel : ViewModel, ImageSelection, Annotat
 	public ReadOnlyObservableList<Image> Images => _images;
 	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
 	public Image? SelectedImage => SelectedImageIndex >= 0 ? Images[SelectedImageIndex] : null;
-	public Image? SelectedImageViewModel => SelectedImage != null ? Images[SelectedImageIndex] : null;
 	public IObservable<Unit> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
 	public ImagesViewModel(
