@@ -16,6 +16,8 @@ internal static class ObservableChangesExtensions
 		result = dictionary;
 		return changes.Subscribe(change =>
 		{
+			if (change is Move<TValue>)
+				return;
 			foreach (var oldItem in change.OldItems)
 			{
 				var key = keySelector(oldItem);
