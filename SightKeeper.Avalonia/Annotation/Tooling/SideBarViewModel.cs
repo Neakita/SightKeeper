@@ -5,7 +5,6 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.DataSets;
-using SightKeeper.Avalonia.ImageSets;
 using Vibrance;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;

@@ -5,7 +5,6 @@ using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.DataSets;
-using SightKeeper.Avalonia.ImageSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;

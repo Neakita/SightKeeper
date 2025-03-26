@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using SightKeeper.Avalonia.DataSets;
-using SightKeeper.Avalonia.ImageSets;
 using Vibrance;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
