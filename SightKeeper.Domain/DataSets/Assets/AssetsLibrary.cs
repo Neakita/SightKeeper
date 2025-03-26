@@ -2,7 +2,9 @@
 
 namespace SightKeeper.Domain.DataSets.Assets;
 
-public abstract class AssetsLibrary
+public interface AssetsLibrary
 {
-	public abstract bool Contains(Image image);
+	IReadOnlyCollection<Image> Images { get; }
+
+	bool Contains(Image image);
 }

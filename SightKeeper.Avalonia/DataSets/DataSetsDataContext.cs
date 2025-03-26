@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Windows.Input;
+using SightKeeper.Avalonia.DataSets.Card;
 
 namespace SightKeeper.Avalonia.DataSets;
 
 internal interface DataSetsDataContext
 {
-	IReadOnlyCollection<DataSetViewModel> DataSets { get; }
+	IReadOnlyCollection<DataSetCardDataContext> DataSets { get; }
 	ICommand CreateDataSetCommand { get; }
-	ICommand EditDataSetCommand { get; }
-	ICommand DeleteDataSetCommand { get; }
 }

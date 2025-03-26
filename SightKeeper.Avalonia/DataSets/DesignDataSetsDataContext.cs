@@ -1,24 +1,24 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Domain.DataSets.Classifier;
-using SightKeeper.Domain.DataSets.Detector;
-using SightKeeper.Domain.DataSets.Poser2D;
-using SightKeeper.Domain.DataSets.Poser3D;
+using SightKeeper.Avalonia.DataSets.Card;
 
 namespace SightKeeper.Avalonia.DataSets;
 
 internal sealed class DesignDataSetsDataContext : DataSetsDataContext
 {
-	public IReadOnlyCollection<DataSetViewModel> DataSets { get; } =
+	public IReadOnlyCollection<DataSetCardDataContext> DataSets { get; } =
 	[
-		new(new ClassifierDataSet { Name = "Classifier DataSet" }),
-		new(new DetectorDataSet { Name = "Detector DataSet" }),
-		new(new Poser2DDataSet { Name = "Poser 2D DataSet" }),
-		new(new Poser3DDataSet { Name = "Poser 3D DataSet" }),
+		new DesignDataSetCardDataContext("PD2"),
+		new DesignDataSetCardDataContext("KF2 Sample 1", "kfSample1.jpg"),
+		new DesignDataSetCardDataContext("KF2 Sample 2", "kfSample2.jpg"),
+		new DesignDataSetCardDataContext("KF2 Sample 3", "kfSample3.jpg"),
+		new DesignDataSetCardDataContext("KF2 Sample 4", "kfSample4.jpg"),
+		new DesignDataSetCardDataContext("KF2 Sample 5", "kfSample5.jpg"),
+		new DesignDataSetCardDataContext("KF2 Sample 6", "kfSample6.jpg"),
+		new DesignDataSetCardDataContext("KF2 Sample 7", "kfSample7.jpg"),
+		new DesignDataSetCardDataContext("KF2 Sample 8", "kfSample8.jpg"),
 	];
 
 	public ICommand CreateDataSetCommand { get; } = new RelayCommand(() => { });
-	public ICommand EditDataSetCommand { get; } = new RelayCommand(() => { });
-	public ICommand DeleteDataSetCommand { get; } = new RelayCommand(() => { });
 }

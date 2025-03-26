@@ -4,37 +4,33 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:card="clr-namespace:SightKeeper.Avalonia.DataSets.Card"
+             mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.DataSets.DataSetsTab"
              x:DataType="local:DataSetsDataContext">
     <Design.DataContext>
         <local:DesignDataSetsDataContext/>
     </Design.DataContext>
-    <UserControl.Resources>
-		<local:TreeDataGridDataSetsConverter x:Key="DataSetsConverter"/>
-        <DataTemplate x:Key="DataSetActions" DataType="local:DataSetViewModel">
-            <StackPanel Orientation="Horizontal" Classes="regular-spacing">
-                <Button Classes="square"
-                        Content="{icons:MaterialIconExt Edit}"
-                        Command="{Binding $parent[TreeDataGrid].((local:DataSetsDataContext)DataContext).EditDataSetCommand}"
-                        CommandParameter="{Binding Value}"
-                        ToolTip.Tip="{Binding Value.Name, StringFormat=Edit \'{0}\'}"/>
-                <Button Classes="square"
-                        Content="{icons:MaterialIconExt Delete}"
-                        Command="{Binding $parent[TreeDataGrid].((local:DataSetsDataContext)DataContext).DeleteDataSetCommand}"
-                        CommandParameter="{Binding Value}"
-                        ToolTip.Tip="{Binding Value.Name, StringFormat=Delete \'{0}\'}"/>
-            </StackPanel>
-        </DataTemplate>
-	</UserControl.Resources>
-	<ScrollViewer Classes="regular-padding">
-		<StackPanel Classes="regular-spacing">
-			<Border Classes="outer regular-padding">
-				<Button Content="Create dataset" Command="{Binding CreateDataSetCommand}"/>
-			</Border>
-			<Border Classes="outer regular-padding">
-				<TreeDataGrid Source="{Binding DataSets, Converter={StaticResource DataSetsConverter}}"/>
-			</Border>
-		</StackPanel>
-	</ScrollViewer>
+    <ScrollViewer Classes="regular-padding">
+        <StackPanel Classes="medium-spacing">
+            <Border Classes="outer regular-padding">
+                <Button Content="{icons:MaterialIconExt Plus}" Classes="square low-accent"
+                        Command="{Binding CreateDataSetCommand}"
+                        ToolTip.Tip="Create new data set"/>
+            </Border>
+            <ItemsControl ItemsSource="{Binding DataSets}"
+                          Margin="-8">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <card:DataSetCard Margin="8"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

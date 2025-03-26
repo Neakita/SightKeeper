@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Card"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             mc:Ignorable="d"
+             x:Class="SightKeeper.Avalonia.DataSets.Card.DataSetCard"
+             x:DataType="local:DataSetCardDataContext"
+             d:DataContext="{x:Static local:DesignDataSetCardDataContext.Instance}">
+    <Button Theme="{StaticResource CardButtonTheme}">
+        <Button.ContextMenu>
+            <ContextMenu Width="120">
+                <MenuItem
+                    Header="Edit"
+                    Icon="{icons:MaterialIconExt Pencil}"
+                    Command="{Binding EditCommand}"/>
+                <MenuItem
+                    Header="Delete"
+                    Icon="{icons:MaterialIconExt TrashCanOutline}"
+                    Classes="red-accent"
+                    Command="{Binding DeleteCommand}"/>
+            </ContextMenu>
+        </Button.ContextMenu>
+        <StackPanel>
+            <Border BoxShadow="0 3 3 0 #20000000"
+                    Height="156"
+                    CornerRadius="12"
+                    Background="{DynamicResource ControlBackground}">
+                <Panel>
+                    <icons:MaterialIcon Kind="Mountain"
+                                        Foreground="{StaticResource WatermarkSecondary}"
+                                        Margin="12"
+                                        Opacity="0.2"/>
+                    <Border CornerRadius="12"
+                            ClipToBounds="True">
+                        <Image Stretch="UniformToFill">
+                            <Interaction.Behaviors>
+                                <behaviors:ImageDataContextBindingBehavior
+                                    TargetSize="156"
+                                    DataContext="{Binding Image}"/>
+                            </Interaction.Behaviors>
+                        </Image>
+                    </Border>
+                </Panel>
+            </Border>
+            <TextBlock Text="{Binding Name}" MaxLines="1"/>
+        </StackPanel>
+    </Button>
+</UserControl>

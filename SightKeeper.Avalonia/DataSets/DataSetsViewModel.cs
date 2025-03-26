@@ -1,83 +1,36 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Material.Icons;
 using SightKeeper.Application;
-using SightKeeper.Application.DataSets;
-using SightKeeper.Application.DataSets.Creating;
-using SightKeeper.Application.DataSets.Editing;
-using SightKeeper.Avalonia.DataSets.Dialogs;
-using SightKeeper.Avalonia.Dialogs;
-using SightKeeper.Avalonia.Dialogs.MessageBox;
+using SightKeeper.Avalonia.Annotation.Images;
+using SightKeeper.Avalonia.DataSets.Card;
+using SightKeeper.Avalonia.DataSets.Commands;
 using SightKeeper.Domain.DataSets;
+using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.DataSets;
 
-internal partial class DataSetsViewModel : ViewModel, DataSetsDataContext
+internal class DataSetsViewModel : ViewModel, DataSetsDataContext, IDisposable
 {
-	public IReadOnlyCollection<DataSetViewModel> DataSets { get; }
+	public IReadOnlyCollection<DataSetCardDataContext> DataSets { get; }
+	public ICommand CreateDataSetCommand { get; }
 
-	public DataSetsViewModel(
-		DataSetViewModelsObservableRepository dataSetsObservableRepository,
-		DialogManager dialogManager,
-		ReadDataAccess<DataSet> readDataSetsDataAccess,
-		DataSetCreator dataSetCreator,
-		DataSetEditor dataSetEditor,
-		WriteDataAccess<DataSet> writeDataSetsDataAccess)
+	public DataSetsViewModel(ObservableRepository<DataSet> dataSetsObservableRepository, CreateDataSetCommandFactory createDataSetCommandFactory, EditDataSetCommandFactory editDataSetCommandFactory, DeleteDataSetCommandFactory deleteDataSetCommandFactory, ImageLoader imageLoader)
 	{
-		_dialogManager = dialogManager;
-		_readDataSetsDataAccess = readDataSetsDataAccess;
-		_dataSetCreator = dataSetCreator;
-		_dataSetEditor = dataSetEditor;
-		_writeDataSetsDataAccess = writeDataSetsDataAccess;
-		DataSets = dataSetsObservableRepository.Items;
-		_newDataSetDataValidator = new NewDataSetDataValidator(new DataSetDataValidator(), readDataSetsDataAccess);
+		var editDataSetCommand = editDataSetCommandFactory.CreateCommand();
+		var deleteDataSetCommand = deleteDataSetCommandFactory.CreateCommand();
+		var dataSets = dataSetsObservableRepository.Items
+			.Transform(dataSet => new DataSetCardViewModel(dataSet, editDataSetCommand, deleteDataSetCommand, imageLoader))
+			.ToObservableList();
+		DataSets = dataSets;
+		_disposable = dataSets;
+		CreateDataSetCommand = createDataSetCommandFactory.CreateCommand();
 	}
 
-	private readonly DialogManager _dialogManager;
-	private readonly ReadDataAccess<DataSet> _readDataSetsDataAccess;
-	private readonly DataSetCreator _dataSetCreator;
-	private readonly DataSetEditor _dataSetEditor;
-	private readonly WriteDataAccess<DataSet> _writeDataSetsDataAccess;
-	private readonly NewDataSetDataValidator _newDataSetDataValidator;
+	private readonly IDisposable _disposable;
 
-	[ObservableProperty] private DataSetViewModel? _selectedDataSet;
-
-	[RelayCommand]
-	private async Task CreateDataSetAsync()
+	public void Dispose()
 	{
-		using CreateDataSetViewModel dialog = new(new DataSetEditorViewModel(_newDataSetDataValidator));
-		if (await _dialogManager.ShowDialogAsync(dialog))
-			_dataSetCreator.Create(
-				dialog.DataSetEditor,
-				dialog.TagsEditor.Tags,
-				dialog.TypePicker.Type);
+		_disposable.Dispose();
 	}
-
-	[RelayCommand]
-	private async Task EditDataSetAsync(DataSet dataSet)
-	{
-		using EditDataSetViewModel dialog = new(dataSet, new DataSetEditorViewModel(new ExistingDataSetDataValidator(dataSet, new DataSetDataValidator(), _readDataSetsDataAccess), dataSet));
-		if (await _dialogManager.ShowDialogAsync(dialog))
-			_dataSetEditor.Edit(dataSet, dialog.DataSetEditor, dialog.TagsEditor.Tags);
-	}
-
-	[RelayCommand]
-	private async Task DeleteDataSetAsync(DataSet dataSet)
-	{
-		MessageBoxButtonDefinition deletionButton = new("Delete", MaterialIconKind.Delete);
-		MessageBoxDialogViewModel dialog = new(
-			"Data set deletion confirmation",
-			$"Are you sure you want to permanently delete the data set '{dataSet.Name}'? You will not be able to recover it.",
-			deletionButton,
-			new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel));
-		if (await _dialogManager.ShowDialogAsync(dialog) == deletionButton)
-			_writeDataSetsDataAccess.Remove(dataSet);
-	}
-
-	ICommand DataSetsDataContext.CreateDataSetCommand => CreateDataSetCommand;
-	ICommand DataSetsDataContext.EditDataSetCommand => EditDataSetCommand;
-	ICommand DataSetsDataContext.DeleteDataSetCommand => DeleteDataSetCommand;
 }

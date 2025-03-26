@@ -6,6 +6,7 @@ namespace SightKeeper.Domain.DataSets.Assets;
 public sealed class AssetsLibrary<TAsset> : AssetsLibrary, AssetsOwner<TAsset> where TAsset : Asset
 {
 	public IReadOnlyDictionary<Image, TAsset> Assets => _assets.AsReadOnly();
+	IReadOnlyCollection<Image> AssetsLibrary.Images => _assets.Keys;
 
 	public TAsset GetOrMakeAsset(Image image)
 	{
@@ -38,7 +39,7 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary, AssetsOwner<TAsset> w
 		_assets.Clear();
 	}
 
-	public override bool Contains(Image image)
+	public bool Contains(Image image)
 	{
 		return _assets.ContainsKey(image);
 	}
