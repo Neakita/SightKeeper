@@ -25,7 +25,9 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDis
 		ImageSetCardViewModelFactory imageSetCardViewModelFactory)
 	{
 		CreateImageSetCommand = createImageSetCommandFactory.CreateCommand();
-		ImageSets = imageSetsRepository.Items.Transform(imageSetCardViewModelFactory.CreateImageSetCardViewModel).ToObservableList();
+		ImageSets = imageSetsRepository.Items
+			.Transform(imageSetCardViewModelFactory.CreateImageSetCardViewModel)
+			.ToObservableList();
 		_disposable = ImageSets.ToDictionary(imageSetViewModel => imageSetViewModel.ImageSet, out var imageSetCardViewModelsLookup);
 		_imageSetCardViewModelsLookup = imageSetCardViewModelsLookup;
 		imageSetEditor.Edited.Subscribe(OnImageSetEdited);
