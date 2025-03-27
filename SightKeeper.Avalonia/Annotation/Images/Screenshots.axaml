@@ -5,9 +5,12 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:images="clr-namespace:SightKeeper.Avalonia.Annotation.Images"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Images.Images"
              x:DataType="images:ImagesDataContext">
+    <Design.DataContext>
+        <images:DesignImagesDataContext/>
+    </Design.DataContext>
     <ListBox ItemsSource="{Binding Images}"
              SelectedIndex="{Binding SelectedImageIndex}"
              Name="ListBox"
@@ -61,10 +64,9 @@
                                         </ResourceDictionary>
                                     </Image.Resources>
                                     <Interaction.Behaviors>
-                                        <behaviors:RecyclableImageBindingBehavior
-                                            Image="{Binding}"
-                                            TargetSize="{Binding #ImageContainer.Bounds.Size.Width, Converter={StaticResource SizeToImageTargetSizeConverter}}"
-                                            Composition="{StaticResource Composition}"/>
+                                        <behaviors:ImageDataContextBindingBehavior
+                                            DataContext="{Binding}"
+                                            TargetSize="{Binding #ImageContainer.Bounds.Size.Width, Converter={StaticResource SizeToImageTargetSizeConverter}}"/>
                                     </Interaction.Behaviors>
                                 </Image>
                             </Panel>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -10,10 +11,11 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Domain.Images;
 using Vibrance;
+using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.Annotation.Images;
 
-public sealed partial class ImagesViewModel : ViewModel, ImageSelection, AnnotationImagesComponent
+public sealed partial class ImagesViewModel : ViewModel, ImageSelection, AnnotationImagesComponent, IDisposable
 {
 	public ImageSet? Set
 	{
@@ -26,13 +28,12 @@ public sealed partial class ImagesViewModel : ViewModel, ImageSelection, Annotat
 		}
 	}
 
-	public ReadOnlyObservableList<Image> Images => _images;
+	public IReadOnlyCollection<AnnotationImageDataContext> Images { get; }
 	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
-	public Image? SelectedImage => SelectedImageIndex >= 0 ? Images[SelectedImageIndex] : null;
+	public Image? SelectedImage => SelectedImageIndex >= 0 ? _images[SelectedImageIndex] : null;
 	public IObservable<Unit> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
-	public ImagesViewModel(
-		ObservableImageDataAccess observableDataAccess)
+	public ImagesViewModel(ObservableImageDataAccess observableDataAccess, ImageLoader imageLoader)
 	{
 		_images = new ObservableList<Image>();
 		observableDataAccess.Added
@@ -44,6 +45,18 @@ public sealed partial class ImagesViewModel : ViewModel, ImageSelection, Annotat
 			.Select(_images.Remove)
 			.Subscribe(isRemoved => Guard.IsTrue(isRemoved))
 			.DisposeWith(_disposable);
+		var images = _images
+			.Transform(image => new AnnotationImageViewModel(imageLoader, image))
+			.ToObservableList();
+		images.DisposeWith(_disposable);
+		Images = images;
+	}
+
+	public void Dispose()
+	{
+		_disposable.Dispose();
+		_images.Dispose();
+		_selectedImageChanged.Dispose();
 	}
 
 	private readonly CompositeDisposable _disposable = new();
