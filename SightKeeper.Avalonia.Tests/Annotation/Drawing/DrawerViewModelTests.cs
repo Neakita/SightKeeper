@@ -1,9 +1,12 @@
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
+using Serilog.Core;
 using SightKeeper.Application.Annotation;
+using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
@@ -38,7 +41,7 @@ public sealed class DrawerViewModelTests
 			observableBoundingAnnotator,
 			observablePoserAnnotator);
 		var keyPointDrawerViewModel = new KeyPointDrawerViewModel(Substitute.For<PoserAnnotator>());
-		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel, assetItemsViewModel, keyPointDrawerViewModel);
+		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel, assetItemsViewModel, keyPointDrawerViewModel, new ImageLoader(new WriteableBitmapPool(Logger.None), Substitute.For<ImageDataAccess>()));
 		return drawerViewModel;
 	}
 

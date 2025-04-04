@@ -8,14 +8,17 @@
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.DrawerItem"
              x:DataType="local:BoundedItemDataContext">
+    <Design.DataContext>
+        <local:DesignBoundedItemDataContext/>
+    </Design.DataContext>
     <Interaction.Behaviors>
         <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
             <behaviors:AddStylesBehavior.Styles>
                 <Style Selector="ListBoxItem">
                     <Style.Resources>
-                        <local:UIntColorConverter x:Key="ColorConverterAlpha8" AlphaMultiplier="0.8"/>
-                        <local:UIntColorConverter x:Key="ColorConverterAlpha4" AlphaMultiplier="0.4"/>
-                        <local:UIntColorConverter x:Key="ColorConverterAlpha1" AlphaMultiplier="0.1"/>
+                        <local:ColorConverter x:Key="ColorConverterAlpha8" AlphaMultiplier="0.8"/>
+                        <local:ColorConverter x:Key="ColorConverterAlpha4" AlphaMultiplier="0.4"/>
+                        <local:ColorConverter x:Key="ColorConverterAlpha1" AlphaMultiplier="0.1"/>
                     </Style.Resources>
                     <Setter Property="Width">
                         <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
@@ -33,46 +36,48 @@
                             Value="{Binding Bounding, Converter={x:Static local:ReverseBoundingAreaToIntConverter.Instance}}"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderThickness" Value="1"/>
-                    <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha4}}"/>
+                    <Setter Property="BorderBrush"
+                            Value="{Binding Color, Converter={StaticResource ColorConverterAlpha4}}"/>
                     <Style Selector="^.keypoint-hovered">
-                        <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha1}}"/>
+                        <Setter Property="Background"
+                                Value="{Binding Color, Converter={StaticResource ColorConverterAlpha1}}"/>
                     </Style>
                     <Style Selector="^:pointerover">
-                        <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha1}}"/>
+                        <Setter Property="Background"
+                                Value="{Binding Color, Converter={StaticResource ColorConverterAlpha1}}"/>
                         <Style Selector="^ :is(Panel)#ThumbsPanel">
                             <Setter Property="IsVisible" Value="True"/>
                         </Style>
                     </Style>
                     <Style Selector="^:selected">
                         <Setter Property="ZIndex" Value="{x:Static local:DrawerZIndexes.SelectedItemZIndex}"/>
-                        <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={StaticResource ColorConverterAlpha8}}"/>
+                        <Setter Property="BorderBrush"
+                                Value="{Binding Color, Converter={StaticResource ColorConverterAlpha8}}"/>
                     </Style>
                 </Style>
             </behaviors:AddStylesBehavior.Styles>
         </behaviors:AddStylesBehavior>
     </Interaction.Behaviors>
-    <Design.DataContext>
-        <local:DesignBoundedItemViewModel/>
-    </Design.DataContext>
     <Panel>
         <Panel.Resources>
-            <local:UIntColorConverter x:Key="LoweredAlphaColorConverter" AlphaMultiplier="0.2"/>
+            <local:ColorConverter x:Key="LoweredAlphaColorConverter" AlphaMultiplier="0.2"/>
         </Panel.Resources>
         <Border HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Padding="1"
-                Background="{Binding Tag.Color, Converter={StaticResource LoweredAlphaColorConverter}}">
+                Background="{Binding Color, Converter={StaticResource LoweredAlphaColorConverter}}">
             <TextBlock Name="TagNameTextBlock"
-                       Text="{Binding Tag.Name}"
+                       Text="{Binding Name}"
                        FontSize="12"/>
         </Border>
         <Panel Name="ThumbsPanel"
                Margin="-5">
             <Interaction.Behaviors>
-                <local:DraggableBoundingBehavior DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
-                                                              Bounding="{Binding Bounding}"
-                                                              ThumbsPanel="ThumbsPanel"
-                                                              ListBox="{Binding $parent[ListBox]}">
+                <local:DraggableBoundingBehavior
+                    DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"
+                    Bounding="{Binding Bounding}"
+                    ThumbsPanel="ThumbsPanel"
+                    ListBox="{Binding $parent[ListBox]}">
                     <local:DraggableBoundingBehavior.PreviewTemplate>
                         <Template>
                             <Rectangle Stroke="Red" StrokeThickness="1"/>
@@ -86,17 +91,19 @@
                 </Style>
                 <Style Selector="TemplatedControl">
                     <Style.Resources>
-                        <local:UIntColorConverter x:Key="BorderColorConverter"
-                                                  SaturationMultiplier="0.9"
-                                                  ValueMultiplier="0.9"/>
-                        <local:UIntColorConverter x:Key="BackgroundColorConverter"
-                                                  SaturationMultiplier="0.8"
-                                                  ValueMultiplier="0.7"/>
+                        <local:ColorConverter x:Key="BorderColorConverter"
+                                              SaturationMultiplier="0.9"
+                                              ValueMultiplier="0.9"/>
+                        <local:ColorConverter x:Key="BackgroundColorConverter"
+                                              SaturationMultiplier="0.8"
+                                              ValueMultiplier="0.7"/>
                     </Style.Resources>
                     <Setter Property="ClipToBounds" Value="False"/>
                     <Setter Property="UseLayoutRounding" Value="False"/>
-                    <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource BackgroundColorConverter}}"/>
-                    <Setter Property="BorderBrush" Value="{Binding Tag.Color, Converter={StaticResource BorderColorConverter}}"/>
+                    <Setter Property="Background"
+                            Value="{Binding Color, Converter={StaticResource BackgroundColorConverter}}"/>
+                    <Setter Property="BorderBrush"
+                            Value="{Binding Color, Converter={StaticResource BorderColorConverter}}"/>
                     <Setter Property="BorderThickness" Value="2"/>
                     <Setter Property="Width" Value="9"/>
                     <Setter Property="Height" Value="9"/>
@@ -113,8 +120,8 @@
                 </Style>
             </Panel.Styles>
             <TemplatedControl HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   Cursor="LeftSide"/>
+                              VerticalAlignment="Center"
+                              Cursor="LeftSide"/>
             <TemplatedControl HorizontalAlignment="Left"
                               VerticalAlignment="Top"
                               Cursor="TopLeftCorner"/>

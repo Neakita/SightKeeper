@@ -7,13 +7,14 @@
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Poser.KeyPointView"
-             x:DataType="poser:KeyPointDataContext">
+             x:DataType="poser:KeyPointDataContext"
+             d:DataContext="{x:Static poser:DesignKeyPointDataContext.Instance}">
     <UserControl.Resources>
-        <drawing:UIntColorConverter x:Key="ColorConverter"/>
-        <drawing:UIntColorConverter x:Key="LoweredColorConverter" SaturationMultiplier="0.8" ValueMultiplier="0.7"/>
-        <drawing:UIntColorConverter x:Key="TransparentColorConverter" AlphaMultiplier="0.5"/>
-        <drawing:UIntColorConverter x:Key="TransparentLoweredColorConverter" AlphaMultiplier="0.5" SaturationMultiplier="0.8" ValueMultiplier="0.7"/>
-        <drawing:UIntColorConverter x:Key="DarkenColorConverter" ValueMultiplier="0.2"/>
+        <drawing:ColorConverter x:Key="ColorConverter"/>
+        <drawing:ColorConverter x:Key="LoweredColorConverter" SaturationMultiplier="0.8" ValueMultiplier="0.7"/>
+        <drawing:ColorConverter x:Key="TransparentColorConverter" AlphaMultiplier="0.5"/>
+        <drawing:ColorConverter x:Key="TransparentLoweredColorConverter" AlphaMultiplier="0.5" SaturationMultiplier="0.8" ValueMultiplier="0.7"/>
+        <drawing:ColorConverter x:Key="DarkenColorConverter" ValueMultiplier="0.2"/>
     </UserControl.Resources>
     <Interaction.Behaviors>
         <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
@@ -22,13 +23,13 @@
                     <Setter Property="ZIndex" Value="{x:Static drawing:DrawerZIndexes.KeyPointZIndex}"/>
                     <Style Selector="^.item-hovered TemplatedControl">
                         <Setter Property="Background"
-                                Value="{Binding Tag.Color, Converter={StaticResource LoweredColorConverter}}"/>
+                                Value="{Binding Color, Converter={StaticResource LoweredColorConverter}}"/>
                     </Style>
                     <Style Selector="^.item-selected">
                         <Setter Property="ZIndex" Value="{x:Static drawing:DrawerZIndexes.SelectedItemKeyPointZIndex}"/>
                         <Style Selector="^ TemplatedControl">
                             <Setter Property="BorderBrush"
-                                    Value="{Binding Tag.Color, Converter={StaticResource ColorConverter}}"/>
+                                    Value="{Binding Color, Converter={StaticResource ColorConverter}}"/>
                         </Style>
                     </Style>
                 </Style>
@@ -50,21 +51,18 @@
             </poser:DraggableKeyPointBehavior.PreviewTemplate>
         </poser:DraggableKeyPointBehavior>
     </Interaction.Behaviors>
-    <Design.DataContext>
-        <poser:DesignKeyPointDataContext/>
-    </Design.DataContext>
     <UserControl.Styles>
         <Style Selector="poser|KeyPointView.invisible TemplatedControl">
-            <Setter Property="Background" Value="{Binding Tag.Color, Converter={StaticResource DarkenColorConverter}}"/>
+            <Setter Property="Background" Value="{Binding Color, Converter={StaticResource DarkenColorConverter}}"/>
         </Style>
     </UserControl.Styles>
     <TemplatedControl Name="Thumb">
         <TemplatedControl.Theme>
             <ControlTheme TargetType="TemplatedControl">
                 <Setter Property="Background"
-                        Value="{Binding Tag.Color, Converter={StaticResource TransparentLoweredColorConverter}}"/>
+                        Value="{Binding Color, Converter={StaticResource TransparentLoweredColorConverter}}"/>
                 <Setter Property="BorderBrush"
-                        Value="{Binding Tag.Color, Converter={StaticResource TransparentColorConverter}}"/>
+                        Value="{Binding Color, Converter={StaticResource TransparentColorConverter}}"/>
                 <Setter Property="BorderThickness" Value="2"/>
                 <Setter Property="CornerRadius" Value="5"/>
                 <Setter Property="Width" Value="10"/>
@@ -84,7 +82,7 @@
                 </Setter>
                 <Style Selector="^:pointerover">
                     <Setter Property="Background"
-                            Value="{Binding Tag.Color, Converter={StaticResource LoweredColorConverter}}"/>
+                            Value="{Binding Color, Converter={StaticResource LoweredColorConverter}}"/>
                 </Style>
             </ControlTheme>
         </TemplatedControl.Theme>

@@ -7,9 +7,10 @@
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:poser="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Poser"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
-             x:DataType="local:DrawerDataContext">
+             x:DataType="local:DrawerDataContext"
+             d:DataContext="{x:Static local:DesignDrawerDataContext.WithImage}">
     <Panel Classes="regular-margin"
            VerticalAlignment="Center"
            HorizontalAlignment="Center">
@@ -20,9 +21,7 @@
                             Opacity="0.05"/>
         <Image Name="Image">
             <Interaction.Behaviors>
-                <behaviors:RecyclableImageBindingBehavior
-                    Image="{Binding Image}"
-                    Composition="{StaticResource Composition}"/>
+                <behaviors:ImageDataContextBindingBehavior DataContext="{Binding Image}"/>
             </Interaction.Behaviors>
         </Image>
         <ListBox ItemsSource="{Binding Items}"

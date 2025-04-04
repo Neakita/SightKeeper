@@ -8,7 +8,7 @@ using Avalonia.Media.Immutable;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-internal sealed class UIntColorConverter : IValueConverter
+internal sealed class ColorConverter : IValueConverter
 {
 	public double AlphaMultiplier { get; set; } = 1;
 	public double HueMultiplier { get; set; } = 1;
@@ -18,9 +18,13 @@ internal sealed class UIntColorConverter : IValueConverter
 
 	public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		if (value is not uint number)
+		Color color;
+		if (value is uint valueAsNumber)
+			color = valueAsNumber == 0 ? FallBackColor : Color.FromUInt32(valueAsNumber);
+		else if (value is Color valueAsColor)
+			color = valueAsColor;
+		else
 			return AvaloniaProperty.UnsetValue;
-		var color = number == 0 ? FallBackColor : Color.FromUInt32(number);
 		var modifierColor = MultiplyHsvComponents(color);
 		if (targetType == typeof(Color))
 			return modifierColor;

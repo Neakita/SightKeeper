@@ -1,10 +1,11 @@
+using Avalonia.Media;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public interface BoundedItemDataContext : DrawerItemDataContext
 {
-	Tag Tag { get; }
+	string Name { get; }
+	Color Color { get; }
 	Bounding Bounding { get; set; }
 }

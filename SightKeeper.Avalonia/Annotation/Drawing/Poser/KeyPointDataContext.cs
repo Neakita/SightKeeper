@@ -1,10 +1,12 @@
+using Avalonia.Media;
 using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
-public interface KeyPointDataContext
+public interface KeyPointDataContext : DrawerItemDataContext
 {
-	Tag Tag { get; }
-	Vector2<double> Position { get; set; }
+	string Name { get; }
+	Color Color { get; }
+	new Vector2<double> Position { get; set; }
+	Vector2<double> DrawerItemDataContext.Position => Position;
 }

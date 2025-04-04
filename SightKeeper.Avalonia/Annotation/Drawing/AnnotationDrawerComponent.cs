@@ -6,11 +6,11 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public interface AnnotationDrawerComponent : DrawerDataContext
+public interface AnnotationDrawerComponent
 {
 	AssetsOwner<ItemsOwner>? AssetsLibrary { set; }
-	new Image? Image { get; set; }
-	Image? DrawerDataContext.Image => Image;
-	public Tag? Tag { set; }
+	Image? Image { set; }
+	Tag? Tag { set; }
 	IObservable<BoundedItemDataContext?> SelectedItemChanged { get; }
+	BoundedItemDataContext? SelectedItem { get; }
 }

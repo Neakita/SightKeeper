@@ -1,3 +1,4 @@
+using Avalonia.Media;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
@@ -22,6 +23,8 @@ public abstract class BoundedItemViewModel : ViewModel, BoundedItemDataContext
 	}
 
 	public Vector2<double> Position => Bounding.Position;
+	public string Name => Tag.Name;
+	public Color Color => Color.FromUInt32(Tag.Color);
 
 	protected BoundedItemViewModel(BoundingEditor boundingEditor)
 	{

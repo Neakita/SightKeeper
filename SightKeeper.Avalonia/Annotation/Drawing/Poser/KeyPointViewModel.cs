@@ -1,3 +1,4 @@
+using Avalonia.Media;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Poser;
@@ -23,6 +24,8 @@ public abstract class KeyPointViewModel : ViewModel, KeyPointDataContext, Drawer
 			OnPropertyChanged();
 		}
 	}
+	public string Name => Tag.Name;
+	public Color Color => Color.FromUInt32(Tag.Color);
 
 	protected KeyPointViewModel(PoserAnnotator annotator)
 	{
