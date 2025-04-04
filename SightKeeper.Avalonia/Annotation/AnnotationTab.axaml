@@ -9,18 +9,18 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
-    <Border Classes="regular-padding">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="180"/>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <images:Images Grid.Column="0"
-                                     DataContext="{Binding Images}"
-                                     IsVisible="{Binding !!Images.Count}"/>
-            <drawing:Drawer Grid.Column="1" DataContext="{Binding Drawer}"/>
-            <tooling:SideBar Grid.Column="2" DataContext="{Binding SideBar}"/>
-        </Grid>
-    </Border>
+    <Grid Classes="regular-margin">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="180"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <images:Images Grid.Column="0"
+                       DataContext="{Binding Images}"
+                       IsVisible="{Binding !!Images.Count}"/>
+        <drawing:Drawer Grid.Column="1"
+                        DataContext="{Binding Drawer}"/>
+        <tooling:SideBar Grid.Column="2"
+                         DataContext="{Binding SideBar}"/>
+    </Grid>
 </UserControl>
