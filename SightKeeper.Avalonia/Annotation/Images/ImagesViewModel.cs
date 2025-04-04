@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -31,7 +30,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 	public IReadOnlyCollection<AnnotationImageDataContext> Images { get; }
 	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
 	public Image? SelectedImage => SelectedImageIndex >= 0 ? _images[SelectedImageIndex] : null;
-	public IObservable<Unit> SelectedImageChanged => _selectedImageChanged.AsObservable();
+	public IObservable<Image> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
 	public ImagesViewModel(ObservableImageDataAccess observableDataAccess, ImageLoader imageLoader)
 	{
@@ -61,10 +60,11 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 
 	private readonly CompositeDisposable _disposable = new();
 	private readonly ObservableList<Image> _images;
-	private readonly Subject<Unit> _selectedImageChanged = new();
+	private readonly Subject<Image> _selectedImageChanged = new();
 
 	partial void OnSelectedImageIndexChanged(int value)
 	{
-		_selectedImageChanged.OnNext(Unit.Default);
+		var image = _images[value];
+		_selectedImageChanged.OnNext(image);
 	}
 }

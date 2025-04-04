@@ -8,6 +8,7 @@ using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation;
 
@@ -32,7 +33,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 			.Subscribe(OnSelectedDataSetChanged)
 			.DisposeWith(_disposable);
 		_images.SelectedImageChanged
-			.Subscribe(_ => OnSelectedImageChanged())
+			.Subscribe(OnSelectedImageChanged)
 			.DisposeWith(_disposable);
 		SideBar.AdditionalToolingChanged
 			.Subscribe(OnAdditionalToolingChanged)
@@ -58,9 +59,9 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 		Drawer.AssetsLibrary = value?.Value.AssetsLibrary as AssetsOwner<ItemsOwner>;
 	}
 
-	private void OnSelectedImageChanged()
+	private void OnSelectedImageChanged(Image image)
 	{
-		Drawer.Image = _images.SelectedImage;
+		Drawer.Image = image;
 	}
 
 	private void OnAdditionalToolingChanged(object? value)
