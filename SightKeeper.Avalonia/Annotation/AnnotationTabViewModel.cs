@@ -67,22 +67,20 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 	private void OnAdditionalToolingChanged(object? value)
 	{
 		_additionalToolingDisposable?.Dispose();
-		_additionalToolingDisposable = null;
-		CompositeDisposable disposable = new();
+		_additionalToolingDisposable = new CompositeDisposable();
 		if (value is TagSelection<Tag> selection)
 		{
 			SetDrawerTag(selection.SelectedTag);
 		}
 		if (value is ObservableTagSelection<Tag> observableSelection)
 		{
-			observableSelection.SelectedTagChanged.Subscribe(SetDrawerTag).DisposeWith(disposable);
+			observableSelection.SelectedTagChanged.Subscribe(SetDrawerTag).DisposeWith(_additionalToolingDisposable);
 		}
 		if (value is SelectedItemConsumer selectedItemConsumer)
 		{
 			selectedItemConsumer.SelectedItem = Drawer.SelectedItem;
-			Drawer.SelectedItemChanged.Subscribe(item => selectedItemConsumer.SelectedItem = item);
+			Drawer.SelectedItemChanged.Subscribe(item => selectedItemConsumer.SelectedItem = item).DisposeWith(_additionalToolingDisposable);
 		}
-		_additionalToolingDisposable = _disposable;
 	}
 
 	private void SetDrawerTag(Tag? tag)
