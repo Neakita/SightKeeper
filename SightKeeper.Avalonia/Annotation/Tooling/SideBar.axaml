@@ -3,19 +3,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Tooling.SideBar"
              x:DataType="local:SideBarDataContext">
-    <Border Classes="outer wide-padding">
+    <Border Classes="outer regular-padding">
         <StackPanel Classes="regular-spacing">
-            <ComboBox SelectedItem="{Binding SelectedImageSet}"
-                      ItemsSource="{Binding ImageSets}"
-                      DisplayMemberBinding="{Binding Name}"
-                      PlaceholderText="Select image set"/>
-            <ComboBox SelectedItem="{Binding SelectedDataSet}"
-                      ItemsSource="{Binding DataSets}"
-                      DisplayMemberBinding="{Binding Name}"
-                      PlaceholderText="Select data set"/>
+            <HeaderedContentControl Header="Image Set">
+                <ComboBox SelectedItem="{Binding SelectedImageSet}"
+                          ItemsSource="{Binding ImageSets}"
+                          DisplayMemberBinding="{Binding Name}"
+                          PlaceholderText="Not selected"
+                          HorizontalAlignment="Stretch"/>
+            </HeaderedContentControl>
+            <HeaderedContentControl Header="Data Set">
+                <ComboBox SelectedItem="{Binding SelectedDataSet}"
+                          ItemsSource="{Binding DataSets}"
+                          DisplayMemberBinding="{Binding Name}"
+                          PlaceholderText="Not selected"/>
+            </HeaderedContentControl>
             <local:AdaptiveTooling DataContext="{Binding AdditionalTooling}"/>
         </StackPanel>
     </Border>

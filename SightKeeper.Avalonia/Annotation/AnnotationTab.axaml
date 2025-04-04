@@ -6,12 +6,12 @@
              xmlns:drawing="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:tooling="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
              xmlns:images="clr-namespace:SightKeeper.Avalonia.Annotation.Images"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
              x:DataType="local:AnnotationTabViewModel">
     <Grid Classes="regular-margin">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="180"/>
+            <ColumnDefinition MinWidth="160"/>
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
