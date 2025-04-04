@@ -33,7 +33,7 @@
                         </MultiBinding>
                     </Setter>
                     <Setter Property="ZIndex"
-                            Value="{Binding Bounding, Converter={x:Static local:ReverseBoundingAreaToIntConverter.Instance}}"/>
+                            Value="{Binding Bounding, Converter={x:Static local:BoundingAreaToZIndexConverter.Instance}}"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="BorderBrush"

@@ -7,9 +7,9 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-internal sealed class ReverseBoundingAreaToIntConverter : IValueConverter
+internal sealed class BoundingAreaToZIndexConverter : IValueConverter
 {
-	public static ReverseBoundingAreaToIntConverter Instance { get; } = new();
+	public static BoundingAreaToZIndexConverter Instance { get; } = new();
 
 	public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
