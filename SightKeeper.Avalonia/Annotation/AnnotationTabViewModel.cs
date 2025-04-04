@@ -13,25 +13,25 @@ namespace SightKeeper.Avalonia.Annotation;
 
 public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 {
-	public AnnotationImagesComponent Images { get; }
+	public ImagesDataContext Images => _images;
 	public AnnotationDrawerComponent Drawer { get; }
 	public AnnotationSideBarComponent SideBar { get; }
 
 	public AnnotationTabViewModel(
-		AnnotationImagesComponent images,
+		ImagesViewModel images,
 		AnnotationDrawerComponent drawer,
 		AnnotationSideBarComponent sideBar)
 	{
 		SideBar = sideBar;
 		Drawer = drawer;
-		Images = images;
+		_images = images;
 		SideBar.SelectedImageSetChanged
 			.Subscribe(OnSelectedImageSetChanged)
 			.DisposeWith(_disposable);
 		SideBar.SelectedDataSetChanged
 			.Subscribe(OnSelectedDataSetChanged)
 			.DisposeWith(_disposable);
-		Images.SelectedImageChanged
+		_images.SelectedImageChanged
 			.Subscribe(_ => OnSelectedImageChanged())
 			.DisposeWith(_disposable);
 		SideBar.AdditionalToolingChanged
@@ -44,12 +44,13 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 		_disposable.Dispose();
 	}
 
+	private readonly ImagesViewModel _images;
 	private readonly CompositeDisposable _disposable = new();
 	private CompositeDisposable? _additionalToolingDisposable;
 
 	private void OnSelectedImageSetChanged(ImageSetViewModel? value)
 	{
-		Images.Set = value?.Value;
+		_images.Set = value?.Value;
 	}
 
 	private void OnSelectedDataSetChanged(DataSetViewModel? value)
@@ -59,7 +60,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 
 	private void OnSelectedImageChanged()
 	{
-		Drawer.Image = Images.SelectedImage;
+		Drawer.Image = _images.SelectedImage;
 	}
 
 	private void OnAdditionalToolingChanged(object? value)

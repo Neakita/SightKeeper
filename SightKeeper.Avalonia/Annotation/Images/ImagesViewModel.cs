@@ -15,7 +15,7 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.Annotation.Images;
 
-public sealed partial class ImagesViewModel : ViewModel, ImageSelection, AnnotationImagesComponent, IDisposable
+public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, ImageSelection, IDisposable
 {
 	public ImageSet? Set
 	{

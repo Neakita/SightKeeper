@@ -105,7 +105,7 @@ public sealed partial class Composition
 		.Bind<IValidator<ImageSetData>>().To<ImageSetDataValidator>()
 		.Bind<IValidator<ImageSetData>>("new").To<NewImageSetDataValidator>()
 		.Bind<ImageSetDeleter>().To<LockingImageSetDeleter>()
-		.RootBind<ImagesViewModel>(nameof(ImagesViewModel)).Bind<AnnotationImagesComponent>().Bind<ImageSelection>().As(Lifetime.Singleton).To<ImagesViewModel>()
+		.RootBind<ImagesViewModel>(nameof(ImagesViewModel)).Bind<ImageSelection>().As(Lifetime.Singleton).To<ImagesViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
 		.Root<ClassifierAnnotationViewModel>(nameof(ClassifierAnnotationViewModel))
