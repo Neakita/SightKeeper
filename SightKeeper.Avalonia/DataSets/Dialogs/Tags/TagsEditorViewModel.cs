@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Subjects;
+using System.Windows.Input;
 using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
@@ -12,14 +13,16 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 
-internal partial class TagsEditorViewModel : ViewModel, IDisposable
+internal partial class TagsEditorViewModel : ViewModel, TagsEditorDataContext, IDisposable
 {
 	public BehaviorObservable<bool> IsValid => _isValid;
 	public IReadOnlyCollection<TagDataViewModel> Tags => _tags;
+	IReadOnlyCollection<EditableTagDataContext> TagsEditorDataContext.Tags => _tags;
+	ICommand TagsEditorDataContext.CreateTagCommand => CreateTagCommand;
 
 	public TagsEditorViewModel()
 	{
-		Validator = new NewTagDataIndividualValidator(Tags);
+		Validator = new NewTagDataIndividualValidator(_tags);
 	}
 
 	public TagsEditorViewModel(IEnumerable<Tag> existingTags) : this()
@@ -29,7 +32,7 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 
 	public void Dispose()
 	{
-		foreach (var tag in Tags)
+		foreach (var tag in _tags)
 		{
 			tag.PropertyChanged -= OnTagPropertyChanged;
 			tag.ErrorsChanged -= OnTagErrorsChanged;
@@ -45,7 +48,7 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 
 	protected void UpdateIsValid()
 	{
-		bool isValid = Tags.All(IsTagValid);
+		bool isValid = _tags.All(IsTagValid);
 		if (IsValid != isValid)
 			_isValid.OnNext(isValid);
 	}
@@ -93,7 +96,7 @@ internal partial class TagsEditorViewModel : ViewModel, IDisposable
 			return;
 		Guard.IsNotNull(sender);
 		var changedTag = (TagDataViewModel)sender;
-		foreach (var tag in Tags.Except(changedTag))
+		foreach (var tag in _tags.Except(changedTag))
 			tag.Validator.ValidateProperty(nameof(TagDataViewModel.Name));
 	}
 }

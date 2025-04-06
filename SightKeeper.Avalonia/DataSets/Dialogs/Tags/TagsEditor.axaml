@@ -5,9 +5,10 @@
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:tags="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Tags.TagsEditor"
-             x:DataType="tags:TagsEditorViewModel">
+             x:DataType="tags:TagsEditorDataContext"
+             d:DataContext="{x:Static tags:DesignTagsEditorDataContext.PlainTags}">
     <StackPanel Classes="regular-spacing">
         <Grid ColumnDefinitions="* 8 Auto">
             <TextBox Grid.Column="0"
@@ -56,7 +57,7 @@
                         </ItemsControl>
                     </HeaderedContentControl>
                 </DataTemplate>
-                <DataTemplate x:DataType="tags:TagDataViewModel">
+                <DataTemplate x:DataType="tags:EditableTagDataContext">
                     <TextBox Text="{Binding Name}"/>
                 </DataTemplate>
             </ItemsControl.DataTemplates>

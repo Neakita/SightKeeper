@@ -8,7 +8,7 @@ using SightKeeper.Application.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 
-internal partial class TagDataViewModel : ViewModel, NewTagData, INotifyDataErrorInfo
+internal partial class TagDataViewModel : ViewModel, EditableTagDataContext, NewTagData, INotifyDataErrorInfo
 {
 	public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
 	{
@@ -16,12 +16,15 @@ internal partial class TagDataViewModel : ViewModel, NewTagData, INotifyDataErro
 		remove => Validator.ErrorsChanged -= value;
 	}
 
+	[ObservableProperty] public partial string Name { get; set; }
+	[ObservableProperty] public partial Color Color { get; set; }
+
 	public ViewModelValidator<NewTagData> Validator { get; }
 	public virtual bool HasErrors => Validator.HasErrors;
 
 	public TagDataViewModel(string name, IValidator<NewTagData> validator)
 	{
-		_name = name;
+		Name = name;
 		Validator = new ViewModelValidator<NewTagData>(validator, this, this);
 	}
 
@@ -29,9 +32,6 @@ internal partial class TagDataViewModel : ViewModel, NewTagData, INotifyDataErro
 	{
 		return Validator.GetErrors(propertyName);
 	}
-
-	[ObservableProperty] private string _name;
-	[ObservableProperty] private Color _color;
 
 	uint NewTagData.Color => Color.ToUInt32();
 }
