@@ -4,7 +4,7 @@ using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing;
+namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 public abstract class BoundedItemViewModel : ViewModel, BoundedItemDataContext
 {

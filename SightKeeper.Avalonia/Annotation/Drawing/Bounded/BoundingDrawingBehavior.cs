@@ -8,7 +8,7 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing;
+namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 {

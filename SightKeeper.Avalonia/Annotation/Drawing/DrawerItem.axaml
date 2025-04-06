@@ -6,9 +6,10 @@
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              xmlns:design="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Design"
+             xmlns:bounded="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Bounded"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.DrawerItem"
-             x:DataType="local:BoundedItemDataContext"
+             x:DataType="bounded:BoundedItemDataContext"
              d:DataContext="{x:Static design:DesignBoundedItemDataContext.Instance}">
     <Interaction.Behaviors>
         <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
@@ -32,7 +33,7 @@
                         </MultiBinding>
                     </Setter>
                     <Setter Property="ZIndex"
-                            Value="{Binding Bounding, Converter={x:Static local:BoundingAreaToZIndexConverter.Instance}}"/>
+                            Value="{Binding Bounding, Converter={x:Static bounded:BoundingAreaToZIndexConverter.Instance}}"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="BorderBrush"

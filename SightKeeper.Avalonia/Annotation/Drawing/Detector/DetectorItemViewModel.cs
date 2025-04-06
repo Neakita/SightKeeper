@@ -1,4 +1,5 @@
 using SightKeeper.Application.Annotation;
+using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 

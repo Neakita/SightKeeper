@@ -2,7 +2,7 @@ using System.Windows.Input;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Annotation;
-using SightKeeper.Avalonia.Annotation.Drawing;
+using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;

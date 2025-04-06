@@ -5,7 +5,7 @@ using Avalonia.Data.Converters;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.DataSets.Assets.Items;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing;
+namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 internal sealed class BoundingAreaToZIndexConverter : IValueConverter
 {

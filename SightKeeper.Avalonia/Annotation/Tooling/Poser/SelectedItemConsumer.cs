@@ -1,4 +1,4 @@
-using SightKeeper.Avalonia.Annotation.Drawing;
+using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Poser;
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;

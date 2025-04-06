@@ -5,6 +5,7 @@ using Serilog.Core;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Avalonia.Annotation.Drawing;
+using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Domain.DataSets.Assets.Items;

@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 

@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Design;
 

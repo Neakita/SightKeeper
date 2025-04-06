@@ -1,5 +1,6 @@
 using System;
 using SightKeeper.Application.Annotation;
+using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Detector;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Domain.DataSets.Assets.Items;

@@ -8,6 +8,7 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:poser="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Poser"
              xmlns:design="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Design"
+             xmlns:bounded="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Bounded"
              mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
              x:DataType="local:DrawerDataContext"
@@ -45,14 +46,14 @@
                     <Canvas Name="Canvas"
                             Background="Transparent">
                         <Interaction.Behaviors>
-                            <local:BoundingDrawingBehavior Command="{Binding BoundingDrawer.CreateItemCommand}"
+                            <bounded:BoundingDrawingBehavior Command="{Binding BoundingDrawer.CreateItemCommand}"
                                                            ListBox="{Binding $parent[ListBox]}">
-                                <local:BoundingDrawingBehavior.DrawingItemTemplate>
+                                <bounded:BoundingDrawingBehavior.DrawingItemTemplate>
                                     <Template>
                                         <Rectangle Stroke="Red" StrokeThickness="1"/>
                                     </Template>
-                                </local:BoundingDrawingBehavior.DrawingItemTemplate>
-                            </local:BoundingDrawingBehavior>
+                                </bounded:BoundingDrawingBehavior.DrawingItemTemplate>
+                            </bounded:BoundingDrawingBehavior>
                             <poser:KeyPointDrawingBehavior CreateKeyPointCommand="{Binding KeyPointDrawer.CreateKeyPointCommand}"
                                                            ExistingKeyPoint="{Binding KeyPointDrawer.ExistingKeyPoint}"
                                                            ListBox="{Binding #ListBox}">
@@ -114,7 +115,7 @@
                 </Style>
             </ListBox.Styles>
             <ListBox.DataTemplates>
-                <DataTemplate DataType="local:BoundedItemDataContext">
+                <DataTemplate DataType="bounded:BoundedItemDataContext">
                     <local:DrawerItem/>
                 </DataTemplate>
                 <DataTemplate DataType="poser:KeyPointDataContext">

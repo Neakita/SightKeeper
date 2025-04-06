@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing;
+namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 public interface BoundingDrawerDataContext
 {

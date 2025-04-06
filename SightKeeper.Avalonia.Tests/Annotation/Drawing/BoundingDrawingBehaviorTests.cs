@@ -11,7 +11,7 @@ using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 using FluentAssertions;
 using NSubstitute;
-using SightKeeper.Avalonia.Annotation.Drawing;
+using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 

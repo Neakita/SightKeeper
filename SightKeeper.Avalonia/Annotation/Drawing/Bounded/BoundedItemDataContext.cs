@@ -1,7 +1,7 @@
 using Avalonia.Media;
 using SightKeeper.Domain.DataSets.Assets.Items;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing;
+namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 public interface BoundedItemDataContext : DrawerItemDataContext
 {
