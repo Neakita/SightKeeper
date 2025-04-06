@@ -5,10 +5,11 @@
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
+             xmlns:design="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Design"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.DrawerItem"
              x:DataType="local:BoundedItemDataContext"
-             d:DataContext="{x:Static local:DesignBoundedItemDataContext.Instance}">
+             d:DataContext="{x:Static design:DesignBoundedItemDataContext.Instance}">
     <Interaction.Behaviors>
         <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
             <behaviors:AddStylesBehavior.Styles>

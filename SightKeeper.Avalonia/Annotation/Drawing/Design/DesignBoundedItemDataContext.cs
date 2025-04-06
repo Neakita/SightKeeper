@@ -2,7 +2,7 @@ using Avalonia.Media;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 
-namespace SightKeeper.Avalonia.Annotation.Drawing;
+namespace SightKeeper.Avalonia.Annotation.Drawing.Design;
 
 internal sealed class DesignBoundedItemDataContext : BoundedItemDataContext
 {
