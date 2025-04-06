@@ -3,10 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
-             mc:Ignorable="d" d:DesignHeight="450"
+             mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Annotation.Tooling.SideBar"
              x:DataType="local:SideBarDataContext">
-    <Border Classes="outer regular-padding">
+    <Border Classes="outer regular-padding"
+            VerticalAlignment="Top">
         <StackPanel Classes="regular-spacing">
             <HeaderedContentControl Header="Image Set">
                 <ComboBox SelectedItem="{Binding SelectedImageSet}"

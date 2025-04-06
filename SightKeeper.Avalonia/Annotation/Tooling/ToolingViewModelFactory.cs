@@ -1,9 +1,9 @@
 using System;
+using SightKeeper.Avalonia.Annotation.Tooling.Detector;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
@@ -21,15 +21,15 @@ public sealed class ToolingViewModelFactory
 			case null:
 				return null;
 			case ClassifierDataSet classifierDataSet:
-				var classifierAnnotation = _composition.ClassifierAnnotationViewModel;
-				classifierAnnotation.DataSet = classifierDataSet;
-				return classifierAnnotation;
+				var classifierTooling = _composition.ClassifierToolingViewModel;
+				classifierTooling.DataSet = classifierDataSet;
+				return classifierTooling;
 			case DetectorDataSet detectorDataSet:
-				TagSelectionViewModel<Tag> tagSelection = new()
+				DetectorToolingViewModel detectorTooling = new()
 				{
-					Tags = detectorDataSet.TagsLibrary.Tags
+					TagsContainer = detectorDataSet.TagsLibrary
 				};
-				return tagSelection;
+				return detectorTooling;
 			case PoserDataSet poserDataSet:
 				var poserTooling = _composition.PoserToolingViewModel;
 				poserTooling.TagsSource = poserDataSet.TagsLibrary;

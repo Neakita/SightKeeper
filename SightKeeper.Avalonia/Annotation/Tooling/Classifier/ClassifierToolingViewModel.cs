@@ -1,29 +1,34 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.Classifier;
 
-public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelectionToolingDataContext, IDisposable
+public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierToolingDataContext, IDisposable
 {
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
 	public partial ClassifierDataSet? DataSet { get; set; }
 
-	public IReadOnlyCollection<Tag> Tags => DataSet?.TagsLibrary.Tags ?? ReadOnlyCollection<Tag>.Empty;
-
-	IReadOnlyCollection<Named> TagSelectionToolingDataContext.Tags => Tags;
-
-	public Tag? SelectedTag
+	public IEnumerable<TagDataContext> Tags
 	{
-		get => Asset?.Tag;
+		get
+		{
+			if (DataSet == null)
+				return Enumerable.Empty<TagDataContext>();
+			return DataSet.TagsLibrary.Tags.Select(tag => new TagViewModel(tag));
+		}
+	}
+
+	public TagDataContext? SelectedTag
+	{
+		get => Asset == null ? null : new TagViewModel(Asset.Tag);
 		set
 		{
 			Guard.IsNotNull(AssetsLibrary);
@@ -31,14 +36,8 @@ public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelect
 			if (value == null)
 				_annotator.DeleteAsset(AssetsLibrary, Image);
 			else
-				_annotator.SetTag(AssetsLibrary, Image, value);
+				_annotator.SetTag(AssetsLibrary, Image, ((TagViewModel)value).Tag);
 		}
-	}
-
-	Named? TagSelectionToolingDataContext.SelectedTag
-	{
-		get => SelectedTag;
-		set => SelectedTag = (Tag?)value;
 	}
 
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag), nameof(IsEnabled))]
@@ -46,7 +45,7 @@ public sealed partial class ClassifierAnnotationViewModel : ViewModel, TagSelect
 
 	public bool IsEnabled => Image != null;
 
-	public ClassifierAnnotationViewModel(ClassifierAnnotator annotator, ImagesViewModel imagesViewModel)
+	public ClassifierToolingViewModel(ClassifierAnnotator annotator, ImagesViewModel imagesViewModel)
 	{
 		_annotator = annotator;
 		_disposable = imagesViewModel.SelectedImageChanged.Subscribe(_ => Image = imagesViewModel.SelectedImage);

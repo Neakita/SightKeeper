@@ -20,6 +20,7 @@ using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Avalonia.Annotation.Tooling.Classifier;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.ImageSets;
@@ -28,6 +29,7 @@ using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
+using PoserToolingViewModel = SightKeeper.Avalonia.Annotation.Tooling.Poser.PoserToolingViewModel;
 using TagAttribute = SightKeeper.Application.TagAttribute;
 #if OS_LINUX
 using SightKeeper.Application.Linux.X11;
@@ -108,7 +110,7 @@ public sealed partial class Composition
 		.RootBind<ImagesViewModel>(nameof(ImagesViewModel)).Bind<ImageSelection>().As(Lifetime.Singleton).To<ImagesViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
-		.Root<ClassifierAnnotationViewModel>(nameof(ClassifierAnnotationViewModel))
+		.Root<ClassifierToolingViewModel>(nameof(ClassifierToolingViewModel))
 		.Bind<BoundingAnnotator>().Bind<ObservableBoundingAnnotator>().As(Lifetime.Singleton).To<AppDataBoundingAnnotator>()
 		.Bind<BoundingEditor>().To<AppDataBoundingEditor>()
 		.Root<PoserToolingViewModel>(nameof(PoserToolingViewModel))

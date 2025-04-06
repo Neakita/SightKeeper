@@ -22,7 +22,7 @@ internal sealed class ColorConverter : IValueConverter
 		if (value is uint valueAsNumber)
 			color = valueAsNumber == 0 ? FallBackColor : Color.FromUInt32(valueAsNumber);
 		else if (value is Color valueAsColor)
-			color = valueAsColor;
+			color = valueAsColor.A == 0 ? FallBackColor : valueAsColor;
 		else
 			return AvaloniaProperty.UnsetValue;
 		var modifierColor = MultiplyHsvComponents(color);

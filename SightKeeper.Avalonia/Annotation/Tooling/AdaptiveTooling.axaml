@@ -3,17 +3,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:root="clr-namespace:SightKeeper.Avalonia"
-             xmlns:tooling="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
+             xmlns:poser="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.Poser"
+             xmlns:classifier="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.Classifier"
+             xmlns:detector="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.Detector"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Tooling.AdaptiveTooling"
              x:DataType="root:ViewModel">
     <ContentControl Content="{Binding}">
         <ContentControl.DataTemplates>
-            <DataTemplate DataType="tooling:TagSelectionToolingDataContext">
-                <tooling:TagSelectionTooling/>
+            <DataTemplate DataType="classifier:ClassifierToolingDataContext">
+                <classifier:ClassifierTooling/>
             </DataTemplate>
-            <DataTemplate DataType="tooling:PoserToolingViewModel">
-                <tooling:PoserTooling/>
+            <DataTemplate DataType="detector:DetectorToolingDataContext">
+                <detector:DetectorTooling/>
+            </DataTemplate>
+            <DataTemplate DataType="poser:PoserToolingDataContext">
+                <poser:PoserTooling/>
             </DataTemplate>
         </ContentControl.DataTemplates>
     </ContentControl>

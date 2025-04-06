@@ -1,6 +1,8 @@
+using SightKeeper.Domain.DataSets.Tags;
+
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public interface TagSelection<out TTag>
+public interface TagSelection
 {
-	TTag? SelectedTag { get; }
+	Tag? SelectedTag { get; }
 }

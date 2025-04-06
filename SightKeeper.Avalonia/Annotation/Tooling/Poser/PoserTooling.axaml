@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:poser="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.Poser"
+             mc:Ignorable="d" d:DesignWidth="150" d:DesignHeight="300"
+             x:Class="SightKeeper.Avalonia.Annotation.Tooling.Poser.PoserTooling"
+             x:DataType="poser:PoserToolingDataContext"
+             d:DataContext="{x:Static poser:DesignPoserToolingDataContext.WithPoserAndKeyPointTags}">
+    <StackPanel Classes="regular-spacing">
+        <HeaderedContentControl Header="Object Tags">
+            <ListBox ItemsSource="{Binding PoserTags}"
+                     SelectedItem="{Binding SelectedPoserTag}"
+                     DisplayMemberBinding="{Binding Name}"
+                     Classes="compact"/>
+        </HeaderedContentControl>
+        <HeaderedContentControl Header="Key Point Tags">
+            <ListBox ItemsSource="{Binding KeyPointTags}"
+                     SelectedItem="{Binding SelectedKeyPointTag}"
+                     Classes="compact">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right"
+                                    Classes="square"
+                                    Command="{Binding DeleteKeyPointCommand}"
+                                    CommandParameter="{Binding}"
+                                    Content="{icons:MaterialIconExt Close}"
+                                    ToolTip.Tip="{Binding Name, StringFormat=Delete {0} key point}"
+                                    Theme="{DynamicResource EmbeddedButtonTheme}"
+                                    Padding="6">
+                                <Button.Styles>
+                                    <Style Selector="Button:pointerover">
+                                        <Setter Property="Background" Value="{DynamicResource CloseWindowHoveredButtonBackground}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource HighAccentButtonForeground}"/>
+                                    </Style>
+                                </Button.Styles>
+                            </Button>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </HeaderedContentControl>
+    </StackPanel>
+</UserControl>

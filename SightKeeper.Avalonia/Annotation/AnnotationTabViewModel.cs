@@ -4,6 +4,7 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Avalonia.Annotation.Tooling.Poser;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
@@ -68,13 +69,13 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 	{
 		_additionalToolingDisposable?.Dispose();
 		_additionalToolingDisposable = new CompositeDisposable();
-		if (value is TagSelection<Tag> selection)
+		if (value is TagSelection tagSelection)
 		{
-			SetDrawerTag(selection.SelectedTag);
+			SetDrawerTag(tagSelection.SelectedTag);
 		}
-		if (value is ObservableTagSelection<Tag> observableSelection)
+		if (value is ObservableTagSelection observableTagSelection)
 		{
-			observableSelection.SelectedTagChanged.Subscribe(SetDrawerTag).DisposeWith(_additionalToolingDisposable);
+			observableTagSelection.SelectedTagChanged.Subscribe(SetDrawerTag).DisposeWith(_additionalToolingDisposable);
 		}
 		if (value is SelectedItemConsumer selectedItemConsumer)
 		{

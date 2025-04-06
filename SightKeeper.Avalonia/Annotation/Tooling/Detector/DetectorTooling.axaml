@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.Detector"
+             mc:Ignorable="d" d:DesignWidth="120" d:DesignHeight="150"
+             x:Class="SightKeeper.Avalonia.Annotation.Tooling.Detector.DetectorTooling"
+             x:DataType="local:DetectorToolingDataContext">
+    <Design.DataContext>
+        <local:DesignDetectorToolingDataContext/>
+    </Design.DataContext>
+    <HeaderedContentControl Header="Object Tags">
+        <ListBox ItemsSource="{Binding Tags}"
+                 SelectedItem="{Binding SelectedTag}"
+                 DisplayMemberBinding="{Binding Name}"
+                 Classes="compact"/>
+    </HeaderedContentControl>
+</UserControl>
