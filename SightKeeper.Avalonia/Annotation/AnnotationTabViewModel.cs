@@ -16,16 +16,16 @@ namespace SightKeeper.Avalonia.Annotation;
 public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 {
 	public ImagesDataContext Images => _images;
-	public AnnotationDrawerComponent Drawer { get; }
+	public DrawerDataContext Drawer => _drawer;
 	public AnnotationSideBarComponent SideBar { get; }
 
 	public AnnotationTabViewModel(
 		ImagesViewModel images,
-		AnnotationDrawerComponent drawer,
+		DrawerViewModel drawer,
 		AnnotationSideBarComponent sideBar)
 	{
 		SideBar = sideBar;
-		Drawer = drawer;
+		_drawer = drawer;
 		_images = images;
 		SideBar.SelectedImageSetChanged
 			.Subscribe(OnSelectedImageSetChanged)
@@ -47,6 +47,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 	}
 
 	private readonly ImagesViewModel _images;
+	private readonly DrawerViewModel _drawer;
 	private readonly CompositeDisposable _disposable = new();
 	private CompositeDisposable? _additionalToolingDisposable;
 
@@ -57,12 +58,12 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 
 	private void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
-		Drawer.AssetsLibrary = value?.Value.AssetsLibrary as AssetsOwner<ItemsOwner>;
+		_drawer.AssetsLibrary = value?.Value.AssetsLibrary as AssetsOwner<ItemsOwner>;
 	}
 
 	private void OnSelectedImageChanged(Image image)
 	{
-		Drawer.Image = image;
+		_drawer.Image = image;
 	}
 
 	private void OnAdditionalToolingChanged(object? value)
@@ -80,12 +81,12 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 		if (value is SelectedItemConsumer selectedItemConsumer)
 		{
 			selectedItemConsumer.SelectedItem = Drawer.SelectedItem;
-			Drawer.SelectedItemChanged.Subscribe(item => selectedItemConsumer.SelectedItem = item).DisposeWith(_additionalToolingDisposable);
+			_drawer.SelectedItemChanged.Subscribe(item => selectedItemConsumer.SelectedItem = item).DisposeWith(_additionalToolingDisposable);
 		}
 	}
 
 	private void SetDrawerTag(Tag? tag)
 	{
-		Drawer.Tag = tag;
+		_drawer.Tag = tag;
 	}
 }

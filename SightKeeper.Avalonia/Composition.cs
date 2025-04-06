@@ -17,7 +17,6 @@ using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.Annotation;
-using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.Annotation.Tooling.Classifier;
@@ -115,7 +114,6 @@ public sealed partial class Composition
 		.Bind<BoundingEditor>().To<AppDataBoundingEditor>()
 		.Root<PoserToolingViewModel>(nameof(PoserToolingViewModel))
 		.Bind<PoserAnnotator>().Bind<ObservablePoserAnnotator>().As(Lifetime.Singleton).To<AppDataPoserAnnotator>()
-		.Bind<AnnotationDrawerComponent>().To<DrawerViewModel>()
 		.Bind<AnnotationSideBarComponent>().To<SideBarViewModel>()
 		.Bind<ImageSetEditor>().As(Lifetime.Singleton).To<AppDataImageSetEditor>();
 }

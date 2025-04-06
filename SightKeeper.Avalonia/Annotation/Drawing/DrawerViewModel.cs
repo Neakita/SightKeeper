@@ -13,7 +13,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, AnnotationDrawerComponent
+public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 {
 	[ObservableProperty] public partial Image? Image { get; set; }
 
