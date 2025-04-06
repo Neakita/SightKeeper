@@ -7,10 +7,8 @@
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="100"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.DrawerItem"
-             x:DataType="local:BoundedItemDataContext">
-    <Design.DataContext>
-        <local:DesignBoundedItemDataContext/>
-    </Design.DataContext>
+             x:DataType="local:BoundedItemDataContext"
+             d:DataContext="{x:Static local:DesignBoundedItemDataContext.Instance}">
     <Interaction.Behaviors>
         <behaviors:AddStylesBehavior Target="{Binding $parent[ListBoxItem]}">
             <behaviors:AddStylesBehavior.Styles>
