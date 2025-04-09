@@ -11,7 +11,10 @@
 			<TextBox Text="{Binding Name}"/>
 		</HeaderedContentControl>
 		<HeaderedContentControl Header="Description">
-			<TextBox Text="{Binding Description}"/>
+			<TextBox Text="{Binding Description}"
+                     AcceptsReturn="True"
+                     MinLines="2"
+                     MaxLines="5"/>
 		</HeaderedContentControl>
 	</StackPanel>
 </UserControl>
