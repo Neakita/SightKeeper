@@ -5,20 +5,23 @@
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:tags="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.DataSetDialog"
              x:DataType="local:DataSetDialogViewModel"
              HorizontalAlignment="Center"
-             MinWidth="500">
-    <StackPanel Classes="regular-spacing">
-        <local:GeneralDataSetEditor DataContext="{Binding DataSetEditor}"/>
-        <ListBox SelectedItem="{Binding TypePicker.Type}"
-                 ItemsSource="{Binding TypePicker.Types}"
-                 Theme="{DynamicResource RadioButtonsListBoxTheme}"
-                 Classes="horizontal"
-                 IsVisible="{Binding TypePicker, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-        <tags:TagsEditor DataContext="{Binding TagsEditor}"/>
-        <StackPanel Orientation="Horizontal"
+             VerticalAlignment="Center"
+             MaxWidth="400">
+    <Grid RowDefinitions="* 16 Auto">
+        <StackPanel Grid.Row="0" Classes="regular-spacing">
+            <local:GeneralDataSetEditor DataContext="{Binding DataSetEditor}"/>
+            <ListBox SelectedItem="{Binding TypePicker.Type}"
+                     ItemsSource="{Binding TypePicker.Types}"
+                     Theme="{DynamicResource RadioButtonsListBoxTheme}"
+                     Classes="horizontal"
+                     IsVisible="{Binding TypePicker, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            <tags:TagsEditor DataContext="{Binding TagsEditor}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal"
                     Classes="regular-spacing"
                     HorizontalAlignment="Right">
             <Button Command="{Binding ApplyCommand}">
@@ -34,5 +37,5 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-    </StackPanel>
+    </Grid>
 </UserControl>
