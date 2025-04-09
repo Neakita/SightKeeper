@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-internal sealed partial class DataSetTypePickerViewModel : ViewModel, IDisposable
+public sealed partial class DataSetTypePickerViewModel : ViewModel, IDisposable
 {
 	public static ImmutableArray<DataSetType> Types { get; } =
 	[
@@ -17,6 +17,7 @@ internal sealed partial class DataSetTypePickerViewModel : ViewModel, IDisposabl
 		DataSetType.Poser3D
 	];
 
+	[ObservableProperty] public partial DataSetType SelectedType { get; set; }
 	public IObservable<DataSetType> TypeChanged => _typeChanged.AsObservable();
 
 	public void Dispose()
@@ -25,9 +26,8 @@ internal sealed partial class DataSetTypePickerViewModel : ViewModel, IDisposabl
 	}
 
 	private readonly Subject<DataSetType> _typeChanged = new();
-	[ObservableProperty] private DataSetType _type;
 
-	partial void OnTypeChanged(DataSetType value)
+	partial void OnSelectedTypeChanged(DataSetType value)
 	{
 		_typeChanged.OnNext(value);
 	}

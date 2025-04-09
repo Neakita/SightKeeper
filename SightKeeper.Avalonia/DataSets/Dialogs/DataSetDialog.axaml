@@ -7,14 +7,15 @@
              xmlns:tags="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.DataSetDialog"
-             x:DataType="local:DataSetDialogViewModel"
+             x:DataType="local:DataSetDialogDataContext"
+             d:DataContext="{x:Static local:DesignDataSetDialogDataContext.DetectorCreation}"
              HorizontalAlignment="Center"
              VerticalAlignment="Center"
-             MaxWidth="400">
+             MaxWidth="532">
     <Grid RowDefinitions="* 16 Auto">
         <StackPanel Grid.Row="0" Classes="regular-spacing">
             <local:GeneralDataSetEditor DataContext="{Binding DataSetEditor}"/>
-            <ListBox SelectedItem="{Binding TypePicker.Type}"
+            <ListBox SelectedItem="{Binding TypePicker.SelectedType}"
                      ItemsSource="{Binding TypePicker.Types}"
                      Theme="{DynamicResource RadioButtonsListBoxTheme}"
                      Classes="horizontal"

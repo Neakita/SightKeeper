@@ -8,7 +8,7 @@ using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetData, INotifyDataErrorInfo, IDisposable
+internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetEditorDataContext, DataSetData, INotifyDataErrorInfo, IDisposable
 {
 	public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
 	{

@@ -3,9 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
-             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+             mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.GeneralDataSetEditor"
-             x:DataType="local:DataSetEditorViewModel">
+             x:DataType="local:DataSetEditorDataContext">
 	<StackPanel Classes="regular-spacing">
 		<HeaderedContentControl Header="Name">
 			<TextBox Text="{Binding Name}"/>

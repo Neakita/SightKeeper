@@ -38,6 +38,6 @@ internal sealed class CreateDataSetCommandFactory
 			_dataSetCreator.Create(
 				dialog.DataSetEditor,
 				dialog.TagsEditor.Tags,
-				dialog.TypePicker.Type);
+				dialog.TypePicker.SelectedType);
 	}
 }

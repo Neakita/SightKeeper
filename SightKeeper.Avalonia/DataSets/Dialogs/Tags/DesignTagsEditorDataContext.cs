@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
-using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
@@ -12,8 +12,17 @@ internal sealed class DesignTagsEditorDataContext : TagsEditorDataContext
 	{
 		Tags =
 		[
-			new DesignEditableTagDataContext("Head", Colors.IndianRed),
-			new DesignEditableTagDataContext("Body", Colors.SeaGreen)
+			new DesignEditableTagDataContext("Head"),
+			new DesignEditableTagDataContext("Body")
+		]
+	};
+
+	public static DesignTagsEditorDataContext PoserTags => new()
+	{
+		Tags =
+		[
+			new DesignEditableTagDataContext("Enemy"),
+			new DesignEditableTagDataContext("Ally")
 		]
 	};
 
@@ -21,4 +30,13 @@ internal sealed class DesignTagsEditorDataContext : TagsEditorDataContext
 		ReadOnlyCollection<EditableTagDataContext>.Empty;
 
 	public ICommand CreateTagCommand => new RelayCommand(() => { });
+
+	public DesignTagsEditorDataContext()
+	{
+	}
+
+	public DesignTagsEditorDataContext(params IEnumerable<string> tagNames)
+	{
+		Tags = tagNames.Select(name => new DesignEditableTagDataContext(name)).ToList();
+	}
 }
