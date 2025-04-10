@@ -13,11 +13,11 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 
-internal partial class TagsEditorViewModel : ViewModel, TagsEditorDataContext, IDisposable
+internal partial class TagsEditorViewModel : ViewModel, PlainTagsEditorDataContext, IDisposable
 {
 	public BehaviorObservable<bool> IsValid => _isValid;
 	public IReadOnlyCollection<TagDataViewModel> Tags => _tags;
-	IReadOnlyCollection<EditableTagDataContext> TagsEditorDataContext.Tags => _tags;
+	IReadOnlyCollection<EditableTagDataContext> PlainTagsEditorDataContext.Tags => _tags;
 	ICommand TagsEditorDataContext.CreateTagCommand => CreateTagCommand;
 
 	public TagsEditorViewModel()

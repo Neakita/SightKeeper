@@ -19,7 +19,7 @@ internal sealed class DesignDataSetDialogDataContext : DataSetDialogDataContext
 				Only the body and head should be included in the frame of the object.
 				"""
 		},
-		TagsEditor = new DesignTagsEditorDataContext(
+		TagsEditor = new DesignPlainTagsEditorDataContext(
 			"Cyst", "Alpha Clot", "Slasher", "Stalker", "Crawler", "Gorefast", "Bloat", "Siren",
 			"Husk", "E.D.A.R.", "Quarter Pound", "Scrake", "Fleshpound", "Rioter", "Elite Crawler", "Gorefiend",
 			"Dr. Hans Volter", "Patriarch", "King Fleshpound", "Abomination", "Matriarch"),

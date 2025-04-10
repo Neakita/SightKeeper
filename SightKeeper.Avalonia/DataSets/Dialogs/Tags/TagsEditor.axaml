@@ -2,77 +2,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
-             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:tags="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Tags.TagsEditor"
-             x:DataType="tags:TagsEditorDataContext"
-             d:DataContext="{x:Static tags:DesignTagsEditorDataContext.PlainTags}">
+             x:DataType="local:TagsEditorDataContext">
     <HeaderedContentControl Header="Tags">
-        <StackPanel Classes="regular-spacing">
-            <Grid ColumnDefinitions="* 8 Auto">
-                <TextBox Grid.Column="0"
-                         Name="TagNameTextBox"
-                         Watermark="New Tag Name">
-                    <Interaction.Behaviors>
-                        <behaviors:ExecuteCommandAndClearOnKeyDown
-                            Key="Enter"
-                            Command="{Binding CreateTagCommand}"
-                            CommandParameter="{Binding #TagNameTextBox.Text}"/>
-                    </Interaction.Behaviors>
-                </TextBox>
-                <Button Grid.Column="2"
-                        Content="Add"
-                        Command="{Binding CreateTagCommand}"
-                        CommandParameter="{Binding #TagNameTextBox.Text}">
-                    <Interaction.Behaviors>
-                        <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
-                    </Interaction.Behaviors>
-                </Button>
-            </Grid>
-            <ItemsControl ItemsSource="{Binding Tags}"
-                          ClipToBounds="False">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.DataTemplates>
-                    <DataTemplate x:DataType="tags:PoserNewTagViewModel">
-                        <HeaderedContentControl>
-                            <HeaderedContentControl.Header>
-                                <Grid ColumnDefinitions="Auto 8 *">
-                                    <Button Grid.Column="0" Content="{icons:MaterialIconExt Kind=Plus}"
-                                            Classes="square"
-                                            ToolTip.Tip="Create keypoint tag"
-                                            Command="{Binding CreateKeyPointTagCommand}"
-                                            CommandParameter="{Binding #TagNameTextBox.Text}">
-                                        <Interaction.Behaviors>
-                                            <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
-                                        </Interaction.Behaviors>
-                                    </Button>
-                                    <TextBox Grid.Column="2" Text="{Binding Name}"/>
-                                </Grid>
-                            </HeaderedContentControl.Header>
-                            <ItemsControl ItemsSource="{Binding KeyPointTags}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Name}"/>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </HeaderedContentControl>
-                    </DataTemplate>
-                    <DataTemplate x:DataType="tags:EditableTagDataContext">
-                        <TextBox Text="{Binding Name}"
-                                 Classes="compact"
-                                 MinWidth="100"
-                                 HorizontalAlignment="Left"
-                                 Margin="4"/>
-                    </DataTemplate>
-                </ItemsControl.DataTemplates>
-            </ItemsControl>
-        </StackPanel>
+        <ContentControl Content="{Binding}">
+            <ContentControl.DataTemplates>
+                <DataTemplate DataType="local:PlainTagsEditorDataContext">
+                    <local:PlainTagsEditor/>
+                </DataTemplate>
+                <DataTemplate DataType="local:PoserTagsEditorDataContext">
+                    <local:PoserTagsEditor/>
+                </DataTemplate>
+            </ContentControl.DataTemplates>
+        </ContentControl>
     </HeaderedContentControl>
 </UserControl>

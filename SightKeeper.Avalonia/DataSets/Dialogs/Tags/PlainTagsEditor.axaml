@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             mc:Ignorable="d"
+             x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Tags.PlainTagsEditor"
+             x:DataType="local:PlainTagsEditorDataContext"
+             d:DataContext="{x:Static local:DesignPlainTagsEditorDataContext.Instance}">
+    <StackPanel Classes="regular-spacing">
+        <Grid ColumnDefinitions="* 8 Auto">
+            <TextBox Grid.Column="0"
+                     Name="TagNameTextBox"
+                     Watermark="New Tag Name">
+                <Interaction.Behaviors>
+                    <behaviors:ExecuteCommandAndClearOnKeyDown
+                        Key="Enter"
+                        Command="{Binding CreateTagCommand}"
+                        CommandParameter="{Binding #TagNameTextBox.Text}"/>
+                </Interaction.Behaviors>
+            </TextBox>
+            <Button Grid.Column="2"
+                    Content="Add"
+                    Command="{Binding CreateTagCommand}"
+                    CommandParameter="{Binding #TagNameTextBox.Text}">
+                <Interaction.Behaviors>
+                    <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
+                </Interaction.Behaviors>
+            </Button>
+        </Grid>
+        <ItemsControl ItemsSource="{Binding Tags}"
+                      ClipToBounds="False">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBox Text="{Binding Name}"
+                             Classes="compact"
+                             MinWidth="100"
+                             HorizontalAlignment="Left"
+                             Margin="4"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</UserControl>
