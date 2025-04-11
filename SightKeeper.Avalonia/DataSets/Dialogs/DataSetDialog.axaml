@@ -11,7 +11,7 @@
              d:DataContext="{x:Static local:DesignDataSetDialogDataContext.DetectorCreation}"
              HorizontalAlignment="Center"
              VerticalAlignment="Center"
-             MaxWidth="532">
+             MaxWidth="600">
     <Grid RowDefinitions="* 16 Auto">
         <StackPanel Grid.Row="0" Classes="regular-spacing">
             <local:GeneralDataSetEditor DataContext="{Binding DataSetEditor}"/>

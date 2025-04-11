@@ -4,13 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Tags.PlainTagsEditor"
              x:DataType="local:PlainTagsEditorDataContext"
              d:DataContext="{x:Static local:DesignPlainTagsEditorDataContext.Instance}">
     <StackPanel Classes="regular-spacing">
-        <Grid ColumnDefinitions="* 8 Auto">
-            <TextBox Grid.Column="0"
+        <Grid ColumnDefinitions="Auto 8 *">
+            <Button Grid.Column="0"
+                    Content="{icons:MaterialIconExt Plus}"
+                    Classes="square"
+                    Command="{Binding CreateTagCommand}"
+                    CommandParameter="{Binding #TagNameTextBox.Text}"
+                    ToolTip.Tip="Create tag">
+                <Interaction.Behaviors>
+                    <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
+                </Interaction.Behaviors>
+            </Button>
+            <TextBox Grid.Column="2"
                      Name="TagNameTextBox"
                      Watermark="New Tag Name">
                 <Interaction.Behaviors>
@@ -20,14 +31,6 @@
                         CommandParameter="{Binding #TagNameTextBox.Text}"/>
                 </Interaction.Behaviors>
             </TextBox>
-            <Button Grid.Column="2"
-                    Content="Add"
-                    Command="{Binding CreateTagCommand}"
-                    CommandParameter="{Binding #TagNameTextBox.Text}">
-                <Interaction.Behaviors>
-                    <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
-                </Interaction.Behaviors>
-            </Button>
         </Grid>
         <ItemsControl ItemsSource="{Binding Tags}"
                       ClipToBounds="False">
@@ -41,7 +44,6 @@
                     <TextBox Text="{Binding Name}"
                              Classes="compact"
                              MinWidth="100"
-                             HorizontalAlignment="Left"
                              Margin="4"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

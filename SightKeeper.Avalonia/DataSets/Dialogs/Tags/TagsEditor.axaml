@@ -7,7 +7,7 @@
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Tags.TagsEditor"
              x:DataType="local:TagsEditorDataContext">
     <HeaderedContentControl Header="Tags">
-        <ContentControl Content="{Binding}">
+        <ContentControl Content="{Binding}" ClipToBounds="False">
             <ContentControl.DataTemplates>
                 <DataTemplate DataType="local:PlainTagsEditorDataContext">
                     <local:PlainTagsEditor/>

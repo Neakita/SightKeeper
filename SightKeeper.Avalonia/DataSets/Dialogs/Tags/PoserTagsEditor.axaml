@@ -9,9 +9,19 @@
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Tags.PoserTagsEditor"
              x:DataType="local:PoserTagsEditorDataContext"
              d:DataContext="{x:Static local:DesignPoserTagsEditorDataContext.Instance}">
-        <StackPanel Classes="regular-spacing">
-            <Grid ColumnDefinitions="* 8 Auto">
-                <TextBox Grid.Column="0"
+        <StackPanel Classes="medium-spacing">
+            <Grid ColumnDefinitions="Auto 8 *">
+                <Button Grid.Column="0"
+                        Content="{icons:MaterialIconExt Plus}"
+                        Classes="square"
+                        Command="{Binding CreateTagCommand}"
+                        CommandParameter="{Binding #TagNameTextBox.Text}"
+                        ToolTip.Tip="Create poser tag">
+                    <Interaction.Behaviors>
+                        <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
+                    </Interaction.Behaviors>
+                </Button>
+                <TextBox Grid.Column="2"
                          Name="TagNameTextBox"
                          Watermark="New Tag Name">
                     <Interaction.Behaviors>
@@ -21,20 +31,12 @@
                             CommandParameter="{Binding #TagNameTextBox.Text}"/>
                     </Interaction.Behaviors>
                 </TextBox>
-                <Button Grid.Column="2"
-                        Content="Add"
-                        Command="{Binding CreateTagCommand}"
-                        CommandParameter="{Binding #TagNameTextBox.Text}">
-                    <Interaction.Behaviors>
-                        <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
-                    </Interaction.Behaviors>
-                </Button>
             </Grid>
             <ItemsControl ItemsSource="{Binding Tags}"
                           ClipToBounds="False">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel/>
+                        <StackPanel Classes="medium-spacing"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -44,7 +46,7 @@
                                 <Grid ColumnDefinitions="Auto 8 *">
                                     <Button Grid.Column="0" Content="{icons:MaterialIconExt Kind=Plus}"
                                             Classes="square"
-                                            ToolTip.Tip="Create keypoint tag"
+                                            ToolTip.Tip="Create key point tag"
                                             Command="{Binding CreateKeyPointTagCommand}"
                                             CommandParameter="{Binding #TagNameTextBox.Text}">
                                         <Interaction.Behaviors>
@@ -55,9 +57,17 @@
                                 </Grid>
                             </HeaderedContentControl.Header>
                             <ItemsControl ItemsSource="{Binding KeyPointTags}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding Name}"/>
+                                        <TextBox Text="{Binding Name}"
+                                                 Classes="compact"
+                                                 Margin="4"
+                                                 MinWidth="100"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
