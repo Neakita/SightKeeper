@@ -5,6 +5,7 @@ using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentValidation;
 using SightKeeper.Application.DataSets.Tags;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 

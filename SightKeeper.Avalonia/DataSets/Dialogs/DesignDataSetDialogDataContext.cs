@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;

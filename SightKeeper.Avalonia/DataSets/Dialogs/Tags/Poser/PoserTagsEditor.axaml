@@ -2,13 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:poser="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser"
              mc:Ignorable="d"
-             x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Tags.PoserTagsEditor"
-             x:DataType="local:PoserTagsEditorDataContext"
-             d:DataContext="{x:Static local:DesignPoserTagsEditorDataContext.Instance}">
+             x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser.PoserTagsEditor"
+             x:DataType="poser:PoserTagsEditorDataContext"
+             d:DataContext="{x:Static poser:DesignPoserTagsEditorDataContext.Instance}">
         <StackPanel Classes="medium-spacing">
             <Grid ColumnDefinitions="Auto 8 *">
                 <Button Grid.Column="0"

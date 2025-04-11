@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 
 internal sealed class DesignPlainTagsEditorDataContext : PlainTagsEditorDataContext
 {

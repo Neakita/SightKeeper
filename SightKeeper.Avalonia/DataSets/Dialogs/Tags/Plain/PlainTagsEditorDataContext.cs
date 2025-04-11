@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 
 public interface PlainTagsEditorDataContext : TagsEditorDataContext
 {

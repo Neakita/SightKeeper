@@ -72,6 +72,14 @@
         <DependentUpon>PoserTooling.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="DataSets\Dialogs\Tags\Plain\PlainTagsEditor.axaml.cs">
+        <DependentUpon>PlainTagsEditor.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="DataSets\Dialogs\Tags\Poser\PoserTagsEditor.axaml.cs">
+        <DependentUpon>PoserTagsEditor.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">

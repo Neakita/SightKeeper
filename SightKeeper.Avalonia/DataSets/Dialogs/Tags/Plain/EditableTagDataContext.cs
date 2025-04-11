@@ -1,6 +1,6 @@
 using Avalonia.Media;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 
 public interface EditableTagDataContext
 {

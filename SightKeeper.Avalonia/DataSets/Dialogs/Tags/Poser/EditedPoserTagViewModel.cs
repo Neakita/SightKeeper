@@ -6,7 +6,7 @@ using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 
 internal sealed class EditedPoserTagViewModel : PoserNewTagViewModel, EditedPoserTagData
 {

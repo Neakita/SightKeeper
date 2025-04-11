@@ -8,6 +8,7 @@ using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.DataSets.Tags;
 

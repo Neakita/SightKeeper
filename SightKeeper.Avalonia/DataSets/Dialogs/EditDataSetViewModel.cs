@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;

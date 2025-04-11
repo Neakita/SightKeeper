@@ -3,17 +3,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags"
+             xmlns:plain="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain"
+             xmlns:poser="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.DataSets.Dialogs.Tags.TagsEditor"
              x:DataType="local:TagsEditorDataContext">
     <HeaderedContentControl Header="Tags">
         <ContentControl Content="{Binding}" ClipToBounds="False">
             <ContentControl.DataTemplates>
-                <DataTemplate DataType="local:PlainTagsEditorDataContext">
-                    <local:PlainTagsEditor/>
+                <DataTemplate DataType="plain:PlainTagsEditorDataContext">
+                    <plain:PlainTagsEditor/>
                 </DataTemplate>
-                <DataTemplate DataType="local:PoserTagsEditorDataContext">
-                    <local:PoserTagsEditor/>
+                <DataTemplate DataType="poser:PoserTagsEditorDataContext">
+                    <poser:PoserTagsEditor/>
                 </DataTemplate>
             </ContentControl.DataTemplates>
         </ContentControl>

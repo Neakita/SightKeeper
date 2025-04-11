@@ -3,8 +3,9 @@ using System.Linq;
 using System.Windows.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 
 internal sealed class DesignEditablePoserTagDataContext : EditablePoserTagDataContext
 {

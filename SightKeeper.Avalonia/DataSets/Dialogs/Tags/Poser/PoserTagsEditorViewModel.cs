@@ -5,7 +5,7 @@ using System.Reactive.Disposables;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.DataSets.Poser;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 
 internal sealed class PoserTagsEditorViewModel : TagsEditorViewModel
 {

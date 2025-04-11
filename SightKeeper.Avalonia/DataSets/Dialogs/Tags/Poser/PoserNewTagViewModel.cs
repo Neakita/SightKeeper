@@ -4,8 +4,9 @@ using System.Windows.Input;
 using FluentValidation;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Tags;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 
 internal class PoserNewTagViewModel : TagDataViewModel, EditablePoserTagDataContext, NewPoserTagData, IDisposable
 {

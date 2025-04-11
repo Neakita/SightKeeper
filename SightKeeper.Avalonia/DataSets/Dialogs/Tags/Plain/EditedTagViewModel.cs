@@ -4,7 +4,7 @@ using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 
 internal sealed class EditedTagViewModel : TagDataViewModel, EditedTagData
 {
