@@ -16,6 +16,10 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetEditorD
 		remove => _validator.ErrorsChanged -= value;
 	}
 
+
+	[ObservableProperty] public partial string Name { get; set; } = string.Empty;
+	[ObservableProperty] public partial string Description { get; set; } = string.Empty;
+
 	public bool HasErrors => _validator.HasErrors;
 
 	public DataSetEditorViewModel(IValidator<DataSetData> validator)
@@ -25,8 +29,8 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetEditorD
 
 	public DataSetEditorViewModel(IValidator<DataSetData> validator, DataSet dataSet)
 	{
-		_name = dataSet.Name;
-		_description = dataSet.Description;
+		Name = dataSet.Name;
+		Description = dataSet.Description;
 		_validator = new ViewModelValidator<DataSetData>(validator, this, this);
 	}
 
@@ -41,7 +45,4 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetEditorD
 	}
 
 	private readonly ViewModelValidator<DataSetData> _validator;
-
-	[ObservableProperty] private string _name = string.Empty;
-	[ObservableProperty] private string _description = string.Empty;
 }
