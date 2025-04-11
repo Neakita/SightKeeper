@@ -8,13 +8,15 @@
              x:DataType="local:DataSetEditorDataContext">
 	<StackPanel Classes="regular-spacing">
 		<HeaderedContentControl Header="Name">
-			<TextBox Text="{Binding Name}"/>
+			<TextBox Text="{Binding Name}"
+                     Watermark="Short and descriptive"/>
 		</HeaderedContentControl>
 		<HeaderedContentControl Header="Description">
 			<TextBox Text="{Binding Description}"
                      AcceptsReturn="True"
                      MinLines="2"
-                     MaxLines="5"/>
+                     MaxLines="5"
+                     Watermark="Optional detailed notes of the purpose and classes of objects used"/>
 		</HeaderedContentControl>
 	</StackPanel>
 </UserControl>
