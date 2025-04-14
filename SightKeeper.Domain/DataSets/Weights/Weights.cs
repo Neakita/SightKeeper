@@ -4,18 +4,10 @@ namespace SightKeeper.Domain.DataSets.Weights;
 
 public abstract class Weights
 {
-	public DateTimeOffset CreationTimestamp { get; }
-	public ModelSize ModelSize { get; }
-	public WeightsMetrics Metrics { get; }
-	public Vector2<ushort> Resolution { get; }
-	public ImageComposition? Composition { get; }
-
-	protected Weights(DateTimeOffset creationTimestamp, ModelSize size, WeightsMetrics metrics, Vector2<ushort> resolution, ImageComposition? composition)
-	{
-		CreationTimestamp = creationTimestamp;
-		ModelSize = size;
-		Metrics = metrics;
-		Resolution = resolution;
-		Composition = composition;
-	}
+	public required Model Model { get; init; }
+	public required DateTimeOffset CreationTimestamp { get; init; }
+	public required ModelSize ModelSize { get; init; }
+	public required WeightsMetrics Metrics { get; init; }
+	public required Vector2<ushort> Resolution { get; init; }
+	public required ImageComposition? Composition { get; init; }
 }

@@ -25,6 +25,7 @@ internal sealed class PlainWeightsConverter
 		_session.WeightsIds.Add(weights, id);
 		return new PackablePlainWeights
 		{
+			Model = weights.Model,
 			Id = id,
 			CreationTimestamp = weights.CreationTimestamp,
 			ModelSize = weights.ModelSize,

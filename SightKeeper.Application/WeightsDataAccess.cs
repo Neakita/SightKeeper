@@ -11,6 +11,7 @@ public abstract class WeightsDataAccess
 	public PlainWeights CreateWeights(
 		PlainWeightsLibrary library,
 		byte[] data,
+		Model model,
 		DateTimeOffset creationTimestamp,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
@@ -18,7 +19,7 @@ public abstract class WeightsDataAccess
 		IEnumerable<Tag> tags,
 		ImageComposition? composition)
 	{
-		var weights = CreateWeights(library, creationTimestamp, modelSize, metrics, resolution, tags, composition);
+		var weights = CreateWeights(library, model, creationTimestamp, modelSize, metrics, resolution, tags, composition);
 		SaveWeightsData(weights, data);
 		return weights;
 	}
@@ -26,6 +27,7 @@ public abstract class WeightsDataAccess
 	public PoserWeights CreateWeights(
 		PoserWeightsLibrary library,
 		byte[] data,
+		Model model,
 		DateTimeOffset creationTimestamp,
 		ModelSize modelSize,
 		WeightsMetrics metrics,
@@ -33,7 +35,7 @@ public abstract class WeightsDataAccess
 		ImageComposition? composition,
 		IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
-		var weights = CreateWeights(library, creationTimestamp, modelSize, metrics, resolution, composition, tags);
+		var weights = CreateWeights(library, model, creationTimestamp, modelSize, metrics, resolution, composition, tags);
 		SaveWeightsData(weights, data);
 		return weights;
 	}
@@ -52,14 +54,14 @@ public abstract class WeightsDataAccess
 
 	public abstract byte[] LoadWeightsData(Weights weights);
 
-	protected virtual PlainWeights CreateWeights(PlainWeightsLibrary library, DateTimeOffset creationTimestamp, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<Tag> tags, ImageComposition? composition)
+	protected virtual PlainWeights CreateWeights(PlainWeightsLibrary library, Model model, DateTimeOffset creationTimestamp, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<Tag> tags, ImageComposition? composition)
 	{
-		return library.CreateWeights(creationTimestamp, modelSize, metrics, resolution, composition, tags);
+		return library.CreateWeights(model, creationTimestamp, modelSize, metrics, resolution, composition, tags);
 	}
 
-	protected virtual PoserWeights CreateWeights(PoserWeightsLibrary library, DateTimeOffset creationTimestamp, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, ImageComposition? composition, IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
+	protected virtual PoserWeights CreateWeights(PoserWeightsLibrary library, Model model, DateTimeOffset creationTimestamp, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, ImageComposition? composition, IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
 	{
-		return library.CreateWeights(creationTimestamp, modelSize, metrics, resolution, composition, tags);
+		return library.CreateWeights(model, creationTimestamp, modelSize, metrics, resolution, composition, tags);
 	}
 
 	protected virtual void RemoveWeights(PlainWeightsLibrary library, PlainWeights weights)

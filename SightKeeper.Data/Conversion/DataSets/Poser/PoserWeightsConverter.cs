@@ -27,6 +27,7 @@ internal sealed class PoserWeightsConverter
 		_session.WeightsIds.Add(weights, id);
 		return new PackablePoserWeights
 		{
+			Model = weights.Model,
 			TagsIndexes = ConvertTags(weights.Tags),
 			Id = id,
 			CreationTimestamp = weights.CreationTimestamp,

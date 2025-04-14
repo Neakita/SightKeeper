@@ -18,7 +18,7 @@ public sealed class Poser2DWeightsLibraryTests
 		{
 			{ tag, ReadOnlyCollection<Tag>.Empty }
 		};
-		var weights = dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, weightsTags);
+		var weights = dataSet.WeightsLibrary.CreateWeights(Model.UltralyticsYoloV11, DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, weightsTags);
 		dataSet.WeightsLibrary.Weights.Should().Contain(weights);
 	}
 
@@ -26,7 +26,7 @@ public sealed class Poser2DWeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		Poser2DDataSet dataSet = new();
-		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, ReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>>.Empty));
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(Model.UltralyticsYoloV11, DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, ReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>>.Empty));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 
@@ -42,7 +42,7 @@ public sealed class Poser2DWeightsLibraryTests
 		{
 			{ tag1, [keyPoint2] }
 		};
-		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, weightsTags));
+		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(Model.UltralyticsYoloV11, DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, weightsTags));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 }

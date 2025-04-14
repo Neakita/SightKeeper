@@ -12,7 +12,7 @@ internal static class PlainWeightsReplicator
 		{
 			var composition = CompositionReplicator.ReplicateComposition(weights.Composition);
 			var tags = ReplicateTags(tagsLibrary, weights.TagsIndexes);
-			weightsLibrary.CreateWeights(weights.CreationTimestamp, weights.ModelSize, weights.Metrics, weights.Resolution, composition, tags);
+			weightsLibrary.CreateWeights(weights.Model, weights.CreationTimestamp, weights.ModelSize, weights.Metrics, weights.Resolution, composition, tags);
 		}
 	}
 
