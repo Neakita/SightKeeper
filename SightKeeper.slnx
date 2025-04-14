@@ -11,6 +11,7 @@
     <Project Path="..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="SightKeeper.Application.Tests\SightKeeper.Application.Tests.csproj" Type="Classic C#" />
     <Project Path="SightKeeper.Avalonia.Tests\SightKeeper.Avalonia.Tests.csproj" Type="Classic C#" />
     <Project Path="SightKeeper.Data.Tests\SightKeeper.Data.Tests.csproj" Type="Classic C#" />
     <Project Path="SightKeeper.Domain.Tests\SightKeeper.Domain.Tests.csproj" Type="Classic C#" />

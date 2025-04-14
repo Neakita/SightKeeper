@@ -7,6 +7,7 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary, AssetsOwner<TAsset> w
 {
 	public IReadOnlyDictionary<Image, TAsset> Assets => _assets.AsReadOnly();
 	IReadOnlyCollection<Image> AssetsLibrary.Images => _assets.Keys;
+	IReadOnlyCollection<Asset> AssetsLibrary.Assets => _assets.Values;
 
 	public TAsset GetOrMakeAsset(Image image)
 	{
