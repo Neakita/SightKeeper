@@ -17,7 +17,6 @@ internal sealed class ClassifierAssetsReplicator
 			var image = _session.Images[packableAsset.ImageId];
 			var asset = dataSet.AssetsLibrary.MakeAsset(image);
 			asset.Tag = dataSet.TagsLibrary.Tags[packableAsset.TagIndex];
-			asset.Usage = packableAsset.Usage;
 		}
 	}
 

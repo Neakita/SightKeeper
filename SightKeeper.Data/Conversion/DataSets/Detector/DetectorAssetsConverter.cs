@@ -27,7 +27,6 @@ internal sealed class DetectorAssetsConverter
 		var (image, asset) = assetPair;
 		return new PackableItemsAsset<PackableDetectorItem>
 		{
-			Usage = asset.Usage,
 			ImageId = _imageDataAccess.GetId(image),
 			Items = ConvertItems(asset.Items).ToImmutableArray()
 		};

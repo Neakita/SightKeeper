@@ -27,7 +27,6 @@ internal sealed class ClassifierAssetsConverter
 		return new PackableClassifierAsset
 		{
 			TagIndex = _session.TagsIndexes[asset.Tag],
-			Usage = asset.Usage,
 			ImageId = _imageDataAccess.GetId(image)
 		};
 	}

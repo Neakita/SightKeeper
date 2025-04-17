@@ -8,6 +8,5 @@ namespace SightKeeper.Data.Model.DataSets.Assets;
 /// </summary>
 internal abstract class PackableAsset
 {
-	public required AssetUsage Usage { get; init; }
 	public required Id ImageId { get; init; }
 }

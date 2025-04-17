@@ -28,7 +28,6 @@ internal sealed class Poser3DAssetsConverter
 		return new PackableItemsAsset<PackablePoser3DItem>
 		{
 			Items = ConvertItems(asset.Items).ToImmutableArray(),
-			Usage = asset.Usage,
 			ImageId = _imageDataAccess.GetId(image)
 		};
 	}

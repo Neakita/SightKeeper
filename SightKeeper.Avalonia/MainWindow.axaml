@@ -9,6 +9,7 @@
         xmlns:dataSets="clr-namespace:SightKeeper.Avalonia.DataSets"
         xmlns:annotation="clr-namespace:SightKeeper.Avalonia.Annotation"
         xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
+        xmlns:training="clr-namespace:SightKeeper.Avalonia.Training"
         mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="320"
         x:Class="SightKeeper.Avalonia.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
@@ -52,6 +53,9 @@
             </DataTemplate>
             <DataTemplate x:DataType="annotation:AnnotationTabViewModel">
                 <annotation:AnnotationTab/>
+            </DataTemplate>
+            <DataTemplate x:DataType="training:TrainingViewModel">
+                <training:TrainingTab/>
             </DataTemplate>
         </ContentControl.DataTemplates>
     </ContentControl>
