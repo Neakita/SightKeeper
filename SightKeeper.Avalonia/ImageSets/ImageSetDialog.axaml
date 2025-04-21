@@ -4,24 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
-             mc:Ignorable="d"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.ImageSets.ImageSetDialog"
              x:DataType="imageSets:ImageSetDialogViewModel"
              HorizontalAlignment="Center"
-             VerticalAlignment="Center"
              MinWidth="500">
     <StackPanel Classes="regular-spacing">
         <StackPanel Classes="regular-spacing">
             <HeaderedContentControl Header="Name">
-                <TextBox Text="{Binding Name}"
-                         Watermark="Short and descriptive"/>
+                <TextBox Text="{Binding Name}"/>
             </HeaderedContentControl>
             <HeaderedContentControl Header="Description">
-                <TextBox Text="{Binding Description}"
-                         MinLines="2"
-                         MaxLines="5"
-                         AcceptsReturn="True"
-                         Watermark="Optional detailed notes of the images and their environment"/>
+                <TextBox Text="{Binding Description}"/>
             </HeaderedContentControl>
         </StackPanel>
         <StackPanel Orientation="Horizontal"
