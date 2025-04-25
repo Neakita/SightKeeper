@@ -5,10 +5,11 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              xmlns:card="clr-namespace:SightKeeper.Avalonia.ImageSets.Card"
+             xmlns:assists="clr-namespace:Sightful.Avalonia.Assists;assembly=Sightful.Avalonia"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.ImageSets.Card.ImageSetCard"
              x:DataType="card:ImageSetCardDataContext"
-             d:DataContext="{x:Static card:DesignImageSetCardDataContext.Instance}">
+             d:DataContext="{x:Static card:DesignImageSetCardViewModel.Instance}">
     <Button Theme="{StaticResource CardButtonTheme}"
             Command="{Binding EditCommand}">
         <Button.ContextMenu>
@@ -24,6 +25,25 @@
                     Command="{Binding DeleteCommand}"/>
             </ContextMenu>
         </Button.ContextMenu>
+        <assists:CardButtonAssist.OverlayContent>
+            <Border Height="156"
+                    VerticalAlignment="Top"
+                    Classes="small-padding">
+                <Panel HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom">
+                    <Button HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Classes="square high-accent"
+                            Content="{icons:MaterialIconExt Record}"
+                            IsVisible="{Binding !IsCapturing}"
+                            Command="{Binding StartCapturingCommand}"/>
+                    <Button Classes="square red-accent"
+                            Content="{icons:MaterialIconExt Stop}"
+                            IsVisible="{Binding IsCapturing}"
+                            Command="{Binding StopCapturingCommand}"/>
+                </Panel>
+            </Border>
+        </assists:CardButtonAssist.OverlayContent>
         <StackPanel>
             <Border BoxShadow="0 3 3 0 #20000000"
                     Height="156"
@@ -43,6 +63,14 @@
                             </Interaction.Behaviors>
                         </Image>
                     </Border>
+                    <icons:MaterialIcon Width="16"
+                                        Height="16"
+                                        Kind="RadioboxMarked"
+                                        Foreground="{DynamicResource Accent}"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Margin="8"
+                                        IsVisible="{Binding IsCapturing}"/>
                 </Panel>
             </Border>
             <TextBlock Text="{Binding Name}"/>

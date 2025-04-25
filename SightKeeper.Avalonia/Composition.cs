@@ -54,7 +54,7 @@ public sealed partial class Composition
 		.To<BufferedImageSaver<Bgra32>>()
 		.Bind<ObservableRepository<TT>>().To<DataAccessObservableRepository<TT>>()
 		.Bind<ScreenBoundsProvider>().To<SharpHookScreenBoundsProvider>()
-		.Bind<HotKeyScreenCapture>().To<HotKeyScreenCapture<Bgra32>>()
+		.Bind<HotKeyScreenCapture>().Bind<ImageCapturer>().As(Lifetime.Singleton).To<HotKeyScreenCapture<Bgra32>>()
 		.Bind<PixelConverter<Bgra32, Rgba32>>().To<Bgra32ToRgba32PixelConverter>()
 #if OS_WINDOWS
 		.Bind<ScreenCapture<Bgra32>>().To<DX11ScreenCapture>()

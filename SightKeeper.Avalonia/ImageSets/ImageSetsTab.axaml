@@ -5,32 +5,38 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
              xmlns:card="clr-namespace:SightKeeper.Avalonia.ImageSets.Card"
-             mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="450"
+             xmlns:capturing="clr-namespace:SightKeeper.Avalonia.ImageSets.Capturing"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.ImageSets.ImageSetsTab"
              x:DataType="imageSets:ImageSetsDataContext">
     <Design.DataContext>
         <imageSets:DesignImageSetsDataContext/>
     </Design.DataContext>
-    <ScrollViewer Classes="regular-padding">
-        <StackPanel Classes="medium-spacing">
-            <Border Classes="outer regular-padding">
-                <Button Content="{icons:MaterialIconExt Plus}" Classes="square low-accent"
-                        Command="{Binding CreateImageSetCommand}"
-                        ToolTip.Tip="Create new image set"/>
-            </Border>
-            <ItemsControl ItemsSource="{Binding ImageSets}"
-                          Margin="-8">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <card:ImageSetCard Margin="8"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
-    </ScrollViewer>
+    <Grid ColumnDefinitions="* Auto">
+        <ScrollViewer Grid.Column="0" Classes="regular-padding">
+            <StackPanel Classes="medium-spacing">
+                <Border Classes="outer regular-padding">
+                    <Button Content="{icons:MaterialIconExt Plus}" Classes="square low-accent"
+                            Command="{Binding CreateImageSetCommand}"
+                            ToolTip.Tip="Create new image set"/>
+                </Border>
+                <ItemsControl ItemsSource="{Binding ImageSets}"
+                              Margin="-8">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <card:ImageSetCard Margin="8"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+        <capturing:CapturingSettings Grid.Column="1"
+                                     DataContext="{Binding CapturingSettings}"
+                                     Classes="regular-padding"/>
+    </Grid>
 </UserControl>

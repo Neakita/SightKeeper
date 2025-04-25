@@ -4,6 +4,7 @@ using System.Windows.Input;
 using SightKeeper.Application;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Avalonia.Extensions;
+using SightKeeper.Avalonia.ImageSets.Capturing;
 using SightKeeper.Avalonia.ImageSets.Card;
 using SightKeeper.Avalonia.ImageSets.Commands;
 using SightKeeper.Domain.Images;
@@ -18,19 +19,24 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDis
 	IReadOnlyCollection<ImageSetCardDataContext> ImageSetsDataContext.ImageSets => ImageSets;
 	public ICommand CreateImageSetCommand { get; }
 
+	public CapturingSettingsDataContext CapturingSettings { get; }
+
 	public ImageSetsViewModel(
 		CreateImageSetCommandFactory createImageSetCommandFactory,
 		ObservableRepository<ImageSet> imageSetsRepository,
 		ImageSetEditor imageSetEditor,
-		ImageSetCardViewModelFactory imageSetCardViewModelFactory)
+		ImageSetCardViewModelFactory imageSetCardViewModelFactory,
+		CapturingSettingsViewModel capturingSettings)
 	{
 		CreateImageSetCommand = createImageSetCommandFactory.CreateCommand();
 		ImageSets = imageSetsRepository.Items
 			.Transform(imageSetCardViewModelFactory.CreateImageSetCardViewModel)
+			.DisposeMany()
 			.ToObservableList();
 		_disposable = ImageSets.ToDictionary(imageSetViewModel => imageSetViewModel.ImageSet, out var imageSetCardViewModelsLookup);
 		_imageSetCardViewModelsLookup = imageSetCardViewModelsLookup;
 		imageSetEditor.Edited.Subscribe(OnImageSetEdited);
+		CapturingSettings = capturingSettings;
 	}
 
 	public void Dispose()

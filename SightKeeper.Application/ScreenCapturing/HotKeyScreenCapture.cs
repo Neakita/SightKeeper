@@ -1,3 +1,5 @@
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using HotKeys.Bindings;
 using HotKeys.Gestures;
@@ -8,17 +10,17 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public abstract class HotKeyScreenCapture
+public abstract class HotKeyScreenCapture : ImageCapturer
 {
 	public bool IsEnabled
 	{
-		get => _isEnabled;
-		set
+		get;
+		private set
 		{
-			if (_isEnabled == value)
+			if (field == value)
 				return;
 			Guard.IsNotNull(Set);
-			_isEnabled = value;
+			field = value;
 			if (value) Enable();
 			else Disable();
 		}
@@ -26,22 +28,28 @@ public abstract class HotKeyScreenCapture
 
 	public ImageSet? Set
 	{
-		get => _set;
+		get;
 		set
 		{
-			Guard.IsFalse(IsEnabled);
-			_set = value;
+			if (field != null)
+				IsEnabled = false;
+			field = value;
+			if (value != null)
+				IsEnabled = true;
+			_setChanged.OnNext(value);
 		}
 	}
 
-	public float? FPSLimit
+	public IObservable<ImageSet?> SetChanged => _setChanged.AsObservable();
+
+	public double? FrameRateLimit
 	{
-		get => _fpsLimit;
+		get;
 		set
 		{
 			if (value != null)
 				Guard.IsGreaterThan(value.Value, 0);
-			_fpsLimit = value;
+			field = value;
 		}
 	}
 
@@ -58,7 +66,7 @@ public abstract class HotKeyScreenCapture
 
 	public Gesture Gesture { get; set; } = new(MouseButton.Button1);
 
-	protected TimeSpan Timeout => FPSLimit == null ? TimeSpan.Zero : TimeSpan.FromSeconds(1) / FPSLimit.Value;
+	protected TimeSpan Timeout => FrameRateLimit == null ? TimeSpan.Zero : TimeSpan.FromSeconds(1) / FrameRateLimit.Value;
 	protected Vector2<ushort> Offset => _screenBoundsProvider.MainScreenCenter - _resolution / 2;
 
 	protected HotKeyScreenCapture(
@@ -72,16 +80,6 @@ public abstract class HotKeyScreenCapture
 
 	protected abstract void MakeImages(ActionContext context);
 
-	private const ushort MinimumResolutionDimension = 32;
-	private readonly ScreenBoundsProvider _screenBoundsProvider;
-	private readonly BindingsManager _bindingsManager;
-	private readonly ContextualizedHandler _handler;
-	private float? _fpsLimit;
-	private Vector2<ushort> _resolution = new(320, 320);
-	private bool _isEnabled;
-	private IDisposable? _binding;
-	private ImageSet? _set;
-
 	protected virtual void Enable()
 	{
 		Guard.IsNull(_binding);
@@ -94,4 +92,12 @@ public abstract class HotKeyScreenCapture
 		_binding.Dispose();
 		_binding = null;
 	}
+
+	private const ushort MinimumResolutionDimension = 32;
+	private readonly ScreenBoundsProvider _screenBoundsProvider;
+	private readonly BindingsManager _bindingsManager;
+	private readonly ContextualizedHandler _handler;
+	private readonly Subject<ImageSet?> _setChanged = new();
+	private Vector2<ushort> _resolution = new(320, 320);
+	private IDisposable? _binding;
 }

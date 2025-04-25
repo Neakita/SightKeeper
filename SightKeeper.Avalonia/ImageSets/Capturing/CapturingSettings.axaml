@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.ImageSets.Capturing"
+             mc:Ignorable="d"
+             x:Class="SightKeeper.Avalonia.ImageSets.Capturing.CapturingSettings"
+             x:DataType="local:CapturingSettingsDataContext">
+    <Design.DataContext>
+        <local:DesignCapturingSettingsViewModel/>
+    </Design.DataContext>
+    <Border Classes="outer regular-padding">
+    <StackPanel Classes="regular-spacing">
+        <HeaderedContentControl Header="Width">
+            <Grid ColumnDefinitions="80 8 140">
+                <Slider Grid.Column="0" Maximum="{Binding MaximumWidth}"
+                        Value="{Binding Width}"
+                        TickFrequency="40"
+                        Minimum="40"
+                        IsSnapToTickEnabled="True"
+                        VerticalAlignment="Center"/>
+                <NumericUpDown Grid.Column="2" Value="{Binding Width}"
+                               DockPanel.Dock="Right"
+                               MinWidth="70"
+                               Minimum="40"
+                               Increment="40"
+                               ClipValueToMinMax="True"
+                               Maximum="{Binding MaximumWidth}"/>
+            </Grid>
+        </HeaderedContentControl>
+        <HeaderedContentControl Header="Height">
+            <Grid ColumnDefinitions="80 8 140">
+                <Slider Grid.Column="0" Maximum="{Binding MaximumHeight}"
+                        Value="{Binding Height}"
+                        TickFrequency="40"
+                        Minimum="40"
+                        IsSnapToTickEnabled="True"
+                        VerticalAlignment="Center"/>
+                <NumericUpDown Grid.Column="2" Value="{Binding Height}"
+                               DockPanel.Dock="Right"
+                               MinWidth="70"
+                               Minimum="40"
+                               Increment="40"
+                               ClipValueToMinMax="True"
+                               Maximum="{Binding MaximumHeight}"/>
+            </Grid>
+        </HeaderedContentControl>
+        <HeaderedContentControl Header="Framerate Limit">
+            <NumericUpDown Value="{Binding FrameRateLimit}"
+                           DockPanel.Dock="Right"
+                           Minimum="1"
+                           Maximum="60"
+                           Watermark="Unlimited"
+                           FormatString="0.##"
+                           Increment="1">
+                <NumericUpDown.InnerRightContent>
+                    <TextBlock IsVisible="{Binding $parent[NumericUpDown].Value, Converter={x:Static ObjectConverters.IsNotNull}}" Text="f/s" ToolTip.Tip="Frames per second"/>
+                </NumericUpDown.InnerRightContent>
+            </NumericUpDown>
+        </HeaderedContentControl>
+    </StackPanel>
+    </Border>
+</UserControl>
