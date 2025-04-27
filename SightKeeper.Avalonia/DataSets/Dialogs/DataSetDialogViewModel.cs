@@ -1,16 +1,15 @@
-using System;
-using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-internal abstract partial class DataSetDialogViewModel : DialogViewModel<bool>, DataSetDialogDataContext, IDisposable
+internal abstract partial class DataSetDialogViewModel : DialogViewModel<bool>, DataSetDialogDataContext
 {
 	public DataSetEditorViewModel DataSetEditor { get; }
-	public abstract TagsEditorViewModel TagsEditor { get; }
+	public abstract TagsEditorDataContext TagsEditor { get; }
 	public virtual DataSetTypePickerViewModel? TypePicker => null;
 
 	DataSetEditorDataContext DataSetDialogDataContext.DataSetEditor => DataSetEditor;
@@ -18,34 +17,21 @@ internal abstract partial class DataSetDialogViewModel : DialogViewModel<bool>, 
 	ICommand DataSetDialogDataContext.ApplyCommand => ApplyCommand;
 	ICommand DataSetDialogDataContext.CloseCommand => CloseCommand;
 
-	public DataSetDialogViewModel(DataSetEditorViewModel dataSetEditor)
+	protected DataSetDialogViewModel()
 	{
-		DataSetEditor = dataSetEditor;
-		DataSetEditor.ErrorsChanged += OnDataSetEditorErrorsChanged;
+		DataSetEditor = new DataSetEditorViewModel();
 	}
 
-	public virtual void Dispose()
+	public DataSetDialogViewModel(DataSet dataSet)
 	{
-		DataSetEditor.Dispose();
-		TagsEditor.Dispose();
-		DataSetEditor.ErrorsChanged -= OnDataSetEditorErrorsChanged;
+		DataSetEditor = new DataSetEditorViewModel(dataSet);
 	}
 
 	protected sealed override bool DefaultResult => false;
 
-	private void OnDataSetEditorErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
-	{
-		ApplyCommand.NotifyCanExecuteChanged();
-	}
-
-	[RelayCommand(CanExecute = nameof(CanApply))]
+	[RelayCommand]
 	private void Apply()
 	{
 		Return(true);
-	}
-
-	private bool CanApply()
-	{
-		return !DataSetEditor.HasErrors && TagsEditor.IsValid;
 	}
 }

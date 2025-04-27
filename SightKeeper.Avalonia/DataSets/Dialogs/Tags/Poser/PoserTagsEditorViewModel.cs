@@ -1,35 +1,53 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Disposables;
-using SightKeeper.Application.Extensions;
+using System.Windows.Input;
+using Avalonia.Collections;
+using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 
-internal sealed class PoserTagsEditorViewModel : TagsEditorViewModel
+internal sealed partial class PoserTagsEditorViewModel : ViewModel, PoserTagsEditorDataContext, TagsChanges
 {
+	public IReadOnlyCollection<EditablePoserTagDataContext> Tags => _tags;
+	ICommand TagsEditorDataContext.CreateTagCommand => CreateTagCommand;
+
+	public PoserTagsEditorViewModel(IEnumerable<PoserTag> existingTags) : this()
+	{
+		foreach (var tag in existingTags)
+		{
+			ExistingPoserTagViewModel tagViewModel = new(tag);
+			_tags.Add(tagViewModel);
+		}
+	}
+
 	public PoserTagsEditorViewModel()
 	{
 	}
 
-	public PoserTagsEditorViewModel(IEnumerable<PoserTag> existingTags)
+	private readonly AvaloniaList<EditablePoserTagDataContext> _tags = new();
+
+	[RelayCommand(CanExecute = nameof(CanCreateTag))]
+	private void CreateTag(string name)
 	{
-		var tagsToAdd = existingTags.Select(tag => new EditedPoserTagViewModel(Validator, tag));
-		AddTags(tagsToAdd);
+		NewPoserTagViewModel tag = new()
+		{
+			Name = name
+		};
+		_tags.Add(tag);
 	}
 
-	protected override TagDataViewModel CreateTagViewModel(string name, NewTagDataIndividualValidator validator)
+	private bool CanCreateTag(string name)
 	{
-		PoserNewTagViewModel newTag = new(name, validator);
-		newTag.IsKeyPointsValid.Subscribe(_ => UpdateIsValid()).DisposeWith(_disposable);
-		return newTag;
+		return !string.IsNullOrWhiteSpace(name) && Tags.All(tag => tag.Name != name);
 	}
 
-	protected override bool IsTagValid(TagDataViewModel newTag)
-	{
-		return base.IsTagValid(newTag) && ((PoserNewTagViewModel)newTag).IsKeyPointsValid;
-	}
+	public IEnumerable<Tag> RemovedTags => Enumerable.Empty<Tag>();
 
-	private readonly CompositeDisposable _disposable = new();
+	public IEnumerable<EditedTagData> EditedTags =>
+		_tags.OfType<ExistingPoserTagViewModel>().Where(tag => tag.IsEffectivelyEdited);
+
+	public IEnumerable<NewTagData> NewTags => _tags.OfType<NewPoserTagViewModel>();
 }

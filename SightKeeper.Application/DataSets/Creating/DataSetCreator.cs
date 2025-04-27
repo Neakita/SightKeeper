@@ -15,7 +15,7 @@ public sealed class DataSetCreator
 		_dataAccess = dataAccess;
 	}
 
-	public DataSet Create(DataSetData data, IReadOnlyCollection<NewTagData> tagsData, DataSetType type)
+	public DataSet Create(DataSetData data, DataSetType type)
 	{
 		DataSet dataSet = type switch
 		{
@@ -26,7 +26,7 @@ public sealed class DataSetCreator
 			_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
 		};
 		SetGeneralData(dataSet, data);
-		AddTags(dataSet, tagsData);
+		AddTags(dataSet, data.TagsChanges.NewTags);
 		_dataAccess.Add(dataSet);
 		return dataSet;
 	}
@@ -39,7 +39,7 @@ public sealed class DataSetCreator
 		dataSet.Description = data.Description;
 	}
 
-	private static void AddTags(DataSet dataSet, IReadOnlyCollection<NewTagData> tagsData)
+	private static void AddTags(DataSet dataSet, IEnumerable<NewTagData> tagsData)
 	{
 		foreach (var tagData in tagsData)
 		{

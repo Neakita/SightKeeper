@@ -14,11 +14,12 @@
                 <Button Grid.Column="0"
                         Content="{icons:MaterialIconExt Plus}"
                         Classes="square"
-                        Command="{Binding CreateTagCommand}"
-                        CommandParameter="{Binding #TagNameTextBox.Text}"
                         ToolTip.Tip="Create poser tag">
                     <Interaction.Behaviors>
-                        <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
+                        <behaviors:ExecuteCommandAndClearTextBoxWhenClickingBehavior
+                            Command="{Binding CreateTagCommand}"
+                            CommandParameter="{Binding #TagNameTextBox.Text}"
+                            TextBox="TagNameTextBox"/>
                     </Interaction.Behaviors>
                 </Button>
                 <TextBox Grid.Column="2"
@@ -46,11 +47,12 @@
                                 <Grid ColumnDefinitions="Auto 8 *">
                                     <Button Grid.Column="0" Content="{icons:MaterialIconExt Kind=Plus}"
                                             Classes="square"
-                                            ToolTip.Tip="Create key point tag"
-                                            Command="{Binding CreateKeyPointTagCommand}"
-                                            CommandParameter="{Binding #TagNameTextBox.Text}">
+                                            ToolTip.Tip="Create key point tag">
                                         <Interaction.Behaviors>
-                                            <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
+                                            <behaviors:ExecuteCommandAndClearTextBoxWhenClickingBehavior
+                                                Command="{Binding CreateKeyPointTagCommand}"
+                                                CommandParameter="{Binding #TagNameTextBox.Text}"
+                                                TextBox="TagNameTextBox"/>
                                         </Interaction.Behaviors>
                                     </Button>
                                     <TextBox Grid.Column="2" Text="{Binding Name}"/>

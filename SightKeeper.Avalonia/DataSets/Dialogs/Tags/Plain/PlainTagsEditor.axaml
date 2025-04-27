@@ -14,11 +14,12 @@
             <Button Grid.Column="0"
                     Content="{icons:MaterialIconExt Plus}"
                     Classes="square"
-                    Command="{Binding CreateTagCommand}"
-                    CommandParameter="{Binding #TagNameTextBox.Text}"
                     ToolTip.Tip="Create tag">
                 <Interaction.Behaviors>
-                    <behaviors:ClearTextBoxWhenClickingBehavior TextBox="TagNameTextBox"/>
+                    <behaviors:ExecuteCommandAndClearTextBoxWhenClickingBehavior
+                        Command="{Binding CreateTagCommand}"
+                        CommandParameter="{Binding #TagNameTextBox.Text}"
+                        TextBox="TagNameTextBox"/>
                 </Interaction.Behaviors>
             </Button>
             <TextBox Grid.Column="2"

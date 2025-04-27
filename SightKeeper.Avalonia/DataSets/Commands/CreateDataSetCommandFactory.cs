@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
-using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs;
@@ -17,7 +16,6 @@ internal sealed class CreateDataSetCommandFactory
 		DialogManager dialogManager,
 		DataSetCreator dataSetCreator)
 	{
-		_newDataSetDataValidator = new NewDataSetDataValidator(new DataSetDataValidator(), readDataSetsDataAccess);
 		_dialogManager = dialogManager;
 		_dataSetCreator = dataSetCreator;
 	}
@@ -27,17 +25,15 @@ internal sealed class CreateDataSetCommandFactory
 		return new AsyncRelayCommand(CreateDataSetAsync);
 	}
 
-	private readonly NewDataSetDataValidator _newDataSetDataValidator;
 	private readonly DialogManager _dialogManager;
 	private readonly DataSetCreator _dataSetCreator;
 
 	private async Task CreateDataSetAsync()
 	{
-		using CreateDataSetViewModel dialog = new(new DataSetEditorViewModel(_newDataSetDataValidator));
+		using CreateDataSetViewModel dialog = new();
 		if (await _dialogManager.ShowDialogAsync(dialog))
 			_dataSetCreator.Create(
-				dialog.DataSetEditor,
-				dialog.TagsEditor.Tags,
+				dialog,
 				dialog.TypePicker.SelectedType);
 	}
 }

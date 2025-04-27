@@ -1,46 +1,50 @@
 ﻿using System;
+using SightKeeper.Application.DataSets;
+using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 using SightKeeper.Domain.DataSets;
+using PlainTagsEditorViewModel = SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain.PlainTagsEditorViewModel;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-internal sealed class CreateDataSetViewModel : DataSetDialogViewModel
+internal sealed class CreateDataSetViewModel : DataSetDialogViewModel, DataSetData, IDisposable
 {
 	public override string Header => "Create dataset";
 
-	public override TagsEditorViewModel TagsEditor => _tagsEditor;
+	public override TagsEditorDataContext TagsEditor => _tagsEditor;
 
 	public override DataSetTypePickerViewModel TypePicker { get; } = new();
 
-	public CreateDataSetViewModel(DataSetEditorViewModel dataSetEditor) : base(dataSetEditor)
+	public CreateDataSetViewModel()
 	{
 		_typePickerSubscription = TypePicker.TypeChanged.Subscribe(OnDataSetTypeChanged);
-		_tagsEditorSubscription = TagsEditor.IsValid.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
 	}
 
-	public override void Dispose()
+	public void Dispose()
 	{
 		TypePicker.Dispose();
 		_typePickerSubscription.Dispose();
-		_tagsEditorSubscription.Dispose();
 	}
 
 	private readonly IDisposable _typePickerSubscription;
-	private IDisposable _tagsEditorSubscription;
-	private TagsEditorViewModel _tagsEditor = new();
+	private TagsEditorDataContext _tagsEditor = new PlainTagsEditorViewModel();
 
 	private void OnDataSetTypeChanged(DataSetType value)
 	{
-		_tagsEditorSubscription.Dispose();
 		OnPropertyChanging(nameof(TagsEditor));
 		_tagsEditor = value switch
 		{
-			DataSetType.Classifier or DataSetType.Detector => new TagsEditorViewModel(),
+			DataSetType.Classifier or DataSetType.Detector => new PlainTagsEditorViewModel(),
 			DataSetType.Poser2D or DataSetType.Poser3D => new PoserTagsEditorViewModel(),
 			_ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
 		};
 		OnPropertyChanged(nameof(TagsEditor));
-		_tagsEditorSubscription = TagsEditor.IsValid.Subscribe(_ => ApplyCommand.NotifyCanExecuteChanged());
 	}
+
+	public string Name => DataSetEditor.Name;
+
+	public string Description => DataSetEditor.Description;
+
+	public TagsChanges TagsChanges => (TagsChanges)_tagsEditor;
 }
