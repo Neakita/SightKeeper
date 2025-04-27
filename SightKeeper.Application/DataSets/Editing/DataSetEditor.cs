@@ -11,10 +11,10 @@ public abstract class DataSetEditor : IDisposable
 {
 	public IObservable<DataSet> DataSetEdited => _dataSetEdited.AsObservable();
 
-	public virtual void Edit(DataSet dataSet, DataSetData data, IReadOnlyCollection<TagData> tagsData)
+	public virtual void Edit(DataSet dataSet, DataSetData data)
 	{
 		SetGeneralData(dataSet, data);
-		UpdateTags(dataSet, tagsData);
+		UpdateTags(dataSet, data.TagsChanges);
 	}
 
 	public void Dispose()
@@ -30,30 +30,22 @@ public abstract class DataSetEditor : IDisposable
 		dataSet.Description = data.Description;
 	}
 
-	private static void UpdateTags(DataSet dataSet, IReadOnlyCollection<TagData> tagsData)
+	private static void UpdateTags(DataSet dataSet, TagsChanges changes)
 	{
-		var orderedData = tagsData.Order(TagDataOperationPriorityComparer.Instance);
-		foreach (var tagData in orderedData)
-		{
-			if (tagData is EditedTagData editedTagData)
-				EditTag(editedTagData);
-			else if (tagData is ExistingTagData existingTagData)
-				RemoveTag(dataSet.TagsLibrary, existingTagData);
-			else if (tagData is NewTagData newTagData)
-				CreateNewTag(dataSet.TagsLibrary, newTagData);
-			else
-				throw new ArgumentOutOfRangeException(nameof(tagData), tagData, null);
-		}
+		foreach (var tag in changes.RemovedTags)
+			RemoveTag(dataSet.TagsLibrary, tag);
+		foreach (var tag in changes.EditedTags)
+			EditTag(tag);
+		foreach (var tag in changes.NewTags)
+			CreateNewTag(dataSet.TagsLibrary, tag);
 	}
 
-	private static void RemoveTag(TagsLibrary tagsLibrary, ExistingTagData existingTagData)
+	private static void RemoveTag(TagsLibrary tagsLibrary, Tag tag)
 	{
 		if (tagsLibrary is TagsLibrary<Tag> plainTagsLibrary)
-			plainTagsLibrary.DeleteTag(existingTagData.Tag);
+			plainTagsLibrary.DeleteTag(tag);
 		else if (tagsLibrary is TagsLibrary<PoserTag> poserTagsLibrary)
-		{
-			poserTagsLibrary.DeleteTag((PoserTag)existingTagData.Tag);
-		}
+			poserTagsLibrary.DeleteTag((PoserTag)tag);
 	}
 
 	private static void EditTag(EditedTagData editedTagData)
@@ -62,23 +54,20 @@ public abstract class DataSetEditor : IDisposable
 		tag.Name = editedTagData.Name;
 		tag.Color = editedTagData.Color;
 		if (tag is PoserTag poserTag)
-			EditKeyPoints(poserTag, ((EditedPoserTagData)editedTagData).KeyPointTags);
+		{
+			var editedPoserTagData = (EditedPoserTagData)editedTagData;
+			EditKeyPoints(poserTag, editedPoserTagData.KeyPointTagsChanges);
+		}
 	}
 
-	private static void EditKeyPoints(PoserTag poserTag, IReadOnlyCollection<TagData> tagsData)
+	private static void EditKeyPoints(PoserTag poserTag, TagsChanges changes)
 	{
-		var orderedData = tagsData.Order(TagDataOperationPriorityComparer.Instance);
-		foreach (var tagData in orderedData)
-		{
-			if (tagData is EditedTagData editedTagData)
-				EditTag(editedTagData);
-			else if (tagData is ExistingTagData existingTagData)
-				poserTag.DeleteKeyPointTag(existingTagData.Tag);
-			else if (tagData is NewTagData newTagData)
-				CreateKeyPointTag(poserTag, newTagData);
-			else
-				throw new ArgumentOutOfRangeException(nameof(tagData));
-		}
+		foreach (var tag in changes.RemovedTags)
+			poserTag.DeleteKeyPointTag(tag);
+		foreach (var tag in changes.EditedTags)
+			EditTag(tag);
+		foreach (var tag in changes.NewTags)
+			CreateKeyPointTag(poserTag, tag);
 	}
 
 	private static void CreateNewTag(TagsLibrary tagsLibrary, NewTagData tagData)
