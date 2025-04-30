@@ -9,119 +9,126 @@
              xmlns:poser="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Poser"
              xmlns:design="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Design"
              xmlns:bounded="clr-namespace:SightKeeper.Avalonia.Annotation.Drawing.Bounded"
+             xmlns:zoomViewer="clr-namespace:Sightful.Avalonia.Controls.ZoomViewer;assembly=Sightful.Avalonia.Controls.ZoomViewer"
              mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.Drawing.Drawer"
              x:DataType="local:DrawerDataContext"
              d:DataContext="{x:Static design:DesignDrawerDataContext.WithImage}">
-    <Panel Classes="regular-margin"
-           VerticalAlignment="Center"
-           HorizontalAlignment="Center">
-        <icons:MaterialIcon Kind="Image"
-                            IsVisible="{Binding #Image.Source, Converter={x:Static ObjectConverters.IsNull}}"
-                            RenderTransform="scale(0.5)"
-                            Foreground="{StaticResource WatermarkSecondary}"
-                            Opacity="0.05"/>
-        <Image Name="Image">
-            <Interaction.Behaviors>
-                <behaviors:ImageDataContextBindingBehavior DataContext="{Binding Image}"/>
-            </Interaction.Behaviors>
-        </Image>
-        <ListBox ItemsSource="{Binding Items}"
-                 SelectedItem="{Binding SelectedItem}"
-                 Name="ListBox"
-                 ClipToBounds="False"
-                 SelectionMode="Toggle">
-            <Interaction.Behaviors>
-                <local:DeselectListBoxItemOnClickOutsideOfItemBehavior/>
-                <behaviors:AddPseudoClassOnGesturePressed ClassName="clickable-items">
-                    <behaviors:AddPseudoClassOnGesturePressed.Gesture>
-                        <KeyGesture>LeftCtrl</KeyGesture>
-                    </behaviors:AddPseudoClassOnGesturePressed.Gesture>
-                </behaviors:AddPseudoClassOnGesturePressed>
-                <poser:AddClassToHoveredItemKeyPointsBehavior KeyPointClassName="item-hovered" ItemClassName="keypoint-hovered"/>
-                <poser:AddClassToSelectedItemKeyPointsBehavior ClassName="item-selected"/>
-            </Interaction.Behaviors>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas Name="Canvas"
-                            Background="Transparent">
-                        <Interaction.Behaviors>
-                            <bounded:BoundingDrawingBehavior Command="{Binding BoundingDrawer.CreateItemCommand}"
-                                                           ListBox="{Binding $parent[ListBox]}">
-                                <bounded:BoundingDrawingBehavior.DrawingItemTemplate>
-                                    <Template>
-                                        <Rectangle Stroke="Red" StrokeThickness="1"/>
-                                    </Template>
-                                </bounded:BoundingDrawingBehavior.DrawingItemTemplate>
-                            </bounded:BoundingDrawingBehavior>
-                            <poser:KeyPointDrawingBehavior CreateKeyPointCommand="{Binding KeyPointDrawer.CreateKeyPointCommand}"
-                                                           ExistingKeyPoint="{Binding KeyPointDrawer.ExistingKeyPoint}"
-                                                           ListBox="{Binding #ListBox}">
-                                <poser:KeyPointDrawingBehavior.KeyPointTemplate>
-                                    <Template>
-                                        <Ellipse Width="6"
-                                                 Height="6"
-                                                 Fill="Red"
-                                                 Margin="-3"/>
-                                    </Template>
-                                </poser:KeyPointDrawingBehavior.KeyPointTemplate>
-                            </poser:KeyPointDrawingBehavior>
-                        </Interaction.Behaviors>
-                    </Canvas>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.Template>
-                <ControlTemplate>
-                    <ItemsPresenter Name="PART_ItemsPresenter"
-                                    ItemsPanel="{TemplateBinding ItemsPanel}"
-                                    Margin="{TemplateBinding Padding}"/>
-                </ControlTemplate>
-            </ListBox.Template>
-            <ListBox.ItemContainerTheme>
-                <ControlTheme TargetType="ListBoxItem">
-                    <Setter Property="Cursor" Value="Hand"/>
-                    <Setter Property="Template">
-                        <ControlTemplate>
-                            <ContentPresenter Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              Background="{TemplateBinding Background}"
-                                              BorderBrush="{TemplateBinding BorderBrush}"
-                                              BorderThickness="{TemplateBinding BorderThickness}"/>
-                        </ControlTemplate>
-                    </Setter>
-                </ControlTheme>
-            </ListBox.ItemContainerTheme>
-            <ListBox.Styles>
-                <Style Selector="ListBox:not(.clickable-items) ListBoxItem">
-                    <Setter Property="IsHitTestVisible" Value="False"/>
-                </Style>
-                <Style Selector="ListBox.hide-items ListBoxItem">
-                    <Setter Property="IsVisible" Value="False"/>
-                </Style>
-                <Style Selector="ListBoxItem">
-                    <Setter Property="ClipToBounds" Value="False"/>
-                    <Setter Property="Canvas.Left">
-                        <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemDataContext).Position.X"/>
-                            <Binding Path="#ListBox.Bounds.Width"/>
-                        </MultiBinding>
-                    </Setter>
-                    <Setter Property="Canvas.Top">
-                        <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
-                            <Binding Path="(local:DrawerItemDataContext).Position.Y"/>
-                            <Binding Path="#ListBox.Bounds.Height"/>
-                        </MultiBinding>
-                    </Setter>
-                </Style>
-            </ListBox.Styles>
-            <ListBox.DataTemplates>
-                <DataTemplate DataType="bounded:BoundedItemDataContext">
-                    <local:DrawerItem/>
-                </DataTemplate>
-                <DataTemplate DataType="poser:KeyPointDataContext">
-                    <poser:KeyPointView/>
-                </DataTemplate>
-            </ListBox.DataTemplates>
-        </ListBox>
-    </Panel>
+    <zoomViewer:ZoomViewer>
+        <zoomViewer:ZoomViewer.ForegroundContent>
+            <ListBox ItemsSource="{Binding Items}"
+                     SelectedItem="{Binding SelectedItem}"
+                     Name="ListBox"
+                     ClipToBounds="False"
+                     SelectionMode="Toggle">
+                <Interaction.Behaviors>
+                    <local:DeselectListBoxItemOnClickOutsideOfItemBehavior/>
+                    <behaviors:AddPseudoClassOnGesturePressed ClassName="clickable-items">
+                        <behaviors:AddPseudoClassOnGesturePressed.Gesture>
+                            <KeyGesture>LeftCtrl</KeyGesture>
+                        </behaviors:AddPseudoClassOnGesturePressed.Gesture>
+                    </behaviors:AddPseudoClassOnGesturePressed>
+                    <poser:AddClassToHoveredItemKeyPointsBehavior KeyPointClassName="item-hovered"
+                                                                  ItemClassName="keypoint-hovered"/>
+                    <poser:AddClassToSelectedItemKeyPointsBehavior ClassName="item-selected"/>
+                </Interaction.Behaviors>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Name="Canvas"
+                                Background="Transparent">
+                            <Interaction.Behaviors>
+                                <bounded:BoundingDrawingBehavior Command="{Binding BoundingDrawer.CreateItemCommand}"
+                                                                 ListBox="{Binding $parent[ListBox]}">
+                                    <bounded:BoundingDrawingBehavior.DrawingItemTemplate>
+                                        <Template>
+                                            <Rectangle Stroke="Red" StrokeThickness="1"/>
+                                        </Template>
+                                    </bounded:BoundingDrawingBehavior.DrawingItemTemplate>
+                                </bounded:BoundingDrawingBehavior>
+                                <poser:KeyPointDrawingBehavior
+                                    CreateKeyPointCommand="{Binding KeyPointDrawer.CreateKeyPointCommand}"
+                                    ExistingKeyPoint="{Binding KeyPointDrawer.ExistingKeyPoint}"
+                                    ListBox="{Binding #ListBox}">
+                                    <poser:KeyPointDrawingBehavior.KeyPointTemplate>
+                                        <Template>
+                                            <Ellipse Width="6"
+                                                     Height="6"
+                                                     Fill="Red"
+                                                     Margin="-3"/>
+                                        </Template>
+                                    </poser:KeyPointDrawingBehavior.KeyPointTemplate>
+                                </poser:KeyPointDrawingBehavior>
+                            </Interaction.Behaviors>
+                        </Canvas>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.Template>
+                    <ControlTemplate>
+                        <ItemsPresenter Name="PART_ItemsPresenter"
+                                        ItemsPanel="{TemplateBinding ItemsPanel}"
+                                        Margin="{TemplateBinding Padding}"/>
+                    </ControlTemplate>
+                </ListBox.Template>
+                <ListBox.ItemContainerTheme>
+                    <ControlTheme TargetType="ListBoxItem">
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <ControlTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Background="{TemplateBinding Background}"
+                                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                                  BorderThickness="{TemplateBinding BorderThickness}"/>
+                            </ControlTemplate>
+                        </Setter>
+                    </ControlTheme>
+                </ListBox.ItemContainerTheme>
+                <ListBox.Styles>
+                    <Style Selector="ListBox:not(.clickable-items) ListBoxItem">
+                        <Setter Property="IsHitTestVisible" Value="False"/>
+                    </Style>
+                    <Style Selector="ListBox.hide-items ListBoxItem">
+                        <Setter Property="IsVisible" Value="False"/>
+                    </Style>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="ClipToBounds" Value="False"/>
+                        <Setter Property="Canvas.Left">
+                            <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
+                                <Binding Path="(local:DrawerItemDataContext).Position.X"/>
+                                <Binding Path="#ListBox.Bounds.Width"/>
+                            </MultiBinding>
+                        </Setter>
+                        <Setter Property="Canvas.Top">
+                            <MultiBinding Converter="{x:Static converters:MultiplyConverter.Instance}">
+                                <Binding Path="(local:DrawerItemDataContext).Position.Y"/>
+                                <Binding Path="#ListBox.Bounds.Height"/>
+                            </MultiBinding>
+                        </Setter>
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.DataTemplates>
+                    <DataTemplate DataType="bounded:BoundedItemDataContext">
+                        <local:DrawerItem/>
+                    </DataTemplate>
+                    <DataTemplate DataType="poser:KeyPointDataContext">
+                        <poser:KeyPointView/>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+        </zoomViewer:ZoomViewer.ForegroundContent>
+        <Panel Classes="regular-margin"
+               VerticalAlignment="Center"
+               HorizontalAlignment="Center">
+            <icons:MaterialIcon Kind="Image"
+                                IsVisible="{Binding #Image.Source, Converter={x:Static ObjectConverters.IsNull}}"
+                                RenderTransform="scale(0.5)"
+                                Foreground="{StaticResource WatermarkSecondary}"
+                                Opacity="0.05"/>
+            <Image Name="Image">
+                <Interaction.Behaviors>
+                    <behaviors:ImageDataContextBindingBehavior DataContext="{Binding Image}"/>
+                </Interaction.Behaviors>
+            </Image>
+        </Panel>
+    </zoomViewer:ZoomViewer>
 </UserControl>

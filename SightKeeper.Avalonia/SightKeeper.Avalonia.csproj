@@ -54,6 +54,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\HotKeys\HotKeys.Avalonia\HotKeys.Avalonia.csproj" />
         <ProjectReference Include="..\..\HotKeys\HotKeys\HotKeys.csproj" />
+        <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls.ZoomViewer\Sightful.Avalonia.Controls.ZoomViewer.csproj" />
         <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls\Sightful.Avalonia.Controls.csproj"/>
         <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj"/>
         <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid\Sightful.Avalonia.TreeDataGrid.csproj"/>

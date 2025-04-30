@@ -67,6 +67,8 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 
 	private void OnAssociatedObjectPointerPressed(object? sender, PointerPressedEventArgs e)
 	{
+		if (!e.GetCurrentPoint(null).Properties.IsLeftButtonPressed)
+			return;
 		Guard.IsNotNull(AssociatedObject);
 		if (!IsEnabled)
 			return;
@@ -78,6 +80,7 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 		_initialPosition = e.GetPosition(AssociatedObject);
 		ListBox?.Classes.Add(HideItemsStyleClass);
 		ShowPreview();
+		e.Handled = true;
 	}
 
 	private void ShowPreview()
