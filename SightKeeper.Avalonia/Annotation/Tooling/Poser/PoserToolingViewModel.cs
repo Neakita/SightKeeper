@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -35,6 +36,7 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 		{
 			OnPropertyChanging(nameof(KeyPointTags));
 			_selectedItem = ((PoserItemViewModel?)value)?.Value;
+			KeyPointTags = _selectedItem == null ? ReadOnlyCollection<KeyPointTagDataContext>.Empty : _selectedItem.Tag.KeyPointTags.Select(tag => new KeyPointTagViewModel(tag, new ParametrizedCommandAdapter(DeleteKeyPointCommand, tag))).ToList();
 			OnPropertyChanged(nameof(KeyPointTags));
 		}
 	}
@@ -49,15 +51,9 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 		}
 	}
 
-	public IEnumerable<KeyPointTagDataContext> KeyPointTags
-	{
-		get
-		{
-			if (_selectedItem == null)
-				return Enumerable.Empty<KeyPointTagDataContext>();
-			return _selectedItem.Tag.KeyPointTags.Select(tag => new KeyPointTagViewModel(tag, new ParametrizedCommandAdapter(DeleteKeyPointCommand, tag)));
-		}
-	}
+	[ObservableProperty]
+	public partial IReadOnlyCollection<KeyPointTagDataContext> KeyPointTags { get; private set; } =
+		ReadOnlyCollection<KeyPointTagDataContext>.Empty;
 
 	[ObservableProperty] public partial TagDataContext? SelectedPoserTag { get; set; }
 	[ObservableProperty] public partial TagDataContext? SelectedKeyPointTag { get; set; }

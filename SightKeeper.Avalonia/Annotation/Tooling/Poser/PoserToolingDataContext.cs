@@ -6,6 +6,6 @@ public interface PoserToolingDataContext
 {
 	IEnumerable<TagDataContext> PoserTags { get; }
 	TagDataContext? SelectedPoserTag { get; set; }
-	IEnumerable<KeyPointTagDataContext> KeyPointTags { get; }
+	IReadOnlyCollection<KeyPointTagDataContext> KeyPointTags { get; }
 	TagDataContext? SelectedKeyPointTag { get; set; }
 }

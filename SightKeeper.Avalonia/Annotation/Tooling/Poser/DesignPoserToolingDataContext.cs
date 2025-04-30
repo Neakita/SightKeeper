@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Poser;
@@ -31,7 +32,7 @@ internal sealed class DesignPoserToolingDataContext : PoserToolingDataContext
 	};
 
 	public IEnumerable<TagDataContext> PoserTags { get; init; } = Enumerable.Empty<TagDataContext>();
-	public IEnumerable<KeyPointTagDataContext> KeyPointTags { get; init; } = Enumerable.Empty<KeyPointTagDataContext>();
+	public IReadOnlyCollection<KeyPointTagDataContext> KeyPointTags { get; init; } = ReadOnlyCollection<KeyPointTagDataContext>.Empty;
 
 	public TagDataContext? SelectedPoserTag { get; set; }
 	public TagDataContext? SelectedKeyPointTag { get; set; }

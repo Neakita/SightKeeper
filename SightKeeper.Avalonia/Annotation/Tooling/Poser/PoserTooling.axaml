@@ -9,13 +9,8 @@
              x:DataType="poser:PoserToolingDataContext"
              d:DataContext="{x:Static poser:DesignPoserToolingDataContext.WithPoserAndKeyPointTags}">
     <StackPanel Classes="regular-spacing">
-        <HeaderedContentControl Header="Object Tags">
-            <ListBox ItemsSource="{Binding PoserTags}"
-                     SelectedItem="{Binding SelectedPoserTag}"
-                     DisplayMemberBinding="{Binding Name}"
-                     Classes="compact"/>
-        </HeaderedContentControl>
-        <HeaderedContentControl Header="Key Point Tags">
+        <HeaderedContentControl Header="Key Point Tags"
+                                IsVisible="{Binding KeyPointTags.Count}">
             <ListBox ItemsSource="{Binding KeyPointTags}"
                      SelectedItem="{Binding SelectedKeyPointTag}"
                      Classes="compact">
@@ -42,6 +37,12 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+        </HeaderedContentControl>
+        <HeaderedContentControl Header="Object Tags">
+            <ListBox ItemsSource="{Binding PoserTags}"
+                     SelectedItem="{Binding SelectedPoserTag}"
+                     DisplayMemberBinding="{Binding Name}"
+                     Classes="compact"/>
         </HeaderedContentControl>
     </StackPanel>
 </UserControl>
