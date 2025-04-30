@@ -56,9 +56,15 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 		ReadOnlyCollection<KeyPointTagDataContext>.Empty;
 
 	[ObservableProperty] public partial TagDataContext? SelectedPoserTag { get; set; }
-	[ObservableProperty] public partial TagDataContext? SelectedKeyPointTag { get; set; }
+	[ObservableProperty] public partial KeyPointTagViewModel? SelectedKeyPointTag { get; set; }
 
-	public Tag? SelectedTag => ((TagViewModel?)SelectedPoserTag)?.Tag ?? ((TagViewModel?)SelectedKeyPointTag)?.Tag;
+	TagDataContext? PoserToolingDataContext.SelectedKeyPointTag
+	{
+		get => SelectedKeyPointTag;
+		set => SelectedKeyPointTag = (KeyPointTagViewModel?)value;
+	}
+
+	public Tag? SelectedTag => ((TagViewModel?)SelectedPoserTag)?.Tag ?? SelectedKeyPointTag?.Tag;
 
 	public IObservable<Tag?> SelectedTagChanged => _selectedTagChanged.DistinctUntilChanged();
 
@@ -84,16 +90,17 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 
 	partial void OnSelectedPoserTagChanged(TagDataContext? value)
 	{
-		_selectedTagChanged.OnNext(((TagViewModel?)value)?.Tag);
 		if (value != null)
 			SelectedKeyPointTag = null;
+		_selectedTagChanged.OnNext(((TagViewModel?)value)?.Tag);
 	}
 
-	partial void OnSelectedKeyPointTagChanged(TagDataContext? value)
+	partial void OnSelectedKeyPointTagChanged(KeyPointTagViewModel? value)
 	{
-		_selectedTagChanged.OnNext(((TagViewModel?)value)?.Tag);
 		if (value != null)
 			SelectedPoserTag = null;
+		var tag = value?.Tag;
+		_selectedTagChanged.OnNext(tag);
 	}
 
 	[RelayCommand(CanExecute = nameof(CanDeleteKeyPoint))]

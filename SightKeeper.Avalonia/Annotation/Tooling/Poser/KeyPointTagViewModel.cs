@@ -3,16 +3,15 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Poser;
 
-internal sealed class KeyPointTagViewModel : KeyPointTagDataContext
+public sealed class KeyPointTagViewModel : KeyPointTagDataContext
 {
-	public string Name => _tag.Name;
+	public Tag Tag { get; }
+	public string Name => Tag.Name;
 	public ICommand DeleteKeyPointCommand { get; }
 
 	public KeyPointTagViewModel(Tag tag, ICommand deleteKeyPointCommand)
 	{
-		_tag = tag;
+		Tag = tag;
 		DeleteKeyPointCommand = deleteKeyPointCommand;
 	}
-
-	private readonly Tag _tag;
 }
