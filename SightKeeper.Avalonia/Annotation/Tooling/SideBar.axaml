@@ -8,21 +8,23 @@
              x:DataType="local:SideBarDataContext">
     <Border Classes="outer regular-padding"
             VerticalAlignment="Top">
-        <StackPanel Classes="regular-spacing">
-            <HeaderedContentControl Header="Image Set">
-                <ComboBox SelectedItem="{Binding SelectedImageSet}"
-                          ItemsSource="{Binding ImageSets}"
-                          DisplayMemberBinding="{Binding Name}"
-                          PlaceholderText="Not selected"
-                          HorizontalAlignment="Stretch"/>
-            </HeaderedContentControl>
-            <HeaderedContentControl Header="Data Set">
-                <ComboBox SelectedItem="{Binding SelectedDataSet}"
-                          ItemsSource="{Binding DataSets}"
-                          DisplayMemberBinding="{Binding Name}"
-                          PlaceholderText="Not selected"/>
-            </HeaderedContentControl>
-            <local:AdaptiveTooling DataContext="{Binding AdditionalTooling}"/>
-        </StackPanel>
+        <ScrollViewer>
+            <StackPanel Classes="regular-spacing">
+                <HeaderedContentControl Header="Image Set">
+                    <ComboBox SelectedItem="{Binding SelectedImageSet}"
+                              ItemsSource="{Binding ImageSets}"
+                              DisplayMemberBinding="{Binding Name}"
+                              PlaceholderText="Not selected"
+                              HorizontalAlignment="Stretch"/>
+                </HeaderedContentControl>
+                <HeaderedContentControl Header="Data Set">
+                    <ComboBox SelectedItem="{Binding SelectedDataSet}"
+                              ItemsSource="{Binding DataSets}"
+                              DisplayMemberBinding="{Binding Name}"
+                              PlaceholderText="Not selected"/>
+                </HeaderedContentControl>
+                <local:AdaptiveTooling DataContext="{Binding AdditionalTooling}"/>
+            </StackPanel>
+        </ScrollViewer>
     </Border>
 </UserControl>
