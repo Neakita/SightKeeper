@@ -101,7 +101,10 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 
 	private void OnPointerMoved(object? sender, PointerEventArgs e)
 	{
+		Guard.IsNotNull(DrawingCanvas);
 		var position = e.GetPosition(DrawingCanvas).ToVector();
+		var canvasSize = DrawingCanvas.Bounds.Size.ToVector();
+		position = position.Clamp(Vector2<double>.Zero, canvasSize);
 		SetPreviewPosition(position);
 		_pointerMoved = true;
 	}
@@ -127,6 +130,7 @@ internal sealed class DraggableKeyPointBehavior : Behavior
 		var canvasSize = DrawingCanvas.Bounds.Size.ToVector();
 		var position = e.GetPosition(DrawingCanvas).ToVector();
 		var normalizedPosition = position / canvasSize;
+		normalizedPosition = normalizedPosition.Clamp(Vector2<double>.Zero, Vector2<double>.One);
 		SetCurrentValue(PositionProperty, normalizedPosition);
 	}
 
