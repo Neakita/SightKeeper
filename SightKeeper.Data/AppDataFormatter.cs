@@ -1,4 +1,5 @@
 ﻿using MemoryPack;
+using Serilog;
 using SightKeeper.Application;
 using SightKeeper.Data.Conversion;
 using SightKeeper.Data.Replication;
@@ -8,11 +9,11 @@ namespace SightKeeper.Data;
 
 public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {
-	public AppDataFormatter(FileSystemImageDataAccess imageDataAccess, [Tag(typeof(AppData))] Lock editingLock)
+	public AppDataFormatter(FileSystemImageDataAccess imageDataAccess, [Tag(typeof(AppData))] Lock editingLock, ILogger logger)
 	{
 		_editingLock = editingLock;
 		_converter = new AppDataConverter(imageDataAccess);
-		_replicator = new AppDataReplicator(imageDataAccess);
+		_replicator = new AppDataReplicator(imageDataAccess, logger.ForContext<AppDataReplicator>());
 	}
 
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref AppData? value)
