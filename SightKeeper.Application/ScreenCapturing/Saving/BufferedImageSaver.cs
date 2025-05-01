@@ -13,26 +13,27 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, PendingImag
 {
 	public override Vector2<ushort> MaximumImageSize
 	{
-		get => _imageSize;
+		get;
 		set
 		{
-			if (_imageSize == value)
+			if (field == value)
 				return;
 			Guard.IsGreaterThan<ushort>(value.X, 0);
 			Guard.IsGreaterThan<ushort>(value.Y, 0);
-			_imageSize = value;
+			field = value;
 			UpdateArrayPools();
 		}
 	}
 
 	public BehaviorObservable<ushort> PendingImagesCount => _pendingImagesCount;
 
-	public BufferedImageSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter)
+	public BufferedImageSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter, ImagesCleaner imagesCleaner)
 	{
 		_rawPixelsArrayPool = new WeakReference<ArrayPool<TPixel>>(null!);
 		_convertedPixelsArrayPool = new WeakReference<ArrayPool<Rgba32>>(null!);
 		_imageDataAccess = imageDataAccess;
 		_pixelConverter = pixelConverter;
+		_imagesCleaner = imagesCleaner;
 		MaximumImageSize = new Vector2<ushort>(320, 320);
 	}
 
@@ -81,12 +82,12 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, PendingImag
 
 	private readonly ImageDataAccess _imageDataAccess;
 	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
+	private readonly ImagesCleaner _imagesCleaner;
 	private readonly BehaviorSubject<ushort> _pendingImagesCount = new(0);
 	private readonly Dictionary<ImageSet, BufferedImageSaverSession<TPixel>> _sessions = new();
 	private readonly Dictionary<BufferedImageSaverSession<TPixel>, IDisposable> _freeSessions = new();
 	private readonly WeakReference<ArrayPool<TPixel>> _rawPixelsArrayPool;
 	private readonly WeakReference<ArrayPool<Rgba32>> _convertedPixelsArrayPool;
-	private Vector2<ushort> _imageSize;
 	private IDisposable _aggregateSubscription = Disposable.Empty;
 	private ArrayPool<TPixel> RawPixelsArrayPool
 	{

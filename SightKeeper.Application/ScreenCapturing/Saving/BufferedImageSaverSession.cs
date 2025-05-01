@@ -10,18 +10,17 @@ namespace SightKeeper.Application.ScreenCapturing.Saving;
 
 public sealed class BufferedImageSaverSession<TPixel> : ImageSaverSession<TPixel>, LimitedSession
 {
-	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
 	public BehaviorObservable<ushort> PendingImagesCount => _pendingImagesCount;
 
 	public ushort MaximumAllowedPendingImages
 	{
-		get => _maximumAllowedPendingImages;
+		get;
 		set
 		{
 			Guard.IsGreaterThan<ushort>(value, 0);
-			_maximumAllowedPendingImages = value;
+			field = value;
 		}
-	}
+	} = 10;
 
 	public bool IsLimitExceeded => _limit != null;
 
@@ -32,10 +31,12 @@ public sealed class BufferedImageSaverSession<TPixel> : ImageSaverSession<TPixel
 		ImageDataAccess imageDataAccess,
 		ArrayPool<TPixel> rawPixelsArrayPool,
 		ArrayPool<Rgba32> convertedPixelsArrayPool,
-		PixelConverter<TPixel, Rgba32> pixelConverter)
+		PixelConverter<TPixel, Rgba32> pixelConverter,
+		ImagesCleaner imagesCleaner)
 		: base(imageSet, imageDataAccess)
 	{
 		_pixelConverter = pixelConverter;
+		_imagesCleaner = imagesCleaner;
 		RawPixelsArrayPool = rawPixelsArrayPool;
 		ConvertedPixelsArrayPool = convertedPixelsArrayPool;
 	}
@@ -64,8 +65,9 @@ public sealed class BufferedImageSaverSession<TPixel> : ImageSaverSession<TPixel
 
 	private readonly ConcurrentQueue<ImageData<TPixel>> _pendingImages = new();
 	private readonly BehaviorSubject<ushort> _pendingImagesCount = new(0);
+	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
+	private readonly ImagesCleaner _imagesCleaner;
 	private Task _processingTask = Task.CompletedTask;
-	private ushort _maximumAllowedPendingImages = 10;
 	private TaskCompletionSource? _limit;
 
 	private void ProcessImages()
@@ -86,6 +88,7 @@ public sealed class BufferedImageSaverSession<TPixel> : ImageSaverSession<TPixel
 				data.Dispose();
 			}
 		}
+		_imagesCleaner.RemoveExceedUnusedImages(Set);
 	}
 
 	private void OnImagesCountChanged()
