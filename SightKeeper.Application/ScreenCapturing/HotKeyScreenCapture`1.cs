@@ -23,16 +23,19 @@ public sealed class HotKeyScreenCapture<TPixel> : HotKeyScreenCapture
 		ScreenCapture<TPixel> screenCapture,
 		ScreenBoundsProvider screenBoundsProvider,
 		BindingsManager bindingsManager,
-		ImageSaver<TPixel> imageSaver)
+		ImageSaver<TPixel> imageSaver,
+		SelfActivityProvider selfActivityProvider)
 		: base(screenBoundsProvider, bindingsManager)
 	{
 		_screenCapture = screenCapture;
 		_imageSaver = imageSaver;
+		_selfActivityProvider = selfActivityProvider;
 		_imageSaver.MaximumImageSize = ImageSize;
 	}
 
 	private readonly ScreenCapture<TPixel> _screenCapture;
 	private readonly ImageSaver<TPixel> _imageSaver;
+	private readonly SelfActivityProvider _selfActivityProvider;
 	private ImageSaverSession<TPixel>? _session;
 
 	protected override void Enable()
@@ -53,6 +56,8 @@ public sealed class HotKeyScreenCapture<TPixel> : HotKeyScreenCapture
 
 	protected override void MakeImages(ActionContext context)
 	{
+		if (_selfActivityProvider.IsOwnWindowActive)
+			return;
 		var session = _session;
 		Guard.IsNotNull(session);
 		var processingStopwatch = Stopwatch.StartNew();

@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Application;
 
-public interface SelfActivityService
+public interface SelfActivityProvider
 {
     bool IsOwnWindowActive { get; }
 }

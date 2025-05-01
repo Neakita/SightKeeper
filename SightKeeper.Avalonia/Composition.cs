@@ -115,5 +115,6 @@ public sealed partial class Composition
 		.Root<PoserToolingViewModel>(nameof(PoserToolingViewModel))
 		.Bind<PoserAnnotator>().Bind<ObservablePoserAnnotator>().As(Lifetime.Singleton).To<AppDataPoserAnnotator>()
 		.Bind<AnnotationSideBarComponent>().To<SideBarViewModel>()
-		.Bind<ImageSetEditor>().As(Lifetime.Singleton).To<AppDataImageSetEditor>();
+		.Bind<ImageSetEditor>().As(Lifetime.Singleton).To<AppDataImageSetEditor>()
+		.Bind<SelfActivityProvider>().To<AvaloniaSelfActivityProvider>();
 }
