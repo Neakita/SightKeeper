@@ -1,6 +1,6 @@
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-public interface LimitedSession
+public interface LimitedSaver
 {
 	Task Limit { get; }
 }

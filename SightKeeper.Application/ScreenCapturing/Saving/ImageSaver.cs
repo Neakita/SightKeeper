@@ -1,14 +1,9 @@
-using SightKeeper.Domain;
+using CommunityToolkit.HighPerformance;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-public abstract class ImageSaver<TPixel> : IDisposable
+public interface ImageSaver<TPixel>
 {
-	public abstract Vector2<ushort> MaximumImageSize { get; set; }
-
-	public abstract ImageSaverSession<TPixel> AcquireSession(ImageSet set);
-	public abstract void ReleaseSession(ImageSaverSession<TPixel> session);
-
-	public abstract void Dispose();
+	void SaveImage(ImageSet set, ReadOnlySpan2D<TPixel> imageData);
 }

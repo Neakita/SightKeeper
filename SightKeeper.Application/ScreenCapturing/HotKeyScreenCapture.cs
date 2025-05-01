@@ -53,7 +53,7 @@ public abstract class HotKeyScreenCapture : ImageCapturer
 		}
 	}
 
-	public virtual Vector2<ushort> ImageSize
+	public Vector2<ushort> ImageSize
 	{
 		get => _resolution;
 		set

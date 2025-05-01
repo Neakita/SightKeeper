@@ -1,17 +1,18 @@
 using System.Buffers;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
+using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.HighPerformance;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, PendingImagesCountReporter, IDisposable
+public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSaver, PendingImagesCountReporter, IDisposable
 {
-	public override Vector2<ushort> MaximumImageSize
+	private Vector2<ushort> MaximumImageSize
 	{
 		get;
 		set
@@ -26,116 +27,98 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, PendingImag
 	}
 
 	public BehaviorObservable<ushort> PendingImagesCount => _pendingImagesCount;
-
-	public BufferedImageSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter, ImagesCleaner imagesCleaner)
+	
+	public ushort MaximumAllowedPendingImages
 	{
-		_rawPixelsArrayPool = new WeakReference<ArrayPool<TPixel>>(null!);
-		_convertedPixelsArrayPool = new WeakReference<ArrayPool<Rgba32>>(null!);
+		get;
+		set
+		{
+			Guard.IsGreaterThan<ushort>(value, 0);
+			field = value;
+		}
+	} = 10;
+
+	public bool IsLimitExceeded => _limit != null;
+
+	public Task Limit => _limit?.Task ?? Task.CompletedTask;
+
+	public BufferedImageSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter)
+	{
+		UpdateArrayPools();
 		_imageDataAccess = imageDataAccess;
 		_pixelConverter = pixelConverter;
-		_imagesCleaner = imagesCleaner;
 		MaximumImageSize = new Vector2<ushort>(320, 320);
 	}
 
-	public override ImageSaverSession<TPixel> AcquireSession(ImageSet set)
+	public void Dispose()
 	{
-		if (_sessions.TryGetValue(set, out var session))
-		{
-			if (_freeSessions.Remove(session, out var subscription))
-				subscription.Dispose();
-			return session;
-		}
-		session = new BufferedImageSaverSession<TPixel>(set, _imageDataAccess, RawPixelsArrayPool, ConvertedPixelsArrayPool, _pixelConverter, _imagesCleaner);
-		_sessions.Add(set, session);
-		UpdateAggregateSubscription();
-		return session;
-	}
-
-	public override void ReleaseSession(ImageSaverSession<TPixel> session)
-	{
-		var bufferedSession = (BufferedImageSaverSession<TPixel>)session;
-		if (bufferedSession.PendingImagesCount.Value == 0)
-		{
-			Guard.IsTrue(_sessions.Remove(bufferedSession.Set));
-			bufferedSession.Dispose();
-			UpdateAggregateSubscription();
-			return;
-		}
-		var subscription = bufferedSession.PendingImagesCount.Subscribe(count =>
-		{
-			if (count != 0)
-				return;
-			Guard.IsTrue(_sessions.Remove(bufferedSession.Set));
-			Guard.IsTrue(_freeSessions.Remove(bufferedSession, out var subscription));
-			bufferedSession.Dispose();
-			subscription.Dispose();
-			UpdateAggregateSubscription();
-		});
-		_freeSessions.Add(bufferedSession, subscription);
-	}
-
-	public override void Dispose()
-	{
-		Guard.IsEqualTo(_sessions.Count, 0);
 		_pendingImagesCount.Dispose();
 	}
 
+	public void SaveImage(ImageSet set, ReadOnlySpan2D<TPixel> imageData)
+	{
+		Guard.IsFalse(IsLimitExceeded);
+		var data = new ImageData<TPixel>(set, imageData, _rawPixelsArrayPool);
+		_pendingImages.Enqueue(data);
+		if (_processingTask.IsCompleted)
+			_processingTask = Task.Run(ProcessImages);
+		OnImagesCountChanged();
+	}
+
+	private readonly ConcurrentQueue<ImageData<TPixel>> _pendingImages = new();
 	private readonly ImageDataAccess _imageDataAccess;
 	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
-	private readonly ImagesCleaner _imagesCleaner;
 	private readonly BehaviorSubject<ushort> _pendingImagesCount = new(0);
-	private readonly Dictionary<ImageSet, BufferedImageSaverSession<TPixel>> _sessions = new();
-	private readonly Dictionary<BufferedImageSaverSession<TPixel>, IDisposable> _freeSessions = new();
-	private readonly WeakReference<ArrayPool<TPixel>> _rawPixelsArrayPool;
-	private readonly WeakReference<ArrayPool<Rgba32>> _convertedPixelsArrayPool;
-	private IDisposable _aggregateSubscription = Disposable.Empty;
-	private ArrayPool<TPixel> RawPixelsArrayPool
-	{
-		get
-		{
-			if (_rawPixelsArrayPool.TryGetTarget(out var arrayPool))
-				return arrayPool;
-			arrayPool = CreateArrayPool<TPixel>();
-			_rawPixelsArrayPool.SetTarget(arrayPool);
-			return arrayPool;
-		}
-	}
-	private ArrayPool<Rgba32> ConvertedPixelsArrayPool
-	{
-		get
-		{
-			if (_convertedPixelsArrayPool.TryGetTarget(out var arrayPool))
-				return arrayPool;
-			arrayPool = CreateArrayPool<Rgba32>();
-			_convertedPixelsArrayPool.SetTarget(arrayPool);
-			return arrayPool;
-		}
-	}
+	private ArrayPool<TPixel> _rawPixelsArrayPool;
+	private ArrayPool<Rgba32> _convertedPixelsArrayPool;
+	private Task _processingTask = Task.CompletedTask;
+	private TaskCompletionSource? _limit;
 
 	private ArrayPool<T> CreateArrayPool<T>()
 	{
 		return ArrayPool<T>.Create(MaximumImageSize.X * MaximumImageSize.Y, 50);
 	}
 
-	private void UpdateAggregateSubscription()
-	{
-		_aggregateSubscription.Dispose();
-		_aggregateSubscription = _sessions
-			.Select(session => session.Value.PendingImagesCount)
-			.CombineLatest(counts => (ushort)counts.Sum(count => count))
-			.Subscribe(_pendingImagesCount);
-	}
-
+	[MemberNotNull(nameof(_rawPixelsArrayPool), nameof(_convertedPixelsArrayPool))]
 	private void UpdateArrayPools()
 	{
-		var rawPixelsArrayPool = CreateArrayPool<TPixel>();
-		var convertedPixelsArrayPool = CreateArrayPool<Rgba32>();
-		_rawPixelsArrayPool.SetTarget(rawPixelsArrayPool);
-		_convertedPixelsArrayPool.SetTarget(convertedPixelsArrayPool);
-		foreach (var session in _sessions.Values)
+		_rawPixelsArrayPool = CreateArrayPool<TPixel>();
+		_convertedPixelsArrayPool = CreateArrayPool<Rgba32>();
+	}
+
+	private void ProcessImages()
+	{
+		while (_pendingImages.TryDequeue(out var data))
 		{
-			session.RawPixelsArrayPool = rawPixelsArrayPool;
-			session.ConvertedPixelsArrayPool = convertedPixelsArrayPool;
+			OnImagesCountChanged();
+			var buffer = _convertedPixelsArrayPool.Rent(data.ImageSize.X * data.ImageSize.Y);
+			try
+			{
+				var buffer2D = buffer.AsSpan().AsSpan2D(data.ImageSize.Y, data.ImageSize.X);
+				_pixelConverter.Convert(data.Data2D, buffer2D);
+				_imageDataAccess.CreateImage(data.Set, buffer2D, data.CreationTimestamp);
+			}
+			finally
+			{
+				_convertedPixelsArrayPool.Return(buffer);
+				data.Dispose();
+			}
 		}
+	}
+
+	private void OnImagesCountChanged()
+	{
+		var count = (ushort)_pendingImages.Count;
+		if (count > MaximumAllowedPendingImages)
+		{
+			Guard.IsNull(_limit);
+			_limit = new TaskCompletionSource();
+		}
+		else if (count == 0 && _limit != null)
+		{
+			_limit.SetResult();
+			_limit = null;
+		}
+		_pendingImagesCount.OnNext(count);
 	}
 }
