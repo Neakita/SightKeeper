@@ -31,5 +31,20 @@ public sealed class ImageSet
 		_images.RemoveAt(index);
 	}
 
+	public List<Image> GetImagesRange(int index, int count)
+	{
+		return _images.GetRange(index, count);
+	}
+
+	public void RemoveImagesRange(int index, int count)
+	{
+		for (var i = index; i < index + count; i++)
+		{
+			var image = _images[i];
+			ImageIsInUseException.ThrowForDeletionIfInUse(this, image);
+		}
+		_images.RemoveRange(index, count);
+	}
+
 	private readonly List<Image> _images = new();
 }
