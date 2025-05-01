@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Application.ImageSets;
@@ -39,10 +38,9 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 			.Where(image => image.Set == Set)
 			.Subscribe(_images.Add)
 			.DisposeWith(_disposable);
-		observableDataAccess.Removed
-			.Where(image => image.Set == Set)
-			.Select(_images.Remove)
-			.Subscribe(isRemoved => Guard.IsTrue(isRemoved))
+		observableDataAccess.DeletingImages
+			.Where(tuple => tuple.Set == Set)
+			.Subscribe(tuple => _images.RemoveRange(tuple.Range.Start, tuple.Range.Count))
 			.DisposeWith(_disposable);
 		var images = _images
 			.Transform(image => new AnnotationImageViewModel(imageLoader, image))
