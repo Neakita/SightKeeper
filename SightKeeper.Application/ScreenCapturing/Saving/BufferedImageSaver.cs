@@ -36,16 +36,16 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, PendingImag
 		MaximumImageSize = new Vector2<ushort>(320, 320);
 	}
 
-	public override ImageSaverSession<TPixel> AcquireSession(ImageSet library)
+	public override ImageSaverSession<TPixel> AcquireSession(ImageSet set)
 	{
-		if (_sessions.TryGetValue(library, out var session))
+		if (_sessions.TryGetValue(set, out var session))
 		{
 			if (_freeSessions.Remove(session, out var subscription))
 				subscription.Dispose();
 			return session;
 		}
-		session = new BufferedImageSaverSession<TPixel>(library, _imageDataAccess, RawPixelsArrayPool, ConvertedPixelsArrayPool, _pixelConverter);
-		_sessions.Add(library, session);
+		session = new BufferedImageSaverSession<TPixel>(set, _imageDataAccess, RawPixelsArrayPool, ConvertedPixelsArrayPool, _pixelConverter, _imagesCleaner);
+		_sessions.Add(set, session);
 		UpdateAggregateSubscription();
 		return session;
 	}

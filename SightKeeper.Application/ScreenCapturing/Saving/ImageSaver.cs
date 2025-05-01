@@ -7,7 +7,7 @@ public abstract class ImageSaver<TPixel> : IDisposable
 {
 	public abstract Vector2<ushort> MaximumImageSize { get; set; }
 
-	public abstract ImageSaverSession<TPixel> AcquireSession(ImageSet library);
+	public abstract ImageSaverSession<TPixel> AcquireSession(ImageSet set);
 	public abstract void ReleaseSession(ImageSaverSession<TPixel> session);
 
 	public abstract void Dispose();
