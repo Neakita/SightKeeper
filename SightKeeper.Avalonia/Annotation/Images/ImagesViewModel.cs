@@ -29,7 +29,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 	public IReadOnlyCollection<AnnotationImageDataContext> Images { get; }
 	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
 	public Image? SelectedImage => SelectedImageIndex >= 0 ? _images[SelectedImageIndex] : null;
-	public IObservable<Image> SelectedImageChanged => _selectedImageChanged.AsObservable();
+	public IObservable<Image?> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
 	public ImagesViewModel(ObservableImageDataAccess observableDataAccess, ImageLoader imageLoader)
 	{
@@ -58,11 +58,11 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 
 	private readonly CompositeDisposable _disposable = new();
 	private readonly ObservableList<Image> _images;
-	private readonly Subject<Image> _selectedImageChanged = new();
+	private readonly Subject<Image?> _selectedImageChanged = new();
 
 	partial void OnSelectedImageIndexChanged(int value)
 	{
-		var image = _images[value];
+		var image = value == -1 ? null : _images[value];
 		_selectedImageChanged.OnNext(image);
 	}
 }
