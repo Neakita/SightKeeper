@@ -24,8 +24,6 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 		}
 	} = 10;
 
-	public bool IsLimitExceeded => _limit != null;
-
 	public Task Limit => _limit?.Task ?? Task.CompletedTask;
 
 	public BufferedImageSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter)
@@ -42,7 +40,7 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 	public void SaveImage(ImageSet set, ReadOnlySpan2D<TPixel> imageData)
 	{
 		GrowMaximumImageDataLengthIfNecessary(new Vector2<ushort>((ushort)imageData.Width, (ushort)imageData.Height));
-		Guard.IsFalse(IsLimitExceeded);
+		Guard.IsFalse(IsLimitReached);
 		var data = new ImageData<TPixel>(set, imageData, RawPixelsPool);
 		_pendingImages.Enqueue(data);
 		OnImagesCountChanged();
@@ -68,6 +66,8 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 		ArrayPool<TPixel>.Create(MaximumImageDataLength, MaximumAllowedPendingImages);
 
 	private Rgba32[] ConvertedPixelsBuffer => _convertedPixelsBuffer ?? new Rgba32[MaximumImageDataLength];
+
+	private bool IsLimitReached => _limit != null;
 
 	private readonly ConcurrentQueue<ImageData<TPixel>> _pendingImages = new();
 	private readonly ImageDataAccess _imageDataAccess;
