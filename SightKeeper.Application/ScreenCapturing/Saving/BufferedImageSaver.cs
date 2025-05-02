@@ -1,6 +1,5 @@
 using System.Buffers;
 using System.Collections.Concurrent;
-using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
@@ -12,20 +11,6 @@ namespace SightKeeper.Application.ScreenCapturing.Saving;
 
 public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSaver, PendingImagesCountReporter, IDisposable
 {
-	private Vector2<ushort> MaximumImageSize
-	{
-		get;
-		set
-		{
-			if (field == value)
-				return;
-			Guard.IsGreaterThan<ushort>(value.X, 0);
-			Guard.IsGreaterThan<ushort>(value.Y, 0);
-			field = value;
-			UpdateArrayPools();
-		}
-	}
-
 	public BehaviorObservable<ushort> PendingImagesCount => _pendingImagesCount;
 	
 	public ushort MaximumAllowedPendingImages
@@ -35,6 +20,7 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 		{
 			Guard.IsGreaterThan<ushort>(value, 0);
 			field = value;
+			_rawPixelsPool = null;
 		}
 	} = 10;
 
@@ -44,10 +30,8 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 
 	public BufferedImageSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter)
 	{
-		UpdateArrayPools();
 		_imageDataAccess = imageDataAccess;
 		_pixelConverter = pixelConverter;
-		MaximumImageSize = new Vector2<ushort>(320, 320);
 	}
 
 	public void Dispose()
@@ -57,33 +41,48 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 
 	public void SaveImage(ImageSet set, ReadOnlySpan2D<TPixel> imageData)
 	{
+		GrowMaximumImageDataLengthIfNecessary(new Vector2<ushort>((ushort)imageData.Width, (ushort)imageData.Height));
 		Guard.IsFalse(IsLimitExceeded);
-		var data = new ImageData<TPixel>(set, imageData, _rawPixelsArrayPool);
+		var data = new ImageData<TPixel>(set, imageData, RawPixelsPool);
 		_pendingImages.Enqueue(data);
+		OnImagesCountChanged();
 		if (_processingTask.IsCompleted)
 			_processingTask = Task.Run(ProcessImages);
-		OnImagesCountChanged();
 	}
+
+	private int MaximumImageDataLength
+	{
+		get;
+		set
+		{
+			if (field == value)
+				return;
+			Guard.IsGreaterThanOrEqualTo(value, field);
+			field = value;
+			_rawPixelsPool = null;
+			_convertedPixelsBuffer = null;
+		}
+	}
+
+	private ArrayPool<TPixel> RawPixelsPool => _rawPixelsPool ??=
+		ArrayPool<TPixel>.Create(MaximumImageDataLength, MaximumAllowedPendingImages);
+
+	private Rgba32[] ConvertedPixelsBuffer => _convertedPixelsBuffer ?? new Rgba32[MaximumImageDataLength];
 
 	private readonly ConcurrentQueue<ImageData<TPixel>> _pendingImages = new();
 	private readonly ImageDataAccess _imageDataAccess;
 	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
 	private readonly BehaviorSubject<ushort> _pendingImagesCount = new(0);
-	private ArrayPool<TPixel> _rawPixelsArrayPool;
-	private ArrayPool<Rgba32> _convertedPixelsArrayPool;
+	private ArrayPool<TPixel>? _rawPixelsPool;
+	private Rgba32[]? _convertedPixelsBuffer;
 	private Task _processingTask = Task.CompletedTask;
 	private TaskCompletionSource? _limit;
 
-	private ArrayPool<T> CreateArrayPool<T>()
+	private void GrowMaximumImageDataLengthIfNecessary(Vector2<ushort> imageSize)
 	{
-		return ArrayPool<T>.Create(MaximumImageSize.X * MaximumImageSize.Y, 50);
-	}
-
-	[MemberNotNull(nameof(_rawPixelsArrayPool), nameof(_convertedPixelsArrayPool))]
-	private void UpdateArrayPools()
-	{
-		_rawPixelsArrayPool = CreateArrayPool<TPixel>();
-		_convertedPixelsArrayPool = CreateArrayPool<Rgba32>();
+		var dataLength = imageSize.X * imageSize.Y;
+		if (dataLength > MaximumImageDataLength)
+			MaximumImageDataLength = dataLength;
 	}
 
 	private void ProcessImages()
@@ -91,7 +90,7 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 		while (_pendingImages.TryDequeue(out var data))
 		{
 			OnImagesCountChanged();
-			var buffer = _convertedPixelsArrayPool.Rent(data.ImageSize.X * data.ImageSize.Y);
+			var buffer = ConvertedPixelsBuffer;
 			try
 			{
 				var buffer2D = buffer.AsSpan().AsSpan2D(data.ImageSize.Y, data.ImageSize.X);
@@ -100,7 +99,6 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 			}
 			finally
 			{
-				_convertedPixelsArrayPool.Return(buffer);
 				data.Dispose();
 			}
 		}
@@ -109,7 +107,7 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 	private void OnImagesCountChanged()
 	{
 		var count = (ushort)_pendingImages.Count;
-		if (count > MaximumAllowedPendingImages)
+		if (count == MaximumAllowedPendingImages)
 		{
 			Guard.IsNull(_limit);
 			_limit = new TaskCompletionSource();
