@@ -42,7 +42,13 @@
             <ListBox ItemsSource="{Binding PoserTags}"
                      SelectedItem="{Binding SelectedPoserTag}"
                      DisplayMemberBinding="{Binding Name}"
-                     Classes="compact"/>
+                     Classes="compact">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </HeaderedContentControl>
     </StackPanel>
 </UserControl>
