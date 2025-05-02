@@ -44,7 +44,7 @@ public sealed partial class Composition
 	private void Setup() => DI.Setup(nameof(Composition))
 		.Hint(Hint.Resolve, "Off")
 		.RootBind<AppDataAccess>(nameof(AppDataAccess)).Bind<ApplicationSettingsProvider>().As(Lifetime.Singleton).To<AppDataAccess>()
-		.Bind().Bind<ImageDataAccess>().Bind<ObservableImageDataAccess>().As(Lifetime.Singleton)
+		.RootBind<FileSystemImageDataAccess>(nameof(FileSystemImageDataAccess)).Bind().Bind<ImageDataAccess>().Bind<ObservableImageDataAccess>().As(Lifetime.Singleton)
 		.To<FileSystemImageDataAccess>()
 		.Bind<ReadDataAccess<ImageSet>>().Bind<ObservableDataAccess<ImageSet>>()
 		.Bind<WriteDataAccess<ImageSet>>().As(Lifetime.Singleton).To<AppDataImageSetsDataAccess>()

@@ -48,6 +48,11 @@ public sealed class FileSystemImageDataAccess : ImageDataAccess
 		_appDataAccess.SetDataChanged();
 	}
 
+	public void ClearUnassociatedImageFiles()
+	{
+		_fileSystemDataAccess.ClearUnassociatedFiles();
+	}
+
 	internal void AssociateId(Image image, Id id)
 	{
 		_fileSystemDataAccess.AssociateId(image, id);

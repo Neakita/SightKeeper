@@ -1,10 +1,13 @@
 ﻿using CommunityToolkit.Diagnostics;
 using FlakeId;
+using Serilog;
 
 namespace SightKeeper.Data.Services;
 
 internal sealed class FileSystemDataAccess<T> where T : notnull
 {
+	private readonly ILogger _logger = Log.ForContext<FileSystemDataAccess<T>>();
+
 	public string DirectoryPath { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), "Data");
 
 	public FileSystemDataAccess(string fileExtension = "")
@@ -58,6 +61,22 @@ internal sealed class FileSystemDataAccess<T> where T : notnull
 		Guard.IsTrue(_ids.Remove(item, out var id));
 		var filePath = GetFilePath(id);
 		File.Delete(filePath);
+	}
+
+	public void ClearUnassociatedFiles()
+	{
+		var filesPaths = Directory.GetFiles(DirectoryPath);
+		var associatedIds = _ids.Values.ToHashSet();
+		foreach (var filePath in filesPaths)
+		{
+			var fileName = Path.GetFileName(filePath);
+			Id fileId = new(long.Parse(fileName.Replace(_fileExtension, "")));
+			if (!associatedIds.Contains(fileId))
+			{
+				File.Delete(filePath);
+				_logger.Warning("Unassociated file removed: {filePath}", filePath);
+			}
+		}
 	}
 
 	private readonly Dictionary<T, Id> _ids = new();
