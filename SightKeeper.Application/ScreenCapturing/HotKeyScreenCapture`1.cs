@@ -37,13 +37,16 @@ public sealed class HotKeyScreenCapture<TPixel> : HotKeyScreenCapture
 		var processingStopwatch = Stopwatch.StartNew();
 		do
 		{
-			if (_imageSaver is LimitedSaver limitedSession && context.IsEliminatedAfterCompletion(limitedSession.Limit))
+			if (_imageSaver is LimitedSaver { IsLimitReached: true } limitedSession &&
+			    context.IsEliminatedAfterCompletion(limitedSession.Processing))
 				break;
 			processingStopwatch.Restart();
 			var imageData = _screenCapture.Capture(ImageSize, Offset);
 			_imageSaver.SaveImage(set, imageData);
 		} while (IsEnabled && context.IsAliveAfter(Timeout - processingStopwatch.Elapsed));
 		processingStopwatch.Stop();
+		if (_imageSaver is LimitedSaver limitedSaver)
+			limitedSaver.Processing.Wait();
 		_imagesCleaner.RemoveExceedUnusedImages(set);
 	}
 }

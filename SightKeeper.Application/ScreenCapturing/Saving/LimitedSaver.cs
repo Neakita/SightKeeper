@@ -2,5 +2,6 @@ namespace SightKeeper.Application.ScreenCapturing.Saving;
 
 public interface LimitedSaver
 {
-	Task Limit { get; }
+	bool IsLimitReached { get; }
+	Task Processing { get; }
 }

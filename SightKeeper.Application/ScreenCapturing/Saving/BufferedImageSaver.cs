@@ -24,7 +24,9 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 		}
 	} = 10;
 
-	public Task Limit => _limit?.Task ?? Task.CompletedTask;
+	public bool IsLimitReached => _pendingImages.Count == MaximumAllowedPendingImages;
+
+	public Task Processing { get; private set; } = Task.CompletedTask;
 
 	public BufferedImageSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter)
 	{
@@ -44,8 +46,8 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 		var data = new ImageData<TPixel>(set, imageData, RawPixelsPool);
 		_pendingImages.Enqueue(data);
 		OnImagesCountChanged();
-		if (_processingTask.IsCompleted)
-			_processingTask = Task.Run(ProcessImages);
+		if (Processing.IsCompleted)
+			Processing = Task.Run(ProcessImages);
 	}
 
 	private int MaximumImageDataLength
@@ -67,16 +69,12 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 
 	private Rgba32[] ConvertedPixelsBuffer => _convertedPixelsBuffer ?? new Rgba32[MaximumImageDataLength];
 
-	private bool IsLimitReached => _limit != null;
-
 	private readonly ConcurrentQueue<ImageData<TPixel>> _pendingImages = new();
 	private readonly ImageDataAccess _imageDataAccess;
 	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
 	private readonly BehaviorSubject<ushort> _pendingImagesCount = new(0);
 	private ArrayPool<TPixel>? _rawPixelsPool;
 	private Rgba32[]? _convertedPixelsBuffer;
-	private Task _processingTask = Task.CompletedTask;
-	private TaskCompletionSource? _limit;
 
 	private void GrowMaximumImageDataLengthIfNecessary(Vector2<ushort> imageSize)
 	{
@@ -107,16 +105,6 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 	private void OnImagesCountChanged()
 	{
 		var count = (ushort)_pendingImages.Count;
-		if (count == MaximumAllowedPendingImages)
-		{
-			Guard.IsNull(_limit);
-			_limit = new TaskCompletionSource();
-		}
-		else if (count == 0 && _limit != null)
-		{
-			_limit.SetResult();
-			_limit = null;
-		}
 		_pendingImagesCount.OnNext(count);
 	}
 }
