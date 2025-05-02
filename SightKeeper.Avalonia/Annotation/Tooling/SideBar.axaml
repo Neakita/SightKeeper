@@ -14,8 +14,7 @@
                     <ComboBox SelectedItem="{Binding SelectedImageSet}"
                               ItemsSource="{Binding ImageSets}"
                               DisplayMemberBinding="{Binding Name}"
-                              PlaceholderText="Not selected"
-                              HorizontalAlignment="Stretch"/>
+                              PlaceholderText="Not selected"/>
                 </HeaderedContentControl>
                 <HeaderedContentControl Header="Data Set">
                     <ComboBox SelectedItem="{Binding SelectedDataSet}"
