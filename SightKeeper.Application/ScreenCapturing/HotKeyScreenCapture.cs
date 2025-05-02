@@ -80,13 +80,13 @@ public abstract class HotKeyScreenCapture : ImageCapturer
 
 	protected abstract void MakeImages(ActionContext context);
 
-	protected virtual void Enable()
+	private void Enable()
 	{
 		Guard.IsNull(_binding);
 		_binding = _bindingsManager.Bind(Gesture, _handler);
 	}
 
-	protected virtual void Disable()
+	private void Disable()
 	{
 		Guard.IsNotNull(_binding);
 		_binding.Dispose();
