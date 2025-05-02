@@ -11,16 +11,20 @@
              x:DataType="local:AnnotationTabViewModel">
     <Grid Classes="regular-margin">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="160"/>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition MinWidth="160" MaxWidth="400"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="4*" MinWidth="600"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="Auto" MinWidth="200" MaxWidth="350"/>
         </Grid.ColumnDefinitions>
         <images:Images Grid.Column="0"
                        DataContext="{Binding Images}"
                        IsVisible="{Binding !!Images.Count}"/>
-        <drawing:Drawer Grid.Column="1"
+        <GridSplitter Grid.Column="1"/>
+        <drawing:Drawer Grid.Column="2"
                         DataContext="{Binding Drawer}"/>
-        <tooling:SideBar Grid.Column="2"
+        <GridSplitter Grid.Column="3"/>
+        <tooling:SideBar Grid.Column="4"
                          DataContext="{Binding SideBar}"/>
     </Grid>
 </UserControl>
