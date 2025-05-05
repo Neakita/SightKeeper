@@ -20,6 +20,7 @@ using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.Annotation.Tooling.Classifier;
+using SightKeeper.Avalonia.Annotation.Tooling.Commands;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.ImageSets;
@@ -43,8 +44,10 @@ public sealed partial class Composition
 {
 	private void Setup() => DI.Setup(nameof(Composition))
 		.Hint(Hint.Resolve, "Off")
-		.RootBind<AppDataAccess>(nameof(AppDataAccess)).Bind<ApplicationSettingsProvider>().As(Lifetime.Singleton).To<AppDataAccess>()
-		.RootBind<FileSystemImageDataAccess>(nameof(FileSystemImageDataAccess)).Bind().Bind<ImageDataAccess>().Bind<ObservableImageDataAccess>().As(Lifetime.Singleton)
+		.RootBind<AppDataAccess>(nameof(AppDataAccess)).Bind<ApplicationSettingsProvider>().As(Lifetime.Singleton)
+		.To<AppDataAccess>()
+		.RootBind<FileSystemImageDataAccess>(nameof(FileSystemImageDataAccess)).Bind().Bind<ImageDataAccess>()
+		.Bind<ObservableImageDataAccess>().As(Lifetime.Singleton)
 		.To<FileSystemImageDataAccess>()
 		.Bind<ReadDataAccess<ImageSet>>().Bind<ObservableDataAccess<ImageSet>>()
 		.Bind<WriteDataAccess<ImageSet>>().As(Lifetime.Singleton).To<AppDataImageSetsDataAccess>()
@@ -106,15 +109,18 @@ public sealed partial class Composition
 		.Bind<IValidator<ImageSetData>>().To<ImageSetDataValidator>()
 		.Bind<IValidator<ImageSetData>>("new").To<NewImageSetDataValidator>()
 		.Bind<ImageSetDeleter>().To<LockingImageSetDeleter>()
-		.RootBind<ImagesViewModel>(nameof(ImagesViewModel)).Bind<ImageSelection>().As(Lifetime.Singleton).To<ImagesViewModel>()
+		.RootBind<ImagesViewModel>(nameof(ImagesViewModel)).Bind<ImageSelection>().As(Lifetime.Singleton)
+		.To<ImagesViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
 		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
 		.Root<ClassifierToolingViewModel>(nameof(ClassifierToolingViewModel))
-		.Bind<BoundingAnnotator>().Bind<ObservableBoundingAnnotator>().As(Lifetime.Singleton).To<AppDataBoundingAnnotator>()
+		.Bind<BoundingAnnotator>().Bind<ObservableBoundingAnnotator>().As(Lifetime.Singleton)
+		.To<AppDataBoundingAnnotator>()
 		.Bind<BoundingEditor>().To<AppDataBoundingEditor>()
 		.Root<PoserToolingViewModel>(nameof(PoserToolingViewModel))
 		.Bind<PoserAnnotator>().Bind<ObservablePoserAnnotator>().As(Lifetime.Singleton).To<AppDataPoserAnnotator>()
 		.Bind<AnnotationSideBarComponent>().To<SideBarViewModel>()
 		.Bind<ImageSetEditor>().As(Lifetime.Singleton).To<AppDataImageSetEditor>()
-		.Bind<SelfActivityProvider>().To<AvaloniaSelfActivityProvider>();
+		.Bind<SelfActivityProvider>().To<AvaloniaSelfActivityProvider>()
+		.Bind<AnnotationButtonDefinitionFactory>().To<DeleteSelectedImageButtonDefinitionFactory>();
 }

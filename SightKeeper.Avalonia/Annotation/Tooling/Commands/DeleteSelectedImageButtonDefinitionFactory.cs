@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
+using Material.Icons;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Application.ScreenCapturing;
@@ -12,9 +13,9 @@ using SightKeeper.Avalonia.Annotation.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Commands;
 
-public sealed class DeleteSelectedImageCommandFactory
+public sealed class DeleteSelectedImageButtonDefinitionFactory : AnnotationButtonDefinitionFactory
 {
-	public DeleteSelectedImageCommandFactory(
+	public DeleteSelectedImageButtonDefinitionFactory(
 		ImageSelection images,
 		IReadOnlyCollection<ObservableAnnotator> annotators,
 		ImageDataAccess imageDataAccess)
@@ -24,7 +25,18 @@ public sealed class DeleteSelectedImageCommandFactory
 		_imageDataAccess = imageDataAccess;
 	}
 
-	public DisposableCommand CreateCommand()
+	public AnnotationButtonDefinition CreateButtonDefinition() => new()
+	{
+		IconKind = MaterialIconKind.ImageRemove,
+		Command = CreateCommand(),
+		ToolTip = "Delete selected image"
+	};
+
+	private readonly ImageSelection _images;
+	private readonly IReadOnlyCollection<ObservableAnnotator> _annotators;
+	private readonly ImageDataAccess _imageDataAccess;
+
+	private DisposableCommand CreateCommand()
 	{
 		RelayCommand command = new(DeleteImage, () => CanDeleteImage);
 		CompositeDisposable disposable = new(2);
@@ -39,10 +51,6 @@ public sealed class DeleteSelectedImageCommandFactory
 			.DisposeWith(disposable);
 		return new DisposableCommand(command, disposable);
 	}
-
-	private readonly ImageSelection _images;
-	private readonly IReadOnlyCollection<ObservableAnnotator> _annotators;
-	private readonly ImageDataAccess _imageDataAccess;
 
 	private bool CanDeleteImage => _images.SelectedImage?.Assets.Count == 0;
 
