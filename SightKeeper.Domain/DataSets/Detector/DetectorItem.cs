@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Detector;
 
-public sealed class DetectorItem : BoundedItem
+public sealed class DetectorItem : BoundedItem, AssetItem
 {
 	public Tag Tag
 	{

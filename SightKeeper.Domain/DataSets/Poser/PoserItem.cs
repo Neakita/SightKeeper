@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser;
 
-public abstract class PoserItem : BoundedItem
+public abstract class PoserItem : BoundedItem, AssetItem
 {
 	public PoserTag Tag
 	{
@@ -14,6 +14,8 @@ public abstract class PoserItem : BoundedItem
 			_tag = value;
 		}
 	}
+
+	Tag AssetItem.Tag => Tag;
 
 	public abstract IReadOnlyCollection<KeyPoint> KeyPoints { get; }
 
