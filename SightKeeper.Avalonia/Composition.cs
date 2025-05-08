@@ -112,15 +112,25 @@ public sealed partial class Composition
 		.RootBind<ImagesViewModel>(nameof(ImagesViewModel)).Bind<ImageSelection>().As(Lifetime.Singleton)
 		.To<ImagesViewModel>()
 		.Bind<DataSetEditor>().To<AppDataDataSetEditor>()
-		.Bind<ClassifierAnnotator>().To<AppDataClassifierAnnotator>()
+		.Bind<ClassifierAnnotator>().As(Lifetime.Singleton).To<AppDataClassifierAnnotator>()
 		.Root<ClassifierToolingViewModel>(nameof(ClassifierToolingViewModel))
 		.Bind<BoundingAnnotator>().Bind<ObservableBoundingAnnotator>().As(Lifetime.Singleton)
 		.To<AppDataBoundingAnnotator>()
 		.Bind<BoundingEditor>().To<AppDataBoundingEditor>()
 		.Root<PoserToolingViewModel>(nameof(PoserToolingViewModel))
 		.Bind<PoserAnnotator>().Bind<ObservablePoserAnnotator>().As(Lifetime.Singleton).To<AppDataPoserAnnotator>()
-		.Bind<AnnotationSideBarComponent>().To<SideBarViewModel>()
+		.Bind<AnnotationSideBarComponent>().As(Lifetime.Singleton).To<SideBarViewModel>()
 		.Bind<ImageSetEditor>().As(Lifetime.Singleton).To<AppDataImageSetEditor>()
 		.Bind<SelfActivityProvider>().To<AvaloniaSelfActivityProvider>()
-		.Bind<AnnotationButtonDefinitionFactory>().To<DeleteSelectedImageButtonDefinitionFactory>();
+		.Bind<AssetDeleter>().As(Lifetime.Singleton).To<AppDataAssetDeleter>()
+		.Bind<ObservableAnnotator>().To(context =>
+		{
+			context.Inject(out ClassifierAnnotator classifierAnnotator);
+			context.Inject(out AssetDeleter assetDeleter);
+			context.Inject(out BoundingAnnotator boundingAnnotator);
+			return new MergeObservableAnnotator(classifierAnnotator, (ObservableAnnotator)assetDeleter, (ObservableAnnotator)boundingAnnotator);
+		})
+		.Bind<AnnotationButtonDefinitionFactory>().To<DeleteSelectedImageButtonDefinitionFactory>()
+		.Bind<AnnotationButtonDefinitionFactory>(2).To<DeleteSelectedAssetButtonDefinitionFactory>()
+		.Bind<DataSetSelectionViewModel>().Bind<DataSetSelectionDataContext>().Bind<DataSetSelection>().As(Lifetime.Singleton).To<DataSetSelectionViewModel>();
 }

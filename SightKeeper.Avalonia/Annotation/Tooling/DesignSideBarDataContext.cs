@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.Input;
@@ -7,7 +6,7 @@ using SightKeeper.Avalonia.DataSets;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-internal sealed class DesignSideBarDataContext : SideBarDataContext
+internal sealed class DesignSideBarDataContext : SideBarDataContext, DataSetSelectionDataContext
 {
 	public IReadOnlyCollection<ImageSetDataContext> ImageSets =>
 	[
@@ -25,6 +24,8 @@ internal sealed class DesignSideBarDataContext : SideBarDataContext
 
 	public DataSetDataContext? SelectedDataSet { get; set; }
 
+	public DataSetSelectionDataContext DataSetSelection => this;
+
 	public IReadOnlyCollection<AnnotationButtonDefinition> ButtonDefinitions => Enumerable.Repeat(
 		new AnnotationButtonDefinition
 		{
@@ -33,5 +34,5 @@ internal sealed class DesignSideBarDataContext : SideBarDataContext
 			ToolTip = "The tool tip"
 		}, 5).ToList();
 
-	public object? AdditionalTooling => throw new NotImplementedException();
+	public object? AdditionalTooling => null;
 }

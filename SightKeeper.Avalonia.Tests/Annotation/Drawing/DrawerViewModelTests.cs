@@ -12,6 +12,7 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Drawing;
 
@@ -36,11 +37,14 @@ public sealed class DrawerViewModelTests
 		var observablePoserAnnotator = Substitute.For<ObservablePoserAnnotator>();
 		observablePoserAnnotator.KeyPointCreated.Returns(Observable.Empty<(PoserItem, KeyPoint)>());
 		observablePoserAnnotator.KeyPointDeleted.Returns(Observable.Empty<(PoserItem, KeyPoint)>());
+		var observableAnnotator = Substitute.For<ObservableAnnotator>();
+		observableAnnotator.AssetsChanged.Returns(Observable.Empty<Image>());
 		var assetItemsViewModel = new AssetItemsViewModel(
 			drawerItemsFactory,
 			keyPointViewModelFactory,
 			observableBoundingAnnotator,
-			observablePoserAnnotator);
+			observablePoserAnnotator,
+			observableAnnotator);
 		var keyPointDrawerViewModel = new KeyPointDrawerViewModel(Substitute.For<PoserAnnotator>());
 		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel, assetItemsViewModel, keyPointDrawerViewModel, new ImageLoader(new WriteableBitmapPool(Logger.None), Substitute.For<ImageDataAccess>()));
 		return drawerViewModel;

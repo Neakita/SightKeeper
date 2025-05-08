@@ -22,7 +22,8 @@
                               PlaceholderText="Not selected"/>
                 </HeaderedContentControl>
                 <HeaderedContentControl Header="Data Set">
-                    <ComboBox SelectedItem="{Binding SelectedDataSet}"
+                    <ComboBox DataContext="{Binding DataSetSelection}"
+                              SelectedItem="{Binding SelectedDataSet}"
                               ItemsSource="{Binding DataSets}"
                               DisplayMemberBinding="{Binding Name}"
                               PlaceholderText="Not selected"/>

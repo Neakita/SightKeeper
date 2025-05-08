@@ -52,7 +52,11 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 	public BoundingDrawerDataContext BoundingDrawer => _boundingDrawer;
 	public KeyPointDrawerDataContext KeyPointDrawer => _keyPointDrawer;
 
-	public DrawerViewModel(BoundingDrawerViewModel boundingDrawer, AssetItemsViewModel itemsViewModel, KeyPointDrawerViewModel keyPointDrawer, ImageLoader imageLoader)
+	public DrawerViewModel(
+		BoundingDrawerViewModel boundingDrawer,
+		AssetItemsViewModel itemsViewModel,
+		KeyPointDrawerViewModel keyPointDrawer,
+		ImageLoader imageLoader)
 	{
 		_boundingDrawer = boundingDrawer;
 		_itemsViewModel = itemsViewModel;

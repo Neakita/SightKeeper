@@ -13,11 +13,8 @@ namespace SightKeeper.Avalonia.Annotation.Tooling;
 public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarComponent, IDisposable
 {
 	public IReadOnlyCollection<ImageSetViewModel> ImageSets { get; }
-	public IReadOnlyCollection<DataSetViewModel> DataSets { get; }
-	[ObservableProperty] public partial DataSetViewModel? SelectedDataSet { get; set; }
 	[ObservableProperty] public partial ImageSetViewModel? SelectedImageSet { get; set; }
 	public IObservable<ImageSetViewModel?> SelectedImageSetChanged => _selectedImageSetChanged.AsObservable();
-	public IObservable<DataSetViewModel?> SelectedDataSetChanged => _selectedDataSetChanged.AsObservable();
 	public IReadOnlyCollection<AnnotationButtonDefinition> ButtonDefinitions => _buttonDefinitions;
 	[ObservableProperty] public partial object? AdditionalTooling { get; private set; }
 	public IObservable<object?> AdditionalToolingChanged => _additionalToolingChanged.AsObservable();
@@ -30,24 +27,22 @@ public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarCompo
 		set => SelectedImageSet = (ImageSetViewModel?)value;
 	}
 
-	IReadOnlyCollection<DataSetDataContext> SideBarDataContext.DataSets => DataSets;
+	public DataSetSelectionDataContext DataSetSelection => _dataSetSelection;
 
-	DataSetDataContext? SideBarDataContext.SelectedDataSet
-	{
-		get => SelectedDataSet;
-		set => SelectedDataSet = (DataSetViewModel?)value;
-	}
+	IObservable<DataSetViewModel?> AnnotationSideBarComponent.SelectedDataSetChanged =>
+		_dataSetSelection.SelectedDataSetChanged;
 
 	public SideBarViewModel(
-		DataSetViewModelsObservableRepository dataSetsRepository,
 		ImageSetViewModelsObservableRepository imageSets,
 		ToolingViewModelFactory toolingViewModelFactory,
-		IEnumerable<AnnotationButtonDefinitionFactory> buttonDefinitionFactories)
+		IEnumerable<AnnotationButtonDefinitionFactory> buttonDefinitionFactories,
+		DataSetSelectionViewModel dataSetSelection)
 	{
 		_toolingViewModelFactory = toolingViewModelFactory;
-		DataSets = dataSetsRepository.Items;
+		_dataSetSelection = dataSetSelection;
 		ImageSets = imageSets.Items;
 		_buttonDefinitions.AddRange(buttonDefinitionFactories.Select(factory => factory.CreateButtonDefinition()));
+		_selectedDataSetChangedSubscription = _dataSetSelection.SelectedDataSetChanged.Subscribe(OnSelectedDataSetChanged);
 	}
 
 	partial void OnSelectedImageSetChanged(ImageSetViewModel? value)
@@ -55,9 +50,8 @@ public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarCompo
 		_selectedImageSetChanged.OnNext(value);
 	}
 
-	partial void OnSelectedDataSetChanged(DataSetViewModel? value)
+	private void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
-		_selectedDataSetChanged.OnNext(value);
 		if (AdditionalTooling is AnnotationButtonDefinitionsProvider oldButtonDefinitionsProvider)
 		{
 			var oldButtonDefinitions = oldButtonDefinitionsProvider.ButtonDefinitions;
@@ -79,17 +73,18 @@ public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarCompo
 	}
 
 	private readonly Subject<ImageSetViewModel?> _selectedImageSetChanged = new();
-	private readonly Subject<DataSetViewModel?> _selectedDataSetChanged = new();
 	private readonly Subject<object?> _additionalToolingChanged = new();
 	private readonly ToolingViewModelFactory _toolingViewModelFactory;
 	private readonly AvaloniaList<AnnotationButtonDefinition> _buttonDefinitions = new();
+	private readonly DataSetSelectionViewModel _dataSetSelection;
+	private readonly IDisposable _selectedDataSetChangedSubscription;
 
 	public void Dispose()
 	{
 		_selectedImageSetChanged.Dispose();
-		_selectedDataSetChanged.Dispose();
 		_additionalToolingChanged.Dispose();
 		foreach (var disposable in _buttonDefinitions.Select(definition => definition.Command).OfType<IDisposable>())
 			disposable.Dispose();
+		_selectedDataSetChangedSubscription.Dispose();
 	}
 }

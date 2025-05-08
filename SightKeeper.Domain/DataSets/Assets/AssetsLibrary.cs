@@ -8,4 +8,5 @@ public interface AssetsLibrary
 	IReadOnlyCollection<Asset> Assets { get; }
 
 	bool Contains(Image image);
+	void DeleteAsset(Image image);
 }

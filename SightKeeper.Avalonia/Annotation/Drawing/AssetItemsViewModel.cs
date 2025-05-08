@@ -44,7 +44,8 @@ public sealed class AssetItemsViewModel
 		DrawerItemsFactory drawerItemsFactory,
 		KeyPointViewModelFactory keyPointFactory,
 		ObservableBoundingAnnotator observableBoundingAnnotator,
-		ObservablePoserAnnotator observablePoserAnnotator)
+		ObservablePoserAnnotator observablePoserAnnotator,
+		ObservableAnnotator observableAnnotator)
 	{
 		_drawerItemsFactory = drawerItemsFactory;
 		_keyPointFactory = keyPointFactory;
@@ -55,6 +56,15 @@ public sealed class AssetItemsViewModel
 			.DisposeWith(_disposable);
 		observablePoserAnnotator.KeyPointCreated.Subscribe(OnKeyPointCreated).DisposeWith(_disposable);
 		observablePoserAnnotator.KeyPointDeleted.Subscribe(OnKeyPointDeleted).DisposeWith(_disposable);
+		observableAnnotator.AssetsChanged.Subscribe(OnAssetsChanged).DisposeWith(_disposable);
+	}
+
+	private void OnAssetsChanged(Image image)
+	{
+		if (Image != image || AssetsLibrary == null)
+			return;
+		if (!AssetsLibrary.Contains(image))
+			_items.Clear();
 	}
 
 	private readonly DrawerItemsFactory _drawerItemsFactory;
