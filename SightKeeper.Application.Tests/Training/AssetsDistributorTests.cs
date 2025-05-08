@@ -8,7 +8,10 @@ public sealed class AssetsDistributorTests
 	[Fact]
 	public void ShouldDistributeAssets()
 	{
-		var assets = Enumerable.Range(0, 100).Select(_ => new FakeAsset()).ToList();
+		var assets = Enumerable.Range(0, 100).Select(_ => new FakeAsset
+		{
+			Image = null!
+		}).ToList();
 		AssetsDistributor distributor = new()
 		{
 			Assets = assets,
@@ -24,7 +27,10 @@ public sealed class AssetsDistributorTests
 	[Fact]
 	public void ShouldDistributeAssetsWhenFractionsSumIsNotOne()
 	{
-		var assets = Enumerable.Range(0, 100).Select(_ => new FakeAsset()).ToList();
+		var assets = Enumerable.Range(0, 100).Select(_ => new FakeAsset
+		{
+			Image = null!
+		}).ToList();
 		AssetsDistributor distributor = new()
 		{
 			Assets = assets,

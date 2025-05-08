@@ -1,5 +1,6 @@
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.DataSets.Poser2D;
 
@@ -10,9 +11,12 @@ internal sealed class Poser2DAssetsFactory : AssetsFactory<Poser2DAsset>
 		_tagsOwner = tagsOwner;
 	}
 
-	public Poser2DAsset CreateAsset()
+	public Poser2DAsset CreateAsset(Image image)
 	{
-		return new Poser2DAsset(_tagsOwner);
+		return new Poser2DAsset(_tagsOwner)
+		{
+			Image = image
+		};
 	}
 
 	private readonly TagsContainer<Tag> _tagsOwner;

@@ -18,7 +18,7 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary, AssetsOwner<TAsset> w
 
 	public TAsset MakeAsset(Image image)
 	{
-		var asset = _assetsFactory.CreateAsset();
+		var asset = _assetsFactory.CreateAsset(image);
 		image.AddAsset(asset);
 		_assets.Add(image, asset);
 		return asset;
