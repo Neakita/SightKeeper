@@ -62,4 +62,47 @@ public sealed class Poser2DAssetTests
 		asset.Items.Should().Contain(item);
 		item.KeyPoints.Should().Contain(firstKeyPoint).And.Contain(secondKeyPoint);
 	}
+
+	[Fact]
+	public void ShouldCreateItemUsingItemsCreator()
+	{
+		ImageSet imageSet = new();
+		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		Poser2DDataSet dataSet = new();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
+		ItemsCreator assetsAsItemsCreator = asset;
+		var item = (Poser2DItem)assetsAsItemsCreator.CreateItem(tag, new Bounding());
+		asset.Items.Should().Contain(item);
+	}
+
+	[Fact]
+	public void ShouldDeleteKeyPoint()
+	{
+		ImageSet imageSet = new();
+		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		Poser2DDataSet dataSet = new();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var keyPointTag = tag.CreateKeyPointTag("1");
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
+		var item = asset.CreateItem(tag, new Bounding());
+		var keyPoint = item.CreateKeyPoint(keyPointTag, new Vector2<double>(0.1, 0.2));
+		item.DeleteKeyPoint(keyPoint);
+		item.KeyPoints.Should().NotContain(keyPoint);
+	}
+
+	[Fact]
+	public void ShouldNotDeleteKeyPointTwice()
+	{
+		ImageSet imageSet = new();
+		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		Poser2DDataSet dataSet = new();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var keyPointTag = tag.CreateKeyPointTag("1");
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
+		var item = asset.CreateItem(tag, new Bounding());
+		var keyPoint = item.CreateKeyPoint(keyPointTag, new Vector2<double>(0.1, 0.2));
+		item.DeleteKeyPoint(keyPoint);
+		Assert.Throws<ArgumentException>(() => item.DeleteKeyPoint(keyPoint));
+	}
 }

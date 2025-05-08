@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
@@ -53,8 +54,9 @@ public sealed class DetectorTagsLibraryTests
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
-		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.DeleteTag(tag));
+		var exception = Assert.Throws<TagIsInUseException>(() => dataSet.TagsLibrary.DeleteTag(tag));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);
+		exception.Tag.Should().Be(tag);
 	}
 
 	[Fact]

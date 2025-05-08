@@ -42,7 +42,9 @@ public sealed class Poser2DWeightsLibraryTests
 		{
 			{ tag1, [keyPoint2] }
 		};
-		Assert.ThrowsAny<Exception>(() => dataSet.WeightsLibrary.CreateWeights(Model.UltralyticsYoloV11, DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, weightsTags));
+		var exception = Assert.Throws<UnexpectedTagsOwnerException>(() => dataSet.WeightsLibrary.CreateWeights(Model.UltralyticsYoloV11, DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, weightsTags));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
+		exception.ExpectedOwner.Should().Be(tag1);
+		exception.Causer.Should().Be(keyPoint2);
 	}
 }

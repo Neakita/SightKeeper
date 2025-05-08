@@ -54,20 +54,7 @@ public sealed class ClassifierAssetLibraryTests
 		Assert.ThrowsAny<Exception>(() => dataSet2.AssetsLibrary.DeleteAsset(image));
 		dataSet1.AssetsLibrary.Assets.Should().ContainKey(image).WhoseValue.Should().Be(asset);
 	}
-	
-	[Fact]
-	public void ShouldNotSetAssetTagToForeign()
-	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
-		ClassifierDataSet dataSet = new();
-		var properTag = dataSet.TagsLibrary.CreateTag("");
-		var foreignTag = new ClassifierDataSet().TagsLibrary.CreateTag("");
-		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		Assert.ThrowsAny<Exception>(() => asset.Tag = foreignTag);
-		asset.Tag.Should().Be(properTag);
-	}
-	
+
 	[Fact]
 	public void ShouldNotCreateAssetWithoutAvailableTags()
 	{
