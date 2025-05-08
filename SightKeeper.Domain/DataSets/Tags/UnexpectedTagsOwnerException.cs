@@ -12,8 +12,7 @@ public sealed class UnexpectedTagsOwnerException : Exception
 	}
 
 	public Tag Causer { get; }
-
-	internal TagsContainer<Tag> ExpectedOwner { get; }
+	public TagsContainer<Tag> ExpectedOwner { get; }
 
 	internal UnexpectedTagsOwnerException(string? message, TagsContainer<Tag> expectedOwner, Tag causer) : base(message)
 	{
