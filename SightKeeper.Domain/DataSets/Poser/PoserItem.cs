@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser;
 
-public abstract class PoserItem : BoundedItem, AssetItem
+public abstract class PoserItem : BoundedItem, AssetItem, TagUser
 {
 	public PoserTag Tag
 	{
@@ -11,7 +11,9 @@ public abstract class PoserItem : BoundedItem, AssetItem
 		set
 		{
 			InappropriateTagsOwnerChangeException.ThrowIfOwnerChanged(_tag, value);
+			_tag.RemoveUser(this);
 			_tag = value;
+			_tag.AddUser(this);
 		}
 	}
 
@@ -25,6 +27,7 @@ public abstract class PoserItem : BoundedItem, AssetItem
 	protected PoserItem(Bounding bounding, PoserTag tag) : base(bounding)
 	{
 		_tag = tag;
+		_tag.AddUser(this);
 	}
 
 	private PoserTag _tag;

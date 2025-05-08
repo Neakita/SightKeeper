@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Detector;
 
-public sealed class DetectorItem : BoundedItem, AssetItem
+public sealed class DetectorItem : BoundedItem, AssetItem, TagUser
 {
 	public Tag Tag
 	{
@@ -11,13 +11,16 @@ public sealed class DetectorItem : BoundedItem, AssetItem
 		set
 		{
 			InappropriateTagsOwnerChangeException.ThrowIfOwnerChanged(_tag, value);
+			_tag.RemoveUser(this);
 			_tag = value;
+			_tag.AddUser(this);
 		}
 	}
 
 	internal DetectorItem(Bounding bounding, Tag tag) : base(bounding)
 	{
 		_tag = tag;
+		_tag.AddUser(this);
 	}
 
 	private Tag _tag;

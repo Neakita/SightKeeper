@@ -15,6 +15,7 @@ public sealed class Poser2DItem : PoserItem
 		KeyPoint keyPoint = new(tag, position);
 		bool isAdded = _keyPoints.Add(keyPoint);
 		Debug.Assert(isAdded);
+		tag.AddUser(keyPoint);
 		return keyPoint;
 	}
 
@@ -23,6 +24,7 @@ public sealed class Poser2DItem : PoserItem
 		bool isRemoved = _keyPoints.Remove(keyPoint);
 		if (!isRemoved)
 			throw new ArgumentException("Specified key point tag was not found and therefore not deleted", nameof(keyPoint));
+		keyPoint.Tag.RemoveUser(keyPoint);
 	}
 
 	internal Poser2DItem(Bounding bounding, PoserTag tag) : base(bounding, tag)

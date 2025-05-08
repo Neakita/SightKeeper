@@ -17,17 +17,13 @@ public sealed class PoserTag : Tag, TagsOwner<Tag>
 	public void DeleteKeyPointTagAt(int index)
 	{
 		var tag = _keyPointTags[index];
-		var isTagInUse = _usageProvider.IsInUse(tag);
-		if (isTagInUse)
-			TagIsInUseException.ThrowForDeletion(tag);
+		TagIsInUseException.ThrowForDeletionIfInUse(tag);
 		_keyPointTags.RemoveAt(index);
 	}
 
 	public void DeleteKeyPointTag(Tag tag)
 	{
-		var isTagInUse = _usageProvider.IsInUse(tag);
-		if (isTagInUse)
-			TagIsInUseException.ThrowForDeletion(tag);
+		TagIsInUseException.ThrowForDeletionIfInUse(tag);
 		var isRemoved = _keyPointTags.Remove(tag);
 		if (!isRemoved)
 			throw new ArgumentException("Specified tag was not found and therefore not deleted", nameof(tag));
@@ -43,11 +39,9 @@ public sealed class PoserTag : Tag, TagsOwner<Tag>
 		DeleteKeyPointTagAt(index);
 	}
 
-	internal PoserTag(TagsContainer<Tag> owner, string name, TagsUsageProvider usageProvider) : base(owner, name)
+	internal PoserTag(TagsContainer<Tag> owner, string name) : base(owner, name)
 	{
-		_usageProvider = usageProvider;
 	}
 
-	private readonly TagsUsageProvider _usageProvider;
 	private readonly List<Tag> _keyPointTags = new();
 }

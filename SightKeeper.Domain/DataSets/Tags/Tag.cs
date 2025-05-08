@@ -20,10 +20,25 @@ public class Tag
 	public uint Color { get; set; }
 
 	public TagsContainer<Tag> Owner { get; }
+	public IReadOnlyCollection<TagUser> Users => _users;
 
 	internal Tag(TagsContainer<Tag> owner, string name)
 	{
 		Owner = owner;
 		Name = name;
 	}
+
+	internal void AddUser(TagUser user)
+	{
+		_users.Add(user);
+	}
+
+	internal void RemoveUser(TagUser user)
+	{
+		bool isRemoved = _users.Remove(user);
+		if (!isRemoved)
+			throw new ArgumentException("The tag user was not found", nameof(user));
+	}
+
+	private readonly HashSet<TagUser> _users = new();
 }

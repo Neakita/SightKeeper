@@ -4,6 +4,12 @@ namespace SightKeeper.Domain.DataSets.Tags;
 
 public sealed class TagIsInUseException : Exception
 {
+	public static void ThrowForDeletionIfInUse(Tag tag)
+	{
+		if (tag.Users.Count > 0)
+			ThrowForDeletion(tag);
+	}
+
 	[DoesNotReturn]
 	public static void ThrowForDeletion(Tag tag)
 	{

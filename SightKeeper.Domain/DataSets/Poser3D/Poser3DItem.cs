@@ -1,4 +1,5 @@
-﻿using SightKeeper.Domain.DataSets.Assets.Items;
+﻿using System.Diagnostics;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -12,7 +13,9 @@ public sealed class Poser3DItem : PoserItem
 	{
 		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(Tag, tag);
 		KeyPoint3D keyPoint = new(tag, position);
-		_keyPoints.Add(keyPoint);
+		bool isAdded = _keyPoints.Add(keyPoint);
+		Debug.Assert(isAdded);
+		tag.AddUser(keyPoint);
 		return keyPoint;
 	}
 
@@ -28,6 +31,7 @@ public sealed class Poser3DItem : PoserItem
 		bool isRemoved = _keyPoints.Remove(keyPoint);
 		if (!isRemoved)
 			throw new ArgumentException("Specified key point tag was not found and therefore not deleted", nameof(keyPoint));
+		keyPoint.Tag.RemoveUser(keyPoint);
 	}
 
 	public override void DeleteKeyPoint(KeyPoint keyPoint)

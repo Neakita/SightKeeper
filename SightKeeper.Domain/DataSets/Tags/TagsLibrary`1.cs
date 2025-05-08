@@ -15,29 +15,23 @@ public sealed class TagsLibrary<TTag> : TagsLibrary, TagsOwner<TTag> where TTag 
 	public override void DeleteTagAt(int index)
 	{
 		var tag = _tags[index];
-		bool isTagInUse = _tagsUsageProvider.IsInUse(tag);
-		if (isTagInUse)
-			TagIsInUseException.ThrowForDeletion(tag);
+		TagIsInUseException.ThrowForDeletionIfInUse(tag);
 		_tags.RemoveAt(index);
 	}
 
 	public void DeleteTag(TTag tag)
 	{
-		bool isTagInUse = _tagsUsageProvider.IsInUse(tag);
-		if (isTagInUse)
-			TagIsInUseException.ThrowForDeletion(tag);
+		TagIsInUseException.ThrowForDeletionIfInUse(tag);
 		var isRemoved = _tags.Remove(tag);
 		if (!isRemoved)
 			throw new ArgumentException("Specified tag was not found and therefore not deleted", nameof(tag));
 	}
 
-	internal TagsLibrary(TagsFactory<TTag> tagsFactory, TagsUsageProvider tagsUsageProvider)
+	internal TagsLibrary(TagsFactory<TTag> tagsFactory)
 	{
 		_tagsFactory = tagsFactory;
-		_tagsUsageProvider = tagsUsageProvider;
 	}
 
 	private readonly TagsFactory<TTag> _tagsFactory;
-	private readonly TagsUsageProvider _tagsUsageProvider;
 	private readonly List<TTag> _tags = new();
 }

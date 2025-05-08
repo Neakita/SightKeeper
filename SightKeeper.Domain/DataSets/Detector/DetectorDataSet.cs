@@ -12,11 +12,9 @@ public sealed class DetectorDataSet : DataSet
 
 	public DetectorDataSet()
 	{
-		DetectorIterativeTagsUsageProvider tagsUsageProvider = new();
-		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance, tagsUsageProvider);
+		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance);
 		DetectorAssetsFactory assetsFactory = new(TagsLibrary);
 		AssetsLibrary = new AssetsLibrary<DetectorAsset>(assetsFactory);
-		tagsUsageProvider.AssetsSource = AssetsLibrary.Assets.Values;
 		WeightsLibrary = new PlainWeightsLibrary(1, TagsLibrary);
 	}
 }

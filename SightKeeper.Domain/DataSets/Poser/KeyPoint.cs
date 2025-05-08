@@ -2,7 +2,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser;
 
-public class KeyPoint
+public class KeyPoint : TagUser
 {
 	public Tag Tag { get; }
 
