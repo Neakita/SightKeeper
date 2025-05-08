@@ -2,7 +2,7 @@ namespace SightKeeper.Domain.DataSets.Tags;
 
 public sealed class UnexpectedTagsOwnerException : Exception
 {
-	internal static void ThrowIfTagsOwnerDoesNotMatch(TagsOwner tagsOwner, Tag tag)
+	internal static void ThrowIfTagsOwnerDoesNotMatch(TagsContainer<Tag> tagsOwner, Tag tag)
 	{
 		if (tagsOwner == tag.Owner)
 			return;
@@ -13,9 +13,9 @@ public sealed class UnexpectedTagsOwnerException : Exception
 
 	public Tag Causer { get; }
 
-	internal TagsOwner ExpectedOwner { get; }
+	internal TagsContainer<Tag> ExpectedOwner { get; }
 
-	internal UnexpectedTagsOwnerException(string? message, TagsOwner expectedOwner, Tag causer) : base(message)
+	internal UnexpectedTagsOwnerException(string? message, TagsContainer<Tag> expectedOwner, Tag causer) : base(message)
 	{
 		ExpectedOwner = expectedOwner;
 		Causer = causer;

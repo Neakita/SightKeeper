@@ -46,12 +46,12 @@ public sealed class PoserWeightsLibrary : WeightsLibrary
 			throw new ArgumentException("Specified weights was not found and therefore not deleted");
 	}
 
-	internal PoserWeightsLibrary(TagsOwner tagsOwner)
+	internal PoserWeightsLibrary(TagsContainer<Tag> tagsOwner)
 	{
 		_tagsOwner = tagsOwner;
 	}
 
-	private readonly TagsOwner _tagsOwner;
+	private readonly TagsContainer<Tag> _tagsOwner;
 	private readonly SortedSet<PoserWeights> _weights = new(WeightsDateComparer.Instance);
 
 	private static ReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> PreventExternalEditing(IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)

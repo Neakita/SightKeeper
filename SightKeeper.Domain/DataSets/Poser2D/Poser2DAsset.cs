@@ -19,10 +19,10 @@ public sealed class Poser2DAsset : ItemsAsset<Poser2DItem>, ItemsOwner
 		return CreateItem((PoserTag)tag, bounding);
 	}
 
-	internal Poser2DAsset(TagsOwner tagsOwner)
+	internal Poser2DAsset(TagsContainer<Tag> tagsOwner)
 	{
 		_tagsOwner = tagsOwner;
 	}
 
-	private readonly TagsOwner _tagsOwner;
+	private readonly TagsContainer<Tag> _tagsOwner;
 }

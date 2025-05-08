@@ -2,5 +2,5 @@ namespace SightKeeper.Domain.DataSets.Tags;
 
 internal abstract class TagsFactory<TTag> where TTag : Tag
 {
-	public abstract TTag CreateTag(TagsOwner owner, string name);
+	public abstract TTag CreateTag(TagsContainer<Tag> owner, string name);
 }

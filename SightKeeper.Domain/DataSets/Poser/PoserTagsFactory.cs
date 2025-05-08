@@ -9,7 +9,7 @@ internal sealed class PoserTagsFactory : TagsFactory<PoserTag>
 		_tagsUsageProvider = tagsUsageProvider;
 	}
 
-	public override PoserTag CreateTag(TagsOwner owner, string name)
+	public override PoserTag CreateTag(TagsContainer<Tag> owner, string name)
 	{
 		return new PoserTag(owner, name, _tagsUsageProvider);
 	}

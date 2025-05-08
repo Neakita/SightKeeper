@@ -20,10 +20,10 @@ public sealed class DetectorAsset : ItemsAsset<DetectorItem>, ItemsOwner
 
 	BoundedItem ItemsCreator.CreateItem(Tag tag, Bounding bounding) => CreateItem(tag, bounding);
 
-	internal DetectorAsset(TagsOwner tagsOwner)
+	internal DetectorAsset(TagsContainer<Tag> tagsOwner)
 	{
 		_tagsOwner = tagsOwner;
 	}
 
-	private readonly TagsOwner _tagsOwner;
+	private readonly TagsContainer<Tag> _tagsOwner;
 }

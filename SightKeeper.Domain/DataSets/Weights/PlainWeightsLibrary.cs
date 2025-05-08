@@ -42,14 +42,14 @@ public sealed class PlainWeightsLibrary : WeightsLibrary
 			throw new ArgumentException("Specified weights was not found and therefore not deleted");
 	}
 
-	internal PlainWeightsLibrary(int minimumTagsCount, TagsOwner tagsOwner)
+	internal PlainWeightsLibrary(int minimumTagsCount, TagsContainer<Tag> tagsOwner)
 	{
 		_minimumTagsCount = minimumTagsCount;
 		_tagsOwner = tagsOwner;
 	}
 
 	private readonly int _minimumTagsCount;
-	private readonly TagsOwner _tagsOwner;
+	private readonly TagsContainer<Tag> _tagsOwner;
 	private readonly SortedSet<PlainWeights> _weights = new(WeightsDateComparer.Instance);
 
 	private void ValidateTags(ReadOnlyCollection<Tag> tagsList, string paramName)

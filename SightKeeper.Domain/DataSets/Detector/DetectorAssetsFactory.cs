@@ -5,7 +5,7 @@ namespace SightKeeper.Domain.DataSets.Detector;
 
 internal sealed class DetectorAssetsFactory : AssetsFactory<DetectorAsset>
 {
-	public DetectorAssetsFactory(TagsOwner tagsOwner)
+	public DetectorAssetsFactory(TagsContainer<Tag> tagsOwner)
 	{
 		_tagsOwner = tagsOwner;
 	}
@@ -15,5 +15,5 @@ internal sealed class DetectorAssetsFactory : AssetsFactory<DetectorAsset>
 		return new DetectorAsset(_tagsOwner);
 	}
 
-	private readonly TagsOwner _tagsOwner;
+	private readonly TagsContainer<Tag> _tagsOwner;
 }

@@ -1,6 +1,7 @@
 namespace SightKeeper.Domain.DataSets.Tags;
 
-public interface TagsOwner
+public interface TagsOwner<out TTag> : TagsContainer<TTag>
 {
-	IReadOnlyList<Tag> Tags { get; }
+	TTag CreateTag(string name);
+	void DeleteTagAt(int index);
 }

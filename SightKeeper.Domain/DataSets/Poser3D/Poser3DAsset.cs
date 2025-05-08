@@ -19,10 +19,10 @@ public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>, ItemsOwner
 		return CreateItem((PoserTag)tag, bounding);
 	}
 
-	internal Poser3DAsset(TagsOwner tagsOwner)
+	internal Poser3DAsset(TagsContainer<Tag> tagsOwner)
 	{
 		_tagsOwner = tagsOwner;
 	}
 
-	private readonly TagsOwner _tagsOwner;
+	private readonly TagsContainer<Tag> _tagsOwner;
 }

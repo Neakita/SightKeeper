@@ -19,9 +19,9 @@ public class Tag
 	}
 	public uint Color { get; set; }
 
-	public TagsOwner Owner { get; }
+	public TagsContainer<Tag> Owner { get; }
 
-	internal Tag(TagsOwner owner, string name)
+	internal Tag(TagsContainer<Tag> owner, string name)
 	{
 		Owner = owner;
 		Name = name;

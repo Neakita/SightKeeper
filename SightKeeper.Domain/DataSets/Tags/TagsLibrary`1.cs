@@ -1,15 +1,24 @@
 namespace SightKeeper.Domain.DataSets.Tags;
 
-public sealed class TagsLibrary<TTag> : TagsLibrary, TagsContainer<TTag> where TTag : Tag
+public sealed class TagsLibrary<TTag> : TagsLibrary, TagsOwner<TTag> where TTag : Tag
 {
 	public override IReadOnlyList<TTag> Tags => _tags.AsReadOnly();
-	IReadOnlyCollection<TTag> TagsContainer<TTag>.Tags => Tags;
+	IReadOnlyList<TTag> TagsContainer<TTag>.Tags => Tags;
 
 	public override TTag CreateTag(string name)
 	{
 		var tag = _tagsFactory.CreateTag(this, name);
 		_tags.Add(tag);
 		return tag;
+	}
+
+	public override void DeleteTagAt(int index)
+	{
+		var tag = _tags[index];
+		bool isTagInUse = _tagsUsageProvider.IsInUse(tag);
+		if (isTagInUse)
+			TagIsInUseException.ThrowForDeletion(tag);
+		_tags.RemoveAt(index);
 	}
 
 	public void DeleteTag(TTag tag)

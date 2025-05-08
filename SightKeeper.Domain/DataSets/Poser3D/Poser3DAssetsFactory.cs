@@ -5,7 +5,7 @@ namespace SightKeeper.Domain.DataSets.Poser3D;
 
 internal sealed class Poser3DAssetsFactory : AssetsFactory<Poser3DAsset>
 {
-	public Poser3DAssetsFactory(TagsOwner tagsOwner)
+	public Poser3DAssetsFactory(TagsContainer<Tag> tagsOwner)
 	{
 		_tagsOwner = tagsOwner;
 	}
@@ -15,5 +15,5 @@ internal sealed class Poser3DAssetsFactory : AssetsFactory<Poser3DAsset>
 		return new Poser3DAsset(_tagsOwner);
 	}
 
-	private readonly TagsOwner _tagsOwner;
+	private readonly TagsContainer<Tag> _tagsOwner;
 }
