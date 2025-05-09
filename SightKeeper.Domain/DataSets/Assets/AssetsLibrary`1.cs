@@ -51,6 +51,11 @@ public sealed class AssetsLibrary<TAsset> : AssetsLibrary, AssetsOwner<TAsset> w
 		return asset;
 	}
 
+	Asset AssetsLibrary.MakeAsset(Image image)
+	{
+		return MakeAsset(image);
+	}
+
 	internal AssetsLibrary(AssetsFactory<TAsset> assetsFactory)
 	{
 		_assetsFactory = assetsFactory;

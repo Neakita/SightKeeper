@@ -7,6 +7,7 @@ public interface AssetsLibrary
 	IReadOnlyCollection<Image> Images { get; }
 	IReadOnlyCollection<Asset> Assets { get; }
 
+	Asset MakeAsset(Image image);
 	bool Contains(Image image);
 	void DeleteAsset(Image image);
 }
