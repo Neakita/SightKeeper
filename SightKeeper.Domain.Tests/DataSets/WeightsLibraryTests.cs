@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Domain.Tests.DataSets.Weights;
+namespace SightKeeper.Domain.Tests.DataSets;
 
 public sealed class WeightsLibraryTests
 {

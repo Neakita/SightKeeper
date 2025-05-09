@@ -1,7 +1,7 @@
 using FluentAssertions;
 using SightKeeper.Domain.DataSets.Classifier;
 
-namespace SightKeeper.Domain.Tests.DataSets.Tags;
+namespace SightKeeper.Domain.Tests.DataSets;
 
 public sealed class TagsLibraryTests
 {

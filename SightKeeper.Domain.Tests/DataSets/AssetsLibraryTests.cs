@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
 
-namespace SightKeeper.Domain.Tests.DataSets.Assets;
+namespace SightKeeper.Domain.Tests.DataSets;
 
 public sealed class AssetsLibraryTests
 {
