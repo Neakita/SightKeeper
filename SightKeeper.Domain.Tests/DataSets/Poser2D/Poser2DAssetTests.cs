@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser2D;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 
@@ -10,8 +9,7 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldCreateKeyPoints()
 	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var firstKeyPointTag = tag.CreateKeyPointTag("1");
@@ -27,8 +25,7 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldDeleteKeyPoint()
 	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag = tag.CreateKeyPointTag("1");
@@ -42,8 +39,7 @@ public sealed class Poser2DAssetTests
 	[Fact]
 	public void ShouldNotDeleteKeyPointTwice()
 	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag = tag.CreateKeyPointTag("1");

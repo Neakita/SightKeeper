@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser2D;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 
@@ -10,8 +9,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldAddNewKeyPointTagToPoserTagWithAssociatedItems()
 	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
@@ -23,8 +21,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldNotDeleteKeyPointTagWithAssociatedKeyPoint()
 	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag1 = tag.CreateKeyPointTag("1");
@@ -38,8 +35,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldAddNewPointToTagWithoutAssociatedItems()
 	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
@@ -52,8 +48,7 @@ public class Poser2DTagTests
 	[Fact]
 	public void ShouldDeletePointOfTagWithoutAssociatedItems()
 	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		Poser2DDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
