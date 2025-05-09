@@ -2,7 +2,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
-public interface ItemsCreator
+public interface ItemsMaker
 {
-	BoundedItem CreateItem(Tag tag, Bounding bounding);
+	BoundedItem MakeItem(Tag tag, Bounding bounding);
 }

@@ -36,7 +36,7 @@ public class Poser2DTagTests
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		asset.CreateItem(tag, new Bounding());
+		asset.MakeItem(tag, new Bounding());
 		var keyPointTag = tag.CreateKeyPointTag("");
 		tag.KeyPointTags.Should().Contain(keyPointTag);
 	}
@@ -50,7 +50,7 @@ public class Poser2DTagTests
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag1 = tag.CreateKeyPointTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item = asset.CreateItem(tag, new Bounding());
+		var item = asset.MakeItem(tag, new Bounding());
 		var keyPoint = item.CreateKeyPoint(keyPointTag1, new Vector2<double>(0.1, 0.2));
 		Assert.ThrowsAny<Exception>(() => tag.DeleteKeyPointTag(keyPointTag1));
 		item.KeyPoints.Should().Contain(keyPoint);
@@ -65,7 +65,7 @@ public class Poser2DTagTests
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		asset.CreateItem(tag1, new Bounding());
+		asset.MakeItem(tag1, new Bounding());
 		var keyPoint = tag2.CreateKeyPointTag("");
 		tag2.KeyPointTags.Should().Contain(keyPoint);
 	}
@@ -80,7 +80,7 @@ public class Poser2DTagTests
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var keyPoint2 = tag2.CreateKeyPointTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		asset.CreateItem(tag1, new Bounding());
+		asset.MakeItem(tag1, new Bounding());
 		tag2.DeleteKeyPointTag(keyPoint2);
 		tag2.KeyPointTags.Should().BeEmpty();
 	}

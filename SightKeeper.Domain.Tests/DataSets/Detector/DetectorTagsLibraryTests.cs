@@ -53,7 +53,7 @@ public sealed class DetectorTagsLibraryTests
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
+		asset.MakeItem(tag, new Bounding(0, 0, 1, 1));
 		var exception = Assert.Throws<TagIsInUseException>(() => dataSet.TagsLibrary.DeleteTag(tag));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);
 		exception.Tag.Should().Be(tag);
@@ -68,7 +68,7 @@ public sealed class DetectorTagsLibraryTests
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		asset.CreateItem(tag1, new Bounding(0, 0, 1, 1));
+		asset.MakeItem(tag1, new Bounding(0, 0, 1, 1));
 		dataSet.TagsLibrary.DeleteTag(tag2);
 		dataSet.TagsLibrary.Tags.Should().Contain(tag1);
 		dataSet.TagsLibrary.Tags.Should().NotContain(tag2);

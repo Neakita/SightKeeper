@@ -14,7 +14,7 @@ public sealed class DetectorAssetTests
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item = asset.CreateItem(tag, new Bounding());
+		var item = asset.MakeItem(tag, new Bounding());
 		asset.Items.Should().Contain(item);
 	}
 
@@ -25,8 +25,8 @@ public sealed class DetectorAssetTests
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item1 = asset.CreateItem(tag, new Bounding(0, 0, 0.5, 0.5));
-		var item2 = asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
+		var item1 = asset.MakeItem(tag, new Bounding(0, 0, 0.5, 0.5));
+		var item2 = asset.MakeItem(tag, new Bounding(0, 0, 1, 1));
 		asset.Items.Should().Contain([item1, item2]);
 	}
 
@@ -38,8 +38,8 @@ public sealed class DetectorAssetTests
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item1 = asset.CreateItem(tag1, new Bounding());
-		var item2 = asset.CreateItem(tag2, new Bounding());
+		var item1 = asset.MakeItem(tag1, new Bounding());
+		var item2 = asset.MakeItem(tag2, new Bounding());
 		asset.Items.Should().Contain([item1, item2]);
 	}
 
@@ -50,7 +50,7 @@ public sealed class DetectorAssetTests
 		DetectorDataSet dataSet = new();
 		var tag2 = new DetectorDataSet().TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var exception = Assert.Throws<UnexpectedTagsOwnerException>(() => asset.CreateItem(tag2, new Bounding(.1, .2, .3, .4)));
+		var exception = Assert.Throws<UnexpectedTagsOwnerException>(() => asset.MakeItem(tag2, new Bounding(.1, .2, .3, .4)));
 		tag2.Users.Should().BeEmpty();
 		exception.ExpectedOwner.Should().Be(dataSet.TagsLibrary);
 		exception.Causer.Should().Be(tag2);
@@ -63,8 +63,8 @@ public sealed class DetectorAssetTests
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		ItemsCreator assetAsItemsCreator = asset;
-		var item = (DetectorItem)assetAsItemsCreator.CreateItem(tag, new Bounding());
+		ItemsMaker assetAsItemsMaker = asset;
+		var item = (DetectorItem)assetAsItemsMaker.MakeItem(tag, new Bounding());
 		asset.Items.Should().Contain(item);
 	}
 }

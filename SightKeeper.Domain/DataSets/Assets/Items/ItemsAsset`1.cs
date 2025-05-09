@@ -1,8 +1,18 @@
+using SightKeeper.Domain.DataSets.Tags;
+
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
 public abstract class ItemsAsset<TItem> : ItemsAsset where TItem : BoundedItem
 {
 	public override IReadOnlyCollection<TItem> Items => _items.AsReadOnly();
+
+	public sealed override TItem MakeItem(Tag tag, Bounding bounding)
+	{
+		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
+		var item = CreateItem(tag, bounding);
+		_items.Add(item);
+		return item;
+	}
 
 	public void DeleteItem(TItem item)
 	{
@@ -16,10 +26,13 @@ public abstract class ItemsAsset<TItem> : ItemsAsset where TItem : BoundedItem
 		_items.Clear();
 	}
 
-	protected void AddItem(TItem item)
+	protected ItemsAsset(TagsContainer<Tag> tagsOwner)
 	{
-		_items.Add(item);
+		_tagsOwner = tagsOwner;
 	}
 
+	protected abstract TItem CreateItem(Tag tag, Bounding bounding);
+
 	private readonly List<TItem> _items = new();
+	private readonly TagsContainer<Tag> _tagsOwner;
 }

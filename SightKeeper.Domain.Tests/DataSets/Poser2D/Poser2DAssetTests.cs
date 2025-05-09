@@ -15,7 +15,7 @@ public sealed class Poser2DAssetTests
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item = asset.CreateItem(tag, new Bounding());
+		var item = asset.MakeItem(tag, new Bounding());
 		asset.Items.Should().Contain(item);
 	}
 
@@ -27,8 +27,8 @@ public sealed class Poser2DAssetTests
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item1 = asset.CreateItem(tag, new Bounding(0, 0, 0.5, 0.5));
-		var item2 = asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
+		var item1 = asset.MakeItem(tag, new Bounding(0, 0, 0.5, 0.5));
+		var item2 = asset.MakeItem(tag, new Bounding(0, 0, 1, 1));
 		asset.Items.Should().Contain([item1, item2]);
 	}
 
@@ -41,8 +41,8 @@ public sealed class Poser2DAssetTests
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item1 = asset.CreateItem(tag1, new Bounding());
-		var item2 = asset.CreateItem(tag2, new Bounding());
+		var item1 = asset.MakeItem(tag1, new Bounding());
+		var item2 = asset.MakeItem(tag2, new Bounding());
 		asset.Items.Should().Contain([item1, item2]);
 	}
 
@@ -56,7 +56,7 @@ public sealed class Poser2DAssetTests
 		var firstKeyPointTag = tag.CreateKeyPointTag("1");
 		var secondKeyPointTag = tag.CreateKeyPointTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item = asset.CreateItem(tag, new Bounding());
+		var item = asset.MakeItem(tag, new Bounding());
 		var firstKeyPoint = item.CreateKeyPoint(firstKeyPointTag, new Vector2<double>(0.1, 0.2));
 		var secondKeyPoint = item.CreateKeyPoint(secondKeyPointTag, new Vector2<double>(0.3, 0.4));
 		asset.Items.Should().Contain(item);
@@ -71,8 +71,8 @@ public sealed class Poser2DAssetTests
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		ItemsCreator assetsAsItemsCreator = asset;
-		var item = (Poser2DItem)assetsAsItemsCreator.CreateItem(tag, new Bounding());
+		ItemsMaker assetsAsItemsMaker = asset;
+		var item = (Poser2DItem)assetsAsItemsMaker.MakeItem(tag, new Bounding());
 		asset.Items.Should().Contain(item);
 	}
 
@@ -85,7 +85,7 @@ public sealed class Poser2DAssetTests
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag = tag.CreateKeyPointTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item = asset.CreateItem(tag, new Bounding());
+		var item = asset.MakeItem(tag, new Bounding());
 		var keyPoint = item.CreateKeyPoint(keyPointTag, new Vector2<double>(0.1, 0.2));
 		item.DeleteKeyPoint(keyPoint);
 		item.KeyPoints.Should().NotContain(keyPoint);
@@ -100,7 +100,7 @@ public sealed class Poser2DAssetTests
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag = tag.CreateKeyPointTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item = asset.CreateItem(tag, new Bounding());
+		var item = asset.MakeItem(tag, new Bounding());
 		var keyPoint = item.CreateKeyPoint(keyPointTag, new Vector2<double>(0.1, 0.2));
 		item.DeleteKeyPoint(keyPoint);
 		Assert.Throws<ArgumentException>(() => item.DeleteKeyPoint(keyPoint));

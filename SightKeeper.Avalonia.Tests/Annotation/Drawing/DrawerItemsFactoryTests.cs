@@ -27,7 +27,7 @@ public sealed class DrawerItemsFactoryTests
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var screenshot = CreateScreenshot();
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		return asset.CreateItem(tag, new Bounding(0.1, 0.2, 0.3, 0.4));
+		return asset.MakeItem(tag, new Bounding(0.1, 0.2, 0.3, 0.4));
 	}
 
 	private static Image CreateScreenshot()

@@ -4,25 +4,14 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser2D;
 
-public sealed class Poser2DAsset : ItemsAsset<Poser2DItem>, ItemsOwner
+public sealed class Poser2DAsset : ItemsAsset<Poser2DItem>
 {
-	public Poser2DItem CreateItem(PoserTag tag, Bounding bounding)
+	protected override Poser2DItem CreateItem(Tag tag, Bounding bounding)
 	{
-		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
-		Poser2DItem item = new(bounding, tag);
-		AddItem(item);
-		return item;
+		return new Poser2DItem(bounding, (PoserTag)tag);
 	}
 
-	BoundedItem ItemsCreator.CreateItem(Tag tag, Bounding bounding)
+	internal Poser2DAsset(TagsContainer<Tag> tagsOwner) : base(tagsOwner)
 	{
-		return CreateItem((PoserTag)tag, bounding);
 	}
-
-	internal Poser2DAsset(TagsContainer<Tag> tagsOwner)
-	{
-		_tagsOwner = tagsOwner;
-	}
-
-	private readonly TagsContainer<Tag> _tagsOwner;
 }

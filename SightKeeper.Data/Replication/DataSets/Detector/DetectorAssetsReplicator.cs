@@ -28,7 +28,7 @@ internal sealed class DetectorAssetsReplicator
 		foreach (var packableItem in packableItems)
 		{
 			var tag = tagsLibrary.Tags[packableItem.TagIndex];
-			asset.CreateItem(tag, packableItem.Bounding);
+			asset.MakeItem(tag, packableItem.Bounding);
 		}
 	}
 }

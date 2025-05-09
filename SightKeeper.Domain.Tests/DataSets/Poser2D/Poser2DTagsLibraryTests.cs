@@ -53,7 +53,7 @@ public class Poser2DTagsLibraryTests
 		Poser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		asset.CreateItem(tag, new Bounding(0, 0, 1, 1));
+		asset.MakeItem(tag, new Bounding(0, 0, 1, 1));
 		var exception = Assert.Throws<TagIsInUseException>(() => dataSet.TagsLibrary.DeleteTag(tag));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);
 		exception.Tag.Should().Be(tag);

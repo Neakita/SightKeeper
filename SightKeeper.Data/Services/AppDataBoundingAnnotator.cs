@@ -11,7 +11,7 @@ namespace SightKeeper.Data.Services;
 
 public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoundingAnnotator, ObservableAnnotator, IDisposable
 {
-	public IObservable<(ItemsCreator asset, BoundedItem item)> ItemCreated => _itemCreated.AsObservable();
+	public IObservable<(ItemsMaker asset, BoundedItem item)> ItemCreated => _itemCreated.AsObservable();
 
 	public IObservable<Image> AssetsChanged => _assetsChanged;
 
@@ -21,14 +21,14 @@ public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoun
 		_appDataAccess = appDataAccess;
 	}
 
-	public BoundedItem CreateItem(AssetsMaker<ItemsCreator> assetsLibrary, Image image, Tag tag, Bounding bounding)
+	public BoundedItem CreateItem(AssetsMaker<ItemsMaker> assetsLibrary, Image image, Tag tag, Bounding bounding)
 	{
 		BoundedItem item;
-		ItemsCreator asset;
+		ItemsMaker asset;
 		lock (_appDataLock)
 		{
 			asset = assetsLibrary.GetOrMakeAsset(image);
-			item = asset.CreateItem(tag, bounding);
+			item = asset.MakeItem(tag, bounding);
 		}
 		_appDataAccess.SetDataChanged();
 		_assetsChanged.OnNext(image);
@@ -45,6 +45,6 @@ public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoun
 	private readonly Lock _appDataLock;
 	private readonly AppDataAccess _appDataAccess;
 
-	private readonly Subject<(ItemsCreator, BoundedItem)> _itemCreated = new();
+	private readonly Subject<(ItemsMaker, BoundedItem)> _itemCreated = new();
 	private readonly Subject<Image> _assetsChanged = new();
 }

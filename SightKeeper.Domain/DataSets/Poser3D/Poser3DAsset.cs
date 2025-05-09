@@ -4,25 +4,14 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser3D;
 
-public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>, ItemsOwner
+public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>
 {
-	public Poser3DItem CreateItem(PoserTag tag, Bounding bounding)
+	protected override Poser3DItem CreateItem(Tag tag, Bounding bounding)
 	{
-		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
-		Poser3DItem item = new(bounding, tag);
-		AddItem(item);
-		return item;
+		return new Poser3DItem(bounding, (PoserTag)tag);
 	}
 
-	BoundedItem ItemsCreator.CreateItem(Tag tag, Bounding bounding)
+	internal Poser3DAsset(TagsContainer<Tag> tagsOwner) : base(tagsOwner)
 	{
-		return CreateItem((PoserTag)tag, bounding);
 	}
-
-	internal Poser3DAsset(TagsContainer<Tag> tagsOwner)
-	{
-		_tagsOwner = tagsOwner;
-	}
-
-	private readonly TagsContainer<Tag> _tagsOwner;
 }
