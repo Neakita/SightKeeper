@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using SightKeeper.Data.Model.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Poser;
 
@@ -22,9 +21,10 @@ internal sealed class PoserTagsConverter
 	private PackablePoserTag ConvertTag(int index, PoserTag tag)
 	{
 		_session.TagsIndexes.Add(tag, (byte)index);
+		
 		return new PackablePoserTag
 		{
-			KeyPointTags = _tagsConverter.ConvertTags(tag.KeyPointTags).ToImmutableArray(),
+			KeyPointTags = _tagsConverter.ConvertTags(tag.KeyPointTags).ToList(),
 			Name = tag.Name,
 			Color = tag.Color
 		};

@@ -19,7 +19,7 @@ internal sealed class DetectorDataSetReplicator
 		};
 		TagsReplicator.ReplicateTags(dataSet.TagsLibrary, packableDataSet.Tags);
 		_assetsReplicator.ReplicateAssets(dataSet, packableDataSet.Assets);
-		PlainWeightsReplicator.ReplicateWeights(dataSet.WeightsLibrary, dataSet.TagsLibrary, packableDataSet.Weights);
+		WeightsReplicator.ReplicateWeights(dataSet.WeightsLibrary, dataSet.TagsLibrary, packableDataSet.Weights);
 		return dataSet;
 	}
 

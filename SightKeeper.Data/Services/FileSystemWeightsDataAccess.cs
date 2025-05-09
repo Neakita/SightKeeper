@@ -1,7 +1,6 @@
 ﻿using FlakeId;
 using SightKeeper.Application;
 using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
@@ -37,16 +36,10 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 		_weightsDataAccess.AssociateId(weights, id);
 	}
 
-	protected override PlainWeights CreateWeights(PlainWeightsLibrary library, Domain.DataSets.Weights.Model model, DateTimeOffset creationTimestamp, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<Tag> tags, ImageComposition? composition)
+	protected override Weights CreateWeights(WeightsLibrary library, Domain.DataSets.Weights.Model model, DateTimeOffset creationTimestamp, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<Tag> tags, ImageComposition? composition)
 	{
 		lock (_appDataLock)
 			return base.CreateWeights(library, model, creationTimestamp, modelSize, metrics, resolution, tags, composition);
-	}
-
-	protected override PoserWeights CreateWeights(PoserWeightsLibrary library, Domain.DataSets.Weights.Model model, DateTimeOffset creationTimestamp, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, ImageComposition? composition, IReadOnlyDictionary<PoserTag, IReadOnlyCollection<Tag>> tags)
-	{
-		lock (_appDataLock)
-			return base.CreateWeights(library, model, creationTimestamp, modelSize, metrics, resolution, composition, tags);
 	}
 
 	protected override void SaveWeightsData(Weights weights, byte[] data)
@@ -54,14 +47,7 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 		_weightsDataAccess.WriteAllBytes(weights, data);
 	}
 
-	protected override void RemoveWeights(PlainWeightsLibrary library, PlainWeights weights)
-	{
-		lock (_appDataLock)
-			base.RemoveWeights(library, weights);
-		_appDataAccess.SetDataChanged();
-	}
-
-	protected override void RemoveWeights(PoserWeightsLibrary library, PoserWeights weights)
+	protected override void RemoveWeights(WeightsLibrary library, Weights weights)
 	{
 		lock (_appDataLock)
 			base.RemoveWeights(library, weights);

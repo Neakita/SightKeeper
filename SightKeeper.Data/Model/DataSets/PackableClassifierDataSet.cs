@@ -1,7 +1,6 @@
 using MemoryPack;
 using SightKeeper.Data.Model.DataSets.Assets;
 using SightKeeper.Data.Model.DataSets.Tags;
-using SightKeeper.Data.Model.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Data.Model.DataSets;
@@ -14,5 +13,4 @@ internal sealed partial class PackableClassifierDataSet : PackableDataSet
 {
 	public required IReadOnlyCollection<PackableTag> Tags { get; init; }
 	public required IReadOnlyCollection<PackableClassifierAsset> Assets { get; init; }
-	public required IReadOnlyCollection<PackablePlainWeights> Weights { get; init; }
 }

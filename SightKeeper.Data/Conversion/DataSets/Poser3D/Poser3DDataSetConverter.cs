@@ -12,7 +12,7 @@ internal sealed class Poser3DDataSetConverter
 	{
 		_tagsConverter = new PoserTagsConverter(session);
 		_assetsConverter = new Poser3DAssetsConverter(session, imageDataAccess);
-		_weightsConverter = new PoserWeightsConverter(session);
+		_weightsConverter = new WeightsConverter(session);
 	}
 
 	public PackablePoser3DDataSet ConvertDataSet(Poser3DDataSet dataSet) => new()
@@ -26,5 +26,5 @@ internal sealed class Poser3DDataSetConverter
 
 	private readonly PoserTagsConverter _tagsConverter;
 	private readonly Poser3DAssetsConverter _assetsConverter;
-	private readonly PoserWeightsConverter _weightsConverter;
+	private readonly WeightsConverter _weightsConverter;
 }

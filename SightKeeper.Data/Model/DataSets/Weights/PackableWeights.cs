@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using MemoryPack;
 using SightKeeper.Data.Model.DataSets.Compositions;
 using SightKeeper.Domain;
@@ -9,7 +10,7 @@ namespace SightKeeper.Data.Model.DataSets.Weights;
 /// MemoryPackable version of <see cref="Weights"/>
 /// </summary>
 [MemoryPackable]
-internal partial class PackableWeights
+internal sealed partial class PackableWeights
 {
 	public required ushort Id { get; init; }
 	public required Domain.DataSets.Weights.Model Model { get; init; }
@@ -18,4 +19,6 @@ internal partial class PackableWeights
 	public required WeightsMetrics Metrics { get; init; }
 	public required Vector2<ushort> Resolution { get; init; }
 	public required PackableComposition? Composition { get; init; }
+	public required IReadOnlyCollection<byte> TagsIndexes { get; init; }
+	public IReadOnlyCollection<KeyPointTagLocation> KeyPointTagsLocations { get; init; } = ReadOnlyCollection<KeyPointTagLocation>.Empty;
 }

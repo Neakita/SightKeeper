@@ -5,6 +5,12 @@ namespace SightKeeper.Domain.DataSets.Poser;
 
 public abstract class PoserDataSet : DataSet
 {
-	public sealed override TagsLibrary<PoserTag> TagsLibrary { get; } = new(PoserTagsFactory.Instance);
-	public abstract override PoserWeightsLibrary WeightsLibrary { get; }
+	public sealed override TagsLibrary<PoserTag> TagsLibrary { get; }
+	public sealed override WeightsLibrary WeightsLibrary { get; }
+
+	protected PoserDataSet()
+	{
+		TagsLibrary = new TagsLibrary<PoserTag>(PoserTagsFactory.Instance);
+		WeightsLibrary = new WeightsLibrary(TagsLibrary);
+	}
 }

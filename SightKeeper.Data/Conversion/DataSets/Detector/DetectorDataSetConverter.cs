@@ -11,7 +11,7 @@ internal sealed class DetectorDataSetConverter
 	{
 		_tagsConverter = new TagsConverter(session);
 		_assetsConverter = new DetectorAssetsConverter(imageDataAccess, session);
-		_weightsConverter = new PlainWeightsConverter(session);
+		_weightsConverter = new WeightsConverter(session);
 	}
 
 	public PackableDetectorDataSet ConvertDataSet(DetectorDataSet dataSet) => new()
@@ -25,5 +25,5 @@ internal sealed class DetectorDataSetConverter
 
 	private readonly TagsConverter _tagsConverter;
 	private readonly DetectorAssetsConverter _assetsConverter;
-	private readonly PlainWeightsConverter _weightsConverter;
+	private readonly WeightsConverter _weightsConverter;
 }

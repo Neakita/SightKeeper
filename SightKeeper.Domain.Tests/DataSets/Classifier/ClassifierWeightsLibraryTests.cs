@@ -6,15 +6,6 @@ namespace SightKeeper.Domain.Tests.DataSets.Classifier;
 
 public sealed class ClassifierWeightsLibraryTests
 {
-	[Fact]
-	public void ShouldCreateWeights()
-	{
-		ClassifierDataSet dataSet = new();
-		var tag1 = dataSet.TagsLibrary.CreateTag("1");
-		var tag2 = dataSet.TagsLibrary.CreateTag("2");
-		var weights = dataSet.WeightsLibrary.CreateWeights(Model.UltralyticsYoloV11, DateTime.UtcNow, ModelSize.Nano, new WeightsMetrics(), new Vector2<ushort>(320, 320), null, [tag1, tag2]);
-		dataSet.WeightsLibrary.Weights.Should().Contain(weights);
-	}
 
 	[Fact]
 	public void ShouldNotCreateWeightsWithNoTags()

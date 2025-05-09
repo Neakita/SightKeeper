@@ -8,12 +8,12 @@ public sealed class ClassifierDataSet : DataSet
 {
 	public override TagsLibrary<Tag> TagsLibrary { get; }
 	public override AssetsLibrary<ClassifierAsset> AssetsLibrary { get; }
-	public override PlainWeightsLibrary WeightsLibrary { get; }
+	public override WeightsLibrary WeightsLibrary { get; }
 
 	public ClassifierDataSet()
 	{
 		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance);
 		AssetsLibrary = new AssetsLibrary<ClassifierAsset>(new ClassifierAssetsFactory(TagsLibrary));
-		WeightsLibrary = new PlainWeightsLibrary(2, TagsLibrary);
+		WeightsLibrary = new WeightsLibrary(TagsLibrary, 2);
 	}
 }

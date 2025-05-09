@@ -1,4 +1,5 @@
 using MemoryPack;
+using SightKeeper.Data.Model.DataSets.Weights;
 using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Data.Model.DataSets;
@@ -15,4 +16,5 @@ internal abstract partial class PackableDataSet
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
+	public required IReadOnlyCollection<PackableWeights> Weights { get; init; }
 }

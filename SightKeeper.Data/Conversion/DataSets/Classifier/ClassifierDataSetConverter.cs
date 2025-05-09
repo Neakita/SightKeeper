@@ -11,7 +11,7 @@ internal sealed class ClassifierDataSetConverter
 	{
 		_tagsConverter = new TagsConverter(session);
 		_assetsConverter = new ClassifierAssetsConverter(imageDataAccess, session);
-		_weightsConverter = new PlainWeightsConverter(session);
+		_weightsConverter = new WeightsConverter(session);
 	}
 
 	public PackableClassifierDataSet ConvertDataSet(ClassifierDataSet dataSet) => new()
@@ -25,5 +25,5 @@ internal sealed class ClassifierDataSetConverter
 
 	private readonly TagsConverter _tagsConverter;
 	private readonly ClassifierAssetsConverter _assetsConverter;
-	private readonly PlainWeightsConverter _weightsConverter;
+	private readonly WeightsConverter _weightsConverter;
 }
