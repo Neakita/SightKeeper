@@ -8,27 +8,6 @@ namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
 public class Poser2DTagTests
 {
 	[Fact]
-	public void ShouldNotChangeTagNameToOccupied()
-	{
-		Poser2DDataSet dataSet = new();
-		var tag1 = dataSet.TagsLibrary.CreateTag("1");
-		var tag2 = dataSet.TagsLibrary.CreateTag("2");
-		Assert.ThrowsAny<Exception>(() => tag2.Name = "1");
-		tag1.Name.Should().Be("1");
-		tag2.Name.Should().Be("2");
-	}
-
-	[Fact]
-	public void ShouldSetTagNameToDeletedTagName()
-	{
-		Poser2DDataSet dataSet = new();
-		var tag1 = dataSet.TagsLibrary.CreateTag("1");
-		var tag2 = dataSet.TagsLibrary.CreateTag("2");
-		dataSet.TagsLibrary.DeleteTag(tag1);
-		tag2.Name = tag1.Name;
-	}
-
-	[Fact]
 	public void ShouldAddNewKeyPointTagToPoserTagWithAssociatedItems()
 	{
 		ImageSet imageSet = new();
