@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Domain.Tests.DataSets.Detector;
+namespace SightKeeper.Domain.Tests.DataSets;
 
-public sealed class DetectorAssetTests
+public sealed class ItemsAssetTests
 {
 	[Fact]
 	public void ShouldCreateItem()
@@ -54,17 +54,5 @@ public sealed class DetectorAssetTests
 		tag2.Users.Should().BeEmpty();
 		exception.ExpectedOwner.Should().Be(dataSet.TagsLibrary);
 		exception.Causer.Should().Be(tag2);
-	}
-
-	[Fact]
-	public void ShouldCreateItemViaItemsCreator()
-	{
-		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
-		var tag = dataSet.TagsLibrary.CreateTag("");
-		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		ItemsMaker assetAsItemsMaker = asset;
-		var item = (DetectorItem)assetAsItemsMaker.MakeItem(tag, new Bounding());
-		asset.Items.Should().Contain(item);
 	}
 }
