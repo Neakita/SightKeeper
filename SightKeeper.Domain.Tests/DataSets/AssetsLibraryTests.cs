@@ -36,7 +36,7 @@ public sealed class AssetsLibraryTests
 		library.Assets.Should().BeEmpty();
 	}
 
-	private static AssetsLibrary CreateLibrary()
+	private static AssetsOwner<Asset> CreateLibrary()
 	{
 		var dataSet = CreateDataSet();
 		return dataSet.AssetsLibrary;

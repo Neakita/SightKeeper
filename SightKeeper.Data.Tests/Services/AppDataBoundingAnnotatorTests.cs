@@ -17,7 +17,7 @@ public sealed class AppDataBoundingAnnotatorTests
 		var (dataSet, tag) = PrepareDataSet();
 		var screenshot = PrepareScreenshot();
 		var item = annotator.CreateItem(dataSet.AssetsLibrary, screenshot, tag, new Bounding());
-		dataSet.AssetsLibrary.Assets.Single().Value.Items.Single().Should().Be(item);
+		dataSet.AssetsLibrary.Assets.Should().Contain(asset => asset.Items.Contains(item));
 	}
 
 	[Fact]

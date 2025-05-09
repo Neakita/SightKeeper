@@ -5,5 +5,5 @@ namespace SightKeeper.Application.Annotation;
 
 public interface AssetDeleter
 {
-	void DeleteAsset(AssetsLibrary library, Image image);
+	void DeleteAsset(AssetsOwner<Asset> assetsOwner, Image image);
 }

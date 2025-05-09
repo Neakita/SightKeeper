@@ -1,7 +1,6 @@
 using SightKeeper.Data.Model.DataSets.Assets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Classifier;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Conversion.DataSets.Classifier;
 
@@ -13,17 +12,17 @@ internal sealed class ClassifierAssetsConverter
 		_session = session;
 	}
 
-	public IEnumerable<PackableClassifierAsset> ConvertAssets(IEnumerable<KeyValuePair<Image, ClassifierAsset>> assetsPairs)
+	public IEnumerable<PackableClassifierAsset> ConvertAssets(IEnumerable<ClassifierAsset> assets)
 	{
-		return assetsPairs.Select(ConvertAsset);
+		return assets.Select(ConvertAsset);
 	}
 
 	private readonly FileSystemImageDataAccess _imageDataAccess;
 	private readonly ConversionSession _session;
 
-	private PackableClassifierAsset ConvertAsset(KeyValuePair<Image, ClassifierAsset> assetPair)
+	private PackableClassifierAsset ConvertAsset(ClassifierAsset asset)
 	{
-		var (image, asset) = assetPair;
+		var image = asset.Image;
 		return new PackableClassifierAsset
 		{
 			TagIndex = _session.TagsIndexes[asset.Tag],

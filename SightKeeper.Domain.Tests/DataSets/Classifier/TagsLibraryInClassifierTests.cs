@@ -15,7 +15,8 @@ public sealed class TagsLibraryInClassifierTests
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var exception = Assert.Throws<TagIsInUseException>(() => dataSet.TagsLibrary.DeleteTag(tag));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);
-		dataSet.AssetsLibrary.Assets.Should().ContainValue(asset);
+		dataSet.AssetsLibrary.Assets.Should().Contain(asset);
+		dataSet.AssetsLibrary.Images.Should().Contain(image);
 		asset.Tag.Should().Be(tag);
 		exception.Tag.Should().Be(tag);
 	}

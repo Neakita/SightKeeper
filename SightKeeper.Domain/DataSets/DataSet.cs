@@ -10,6 +10,6 @@ public abstract class DataSet
 	public string Description { get; set; } = string.Empty;
 
 	public abstract TagsLibrary TagsLibrary { get; }
-	public abstract AssetsLibrary AssetsLibrary { get; }
+	public abstract AssetsOwner<Asset> AssetsLibrary { get; }
 	public abstract WeightsLibrary WeightsLibrary { get; }
 }

@@ -3,7 +3,6 @@ using SightKeeper.Data.Model.DataSets.Assets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser2D;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Conversion.DataSets.Poser2D;
 
@@ -15,7 +14,7 @@ internal sealed class Poser2DAssetsConverter
 		_imageDataAccess = imageDataAccess;
 	}
 
-	public IEnumerable<PackableItemsAsset<PackablePoser2DItem>> ConvertAssets(IEnumerable<KeyValuePair<Image, Poser2DAsset>> assets)
+	public IEnumerable<PackableItemsAsset<PackablePoser2DItem>> ConvertAssets(IEnumerable<Poser2DAsset> assets)
 	{
 		return assets.Select(ConvertAsset);
 	}
@@ -23,9 +22,9 @@ internal sealed class Poser2DAssetsConverter
 	private readonly ConversionSession _session;
 	private readonly FileSystemImageDataAccess _imageDataAccess;
 
-	private PackableItemsAsset<PackablePoser2DItem> ConvertAsset(KeyValuePair<Image, Poser2DAsset> assetPair)
+	private PackableItemsAsset<PackablePoser2DItem> ConvertAsset(Poser2DAsset asset)
 	{
-		var (image, asset) = assetPair;
+		var image = asset.Image;
 		return new PackableItemsAsset<PackablePoser2DItem>
 		{
 			Items = ConvertItems(asset.Items).ToImmutableArray(),

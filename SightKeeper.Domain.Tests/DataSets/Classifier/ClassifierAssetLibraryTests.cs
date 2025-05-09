@@ -12,7 +12,8 @@ public sealed class ClassifierAssetLibraryTests
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		dataSet.AssetsLibrary.Assets.Should().ContainKey(image).WhoseValue.Should().Be(asset);
+		dataSet.AssetsLibrary.Assets.Should().Contain(asset);
+		dataSet.AssetsLibrary.Images.Should().Contain(image);
 		asset.Image.Should().Be(image);
 		asset.Tag.Should().Be(tag);
 	}

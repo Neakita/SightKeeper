@@ -62,5 +62,5 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 	private readonly IDisposable _disposable;
 
 	private ClassifierAsset? Asset =>
-		Image == null ? null : AssetsLibrary?.Assets.GetValueOrDefault(Image);
+		Image == null ? null : AssetsLibrary?.GetOrMakeAsset(Image);
 }

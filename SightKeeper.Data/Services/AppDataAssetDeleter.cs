@@ -16,10 +16,10 @@ public sealed class AppDataAssetDeleter : AssetDeleter, ObservableAnnotator, IDi
 		_appDataAccess = appDataAccess;
 	}
 
-	public void DeleteAsset(AssetsLibrary library, Image image)
+	public void DeleteAsset(AssetsOwner<Asset> assetsOwner, Image image)
 	{
 		lock (_appDataLock)
-			library.DeleteAsset(image);
+			assetsOwner.DeleteAsset(image);
 		_appDataAccess.SetDataChanged();
 		_assetsChanged.OnNext(image);
 	}
