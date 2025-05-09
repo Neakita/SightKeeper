@@ -17,7 +17,7 @@ public sealed class WeightsLibrary
 		WeightsMetrics metrics,
 		Vector2<ushort> resolution,
 		ImageComposition? composition,
-		IEnumerable<Tag> tags)
+		params IEnumerable<Tag> tags)
 	{
 		var tagsList = tags.ToList().AsReadOnly();
 		ValidateTags(tagsList, nameof(tags));
