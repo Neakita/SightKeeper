@@ -1,16 +1,18 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser2D;
+using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
+namespace SightKeeper.Domain.Tests.DataSets;
 
-public class Poser2DTagTests
+public sealed class PoserTagTests
 {
 	[Fact]
 	public void ShouldAddNewKeyPointTagToPoserTagWithAssociatedItems()
 	{
 		var image = Utilities.CreateImage();
-		Poser2DDataSet dataSet = new();
+		var dataSet = CreateDataSet();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		asset.MakeItem(tag, new Bounding());
@@ -22,7 +24,7 @@ public class Poser2DTagTests
 	public void ShouldNotDeleteKeyPointTagWithAssociatedKeyPoint()
 	{
 		var image = Utilities.CreateImage();
-		Poser2DDataSet dataSet = new();
+		var dataSet = CreateDataSet();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag1 = tag.CreateKeyPointTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
@@ -36,7 +38,7 @@ public class Poser2DTagTests
 	public void ShouldAddNewPointToTagWithoutAssociatedItems()
 	{
 		var image = Utilities.CreateImage();
-		Poser2DDataSet dataSet = new();
+		var dataSet = CreateDataSet();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
@@ -49,7 +51,7 @@ public class Poser2DTagTests
 	public void ShouldDeletePointOfTagWithoutAssociatedItems()
 	{
 		var image = Utilities.CreateImage();
-		Poser2DDataSet dataSet = new();
+		var dataSet = CreateDataSet();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var keyPoint2 = tag2.CreateKeyPointTag("");
@@ -57,5 +59,51 @@ public class Poser2DTagTests
 		asset.MakeItem(tag1, new Bounding());
 		tag2.DeleteKeyPointTag(keyPoint2);
 		tag2.KeyPointTags.Should().BeEmpty();
+	}
+
+	[Fact]
+	public void ShouldNotDeleteKeyPointTagTwice()
+	{
+		var dataSet = CreateDataSet();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var keyPointTag = tag.CreateKeyPointTag("");
+		tag.DeleteKeyPointTag(keyPointTag);
+		Assert.Throws<ArgumentException>(() => tag.DeleteKeyPointTag(keyPointTag));
+	}
+
+	[Fact]
+	public void ShouldDeleteKeyPointTagByIndex()
+	{
+		var dataSet = CreateDataSet();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		tag.CreateKeyPointTag("");
+		tag.DeleteKeyPointTagAt(0);
+		tag.KeyPointTags.Should().BeEmpty();
+	}
+
+	[Fact]
+	public void ShouldCreateKeyPointTagViaTagsOwner()
+	{
+		var dataSet = CreateDataSet();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		TagsOwner<Tag> tagAsTagsOwner = tag;
+		var keyPointTag = tagAsTagsOwner.CreateTag("");
+		tag.KeyPointTags.Should().Contain(keyPointTag);
+	}
+
+	[Fact]
+	public void ShouldDeleteKeyPointTagByIndexViaTagsOwner()
+	{
+		var dataSet = CreateDataSet();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		tag.CreateKeyPointTag("");
+		TagsOwner<Tag> tagAsTagsOwner = tag;
+		tagAsTagsOwner.DeleteTagAt(0);
+		tag.KeyPointTags.Should().BeEmpty();
+	}
+
+	private static PoserDataSet CreateDataSet()
+	{
+		return new Poser2DDataSet();
 	}
 }
