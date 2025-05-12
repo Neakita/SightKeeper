@@ -39,6 +39,11 @@ public sealed class Poser3DItem : PoserItem
 		DeleteKeyPoint((KeyPoint3D)keyPoint);
 	}
 
+	public override void ClearKeyPoints()
+	{
+		_keyPoints.Clear();
+	}
+
 	internal Poser3DItem(Bounding bounding, PoserTag tag) : base(bounding, tag)
 	{
 	}

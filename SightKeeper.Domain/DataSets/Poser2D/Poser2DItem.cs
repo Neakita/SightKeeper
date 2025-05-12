@@ -27,6 +27,11 @@ public sealed class Poser2DItem : PoserItem
 		keyPoint.Tag.RemoveUser(keyPoint);
 	}
 
+	public override void ClearKeyPoints()
+	{
+		_keyPoints.Clear();
+	}
+
 	internal Poser2DItem(Bounding bounding, PoserTag tag) : base(bounding, tag)
 	{
 	}
