@@ -1,10 +1,14 @@
 ﻿using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.DataSets.Classifier;
 
 public sealed class ClassifierAsset : Asset, TagUser
 {
+	public required Image Image { get; init; }
+	public AssetUsage Usage { get; set; }
+
 	public Tag Tag
 	{
 		get => _tag;

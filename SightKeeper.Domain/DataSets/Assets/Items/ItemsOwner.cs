@@ -1,3 +1,7 @@
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
-public interface ItemsOwner : ItemsMaker, ItemsContainer;
+public interface ItemsOwner<out TItem> : ItemsMaker<TItem>, ItemsContainer<TItem>
+{
+	void DeleteItemAt(int index);
+	void ClearItems();
+}

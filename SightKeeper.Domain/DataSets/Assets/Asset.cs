@@ -2,8 +2,8 @@
 
 namespace SightKeeper.Domain.DataSets.Assets;
 
-public abstract class Asset
+public interface Asset
 {
-	public required Image Image { get; init; }
-	public AssetUsage Usage { get; set; } = AssetUsage.Any;
+	Image Image { get; }
+	AssetUsage Usage { get; set; }
 }

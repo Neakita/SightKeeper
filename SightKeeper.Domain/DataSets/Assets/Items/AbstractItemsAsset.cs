@@ -1,12 +1,15 @@
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
-public abstract class ItemsAsset<TItem> : ItemsAsset where TItem : BoundedItem
+public abstract class AbstractItemsAsset<TItem> : ItemsAsset<TItem> where TItem : BoundedItem
 {
-	public override IReadOnlyCollection<TItem> Items => _items.AsReadOnly();
+	public required Image Image { get; init; }
+	public AssetUsage Usage { get; set; }
+	public IReadOnlyList<TItem> Items => _items.AsReadOnly();
 
-	public sealed override TItem MakeItem(Tag tag, Bounding bounding)
+	public TItem MakeItem(Tag tag, Bounding bounding)
 	{
 		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
 		var item = CreateItem(tag, bounding);
@@ -21,12 +24,17 @@ public abstract class ItemsAsset<TItem> : ItemsAsset where TItem : BoundedItem
 			throw new ArgumentException("Specified item was not found and therefore not deleted", nameof(item));
 	}
 
+	public void DeleteItemAt(int index)
+	{
+		_items.RemoveAt(index);
+	}
+
 	public void ClearItems()
 	{
 		_items.Clear();
 	}
 
-	protected ItemsAsset(TagsContainer<Tag> tagsOwner)
+	protected AbstractItemsAsset(TagsContainer<Tag> tagsOwner)
 	{
 		_tagsOwner = tagsOwner;
 	}

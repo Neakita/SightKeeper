@@ -28,7 +28,7 @@ public sealed class AssetItemsViewModel
 		}
 	}
 
-	public AssetsContainer<ItemsContainer>? AssetsLibrary
+	public AssetsContainer<ItemsContainer<AssetItem>>? AssetsLibrary
 	{
 		get;
 		set
@@ -71,7 +71,7 @@ public sealed class AssetItemsViewModel
 	private readonly KeyPointViewModelFactory _keyPointFactory;
 	private readonly AvaloniaList<DrawerItemDataContext> _items = new();
 	private readonly CompositeDisposable _disposable = new();
-	private ItemsContainer? Asset => Image == null ? null : AssetsLibrary?.GetOptionalAsset(Image);
+	private ItemsContainer<AssetItem>? Asset => Image == null ? null : AssetsLibrary?.GetOptionalAsset(Image);
 
 	private void UpdateItems()
 	{
@@ -96,7 +96,7 @@ public sealed class AssetItemsViewModel
 		}
 	}
 
-	private void OnItemCreated(BoundedItem item)
+	private void OnItemCreated(AssetItem item)
 	{
 		var itemViewModel = _drawerItemsFactory.CreateItemViewModel(item);
 		_items.Add(itemViewModel);

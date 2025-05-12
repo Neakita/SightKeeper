@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser3D;
 
-public sealed class Poser3DAsset : ItemsAsset<Poser3DItem>
+public sealed class Poser3DAsset : AbstractItemsAsset<Poser3DItem>
 {
 	protected override Poser3DItem CreateItem(Tag tag, Bounding bounding)
 	{

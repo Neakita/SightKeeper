@@ -4,5 +4,5 @@ namespace SightKeeper.Application.Annotation;
 
 public interface ObservableBoundingAnnotator
 {
-	IObservable<(ItemsMaker asset, BoundedItem item)> ItemCreated { get; }
+	IObservable<(ItemsMaker<AssetItem> asset, AssetItem item)> ItemCreated { get; }
 }

@@ -33,7 +33,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 		}
 	}
 
-	public AssetsOwner<ItemsOwner>? AssetsLibrary
+	public AssetsOwner<ItemsOwner<AssetItem>>? AssetsLibrary
 	{
 		get;
 		set

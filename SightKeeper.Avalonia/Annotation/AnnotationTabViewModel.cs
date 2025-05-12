@@ -58,10 +58,10 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 
 	private void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{
-		_drawer.AssetsLibrary = value?.Value.AssetsLibrary as AssetsOwner<ItemsOwner>;
+		_drawer.AssetsLibrary = value?.Value.AssetsLibrary as AssetsOwner<ItemsOwner<AssetItem>>;
 	}
 
-	private void OnSelectedImageChanged(Image image)
+	private void OnSelectedImageChanged(Image? image)
 	{
 		_drawer.Image = image;
 	}

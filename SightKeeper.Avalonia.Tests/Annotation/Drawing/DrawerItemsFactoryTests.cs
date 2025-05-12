@@ -21,7 +21,7 @@ public sealed class DrawerItemsFactoryTests
 		itemViewModel.Should().BeOfType<DetectorItemViewModel>();
 	}
 
-	private static BoundedItem CreateItem()
+	private static AssetItem CreateItem()
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");

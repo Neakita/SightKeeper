@@ -33,7 +33,7 @@ public sealed class DrawerViewModelTests
 		var drawerItemsFactory = new DrawerItemsFactory(Substitute.For<BoundingEditor>());
 		var keyPointViewModelFactory = new KeyPointViewModelFactory(Substitute.For<PoserAnnotator>());
 		var observableBoundingAnnotator = Substitute.For<ObservableBoundingAnnotator>();
-		observableBoundingAnnotator.ItemCreated.Returns(Observable.Empty<(ItemsMaker, BoundedItem)>());
+		observableBoundingAnnotator.ItemCreated.Returns(Observable.Empty<(ItemsMaker<AssetItem>, AssetItem)>());
 		var observablePoserAnnotator = Substitute.For<ObservablePoserAnnotator>();
 		observablePoserAnnotator.KeyPointCreated.Returns(Observable.Empty<(PoserItem, KeyPoint)>());
 		observablePoserAnnotator.KeyPointDeleted.Returns(Observable.Empty<(PoserItem, KeyPoint)>());

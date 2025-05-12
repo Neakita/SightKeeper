@@ -1,6 +1,6 @@
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
-public interface ItemsContainer
+public interface ItemsContainer<out TItem>
 {
-	IReadOnlyCollection<BoundedItem> Items { get; }
+	IReadOnlyList<TItem> Items { get; }
 }
