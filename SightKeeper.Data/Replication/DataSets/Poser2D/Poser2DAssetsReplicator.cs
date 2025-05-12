@@ -39,7 +39,7 @@ internal sealed class Poser2DAssetsReplicator
 		foreach (var packableKeyPoint in packableKeyPoints)
 		{
 			var tag = item.Tag.KeyPointTags[packableKeyPoint.TagIndex];
-			item.CreateKeyPoint(tag, packableKeyPoint.Position);
+			item.MakeKeyPoint(tag, packableKeyPoint.Position);
 		}
 	}
 }

@@ -29,7 +29,7 @@ public sealed class PoserTagTests
 		var keyPointTag1 = tag.CreateKeyPointTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var item = asset.MakeItem(tag, new Bounding());
-		var keyPoint = item.CreateKeyPoint(keyPointTag1, new Vector2<double>(0.1, 0.2));
+		var keyPoint = item.MakeKeyPoint(keyPointTag1, new Vector2<double>(0.1, 0.2));
 		Assert.ThrowsAny<Exception>(() => tag.DeleteKeyPointTag(keyPointTag1));
 		item.KeyPoints.Should().Contain(keyPoint);
 	}

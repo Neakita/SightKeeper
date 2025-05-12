@@ -24,7 +24,7 @@ public sealed class AppDataPoserAnnotator : PoserAnnotator, ObservablePoserAnnot
 	{
 		KeyPoint keyPoint;
 		lock (_appDataLock)
-			keyPoint = item.CreateKeyPoint(tag, position);
+			keyPoint = item.MakeKeyPoint(tag, position);
 		_appDataAccess.SetDataChanged();
 		_keyPointCreated.OnNext((item, keyPoint));
 	}
