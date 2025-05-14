@@ -21,10 +21,9 @@ public class KeyPoint : TagUser
 		}
 	}
 
-	internal KeyPoint(Tag tag, Vector2<double> position)
+	internal KeyPoint(Tag tag)
 	{
 		Tag = tag;
-		Position = position;
 	}
 
 	private static bool IsDimensionsNormalized(Vector2<double> vector)

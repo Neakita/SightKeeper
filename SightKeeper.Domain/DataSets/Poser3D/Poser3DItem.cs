@@ -6,9 +6,9 @@ namespace SightKeeper.Domain.DataSets.Poser3D;
 
 public sealed class Poser3DItem : PoserItem<KeyPoint3D>
 {
-	protected override KeyPoint3D CreateKeyPoint(Tag tag, Vector2<double> position)
+	protected override KeyPoint3D CreateKeyPoint(Tag tag)
 	{
-		return new KeyPoint3D(tag, position);
+		return new KeyPoint3D(tag);
 	}
 
 	internal Poser3DItem(Bounding bounding, PoserTag tag) : base(bounding, tag)

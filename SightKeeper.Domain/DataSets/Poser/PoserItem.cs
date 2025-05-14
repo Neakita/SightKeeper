@@ -22,7 +22,7 @@ public abstract class PoserItem : BoundedItem, AssetItem, TagUser
 
 	public abstract IReadOnlyCollection<KeyPoint> KeyPoints { get; }
 
-	public abstract KeyPoint MakeKeyPoint(Tag tag, Vector2<double> position);
+	public abstract KeyPoint MakeKeyPoint(Tag tag);
 	public abstract void DeleteKeyPoint(KeyPoint keyPoint);
 	public abstract void ClearKeyPoints();
 

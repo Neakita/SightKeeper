@@ -6,9 +6,9 @@ namespace SightKeeper.Domain.DataSets.Poser2D;
 
 public sealed class Poser2DItem : PoserItem<KeyPoint>
 {
-	protected override KeyPoint CreateKeyPoint(Tag tag, Vector2<double> position)
+	protected override KeyPoint CreateKeyPoint(Tag tag)
 	{
-		return new KeyPoint(tag, position);
+		return new KeyPoint(tag);
 	}
 
 	internal Poser2DItem(Bounding bounding, PoserTag tag) : base(bounding, tag)
