@@ -28,7 +28,8 @@ public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoun
 		lock (_appDataLock)
 		{
 			asset = assetsLibrary.GetOrMakeAsset(image);
-			item = asset.MakeItem(tag, bounding);
+			item = asset.MakeItem(tag);
+			item.Bounding = bounding;
 		}
 		_appDataAccess.SetDataChanged();
 		_assetsChanged.OnNext(image);

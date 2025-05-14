@@ -33,7 +33,7 @@ public sealed class AppDataBoundingEditorTests
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var screenshot = PrepareScreenshot();
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
-		return asset.MakeItem(tag, new Bounding());
+		return asset.MakeItem(tag);
 	}
 
 	private static Image PrepareScreenshot()

@@ -30,6 +30,6 @@ public sealed class BoundedItemTests
 		var image = Utilities.CreateImage();
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var tag = dataSet.TagsLibrary.CreateTag(string.Empty);
-		return asset.MakeItem(tag, new Bounding());
+		return asset.MakeItem(tag);
 	}
 }

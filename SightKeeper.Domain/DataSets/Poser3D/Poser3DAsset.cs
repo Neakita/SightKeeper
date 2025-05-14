@@ -6,18 +6,18 @@ namespace SightKeeper.Domain.DataSets.Poser3D;
 
 public sealed class Poser3DAsset : AbstractItemsAsset<Poser3DItem>, PoserAsset
 {
-	protected override Poser3DItem CreateItem(Tag tag, Bounding bounding)
+	protected override Poser3DItem CreateItem(Tag tag)
 	{
-		return new Poser3DItem(bounding, (PoserTag)tag);
+		return new Poser3DItem((PoserTag)tag);
 	}
 
 	internal Poser3DAsset(TagsContainer<Tag> tagsOwner) : base(tagsOwner)
 	{
 	}
 
-	PoserItem ItemsMaker<PoserItem>.MakeItem(Tag tag, Bounding bounding)
+	PoserItem ItemsMaker<PoserItem>.MakeItem(Tag tag)
 	{
-		return MakeItem(tag, bounding);
+		return MakeItem(tag);
 	}
 
 	IReadOnlyList<PoserItem> ItemsContainer<PoserItem>.Items => Items;

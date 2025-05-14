@@ -26,7 +26,7 @@ public abstract class PoserItem : BoundedItem, AssetItem, TagUser
 	public abstract void DeleteKeyPoint(KeyPoint keyPoint);
 	public abstract void ClearKeyPoints();
 
-	protected PoserItem(Bounding bounding, PoserTag tag) : base(bounding)
+	protected PoserItem(PoserTag tag)
 	{
 		_tag = tag;
 		_tag.AddUser(this);

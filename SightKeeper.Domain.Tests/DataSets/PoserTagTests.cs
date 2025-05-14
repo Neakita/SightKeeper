@@ -1,5 +1,4 @@
 using FluentAssertions;
-using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Tags;
@@ -15,7 +14,7 @@ public sealed class PoserTagTests
 		var dataSet = CreateDataSet();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		asset.MakeItem(tag, new Bounding());
+		asset.MakeItem(tag);
 		var keyPointTag = tag.CreateKeyPointTag("");
 		tag.KeyPointTags.Should().Contain(keyPointTag);
 	}
@@ -28,7 +27,7 @@ public sealed class PoserTagTests
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag1 = tag.CreateKeyPointTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var item = asset.MakeItem(tag, new Bounding());
+		var item = asset.MakeItem(tag);
 		var keyPoint = item.MakeKeyPoint(keyPointTag1);
 		Assert.ThrowsAny<Exception>(() => tag.DeleteKeyPointTag(keyPointTag1));
 		item.KeyPoints.Should().Contain(keyPoint);
@@ -42,7 +41,7 @@ public sealed class PoserTagTests
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		asset.MakeItem(tag1, new Bounding());
+		asset.MakeItem(tag1);
 		var keyPoint = tag2.CreateKeyPointTag("");
 		tag2.KeyPointTags.Should().Contain(keyPoint);
 	}
@@ -56,7 +55,7 @@ public sealed class PoserTagTests
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var keyPoint2 = tag2.CreateKeyPointTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		asset.MakeItem(tag1, new Bounding());
+		asset.MakeItem(tag1);
 		tag2.DeleteKeyPointTag(keyPoint2);
 		tag2.KeyPointTags.Should().BeEmpty();
 	}

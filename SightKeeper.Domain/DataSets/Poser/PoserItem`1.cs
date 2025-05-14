@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser;
@@ -38,7 +37,7 @@ public abstract class PoserItem<TKeyPoint> : PoserItem where TKeyPoint : KeyPoin
 
 	protected abstract TKeyPoint CreateKeyPoint(Tag tag);
 
-	internal PoserItem(Bounding bounding, PoserTag tag) : base(bounding, tag)
+	internal PoserItem(PoserTag tag) : base(tag)
 	{
 	}
 

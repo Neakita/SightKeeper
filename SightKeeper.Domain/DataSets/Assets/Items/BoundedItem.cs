@@ -17,11 +17,6 @@ public abstract class BoundedItem
 		}
 	}
 
-	protected BoundedItem(Bounding bounding)
-	{
-		Bounding = bounding;
-	}
-
 	private static bool IsNormalized(Bounding bounding)
 	{
 		return IsNormalized(bounding.Left) &&

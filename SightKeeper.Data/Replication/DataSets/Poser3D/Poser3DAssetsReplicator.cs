@@ -29,7 +29,8 @@ internal sealed class Poser3DAssetsReplicator
 		foreach (var packableItem in packableItems)
 		{
 			var tag = tagsLibrary.Tags[packableItem.TagIndex];
-			var item = asset.MakeItem(tag, packableItem.Bounding);
+			var item = asset.MakeItem(tag);
+			item.Bounding = packableItem.Bounding;
 			ReplicateKeyPoints(item, packableItem.KeyPoints);
 		}
 	}

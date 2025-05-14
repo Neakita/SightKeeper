@@ -17,7 +17,7 @@ public sealed class DetectorItem : BoundedItem, AssetItem, TagUser
 		}
 	}
 
-	internal DetectorItem(Bounding bounding, Tag tag) : base(bounding)
+	internal DetectorItem(Tag tag)
 	{
 		_tag = tag;
 		_tag.AddUser(this);
