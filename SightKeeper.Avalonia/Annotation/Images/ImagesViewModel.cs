@@ -38,7 +38,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 			.Where(image => image.Set == Set)
 			.Subscribe(_images.Add)
 			.DisposeWith(_disposable);
-		observableDataAccess.DeletingImages
+		observableDataAccess.ImagesDeleted
 			.Where(tuple => tuple.Set == Set)
 			.Subscribe(tuple => _images.RemoveRange(tuple.Range.Start, tuple.Range.Count))
 			.DisposeWith(_disposable);

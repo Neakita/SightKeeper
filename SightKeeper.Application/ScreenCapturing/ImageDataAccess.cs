@@ -5,7 +5,6 @@ using SightKeeper.Application.ImageSets;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
-using Range = Vibrance.Utilities.Range;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
@@ -13,7 +12,7 @@ public abstract class ImageDataAccess : ObservableImageDataAccess, IDisposable
 {
 	public IObservable<Image> Added => _added.AsObservable();
 	public IObservable<Image> Removed => _removed.AsObservable();
-	public IObservable<(ImageSet, Range)> DeletingImages => _deletingImages.AsObservable();
+	public IObservable<ImagesRange> ImagesDeleted => _imagesDeleted.AsObservable();
 
 	public abstract Stream LoadImage(Image image);
 
@@ -26,18 +25,13 @@ public abstract class ImageDataAccess : ObservableImageDataAccess, IDisposable
 		return image;
 	}
 
-	public virtual void DeleteImage(ImageSet set, int index)
+	public void DeleteImage(ImageSet set, int index)
 	{
-		_deletingImages.OnNext((set, new Range(index, index)));
-		var image = set.Images[index];
-		set.RemoveImageAt(index);
-		DeleteImageData(image);
-		_removed.OnNext(image);
+		DeleteImagesRange(set, index, 1);
 	}
 
 	public virtual void DeleteImagesRange(ImageSet set, int index, int count)
 	{
-		_deletingImages.OnNext((set, new Range(index, index + count - 1)));
 		var images = set.GetImagesRange(index, count);
 		set.RemoveImagesRange(index, count);
 		foreach (var image in images)
@@ -45,12 +39,20 @@ public abstract class ImageDataAccess : ObservableImageDataAccess, IDisposable
 			DeleteImageData(image);
 			_removed.OnNext(image);
 		}
+		ImagesRange imagesRange = new()
+		{
+			Set = set,
+			Images = images,
+			Range = Range.FromCount(index, count)
+		};
+		_imagesDeleted.OnNext(imagesRange);
 	}
 
 	public void Dispose()
 	{
 		_added.Dispose();
 		_removed.Dispose();
+		_imagesDeleted.Dispose();
 	}
 
 	protected virtual Image CreateImage(ImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
@@ -63,5 +65,5 @@ public abstract class ImageDataAccess : ObservableImageDataAccess, IDisposable
 
 	private readonly Subject<Image> _added = new();
 	private readonly Subject<Image> _removed = new();
-	private readonly Subject<(ImageSet, Range)> _deletingImages = new();
+	private readonly Subject<ImagesRange> _imagesDeleted = new();
 }

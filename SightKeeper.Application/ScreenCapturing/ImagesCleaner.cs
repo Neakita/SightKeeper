@@ -1,6 +1,5 @@
+using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Images;
-using Vibrance.Utilities;
-using Range = Vibrance.Utilities.Range;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
@@ -25,7 +24,7 @@ public sealed class ImagesCleaner
 
 	private readonly ImageDataAccess _imageDataAccess;
 
-	private IReadOnlyList<Range> GetRangesToRemove(ImageSet set)
+	private List<Range> GetRangesToRemove(ImageSet set)
 	{
 		var unusedRanges = set.Images
 			.Index()

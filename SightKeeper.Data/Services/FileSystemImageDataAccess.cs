@@ -34,13 +34,6 @@ public sealed class FileSystemImageDataAccess : ImageDataAccess
 		return _fileSystemDataAccess.GetId(image);
 	}
 
-	public override void DeleteImage(ImageSet set, int index)
-	{
-		lock (_appDataLock)
-			base.DeleteImage(set, index);
-		_appDataAccess.SetDataChanged();
-	}
-
 	public override void DeleteImagesRange(ImageSet set, int index, int count)
 	{
 		lock (_appDataAccess)
