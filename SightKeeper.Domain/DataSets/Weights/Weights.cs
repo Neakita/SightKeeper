@@ -10,6 +10,11 @@ public sealed class Weights
 	public required ModelSize ModelSize { get; init; }
 	public required WeightsMetrics Metrics { get; init; }
 	public required Vector2<ushort> Resolution { get; init; }
-	public required ImageComposition? Composition { get; init; }
-	public required IReadOnlyCollection<Tag> Tags { get; init; }
+	public ImageComposition? Composition { get; init; }
+	public IReadOnlyCollection<Tag> Tags { get; }
+
+	public Weights(params IEnumerable<Tag> tags)
+	{
+		Tags = tags.ToList();
+	}
 }

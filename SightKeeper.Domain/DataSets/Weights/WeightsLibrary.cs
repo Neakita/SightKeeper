@@ -1,8 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using SightKeeper.Domain.DataSets.Poser;
+﻿using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 namespace SightKeeper.Domain.DataSets.Weights;
 
@@ -10,30 +7,12 @@ public sealed class WeightsLibrary
 {
 	public IReadOnlyCollection<Weights> Weights => _weights;
 
-	public Weights CreateWeights(
-		Model model,
-		DateTimeOffset creationTimestamp,
-		ModelSize modelSize,
-		WeightsMetrics metrics,
-		Vector2<ushort> resolution,
-		ImageComposition? composition,
-		params IEnumerable<Tag> tags)
+	public void AddWeights(Weights weights)
 	{
-		var tagsList = tags.ToList().AsReadOnly();
-		ValidateTags(tagsList, nameof(tags));
-		Weights weights = new()
-		{
-			Model = model,
-			CreationTimestamp = creationTimestamp,
-			ModelSize = modelSize,
-			Metrics = metrics,
-			Resolution = resolution,
-			Composition = composition,
-			Tags = tagsList
-		};
+		ValidateTags(weights.Tags);
 		var isAdded = _weights.Add(weights);
-		Debug.Assert(isAdded);
-		return weights;
+		if (!isAdded)
+			throw new ArgumentException("Specified weights already exists in the library");
 	}
 
 	public void RemoveWeights(Weights weights)
@@ -53,20 +32,20 @@ public sealed class WeightsLibrary
 	private readonly TagsContainer<Tag> _tagsOwner;
 	private readonly SortedSet<Weights> _weights = new(WeightsDateComparer.Instance);
 
-	private void ValidateTags(ReadOnlyCollection<Tag> tagsList, string paramName)
+	private void ValidateTags(IReadOnlyCollection<Tag> tagsList)
 	{
 		DuplicateTagsException.ThrowIfContainsDuplicates(tagsList);
-		ValidateTagsQuantity(tagsList, paramName);
+		ValidateTagsQuantity(tagsList);
 		ValidateTagOwners(tagsList);
 	}
 
-	private void ValidateTagsQuantity(ReadOnlyCollection<Tag> tagsList, string paramName)
+	private void ValidateTagsQuantity(IReadOnlyCollection<Tag> tagsList)
 	{
 		if (tagsList.Count < _minimumTagsCount)
-			throw new ArgumentException($"Should specify at least {_minimumTagsCount} tags", paramName);
+			throw new ArgumentException($"Should specify at least {_minimumTagsCount} tags");
 	}
 
-	private void ValidateTagOwners(ReadOnlyCollection<Tag> tagsList)
+	private void ValidateTagOwners(IReadOnlyCollection<Tag> tagsList)
 	{
 		foreach (var tag in tagsList)
 		{

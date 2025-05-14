@@ -14,7 +14,8 @@ public sealed class WeightsLibraryTests
 	{
 		var dataSet = CreateDataSet();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var weights = dataSet.WeightsLibrary.CreateWeights(tag);
+		var weights = Utilities.CreateWeights(tag);
+		dataSet.WeightsLibrary.AddWeights(weights);
 		dataSet.WeightsLibrary.Weights.Should().Contain(weights);
 	}
 
@@ -22,7 +23,8 @@ public sealed class WeightsLibraryTests
 	public void ShouldNotCreateWeightsWithNoTags()
 	{
 		var dataSet = CreateDataSet();
-		Assert.Throws<ArgumentException>(() => dataSet.WeightsLibrary.CreateWeights());
+		var weights = Utilities.CreateWeights();
+		Assert.Throws<ArgumentException>(() => dataSet.WeightsLibrary.AddWeights(weights));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 
@@ -32,7 +34,8 @@ public sealed class WeightsLibraryTests
 		var dataSet = CreateDataSet();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
-		Assert.Throws<DuplicateTagsException>(() => dataSet.WeightsLibrary.CreateWeights(tag1, tag1, tag2));
+		var weights = Utilities.CreateWeights(tag1, tag1, tag2);
+		Assert.Throws<DuplicateTagsException>(() => dataSet.WeightsLibrary.AddWeights(weights));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
 
@@ -41,7 +44,8 @@ public sealed class WeightsLibraryTests
 	{
 		var dataSet = CreatePoserDataSet();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		var weights = dataSet.WeightsLibrary.CreateWeights(tag);
+		var weights = Utilities.CreateWeights(tag);
+		dataSet.WeightsLibrary.AddWeights(weights);
 		dataSet.WeightsLibrary.Weights.Should().Contain(weights);
 	}
 
@@ -53,7 +57,8 @@ public sealed class WeightsLibraryTests
 		tag1.CreateKeyPointTag("1.1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var keyPoint2 = tag2.CreateKeyPointTag("2.1");
-		var exception = Assert.Throws<KeyPointTagWithoutOwnerException>(() => dataSet.WeightsLibrary.CreateWeights(tag1, keyPoint2));
+		var weights = Utilities.CreateWeights(tag1, keyPoint2);
+		var exception = Assert.Throws<KeyPointTagWithoutOwnerException>(() => dataSet.WeightsLibrary.AddWeights(weights));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 		exception.ExpectedOwner.Should().Be(tag2);
 		exception.KeyPointTag.Should().Be(keyPoint2);
@@ -65,7 +70,8 @@ public sealed class WeightsLibraryTests
 		var dataSet = CreatePoserDataSet();
 		var tag = dataSet.TagsLibrary.CreateTag("1");
 		var keyPointTag = tag.CreateKeyPointTag("1.1");
-		var weights = dataSet.WeightsLibrary.CreateWeights(tag, keyPointTag);
+		var weights = Utilities.CreateWeights(tag, keyPointTag);
+		dataSet.WeightsLibrary.AddWeights(weights);
 		dataSet.WeightsLibrary.Weights.Should().Contain(weights).Which.Tags.Should().Contain([tag, keyPointTag]);
 	}
 

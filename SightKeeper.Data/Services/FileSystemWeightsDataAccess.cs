@@ -1,13 +1,10 @@
 ﻿using FlakeId;
 using SightKeeper.Application;
-using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
-using SightKeeper.Domain.DataSets.Weights.ImageCompositions;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
+public sealed class FileSystemWeightsDataAccess : WeightsDataAccess
 {
 	public string DirectoryPath
 	{
@@ -36,10 +33,10 @@ public sealed class FileSystemWeightsDataAccess: WeightsDataAccess
 		_weightsDataAccess.AssociateId(weights, id);
 	}
 
-	protected override Weights CreateWeights(WeightsLibrary library, Domain.DataSets.Weights.Model model, DateTimeOffset creationTimestamp, ModelSize modelSize, WeightsMetrics metrics, Vector2<ushort> resolution, IEnumerable<Tag> tags, ImageComposition? composition)
+	protected override void AddWeights(WeightsLibrary library, Weights weights)
 	{
 		lock (_appDataLock)
-			return base.CreateWeights(library, model, creationTimestamp, modelSize, metrics, resolution, tags, composition);
+			base.AddWeights(library, weights);
 	}
 
 	protected override void SaveWeightsData(Weights weights, byte[] data)

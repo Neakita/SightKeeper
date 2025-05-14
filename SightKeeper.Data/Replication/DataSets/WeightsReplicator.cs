@@ -10,16 +10,25 @@ internal static class WeightsReplicator
 	public static void ReplicateWeights(WeightsLibrary weightsLibrary, TagsContainer<Tag> tagsContainer,
 		IReadOnlyCollection<PackableWeights> packableWeights)
 	{
-		foreach (var weights in packableWeights)
+		foreach (var packable in packableWeights)
 		{
-			var composition = CompositionReplicator.ReplicateComposition(weights.Composition);
-			var tags = ReplicateTags(tagsContainer, weights.TagsIndexes);
+			var composition = CompositionReplicator.ReplicateComposition(packable.Composition);
+			var tags = ReplicateTags(tagsContainer, packable.TagsIndexes);
 			if (tagsContainer is TagsContainer<PoserTag> poserTagsContainer)
 			{
-				var keyPointTags = ReplicateKeyPointTags(poserTagsContainer, weights.KeyPointTagsLocations);
+				var keyPointTags = ReplicateKeyPointTags(poserTagsContainer, packable.KeyPointTagsLocations);
 				tags = tags.Concat(keyPointTags);
 			}
-			weightsLibrary.CreateWeights(weights.Model, weights.CreationTimestamp, weights.ModelSize, weights.Metrics, weights.Resolution, composition, tags);
+			Weights weights = new(tags)
+			{
+				Model = packable.Model,
+				CreationTimestamp = packable.CreationTimestamp,
+				ModelSize = packable.ModelSize,
+				Metrics = packable.Metrics,
+				Resolution = packable.Resolution,
+				Composition = composition
+			};
+			weightsLibrary.AddWeights(weights);
 		}
 	}
 
