@@ -26,8 +26,7 @@ internal static class Utilities
 			CreationTimestamp = DateTimeOffset.UtcNow,
 			ModelSize = ModelSize.Nano,
 			Metrics = new WeightsMetrics(),
-			Resolution = new Vector2<ushort>(320, 320),
-			Composition = null
+			Resolution = new Vector2<ushort>(320, 320)
 		};
 		return weights;
 	}

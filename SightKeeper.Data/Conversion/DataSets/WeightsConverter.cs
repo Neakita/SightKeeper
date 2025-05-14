@@ -31,7 +31,6 @@ internal sealed class WeightsConverter
 			ModelSize = weights.ModelSize,
 			Metrics = weights.Metrics,
 			Resolution = weights.Resolution,
-			Composition = CompositionConverter.ConvertComposition(weights.Composition),
 			TagsIndexes = ConvertTagsToIds(weights.Tags).ToList(),
 			KeyPointTagsLocations = ConvertKeyPointTagsToLocations(weights.Tags).ToList()
 		};

@@ -12,7 +12,6 @@ internal static class WeightsReplicator
 	{
 		foreach (var packable in packableWeights)
 		{
-			var composition = CompositionReplicator.ReplicateComposition(packable.Composition);
 			var tags = ReplicateTags(tagsContainer, packable.TagsIndexes);
 			if (tagsContainer is TagsContainer<PoserTag> poserTagsContainer)
 			{
@@ -25,8 +24,7 @@ internal static class WeightsReplicator
 				CreationTimestamp = packable.CreationTimestamp,
 				ModelSize = packable.ModelSize,
 				Metrics = packable.Metrics,
-				Resolution = packable.Resolution,
-				Composition = composition
+				Resolution = packable.Resolution
 			};
 			weightsLibrary.AddWeights(weights);
 		}
