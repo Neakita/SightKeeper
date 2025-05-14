@@ -5,7 +5,7 @@ namespace SightKeeper.Application.Annotation;
 
 public interface AssetsMaker
 {
-	TAsset MakeAsset<TAsset>(AssetsMaker<TAsset> assetsMaker, Image image);
+	TAsset MakeAsset<TAsset>(AssetsOwner<TAsset> assetsOwner, Image image);
 
 	TAsset GetOrMakeAsset<TAsset>(AssetsOwner<TAsset> assetsOwner, Image image)
 	{

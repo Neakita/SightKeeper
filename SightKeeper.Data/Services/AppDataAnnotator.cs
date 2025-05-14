@@ -16,11 +16,11 @@ public sealed class AppDataAnnotator : AssetsMaker, AssetsDeleter, ObservableAnn
 		_appDataAccess = appDataAccess;
 	}
 
-	public TAsset MakeAsset<TAsset>(AssetsMaker<TAsset> assetsMaker, Image image)
+	public TAsset MakeAsset<TAsset>(AssetsOwner<TAsset> assetsOwner, Image image)
 	{
 		TAsset asset;
 		lock (_appDataLock)
-			asset = assetsMaker.MakeAsset(image);
+			asset = assetsOwner.MakeAsset(image);
 		_appDataAccess.SetDataChanged();
 		_assetsChanged.OnNext(image);
 		return asset;
