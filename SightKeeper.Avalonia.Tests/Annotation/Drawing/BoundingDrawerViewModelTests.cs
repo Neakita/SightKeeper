@@ -101,7 +101,7 @@ public sealed class BoundingDrawerViewModelTests
 		return Substitute.For<BoundingAnnotator>();
 	}
 
-	private static (AssetsMaker<ItemsMaker<AssetItem>> assetsLibrary, Tag tag) CreateDataSetWithTag()
+	private static (AssetsOwner<ItemsMaker<AssetItem>> assetsLibrary, Tag tag) CreateDataSetWithTag()
 	{
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
@@ -117,7 +117,7 @@ public sealed class BoundingDrawerViewModelTests
 
 	private static BoundingDrawerViewModel CreateBoundingDrawerViewModel(
 		BoundingAnnotator boundingAnnotator,
-		AssetsMaker<ItemsMaker<AssetItem>>? assetsLibrary,
+		AssetsOwner<ItemsMaker<AssetItem>>? assetsLibrary,
 		Tag? tag,
 		Image? screenshot)
 	{

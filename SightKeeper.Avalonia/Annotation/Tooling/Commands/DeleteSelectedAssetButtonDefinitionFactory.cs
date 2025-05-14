@@ -14,7 +14,7 @@ internal sealed class DeleteSelectedAssetButtonDefinitionFactory : AnnotationBut
 	public required ImageSelection ImageSelection { private get; init; }
 	public required DataSetSelection DataSetSelection { private get; init; }
 	public required ObservableAnnotator ObservableAnnotator { private get; init; }
-	public required AssetDeleter AssetDeleter { private get; init; }
+	public required AssetsDeleter AssetDeleter { private get; init; }
 
 	public AnnotationButtonDefinition CreateButtonDefinition()
 	{

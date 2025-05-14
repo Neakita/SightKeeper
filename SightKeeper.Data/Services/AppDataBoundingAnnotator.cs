@@ -9,30 +9,28 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoundingAnnotator, ObservableAnnotator, IDisposable
+public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoundingAnnotator, IDisposable
 {
 	public IObservable<(ItemsMaker<AssetItem> asset, AssetItem item)> ItemCreated => _itemCreated.AsObservable();
 
-	public IObservable<Image> AssetsChanged => _assetsChanged;
-
-	public AppDataBoundingAnnotator([Tag(typeof(AppData))] Lock appDataLock, AppDataAccess appDataAccess)
+	public AppDataBoundingAnnotator([Tag(typeof(AppData))] Lock appDataLock, AppDataAccess appDataAccess, AssetsMaker assetsMaker)
 	{
 		_appDataLock = appDataLock;
 		_appDataAccess = appDataAccess;
+		_assetsMaker = assetsMaker;
 	}
 
-	public AssetItem CreateItem(AssetsMaker<ItemsMaker<AssetItem>> assetsLibrary, Image image, Tag tag, Bounding bounding)
+	public AssetItem CreateItem(AssetsOwner<ItemsMaker<AssetItem>> assetsLibrary, Image image, Tag tag, Bounding bounding)
 	{
 		AssetItem item;
 		ItemsMaker<AssetItem> asset;
 		lock (_appDataLock)
 		{
-			asset = assetsLibrary.GetOrMakeAsset(image);
+			asset = _assetsMaker.GetOrMakeAsset(assetsLibrary, image);
 			item = asset.MakeItem(tag);
 			item.Bounding = bounding;
 		}
 		_appDataAccess.SetDataChanged();
-		_assetsChanged.OnNext(image);
 		_itemCreated.OnNext((asset, item));
 		return item;
 	}
@@ -40,12 +38,11 @@ public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoun
 	public void Dispose()
 	{
 		_itemCreated.Dispose();
-		_assetsChanged.Dispose();
 	}
 
 	private readonly Lock _appDataLock;
 	private readonly AppDataAccess _appDataAccess;
+	private readonly AssetsMaker _assetsMaker;
 
 	private readonly Subject<(ItemsMaker<AssetItem>, AssetItem)> _itemCreated = new();
-	private readonly Subject<Image> _assetsChanged = new();
 }

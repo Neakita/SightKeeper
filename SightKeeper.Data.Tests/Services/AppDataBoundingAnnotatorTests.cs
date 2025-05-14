@@ -35,8 +35,9 @@ public sealed class AppDataBoundingAnnotatorTests
 	{
 		AppDataAccess dataAccess = new();
 		Lock appDataLock = new();
-		AppDataBoundingAnnotator annotator = new(appDataLock, dataAccess);
-		return annotator;
+		AppDataAnnotator annotator = new(appDataLock, dataAccess);
+		AppDataBoundingAnnotator boundingAnnotator = new(appDataLock, dataAccess, annotator);
+		return boundingAnnotator;
 	}
 
 	private static (DetectorDataSet dataSet, Tag tag) PrepareDataSet()

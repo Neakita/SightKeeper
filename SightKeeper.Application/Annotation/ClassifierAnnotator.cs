@@ -1,5 +1,3 @@
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
@@ -7,13 +5,16 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Annotation;
 
-public abstract class ClassifierAnnotator : ObservableAnnotator, IDisposable
+public abstract class ClassifierAnnotator
 {
-	public IObservable<Image> AssetsChanged => _assetsChanged.AsObservable();
+	protected ClassifierAnnotator(AssetsMaker assetsMaker)
+	{
+		_assetsMaker = assetsMaker;
+	}
 
 	public virtual void SetTag(AssetsLibrary<ClassifierAsset> assetsLibrary, Image image, Tag tag)
 	{
-		var asset = assetsLibrary.GetOrMakeAsset(image);
+		var asset = _assetsMaker.GetOrMakeAsset(assetsLibrary, image);
 		asset.Tag = tag;
 	}
 
@@ -22,10 +23,5 @@ public abstract class ClassifierAnnotator : ObservableAnnotator, IDisposable
 		assetsLibrary.DeleteAsset(image);
 	}
 
-	public void Dispose()
-	{
-		_assetsChanged.Dispose();
-	}
-
-	private readonly Subject<Image> _assetsChanged = new();
+	private readonly AssetsMaker _assetsMaker;
 }

@@ -44,6 +44,11 @@ public sealed class AssetsLibrary<TAsset> : AssetsOwner<TAsset> where TAsset : A
 		return _assets.ContainsKey(image);
 	}
 
+	public TAsset GetAsset(Image image)
+	{
+		return _assets[image];
+	}
+
 	public TAsset? GetOptionalAsset(Image image)
 	{
 		_assets.TryGetValue(image, out var asset);

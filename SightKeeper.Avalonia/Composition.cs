@@ -122,14 +122,7 @@ public sealed partial class Composition
 		.Bind<AnnotationSideBarComponent>().As(Lifetime.Singleton).To<SideBarViewModel>()
 		.Bind<ImageSetEditor>().As(Lifetime.Singleton).To<AppDataImageSetEditor>()
 		.Bind<SelfActivityProvider>().To<AvaloniaSelfActivityProvider>()
-		.Bind<AssetDeleter>().As(Lifetime.Singleton).To<AppDataAssetDeleter>()
-		.Bind<ObservableAnnotator>().To(context =>
-		{
-			context.Inject(out ClassifierAnnotator classifierAnnotator);
-			context.Inject(out AssetDeleter assetDeleter);
-			context.Inject(out BoundingAnnotator boundingAnnotator);
-			return new MergeObservableAnnotator(classifierAnnotator, (ObservableAnnotator)assetDeleter, (ObservableAnnotator)boundingAnnotator);
-		})
+		.Bind<AssetsDeleter>().Bind<AssetsMaker>().Bind<ObservableAnnotator>().As(Lifetime.Singleton).To<AppDataAnnotator>()
 		.Bind<AnnotationButtonDefinitionFactory>().To<DeleteSelectedImageButtonDefinitionFactory>()
 		.Bind<AnnotationButtonDefinitionFactory>(2).To<DeleteSelectedAssetButtonDefinitionFactory>()
 		.Bind<DataSetSelectionViewModel>().Bind<DataSetSelectionDataContext>().Bind<DataSetSelection>().As(Lifetime.Singleton).To<DataSetSelectionViewModel>();

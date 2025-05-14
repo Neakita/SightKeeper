@@ -9,7 +9,7 @@ namespace SightKeeper.Data.Services;
 
 public sealed class AppDataClassifierAnnotator : ClassifierAnnotator
 {
-	public AppDataClassifierAnnotator(AppDataAccess dataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public AppDataClassifierAnnotator(AppDataAccess dataAccess, [Tag(typeof(AppData))] Lock appDataLock, AssetsMaker assetsMaker) : base(assetsMaker)
 	{
 		_dataAccess = dataAccess;
 		_appDataLock = appDataLock;

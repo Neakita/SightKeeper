@@ -31,7 +31,7 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		}
 	}
 
-	public AssetsMaker<ItemsMaker<AssetItem>>? AssetsLibrary
+	public AssetsOwner<ItemsMaker<AssetItem>>? AssetsLibrary
 	{
 		get;
 		set
