@@ -68,4 +68,52 @@ public sealed class ItemsAssetTests
 		exception.Value.Should().Be(nonNormalizedBounding);
 		asset.Items.Should().BeEmpty();
 	}
+
+	[Fact]
+	public void ShouldDeleteItem()
+	{
+		var image = Utilities.CreateImage();
+		DetectorDataSet dataSet = new();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
+		var item = asset.MakeItem(tag, new Bounding());
+		asset.DeleteItem(item);
+		asset.Items.Should().BeEmpty();
+	}
+
+	[Fact]
+	public void ShouldNotDeleteItemTwice()
+	{
+		var image = Utilities.CreateImage();
+		DetectorDataSet dataSet = new();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
+		var item = asset.MakeItem(tag, new Bounding());
+		asset.DeleteItem(item);
+		Assert.Throws<ArgumentException>(() => asset.DeleteItem(item));
+	}
+
+	[Fact]
+	public void ShouldDeleteItemByIndex()
+	{
+		var image = Utilities.CreateImage();
+		DetectorDataSet dataSet = new();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
+		asset.MakeItem(tag, new Bounding());
+		asset.DeleteItemAt(0);
+	}
+
+	[Fact]
+	public void ShouldClearItems()
+	{
+		var image = Utilities.CreateImage();
+		DetectorDataSet dataSet = new();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
+		asset.MakeItem(tag, new Bounding());
+		asset.MakeItem(tag, new Bounding());
+		asset.ClearItems();
+		asset.Items.Should().BeEmpty();
+	}
 }
