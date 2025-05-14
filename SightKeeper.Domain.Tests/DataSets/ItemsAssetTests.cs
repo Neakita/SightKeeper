@@ -55,4 +55,17 @@ public sealed class ItemsAssetTests
 		exception.ExpectedOwner.Should().Be(dataSet.TagsLibrary);
 		exception.Causer.Should().Be(tag2);
 	}
+
+	[Fact]
+	public void ShouldNotCreateItemWithNonNormalizedBounding()
+	{
+		var image = Utilities.CreateImage();
+		DetectorDataSet dataSet = new();
+		var tag = dataSet.TagsLibrary.CreateTag("");
+		var asset = dataSet.AssetsLibrary.MakeAsset(image);
+		Bounding nonNormalizedBounding = new(0.1, 0.2, 1.1, 1.2);
+		var exception = Assert.Throws<ItemBoundingConstraintException>(() => asset.MakeItem(tag, nonNormalizedBounding));
+		exception.Value.Should().Be(nonNormalizedBounding);
+		asset.Items.Should().BeEmpty();
+	}
 }
