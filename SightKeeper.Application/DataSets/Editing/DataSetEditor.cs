@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
-public abstract class DataSetEditor : IDisposable
+public class DataSetEditor : IDisposable
 {
 	public IObservable<DataSet> DataSetEdited => _dataSetEdited.AsObservable();
 
