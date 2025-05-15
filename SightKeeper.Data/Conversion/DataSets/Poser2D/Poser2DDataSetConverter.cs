@@ -8,10 +8,10 @@ namespace SightKeeper.Data.Conversion.DataSets.Poser2D;
 
 internal sealed class Poser2DDataSetConverter
 {
-	public Poser2DDataSetConverter(ConversionSession session, FileSystemImageDataAccess imageDataAccess)
+	public Poser2DDataSetConverter(ConversionSession session, FileSystemImageRepository imageRepository)
 	{
 		_tagsConverter = new PoserTagsConverter(session);
-		_assetsConverter = new Poser2DAssetsConverter(session, imageDataAccess);
+		_assetsConverter = new Poser2DAssetsConverter(session, imageRepository);
 		_weightsConverter = new WeightsConverter(session);
 	}
 

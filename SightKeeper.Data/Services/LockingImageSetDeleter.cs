@@ -8,10 +8,10 @@ namespace SightKeeper.Data.Services;
 public sealed class LockingImageSetDeleter : ImageSetDeleter
 {
 	public LockingImageSetDeleter(
-		ReadDataAccess<DataSet> dataSetsDataAccess,
-		WriteDataAccess<ImageSet> librariesDataAccess,
+		ReadRepository<DataSet> dataSetsRepository,
+		WriteRepository<ImageSet> librariesRepository,
 		[Tag(typeof(AppData))] Lock appDataLock) :
-		base(dataSetsDataAccess, librariesDataAccess)
+		base(dataSetsRepository, librariesRepository)
 	{
 		_appDataLock = appDataLock;
 	}

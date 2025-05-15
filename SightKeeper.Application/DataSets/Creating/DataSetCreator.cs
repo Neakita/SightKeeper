@@ -10,9 +10,9 @@ namespace SightKeeper.Application.DataSets.Creating;
 
 public sealed class DataSetCreator
 {
-	public DataSetCreator(WriteDataAccess<DataSet> dataAccess)
+	public DataSetCreator(WriteRepository<DataSet> repository)
 	{
-		_dataAccess = dataAccess;
+		_repository = repository;
 	}
 
 	public DataSet Create(DataSetData data, DataSetType type)
@@ -27,11 +27,11 @@ public sealed class DataSetCreator
 		};
 		SetGeneralData(dataSet, data);
 		AddTags(dataSet, data.TagsChanges.NewTags);
-		_dataAccess.Add(dataSet);
+		_repository.Add(dataSet);
 		return dataSet;
 	}
 
-	private readonly WriteDataAccess<DataSet> _dataAccess;
+	private readonly WriteRepository<DataSet> _repository;
 
 	private static void SetGeneralData(DataSet dataSet, DataSetData data)
 	{

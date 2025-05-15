@@ -14,12 +14,12 @@ namespace SightKeeper.Data.Conversion.DataSets;
 
 internal sealed class DataSetsConverter
 {
-	public DataSetsConverter(ConversionSession session, FileSystemImageDataAccess imageDataAccess)
+	public DataSetsConverter(ConversionSession session, FileSystemImageRepository imageRepository)
 	{
-		_classifierConverter = new ClassifierDataSetConverter(session, imageDataAccess);
-		_detectorConverter = new DetectorDataSetConverter(session, imageDataAccess);
-		_poser2DConverter = new Poser2DDataSetConverter(session, imageDataAccess);
-		_poser3DConverter = new Poser3DDataSetConverter(session, imageDataAccess);
+		_classifierConverter = new ClassifierDataSetConverter(session, imageRepository);
+		_detectorConverter = new DetectorDataSetConverter(session, imageRepository);
+		_poser2DConverter = new Poser2DDataSetConverter(session, imageRepository);
+		_poser3DConverter = new Poser3DDataSetConverter(session, imageRepository);
 	}
 
 	public IEnumerable<PackableDataSet> ConvertDataSets(IEnumerable<DataSet> dataSets)

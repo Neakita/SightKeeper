@@ -28,9 +28,9 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 
 	public Task Processing { get; private set; } = Task.CompletedTask;
 
-	public BufferedImageSaver(ImageDataAccess imageDataAccess, PixelConverter<TPixel, Rgba32> pixelConverter)
+	public BufferedImageSaver(ImageRepository imageRepository, PixelConverter<TPixel, Rgba32> pixelConverter)
 	{
-		_imageDataAccess = imageDataAccess;
+		_imageRepository = imageRepository;
 		_pixelConverter = pixelConverter;
 	}
 
@@ -70,7 +70,7 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 	private Rgba32[] ConvertedPixelsBuffer => _convertedPixelsBuffer ?? new Rgba32[MaximumImageDataLength];
 
 	private readonly ConcurrentQueue<ImageData<TPixel>> _pendingImages = new();
-	private readonly ImageDataAccess _imageDataAccess;
+	private readonly ImageRepository _imageRepository;
 	private readonly PixelConverter<TPixel, Rgba32> _pixelConverter;
 	private readonly BehaviorSubject<ushort> _pendingImagesCount = new(0);
 	private ArrayPool<TPixel>? _rawPixelsPool;
@@ -93,7 +93,7 @@ public sealed class BufferedImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSave
 			{
 				var buffer2D = buffer.AsSpan().AsSpan2D(data.ImageSize.Y, data.ImageSize.X);
 				_pixelConverter.Convert(data.Data2D, buffer2D);
-				_imageDataAccess.CreateImage(data.Set, buffer2D, data.CreationTimestamp);
+				_imageRepository.CreateImage(data.Set, buffer2D, data.CreationTimestamp);
 			}
 			finally
 			{

@@ -17,10 +17,10 @@ namespace SightKeeper.Avalonia.Annotation.Images;
 
 public sealed class ImageLoader
 {
-	public ImageLoader(WriteableBitmapPool bitmapPool, ImageDataAccess imageDataAccess)
+	public ImageLoader(WriteableBitmapPool bitmapPool, ImageRepository imageRepository)
 	{
 		_bitmapPool = bitmapPool;
-		_imageDataAccess = imageDataAccess;
+		_imageRepository = imageRepository;
 	}
 
 	public async Task<PooledWriteableBitmap?> LoadImageAsync(
@@ -40,7 +40,7 @@ public sealed class ImageLoader
 	}
 
 	private readonly WriteableBitmapPool _bitmapPool;
-	private readonly ImageDataAccess _imageDataAccess;
+	private readonly ImageRepository _imageRepository;
 
 	private async Task<bool> ReadImageDataToBitmapAsync(
 		Image image,
@@ -68,7 +68,7 @@ public sealed class ImageLoader
 		CancellationToken cancellationToken)
 	{
 		Memory<byte> targetAsBytes = target.Cast<Rgba32, byte>();
-		await using var stream = _imageDataAccess.LoadImage(image);
+		await using var stream = _imageRepository.LoadImage(image);
 		int totalBytesRead = 0;
 		int lastBytesRead;
 		do

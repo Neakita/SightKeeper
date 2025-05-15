@@ -4,9 +4,9 @@ namespace SightKeeper.Application.ImageSets.Creating;
 
 public sealed class ImageSetCreator
 {
-	public ImageSetCreator(WriteDataAccess<ImageSet> dataAccess)
+	public ImageSetCreator(WriteRepository<ImageSet> repository)
 	{
-		_dataAccess = dataAccess;
+		_repository = repository;
 	}
 
 	public ImageSet Create(ImageSetData data)
@@ -16,9 +16,9 @@ public sealed class ImageSetCreator
 			Name = data.Name,
 			Description = data.Description
 		};
-		_dataAccess.Add(library);
+		_repository.Add(library);
 		return library;
 	}
 
-	private readonly WriteDataAccess<ImageSet> _dataAccess;
+	private readonly WriteRepository<ImageSet> _repository;
 }

@@ -7,10 +7,10 @@ namespace SightKeeper.Data.Conversion.DataSets.Classifier;
 
 internal sealed class ClassifierDataSetConverter
 {
-	public ClassifierDataSetConverter(ConversionSession session, FileSystemImageDataAccess imageDataAccess)
+	public ClassifierDataSetConverter(ConversionSession session, FileSystemImageRepository imageRepository)
 	{
 		_tagsConverter = new TagsConverter(session);
-		_assetsConverter = new ClassifierAssetsConverter(imageDataAccess, session);
+		_assetsConverter = new ClassifierAssetsConverter(imageRepository, session);
 		_weightsConverter = new WeightsConverter(session);
 	}
 

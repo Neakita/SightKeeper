@@ -8,10 +8,10 @@ public sealed class ExistingDataSetDataValidator : AbstractValidator<DataSetData
 	public ExistingDataSetDataValidator(
 		DataSet dataSet,
 		IValidator<DataSetData> dataSetDataValidator,
-		ReadDataAccess<DataSet> dataSetsDataAccess)
+		ReadRepository<DataSet> dataSetsRepository)
 	{
 		_dataSet = dataSet;
-		_dataSetsDataAccess = dataSetsDataAccess;
+		_dataSetsRepository = dataSetsRepository;
 		Include(dataSetDataValidator);
 		RuleFor(data => data.Name)
 			.Must((_, dataSetName) => IsNameFree(dataSetName))
@@ -20,10 +20,10 @@ public sealed class ExistingDataSetDataValidator : AbstractValidator<DataSetData
 	}
 
 	private readonly DataSet _dataSet;
-	private readonly ReadDataAccess<DataSet> _dataSetsDataAccess;
+	private readonly ReadRepository<DataSet> _dataSetsRepository;
 
 	private bool IsNameFree(string name)
 	{
-		return _dataSetsDataAccess.Items.All(dataSet => dataSet == _dataSet || dataSet.Name != name);
+		return _dataSetsRepository.Items.All(dataSet => dataSet == _dataSet || dataSet.Name != name);
 	}
 }

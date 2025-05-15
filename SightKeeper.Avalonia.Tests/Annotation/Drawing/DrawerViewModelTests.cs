@@ -46,7 +46,7 @@ public sealed class DrawerViewModelTests
 			observablePoserAnnotator,
 			observableAnnotator);
 		var keyPointDrawerViewModel = new KeyPointDrawerViewModel(Substitute.For<PoserAnnotator>());
-		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel, assetItemsViewModel, keyPointDrawerViewModel, new ImageLoader(new WriteableBitmapPool(Logger.None), Substitute.For<ImageDataAccess>()));
+		DrawerViewModel drawerViewModel = new(boundingDrawerViewModel, assetItemsViewModel, keyPointDrawerViewModel, new ImageLoader(new WriteableBitmapPool(Logger.None), Substitute.For<ImageRepository>()));
 		return drawerViewModel;
 	}
 

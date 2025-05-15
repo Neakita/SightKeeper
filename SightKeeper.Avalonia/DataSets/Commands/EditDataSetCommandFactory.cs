@@ -11,9 +11,9 @@ namespace SightKeeper.Avalonia.DataSets.Commands;
 
 internal sealed class EditDataSetCommandFactory
 {
-	public EditDataSetCommandFactory(ReadDataAccess<DataSet> readDataSetsDataAccess, DialogManager dialogManager, DataSetEditor dataSetEditor)
+	public EditDataSetCommandFactory(ReadRepository<DataSet> readDataSetsRepository, DialogManager dialogManager, DataSetEditor dataSetEditor)
 	{
-		_readDataSetsDataAccess = readDataSetsDataAccess;
+		_readDataSetsRepository = readDataSetsRepository;
 		_dialogManager = dialogManager;
 		_dataSetEditor = dataSetEditor;
 	}
@@ -23,7 +23,7 @@ internal sealed class EditDataSetCommandFactory
 		return new AsyncRelayCommand<DataSet>(EditDataSetAsync!);
 	}
 
-	private readonly ReadDataAccess<DataSet> _readDataSetsDataAccess;
+	private readonly ReadRepository<DataSet> _readDataSetsRepository;
 	private readonly DialogManager _dialogManager;
 	private readonly DataSetEditor _dataSetEditor;
 

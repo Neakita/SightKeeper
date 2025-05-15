@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Application;
 
-public interface ReadDataAccess<out T>
+public interface ReadRepository<out T>
 {
 	IReadOnlyCollection<T> Items { get; }
 }

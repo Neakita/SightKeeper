@@ -9,13 +9,13 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-public sealed class ImageSetViewModelsObservableRepository : ObservableRepository<ImageSetViewModel>, IDisposable
+public sealed class ImageSetViewModelsObservableListRepository : ObservableListRepository<ImageSetViewModel>, IDisposable
 {
 	public ReadOnlyObservableList<ImageSetViewModel> Items { get; }
 
-	public ImageSetViewModelsObservableRepository(ObservableRepository<ImageSet> repository, ImageSetEditor editor)
+	public ImageSetViewModelsObservableListRepository(ObservableListRepository<ImageSet> listRepository, ImageSetEditor editor)
 	{
-		Items = repository.Items
+		Items = listRepository.Items
 			.Transform(library => new ImageSetViewModel(library))
 			.ToObservableList();
 		Items.ToDictionary(viewModel => viewModel.Value, out var viewModelsLookup);

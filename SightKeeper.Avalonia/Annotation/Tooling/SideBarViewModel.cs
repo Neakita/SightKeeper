@@ -33,7 +33,7 @@ public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarCompo
 		_dataSetSelection.SelectedDataSetChanged;
 
 	public SideBarViewModel(
-		ImageSetViewModelsObservableRepository imageSets,
+		ImageSetViewModelsObservableListRepository imageSets,
 		ToolingViewModelFactory toolingViewModelFactory,
 		IEnumerable<AnnotationButtonDefinitionFactory> buttonDefinitionFactories,
 		DataSetSelectionViewModel dataSetSelection)

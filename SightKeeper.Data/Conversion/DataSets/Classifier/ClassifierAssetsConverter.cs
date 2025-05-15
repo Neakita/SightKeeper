@@ -6,9 +6,9 @@ namespace SightKeeper.Data.Conversion.DataSets.Classifier;
 
 internal sealed class ClassifierAssetsConverter
 {
-	public ClassifierAssetsConverter(FileSystemImageDataAccess imageDataAccess, ConversionSession session)
+	public ClassifierAssetsConverter(FileSystemImageRepository imageRepository, ConversionSession session)
 	{
-		_imageDataAccess = imageDataAccess;
+		_imageRepository = imageRepository;
 		_session = session;
 	}
 
@@ -17,7 +17,7 @@ internal sealed class ClassifierAssetsConverter
 		return assets.Select(ConvertAsset);
 	}
 
-	private readonly FileSystemImageDataAccess _imageDataAccess;
+	private readonly FileSystemImageRepository _imageRepository;
 	private readonly ConversionSession _session;
 
 	private PackableClassifierAsset ConvertAsset(ClassifierAsset asset)
@@ -27,7 +27,7 @@ internal sealed class ClassifierAssetsConverter
 		{
 			TagIndex = _session.TagsIndexes[asset.Tag],
 			Usage = asset.Usage,
-			ImageId = _imageDataAccess.GetId(image)
+			ImageId = _imageRepository.GetId(image)
 		};
 	}
 }

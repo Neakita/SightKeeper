@@ -11,10 +11,10 @@ namespace SightKeeper.Avalonia.DataSets.Commands;
 
 internal sealed class DeleteDataSetCommandFactory
 {
-	public DeleteDataSetCommandFactory(DialogManager dialogManager, WriteDataAccess<DataSet> writeDataSetsDataAccess)
+	public DeleteDataSetCommandFactory(DialogManager dialogManager, WriteRepository<DataSet> writeDataSetsRepository)
 	{
 		_dialogManager = dialogManager;
-		_writeDataSetsDataAccess = writeDataSetsDataAccess;
+		_writeDataSetsRepository = writeDataSetsRepository;
 	}
 
 	public ICommand CreateCommand()
@@ -23,7 +23,7 @@ internal sealed class DeleteDataSetCommandFactory
 	}
 
 	private readonly DialogManager _dialogManager;
-	private readonly WriteDataAccess<DataSet> _writeDataSetsDataAccess;
+	private readonly WriteRepository<DataSet> _writeDataSetsRepository;
 
 	private async Task DeleteDataSetAsync(DataSet dataSet)
 	{
@@ -34,6 +34,6 @@ internal sealed class DeleteDataSetCommandFactory
 			deletionButton,
 			new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel));
 		if (await _dialogManager.ShowDialogAsync(dialog) == deletionButton)
-			_writeDataSetsDataAccess.Remove(dataSet);
+			_writeDataSetsRepository.Remove(dataSet);
 	}
 }

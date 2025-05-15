@@ -7,9 +7,9 @@ public sealed class ImagesCleaner
 {
 	public ushort UnusedImagesLimit { get; set; } = 500;
 
-	public ImagesCleaner(ImageDataAccess imageDataAccess)
+	public ImagesCleaner(ImageRepository imageRepository)
 	{
-		_imageDataAccess = imageDataAccess;
+		_imageRepository = imageRepository;
 	}
 
 	public void RemoveExceedUnusedImages(ImageSet set)
@@ -18,11 +18,11 @@ public sealed class ImagesCleaner
 		for (var i = ranges.Count - 1; i >= 0; i--)
 		{
 			var range = ranges[i];
-			_imageDataAccess.DeleteImagesRange(set, range.Start, range.Count);
+			_imageRepository.DeleteImagesRange(set, range.Start, range.Count);
 		}
 	}
 
-	private readonly ImageDataAccess _imageDataAccess;
+	private readonly ImageRepository _imageRepository;
 
 	private List<Range> GetRangesToRemove(ImageSet set)
 	{

@@ -6,17 +6,17 @@ using SightKeeper.Domain.DataSets;
 namespace SightKeeper.Data.Services;
 
 // C-C-Combo!
-public sealed class AppDataDataSetsDataAccess :
-	ReadDataAccess<DataSet>,
-	ObservableDataAccess<DataSet>,
-	WriteDataAccess<DataSet>,
+public sealed class AppDataDataSetsRepository :
+	ReadRepository<DataSet>,
+	ObservableRepository<DataSet>,
+	WriteRepository<DataSet>,
 	IDisposable
 {
 	public IReadOnlyCollection<DataSet> Items => _appDataAccess.Data.DataSets;
 	public IObservable<DataSet> Added => _added.AsObservable();
 	public IObservable<DataSet> Removed => _removed.AsObservable();
 
-	public AppDataDataSetsDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public AppDataDataSetsRepository(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
 		_appDataLock = appDataLock;

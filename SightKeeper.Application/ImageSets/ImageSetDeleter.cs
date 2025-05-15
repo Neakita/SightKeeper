@@ -8,7 +8,7 @@ public abstract class ImageSetDeleter
 {
 	public virtual bool CanDelete(ImageSet library)
 	{
-		var dataSets = _dataSetsDataAccess.Items;
+		var dataSets = _dataSetsRepository.Items;
 		foreach (var dataSet in dataSets)
 		foreach (var image in library.Images)
 			if (dataSet.AssetsLibrary.Contains(image))
@@ -19,15 +19,15 @@ public abstract class ImageSetDeleter
 	public virtual void Delete(ImageSet library)
 	{
 		Guard.IsTrue(CanDelete(library));
-		_librariesDataAccess.Remove(library);
+		_librariesRepository.Remove(library);
 	}
 
-	protected ImageSetDeleter(ReadDataAccess<DataSet> dataSetsDataAccess, WriteDataAccess<ImageSet> librariesDataAccess)
+	protected ImageSetDeleter(ReadRepository<DataSet> dataSetsRepository, WriteRepository<ImageSet> librariesRepository)
 	{
-		_dataSetsDataAccess = dataSetsDataAccess;
-		_librariesDataAccess = librariesDataAccess;
+		_dataSetsRepository = dataSetsRepository;
+		_librariesRepository = librariesRepository;
 	}
 
-	private readonly ReadDataAccess<DataSet> _dataSetsDataAccess;
-	private readonly WriteDataAccess<ImageSet> _librariesDataAccess;
+	private readonly ReadRepository<DataSet> _dataSetsRepository;
+	private readonly WriteRepository<ImageSet> _librariesRepository;
 }

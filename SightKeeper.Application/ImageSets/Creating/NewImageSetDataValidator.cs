@@ -7,9 +7,9 @@ public sealed class NewImageSetDataValidator : AbstractValidator<ImageSetData>
 {
 	public NewImageSetDataValidator(
 		IValidator<ImageSetData> imageSetDataValidator,
-		ReadDataAccess<ImageSet> imageSetDataAccess)
+		ReadRepository<ImageSet> imageSetRepository)
 	{
-		_imageSetDataAccess = imageSetDataAccess;
+		_imageSetRepository = imageSetRepository;
 		Include(imageSetDataValidator);
 		RuleFor(data => data.Name)
 			.Must((_, name) => IsNameFree(name))
@@ -17,10 +17,10 @@ public sealed class NewImageSetDataValidator : AbstractValidator<ImageSetData>
 			.WithMessage("Name must be unique");
 	}
 
-	private readonly ReadDataAccess<ImageSet> _imageSetDataAccess;
+	private readonly ReadRepository<ImageSet> _imageSetRepository;
 
 	private bool IsNameFree(string name)
 	{
-		return _imageSetDataAccess.Items.All(dataSet => dataSet.Name != name);
+		return _imageSetRepository.Items.All(dataSet => dataSet.Name != name);
 	}
 }

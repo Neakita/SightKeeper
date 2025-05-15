@@ -23,13 +23,13 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDis
 
 	public ImageSetsViewModel(
 		CreateImageSetCommandFactory createImageSetCommandFactory,
-		ObservableRepository<ImageSet> imageSetsRepository,
+		ObservableListRepository<ImageSet> imageSetsListRepository,
 		ImageSetEditor imageSetEditor,
 		ImageSetCardViewModelFactory imageSetCardViewModelFactory,
 		CapturingSettingsViewModel capturingSettings)
 	{
 		CreateImageSetCommand = createImageSetCommandFactory.CreateCommand();
-		ImageSets = imageSetsRepository.Items
+		ImageSets = imageSetsListRepository.Items
 			.Transform(imageSetCardViewModelFactory.CreateImageSetCardViewModel)
 			.DisposeMany()
 			.ToObservableList();

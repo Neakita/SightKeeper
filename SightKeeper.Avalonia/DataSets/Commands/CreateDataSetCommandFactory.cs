@@ -12,7 +12,7 @@ namespace SightKeeper.Avalonia.DataSets.Commands;
 internal sealed class CreateDataSetCommandFactory
 {
 	public CreateDataSetCommandFactory(
-		ReadDataAccess<DataSet> readDataSetsDataAccess,
+		ReadRepository<DataSet> readDataSetsRepository,
 		DialogManager dialogManager,
 		DataSetCreator dataSetCreator)
 	{

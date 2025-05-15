@@ -31,14 +31,14 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 	public Image? SelectedImage => SelectedImageIndex >= 0 ? _images[SelectedImageIndex] : null;
 	public IObservable<Image?> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
-	public ImagesViewModel(ObservableImageDataAccess observableDataAccess, ImageLoader imageLoader)
+	public ImagesViewModel(ObservableImageRepository observableRepository, ImageLoader imageLoader)
 	{
 		_images = new ObservableList<Image>();
-		observableDataAccess.Added
+		observableRepository.Added
 			.Where(image => image.Set == Set)
 			.Subscribe(_images.Add)
 			.DisposeWith(_disposable);
-		observableDataAccess.ImagesDeleted
+		observableRepository.ImagesDeleted
 			.Where(tuple => tuple.Set == Set)
 			.Subscribe(tuple => _images.RemoveRange(tuple.Range.Start, tuple.Range.Count))
 			.DisposeWith(_disposable);

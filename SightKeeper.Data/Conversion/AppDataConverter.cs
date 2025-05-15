@@ -6,16 +6,16 @@ namespace SightKeeper.Data.Conversion;
 
 internal sealed class AppDataConverter
 {
-	public AppDataConverter(FileSystemImageDataAccess imageDataAccess)
+	public AppDataConverter(FileSystemImageRepository imageRepository)
 	{
-		_imageDataAccess = imageDataAccess;
+		_imageRepository = imageRepository;
 	}
 
 	public PackableAppData Convert(AppData data)
 	{
 		ConversionSession session = new();
-		ImageSetConverter imageSetConverter = new(_imageDataAccess);
-		DataSetsConverter dataSetsConverter = new(session, _imageDataAccess);
+		ImageSetConverter imageSetConverter = new(_imageRepository);
+		DataSetsConverter dataSetsConverter = new(session, _imageRepository);
 		return new PackableAppData
 		{
 			ImageSets = imageSetConverter.ConvertImageSets(data.ImageSets).ToImmutableArray(),
@@ -24,5 +24,5 @@ internal sealed class AppDataConverter
 		};
 	}
 
-	private readonly FileSystemImageDataAccess _imageDataAccess;
+	private readonly FileSystemImageRepository _imageRepository;
 }

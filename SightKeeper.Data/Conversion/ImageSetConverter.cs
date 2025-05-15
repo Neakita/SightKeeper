@@ -7,9 +7,9 @@ namespace SightKeeper.Data.Conversion;
 
 internal sealed class ImageSetConverter
 {
-	public ImageSetConverter(FileSystemImageDataAccess imageDataAccess)
+	public ImageSetConverter(FileSystemImageRepository imageRepository)
 	{
-		_imageDataAccess = imageDataAccess;
+		_imageRepository = imageRepository;
 	}
 
 	public IEnumerable<PackableImageSet> ConvertImageSets(IEnumerable<ImageSet> libraries)
@@ -17,7 +17,7 @@ internal sealed class ImageSetConverter
 		return libraries.Select(ConvertImageSet);
 	}
 
-	private readonly FileSystemImageDataAccess _imageDataAccess;
+	private readonly FileSystemImageRepository _imageRepository;
 
 	private PackableImageSet ConvertImageSet(ImageSet library) => new()
 	{
@@ -35,7 +35,7 @@ internal sealed class ImageSetConverter
 	{
 		return new PackableImage
 		{
-			Id = _imageDataAccess.GetId(image),
+			Id = _imageRepository.GetId(image),
 			CreationTimestamp = image.CreationTimestamp,
 			Image = image.Size
 		};

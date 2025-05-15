@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public abstract class ImageDataAccess : ObservableImageDataAccess, IDisposable
+public abstract class ImageRepository : ObservableImageRepository, IDisposable
 {
 	public IObservable<Image> Added => _added.AsObservable();
 	public IObservable<Image> Removed => _removed.AsObservable();

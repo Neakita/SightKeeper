@@ -18,11 +18,11 @@ public sealed class DeleteSelectedImageButtonDefinitionFactory : AnnotationButto
 	public DeleteSelectedImageButtonDefinitionFactory(
 		ImageSelection images,
 		IReadOnlyCollection<ObservableAnnotator> annotators,
-		ImageDataAccess imageDataAccess)
+		ImageRepository imageRepository)
 	{
 		_images = images;
 		_annotators = annotators;
-		_imageDataAccess = imageDataAccess;
+		_imageRepository = imageRepository;
 	}
 
 	public AnnotationButtonDefinition CreateButtonDefinition() => new()
@@ -34,7 +34,7 @@ public sealed class DeleteSelectedImageButtonDefinitionFactory : AnnotationButto
 
 	private readonly ImageSelection _images;
 	private readonly IReadOnlyCollection<ObservableAnnotator> _annotators;
-	private readonly ImageDataAccess _imageDataAccess;
+	private readonly ImageRepository _imageRepository;
 
 	private DisposableCommand CreateCommand()
 	{
@@ -57,6 +57,6 @@ public sealed class DeleteSelectedImageButtonDefinitionFactory : AnnotationButto
 	private void DeleteImage()
 	{
 		Guard.IsNotNull(_images.Set);
-		_imageDataAccess.DeleteImage(_images.Set, _images.SelectedImageIndex);
+		_imageRepository.DeleteImage(_images.Set, _images.SelectedImageIndex);
 	}
 }

@@ -1,8 +1,7 @@
-using Vibrance;
+﻿namespace SightKeeper.Application;
 
-namespace SightKeeper.Application;
-
-public interface ObservableRepository<out T> where T : notnull
+public interface ObservableRepository<out T>
 {
-	ReadOnlyObservableList<T> Items { get; }
+	IObservable<T> Added { get; }
+	IObservable<T> Removed { get; }
 }

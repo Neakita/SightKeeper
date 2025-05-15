@@ -6,13 +6,13 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.DataSets;
 
-public sealed class DataSetViewModelsObservableRepository : ObservableRepository<DataSetViewModel>, IDisposable
+public sealed class DataSetViewModelsObservableListRepository : ObservableListRepository<DataSetViewModel>, IDisposable
 {
 	public ReadOnlyObservableList<DataSetViewModel> Items { get; }
 
-    public DataSetViewModelsObservableRepository(ObservableRepository<DataSet> repository)
+    public DataSetViewModelsObservableListRepository(ObservableListRepository<DataSet> listRepository)
     {
-	    Items = repository.Items
+	    Items = listRepository.Items
 		    .Transform(dataSet => new DataSetViewModel(dataSet))
 		    .DisposeMany()
 		    .ToObservableList();

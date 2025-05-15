@@ -5,17 +5,17 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class AppDataImageSetsDataAccess :
-	ReadDataAccess<ImageSet>,
-	ObservableDataAccess<ImageSet>,
-	WriteDataAccess<ImageSet>,
+public sealed class AppDataImageSetsRepository :
+	ReadRepository<ImageSet>,
+	ObservableRepository<ImageSet>,
+	WriteRepository<ImageSet>,
 	IDisposable
 {
 	public IReadOnlyCollection<ImageSet> Items => _appDataAccess.Data.ImageSets;
 	public IObservable<ImageSet> Added => _added.AsObservable();
 	public IObservable<ImageSet> Removed => _removed.AsObservable();
 
-	public AppDataImageSetsDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public AppDataImageSetsRepository(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
 		_appDataLock = appDataLock;

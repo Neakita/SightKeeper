@@ -10,7 +10,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class FileSystemImageDataAccess : ImageDataAccess
+public sealed class FileSystemImageRepository : ImageRepository
 {
 	public string DirectoryPath
 	{
@@ -18,7 +18,7 @@ public sealed class FileSystemImageDataAccess : ImageDataAccess
 		set => _fileSystemDataAccess.DirectoryPath = value;
 	}
 
-	public FileSystemImageDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public FileSystemImageRepository(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
 		_appDataLock = appDataLock;

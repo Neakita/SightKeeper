@@ -14,9 +14,9 @@ public sealed partial class DataSetSelectionViewModel : ViewModel, DataSetSelect
 	[ObservableProperty] public partial DataSetViewModel? SelectedDataSet { get; set; }
 	public IObservable<DataSetViewModel?> SelectedDataSetChanged => _selectedDataSetChanged.AsObservable();
 
-	public DataSetSelectionViewModel(DataSetViewModelsObservableRepository dataSetsRepository)
+	public DataSetSelectionViewModel(DataSetViewModelsObservableListRepository dataSetsListRepository)
 	{
-		DataSets = dataSetsRepository.Items;
+		DataSets = dataSetsListRepository.Items;
 	}
 
 	IReadOnlyCollection<DataSetDataContext> DataSetSelectionDataContext.DataSets => DataSets;
