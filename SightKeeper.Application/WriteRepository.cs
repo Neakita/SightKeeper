@@ -2,6 +2,6 @@
 
 public interface WriteRepository<in T>
 {
-	void Add(T item);
-	void Remove(T item);
+	void Add(T set);
+	void Remove(T set);
 }

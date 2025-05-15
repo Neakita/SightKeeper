@@ -1,6 +1,9 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
+using SightKeeper.Application.Extensions;
+using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
@@ -11,31 +14,34 @@ public sealed class AppDataImageSetsRepository :
 	WriteRepository<ImageSet>,
 	IDisposable
 {
-	public IReadOnlyCollection<ImageSet> Items => _appDataAccess.Data.ImageSets;
+	[Tag(typeof(AppData))] public required Lock AppDataLock { get; init; }
+	public required AppDataAccess AppDataAccess { get; init; }
+	public required ChangeListener ChangeListener { get; init; }
+	public required WriteImageDataAccess ImageDataAccess { get; init; }
+
+	public IReadOnlyCollection<ImageSet> Items => AppDataAccess.Data.ImageSets;
 	public IObservable<ImageSet> Added => _added.AsObservable();
 	public IObservable<ImageSet> Removed => _removed.AsObservable();
 
-	public AppDataImageSetsRepository(AppDataAccess appDataAccess, ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock)
+	public void Add(ImageSet set)
 	{
-		_appDataAccess = appDataAccess;
-		_changeListener = changeListener;
-		_appDataLock = appDataLock;
+		lock (AppDataLock)
+			AppDataAccess.Data.AddImageSet(set);
+		ChangeListener.SetDataChanged();
+		_added.OnNext(set);
 	}
 
-	public void Add(ImageSet library)
+	public void Remove(ImageSet set)
 	{
-		lock (_appDataLock)
-			_appDataAccess.Data.AddImageSet(library);
-		_changeListener.SetDataChanged();
-		_added.OnNext(library);
-	}
-
-	public void Remove(ImageSet library)
-	{
-		lock (_appDataLock)
-			_appDataAccess.Data.RemoveImageSet(library);
-		_changeListener.SetDataChanged();
-		_removed.OnNext(library);
+		bool canDelete = set.CanDelete();
+		Guard.IsTrue(canDelete);
+		lock (AppDataLock)
+		{
+			AppDataAccess.Data.RemoveImageSet(set);
+			DeleteImagesData(set);
+		}
+		ChangeListener.SetDataChanged();
+		_removed.OnNext(set);
 	}
 
 	public void Dispose()
@@ -44,9 +50,12 @@ public sealed class AppDataImageSetsRepository :
 		_removed.Dispose();
 	}
 
-	private readonly AppDataAccess _appDataAccess;
-	private readonly ChangeListener _changeListener;
-	private readonly Lock _appDataLock;
 	private readonly Subject<ImageSet> _added = new();
 	private readonly Subject<ImageSet> _removed = new();
+
+	private void DeleteImagesData(ImageSet set)
+	{
+		foreach (var image in set.Images)
+			ImageDataAccess.DeleteImageData(image);
+	}
 }

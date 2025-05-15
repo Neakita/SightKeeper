@@ -22,20 +22,23 @@ public sealed class AppDataDataSetsRepository :
 		_appDataLock = appDataLock;
 	}
 
-	public void Add(DataSet dataSet)
+	public void Add(DataSet set)
 	{
 		lock (_appDataLock)
-			_appDataAccess.Data.AddDataSet(dataSet);
+			_appDataAccess.Data.AddDataSet(set);
 		_changeListener.SetDataChanged();
-		_added.OnNext(dataSet);
+		_added.OnNext(set);
 	}
 
-	public void Remove(DataSet dataSet)
+	public void Remove(DataSet set)
 	{
 		lock (_appDataLock)
-			_appDataAccess.Data.RemoveDataSet(dataSet);
+		{
+			_appDataAccess.Data.RemoveDataSet(set);
+			set.AssetsLibrary.ClearAssets();
+		}
 		_changeListener.SetDataChanged();
-		_removed.OnNext(dataSet);
+		_removed.OnNext(set);
 	}
 
 	public void Dispose()

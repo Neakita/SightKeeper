@@ -7,4 +7,5 @@ public interface AssetsOwner<out TAsset> : AssetsContainer<TAsset>
 	TAsset MakeAsset(Image image);
 	TAsset GetOrMakeAsset(Image image);
 	void DeleteAsset(Image image);
+	void ClearAssets();
 }
