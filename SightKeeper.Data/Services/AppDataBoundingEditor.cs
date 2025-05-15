@@ -6,19 +6,19 @@ namespace SightKeeper.Data.Services;
 
 public sealed class AppDataBoundingEditor : BoundingEditor
 {
-	public AppDataBoundingEditor([Tag(typeof(AppData))] Lock appDataLock, AppDataAccess appDataAccess)
+	public AppDataBoundingEditor([Tag(typeof(AppData))] Lock appDataLock, ChangeListener changeListener)
 	{
 		_appDataLock = appDataLock;
-		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 	}
 
 	public void SetBounding(BoundedItem item, Bounding bounding)
 	{
 		lock (_appDataLock)
 			item.Bounding = bounding;
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 	}
 
 	private readonly Lock _appDataLock;
-	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 }

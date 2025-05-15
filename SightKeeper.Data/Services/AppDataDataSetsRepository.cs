@@ -16,9 +16,10 @@ public sealed class AppDataDataSetsRepository :
 	public IObservable<DataSet> Added => _added.AsObservable();
 	public IObservable<DataSet> Removed => _removed.AsObservable();
 
-	public AppDataDataSetsRepository(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public AppDataDataSetsRepository(AppDataAccess appDataAccess, ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 		_appDataLock = appDataLock;
 	}
 
@@ -26,7 +27,7 @@ public sealed class AppDataDataSetsRepository :
 	{
 		lock (_appDataLock)
 			_appDataAccess.Data.AddDataSet(dataSet);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_added.OnNext(dataSet);
 	}
 
@@ -34,7 +35,7 @@ public sealed class AppDataDataSetsRepository :
 	{
 		lock (_appDataLock)
 			_appDataAccess.Data.RemoveDataSet(dataSet);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_removed.OnNext(dataSet);
 	}
 
@@ -45,6 +46,7 @@ public sealed class AppDataDataSetsRepository :
 	}
 
 	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
 	private readonly Subject<DataSet> _added = new();
 	private readonly Subject<DataSet> _removed = new();

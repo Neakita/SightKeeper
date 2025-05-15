@@ -12,9 +12,9 @@ public sealed class FileSystemWeightsDataAccess : WeightsDataAccess
 		set => _weightsDataAccess.DirectoryPath = value;
 	}
 
-	public FileSystemWeightsDataAccess(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public FileSystemWeightsDataAccess(ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock)
 	{
-		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 		_appDataLock = appDataLock;
 	}
 
@@ -37,6 +37,7 @@ public sealed class FileSystemWeightsDataAccess : WeightsDataAccess
 	{
 		lock (_appDataLock)
 			base.AddWeights(library, weights);
+		_changeListener.SetDataChanged();
 	}
 
 	protected override void SaveWeightsData(Weights weights, byte[] data)
@@ -48,7 +49,7 @@ public sealed class FileSystemWeightsDataAccess : WeightsDataAccess
 	{
 		lock (_appDataLock)
 			base.RemoveWeights(library, weights);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 	}
 
 	protected override void RemoveWeightsData(Weights weights)
@@ -56,7 +57,7 @@ public sealed class FileSystemWeightsDataAccess : WeightsDataAccess
 		_weightsDataAccess.Delete(weights);
 	}
 
-	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
 	private readonly FileSystemDataAccess<Weights> _weightsDataAccess = new(".pt");
 }

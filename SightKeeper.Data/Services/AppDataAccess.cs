@@ -30,17 +30,7 @@ public sealed class AppDataAccess : ApplicationSettingsProvider
 
 	public void Save()
 	{
-		if (!_dataChangedSinceLastSave)
-			return;
 		var serializedData = MemoryPackSerializer.Serialize(Data);
 		File.WriteAllBytes(FilePath, serializedData);
-		_dataChangedSinceLastSave = false;
 	}
-
-	internal void SetDataChanged()
-	{
-		 _dataChangedSinceLastSave = true;
-	}
-
-	private bool _dataChangedSinceLastSave;
 }

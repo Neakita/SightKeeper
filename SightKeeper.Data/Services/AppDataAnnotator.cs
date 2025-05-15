@@ -10,10 +10,10 @@ public sealed class AppDataAnnotator : AssetsMaker, AssetsDeleter, ObservableAnn
 {
 	public IObservable<Image> AssetsChanged => _assetsChanged;
 
-	public AppDataAnnotator([Tag(typeof(AppData))] Lock appDataLock, AppDataAccess appDataAccess)
+	public AppDataAnnotator([Tag(typeof(AppData))] Lock appDataLock, ChangeListener changeListener)
 	{
 		_appDataLock = appDataLock;
-		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 	}
 
 	public TAsset MakeAsset<TAsset>(AssetsOwner<TAsset> assetsOwner, Image image)
@@ -21,7 +21,7 @@ public sealed class AppDataAnnotator : AssetsMaker, AssetsDeleter, ObservableAnn
 		TAsset asset;
 		lock (_appDataLock)
 			asset = assetsOwner.MakeAsset(image);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_assetsChanged.OnNext(image);
 		return asset;
 	}
@@ -30,11 +30,11 @@ public sealed class AppDataAnnotator : AssetsMaker, AssetsDeleter, ObservableAnn
 	{
 		lock (_appDataLock)
 			assetsOwner.DeleteAsset(image);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_assetsChanged.OnNext(image);
 	}
 
 	private readonly Subject<Image> _assetsChanged = new();
 	private readonly Lock _appDataLock;
-	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 }

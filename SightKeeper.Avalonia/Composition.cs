@@ -100,7 +100,7 @@ public sealed partial class Composition
 		})
 		.Bind().As(Lifetime.Singleton).To<WriteableBitmapPool>()
 		.Root<ImageLoader>(nameof(ImageLoader))
-		.Bind().As(Lifetime.Singleton).To<PeriodicAppDataSaver>()
+		.Bind().Bind<ChangeListener>().As(Lifetime.Singleton).To<PeriodicAppDataSaver>()
 		.Root<PeriodicAppDataSaver>(nameof(PeriodicAppDataSaver))
 		.Root<AppDataFormatter>(nameof(AppDataFormatter))
 		.Bind(typeof(AppData)).As(Lifetime.Singleton).To<Lock>()

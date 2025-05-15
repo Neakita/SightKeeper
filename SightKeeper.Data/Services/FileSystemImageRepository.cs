@@ -18,9 +18,9 @@ public sealed class FileSystemImageRepository : ImageRepository
 		set => _fileSystemDataAccess.DirectoryPath = value;
 	}
 
-	public FileSystemImageRepository(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public FileSystemImageRepository(ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock)
 	{
-		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 		_appDataLock = appDataLock;
 	}
 
@@ -36,9 +36,9 @@ public sealed class FileSystemImageRepository : ImageRepository
 
 	public override void DeleteImagesRange(ImageSet set, int index, int count)
 	{
-		lock (_appDataAccess)
+		lock (_changeListener)
 			base.DeleteImagesRange(set, index, count);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 	}
 
 	public void ClearUnassociatedImageFiles()
@@ -59,7 +59,7 @@ public sealed class FileSystemImageRepository : ImageRepository
 		Image image;
 		lock (_appDataLock)
 			image = base.CreateImage(set, creationTimestamp, resolution);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		return image;
 	}
 
@@ -85,7 +85,7 @@ public sealed class FileSystemImageRepository : ImageRepository
 		_fileSystemDataAccess.Delete(image);
 	}
 
-	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
 	private readonly FileSystemDataAccess<Image> _fileSystemDataAccess = new(".bin");
 }

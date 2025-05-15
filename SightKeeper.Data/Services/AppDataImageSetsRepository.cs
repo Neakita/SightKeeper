@@ -15,9 +15,10 @@ public sealed class AppDataImageSetsRepository :
 	public IObservable<ImageSet> Added => _added.AsObservable();
 	public IObservable<ImageSet> Removed => _removed.AsObservable();
 
-	public AppDataImageSetsRepository(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public AppDataImageSetsRepository(AppDataAccess appDataAccess, ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 		_appDataLock = appDataLock;
 	}
 
@@ -25,7 +26,7 @@ public sealed class AppDataImageSetsRepository :
 	{
 		lock (_appDataLock)
 			_appDataAccess.Data.AddImageSet(library);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_added.OnNext(library);
 	}
 
@@ -33,7 +34,7 @@ public sealed class AppDataImageSetsRepository :
 	{
 		lock (_appDataLock)
 			_appDataAccess.Data.RemoveImageSet(library);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_removed.OnNext(library);
 	}
 
@@ -44,6 +45,7 @@ public sealed class AppDataImageSetsRepository :
 	}
 
 	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
 	private readonly Subject<ImageSet> _added = new();
 	private readonly Subject<ImageSet> _removed = new();

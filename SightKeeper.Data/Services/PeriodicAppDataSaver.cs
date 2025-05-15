@@ -1,6 +1,6 @@
 namespace SightKeeper.Data.Services;
 
-public sealed class PeriodicAppDataSaver : IDisposable
+public sealed class PeriodicAppDataSaver : ChangeListener, IDisposable
 {
 	public PeriodicAppDataSaver(AppDataAccess appDataAccess)
 	{
@@ -10,6 +10,11 @@ public sealed class PeriodicAppDataSaver : IDisposable
 	public void Start()
 	{
 		new TaskFactory().StartNew(SavePeriodically, TaskCreationOptions.LongRunning);
+	}
+
+	public void SetDataChanged()
+	{
+		_dataChangedSinceLastSave = true;
 	}
 
 	public void Dispose()
@@ -23,7 +28,12 @@ public sealed class PeriodicAppDataSaver : IDisposable
 	private async Task SavePeriodically()
 	{
 		while (await _timer.WaitForNextTickAsync())
-			_appDataAccess.Save();
-		_appDataAccess.Save();
+		{
+			if (_dataChangedSinceLastSave)
+				_appDataAccess.Save();
+			_dataChangedSinceLastSave = false;
+		}
 	}
+
+	private bool _dataChangedSinceLastSave;
 }

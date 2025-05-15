@@ -9,9 +9,9 @@ namespace SightKeeper.Data.Services;
 
 public sealed class AppDataClassifierAnnotator : ClassifierAnnotator
 {
-	public AppDataClassifierAnnotator(AppDataAccess dataAccess, [Tag(typeof(AppData))] Lock appDataLock, AssetsMaker assetsMaker) : base(assetsMaker)
+	public AppDataClassifierAnnotator(ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock, AssetsMaker assetsMaker) : base(assetsMaker)
 	{
-		_dataAccess = dataAccess;
+		_changeListener = changeListener;
 		_appDataLock = appDataLock;
 	}
 
@@ -19,16 +19,16 @@ public sealed class AppDataClassifierAnnotator : ClassifierAnnotator
 	{
 		lock (_appDataLock)
 			base.SetTag(assetsLibrary, image, tag);
-		_dataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 	}
 
 	public override void DeleteAsset(AssetsLibrary<ClassifierAsset> assetsLibrary, Image image)
 	{
 		lock (_appDataLock)
 			base.DeleteAsset(assetsLibrary, image);
-		_dataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 	}
 
-	private readonly AppDataAccess _dataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
 }

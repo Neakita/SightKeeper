@@ -7,9 +7,9 @@ namespace SightKeeper.Data.Services;
 
 public sealed class AppDataDataSetEditor : DataSetEditor
 {
-	public AppDataDataSetEditor(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public AppDataDataSetEditor(ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock)
 	{
-		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 		_appDataLock = appDataLock;
 	}
 
@@ -18,10 +18,10 @@ public sealed class AppDataDataSetEditor : DataSetEditor
 		lock (_appDataLock)
 		{
 			base.Edit(dataSet, data);
-			_appDataAccess.SetDataChanged();
+			_changeListener.SetDataChanged();
 		}
 	}
 
-	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
 }

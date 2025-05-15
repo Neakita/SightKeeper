@@ -14,9 +14,9 @@ public sealed class AppDataPoserAnnotator : PoserAnnotator, ObservablePoserAnnot
 	public IObservable<(PoserItem item, KeyPoint keyPoint)> KeyPointCreated => _keyPointCreated.AsObservable();
 	public IObservable<(PoserItem item, KeyPoint keyPoint)> KeyPointDeleted => _keyPointDeleted.AsObservable();
 
-	public AppDataPoserAnnotator(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public AppDataPoserAnnotator(ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock)
 	{
-		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 		_appDataLock = appDataLock;
 	}
 
@@ -28,7 +28,7 @@ public sealed class AppDataPoserAnnotator : PoserAnnotator, ObservablePoserAnnot
 			keyPoint = item.MakeKeyPoint(tag);
 			keyPoint.Position = position;
 		}
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_keyPointCreated.OnNext((item, keyPoint));
 	}
 
@@ -36,14 +36,14 @@ public sealed class AppDataPoserAnnotator : PoserAnnotator, ObservablePoserAnnot
 	{
 		lock (_appDataLock)
 			keyPoint.Position = position;
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 	}
 
 	public void SetKeyPointVisibility(KeyPoint3D keyPoint, bool isVisible)
 	{
 		lock (_appDataLock)
 			keyPoint.IsVisible = isVisible;
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 	}
 
 	public void DeleteKeyPoint(PoserItem item, Tag tag)
@@ -51,7 +51,7 @@ public sealed class AppDataPoserAnnotator : PoserAnnotator, ObservablePoserAnnot
 		var keyPoint = item.KeyPoints.Single(keyPoint => keyPoint.Tag == tag);
 		lock(_appDataLock)
 			item.DeleteKeyPoint(keyPoint);
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_keyPointDeleted.OnNext((item, keyPoint));
 	}
 
@@ -61,7 +61,7 @@ public sealed class AppDataPoserAnnotator : PoserAnnotator, ObservablePoserAnnot
 		_keyPointDeleted.Dispose();
 	}
 
-	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
 	private readonly Subject<(PoserItem item, KeyPoint keyPoint)> _keyPointCreated = new();
 	private readonly Subject<(PoserItem item, KeyPoint keyPoint)> _keyPointDeleted = new();

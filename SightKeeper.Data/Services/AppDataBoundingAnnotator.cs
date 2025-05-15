@@ -13,10 +13,10 @@ public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoun
 {
 	public IObservable<(ItemsMaker<AssetItem> asset, AssetItem item)> ItemCreated => _itemCreated.AsObservable();
 
-	public AppDataBoundingAnnotator([Tag(typeof(AppData))] Lock appDataLock, AppDataAccess appDataAccess, AssetsMaker assetsMaker)
+	public AppDataBoundingAnnotator([Tag(typeof(AppData))] Lock appDataLock, ChangeListener changeListener, AssetsMaker assetsMaker)
 	{
 		_appDataLock = appDataLock;
-		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 		_assetsMaker = assetsMaker;
 	}
 
@@ -30,7 +30,7 @@ public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoun
 			item = asset.MakeItem(tag);
 			item.Bounding = bounding;
 		}
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_itemCreated.OnNext((asset, item));
 		return item;
 	}
@@ -41,7 +41,7 @@ public sealed class AppDataBoundingAnnotator : BoundingAnnotator, ObservableBoun
 	}
 
 	private readonly Lock _appDataLock;
-	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly AssetsMaker _assetsMaker;
 
 	private readonly Subject<(ItemsMaker<AssetItem>, AssetItem)> _itemCreated = new();

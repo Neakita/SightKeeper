@@ -11,9 +11,9 @@ public sealed class AppDataImageSetEditor : ImageSetEditor
 {
 	public IObservable<ImageSet> Edited => _edited.AsObservable();
 
-	public AppDataImageSetEditor(AppDataAccess appDataAccess, [Tag(typeof(AppData))] Lock appDataLock)
+	public AppDataImageSetEditor(ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock)
 	{
-		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
 		_appDataLock = appDataLock;
 	}
 
@@ -24,11 +24,11 @@ public sealed class AppDataImageSetEditor : ImageSetEditor
 			set.Name = data.Name;
 			set.Description = data.Description;
 		}
-		_appDataAccess.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_edited.OnNext(set);
 	}
 
-	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
 	private readonly Subject<ImageSet> _edited = new();
 }
