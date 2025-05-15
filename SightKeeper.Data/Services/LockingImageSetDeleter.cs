@@ -4,15 +4,13 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class AppDataImageSetDeleter : ImageSetDeleter
+public sealed class LockingImageSetDeleter : ImageSetDeleter
 {
 	[Tag(typeof(AppData))] public required Lock AppDataLock { get; init; }
-	public required ChangeListener ChangeListener { get; init; }
 
 	public override void Delete(ImageSet set)
 	{
 		lock (AppDataLock)
 			base.Delete(set);
-		ChangeListener.SetDataChanged();
 	}
 }
