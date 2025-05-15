@@ -30,7 +30,7 @@ internal sealed class DeleteImageSetCommandFactory
 
 	private async Task DeleteImageSetAsync(ImageSet set)
 	{
-		if (!_imageSetDeleter.CanDelete(set))
+		if (!ImageSetDeleter.CanDelete(set))
 		{
 			var message =
 				$"The library '{set.Name}' cannot be deleted as some dataset references it as asset. " +

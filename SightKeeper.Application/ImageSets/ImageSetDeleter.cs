@@ -1,33 +1,30 @@
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Domain.DataSets;
+using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ImageSets;
 
 public abstract class ImageSetDeleter
 {
-	public virtual bool CanDelete(ImageSet library)
+	public required WriteRepository<ImageSet> ImageSetsRepository { get; init; }
+	public required WriteImageDataAccess ImageDataAccess { get; init; }
+
+	public static bool CanDelete(ImageSet set)
 	{
-		var dataSets = _dataSetsRepository.Items;
-		foreach (var dataSet in dataSets)
-		foreach (var image in library.Images)
-			if (dataSet.AssetsLibrary.Contains(image))
-				return false;
-		return true;
+		return set.Images.All(image => image.Assets.Count == 0);
 	}
 
-	public virtual void Delete(ImageSet library)
+	public virtual void Delete(ImageSet set)
 	{
-		Guard.IsTrue(CanDelete(library));
-		_librariesRepository.Remove(library);
+		var canDelete = CanDelete(set);
+		Guard.IsTrue(canDelete);
+		ImageSetsRepository.Remove(set);
+		DeleteImagesData(set);
 	}
 
-	protected ImageSetDeleter(ReadRepository<DataSet> dataSetsRepository, WriteRepository<ImageSet> librariesRepository)
+	private void DeleteImagesData(ImageSet set)
 	{
-		_dataSetsRepository = dataSetsRepository;
-		_librariesRepository = librariesRepository;
+		foreach (var image in set.Images)
+			ImageDataAccess.DeleteImageData(image);
 	}
-
-	private readonly ReadRepository<DataSet> _dataSetsRepository;
-	private readonly WriteRepository<ImageSet> _librariesRepository;
 }
