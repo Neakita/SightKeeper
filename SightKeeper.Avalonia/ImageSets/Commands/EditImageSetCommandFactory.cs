@@ -47,6 +47,6 @@ internal sealed class EditImageSetCommandFactory
 			set.Name,
 			set.Description);
 		if (await _dialogManager.ShowDialogAsync(dialog))
-			_imageSetEditor.EditLibrary(set, dialog);
+			_imageSetEditor.EditImageSet(set, dialog);
 	}
 }

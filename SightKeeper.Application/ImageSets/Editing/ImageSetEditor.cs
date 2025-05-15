@@ -1,10 +1,17 @@
+using System.Reactive.Subjects;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ImageSets.Editing;
 
-public interface ImageSetEditor
+public class ImageSetEditor
 {
-	IObservable<ImageSet> Edited { get; }
+	public IObservable<ImageSet> Edited => _edited;
 
-	void EditLibrary(ImageSet set, ImageSetData data);
+	public virtual void EditImageSet(ImageSet set, ImageSetData data)
+	{
+		set.Name = data.Name;
+		set.Description = data.Description;
+	}
+
+	private readonly Subject<ImageSet> _edited = new();
 }
