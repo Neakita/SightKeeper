@@ -4,7 +4,7 @@ using Serilog;
 
 namespace SightKeeper.Data.Services;
 
-internal sealed class FileSystemDataAccess<T> where T : notnull
+public sealed class FileSystemDataAccess<T> where T : notnull
 {
 	private readonly ILogger _logger = Log.ForContext<FileSystemDataAccess<T>>();
 

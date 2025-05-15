@@ -1,32 +1,18 @@
-﻿using System.IO.Compression;
-using System.Runtime.InteropServices;
-using CommunityToolkit.HighPerformance;
-using FlakeId;
+﻿using FlakeId;
 using SightKeeper.Application;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
 public sealed class FileSystemImageRepository : ImageRepository
 {
-	public string DirectoryPath
+	public FileSystemImageRepository(FileSystemDataAccess<Image> fileSystemDataAccess, ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock, WriteImageDataAccess writeImageDataAccess) : base(writeImageDataAccess)
 	{
-		get => _fileSystemDataAccess.DirectoryPath;
-		set => _fileSystemDataAccess.DirectoryPath = value;
-	}
-
-	public FileSystemImageRepository(ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock)
-	{
+		_fileSystemDataAccess = fileSystemDataAccess;
 		_changeListener = changeListener;
 		_appDataLock = appDataLock;
-	}
-
-	public override Stream LoadImage(Image image)
-	{
-		return new ZLibStream(_fileSystemDataAccess.OpenReadStream(image), CompressionMode.Decompress);
 	}
 
 	public Id GetId(Image image)
@@ -63,29 +49,7 @@ public sealed class FileSystemImageRepository : ImageRepository
 		return image;
 	}
 
-	protected override void SaveImageData(Image image, ReadOnlySpan2D<Rgba32> data)
-	{
-		using var stream = new ZLibStream(_fileSystemDataAccess.OpenWriteStream(image), CompressionLevel.SmallestSize);
-		if (data.TryGetSpan(out var contiguousData))
-		{
-			var bytes = MemoryMarshal.AsBytes(contiguousData);
-			stream.Write(bytes);
-			return;
-		}
-		for (int i = 0; i < data.Height; i++)
-		{
-			var rowData = data.GetRowSpan(i);
-			var bytes = MemoryMarshal.AsBytes(rowData);
-			stream.Write(bytes);
-		}
-	}
-
-	protected override void DeleteImageData(Image image)
-	{
-		_fileSystemDataAccess.Delete(image);
-	}
-
 	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
-	private readonly FileSystemDataAccess<Image> _fileSystemDataAccess = new(".bin");
+	private readonly FileSystemDataAccess<Image> _fileSystemDataAccess;
 }

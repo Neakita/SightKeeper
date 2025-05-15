@@ -1,4 +1,5 @@
 using FluentAssertions;
+using NSubstitute;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
@@ -33,10 +34,9 @@ public sealed class AppDataBoundingAnnotatorTests
 
 	private static AppDataBoundingAnnotator PrepareAnnotator()
 	{
-		AppDataAccess dataAccess = new();
 		Lock appDataLock = new();
-		AppDataAnnotator annotator = new(appDataLock, dataAccess);
-		AppDataBoundingAnnotator boundingAnnotator = new(appDataLock, dataAccess, annotator);
+		AppDataAnnotator annotator = new(appDataLock, Substitute.For<ChangeListener>());
+		AppDataBoundingAnnotator boundingAnnotator = new(appDataLock, Substitute.For<ChangeListener>(), annotator);
 		return boundingAnnotator;
 	}
 

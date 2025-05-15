@@ -5,7 +5,6 @@ using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Data.Services;
 
-// C-C-Combo!
 public sealed class AppDataDataSetsRepository :
 	ReadRepository<DataSet>,
 	ObservableRepository<DataSet>,

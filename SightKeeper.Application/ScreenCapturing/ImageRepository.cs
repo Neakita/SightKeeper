@@ -8,19 +8,17 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public abstract class ImageRepository : ObservableImageRepository, IDisposable
+public class ImageRepository : ObservableImageRepository, IDisposable
 {
 	public IObservable<Image> Added => _added.AsObservable();
 	public IObservable<Image> Removed => _removed.AsObservable();
 	public IObservable<ImagesRange> ImagesDeleted => _imagesDeleted.AsObservable();
 
-	public abstract Stream LoadImage(Image image);
-
 	public Image CreateImage(ImageSet library, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
 		var image = CreateImage(library, creationTimestamp, resolution);
-		SaveImageData(image, imageData);
+		_writeImageDataAccess.SaveImageData(image, imageData);
 		_added.OnNext(image);
 		return image;
 	}
@@ -36,7 +34,7 @@ public abstract class ImageRepository : ObservableImageRepository, IDisposable
 		set.RemoveImagesRange(index, count);
 		foreach (var image in images)
 		{
-			DeleteImageData(image);
+			_writeImageDataAccess.DeleteImageData(image);
 			_removed.OnNext(image);
 		}
 		ImagesRange imagesRange = new()
@@ -55,14 +53,17 @@ public abstract class ImageRepository : ObservableImageRepository, IDisposable
 		_imagesDeleted.Dispose();
 	}
 
+	protected ImageRepository(WriteImageDataAccess writeImageDataAccess)
+	{
+		_writeImageDataAccess = writeImageDataAccess;
+	}
+
 	protected virtual Image CreateImage(ImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
 	{
 		return set.CreateImage(creationTimestamp, resolution);
 	}
 
-	protected abstract void SaveImageData(Image image, ReadOnlySpan2D<Rgba32> data);
-	protected abstract void DeleteImageData(Image image);
-
+	private readonly WriteImageDataAccess _writeImageDataAccess;
 	private readonly Subject<Image> _added = new();
 	private readonly Subject<Image> _removed = new();
 	private readonly Subject<ImagesRange> _imagesDeleted = new();
