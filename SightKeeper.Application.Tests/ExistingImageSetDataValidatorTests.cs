@@ -1,5 +1,4 @@
 using FluentAssertions;
-using NSubstitute;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Domain.Images;
@@ -35,15 +34,8 @@ public sealed class ExistingImageSetDataValidatorTests
 
 	private static ExistingImageSetDataValidator CreateValidator(ImageSet set, params IEnumerable<ImageSet> otherSets)
 	{
-		var repository = CreateRepository(otherSets.Prepend(set));
+		var repository = Utilities.CreateRepository(otherSets.Prepend(set).ToList());
 		ExistingImageSetDataValidator validator = new(set, repository);
 		return validator;
-	}
-
-	private static ReadRepository<ImageSet> CreateRepository(IEnumerable<ImageSet> sets)
-	{
-		var repository = Substitute.For<ReadRepository<ImageSet>>();
-		repository.Items.Returns(sets.ToList());
-		return repository;
 	}
 }

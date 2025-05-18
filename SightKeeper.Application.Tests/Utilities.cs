@@ -12,4 +12,11 @@ internal static class Utilities
 		data.Description.Returns(description);
 		return data;
 	}
+
+	public static ReadRepository<T> CreateRepository<T>(IReadOnlyCollection<T> items)
+	{
+		var repository = Substitute.For<ReadRepository<T>>();
+		repository.Items.Returns(items);
+		return repository;
+	}
 }
