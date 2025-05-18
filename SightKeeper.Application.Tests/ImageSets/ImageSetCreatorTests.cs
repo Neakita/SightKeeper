@@ -5,7 +5,7 @@ using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Application.Tests;
+namespace SightKeeper.Application.Tests.ImageSets;
 
 public sealed class ImageSetCreatorTests
 {

@@ -1,7 +1,7 @@
 using FluentAssertions;
 using SightKeeper.Application.ImageSets;
 
-namespace SightKeeper.Application.Tests;
+namespace SightKeeper.Application.Tests.ImageSets;
 
 public sealed class ImageSetDataValidatorTests
 {
