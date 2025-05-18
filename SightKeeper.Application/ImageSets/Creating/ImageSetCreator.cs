@@ -1,24 +1,22 @@
+using FluentValidation;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ImageSets.Creating;
 
 public sealed class ImageSetCreator
 {
-	public ImageSetCreator(WriteRepository<ImageSet> repository)
-	{
-		_repository = repository;
-	}
+	[Tag("new")] public required IValidator<ImageSetData> Validator { get; init; }
+	public required WriteRepository<ImageSet> Repository { get; init; }
 
 	public ImageSet Create(ImageSetData data)
 	{
+		Validator.ValidateAndThrow(data);
 		ImageSet library = new()
 		{
 			Name = data.Name,
 			Description = data.Description
 		};
-		_repository.Add(library);
+		Repository.Add(library);
 		return library;
 	}
-
-	private readonly WriteRepository<ImageSet> _repository;
 }
