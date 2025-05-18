@@ -5,11 +5,11 @@ using Vibrance;
 
 namespace SightKeeper.Application;
 
-public sealed class DataAccessObservableListRepository<T> : ObservableListRepository<T>, IDisposable where T : notnull
+public sealed class ComposeObservableListRepository<T> : ObservableListRepository<T>, IDisposable where T : notnull
 {
 	public ReadOnlyObservableList<T> Items => _items;
 
-    public DataAccessObservableListRepository(ObservableRepository<T> observableRepository, ReadRepository<T> readRepository)
+    public ComposeObservableListRepository(ObservableRepository<T> observableRepository, ReadRepository<T> readRepository)
     {
 	    observableRepository.Added.Subscribe(_items.Add).DisposeWith(_disposable);
 	    observableRepository.Removed.Subscribe(item => Guard.IsTrue(_items.Remove(item))).DisposeWith(_disposable);

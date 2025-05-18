@@ -55,7 +55,7 @@ public sealed partial class Composition
 		.As(Lifetime.Singleton).To<AppDataDataSetsRepository>()
 		.Bind<PendingImagesCountReporter>().Bind<ImageSaver<Bgra32>>().As(Lifetime.Singleton)
 		.To<BufferedImageSaver<Bgra32>>()
-		.Bind<ObservableListRepository<TT>>().To<DataAccessObservableListRepository<TT>>()
+		.Bind<ObservableListRepository<TT>>().To<ComposeObservableListRepository<TT>>()
 		.Bind<ScreenBoundsProvider>().To<SharpHookScreenBoundsProvider>()
 		.Bind<HotKeyScreenCapture>().Bind<ImageCapturer>().As(Lifetime.Singleton).To<HotKeyScreenCapture<Bgra32>>()
 		.Bind<PixelConverter<Bgra32, Rgba32>>().To<Bgra32ToRgba32PixelConverter>()
