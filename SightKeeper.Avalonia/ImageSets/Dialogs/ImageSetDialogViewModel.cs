@@ -21,6 +21,7 @@ internal abstract partial class ImageSetDialogViewModel : DialogViewModel<bool>,
 
 	public bool HasErrors => ErrorInfoSource.HasErrors;
 
+	ICommand ImageSetDialogDataContext.ApplyCommand => ApplyCommand;
 	ICommand ImageSetDialogDataContext.CancelCommand => CloseCommand;
 
 	public IEnumerable GetErrors(string? propertyName)
