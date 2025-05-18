@@ -5,9 +5,9 @@ namespace SightKeeper.Application.ImageSets.Editing;
 
 public sealed class ExistingImageSetDataValidator : AbstractValidator<ImageSetData>
 {
-	public ExistingImageSetDataValidator(ImageSet library, IValidator<ImageSetData> baseValidator, ReadRepository<ImageSet> repository)
+	public ExistingImageSetDataValidator(ImageSet set, IValidator<ImageSetData> baseValidator, ReadRepository<ImageSet> repository)
 	{
-		_library = library;
+		_set = set;
 		_repository = repository;
 		Include(baseValidator);
 		RuleFor(data => data.Name)
@@ -16,11 +16,11 @@ public sealed class ExistingImageSetDataValidator : AbstractValidator<ImageSetDa
 			.WithMessage("Name must be unique");
 	}
 
-	private readonly ImageSet _library;
+	private readonly ImageSet _set;
 	private readonly ReadRepository<ImageSet> _repository;
 
 	private bool IsNameFree(string name)
 	{
-		return _repository.Items.All(library => library == _library || library.Name != name);
+		return _repository.Items.All(set => set == _set || set.Name != name);
 	}
 }
