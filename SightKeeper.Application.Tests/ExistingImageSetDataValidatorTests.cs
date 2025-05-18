@@ -36,7 +36,7 @@ public sealed class ExistingImageSetDataValidatorTests
 	private static ExistingImageSetDataValidator CreateValidator(ImageSet set, params IEnumerable<ImageSet> otherSets)
 	{
 		var repository = CreateRepository(otherSets.Prepend(set));
-		ExistingImageSetDataValidator validator = new(set, new ImageSetDataValidator(), repository);
+		ExistingImageSetDataValidator validator = new(set, repository);
 		return validator;
 	}
 

@@ -6,11 +6,10 @@ namespace SightKeeper.Application.ImageSets.Creating;
 public sealed class NewImageSetDataValidator : AbstractValidator<ImageSetData>
 {
 	public NewImageSetDataValidator(
-		IValidator<ImageSetData> imageSetDataValidator,
 		ReadRepository<ImageSet> imageSetRepository)
 	{
 		_imageSetRepository = imageSetRepository;
-		Include(imageSetDataValidator);
+		Include(ImageSetDataValidator.Instance);
 		RuleFor(data => data.Name)
 			.Must((_, name) => IsNameFree(name))
 			.Unless(data => string.IsNullOrEmpty(data.Name))

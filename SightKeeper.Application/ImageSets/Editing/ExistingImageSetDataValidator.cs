@@ -5,11 +5,11 @@ namespace SightKeeper.Application.ImageSets.Editing;
 
 public sealed class ExistingImageSetDataValidator : AbstractValidator<ImageSetData>
 {
-	public ExistingImageSetDataValidator(ImageSet set, IValidator<ImageSetData> baseValidator, ReadRepository<ImageSet> repository)
+	public ExistingImageSetDataValidator(ImageSet set, ReadRepository<ImageSet> repository)
 	{
 		_set = set;
 		_repository = repository;
-		Include(baseValidator);
+		Include(ImageSetDataValidator.Instance);
 		RuleFor(data => data.Name)
 			.Must((_, name) => IsNameFree(name))
 			.Unless(data => string.IsNullOrEmpty(data.Name))

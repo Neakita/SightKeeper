@@ -15,12 +15,10 @@ internal sealed class EditImageSetCommandFactory
 	public EditImageSetCommandFactory(
 		ReadRepository<ImageSet> readImageSetsRepository,
 		ImageSetEditor imageSetEditor,
-		IValidator<ImageSetData> imageSetDataValidator,
 		DialogManager dialogManager)
 	{
 		_readImageSetsRepository = readImageSetsRepository;
 		_imageSetEditor = imageSetEditor;
-		_imageSetDataValidator = imageSetDataValidator;
 		_dialogManager = dialogManager;
 	}
 
@@ -31,7 +29,6 @@ internal sealed class EditImageSetCommandFactory
 
 	private readonly ReadRepository<ImageSet> _readImageSetsRepository;
 	private readonly ImageSetEditor _imageSetEditor;
-	private readonly IValidator<ImageSetData> _imageSetDataValidator;
 	private readonly DialogManager _dialogManager;
 
 	private async Task EditImageSet(ImageSet set)
@@ -39,7 +36,6 @@ internal sealed class EditImageSetCommandFactory
 		var dialogHeader = $"Edit image set '{set.Name}'";
 		IValidator<ImageSetData> validator = new ExistingImageSetDataValidator(
 			set,
-			_imageSetDataValidator,
 			_readImageSetsRepository);
 		using ImageSetDialogViewModel dialog = new(
 			dialogHeader,

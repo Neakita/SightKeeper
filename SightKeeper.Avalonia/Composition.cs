@@ -106,7 +106,6 @@ public sealed partial class Composition
 		.Bind(typeof(AppData)).As(Lifetime.Singleton).To<Lock>()
 		.TagAttribute<TagAttribute>()
 		.Bind<ILogger>().To(context => Log.ForContext(context.ConsumerTypes.Single()))
-		.Bind<IValidator<ImageSetData>>().To<ImageSetDataValidator>()
 		.Bind<IValidator<ImageSetData>>("new").To<NewImageSetDataValidator>()
 		.Bind<IValidator<ImageSetData>>("existing").To<ExistingImageSetDataValidator>()
 		.RootBind<ImagesViewModel>(nameof(ImagesViewModel)).Bind<ImageSelection>().As(Lifetime.Singleton)

@@ -35,9 +35,8 @@ public sealed class NewImageSetDataValidatorTests
 
 	private static NewImageSetDataValidator CreateValidator(params IReadOnlyCollection<ImageSet> repositorySets)
 	{
-		ImageSetDataValidator baseValidator = new();
 		var imageSetsRepository = CreateRepository(repositorySets);
-		NewImageSetDataValidator validator = new(baseValidator, imageSetsRepository);
+		NewImageSetDataValidator validator = new(imageSetsRepository);
 		return validator;
 	}
 
