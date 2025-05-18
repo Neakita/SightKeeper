@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Avalonia.ImageSets.Dialogs;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ImageSets.Commands;

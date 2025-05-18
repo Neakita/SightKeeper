@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
+             xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ImageSets.Dialogs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SightKeeper.Avalonia.ImageSets.ImageSetDialog"
-             x:DataType="imageSets:ImageSetDialogDataContext"
+             x:Class="SightKeeper.Avalonia.ImageSets.Dialogs.ImageSetDialog"
+             x:DataType="dialogs:ImageSetDialogDataContext"
              HorizontalAlignment="Center"
              MinWidth="500">
     <StackPanel Classes="regular-spacing">

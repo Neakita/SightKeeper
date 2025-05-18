@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Avalonia.Dialogs;
 
-namespace SightKeeper.Avalonia.ImageSets;
+namespace SightKeeper.Avalonia.ImageSets.Dialogs;
 
 internal abstract partial class ImageSetDialogViewModel : DialogViewModel<bool>, ImageSetDialogDataContext, INotifyDataErrorInfo, IDisposable
 {

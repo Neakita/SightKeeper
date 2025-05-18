@@ -5,6 +5,7 @@ using FluentValidation;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Avalonia.ImageSets.Dialogs;
 
 namespace SightKeeper.Avalonia.ImageSets.Commands;
 

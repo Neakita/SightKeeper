@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace SightKeeper.Avalonia.ImageSets;
+namespace SightKeeper.Avalonia.ImageSets.Dialogs;
 
 public interface ImageSetDialogDataContext
 {

@@ -2,7 +2,7 @@ using System.ComponentModel;
 using FluentValidation;
 using SightKeeper.Application.ImageSets;
 
-namespace SightKeeper.Avalonia.ImageSets;
+namespace SightKeeper.Avalonia.ImageSets.Dialogs;
 
 internal sealed class ImageSetCreationDialogViewModel : ImageSetDialogViewModel, ImageSetData
 {
