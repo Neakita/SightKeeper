@@ -72,7 +72,7 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 	private readonly IValidator<TValidatable> _validator;
 	private readonly ViewModel _viewModel;
 	private readonly TValidatable _validatable;
-	private System.Collections.Generic.IDictionary<string, string[]> _errors = new Dictionary<string, string[]>();
+	private IDictionary<string, string[]> _errors = new Dictionary<string, string[]>();
 	private bool _validateOnPropertyChanged = true;
 
 	private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
