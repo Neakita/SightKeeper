@@ -3,24 +3,22 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ImageSets.Editing;
 
-public sealed class ExistingImageSetDataValidator : AbstractValidator<ImageSetData>
+public sealed class ExistingImageSetDataValidator : AbstractValidator<ExistingImageSetData>
 {
-	public ExistingImageSetDataValidator(ImageSet set, ReadRepository<ImageSet> repository)
+	public ExistingImageSetDataValidator(ReadRepository<ImageSet> repository)
 	{
-		_set = set;
 		_repository = repository;
 		Include(ImageSetDataValidator.Instance);
 		RuleFor(data => data.Name)
-			.Must((_, name) => IsNameFree(name))
+			.Must((data, name) => IsNameFree(data.ExistingSet, name))
 			.Unless(data => string.IsNullOrEmpty(data.Name))
 			.WithMessage("Name must be unique");
 	}
 
-	private readonly ImageSet _set;
 	private readonly ReadRepository<ImageSet> _repository;
 
-	private bool IsNameFree(string name)
+	private bool IsNameFree(ImageSet subjectSet, string name)
 	{
-		return _repository.Items.All(set => set == _set || set.Name != name);
+		return _repository.Items.All(storedSet => storedSet == subjectSet || storedSet.Name != name);
 	}
 }

@@ -6,7 +6,7 @@
              xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.ImageSets.ImageSetDialog"
-             x:DataType="imageSets:ImageSetDialogViewModel"
+             x:DataType="imageSets:ImageSetDialogDataContext"
              HorizontalAlignment="Center"
              MinWidth="500">
     <StackPanel Classes="regular-spacing">
@@ -27,7 +27,7 @@
                     <TextBlock Text="Apply"/>
                 </StackPanel>
             </Button>
-            <Button Command="{Binding CloseCommand}">
+            <Button Command="{Binding CancelCommand}">
                 <StackPanel Orientation="Horizontal">
                     <icons:MaterialIcon Kind="Close"/>
                     <TextBlock Text="Cancel"/>

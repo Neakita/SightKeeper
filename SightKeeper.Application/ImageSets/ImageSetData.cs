@@ -2,6 +2,6 @@ namespace SightKeeper.Application.ImageSets;
 
 public interface ImageSetData
 {
-	string Name { get; }
-	string Description { get; }
+	public string Name { get; }
+	public string Description { get; }
 }

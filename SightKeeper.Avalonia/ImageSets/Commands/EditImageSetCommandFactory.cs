@@ -2,8 +2,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using FluentValidation;
-using SightKeeper.Application;
-using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Domain.Images;
@@ -13,13 +11,13 @@ namespace SightKeeper.Avalonia.ImageSets.Commands;
 internal sealed class EditImageSetCommandFactory
 {
 	public EditImageSetCommandFactory(
-		ReadRepository<ImageSet> readImageSetsRepository,
 		ImageSetEditor imageSetEditor,
-		DialogManager dialogManager)
+		DialogManager dialogManager,
+		IValidator<ExistingImageSetData> validator)
 	{
-		_readImageSetsRepository = readImageSetsRepository;
 		_imageSetEditor = imageSetEditor;
 		_dialogManager = dialogManager;
+		_validator = validator;
 	}
 
 	public ICommand CreateCommand()
@@ -27,22 +25,14 @@ internal sealed class EditImageSetCommandFactory
 		return new AsyncRelayCommand<ImageSet>(EditImageSet!);
 	}
 
-	private readonly ReadRepository<ImageSet> _readImageSetsRepository;
 	private readonly ImageSetEditor _imageSetEditor;
 	private readonly DialogManager _dialogManager;
+	private readonly IValidator<ExistingImageSetData> _validator;
 
 	private async Task EditImageSet(ImageSet set)
 	{
-		var dialogHeader = $"Edit image set '{set.Name}'";
-		IValidator<ImageSetData> validator = new ExistingImageSetDataValidator(
-			set,
-			_readImageSetsRepository);
-		using ImageSetDialogViewModel dialog = new(
-			dialogHeader,
-			validator,
-			set.Name,
-			set.Description);
-		if (await _dialogManager.ShowDialogAsync(dialog))
-			_imageSetEditor.EditImageSet(set, dialog);
+		using ImageSetEditingDialogViewModel creationDialog = new(set, _validator);
+		if (await _dialogManager.ShowDialogAsync(creationDialog))
+			_imageSetEditor.EditImageSet(set, creationDialog);
 	}
 }

@@ -1,53 +1,45 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FluentValidation;
-using SightKeeper.Application.ImageSets;
 using SightKeeper.Avalonia.Dialogs;
 
 namespace SightKeeper.Avalonia.ImageSets;
 
-internal sealed partial class ImageSetDialogViewModel : DialogViewModel<bool>, ImageSetData, INotifyDataErrorInfo, IDisposable
+internal abstract partial class ImageSetDialogViewModel : DialogViewModel<bool>, ImageSetDialogDataContext, INotifyDataErrorInfo, IDisposable
 {
 	public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged
 	{
-		add => _viewModelValidator.ErrorsChanged += value;
-		remove => _viewModelValidator.ErrorsChanged -= value;
+		add => ErrorInfoSource.ErrorsChanged += value;
+		remove => ErrorInfoSource.ErrorsChanged -= value;
 	}
 
-	public override string Header { get; }
+	[ObservableProperty] public partial string Name { get; set; } = string.Empty;
+	[ObservableProperty] public partial string Description { get; set; } = string.Empty;
 
-	public bool HasErrors => _viewModelValidator.HasErrors;
+	public bool HasErrors => ErrorInfoSource.HasErrors;
 
-	public ImageSetDialogViewModel(string header, IValidator<ImageSetData> validator, string initialName = "", string initialDescription = "")
-	{
-		Header = header;
-		_validator = validator;
-		_name = initialName;
-		_description = initialDescription;
-		_viewModelValidator = new ViewModelValidator<ImageSetData>(validator, this, this);
-		_viewModelValidator.ErrorsChanged += OnErrorsChanged;
-	}
+	ICommand ImageSetDialogDataContext.CancelCommand => CloseCommand;
 
 	public IEnumerable GetErrors(string? propertyName)
 	{
-		return _viewModelValidator.GetErrors(propertyName);
+		return ErrorInfoSource.GetErrors(propertyName);
 	}
 
-	public void Dispose()
+	public virtual void Dispose()
 	{
-		_viewModelValidator.ErrorsChanged -= OnErrorsChanged;
-		_viewModelValidator.Dispose();
+		ErrorInfoSource.ErrorsChanged -= OnErrorsChanged;
 	}
 
 	protected override bool DefaultResult => false;
+	protected abstract INotifyDataErrorInfo ErrorInfoSource { get; }
 
-	private readonly IValidator<ImageSetData> _validator;
-	private readonly ViewModelValidator<ImageSetData> _viewModelValidator;
-	[ObservableProperty] private string _name;
-	[ObservableProperty] private string _description;
+	protected void InitializeErrorHandling()
+	{
+		ErrorInfoSource.ErrorsChanged += OnErrorsChanged;
+	}
 
 	private void OnErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
 	{
@@ -60,8 +52,8 @@ internal sealed partial class ImageSetDialogViewModel : DialogViewModel<bool>, I
 		Return(true);
 	}
 
-	private bool CanApply()
+	protected bool CanApply()
 	{
-		return _validator.Validate(this).IsValid;
+		return !HasErrors;
 	}
 }
