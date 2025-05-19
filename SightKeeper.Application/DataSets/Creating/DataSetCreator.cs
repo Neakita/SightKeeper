@@ -1,4 +1,5 @@
-﻿using SightKeeper.Application.DataSets.Tags;
+﻿using FluentValidation;
+using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
@@ -10,13 +11,15 @@ namespace SightKeeper.Application.DataSets.Creating;
 
 public sealed class DataSetCreator
 {
-	public DataSetCreator(WriteRepository<DataSet> repository)
+	public DataSetCreator(IValidator<DataSetData> validator, WriteRepository<DataSet> repository)
 	{
+		_validator = validator;
 		_repository = repository;
 	}
 
 	public DataSet Create(DataSetData data, DataSetType type)
 	{
+		_validator.ValidateAndThrow(data);
 		DataSet dataSet = type switch
 		{
 			DataSetType.Classifier => new ClassifierDataSet(),
@@ -31,6 +34,7 @@ public sealed class DataSetCreator
 		return dataSet;
 	}
 
+	private readonly IValidator<DataSetData> _validator;
 	private readonly WriteRepository<DataSet> _repository;
 
 	private static void SetGeneralData(DataSet dataSet, DataSetData data)

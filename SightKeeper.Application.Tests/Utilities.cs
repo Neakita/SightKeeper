@@ -1,4 +1,5 @@
 using NSubstitute;
+using SightKeeper.Application.DataSets;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Domain.Images;
@@ -29,5 +30,13 @@ internal static class Utilities
 		var repository = Substitute.For<ReadRepository<T>>();
 		repository.Items.Returns(items);
 		return repository;
+	}
+
+	public static DataSetData CreateDataSetData(string name = "", string description = "")
+	{
+		var data = Substitute.For<DataSetData>();
+		data.Name.Returns(name);
+		data.Description.Returns(description);
+		return data;
 	}
 }
