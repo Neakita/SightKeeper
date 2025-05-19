@@ -61,24 +61,15 @@ public sealed class DataSetCreatorTests
 	[Fact]
 	public void ShouldNotAddDataSetToRepositoryWhenValidationFails()
 	{
-		var validator = CreateImpassableValidator();
-		var repository = Substitute.For<WriteRepository<DataSet>>();
-		DataSetCreator creator = new()
-		{
-			Validator = validator,
-			Repository = repository
-		};
-		var data = Utilities.CreateNewDataSetData();
-		Assert.Throws<ValidationException>(() => creator.Create(data));
+		AttemptToCreateDataSetWithValidationExceptionProvocation(out var repository);
 		repository.DidNotReceive().Add(Arg.Any<DataSet>());
 	}
 
 	private static DataSet CreateDataSetViaCreator(string name, string description)
 	{
-		var validator = CreateValidator();
 		DataSetCreator creator = new()
 		{
-			Validator = validator,
+			Validator = CreateValidator(),
 			Repository = Substitute.For<WriteRepository<DataSet>>()
 		};
 		var data = Utilities.CreateNewDataSetData(name, description);
@@ -87,11 +78,10 @@ public sealed class DataSetCreatorTests
 
 	private static DataSet CreateDataSetViaCreator(out WriteRepository<DataSet> repository)
 	{
-		var validator = CreateValidator();
 		repository = Substitute.For<WriteRepository<DataSet>>();
 		DataSetCreator creator = new()
 		{
-			Validator = validator,
+			Validator = CreateValidator(),
 			Repository = repository
 		};
 		var data = Utilities.CreateNewDataSetData();
@@ -100,16 +90,26 @@ public sealed class DataSetCreatorTests
 
 	private static DataSet CreateDataSetViaCreator(DataSetType type)
 	{
-		var validator = CreateValidator();
-		var repository = Substitute.For<WriteRepository<DataSet>>();
 		DataSetCreator creator = new()
 		{
-			Validator = validator,
-			Repository = repository
+			Validator = CreateValidator(),
+			Repository = Substitute.For<WriteRepository<DataSet>>()
 		};
 		var data = Utilities.CreateNewDataSetData(type: type);
 		var dataSet = creator.Create(data);
 		return dataSet;
+	}
+
+	private static void AttemptToCreateDataSetWithValidationExceptionProvocation(out WriteRepository<DataSet> repository)
+	{
+		repository = Substitute.For<WriteRepository<DataSet>>();
+		DataSetCreator creator = new()
+		{
+			Validator = CreateImpassableValidator(),
+			Repository = repository
+		};
+		var data = Utilities.CreateNewDataSetData();
+		Assert.Throws<ValidationException>(() => creator.Create(data));
 	}
 
 	private static IValidator<NewDataSetData> CreateValidator()
