@@ -1,5 +1,6 @@
 using NSubstitute;
 using SightKeeper.Application.DataSets;
+using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Domain.Images;
@@ -32,11 +33,12 @@ internal static class Utilities
 		return repository;
 	}
 
-	public static DataSetData CreateDataSetData(string name = "", string description = "")
+	public static NewDataSetData CreateNewDataSetData(string name = "", string description = "", DataSetType type = DataSetType.Classifier)
 	{
-		var data = Substitute.For<DataSetData>();
+		var data = Substitute.For<NewDataSetData>();
 		data.Name.Returns(name);
 		data.Description.Returns(description);
+		data.Type.Returns(type);
 		return data;
 	}
 }

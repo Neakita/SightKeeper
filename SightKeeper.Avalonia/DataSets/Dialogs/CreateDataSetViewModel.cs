@@ -1,5 +1,6 @@
 ﻿using System;
 using SightKeeper.Application.DataSets;
+using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
@@ -8,7 +9,7 @@ using PlainTagsEditorViewModel = SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plai
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-internal sealed class CreateDataSetViewModel : DataSetDialogViewModel, DataSetData, IDisposable
+internal sealed class CreateDataSetViewModel : DataSetDialogViewModel, NewDataSetData, IDisposable
 {
 	public override string Header => "Create dataset";
 
@@ -47,4 +48,6 @@ internal sealed class CreateDataSetViewModel : DataSetDialogViewModel, DataSetDa
 	public string Description => DataSetEditor.Description;
 
 	public TagsChanges TagsChanges => (TagsChanges)_tagsEditor;
+
+	public DataSetType Type => TypePicker.SelectedType;
 }

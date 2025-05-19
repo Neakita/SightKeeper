@@ -10,6 +10,7 @@ using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotation;
+using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Creating;
@@ -126,5 +127,6 @@ public sealed partial class Composition
 		.Bind<AnnotationButtonDefinitionFactory>(2).To<DeleteSelectedAssetButtonDefinitionFactory>()
 		.Bind<DataSetSelectionViewModel>().Bind<DataSetSelectionDataContext>().Bind<DataSetSelection>().As(Lifetime.Singleton).To<DataSetSelectionViewModel>()
 		.Bind<FileSystemDataAccess<Image>>().As(Lifetime.Singleton).To(_ => new FileSystemDataAccess<Image>(".bin"))
-		.Bind<WriteImageDataAccess>().Bind<ReadImageDataAccess>().As(Lifetime.Singleton).To<FileSystemImageDataAccess>();
+		.Bind<WriteImageDataAccess>().Bind<ReadImageDataAccess>().As(Lifetime.Singleton).To<FileSystemImageDataAccess>()
+		.Bind<IValidator<NewDataSetData>>().To<NewDataSetDataValidator>();
 }

@@ -11,31 +11,25 @@ namespace SightKeeper.Application.DataSets.Creating;
 
 public sealed class DataSetCreator
 {
-	public DataSetCreator(IValidator<DataSetData> validator, WriteRepository<DataSet> repository)
-	{
-		_validator = validator;
-		_repository = repository;
-	}
+	public required IValidator<NewDataSetData> Validator { get; init; }
+	public required WriteRepository<DataSet> Repository { get; init; }
 
-	public DataSet Create(DataSetData data, DataSetType type)
+	public DataSet Create(NewDataSetData data)
 	{
-		_validator.ValidateAndThrow(data);
-		DataSet dataSet = type switch
+		Validator.ValidateAndThrow(data);
+		DataSet dataSet = data.Type switch
 		{
 			DataSetType.Classifier => new ClassifierDataSet(),
 			DataSetType.Detector => new DetectorDataSet(),
 			DataSetType.Poser2D => new Poser2DDataSet(),
 			DataSetType.Poser3D => new Poser3DDataSet(),
-			_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+			_ => throw new ArgumentOutOfRangeException(nameof(data), data, null)
 		};
 		SetGeneralData(dataSet, data);
 		AddTags(dataSet, data.TagsChanges.NewTags);
-		_repository.Add(dataSet);
+		Repository.Add(dataSet);
 		return dataSet;
 	}
-
-	private readonly IValidator<DataSetData> _validator;
-	private readonly WriteRepository<DataSet> _repository;
 
 	private static void SetGeneralData(DataSet dataSet, DataSetData data)
 	{

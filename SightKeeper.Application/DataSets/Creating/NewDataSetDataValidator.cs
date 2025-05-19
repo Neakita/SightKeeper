@@ -3,14 +3,12 @@ using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Application.DataSets.Creating;
 
-public sealed class NewDataSetDataValidator : AbstractValidator<DataSetData>
+public sealed class NewDataSetDataValidator : AbstractValidator<NewDataSetData>
 {
-	public NewDataSetDataValidator(
-		IValidator<DataSetData> dataSetDataValidator,
-		ReadRepository<DataSet> dataSetsRepository)
+	public NewDataSetDataValidator(ReadRepository<DataSet> dataSetsRepository)
 	{
 		_dataSetsRepository = dataSetsRepository;
-		Include(dataSetDataValidator);
+		Include(DataSetDataValidator.Instance);
 		RuleFor(data => data.Name)
 			.Must((_, dataSetName) => IsNameFree(dataSetName))
 			.Unless(data => string.IsNullOrEmpty(data.Name))

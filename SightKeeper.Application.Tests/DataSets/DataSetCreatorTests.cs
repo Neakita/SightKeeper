@@ -18,11 +18,15 @@ public sealed class DataSetCreatorTests
 	{
 		var validator = CreateValidator();
 		var repository = Substitute.For<WriteRepository<DataSet>>();
-		DataSetCreator creator = new(validator, repository);
+		DataSetCreator creator = new()
+		{
+			Validator = validator,
+			Repository = repository
+		};
 		const string name = "the name";
 		const string description = "the description";
-		var data = Utilities.CreateDataSetData(name, description);
-		var dataSet = creator.Create(data, DataSetType.Classifier);
+		var data = Utilities.CreateNewDataSetData(name, description);
+		var dataSet = creator.Create(data);
 		dataSet.Name.Should().Be(name);
 		dataSet.Description.Should().Be(description);
 		repository.Received().Add(dataSet);
@@ -33,9 +37,13 @@ public sealed class DataSetCreatorTests
 	{
 		var validator = CreateValidator();
 		var repository = Substitute.For<WriteRepository<DataSet>>();
-		DataSetCreator creator = new(validator, repository);
-		var data = Utilities.CreateDataSetData();
-		var dataSet = creator.Create(data, DataSetType.Classifier);
+		DataSetCreator creator = new()
+		{
+			Validator = validator,
+			Repository = repository
+		};
+		var data = Utilities.CreateNewDataSetData(type: DataSetType.Classifier);
+		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<ClassifierDataSet>();
 	}
 
@@ -44,9 +52,13 @@ public sealed class DataSetCreatorTests
 	{
 		var validator = CreateValidator();
 		var repository = Substitute.For<WriteRepository<DataSet>>();
-		DataSetCreator creator = new(validator, repository);
-		var data = Utilities.CreateDataSetData();
-		var dataSet = creator.Create(data, DataSetType.Detector);
+		DataSetCreator creator = new()
+		{
+			Validator = validator,
+			Repository = repository
+		};
+		var data = Utilities.CreateNewDataSetData(type: DataSetType.Detector);
+		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<DetectorDataSet>();
 	}
 
@@ -55,9 +67,13 @@ public sealed class DataSetCreatorTests
 	{
 		var validator = CreateValidator();
 		var repository = Substitute.For<WriteRepository<DataSet>>();
-		DataSetCreator creator = new(validator, repository);
-		var data = Utilities.CreateDataSetData();
-		var dataSet = creator.Create(data, DataSetType.Poser2D);
+		DataSetCreator creator = new()
+		{
+			Validator = validator,
+			Repository = repository
+		};
+		var data = Utilities.CreateNewDataSetData(type: DataSetType.Poser2D);
+		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<Poser2DDataSet>();
 	}
 
@@ -66,9 +82,13 @@ public sealed class DataSetCreatorTests
 	{
 		var validator = CreateValidator();
 		var repository = Substitute.For<WriteRepository<DataSet>>();
-		DataSetCreator creator = new(validator, repository);
-		var data = Utilities.CreateDataSetData();
-		var dataSet = creator.Create(data, DataSetType.Poser3D);
+		DataSetCreator creator = new()
+		{
+			Validator = validator,
+			Repository = repository
+		};
+		var data = Utilities.CreateNewDataSetData(type: DataSetType.Poser3D);
+		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<Poser3DDataSet>();
 	}
 
@@ -77,17 +97,21 @@ public sealed class DataSetCreatorTests
 	{
 		var validator = CreateImpassableValidator();
 		var repository = Substitute.For<WriteRepository<DataSet>>();
-		DataSetCreator creator = new(validator, repository);
-		var data = Utilities.CreateDataSetData();
-		Assert.Throws<ValidationException>(() => creator.Create(data, DataSetType.Classifier));
+		DataSetCreator creator = new()
+		{
+			Validator = validator,
+			Repository = repository
+		};
+		var data = Utilities.CreateNewDataSetData();
+		Assert.Throws<ValidationException>(() => creator.Create(data));
 	}
 
-	private static IValidator<DataSetData> CreateValidator()
+	private static IValidator<NewDataSetData> CreateValidator()
 	{
 		return new InlineValidator<DataSetData>();
 	}
 
-	private static IValidator<DataSetData> CreateImpassableValidator()
+	private static IValidator<NewDataSetData> CreateImpassableValidator()
 	{
 		InlineValidator<DataSetData> validator = new();
 		validator.RuleFor(data => data.Name).Must(_ => false);
