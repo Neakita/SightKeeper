@@ -15,6 +15,7 @@ public class DataSetEditor : IDisposable
 	{
 		SetGeneralData(dataSet, data);
 		UpdateTags(dataSet, data.TagsChanges);
+		_dataSetEdited.OnNext(dataSet);
 	}
 
 	public void Dispose()

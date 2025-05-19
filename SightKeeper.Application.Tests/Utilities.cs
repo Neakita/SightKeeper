@@ -41,4 +41,12 @@ internal static class Utilities
 		data.Type.Returns(type);
 		return data;
 	}
+
+	public static DataSetData CreateDataSetData(string name = "", string description = "")
+	{
+		var data = Substitute.For<DataSetData>();
+		data.Name.Returns(name);
+		data.Description.Returns(description);
+		return data;
+	}
 }
