@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using SightKeeper.Application.DataSets;
+using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
@@ -14,14 +15,15 @@ using PlainTagsEditorViewModel = SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plai
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-internal sealed class EditDataSetViewModel : DataSetDialogViewModel, DataSetData
+internal sealed class EditDataSetViewModel : DataSetDialogViewModel, ExistingDataSetData
 {
-	public override string Header => $"Edit {_dataSet.Name}";
+	public override string Header => $"Edit {DataSet.Name}";
 	public override TagsEditorDataContext TagsEditor { get; }
+	public DataSet DataSet { get; }
 
 	public EditDataSetViewModel(DataSet dataSet) : base(dataSet)
 	{
-		_dataSet = dataSet;
+		DataSet = dataSet;
 		TagsEditor = dataSet switch
 		{
 			ClassifierDataSet or DetectorDataSet => new PlainTagsEditorViewModel(dataSet.TagsLibrary.Tags),
@@ -29,8 +31,6 @@ internal sealed class EditDataSetViewModel : DataSetDialogViewModel, DataSetData
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
 		};
 	}
-
-	private readonly DataSet _dataSet;
 
 	public string Name => DataSetEditor.Name;
 

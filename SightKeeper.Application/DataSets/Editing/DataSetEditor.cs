@@ -1,5 +1,6 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using FluentValidation;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Poser;
@@ -9,10 +10,14 @@ namespace SightKeeper.Application.DataSets.Editing;
 
 public class DataSetEditor : IDisposable
 {
+	public required IValidator<ExistingDataSetData> Validator { get; init; }
+
 	public IObservable<DataSet> DataSetEdited => _dataSetEdited.AsObservable();
 
-	public virtual void Edit(DataSet dataSet, DataSetData data)
+	public virtual void Edit(ExistingDataSetData data)
 	{
+		var dataSet = data.DataSet;
+		Validator.ValidateAndThrow(data);
 		SetGeneralData(dataSet, data);
 		UpdateTags(dataSet, data.TagsChanges);
 		_dataSetEdited.OnNext(dataSet);

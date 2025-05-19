@@ -1,8 +1,10 @@
 using NSubstitute;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
+using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Editing;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Tests;
@@ -42,9 +44,10 @@ internal static class Utilities
 		return data;
 	}
 
-	public static DataSetData CreateDataSetData(string name = "", string description = "")
+	public static ExistingDataSetData CreateExistingDataSetData(DataSet dataSet, string name = "", string description = "")
 	{
-		var data = Substitute.For<DataSetData>();
+		var data = Substitute.For<ExistingDataSetData>();
+		data.DataSet.Returns(dataSet);
 		data.Name.Returns(name);
 		data.Description.Returns(description);
 		return data;
