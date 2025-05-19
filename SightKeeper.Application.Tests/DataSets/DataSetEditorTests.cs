@@ -12,15 +12,9 @@ public sealed class DataSetEditorTests
 	[Fact]
 	public void ShouldChangeDataSetProperties()
 	{
-		var dataSet = CreateDataSet();
-		DataSetEditor editor = new()
-		{
-			Validator = CreateValidator()
-		};
 		const string name = "new name";
 		const string description = "new description";
-		var data = Utilities.CreateExistingDataSetData(dataSet, name, description);
-		editor.Edit(data);
+		EditDataSetViaEditor(name, description, out var dataSet);
 		dataSet.Name.Should().Be(name);
 		dataSet.Description.Should().Be(description);
 	}
@@ -28,47 +22,73 @@ public sealed class DataSetEditorTests
 	[Fact]
 	public void ShouldNotifyObserver()
 	{
-		var dataSet = CreateDataSet();
-		DataSetEditor editor = new()
-		{
-			Validator = CreateValidator()
-		};
-		var data = Utilities.CreateExistingDataSetData(dataSet, "new name", "new description");
-		var observer = Substitute.For<IObserver<DataSet>>();
-		editor.DataSetEdited.Subscribe(observer);
-		editor.Edit(data);
+		EditDataSetViaEditor(out var dataSet, out var observer);
 		observer.Received().OnNext(dataSet);
 	}
 
 	[Fact]
 	public void ShouldNotChangeDataSetPropertiesWhenValidationFails()
 	{
-		const string name = "old name";
-		const string description = "old description";
-		var dataSet = CreateDataSet(name, description);
-		DataSetEditor editor = new()
-		{
-			Validator = CreateImpassableValidator()
-		};
-		var data = Utilities.CreateExistingDataSetData(dataSet, "new name", "new description");
-		Assert.Throws<ValidationException>(() => editor.Edit(data));
-		dataSet.Name.Should().Be(name);
-		dataSet.Description.Should().Be(description);
+		const string initialName = "the name";
+		const string initialDescription = "the description";
+		AttemptToEditDataSetWithValidationExceptionProvocation(initialName, initialDescription, out var dataSet);
+		dataSet.Name.Should().Be(initialName);
+		dataSet.Description.Should().Be(initialDescription);
 	}
 
 	[Fact]
 	public void ShouldNotNotifyObserverWhenValidationFails()
 	{
-		var dataSet = CreateDataSet();
+		AttemptToEditDataSetWithValidationExceptionProvocation(out var dataSet, out var observer);
+		observer.DidNotReceive().OnNext(dataSet);
+	}
+
+	private static void EditDataSetViaEditor(string name, string description, out DataSet dataSet)
+	{
+		dataSet = CreateDataSet();
+		DataSetEditor editor = new()
+		{
+			Validator = CreateValidator()
+		};
+		var data = Utilities.CreateExistingDataSetData(dataSet, name, description);
+		editor.Edit(data);
+	}
+
+	private static void EditDataSetViaEditor(out DataSet dataSet, out IObserver<DataSet> observer)
+	{
+		dataSet = CreateDataSet();
+		DataSetEditor editor = new()
+		{
+			Validator = CreateValidator()
+		};
+		var data = Utilities.CreateExistingDataSetData(dataSet, "new name", "new description");
+		observer = Substitute.For<IObserver<DataSet>>();
+		editor.DataSetEdited.Subscribe(observer);
+		editor.Edit(data);
+	}
+
+	private static void AttemptToEditDataSetWithValidationExceptionProvocation(string initialName, string initialDescription, out DataSet dataSet)
+	{
+		dataSet = CreateDataSet(initialName, initialDescription);
 		DataSetEditor editor = new()
 		{
 			Validator = CreateImpassableValidator()
 		};
 		var data = Utilities.CreateExistingDataSetData(dataSet, "new name", "new description");
-		var observer = Substitute.For<IObserver<DataSet>>();
+		Assert.Throws<ValidationException>(() => editor.Edit(data));
+	}
+
+	private static void AttemptToEditDataSetWithValidationExceptionProvocation(out DataSet dataSet, out IObserver<DataSet> observer)
+	{
+		dataSet = CreateDataSet();
+		DataSetEditor editor = new()
+		{
+			Validator = CreateImpassableValidator()
+		};
+		var data = Utilities.CreateExistingDataSetData(dataSet, "new name", "new description");
+		observer = Substitute.For<IObserver<DataSet>>();
 		editor.DataSetEdited.Subscribe(observer);
 		Assert.Throws<ValidationException>(() => editor.Edit(data));
-		observer.DidNotReceive().OnNext(dataSet);
 	}
 
 	private static DataSet CreateDataSet(string name = "", string description = "")
