@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.DataSets;
 
-internal sealed class DataSetDataValidator : AbstractValidator<DataSetData>
+public sealed class DataSetDataValidator : AbstractValidator<DataSetData>
 {
 	public static DataSetDataValidator Instance { get; } = new();
 
