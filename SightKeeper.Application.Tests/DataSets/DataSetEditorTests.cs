@@ -2,8 +2,10 @@ using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
 using SightKeeper.Application.DataSets.Editing;
+using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.Tests.DataSets;
 

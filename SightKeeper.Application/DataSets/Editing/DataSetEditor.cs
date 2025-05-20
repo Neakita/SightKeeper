@@ -46,12 +46,10 @@ public class DataSetEditor : IDisposable
 			CreateNewTag(dataSet.TagsLibrary, tag);
 	}
 
-	private static void RemoveTag(TagsLibrary tagsLibrary, Tag tag)
+	private static void RemoveTag(TagsOwner<Tag> tagsOwner, Tag tag)
 	{
-		if (tagsLibrary is TagsLibrary<Tag> plainTagsLibrary)
-			plainTagsLibrary.DeleteTag(tag);
-		else if (tagsLibrary is TagsLibrary<PoserTag> poserTagsLibrary)
-			poserTagsLibrary.DeleteTag((PoserTag)tag);
+		var tagIndex = tagsOwner.Tags.Index().First(t => t.Item == tag).Index;
+		tagsOwner.DeleteTagAt(tagIndex);
 	}
 
 	private static void EditTag(EditedTagData editedTagData)

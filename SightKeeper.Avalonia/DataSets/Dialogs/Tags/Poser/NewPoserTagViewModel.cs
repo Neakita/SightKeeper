@@ -15,7 +15,7 @@ internal partial class NewPoserTagViewModel : EditableTagViewModel, EditablePose
 
 	ICommand EditablePoserTagDataContext.CreateKeyPointTagCommand => CreateKeyPointTagCommand;
 
-	IReadOnlyCollection<NewTagData> NewPoserTagData.KeyPointTags => _keyPointTags;
+	IEnumerable<NewTagData> NewPoserTagData.KeyPointTags => _keyPointTags;
 
 	[RelayCommand]
 	private void CreateKeyPointTag(string name)
