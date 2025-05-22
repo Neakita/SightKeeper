@@ -14,7 +14,7 @@ public sealed class ExistingDataSetDataValidatorTests
 		var dataSet1 = CreateDataSet("data set 1");
 		var dataSet2 = CreateDataSet("data set 2");
 		var validator = CreateValidator(dataSet1, dataSet2);
-		var data = Utilities.CreateExistingDataSetData(dataSet2, "data set 3");
+		var data = new FakeExistingDataSetData(dataSet2, "data set 3");
 		var result = validator.Validate(data);
 		result.IsValid.Should().BeTrue();
 	}
@@ -25,7 +25,7 @@ public sealed class ExistingDataSetDataValidatorTests
 		var dataSet1 = CreateDataSet("data set 1");
 		var dataSet2 = CreateDataSet("data set 2");
 		var validator = CreateValidator(dataSet1, dataSet2);
-		var data = Utilities.CreateExistingDataSetData(dataSet1, "data set 2");
+		var data = new FakeExistingDataSetData(dataSet1, "data set 2");
 		var result = validator.Validate(data);
 		result.Errors.Should().Contain(failure => failure.PropertyName == nameof(ExistingDataSetData.Name));
 	}

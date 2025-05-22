@@ -17,8 +17,6 @@ internal sealed partial class ExistingPoserTagViewModel : EditableTagViewModel, 
 
 	uint EditedTagData.Color => Color.ToUInt32();
 
-	Tag EditedTagData.Tag => Tag;
-
 	public bool IsEffectivelyEdited => Name != Tag.Name || Color.ToUInt32() != Tag.Color;
 
 	public ExistingPoserTagViewModel(PoserTag tag)

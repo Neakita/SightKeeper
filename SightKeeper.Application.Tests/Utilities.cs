@@ -43,13 +43,4 @@ internal static class Utilities
 		data.Type.Returns(type);
 		return data;
 	}
-
-	public static ExistingDataSetData CreateExistingDataSetData(DataSet dataSet, string name = "", string description = "")
-	{
-		var data = Substitute.For<ExistingDataSetData>();
-		data.DataSet.Returns(dataSet);
-		data.Name.Returns(name);
-		data.Description.Returns(description);
-		return data;
-	}
 }
