@@ -1,6 +1,4 @@
 using NSubstitute;
-using SightKeeper.Application.DataSets;
-using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Domain.Images;

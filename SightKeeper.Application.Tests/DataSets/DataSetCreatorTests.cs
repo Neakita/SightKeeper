@@ -7,6 +7,7 @@ using SightKeeper.Application.Tests.DataSets.Fakes;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Poser3D;
 
@@ -78,6 +79,27 @@ public sealed class DataSetCreatorTests
 		var data = new FakeNewDataSetData();
 		Assert.Throws<ValidationException>(() => creator.Create(data));
 		repository.DidNotReceive().Add(Arg.Any<DataSet>());
+	}
+
+	[Fact]
+	public void ShouldCreateDataSetWithTags()
+	{
+		const string tagName = "the tag";
+		var creator = CreateCreator();
+		var data = FakeNewDataSetData.CreateWithTags(tagName);
+		var dataSet = creator.Create(data);
+		dataSet.TagsLibrary.Tags.Should().Contain(tag => tag.Name == tagName);
+	}
+
+	[Fact]
+	public void ShouldCreateDataSetWithKeyPointTag()
+	{
+		const string keyPointTagName = "the key point tag";
+		var creator = CreateCreator();
+		var data = FakeNewDataSetData.CreateWithKeyPointTags(keyPointTagName);
+		var dataSet = creator.Create(data);
+		dataSet.Should().BeAssignableTo<PoserDataSet>().Which.TagsLibrary.Tags
+			.Should().Contain(tag => tag.KeyPointTags.Any(keyPointTag => keyPointTag.Name == keyPointTagName));
 	}
 
 	private static DataSetCreator CreateCreator()

@@ -14,4 +14,11 @@ internal sealed class FakeNewPoserTagData : NewPoserTagData
 		Color = default;
 		KeyPointTags = keyPointTags;
 	}
+
+	public FakeNewPoserTagData(IEnumerable<NewTagData> keyPointTags)
+	{
+		Name = string.Empty;
+		Color = default;
+		KeyPointTags = keyPointTags;
+	}
 }
