@@ -18,7 +18,9 @@ public sealed class DataSetCreatorTests
 	{
 		const string name = "the name";
 		const string description = "the description";
-		var dataSet = CreateDataSetViaCreator(name, description);
+		var creator = CreateCreator();
+		var data = Utilities.CreateNewDataSetData(name, description);
+		var dataSet = creator.Create(data);
 		dataSet.Name.Should().Be(name);
 		dataSet.Description.Should().Be(description);
 	}
@@ -26,57 +28,68 @@ public sealed class DataSetCreatorTests
 	[Fact]
 	public void ShouldAddDataSetToRepository()
 	{
-		var dataSet = CreateDataSetViaCreator(out var repository);
+		var creator = CreateCreator(out var repository);
+		var data = Utilities.CreateNewDataSetData();
+		var dataSet = creator.Create(data);
 		repository.Received().Add(dataSet);
 	}
 
 	[Fact]
 	public void ShouldCreateClassifierDataSet()
 	{
-		var dataSet = CreateDataSetViaCreator(DataSetType.Classifier);
+		var creator = CreateCreator();
+		var data = Utilities.CreateNewDataSetData(type: DataSetType.Classifier);
+		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<ClassifierDataSet>();
 	}
 
 	[Fact]
 	public void ShouldCreateDetectorDataSet()
 	{
-		var dataSet = CreateDataSetViaCreator(DataSetType.Detector);
+		var creator = CreateCreator();
+		var data = Utilities.CreateNewDataSetData(type: DataSetType.Detector);
+		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<DetectorDataSet>();
 	}
 
 	[Fact]
 	public void ShouldCreatePoser2DDataSet()
 	{
-		var dataSet = CreateDataSetViaCreator(DataSetType.Poser2D);
+		var creator = CreateCreator();
+		var data = Utilities.CreateNewDataSetData(type: DataSetType.Poser2D);
+		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<Poser2DDataSet>();
 	}
 
 	[Fact]
 	public void ShouldCreatePoser3DDataSet()
 	{
-		var dataSet = CreateDataSetViaCreator(DataSetType.Poser3D);
+		var creator = CreateCreator();
+		var data = Utilities.CreateNewDataSetData(type: DataSetType.Poser3D);
+		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<Poser3DDataSet>();
 	}
 
 	[Fact]
 	public void ShouldNotAddDataSetToRepositoryWhenValidationFails()
 	{
-		AttemptToCreateDataSetWithValidationExceptionProvocation(out var repository);
+		var creator = CreateCreatorWithImpassableValidator(out var repository);
+		var data = Utilities.CreateNewDataSetData();
+		Assert.Throws<ValidationException>(() => creator.Create(data));
 		repository.DidNotReceive().Add(Arg.Any<DataSet>());
 	}
 
-	private static DataSet CreateDataSetViaCreator(string name, string description)
+	private static DataSetCreator CreateCreator()
 	{
 		DataSetCreator creator = new()
 		{
 			Validator = CreateValidator(),
 			Repository = Substitute.For<WriteRepository<DataSet>>()
 		};
-		var data = Utilities.CreateNewDataSetData(name, description);
-		return creator.Create(data);
+		return creator;
 	}
 
-	private static DataSet CreateDataSetViaCreator(out WriteRepository<DataSet> repository)
+	private static DataSetCreator CreateCreator(out WriteRepository<DataSet> repository)
 	{
 		repository = Substitute.For<WriteRepository<DataSet>>();
 		DataSetCreator creator = new()
@@ -84,23 +97,15 @@ public sealed class DataSetCreatorTests
 			Validator = CreateValidator(),
 			Repository = repository
 		};
-		var data = Utilities.CreateNewDataSetData();
-		return creator.Create(data);
+		return creator;
 	}
 
-	private static DataSet CreateDataSetViaCreator(DataSetType type)
+	private static IValidator<NewDataSetData> CreateValidator()
 	{
-		DataSetCreator creator = new()
-		{
-			Validator = CreateValidator(),
-			Repository = Substitute.For<WriteRepository<DataSet>>()
-		};
-		var data = Utilities.CreateNewDataSetData(type: type);
-		var dataSet = creator.Create(data);
-		return dataSet;
+		return new InlineValidator<DataSetData>();
 	}
 
-	private static void AttemptToCreateDataSetWithValidationExceptionProvocation(out WriteRepository<DataSet> repository)
+	private static DataSetCreator CreateCreatorWithImpassableValidator(out WriteRepository<DataSet> repository)
 	{
 		repository = Substitute.For<WriteRepository<DataSet>>();
 		DataSetCreator creator = new()
@@ -108,13 +113,7 @@ public sealed class DataSetCreatorTests
 			Validator = CreateImpassableValidator(),
 			Repository = repository
 		};
-		var data = Utilities.CreateNewDataSetData();
-		Assert.Throws<ValidationException>(() => creator.Create(data));
-	}
-
-	private static IValidator<NewDataSetData> CreateValidator()
-	{
-		return new InlineValidator<DataSetData>();
+		return creator;
 	}
 
 	private static IValidator<NewDataSetData> CreateImpassableValidator()
