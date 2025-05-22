@@ -6,7 +6,7 @@ namespace SightKeeper.Application.ScreenCapturing;
 
 public class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32>
 {
-	protected override void Convert(ReadOnlySpan<Bgra32> source, Span<Rgba32> target)
+	public override void Convert(ReadOnlySpan<Bgra32> source, Span<Rgba32> target)
 	{
 		var packedSource = MemoryMarshal.Cast<Bgra32, uint>(source);
 		var packedTarget = MemoryMarshal.Cast<Rgba32, uint>(target);

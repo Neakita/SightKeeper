@@ -21,5 +21,5 @@ public abstract class PixelConverter<TFrom, TTo>
 		}
 	}
 
-	protected abstract void Convert(ReadOnlySpan<TFrom> source, Span<TTo> target);
+	public abstract void Convert(ReadOnlySpan<TFrom> source, Span<TTo> target);
 }
