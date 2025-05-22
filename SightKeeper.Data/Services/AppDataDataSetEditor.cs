@@ -1,7 +1,5 @@
 using SightKeeper.Application;
-using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
-using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Data.Services;
 

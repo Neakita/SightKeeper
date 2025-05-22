@@ -1,10 +1,8 @@
 using NSubstitute;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
-using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Editing;
-using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Tests;

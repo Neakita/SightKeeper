@@ -1,6 +1,6 @@
 using SightKeeper.Application.DataSets.Tags;
 
-namespace SightKeeper.Application.Tests.DataSets;
+namespace SightKeeper.Application.Tests.DataSets.Fakes;
 
 internal sealed class FakeNewPoserTagData : NewPoserTagData
 {

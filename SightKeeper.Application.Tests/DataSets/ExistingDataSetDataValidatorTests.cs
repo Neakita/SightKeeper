@@ -1,6 +1,7 @@
 using FluentAssertions;
 using FluentValidation;
 using SightKeeper.Application.DataSets.Editing;
+using SightKeeper.Application.Tests.DataSets.Fakes;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 

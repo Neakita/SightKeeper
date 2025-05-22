@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Application.Tests.DataSets;
+namespace SightKeeper.Application.Tests.DataSets.Fakes;
 
 internal sealed class FakeExistingDataSetData : ExistingDataSetData
 {

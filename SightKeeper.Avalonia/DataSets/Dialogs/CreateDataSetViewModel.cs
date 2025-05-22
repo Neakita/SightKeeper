@@ -5,7 +5,6 @@ using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
-using SightKeeper.Domain.DataSets;
 using PlainTagsEditorViewModel = SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain.PlainTagsEditorViewModel;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;

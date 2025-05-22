@@ -10,7 +10,6 @@ using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application;
 using SightKeeper.Application.Annotation;
-using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ImageSets;

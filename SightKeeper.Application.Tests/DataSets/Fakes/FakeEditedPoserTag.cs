@@ -1,7 +1,7 @@
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Poser;
 
-namespace SightKeeper.Application.Tests.DataSets;
+namespace SightKeeper.Application.Tests.DataSets.Fakes;
 
 internal sealed class FakeEditedPoserTag : EditedPoserTagData
 {

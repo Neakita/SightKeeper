@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
