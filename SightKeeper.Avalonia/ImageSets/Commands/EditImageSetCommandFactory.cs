@@ -32,8 +32,8 @@ internal sealed class EditImageSetCommandFactory
 
 	private async Task EditImageSet(ImageSet set)
 	{
-		using ImageSetEditingDialogViewModel creationDialog = new(set, _validator);
-		if (await _dialogManager.ShowDialogAsync(creationDialog))
-			_imageSetEditor.EditImageSet(set, creationDialog);
+		using ImageSetEditingDialogViewModel dialog = new(set, _validator);
+		if (await _dialogManager.ShowDialogAsync(dialog))
+			_imageSetEditor.EditImageSet(dialog);
 	}
 }

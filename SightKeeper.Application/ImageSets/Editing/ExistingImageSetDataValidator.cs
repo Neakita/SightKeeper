@@ -10,7 +10,7 @@ public sealed class ExistingImageSetDataValidator : AbstractValidator<ExistingIm
 		_repository = repository;
 		Include(ImageSetDataValidator.Instance);
 		RuleFor(data => data.Name)
-			.Must((data, name) => IsNameFree(data.ExistingSet, name))
+			.Must((data, name) => IsNameFree(data.Set, name))
 			.Unless(data => string.IsNullOrEmpty(data.Name))
 			.WithMessage("Name must be unique");
 	}

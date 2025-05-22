@@ -7,12 +7,12 @@ namespace SightKeeper.Avalonia.ImageSets.Dialogs;
 
 internal sealed class ImageSetEditingDialogViewModel : ImageSetDialogViewModel, ExistingImageSetData
 {
-	public override string Header => $"Edit image set '{ExistingSet.Name}'";
-	public ImageSet ExistingSet { get; }
+	public override string Header => $"Edit image set '{Set.Name}'";
+	public ImageSet Set { get; }
 
 	public ImageSetEditingDialogViewModel(ImageSet set, IValidator<ExistingImageSetData> validator)
 	{
-		ExistingSet = set;
+		Set = set;
 		Name = set.Name;
 		Description = set.Description;
 		_viewModelValidator = new ViewModelValidator<ExistingImageSetData>(validator, this, this);

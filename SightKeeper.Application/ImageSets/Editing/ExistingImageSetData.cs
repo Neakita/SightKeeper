@@ -4,5 +4,5 @@ namespace SightKeeper.Application.ImageSets.Editing;
 
 public interface ExistingImageSetData : ImageSetData
 {
-	ImageSet ExistingSet { get; }
+	ImageSet Set { get; }
 }
