@@ -3,6 +3,7 @@ using FluentValidation;
 using NSubstitute;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
+using SightKeeper.Application.Tests.DataSets.Fakes;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
@@ -19,7 +20,7 @@ public sealed class DataSetCreatorTests
 		const string name = "the name";
 		const string description = "the description";
 		var creator = CreateCreator();
-		var data = Utilities.CreateNewDataSetData(name, description);
+		var data = new FakeNewDataSetData(name, description);
 		var dataSet = creator.Create(data);
 		dataSet.Name.Should().Be(name);
 		dataSet.Description.Should().Be(description);
@@ -29,7 +30,7 @@ public sealed class DataSetCreatorTests
 	public void ShouldAddDataSetToRepository()
 	{
 		var creator = CreateCreator(out var repository);
-		var data = Utilities.CreateNewDataSetData();
+		var data = new FakeNewDataSetData();
 		var dataSet = creator.Create(data);
 		repository.Received().Add(dataSet);
 	}
@@ -38,7 +39,7 @@ public sealed class DataSetCreatorTests
 	public void ShouldCreateClassifierDataSet()
 	{
 		var creator = CreateCreator();
-		var data = Utilities.CreateNewDataSetData(type: DataSetType.Classifier);
+		var data = new FakeNewDataSetData(DataSetType.Classifier);
 		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<ClassifierDataSet>();
 	}
@@ -47,7 +48,7 @@ public sealed class DataSetCreatorTests
 	public void ShouldCreateDetectorDataSet()
 	{
 		var creator = CreateCreator();
-		var data = Utilities.CreateNewDataSetData(type: DataSetType.Detector);
+		var data = new FakeNewDataSetData(DataSetType.Detector);
 		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<DetectorDataSet>();
 	}
@@ -56,7 +57,7 @@ public sealed class DataSetCreatorTests
 	public void ShouldCreatePoser2DDataSet()
 	{
 		var creator = CreateCreator();
-		var data = Utilities.CreateNewDataSetData(type: DataSetType.Poser2D);
+		var data = new FakeNewDataSetData(DataSetType.Poser2D);
 		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<Poser2DDataSet>();
 	}
@@ -65,7 +66,7 @@ public sealed class DataSetCreatorTests
 	public void ShouldCreatePoser3DDataSet()
 	{
 		var creator = CreateCreator();
-		var data = Utilities.CreateNewDataSetData(type: DataSetType.Poser3D);
+		var data = new FakeNewDataSetData(DataSetType.Poser3D);
 		var dataSet = creator.Create(data);
 		dataSet.Should().BeOfType<Poser3DDataSet>();
 	}
@@ -74,7 +75,7 @@ public sealed class DataSetCreatorTests
 	public void ShouldNotAddDataSetToRepositoryWhenValidationFails()
 	{
 		var creator = CreateCreatorWithImpassableValidator(out var repository);
-		var data = Utilities.CreateNewDataSetData();
+		var data = new FakeNewDataSetData();
 		Assert.Throws<ValidationException>(() => creator.Create(data));
 		repository.DidNotReceive().Add(Arg.Any<DataSet>());
 	}

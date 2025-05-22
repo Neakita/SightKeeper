@@ -1,6 +1,7 @@
 using FluentAssertions;
 using FluentValidation;
 using SightKeeper.Application.DataSets.Creating;
+using SightKeeper.Application.Tests.DataSets.Fakes;
 using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Application.Tests.DataSets;
@@ -11,7 +12,7 @@ public sealed class NewDataSetDataValidatorTests
 	public void ShouldPassValidation()
 	{
 		var validator = CreateValidator("data set 1", "data set 2");
-		var data = Utilities.CreateNewDataSetData("data set 3");
+		var data = new FakeNewDataSetData("data set 3");
 		var result = validator.Validate(data);
 		result.IsValid.Should().BeTrue();
 	}
@@ -20,7 +21,7 @@ public sealed class NewDataSetDataValidatorTests
 	public void ShouldNotPassValidationWhenNameCollides()
 	{
 		var validator = CreateValidator("data set 1", "data set 2");
-		var data = Utilities.CreateNewDataSetData("data set 2");
+		var data = new FakeNewDataSetData("data set 2");
 		var result = validator.Validate(data);
 		result.Errors.Should().Contain(failure => failure.PropertyName == nameof(NewDataSetData.Name));
 	}

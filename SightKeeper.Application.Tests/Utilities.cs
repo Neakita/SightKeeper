@@ -32,13 +32,4 @@ internal static class Utilities
 		repository.Items.Returns(items);
 		return repository;
 	}
-
-	public static NewDataSetData CreateNewDataSetData(string name = "", string description = "", DataSetType type = DataSetType.Classifier)
-	{
-		var data = Substitute.For<NewDataSetData>();
-		data.Name.Returns(name);
-		data.Description.Returns(description);
-		data.Type.Returns(type);
-		return data;
-	}
 }
