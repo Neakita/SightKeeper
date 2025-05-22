@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Tags;
@@ -47,7 +48,6 @@ internal sealed class CreateDataSetViewModel : DataSetDialogViewModel, NewDataSe
 
 	public string Description => DataSetEditor.Description;
 
-	public TagsChanges TagsChanges => (TagsChanges)_tagsEditor;
-
 	public DataSetType Type => TypePicker.SelectedType;
+	public IEnumerable<NewTagData> NewTags => ((TagsChanges)_tagsEditor).NewTags;
 }

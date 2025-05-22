@@ -26,7 +26,7 @@ public sealed class DataSetCreator
 			_ => throw new ArgumentOutOfRangeException(nameof(data), data, null)
 		};
 		SetGeneralData(dataSet, data);
-		AddTags(dataSet, data.TagsChanges.NewTags);
+		AddTags(dataSet, data.NewTags);
 		Repository.Add(dataSet);
 		return dataSet;
 	}
