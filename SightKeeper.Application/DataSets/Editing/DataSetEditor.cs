@@ -19,7 +19,7 @@ public class DataSetEditor : IDisposable
 		var dataSet = data.DataSet;
 		Validator.ValidateAndThrow(data);
 		SetGeneralData(dataSet, data);
-		UpdateTags(dataSet, data.TagsChanges);
+		UpdateTags(dataSet.TagsLibrary, data.TagsChanges);
 		_dataSetEdited.OnNext(dataSet);
 	}
 
@@ -36,14 +36,14 @@ public class DataSetEditor : IDisposable
 		dataSet.Description = data.Description;
 	}
 
-	private static void UpdateTags(DataSet dataSet, TagsChanges changes)
+	private static void UpdateTags(TagsOwner<Tag> tagsOwner, TagsChanges changes)
 	{
 		foreach (var tag in changes.RemovedTags)
-			RemoveTag(dataSet.TagsLibrary, tag);
+			RemoveTag(tagsOwner, tag);
 		foreach (var tag in changes.EditedTags)
 			EditTag(tag);
 		foreach (var tag in changes.NewTags)
-			CreateNewTag(dataSet.TagsLibrary, tag);
+			CreateNewTag(tagsOwner, tag);
 	}
 
 	private static void RemoveTag(TagsOwner<Tag> tagsOwner, Tag tag)
@@ -60,21 +60,11 @@ public class DataSetEditor : IDisposable
 		if (tag is PoserTag poserTag)
 		{
 			var editedPoserTagData = (EditedPoserTagData)editedTagData;
-			EditKeyPoints(poserTag, editedPoserTagData.KeyPointTagsChanges);
+			UpdateTags(poserTag, editedPoserTagData.KeyPointTagsChanges);
 		}
 	}
 
-	private static void EditKeyPoints(PoserTag poserTag, TagsChanges changes)
-	{
-		foreach (var tag in changes.RemovedTags)
-			poserTag.DeleteKeyPointTag(tag);
-		foreach (var tag in changes.EditedTags)
-			EditTag(tag);
-		foreach (var tag in changes.NewTags)
-			CreateKeyPointTag(poserTag, tag);
-	}
-
-	private static void CreateNewTag(TagsLibrary tagsLibrary, NewTagData tagData)
+	private static void CreateNewTag(TagsOwner<Tag> tagsLibrary, NewTagData tagData)
 	{
 		var tag = tagsLibrary.CreateTag(tagData.Name);
 		tag.Color = tagData.Color;
@@ -89,11 +79,5 @@ public class DataSetEditor : IDisposable
 			var keyPointTag = tag.CreateKeyPointTag(keyPointTagData.Name);
 			keyPointTag.Color = keyPointTagData.Color;
 		}
-	}
-
-	private static void CreateKeyPointTag(PoserTag poserTag, NewTagData data)
-	{
-		var keyPointTag = poserTag.CreateKeyPointTag(data.Name);
-		keyPointTag.Color = data.Color;
 	}
 }

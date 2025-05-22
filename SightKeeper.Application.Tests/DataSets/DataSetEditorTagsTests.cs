@@ -56,21 +56,6 @@ public sealed class DataSetEditorTagsTests
 		dataSet.TagsLibrary.Tags.Should().Contain(tag => tag.Name == newName);
 	}
 
-	[Fact]
-	public void ShouldCreatePoserTagWithKeyPointTags()
-	{
-		var dataSet = CreatePoserDataSet();
-		DataSetEditor editor = new()
-		{
-			Validator = CreateValidator()
-		};
-		const string newName = "new name";
-		const string keyPointTagName = "key point tag";
-		var data = CreateDataWithNewPoserTag(dataSet, newName, keyPointTagName);
-		editor.Edit(data);
-		dataSet.TagsLibrary.Tags.Should().Contain(tag => tag.KeyPointTags.Any(keyPointTag => keyPointTag.Name == keyPointTagName));
-	}
-
 	private static DataSet CreateDataSet()
 	{
 		return new ClassifierDataSet();
@@ -113,25 +98,17 @@ public sealed class DataSetEditorTagsTests
 		return data;
 	}
 
-	private static PoserDataSet CreatePoserDataSet()
+	/*private static EditedPoserTagData CreateEditedPoserTagDataWithRemovedKeyPointTag()
 	{
-		return new Poser2DDataSet();
-	}
+		var data = Substitute.For<EditedPoserTagData>();
+		data.
+	}*/
 
-	private static ExistingDataSetData CreateDataWithNewPoserTag(PoserDataSet dataSet, string newPoserTagName, params IEnumerable<string> keyPointTagNames)
+	private static ExistingDataSetData CreateDataWithEditedPoserTag(PoserDataSet dataSet, params IEnumerable<EditedPoserTagData> editedTags)
 	{
 		var data = Utilities.CreateExistingDataSetData(dataSet);
 		var tagsChanges = Substitute.For<TagsChanges>();
-		var newTagData = Substitute.For<NewPoserTagData>();
-		newTagData.Name.Returns(newPoserTagName);
-		var keyPointTags = keyPointTagNames.Select(name =>
-		{
-			var keyPointTagData = Substitute.For<NewTagData>();
-			keyPointTagData.Name.Returns(name);
-			return keyPointTagData;
-		});
-		newTagData.KeyPointTags.Returns(keyPointTags);
-		tagsChanges.NewTags.Returns([newTagData]);
+		tagsChanges.EditedTags.Returns(editedTags);
 		data.TagsChanges.Returns(tagsChanges);
 		return data;
 	}
