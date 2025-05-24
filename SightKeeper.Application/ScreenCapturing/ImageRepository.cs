@@ -14,6 +14,11 @@ public class ImageRepository : ObservableImageRepository, IDisposable
 	public IObservable<Image> Removed => _removed.AsObservable();
 	public IObservable<ImagesRange> ImagesDeleted => _imagesDeleted.AsObservable();
 
+	public ImageRepository(WriteImageDataAccess writeImageDataAccess)
+	{
+		_writeImageDataAccess = writeImageDataAccess;
+	}
+
 	public Image CreateImage(ImageSet library, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
@@ -51,11 +56,6 @@ public class ImageRepository : ObservableImageRepository, IDisposable
 		_added.Dispose();
 		_removed.Dispose();
 		_imagesDeleted.Dispose();
-	}
-
-	protected ImageRepository(WriteImageDataAccess writeImageDataAccess)
-	{
-		_writeImageDataAccess = writeImageDataAccess;
 	}
 
 	protected virtual Image CreateImage(ImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)

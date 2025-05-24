@@ -6,8 +6,6 @@ using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 using HotKeys;
 using HotKeys.Avalonia;
-using HotKeys.Bindings;
-using HotKeys.Gestures;
 
 namespace SightKeeper.Avalonia.Behaviors;
 

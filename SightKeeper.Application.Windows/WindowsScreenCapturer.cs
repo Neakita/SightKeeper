@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Windows;
 
-public sealed class WindowsScreenCapture : ScreenCapture<Bgra32>
+public sealed class WindowsScreenCapturer : ScreenCapturer<Bgra32>
 {
 	public unsafe ReadOnlySpan2D<Bgra32> Capture(Vector2<ushort> resolution, Vector2<ushort> offset)
 	{

@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading;
 using FluentValidation;
 using HotKeys;
-using HotKeys.Bindings;
 using HotKeys.SharpHook;
 using Material.Icons;
 using Pure.DI;
@@ -58,12 +57,12 @@ public sealed partial class Composition
 		.To<BufferedImageSaver<Bgra32>>()
 		.Bind<ObservableListRepository<TT>>().To<ComposeObservableListRepository<TT>>()
 		.Bind<ScreenBoundsProvider>().To<SharpHookScreenBoundsProvider>()
-		.Bind<HotKeyScreenCapture>().Bind<ImageCapturer>().As(Lifetime.Singleton).To<HotKeyScreenCapture<Bgra32>>()
+		.Bind<HotKeyScreenCapturer>().Bind<ImageCapturer>().As(Lifetime.Singleton).To<HotKeyScreenCapturer<Bgra32>>()
 		.Bind<PixelConverter<Bgra32, Rgba32>>().To<Bgra32ToRgba32PixelConverter>()
 #if OS_WINDOWS
 		.Bind<ScreenCapture<Bgra32>>().To<DX11ScreenCapture>()
 #elif OS_LINUX
-		.Bind<ScreenCapture<Bgra32>>().To<X11ScreenCapture>()
+		.Bind<ScreenCapturer<Bgra32>>().To<X11ScreenCapturer>()
 #endif
 		.Bind<IReactiveGlobalHook>().As(Lifetime.Singleton).To<SimpleReactiveGlobalHook>(_ =>
 		{

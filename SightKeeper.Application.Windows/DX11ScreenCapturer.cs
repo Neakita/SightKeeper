@@ -12,9 +12,9 @@ using Resource = SharpDX.DXGI.Resource;
 
 namespace SightKeeper.Application.Windows;
 
-public sealed class DX11ScreenCapture : ScreenCapture<Bgra32>, IDisposable
+public sealed class DX11ScreenCapturer : ScreenCapturer<Bgra32>, IDisposable
 {
-	public DX11ScreenCapture()
+	public DX11ScreenCapturer()
 	{
 		_factory = new Factory1();
 		var adapter = _factory.GetAdapter1(0);
