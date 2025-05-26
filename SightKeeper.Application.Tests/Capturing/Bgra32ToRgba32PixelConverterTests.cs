@@ -14,7 +14,9 @@ public sealed class Bgra32ToRgba32PixelConverterTests
 		Span<Bgra32> source = stackalloc Bgra32[16];
 		Random.Shared.NextBytes(source.AsBytes());
 		Span<Rgba32> target = stackalloc Rgba32[16];
-		converter.Convert(source, target);
+		var source2D = source.AsSpan2D(4, 4);
+		var target2D = target.AsSpan2D(4, 4);
+		converter.Convert(source2D, target2D);
 		for (int i = 0; i < source.Length; i++)
 		{
 			var sourcePixel = source[i];
