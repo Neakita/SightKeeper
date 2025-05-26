@@ -5,15 +5,19 @@ using CommunityToolkit.Diagnostics;
 using HotKeys;
 using HotKeys.Handlers;
 using SharpHook.Native;
+using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public abstract class HotKeyScreenCapturer : ImageCapturer, IDisposable
+public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 {
 	public required ScreenBoundsProvider ScreenBoundsProvider { get; init; }
 	public required ImagesCleaner ImagesCleaner { get; init; }
+	public required ScreenCapturer<TPixel> ScreenCapturer { get; init; }
+	public required ImageSaver<TPixel> ImageSaver { get; init; }
+	public required SelfActivityProvider SelfActivityProvider { get; init; }
 
 	public required BindingsManager BindingsManager
 	{
@@ -50,14 +54,14 @@ public abstract class HotKeyScreenCapturer : ImageCapturer, IDisposable
 
 	public Vector2<ushort> ImageSize
 	{
-		get => _resolution;
+		get;
 		set
 		{
 			Guard.IsGreaterThanOrEqualTo(value.X, MinimumResolutionDimension);
 			Guard.IsGreaterThanOrEqualTo(value.Y, MinimumResolutionDimension);
-			_resolution = value;
+			field = value;
 		}
-	}
+	} = new(320, 320);
 
 	public Gesture Gesture
 	{
@@ -71,21 +75,10 @@ public abstract class HotKeyScreenCapturer : ImageCapturer, IDisposable
 		_binding.Dispose();
 	}
 
-	protected Vector2<ushort> Offset => ScreenBoundsProvider.MainScreenCenter - _resolution / 2;
-
-	protected abstract void MakeImage();
-
-	protected virtual void ClearExceedImages()
-	{
-		if (Set == null)
-			return;
-		ImagesCleaner.RemoveExceedUnusedImages(Set);
-	}
-
 	private const ushort MinimumResolutionDimension = 32;
 	private readonly Subject<ImageSet?> _setChanged = new();
 	private readonly Binding _binding;
-	private Vector2<ushort> _resolution = new(320, 320);
+	private Vector2<ushort> Offset => ScreenBoundsProvider.MainScreenCenter - ImageSize / 2;
 
 	private ContinuousHandler GetHandler()
 	{
@@ -102,5 +95,26 @@ public abstract class HotKeyScreenCapturer : ImageCapturer, IDisposable
 				Period = TimeSpan.FromSeconds(1) / FrameRateLimit.Value
 			}
 		};
+	}
+
+	private void MakeImage()
+	{
+		if (SelfActivityProvider.IsOwnWindowActive)
+			return;
+		if (ImageSaver is LimitedSaver { IsLimitReached: true })
+			return;
+		var set = Set;
+		Guard.IsNotNull(set);
+		var imageData = ScreenCapturer.Capture(ImageSize, Offset);
+		ImageSaver.SaveImage(set, imageData);
+	}
+
+	private void ClearExceedImages()
+	{
+		if (Set == null)
+			return;
+		if (ImageSaver is LimitedSaver limitedSaver)
+			limitedSaver.Processing.Wait();
+		ImagesCleaner.RemoveExceedUnusedImages(Set);
 	}
 }
