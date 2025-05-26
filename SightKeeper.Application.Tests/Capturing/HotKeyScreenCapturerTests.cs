@@ -38,9 +38,34 @@ public sealed class HotKeyScreenCapturerTests
 		var subject = CreateSubject(out var gestureObserver, out var screenCapturer);
 		subject.FrameRateLimit = 0;
 		gestureObserver.OnNext(subject.Gesture);
-		Thread.Sleep(100);
+		Thread.Sleep(50);
 		gestureObserver.OnNext(Gesture.Empty);
 		screenCapturer.CaptureCalls.Count.Should().Be(1);
+	}
+
+	[Fact]
+	public void ShouldCaptureWithChangedGesture()
+	{
+		var gesture = new Gesture('A');
+		var subject = CreateSubject(out var gestureObserver, out var screenCapturer);
+		subject.Gesture = gesture;
+		gestureObserver.OnNext(gesture);
+		Thread.Sleep(50);
+		gestureObserver.OnNext(Gesture.Empty);
+		screenCapturer.CaptureCalls.Should().NotBeEmpty();
+	}
+
+	[Fact]
+	public void ShouldWithdrawFrameRateLimitWhenGestureIsPressed()
+	{
+		var subject = CreateSubject(out var gestureObserver, out var screenCapturer);
+		subject.FrameRateLimit = 0;
+		gestureObserver.OnNext(subject.Gesture);
+		Thread.Sleep(50);
+		subject.FrameRateLimit = null;
+		Thread.Sleep(50);
+		gestureObserver.OnNext(Gesture.Empty);
+		screenCapturer.CaptureCalls.Should().HaveCountGreaterThan(5);
 	}
 
 	private static HotKeyScreenCapturer<Rgba32> CreateSubject(out IObserver<Gesture> gestureObserver, out FakeScreenCapturer<Rgba32> screenCapturer)
