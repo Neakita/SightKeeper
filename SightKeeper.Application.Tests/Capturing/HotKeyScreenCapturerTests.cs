@@ -68,6 +68,13 @@ public sealed class HotKeyScreenCapturerTests
 		screenCapturer.CaptureCalls.Should().HaveCountGreaterThan(5);
 	}
 
+	[Fact]
+	public void ShouldNotSetImageSizeToZero()
+	{
+		var subject = CreateSubject(out _, out _);
+		Assert.Throws<ArgumentOutOfRangeException>(() => subject.ImageSize = new Vector2<ushort>(500, 0));
+	}
+
 	private static HotKeyScreenCapturer<Rgba32> CreateSubject(out IObserver<Gesture> gestureObserver, out FakeScreenCapturer<Rgba32> screenCapturer)
 	{
 		Subject<Gesture> gestureSubject = new();
