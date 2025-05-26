@@ -8,7 +8,7 @@ internal sealed class FakeImageSaver<TPixel> : ImageSaver<TPixel>
 {
 	public List<(ImageSet set, TPixel[,] imageData)> SaveImageCalls { get; } = new();
 
-	public void SaveImage(ImageSet set, ReadOnlySpan2D<TPixel> imageData)
+	public void SaveImage(ImageSet set, ReadOnlySpan2D<TPixel> imageData, DateTimeOffset creationTimestamp)
 	{
 		SaveImageCalls.Add((set, imageData.ToArray()));
 	}

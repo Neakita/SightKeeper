@@ -106,7 +106,7 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 		var set = Set;
 		Guard.IsNotNull(set);
 		var imageData = ScreenCapturer.Capture(ImageSize, Offset);
-		ImageSaver.SaveImage(set, imageData);
+		ImageSaver.SaveImage(set, imageData, DateTimeOffset.Now);
 	}
 
 	private void ClearExceedImages()

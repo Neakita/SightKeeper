@@ -54,7 +54,20 @@ public sealed partial class Composition
 		.Bind<ReadRepository<DataSet>>().Bind<ObservableRepository<DataSet>>().Bind<WriteRepository<DataSet>>()
 		.As(Lifetime.Singleton).To<AppDataDataSetsRepository>()
 		.Bind<PendingImagesCountReporter>().Bind<ImageSaver<Bgra32>>().As(Lifetime.Singleton)
-		.To<BufferedImageSaver<Bgra32>>()
+		.To<BufferedImageSaverMiddleware<Bgra32>>(context =>
+		{
+			context.Inject(out PixelConverter<Bgra32, Rgba32> converter);
+			context.Inject(out ImageRepository imageRepository);
+			ImageSaverConverterMiddleware<Bgra32, Rgba32> converterMiddleware = new()
+			{
+				Converter = converter,
+				NextMiddleware = imageRepository
+			};
+			return new BufferedImageSaverMiddleware<Bgra32>
+			{
+				NextMiddleware = converterMiddleware 
+			};
+		})
 		.Bind<ObservableListRepository<TT>>().To<ComposeObservableListRepository<TT>>()
 		.Bind<ScreenBoundsProvider>().To<SharpHookScreenBoundsProvider>()
 		.Bind<ImageCapturer>().As(Lifetime.Singleton).To<HotKeyScreenCapturer<Bgra32>>()

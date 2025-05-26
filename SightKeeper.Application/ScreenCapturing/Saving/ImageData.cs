@@ -8,29 +8,28 @@ namespace SightKeeper.Application.ScreenCapturing.Saving;
 internal sealed class ImageData<TPixel> : IDisposable
 {
 	public ImageSet Set { get; }
-	public DateTimeOffset CreationTimestamp { get; } = DateTimeOffset.Now;
+	public DateTimeOffset CreationTimestamp { get; }
 	public Vector2<ushort> ImageSize { get; }
-	public ReadOnlySpan<TPixel> Data => _data.AsSpan()[..ImageDataLength];
+	public ReadOnlySpan<TPixel> Data => _memoryOwner.Memory.Span[..ImageDataLength];
 	public ReadOnlySpan2D<TPixel> Data2D => Data.AsSpan2D(ImageSize.Y, ImageSize.X);
 
 	public ImageData(
 		ImageSet set,
 		ReadOnlySpan2D<TPixel> imageData,
-		ArrayPool<TPixel> arrayPool)
+		DateTimeOffset creationTimestamp)
 	{
 		Set = set;
-		_arrayPool = arrayPool;
 		ImageSize = new Vector2<ushort>((ushort)imageData.Width, (ushort)imageData.Height);
-		_data = arrayPool.Rent(ImageDataLength);
-		imageData.CopyTo(_data);
+		_memoryOwner = MemoryPool<TPixel>.Shared.Rent(ImageSize.X * ImageSize.Y);
+		imageData.CopyTo(_memoryOwner.Memory.Span);
+		CreationTimestamp = creationTimestamp;
 	}
 
 	public void Dispose()
 	{
-		_arrayPool.Return(_data);
+		_memoryOwner.Dispose();
 	}
 
-	private readonly ArrayPool<TPixel> _arrayPool;
-	private readonly TPixel[] _data;
+	private readonly IMemoryOwner<TPixel> _memoryOwner;
 	private int ImageDataLength => ImageSize.X * ImageSize.Y;
 }

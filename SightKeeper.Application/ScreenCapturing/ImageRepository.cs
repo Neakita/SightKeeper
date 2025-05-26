@@ -2,13 +2,14 @@
 using System.Reactive.Subjects;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.ImageSets;
+using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public class ImageRepository : ObservableImageRepository, IDisposable
+public class ImageRepository : ObservableImageRepository, ImageSaver<Rgba32>, IDisposable
 {
 	public IObservable<Image> Added => _added.AsObservable();
 	public IObservable<Image> Removed => _removed.AsObservable();
@@ -19,13 +20,12 @@ public class ImageRepository : ObservableImageRepository, IDisposable
 		_writeImageDataAccess = writeImageDataAccess;
 	}
 
-	public Image CreateImage(ImageSet library, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
+	public void SaveImage(ImageSet set, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
-		var image = CreateImage(library, creationTimestamp, resolution);
+		var image = CreateImage(set, creationTimestamp, resolution);
 		_writeImageDataAccess.SaveImageData(image, imageData);
 		_added.OnNext(image);
-		return image;
 	}
 
 	public void DeleteImage(ImageSet set, int index)
