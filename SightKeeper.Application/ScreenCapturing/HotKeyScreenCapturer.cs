@@ -30,11 +30,8 @@ public abstract class HotKeyScreenCapturer : ImageCapturer
 		get;
 		set
 		{
-			if (field != null)
-				Disable();
 			field = value;
-			if (value != null)
-				Enable();
+			_binding.IsEnabled = value != null;
 			_setChanged.OnNext(value);
 		}
 	}
@@ -79,17 +76,6 @@ public abstract class HotKeyScreenCapturer : ImageCapturer
 	private readonly Subject<ImageSet?> _setChanged = new();
 	private readonly Binding _binding;
 	private Vector2<ushort> _resolution = new(320, 320);
-
-	private void Enable()
-	{
-		Guard.IsNull(_binding);
-	}
-
-	private void Disable()
-	{
-		Guard.IsNotNull(_binding);
-		_binding.Dispose();
-	}
 
 	private ContinuousHandler GetHandler()
 	{
