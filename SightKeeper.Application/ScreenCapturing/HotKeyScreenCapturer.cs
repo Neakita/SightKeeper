@@ -59,7 +59,11 @@ public abstract class HotKeyScreenCapturer : ImageCapturer
 		}
 	}
 
-	public Gesture Gesture { get; set; } = new(MouseButton.Button1);
+	public Gesture Gesture
+	{
+		get => _binding.Gesture;
+		set => _binding.Gesture = value;
+	}
 
 	protected Vector2<ushort> Offset => ScreenBoundsProvider.MainScreenCenter - _resolution / 2;
 
