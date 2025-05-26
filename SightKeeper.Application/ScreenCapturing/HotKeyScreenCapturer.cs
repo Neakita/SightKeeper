@@ -82,7 +82,7 @@ public abstract class HotKeyScreenCapturer : ImageCapturer
 		return FrameRateLimit switch
 		{
 			null => new RepeatedHandler(new ActionHandler(MakeImage), new ActionHandler(ClearExceedImages)),
-			0 => new BeginHandler(new ActionHandler(() =>
+			0 => new BeginAsyncHandler(new ActionHandler(() =>
 			{
 				MakeImage();
 				ClearExceedImages();
