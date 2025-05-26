@@ -15,51 +15,40 @@ public sealed class ImagesCleaner
 	public void RemoveExceedUnusedImages(ImageSet set)
 	{
 		var ranges = GetRangesToRemove(set);
-		for (var i = ranges.Count - 1; i >= 0; i--)
-		{
-			var range = ranges[i];
+		foreach (var range in ranges)
 			_imageRepository.DeleteImagesRange(set, range.Start, range.Count);
-		}
 	}
 
 	private readonly ImageRepository _imageRepository;
 
-	private List<Range> GetRangesToRemove(ImageSet set)
+	/// <returns>reversed ranges, i.e. first range has latest indexes</returns>
+	private IEnumerable<Range> GetRangesToRemove(ImageSet set)
 	{
 		var unusedRanges = set.Images
 			.Index()
 			.Where(tuple => !tuple.Item.IsInUse)
 			.Select(tuple => tuple.Index)
 			.ToRanges()
-			.ToList();
-		if (unusedRanges.Count == 0)
-			return unusedRanges;
-		RemoveLimitedLastIndexes(unusedRanges);
-		return unusedRanges;
+			.Reverse();
+		return ExcludeAllowed(unusedRanges);
 	}
 
-	private void RemoveLimitedLastIndexes(List<Range> ranges)
+	private IEnumerable<Range> ExcludeAllowed(IEnumerable<Range> ranges)
 	{
-		int targetRemoves = UnusedImagesLimit;
-		while (targetRemoves > 0 && ranges.Count > 0)
+		int remainingExclusions = UnusedImagesLimit;
+		using var enumerator = ranges.GetEnumerator();
+		while (remainingExclusions > 0 && enumerator.MoveNext())
 		{
-			var index = ranges.Count - 1;
-			var lastRange = ranges[index];
-			ranges.RemoveAt(index);
-			var lastRemovedCount = Math.Min(lastRange.Count, targetRemoves);
-			targetRemoves -= lastRemovedCount;
-			var modifiedRangeCount = lastRange.Count - lastRemovedCount;
-			if (modifiedRangeCount > 0)
+			var range = enumerator.Current;
+			remainingExclusions -= range.Count;
+			if (remainingExclusions < 0)
 			{
-				var modifiedRange = CreateRangeFromCount(lastRange.Start, modifiedRangeCount);
-				ranges.Add(modifiedRange);
+				// Too many were excluded. Keep everything that doesn't fit.
+				yield return Range.FromCount(range.Start, -remainingExclusions);
+				break;
 			}
 		}
-		
-	}
-
-	private static Range CreateRangeFromCount(int start, int count)
-	{
-		return new Range(start, start + count - 1);
+		while (enumerator.MoveNext())
+			yield return enumerator.Current;
 	}
 }
