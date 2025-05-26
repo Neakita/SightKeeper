@@ -8,6 +8,7 @@ public sealed class Image
 	public DateTimeOffset CreationTimestamp { get; }
 	public Vector2<ushort> Size { get; }
 	public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
+	public bool IsInUse => _assets.Count > 0;
 
 	internal Image(ImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{

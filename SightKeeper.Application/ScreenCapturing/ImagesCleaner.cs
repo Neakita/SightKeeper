@@ -28,7 +28,7 @@ public sealed class ImagesCleaner
 	{
 		var unusedRanges = set.Images
 			.Index()
-			.Where(tuple => !IsInUse(tuple.Item))
+			.Where(tuple => !tuple.Item.IsInUse)
 			.Select(tuple => tuple.Index)
 			.ToRanges()
 			.ToList();
@@ -36,11 +36,6 @@ public sealed class ImagesCleaner
 			return unusedRanges;
 		RemoveLimitedLastIndexes(unusedRanges);
 		return unusedRanges;
-	}
-
-	private bool IsInUse(Image image)
-	{
-		return image.Assets.Count > 0;
 	}
 
 	private void RemoveLimitedLastIndexes(List<Range> ranges)
