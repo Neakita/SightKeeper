@@ -10,7 +10,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public abstract class HotKeyScreenCapturer : ImageCapturer
+public abstract class HotKeyScreenCapturer : ImageCapturer, IDisposable
 {
 	public required ScreenBoundsProvider ScreenBoundsProvider { get; init; }
 	public required ImagesCleaner ImagesCleaner { get; init; }
@@ -63,6 +63,12 @@ public abstract class HotKeyScreenCapturer : ImageCapturer
 	{
 		get => _binding.Gesture;
 		set => _binding.Gesture = value;
+	}
+
+	public void Dispose()
+	{
+		_setChanged.Dispose();
+		_binding.Dispose();
 	}
 
 	protected Vector2<ushort> Offset => ScreenBoundsProvider.MainScreenCenter - _resolution / 2;
