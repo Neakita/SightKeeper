@@ -8,7 +8,7 @@ namespace SightKeeper.Application.Tests.Capturing;
 public sealed class Bgra32ToRgba32PixelConverterTests
 {
 	[Fact]
-	public void Foo()
+	public void ConvertedPixelsShouldMatchRGBValues()
 	{
 		Bgra32ToRgba32PixelConverter converter = new();
 		Span<Bgra32> source = stackalloc Bgra32[16];
