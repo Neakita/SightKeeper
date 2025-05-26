@@ -12,79 +12,54 @@ namespace SightKeeper.Application.Tests.Capturing;
 public sealed class HotKeyScreenCapturerTests
 {
 	[Fact]
-	public void ShouldCallImageSaver()
+	public void ShouldCapture()
 	{
-		Subject<Gesture> gestureSubject = new();
-		ImageSet imageSet = new();
-		Vector2<ushort> imageSize = new(320, 320);
-		FakeScreenCapturer<Rgba32> screenCapturer = new();
-		FakeImageSaver<Rgba32> imageSaver = new();
-		HotKeyScreenCapturer<Rgba32> hotKeyScreenCapturer = new()
-		{
-			ScreenBoundsProvider = new FakeScreenBoundsProvider(imageSize),
-			BindingsManager = new BindingsManager(gestureSubject),
-			Set = imageSet,
-			ImageSize = imageSize,
-			ScreenCapturer = screenCapturer,
-			ImageSaver = imageSaver,
-			SelfActivityProvider = Substitute.For<SelfActivityProvider>(),
-			ImagesCleaner = new ImagesCleaner(new ImageRepository(Substitute.For<WriteImageDataAccess>()))
-		};
-		gestureSubject.OnNext(hotKeyScreenCapturer.Gesture);
+		var subject = CreateSubject(out var gestureObserver, out var screenCapturer);
+		gestureObserver.OnNext(subject.Gesture);
 		Thread.Sleep(50);
-		gestureSubject.OnNext(Gesture.Empty);
+		gestureObserver.OnNext(Gesture.Empty);
 		screenCapturer.CaptureCalls.Should().NotBeEmpty();
 	}
 
 	[Fact]
-	public void ShouldCallImageSaverCertainNumberOfTimesInTheAllottedTime()
+	public void ShouldCaptureCertainNumberOfTimesInTheAllottedTime()
 	{
-		Subject<Gesture> gestureSubject = new();
-		ImageSet imageSet = new();
-		Vector2<ushort> imageSize = new(320, 320);
-		FakeScreenCapturer<Rgba32> screenCapturer = new();
-		FakeImageSaver<Rgba32> imageSaver = new();
-		HotKeyScreenCapturer<Rgba32> hotKeyScreenCapturer = new()
-		{
-			ScreenBoundsProvider = new FakeScreenBoundsProvider(imageSize),
-			BindingsManager = new BindingsManager(gestureSubject),
-			Set = imageSet,
-			ImageSize = imageSize,
-			ScreenCapturer = screenCapturer,
-			ImageSaver = imageSaver,
-			SelfActivityProvider = Substitute.For<SelfActivityProvider>(),
-			ImagesCleaner = new ImagesCleaner(new ImageRepository(Substitute.For<WriteImageDataAccess>())),
-			FrameRateLimit = 60
-		};
-		gestureSubject.OnNext(hotKeyScreenCapturer.Gesture);
+		var subject = CreateSubject(out var gestureObserver, out var screenCapturer);
+		subject.FrameRateLimit = 60;
+		gestureObserver.OnNext(subject.Gesture);
 		Thread.Sleep(1000);
-		gestureSubject.OnNext(Gesture.Empty);
+		gestureObserver.OnNext(Gesture.Empty);
 		screenCapturer.CaptureCalls.Count.Should().BeInRange(60, 61);
 	}
 
 	[Fact]
-	public void ShouldCallImageSaverOnce()
+	public void ShouldCaptureOnce()
+	{
+		var subject = CreateSubject(out var gestureObserver, out var screenCapturer);
+		subject.FrameRateLimit = 0;
+		gestureObserver.OnNext(subject.Gesture);
+		Thread.Sleep(100);
+		gestureObserver.OnNext(Gesture.Empty);
+		screenCapturer.CaptureCalls.Count.Should().Be(1);
+	}
+
+	private static HotKeyScreenCapturer<Rgba32> CreateSubject(out IObserver<Gesture> gestureObserver, out FakeScreenCapturer<Rgba32> screenCapturer)
 	{
 		Subject<Gesture> gestureSubject = new();
+		gestureObserver = gestureSubject;
 		ImageSet imageSet = new();
-		Vector2<ushort> imageSize = new(320, 320);
-		FakeScreenCapturer<Rgba32> screenCapturer = new();
-		FakeImageSaver<Rgba32> imageSaver = new();
+		screenCapturer = new FakeScreenCapturer<Rgba32>();
+		var imageSaver = new FakeImageSaver<Rgba32>();
 		HotKeyScreenCapturer<Rgba32> hotKeyScreenCapturer = new()
 		{
-			ScreenBoundsProvider = new FakeScreenBoundsProvider(imageSize),
+			ScreenBoundsProvider = new FakeScreenBoundsProvider(new Vector2<ushort>(1920, 1080)),
 			BindingsManager = new BindingsManager(gestureSubject),
 			Set = imageSet,
-			ImageSize = imageSize,
 			ScreenCapturer = screenCapturer,
 			ImageSaver = imageSaver,
 			SelfActivityProvider = Substitute.For<SelfActivityProvider>(),
 			ImagesCleaner = new ImagesCleaner(new ImageRepository(Substitute.For<WriteImageDataAccess>())),
-			FrameRateLimit = 0
 		};
-		gestureSubject.OnNext(hotKeyScreenCapturer.Gesture);
-		Thread.Sleep(100);
-		gestureSubject.OnNext(Gesture.Empty);
-		screenCapturer.CaptureCalls.Count.Should().Be(1);
+		return hotKeyScreenCapturer;
 	}
 }
