@@ -19,19 +19,18 @@ public sealed class HotKeyScreenCapturerTests
 		Vector2<ushort> imageSize = new(320, 320);
 		FakeScreenCapturer<Rgba32> screenCapturer = new();
 		FakeImageSaver<Rgba32> imageSaver = new();
-		HotKeyScreenCapturer<Rgba32> capturer = new()
+		HotKeyScreenCapturer<Rgba32> hotKeyScreenCapturer = new()
 		{
 			ScreenBoundsProvider = new FakeScreenBoundsProvider(imageSize),
 			BindingsManager = new BindingsManager(gestureSubject),
 			Set = imageSet,
-			FrameRateLimit = null,
 			ImageSize = imageSize,
 			ScreenCapturer = screenCapturer,
 			ImageSaver = imageSaver,
 			SelfActivityProvider = Substitute.For<SelfActivityProvider>(),
 			ImagesCleaner = new ImagesCleaner(new ImageRepository(Substitute.For<WriteImageDataAccess>()))
 		};
-		gestureSubject.OnNext(capturer.Gesture);
+		gestureSubject.OnNext(hotKeyScreenCapturer.Gesture);
 		Thread.Sleep(100);
 		gestureSubject.OnNext(Gesture.Empty);
 		screenCapturer.CaptureCalls.Should().NotBeEmpty();
