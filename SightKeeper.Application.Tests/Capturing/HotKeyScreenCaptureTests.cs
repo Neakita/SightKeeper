@@ -61,4 +61,30 @@ public sealed class HotKeyScreenCapturerTests
 		gestureSubject.OnNext(Gesture.Empty);
 		screenCapturer.CaptureCalls.Count.Should().BeInRange(60, 61);
 	}
+
+	[Fact]
+	public void ShouldCallImageSaverOnce()
+	{
+		Subject<Gesture> gestureSubject = new();
+		ImageSet imageSet = new();
+		Vector2<ushort> imageSize = new(320, 320);
+		FakeScreenCapturer<Rgba32> screenCapturer = new();
+		FakeImageSaver<Rgba32> imageSaver = new();
+		HotKeyScreenCapturer<Rgba32> hotKeyScreenCapturer = new()
+		{
+			ScreenBoundsProvider = new FakeScreenBoundsProvider(imageSize),
+			BindingsManager = new BindingsManager(gestureSubject),
+			Set = imageSet,
+			ImageSize = imageSize,
+			ScreenCapturer = screenCapturer,
+			ImageSaver = imageSaver,
+			SelfActivityProvider = Substitute.For<SelfActivityProvider>(),
+			ImagesCleaner = new ImagesCleaner(new ImageRepository(Substitute.For<WriteImageDataAccess>())),
+			FrameRateLimit = 0
+		};
+		gestureSubject.OnNext(hotKeyScreenCapturer.Gesture);
+		Thread.Sleep(100);
+		gestureSubject.OnNext(Gesture.Empty);
+		screenCapturer.CaptureCalls.Count.Should().Be(1);
+	}
 }
