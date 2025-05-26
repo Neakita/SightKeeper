@@ -74,7 +74,7 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>, Continu
 	}
 
 	private BindingsManager? _bindingsManager;
-	private IDisposable? _binding;
+	private Binding? _binding;
 
 	private void UpdateBinding()
 	{
@@ -88,6 +88,7 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>, Continu
 			KeyGesture keyGesture => new Gesture(keyGesture.Key),
 			_ => throw new ArgumentOutOfRangeException(nameof(Gesture), Gesture, null)
 		};
-		_binding = _bindingsManager.Bind(gesture, this);
+		_binding = _bindingsManager.CreateBinding(this);
+		_binding.Gesture = gesture;
 	}
 }
