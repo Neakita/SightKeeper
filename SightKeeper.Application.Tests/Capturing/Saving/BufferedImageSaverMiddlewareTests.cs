@@ -16,7 +16,7 @@ public sealed class BufferedImageSaverMiddlewareTests
 		middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
 		Thread.Sleep(50);
 		var receivedPixels = imageSaver.ReceivedCalls.Single().imageData;
-		AssertRoughlyEquals(pixels, receivedPixels);
+		receivedPixels.ShouldRoughlyBe(pixels);
 	}
 
 	[Fact]
@@ -27,7 +27,7 @@ public sealed class BufferedImageSaverMiddlewareTests
 		middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
 		Thread.Sleep(50);
 		var receivedPixels = imageSaver.ReceivedCalls.Single().imageData;
-		AssertRoughlyEquals(pixels, receivedPixels);
+		receivedPixels.ShouldRoughlyBe(pixels);
 	}
 
 	[Fact]
@@ -103,22 +103,5 @@ public sealed class BufferedImageSaverMiddlewareTests
 		var middleware = CreateMiddleware(out imageSaver);
 		middleware.MaximumAllowedPendingImages = maximumAllowedPendingImages;
 		return middleware;
-	}
-
-	private static void AssertRoughlyEquals<T>(T[,] value, T[,] expected)
-	{
-		// don't use variables to capture name
-		value.GetLength(0).Should().Be(expected.GetLength(0));
-		value.GetLength(1).Should().Be(expected.GetLength(1));
-		var lengthX = value.GetLength(0);
-		var lengthY = value.GetLength(1);
-		value[0, 0].Should().Be(expected[0, 0]);
-		value[lengthX - 1, lengthY - 1].Should().Be(expected[lengthX - 1, lengthY - 1]);
-		for (int i = 0; i < 10; i++)
-		{
-			var x = Random.Shared.Next(lengthX);
-			var y = Random.Shared.Next(lengthY);
-			value[x, y].Should().Be(expected[x, y]);
-		}
 	}
 }

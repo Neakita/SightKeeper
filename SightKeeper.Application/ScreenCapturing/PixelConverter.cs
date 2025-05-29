@@ -5,7 +5,7 @@ namespace SightKeeper.Application.ScreenCapturing;
 
 public abstract class PixelConverter<TFrom, TTo>
 {
-	public void Convert(ReadOnlySpan2D<TFrom> source, Span2D<TTo> target)
+	public virtual void Convert(ReadOnlySpan2D<TFrom> source, Span2D<TTo> target)
 	{
 		if (source.TryGetSpan(out var contiguousSource) && target.TryGetSpan(out var contiguousTarget))
 		{
