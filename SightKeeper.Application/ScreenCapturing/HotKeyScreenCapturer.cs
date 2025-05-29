@@ -25,6 +25,7 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 		{
 			var handler = GetHandler();
 			_binding = value.CreateBinding(handler);
+			_binding.IsEnabled = false;
 			_binding.Gesture = new Gesture(MouseButton.Button1);
 		}
 	}
@@ -111,10 +112,11 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 
 	private void ClearExceedImages()
 	{
-		if (Set == null)
+		var set = Set;
+		if (set == null)
 			return;
 		if (ImageSaver is LimitedSaver limitedSaver)
 			limitedSaver.Processing.Wait();
-		ImagesCleaner.RemoveExceedUnusedImages(Set);
+		ImagesCleaner.RemoveExceedUnusedImages(set);
 	}
 }

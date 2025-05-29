@@ -17,4 +17,11 @@ public readonly struct Range
 		Start = start;
 		End = end;
 	}
+
+	public override string ToString()
+	{
+		if (Count == 1)
+			return $"{Start}";
+		return $"{Start} ~ {End} ({Count})";
+	}
 }
