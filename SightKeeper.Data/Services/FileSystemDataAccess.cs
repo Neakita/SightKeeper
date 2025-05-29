@@ -65,6 +65,8 @@ public sealed class FileSystemDataAccess<T> where T : notnull
 
 	public void ClearUnassociatedFiles()
 	{
+		if (!Directory.Exists(DirectoryPath))
+			return;
 		var filesPaths = Directory.GetFiles(DirectoryPath);
 		var associatedIds = _ids.Values.ToHashSet();
 		foreach (var filePath in filesPaths)
