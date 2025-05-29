@@ -3,6 +3,7 @@ using FluentAssertions;
 using HotKeys;
 using NSubstitute;
 using SightKeeper.Application.ScreenCapturing;
+using SightKeeper.Application.Tests.Capturing.Saving;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
