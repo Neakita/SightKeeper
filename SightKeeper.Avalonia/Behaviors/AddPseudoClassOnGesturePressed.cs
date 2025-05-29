@@ -49,20 +49,8 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>, Continu
 		Guard.IsNotNull(topLevel);
 		var observableGesture = topLevel.ObserveInputStates().Filter().ToGesture();
 		_bindingsManager = new BindingsManager(observableGesture);
-		UpdateBinding();
-	}
-
-	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-	{
-		base.OnPropertyChanged(change);
-		if (change.Property == GestureProperty)
-			UpdateBinding();
-		if (change.Property == ClassNameProperty && AssociatedObject != null)
-		{
-			var (oldValue, newValue) = change.GetOldAndNewValue<string>();
-			if (AssociatedObject.Classes.Remove(oldValue))
-				AssociatedObject.Classes.Add(newValue);
-		}
+		_binding = _bindingsManager.CreateBinding(this);
+		_binding.Gesture = ConvertGesture(Gesture);
 	}
 
 	protected override void OnDetachedFromVisualTree()
@@ -73,22 +61,29 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>, Continu
 		_bindingsManager.Dispose();
 	}
 
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+	{
+		base.OnPropertyChanged(change);
+		if (change.Property == GestureProperty && _binding != null)
+			_binding.Gesture = ConvertGesture(change.NewValue);
+		if (change.Property == ClassNameProperty && AssociatedObject != null)
+		{
+			var (oldValue, newValue) = change.GetOldAndNewValue<string>();
+			if (AssociatedObject.Classes.Remove(oldValue))
+				AssociatedObject.Classes.Add(newValue);
+		}
+	}
+
 	private BindingsManager? _bindingsManager;
 	private Binding? _binding;
 
-	private void UpdateBinding()
+	private static Gesture ConvertGesture(object? gesture)
 	{
-		_binding?.Dispose();
-		if (_bindingsManager == null)
-			return;
-		if (Gesture == null)
-			return;
-		var gesture = Gesture switch
+		return gesture switch
 		{
+			null => HotKeys.Gesture.Empty,
 			KeyGesture keyGesture => new Gesture(keyGesture.Key),
-			_ => throw new ArgumentOutOfRangeException(nameof(Gesture), Gesture, null)
+			_ => throw new ArgumentOutOfRangeException(nameof(gesture), gesture, null)
 		};
-		_binding = _bindingsManager.CreateBinding(this);
-		_binding.Gesture = gesture;
 	}
 }
