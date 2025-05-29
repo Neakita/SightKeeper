@@ -5,7 +5,7 @@ using Vibrance;
 
 namespace SightKeeper.Application;
 
-public sealed class ComposeObservableListRepository<T> : ObservableListRepository<T>, IDisposable where T : notnull
+public sealed class ComposeObservableListRepository<T> : ObservableListRepository<T>, IDisposable
 {
 	public ReadOnlyObservableList<T> Items => _items;
 
