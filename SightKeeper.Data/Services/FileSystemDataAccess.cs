@@ -8,7 +8,7 @@ public sealed class FileSystemDataAccess<T> where T : notnull
 {
 	private readonly ILogger _logger = Log.ForContext<FileSystemDataAccess<T>>();
 
-	public string DirectoryPath { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+	public string DirectoryPath { get; set; } = Path.GetFullPath("Data");
 
 	public FileSystemDataAccess(string fileExtension = "")
 	{

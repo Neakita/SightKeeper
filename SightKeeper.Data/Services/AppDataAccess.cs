@@ -1,12 +1,11 @@
 ﻿using CommunityToolkit.Diagnostics;
 using MemoryPack;
-using SightKeeper.Application;
 
 namespace SightKeeper.Data.Services;
 
 public sealed class AppDataAccess
 {
-	public string FilePath { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), "App.data");
+	public string FilePath { get; set; } = Path.GetFullPath("App.data");
 	public AppData Data { get; set; } = new();
 
 	public void Load()
