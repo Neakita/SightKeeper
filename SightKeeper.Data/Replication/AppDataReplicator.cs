@@ -19,7 +19,7 @@ internal class AppDataReplicator
 		DataSetsReplicator dataSetReplicator = new(session);
 		var imageSets = imageSetReplicator.ReplicateImageSets(packable.ImageSets).ToHashSet();
 		var dataSets = dataSetReplicator.ReplicateDataSets(packable.DataSets).ToHashSet();
-		return new AppData(imageSets, dataSets, packable.ApplicationSettings);
+		return new AppData(imageSets, dataSets);
 	}
 
 	private readonly FileSystemImageRepository _imageRepository;

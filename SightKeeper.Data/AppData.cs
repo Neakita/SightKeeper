@@ -1,37 +1,26 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Application;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 
-public sealed class AppData : ApplicationSettingsProvider
+public sealed class AppData
 {
 	public IReadOnlySet<ImageSet> ImageSets => _imageSets;
 	public IReadOnlySet<DataSet> DataSets => _dataSets;
-	public ApplicationSettings ApplicationSettings { get; }
-
-	public bool CustomDecorations
-	{
-		get => ApplicationSettings.CustomDecorations;
-		set => ApplicationSettings.CustomDecorations = value;
-	}
 
 	internal AppData(
 		HashSet<ImageSet> imageSets,
-		HashSet<DataSet> dataSets,
-		ApplicationSettings applicationSettings)
+		HashSet<DataSet> dataSets)
 	{
 		_imageSets = imageSets;
 		_dataSets = dataSets;
-		ApplicationSettings = applicationSettings;
 	}
 
 	internal AppData()
 	{
 		_imageSets = new HashSet<ImageSet>();
 		_dataSets = new HashSet<DataSet>();
-		ApplicationSettings = new ApplicationSettings();
 	}
 
 	internal void AddImageSet(ImageSet library)

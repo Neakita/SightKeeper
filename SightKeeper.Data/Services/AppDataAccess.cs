@@ -4,16 +4,10 @@ using SightKeeper.Application;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class AppDataAccess : ApplicationSettingsProvider
+public sealed class AppDataAccess
 {
 	public string FilePath { get; set; } = Path.Combine(Directory.GetCurrentDirectory(), "App.data");
 	public AppData Data { get; set; } = new();
-
-	public bool CustomDecorations
-	{
-		get => Data.CustomDecorations;
-		set => Data.CustomDecorations = value;
-	}
 
 	public void Load()
 	{

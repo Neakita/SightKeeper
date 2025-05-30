@@ -19,8 +19,7 @@ internal sealed class AppDataConverter
 		return new PackableAppData
 		{
 			ImageSets = imageSetConverter.ConvertImageSets(data.ImageSets).ToImmutableArray(),
-			DataSets = dataSetsConverter.ConvertDataSets(data.DataSets).ToImmutableArray(),
-			ApplicationSettings = data.ApplicationSettings,
+			DataSets = dataSetsConverter.ConvertDataSets(data.DataSets).ToImmutableArray()
 		};
 	}
 
