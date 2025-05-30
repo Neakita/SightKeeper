@@ -24,6 +24,12 @@ public sealed class ImageSet
 		return image;
 	}
 
+	public void RemoveImage(Image image)
+	{
+		ImageIsInUseException.ThrowForDeletionIfInUse(this, image);
+		_images.Remove(image);
+	}
+
 	public void RemoveImageAt(int index)
 	{
 		var image = _images[index];
