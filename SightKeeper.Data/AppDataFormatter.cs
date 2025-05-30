@@ -4,12 +4,13 @@ using SightKeeper.Application;
 using SightKeeper.Data.Conversion;
 using SightKeeper.Data.Replication;
 using SightKeeper.Data.Services;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 
 public sealed class AppDataFormatter : MemoryPackFormatter<AppData>
 {
-	public AppDataFormatter(FileSystemImageRepository imageRepository, [Tag(typeof(AppData))] Lock editingLock, ILogger logger)
+	public AppDataFormatter(IdRepository<Image> imageRepository, [Tag(typeof(AppData))] Lock editingLock, ILogger logger)
 	{
 		_editingLock = editingLock;
 		_converter = new AppDataConverter(imageRepository);

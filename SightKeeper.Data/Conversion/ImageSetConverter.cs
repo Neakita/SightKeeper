@@ -7,7 +7,7 @@ namespace SightKeeper.Data.Conversion;
 
 internal sealed class ImageSetConverter
 {
-	public ImageSetConverter(FileSystemImageRepository imageRepository)
+	public ImageSetConverter(ReadIdRepository<Image> imageRepository)
 	{
 		_imageRepository = imageRepository;
 	}
@@ -17,7 +17,7 @@ internal sealed class ImageSetConverter
 		return libraries.Select(ConvertImageSet);
 	}
 
-	private readonly FileSystemImageRepository _imageRepository;
+	private readonly ReadIdRepository<Image> _imageRepository;
 
 	private PackableImageSet ConvertImageSet(ImageSet library) => new()
 	{

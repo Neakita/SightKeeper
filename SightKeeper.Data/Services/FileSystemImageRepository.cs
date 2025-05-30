@@ -6,7 +6,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class FileSystemImageRepository : ImageRepository
+public sealed class FileSystemImageRepository : ImageRepository, IdRepository<Image>
 {
 	public FileSystemImageRepository(FileSystemDataAccess<Image> fileSystemDataAccess, ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock, WriteImageDataAccess writeImageDataAccess) : base(writeImageDataAccess)
 	{
@@ -32,7 +32,7 @@ public sealed class FileSystemImageRepository : ImageRepository
 		_fileSystemDataAccess.ClearUnassociatedFiles();
 	}
 
-	internal void AssociateId(Image image, Id id)
+	public void AssociateId(Image image, Id id)
 	{
 		_fileSystemDataAccess.AssociateId(image, id);
 	}

@@ -2,12 +2,13 @@ using System.Collections.Immutable;
 using SightKeeper.Data.Model.DataSets.Assets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Conversion.DataSets.Detector;
 
 internal sealed class DetectorAssetsConverter
 {
-	public DetectorAssetsConverter(FileSystemImageRepository imageRepository, ConversionSession session)
+	public DetectorAssetsConverter(ReadIdRepository<Image> imageRepository, ConversionSession session)
 	{
 		_imageRepository = imageRepository;
 		_session = session;
@@ -18,7 +19,7 @@ internal sealed class DetectorAssetsConverter
 		return assets.Select(ConvertAsset);
 	}
 
-	private readonly FileSystemImageRepository _imageRepository;
+	private readonly ReadIdRepository<Image> _imageRepository;
 	private readonly ConversionSession _session;
 
 	private PackableItemsAsset<PackableDetectorItem> ConvertAsset(DetectorAsset asset)

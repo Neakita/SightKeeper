@@ -3,12 +3,13 @@ using SightKeeper.Data.Conversion.DataSets.Poser;
 using SightKeeper.Data.Model.DataSets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Poser3D;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Conversion.DataSets.Poser3D;
 
 internal sealed class Poser3DDataSetConverter
 {
-	public Poser3DDataSetConverter(ConversionSession session, FileSystemImageRepository imageRepository)
+	public Poser3DDataSetConverter(ConversionSession session, ReadIdRepository<Image> imageRepository)
 	{
 		_tagsConverter = new PoserTagsConverter(session);
 		_assetsConverter = new Poser3DAssetsConverter(session, imageRepository);

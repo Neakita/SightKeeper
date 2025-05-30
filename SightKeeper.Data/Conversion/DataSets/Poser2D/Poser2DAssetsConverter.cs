@@ -3,12 +3,13 @@ using SightKeeper.Data.Model.DataSets.Assets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser2D;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Conversion.DataSets.Poser2D;
 
 internal sealed class Poser2DAssetsConverter
 {
-	public Poser2DAssetsConverter(ConversionSession session, FileSystemImageRepository imageRepository)
+	public Poser2DAssetsConverter(ConversionSession session, ReadIdRepository<Image> imageRepository)
 	{
 		_session = session;
 		_imageRepository = imageRepository;
@@ -20,7 +21,7 @@ internal sealed class Poser2DAssetsConverter
 	}
 
 	private readonly ConversionSession _session;
-	private readonly FileSystemImageRepository _imageRepository;
+	private readonly ReadIdRepository<Image> _imageRepository;
 
 	private PackableItemsAsset<PackablePoser2DItem> ConvertAsset(Poser2DAsset asset)
 	{

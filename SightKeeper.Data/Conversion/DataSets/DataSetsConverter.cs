@@ -9,12 +9,13 @@ using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Poser3D;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Conversion.DataSets;
 
 internal sealed class DataSetsConverter
 {
-	public DataSetsConverter(ConversionSession session, FileSystemImageRepository imageRepository)
+	public DataSetsConverter(ConversionSession session, ReadIdRepository<Image> imageRepository)
 	{
 		_classifierConverter = new ClassifierDataSetConverter(session, imageRepository);
 		_detectorConverter = new DetectorDataSetConverter(session, imageRepository);

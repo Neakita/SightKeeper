@@ -1,12 +1,13 @@
 using Serilog;
 using SightKeeper.Data.Replication.DataSets;
 using SightKeeper.Data.Services;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Replication;
 
 internal class AppDataReplicator
 {
-	public AppDataReplicator(FileSystemImageRepository imageRepository, ILogger logger)
+	public AppDataReplicator(WriteIdRepository<Image> imageRepository, ILogger logger)
 	{
 		_imageRepository = imageRepository;
 		_logger = logger;
@@ -22,6 +23,6 @@ internal class AppDataReplicator
 		return new AppData(imageSets, dataSets);
 	}
 
-	private readonly FileSystemImageRepository _imageRepository;
+	private readonly WriteIdRepository<Image> _imageRepository;
 	private readonly ILogger _logger;
 }

@@ -7,7 +7,7 @@ namespace SightKeeper.Data.Replication;
 
 internal sealed class ImageSetReplicator
 {
-	public ImageSetReplicator(ReplicationSession session, FileSystemImageRepository imageRepository, ILogger logger)
+	public ImageSetReplicator(ReplicationSession session, WriteIdRepository<Image> imageRepository, ILogger logger)
 	{
 		_session = session;
 		_imageRepository = imageRepository;
@@ -20,7 +20,7 @@ internal sealed class ImageSetReplicator
 	}
 
 	private readonly ReplicationSession _session;
-	private readonly FileSystemImageRepository _imageRepository;
+	private readonly WriteIdRepository<Image> _imageRepository;
 	private readonly ILogger _logger;
 
 	private ImageSet ReplicateImageSet(PackableImageSet packableSet)

@@ -1,12 +1,13 @@
 using System.Collections.Immutable;
 using SightKeeper.Data.Conversion.DataSets;
 using SightKeeper.Data.Services;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Conversion;
 
 internal sealed class AppDataConverter
 {
-	public AppDataConverter(FileSystemImageRepository imageRepository)
+	public AppDataConverter(ReadIdRepository<Image> imageRepository)
 	{
 		_imageRepository = imageRepository;
 	}
@@ -23,5 +24,5 @@ internal sealed class AppDataConverter
 		};
 	}
 
-	private readonly FileSystemImageRepository _imageRepository;
+	private readonly ReadIdRepository<Image> _imageRepository;
 }
