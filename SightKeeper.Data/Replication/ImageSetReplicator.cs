@@ -32,7 +32,7 @@ internal sealed class ImageSetReplicator
 		};
 		foreach (var packableImage in packableSet.Images)
 		{
-			var image = set.CreateImage(packableImage.CreationTimestamp, packableImage.Image);
+			var image = set.CreateImage(packableImage.CreationTimestamp, packableImage.Size);
 			var imageId = packableImage.Id;
 			try
 			{

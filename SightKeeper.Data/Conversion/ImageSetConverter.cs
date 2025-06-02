@@ -37,7 +37,7 @@ internal sealed class ImageSetConverter
 		{
 			Id = _imageRepository.GetId(image),
 			CreationTimestamp = image.CreationTimestamp,
-			Image = image.Size
+			Size = image.Size
 		};
 	}
 }
