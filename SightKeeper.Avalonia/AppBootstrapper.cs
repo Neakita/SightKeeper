@@ -11,7 +11,7 @@ internal static class AppBootstrapper
 		MemoryPackFormatterProvider.Register(composition.AppDataFormatter);
 		composition.AppDataAccess.Load();
 		composition.FileSystemImageRepository.ClearUnassociatedImageFiles();
-		composition.PeriodicAppDataSaver.Start();
+		composition.PeriodicDataSaver.Start();
 	}
 
 	private static void SetupLogger()
