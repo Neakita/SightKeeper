@@ -2,6 +2,7 @@
 
 public abstract class TagsLibrary : TagsOwner<Tag>
 {
+	public required DataSet DataSet { get; init; }
 	public abstract IReadOnlyList<Tag> Tags { get; }
 
 	public abstract Tag CreateTag(string name);

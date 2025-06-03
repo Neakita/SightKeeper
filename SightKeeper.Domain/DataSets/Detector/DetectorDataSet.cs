@@ -12,7 +12,10 @@ public sealed class DetectorDataSet : DataSet
 
 	public DetectorDataSet()
 	{
-		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance);
+		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance)
+		{
+			DataSet = this
+		};
 		DetectorAssetsFactory assetsFactory = new(TagsLibrary);
 		AssetsLibrary = new AssetsLibrary<DetectorAsset>(assetsFactory);
 		WeightsLibrary = new WeightsLibrary(TagsLibrary);

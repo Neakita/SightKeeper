@@ -12,7 +12,10 @@ public sealed class ClassifierDataSet : DataSet
 
 	public ClassifierDataSet()
 	{
-		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance);
+		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance)
+		{
+			DataSet = this
+		};
 		AssetsLibrary = new AssetsLibrary<ClassifierAsset>(new ClassifierAssetsFactory(TagsLibrary));
 		WeightsLibrary = new WeightsLibrary(TagsLibrary, 2);
 	}

@@ -12,7 +12,10 @@ public abstract class PoserDataSet : DataSet
 
 	protected PoserDataSet()
 	{
-		TagsLibrary = new TagsLibrary<PoserTag>(PoserTagsFactory.Instance);
+		TagsLibrary = new TagsLibrary<PoserTag>(PoserTagsFactory.Instance)
+		{
+			DataSet = this
+		};
 		WeightsLibrary = new WeightsLibrary(TagsLibrary);
 	}
 }
