@@ -5,9 +5,9 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Annotation;
 
-public abstract class ClassifierAnnotator
+public class ClassifierAnnotator
 {
-	protected ClassifierAnnotator(AssetsMaker assetsMaker)
+	public ClassifierAnnotator(AssetsMaker assetsMaker)
 	{
 		_assetsMaker = assetsMaker;
 	}
