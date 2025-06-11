@@ -33,7 +33,7 @@ public sealed class ExistingDataSetDataValidatorTests
 
 	private static DataSet CreateDataSet(string name)
 	{
-		return new ClassifierDataSet
+		return new DomainClassifierDataSet
 		{
 			Name = name
 		};

@@ -23,7 +23,7 @@ public sealed class DrawerItemsFactoryTests
 
 	private static AssetItem CreateItem()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var screenshot = CreateScreenshot();
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);

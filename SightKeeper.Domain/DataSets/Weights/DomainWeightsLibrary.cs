@@ -1,0 +1,60 @@
+﻿using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Tags;
+
+namespace SightKeeper.Domain.DataSets.Weights;
+
+public sealed class DomainWeightsLibrary : WeightsLibrary, Decorator<WeightsLibrary>
+{
+	public WeightsLibrary Inner { get; }
+	public IReadOnlyCollection<Weights> Weights => Inner.Weights;
+
+	public void AddWeights(Weights weights)
+	{
+		ValidateTags(weights.Tags);
+		Inner.AddWeights(weights);
+		/*if (!isAdded)
+			throw new ArgumentException("Specified weights already exists in the library");*/
+	}
+
+	public void RemoveWeights(Weights weights)
+	{
+		Inner.RemoveWeights(weights);
+		/*if (!isRemoved)
+			throw new ArgumentException("Specified weights was not found and therefore not deleted");*/
+	}
+
+	internal DomainWeightsLibrary(WeightsLibrary inner, TagsContainer<Tag> tagsOwner, int minimumTagsCount = 1)
+	{
+		Inner = inner;
+		_minimumTagsCount = minimumTagsCount;
+		_tagsOwner = tagsOwner;
+	}
+
+	private readonly int _minimumTagsCount;
+	private readonly TagsContainer<Tag> _tagsOwner;
+
+	private void ValidateTags(IReadOnlyCollection<Tag> tagsList)
+	{
+		DuplicateTagsException.ThrowIfContainsDuplicates(tagsList);
+		ValidateTagsQuantity(tagsList);
+		ValidateTagOwners(tagsList);
+	}
+
+	private void ValidateTagsQuantity(IReadOnlyCollection<Tag> tagsList)
+	{
+		if (tagsList.Count < _minimumTagsCount)
+			throw new ArgumentException($"Should specify at least {_minimumTagsCount} tags");
+	}
+
+	private void ValidateTagOwners(IReadOnlyCollection<Tag> tagsList)
+	{
+		foreach (var tag in tagsList)
+		{
+			UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
+			if (tag.Owner is not PoserTag poserTag)
+				continue;
+			if (!tagsList.Contains(poserTag))
+				throw new KeyPointTagWithoutOwnerException(tag, poserTag);
+		}
+	}
+}

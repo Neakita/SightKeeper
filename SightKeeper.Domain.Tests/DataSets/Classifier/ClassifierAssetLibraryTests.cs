@@ -9,7 +9,7 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldCreateAssetWithInitialTag()
 	{
 		var image = Utilities.CreateImage();
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		dataSet.AssetsLibrary.Assets.Should().Contain(asset);
@@ -22,7 +22,7 @@ public sealed class ClassifierAssetLibraryTests
 	public void ShouldNotCreateAssetWithoutAvailableTags()
 	{
 		var image = Utilities.CreateImage();
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		Assert.Throws<ArgumentOutOfRangeException>(() => dataSet.AssetsLibrary.MakeAsset(image));
 	}
 }

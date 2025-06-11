@@ -8,7 +8,7 @@ public sealed class DetectorTagTests
 	[Fact]
 	public void ShouldNotChangeTagNameToOccupied()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		Assert.ThrowsAny<Exception>(() => tag2.Name = "1");
@@ -19,7 +19,7 @@ public sealed class DetectorTagTests
 	[Fact]
 	public void ShouldSetTagNameToDeletedTagName()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		dataSet.TagsLibrary.DeleteTag(tag1);

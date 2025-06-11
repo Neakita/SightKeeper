@@ -12,9 +12,9 @@ internal static class Utilities
 		return new Image(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 	}
 
-	public static TagsLibrary<Tag> CreateTagsLibrary()
+	public static DomainTagsLibrary<Tag> CreateTagsLibrary()
 	{
-		return new ClassifierDataSet().TagsLibrary;
+		return new DomainClassifierDataSet().TagsLibrary;
 	}
 
 	public static Weights CreateWeights(params IEnumerable<Tag> tags)

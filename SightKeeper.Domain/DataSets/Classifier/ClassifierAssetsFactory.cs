@@ -6,7 +6,7 @@ namespace SightKeeper.Domain.DataSets.Classifier;
 
 internal sealed class ClassifierAssetsFactory : AssetsFactory<ClassifierAsset>
 {
-	public ClassifierAssetsFactory(TagsLibrary<Tag> tagsLibrary)
+	public ClassifierAssetsFactory(DomainTagsLibrary<Tag> tagsLibrary)
 	{
 		_tagsLibrary = tagsLibrary;
 	}
@@ -19,5 +19,5 @@ internal sealed class ClassifierAssetsFactory : AssetsFactory<ClassifierAsset>
 		};
 	}
 
-	private readonly TagsLibrary<Tag> _tagsLibrary;
+	private readonly DomainTagsLibrary<Tag> _tagsLibrary;
 }

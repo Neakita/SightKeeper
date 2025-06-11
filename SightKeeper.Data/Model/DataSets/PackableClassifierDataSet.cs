@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets.Classifier;
 namespace SightKeeper.Data.Model.DataSets;
 
 /// <summary>
-/// MemoryPackable version of <see cref="ClassifierDataSet"/>
+/// MemoryPackable version of <see cref="DomainClassifierDataSet"/>
 /// </summary>
 [MemoryPackable]
 internal sealed partial class PackableClassifierDataSet : PackableDataSet

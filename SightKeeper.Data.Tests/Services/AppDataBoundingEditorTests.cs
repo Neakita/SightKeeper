@@ -28,7 +28,7 @@ public sealed class AppDataBoundingEditorTests
 
 	private static BoundedItem PrepareItem()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var screenshot = PrepareScreenshot();
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);

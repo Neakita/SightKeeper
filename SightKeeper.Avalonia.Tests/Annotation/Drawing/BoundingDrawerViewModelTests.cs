@@ -103,7 +103,7 @@ public sealed class BoundingDrawerViewModelTests
 
 	private static (AssetsOwner<ItemsMaker<AssetItem>> assetsLibrary, Tag tag) CreateDataSetWithTag()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		return (dataSet.AssetsLibrary, tag);
 	}

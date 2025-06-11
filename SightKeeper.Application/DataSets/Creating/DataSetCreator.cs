@@ -19,8 +19,8 @@ public sealed class DataSetCreator
 		Validator.ValidateAndThrow(data);
 		DataSet dataSet = data.Type switch
 		{
-			DataSetType.Classifier => new ClassifierDataSet(),
-			DataSetType.Detector => new DetectorDataSet(),
+			DataSetType.Classifier => new DomainClassifierDataSet(),
+			DataSetType.Detector => new DomainDetectorDataSet(),
 			DataSetType.Poser2D => new Poser2DDataSet(),
 			DataSetType.Poser3D => new Poser3DDataSet(),
 			_ => throw new ArgumentOutOfRangeException(nameof(data), data, null)

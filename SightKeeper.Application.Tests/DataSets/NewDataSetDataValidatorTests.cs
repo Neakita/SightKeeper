@@ -28,7 +28,7 @@ public sealed class NewDataSetDataValidatorTests
 
 	private static IValidator<NewDataSetData> CreateValidator(params IEnumerable<string> existingDataSetsNames)
 	{
-		var existingDataSets = existingDataSetsNames.Select(name => new ClassifierDataSet { Name = name }).ToList();
+		var existingDataSets = existingDataSetsNames.Select(name => new DomainClassifierDataSet { Name = name }).ToList();
 		var repository = Utilities.CreateRepository(existingDataSets);
 		return new NewDataSetDataValidator(repository);
 	}

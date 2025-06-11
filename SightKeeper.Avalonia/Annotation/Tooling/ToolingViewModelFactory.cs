@@ -20,11 +20,11 @@ public sealed class ToolingViewModelFactory
 		{
 			case null:
 				return null;
-			case ClassifierDataSet classifierDataSet:
+			case DomainClassifierDataSet classifierDataSet:
 				var classifierTooling = _composition.ClassifierToolingViewModel;
 				classifierTooling.DataSet = classifierDataSet;
 				return classifierTooling;
-			case DetectorDataSet detectorDataSet:
+			case DomainDetectorDataSet detectorDataSet:
 				DetectorToolingViewModel detectorTooling = new()
 				{
 					TagsContainer = detectorDataSet.TagsLibrary

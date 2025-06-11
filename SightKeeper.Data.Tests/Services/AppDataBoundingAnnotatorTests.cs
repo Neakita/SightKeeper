@@ -39,9 +39,9 @@ public sealed class AppDataBoundingAnnotatorTests
 		return boundingAnnotator;
 	}
 
-	private static (DetectorDataSet dataSet, Tag tag) PrepareDataSet()
+	private static (DomainDetectorDataSet dataSet, Tag tag) PrepareDataSet()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		return (dataSet, tag);
 	}

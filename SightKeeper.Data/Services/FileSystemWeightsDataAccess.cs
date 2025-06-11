@@ -33,7 +33,7 @@ public sealed class FileSystemWeightsDataAccess : WeightsDataAccess
 		_weightsDataAccess.AssociateId(weights, id);
 	}
 
-	protected override void AddWeights(WeightsLibrary library, Weights weights)
+	protected override void AddWeights(DomainWeightsLibrary library, Weights weights)
 	{
 		lock (_appDataLock)
 			base.AddWeights(library, weights);
@@ -45,7 +45,7 @@ public sealed class FileSystemWeightsDataAccess : WeightsDataAccess
 		_weightsDataAccess.WriteAllBytes(weights, data);
 	}
 
-	protected override void RemoveWeights(WeightsLibrary library, Weights weights)
+	protected override void RemoveWeights(DomainWeightsLibrary library, Weights weights)
 	{
 		lock (_appDataLock)
 			base.RemoveWeights(library, weights);

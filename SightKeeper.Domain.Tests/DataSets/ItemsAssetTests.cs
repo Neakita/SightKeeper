@@ -10,7 +10,7 @@ public sealed class ItemsAssetTests
 	public void ShouldCreateItem()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var item = asset.MakeItem(tag);
@@ -21,7 +21,7 @@ public sealed class ItemsAssetTests
 	public void ShouldCreateMultipleItemsWithSameTag()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var item1 = asset.MakeItem(tag);
@@ -33,7 +33,7 @@ public sealed class ItemsAssetTests
 	public void ShouldCreateMultipleItemsWithSameBounding()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
@@ -46,8 +46,8 @@ public sealed class ItemsAssetTests
 	public void ShouldNotCreateItemWithWrongOwnerTag()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
-		var tag2 = new DetectorDataSet().TagsLibrary.CreateTag("2");
+		DomainDetectorDataSet dataSet = new();
+		var tag2 = new DomainDetectorDataSet().TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var exception = Assert.Throws<UnexpectedTagsOwnerException>(() => asset.MakeItem(tag2));
 		tag2.Users.Should().BeEmpty();
@@ -59,7 +59,7 @@ public sealed class ItemsAssetTests
 	public void ShouldDeleteItem()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var item = asset.MakeItem(tag);
@@ -71,7 +71,7 @@ public sealed class ItemsAssetTests
 	public void ShouldNotDeleteItemTwice()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var item = asset.MakeItem(tag);
@@ -83,7 +83,7 @@ public sealed class ItemsAssetTests
 	public void ShouldDeleteItemByIndex()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		asset.MakeItem(tag);
@@ -94,7 +94,7 @@ public sealed class ItemsAssetTests
 	public void ShouldClearItems()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		asset.MakeItem(tag);

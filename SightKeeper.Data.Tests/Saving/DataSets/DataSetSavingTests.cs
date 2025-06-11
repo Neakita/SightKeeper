@@ -28,7 +28,7 @@ public sealed class DataSetSavingTests
 
 	private static DataSet CreateDataSet()
 	{
-		return new ClassifierDataSet();
+		return new DomainClassifierDataSet();
 	}
 
 	private static DataSet Persist(DataSet set)

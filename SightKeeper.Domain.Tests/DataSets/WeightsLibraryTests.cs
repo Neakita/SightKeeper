@@ -77,7 +77,7 @@ public sealed class WeightsLibraryTests
 
 	private static DataSet CreateDataSet()
 	{
-		return new DetectorDataSet();
+		return new DomainDetectorDataSet();
 	}
 
 	private static PoserDataSet CreatePoserDataSet()

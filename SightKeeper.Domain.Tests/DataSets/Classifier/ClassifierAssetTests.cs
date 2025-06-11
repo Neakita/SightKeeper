@@ -10,7 +10,7 @@ public sealed class ClassifierAssetTests
 	public void ShouldUpdateTag()
 	{
 		var image = Utilities.CreateImage();
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
@@ -24,9 +24,9 @@ public sealed class ClassifierAssetTests
 	public void ShouldNotSetTagToForeign()
 	{
 		var image = Utilities.CreateImage();
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var properTag = dataSet.TagsLibrary.CreateTag("");
-		var foreignTag = new ClassifierDataSet().TagsLibrary.CreateTag("");
+		var foreignTag = new DomainClassifierDataSet().TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var exception = Assert.Throws<InappropriateTagsOwnerChangeException>(() => asset.Tag = foreignTag);
 		asset.Tag.Should().Be(properTag);

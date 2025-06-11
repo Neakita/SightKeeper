@@ -13,7 +13,7 @@ public sealed class ClassifierAnnotatorTests
 	{
 		DomainImageSet imageSet = new();
 		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		ClassifierAnnotator annotator = new(new FakeAssetsMaker());
 		annotator.SetTag(dataSet.AssetsLibrary, image, tag);
@@ -25,7 +25,7 @@ public sealed class ClassifierAnnotatorTests
 	{
 		DomainImageSet imageSet = new();
 		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
@@ -39,7 +39,7 @@ public sealed class ClassifierAnnotatorTests
 	{
 		DomainImageSet imageSet = new();
 		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		ClassifierAnnotator annotator = new(new FakeAssetsMaker());
@@ -52,7 +52,7 @@ public sealed class ClassifierAnnotatorTests
 	{
 		DomainImageSet imageSet = new();
 		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("1");
 		ClassifierAnnotator annotator = new(new FakeAssetsMaker());
 		Assert.Throws<ArgumentException>(() => annotator.DeleteAsset(dataSet.AssetsLibrary, image));

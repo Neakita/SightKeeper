@@ -8,7 +8,7 @@ public sealed class DetectorItemTests
 	[Fact]
 	public void ShouldUpdateTag()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var image = Utilities.CreateImage();

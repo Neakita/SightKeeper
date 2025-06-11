@@ -8,7 +8,7 @@ public sealed class WeightsLibraryInClassifierTests
 	[Fact]
 	public void ShouldAddWeightsWithTwoTags()
 	{
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var weights = Utilities.CreateWeights(tag1, tag2);
@@ -19,7 +19,7 @@ public sealed class WeightsLibraryInClassifierTests
 	[Fact]
 	public void ShouldNotAddWeightsWithOneTag()
 	{
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var weights = Utilities.CreateWeights(tag);
 		Assert.Throws<ArgumentException>(() => dataSet.WeightsLibrary.AddWeights(weights));

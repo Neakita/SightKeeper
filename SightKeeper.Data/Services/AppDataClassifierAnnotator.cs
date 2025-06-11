@@ -15,14 +15,14 @@ public sealed class AppDataClassifierAnnotator : ClassifierAnnotator
 		_appDataLock = appDataLock;
 	}
 
-	public override void SetTag(AssetsLibrary<ClassifierAsset> assetsLibrary, Image image, Tag tag)
+	public override void SetTag(DomainAssetsLibrary<ClassifierAsset> assetsLibrary, Image image, Tag tag)
 	{
 		lock (_appDataLock)
 			base.SetTag(assetsLibrary, image, tag);
 		_changeListener.SetDataChanged();
 	}
 
-	public override void DeleteAsset(AssetsLibrary<ClassifierAsset> assetsLibrary, Image image)
+	public override void DeleteAsset(DomainAssetsLibrary<ClassifierAsset> assetsLibrary, Image image)
 	{
 		lock (_appDataLock)
 			base.DeleteAsset(assetsLibrary, image);

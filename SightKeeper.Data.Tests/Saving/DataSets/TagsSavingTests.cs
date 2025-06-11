@@ -35,7 +35,7 @@ public sealed class TagsSavingTests
 
 	private static DataSet CreateDataSet()
 	{
-		return new ClassifierDataSet();
+		return new DomainClassifierDataSet();
 	}
 
 	private static Tag Persist(Tag tag)

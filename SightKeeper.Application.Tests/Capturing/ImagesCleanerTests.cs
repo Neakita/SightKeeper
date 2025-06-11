@@ -34,7 +34,7 @@ public sealed class ImagesCleanerTests
 		DomainImageSet set = new();
 		for (int i = 0; i < 15; i++)
 			set.CreateImage(DateTimeOffset.UtcNow.AddMilliseconds(i), new Vector2<ushort>(320, 320));
-		var dataSet = new DetectorDataSet();
+		var dataSet = new DomainDetectorDataSet();
 		dataSet.AssetsLibrary.MakeAsset(set.Images[1]);
 		dataSet.AssetsLibrary.MakeAsset(set.Images[3]);
 		var usedImages = set.Images.Where(image => image.IsInUse).ToList();

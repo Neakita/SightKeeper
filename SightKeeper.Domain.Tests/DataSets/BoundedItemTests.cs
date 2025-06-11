@@ -26,7 +26,7 @@ public sealed class BoundedItemTests
 
 	private static BoundedItem CreateItem()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var image = Utilities.CreateImage();
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var tag = dataSet.TagsLibrary.CreateTag(string.Empty);

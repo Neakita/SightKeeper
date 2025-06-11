@@ -10,7 +10,7 @@ public sealed class TagsLibraryInClassifierTests
 	public void ShouldNotDeleteTagWithAssociatedAsset()
 	{
 		var image = Utilities.CreateImage();
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var exception = Assert.Throws<TagIsInUseException>(() => dataSet.TagsLibrary.DeleteTag(tag));

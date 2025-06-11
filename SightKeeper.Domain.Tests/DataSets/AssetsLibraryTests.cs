@@ -116,6 +116,6 @@ public sealed class AssetsLibraryTests
 
 	private static DataSet CreateDataSet()
 	{
-		return new DetectorDataSet();
+		return new DomainDetectorDataSet();
 	}
 }

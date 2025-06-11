@@ -11,7 +11,7 @@ public sealed class ImageSetTests
 	{
 		DomainImageSet imageSet = new(new FakeImageSet());
 		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(image);
 		var exception = Assert.Throws<ImageIsInUseException>(() => imageSet.RemoveImageAt(0));
 		exception.Image.Should().Be(image);
@@ -23,7 +23,7 @@ public sealed class ImageSetTests
 	{
 		DomainImageSet imageSet = new(new FakeImageSet());
 		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(image);
 		dataSet.AssetsLibrary.DeleteAsset(image);
 		imageSet.RemoveImageAt(0);
@@ -34,7 +34,7 @@ public sealed class ImageSetTests
 	{
 		DomainImageSet imageSet = new(new FakeImageSet());
 		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(image);
 		dataSet.AssetsLibrary.ClearAssets();
 		imageSet.RemoveImageAt(0);

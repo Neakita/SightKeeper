@@ -42,7 +42,7 @@ public sealed class DataSetCreatorTests
 		var creator = CreateCreator();
 		var data = new FakeNewDataSetData(DataSetType.Classifier);
 		var dataSet = creator.Create(data);
-		dataSet.Should().BeOfType<ClassifierDataSet>();
+		dataSet.Should().BeOfType<DomainClassifierDataSet>();
 	}
 
 	[Fact]
@@ -51,7 +51,7 @@ public sealed class DataSetCreatorTests
 		var creator = CreateCreator();
 		var data = new FakeNewDataSetData(DataSetType.Detector);
 		var dataSet = creator.Create(data);
-		dataSet.Should().BeOfType<DetectorDataSet>();
+		dataSet.Should().BeOfType<DomainDetectorDataSet>();
 	}
 
 	[Fact]

@@ -124,7 +124,7 @@ public sealed class DataSetEditorTests
 
 	private static DataSet CreateDataSet(string name = "", string description = "")
 	{
-		return new ClassifierDataSet
+		return new DomainClassifierDataSet
 		{
 			Name = name,
 			Description = description

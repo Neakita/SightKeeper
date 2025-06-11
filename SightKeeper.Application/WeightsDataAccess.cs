@@ -4,14 +4,14 @@ namespace SightKeeper.Application;
 
 public abstract class WeightsDataAccess
 {
-	public Weights AddWeights(WeightsLibrary library, Weights weights, byte[] data)
+	public Weights AddWeights(DomainWeightsLibrary library, Weights weights, byte[] data)
 	{
 		AddWeights(library, weights);
 		SaveWeightsData(weights, data);
 		return weights;
 	}
 
-	public void DeleteWeights(WeightsLibrary library, Weights weights)
+	public void DeleteWeights(DomainWeightsLibrary library, Weights weights)
 	{
 		RemoveWeights(library, weights);
 		RemoveWeightsData(weights);
@@ -19,12 +19,12 @@ public abstract class WeightsDataAccess
 
 	public abstract byte[] LoadWeightsData(Weights weights);
 
-	protected virtual void AddWeights(WeightsLibrary library, Weights weights)
+	protected virtual void AddWeights(DomainWeightsLibrary library, Weights weights)
 	{
 		library.AddWeights(weights);
 	}
 
-	protected virtual void RemoveWeights(WeightsLibrary library, Weights weights)
+	protected virtual void RemoveWeights(DomainWeightsLibrary library, Weights weights)
 	{
 		library.RemoveWeights(weights);
 	}

@@ -52,7 +52,7 @@ public sealed class DrawerViewModelTests
 
 	private static Tag CreateTag()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		return tag;
 	}

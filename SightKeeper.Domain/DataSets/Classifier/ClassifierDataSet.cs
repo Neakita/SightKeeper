@@ -1,22 +1,9 @@
-﻿using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Domain.DataSets.Classifier;
 
-public sealed class ClassifierDataSet : DataSet
+public interface ClassifierDataSet : DataSet
 {
-	public override TagsLibrary<Tag> TagsLibrary { get; }
-	public override AssetsLibrary<ClassifierAsset> AssetsLibrary { get; }
-	public override WeightsLibrary WeightsLibrary { get; }
-
-	public ClassifierDataSet()
-	{
-		TagsLibrary = new TagsLibrary<Tag>(PlainTagsFactory.Instance)
-		{
-			DataSet = this
-		};
-		AssetsLibrary = new AssetsLibrary<ClassifierAsset>(new ClassifierAssetsFactory(TagsLibrary));
-		WeightsLibrary = new WeightsLibrary(TagsLibrary, 2);
-	}
+	new AssetsOwner<ClassifierAsset> AssetsLibrary { get; }
+	AssetsOwner<Asset> DataSet.AssetsLibrary => AssetsLibrary;
 }

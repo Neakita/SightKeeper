@@ -25,7 +25,7 @@ internal sealed class EditDataSetViewModel : DataSetDialogViewModel, ExistingDat
 		DataSet = dataSet;
 		TagsEditor = dataSet switch
 		{
-			ClassifierDataSet or DetectorDataSet => new PlainTagsEditorViewModel(dataSet.TagsLibrary.Tags),
+			DomainClassifierDataSet or DomainDetectorDataSet => new PlainTagsEditorViewModel(dataSet.TagsLibrary.Tags),
 			Poser2DDataSet or Poser3DDataSet => new PoserTagsEditorViewModel(dataSet.TagsLibrary.Tags.Cast<PoserTag>()),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
 		};

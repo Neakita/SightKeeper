@@ -9,7 +9,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldCreateTag()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		dataSet.TagsLibrary.Tags.Should().Contain(tag);
 	}
@@ -17,7 +17,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldCreateMultipleTags()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var tag3 = dataSet.TagsLibrary.CreateTag("3");
@@ -27,7 +27,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldNotCreateTagWithOccupiedName()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.CreateTag("1"));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag1);
@@ -37,7 +37,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldDeleteTag()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		dataSet.TagsLibrary.DeleteTag(tag);
 		dataSet.TagsLibrary.Tags.Should().BeEmpty();
@@ -47,7 +47,7 @@ public sealed class DetectorTagsLibraryTests
 	public void ShouldNotDeleteTagWithItems()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		asset.MakeItem(tag);
@@ -60,7 +60,7 @@ public sealed class DetectorTagsLibraryTests
 	public void ShouldDeleteTagWithoutItems()
 	{
 		var image = Utilities.CreateImage();
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);

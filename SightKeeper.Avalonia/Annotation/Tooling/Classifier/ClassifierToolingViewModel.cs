@@ -14,7 +14,7 @@ namespace SightKeeper.Avalonia.Annotation.Tooling.Classifier;
 public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierToolingDataContext, IDisposable
 {
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
-	public partial ClassifierDataSet? DataSet { get; set; }
+	public partial DomainClassifierDataSet? DataSet { get; set; }
 
 	public IEnumerable<TagDataContext> Tags
 	{
@@ -58,7 +58,7 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 	}
 
 	private readonly ClassifierAnnotator _annotator;
-	private AssetsLibrary<ClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
+	private DomainAssetsLibrary<ClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
 	private readonly IDisposable _disposable;
 
 	private ClassifierAsset? Asset =>

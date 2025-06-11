@@ -16,7 +16,7 @@ public sealed class TagsLibraryTests
 	[Fact]
 	public void ShouldCreateMultipleTags()
 	{
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
 		var tag3 = dataSet.TagsLibrary.CreateTag("3");
@@ -26,7 +26,7 @@ public sealed class TagsLibraryTests
 	[Fact]
 	public void ShouldDeleteTag()
 	{
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		dataSet.TagsLibrary.DeleteTag(tag);
 		dataSet.TagsLibrary.Tags.Should().BeEmpty();
@@ -35,7 +35,7 @@ public sealed class TagsLibraryTests
 	[Fact]
 	public void ShouldNotCreateTagWithOccupiedName()
 	{
-		ClassifierDataSet dataSet = new();
+		DomainClassifierDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.CreateTag("1"));
 		dataSet.TagsLibrary.Tags.Should().Contain(tag1);
