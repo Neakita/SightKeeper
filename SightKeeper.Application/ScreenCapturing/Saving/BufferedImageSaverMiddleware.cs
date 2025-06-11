@@ -30,7 +30,7 @@ public sealed class BufferedImageSaverMiddleware<TPixel> : ImageSaver<TPixel>, L
 		_pendingImagesCount.Dispose();
 	}
 
-	public void SaveImage(ImageSet set, ReadOnlySpan2D<TPixel> imageData, DateTimeOffset creationTimestamp)
+	public void SaveImage(DomainImageSet set, ReadOnlySpan2D<TPixel> imageData, DateTimeOffset creationTimestamp)
 	{
 		Guard.IsFalse(IsLimitReached);
 		var data = new ImageData<TPixel>(set, imageData, creationTimestamp);

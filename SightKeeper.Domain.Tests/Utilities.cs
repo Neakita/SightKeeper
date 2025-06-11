@@ -9,8 +9,7 @@ internal static class Utilities
 {
 	public static Image CreateImage()
 	{
-		ImageSet set = new();
-		return set.CreateImage();
+		return new Image(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 	}
 
 	public static TagsLibrary<Tag> CreateTagsLibrary()

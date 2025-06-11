@@ -21,7 +21,7 @@ public sealed class ImageSaverConverterMiddlewareTests
 		};
 		var pixels = new Bgra32[4, 4];
 		Random.Shared.NextBytes(pixels.AsSpan().AsBytes());
-		middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
+		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
 		converter.ReceivedCalls.Count.Should().Be(1);
 		var receivedPixels = converter.ReceivedCalls.Single();
 		receivedPixels.ShouldRoughlyBe(pixels);
@@ -39,7 +39,7 @@ public sealed class ImageSaverConverterMiddlewareTests
 		};
 		var pixels = new Bgra32[4, 4];
 		Random.Shared.NextBytes(pixels.AsSpan().AsBytes());
-		middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
+		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
 		imageSaver.ReceivedCalls.Should().HaveCount(1);
 		var receivedPixels = imageSaver.ReceivedCalls.Single().imageData;
 		AssertRoughlyEquals(receivedPixels, pixels);

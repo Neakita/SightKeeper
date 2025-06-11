@@ -13,14 +13,14 @@ namespace SightKeeper.Avalonia.ImageSets.Commands;
 internal sealed class DeleteImageSetCommandFactory
 {
 	public required DialogManager DialogManager { get; init; }
-	public required WriteRepository<ImageSet> ImageSetRepository { get; init; }
+	public required WriteRepository<DomainImageSet> ImageSetRepository { get; init; }
 
 	public ICommand CreateCommand()
 	{
-		return new AsyncRelayCommand<ImageSet>(DeleteImageSetAsync!);
+		return new AsyncRelayCommand<DomainImageSet>(DeleteImageSetAsync!);
 	}
 
-	private async Task DeleteImageSetAsync(ImageSet set)
+	private async Task DeleteImageSetAsync(DomainImageSet set)
 	{
 		if (!set.CanDelete())
 		{

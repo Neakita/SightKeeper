@@ -1,5 +1,4 @@
 using FluentAssertions;
-using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 
@@ -34,9 +33,10 @@ public sealed class DataSetSavingTests
 
 	private static DataSet Persist(DataSet set)
 	{
-		AppDataAccess appDataAccess = new();
+		throw new NotImplementedException();
+		/*AppDataAccess appDataAccess = new();
 		Utilities.AddDataSetToAppData(set, appDataAccess);
 		var persistedAppData = appDataAccess.Data.Persist();
-		return persistedAppData.DataSets.Single();
+		return persistedAppData.DataSets.Single();*/
 	}
 }

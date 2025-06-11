@@ -1,6 +1,5 @@
 using CommunityToolkit.Diagnostics;
 using FluentAssertions;
-using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
@@ -50,9 +49,10 @@ public sealed class TagsSavingTests
 
 	private static DataSet Persist(DataSet set)
 	{
-		AppDataAccess appDataAccess = new();
+		throw new NotImplementedException();
+		/*AppDataAccess appDataAccess = new();
 		Utilities.AddDataSetToAppData(set, appDataAccess);
 		var persistedAppData = appDataAccess.Data.Persist();
-		return persistedAppData.DataSets.Single();
+		return persistedAppData.DataSets.Single();*/
 	}
 }

@@ -110,7 +110,7 @@ public sealed class BoundingDrawerViewModelTests
 
 	private static Image CreateScreenshot()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new();
 		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return screenshot;
 	}

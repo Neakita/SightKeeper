@@ -1,6 +1,4 @@
-using CommunityToolkit.Diagnostics;
 using FluentAssertions;
-using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
@@ -12,8 +10,9 @@ public sealed class ImageSavingTests
 	public void ShouldPersistCreationTimestamp()
 	{
 		var creationTimestamp = DateTimeOffset.UtcNow.AddDays(-2);
-		var image = CreateImage(creationTimestamp, new Vector2<ushort>(320, 320));
-		var persistedImage = Persist(image);
+		var set = CreateSetWithImages(creationTimestamp);
+		var persistedSet = set.Persist();
+		var persistedImage = persistedSet.Images.Single();
 		persistedImage.CreationTimestamp.Should().Be(creationTimestamp);
 	}
 
@@ -21,25 +20,36 @@ public sealed class ImageSavingTests
 	public void ShouldPersistSize()
 	{
 		var size = new Vector2<ushort>(480, 320);
-		var image = CreateImage(DateTimeOffset.UtcNow, size);
-		var persistedImage = Persist(image);
+		var set = CreateSetWithImage(size);
+		var persistedSet = set.Persist();
+		var persistedImage = persistedSet.Images.Single();
 		persistedImage.Size.Should().Be(size);
 	}
 
-	private static Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	[Fact]
+	public void ShouldPersistMultipleImages()
 	{
-		ImageSet set = new();
-		var image = set.CreateImage(creationTimestamp, size);
-		return image;
+		var initialTimestamp = DateTimeOffset.UtcNow;
+		var timestamps = Enumerable.Range(0, 5)
+			.Select(i => initialTimestamp.AddMilliseconds(i))
+			.ToList();
+		var set = CreateSetWithImages(timestamps);
+		var persistedSet = set.Persist();
+		persistedSet.Images.Select(image => image.CreationTimestamp).Should().ContainInOrder(timestamps);
 	}
 
-	private static Image Persist(Image image)
+	private static ImageSet CreateSetWithImages(params IEnumerable<DateTimeOffset> imageCreationTimestamps)
 	{
-		var set = image.Set;
-		Guard.IsEqualTo(set.Images.Count, 1);
-		AppDataAccess appDataAccess = new();
-		Utilities.AddImageSetToAppData(set, appDataAccess);
-		var persistedAppData = appDataAccess.Data.Persist();
-		return persistedAppData.ImageSets.Single().Images.Single();
+		var set = Utilities.CreateImageSet();
+		foreach (var timestamp in imageCreationTimestamps)
+			set.CreateImage(timestamp, new Vector2<ushort>(320, 320));
+		return set;
+	}
+
+	private static ImageSet CreateSetWithImage(Vector2<ushort> imageSize)
+	{
+		var set = Utilities.CreateImageSet();
+		set.CreateImage(DateTimeOffset.UtcNow, imageSize);
+		return set;
 	}
 }

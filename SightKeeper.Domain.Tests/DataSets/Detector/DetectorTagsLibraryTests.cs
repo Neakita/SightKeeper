@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
 
@@ -47,8 +46,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldNotDeleteTagWithItems()
 	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		DetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
@@ -61,8 +59,7 @@ public sealed class DetectorTagsLibraryTests
 	[Fact]
 	public void ShouldDeleteTagWithoutItems()
 	{
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		DetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");

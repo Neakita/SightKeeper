@@ -12,7 +12,7 @@ public sealed class ImagesCleaner
 		_imageRepository = imageRepository;
 	}
 
-	public void RemoveExceedUnusedImages(ImageSet set)
+	public void RemoveExceedUnusedImages(DomainImageSet set)
 	{
 		var ranges = GetRangesToRemove(set);
 		foreach (var range in ranges)
@@ -22,7 +22,7 @@ public sealed class ImagesCleaner
 	private readonly ImageRepository _imageRepository;
 
 	/// <returns>reversed ranges, i.e. first range has latest indexes</returns>
-	private IEnumerable<Range> GetRangesToRemove(ImageSet set)
+	private IEnumerable<Range> GetRangesToRemove(DomainImageSet set)
 	{
 		var unusedRanges = set.Images
 			.Index()

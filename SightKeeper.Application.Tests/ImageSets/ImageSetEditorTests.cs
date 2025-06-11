@@ -24,7 +24,7 @@ public sealed class ImageSetEditorTests
 	public void ShouldNotifyObserver()
 	{
 		var editor = CreateEditor();
-		var observer = Substitute.For<IObserver<ImageSet>>();
+		var observer = Substitute.For<IObserver<DomainImageSet>>();
 		editor.Edited.Subscribe(observer);
 		var set = CreateImageSet();
 		var data = Utilities.CreateExistingImageSetData(set, "new name", "new description");
@@ -37,8 +37,8 @@ public sealed class ImageSetEditorTests
 		return new ImageSetEditor();
 	}
 
-	private static ImageSet CreateImageSet()
+	private static DomainImageSet CreateImageSet()
 	{
-		return new ImageSet();
+		return new DomainImageSet();
 	}
 }

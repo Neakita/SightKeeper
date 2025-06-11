@@ -1,6 +1,5 @@
 using FluentAssertions;
 using SightKeeper.Domain.DataSets.Detector;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
 
@@ -12,8 +11,7 @@ public sealed class DetectorItemTests
 		DetectorDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
-		ImageSet imageSet = new();
-		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		var image = Utilities.CreateImage();
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
 		var item = asset.MakeItem(tag1);
 		item.Tag = tag2;

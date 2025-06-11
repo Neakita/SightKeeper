@@ -13,7 +13,7 @@ public sealed class BufferedImageSaverMiddlewareTests
 	{
 		var middleware = CreateMiddleware(out var imageSaver);
 		var pixels = CreateRandomPixels(1920, 1080);
-		middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
+		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
 		Thread.Sleep(50);
 		var receivedPixels = imageSaver.ReceivedCalls.Single().imageData;
 		receivedPixels.ShouldRoughlyBe(pixels);
@@ -24,7 +24,7 @@ public sealed class BufferedImageSaverMiddlewareTests
 	{
 		var middleware = CreateMiddleware(out var imageSaver);
 		var pixels = CreateRandomPixels(4096, 2160);
-		middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
+		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
 		Thread.Sleep(50);
 		var receivedPixels = imageSaver.ReceivedCalls.Single().imageData;
 		receivedPixels.ShouldRoughlyBe(pixels);
@@ -37,7 +37,7 @@ public sealed class BufferedImageSaverMiddlewareTests
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
 		for (int i = 0; i < 10; i++)
-			middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
+			middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
 		// first call data dequeues nearly instantly
 		middleware.PendingImagesCount.Value.Should().Be(9);
 	}
@@ -49,9 +49,9 @@ public sealed class BufferedImageSaverMiddlewareTests
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
 		// first call data will be dequeued even when calls halt
-		middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
+		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
 		for (int i = 0; i < 10; i++)
-			middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
+			middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
 		middleware.IsLimitReached.Should().BeTrue();
 	}
 
@@ -62,7 +62,7 @@ public sealed class BufferedImageSaverMiddlewareTests
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
 		for (int i = 0; i < 10; i++)
-			middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
+			middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
 		imageSaver.HoldCalls = false;
 		Thread.Sleep(100);
 		middleware.PendingImagesCount.Value.Should().Be(0);
@@ -75,7 +75,7 @@ public sealed class BufferedImageSaverMiddlewareTests
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
 		for (int i = 0; i < 10; i++)
-			middleware.SaveImage(new ImageSet(), pixels, DateTimeOffset.UtcNow);
+			middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
 		imageSaver.HoldCalls = false;
 		Thread.Sleep(100);
 		imageSaver.ReceivedCalls.Should().HaveCount(10);

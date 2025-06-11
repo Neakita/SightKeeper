@@ -2,18 +2,16 @@
 
 namespace SightKeeper.Domain.Images;
 
-public sealed class Image
+public class Image
 {
-	public ImageSet Set { get; }
 	public DateTimeOffset CreationTimestamp { get; }
 	public Vector2<ushort> Size { get; }
 	public IReadOnlyCollection<Asset> Assets => _assets.AsReadOnly();
 	public bool IsInUse => _assets.Count > 0;
 
-	internal Image(ImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public Image(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
-		Set = set;
-		ValidateImageSize(size);
+		ValidateSize(size);
 		CreationTimestamp = creationTimestamp;
 		Size = size;
 	}
@@ -34,15 +32,15 @@ public sealed class Image
 
 	private readonly HashSet<Asset> _assets = new();
 
-	private void ValidateImageSize(Vector2<ushort> imageSize)
+	private static void ValidateSize(Vector2<ushort> size)
 	{
-		ValidateImageSize(imageSize.X);
-		ValidateImageSize(imageSize.Y);
+		ValidateSize(size.X);
+		ValidateSize(size.Y);
 	}
 
-	private void ValidateImageSize(ushort imageSize)
+	private static void ValidateSize(ushort size)
 	{
-		if (imageSize <= 0)
-			throw new ArgumentException($"Image size should be greater than 0, but was {imageSize}");
+		if (size <= 0)
+			throw new ArgumentException($"Image size should be greater than 0, but was {size}");
 	}
 }

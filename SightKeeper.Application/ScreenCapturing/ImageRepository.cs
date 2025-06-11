@@ -20,7 +20,7 @@ public class ImageRepository : ObservableImageRepository, ImageSaver<Rgba32>, ID
 		_writeImageDataAccess = writeImageDataAccess;
 	}
 
-	public void SaveImage(ImageSet set, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
+	public void SaveImage(DomainImageSet set, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
 		var image = CreateImage(set, creationTimestamp, resolution);
@@ -28,12 +28,12 @@ public class ImageRepository : ObservableImageRepository, ImageSaver<Rgba32>, ID
 		_added.OnNext(image);
 	}
 
-	public void DeleteImage(ImageSet set, int index)
+	public void DeleteImage(DomainImageSet set, int index)
 	{
 		DeleteImagesRange(set, index, 1);
 	}
 
-	public virtual void DeleteImagesRange(ImageSet set, int index, int count)
+	public virtual void DeleteImagesRange(DomainImageSet set, int index, int count)
 	{
 		var images = set.GetImagesRange(index, count);
 		set.RemoveImagesRange(index, count);
@@ -58,7 +58,7 @@ public class ImageRepository : ObservableImageRepository, ImageSaver<Rgba32>, ID
 		_imagesDeleted.Dispose();
 	}
 
-	protected virtual Image CreateImage(ImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
+	protected virtual Image CreateImage(DomainImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
 	{
 		return set.CreateImage(creationTimestamp, resolution);
 	}

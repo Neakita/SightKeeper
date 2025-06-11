@@ -28,11 +28,11 @@ public sealed class NewImageSetDataValidatorTests
 
 	private static NewImageSetDataValidator CreateValidator(params IEnumerable<string> repositorySetsNames)
 	{
-		var sets = repositorySetsNames.Select(name => new ImageSet { Name = name }).ToList();
+		var sets = repositorySetsNames.Select(name => new DomainImageSet { Name = name }).ToList();
 		return CreateValidator(sets);
 	}
 
-	private static NewImageSetDataValidator CreateValidator(params IReadOnlyCollection<ImageSet> repositorySets)
+	private static NewImageSetDataValidator CreateValidator(params IReadOnlyCollection<DomainImageSet> repositorySets)
 	{
 		var imageSetsRepository = Utilities.CreateRepository(repositorySets);
 		NewImageSetDataValidator validator = new(imageSetsRepository);

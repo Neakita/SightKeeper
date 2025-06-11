@@ -16,7 +16,7 @@ public sealed class ImagesCleanerTests
 		{
 			UnusedImagesLimit = 10
 		};
-		ImageSet set = new();
+		DomainImageSet set = new();
 		for (int i = 0; i < 15; i++)
 			set.CreateImage(DateTimeOffset.UtcNow.AddMilliseconds(i), new Vector2<ushort>(320, 320));
 		var expectedRemovedImages = set.Images.Take(5).ToList();
@@ -31,7 +31,7 @@ public sealed class ImagesCleanerTests
 		{
 			UnusedImagesLimit = 10
 		};
-		ImageSet set = new();
+		DomainImageSet set = new();
 		for (int i = 0; i < 15; i++)
 			set.CreateImage(DateTimeOffset.UtcNow.AddMilliseconds(i), new Vector2<ushort>(320, 320));
 		var dataSet = new DetectorDataSet();

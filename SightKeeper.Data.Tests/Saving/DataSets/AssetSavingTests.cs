@@ -1,10 +1,6 @@
-using CommunityToolkit.Diagnostics;
 using FluentAssertions;
-using SightKeeper.Data.Services;
-using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests.Saving.DataSets;
@@ -19,17 +15,19 @@ public sealed class AssetSavingTests
 		persistedAsset.Image.CreationTimestamp.Should().Be(asset.Image.CreationTimestamp);
 	}
 
-	private static Asset CreateAsset(out DataSet dataSet, out ImageSet imageSet)
+	private static Asset CreateAsset(out DataSet dataSet, out DomainImageSet imageSet)
 	{
-		dataSet = new DetectorDataSet(); 
-		imageSet = new ImageSet();
+		throw new NotImplementedException();
+		/*dataSet = new DetectorDataSet();
+		imageSet = new DomainImageSet();
 		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		return dataSet.AssetsLibrary.MakeAsset(image);
+		return dataSet.AssetsLibrary.MakeAsset(image);*/
 	}
 
-	private static Asset Persist(DataSet dataSet, ImageSet imageSet)
+	private static Asset Persist(DataSet dataSet, DomainImageSet imageSet)
 	{
-		Guard.IsNotNull(dataSet);
+		throw new NotImplementedException();
+		/*Guard.IsNotNull(dataSet);
 		var assetsLibrary = dataSet.AssetsLibrary;
 		Guard.IsEqualTo(assetsLibrary.Assets.Count, 1);
 		AppDataAccess appDataAccess = new();
@@ -37,6 +35,6 @@ public sealed class AssetSavingTests
 		Utilities.AddDataSetToAppData(dataSet, appDataAccess);
 		var persistedAppData = appDataAccess.Data.Persist();
 		var persistedDataSet = persistedAppData.DataSets.Single();
-		return persistedDataSet.AssetsLibrary.Assets.Single();
+		return persistedDataSet.AssetsLibrary.Assets.Single();*/
 	}
 }

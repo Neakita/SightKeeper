@@ -5,7 +5,7 @@ namespace SightKeeper.Application.ImageSets.Editing;
 
 public class ImageSetEditor
 {
-	public IObservable<ImageSet> Edited => _edited;
+	public IObservable<DomainImageSet> Edited => _edited;
 
 	public virtual void EditImageSet(ExistingImageSetData data)
 	{
@@ -15,5 +15,5 @@ public class ImageSetEditor
 		_edited.OnNext(set);
 	}
 
-	private readonly Subject<ImageSet> _edited = new();
+	private readonly Subject<DomainImageSet> _edited = new();
 }

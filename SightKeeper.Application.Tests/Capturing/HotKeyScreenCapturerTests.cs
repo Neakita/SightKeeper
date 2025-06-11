@@ -80,7 +80,7 @@ public sealed class HotKeyScreenCapturerTests
 	{
 		Subject<Gesture> gestureSubject = new();
 		gestureObserver = gestureSubject;
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new();
 		screenCapturer = new FakeScreenCapturer<Rgba32>();
 		var imageSaver = new FakeImageSaver<Rgba32>();
 		HotKeyScreenCapturer<Rgba32> hotKeyScreenCapturer = new()

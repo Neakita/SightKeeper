@@ -12,7 +12,7 @@ public sealed class ImageSetCreatorTests
 	[Fact]
 	public void ShouldAddNewImageSetToRepository()
 	{
-		var repository = Substitute.For<WriteRepository<ImageSet>>();
+		var repository = Substitute.For<WriteRepository<DomainImageSet>>();
 		ImageSetCreator imageSetCreator = new()
 		{
 			Validator = new ImageSetDataValidator(),
@@ -30,7 +30,7 @@ public sealed class ImageSetCreatorTests
 	[Fact]
 	public void ShouldThrowWhenValidationFails()
 	{
-		var repository = Substitute.For<WriteRepository<ImageSet>>();
+		var repository = Substitute.For<WriteRepository<DomainImageSet>>();
 		ImageSetCreator imageSetCreator = new()
 		{
 			Validator = new ImageSetDataValidator(),
@@ -40,6 +40,6 @@ public sealed class ImageSetCreatorTests
 		const string description = "description";
 		var data = Utilities.CreateImageSetData(name, description);
 		Assert.Throws<ValidationException>(() => imageSetCreator.Create(data));
-		repository.DidNotReceive().Add(Arg.Any<ImageSet>());
+		repository.DidNotReceive().Add(Arg.Any<DomainImageSet>());
 	}
 }

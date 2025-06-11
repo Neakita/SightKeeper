@@ -23,7 +23,7 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDis
 
 	public ImageSetsViewModel(
 		CreateImageSetCommandFactory createImageSetCommandFactory,
-		ObservableListRepository<ImageSet> imageSetsListRepository,
+		ObservableListRepository<DomainImageSet> imageSetsListRepository,
 		ImageSetEditor imageSetEditor,
 		ImageSetCardViewModelFactory imageSetCardViewModelFactory,
 		CapturingSettingsViewModel capturingSettings)
@@ -45,10 +45,10 @@ internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDis
 		_disposable.Dispose();
 	}
 
-	private readonly Dictionary<ImageSet, ImageSetCardViewModel> _imageSetCardViewModelsLookup;
+	private readonly Dictionary<DomainImageSet, ImageSetCardViewModel> _imageSetCardViewModelsLookup;
 	private readonly IDisposable _disposable;
 
-	private void OnImageSetEdited(ImageSet set)
+	private void OnImageSetEdited(DomainImageSet set)
 	{
 		var viewModel = _imageSetCardViewModelsLookup[set];
 		viewModel.NotifyPropertiesChanged();

@@ -30,7 +30,7 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 		}
 	}
 
-	public ImageSet? Set
+	public DomainImageSet? Set
 	{
 		get;
 		set
@@ -41,7 +41,7 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 		}
 	}
 
-	public IObservable<ImageSet?> SetChanged => _setChanged.AsObservable();
+	public IObservable<DomainImageSet?> SetChanged => _setChanged.AsObservable();
 
 	public double? FrameRateLimit
 	{
@@ -77,7 +77,7 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 	}
 
 	private const ushort MinimumResolutionDimension = 32;
-	private readonly Subject<ImageSet?> _setChanged = new();
+	private readonly Subject<DomainImageSet?> _setChanged = new();
 	private readonly Binding _binding;
 	private Vector2<ushort> Offset => ScreenBoundsProvider.MainScreenCenter - ImageSize / 2;
 

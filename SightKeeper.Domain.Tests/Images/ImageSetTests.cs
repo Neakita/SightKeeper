@@ -9,7 +9,7 @@ public sealed class ImageSetTests
 	[Fact]
 	public void ShouldNotDeleteImageWithAsset()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new(new FakeImageSet());
 		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(image);
@@ -21,7 +21,7 @@ public sealed class ImageSetTests
 	[Fact]
 	public void ShouldDeleteImageAfterAssetDeletion()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new(new FakeImageSet());
 		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(image);
@@ -32,7 +32,7 @@ public sealed class ImageSetTests
 	[Fact]
 	public void ShouldDeleteImageAfterAssetsLibraryClear()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new(new FakeImageSet());
 		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
 		DetectorDataSet dataSet = new();
 		dataSet.AssetsLibrary.MakeAsset(image);
@@ -43,18 +43,17 @@ public sealed class ImageSetTests
 	[Fact]
 	public void ShouldNotCreateImageWithAnyZeroSizeDimensions()
 	{
-		ImageSet set = new();
+		DomainImageSet set = new(new FakeImageSet());
 		Assert.Throws<ArgumentException>(() => set.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(0, 320)));
 	}
 
 	[Fact]
 	public void ShouldCreateImage()
 	{
-		var set = new ImageSet();
+		var set = new DomainImageSet(new FakeImageSet());
 		var creationTimestamp = DateTimeOffset.Now;
 		var size = new Vector2<ushort>(480, 480);
 		var image = set.CreateImage(creationTimestamp, size);
-		image.Set.Should().Be(set);
 		image.CreationTimestamp.Should().Be(creationTimestamp);
 		image.Size.Should().Be(size);
 		set.Images.Should().Contain(image);
@@ -63,7 +62,7 @@ public sealed class ImageSetTests
 	[Fact]
 	public void ShouldNotCreateImageWithEarlierTimestampThanLatestCreated()
 	{
-		var set = new ImageSet();
+		var set = new DomainImageSet(new FakeImageSet());
 		var earlierTimestamp = DateTimeOffset.Now;
 		var laterTimestamp = earlierTimestamp.AddHours(2);
 		set.CreateImage(laterTimestamp, new Vector2<ushort>(320, 320));
@@ -76,7 +75,7 @@ public sealed class ImageSetTests
 	[Fact]
 	public void ShouldGetImagesRange()
 	{
-		var set = new ImageSet();
+		var set = new DomainImageSet(new FakeImageSet());
 		var initialTimestamp = DateTimeOffset.UtcNow;
 		for (int i = 0; i < 10; i++)
 			set.CreateImage(initialTimestamp.AddSeconds(i), new Vector2<ushort>(320, 320));
@@ -89,7 +88,7 @@ public sealed class ImageSetTests
 	[Fact]
 	public void ShouldRemoveImagesRange()
 	{
-		var set = new ImageSet();
+		var set = new DomainImageSet(new FakeImageSet());
 		var initialTimestamp = DateTimeOffset.UtcNow;
 		for (int i = 0; i < 10; i++)
 			set.CreateImage(initialTimestamp.AddSeconds(i), new Vector2<ushort>(320, 320));

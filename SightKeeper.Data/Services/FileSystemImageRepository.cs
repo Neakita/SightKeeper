@@ -20,7 +20,7 @@ public sealed class FileSystemImageRepository : ImageRepository, IdRepository<Im
 		return _fileSystemDataAccess.GetId(image);
 	}
 
-	public override void DeleteImagesRange(ImageSet set, int index, int count)
+	public override void DeleteImagesRange(DomainImageSet set, int index, int count)
 	{
 		lock (_changeListener)
 			base.DeleteImagesRange(set, index, count);
@@ -38,7 +38,7 @@ public sealed class FileSystemImageRepository : ImageRepository, IdRepository<Im
 	}
 
 	protected override Image CreateImage(
-		ImageSet set,
+		DomainImageSet set,
 		DateTimeOffset creationTimestamp,
 		Vector2<ushort> resolution)
 	{

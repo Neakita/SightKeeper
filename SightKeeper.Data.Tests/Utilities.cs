@@ -1,8 +1,6 @@
-using CommunityToolkit.Diagnostics;
-using MemoryPack;
 using NSubstitute;
-using Serilog.Core;
 using SightKeeper.Application.ScreenCapturing;
+using SightKeeper.Data.Model;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Images;
@@ -11,18 +9,7 @@ namespace SightKeeper.Data.Tests;
 
 internal static class Utilities
 {
-	public static AppData Persist(this AppData appData)
-	{
-		FakeIdRepository<Image> idRepository = new();
-		var formatter = new AppDataFormatter(idRepository, new Lock(), Logger.None);
-		MemoryPackFormatterProvider.Register(formatter);
-		var serializedAppData = MemoryPackSerializer.Serialize(appData);
-		var deserializedAppData = MemoryPackSerializer.Deserialize<AppData>(serializedAppData);
-		Guard.IsNotNull(deserializedAppData);
-		return deserializedAppData;
-	}
-
-	public static void AddImageSetToAppData(ImageSet set, AppDataAccess appDataAccess)
+	public static void AddImageSetToAppData(DomainImageSet set, AppDataAccess appDataAccess)
 	{
 		AppDataImageSetsRepository repository = new()
 		{
@@ -41,5 +28,28 @@ internal static class Utilities
 			Substitute.For<ChangeListener>(),
 			new Lock());
 		repository.Add(set);
+	}
+
+	public static ImageSet CreateImageSet()
+	{
+		var factory = new StorableImageSetFactory(Substitute.For<ChangeListener>(), new Lock());
+		return factory.CreateImageSet();
+	}
+
+	public static ImageSet Persist(this ImageSet set)
+	{
+		DataBootstrapper.Setup(Substitute.For<ChangeListener>(), new Lock());
+		AppDataAccess appDataAccess = new();
+		AppDataImageSetsRepository repository = new()
+		{
+			AppDataLock = new Lock(),
+			AppDataAccess = appDataAccess,
+			ChangeListener = Substitute.For<ChangeListener>(),
+			ImageDataAccess = Substitute.For<WriteImageDataAccess>()
+		};
+		repository.Add(set);
+		appDataAccess.Save();
+		appDataAccess.Load();
+		return repository.Items.Single();
 	}
 }

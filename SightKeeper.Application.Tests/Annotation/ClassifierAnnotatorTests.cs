@@ -11,7 +11,7 @@ public sealed class ClassifierAnnotatorTests
 	[Fact]
 	public void ShouldCreateAssetAndSetTag()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new();
 		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
@@ -23,7 +23,7 @@ public sealed class ClassifierAnnotatorTests
 	[Fact]
 	public void ShouldSetTagInExistingAsset()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new();
 		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("1");
@@ -37,7 +37,7 @@ public sealed class ClassifierAnnotatorTests
 	[Fact]
 	public void ShouldDeleteAsset()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new();
 		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("1");
@@ -50,7 +50,7 @@ public sealed class ClassifierAnnotatorTests
 	[Fact]
 	public void ShouldNotDeleteAssetThatDoesNotExist()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new();
 		var image = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		ClassifierDataSet dataSet = new();
 		dataSet.TagsLibrary.CreateTag("1");

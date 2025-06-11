@@ -1,7 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.Services;
-using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.Images;
@@ -38,8 +37,9 @@ public sealed class AppDataBoundingEditorTests
 
 	private static Image PrepareScreenshot()
 	{
-		ImageSet imageSet = new();
+		throw new NotImplementedException();
+		/*DomainImageSet imageSet = new();
 		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
-		return screenshot;
+		return screenshot;*/
 	}
 }

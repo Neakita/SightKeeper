@@ -7,9 +7,9 @@ namespace SightKeeper.Application.Tests.Capturing.Saving;
 internal sealed class FakeImageSaver<TPixel> : ImageSaver<TPixel>
 {
 	public bool HoldCalls { get; set; }
-	public List<(ImageSet set, TPixel[,] imageData, DateTimeOffset creationTimestamp)> ReceivedCalls { get; } = new();
+	public List<(DomainImageSet set, TPixel[,] imageData, DateTimeOffset creationTimestamp)> ReceivedCalls { get; } = new();
 
-	public void SaveImage(ImageSet set, ReadOnlySpan2D<TPixel> imageData, DateTimeOffset creationTimestamp)
+	public void SaveImage(DomainImageSet set, ReadOnlySpan2D<TPixel> imageData, DateTimeOffset creationTimestamp)
 	{
 		ReceivedCalls.Add((set, imageData.ToArray(), creationTimestamp));
 		while (HoldCalls)

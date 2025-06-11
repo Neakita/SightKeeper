@@ -15,7 +15,7 @@ namespace SightKeeper.Avalonia.Annotation.Images;
 
 public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, ImageSelection, IDisposable
 {
-	public ImageSet? Set
+	public DomainImageSet? Set
 	{
 		get;
 		set

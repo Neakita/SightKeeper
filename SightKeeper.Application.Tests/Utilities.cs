@@ -16,7 +16,7 @@ internal static class Utilities
 		return data;
 	}
 
-	public static ExistingImageSetData CreateExistingImageSetData(ImageSet set, string name, string description = "")
+	public static ExistingImageSetData CreateExistingImageSetData(DomainImageSet set, string name, string description = "")
 	{
 		var data = Substitute.For<ExistingImageSetData>();
 		data.Set.Returns(set);

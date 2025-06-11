@@ -23,14 +23,14 @@ internal sealed class EditImageSetCommandFactory
 
 	public ICommand CreateCommand()
 	{
-		return new AsyncRelayCommand<ImageSet>(EditImageSet!);
+		return new AsyncRelayCommand<DomainImageSet>(EditImageSet!);
 	}
 
 	private readonly ImageSetEditor _imageSetEditor;
 	private readonly DialogManager _dialogManager;
 	private readonly IValidator<ExistingImageSetData> _validator;
 
-	private async Task EditImageSet(ImageSet set)
+	private async Task EditImageSet(DomainImageSet set)
 	{
 		using ImageSetEditingDialogViewModel dialog = new(set, _validator);
 		if (await _dialogManager.ShowDialogAsync(dialog))

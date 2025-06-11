@@ -7,6 +7,6 @@ public interface ImageSelection
 {
 	int SelectedImageIndex { get; }
 	IObservable<Image?> SelectedImageChanged { get; }
-	ImageSet? Set { get; }
+	DomainImageSet? Set { get; }
 	Image? SelectedImage => SelectedImageIndex >= 0 ? Set?.Images[SelectedImageIndex] : null;
 }

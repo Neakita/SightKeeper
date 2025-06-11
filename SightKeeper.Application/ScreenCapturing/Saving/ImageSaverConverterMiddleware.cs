@@ -9,7 +9,7 @@ public sealed class ImageSaverConverterMiddleware<TSourcePixel, TTargetPixel> : 
 	public required PixelConverter<TSourcePixel, TTargetPixel> Converter { private get; init; }
 	public required ImageSaver<TTargetPixel> NextMiddleware { private get; init; }
 
-	public void SaveImage(ImageSet set, ReadOnlySpan2D<TSourcePixel> imageData, DateTimeOffset creationTimestamp)
+	public void SaveImage(DomainImageSet set, ReadOnlySpan2D<TSourcePixel> imageData, DateTimeOffset creationTimestamp)
 	{
 		var bufferLength = imageData.Width * imageData.Height;
 		using var bufferOwner = MemoryPool<TTargetPixel>.Shared.Rent(bufferLength);
