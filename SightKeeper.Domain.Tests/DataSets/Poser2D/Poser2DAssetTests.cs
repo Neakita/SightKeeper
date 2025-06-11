@@ -9,7 +9,7 @@ public sealed class Poser2DAssetTests
 	public void ShouldCreateKeyPoints()
 	{
 		var image = Utilities.CreateImage();
-		Poser2DDataSet dataSet = new();
+		DomainPoser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var firstKeyPointTag = tag.CreateKeyPointTag("1");
 		var secondKeyPointTag = tag.CreateKeyPointTag("2");
@@ -25,7 +25,7 @@ public sealed class Poser2DAssetTests
 	public void ShouldDeleteKeyPoint()
 	{
 		var image = Utilities.CreateImage();
-		Poser2DDataSet dataSet = new();
+		DomainPoser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag = tag.CreateKeyPointTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);
@@ -39,7 +39,7 @@ public sealed class Poser2DAssetTests
 	public void ShouldNotDeleteKeyPointTwice()
 	{
 		var image = Utilities.CreateImage();
-		Poser2DDataSet dataSet = new();
+		DomainPoser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag = tag.CreateKeyPointTag("1");
 		var asset = dataSet.AssetsLibrary.MakeAsset(image);

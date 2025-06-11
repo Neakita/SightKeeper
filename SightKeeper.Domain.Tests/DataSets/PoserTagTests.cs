@@ -103,6 +103,6 @@ public sealed class PoserTagTests
 
 	private static PoserDataSet CreateDataSet()
 	{
-		return new Poser2DDataSet();
+		return new DomainPoser2DDataSet();
 	}
 }

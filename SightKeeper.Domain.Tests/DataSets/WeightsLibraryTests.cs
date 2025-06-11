@@ -82,6 +82,6 @@ public sealed class WeightsLibraryTests
 
 	private static PoserDataSet CreatePoserDataSet()
 	{
-		return new Poser2DDataSet();
+		return new DomainPoser2DDataSet();
 	}
 }

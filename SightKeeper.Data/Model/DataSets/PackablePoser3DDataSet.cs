@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets.Poser3D;
 namespace SightKeeper.Data.Model.DataSets;
 
 /// <summary>
-/// MemoryPackable version of <see cref="Poser3DDataSet"/>
+/// MemoryPackable version of <see cref="DomainPoser3DDataSet"/>
 /// </summary>
 [MemoryPackable]
 internal sealed partial class PackablePoser3DDataSet : PackableDataSet

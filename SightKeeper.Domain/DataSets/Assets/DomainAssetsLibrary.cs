@@ -10,6 +10,8 @@ public sealed class DomainAssetsLibrary<TAsset> : AssetsOwner<TAsset>, Decorator
 
 	public TAsset MakeAsset(Image image)
 	{
+		if (Contains(image))
+			throw new ArgumentException("Already contains asset for provided image", nameof(image));
 		var asset = Inner.MakeAsset(image);
 		image.AddAsset(asset);
 		return asset;

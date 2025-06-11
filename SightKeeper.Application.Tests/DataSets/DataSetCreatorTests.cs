@@ -60,7 +60,7 @@ public sealed class DataSetCreatorTests
 		var creator = CreateCreator();
 		var data = new FakeNewDataSetData(DataSetType.Poser2D);
 		var dataSet = creator.Create(data);
-		dataSet.Should().BeOfType<Poser2DDataSet>();
+		dataSet.Should().BeOfType<DomainPoser2DDataSet>();
 	}
 
 	[Fact]
@@ -69,7 +69,7 @@ public sealed class DataSetCreatorTests
 		var creator = CreateCreator();
 		var data = new FakeNewDataSetData(DataSetType.Poser3D);
 		var dataSet = creator.Create(data);
-		dataSet.Should().BeOfType<Poser3DDataSet>();
+		dataSet.Should().BeOfType<DomainPoser3DDataSet>();
 	}
 
 	[Fact]

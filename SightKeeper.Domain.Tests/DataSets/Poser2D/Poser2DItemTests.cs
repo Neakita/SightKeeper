@@ -9,7 +9,7 @@ public sealed class Poser2DItemTests
 	[Fact]
 	public void ShouldClearKeyPointsWhenChangingTag()
 	{
-		Poser2DDataSet dataSet = new();
+		DomainPoser2DDataSet dataSet = new();
 		var tag1 = dataSet.TagsLibrary.CreateTag("1");
 		var keyPointTag1 = tag1.CreateKeyPointTag("1.1");
 		var tag2 = dataSet.TagsLibrary.CreateTag("2");
@@ -25,7 +25,7 @@ public sealed class Poser2DItemTests
 	[Fact]
 	public void ShouldNotSetKeyPointPositionToNotNormalized()
 	{
-		Poser2DDataSet dataSet = new();
+		DomainPoser2DDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		var keyPointTag = tag.CreateKeyPointTag("");
 		var image = Utilities.CreateImage();

@@ -161,6 +161,6 @@ public sealed class DataSetEditorTests
 
 	private static PoserDataSet CreatePoserDataSet()
 	{
-		return new Poser2DDataSet();
+		return new DomainPoser2DDataSet();
 	}
 }

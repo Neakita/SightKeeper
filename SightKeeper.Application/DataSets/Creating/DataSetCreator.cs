@@ -21,8 +21,8 @@ public sealed class DataSetCreator
 		{
 			DataSetType.Classifier => new DomainClassifierDataSet(),
 			DataSetType.Detector => new DomainDetectorDataSet(),
-			DataSetType.Poser2D => new Poser2DDataSet(),
-			DataSetType.Poser3D => new Poser3DDataSet(),
+			DataSetType.Poser2D => new DomainPoser2DDataSet(),
+			DataSetType.Poser3D => new DomainPoser3DDataSet(),
 			_ => throw new ArgumentOutOfRangeException(nameof(data), data, null)
 		};
 		SetGeneralData(dataSet, data);
