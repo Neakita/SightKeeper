@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Model;
 
-internal sealed class TrackableImageSet(ImageSet imageSet, ChangeListener changeListener) : ImageSet, Decorator<ImageSet>
+internal sealed class TrackableImageSet(ImageSet imageSet, ChangeListener changeListener) : ImageSet
 {
 	public string Name
 	{
@@ -41,10 +41,9 @@ internal sealed class TrackableImageSet(ImageSet imageSet, ChangeListener change
 		return imageSet.GetImagesRange(index, count);
 	}
 
-	public void RemoveImage(Image image)
+	public int IndexOf(Image image)
 	{
-		imageSet.RemoveImage(image);
-		changeListener.SetDataChanged();
+		return imageSet.IndexOf(image);
 	}
 
 	public void RemoveImageAt(int index)

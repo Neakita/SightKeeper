@@ -1,26 +1,27 @@
 namespace SightKeeper.Domain.DataSets.Tags;
 
-public sealed class DomainTagsLibrary<TTag> : TagsOwner<TTag>, Decorator<TagsOwner<TTag>> where TTag : Tag
+public sealed class DomainTagsLibrary<TTag> : TagsOwner<TTag> where TTag : Tag
 {
-	public TagsOwner<TTag> Inner { get; }
-	public IReadOnlyList<TTag> Tags => Inner.Tags;
+	public IReadOnlyList<TTag> Tags => _inner.Tags;
 
 	public TTag CreateTag(string name)
 	{
 		if (Tags.Any(tag => tag.Name == name))
 			throw new ArgumentException($"Tag name \"{name}\" is already used", nameof(name));
-		return Inner.CreateTag(name);
+		return _inner.CreateTag(name);
 	}
 
 	public void DeleteTagAt(int index)
 	{
-		var tag = Inner.Tags[index];
+		var tag = _inner.Tags[index];
 		TagIsInUseException.ThrowForDeletionIfInUse(tag);
-		Inner.DeleteTagAt(index);
+		_inner.DeleteTagAt(index);
 	}
 
 	internal DomainTagsLibrary(TagsOwner<TTag> inner)
 	{
-		Inner = inner;
+		_inner = inner;
 	}
+
+	private readonly TagsOwner<TTag> _inner;
 }

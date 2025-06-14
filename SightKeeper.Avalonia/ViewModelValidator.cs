@@ -13,12 +13,12 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 	public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 	public bool HasErrors => _errors.Count > 0;
 
-	public ViewModelValidator(IValidator<TValidatable> validator, ViewModel viewModel, TValidatable validatable)
+	public ViewModelValidator(IValidator<TValidatable> validator, INotifyPropertyChanged propertyNotificationsSource, TValidatable validatable)
 	{
 		_validator = validator;
-		_viewModel = viewModel;
+		_propertyNotificationsSource = propertyNotificationsSource;
 		_validatable = validatable;
-		_viewModel.PropertyChanged += OnViewModelPropertyChanged;
+		_propertyNotificationsSource.PropertyChanged += OnViewModelPropertyChanged;
 		ValidateEntireViewModel();
 	}
 
@@ -34,7 +34,7 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 
 	public void Dispose()
 	{
-		_viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+		_propertyNotificationsSource.PropertyChanged -= OnViewModelPropertyChanged;
 	}
 
 	public IDisposable SuppressValidation()
@@ -70,9 +70,9 @@ internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, I
 	}
 
 	private readonly IValidator<TValidatable> _validator;
-	private readonly ViewModel _viewModel;
+	private readonly INotifyPropertyChanged _propertyNotificationsSource;
 	private readonly TValidatable _validatable;
-	private IDictionary<string, string[]> _errors = new Dictionary<string, string[]>();
+	private System.Collections.Generic.IDictionary<string, string[]> _errors = new Dictionary<string, string[]>();
 	private bool _validateOnPropertyChanged = true;
 
 	private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)

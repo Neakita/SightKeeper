@@ -6,9 +6,6 @@ internal sealed class ImageSetWrapper(ChangeListener changeListener, Lock editin
 {
 	public ImageSet Wrap(PackableImageSet packable)
 	{
-		return packable
-			.WithDomainRules()
-			.WithTracking(changeListener)
-			.WithLocking(editingLock);
+		return new StorableImageSet(packable, editingLock, changeListener);
 	}
 }

@@ -2,17 +2,16 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.DataSets.Assets;
 
-public sealed class DomainAssetsLibrary<TAsset> : AssetsOwner<TAsset>, Decorator<AssetsOwner<TAsset>> where TAsset : Asset
+public sealed class DomainAssetsLibrary<TAsset>(AssetsOwner<TAsset> inner) : AssetsOwner<TAsset> where TAsset : Asset
 {
-	public IReadOnlyCollection<TAsset> Assets => Inner.Assets;
-	public IReadOnlyCollection<Image> Images => Inner.Images;
-	public AssetsOwner<TAsset> Inner { get; }
+	public IReadOnlyCollection<TAsset> Assets => inner.Assets;
+	public IReadOnlyCollection<Image> Images => inner.Images;
 
 	public TAsset MakeAsset(Image image)
 	{
 		if (Contains(image))
 			throw new ArgumentException("Already contains asset for provided image", nameof(image));
-		var asset = Inner.MakeAsset(image);
+		var asset = inner.MakeAsset(image);
 		image.AddAsset(asset);
 		return asset;
 	}
@@ -20,7 +19,7 @@ public sealed class DomainAssetsLibrary<TAsset> : AssetsOwner<TAsset>, Decorator
 	public void DeleteAsset(Image image)
 	{
 		var asset = GetAsset(image);
-		Inner.DeleteAsset(image);
+		inner.DeleteAsset(image);
 		image.RemoveAsset(asset);
 	}
 
@@ -28,26 +27,21 @@ public sealed class DomainAssetsLibrary<TAsset> : AssetsOwner<TAsset>, Decorator
 	{
 		foreach (var (image, asset) in Images.Zip(Assets))
 			image.RemoveAsset(asset);
-		Inner.ClearAssets();
+		inner.ClearAssets();
 	}
 
 	public bool Contains(Image image)
 	{
-		return Inner.Contains(image);
+		return inner.Contains(image);
 	}
 
 	public TAsset GetAsset(Image image)
 	{
-		return Inner.GetAsset(image);
+		return inner.GetAsset(image);
 	}
 
 	public TAsset? GetOptionalAsset(Image image)
 	{
-		return Inner.GetOptionalAsset(image);
-	}
-
-	internal DomainAssetsLibrary(AssetsOwner<TAsset> inner)
-	{
-		Inner = inner;
+		return inner.GetOptionalAsset(image);
 	}
 }

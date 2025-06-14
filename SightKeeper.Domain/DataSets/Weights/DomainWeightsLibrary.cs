@@ -3,33 +3,33 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Weights;
 
-public sealed class DomainWeightsLibrary : WeightsLibrary, Decorator<WeightsLibrary>
+public sealed class DomainWeightsLibrary : WeightsLibrary
 {
-	public WeightsLibrary Inner { get; }
-	public IReadOnlyCollection<Weights> Weights => Inner.Weights;
+	public IReadOnlyCollection<Weights> Weights => _inner.Weights;
 
 	public void AddWeights(Weights weights)
 	{
 		ValidateTags(weights.Tags);
-		Inner.AddWeights(weights);
+		_inner.AddWeights(weights);
 		/*if (!isAdded)
 			throw new ArgumentException("Specified weights already exists in the library");*/
 	}
 
 	public void RemoveWeights(Weights weights)
 	{
-		Inner.RemoveWeights(weights);
+		_inner.RemoveWeights(weights);
 		/*if (!isRemoved)
 			throw new ArgumentException("Specified weights was not found and therefore not deleted");*/
 	}
 
 	internal DomainWeightsLibrary(WeightsLibrary inner, TagsContainer<Tag> tagsOwner, int minimumTagsCount = 1)
 	{
-		Inner = inner;
+		_inner = inner;
 		_minimumTagsCount = minimumTagsCount;
 		_tagsOwner = tagsOwner;
 	}
 
+	private readonly WeightsLibrary _inner;
 	private readonly int _minimumTagsCount;
 	private readonly TagsContainer<Tag> _tagsOwner;
 

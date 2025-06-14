@@ -12,7 +12,15 @@ public interface ImageSet
 
 	Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size);
 	IReadOnlyList<Image> GetImagesRange(int index, int count);
-	void RemoveImage(Image image);
+	int IndexOf(Image image);
+
 	void RemoveImageAt(int index);
 	void RemoveImagesRange(int index, int count);
+
+	void RemoveImage(Image image)
+	{
+		var index = IndexOf(image);
+		if (index < 0)
+			throw new ArgumentException("Image not found", nameof(image));
+	}
 }

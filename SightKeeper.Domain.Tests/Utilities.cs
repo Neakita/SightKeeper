@@ -9,7 +9,7 @@ internal static class Utilities
 {
 	public static Image CreateImage()
 	{
-		return new Image(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
+		return new Image(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320), new FakeImageDataLoader());
 	}
 
 	public static DomainTagsLibrary<Tag> CreateTagsLibrary()

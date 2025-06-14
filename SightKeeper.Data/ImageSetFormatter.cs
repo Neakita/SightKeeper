@@ -1,6 +1,5 @@
 using MemoryPack;
 using SightKeeper.Data.Model;
-using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
@@ -36,11 +35,8 @@ internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
 
 	private static PackableImageSet AsPackable(ImageSet set)
 	{
-		if (set is PackableImageSet packable)
-			return packable;
-		if (set is Decorator<ImageSet> facade)
-			return AsPackable(facade.Inner);
-		throw new ArgumentException($"Could not find packable implementation of {nameof(ImageSet)}", nameof(set));
+		var storable = (StorableImageSet)set;
+		return storable.Packable;
 	}
 
 	private readonly ImageSetWrapper _wrapper;

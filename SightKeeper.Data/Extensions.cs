@@ -19,4 +19,9 @@ internal static class Extensions
 	{
 		return new LockingImageSet(set, editingLock);
 	}
+
+	public static ImageSet WithObservableImages(this ImageSet set)
+	{
+		return new ObservableImagesImageSet(set);
+	}
 }

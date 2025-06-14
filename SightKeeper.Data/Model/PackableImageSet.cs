@@ -41,9 +41,14 @@ internal sealed partial class PackableImageSet : ImageSet
 		return _images.GetRange(index, count);
 	}
 
-	public void RemoveImage(Image image)
+	public int IndexOf(Image image)
 	{
-		_images.Remove((PackableImage)image);
+		// images are ordered by creation timestamp, so binary search is possible and highly preferable,
+		// images list can contain thousands of images.
+		var index = _images.BinarySearch((PackableImage)image, ImageCreationTimestampComparer);
+		if (index < 0)
+			return -1;
+		return index;
 	}
 
 	public void RemoveImageAt(int index)
@@ -55,6 +60,9 @@ internal sealed partial class PackableImageSet : ImageSet
 	{
 		_images.RemoveRange(index, count);
 	}
+
+	private static readonly Comparer<PackableImage> ImageCreationTimestampComparer =
+		Comparer<PackableImage>.Create((x, y) => x.CreationTimestamp.CompareTo(y.CreationTimestamp));
 
 	[MemoryPackInclude]
 	private readonly List<PackableImage> _images;

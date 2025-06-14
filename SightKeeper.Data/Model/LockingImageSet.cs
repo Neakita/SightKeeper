@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Model;
 
-internal sealed class LockingImageSet(ImageSet imageSet, Lock editingLock) : ImageSet, Decorator<ImageSet>
+internal sealed class LockingImageSet(ImageSet imageSet, Lock editingLock) : ImageSet
 {
 	public string Name
 	{
@@ -41,10 +41,9 @@ internal sealed class LockingImageSet(ImageSet imageSet, Lock editingLock) : Ima
 			return imageSet.GetImagesRange(index, count);
 	}
 
-	public void RemoveImage(Image image)
+	public int IndexOf(Image image)
 	{
-		lock (editingLock)
-			imageSet.RemoveImage(image);
+		return imageSet.IndexOf(image);
 	}
 
 	public void RemoveImageAt(int index)

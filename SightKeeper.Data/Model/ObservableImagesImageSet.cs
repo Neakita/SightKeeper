@@ -1,0 +1,82 @@
+using SightKeeper.Domain;
+using SightKeeper.Domain.Images;
+using Vibrance.Changes;
+
+namespace SightKeeper.Data.Model;
+
+// could be named ObservableImageSet,
+// but I want to specify it handles only Images observability
+internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
+{
+	public string Name
+	{
+		get => inner.Name;
+		set => inner.Name = value;
+	}
+
+	public string Description
+	{
+		get => inner.Description;
+		set => inner.Description = value;
+	}
+
+	public IReadOnlyList<Image> Images => inner.Images;
+
+	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	{
+		var index = Images.Count;
+		var image = inner.CreateImage(creationTimestamp, size);
+		if (_observableImages.HasObservers)
+		{
+			Insertion<Image> change = new()
+			{
+				Index = index,
+				Items = [image]
+			};
+			_observableImages.Notify(change);
+		}
+		return image;
+	}
+
+	public IReadOnlyList<Image> GetImagesRange(int index, int count)
+	{
+		return inner.GetImagesRange(index, count);
+	}
+
+	public int IndexOf(Image image)
+	{
+		return inner.IndexOf(image);
+	}
+
+	public void RemoveImageAt(int index)
+	{
+		var image = Images[index];
+		inner.RemoveImageAt(index);
+		if (_observableImages.HasObservers)
+		{
+			IndexedRemoval<Image> change = new()
+			{
+				Index = index,
+				Items = [image]
+			};
+			_observableImages.Notify(change);
+		}
+	}
+
+	public void RemoveImagesRange(int index, int count)
+	{
+		var images = GetImagesRange(index, count);
+		inner.RemoveImagesRange(index, count);
+		if (_observableImages.HasObservers)
+		{
+			IndexedRemoval<Image> change = new()
+			{
+				Index = index,
+				Items = images
+			};
+			_observableImages.Notify(change);
+		}
+	}
+
+	private readonly ExternalObservableList<Image> _observableImages = new(inner.Images);
+}

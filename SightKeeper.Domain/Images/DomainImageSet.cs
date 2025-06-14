@@ -1,25 +1,23 @@
 ﻿namespace SightKeeper.Domain.Images;
 
-public sealed class DomainImageSet(ImageSet imageSet) : ImageSet, Decorator<ImageSet>
+public sealed class DomainImageSet(ImageSet inner) : ImageSet
 {
 	public string Name
 	{
-		get => imageSet.Name;
-		set => imageSet.Name = value;
+		get => inner.Name;
+		set => inner.Name = value;
 	}
 
 	public string Description
 	{
-		get => imageSet.Description;
-		set => imageSet.Description = value;
+		get => inner.Description;
+		set => inner.Description = value;
 	}
 
 	/// <remarks>
 	/// Sorted by creation timestamp: first is the earliest, last is the latest
 	/// </remarks>
-	public IReadOnlyList<Image> Images => imageSet.Images;
-
-	public ImageSet Inner => imageSet;
+	public IReadOnlyList<Image> Images => inner.Images;
 
 	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
@@ -30,25 +28,30 @@ public sealed class DomainImageSet(ImageSet imageSet) : ImageSet, Decorator<Imag
 				"Check that the time synchronization is correct and/or delete incorrectly created images",
 				creationTimestamp, this);
 		}
-		return imageSet.CreateImage(creationTimestamp, size);
+		return inner.CreateImage(creationTimestamp, size);
 	}
 
 	public IReadOnlyList<Image> GetImagesRange(int index, int count)
 	{
-		return imageSet.GetImagesRange(index, count);
+		return inner.GetImagesRange(index, count);
+	}
+
+	public int IndexOf(Image image)
+	{
+		return inner.IndexOf(image);
 	}
 
 	public void RemoveImage(Image image)
 	{
 		ImageIsInUseException.ThrowForDeletionIfInUse(this, image);
-		imageSet.RemoveImage(image);
+		inner.RemoveImage(image);
 	}
 
 	public void RemoveImageAt(int index)
 	{
 		var image = Images[index];
 		ImageIsInUseException.ThrowForDeletionIfInUse(this, image);
-		imageSet.RemoveImageAt(index);
+		inner.RemoveImageAt(index);
 	}
 
 	public void RemoveImagesRange(int index, int count)
@@ -58,6 +61,6 @@ public sealed class DomainImageSet(ImageSet imageSet) : ImageSet, Decorator<Imag
 			var image = Images[i];
 			ImageIsInUseException.ThrowForDeletionIfInUse(this, image);
 		}
-		imageSet.RemoveImagesRange(index, count);
+		inner.RemoveImagesRange(index, count);
 	}
 }
