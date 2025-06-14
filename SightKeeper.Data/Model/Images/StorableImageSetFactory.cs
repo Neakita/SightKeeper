@@ -1,7 +1,7 @@
 using SightKeeper.Application;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model;
+namespace SightKeeper.Data.Model.Images;
 
 public sealed class StorableImageSetFactory : ImageSetFactory
 {

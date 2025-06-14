@@ -1,4 +1,4 @@
-using SightKeeper.Data.Model;
+using SightKeeper.Data.Model.Images;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;

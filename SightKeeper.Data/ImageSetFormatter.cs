@@ -1,6 +1,7 @@
 using MemoryPack;
-using SightKeeper.Data.Model;
+using SightKeeper.Data.Model.Images;
 using SightKeeper.Domain.Images;
+using PackableImageSet = SightKeeper.Data.Model.Images.PackableImageSet;
 
 namespace SightKeeper.Data;
 

@@ -1,17 +1,17 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model;
+namespace SightKeeper.Data.Model.Images;
 
-internal sealed class LockingImageSet(ImageSet imageSet, Lock editingLock) : ImageSet
+internal sealed class TrackableImageSet(ImageSet imageSet, ChangeListener changeListener) : ImageSet
 {
 	public string Name
 	{
 		get => imageSet.Name;
 		set
 		{
-			lock (editingLock)
-				imageSet.Name = value;
+			imageSet.Name = value;
+			changeListener.SetDataChanged();
 		}
 	}
 
@@ -20,8 +20,8 @@ internal sealed class LockingImageSet(ImageSet imageSet, Lock editingLock) : Ima
 		get => imageSet.Description;
 		set
 		{
-			lock (editingLock)
-				imageSet.Description = value;
+			imageSet.Description = value;
+			changeListener.SetDataChanged();
 		}
 	}
 
@@ -31,14 +31,14 @@ internal sealed class LockingImageSet(ImageSet imageSet, Lock editingLock) : Ima
 
 	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
-		lock (editingLock)
-			return imageSet.CreateImage(creationTimestamp, size);
+		var image = imageSet.CreateImage(creationTimestamp, size);
+		changeListener.SetDataChanged();
+		return image;
 	}
 
 	public IReadOnlyList<Image> GetImagesRange(int index, int count)
 	{
-		lock (editingLock)
-			return imageSet.GetImagesRange(index, count);
+		return imageSet.GetImagesRange(index, count);
 	}
 
 	public int IndexOf(Image image)
@@ -48,13 +48,15 @@ internal sealed class LockingImageSet(ImageSet imageSet, Lock editingLock) : Ima
 
 	public void RemoveImageAt(int index)
 	{
-		lock (editingLock)
-			imageSet.RemoveImageAt(index);
+		imageSet.RemoveImageAt(index);
+		changeListener.SetDataChanged();
 	}
 
 	public void RemoveImagesRange(int index, int count)
 	{
-		lock (editingLock)
-			imageSet.RemoveImagesRange(index, count);
+		if (count == 0)
+			return;
+		imageSet.RemoveImagesRange(index, count);
+		changeListener.SetDataChanged();
 	}
 }

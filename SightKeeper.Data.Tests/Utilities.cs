@@ -1,6 +1,6 @@
 using NSubstitute;
 using SightKeeper.Application.ScreenCapturing;
-using SightKeeper.Data.Model;
+using SightKeeper.Data.Model.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Images;

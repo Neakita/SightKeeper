@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model;
+namespace SightKeeper.Data.Model.Images;
 
 // Represents ready to modify, track/observer and saving ImageSet 
 // I wanted to use series of decorators so each decorator does small part of the job,

@@ -3,7 +3,7 @@ using FlakeId;
 using MemoryPack;
 using SightKeeper.Domain;
 
-namespace SightKeeper.Data.Model;
+namespace SightKeeper.Data.Model.Images;
 
 internal sealed class PackableImageFormatter : MemoryPackFormatter<PackableImage>
 {
