@@ -1,5 +1,6 @@
-/*using FluentAssertions;
-using SightKeeper.Domain.DataSets.Classifier;
+using FluentAssertions;
+using NSubstitute;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.Tests.DataSets;
 
@@ -8,57 +9,51 @@ public sealed class TagsLibraryTests
 	[Fact]
 	public void ShouldCreateTag()
 	{
-		var library = Utilities.CreateTagsLibrary();
-		var tag = library.CreateTag("");
-		library.Tags.Should().Contain(tag);
+		const string tagName = "Tag1";
+		var innerLibrary = Substitute.For<TagsOwner<Tag>>();
+		var expectedTag = Substitute.For<Tag>();
+		innerLibrary.CreateTag(tagName).Returns(expectedTag);
+		DomainTagsLibrary<Tag> domainLibrary = new(innerLibrary);
+		var tag = domainLibrary.CreateTag(tagName);
+		tag.Should().BeSameAs(expectedTag);
+		innerLibrary.Received().CreateTag(tagName);
 	}
 
 	[Fact]
-	public void ShouldCreateMultipleTags()
+	public void ShouldAllowDeleteTag()
 	{
-		DomainClassifierDataSet dataSet = new();
-		var tag1 = dataSet.TagsLibrary.CreateTag("1");
-		var tag2 = dataSet.TagsLibrary.CreateTag("2");
-		var tag3 = dataSet.TagsLibrary.CreateTag("3");
-		dataSet.TagsLibrary.Tags.Should().Contain([tag1, tag2, tag3]);
+		var innerLibrary = Substitute.For<TagsOwner<Tag>>();
+		var tag = Substitute.For<Tag>();
+		innerLibrary.Tags.Returns([tag]);
+		DomainTagsLibrary<Tag> domainLibrary = new(innerLibrary);
+		domainLibrary.DeleteTagAt(0);
+		innerLibrary.Received().DeleteTagAt(0);
 	}
 
 	[Fact]
-	public void ShouldDeleteTag()
+	public void ShouldNotAllowCreateTagWithOccupiedName()
 	{
-		DomainClassifierDataSet dataSet = new();
-		var tag = dataSet.TagsLibrary.CreateTag("");
-		dataSet.TagsLibrary.DeleteTag(tag);
-		dataSet.TagsLibrary.Tags.Should().BeEmpty();
+		const string tagName = "Tag1";
+		var innerLibrary = Substitute.For<TagsOwner<Tag>>();
+		var tag = Substitute.For<Tag>();
+		tag.Name.Returns(tagName);
+		innerLibrary.Tags.Returns([tag]);
+		DomainTagsLibrary<Tag> domainLibrary = new(innerLibrary);
+		var exception = Assert.Throws<ArgumentException>(() => domainLibrary.CreateTag(tagName));
+		exception.ParamName.Should().Be("name");
+		innerLibrary.DidNotReceive().CreateTag(Arg.Any<string>());
 	}
 
 	[Fact]
-	public void ShouldNotCreateTagWithOccupiedName()
+	public void ShouldNotAllowDeleteTagWithUsers()
 	{
-		DomainClassifierDataSet dataSet = new();
-		var tag1 = dataSet.TagsLibrary.CreateTag("1");
-		Assert.ThrowsAny<Exception>(() => dataSet.TagsLibrary.CreateTag("1"));
-		dataSet.TagsLibrary.Tags.Should().Contain(tag1);
-		dataSet.TagsLibrary.Tags.Should().HaveCount(1);
+		var innerLibrary = Substitute.For<TagsOwner<Tag>>();
+		var tag = Substitute.For<Tag>();
+		tag.Users.Returns([Substitute.For<TagUser>()]);
+		innerLibrary.Tags.Returns([tag]);
+		DomainTagsLibrary<Tag> domainLibrary = new(innerLibrary);
+		var exception = Assert.Throws<TagIsInUseException>(() => domainLibrary.DeleteTagAt(0));
+		innerLibrary.DidNotReceive().DeleteTagAt(Arg.Any<int>());
+		exception.Tag.Should().BeSameAs(tag);
 	}
-
-	[Fact]
-	public void ShouldNotDeleteTagTwice()
-	{
-		var library = Utilities.CreateTagsLibrary();
-		var tag = library.CreateTag("");
-		library.DeleteTag(tag);
-		Assert.Throws<ArgumentException>(() => library.DeleteTag(tag));
-	}
-
-	[Fact]
-	public void ShouldDeleteTagByIndex()
-	{
-		var library = Utilities.CreateTagsLibrary();
-		library.CreateTag("1");
-		library.CreateTag("2");
-		var tag = library.CreateTag("3");
-		library.DeleteTagAt(2);
-		library.Tags.Should().NotContain(tag);
-	}
-}*/
+}
