@@ -17,7 +17,6 @@ internal sealed class PackableImage : Image
 	public Vector2<ushort> Size { get; }
 
 	[MemoryPackIgnore] public IReadOnlyCollection<Asset> Assets => _assets;
-
 	public Id Id { get; }
 
 	public PackableImage(DateTimeOffset creationTimestamp, Vector2<ushort> size, Id id)
@@ -26,6 +25,17 @@ internal sealed class PackableImage : Image
 		Size = size;
 		Id = id;
 	}
+
+	public Stream? OpenReadDataStream()
+	{
+		return null;
+	}
+
+	public Stream? OpenWriteDataStream()
+	{
+		return null;
+	}
+
 
 	private readonly HashSet<Asset> _assets = new();
 }
