@@ -14,9 +14,9 @@ public sealed class InappropriateTagsOwnerChangeException : Exception
 	}
 
 	private const string InappropriateTagsOwnerChangeExceptionMessage =
-		"The classifier asset cannot change the tags owner " +
-		"because this will mean that another dataset has become the owner of this asset. " +
-		"Use tags from the current dataset only.";
+		"Cannot change the tags owner " +
+		"because this will mean that another dataset has become the owner of this asset, item or key point. " +
+		"Use tags from the current data set/poser tag only.";
 
 	public Tag CurrentTag { get; }
 	public Tag Causer { get; }
