@@ -2,13 +2,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using SightKeeper.Avalonia.Annotation.Images;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia;
 
 internal sealed class ImageViewModel : ImageDataContext
 {
-	public ImageViewModel(ImageLoader imageLoader, Image image)
+	public ImageViewModel(ImageLoader imageLoader, DomainImage image)
 	{
 		_imageLoader = imageLoader;
 		_image = image;
@@ -20,5 +19,5 @@ internal sealed class ImageViewModel : ImageDataContext
 	}
 
 	private readonly ImageLoader _imageLoader;
-	private readonly Image _image;
+	private readonly DomainImage _image;
 }

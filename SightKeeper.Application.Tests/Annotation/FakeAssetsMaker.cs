@@ -1,12 +1,11 @@
 using SightKeeper.Application.Annotation;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Tests.Annotation;
 
 internal sealed class FakeAssetsMaker : AssetsMaker
 {
-	public TAsset MakeAsset<TAsset>(AssetsOwner<TAsset> assetsOwner, Image image)
+	public TAsset MakeAsset<TAsset>(AssetsOwner<TAsset> assetsOwner, DomainImage image)
 	{
 		return assetsOwner.MakeAsset(image);
 	}

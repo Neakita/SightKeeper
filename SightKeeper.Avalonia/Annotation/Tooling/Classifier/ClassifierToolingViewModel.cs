@@ -5,9 +5,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Images;
-using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Classifier;
 
@@ -41,7 +39,7 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 	}
 
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag), nameof(IsEnabled))]
-	public partial Image? Image { get; set; }
+	public partial DomainImage? Image { get; set; }
 
 	public bool IsEnabled => Image != null;
 

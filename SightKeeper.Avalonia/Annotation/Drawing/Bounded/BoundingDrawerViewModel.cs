@@ -5,7 +5,6 @@ using SightKeeper.Application.Annotation;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
@@ -21,7 +20,7 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		}
 	}
 
-	public Image? Image
+	public DomainImage? Image
 	{
 		get;
 		set

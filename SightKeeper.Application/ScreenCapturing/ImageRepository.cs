@@ -11,8 +11,8 @@ namespace SightKeeper.Application.ScreenCapturing;
 
 public class ImageRepository : ObservableImageRepository, ImageSaver<Rgba32>, IDisposable
 {
-	public IObservable<Image> Added => _added.AsObservable();
-	public IObservable<Image> Removed => _removed.AsObservable();
+	public IObservable<DomainImage> Added => _added.AsObservable();
+	public IObservable<DomainImage> Removed => _removed.AsObservable();
 	public IObservable<ImagesRange> ImagesDeleted => _imagesDeleted.AsObservable();
 
 	public ImageRepository(WriteImageDataAccess writeImageDataAccess)
@@ -58,13 +58,13 @@ public class ImageRepository : ObservableImageRepository, ImageSaver<Rgba32>, ID
 		_imagesDeleted.Dispose();
 	}
 
-	protected virtual Image CreateImage(DomainImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
+	protected virtual DomainImage CreateImage(DomainImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
 	{
 		return set.CreateImage(creationTimestamp, resolution);
 	}
 
 	private readonly WriteImageDataAccess _writeImageDataAccess;
-	private readonly Subject<Image> _added = new();
-	private readonly Subject<Image> _removed = new();
+	private readonly Subject<DomainImage> _added = new();
+	private readonly Subject<DomainImage> _removed = new();
 	private readonly Subject<ImagesRange> _imagesDeleted = new();
 }

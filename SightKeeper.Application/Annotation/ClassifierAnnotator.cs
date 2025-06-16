@@ -1,7 +1,5 @@
-using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Annotation;
 
@@ -12,13 +10,13 @@ public class ClassifierAnnotator
 		_assetsMaker = assetsMaker;
 	}
 
-	public virtual void SetTag(DomainAssetsLibrary<DomainClassifierAsset> assetsLibrary, Image image, DomainTag tag)
+	public virtual void SetTag(DomainAssetsLibrary<DomainClassifierAsset> assetsLibrary, DomainImage image, DomainTag tag)
 	{
 		var asset = _assetsMaker.GetOrMakeAsset(assetsLibrary, image);
 		asset.Tag = tag;
 	}
 
-	public virtual void DeleteAsset(DomainAssetsLibrary<DomainClassifierAsset> assetsLibrary, Image image)
+	public virtual void DeleteAsset(DomainAssetsLibrary<DomainClassifierAsset> assetsLibrary, DomainImage image)
 	{
 		assetsLibrary.DeleteAsset(image);
 	}

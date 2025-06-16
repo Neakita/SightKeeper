@@ -108,7 +108,7 @@ public sealed class BoundingDrawerViewModelTests
 		return (dataSet.AssetsLibrary, tag);
 	}
 
-	private static Image CreateScreenshot()
+	private static DomainImage CreateScreenshot()
 	{
 		DomainImageSet imageSet = new();
 		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
@@ -119,7 +119,7 @@ public sealed class BoundingDrawerViewModelTests
 		BoundingAnnotator boundingAnnotator,
 		AssetsOwner<ItemsMaker<AssetItem>>? assetsLibrary,
 		DomainTag? tag,
-		Image? screenshot)
+		DomainImage? screenshot)
 	{
 		BoundingDrawerViewModel drawerViewModel = new(boundingAnnotator)
 		{

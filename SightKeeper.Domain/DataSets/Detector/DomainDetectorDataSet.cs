@@ -27,7 +27,7 @@ public sealed class DomainDetectorDataSet : DetectorDataSet
 	{
 		_inner = inner;
 		TagsLibrary = new DomainTagsLibrary<Tag>(inner.TagsLibrary);
-		AssetsLibrary = new DomainAssetsLibrary<ItemsAsset<DetectorItem>>(inner.AssetsLibrary);
+		AssetsLibrary = inner.AssetsLibrary;
 		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, TagsLibrary);
 	}
 

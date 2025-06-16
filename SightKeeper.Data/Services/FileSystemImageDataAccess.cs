@@ -2,24 +2,23 @@ using System.IO.Compression;
 using System.Runtime.InteropServices;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.ScreenCapturing;
-using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
 public sealed class FileSystemImageDataAccess : WriteImageDataAccess, ReadImageDataAccess
 {
-	public FileSystemImageDataAccess(FileSystemDataAccess<Image> fileSystemDataAccess)
+	public FileSystemImageDataAccess(FileSystemDataAccess<DomainImage> fileSystemDataAccess)
 	{
 		_fileSystemDataAccess = fileSystemDataAccess;
 	}
 
-	public Stream LoadImage(Image image)
+	public Stream LoadImage(DomainImage image)
 	{
 		return new ZLibStream(_fileSystemDataAccess.OpenReadStream(image), CompressionMode.Decompress);
 	}
 
-	public void SaveImageData(Image image, ReadOnlySpan2D<Rgba32> data)
+	public void SaveImageData(DomainImage image, ReadOnlySpan2D<Rgba32> data)
 	{
 		using var stream = new ZLibStream(_fileSystemDataAccess.OpenWriteStream(image), CompressionLevel.SmallestSize);
 		if (data.TryGetSpan(out var contiguousData))
@@ -36,10 +35,10 @@ public sealed class FileSystemImageDataAccess : WriteImageDataAccess, ReadImageD
 		}
 	}
 
-	public void DeleteImageData(Image image)
+	public void DeleteImageData(DomainImage image)
 	{
 		_fileSystemDataAccess.Delete(image);
 	}
 
-	private readonly FileSystemDataAccess<Image> _fileSystemDataAccess;
+	private readonly FileSystemDataAccess<DomainImage> _fileSystemDataAccess;
 }

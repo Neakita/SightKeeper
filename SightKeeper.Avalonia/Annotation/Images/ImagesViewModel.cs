@@ -22,18 +22,18 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 		{
 			if (!SetProperty(ref field, value))
 				return;
-			_images.ReplaceAll(value?.Images ?? Enumerable.Empty<Image>());
+			_images.ReplaceAll(value?.Images ?? Enumerable.Empty<DomainImage>());
 		}
 	}
 
 	public IReadOnlyCollection<AnnotationImageDataContext> Images { get; }
 	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
-	public Image? SelectedImage => SelectedImageIndex >= 0 ? _images[SelectedImageIndex] : null;
-	public IObservable<Image?> SelectedImageChanged => _selectedImageChanged.AsObservable();
+	public DomainImage? SelectedImage => SelectedImageIndex >= 0 ? _images[SelectedImageIndex] : null;
+	public IObservable<DomainImage?> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
 	public ImagesViewModel(ObservableImageRepository observableRepository, ImageLoader imageLoader)
 	{
-		_images = new ObservableList<Image>();
+		_images = new ObservableList<DomainImage>();
 		observableRepository.Added
 			.Where(image => image.Set == Set)
 			.Subscribe(_images.Add)
@@ -57,8 +57,8 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 	}
 
 	private readonly CompositeDisposable _disposable = new();
-	private readonly ObservableList<Image> _images;
-	private readonly Subject<Image?> _selectedImageChanged = new();
+	private readonly ObservableList<DomainImage> _images;
+	private readonly Subject<DomainImage?> _selectedImageChanged = new();
 
 	partial void OnSelectedImageIndexChanged(int value)
 	{

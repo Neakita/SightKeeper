@@ -1,8 +1,6 @@
-using SightKeeper.Domain.Images;
-
 namespace SightKeeper.Application.ImageSets;
 
-public interface ObservableImageRepository : ObservableRepository<Image>
+public interface ObservableImageRepository : ObservableRepository<DomainImage>
 {
 	public IObservable<ImagesRange> ImagesDeleted { get; }
 }

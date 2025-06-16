@@ -11,7 +11,7 @@ internal sealed partial class PackableImageSet : ImageSet
 	public string Name { get; set; }
 	public string Description { get; set; }
 	[MemoryPackIgnore]
-	public IReadOnlyList<Image> Images => _images;
+	public IReadOnlyList<DomainImage> Images => _images;
 
 	public PackableImageSet()
 	{
@@ -28,7 +28,7 @@ internal sealed partial class PackableImageSet : ImageSet
 		_images = images;
 	}
 
-	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public DomainImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		var id = Id.Create();
 		PackableImage image = new(creationTimestamp, size, id);
@@ -36,12 +36,12 @@ internal sealed partial class PackableImageSet : ImageSet
 		return image;
 	}
 
-	public IReadOnlyList<Image> GetImagesRange(int index, int count)
+	public IReadOnlyList<DomainImage> GetImagesRange(int index, int count)
 	{
 		return _images.GetRange(index, count);
 	}
 
-	public int IndexOf(Image image)
+	public int IndexOf(DomainImage image)
 	{
 		// images are ordered by creation timestamp, so binary search is possible and highly preferable,
 		// images list can contain thousands of images.

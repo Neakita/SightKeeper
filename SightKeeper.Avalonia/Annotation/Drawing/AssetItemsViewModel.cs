@@ -12,13 +12,12 @@ using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed class AssetItemsViewModel
 {
-	public Image? Image
+	public DomainImage? Image
 	{
 		get;
 		set
@@ -59,7 +58,7 @@ public sealed class AssetItemsViewModel
 		observableAnnotator.AssetsChanged.Subscribe(OnAssetsChanged).DisposeWith(_disposable);
 	}
 
-	private void OnAssetsChanged(Image image)
+	private void OnAssetsChanged(DomainImage image)
 	{
 		if (Image != image || AssetsLibrary == null)
 			return;

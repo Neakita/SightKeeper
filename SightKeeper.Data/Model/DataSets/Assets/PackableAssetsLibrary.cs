@@ -2,7 +2,6 @@ using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using SightKeeper.Data.Model.Images;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Model.DataSets.Assets;
 
@@ -11,29 +10,29 @@ internal sealed partial class PackableAssetsLibrary<TAsset> : AssetsOwner<TAsset
 {
 	[MemoryPackIgnore] public IReadOnlyCollection<TAsset> Assets => _assets.Values;
 	[MemoryPackIgnore] public IReadOnlyCollection<PackableImage> Images => _assets.Keys;
-	IReadOnlyCollection<Image> AssetsContainer<TAsset>.Images => Images;
+	IReadOnlyCollection<DomainImage> AssetsContainer<TAsset>.Images => Images;
 
-	public TAsset GetAsset(Image image)
+	public TAsset GetAsset(DomainImage image)
 	{
 		return _assets[(PackableImage)image];
 	}
 
-	public TAsset? GetOptionalAsset(Image image)
+	public TAsset? GetOptionalAsset(DomainImage image)
 	{
 		return _assets.GetValueOrDefault((PackableImage)image);
 	}
 
-	public bool Contains(Image image)
+	public bool Contains(DomainImage image)
 	{
 		return _assets.ContainsKey((PackableImage)image);
 	}
 
-	public TAsset MakeAsset(Image image)
+	public TAsset MakeAsset(DomainImage image)
 	{
 		throw new NotImplementedException();
 	}
 
-	public void DeleteAsset(Image image)
+	public void DeleteAsset(DomainImage image)
 	{
 		var isRemoved = _assets.Remove((PackableImage)image);
 		Guard.IsTrue(isRemoved);

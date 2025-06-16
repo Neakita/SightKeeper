@@ -1,15 +1,14 @@
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests;
 
 internal static class Utilities
 {
-	public static Image CreateImage()
+	public static DomainImage CreateImage()
 	{
-		return new Image(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320), new FakeImageDataLoader());
+		return new DomainImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320), new FakeImageDataLoader());
 	}
 
 	public static DomainTagsLibrary<DomainTag> CreateTagsLibrary()

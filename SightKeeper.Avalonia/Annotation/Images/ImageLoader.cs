@@ -7,9 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.ScreenCapturing;
-using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 using Yolo.InputProcessing;
 
@@ -24,7 +22,7 @@ public sealed class ImageLoader
 	}
 
 	public async Task<PooledWriteableBitmap?> LoadImageAsync(
-		Image image,
+		DomainImage image,
 		int? maximumLargestDimension,
 		CancellationToken cancellationToken)
 	{
@@ -43,7 +41,7 @@ public sealed class ImageLoader
 	private readonly ReadImageDataAccess _imageDataAccess;
 
 	private async Task<bool> ReadImageDataToBitmapAsync(
-		Image image,
+		DomainImage image,
 		WriteableBitmap bitmap,
 		CancellationToken cancellationToken)
 	{
@@ -63,7 +61,7 @@ public sealed class ImageLoader
 	}
 
 	private async Task<bool> ReadImageDataAsync(
-		Image image,
+		DomainImage image,
 		Memory<Rgba32> target,
 		CancellationToken cancellationToken)
 	{

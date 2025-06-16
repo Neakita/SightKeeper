@@ -27,7 +27,7 @@ public sealed class DomainPoser2DDataSet : Poser2DDataSet
 	{
 		_inner = inner;
 		TagsLibrary = new DomainTagsLibrary<PoserTag>(inner.TagsLibrary);
-		AssetsLibrary = new DomainAssetsLibrary<PoserAsset<Poser2DItem>>(inner.AssetsLibrary);
+		AssetsLibrary = inner.AssetsLibrary;
 		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, TagsLibrary);
 	}
 

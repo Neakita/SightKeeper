@@ -25,23 +25,23 @@ internal sealed class TrackableImageSet(ImageSet imageSet, ChangeListener change
 		}
 	}
 
-	public IReadOnlyList<Image> Images => imageSet.Images;
+	public IReadOnlyList<DomainImage> Images => imageSet.Images;
 
 	public ImageSet Inner => imageSet;
 
-	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public DomainImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		var image = imageSet.CreateImage(creationTimestamp, size);
 		changeListener.SetDataChanged();
 		return image;
 	}
 
-	public IReadOnlyList<Image> GetImagesRange(int index, int count)
+	public IReadOnlyList<DomainImage> GetImagesRange(int index, int count)
 	{
 		return imageSet.GetImagesRange(index, count);
 	}
 
-	public int IndexOf(Image image)
+	public int IndexOf(DomainImage image)
 	{
 		return imageSet.IndexOf(image);
 	}

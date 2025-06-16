@@ -20,15 +20,15 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		set => inner.Description = value;
 	}
 
-	public IReadOnlyList<Image> Images => inner.Images;
+	public IReadOnlyList<DomainImage> Images => inner.Images;
 
-	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public DomainImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		var index = Images.Count;
 		var image = inner.CreateImage(creationTimestamp, size);
 		if (_observableImages.HasObservers)
 		{
-			Insertion<Image> change = new()
+			Insertion<DomainImage> change = new()
 			{
 				Index = index,
 				Items = [image]
@@ -38,12 +38,12 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		return image;
 	}
 
-	public IReadOnlyList<Image> GetImagesRange(int index, int count)
+	public IReadOnlyList<DomainImage> GetImagesRange(int index, int count)
 	{
 		return inner.GetImagesRange(index, count);
 	}
 
-	public int IndexOf(Image image)
+	public int IndexOf(DomainImage image)
 	{
 		return inner.IndexOf(image);
 	}
@@ -54,7 +54,7 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		inner.RemoveImageAt(index);
 		if (_observableImages.HasObservers)
 		{
-			IndexedRemoval<Image> change = new()
+			IndexedRemoval<DomainImage> change = new()
 			{
 				Index = index,
 				Items = [image]
@@ -69,7 +69,7 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		inner.RemoveImagesRange(index, count);
 		if (_observableImages.HasObservers)
 		{
-			IndexedRemoval<Image> change = new()
+			IndexedRemoval<DomainImage> change = new()
 			{
 				Index = index,
 				Items = images
@@ -78,5 +78,5 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		}
 	}
 
-	private readonly ExternalObservableList<Image> _observableImages = new(inner.Images);
+	private readonly ExternalObservableList<DomainImage> _observableImages = new(inner.Images);
 }

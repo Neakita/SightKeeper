@@ -1,7 +1,6 @@
 using NSubstitute;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests.Services;
 
@@ -33,7 +32,7 @@ public sealed class AppDataBoundingEditorTests
 		return asset.MakeItem(tag);
 	}
 
-	private static Image PrepareScreenshot()
+	private static DomainImage PrepareScreenshot()
 	{
 		throw new NotImplementedException();
 		/*DomainImageSet imageSet = new();

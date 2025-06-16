@@ -26,7 +26,7 @@ public sealed class DomainClassifierDataSet : ClassifierDataSet
 	{
 		_inner = inner;
 		TagsLibrary = new DomainTagsLibrary<Tag>(inner.TagsLibrary);
-		AssetsLibrary = new DomainAssetsLibrary<ClassifierAsset>(inner.AssetsLibrary);
+		AssetsLibrary = inner.AssetsLibrary;
 		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, TagsLibrary, 2);
 	}
 

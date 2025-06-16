@@ -6,7 +6,7 @@ namespace SightKeeper.Avalonia.Annotation.Images;
 public interface ImageSelection
 {
 	int SelectedImageIndex { get; }
-	IObservable<Image?> SelectedImageChanged { get; }
+	IObservable<DomainImage?> SelectedImageChanged { get; }
 	DomainImageSet? Set { get; }
-	Image? SelectedImage => SelectedImageIndex >= 0 ? Set?.Images[SelectedImageIndex] : null;
+	DomainImage? SelectedImage => SelectedImageIndex >= 0 ? Set?.Images[SelectedImageIndex] : null;
 }

@@ -9,7 +9,6 @@ using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation;
 
@@ -61,7 +60,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 		_drawer.AssetsLibrary = value?.Value.AssetsLibrary as AssetsOwner<ItemsOwner<AssetItem>>;
 	}
 
-	private void OnSelectedImageChanged(Image? image)
+	private void OnSelectedImageChanged(DomainImage? image)
 	{
 		_drawer.Image = image;
 	}

@@ -137,7 +137,7 @@ public sealed partial class Composition
 		.Bind<AnnotationButtonDefinitionFactory>().To<DeleteSelectedImageButtonDefinitionFactory>()
 		.Bind<AnnotationButtonDefinitionFactory>(2).To<DeleteSelectedAssetButtonDefinitionFactory>()
 		.Bind<DataSetSelectionViewModel>().Bind<DataSetSelectionDataContext>().Bind<DataSetSelection>().As(Lifetime.Singleton).To<DataSetSelectionViewModel>()
-		.Bind<FileSystemDataAccess<Image>>().As(Lifetime.Singleton).To(_ => new FileSystemDataAccess<Image>(".bin"))
+		.Bind<FileSystemDataAccess<DomainImage>>().As(Lifetime.Singleton).To(_ => new FileSystemDataAccess<DomainImage>(".bin"))
 		.Bind<WriteImageDataAccess>().Bind<ReadImageDataAccess>().As(Lifetime.Singleton).To<FileSystemImageDataAccess>()
 		.Bind<IValidator<NewDataSetData>>().To<NewDataSetDataValidator>()
 		.Bind<IValidator<ExistingDataSetData>>().To<ExistingDataSetDataValidator>();

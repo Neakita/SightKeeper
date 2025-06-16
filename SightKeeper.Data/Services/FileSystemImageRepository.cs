@@ -8,14 +8,14 @@ namespace SightKeeper.Data.Services;
 
 public sealed class FileSystemImageRepository : ImageRepository
 {
-	public FileSystemImageRepository(FileSystemDataAccess<Image> fileSystemDataAccess, ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock, WriteImageDataAccess writeImageDataAccess) : base(writeImageDataAccess)
+	public FileSystemImageRepository(FileSystemDataAccess<DomainImage> fileSystemDataAccess, ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock, WriteImageDataAccess writeImageDataAccess) : base(writeImageDataAccess)
 	{
 		_fileSystemDataAccess = fileSystemDataAccess;
 		_changeListener = changeListener;
 		_appDataLock = appDataLock;
 	}
 
-	public Id GetId(Image image)
+	public Id GetId(DomainImage image)
 	{
 		return _fileSystemDataAccess.GetId(image);
 	}
@@ -32,17 +32,17 @@ public sealed class FileSystemImageRepository : ImageRepository
 		_fileSystemDataAccess.ClearUnassociatedFiles();
 	}
 
-	public void AssociateId(Image image, Id id)
+	public void AssociateId(DomainImage image, Id id)
 	{
 		_fileSystemDataAccess.AssociateId(image, id);
 	}
 
-	protected override Image CreateImage(
+	protected override DomainImage CreateImage(
 		DomainImageSet set,
 		DateTimeOffset creationTimestamp,
 		Vector2<ushort> resolution)
 	{
-		Image image;
+		DomainImage image;
 		lock (_appDataLock)
 			image = base.CreateImage(set, creationTimestamp, resolution);
 		_changeListener.SetDataChanged();
@@ -51,5 +51,5 @@ public sealed class FileSystemImageRepository : ImageRepository
 
 	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
-	private readonly FileSystemDataAccess<Image> _fileSystemDataAccess;
+	private readonly FileSystemDataAccess<DomainImage> _fileSystemDataAccess;
 }

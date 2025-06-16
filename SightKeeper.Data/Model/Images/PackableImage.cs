@@ -1,11 +1,10 @@
 using FlakeId;
 using MemoryPack;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Model.Images;
 
-internal sealed class PackableImage : Image
+internal sealed class PackableImage : DomainImage
 {
 	static PackableImage()
 	{
