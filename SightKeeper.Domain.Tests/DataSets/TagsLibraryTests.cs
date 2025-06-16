@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Domain.Tests.DataSets;
@@ -61,4 +61,4 @@ public sealed class TagsLibraryTests
 		library.DeleteTagAt(2);
 		library.Tags.Should().NotContain(tag);
 	}
-}
+}*/

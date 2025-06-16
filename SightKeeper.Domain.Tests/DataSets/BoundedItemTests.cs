@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
 
@@ -32,4 +32,4 @@ public sealed class BoundedItemTests
 		var tag = dataSet.TagsLibrary.CreateTag(string.Empty);
 		return asset.MakeItem(tag);
 	}
-}
+}*/

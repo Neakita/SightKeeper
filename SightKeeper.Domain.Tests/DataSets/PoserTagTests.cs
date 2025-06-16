@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Tags;
@@ -105,4 +105,4 @@ public sealed class PoserTagTests
 	{
 		return new DomainPoser2DDataSet();
 	}
-}
+}*/

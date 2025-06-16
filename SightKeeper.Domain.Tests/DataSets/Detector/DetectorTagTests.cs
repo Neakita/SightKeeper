@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Detector;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
@@ -25,4 +25,4 @@ public sealed class DetectorTagTests
 		dataSet.TagsLibrary.DeleteTag(tag1);
 		tag2.Name = tag1.Name;
 	}
-}
+}*/

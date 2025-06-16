@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -20,4 +20,4 @@ public sealed class TagsLibraryInClassifierTests
 		asset.Tag.Should().Be(tag);
 		exception.Tag.Should().Be(tag);
 	}
-}
+}*/

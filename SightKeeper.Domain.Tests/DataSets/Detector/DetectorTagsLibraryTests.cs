@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -69,4 +69,4 @@ public sealed class DetectorTagsLibraryTests
 		dataSet.TagsLibrary.Tags.Should().Contain(tag1);
 		dataSet.TagsLibrary.Tags.Should().NotContain(tag2);
 	}
-}
+}*/

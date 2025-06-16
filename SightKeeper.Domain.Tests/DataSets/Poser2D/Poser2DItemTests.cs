@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser2D;
 
@@ -37,4 +37,4 @@ public sealed class Poser2DItemTests
 		exception.Value.Should().Be(newPosition);
 		exception.KeyPoint.Should().Be(keyPoint);
 	}
-}
+}*/

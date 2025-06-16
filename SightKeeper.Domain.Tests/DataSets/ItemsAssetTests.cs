@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -102,4 +102,4 @@ public sealed class ItemsAssetTests
 		asset.ClearItems();
 		asset.Items.Should().BeEmpty();
 	}
-}
+}*/

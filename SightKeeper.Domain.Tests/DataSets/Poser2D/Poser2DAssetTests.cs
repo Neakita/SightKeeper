@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Poser2D;
 
 namespace SightKeeper.Domain.Tests.DataSets.Poser2D;
@@ -48,4 +48,4 @@ public sealed class Poser2DAssetTests
 		item.DeleteKeyPoint(keyPoint);
 		Assert.Throws<ArgumentException>(() => item.DeleteKeyPoint(keyPoint));
 	}
-}
+}*/

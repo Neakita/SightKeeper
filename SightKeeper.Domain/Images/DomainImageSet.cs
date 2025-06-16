@@ -21,6 +21,7 @@ public sealed class DomainImageSet(ImageSet inner) : ImageSet
 
 	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
+		ValidateImageSize(size);
 		if (Images.Count > 0 && creationTimestamp <= Images[^1].CreationTimestamp)
 		{
 			throw new InconsistentImageCreationTimestampException(
@@ -62,5 +63,17 @@ public sealed class DomainImageSet(ImageSet inner) : ImageSet
 			ImageIsInUseException.ThrowForDeletionIfInUse(this, image);
 		}
 		inner.RemoveImagesRange(index, count);
+	}
+
+	private static void ValidateImageSize(Vector2<ushort> size)
+	{
+		ValidateImageSize(size.X);
+		ValidateImageSize(size.Y);
+	}
+
+	private static void ValidateImageSize(ushort size)
+	{
+		if (size <= 0)
+			throw new ArgumentException($"Image size should be greater than 0, but was {size}");
 	}
 }

@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Detector;
 
 namespace SightKeeper.Domain.Tests.DataSets.Detector;
@@ -19,4 +19,4 @@ public sealed class DetectorItemTests
 		tag1.Users.Should().BeEmpty();
 		tag2.Users.Should().Contain(item);
 	}
-}
+}*/

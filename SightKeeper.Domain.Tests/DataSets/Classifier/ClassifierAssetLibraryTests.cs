@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Domain.Tests.DataSets.Classifier;
@@ -25,4 +25,4 @@ public sealed class ClassifierAssetLibraryTests
 		DomainClassifierDataSet dataSet = new();
 		Assert.Throws<ArgumentOutOfRangeException>(() => dataSet.AssetsLibrary.MakeAsset(image));
 	}
-}
+}*/

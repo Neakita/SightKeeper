@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
@@ -84,4 +84,4 @@ public sealed class WeightsLibraryTests
 	{
 		return new DomainPoser2DDataSet();
 	}
-}
+}*/

@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
-using SightKeeper.Domain.DataSets.Detector;
+﻿using System.Collections.ObjectModel;
+using FluentAssertions;
+using NSubstitute;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests.Images;
@@ -7,93 +9,88 @@ namespace SightKeeper.Domain.Tests.Images;
 public sealed class ImageSetTests
 {
 	[Fact]
-	public void ShouldNotDeleteImageWithAsset()
+	public void ShouldNotAllowDeleteImageWithAsset()
 	{
-		DomainImageSet imageSet = new(new FakeImageSet());
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
-		DomainDetectorDataSet dataSet = new();
-		dataSet.AssetsLibrary.MakeAsset(image);
-		var exception = Assert.Throws<ImageIsInUseException>(() => imageSet.RemoveImageAt(0));
+		var innerSet = Substitute.For<ImageSet>();
+		var image = Substitute.For<Image>();
+		image.Assets.Returns([Substitute.For<Asset>()]);
+		innerSet.Images.Returns([image]);
+		var domainSet = new DomainImageSet(innerSet);
+		var exception = Assert.Throws<ImageIsInUseException>(() => domainSet.RemoveImageAt(0));
 		exception.Image.Should().Be(image);
-		exception.Set.Should().Be(imageSet);
+		exception.Set.Should().Be(domainSet);
+		innerSet.DidNotReceive().RemoveImageAt(0);
 	}
 
 	[Fact]
-	public void ShouldDeleteImageAfterAssetDeletion()
+	public void ShouldAllowDeleteImageWithoutAssets()
 	{
-		DomainImageSet imageSet = new(new FakeImageSet());
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
-		DomainDetectorDataSet dataSet = new();
-		dataSet.AssetsLibrary.MakeAsset(image);
-		dataSet.AssetsLibrary.DeleteAsset(image);
-		imageSet.RemoveImageAt(0);
+		var innerSet = Substitute.For<ImageSet>();
+		var image = Substitute.For<Image>();
+		image.Assets.Returns(ReadOnlyCollection<Asset>.Empty);
+		innerSet.Images.Returns([image]);
+		var domainSet = new DomainImageSet(innerSet);
+		domainSet.RemoveImageAt(0);
+		innerSet.Received().RemoveImageAt(0);
 	}
 
 	[Fact]
-	public void ShouldDeleteImageAfterAssetsLibraryClear()
+	public void ShouldNotCreateImageWithZeroSizeDimensions()
 	{
-		DomainImageSet imageSet = new(new FakeImageSet());
-		var image = imageSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(320, 320));
-		DomainDetectorDataSet dataSet = new();
-		dataSet.AssetsLibrary.MakeAsset(image);
-		dataSet.AssetsLibrary.ClearAssets();
-		imageSet.RemoveImageAt(0);
-	}
-
-	[Fact]
-	public void ShouldNotCreateImageWithAnyZeroSizeDimensions()
-	{
-		DomainImageSet set = new(new FakeImageSet());
-		Assert.Throws<ArgumentException>(() => set.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(0, 320)));
+		var innerSet = Substitute.For<ImageSet>();
+		DomainImageSet domainSet = new(innerSet);
+		Assert.Throws<ArgumentException>(() => domainSet.CreateImage(DateTimeOffset.Now, new Vector2<ushort>(0, 320)));
+		innerSet.DidNotReceive().CreateImage(Arg.Any<DateTimeOffset>(), Arg.Any<Vector2<ushort>>());
 	}
 
 	[Fact]
 	public void ShouldCreateImage()
 	{
-		var set = new DomainImageSet(new FakeImageSet());
+		var innerSet = Substitute.For<ImageSet>();
+		var domainSet = new DomainImageSet(innerSet);
 		var creationTimestamp = DateTimeOffset.Now;
 		var size = new Vector2<ushort>(480, 480);
-		var image = set.CreateImage(creationTimestamp, size);
-		image.CreationTimestamp.Should().Be(creationTimestamp);
-		image.Size.Should().Be(size);
-		set.Images.Should().Contain(image);
+		var expectedImage = Substitute.For<Image>();
+		innerSet.CreateImage(creationTimestamp, size).Returns(expectedImage);
+		var image = domainSet.CreateImage(creationTimestamp, size);
+		image.Should().Be(expectedImage);
 	}
 
 	[Fact]
-	public void ShouldNotCreateImageWithEarlierTimestampThanLatestCreated()
+	public void ShouldNotAllowCreateImageWithEarlierTimestampThanLatestCreated()
 	{
-		var set = new DomainImageSet(new FakeImageSet());
-		var earlierTimestamp = DateTimeOffset.Now;
+		var earlierTimestamp = DateTimeOffset.UtcNow;
 		var laterTimestamp = earlierTimestamp.AddHours(2);
-		set.CreateImage(laterTimestamp, new Vector2<ushort>(320, 320));
+		var innerSet = Substitute.For<ImageSet>();
+		var laterImage = Substitute.For<Image>();
+		laterImage.CreationTimestamp.Returns(laterTimestamp);
+		innerSet.Images.Returns([laterImage]);
+		var domainSet = new DomainImageSet(innerSet);
 		var exception = Assert.Throws<InconsistentImageCreationTimestampException>(() =>
-			set.CreateImage(earlierTimestamp, new Vector2<ushort>(320, 320)));
-		exception.AffectedSet.Should().Be(set);
+			domainSet.CreateImage(earlierTimestamp, new Vector2<ushort>(320, 320)));
+		exception.AffectedSet.Should().Be(domainSet);
 		exception.NewImageCreationTimestamp.Should().Be(earlierTimestamp);
+		innerSet.DidNotReceive().CreateImage(Arg.Any<DateTimeOffset>(), Arg.Any<Vector2<ushort>>());
 	}
 
 	[Fact]
 	public void ShouldGetImagesRange()
 	{
-		var set = new DomainImageSet(new FakeImageSet());
-		var initialTimestamp = DateTimeOffset.UtcNow;
-		for (int i = 0; i < 10; i++)
-			set.CreateImage(initialTimestamp.AddSeconds(i), new Vector2<ushort>(320, 320));
-		var images = set.GetImagesRange(2, 4);
-		var timestamps = images.Select(image => image.CreationTimestamp);
-		var expectedTimestamps = Enumerable.Range(2, 4).Select(offset => initialTimestamp.AddSeconds(offset));
-		timestamps.Should().ContainInOrder(expectedTimestamps);
+		var innerSet = Substitute.For<ImageSet>();
+		IReadOnlyList<Image> expectedImages = [Substitute.For<Image>(), Substitute.For<Image>()];
+		innerSet.GetImagesRange(1, 2).Returns(expectedImages);
+		var domainSet = new DomainImageSet(innerSet);
+		var images = domainSet.GetImagesRange(1, 2);
+		images.Should().BeSameAs(expectedImages);
+		innerSet.Received().GetImagesRange(1, 2);
 	}
 
 	[Fact]
 	public void ShouldRemoveImagesRange()
 	{
-		var set = new DomainImageSet(new FakeImageSet());
-		var initialTimestamp = DateTimeOffset.UtcNow;
-		for (int i = 0; i < 10; i++)
-			set.CreateImage(initialTimestamp.AddSeconds(i), new Vector2<ushort>(320, 320));
-		set.RemoveImagesRange(2, 4);
-		var removedImagesTimestamps = Enumerable.Range(2, 4).Select(offset => initialTimestamp.AddSeconds(offset));
-		set.Images.Should().NotContain(image => removedImagesTimestamps.Contains(image.CreationTimestamp));
+		var innerSet = Substitute.For<ImageSet>();
+		var domainSet = new DomainImageSet(innerSet);
+		domainSet.RemoveImagesRange(2, 4);
+		innerSet.Received().RemoveImagesRange(2, 4);
 	}
 }

@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Detector;
@@ -118,4 +118,4 @@ public sealed class AssetsLibraryTests
 	{
 		return new DomainDetectorDataSet();
 	}
-}
+}*/

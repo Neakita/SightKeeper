@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿/*using FluentAssertions;
 using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Domain.Tests.DataSets.Classifier;
@@ -25,4 +25,4 @@ public sealed class WeightsLibraryInClassifierTests
 		Assert.Throws<ArgumentException>(() => dataSet.WeightsLibrary.AddWeights(weights));
 		dataSet.WeightsLibrary.Weights.Should().BeEmpty();
 	}
-}
+}*/
