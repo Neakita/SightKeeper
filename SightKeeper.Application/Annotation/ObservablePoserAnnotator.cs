@@ -4,6 +4,6 @@ namespace SightKeeper.Application.Annotation;
 
 public interface ObservablePoserAnnotator
 {
-	IObservable<(PoserItem item, KeyPoint keyPoint)> KeyPointCreated { get; }
-	IObservable<(PoserItem item, KeyPoint keyPoint)> KeyPointDeleted { get; }
+	IObservable<(DomainPoserItem item, DomainKeyPoint keyPoint)> KeyPointCreated { get; }
+	IObservable<(DomainPoserItem item, DomainKeyPoint keyPoint)> KeyPointDeleted { get; }
 }

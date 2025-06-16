@@ -7,7 +7,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 public sealed class KeyPoint3DViewModel : KeyPointViewModel
 {
 	public override Poser3DItemViewModel Item { get; }
-	public override KeyPoint3D Value { get; }
+	public override DomainKeyPoint3D Value { get; }
 	public override DomainTag Tag => Value.Tag;
 
 	public bool IsVisible
@@ -21,7 +21,7 @@ public sealed class KeyPoint3DViewModel : KeyPointViewModel
 		}
 	}
 
-	public KeyPoint3DViewModel(PoserAnnotator annotator, Poser3DItemViewModel item, KeyPoint3D value) : base(annotator)
+	public KeyPoint3DViewModel(PoserAnnotator annotator, Poser3DItemViewModel item, DomainKeyPoint3D value) : base(annotator)
 	{
 		_annotator = annotator;
 		Item = item;

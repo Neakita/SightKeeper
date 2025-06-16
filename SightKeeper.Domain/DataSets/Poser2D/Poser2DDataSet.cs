@@ -5,7 +5,7 @@ namespace SightKeeper.Domain.DataSets.Poser2D;
 
 public interface Poser2DDataSet : PoserDataSet
 {
-	new AssetsOwner<Poser2DAsset> AssetsLibrary { get; }
+	new AssetsOwner<PoserAsset<Poser2DItem>> AssetsLibrary { get; }
 
-	AssetsOwner<PoserAsset> PoserDataSet.AssetsLibrary => AssetsLibrary;
+	AssetsOwner<PoserAsset<PoserItem>> PoserDataSet.AssetsLibrary => AssetsLibrary;
 }

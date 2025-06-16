@@ -1,13 +1,8 @@
-﻿using SightKeeper.Domain.DataSets.Poser;
-using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Domain.DataSets.Poser3D;
 
-public sealed class KeyPoint3D : KeyPoint
+public interface KeyPoint3D : KeyPoint
 {
-	public bool IsVisible { get; set; }
-
-	internal KeyPoint3D(DomainTag tag) : base(tag)
-	{
-	}
+	bool IsVisible { get; set; }
 }

@@ -7,8 +7,8 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 public abstract class PoserItemViewModel : BoundedItemViewModel
 {
-	public abstract override PoserItem Value { get; }
-	public abstract override PoserTag Tag { get; }
+	public abstract override DomainPoserItem Value { get; }
+	public abstract override DomainPoserTag Tag { get; }
 	public abstract IReadOnlyList<KeyPointViewModel> KeyPoints { get; }
 
 	internal abstract void RemoveKeyPoint(KeyPointViewModel keyPoint);

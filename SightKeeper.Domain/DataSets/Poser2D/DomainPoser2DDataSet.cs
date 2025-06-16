@@ -20,14 +20,14 @@ public sealed class DomainPoser2DDataSet : Poser2DDataSet
 	}
 
 	public TagsOwner<PoserTag> TagsLibrary { get; }
-	public AssetsOwner<Poser2DAsset> AssetsLibrary { get; }
+	public AssetsOwner<PoserAsset<Poser2DItem>> AssetsLibrary { get; }
 	public WeightsLibrary WeightsLibrary { get; }
 
 	public DomainPoser2DDataSet(Poser2DDataSet inner)
 	{
 		_inner = inner;
 		TagsLibrary = new DomainTagsLibrary<PoserTag>(inner.TagsLibrary);
-		AssetsLibrary = new DomainAssetsLibrary<Poser2DAsset>(inner.AssetsLibrary);
+		AssetsLibrary = new DomainAssetsLibrary<PoserAsset<Poser2DItem>>(inner.AssetsLibrary);
 		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, TagsLibrary);
 	}
 

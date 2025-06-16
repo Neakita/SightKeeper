@@ -19,7 +19,7 @@ namespace SightKeeper.Avalonia.Annotation.Tooling.Poser;
 
 public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataContext, TagSelection, ObservableTagSelection, SelectedItemConsumer, IDisposable
 {
-	public TagsContainer<PoserTag>? TagsSource
+	public TagsContainer<DomainPoserTag>? TagsSource
 	{
 		get;
 		set
@@ -86,7 +86,7 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 	private readonly PoserAnnotator _poserAnnotator;
 	private readonly CompositeDisposable _disposable = new();
 	private readonly Subject<DomainTag?> _selectedTagChanged = new();
-	private PoserItem? _selectedItem;
+	private DomainPoserItem? _selectedItem;
 
 	partial void OnSelectedPoserTagChanged(TagDataContext? value)
 	{

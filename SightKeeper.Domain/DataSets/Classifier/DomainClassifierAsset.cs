@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.DataSets.Classifier;
 
-public sealed class DomainClassifierAsset(ClassifierAsset inner) : ClassifierAsset, TagUser
+public sealed class DomainClassifierAsset(ClassifierAsset inner) : ClassifierAsset
 {
 	public Image Image => inner.Image;
 

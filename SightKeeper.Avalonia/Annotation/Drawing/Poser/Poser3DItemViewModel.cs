@@ -9,11 +9,11 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
 public sealed class Poser3DItemViewModel : PoserItemViewModel
 {
-	public override Poser3DItem Value { get; }
-	public override PoserTag Tag => Value.Tag;
+	public override DomainPoser3DItem Value { get; }
+	public override DomainPoserTag Tag => Value.Tag;
 	public override IReadOnlyList<KeyPoint3DViewModel> KeyPoints => _keyPoints;
 
-	public Poser3DItemViewModel(Poser3DItem value, BoundingEditor boundingEditor) : base(boundingEditor)
+	public Poser3DItemViewModel(DomainPoser3DItem value, BoundingEditor boundingEditor) : base(boundingEditor)
 	{
 		Value = value;
 	}

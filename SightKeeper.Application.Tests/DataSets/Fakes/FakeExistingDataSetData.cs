@@ -47,7 +47,7 @@ internal sealed class FakeExistingDataSetData : ExistingDataSetData
 		return new FakeExistingDataSetData(dataSet, tagsChanges);
 	}
 
-	public static FakeExistingDataSetData CreateWithRemovedKeyPointTag(PoserDataSet dataSet, PoserTag poserTag, DomainTag keyPointTag)
+	public static FakeExistingDataSetData CreateWithRemovedKeyPointTag(PoserDataSet dataSet, DomainPoserTag poserTag, DomainTag keyPointTag)
 	{
 		FakeTagsChanges keyPointTagsChanges = new()
 		{

@@ -4,5 +4,5 @@ namespace SightKeeper.Domain.DataSets.Assets.Items;
 
 public interface ItemsMaker<out TItem>
 {
-	TItem MakeItem(DomainTag tag);
+	TItem MakeItem(Tag tag);
 }

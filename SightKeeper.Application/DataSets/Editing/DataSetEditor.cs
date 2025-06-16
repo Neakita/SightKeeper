@@ -57,7 +57,7 @@ public class DataSetEditor : IDisposable
 		var tag = editedTagData.Tag;
 		tag.Name = editedTagData.Name;
 		tag.Color = editedTagData.Color;
-		if (tag is PoserTag poserTag)
+		if (tag is DomainPoserTag poserTag)
 		{
 			var editedPoserTagData = (EditedPoserTagData)editedTagData;
 			UpdateTags(poserTag, editedPoserTagData.KeyPointTagsChanges);
@@ -68,11 +68,11 @@ public class DataSetEditor : IDisposable
 	{
 		var tag = tagsLibrary.CreateTag(tagData.Name);
 		tag.Color = tagData.Color;
-		if (tag is PoserTag poserTag)
+		if (tag is DomainPoserTag poserTag)
 			CreateKeyPointTags(poserTag, (NewPoserTagData)tagData);
 	}
 
-	private static void CreateKeyPointTags(PoserTag tag, NewPoserTagData data)
+	private static void CreateKeyPointTags(DomainPoserTag tag, NewPoserTagData data)
 	{
 		foreach (var keyPointTagData in data.KeyPointTags)
 		{

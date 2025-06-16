@@ -7,13 +7,7 @@ public sealed class DomainTag(Tag inner) : Tag
 		get => inner.Name;
 		set
 		{
-			const string tagsConflictingNameExceptionMessage =
-				"An attempt has been made to assign a name already occupied by another tag. " +
-				"Before setting a new name, " +
-				"make sure that this name is not occupied by another tag in the appropriate context (dataset or key point tag)";
-			foreach (var sibling in Owner.Tags)
-				if (sibling.Name == value && sibling != this)
-					throw new TagsConflictingNameException(tagsConflictingNameExceptionMessage, this, value, sibling);
+			TagsConflictingNameException.ThrowIfNameConflicts(Owner.Tags, this, value);
 			inner.Name = value;
 		}
 	}

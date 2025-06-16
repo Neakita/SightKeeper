@@ -5,7 +5,7 @@ namespace SightKeeper.Application.DataSets.Tags;
 
 public interface EditedPoserTagData : EditedTagData
 {
-	new PoserTag Tag { get; }
+	new DomainPoserTag Tag { get; }
 	DomainTag EditedTagData.Tag => Tag;
 	TagsChanges KeyPointTagsChanges { get; }
 }

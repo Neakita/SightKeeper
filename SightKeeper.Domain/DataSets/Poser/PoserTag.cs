@@ -1,47 +1,25 @@
-﻿using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser;
 
-public sealed class PoserTag : DomainTag, TagsOwner<DomainTag>
+public interface PoserTag : Tag, TagsOwner<Tag>
 {
-	public IReadOnlyList<DomainTag> KeyPointTags => _keyPointTags.AsReadOnly();
-	IReadOnlyList<DomainTag> TagsContainer<DomainTag>.Tags => KeyPointTags;
+	IReadOnlyList<Tag> KeyPointTags { get; }
+	new TagsContainer<PoserTag> Owner { get; }
+	TagsContainer<Tag> Tag.Owner => Owner;
+	Tag CreateKeyPointTag(string name);
+	void DeleteKeyPointTagAt(int index);
+	void DeleteKeyPointTag(Tag tag);
 
-	public DomainTag CreateKeyPointTag(string name)
-	{
-		DomainTag tag = new(this, name);
-		_keyPointTags.Add(tag);
-		return tag;
-	}
+	IReadOnlyList<Tag> TagsContainer<Tag>.Tags => KeyPointTags;
 
-	public void DeleteKeyPointTagAt(int index)
-	{
-		var tag = _keyPointTags[index];
-		TagIsInUseException.ThrowForDeletionIfInUse(tag);
-		_keyPointTags.RemoveAt(index);
-	}
-
-	public void DeleteKeyPointTag(DomainTag tag)
-	{
-		TagIsInUseException.ThrowForDeletionIfInUse(tag);
-		var isRemoved = _keyPointTags.Remove(tag);
-		if (!isRemoved)
-			throw new ArgumentException("Specified tag was not found and therefore not deleted", nameof(tag));
-	}
-
-	DomainTag TagsOwner<DomainTag>.CreateTag(string name)
+	Tag TagsOwner<Tag>.CreateTag(string name)
 	{
 		return CreateKeyPointTag(name);
 	}
 
-	void TagsOwner<DomainTag>.DeleteTagAt(int index)
+	void TagsOwner<Tag>.DeleteTagAt(int index)
 	{
 		DeleteKeyPointTagAt(index);
 	}
-
-	internal PoserTag(TagsContainer<DomainTag> owner, string name) : base(owner, name)
-	{
-	}
-
-	private readonly List<DomainTag> _keyPointTags = new();
 }

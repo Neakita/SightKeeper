@@ -1,16 +1,5 @@
-﻿using SightKeeper.Domain.DataSets.Poser;
-using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Domain.DataSets.Poser2D;
 
-public sealed class Poser2DItem : PoserItem<KeyPoint>
-{
-	protected override KeyPoint CreateKeyPoint(DomainTag tag)
-	{
-		return new KeyPoint(tag);
-	}
-
-	internal Poser2DItem(PoserTag tag) : base(tag)
-	{
-	}
-}
+public interface Poser2DItem : PoserItem;

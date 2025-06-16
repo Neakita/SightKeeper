@@ -4,5 +4,5 @@ namespace SightKeeper.Application.Annotation;
 
 public interface BoundingEditor
 {
-	void SetBounding(BoundedItem item, Bounding bounding);
+	void SetBounding(DomainBoundedItem item, Bounding bounding);
 }

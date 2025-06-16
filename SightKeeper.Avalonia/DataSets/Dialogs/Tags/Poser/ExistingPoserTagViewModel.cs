@@ -13,13 +13,13 @@ namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 
 internal sealed partial class ExistingPoserTagViewModel : EditableTagViewModel, EditablePoserTagDataContext, EditedPoserTagData, TagsChanges
 {
-	public PoserTag Tag { get; }
+	public DomainPoserTag Tag { get; }
 
 	uint EditedTagData.Color => Color.ToUInt32();
 
 	public bool IsEffectivelyEdited => Name != Tag.Name || Color.ToUInt32() != Tag.Color;
 
-	public ExistingPoserTagViewModel(PoserTag tag)
+	public ExistingPoserTagViewModel(DomainPoserTag tag)
 	{
 		Tag = tag;
 		Name = tag.Name;

@@ -102,14 +102,14 @@ public sealed class AssetItemsViewModel
 		_items.Add(itemViewModel);
 	}
 
-	private void OnKeyPointCreated((PoserItem item, KeyPoint keyPoint) tuple)
+	private void OnKeyPointCreated((DomainPoserItem item, DomainKeyPoint keyPoint) tuple)
 	{
 		var itemViewModel = _items.OfType<PoserItemViewModel>().Single(viewModel => viewModel.Value == tuple.item);
 		var keyPointViewModel = _keyPointFactory.CreateViewModel(itemViewModel, tuple.keyPoint);
 		_items.Add(keyPointViewModel);
 	}
 
-	private void OnKeyPointDeleted((PoserItem item, KeyPoint keyPoint) tuple)
+	private void OnKeyPointDeleted((DomainPoserItem item, DomainKeyPoint keyPoint) tuple)
 	{
 		var itemViewModel = _items.OfType<PoserItemViewModel>().Single(viewModel => viewModel.Value == tuple.item);
 		var keyPointViewModel = itemViewModel.KeyPoints.Single(viewModel => viewModel.Value == tuple.keyPoint);

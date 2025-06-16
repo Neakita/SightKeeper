@@ -26,7 +26,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 			field = value;
 			_boundingDrawer.Tag = null;
 			_keyPointDrawer.Tag = null;
-			if (value?.Owner is PoserTag)
+			if (value?.Owner is DomainPoserTag)
 				_keyPointDrawer.Tag = value;
 			else
 				_boundingDrawer.Tag = value;

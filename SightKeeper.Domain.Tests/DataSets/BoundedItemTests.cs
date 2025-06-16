@@ -24,7 +24,7 @@ public sealed class BoundedItemTests
 		exception.Value.Should().Be(nonNormalizedBounding);
 	}
 
-	private static BoundedItem CreateItem()
+	private static DomainBoundedItem CreateItem()
 	{
 		DomainDetectorDataSet dataSet = new();
 		var image = Utilities.CreateImage();

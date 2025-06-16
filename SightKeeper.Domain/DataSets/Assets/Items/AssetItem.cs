@@ -2,8 +2,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
-public interface AssetItem
+public interface AssetItem : BoundedItem, TagUser
 {
-	DomainTag Tag { get; }
-	Bounding Bounding { get; set; }
+	Tag Tag { get; }
 }

@@ -11,9 +11,9 @@ public sealed class KeyPointViewModelFactory
 		_annotator = annotator;
 	}
 
-	public KeyPointViewModel CreateViewModel(PoserItemViewModel item, KeyPoint keyPoint)
+	public KeyPointViewModel CreateViewModel(PoserItemViewModel item, DomainKeyPoint keyPoint)
 	{
-		if (keyPoint is KeyPoint3D keyPoint3D)
+		if (keyPoint is DomainKeyPoint3D keyPoint3D)
 		{
 			var poser3DItemViewModel = (Poser3DItemViewModel)item;
 			KeyPoint3DViewModel keyPoint3DViewModel = new(_annotator, poser3DItemViewModel, keyPoint3D);

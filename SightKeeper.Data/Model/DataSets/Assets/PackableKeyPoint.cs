@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Poser;
 namespace SightKeeper.Data.Model.DataSets.Assets;
 
 /// <summary>
-/// MemoryPackable version of <see cref="KeyPoint"/>
+/// MemoryPackable version of <see cref="DomainKeyPoint"/>
 /// </summary>
 [MemoryPackable]
 internal partial class PackableKeyPoint

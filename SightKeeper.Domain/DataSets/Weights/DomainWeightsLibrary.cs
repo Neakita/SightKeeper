@@ -47,7 +47,7 @@ public sealed class DomainWeightsLibrary : WeightsLibrary
 		foreach (var tag in tagsList)
 		{
 			UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
-			if (tag.Owner is not PoserTag poserTag)
+			if (tag.Owner is not DomainPoserTag poserTag)
 				continue;
 			if (!tagsList.Contains(poserTag))
 				throw new KeyPointTagWithoutOwnerException(tag, poserTag);

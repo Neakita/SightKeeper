@@ -9,7 +9,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 public abstract class BoundedItemViewModel : ViewModel, BoundedItemDataContext
 {
 	public abstract DomainTag Tag { get; }
-	public abstract BoundedItem Value { get; }
+	public abstract DomainBoundedItem Value { get; }
 
 	public Bounding Bounding
 	{

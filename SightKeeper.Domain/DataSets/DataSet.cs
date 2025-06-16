@@ -6,10 +6,10 @@ namespace SightKeeper.Domain.DataSets;
 
 public interface DataSet
 {
-	public string Name { get; set; }
-	public string Description { get; set; }
+	string Name { get; set; }
+	string Description { get; set; }
 
-	public TagsOwner<Tag> TagsLibrary { get; }
+	TagsOwner<Tag> TagsLibrary { get; }
 	AssetsOwner<Asset> AssetsLibrary { get; }
-	public WeightsLibrary WeightsLibrary { get; }
+	WeightsLibrary WeightsLibrary { get; }
 }

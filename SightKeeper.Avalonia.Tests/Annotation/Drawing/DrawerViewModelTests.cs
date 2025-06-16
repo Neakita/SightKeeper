@@ -35,8 +35,8 @@ public sealed class DrawerViewModelTests
 		var observableBoundingAnnotator = Substitute.For<ObservableBoundingAnnotator>();
 		observableBoundingAnnotator.ItemCreated.Returns(Observable.Empty<(ItemsMaker<AssetItem>, AssetItem)>());
 		var observablePoserAnnotator = Substitute.For<ObservablePoserAnnotator>();
-		observablePoserAnnotator.KeyPointCreated.Returns(Observable.Empty<(PoserItem, KeyPoint)>());
-		observablePoserAnnotator.KeyPointDeleted.Returns(Observable.Empty<(PoserItem, KeyPoint)>());
+		observablePoserAnnotator.KeyPointCreated.Returns(Observable.Empty<(DomainPoserItem, DomainKeyPoint)>());
+		observablePoserAnnotator.KeyPointDeleted.Returns(Observable.Empty<(DomainPoserItem, DomainKeyPoint)>());
 		var observableAnnotator = Substitute.For<ObservableAnnotator>();
 		observableAnnotator.AssetsChanged.Returns(Observable.Empty<Image>());
 		var assetItemsViewModel = new AssetItemsViewModel(
