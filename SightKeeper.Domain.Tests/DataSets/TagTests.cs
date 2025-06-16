@@ -1,4 +1,5 @@
-/*using FluentAssertions;
+using FluentAssertions;
+using NSubstitute;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.Tests.DataSets;
@@ -6,26 +7,28 @@ namespace SightKeeper.Domain.Tests.DataSets;
 public sealed class TagTests
 {
 	[Fact]
-	public void ShouldNotChangeTagNameToOccupied()
+	public void ShouldAllowSetTagName()
 	{
-		var library = Utilities.CreateTagsLibrary();
-		var tag1 = library.CreateTag("1");
-		var tag2 = library.CreateTag("2");
-		var exception = Assert.Throws<TagsConflictingNameException>(() => tag2.Name = "1");
-		tag1.Name.Should().Be("1");
-		tag2.Name.Should().Be("2");
-		exception.ConflictingTag.Should().Be(tag1);
-		exception.EditingTag.Should().Be(tag2);
-		exception.Name.Should().Be("1");
+		var innerTag = Substitute.For<Tag>();
+		const string newName = "Tag2";
+		var domainTag = new DomainTag(innerTag);
+		domainTag.Name = newName;
+		innerTag.Received().Name = newName;
 	}
 
 	[Fact]
-	public void ShouldSetTagNameToDeletedTagName()
+	public void ShouldNotChangeTagNameToOccupied()
 	{
-		var library = Utilities.CreateTagsLibrary();
-		var tag1 = library.CreateTag("1");
-		var tag2 = library.CreateTag("2");
-		library.DeleteTag(tag1);
-		tag2.Name = tag1.Name;
+		var innerTag = Substitute.For<Tag>();
+		var otherTag = Substitute.For<Tag>();
+		const string conflictingName = "Tag2";
+		otherTag.Name.Returns(conflictingName);
+		innerTag.Owner.Tags.Returns([otherTag]);
+		var domainTag = new DomainTag(innerTag);
+		var exception = Assert.Throws<TagsConflictingNameException>(() => domainTag.Name = conflictingName);
+		innerTag.DidNotReceive().Name = Arg.Any<string>();
+		exception.ConflictingTag.Should().Be(otherTag);
+		exception.EditingTag.Should().Be(domainTag);
+		exception.Name.Should().Be(conflictingName);
 	}
-}*/
+}
