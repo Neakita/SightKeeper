@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -36,5 +37,17 @@ public sealed class DetectorItemTests
 		innerItem.DidNotReceive().Tag = Arg.Any<Tag>();
 		exception.Causer.Should().Be(newTag);
 		exception.CurrentTag.Should().Be(initialTag);
+	}
+
+	[Fact]
+	public void ShouldNotAllowSetNotNormalizedBounding()
+	{
+		var innerItem = Substitute.For<DetectorItem>();
+		var domainItem = new DomainDetectorItem(innerItem);
+		var bounding = new Bounding(2, 3, 4, 5);
+		var exception = Assert.Throws<ItemBoundingConstraintException>(() => domainItem.Bounding = bounding);
+		innerItem.DidNotReceive().Bounding = Arg.Any<Bounding>();
+		exception.Item.Should().Be(domainItem);
+		exception.Value.Should().Be(bounding);
 	}
 }
