@@ -8,4 +8,7 @@ public interface Image
 	Vector2<ushort> Size { get; }
 	IReadOnlyCollection<Asset> Assets { get; }
 	bool IsInUse => Assets.Count > 0;
+
+	Stream? OpenReadDataStream();
+	Stream? OpenWriteDataStream();
 }
