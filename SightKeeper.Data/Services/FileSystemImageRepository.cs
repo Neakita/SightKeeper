@@ -6,7 +6,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class FileSystemImageRepository : ImageRepository, IdRepository<Image>
+public sealed class FileSystemImageRepository : ImageRepository
 {
 	public FileSystemImageRepository(FileSystemDataAccess<Image> fileSystemDataAccess, ChangeListener changeListener, [Tag(typeof(AppData))] Lock appDataLock, WriteImageDataAccess writeImageDataAccess) : base(writeImageDataAccess)
 	{
