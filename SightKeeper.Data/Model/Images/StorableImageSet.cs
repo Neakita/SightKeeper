@@ -37,7 +37,7 @@ internal sealed class StorableImageSet : ImageSet, INotifyPropertyChanged
 		}
 	}
 
-	public IReadOnlyList<DomainImage> Images => _decorated.Images;
+	public IReadOnlyList<Image> Images => _decorated.Images;
 
 	// this property used only for saving.
 	// No changes should be made through this instance as it isn't decorated with domain rules, locking and changes tracking.
@@ -60,18 +60,18 @@ internal sealed class StorableImageSet : ImageSet, INotifyPropertyChanged
 			.WithDomainRules();
 	}
 
-	public DomainImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		return _decorated.CreateImage(creationTimestamp, size);
 	}
 
-	public IReadOnlyList<DomainImage> GetImagesRange(int index, int count)
+	public IReadOnlyList<Image> GetImagesRange(int index, int count)
 	{
 		// read can be performed directly from packable instance, not a big deal.
 		return Packable.GetImagesRange(index, count);
 	}
 
-	public int IndexOf(DomainImage image)
+	public int IndexOf(Image image)
 	{
 		return Packable.IndexOf(image);
 	}

@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Model.Images;
 
-public sealed class StorableImageSetFactory : ImageSetFactory
+public sealed class StorableImageSetFactory
 {
 	public StorableImageSetFactory(ChangeListener changeListener, [Tag(typeof(AppData))] Lock editingLock)
 	{
