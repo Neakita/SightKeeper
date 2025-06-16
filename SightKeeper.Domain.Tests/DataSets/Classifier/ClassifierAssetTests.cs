@@ -1,4 +1,5 @@
-﻿/*using FluentAssertions;
+﻿using FluentAssertions;
+using NSubstitute;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -7,30 +8,33 @@ namespace SightKeeper.Domain.Tests.DataSets.Classifier;
 public sealed class ClassifierAssetTests
 {
 	[Fact]
-	public void ShouldUpdateTag()
+	public void ShouldAllowUpdateTag()
 	{
-		var image = Utilities.CreateImage();
-		DomainClassifierDataSet dataSet = new();
-		var tag1 = dataSet.TagsLibrary.CreateTag("1");
-		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var tag2 = dataSet.TagsLibrary.CreateTag("2");
-		asset.Tag = tag2;
-		asset.Tag.Should().Be(tag2);
-		tag1.Users.Should().BeEmpty();
-		tag2.Users.Should().Contain(asset);
+		var innerAsset = Substitute.For<ClassifierAsset>();
+		var domainAsset = new DomainClassifierAsset(innerAsset);
+		var tagsOwner = Substitute.For<TagsOwner<Tag>>();
+		var tag1 = Substitute.For<Tag>();
+		tag1.Owner.Returns(tagsOwner);
+		innerAsset.Tag.Returns(tag1);
+		var tag2 = Substitute.For<Tag>();
+		tag2.Owner.Returns(tagsOwner);
+		domainAsset.Tag = tag2;
+		innerAsset.Received().Tag = tag2;
 	}
 
 	[Fact]
-	public void ShouldNotSetTagToForeign()
+	public void ShouldNotAllowSetTagWithDifferentOwner()
 	{
-		var image = Utilities.CreateImage();
-		DomainClassifierDataSet dataSet = new();
-		var properTag = dataSet.TagsLibrary.CreateTag("");
-		var foreignTag = new DomainClassifierDataSet().TagsLibrary.CreateTag("");
-		var asset = dataSet.AssetsLibrary.MakeAsset(image);
-		var exception = Assert.Throws<InappropriateTagsOwnerChangeException>(() => asset.Tag = foreignTag);
-		asset.Tag.Should().Be(properTag);
-		exception.Causer.Should().Be(foreignTag);
-		exception.CurrentTag.Should().Be(properTag);
+		var initialTag = Substitute.For<Tag>();
+		initialTag.Owner.Returns(Substitute.For<TagsOwner<Tag>>());
+		var newTag = Substitute.For<Tag>();
+		newTag.Owner.Returns(Substitute.For<TagsOwner<Tag>>());
+		var innerAsset = Substitute.For<ClassifierAsset>();
+		innerAsset.Tag.Returns(initialTag);
+		var domainAsset = new DomainClassifierAsset(innerAsset);
+		var exception = Assert.Throws<InappropriateTagsOwnerChangeException>(() => domainAsset.Tag = newTag);
+		domainAsset.Tag.Should().Be(initialTag);
+		exception.Causer.Should().Be(newTag);
+		exception.CurrentTag.Should().Be(initialTag);
 	}
-}*/
+}
