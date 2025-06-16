@@ -9,7 +9,7 @@ public abstract class AbstractItemsAsset<TItem> : ItemsAsset<TItem> where TItem 
 	public AssetUsage Usage { get; set; }
 	public IReadOnlyList<TItem> Items => _items.AsReadOnly();
 
-	public TItem MakeItem(Tag tag)
+	public TItem MakeItem(DomainTag tag)
 	{
 		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
 		var item = CreateItem(tag);
@@ -34,13 +34,13 @@ public abstract class AbstractItemsAsset<TItem> : ItemsAsset<TItem> where TItem 
 		_items.Clear();
 	}
 
-	protected AbstractItemsAsset(TagsContainer<Tag> tagsOwner)
+	protected AbstractItemsAsset(TagsContainer<DomainTag> tagsOwner)
 	{
 		_tagsOwner = tagsOwner;
 	}
 
-	protected abstract TItem CreateItem(Tag tag);
+	protected abstract TItem CreateItem(DomainTag tag);
 
 	private readonly List<TItem> _items = new();
-	private readonly TagsContainer<Tag> _tagsOwner;
+	private readonly TagsContainer<DomainTag> _tagsOwner;
 }

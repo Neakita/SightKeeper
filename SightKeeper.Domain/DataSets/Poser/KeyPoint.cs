@@ -4,7 +4,7 @@ namespace SightKeeper.Domain.DataSets.Poser;
 
 public class KeyPoint : TagUser
 {
-	public Tag Tag { get; }
+	public DomainTag Tag { get; }
 
 	public Vector2<double> Position
 	{
@@ -21,7 +21,7 @@ public class KeyPoint : TagUser
 		}
 	}
 
-	internal KeyPoint(Tag tag)
+	internal KeyPoint(DomainTag tag)
 	{
 		Tag = tag;
 	}

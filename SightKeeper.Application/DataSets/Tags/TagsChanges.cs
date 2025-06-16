@@ -4,7 +4,7 @@ namespace SightKeeper.Application.DataSets.Tags;
 
 public interface TagsChanges
 {
-	IEnumerable<Tag> RemovedTags { get; }
+	IEnumerable<DomainTag> RemovedTags { get; }
 	IEnumerable<EditedTagData> EditedTags { get; }
 	IEnumerable<NewTagData> NewTags { get; }
 }

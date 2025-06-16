@@ -11,7 +11,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerDataContext
 {
-	public Tag? Tag
+	public DomainTag? Tag
 	{
 		get;
 		set

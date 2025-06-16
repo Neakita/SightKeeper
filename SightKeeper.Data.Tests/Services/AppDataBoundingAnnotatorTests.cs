@@ -1,6 +1,5 @@
 using FluentAssertions;
 using NSubstitute;
-using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
@@ -39,7 +38,7 @@ public sealed class AppDataBoundingAnnotatorTests
 		return boundingAnnotator;
 	}
 
-	private static (DomainDetectorDataSet dataSet, Tag tag) PrepareDataSet()
+	private static (DomainDetectorDataSet dataSet, DomainTag tag) PrepareDataSet()
 	{
 		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");

@@ -4,6 +4,6 @@ namespace SightKeeper.Domain.DataSets.Classifier;
 
 public interface ClassifierDataSet : DataSet
 {
-	new AssetsOwner<ClassifierAsset> AssetsLibrary { get; }
+	new AssetsOwner<DomainClassifierAsset> AssetsLibrary { get; }
 	AssetsOwner<Asset> DataSet.AssetsLibrary => AssetsLibrary;
 }

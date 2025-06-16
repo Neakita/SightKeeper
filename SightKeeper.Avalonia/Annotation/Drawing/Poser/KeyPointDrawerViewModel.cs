@@ -12,7 +12,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 public sealed partial class KeyPointDrawerViewModel : ViewModel, KeyPointDrawerDataContext
 {
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(ExistingKeyPoint)), NotifyCanExecuteChangedFor(nameof(CreateKeyPointCommand))]
-	public partial Tag? Tag { get; set; }
+	public partial DomainTag? Tag { get; set; }
 
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(ExistingKeyPoint)), NotifyCanExecuteChangedFor(nameof(CreateKeyPointCommand))]
 	public partial PoserItemViewModel? Item { get; set; }

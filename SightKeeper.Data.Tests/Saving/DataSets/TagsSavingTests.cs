@@ -27,7 +27,7 @@ public sealed class TagsSavingTests
 		persistedTag.Color.Should().Be(color);
 	}
 
-	private static Tag CreateTag(string name = "")
+	private static DomainTag CreateTag(string name = "")
 	{
 		var dataSet = CreateDataSet();
 		return dataSet.TagsLibrary.CreateTag(name);
@@ -38,7 +38,7 @@ public sealed class TagsSavingTests
 		return new DomainClassifierDataSet();
 	}
 
-	private static Tag Persist(Tag tag)
+	private static DomainTag Persist(DomainTag tag)
 	{
 		var tagsLibrary = (TagsLibrary)tag.Owner;
 		Guard.IsEqualTo(tagsLibrary.Tags.Count, 1);

@@ -8,7 +8,7 @@ public sealed class KeyPoint3DViewModel : KeyPointViewModel
 {
 	public override Poser3DItemViewModel Item { get; }
 	public override KeyPoint3D Value { get; }
-	public override Tag Tag => Value.Tag;
+	public override DomainTag Tag => Value.Tag;
 
 	public bool IsVisible
 	{

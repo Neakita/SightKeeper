@@ -64,9 +64,9 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 		set => SelectedKeyPointTag = (KeyPointTagViewModel?)value;
 	}
 
-	public Tag? SelectedTag => ((TagViewModel?)SelectedPoserTag)?.Tag ?? SelectedKeyPointTag?.Tag;
+	public DomainTag? SelectedTag => ((TagViewModel?)SelectedPoserTag)?.Tag ?? SelectedKeyPointTag?.Tag;
 
-	public IObservable<Tag?> SelectedTagChanged => _selectedTagChanged.DistinctUntilChanged();
+	public IObservable<DomainTag?> SelectedTagChanged => _selectedTagChanged.DistinctUntilChanged();
 
 	public PoserToolingViewModel(PoserAnnotator poserAnnotator, ObservablePoserAnnotator observablePoserAnnotator)
 	{
@@ -85,7 +85,7 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 
 	private readonly PoserAnnotator _poserAnnotator;
 	private readonly CompositeDisposable _disposable = new();
-	private readonly Subject<Tag?> _selectedTagChanged = new();
+	private readonly Subject<DomainTag?> _selectedTagChanged = new();
 	private PoserItem? _selectedItem;
 
 	partial void OnSelectedPoserTagChanged(TagDataContext? value)
@@ -104,13 +104,13 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 	}
 
 	[RelayCommand(CanExecute = nameof(CanDeleteKeyPoint))]
-	private void DeleteKeyPoint(Tag tag)
+	private void DeleteKeyPoint(DomainTag tag)
 	{
 		Guard.IsNotNull(_selectedItem);
 		_poserAnnotator.DeleteKeyPoint(_selectedItem, tag);
 	}
 
-	private bool CanDeleteKeyPoint(Tag tag)
+	private bool CanDeleteKeyPoint(DomainTag tag)
 	{
 		return _selectedItem != null && _selectedItem.KeyPoints.Any(keyPoint => keyPoint.Tag == tag);
 	}

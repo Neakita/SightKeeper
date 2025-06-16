@@ -18,11 +18,11 @@ public abstract class PoserItem : BoundedItem, AssetItem, TagUser
 		}
 	}
 
-	Tag AssetItem.Tag => Tag;
+	DomainTag AssetItem.Tag => Tag;
 
 	public abstract IReadOnlyCollection<KeyPoint> KeyPoints { get; }
 
-	public abstract KeyPoint MakeKeyPoint(Tag tag);
+	public abstract KeyPoint MakeKeyPoint(DomainTag tag);
 	public abstract void DeleteKeyPoint(KeyPoint keyPoint);
 	public abstract void ClearKeyPoints();
 

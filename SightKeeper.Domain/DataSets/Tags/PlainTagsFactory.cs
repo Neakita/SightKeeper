@@ -6,6 +6,6 @@ internal sealed class PlainTagsFactory : TagsFactory<Tag>
 	
 	public override Tag CreateTag(TagsContainer<Tag> owner, string name)
 	{
-		return new Tag(owner, name);
+		return new DomainTag(owner, name);
 	}
 }

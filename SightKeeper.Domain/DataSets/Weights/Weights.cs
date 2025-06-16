@@ -9,9 +9,9 @@ public sealed class Weights
 	public required ModelSize ModelSize { get; init; }
 	public required WeightsMetrics Metrics { get; init; }
 	public required Vector2<ushort> Resolution { get; init; }
-	public IReadOnlyCollection<Tag> Tags { get; }
+	public IReadOnlyCollection<DomainTag> Tags { get; }
 
-	public Weights(params IEnumerable<Tag> tags)
+	public Weights(params IEnumerable<DomainTag> tags)
 	{
 		Tags = tags.ToList();
 	}

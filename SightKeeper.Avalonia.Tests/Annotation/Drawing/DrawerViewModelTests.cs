@@ -50,7 +50,7 @@ public sealed class DrawerViewModelTests
 		return drawerViewModel;
 	}
 
-	private static Tag CreateTag()
+	private static DomainTag CreateTag()
 	{
 		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");

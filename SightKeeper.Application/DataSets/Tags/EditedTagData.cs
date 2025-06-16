@@ -4,7 +4,7 @@ namespace SightKeeper.Application.DataSets.Tags;
 
 public interface EditedTagData
 {
-	Tag Tag { get; }
+	DomainTag Tag { get; }
 	string Name { get; }
 	uint Color { get; }
 }

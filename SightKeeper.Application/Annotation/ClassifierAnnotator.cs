@@ -12,13 +12,13 @@ public class ClassifierAnnotator
 		_assetsMaker = assetsMaker;
 	}
 
-	public virtual void SetTag(DomainAssetsLibrary<ClassifierAsset> assetsLibrary, Image image, Tag tag)
+	public virtual void SetTag(DomainAssetsLibrary<DomainClassifierAsset> assetsLibrary, Image image, DomainTag tag)
 	{
 		var asset = _assetsMaker.GetOrMakeAsset(assetsLibrary, image);
 		asset.Tag = tag;
 	}
 
-	public virtual void DeleteAsset(DomainAssetsLibrary<ClassifierAsset> assetsLibrary, Image image)
+	public virtual void DeleteAsset(DomainAssetsLibrary<DomainClassifierAsset> assetsLibrary, Image image)
 	{
 		assetsLibrary.DeleteAsset(image);
 	}

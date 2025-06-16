@@ -5,7 +5,7 @@ namespace SightKeeper.Domain.DataSets.Poser2D;
 
 public sealed class Poser2DItem : PoserItem<KeyPoint>
 {
-	protected override KeyPoint CreateKeyPoint(Tag tag)
+	protected override KeyPoint CreateKeyPoint(DomainTag tag)
 	{
 		return new KeyPoint(tag);
 	}

@@ -58,9 +58,9 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 	}
 
 	private readonly ClassifierAnnotator _annotator;
-	private DomainAssetsLibrary<ClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
+	private DomainAssetsLibrary<DomainClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
 	private readonly IDisposable _disposable;
 
-	private ClassifierAsset? Asset =>
+	private DomainClassifierAsset? Asset =>
 		Image == null ? null : AssetsLibrary?.GetOrMakeAsset(Image);
 }

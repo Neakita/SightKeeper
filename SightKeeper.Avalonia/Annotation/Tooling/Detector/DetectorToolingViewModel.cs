@@ -8,7 +8,7 @@ namespace SightKeeper.Avalonia.Annotation.Tooling.Detector;
 
 internal sealed class DetectorToolingViewModel : ViewModel, DetectorToolingDataContext, TagSelection, ObservableTagSelection
 {
-	public TagsContainer<Tag>? TagsContainer
+	public TagsContainer<DomainTag>? TagsContainer
 	{
 		get;
 		set
@@ -39,9 +39,9 @@ internal sealed class DetectorToolingViewModel : ViewModel, DetectorToolingDataC
 		}
 	}
 
-	Tag? TagSelection.SelectedTag => ((TagViewModel?)SelectedTag)?.Tag;
+	DomainTag? TagSelection.SelectedTag => ((TagViewModel?)SelectedTag)?.Tag;
 
-	public IObservable<Tag?> SelectedTagChanged => _selectedTagChanged;
+	public IObservable<DomainTag?> SelectedTagChanged => _selectedTagChanged;
 
-	private readonly Subject<Tag?> _selectedTagChanged = new();
+	private readonly Subject<DomainTag?> _selectedTagChanged = new();
 }

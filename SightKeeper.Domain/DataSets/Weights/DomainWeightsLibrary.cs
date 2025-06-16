@@ -11,15 +11,11 @@ public sealed class DomainWeightsLibrary : WeightsLibrary
 	{
 		ValidateTags(weights.Tags);
 		_inner.AddWeights(weights);
-		/*if (!isAdded)
-			throw new ArgumentException("Specified weights already exists in the library");*/
 	}
 
 	public void RemoveWeights(Weights weights)
 	{
 		_inner.RemoveWeights(weights);
-		/*if (!isRemoved)
-			throw new ArgumentException("Specified weights was not found and therefore not deleted");*/
 	}
 
 	internal DomainWeightsLibrary(WeightsLibrary inner, TagsContainer<Tag> tagsOwner, int minimumTagsCount = 1)

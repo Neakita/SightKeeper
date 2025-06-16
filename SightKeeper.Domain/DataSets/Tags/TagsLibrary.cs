@@ -18,7 +18,7 @@ public sealed class DomainTagsLibrary<TTag> : TagsOwner<TTag> where TTag : Tag
 		_inner.DeleteTagAt(index);
 	}
 
-	internal DomainTagsLibrary(TagsOwner<TTag> inner)
+	public DomainTagsLibrary(TagsOwner<TTag> inner)
 	{
 		_inner = inner;
 	}

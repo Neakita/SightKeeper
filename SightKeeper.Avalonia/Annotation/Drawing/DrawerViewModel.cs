@@ -18,7 +18,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 {
 	[ObservableProperty] public partial Image? Image { get; set; }
 
-	public Tag? Tag
+	public DomainTag? Tag
 	{
 		get;
 		set

@@ -7,8 +7,8 @@ namespace SightKeeper.Application.Annotation;
 
 public interface PoserAnnotator
 {
-	void CreateKeyPoint(PoserItem item, Tag tag, Vector2<double> position);
+	void CreateKeyPoint(PoserItem item, DomainTag tag, Vector2<double> position);
 	void SetKeyPointPosition(KeyPoint keyPoint, Vector2<double> position);
 	void SetKeyPointVisibility(KeyPoint3D keyPoint, bool isVisible);
-	void DeleteKeyPoint(PoserItem item, Tag tag);
+	void DeleteKeyPoint(PoserItem item, DomainTag tag);
 }

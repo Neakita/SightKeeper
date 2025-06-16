@@ -7,7 +7,7 @@ public sealed class KeyPoint3D : KeyPoint
 {
 	public bool IsVisible { get; set; }
 
-	internal KeyPoint3D(Tag tag) : base(tag)
+	internal KeyPoint3D(DomainTag tag) : base(tag)
 	{
 	}
 }

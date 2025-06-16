@@ -12,12 +12,12 @@ internal static class Utilities
 		return new Image(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320), new FakeImageDataLoader());
 	}
 
-	public static DomainTagsLibrary<Tag> CreateTagsLibrary()
+	public static DomainTagsLibrary<DomainTag> CreateTagsLibrary()
 	{
 		return new DomainClassifierDataSet().TagsLibrary;
 	}
 
-	public static Weights CreateWeights(params IEnumerable<Tag> tags)
+	public static Weights CreateWeights(params IEnumerable<DomainTag> tags)
 	{
 		Weights weights = new(tags)
 		{

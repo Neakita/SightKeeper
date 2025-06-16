@@ -7,7 +7,7 @@ public abstract class PoserItem<TKeyPoint> : PoserItem where TKeyPoint : KeyPoin
 {
 	public sealed override IReadOnlyCollection<TKeyPoint> KeyPoints => _keyPoints;
 
-	public override TKeyPoint MakeKeyPoint(Tag tag)
+	public override TKeyPoint MakeKeyPoint(DomainTag tag)
 	{
 		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(Tag, tag);
 		var keyPoint = CreateKeyPoint(tag);
@@ -35,7 +35,7 @@ public abstract class PoserItem<TKeyPoint> : PoserItem where TKeyPoint : KeyPoin
 		_keyPoints.Clear();
 	}
 
-	protected abstract TKeyPoint CreateKeyPoint(Tag tag);
+	protected abstract TKeyPoint CreateKeyPoint(DomainTag tag);
 
 	internal PoserItem(PoserTag tag) : base(tag)
 	{

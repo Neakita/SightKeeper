@@ -85,7 +85,7 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 		}
 	}
 
-	private void SetDrawerTag(Tag? tag)
+	private void SetDrawerTag(DomainTag? tag)
 	{
 		_drawer.Tag = tag;
 	}

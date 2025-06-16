@@ -85,7 +85,7 @@ public sealed class PoserTagTests
 	{
 		var dataSet = CreateDataSet();
 		var tag = dataSet.TagsLibrary.CreateTag("");
-		TagsOwner<Tag> tagAsTagsOwner = tag;
+		TagsOwner<DomainTag> tagAsTagsOwner = tag;
 		var keyPointTag = tagAsTagsOwner.CreateTag("");
 		tag.KeyPointTags.Should().Contain(keyPointTag);
 	}
@@ -96,7 +96,7 @@ public sealed class PoserTagTests
 		var dataSet = CreateDataSet();
 		var tag = dataSet.TagsLibrary.CreateTag("");
 		tag.CreateKeyPointTag("");
-		TagsOwner<Tag> tagAsTagsOwner = tag;
+		TagsOwner<DomainTag> tagAsTagsOwner = tag;
 		tagAsTagsOwner.DeleteTagAt(0);
 		tag.KeyPointTags.Should().BeEmpty();
 	}

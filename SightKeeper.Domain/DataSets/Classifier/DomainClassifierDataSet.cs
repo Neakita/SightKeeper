@@ -19,14 +19,14 @@ public sealed class DomainClassifierDataSet : ClassifierDataSet
 	}
 
 	public TagsOwner<Tag> TagsLibrary { get; }
-	public AssetsOwner<ClassifierAsset> AssetsLibrary { get; }
+	public AssetsOwner<DomainClassifierAsset> AssetsLibrary { get; }
 	public WeightsLibrary WeightsLibrary { get; }
 
 	public DomainClassifierDataSet(ClassifierDataSet inner)
 	{
 		_inner = inner;
 		TagsLibrary = new DomainTagsLibrary<Tag>(inner.TagsLibrary);
-		AssetsLibrary = new DomainAssetsLibrary<ClassifierAsset>(inner.AssetsLibrary);
+		AssetsLibrary = new DomainAssetsLibrary<DomainClassifierAsset>(inner.AssetsLibrary);
 		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, TagsLibrary, 2);
 	}
 

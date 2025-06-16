@@ -36,7 +36,7 @@ public class DataSetEditor : IDisposable
 		dataSet.Description = data.Description;
 	}
 
-	private static void UpdateTags(TagsOwner<Tag> tagsOwner, TagsChanges changes)
+	private static void UpdateTags(TagsOwner<DomainTag> tagsOwner, TagsChanges changes)
 	{
 		foreach (var tag in changes.RemovedTags)
 			RemoveTag(tagsOwner, tag);
@@ -46,7 +46,7 @@ public class DataSetEditor : IDisposable
 			CreateNewTag(tagsOwner, tag);
 	}
 
-	private static void RemoveTag(TagsOwner<Tag> tagsOwner, Tag tag)
+	private static void RemoveTag(TagsOwner<DomainTag> tagsOwner, DomainTag tag)
 	{
 		var tagIndex = tagsOwner.Tags.Index().First(t => t.Item == tag).Index;
 		tagsOwner.DeleteTagAt(tagIndex);
@@ -64,7 +64,7 @@ public class DataSetEditor : IDisposable
 		}
 	}
 
-	private static void CreateNewTag(TagsOwner<Tag> tagsLibrary, NewTagData tagData)
+	private static void CreateNewTag(TagsOwner<DomainTag> tagsLibrary, NewTagData tagData)
 	{
 		var tag = tagsLibrary.CreateTag(tagData.Name);
 		tag.Color = tagData.Color;

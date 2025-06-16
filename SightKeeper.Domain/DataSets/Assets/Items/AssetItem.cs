@@ -4,6 +4,6 @@ namespace SightKeeper.Domain.DataSets.Assets.Items;
 
 public interface AssetItem
 {
-	Tag Tag { get; }
+	DomainTag Tag { get; }
 	Bounding Bounding { get; set; }
 }

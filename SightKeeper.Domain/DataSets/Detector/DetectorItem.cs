@@ -5,23 +5,18 @@ namespace SightKeeper.Domain.DataSets.Detector;
 
 public sealed class DetectorItem : BoundedItem, AssetItem, TagUser
 {
-	public Tag Tag
+	public DomainTag Tag
 	{
-		get => _tag;
+		get;
 		set
 		{
-			InappropriateTagsOwnerChangeException.ThrowIfOwnerChanged(_tag, value);
-			_tag.RemoveUser(this);
-			_tag = value;
-			_tag.AddUser(this);
+			InappropriateTagsOwnerChangeException.ThrowIfOwnerChanged(field, value);
+			field = value;
 		}
 	}
 
-	internal DetectorItem(Tag tag)
+	internal DetectorItem(DomainTag tag)
 	{
-		_tag = tag;
-		_tag.AddUser(this);
+		Tag = tag;
 	}
-
-	private Tag _tag;
 }

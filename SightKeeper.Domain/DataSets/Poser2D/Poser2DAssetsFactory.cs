@@ -6,7 +6,7 @@ namespace SightKeeper.Domain.DataSets.Poser2D;
 
 internal sealed class Poser2DAssetsFactory : AssetsFactory<Poser2DAsset>
 {
-	public Poser2DAssetsFactory(TagsContainer<Tag> tagsOwner)
+	public Poser2DAssetsFactory(TagsContainer<DomainTag> tagsOwner)
 	{
 		_tagsOwner = tagsOwner;
 	}
@@ -19,5 +19,5 @@ internal sealed class Poser2DAssetsFactory : AssetsFactory<Poser2DAsset>
 		};
 	}
 
-	private readonly TagsContainer<Tag> _tagsOwner;
+	private readonly TagsContainer<DomainTag> _tagsOwner;
 }
