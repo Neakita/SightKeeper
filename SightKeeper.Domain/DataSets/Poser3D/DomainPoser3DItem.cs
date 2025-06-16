@@ -36,6 +36,7 @@ public sealed class DomainPoser3DItem(Poser3DItem inner) : Poser3DItem
 
 	public KeyPoint3D MakeKeyPoint(Tag tag)
 	{
+		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(Tag, tag);
 		return inner.MakeKeyPoint(tag);
 	}
 
