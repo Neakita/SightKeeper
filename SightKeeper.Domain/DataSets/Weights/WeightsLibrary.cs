@@ -1,4 +1,4 @@
-namespace SightKeeper.Domain.DataSets.Weights;
+﻿namespace SightKeeper.Domain.DataSets.Weights;
 
 public interface WeightsLibrary
 {
