@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser2D;
 
-public sealed class DomainPoser2DItem(Poser2DItem inner, TagsContainer<DomainPoserTag> tagsOwner) : Poser2DItem
+public sealed class DomainPoser2DItem(Poser2DItem inner) : Poser2DItem
 {
 	public Bounding Bounding
 	{
@@ -31,7 +31,7 @@ public sealed class DomainPoser2DItem(Poser2DItem inner, TagsContainer<DomainPos
 
 	public KeyPoint MakeKeyPoint(Tag tag)
 	{
-		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(tagsOwner, tag);
+		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(Tag, tag);
 		return inner.MakeKeyPoint(tag);
 	}
 
