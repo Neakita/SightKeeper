@@ -5,9 +5,9 @@ using SightKeeper.Domain;
 
 namespace SightKeeper.Data.Model.Images;
 
-internal sealed class PackableImageFormatter : MemoryPackFormatter<PackableImage>
+internal sealed class ImageFormatter : MemoryPackFormatter<InMemoryImage>
 {
-	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref PackableImage? value)
+	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref InMemoryImage? value)
 	{
 		if (value == null)
 		{
@@ -17,7 +17,7 @@ internal sealed class PackableImageFormatter : MemoryPackFormatter<PackableImage
 		writer.WriteUnmanagedWithObjectHeader(3, value.Id, value.CreationTimestamp, value.Size);
 	}
 
-	public override void Deserialize(ref MemoryPackReader reader, scoped ref PackableImage? value)
+	public override void Deserialize(ref MemoryPackReader reader, scoped ref InMemoryImage? value)
 	{
 		if (!reader.TryReadObjectHeader(out var count))
         {
