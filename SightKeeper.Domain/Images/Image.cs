@@ -9,6 +9,6 @@ public interface Image
 	IReadOnlyCollection<Asset> Assets { get; }
 	bool IsInUse => Assets.Count > 0;
 
-	Stream? OpenReadDataStream();
-	Stream? OpenWriteDataStream();
+	Stream? OpenWriteStream();
+	Stream? OpenReadStream();
 }

@@ -10,4 +10,7 @@ public interface Weights : TagUser
 	WeightsMetrics Metrics { get; }
 	Vector2<ushort> Resolution { get; }
 	IReadOnlyList<Tag> Tags { get; }
+
+	Stream? OpenWriteSteam();
+	Stream? OpenReadStream();
 }
