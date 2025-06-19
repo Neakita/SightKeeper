@@ -5,7 +5,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Model.Images;
 
-internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAccess dataAccess) : Image
+internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAccess dataAccess) : Image, Decorator<InMemoryImage>, Decorator<Image>
 {
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 
@@ -13,7 +13,9 @@ internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAcc
 
 	public IReadOnlyCollection<Asset> Assets => inner.Assets;
 
-	public Stream? OpenReadDataStream()
+	InMemoryImage Decorator<InMemoryImage>.Inner => inner;
+	Image Decorator<Image>.Inner => inner;
+
 	public Stream OpenReadDataStream()
 	{
 		return dataAccess.OpenRead(inner.Id);

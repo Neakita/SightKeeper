@@ -1,3 +1,4 @@
+using FlakeId;
 using SightKeeper.Data.Model.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
@@ -29,5 +30,16 @@ internal static class Extensions
 	public static ImageSet WithObservableImages(this ImageSet set)
 	{
 		return new ObservableImagesImageSet(set);
+	}
+
+	public static Id GetId(this Image image)
+	{
+		if (image is InMemoryImage inMemoryImage) 
+			return inMemoryImage.Id;
+		if (image is Decorator<InMemoryImage> decoratorOnInMemory)
+			return decoratorOnInMemory.Inner.Id;
+		if (image is Decorator<Image> decorator)
+			return GetId(decorator.Inner);
+		throw new ArgumentException($"Provided image could not be unwrapped to {typeof(InMemoryImage)}");
 	}
 }
