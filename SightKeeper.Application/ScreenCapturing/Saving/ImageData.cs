@@ -7,14 +7,14 @@ namespace SightKeeper.Application.ScreenCapturing.Saving;
 
 internal sealed class ImageData<TPixel> : IDisposable
 {
-	public DomainImageSet Set { get; }
+	public ImageSet Set { get; }
 	public DateTimeOffset CreationTimestamp { get; }
 	public Vector2<ushort> ImageSize { get; }
 	public ReadOnlySpan<TPixel> Data => _memoryOwner.Memory.Span[..ImageDataLength];
 	public ReadOnlySpan2D<TPixel> Data2D => Data.AsSpan2D(ImageSize.Y, ImageSize.X);
 
 	public ImageData(
-		DomainImageSet set,
+		ImageSet set,
 		ReadOnlySpan2D<TPixel> imageData,
 		DateTimeOffset creationTimestamp)
 	{

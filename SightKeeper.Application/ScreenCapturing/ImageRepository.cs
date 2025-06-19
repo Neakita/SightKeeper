@@ -1,7 +1,4 @@
-﻿using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using CommunityToolkit.HighPerformance;
-using SightKeeper.Application.ImageSets;
+﻿using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
@@ -9,23 +6,18 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public class ImageRepository : ObservableImageRepository, ImageSaver<Rgba32>, IDisposable
+public class ImageRepository : ImageSaver<Rgba32>
 {
-	public IObservable<DomainImage> Added => _added.AsObservable();
-	public IObservable<DomainImage> Removed => _removed.AsObservable();
-	public IObservable<ImagesRange> ImagesDeleted => _imagesDeleted.AsObservable();
-
 	public ImageRepository(WriteImageDataAccess writeImageDataAccess)
 	{
 		_writeImageDataAccess = writeImageDataAccess;
 	}
 
-	public void SaveImage(DomainImageSet set, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
+	public void SaveImage(ImageSet set, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
-		var image = CreateImage(set, creationTimestamp, resolution);
+		var image = set.CreateImage(creationTimestamp, resolution);
 		_writeImageDataAccess.SaveImageData(image, imageData);
-		_added.OnNext(image);
 	}
 
 	public void DeleteImage(DomainImageSet set, int index)
@@ -38,33 +30,8 @@ public class ImageRepository : ObservableImageRepository, ImageSaver<Rgba32>, ID
 		var images = set.GetImagesRange(index, count);
 		set.RemoveImagesRange(index, count);
 		foreach (var image in images)
-		{
 			_writeImageDataAccess.DeleteImageData(image);
-			_removed.OnNext(image);
-		}
-		ImagesRange imagesRange = new()
-		{
-			Set = set,
-			Images = images,
-			Range = Range.FromCount(index, count)
-		};
-		_imagesDeleted.OnNext(imagesRange);
-	}
-
-	public void Dispose()
-	{
-		_added.Dispose();
-		_removed.Dispose();
-		_imagesDeleted.Dispose();
-	}
-
-	protected virtual DomainImage CreateImage(DomainImageSet set, DateTimeOffset creationTimestamp, Vector2<ushort> resolution)
-	{
-		return set.CreateImage(creationTimestamp, resolution);
 	}
 
 	private readonly WriteImageDataAccess _writeImageDataAccess;
-	private readonly Subject<DomainImage> _added = new();
-	private readonly Subject<DomainImage> _removed = new();
-	private readonly Subject<ImagesRange> _imagesDeleted = new();
 }

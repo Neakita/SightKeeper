@@ -13,22 +13,32 @@ public sealed class DataSetCreator
 {
 	public required IValidator<NewDataSetData> Validator { get; init; }
 	public required WriteRepository<DataSet> Repository { get; init; }
+	public required DataSetFactory<ClassifierDataSet> ClassifierFactory { get; init; }
+	public required DataSetFactory<DetectorDataSet> DetectorFactory { get; init; }
+	public required DataSetFactory<Poser2DDataSet> Poser2DFactory { get; init; }
+	public required DataSetFactory<Poser3DDataSet> Poser3DFactory { get; init; }
 
 	public DataSet Create(NewDataSetData data)
 	{
 		Validator.ValidateAndThrow(data);
-		DataSet dataSet = data.Type switch
-		{
-			DataSetType.Classifier => new DomainClassifierDataSet(),
-			DataSetType.Detector => new DomainDetectorDataSet(),
-			DataSetType.Poser2D => new DomainPoser2DDataSet(),
-			DataSetType.Poser3D => new DomainPoser3DDataSet(),
-			_ => throw new ArgumentOutOfRangeException(nameof(data), data, null)
-		};
+		var dataSet = CreateDataSet(data.Type);
 		SetGeneralData(dataSet, data);
 		AddTags(dataSet, data.NewTags);
 		Repository.Add(dataSet);
 		return dataSet;
+	}
+
+	private DataSet CreateDataSet(DataSetType type)
+	{
+		DataSetFactory<DataSet> factory = type switch
+		{
+			DataSetType.Classifier => ClassifierFactory,
+			DataSetType.Detector => DetectorFactory,
+			DataSetType.Poser2D => Poser2DFactory,
+			DataSetType.Poser3D => Poser3DFactory,
+			_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+		};
+		return factory.CreateDataSet();
 	}
 
 	private static void SetGeneralData(DataSet dataSet, DataSetData data)
