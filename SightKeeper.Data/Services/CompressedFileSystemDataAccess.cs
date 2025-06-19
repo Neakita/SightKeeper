@@ -5,7 +5,7 @@ namespace SightKeeper.Data.Services;
 
 internal sealed class CompressedFileSystemDataAccess : FileSystemDataAccess
 {
-	public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.Optimal;
+	public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.SmallestSize;
 
 	public override Stream OpenRead(Id id)
 	{
