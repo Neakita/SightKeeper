@@ -48,6 +48,6 @@ internal sealed class StreamableImagesSet(ImageSet inner, FileSystemDataAccess d
 
 	private StreamableDataImage AsStreamable(Image image)
 	{
-		return new StreamableDataImage((PackableImage)image, dataAccess);
+		return new StreamableDataImage((InMemoryImage)image, dataAccess);
 	}
 }

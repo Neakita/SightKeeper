@@ -38,7 +38,7 @@ internal static class Utilities
 
 	public static ImageSet Persist(this ImageSet set)
 	{
-		DataBootstrapper.Setup(Substitute.For<ChangeListener>(), new Lock());
+		PersistenceBootstrapper.Setup(Substitute.For<ChangeListener>(), new Lock());
 		AppDataAccess appDataAccess = new();
 		AppDataImageSetsRepository repository = new()
 		{

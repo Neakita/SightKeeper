@@ -17,11 +17,11 @@ internal sealed partial class PackableImageSet : ImageSet
 	{
 		Name = string.Empty;
 		Description = string.Empty;
-		_images = new List<PackableImage>();
+		_images = new List<InMemoryImage>();
 	}
 
 	[MemoryPackConstructor]
-	public PackableImageSet(string name, string description, List<PackableImage> images)
+	public PackableImageSet(string name, string description, List<InMemoryImage> images)
 	{
 		Name = name;
 		Description = description;
@@ -31,7 +31,7 @@ internal sealed partial class PackableImageSet : ImageSet
 	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		var id = Id.Create();
-		PackableImage image = new(creationTimestamp, size, id);
+		InMemoryImage image = new(creationTimestamp, size, id);
 		_images.Add(image);
 		return image;
 	}
@@ -45,7 +45,7 @@ internal sealed partial class PackableImageSet : ImageSet
 	{
 		// images are ordered by creation timestamp, so binary search is possible and highly preferable,
 		// images list can contain thousands of images.
-		var index = _images.BinarySearch((PackableImage)image, ImageCreationTimestampComparer);
+		var index = _images.BinarySearch((InMemoryImage)image, ImageCreationTimestampComparer);
 		if (index < 0)
 			return -1;
 		return index;
@@ -61,9 +61,9 @@ internal sealed partial class PackableImageSet : ImageSet
 		_images.RemoveRange(index, count);
 	}
 
-	private static readonly Comparer<PackableImage> ImageCreationTimestampComparer =
-		Comparer<PackableImage>.Create((x, y) => x.CreationTimestamp.CompareTo(y.CreationTimestamp));
+	private static readonly Comparer<InMemoryImage> ImageCreationTimestampComparer =
+		Comparer<InMemoryImage>.Create((x, y) => x.CreationTimestamp.CompareTo(y.CreationTimestamp));
 
 	[MemoryPackInclude]
-	private readonly List<PackableImage> _images;
+	private readonly List<InMemoryImage> _images;
 }

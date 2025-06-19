@@ -5,7 +5,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Model.Images;
 
-internal sealed class StreamableDataImage(PackableImage inner, FileSystemDataAccess dataAccess) : Image
+internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAccess dataAccess) : Image
 {
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 
