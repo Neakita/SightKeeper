@@ -1,5 +1,6 @@
 using MemoryPack;
 using SightKeeper.Data.Model.Images;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 using PackableImageSet = SightKeeper.Data.Model.Images.PackableImageSet;
 
@@ -9,7 +10,9 @@ internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
 {
 	public ImageSetFormatter(ChangeListener changeListener, Lock editingLock)
 	{
-		_wrapper = new ImageSetWrapper(changeListener, editingLock);
+		var imageDataAccess = new CompressedFileSystemDataAccess();
+		imageDataAccess.DirectoryPath = Path.Combine(imageDataAccess.DirectoryPath, "Images");
+		_wrapper = new ImageSetWrapper(changeListener, editingLock, imageDataAccess);
 	}
 
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref ImageSet? value)

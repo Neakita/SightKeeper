@@ -1,4 +1,5 @@
 using SightKeeper.Data.Model.Images;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
@@ -18,6 +19,11 @@ internal static class Extensions
 	public static ImageSet WithLocking(this ImageSet set, Lock editingLock)
 	{
 		return new LockingImageSet(set, editingLock);
+	}
+
+	public static ImageSet WithStreamableImages(this ImageSet set, FileSystemDataAccess dataAccess)
+	{
+		return new StreamableImagesSet(set, dataAccess);
 	}
 
 	public static ImageSet WithObservableImages(this ImageSet set)

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
@@ -43,19 +44,22 @@ internal sealed class StorableImageSet : ImageSet, INotifyPropertyChanged
 	// No changes should be made through this instance as it isn't decorated with domain rules, locking and changes tracking.
 	public PackableImageSet Packable { get; }
 
-	public StorableImageSet(PackableImageSet packable, Lock editingLock, ChangeListener changeListener)
+	public StorableImageSet(PackableImageSet packable, Lock editingLock, ChangeListener changeListener, FileSystemDataAccess imagesDataAccess)
 	{
 		Packable = packable;
 		_decorated = packable
-			// tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,
+			// Tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,
 			// and then tracking decorator will send another notification.
 			.WithTracking(changeListener)
-			// locking of domain rules can be relatively computationally heavy,
+			// Locking of domain rules can be relatively computationally heavy,
 			// for example when removing images range every image should be checked if it is used by some asset,
 			// so locking appears only after domain rules validated.
 			.WithLocking(editingLock)
-			// images observing decorator can also be before domain rules,
-			// but domain rules can often throw exceptions so placing observing decorator after domain rules will make stack trace a bit shorter
+			// Lock should be released as soon as possible, so decorating images as streamable should be outside of lock.
+			.WithStreamableImages(imagesDataAccess)
+			// Images observing decorator can also be before domain rules,
+			// but domain rules can often throw exceptions so placing observing decorator after domain rules will make stack trace a bit shorter.
+			// Observer should be able to stream received images, so observable decorator should contain streamable decorator.
 			.WithObservableImages()
 			.WithDomainRules();
 	}
