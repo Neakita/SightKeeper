@@ -14,11 +14,12 @@ internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAcc
 	public IReadOnlyCollection<Asset> Assets => inner.Assets;
 
 	public Stream? OpenReadDataStream()
+	public Stream OpenReadDataStream()
 	{
 		return dataAccess.OpenRead(inner.Id);
 	}
 
-	public Stream? OpenWriteDataStream()
+	public Stream OpenWriteDataStream()
 	{
 		return dataAccess.OpenWrite(inner.Id);
 	}
