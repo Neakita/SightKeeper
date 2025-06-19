@@ -1,9 +1,10 @@
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
+using SightKeeper.Data.Model.Images;
 using SightKeeper.Domain;
 
-namespace SightKeeper.Data.Model.Images;
+namespace SightKeeper.Data.Formatters;
 
 internal sealed class ImageFormatter : MemoryPackFormatter<InMemoryImage>
 {
@@ -25,9 +26,9 @@ internal sealed class ImageFormatter : MemoryPackFormatter<InMemoryImage>
             return;
         }
         if (count != 3)
-	        MemoryPackSerializationException.ThrowInvalidPropertyCount(typeof(PackableImage), 3, count);
+	        MemoryPackSerializationException.ThrowInvalidPropertyCount(typeof(InMemoryImage), 3, count);
         Guard.IsNull(value);
         reader.ReadUnmanaged(out Id id, out DateTimeOffset creationTimestamp, out Vector2<ushort> size);
-        value = new PackableImage(creationTimestamp, size, id);
+        value = new InMemoryImage(creationTimestamp, size, id);
 	}
 }

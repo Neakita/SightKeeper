@@ -4,7 +4,7 @@ using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 using PackableImageSet = SightKeeper.Data.Model.Images.PackableImageSet;
 
-namespace SightKeeper.Data;
+namespace SightKeeper.Data.Formatters;
 
 internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
 {
