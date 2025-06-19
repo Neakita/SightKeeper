@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 namespace SightKeeper.Data.Model.DataSets.Tags;
 
 /// <summary>
-/// MemoryPackable version of <see cref="DomainTag"/>
+/// MemoryPackable version of <see cref="Tag"/>
 /// </summary>
 [MemoryPackable]
 internal partial class PackableTag : Tag

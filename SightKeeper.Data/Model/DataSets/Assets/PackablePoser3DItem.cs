@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Poser3D;
 namespace SightKeeper.Data.Model.DataSets.Assets;
 
 /// <summary>
-/// MemoryPackable version of <see cref="DomainPoser3DItem"/>
+/// MemoryPackable version of <see cref="Poser3DItem"/>
 /// </summary>
 [MemoryPackable]
 internal sealed partial class PackablePoser3DItem

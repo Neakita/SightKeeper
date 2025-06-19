@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Detector;
 namespace SightKeeper.Data.Model.DataSets.Assets;
 
 /// <summary>
-/// MemoryPackable version of <see cref="DomainDetectorItem"/>
+/// MemoryPackable version of <see cref="DetectorItem"/>
 /// </summary>
 [MemoryPackable]
 internal sealed partial class PackableDetectorItem
