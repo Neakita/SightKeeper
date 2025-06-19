@@ -9,8 +9,10 @@ namespace SightKeeper.Data;
 
 internal sealed class ExternalObservableList<T> : ReadOnlyObservableList<T>
 {
+#pragma warning disable 67
 	public event NotifyCollectionChangedEventHandler? CollectionChanged;
 	public event PropertyChangedEventHandler? PropertyChanged;
+#pragma warning restore 67
 
 	public int Count
 	{
