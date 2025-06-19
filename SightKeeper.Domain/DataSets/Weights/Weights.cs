@@ -9,5 +9,5 @@ public interface Weights
 	ModelSize ModelSize { get; }
 	WeightsMetrics Metrics { get; }
 	Vector2<ushort> Resolution { get; }
-	IReadOnlyCollection<Tag> Tags { get; }
+	IReadOnlyList<Tag> Tags { get; }
 }
