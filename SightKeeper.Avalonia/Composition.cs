@@ -72,7 +72,7 @@ public sealed partial class Composition
 		.Bind<ImageCapturer>().As(Lifetime.Singleton).To<HotKeyScreenCapturer<Bgra32>>()
 		.Bind<PixelConverter<Bgra32, Rgba32>>().To<Bgra32ToRgba32PixelConverter>()
 #if OS_WINDOWS
-		.Bind<ScreenCapture<Bgra32>>().To<DX11ScreenCapture>()
+		.Bind<ScreenCapturer<Bgra32>>().To<DX11ScreenCapturer>()
 #elif OS_LINUX
 		.Bind<ScreenCapturer<Bgra32>>().To<X11ScreenCapturer>()
 #endif
