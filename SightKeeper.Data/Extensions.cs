@@ -22,9 +22,9 @@ internal static class Extensions
 		return new LockingImageSet(set, editingLock);
 	}
 
-	public static ImageSet WithStreamableImages(this ImageSet set, FileSystemDataAccess dataAccess)
+	public static Image WithStreaming(this InMemoryImage image, FileSystemDataAccess dataAccess)
 	{
-		return new StreamableImagesSet(set, dataAccess);
+		return new StreamableDataImage(image, dataAccess);
 	}
 
 	public static ImageSet WithObservableImages(this ImageSet set)

@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
@@ -16,7 +15,7 @@ internal sealed class StorableImageSet : ImageSet, INotifyPropertyChanged
 
 	public string Name
 	{
-		get => Packable.Name;
+		get => _decorated.Name;
 		set
 		{
 			if (value == Name)
@@ -28,7 +27,7 @@ internal sealed class StorableImageSet : ImageSet, INotifyPropertyChanged
 
 	public string Description
 	{
-		get => Packable.Description;
+		get => _decorated.Description;
 		set
 		{
 			if (value == Description)
@@ -40,14 +39,9 @@ internal sealed class StorableImageSet : ImageSet, INotifyPropertyChanged
 
 	public IReadOnlyList<Image> Images => _decorated.Images;
 
-	// this property used only for saving.
-	// No changes should be made through this instance as it isn't decorated with domain rules, locking and changes tracking.
-	public PackableImageSet Packable { get; }
-
-	public StorableImageSet(PackableImageSet packable, Lock editingLock, ChangeListener changeListener, FileSystemDataAccess imagesDataAccess)
+	public StorableImageSet(ImageSet inner, Lock editingLock, ChangeListener changeListener)
 	{
-		Packable = packable;
-		_decorated = packable
+		_decorated = inner
 			// Tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,
 			// and then tracking decorator will send another notification.
 			.WithTracking(changeListener)
@@ -55,8 +49,6 @@ internal sealed class StorableImageSet : ImageSet, INotifyPropertyChanged
 			// for example when removing images range every image should be checked if it is used by some asset,
 			// so locking appears only after domain rules validated.
 			.WithLocking(editingLock)
-			// Lock should be released as soon as possible, so decorating images as streamable should be outside of lock.
-			.WithStreamableImages(imagesDataAccess)
 			// Images observing decorator can also be before domain rules,
 			// but domain rules can often throw exceptions so placing observing decorator after domain rules will make stack trace a bit shorter.
 			// Observer should be able to stream received images, so observable decorator should contain streamable decorator.
@@ -72,12 +64,12 @@ internal sealed class StorableImageSet : ImageSet, INotifyPropertyChanged
 	public IReadOnlyList<Image> GetImagesRange(int index, int count)
 	{
 		// read can be performed directly from packable instance, not a big deal.
-		return Packable.GetImagesRange(index, count);
+		return _decorated.GetImagesRange(index, count);
 	}
 
 	public int IndexOf(Image image)
 	{
-		return Packable.IndexOf(image);
+		return _decorated.IndexOf(image);
 	}
 
 	public void RemoveImageAt(int index)

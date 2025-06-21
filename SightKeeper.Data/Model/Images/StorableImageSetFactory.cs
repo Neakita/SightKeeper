@@ -8,16 +8,18 @@ public sealed class StorableImageSetFactory
 {
 	public StorableImageSetFactory(ChangeListener changeListener, [Tag(typeof(AppData))] Lock editingLock)
 	{
-		var imageDataAccess = new CompressedFileSystemDataAccess();
-		imageDataAccess.DirectoryPath = Path.Combine(imageDataAccess.DirectoryPath, "Images");
-		_wrapper = new ImageSetWrapper(changeListener, editingLock, imageDataAccess);
+		var dataAccess = new CompressedFileSystemDataAccess();
+		dataAccess.DirectoryPath = Path.Combine(dataAccess.DirectoryPath, "Images");
+		_imageWrapper = new ImageWrapper(dataAccess);
+		_setWrapper = new ImageSetWrapper(changeListener, editingLock);
 	}
 
 	public ImageSet CreateImageSet()
 	{
-		var set = new PackableImageSet();
-		return _wrapper.Wrap(set);
+		var set = new InMemoryImageSet(_imageWrapper);
+		return _setWrapper.Wrap(set);
 	}
 
-	private readonly ImageSetWrapper _wrapper;
+	private readonly ImageWrapper _imageWrapper;
+	private readonly ImageSetWrapper _setWrapper;
 }
