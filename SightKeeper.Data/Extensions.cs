@@ -34,12 +34,18 @@ internal static class Extensions
 
 	public static Id GetId(this Image image)
 	{
-		if (image is InMemoryImage inMemoryImage) 
-			return inMemoryImage.Id;
-		if (image is Decorator<InMemoryImage> decoratorOnInMemory)
-			return decoratorOnInMemory.Inner.Id;
-		if (image is Decorator<Image> decorator)
-			return GetId(decorator.Inner);
-		throw new ArgumentException($"Provided image could not be unwrapped to {typeof(InMemoryImage)}");
+		var inMemoryImage = UnWrapDecorator<InMemoryImage>(image);
+		return inMemoryImage.Id;
+	}
+
+	public static TTarget UnWrapDecorator<TTarget>(this object source)
+	{
+		if (source is TTarget target) 
+			return target;
+		if (source is Decorator<TTarget> decoratorOfTarget)
+			return decoratorOfTarget.Inner;
+		if (source is Decorator<object> decorator)
+			return UnWrapDecorator<TTarget>(decorator.Inner);
+		throw new ArgumentException($"Provided object of type {source.GetType()} could not be unwrapped to {typeof(TTarget)}");
 	}
 }
