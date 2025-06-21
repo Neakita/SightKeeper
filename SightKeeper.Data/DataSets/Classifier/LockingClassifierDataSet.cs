@@ -6,17 +6,17 @@ using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.DataSets;
+namespace SightKeeper.Data.DataSets.Classifier;
 
-internal sealed class TrackableClassifierDataSet(ClassifierDataSet inner, ChangeListener listener) : ClassifierDataSet
+internal sealed class LockingClassifierDataSet(ClassifierDataSet inner, Lock editingLock) : ClassifierDataSet
 {
 	public string Name
 	{
 		get => inner.Name;
 		set
 		{
-			inner.Name = value;
-			listener.SetDataChanged();
+			lock (editingLock)
+				inner.Name = value;
 		}
 	}
 
@@ -25,17 +25,17 @@ internal sealed class TrackableClassifierDataSet(ClassifierDataSet inner, Change
 		get => inner.Description;
 		set
 		{
-			inner.Description = value;
-			listener.SetDataChanged();
+			lock (editingLock)
+				inner.Description = value;
 		}
 	}
 
 	public TagsOwner<Tag> TagsLibrary { get; } =
-		new TrackableTagsLibrary<Tag>(inner.TagsLibrary, listener);
+		new LockingTagsLibrary<Tag>(inner.TagsLibrary, editingLock);
 
 	public AssetsOwner<ClassifierAsset> AssetsLibrary { get; } =
-		new TrackableAssetsLibrary<ClassifierAsset>(inner.AssetsLibrary, listener);
+		new LockingAssetsLibrary<ClassifierAsset>(inner.AssetsLibrary, editingLock);
 
 	public WeightsLibrary WeightsLibrary { get; } =
-		new TrackableWeightsLibrary(inner.WeightsLibrary, listener);
+		new LockingWeightsLibrary(inner.WeightsLibrary, editingLock);
 }

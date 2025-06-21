@@ -3,7 +3,7 @@ using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Classifier;
 
-namespace SightKeeper.Data.DataSets;
+namespace SightKeeper.Data.DataSets.Classifier;
 
 public sealed class StorableClassifierDataSetFactory : DataSetFactory<ClassifierDataSet>
 {

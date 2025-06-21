@@ -1,7 +1,7 @@
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using NSubstitute;
-using SightKeeper.Data.DataSets;
+using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.Images;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;

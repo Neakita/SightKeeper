@@ -2,7 +2,7 @@ using MemoryPack;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
 
-namespace SightKeeper.Data.DataSets;
+namespace SightKeeper.Data.DataSets.Classifier;
 
 [MemoryPackable]
 internal sealed partial class PackableClassifierDataSet : PackableDataSet

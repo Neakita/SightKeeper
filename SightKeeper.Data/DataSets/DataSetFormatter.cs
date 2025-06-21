@@ -1,4 +1,5 @@
 using MemoryPack;
+using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;

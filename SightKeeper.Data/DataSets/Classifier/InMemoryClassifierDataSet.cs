@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.DataSets;
+namespace SightKeeper.Data.DataSets.Classifier;
 
 internal sealed class InMemoryClassifierDataSet(TagFactory<Tag> tagFactory, AssetFactory<ClassifierAsset> assetFactory) : ClassifierDataSet
 {

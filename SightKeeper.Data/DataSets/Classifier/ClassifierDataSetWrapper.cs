@@ -1,6 +1,6 @@
 using SightKeeper.Domain.DataSets.Classifier;
 
-namespace SightKeeper.Data.DataSets;
+namespace SightKeeper.Data.DataSets.Classifier;
 
 internal sealed class ClassifierDataSetWrapper
 {

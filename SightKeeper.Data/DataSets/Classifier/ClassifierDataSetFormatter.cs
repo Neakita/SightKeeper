@@ -11,7 +11,7 @@ using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.DataSets;
+namespace SightKeeper.Data.DataSets.Classifier;
 
 internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<ClassifierDataSet>
 {
