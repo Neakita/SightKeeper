@@ -15,6 +15,7 @@ internal class FileSystemDataAccess
 
 	public virtual Stream OpenWrite(Id id)
 	{
+		Directory.CreateDirectory(DirectoryPath);
 		var filePath = GetFilePath(id);
 		return File.OpenWrite(filePath);
 	}
