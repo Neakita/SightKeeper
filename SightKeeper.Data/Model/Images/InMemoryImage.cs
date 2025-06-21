@@ -20,12 +20,12 @@ internal sealed class InMemoryImage : Image
 		Id = id;
 	}
 
-	public Stream? OpenReadDataStream()
+	public Stream? OpenWriteStream()
 	{
 		return null;
 	}
 
-	public Stream? OpenWriteDataStream()
+	public Stream? OpenReadStream()
 	{
 		return null;
 	}

@@ -16,13 +16,13 @@ internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAcc
 	InMemoryImage Decorator<InMemoryImage>.Inner => inner;
 	Image Decorator<Image>.Inner => inner;
 
-	public Stream OpenReadDataStream()
-	{
-		return dataAccess.OpenRead(inner.Id);
-	}
-
-	public Stream OpenWriteDataStream()
+	public Stream OpenWriteStream()
 	{
 		return dataAccess.OpenWrite(inner.Id);
+	}
+
+	public Stream OpenReadStream()
+	{
+		return dataAccess.OpenRead(inner.Id);
 	}
 }
