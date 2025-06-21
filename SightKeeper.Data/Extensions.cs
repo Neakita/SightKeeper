@@ -47,10 +47,8 @@ internal static class Extensions
 
 	public static TTarget UnWrapDecorator<TTarget>(this object source)
 	{
-		if (source is TTarget target) 
+		if (source is TTarget target)
 			return target;
-		if (source is Decorator<TTarget> decoratorOfTarget)
-			return decoratorOfTarget.Inner;
 		if (source is Decorator<object> decorator)
 			return UnWrapDecorator<TTarget>(decorator.Inner);
 		throw new ArgumentException($"Provided object of type {source.GetType()} could not be unwrapped to {typeof(TTarget)}");
