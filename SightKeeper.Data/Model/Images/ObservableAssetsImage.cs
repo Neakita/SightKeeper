@@ -1,17 +1,18 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
-using Vibrance.Changes;
 
 namespace SightKeeper.Data.Model.Images;
 
-internal sealed class ObservableAssetsImage(Image inner) : Image
+internal sealed class ObservableAssetsImage(Image inner) : Image, Decorator<Image>
 {
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 
 	public Vector2<ushort> Size => inner.Size;
 
 	public IReadOnlyCollection<Asset> Assets => _assets;
+
+	public Image Inner => inner;
 
 	public Stream? OpenWriteStream()
 	{
@@ -26,6 +27,8 @@ internal sealed class ObservableAssetsImage(Image inner) : Image
 	public void AddAsset(Asset asset)
 	{
 		inner.AddAsset(asset);
+		if (!_assets.HasObservers)
+			return;
 		Addition<Asset> change = new()
 		{
 			Items = [asset]
@@ -36,6 +39,8 @@ internal sealed class ObservableAssetsImage(Image inner) : Image
 	public void RemoveAsset(Asset asset)
 	{
 		inner.RemoveAsset(asset);
+		if (!_assets.HasObservers)
+			return;
 		Removal<Asset> change = new()
 		{
 			Items = [asset]

@@ -27,6 +27,11 @@ internal static class Extensions
 		return new StreamableDataImage(image, dataAccess);
 	}
 
+	public static Image WithObservableAssets(this Image image)
+	{
+		return new ObservableAssetsImage(image);
+	}
+
 	public static ImageSet WithObservableImages(this ImageSet set)
 	{
 		return new ObservableImagesImageSet(set);

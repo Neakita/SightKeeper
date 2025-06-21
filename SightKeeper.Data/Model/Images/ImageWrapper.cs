@@ -7,6 +7,8 @@ internal sealed class ImageWrapper(FileSystemDataAccess dataAccess)
 {
 	public Image Wrap(InMemoryImage image)
 	{
-		return image.WithStreaming(dataAccess);
+		return image
+			.WithStreaming(dataAccess)
+			.WithObservableAssets();
 	}
 }

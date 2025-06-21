@@ -2,6 +2,7 @@ using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using NSubstitute;
 using SightKeeper.Data.Model.Images;
+using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests;
@@ -21,5 +22,11 @@ internal static class Utilities
 		var imageSet = MemoryPackSerializer.Deserialize<ImageSet>(serialized);
 		Guard.IsNotNull(imageSet);
 		return imageSet;
+	}
+
+	public static Image CreateImage()
+	{
+		var set = CreateImageSet();
+		return set.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 	}
 }
