@@ -20,20 +20,20 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		set => inner.Description = value;
 	}
 
-	public IReadOnlyList<Image> Images => inner.Images;
+	public IReadOnlyList<Image> Images => _images;
 
 	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		var index = Images.Count;
 		var image = inner.CreateImage(creationTimestamp, size);
-		if (_observableImages.HasObservers)
+		if (_images.HasObservers)
 		{
 			Insertion<Image> change = new()
 			{
 				Index = index,
 				Items = [image]
 			};
-			_observableImages.Notify(change);
+			_images.Notify(change);
 		}
 		return image;
 	}
@@ -52,14 +52,14 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 	{
 		var image = Images[index];
 		inner.RemoveImageAt(index);
-		if (_observableImages.HasObservers)
+		if (_images.HasObservers)
 		{
 			IndexedRemoval<Image> change = new()
 			{
 				Index = index,
 				Items = [image]
 			};
-			_observableImages.Notify(change);
+			_images.Notify(change);
 		}
 	}
 
@@ -67,16 +67,16 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 	{
 		var images = GetImagesRange(index, count);
 		inner.RemoveImagesRange(index, count);
-		if (_observableImages.HasObservers)
+		if (_images.HasObservers)
 		{
 			IndexedRemoval<Image> change = new()
 			{
 				Index = index,
 				Items = images
 			};
-			_observableImages.Notify(change);
+			_images.Notify(change);
 		}
 	}
 
-	private readonly ExternalObservableList<Image> _observableImages = new(inner.Images);
+	private readonly ExternalObservableList<Image> _images = new(inner.Images);
 }
