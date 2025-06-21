@@ -1,3 +1,4 @@
+using CommunityToolkit.Diagnostics;
 using FlakeId;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
@@ -9,7 +10,6 @@ internal sealed class InMemoryImage : Image
 {
 	public DateTimeOffset CreationTimestamp { get; }
 	public Vector2<ushort> Size { get; }
-
 	public IReadOnlyCollection<Asset> Assets => _assets;
 	public Id Id { get; }
 
@@ -30,6 +30,17 @@ internal sealed class InMemoryImage : Image
 		return null;
 	}
 
+	public void AddAsset(Asset asset)
+	{
+		bool isAdded = _assets.Add(asset);
+		Guard.IsTrue(isAdded);
+	}
+
+	public void RemoveAsset(Asset asset)
+	{
+		bool isRemoved = _assets.Remove(asset);
+		Guard.IsTrue(isRemoved);
+	}
 
 	private readonly HashSet<Asset> _assets = new();
 }

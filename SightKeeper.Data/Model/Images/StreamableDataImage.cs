@@ -25,4 +25,14 @@ internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAcc
 	{
 		return dataAccess.OpenRead(inner.Id);
 	}
+
+	public void AddAsset(Asset asset)
+	{
+		inner.AddAsset(asset);
+	}
+
+	public void RemoveAsset(Asset asset)
+	{
+		inner.RemoveAsset(asset);
+	}
 }
