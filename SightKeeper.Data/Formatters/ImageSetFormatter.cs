@@ -25,25 +25,23 @@ internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
 			writer.WriteNullObjectHeader();
 			return;
 		}
-		writer.WriteObjectHeader(3);
 		writer.WriteString(set.Name);
 		writer.WriteString(set.Description);
 		writer.WriteCollectionHeader(set.Images.Count);
 		foreach (var image in set.Images)
 		{
 			var inMemoryImage = image.UnWrapDecorator<InMemoryImage>();
-			writer.WriteUnmanagedWithObjectHeader(3, inMemoryImage.Id, inMemoryImage.CreationTimestamp, inMemoryImage.Size);
+			writer.WriteUnmanaged(inMemoryImage.Id, inMemoryImage.CreationTimestamp, inMemoryImage.Size);
 		}
 	}
 
 	public override void Deserialize(ref MemoryPackReader reader, scoped ref ImageSet? set)
 	{
-		if (!reader.TryReadObjectHeader(out var imageSetMemberCount))
+		if (reader.PeekIsNull())
 		{
 			set = null;
 			return;
 		}
-		Guard.IsEqualTo<byte>(imageSetMemberCount, 3);
 		var name = reader.ReadString();
 		Guard.IsNotNull(name);
 		var description = reader.ReadString();
@@ -56,8 +54,6 @@ internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
 		};
 		for (int i = 0; i < imagesCount; i++)
 		{
-			Guard.IsTrue(reader.TryReadObjectHeader(out var imageMemberCount));
-			Guard.IsEqualTo<byte>(imageMemberCount, 3);
 			reader.ReadUnmanaged(out Id id, out DateTimeOffset creationTimestamp, out Vector2<ushort> size);
 			InMemoryImage image = new(id, creationTimestamp, size);
 			inMemorySet.AddImage(image);
