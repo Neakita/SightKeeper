@@ -2,7 +2,7 @@ using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using Vibrance.Changes;
 
-namespace SightKeeper.Data.Model.Images;
+namespace SightKeeper.Data.Images;
 
 // could be named ObservableImageSet,
 // but I want to specify it handles only Images observability

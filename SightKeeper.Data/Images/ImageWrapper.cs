@@ -1,7 +1,7 @@
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model.Images;
+namespace SightKeeper.Data.Images;
 
 internal sealed class ImageWrapper(FileSystemDataAccess dataAccess)
 {

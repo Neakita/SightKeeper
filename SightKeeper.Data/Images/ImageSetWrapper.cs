@@ -1,6 +1,6 @@
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model.Images;
+namespace SightKeeper.Data.Images;
 
 internal sealed class ImageSetWrapper(ChangeListener changeListener, Lock editingLock)
 {

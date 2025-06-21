@@ -3,7 +3,7 @@ using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model.Images;
+namespace SightKeeper.Data.Images;
 
 internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAccess dataAccess) : Image, Decorator<InMemoryImage>, Decorator<Image>
 {

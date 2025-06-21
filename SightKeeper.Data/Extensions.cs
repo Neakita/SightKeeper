@@ -1,6 +1,6 @@
 using FlakeId;
+using SightKeeper.Data.Images;
 using SightKeeper.Data.Model.DataSets;
-using SightKeeper.Data.Model.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.Images;

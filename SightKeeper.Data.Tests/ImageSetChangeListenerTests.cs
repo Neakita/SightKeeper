@@ -1,5 +1,5 @@
 using NSubstitute;
-using SightKeeper.Data.Model.Images;
+using SightKeeper.Data.Images;
 
 namespace SightKeeper.Data.Tests;
 

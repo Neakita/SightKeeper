@@ -1,7 +1,7 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model.Images;
+namespace SightKeeper.Data.Images;
 
 internal sealed class LockingImageSet(ImageSet inner, Lock editingLock) : ImageSet
 {
