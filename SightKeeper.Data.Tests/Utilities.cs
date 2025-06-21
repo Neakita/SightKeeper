@@ -1,8 +1,11 @@
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using NSubstitute;
+using SightKeeper.Data.Model.DataSets;
 using SightKeeper.Data.Model.Images;
 using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests;
@@ -15,13 +18,28 @@ internal static class Utilities
 		return factory.CreateImageSet();
 	}
 
+	public static ClassifierDataSet CreateClassifierDataSet()
+	{
+		var factory = new StorableClassifierDataSetFactory(Substitute.For<ChangeListener>(), new Lock());
+		return factory.CreateDataSet();
+	}
+
 	public static ImageSet Persist(this ImageSet set)
 	{
 		PersistenceBootstrapper.Setup(Substitute.For<ChangeListener>(), new Lock());
 		var serialized = MemoryPackSerializer.Serialize(set);
-		var imageSet = MemoryPackSerializer.Deserialize<ImageSet>(serialized);
-		Guard.IsNotNull(imageSet);
-		return imageSet;
+		var persistedSet = MemoryPackSerializer.Deserialize<ImageSet>(serialized);
+		Guard.IsNotNull(persistedSet);
+		return persistedSet;
+	}
+
+	public static DataSet Persist(this DataSet set)
+	{
+		PersistenceBootstrapper.Setup(Substitute.For<ChangeListener>(), new Lock());
+		var serialized = MemoryPackSerializer.Serialize(set);
+		var persistedSet = MemoryPackSerializer.Deserialize<DataSet>(serialized);
+		Guard.IsNotNull(persistedSet);
+		return persistedSet;
 	}
 
 	public static Image CreateImage()

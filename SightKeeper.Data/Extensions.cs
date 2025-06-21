@@ -1,6 +1,8 @@
 using FlakeId;
+using SightKeeper.Data.Model.DataSets;
 using SightKeeper.Data.Model.Images;
 using SightKeeper.Data.Services;
+using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
@@ -52,5 +54,20 @@ internal static class Extensions
 		if (source is Decorator<object> decorator)
 			return UnWrapDecorator<TTarget>(decorator.Inner);
 		throw new ArgumentException($"Provided object of type {source.GetType()} could not be unwrapped to {typeof(TTarget)}");
+	}
+
+	public static ClassifierDataSet WithTracking(this ClassifierDataSet set, ChangeListener listener)
+	{
+		return new TrackableClassifierDataSet(set, listener);
+	}
+
+	public static ClassifierDataSet WithLocking(this ClassifierDataSet set, Lock editingLock)
+	{
+		return new LockingClassifierDataSet(set, editingLock);
+	}
+
+	public static ClassifierDataSet WithDomainRules(this ClassifierDataSet set)
+	{
+		return new DomainClassifierDataSet(set);
 	}
 }
