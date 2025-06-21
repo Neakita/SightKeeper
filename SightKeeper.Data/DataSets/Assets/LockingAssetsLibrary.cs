@@ -1,7 +1,7 @@
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model.DataSets.Assets;
+namespace SightKeeper.Data.DataSets.Assets;
 
 internal sealed class LockingAssetsLibrary<TAsset>(AssetsOwner<TAsset> inner, Lock editingLock) : AssetsOwner<TAsset>
 {

@@ -1,13 +1,13 @@
-using SightKeeper.Data.Model.DataSets.Assets;
-using SightKeeper.Data.Model.DataSets.Tags;
-using SightKeeper.Data.Model.DataSets.Weights;
+using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.Model.DataSets;
+namespace SightKeeper.Data.DataSets;
 
 internal sealed class InMemoryClassifierDataSet(TagFactory<Tag> tagFactory, AssetFactory<ClassifierAsset> assetFactory) : ClassifierDataSet
 {

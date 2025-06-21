@@ -2,9 +2,8 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
-using SightKeeper.Data.Model.DataSets;
-using SightKeeper.Data.Model.DataSets.Assets;
-using SightKeeper.Data.Model.DataSets.Tags;
+using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
@@ -12,7 +11,7 @@ using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Formatters;
+namespace SightKeeper.Data.DataSets;
 
 internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<ClassifierDataSet>
 {
@@ -130,7 +129,7 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 			Guard.IsEqualTo<byte>(weightsPropertyCount, 7);
 			reader.ReadUnmanaged(
 				out Id id,
-				out Domain.DataSets.Weights.Model model,
+				out Model model,
 				out DateTimeOffset creationTimestamp,
 				out ModelSize modelSize,
 				out WeightsMetrics metrics,
@@ -160,9 +159,9 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 		throw new NotImplementedException();
 	}
 
-	private Weights CreateWeights(
+	private Domain.DataSets.Weights.Weights CreateWeights(
 		Id id,
-		Domain.DataSets.Weights.Model model,
+		Model model,
 		DateTimeOffset creationTimestamp,
 		ModelSize modelSize,
 		WeightsMetrics metrics,

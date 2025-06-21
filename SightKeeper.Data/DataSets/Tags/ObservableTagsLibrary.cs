@@ -1,7 +1,7 @@
 using SightKeeper.Domain.DataSets.Tags;
 using Vibrance.Changes;
 
-namespace SightKeeper.Data.Model.DataSets.Tags;
+namespace SightKeeper.Data.DataSets.Tags;
 
 internal sealed class ObservableTagsLibrary<TTag>(TagsOwner<TTag> inner) : TagsOwner<TTag>
 {

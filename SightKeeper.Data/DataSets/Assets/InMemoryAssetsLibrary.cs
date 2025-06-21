@@ -2,7 +2,7 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model.DataSets.Assets;
+namespace SightKeeper.Data.DataSets.Assets;
 
 internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFactory) : AssetsOwner<TAsset> where TAsset : Asset
 {

@@ -1,9 +1,9 @@
 using MemoryPack;
-using SightKeeper.Data.Model.DataSets.Assets;
-using SightKeeper.Data.Model.DataSets.Tags;
+using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Detector;
 
-namespace SightKeeper.Data.Model.DataSets;
+namespace SightKeeper.Data.DataSets;
 
 /// <summary>
 /// MemoryPackable version of <see cref="DomainDetectorDataSet"/>

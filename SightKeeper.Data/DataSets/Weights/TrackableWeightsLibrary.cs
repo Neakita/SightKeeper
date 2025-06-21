@@ -1,6 +1,6 @@
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.Model.DataSets.Weights;
+namespace SightKeeper.Data.DataSets.Weights;
 
 internal sealed class TrackableWeightsLibrary(WeightsLibrary inner, ChangeListener listener) : WeightsLibrary
 {

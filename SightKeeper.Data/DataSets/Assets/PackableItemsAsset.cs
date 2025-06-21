@@ -1,7 +1,7 @@
 using MemoryPack;
 using SightKeeper.Domain.DataSets.Assets.Items;
 
-namespace SightKeeper.Data.Model.DataSets.Assets;
+namespace SightKeeper.Data.DataSets.Assets;
 
 /// <summary>
 /// MemoryPackable version of <see cref="ItemsAsset{TItem}"/>

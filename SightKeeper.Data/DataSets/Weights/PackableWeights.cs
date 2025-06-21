@@ -3,7 +3,7 @@ using MemoryPack;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.Model.DataSets.Weights;
+namespace SightKeeper.Data.DataSets.Weights;
 
 /// <summary>
 /// MemoryPackable version of <see cref="Weights"/>
@@ -12,7 +12,7 @@ namespace SightKeeper.Data.Model.DataSets.Weights;
 internal sealed partial class PackableWeights
 {
 	public required ushort Id { get; init; }
-	public required Domain.DataSets.Weights.Model Model { get; init; }
+	public required Model Model { get; init; }
 	public required DateTimeOffset CreationTimestamp { get; init; }
 	public required ModelSize ModelSize { get; init; }
 	public required WeightsMetrics Metrics { get; init; }

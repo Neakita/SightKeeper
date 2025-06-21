@@ -1,4 +1,4 @@
-namespace SightKeeper.Data.Model.DataSets.Weights;
+namespace SightKeeper.Data.DataSets.Weights;
 
 public readonly struct KeyPointTagLocation
 {

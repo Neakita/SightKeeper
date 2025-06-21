@@ -1,6 +1,6 @@
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Model.DataSets.Tags;
+namespace SightKeeper.Data.DataSets.Tags;
 
 internal sealed class TrackableTagsLibrary<TTag>(TagsOwner<TTag> inner, ChangeListener listener) : TagsOwner<TTag>
 {

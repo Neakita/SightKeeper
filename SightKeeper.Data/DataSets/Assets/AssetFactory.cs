@@ -1,6 +1,6 @@
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Model.DataSets.Assets;
+namespace SightKeeper.Data.DataSets.Assets;
 
 public interface AssetFactory<out TAsset>
 {

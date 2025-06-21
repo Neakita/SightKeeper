@@ -1,7 +1,7 @@
 using MemoryPack;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Model.DataSets.Tags;
+namespace SightKeeper.Data.DataSets.Tags;
 
 [MemoryPackable]
 internal sealed partial class PackableTagsLibrary<TTag> : TagsOwner<TTag> where TTag : new()

@@ -1,9 +1,9 @@
 using SightKeeper.Application.DataSets.Creating;
-using SightKeeper.Data.Model.DataSets.Assets;
-using SightKeeper.Data.Model.DataSets.Tags;
+using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Classifier;
 
-namespace SightKeeper.Data.Model.DataSets;
+namespace SightKeeper.Data.DataSets;
 
 public sealed class StorableClassifierDataSetFactory : DataSetFactory<ClassifierDataSet>
 {

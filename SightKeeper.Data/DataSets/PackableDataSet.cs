@@ -1,8 +1,8 @@
 using MemoryPack;
-using SightKeeper.Data.Model.DataSets.Weights;
+using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets;
 
-namespace SightKeeper.Data.Model.DataSets;
+namespace SightKeeper.Data.DataSets;
 
 /// <summary>
 /// MemoryPackable version of <see cref="DataSet"/>

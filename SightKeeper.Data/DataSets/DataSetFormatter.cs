@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Poser3D;
 
-namespace SightKeeper.Data.Formatters;
+namespace SightKeeper.Data.DataSets;
 
 internal sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 {
