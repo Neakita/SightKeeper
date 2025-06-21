@@ -8,14 +8,17 @@ namespace SightKeeper.Data;
 [MemoryPackable]
 internal sealed partial class AppData
 {
+	public ushort SchemaVersion { get; }
 	public HashSet<ImageSet> ImageSets { get; }
 	public HashSet<DataSet> DataSets { get; }
 
 	[MemoryPackConstructor]
 	internal AppData(
+		ushort schemaVersion,
 		HashSet<ImageSet> imageSets,
 		HashSet<DataSet> dataSets)
 	{
+		SchemaVersion = schemaVersion;
 		ImageSets = imageSets;
 		DataSets = dataSets;
 	}
