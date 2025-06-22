@@ -1,48 +1,50 @@
 using CommunityToolkit.HighPerformance;
 using FluentAssertions;
-using SightKeeper.Application.ScreenCapturing;
+using NSubstitute;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Tests.Capturing.Saving;
 
-public sealed class ImageSaverConverterMiddlewareTests
+public sealed class ImageDataConverterMiddlewareTests
 {
 	[Fact]
 	public void ShouldCallConverter()
 	{
-		var converter = new FakePixelConverter<Bgra32, Rgba32>();
-		var imageSaver = new FakeImageSaver<Rgba32>();
-		ImageSaverConverterMiddleware<Bgra32, Rgba32> middleware = new()
+		var converterPixels = new Rgba32[4, 4];
+		Random.Shared.NextBytes(converterPixels.AsSpan().AsBytes());
+		var converter = new FakePixelConverter<Bgra32, Rgba32>(converterPixels);
+		var imageSaver = new FakeImageDataSaver<Rgba32>();
+		ImageDataConverterMiddleware<Bgra32, Rgba32> middleware = new()
 		{
 			Converter = converter,
-			NextMiddleware = imageSaver
+			Next = imageSaver
 		};
 		var pixels = new Bgra32[4, 4];
 		Random.Shared.NextBytes(pixels.AsSpan().AsBytes());
-		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
-		converter.ReceivedCalls.Count.Should().Be(1);
-		var receivedPixels = converter.ReceivedCalls.Single();
-		receivedPixels.ShouldRoughlyBe(pixels);
+		middleware.SaveData(Substitute.For<Image>(), pixels);
+		var receivedPixels = converter.ReceivedCalls.Should().ContainSingle().Subject;
+		receivedPixels.Should().BeEquivalentTo(pixels);
 	}
 
 	[Fact]
 	public void ShouldCallNextMiddleware()
 	{
-		var converter = new Bgra32ToRgba32PixelConverter();
-		var imageSaver = new FakeImageSaver<Rgba32>();
-		ImageSaverConverterMiddleware<Bgra32, Rgba32> middleware = new()
+		var converterPixels = new Rgba32[4, 4];
+		Random.Shared.NextBytes(converterPixels.AsSpan().AsBytes());
+		var converter = new FakePixelConverter<Bgra32, Rgba32>(converterPixels.AsMemory2D());
+		var imageSaver = new FakeImageDataSaver<Rgba32>();
+		ImageDataConverterMiddleware<Bgra32, Rgba32> middleware = new()
 		{
 			Converter = converter,
-			NextMiddleware = imageSaver
+			Next = imageSaver
 		};
 		var pixels = new Bgra32[4, 4];
 		Random.Shared.NextBytes(pixels.AsSpan().AsBytes());
-		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
-		imageSaver.ReceivedCalls.Should().HaveCount(1);
-		var receivedPixels = imageSaver.ReceivedCalls.Single().imageData;
-		AssertRoughlyEquals(receivedPixels, pixels);
+		middleware.SaveData(Substitute.For<Image>(), pixels);
+		var receivedPixels = imageSaver.ReceivedCalls.Should().ContainSingle().Subject.data;
+		receivedPixels.Should().BeEquivalentTo(converterPixels);
 	}
 
 	private static void AssertRoughlyEquals(Rgba32[,] actualPixels, Bgra32[,] expectedPixels)

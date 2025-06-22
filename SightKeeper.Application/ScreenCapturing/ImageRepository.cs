@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.HighPerformance;
+﻿using CommunityToolkit.Diagnostics;
+using CommunityToolkit.HighPerformance;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
@@ -8,30 +9,25 @@ namespace SightKeeper.Application.ScreenCapturing;
 
 public class ImageRepository : ImageSaver<Rgba32>
 {
-	public ImageRepository(WriteImageDataAccess writeImageDataAccess)
+	public ImageRepository()
 	{
-		_writeImageDataAccess = writeImageDataAccess;
 	}
 
 	public void SaveImage(ImageSet set, ReadOnlySpan2D<Rgba32> imageData, DateTimeOffset creationTimestamp)
 	{
 		Vector2<ushort> resolution = new((ushort)imageData.Width, (ushort)imageData.Height);
 		var image = set.CreateImage(creationTimestamp, resolution);
-		_writeImageDataAccess.SaveImageData(image, imageData);
+		using var stream = image.OpenWriteStream();
+		Guard.IsNotNull(stream);
+		if (imageData.TryGetSpan(out var contiguousSpan))
+		{
+			stream.Write(contiguousSpan.AsBytes());
+			return;
+		}
+		for (int i = 0; i < imageData.Height; i++)
+		{
+			var rowSpan = imageData.GetRowSpan(i);
+			stream.Write(rowSpan.AsBytes());
+		}
 	}
-
-	public void DeleteImage(DomainImageSet set, int index)
-	{
-		DeleteImagesRange(set, index, 1);
-	}
-
-	public virtual void DeleteImagesRange(DomainImageSet set, int index, int count)
-	{
-		var images = set.GetImagesRange(index, count);
-		set.RemoveImagesRange(index, count);
-		foreach (var image in images)
-			_writeImageDataAccess.DeleteImageData(image);
-	}
-
-	private readonly WriteImageDataAccess _writeImageDataAccess;
 }

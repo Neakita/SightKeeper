@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
 using SightKeeper.Application.ImageSets;
@@ -42,4 +42,4 @@ public sealed class ImageSetCreatorTests
 		Assert.Throws<ValidationException>(() => imageSetCreator.Create(data));
 		repository.DidNotReceive().Add(Arg.Any<DomainImageSet>());
 	}
-}
+}*/

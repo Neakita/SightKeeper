@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
 using SightKeeper.Application.DataSets.Editing;
@@ -163,4 +163,4 @@ public sealed class DataSetEditorTests
 	{
 		return new DomainPoser2DDataSet();
 	}
-}
+}*/

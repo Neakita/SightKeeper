@@ -80,18 +80,17 @@ public sealed class HotKeyScreenCapturerTests
 	{
 		Subject<Gesture> gestureSubject = new();
 		gestureObserver = gestureSubject;
-		DomainImageSet imageSet = new();
 		screenCapturer = new FakeScreenCapturer<Rgba32>();
 		var imageSaver = new FakeImageSaver<Rgba32>();
 		HotKeyScreenCapturer<Rgba32> hotKeyScreenCapturer = new()
 		{
 			ScreenBoundsProvider = new FakeScreenBoundsProvider(new Vector2<ushort>(1920, 1080)),
 			BindingsManager = new BindingsManager(gestureSubject),
-			Set = imageSet,
+			Set = Substitute.For<ImageSet>(),
 			ScreenCapturer = screenCapturer,
 			ImageSaver = imageSaver,
 			SelfActivityProvider = Substitute.For<SelfActivityProvider>(),
-			ImagesCleaner = new ImagesCleaner(new ImageRepository(Substitute.For<WriteImageDataAccess>())),
+			ImagesCleaner = new ImagesCleaner(),
 		};
 		return hotKeyScreenCapturer;
 	}

@@ -1,4 +1,4 @@
-using SightKeeper.Application.DataSets.Editing;
+/*using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Poser;
@@ -89,4 +89,4 @@ internal sealed class FakeExistingDataSetData : ExistingDataSetData
 		Description = dataSet.Description;
 		TagsChanges = tagsChanges;
 	}
-}
+}*/

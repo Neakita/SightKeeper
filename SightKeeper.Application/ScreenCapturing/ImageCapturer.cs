@@ -7,6 +7,6 @@ public interface ImageCapturer
 {
 	Vector2<ushort> ImageSize { get; set; }
 	double? FrameRateLimit { get; set; }
-	DomainImageSet? Set { get; set; }
-	IObservable<DomainImageSet?> SetChanged { get; }
+	ImageSet? Set { get; set; }
+	IObservable<ImageSet?> SetChanged { get; }
 }

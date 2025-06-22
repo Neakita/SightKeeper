@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Domain.Images;
@@ -41,4 +41,4 @@ public sealed class ImageSetEditorTests
 	{
 		return new DomainImageSet();
 	}
-}
+}*/

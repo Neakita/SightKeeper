@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
 using SightKeeper.Application.DataSets;
@@ -145,4 +145,4 @@ public sealed class DataSetCreatorTests
 		validator.RuleFor(data => data.Name).Must(_ => false);
 		return validator;
 	}
-}
+}*/

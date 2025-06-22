@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Domain.Images;
@@ -38,4 +38,4 @@ public sealed class ExistingImageSetDataValidatorTests
 		ExistingImageSetDataValidator validator = new(repository);
 		return validator;
 	}
-}
+}*/

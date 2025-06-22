@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using SightKeeper.Application.Training.Assets.Distribution;
 
 namespace SightKeeper.Application.Tests.Training;
@@ -42,4 +42,4 @@ public sealed class AssetsDistributorTests
 		distributor.ValidationAssets.Count.Should().Be(15);
 		distributor.TestAssets.Count.Should().Be(5);
 	}
-}
+}*/

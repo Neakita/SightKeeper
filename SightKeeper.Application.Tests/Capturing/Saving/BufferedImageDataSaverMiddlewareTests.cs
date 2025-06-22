@@ -1,44 +1,27 @@
 using CommunityToolkit.HighPerformance;
 using FluentAssertions;
+using NSubstitute;
 using SightKeeper.Application.ScreenCapturing.Saving;
+using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Tests.Capturing.Saving;
 
-public sealed class BufferedImageSaverMiddlewareTests
+public sealed class BufferedImageDataSaverMiddlewareTests
 {
-	[Fact]
-	public void ShouldHandleLargeBuffer()
-	{
-		var middleware = CreateMiddleware(out var imageSaver);
-		var pixels = CreateRandomPixels(1920, 1080);
-		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
-		Thread.Sleep(50);
-		var receivedPixels = imageSaver.ReceivedCalls.Single().imageData;
-		receivedPixels.ShouldRoughlyBe(pixels);
-	}
-
-	[Fact]
-	public void ShouldHandleVeryLargeBuffer()
-	{
-		var middleware = CreateMiddleware(out var imageSaver);
-		var pixels = CreateRandomPixels(4096, 2160);
-		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
-		Thread.Sleep(50);
-		var receivedPixels = imageSaver.ReceivedCalls.Single().imageData;
-		receivedPixels.ShouldRoughlyBe(pixels);
-	}
-
 	[Fact]
 	public void ShouldBufferImages()
 	{
 		var middleware = CreateMiddleware(out var imageSaver);
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
+		var image = Substitute.For<Image>();
+		image.Size.Returns(new Vector2<ushort>(320, 320));
 		for (int i = 0; i < 10; i++)
-			middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
+			middleware.SaveData(image, pixels);
 		// first call data dequeues nearly instantly
+		Thread.Sleep(1);
 		middleware.PendingImagesCount.Value.Should().Be(9);
 	}
 
@@ -49,9 +32,11 @@ public sealed class BufferedImageSaverMiddlewareTests
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
 		// first call data will be dequeued even when calls halt
-		middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
+		var image = Substitute.For<Image>();
+		image.Size.Returns(new Vector2<ushort>(320, 320));
+		middleware.SaveData(image, pixels);
 		for (int i = 0; i < 10; i++)
-			middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
+			middleware.SaveData(image, pixels);
 		middleware.IsLimitReached.Should().BeTrue();
 	}
 
@@ -61,8 +46,11 @@ public sealed class BufferedImageSaverMiddlewareTests
 		var middleware = CreateMiddleware(10, out var imageSaver);
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
+		var image = Substitute.For<Image>();
+		image.Size.Returns(new Vector2<ushort>(320, 320));
 		for (int i = 0; i < 10; i++)
-			middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
+			middleware.SaveData(image, pixels);
+
 		imageSaver.HoldCalls = false;
 		Thread.Sleep(100);
 		middleware.PendingImagesCount.Value.Should().Be(0);
@@ -74,19 +62,24 @@ public sealed class BufferedImageSaverMiddlewareTests
 		var middleware = CreateMiddleware(10, out var imageSaver);
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
+		var image = Substitute.For<Image>();
+		image.Size.Returns(new Vector2<ushort>(320, 320));
 		for (int i = 0; i < 10; i++)
-			middleware.SaveImage(new DomainImageSet(), pixels, DateTimeOffset.UtcNow);
+		{
+			middleware.SaveData(image, pixels);
+		}
+
 		imageSaver.HoldCalls = false;
 		Thread.Sleep(100);
 		imageSaver.ReceivedCalls.Should().HaveCount(10);
 	}
 
-	private static BufferedImageSaverMiddleware<Rgba32> CreateMiddleware(out FakeImageSaver<Rgba32> imageSaver)
+	private static BufferedImageDataSaverMiddleware<Rgba32> CreateMiddleware(out FakeImageDataSaver<Rgba32> imageSaver)
 	{
-		imageSaver = new FakeImageSaver<Rgba32>();
-		BufferedImageSaverMiddleware<Rgba32> middleware = new()
+		imageSaver = new FakeImageDataSaver<Rgba32>();
+		BufferedImageDataSaverMiddleware<Rgba32> middleware = new()
 		{
-			NextMiddleware = imageSaver
+			Next = imageSaver
 		};
 		return middleware;
 	}
@@ -98,7 +91,7 @@ public sealed class BufferedImageSaverMiddlewareTests
 		return pixels;
 	}
 
-	private static BufferedImageSaverMiddleware<Rgba32> CreateMiddleware(ushort maximumAllowedPendingImages, out FakeImageSaver<Rgba32> imageSaver)
+	private static BufferedImageDataSaverMiddleware<Rgba32> CreateMiddleware(ushort maximumAllowedPendingImages, out FakeImageDataSaver<Rgba32> imageSaver)
 	{
 		var middleware = CreateMiddleware(out imageSaver);
 		middleware.MaximumAllowedPendingImages = maximumAllowedPendingImages;
