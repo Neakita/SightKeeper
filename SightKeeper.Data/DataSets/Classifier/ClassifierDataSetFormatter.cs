@@ -9,16 +9,14 @@ using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
 internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<ClassifierDataSet>
 {
-	public ClassifierDataSetFormatter()
+	public ClassifierDataSetFormatter(ImageLookupper imageLookupper)
 	{
-		_tagFactory = new StorableTagFactory();
-		_assetFactory = new StorableClassifierAssetFactory();
+		_imageLookupper = imageLookupper;
 		_setWrapper = new ClassifierDataSetWrapper();
 	}
 
@@ -89,11 +87,19 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 		var setDescription = reader.ReadString();
 		Guard.IsNotNull(setDescription);
 
-		var inMemorySet = new InMemoryClassifierDataSet(_tagFactory, _assetFactory)
+		StorableTagFactory tagFactory = new();
+		StorableClassifierAssetFactory assetFactory = new();
+
+		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory)
 		{
 			Name = setName,
 			Description = setDescription
 		};
+
+		tagFactory.TagsOwner = inMemorySet.TagsLibrary;
+		assetFactory.TagsOwner = inMemorySet.TagsLibrary;
+
+		set = _setWrapper.Wrap(inMemorySet);
 
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var tagsCount));
 		inMemorySet.TagsLibrary.EnsureCapacity(tagsCount);
@@ -115,7 +121,7 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 			Guard.IsTrue(reader.TryReadObjectHeader(out var assetMemberCount));
 			Guard.IsEqualTo<byte>(assetMemberCount, 3);
 			reader.ReadUnmanaged(out Id imageId, out byte tagIndex, out AssetUsage usage);
-			var image = GetImage(imageId);
+			var image = _imageLookupper.GetImage(imageId);
 			var asset = inMemorySet.AssetsLibrary.MakeAsset(image);
 			asset.Tag = inMemorySet.TagsLibrary.Tags[tagIndex];
 			asset.Usage = usage;
@@ -146,18 +152,10 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 			var weights = CreateWeights(id, model, creationTimestamp, modelSize, metrics, resolution, tags);
 			inMemorySet.WeightsLibrary.AddWeights(weights);
 		}
-
-		set = _setWrapper.Wrap(inMemorySet);
 	}
 
-	private readonly TagFactory<Tag> _tagFactory;
-	private readonly AssetFactory<ClassifierAsset> _assetFactory;
+	private readonly ImageLookupper _imageLookupper;
 	private readonly ClassifierDataSetWrapper _setWrapper;
-
-	private Image GetImage(Id id)
-	{
-		throw new NotImplementedException();
-	}
 
 	private Domain.DataSets.Weights.Weights CreateWeights(
 		Id id,

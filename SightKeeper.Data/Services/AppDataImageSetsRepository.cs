@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Application.ScreenCapturing;
+using SightKeeper.Data.Images;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
@@ -14,20 +14,15 @@ public sealed class AppDataImageSetsRepository :
 	WriteRepository<ImageSet>,
 	IDisposable
 {
-	[Tag(typeof(AppData))] public required Lock AppDataLock { get; init; }
-	public required AppDataAccess AppDataAccess { get; init; }
-	public required ChangeListener ChangeListener { get; init; }
-	public required WriteImageDataAccess ImageDataAccess { get; init; }
-
-	public IReadOnlyCollection<ImageSet> Items => AppDataAccess.Data.ImageSets;
+	public IReadOnlyCollection<ImageSet> Items => _appDataAccess.Data.ImageSets;
 	public IObservable<ImageSet> Added => _added.AsObservable();
 	public IObservable<ImageSet> Removed => _removed.AsObservable();
 
 	public void Add(ImageSet set)
 	{
-		lock (AppDataLock)
-			AppDataAccess.Data.AddImageSet(set);
-		ChangeListener.SetDataChanged();
+		lock (_appDataLock)
+			_appDataAccess.Data.AddImageSet(set);
+		_changeListener.SetDataChanged();
 		_added.OnNext(set);
 	}
 
@@ -35,12 +30,12 @@ public sealed class AppDataImageSetsRepository :
 	{
 		bool canDelete = set.CanDelete();
 		Guard.IsTrue(canDelete);
-		lock (AppDataLock)
+		lock (_appDataLock)
 		{
-			AppDataAccess.Data.RemoveImageSet(set);
+			_appDataAccess.Data.RemoveImageSet(set);
 			DeleteImagesData(set);
 		}
-		ChangeListener.SetDataChanged();
+		_changeListener.SetDataChanged();
 		_removed.OnNext(set);
 	}
 
@@ -50,12 +45,25 @@ public sealed class AppDataImageSetsRepository :
 		_removed.Dispose();
 	}
 
+	internal AppDataImageSetsRepository(Lock appDataLock, AppDataAccess appDataAccess, ChangeListener changeListener)
+	{
+		_appDataLock = appDataLock;
+		_appDataAccess = appDataAccess;
+		_changeListener = changeListener;
+	}
+
+	private readonly Lock _appDataLock;
+	private readonly AppDataAccess _appDataAccess;
+	private readonly ChangeListener _changeListener;
 	private readonly Subject<ImageSet> _added = new();
 	private readonly Subject<ImageSet> _removed = new();
 
 	private void DeleteImagesData(ImageSet set)
 	{
 		foreach (var image in set.Images)
-			ImageDataAccess.DeleteImageData(image);
+		{
+			var streamableDataImage = image.UnWrapDecorator<StreamableDataImage>();
+			streamableDataImage.DeleteData();
+		}
 	}
 }

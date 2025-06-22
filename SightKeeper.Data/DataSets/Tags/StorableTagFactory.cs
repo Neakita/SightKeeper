@@ -1,11 +1,19 @@
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-public sealed class StorableTagFactory : TagFactory<Tag>
+internal sealed class StorableTagFactory : TagFactory<Tag>
 {
+	public TagsContainer<Tag>? TagsOwner { get; set; }
+
 	public Tag CreateTag(string name)
 	{
-		throw new NotImplementedException();
+		Guard.IsNotNull(TagsOwner);
+		return new InMemoryTag
+		{
+			Name = name,
+			Owner = TagsOwner
+		};
 	}
 }

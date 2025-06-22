@@ -20,6 +20,12 @@ internal class FileSystemDataAccess
 		return File.OpenWrite(filePath);
 	}
 
+	public void Delete(Id id)
+	{
+		var filePath = GetFilePath(id);
+		File.Delete(filePath);
+	}
+
 	private string GetFilePath(Id id)
 	{
 		var fileName = $"{id}.{FileExtension}";

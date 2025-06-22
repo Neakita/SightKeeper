@@ -1,10 +1,11 @@
 using SightKeeper.Application;
+using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Images;
 
-public sealed class StorableImageSetFactory
+internal sealed class StorableImageSetFactory : ImageSetFactory
 {
 	public StorableImageSetFactory(ChangeListener changeListener, [Tag(typeof(AppData))] Lock editingLock)
 	{

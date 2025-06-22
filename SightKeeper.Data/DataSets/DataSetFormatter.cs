@@ -10,9 +10,9 @@ namespace SightKeeper.Data.DataSets;
 
 internal sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 {
-	public DataSetFormatter()
+	public DataSetFormatter(ImageLookupper imageLookupper)
 	{
-		_classifierDataSetFormatter = new ClassifierDataSetFormatter();
+		_classifierDataSetFormatter = new ClassifierDataSetFormatter(imageLookupper);
 	}
 
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref DataSet? value)

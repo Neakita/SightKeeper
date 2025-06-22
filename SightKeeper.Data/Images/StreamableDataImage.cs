@@ -35,4 +35,9 @@ internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAcc
 	{
 		inner.RemoveAsset(asset);
 	}
+
+	internal void DeleteData()
+	{
+		dataAccess.Delete(inner.Id);
+	}
 }
