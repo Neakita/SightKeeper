@@ -7,22 +7,15 @@ public sealed class ImagesCleaner
 {
 	public ushort UnusedImagesLimit { get; set; } = 500;
 
-	public ImagesCleaner(ImageRepository imageRepository)
-	{
-		_imageRepository = imageRepository;
-	}
-
-	public void RemoveExceedUnusedImages(DomainImageSet set)
+	public void RemoveExceedUnusedImages(ImageSet set)
 	{
 		var ranges = GetRangesToRemove(set);
 		foreach (var range in ranges)
-			_imageRepository.DeleteImagesRange(set, range.Start, range.Count);
+			set.RemoveImagesRange(range.Start, range.Count);
 	}
 
-	private readonly ImageRepository _imageRepository;
-
 	/// <returns>reversed ranges, i.e. first range has latest indexes</returns>
-	private IEnumerable<Range> GetRangesToRemove(DomainImageSet set)
+	private IEnumerable<Range> GetRangesToRemove(ImageSet set)
 	{
 		var unusedRanges = set.Images
 			.Index()
