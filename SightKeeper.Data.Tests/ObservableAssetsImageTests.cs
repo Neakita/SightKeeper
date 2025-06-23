@@ -8,7 +8,7 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Data.Tests;
 
-public sealed class ImageAssetsObservingTests
+public sealed class ObservableAssetsImageTests
 {
 	[Fact]
 	public void ShouldObserveAddition()
@@ -22,6 +22,22 @@ public sealed class ImageAssetsObservingTests
 		observedChanges.Should()
 			.ContainSingle()
 			.Which.Should().BeOfType<Addition<Asset>>()
+			.Which.Items.Should().ContainSingle()
+			.Which.Should().BeSameAs(asset);
+	}
+
+	[Fact]
+	public void ShouldObserveRemoval()
+	{
+		var image = new ObservableAssetsImage(Substitute.For<Image>());
+		var asset = Substitute.For<Asset>();
+		var observableAssets = image.Assets.Should().BeAssignableTo<ReadOnlyObservableCollection<Asset>>().Subject;
+		List<Change<Asset>> observedChanges = new();
+		observableAssets.Subscribe(observedChanges.Add);
+		image.RemoveAsset(asset);
+		observedChanges.Should()
+			.ContainSingle()
+			.Which.Should().BeOfType<Removal<Asset>>()
 			.Which.Items.Should().ContainSingle()
 			.Which.Should().BeSameAs(asset);
 	}
