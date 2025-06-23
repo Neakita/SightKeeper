@@ -2,7 +2,6 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
-using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
@@ -10,12 +9,10 @@ namespace SightKeeper.Data.Images;
 
 internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
 {
-	public ImageSetFormatter(ChangeListener changeListener, Lock editingLock)
+	public ImageSetFormatter(ImageSetWrapper setWrapper, ImageWrapper imageWrapper)
 	{
-		var dataAccess = new CompressedFileSystemDataAccess();
-		dataAccess.DirectoryPath = Path.Combine(dataAccess.DirectoryPath, "Images");
-		_imageWrapper = new ImageWrapper(dataAccess);
-		_setWrapper = new ImageSetWrapper(changeListener, editingLock);
+		_imageWrapper = imageWrapper;
+		_setWrapper = setWrapper;
 	}
 
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref ImageSet? set)

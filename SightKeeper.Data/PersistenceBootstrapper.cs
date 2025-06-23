@@ -35,8 +35,9 @@ public static class PersistenceBootstrapper
 			ImageSetFactory = new StorableImageSetFactory(dataSaver, editingLock),
 			ClassifierDataSetFactory = new StorableClassifierDataSetFactory(dataSaver, editingLock)
 		};
-
-		MemoryPackFormatterProvider.Register(new ImageSetFormatter(dataSaver, editingLock));
+		var imagesDataAccess = new CompressedFileSystemDataAccess();
+		imagesDataAccess.DirectoryPath = Path.Combine(imagesDataAccess.DirectoryPath, "Images");
+		MemoryPackFormatterProvider.Register(new ImageSetFormatter(new StorableImageSetWrapper(dataSaver, editingLock), new StorableImageWrapper(imagesDataAccess)));
 		MemoryPackFormatterProvider.Register(new DataSetFormatter(imageLookupper));
 
 		return services;

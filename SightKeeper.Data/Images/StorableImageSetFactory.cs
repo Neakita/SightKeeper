@@ -11,8 +11,8 @@ internal sealed class StorableImageSetFactory : ImageSetFactory
 	{
 		var dataAccess = new CompressedFileSystemDataAccess();
 		dataAccess.DirectoryPath = Path.Combine(dataAccess.DirectoryPath, "Images");
-		_imageWrapper = new ImageWrapper(dataAccess);
-		_setWrapper = new ImageSetWrapper(changeListener, editingLock);
+		_imageWrapper = new StorableImageWrapper(dataAccess);
+		_setWrapper = new StorableImageSetWrapper(changeListener, editingLock);
 	}
 
 	public ImageSet CreateImageSet()
@@ -21,6 +21,6 @@ internal sealed class StorableImageSetFactory : ImageSetFactory
 		return _setWrapper.Wrap(set);
 	}
 
-	private readonly ImageWrapper _imageWrapper;
-	private readonly ImageSetWrapper _setWrapper;
+	private readonly StorableImageWrapper _imageWrapper;
+	private readonly StorableImageSetWrapper _setWrapper;
 }

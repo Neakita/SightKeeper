@@ -1,14 +1,8 @@
-using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Images;
 
-internal sealed class ImageWrapper(FileSystemDataAccess dataAccess)
+internal interface ImageWrapper
 {
-	public Image Wrap(InMemoryImage image)
-	{
-		return image
-			.WithStreaming(dataAccess)
-			.WithObservableAssets();
-	}
+	Image Wrap(InMemoryImage image);
 }
