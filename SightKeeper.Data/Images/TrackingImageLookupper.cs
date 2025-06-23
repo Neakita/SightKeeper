@@ -3,12 +3,11 @@ using CommunityToolkit.Diagnostics;
 using FlakeId;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Data.Images;
 using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;
 
-namespace SightKeeper.Data;
+namespace SightKeeper.Data.Images;
 
 internal sealed class TrackingImageLookupper : ImageLookupper, IDisposable
 {
