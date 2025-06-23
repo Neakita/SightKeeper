@@ -1,4 +1,7 @@
+using FlakeId;
 using FluentAssertions;
+using NSubstitute;
+using SightKeeper.Data.Images;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
@@ -11,7 +14,7 @@ public sealed class ImageSavingTests
 	{
 		var creationTimestamp = DateTimeOffset.UtcNow.AddDays(-2);
 		var set = CreateSetWithImages(creationTimestamp);
-		var persistedSet = set.Persist();
+		var persistedSet = set.PersistUsingFormatter(SetFormatter);
 		var persistedImage = persistedSet.Images.Single();
 		persistedImage.CreationTimestamp.Should().Be(creationTimestamp);
 	}
@@ -21,7 +24,7 @@ public sealed class ImageSavingTests
 	{
 		var size = new Vector2<ushort>(480, 320);
 		var set = CreateSetWithImage(size);
-		var persistedSet = set.Persist();
+		var persistedSet = set.PersistUsingFormatter(SetFormatter);
 		var persistedImage = persistedSet.Images.Single();
 		persistedImage.Size.Should().Be(size);
 	}
@@ -34,22 +37,30 @@ public sealed class ImageSavingTests
 			.Select(i => initialTimestamp.AddMilliseconds(i))
 			.ToList();
 		var set = CreateSetWithImages(timestamps);
-		var persistedSet = set.Persist();
+		var persistedSet = set.PersistUsingFormatter(SetFormatter);
 		persistedSet.Images.Select(image => image.CreationTimestamp).Should().ContainInOrder(timestamps);
 	}
 
+	private static ImageSetFormatter SetFormatter => new(new FakeImageSetWrapper(), new FakeImageWrapper());
+
 	private static ImageSet CreateSetWithImages(params IEnumerable<DateTimeOffset> imageCreationTimestamps)
 	{
-		var set = Utilities.CreateImageSet();
-		foreach (var timestamp in imageCreationTimestamps)
-			set.CreateImage(timestamp, new Vector2<ushort>(320, 320));
+		var set = Substitute.For<ImageSet>();
+		var images = imageCreationTimestamps.Select(CreateImage).ToList();
+		set.Images.Returns(images);
 		return set;
 	}
 
 	private static ImageSet CreateSetWithImage(Vector2<ushort> imageSize)
 	{
-		var set = Utilities.CreateImageSet();
-		set.CreateImage(DateTimeOffset.UtcNow, imageSize);
+		var set = Substitute.For<ImageSet>();
+		var image = new InMemoryImage(Id.Create(), default, imageSize);
+		set.Images.Returns([image]);
 		return set;
+	}
+
+	private static Image CreateImage(DateTimeOffset creationTimestamp)
+	{
+		return new InMemoryImage(Id.Create(), creationTimestamp, default);
 	}
 }
