@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Domain.DataSets.Assets;
+using Vibrance;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.Tests;

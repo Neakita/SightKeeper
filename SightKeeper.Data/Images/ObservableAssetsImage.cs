@@ -1,6 +1,7 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
+using Vibrance.Changes;
 
 namespace SightKeeper.Data.Images;
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Reactive.Disposables;
+using Vibrance;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data;
