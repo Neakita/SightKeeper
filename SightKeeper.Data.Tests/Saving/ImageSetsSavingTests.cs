@@ -1,4 +1,7 @@
 using FluentAssertions;
+using NSubstitute;
+using SightKeeper.Data.Images;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests.Saving;
 
@@ -8,9 +11,9 @@ public sealed class ImageSetsSavingTests
 	public void ShouldPersistName()
 	{
 		const string name = "The name";
-		var set = Utilities.CreateImageSet();
-		set.Name = name;
-		var persistedSet = set.Persist();
+		var set = Substitute.For<ImageSet>();
+		set.Name.Returns(name);
+		var persistedSet = set.PersistUsingFormatter(Formatter);
 		persistedSet.Name.Should().Be(name);
 	}
 
@@ -18,9 +21,11 @@ public sealed class ImageSetsSavingTests
 	public void ShouldPersistDescription()
 	{
 		const string description = "The description";
-		var set = Utilities.CreateImageSet();
-		set.Description = description;
-		var persistedSet = set.Persist();
+		var set = Substitute.For<ImageSet>();
+		set.Description.Returns(description);
+		var persistedSet = set.PersistUsingFormatter(Formatter);
 		persistedSet.Description.Should().Be(description);
 	}
+
+	private static ImageSetFormatter Formatter => new(new FakeImageSetWrapper(), new FakeImageWrapper());
 }
