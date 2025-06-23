@@ -19,6 +19,6 @@ internal sealed class ImageSetWrapper(ChangeListener changeListener, Lock editin
 			// Observer should be able to stream received images, so observable decorator should contain streamable decorator.
 			.WithObservableImages()
 			.WithDomainRules();
-		return new StorableImageSet(decoratedSet);
+		return new NotifyingImageSet(decoratedSet);
 	}
 }

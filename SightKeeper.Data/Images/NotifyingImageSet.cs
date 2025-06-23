@@ -5,11 +5,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Images;
 
-// Represents ready to modify, track/observer and saving ImageSet 
-// I wanted to use series of decorators so each decorator does small part of the job,
-// but I considered it will be not obvious to cast instance through some method and not language casting operators,
-// so interface(s) should be implemented by single class
-internal sealed class StorableImageSet(ImageSet inner) : ImageSet, INotifyPropertyChanged
+internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
