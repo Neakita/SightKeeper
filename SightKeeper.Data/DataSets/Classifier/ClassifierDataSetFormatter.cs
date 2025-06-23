@@ -32,14 +32,12 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 
 		var tagIndexes = dataSet.TagsLibrary.Tags.Index().ToDictionary(tuple => tuple.Item, tuple => (byte)tuple.Index);
 
-		writer.WriteObjectHeader(5);
 		writer.WriteString(dataSet.Name);
 		writer.WriteString(dataSet.Description);
 
 		writer.WriteCollectionHeader(dataSet.TagsLibrary.Tags.Count);
 		foreach (var tag in dataSet.TagsLibrary.Tags)
 		{
-			writer.WriteObjectHeader(2);
 			writer.WriteString(tag.Name);
 			writer.WriteUnmanaged(tag.Color);
 		}
@@ -49,14 +47,13 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 		{
 			var imageId = asset.Image.GetId();
 			var tagIndex = tagIndexes[asset.Tag];
-			writer.WriteUnmanagedWithObjectHeader(3, imageId, tagIndex, asset.Usage);
+			writer.WriteUnmanaged(imageId, tagIndex, asset.Usage);
 		}
 
 		writer.WriteCollectionHeader(dataSet.WeightsLibrary.Weights.Count);
 		foreach (var weights in dataSet.WeightsLibrary.Weights)
 		{
-			writer.WriteUnmanagedWithObjectHeader(
-				7,
+			writer.WriteUnmanaged(
 				/*weights.Id*/ default(Id),
 				weights.Model,
 				weights.CreationTimestamp,
@@ -76,13 +73,11 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 
 	public override void Deserialize(ref MemoryPackReader reader, scoped ref ClassifierDataSet? set)
 	{
-		if (!reader.TryReadObjectHeader(out var setMemberCount))
+		if (reader.PeekIsNull())
 		{
 			set = null;
 			return;
 		}
-
-		Guard.IsEqualTo<byte>(setMemberCount, 5);
 		var setName = reader.ReadString();
 		Guard.IsNotNull(setName);
 		var setDescription = reader.ReadString();
@@ -106,8 +101,6 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 		inMemorySet.TagsLibrary.EnsureCapacity(tagsCount);
 		for (int i = 0; i < tagsCount; i++)
 		{
-			Guard.IsTrue(reader.TryReadObjectHeader(out var tagMemberCount));
-			Guard.IsEqualTo<byte>(tagMemberCount, 2);
 			var tagName = reader.ReadString();
 			Guard.IsNotNull(tagName);
 			var color = reader.ReadUnmanaged<uint>();
@@ -119,8 +112,6 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 		inMemorySet.AssetsLibrary.EnsureCapacity(assetsCount);
 		for (int i = 0; i < assetsCount; i++)
 		{
-			Guard.IsTrue(reader.TryReadObjectHeader(out var assetMemberCount));
-			Guard.IsEqualTo<byte>(assetMemberCount, 3);
 			reader.ReadUnmanaged(out Id imageId, out byte tagIndex, out AssetUsage usage);
 			var image = _imageLookupper.GetImage(imageId);
 			var asset = inMemorySet.AssetsLibrary.MakeAsset(image);
@@ -132,8 +123,6 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 		inMemorySet.WeightsLibrary.EnsureCapacity(weightsCount);
 		for (int i = 0; i < weightsCount; i++)
 		{
-			Guard.IsTrue(reader.TryReadObjectHeader(out var weightsPropertyCount));
-			Guard.IsEqualTo<byte>(weightsPropertyCount, 7);
 			reader.ReadUnmanaged(
 				out Id id,
 				out Model model,
