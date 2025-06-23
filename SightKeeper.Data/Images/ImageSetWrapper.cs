@@ -6,7 +6,7 @@ internal sealed class ImageSetWrapper(ChangeListener changeListener, Lock editin
 {
 	public ImageSet Wrap(ImageSet set)
 	{
-		var decoratedSet = set
+		return set
 			// Tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,
 			// and then tracking decorator will send another notification.
 			.WithTracking(changeListener)
@@ -18,7 +18,10 @@ internal sealed class ImageSetWrapper(ChangeListener changeListener, Lock editin
 			// but domain rules can often throw exceptions so placing observing decorator after domain rules will make stack trace a bit shorter.
 			// Observer should be able to stream received images, so observable decorator should contain streamable decorator.
 			.WithObservableImages()
-			.WithDomainRules();
-		return new NotifyingImageSet(decoratedSet);
+			.WithDomainRules()
+			// INPC interface should be exposed to consumer,
+			// so he can type test and cast it,
+			// so it should be the outermost layer
+			.WithNotifications();
 	}
 }
