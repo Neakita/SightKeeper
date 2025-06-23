@@ -1,4 +1,6 @@
 using FluentAssertions;
+using NSubstitute;
+using SightKeeper.Data.Images;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using Vibrance;
@@ -6,12 +8,12 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Data.Tests;
 
-public sealed class ImageSetImagesObservingTests
+public sealed class ObservableImagesImageSetTests
 {
 	[Fact]
 	public void ShouldObserveImageCreation()
 	{
-		var set = Utilities.CreateImageSet();
+		ObservableImagesImageSet set = new(Substitute.For<ImageSet>());
 		var observableList = (ReadOnlyObservableList<Image>)set.Images;
 		List<IndexedChange<Image>> observedChanges = new();
 		observableList.Subscribe(observedChanges.Add);
