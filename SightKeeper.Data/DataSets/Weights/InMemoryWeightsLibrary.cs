@@ -1,15 +1,20 @@
 using CommunityToolkit.Diagnostics;
+using FlakeId;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class InMemoryWeightsLibrary : WeightsLibrary
+internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : WeightsLibrary
 {
 	public IReadOnlyCollection<Domain.DataSets.Weights.Weights> Weights => _weights;
 
-	public void AddWeights(Domain.DataSets.Weights.Weights weights)
+	public void CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
-		throw new NotImplementedException();
+		var id = Id.Create();
+		var inMemoryWeights = new InMemoryWeights(id, metadata, tags.ToList());
+		var wrappedWeights = weightsWrapper.Wrap(inMemoryWeights);
+		_weights.Add(wrappedWeights);
 	}
 
 	public void RemoveWeights(Domain.DataSets.Weights.Weights weights)
@@ -21,6 +26,12 @@ internal sealed class InMemoryWeightsLibrary : WeightsLibrary
 	internal void EnsureCapacity(int capacity)
 	{
 		_weights.EnsureCapacity(capacity);
+	}
+
+	internal void AddWeights(InMemoryWeights weights)
+	{
+		var wrappedWeights = weightsWrapper.Wrap(weights);
+		_weights.Add(wrappedWeights);
 	}
 
 	private readonly List<Domain.DataSets.Weights.Weights> _weights = new();

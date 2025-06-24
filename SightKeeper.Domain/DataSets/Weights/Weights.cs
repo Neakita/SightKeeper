@@ -4,11 +4,7 @@ namespace SightKeeper.Domain.DataSets.Weights;
 
 public interface Weights : TagUser
 {
-	Model Model { get; }
-	DateTimeOffset CreationTimestamp { get; }
-	ModelSize ModelSize { get; }
-	WeightsMetrics Metrics { get; }
-	Vector2<ushort> Resolution { get; }
+	WeightsMetadata Metadata { get; }
 	IReadOnlyList<Tag> Tags { get; }
 
 	Stream? OpenWriteSteam();

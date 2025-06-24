@@ -7,10 +7,10 @@ public sealed class DomainWeightsLibrary : WeightsLibrary
 {
 	public IReadOnlyCollection<Weights> Weights => _inner.Weights;
 
-	public void AddWeights(Weights weights)
+	public void CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
-		ValidateTags(weights.Tags);
-		_inner.AddWeights(weights);
+		ValidateTags(tags);
+		_inner.CreateWeights(metadata, tags);
 	}
 
 	public void RemoveWeights(Weights weights)

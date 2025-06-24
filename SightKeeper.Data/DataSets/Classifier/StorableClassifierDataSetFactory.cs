@@ -1,6 +1,7 @@
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Data.DataSets.Classifier;
@@ -16,7 +17,8 @@ internal sealed class StorableClassifierDataSetFactory : DataSetFactory<Classifi
 	{
 		StorableTagFactory tagFactory = new();
 		StorableClassifierAssetFactory assetFactory = new();
-		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory);
+		StorableWeightsWrapper weightsWrapper = new();
+		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory, weightsWrapper);
 		tagFactory.TagsOwner = inMemorySet.TagsLibrary;
 		assetFactory.TagsOwner = inMemorySet.TagsLibrary;
 		return _wrapper.Wrap(inMemorySet);

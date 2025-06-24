@@ -4,6 +4,7 @@ using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Data.Images;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
@@ -53,13 +54,14 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 		writer.WriteCollectionHeader(dataSet.WeightsLibrary.Weights.Count);
 		foreach (var weights in dataSet.WeightsLibrary.Weights)
 		{
+			var weightsId = weights.GetId();
 			writer.WriteUnmanaged(
-				/*weights.Id*/ default(Id),
-				weights.Model,
-				weights.CreationTimestamp,
-				weights.ModelSize,
-				weights.Metrics,
-				weights.Resolution);
+				weightsId,
+				weights.Metadata.Model,
+				weights.Metadata.CreationTimestamp,
+				weights.Metadata.ModelSize,
+				weights.Metadata.Metrics,
+				weights.Metadata.Resolution);
 			var weightsTagIndexes = ArrayPool<byte>.Shared.Rent(weights.Tags.Count);
 			for (int i = 0; i < weights.Tags.Count; i++)
 			{
@@ -85,8 +87,9 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 
 		StorableTagFactory tagFactory = new();
 		StorableClassifierAssetFactory assetFactory = new();
+		StorableWeightsWrapper weightsWrapper = new();
 
-		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory)
+		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory, weightsWrapper)
 		{
 			Name = setName,
 			Description = setDescription
@@ -139,23 +142,19 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 				tags.Add(tag);
 			}
 
-			var weights = CreateWeights(id, model, creationTimestamp, modelSize, metrics, resolution, tags);
+			var weightsMetadata = new WeightsMetadata()
+			{
+				Model = model,
+				CreationTimestamp = creationTimestamp,
+				ModelSize = modelSize,
+				Metrics = metrics,
+				Resolution = resolution
+			};
+			var weights = new InMemoryWeights(id, weightsMetadata, tags);
 			inMemorySet.WeightsLibrary.AddWeights(weights);
 		}
 	}
 
 	private readonly ImageLookupper _imageLookupper;
 	private readonly ClassifierDataSetWrapper _setWrapper;
-
-	private Domain.DataSets.Weights.Weights CreateWeights(
-		Id id,
-		Model model,
-		DateTimeOffset creationTimestamp,
-		ModelSize modelSize,
-		WeightsMetrics metrics,
-		Vector2<ushort> resolution,
-		IEnumerable<Tag> tags)
-	{
-		throw new NotImplementedException();
-	}
 }

@@ -8,7 +8,7 @@ namespace SightKeeper.Domain.Tests.DataSets.Classifier;
 public sealed class WeightsLibraryInClassifierTests
 {
 	[Fact]
-	public void ShouldAddWeightsWithTwoTags()
+	public void ShouldCreateWeightsWithTwoTags()
 	{
 		var innerSet = Substitute.For<ClassifierDataSet>();
 		DomainClassifierDataSet domainSet = new(innerSet);
@@ -16,10 +16,10 @@ public sealed class WeightsLibraryInClassifierTests
 		tag1.Owner.Returns(domainSet.TagsLibrary);
 		var tag2 = Substitute.For<Tag>();
 		tag2.Owner.Returns(domainSet.TagsLibrary);
-		var weights = Substitute.For<Weights>();
-		weights.Tags.Returns([tag1, tag2]);
-		domainSet.WeightsLibrary.AddWeights(weights);
-		innerSet.WeightsLibrary.Received().AddWeights(weights);
+		IReadOnlyCollection<Tag> tags = [tag1, tag2];
+		var weightsMetadata = new WeightsMetadata();
+		domainSet.WeightsLibrary.CreateWeights(weightsMetadata, tags);
+		innerSet.WeightsLibrary.Received().CreateWeights(weightsMetadata, tags);
 	}
 
 	[Fact]
@@ -31,7 +31,8 @@ public sealed class WeightsLibraryInClassifierTests
 		tag.Owner.Returns(domainSet.TagsLibrary);
 		var weights = Substitute.For<Weights>();
 		weights.Tags.Returns([tag]);
-		Assert.Throws<ArgumentException>(() => domainSet.WeightsLibrary.AddWeights(weights));
-		innerSet.WeightsLibrary.DidNotReceive().AddWeights(Arg.Any<Weights>());
+		var weightsMetadata = new WeightsMetadata();
+		Assert.Throws<ArgumentException>(() => domainSet.WeightsLibrary.CreateWeights(weightsMetadata, [tag]));
+		innerSet.WeightsLibrary.DidNotReceive().CreateWeights(Arg.Any<WeightsMetadata>(), Arg.Any<IReadOnlyCollection<Tag>>());
 	}
 }

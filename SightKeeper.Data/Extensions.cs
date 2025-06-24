@@ -1,5 +1,8 @@
+using FlakeId;
 using SightKeeper.Data.DataSets.Classifier;
+using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data;
 
@@ -27,5 +30,11 @@ internal static class Extensions
 	public static ClassifierDataSet WithDomainRules(this ClassifierDataSet set)
 	{
 		return new DomainClassifierDataSet(set);
+	}
+
+	public static Id GetId(this Weights weights)
+	{
+		var inMemoryWeights = weights.UnWrapDecorator<InMemoryWeights>();
+		return inMemoryWeights.Id;
 	}
 }

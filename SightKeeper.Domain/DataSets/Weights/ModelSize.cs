@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.DataSets.Weights;
 
-public enum ModelSize
+public enum ModelSize : byte
 {
     Nano,
     Small,
