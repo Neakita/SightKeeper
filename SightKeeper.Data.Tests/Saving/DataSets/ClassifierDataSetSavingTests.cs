@@ -57,7 +57,7 @@ public sealed class ClassifierDataSetSavingTests
 	}
 
 	[Fact]
-	public void ShouldPersistAsset()
+	public void ShouldPersistAssetTag()
 	{
 		var set = Substitute.For<ClassifierDataSet>();
 		var tag = Substitute.For<Tag>();
@@ -72,5 +72,9 @@ public sealed class ClassifierDataSetSavingTests
 		persistedSet.AssetsLibrary.Assets.Should().ContainSingle().Which.Tag.Should().Be(persistedTag);
 	}
 
-	private static ClassifierDataSetFormatter Formatter => new(Substitute.For<ImageLookupper>());
+	private static ClassifierDataSetFormatter Formatter => new()
+	{
+		ImageLookupper = Substitute.For<ImageLookupper>(),
+		SetWrapper = new ClassifierDataSetWrapper()
+	};
 }

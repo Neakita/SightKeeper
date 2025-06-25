@@ -6,23 +6,19 @@ using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Data.Images;
-using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
 internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<ClassifierDataSet>
 {
-	public ClassifierDataSetFormatter(ImageLookupper imageLookupper)
-	{
-		_imageLookupper = imageLookupper;
-		_setWrapper = new ClassifierDataSetWrapper();
-	}
+	public required ImageLookupper ImageLookupper { get; init; }
+	public required ClassifierDataSetWrapper SetWrapper { get; init; }
 
-	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,
+	public override void Serialize<TBufferWriter>(
+		ref MemoryPackWriter<TBufferWriter> writer,
 		scoped ref ClassifierDataSet? dataSet)
 	{
 		if (dataSet == null)
@@ -30,47 +26,11 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 			writer.WriteNullObjectHeader();
 			return;
 		}
-
 		var tagIndexes = dataSet.TagsLibrary.Tags.Index().ToDictionary(tuple => tuple.Item, tuple => (byte)tuple.Index);
-
-		writer.WriteString(dataSet.Name);
-		writer.WriteString(dataSet.Description);
-
-		writer.WriteCollectionHeader(dataSet.TagsLibrary.Tags.Count);
-		foreach (var tag in dataSet.TagsLibrary.Tags)
-		{
-			writer.WriteString(tag.Name);
-			writer.WriteUnmanaged(tag.Color);
-		}
-
-		writer.WriteCollectionHeader(dataSet.AssetsLibrary.Assets.Count);
-		foreach (var asset in dataSet.AssetsLibrary.Assets)
-		{
-			var imageId = asset.Image.GetId();
-			var tagIndex = tagIndexes[asset.Tag];
-			writer.WriteUnmanaged(imageId, tagIndex, asset.Usage);
-		}
-
-		writer.WriteCollectionHeader(dataSet.WeightsLibrary.Weights.Count);
-		foreach (var weights in dataSet.WeightsLibrary.Weights)
-		{
-			var weightsId = weights.GetId();
-			writer.WriteUnmanaged(
-				weightsId,
-				weights.Metadata.Model,
-				weights.Metadata.CreationTimestamp,
-				weights.Metadata.ModelSize,
-				weights.Metadata.Metrics,
-				weights.Metadata.Resolution);
-			var weightsTagIndexes = ArrayPool<byte>.Shared.Rent(weights.Tags.Count);
-			for (int i = 0; i < weights.Tags.Count; i++)
-			{
-				var tag = weights.Tags[i];
-				weightsTagIndexes[i] = tagIndexes[tag];
-			}
-
-			writer.WriteUnmanagedSpan(weightsTagIndexes.AsSpan(0, weights.Tags.Count));
-		}
+		DataSetGeneralDataFormatter.WriteGeneralData(ref writer, dataSet);
+		TagsFormatter.WriteTags(ref writer, dataSet.TagsLibrary.Tags);
+		WriteAssets(ref writer, dataSet.AssetsLibrary.Assets, tagIndexes);
+		WeightsFormatter.WriteWeights(ref writer, dataSet.WeightsLibrary.Weights, tagIndexes);
 	}
 
 	public override void Deserialize(ref MemoryPackReader reader, scoped ref ClassifierDataSet? set)
@@ -80,81 +40,51 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 			set = null;
 			return;
 		}
-		var setName = reader.ReadString();
-		Guard.IsNotNull(setName);
-		var setDescription = reader.ReadString();
-		Guard.IsNotNull(setDescription);
+		var inMemorySet = CreateInMemorySet();
+		set = SetWrapper.Wrap(inMemorySet);
+		DataSetGeneralDataFormatter.ReadGeneralData(ref reader, inMemorySet);
+		TagsFormatter.ReadTags(ref reader, inMemorySet.TagsLibrary);
+		ReadAssets(ref reader, inMemorySet);
+		WeightsFormatter.ReadWeights(ref reader, inMemorySet.WeightsLibrary, inMemorySet.TagsLibrary.Tags);
+	}
 
-		StorableTagFactory tagFactory = new();
-		StorableClassifierAssetFactory assetFactory = new();
-		StorableWeightsWrapper weightsWrapper = new();
-
-		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory, weightsWrapper)
+	private static void WriteAssets<TBufferWriter>(
+		ref MemoryPackWriter<TBufferWriter> writer,
+		IReadOnlyCollection<ClassifierAsset> assets,
+		Dictionary<Tag, byte> tagIndexes)
+		where TBufferWriter : IBufferWriter<byte>
+	{
+		writer.WriteCollectionHeader(assets.Count);
+		foreach (var asset in assets)
 		{
-			Name = setName,
-			Description = setDescription
-		};
-
-		tagFactory.TagsOwner = inMemorySet.TagsLibrary;
-		assetFactory.TagsOwner = inMemorySet.TagsLibrary;
-
-		set = _setWrapper.Wrap(inMemorySet);
-
-		Guard.IsTrue(reader.TryReadCollectionHeader(out var tagsCount));
-		inMemorySet.TagsLibrary.EnsureCapacity(tagsCount);
-		for (int i = 0; i < tagsCount; i++)
-		{
-			var tagName = reader.ReadString();
-			Guard.IsNotNull(tagName);
-			var color = reader.ReadUnmanaged<uint>();
-			var tag = inMemorySet.TagsLibrary.CreateTag(tagName);
-			tag.Color = color;
-		}
-
-		Guard.IsTrue(reader.TryReadCollectionHeader(out var assetsCount));
-		inMemorySet.AssetsLibrary.EnsureCapacity(assetsCount);
-		for (int i = 0; i < assetsCount; i++)
-		{
-			reader.ReadUnmanaged(out Id imageId, out byte tagIndex, out AssetUsage usage);
-			var image = _imageLookupper.GetImage(imageId);
-			var asset = inMemorySet.AssetsLibrary.MakeAsset(image);
-			asset.Tag = inMemorySet.TagsLibrary.Tags[tagIndex];
-			asset.Usage = usage;
-		}
-
-		Guard.IsTrue(reader.TryReadCollectionHeader(out var weightsCount));
-		inMemorySet.WeightsLibrary.EnsureCapacity(weightsCount);
-		for (int i = 0; i < weightsCount; i++)
-		{
-			reader.ReadUnmanaged(
-				out Id id,
-				out Model model,
-				out DateTimeOffset creationTimestamp,
-				out ModelSize modelSize,
-				out WeightsMetrics metrics,
-				out Vector2<ushort> resolution);
-			Span<byte> tagIndexes = new();
-			reader.ReadUnmanagedSpan(ref tagIndexes);
-			List<Tag> tags = new(tagIndexes.Length);
-			foreach (var tagIndex in tagIndexes)
-			{
-				var tag = inMemorySet.TagsLibrary.Tags[tagIndex];
-				tags.Add(tag);
-			}
-
-			var weightsMetadata = new WeightsMetadata()
-			{
-				Model = model,
-				CreationTimestamp = creationTimestamp,
-				ModelSize = modelSize,
-				Metrics = metrics,
-				Resolution = resolution
-			};
-			var weights = new InMemoryWeights(id, weightsMetadata, tags);
-			inMemorySet.WeightsLibrary.AddWeights(weights);
+			var imageId = asset.Image.GetId();
+			var tagIndex = tagIndexes[asset.Tag];
+			writer.WriteUnmanaged(imageId, tagIndex, asset.Usage);
 		}
 	}
 
-	private readonly ImageLookupper _imageLookupper;
-	private readonly ClassifierDataSetWrapper _setWrapper;
+	private InMemoryClassifierDataSet CreateInMemorySet()
+	{
+		StorableTagFactory tagFactory = new();
+		StorableClassifierAssetFactory assetFactory = new();
+		StorableWeightsWrapper weightsWrapper = new();
+		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory, weightsWrapper);
+		tagFactory.TagsOwner = inMemorySet.TagsLibrary;
+		assetFactory.TagsOwner = inMemorySet.TagsLibrary;
+		return inMemorySet;
+	}
+
+	private void ReadAssets(ref MemoryPackReader reader, InMemoryClassifierDataSet set)
+	{
+		Guard.IsTrue(reader.TryReadCollectionHeader(out var assetsCount));
+		set.AssetsLibrary.EnsureCapacity(assetsCount);
+		for (int i = 0; i < assetsCount; i++)
+		{
+			reader.ReadUnmanaged(out Id imageId, out byte tagIndex, out AssetUsage usage);
+			var image = ImageLookupper.GetImage(imageId);
+			var asset = set.AssetsLibrary.MakeAsset(image);
+			asset.Tag = set.TagsLibrary.Tags[tagIndex];
+			asset.Usage = usage;
+		}
+	}
 }

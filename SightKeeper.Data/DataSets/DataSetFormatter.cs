@@ -10,10 +10,7 @@ namespace SightKeeper.Data.DataSets;
 
 internal sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 {
-	public DataSetFormatter(ImageLookupper imageLookupper)
-	{
-		_classifierDataSetFormatter = new ClassifierDataSetFormatter(imageLookupper);
-	}
+	public required ClassifierDataSetFormatter ClassifierDataSetFormatter { get; init; }
 
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref DataSet? value)
 	{
@@ -27,7 +24,7 @@ internal sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 		{
 			case ClassifierDataSet classifierDataSet:
 				writer.WriteUnionHeader(0);
-				_classifierDataSetFormatter.Serialize(ref writer, ref classifierDataSet!);
+				ClassifierDataSetFormatter.Serialize(ref writer, ref classifierDataSet!);
 				break;
 			case DetectorDataSet detectorDataSet:
 				writer.WriteUnionHeader(1);
@@ -52,10 +49,8 @@ internal sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 		}
 		value = tag switch
 		{
-			0 => reader.ReadValueWithFormatter<ClassifierDataSetFormatter, ClassifierDataSet>(_classifierDataSetFormatter),
+			0 => reader.ReadValueWithFormatter<ClassifierDataSetFormatter, ClassifierDataSet>(ClassifierDataSetFormatter),
 			_ => throw new ArgumentOutOfRangeException()
 		};
 	}
-
-	private readonly ClassifierDataSetFormatter _classifierDataSetFormatter;
 }
