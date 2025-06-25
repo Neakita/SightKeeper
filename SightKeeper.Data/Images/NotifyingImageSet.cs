@@ -42,7 +42,6 @@ internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, INotifyPrope
 
 	public IReadOnlyList<Image> GetImagesRange(int index, int count)
 	{
-		// read can be performed directly from packable instance, not a big deal.
 		return inner.GetImagesRange(index, count);
 	}
 
