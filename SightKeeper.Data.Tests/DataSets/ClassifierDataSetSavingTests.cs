@@ -6,7 +6,7 @@ using SightKeeper.Data.Images;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Tests.Saving.DataSets;
+namespace SightKeeper.Data.Tests.DataSets;
 
 public sealed class ClassifierDataSetSavingTests
 {
