@@ -5,7 +5,7 @@ using NSubstitute;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Tests.Saving.DataSets;
+namespace SightKeeper.Data.Tests.DataSets;
 
 public sealed class TagsFormatterTests
 {

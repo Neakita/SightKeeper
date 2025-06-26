@@ -8,7 +8,7 @@ using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets;
 
-namespace SightKeeper.Data.Tests.Saving.DataSets;
+namespace SightKeeper.Data.Tests.DataSets;
 
 public sealed class DataSetGeneralDataFormatterTests
 {

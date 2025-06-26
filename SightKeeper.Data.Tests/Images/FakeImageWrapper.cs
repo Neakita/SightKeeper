@@ -1,7 +1,7 @@
 using SightKeeper.Data.Images;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Tests.Saving;
+namespace SightKeeper.Data.Tests.Images;
 
 internal sealed class FakeImageWrapper : ImageWrapper
 {

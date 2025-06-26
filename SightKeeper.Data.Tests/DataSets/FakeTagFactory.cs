@@ -1,7 +1,7 @@
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Tests.Saving.DataSets;
+namespace SightKeeper.Data.Tests.DataSets;
 
 internal sealed class FakeTagFactory : TagFactory<Tag>
 {

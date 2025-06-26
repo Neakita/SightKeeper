@@ -3,7 +3,7 @@ using NSubstitute;
 using SightKeeper.Data.Images;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Tests.Saving;
+namespace SightKeeper.Data.Tests.Images;
 
 public sealed class ImageSetsSavingTests
 {
