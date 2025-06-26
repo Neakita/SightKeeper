@@ -7,7 +7,7 @@ using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;
 
-namespace SightKeeper.Data.Images;
+namespace SightKeeper.Data.ImageSets;
 
 internal sealed class TrackingImageLookupper : ImageLookupper, IDisposable
 {

@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Data.Images;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;

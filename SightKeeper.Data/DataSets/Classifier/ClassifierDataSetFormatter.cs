@@ -5,7 +5,7 @@ using MemoryPack;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
-using SightKeeper.Data.Images;
+using SightKeeper.Data.ImageSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;

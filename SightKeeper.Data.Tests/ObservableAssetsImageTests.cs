@@ -1,6 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
-using SightKeeper.Data.Images;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 using Vibrance;

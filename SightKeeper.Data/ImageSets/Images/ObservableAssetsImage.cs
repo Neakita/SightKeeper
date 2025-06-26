@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 using Vibrance.Changes;
 
-namespace SightKeeper.Data.Images;
+namespace SightKeeper.Data.ImageSets.Images;
 
 internal sealed class ObservableAssetsImage(Image inner) : Image, Decorator<Image>
 {

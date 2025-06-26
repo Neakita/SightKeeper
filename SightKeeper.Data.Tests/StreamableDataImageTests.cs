@@ -1,7 +1,7 @@
 using FlakeId;
 using FluentAssertions;
 using NSubstitute;
-using SightKeeper.Data.Images;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 

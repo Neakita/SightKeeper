@@ -1,8 +1,9 @@
 using FlakeId;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Images;
+namespace SightKeeper.Data.ImageSets;
 
 internal static class ImageExtensions
 {

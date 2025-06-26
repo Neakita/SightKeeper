@@ -1,8 +1,9 @@
 using FlakeId;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Images;
+namespace SightKeeper.Data.ImageSets;
 
 internal sealed class InMemoryImageSet : ImageSet
 {

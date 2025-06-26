@@ -2,10 +2,11 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Images;
+namespace SightKeeper.Data.ImageSets;
 
 internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
 {

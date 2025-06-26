@@ -2,7 +2,7 @@ using FlakeId;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.DataSets.Classifier;
-using SightKeeper.Data.Images;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 

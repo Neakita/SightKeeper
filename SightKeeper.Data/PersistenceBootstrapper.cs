@@ -1,7 +1,8 @@
 using MemoryPack;
 using SightKeeper.Data.DataSets;
 using SightKeeper.Data.DataSets.Classifier;
-using SightKeeper.Data.Images;
+using SightKeeper.Data.ImageSets;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 
 namespace SightKeeper.Data;

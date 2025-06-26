@@ -1,20 +1,36 @@
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.Images;
+namespace SightKeeper.Data.ImageSets;
 
-internal sealed class DataRemovingImageSet(ImageSet inner) : ImageSet
+internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, INotifyPropertyChanged
 {
+	public event PropertyChangedEventHandler? PropertyChanged;
+
 	public string Name
 	{
 		get => inner.Name;
-		set => inner.Name = value;
+		set
+		{
+			if (value == Name)
+				return;
+			inner.Name = value;
+			OnPropertyChanged();
+		}
 	}
 
 	public string Description
 	{
 		get => inner.Description;
-		set => inner.Description = value;
+		set
+		{
+			if (value == Description)
+				return;
+			inner.Description = value;
+			OnPropertyChanged();
+		}
 	}
 
 	public IReadOnlyList<Image> Images => inner.Images;
@@ -36,21 +52,16 @@ internal sealed class DataRemovingImageSet(ImageSet inner) : ImageSet
 
 	public void RemoveImageAt(int index)
 	{
-		var image = Images[index].UnWrapDecorator<StreamableDataImage>();
-		image.DeleteData();
 		inner.RemoveImageAt(index);
 	}
 
 	public void RemoveImagesRange(int index, int count)
 	{
-		for (int i = 0; i < count; i++)
-			DeleteDataAt(index + i);
 		inner.RemoveImagesRange(index, count);
 	}
 
-	private void DeleteDataAt(int index)
+	private void OnPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		var image = Images[index].UnWrapDecorator<StreamableDataImage>();
-		image.DeleteData();
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }
