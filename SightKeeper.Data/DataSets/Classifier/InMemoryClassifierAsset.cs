@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.DataSets.Assets;
+namespace SightKeeper.Data.DataSets.Classifier;
 
 internal sealed class InMemoryClassifierAsset : ClassifierAsset
 {
