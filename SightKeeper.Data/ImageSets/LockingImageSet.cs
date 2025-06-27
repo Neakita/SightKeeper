@@ -39,11 +39,6 @@ internal sealed class LockingImageSet(ImageSet inner, Lock editingLock) : ImageS
 			return inner.GetImagesRange(index, count);
 	}
 
-	public int IndexOf(Image image)
-	{
-		return inner.IndexOf(image);
-	}
-
 	public void RemoveImageAt(int index)
 	{
 		lock (editingLock)

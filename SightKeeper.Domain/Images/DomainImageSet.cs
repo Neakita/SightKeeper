@@ -37,17 +37,6 @@ public sealed class DomainImageSet(ImageSet inner) : ImageSet
 		return inner.GetImagesRange(index, count);
 	}
 
-	public int IndexOf(Image image)
-	{
-		return inner.IndexOf(image);
-	}
-
-	public void RemoveImage(Image image)
-	{
-		ImageIsInUseException.ThrowForDeletionIfInUse(this, image);
-		inner.RemoveImage(image);
-	}
-
 	public void RemoveImageAt(int index)
 	{
 		var image = Images[index];

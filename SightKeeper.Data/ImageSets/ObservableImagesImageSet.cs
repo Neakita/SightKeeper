@@ -43,11 +43,6 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		return inner.GetImagesRange(index, count);
 	}
 
-	public int IndexOf(Image image)
-	{
-		return inner.IndexOf(image);
-	}
-
 	public void RemoveImageAt(int index)
 	{
 		var image = Images[index];

@@ -45,11 +45,6 @@ internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, INotifyPrope
 		return inner.GetImagesRange(index, count);
 	}
 
-	public int IndexOf(Image image)
-	{
-		return inner.IndexOf(image);
-	}
-
 	public void RemoveImageAt(int index)
 	{
 		inner.RemoveImageAt(index);

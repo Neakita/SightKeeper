@@ -30,16 +30,6 @@ internal sealed class InMemoryImageSet : ImageSet
 		return _images.GetRange(index, count);
 	}
 
-	public int IndexOf(Image image)
-	{
-		// images are ordered by creation timestamp, so binary search is possible and highly preferable,
-		// images list can contain thousands of images.
-		var index = _images.BinarySearch((InMemoryImage)image, ImageCreationTimestampComparer);
-		if (index < 0)
-			return -1;
-		return index;
-	}
-
 	public void RemoveImageAt(int index)
 	{
 		_images.RemoveAt(index);
@@ -60,9 +50,6 @@ internal sealed class InMemoryImageSet : ImageSet
 		var wrappedImage = _imageWrapper.Wrap(image);
 		_images.Add(wrappedImage);
 	}
-
-	private static readonly Comparer<Image> ImageCreationTimestampComparer =
-		Comparer<Image>.Create((x, y) => x.CreationTimestamp.CompareTo(y.CreationTimestamp));
 
 	private readonly ImageWrapper _imageWrapper;
 	private readonly List<Image> _images;

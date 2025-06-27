@@ -41,11 +41,6 @@ internal sealed class TrackableImageSet(ImageSet imageSet, ChangeListener change
 		return imageSet.GetImagesRange(index, count);
 	}
 
-	public int IndexOf(Image image)
-	{
-		return imageSet.IndexOf(image);
-	}
-
 	public void RemoveImageAt(int index)
 	{
 		imageSet.RemoveImageAt(index);
