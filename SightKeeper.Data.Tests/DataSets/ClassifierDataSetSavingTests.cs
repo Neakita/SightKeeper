@@ -29,6 +29,6 @@ public sealed class ClassifierDataSetSavingTests
 	private static ClassifierDataSetFormatter Formatter => new()
 	{
 		ImageLookupper = Substitute.For<ImageLookupper>(),
-		SetWrapper = new ClassifierDataSetWrapper()
+		SetWrapper = new ClassifierDataSetWrapper(Substitute.For<ChangeListener>(), new Lock())
 	};
 }
