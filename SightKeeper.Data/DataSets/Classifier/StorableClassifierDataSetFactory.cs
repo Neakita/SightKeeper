@@ -13,8 +13,9 @@ internal sealed class StorableClassifierDataSetFactory(ClassifierDataSetWrapper 
 		StorableClassifierAssetFactory assetFactory = new();
 		StorableWeightsWrapper weightsWrapper = new();
 		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory, weightsWrapper);
-		tagFactory.TagsOwner = inMemorySet.TagsLibrary;
-		assetFactory.TagsOwner = inMemorySet.TagsLibrary;
-		return wrapper.Wrap(inMemorySet);
+		var wrappedSet = wrapper.Wrap(inMemorySet);
+		tagFactory.TagsOwner = wrappedSet.TagsLibrary;
+		assetFactory.TagsOwner = wrappedSet.TagsLibrary;
+		return wrappedSet;
 	}
 }
