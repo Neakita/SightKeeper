@@ -25,6 +25,8 @@ public static class PersistenceBootstrapper
 
 		TrackingImageLookupper imageLookupper = new(imageSetsRepository, imageSetsRepository);
 
+		var classifierSetWrapper = new ClassifierDataSetWrapper(dataSaver, editingLock);
+
 		PersistenceServices services = new()
 		{
 			WriteImageSetRepository = imageSetsRepository,
@@ -34,7 +36,7 @@ public static class PersistenceBootstrapper
 			ReadDataSetRepository = dataSetsRepository,
 			ObservableDataSetRepository = dataSetsRepository,
 			ImageSetFactory = new StorableImageSetFactory(dataSaver, editingLock),
-			ClassifierDataSetFactory = new StorableClassifierDataSetFactory(dataSaver, editingLock)
+			ClassifierDataSetFactory = new StorableClassifierDataSetFactory(classifierSetWrapper)
 		};
 		var imagesDataAccess = new CompressedFileSystemDataAccess();
 		imagesDataAccess.DirectoryPath = Path.Combine(imagesDataAccess.DirectoryPath, "Images");
@@ -44,7 +46,7 @@ public static class PersistenceBootstrapper
 			ClassifierDataSetFormatter = new ClassifierDataSetFormatter
 			{
 				ImageLookupper = imageLookupper,
-				SetWrapper = new ClassifierDataSetWrapper()
+				SetWrapper = classifierSetWrapper
 			}
 		});
 
