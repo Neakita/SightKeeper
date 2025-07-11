@@ -36,7 +36,7 @@ public static class PersistenceBootstrapper
 			ReadDataSetRepository = dataSetsRepository,
 			ObservableDataSetRepository = dataSetsRepository,
 			ImageSetFactory = new StorableImageSetFactory(dataSaver, editingLock),
-			ClassifierDataSetFactory = new StorableClassifierDataSetFactory(classifierSetWrapper)
+			ClassifierDataSetFactory = new WrappingClassifierDataSetFactory(classifierSetWrapper)
 		};
 		var imagesDataAccess = new CompressedFileSystemDataAccess();
 		imagesDataAccess.DirectoryPath = Path.Combine(imagesDataAccess.DirectoryPath, "Images");
