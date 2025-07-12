@@ -1,11 +1,8 @@
-using FlakeId;
-using SightKeeper.Data.ImageSets.Images;
-using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal static class ImageExtensions
+internal static class ImageSetExtensions
 {
 	public static ImageSet WithDomainRules(this ImageSet set)
 	{
@@ -22,16 +19,6 @@ internal static class ImageExtensions
 		return new LockingImageSet(set, editingLock);
 	}
 
-	public static Image WithStreaming(this InMemoryImage image, FileSystemDataAccess dataAccess)
-	{
-		return new StreamableDataImage(image, dataAccess);
-	}
-
-	public static Image WithObservableAssets(this Image image)
-	{
-		return new ObservableAssetsImage(image);
-	}
-
 	public static ImageSet WithObservableImages(this ImageSet set)
 	{
 		return new ObservableImagesImageSet(set);
@@ -40,11 +27,5 @@ internal static class ImageExtensions
 	public static ImageSet WithNotifications(this ImageSet set)
 	{
 		return new NotifyingImageSet(set);
-	}
-
-	public static Id GetId(this Image image)
-	{
-		var inMemoryImage = image.UnWrapDecorator<InMemoryImage>();
-		return inMemoryImage.Id;
 	}
 }
