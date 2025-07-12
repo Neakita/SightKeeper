@@ -26,6 +26,12 @@ public static class PersistenceBootstrapper
 		TrackingImageLookupper imageLookupper = new(imageSetsRepository, imageSetsRepository);
 
 		var classifierSetWrapper = new ClassifierDataSetWrapper(dataSaver, editingLock);
+        
+        var imagesDataAccess = new CompressedFileSystemDataAccess();
+        imagesDataAccess.DirectoryPath = Path.Combine(imagesDataAccess.DirectoryPath, "Images");
+        var imageWrapper = new StorableImageWrapper(imagesDataAccess);
+        var inMemoryImageSetFactory = new InMemoryImageSetFactory(imageWrapper);
+        var imageSetWrapper = new StorableImageSetWrapper(dataSaver, editingLock);
 
 		PersistenceServices services = new()
 		{
@@ -35,12 +41,11 @@ public static class PersistenceBootstrapper
 			WriteDataSetRepository = dataSetsRepository,
 			ReadDataSetRepository = dataSetsRepository,
 			ObservableDataSetRepository = dataSetsRepository,
-			ImageSetFactory = new StorableImageSetFactory(dataSaver, editingLock),
+			ImageSetFactory = new WrappedImageSetFactory(inMemoryImageSetFactory, imageSetWrapper),
 			ClassifierDataSetFactory = new WrappingClassifierDataSetFactory(classifierSetWrapper)
 		};
-		var imagesDataAccess = new CompressedFileSystemDataAccess();
-		imagesDataAccess.DirectoryPath = Path.Combine(imagesDataAccess.DirectoryPath, "Images");
-		MemoryPackFormatterProvider.Register(new ImageSetFormatter(new StorableImageSetWrapper(dataSaver, editingLock), new StorableImageWrapper(imagesDataAccess)));
+
+		MemoryPackFormatterProvider.Register(new ImageSetFormatter(imageSetWrapper, imageWrapper));
 		MemoryPackFormatterProvider.Register(new DataSetFormatter
 		{
 			ClassifierDataSetFormatter = new ClassifierDataSetFormatter
