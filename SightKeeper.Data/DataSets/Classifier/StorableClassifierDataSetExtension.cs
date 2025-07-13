@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-internal class StorableClassifierDataSetExtension(ClassifierDataSet inner, StorableClassifierDataSet extendedInner) : StorableClassifierDataSet
+internal sealed class StorableClassifierDataSetExtension(ClassifierDataSet inner, StorableClassifierDataSet extendedInner) : StorableClassifierDataSet
 {
 	public string Name
 	{

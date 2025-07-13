@@ -4,27 +4,27 @@ namespace SightKeeper.Data.ImageSets;
 
 internal static class ImageSetExtensions
 {
-	public static ImageSet WithDomainRules(this ImageSet set)
+	public static StorableImageSet WithDomainRules(this StorableImageSet set)
 	{
-		return new DomainImageSet(set);
+		return new StorableImageSetExtension(new DomainImageSet(set), set);
 	}
 
-	public static ImageSet WithTracking(this ImageSet set, ChangeListener listener)
+	public static StorableImageSet WithTracking(this StorableImageSet set, ChangeListener listener)
 	{
 		return new TrackableImageSet(set, listener);
 	}
 
-	public static ImageSet WithLocking(this ImageSet set, Lock editingLock)
+	public static StorableImageSet WithLocking(this StorableImageSet set, Lock editingLock)
 	{
 		return new LockingImageSet(set, editingLock);
 	}
 
-	public static ImageSet WithObservableImages(this ImageSet set)
+	public static StorableImageSet WithObservableImages(this StorableImageSet set)
 	{
 		return new ObservableImagesImageSet(set);
 	}
 
-	public static ImageSet WithNotifications(this ImageSet set)
+	public static StorableImageSet WithNotifications(this StorableImageSet set)
 	{
 		return new NotifyingImageSet(set);
 	}

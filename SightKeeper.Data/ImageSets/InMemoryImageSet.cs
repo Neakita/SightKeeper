@@ -1,23 +1,22 @@
 using FlakeId;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class InMemoryImageSet : ImageSet
+internal sealed class InMemoryImageSet : StorableImageSet
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
-	public IReadOnlyList<Image> Images => _images;
+	public IReadOnlyList<StorableImage> Images => _images;
 
 	public InMemoryImageSet(ImageWrapper imageWrapper)
 	{
 		_imageWrapper = imageWrapper;
-		_images = new List<Image>();
+		_images = new List<StorableImage>();
 	}
 
-	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		InMemoryImage inMemoryImage = new(Id.Create(), creationTimestamp, size);
 		var wrappedImage = _imageWrapper.Wrap(inMemoryImage);
@@ -25,7 +24,7 @@ internal sealed class InMemoryImageSet : ImageSet
 		return wrappedImage;
 	}
 
-	public IReadOnlyList<Image> GetImagesRange(int index, int count)
+	public IReadOnlyList<StorableImage> GetImagesRange(int index, int count)
 	{
 		return _images.GetRange(index, count);
 	}
@@ -52,5 +51,5 @@ internal sealed class InMemoryImageSet : ImageSet
 	}
 
 	private readonly ImageWrapper _imageWrapper;
-	private readonly List<Image> _images;
+	private readonly List<StorableImage> _images;
 }

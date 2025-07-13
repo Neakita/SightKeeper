@@ -1,10 +1,8 @@
-using SightKeeper.Domain.Images;
-
 namespace SightKeeper.Data.ImageSets;
 
 internal sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock editingLock) : ImageSetWrapper
 {
-	public ImageSet Wrap(ImageSet set)
+	public StorableImageSet Wrap(StorableImageSet set)
 	{
 		return set
 			// Tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,

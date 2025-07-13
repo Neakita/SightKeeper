@@ -1,12 +1,12 @@
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Images;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.ImageSets;
 
 // could be named ObservableImageSet,
 // but I want to specify it handles only Images observability
-internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
+internal sealed class ObservableImagesImageSet(StorableImageSet inner) : StorableImageSet
 {
 	public string Name
 	{
@@ -20,15 +20,15 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		set => inner.Description = value;
 	}
 
-	public IReadOnlyList<Image> Images => _images;
+	public IReadOnlyList<StorableImage> Images => _images;
 
-	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		var index = Images.Count;
 		var image = inner.CreateImage(creationTimestamp, size);
 		if (_images.HasObservers)
 		{
-			Insertion<Image> change = new()
+			Insertion<StorableImage> change = new()
 			{
 				Index = index,
 				Items = [image]
@@ -38,7 +38,7 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		return image;
 	}
 
-	public IReadOnlyList<Image> GetImagesRange(int index, int count)
+	public IReadOnlyList<StorableImage> GetImagesRange(int index, int count)
 	{
 		return inner.GetImagesRange(index, count);
 	}
@@ -49,7 +49,7 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		inner.RemoveImageAt(index);
 		if (_images.HasObservers)
 		{
-			IndexedRemoval<Image> change = new()
+			IndexedRemoval<StorableImage> change = new()
 			{
 				Index = index,
 				Items = [image]
@@ -64,7 +64,7 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		inner.RemoveImagesRange(index, count);
 		if (_images.HasObservers)
 		{
-			IndexedRemoval<Image> change = new()
+			IndexedRemoval<StorableImage> change = new()
 			{
 				Index = index,
 				Items = images
@@ -73,5 +73,5 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 		}
 	}
 
-	private readonly ExternalObservableList<Image> _images = new(inner.Images);
+	private readonly ExternalObservableList<StorableImage> _images = new(inner.Images);
 }

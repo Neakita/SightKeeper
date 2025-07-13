@@ -23,7 +23,7 @@ public static class PersistenceBootstrapper
 		AppDataImageSetsRepository imageSetsRepository = new(editingLock, appDataAccess, dataSaver);
 		AppDataDataSetsRepository dataSetsRepository = new(appDataAccess, dataSaver, editingLock);
 
-		TrackingImageLookupper imageLookupper = new(imageSetsRepository, imageSetsRepository);
+		PopulatableImageLookupper imageLookupper = new();
 
 		var classifierSetWrapper = new ClassifierDataSetWrapper(dataSaver, editingLock);
         
@@ -45,7 +45,7 @@ public static class PersistenceBootstrapper
 			ClassifierDataSetFactory = new WrappingClassifierDataSetFactory(classifierSetWrapper)
 		};
 
-		MemoryPackFormatterProvider.Register(new ImageSetFormatter(imageSetWrapper, inMemoryImageSetFactory));
+		MemoryPackFormatterProvider.Register(new ImageSetFormatter(imageSetWrapper, inMemoryImageSetFactory, imageLookupper));
 		MemoryPackFormatterProvider.Register(new DataSetFormatter
 		{
 			ClassifierDataSetFormatter = new ClassifierDataSetFormatter

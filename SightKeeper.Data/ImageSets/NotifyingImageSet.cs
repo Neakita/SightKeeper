@@ -1,11 +1,11 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, INotifyPropertyChanged
+internal sealed class NotifyingImageSet(StorableImageSet inner) : StorableImageSet, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -33,14 +33,14 @@ internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, INotifyPrope
 		}
 	}
 
-	public IReadOnlyList<Image> Images => inner.Images;
+	public IReadOnlyList<StorableImage> Images => inner.Images;
 
-	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		return inner.CreateImage(creationTimestamp, size);
 	}
 
-	public IReadOnlyList<Image> GetImagesRange(int index, int count)
+	public IReadOnlyList<StorableImage> GetImagesRange(int index, int count)
 	{
 		return inner.GetImagesRange(index, count);
 	}

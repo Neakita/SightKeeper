@@ -9,10 +9,13 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class ImageSetFormatter(ImageSetWrapper setWrapper, ImageSetFactory<InMemoryImageSet> imageSetFactory)
-    : MemoryPackFormatter<ImageSet>
+internal sealed class ImageSetFormatter(
+	ImageSetWrapper setWrapper,
+	ImageSetFactory<InMemoryImageSet> imageSetFactory,
+	ImageLookupperPopulator imageLookupperPopulator)
+    : MemoryPackFormatter<StorableImageSet>, IMemoryPackFormatter<ImageSet>
 {
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref ImageSet? set)
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref StorableImageSet? set)
 	{
 		if (set == null)
 		{
@@ -23,7 +26,7 @@ internal sealed class ImageSetFormatter(ImageSetWrapper setWrapper, ImageSetFact
 		WriteImages(ref writer, set);
 	}
 
-	public override void Deserialize(ref MemoryPackReader reader, scoped ref ImageSet? set)
+	public override void Deserialize(ref MemoryPackReader reader, scoped ref StorableImageSet? set)
 	{
 		if (reader.PeekIsNull())
 		{
@@ -33,6 +36,7 @@ internal sealed class ImageSetFormatter(ImageSetWrapper setWrapper, ImageSetFact
 		var inMemorySet = ReadGeneralMembers(ref reader);
 		ReadImages(ref reader, inMemorySet);
 		set = setWrapper.Wrap(inMemorySet);
+		imageLookupperPopulator.AddImages(set.Images);
 	}
 
     private static void WriteGeneralMembers<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, ImageSet set)
@@ -42,7 +46,7 @@ internal sealed class ImageSetFormatter(ImageSetWrapper setWrapper, ImageSetFact
 		writer.WriteString(set.Description);
 	}
 
-	private static void WriteImages<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, ImageSet set)
+	private static void WriteImages<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, StorableImageSet set)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(set.Images.Count);
@@ -50,7 +54,7 @@ internal sealed class ImageSetFormatter(ImageSetWrapper setWrapper, ImageSetFact
 			WriteImage(ref writer, image);
 	}
 
-	private static void WriteImage<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, Image image)
+	private static void WriteImage<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, StorableImage image)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		var inMemoryImage = image.UnWrapDecorator<InMemoryImage>();
@@ -85,5 +89,18 @@ internal sealed class ImageSetFormatter(ImageSetWrapper setWrapper, ImageSetFact
 		reader.ReadUnmanaged(out Id id, out DateTimeOffset creationTimestamp, out Vector2<ushort> size);
 		InMemoryImage image = new(id, creationTimestamp, size);
 		return image;
+	}
+
+	public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref ImageSet? set) where TBufferWriter : IBufferWriter<byte>
+	{
+		var storableSet = (StorableImageSet?)set;
+		Serialize(ref writer, ref storableSet);
+	}
+
+	public void Deserialize(ref MemoryPackReader reader, scoped ref ImageSet? set)
+	{
+		StorableImageSet? storableSet = null;
+		Deserialize(ref reader, ref storableSet);
+		set = storableSet;
 	}
 }
