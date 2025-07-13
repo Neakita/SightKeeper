@@ -1,0 +1,28 @@
+﻿using FlakeId;
+using SightKeeper.Data.ImageSets.Images;
+
+namespace SightKeeper.Data;
+
+internal class PopulatableImageLookupper : ImageLookupperPopulator, ImageLookupper
+{
+	public void AddImages(IEnumerable<StorableImage> images)
+	{
+		foreach (var image in images)
+		{
+			var id = image.Id;
+			_images.Add(id, image);
+		}
+	}
+
+	public StorableImage GetImage(Id id)
+	{
+		return _images[id];
+	}
+
+	public void ClearImages()
+	{
+		_images.Clear();
+	}
+
+	private readonly Dictionary<Id, StorableImage> _images = new();
+}
