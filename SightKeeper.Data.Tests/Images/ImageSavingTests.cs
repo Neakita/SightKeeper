@@ -42,7 +42,7 @@ public sealed class ImageSavingTests
 		persistedSet.Images.Select(image => image.CreationTimestamp).Should().ContainInOrder(timestamps);
 	}
 
-	private static ImageSetFormatter SetFormatter => new(new FakeImageSetWrapper(), new FakeImageWrapper());
+	private static ImageSetFormatter SetFormatter => new(new FakeImageSetWrapper(), new InMemoryImageSetFactory(new FakeImageWrapper()));
 
 	private static ImageSet CreateSetWithImages(params IEnumerable<DateTimeOffset> imageCreationTimestamps)
 	{

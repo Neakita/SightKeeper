@@ -45,7 +45,7 @@ public static class PersistenceBootstrapper
 			ClassifierDataSetFactory = new WrappingClassifierDataSetFactory(classifierSetWrapper)
 		};
 
-		MemoryPackFormatterProvider.Register(new ImageSetFormatter(imageSetWrapper, imageWrapper));
+		MemoryPackFormatterProvider.Register(new ImageSetFormatter(imageSetWrapper, inMemoryImageSetFactory));
 		MemoryPackFormatterProvider.Register(new DataSetFormatter
 		{
 			ClassifierDataSetFormatter = new ClassifierDataSetFormatter

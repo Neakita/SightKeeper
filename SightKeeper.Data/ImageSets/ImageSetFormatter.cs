@@ -2,21 +2,17 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
+using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
+internal sealed class ImageSetFormatter(ImageSetWrapper setWrapper, ImageSetFactory<InMemoryImageSet> imageSetFactory)
+    : MemoryPackFormatter<ImageSet>
 {
-	public ImageSetFormatter(ImageSetWrapper setWrapper, ImageWrapper imageWrapper)
-	{
-		_imageWrapper = imageWrapper;
-		_setWrapper = setWrapper;
-	}
-
-	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref ImageSet? set)
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref ImageSet? set)
 	{
 		if (set == null)
 		{
@@ -36,13 +32,10 @@ internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
 		}
 		var inMemorySet = ReadGeneralMembers(ref reader);
 		ReadImages(ref reader, inMemorySet);
-		set = _setWrapper.Wrap(inMemorySet);
+		set = setWrapper.Wrap(inMemorySet);
 	}
 
-	private readonly ImageSetWrapper _setWrapper;
-	private readonly ImageWrapper _imageWrapper;
-
-	private static void WriteGeneralMembers<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, ImageSet set)
+    private static void WriteGeneralMembers<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, ImageSet set)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteString(set.Name);
@@ -70,11 +63,9 @@ internal sealed class ImageSetFormatter : MemoryPackFormatter<ImageSet>
 		Guard.IsNotNull(name);
 		var description = reader.ReadString();
 		Guard.IsNotNull(description);
-		var inMemorySet = new InMemoryImageSet(_imageWrapper)
-		{
-			Name = name,
-			Description = description
-		};
+        var inMemorySet = imageSetFactory.CreateImageSet();
+        inMemorySet.Name = name;
+        inMemorySet.Description = description;
 		return inMemorySet;
 	}
 

@@ -27,5 +27,5 @@ public sealed class ImageSetsSavingTests
 		persistedSet.Description.Should().Be(description);
 	}
 
-	private static ImageSetFormatter Formatter => new(new FakeImageSetWrapper(), new FakeImageWrapper());
+	private static ImageSetFormatter Formatter => new(new FakeImageSetWrapper(), new InMemoryImageSetFactory(new FakeImageWrapper()));
 }
