@@ -4,21 +4,19 @@ using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<ClassifierDataSet>
+internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableClassifierDataSet>
 {
 	public required ImageLookupper ImageLookupper { get; init; }
 	public required ClassifierDataSetWrapper SetWrapper { get; init; }
 
 	public override void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		scoped ref ClassifierDataSet? dataSet)
+		scoped ref StorableClassifierDataSet? dataSet)
 	{
 		if (dataSet == null)
 		{
@@ -32,7 +30,7 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 		WeightsFormatter.WriteWeights(ref writer, dataSet.WeightsLibrary.Weights, tagIndexes);
 	}
 
-	public override void Deserialize(ref MemoryPackReader reader, scoped ref ClassifierDataSet? set)
+	public override void Deserialize(ref MemoryPackReader reader, scoped ref StorableClassifierDataSet? set)
 	{
 		if (reader.PeekIsNull())
 		{
@@ -49,14 +47,14 @@ internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<Classifie
 
 	private static void WriteAssets<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<ClassifierAsset> assets,
+		IReadOnlyCollection<StorableClassifierAsset> assets,
 		Dictionary<Tag, byte> tagIndexes)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(assets.Count);
 		foreach (var asset in assets)
 		{
-			var imageId = asset.Image.GetId();
+			var imageId = asset.Image.Id;
 			var tagIndex = tagIndexes[asset.Tag];
 			writer.WriteUnmanaged(imageId, tagIndex, asset.Usage);
 		}

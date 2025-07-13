@@ -11,7 +11,4 @@ public interface Image
 
 	Stream? OpenWriteStream();
 	Stream? OpenReadStream();
-
-	void AddAsset(Asset asset);
-	void RemoveAsset(Asset asset);
 }

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
 using MemoryPack;
+using SightKeeper.Data.ImageSets;
 using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 
@@ -9,13 +9,13 @@ namespace SightKeeper.Data;
 internal sealed partial class AppData
 {
 	public ushort SchemaVersion { get; }
-	public HashSet<ImageSet> ImageSets { get; }
+	public HashSet<StorableImageSet> ImageSets { get; }
 	public HashSet<DataSet> DataSets { get; }
 
 	[MemoryPackConstructor]
 	internal AppData(
 		ushort schemaVersion,
-		HashSet<ImageSet> imageSets,
+		HashSet<StorableImageSet> imageSets,
 		HashSet<DataSet> dataSets)
 	{
 		SchemaVersion = schemaVersion;
@@ -25,17 +25,17 @@ internal sealed partial class AppData
 
 	internal AppData()
 	{
-		ImageSets = new HashSet<ImageSet>();
+		ImageSets = new HashSet<StorableImageSet>();
 		DataSets = new HashSet<DataSet>();
 	}
 
-	public void AddImageSet(ImageSet library)
+	public void AddImageSet(StorableImageSet library)
 	{
 		bool isAdded = ImageSets.Add(library);
 		Guard.IsTrue(isAdded);
 	}
 
-	public void RemoveImageSet(ImageSet library)
+	public void RemoveImageSet(StorableImageSet library)
 	{
 		bool isRemoved = ImageSets.Remove(library);
 		Guard.IsTrue(isRemoved);

@@ -1,20 +1,16 @@
+using FlakeId;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class StreamableDataImage(InMemoryImage inner, FileSystemDataAccess dataAccess) : Image, Decorator<InMemoryImage>, Decorator<Image>
+internal sealed class StreamableDataImage(StorableImage inner, FileSystemDataAccess dataAccess) : StorableImage
 {
+	public Id Id => inner.Id;
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
-
 	public Vector2<ushort> Size => inner.Size;
-
 	public IReadOnlyCollection<Asset> Assets => inner.Assets;
-
-	InMemoryImage Decorator<InMemoryImage>.Inner => inner;
-	Image Decorator<Image>.Inner => inner;
 
 	public Stream OpenWriteStream()
 	{

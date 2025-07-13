@@ -17,19 +17,19 @@ internal static class Extensions
 		throw new ArgumentException($"Provided object of type {source.GetType()} could not be unwrapped to {typeof(TTarget)}");
 	}
 
-	public static ClassifierDataSet WithTracking(this ClassifierDataSet set, ChangeListener listener)
+	public static StorableClassifierDataSet WithTracking(this StorableClassifierDataSet set, ChangeListener listener)
 	{
 		return new TrackableClassifierDataSet(set, listener);
 	}
 
-	public static ClassifierDataSet WithLocking(this ClassifierDataSet set, Lock editingLock)
+	public static StorableClassifierDataSet WithLocking(this StorableClassifierDataSet set, Lock editingLock)
 	{
 		return new LockingClassifierDataSet(set, editingLock);
 	}
 
-	public static ClassifierDataSet WithDomainRules(this ClassifierDataSet set)
+	public static StorableClassifierDataSet WithDomainRules(this StorableClassifierDataSet set)
 	{
-		return new DomainClassifierDataSet(set);
+		return new StorableClassifierDataSetExtension(new DomainClassifierDataSet(set), set);
 	}
 
 	public static Id GetId(this Weights weights)

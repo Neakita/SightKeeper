@@ -1,7 +1,6 @@
 using MemoryPack;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Poser3D;
@@ -22,7 +21,7 @@ internal sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 
 		switch (value)
 		{
-			case ClassifierDataSet classifierDataSet:
+			case StorableClassifierDataSet classifierDataSet:
 				writer.WriteUnionHeader(0);
 				ClassifierDataSetFormatter.Serialize(ref writer, ref classifierDataSet!);
 				break;
@@ -49,7 +48,7 @@ internal sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 		}
 		value = tag switch
 		{
-			0 => reader.ReadValueWithFormatter<ClassifierDataSetFormatter, ClassifierDataSet>(ClassifierDataSetFormatter),
+			0 => reader.ReadValueWithFormatter<ClassifierDataSetFormatter, StorableClassifierDataSet>(ClassifierDataSetFormatter),
 			_ => throw new ArgumentOutOfRangeException()
 		};
 	}

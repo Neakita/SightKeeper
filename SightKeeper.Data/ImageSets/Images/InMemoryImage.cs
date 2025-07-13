@@ -2,11 +2,10 @@ using CommunityToolkit.Diagnostics;
 using FlakeId;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class InMemoryImage : Image
+internal sealed class InMemoryImage : StorableImage
 {
 	public Id Id { get; }
 	public DateTimeOffset CreationTimestamp { get; }

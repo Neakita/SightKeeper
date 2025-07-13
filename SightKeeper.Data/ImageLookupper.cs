@@ -1,9 +1,9 @@
 using FlakeId;
-using SightKeeper.Domain.Images;
+using SightKeeper.Data.ImageSets.Images;
 
 namespace SightKeeper.Data;
 
 internal interface ImageLookupper
 {
-	Image GetImage(Id id);
+	StorableImage GetImage(Id id);
 }

@@ -1,0 +1,27 @@
+﻿using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
+
+namespace SightKeeper.Data.DataSets.Classifier;
+
+internal class StorableClassifierDataSetExtension(ClassifierDataSet inner, StorableClassifierDataSet extendedInner) : StorableClassifierDataSet
+{
+	public string Name
+	{
+		get => inner.Name;
+		set => inner.Name = value;
+	}
+
+	public string Description
+	{
+		get => inner.Description;
+		set => inner.Description = value;
+	}
+
+	public TagsOwner<Tag> TagsLibrary => inner.TagsLibrary;
+	public AssetsOwner<StorableClassifierAsset> AssetsLibrary => extendedInner.AssetsLibrary;
+	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
+
+	AssetsOwner<ClassifierAsset> ClassifierDataSet.AssetsLibrary => inner.AssetsLibrary;
+}

@@ -1,19 +1,16 @@
+using FlakeId;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.Images;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class ObservableAssetsImage(Image inner) : Image, Decorator<Image>
+internal sealed class ObservableAssetsImage(StorableImage inner) : StorableImage
 {
+	public Id Id => inner.Id;
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
-
 	public Vector2<ushort> Size => inner.Size;
-
 	public IReadOnlyCollection<Asset> Assets => _assets;
-
-	public Image Inner => inner;
 
 	public Stream? OpenWriteStream()
 	{
