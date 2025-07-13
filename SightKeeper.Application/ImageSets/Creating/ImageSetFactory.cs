@@ -2,7 +2,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ImageSets.Creating;
 
-public interface ImageSetFactory
+public interface ImageSetFactory<out TImageSet> where TImageSet : ImageSet
 {
-	ImageSet CreateImageSet();
+	TImageSet CreateImageSet();
 }

@@ -17,6 +17,6 @@ public sealed class PersistenceServices
 	public required ReadRepository<DataSet> ReadDataSetRepository { get; init; }
 	public required ObservableRepository<DataSet> ObservableDataSetRepository { get; init; }
 	
-	public required ImageSetFactory ImageSetFactory { get; init; }
+	public required ImageSetFactory<ImageSet> ImageSetFactory { get; init; }
 	public required DataSetFactory<ClassifierDataSet> ClassifierDataSetFactory { get; init; }
 }

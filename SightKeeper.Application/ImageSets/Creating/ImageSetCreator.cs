@@ -6,7 +6,7 @@ namespace SightKeeper.Application.ImageSets.Creating;
 public sealed class ImageSetCreator
 {
 	public required IValidator<ImageSetData> Validator { get; init; }
-	public required ImageSetFactory Factory { get; init; }
+	public required ImageSetFactory<ImageSet> Factory { get; init; }
 	public required WriteRepository<ImageSet> Repository { get; init; }
 
 	public ImageSet Create(ImageSetData data)
