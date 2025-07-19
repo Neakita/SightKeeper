@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-internal sealed class WrappingClassifierDataSetFactory(ClassifierDataSetWrapper wrapper) : DataSetFactory<ClassifierDataSet>
+public sealed class WrappingClassifierDataSetFactory(ClassifierDataSetWrapper wrapper) : DataSetFactory<ClassifierDataSet>
 {
 	public ClassifierDataSet CreateDataSet()
 	{

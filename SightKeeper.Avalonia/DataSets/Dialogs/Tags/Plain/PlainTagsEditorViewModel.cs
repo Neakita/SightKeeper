@@ -20,7 +20,7 @@ internal sealed partial class PlainTagsEditorViewModel : ViewModel, PlainTagsEdi
 	{
 	}
 
-	public PlainTagsEditorViewModel(IEnumerable<DomainTag> existingTags) : this()
+	public PlainTagsEditorViewModel(IEnumerable<Tag> existingTags) : this()
 	{
 		foreach (var tag in existingTags)
 		{
@@ -47,7 +47,7 @@ internal sealed partial class PlainTagsEditorViewModel : ViewModel, PlainTagsEdi
 		return !string.IsNullOrWhiteSpace(name) && Tags.All(tag => tag.Name != name);
 	}
 
-	public IEnumerable<DomainTag> RemovedTags => Enumerable.Empty<DomainTag>();
+	public IEnumerable<Tag> RemovedTags => Enumerable.Empty<DomainTag>();
 
 	public IEnumerable<EditedTagData> EditedTags =>
 		_tags.OfType<ExistingTagViewModel>().Where(tag => tag.IsEffectivelyEdited);

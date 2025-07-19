@@ -1,36 +1,27 @@
 using Avalonia.Media;
-using SightKeeper.Application.Annotation;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
-public abstract class KeyPointViewModel : ViewModel, KeyPointDataContext, DrawerItemDataContext
+public abstract class KeyPointViewModel : ViewModel, KeyPointDataContext
 {
 	public abstract PoserItemViewModel Item { get; }
-	public abstract DomainKeyPoint Value { get; }
-	public abstract DomainTag Tag { get; }
+	public abstract KeyPoint Value { get; }
+	public abstract Tag Tag { get; }
 
 	public Vector2<double> Position
 	{
 		get => Value.Position;
-		set
-		{
-			if (Position == value)
-				return;
-			OnPropertyChanging();
-			_annotator.SetKeyPointPosition(Value, value);
-			OnPropertyChanged();
-		}
+		set => SetProperty(Value.Position, value, Value, SetKeyPointPosition);
 	}
+
+	private void SetKeyPointPosition(KeyPoint keyPoint, Vector2<double> position)
+	{
+		keyPoint.Position = position;
+	}
+
 	public string Name => Tag.Name;
 	public Color Color => Color.FromUInt32(Tag.Color);
-
-	protected KeyPointViewModel(PoserAnnotator annotator)
-	{
-		_annotator = annotator;
-	}
-
-	private readonly PoserAnnotator _annotator;
 }

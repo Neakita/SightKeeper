@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Application.Extensions;
-using SightKeeper.Application.ImageSets;
 using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;
@@ -15,54 +12,50 @@ namespace SightKeeper.Avalonia.Annotation.Images;
 
 public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, ImageSelection, IDisposable
 {
-	public DomainImageSet? Set
+	private readonly ImageLoader _imageLoader;
+
+	public ImageSet? Set
 	{
 		get;
 		set
 		{
 			if (!SetProperty(ref field, value))
 				return;
-			_images.ReplaceAll(value?.Images ?? Enumerable.Empty<DomainImage>());
+			Images.Dispose();
+			Images = ReadOnlyObservableList<AnnotationImageDataContext>.Empty;
+			if (Set == null)
+				return;
+			var images = (ObservableList<Image>)Set.Images;
+			Images = images.Transform(image => new AnnotationImageViewModel(_imageLoader, image)).ToObservableList();
 		}
 	}
 
-	public IReadOnlyCollection<AnnotationImageDataContext> Images { get; }
-	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
-	public DomainImage? SelectedImage => SelectedImageIndex >= 0 ? _images[SelectedImageIndex] : null;
-	public IObservable<DomainImage?> SelectedImageChanged => _selectedImageChanged.AsObservable();
+	[ObservableProperty]
+	public partial ReadOnlyObservableList<AnnotationImageDataContext> Images { get; private set; } =
+		ReadOnlyObservableList<AnnotationImageDataContext>.Empty;
 
-	public ImagesViewModel(ObservableImageRepository observableRepository, ImageLoader imageLoader)
+	IReadOnlyCollection<AnnotationImageDataContext> ImagesDataContext.Images => Images;
+	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
+	public Image? SelectedImage => SelectedImageIndex >= 0 ? Set?.Images[SelectedImageIndex] : null;
+	public IObservable<Image?> SelectedImageChanged => _selectedImageChanged.AsObservable();
+
+	public ImagesViewModel(ImageLoader imageLoader)
 	{
-		_images = new ObservableList<DomainImage>();
-		observableRepository.Added
-			.Where(image => image.Set == Set)
-			.Subscribe(_images.Add)
-			.DisposeWith(_disposable);
-		observableRepository.ImagesDeleted
-			.Where(tuple => tuple.Set == Set)
-			.Subscribe(tuple => _images.RemoveRange(tuple.Range.Start, tuple.Range.Count))
-			.DisposeWith(_disposable);
-		var images = _images
-			.Transform(image => new AnnotationImageViewModel(imageLoader, image))
-			.ToObservableList();
-		images.DisposeWith(_disposable);
-		Images = images;
+		_imageLoader = imageLoader;
 	}
 
 	public void Dispose()
 	{
 		_disposable.Dispose();
-		_images.Dispose();
 		_selectedImageChanged.Dispose();
 	}
 
 	private readonly CompositeDisposable _disposable = new();
-	private readonly ObservableList<DomainImage> _images;
-	private readonly Subject<DomainImage?> _selectedImageChanged = new();
+	private readonly Subject<Image?> _selectedImageChanged = new();
 
 	partial void OnSelectedImageIndexChanged(int value)
 	{
-		var image = value == -1 ? null : _images[value];
+		var image = value == -1 ? null : Set?.Images[value];
 		_selectedImageChanged.OnNext(image);
 	}
 }

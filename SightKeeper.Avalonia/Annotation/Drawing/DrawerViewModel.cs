@@ -10,14 +10,15 @@ using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 {
-	[ObservableProperty] public partial DomainImage? Image { get; set; }
+	[ObservableProperty] public partial Image? Image { get; set; }
 
-	public DomainTag? Tag
+	public Tag? Tag
 	{
 		get;
 		set
@@ -25,7 +26,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 			field = value;
 			_boundingDrawer.Tag = null;
 			_keyPointDrawer.Tag = null;
-			if (value?.Owner is DomainPoserTag)
+			if (value?.Owner is PoserTag)
 				_keyPointDrawer.Tag = value;
 			else
 				_boundingDrawer.Tag = value;
@@ -69,7 +70,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 	private readonly ImageLoader _imageLoader;
 	private readonly Subject<BoundedItemDataContext?> _selectedItemChanged = new();
 
-	partial void OnImageChanged(DomainImage? value)
+	partial void OnImageChanged(Image? value)
 	{
 		_boundingDrawer.Image = value;
 		_itemsViewModel.Image = value;

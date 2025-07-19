@@ -13,7 +13,7 @@ namespace SightKeeper.Avalonia.ImageSets.Commands;
 internal sealed class DeleteImageSetCommandFactory
 {
 	public required DialogManager DialogManager { get; init; }
-	public required WriteRepository<DomainImageSet> ImageSetRepository { get; init; }
+	public required WriteRepository<ImageSet> ImageSetRepository { get; init; }
 
 	public ICommand CreateCommand()
 	{

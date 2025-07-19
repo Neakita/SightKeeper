@@ -8,7 +8,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-internal sealed class AppDataImageSetsRepository :
+public sealed class AppDataImageSetsRepository :
 	ReadRepository<ImageSet>,
 	ObservableRepository<ImageSet>,
 	WriteRepository<ImageSet>,

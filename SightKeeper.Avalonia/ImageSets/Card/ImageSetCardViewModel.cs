@@ -10,7 +10,7 @@ namespace SightKeeper.Avalonia.ImageSets.Card;
 
 internal sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDataContext, IDisposable
 {
-	public DomainImageSet ImageSet { get; }
+	public ImageSet ImageSet { get; }
 	public string Name => ImageSet.Name;
 
 	public bool IsCapturing => _capturer.Set == ImageSet;
@@ -29,7 +29,7 @@ internal sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDat
 	ICommand ImageSetCardDataContext.StartCapturingCommand => StartCapturingCommand;
 	ICommand ImageSetCardDataContext.StopCapturingCommand => StopCapturingCommand;
 
-	public ImageSetCardViewModel(DomainImageSet value, ICommand editCommand, ICommand deleteCommand, ImageLoader imageLoader, ImageCapturer capturer)
+	public ImageSetCardViewModel(ImageSet value, ICommand editCommand, ICommand deleteCommand, ImageLoader imageLoader, ImageCapturer capturer)
 	{
 		_imageLoader = imageLoader;
 		_capturer = capturer;
@@ -65,7 +65,7 @@ internal sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDat
 		_capturer.Set = null;
 	}
 
-	private void OnCapturerSetChanged(DomainImageSet? set)
+	private void OnCapturerSetChanged(ImageSet? set)
 	{
 		OnPropertyChanged(nameof(IsCapturing));
 	}

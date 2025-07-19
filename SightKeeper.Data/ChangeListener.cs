@@ -1,6 +1,6 @@
 namespace SightKeeper.Data;
 
-internal interface ChangeListener
+public interface ChangeListener
 {
 	void SetDataChanged();
 }

@@ -5,7 +5,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-internal interface StorableClassifierAsset : ClassifierAsset
+public interface StorableClassifierAsset : ClassifierAsset
 {
 	new StorableImage Image { get; }
 

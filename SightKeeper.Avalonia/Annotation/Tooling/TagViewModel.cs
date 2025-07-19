@@ -4,10 +4,10 @@ namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 internal sealed class TagViewModel : TagDataContext
 {
-	public DomainTag Tag { get; }
+	public Tag Tag { get; }
 	public string Name => Tag.Name;
 
-	public TagViewModel(DomainTag tag)
+	public TagViewModel(Tag tag)
 	{
 		Tag = tag;
 	}

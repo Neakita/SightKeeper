@@ -5,8 +5,7 @@ namespace SightKeeper.Application.ImageSets.Creating;
 
 public sealed class NewImageSetDataValidator : AbstractValidator<ImageSetData>
 {
-	public NewImageSetDataValidator(
-		ReadRepository<DomainImageSet> imageSetRepository)
+	public NewImageSetDataValidator(ReadRepository<ImageSet> imageSetRepository)
 	{
 		_imageSetRepository = imageSetRepository;
 		Include(ImageSetDataValidator.Instance);
@@ -16,7 +15,7 @@ public sealed class NewImageSetDataValidator : AbstractValidator<ImageSetData>
 			.WithMessage("Name must be unique");
 	}
 
-	private readonly ReadRepository<DomainImageSet> _imageSetRepository;
+	private readonly ReadRepository<ImageSet> _imageSetRepository;
 
 	private bool IsNameFree(string name)
 	{

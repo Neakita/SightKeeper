@@ -5,11 +5,11 @@ namespace SightKeeper.Avalonia.Annotation.Tooling.Poser;
 
 public sealed class KeyPointTagViewModel : KeyPointTagDataContext
 {
-	public DomainTag Tag { get; }
+	public Tag Tag { get; }
 	public string Name => Tag.Name;
 	public ICommand DeleteKeyPointCommand { get; }
 
-	public KeyPointTagViewModel(DomainTag tag, ICommand deleteKeyPointCommand)
+	public KeyPointTagViewModel(Tag tag, ICommand deleteKeyPointCommand)
 	{
 		Tag = tag;
 		DeleteKeyPointCommand = deleteKeyPointCommand;

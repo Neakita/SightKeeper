@@ -1,5 +1,4 @@
 using System;
-using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Detector;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
@@ -12,18 +11,11 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed class DrawerItemsFactory
 {
-	public DrawerItemsFactory(BoundingEditor boundingEditor)
-	{
-		_boundingEditor = boundingEditor;
-	}
-
 	public BoundedItemViewModel CreateItemViewModel(AssetItem item) => item switch
 	{
-		DomainDetectorItem detectorItem => new DetectorItemViewModel(detectorItem, _boundingEditor),
-		DomainPoser2DItem poser2DItem => new Poser2DItemViewModel(poser2DItem, _boundingEditor),
-		DomainPoser3DItem poser3DItem => new Poser3DItemViewModel(poser3DItem, _boundingEditor),
+		DetectorItem detectorItem => new DetectorItemViewModel(detectorItem),
+		Poser2DItem poser2DItem => new Poser2DItemViewModel(poser2DItem),
+		Poser3DItem poser3DItem => new Poser3DItemViewModel(poser3DItem),
 		_ => throw new ArgumentOutOfRangeException(nameof(item), item, null)
 	};
-
-	private readonly BoundingEditor _boundingEditor;
 }

@@ -1,16 +1,16 @@
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application.Annotation;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerDataContext
 {
-	public DomainTag? Tag
+	public Tag? Tag
 	{
 		get;
 		set
@@ -20,7 +20,7 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		}
 	}
 
-	public DomainImage? Image
+	public Image? Image
 	{
 		get;
 		set
@@ -40,12 +40,6 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		}
 	}
 
-	public BoundingDrawerViewModel(BoundingAnnotator annotator)
-	{
-		_annotator = annotator;
-	}
-
-	private readonly BoundingAnnotator _annotator;
 	private bool CanCreateItem => Tag != null && Image != null && AssetsLibrary != null;
 
 	[RelayCommand(CanExecute = nameof(CanCreateItem))]
@@ -54,7 +48,9 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		Guard.IsNotNull(Tag);
 		Guard.IsNotNull(Image);
 		Guard.IsNotNull(AssetsLibrary);
-		_annotator.CreateItem(AssetsLibrary, Image, Tag, bounding);
+		var asset = AssetsLibrary.GetOrMakeAsset(Image);
+		var item = asset.MakeItem(Tag);
+		item.Bounding = bounding;
 	}
 
 	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;

@@ -1,6 +1,6 @@
 namespace SightKeeper.Data.ImageSets;
 
-internal interface ImageSetWrapper
+public interface ImageSetWrapper
 {
 	StorableImageSet Wrap(StorableImageSet set);
 }

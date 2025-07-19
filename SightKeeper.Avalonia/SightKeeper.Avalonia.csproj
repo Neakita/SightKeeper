@@ -9,7 +9,6 @@
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <Nullable>enable</Nullable>
-        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <AssemblyTitle>Sight Keeper</AssemblyTitle>
@@ -21,6 +20,7 @@
     <!--Previewer doesn't support AOT https://github.com/AvaloniaUI/Avalonia/issues/13760#issuecomment-1829411762-->
     <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
         <PublishAot>true</PublishAot>
+        <DebugType>None</DebugType>
     </PropertyGroup>
 
     <ItemGroup>

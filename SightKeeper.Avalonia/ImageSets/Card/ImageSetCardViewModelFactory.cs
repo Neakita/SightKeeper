@@ -21,7 +21,7 @@ internal sealed class ImageSetCardViewModelFactory
 		_capturer = capturer;
 	}
 
-	public ImageSetCardViewModel CreateImageSetCardViewModel(DomainImageSet imageSet)
+	public ImageSetCardViewModel CreateImageSetCardViewModel(ImageSet imageSet)
 	{
 		var editCommand = _editImageSetCommand.WithParameter(imageSet);
 		var deleteCommand = _deleteImageSetCommand.WithParameter(imageSet);

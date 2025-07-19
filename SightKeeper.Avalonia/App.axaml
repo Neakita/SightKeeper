@@ -1,6 +1,5 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:root="clr-namespace:SightKeeper.Avalonia"
              x:Class="SightKeeper.Avalonia.App"
              RequestedThemeVariant="Dark">
 
@@ -10,9 +9,5 @@
         <StyleInclude Source="avares://Sightful.Avalonia.Controls/MultiSlider.axaml"/>
         <StyleInclude Source="avares://Sightful.Avalonia.Controls.ZoomViewer/ZoomViewer.axaml"/>
     </Application.Styles>
-
-    <Application.Resources>
-        <root:Composition x:Key="Composition"/>
-    </Application.Resources>
 
 </Application>

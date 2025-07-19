@@ -6,8 +6,9 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.HighPerformance;
-using SightKeeper.Application.ScreenCapturing;
+using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain;
+using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 using Yolo.InputProcessing;
 
@@ -15,14 +16,13 @@ namespace SightKeeper.Avalonia.Annotation.Images;
 
 public sealed class ImageLoader
 {
-	public ImageLoader(WriteableBitmapPool bitmapPool, ReadImageDataAccess imageDataAccess)
+	public ImageLoader(WriteableBitmapPool bitmapPool)
 	{
 		_bitmapPool = bitmapPool;
-		_imageDataAccess = imageDataAccess;
 	}
 
 	public async Task<PooledWriteableBitmap?> LoadImageAsync(
-		DomainImage image,
+		Image image,
 		int? maximumLargestDimension,
 		CancellationToken cancellationToken)
 	{
@@ -38,10 +38,9 @@ public sealed class ImageLoader
 	}
 
 	private readonly WriteableBitmapPool _bitmapPool;
-	private readonly ReadImageDataAccess _imageDataAccess;
 
 	private async Task<bool> ReadImageDataToBitmapAsync(
-		DomainImage image,
+		Image image,
 		WriteableBitmap bitmap,
 		CancellationToken cancellationToken)
 	{
@@ -61,12 +60,14 @@ public sealed class ImageLoader
 	}
 
 	private async Task<bool> ReadImageDataAsync(
-		DomainImage image,
+		Image image,
 		Memory<Rgba32> target,
 		CancellationToken cancellationToken)
 	{
 		Memory<byte> targetAsBytes = target.Cast<Rgba32, byte>();
-		await using var stream = _imageDataAccess.LoadImage(image);
+		await using var stream = image.OpenReadStream();
+		if (stream == null)
+			return false;
 		int totalBytesRead = 0;
 		int lastBytesRead;
 		do
@@ -79,7 +80,6 @@ public sealed class ImageLoader
 			lastBytesRead = await stream.ReadAsync(targetAsBytes[totalBytesRead..], CancellationToken.None);
 			totalBytesRead += lastBytesRead;
 		} while (lastBytesRead > 0);
-
 		return true;
 	}
 

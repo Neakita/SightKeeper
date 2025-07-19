@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Images;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Classifier;
 
 public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierToolingDataContext, IDisposable
 {
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
-	public partial DomainClassifierDataSet? DataSet { get; set; }
+	public partial ClassifierDataSet? DataSet { get; set; }
 
 	public IEnumerable<TagDataContext> Tags
 	{
@@ -32,20 +33,22 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 			Guard.IsNotNull(AssetsLibrary);
 			Guard.IsNotNull(Image);
 			if (value == null)
-				_annotator.DeleteAsset(AssetsLibrary, Image);
-			else
-				_annotator.SetTag(AssetsLibrary, Image, ((TagViewModel)value).Tag);
+			{
+				AssetsLibrary.DeleteAsset(Image);
+				return;
+			}
+			var asset = AssetsLibrary.GetOrMakeAsset(Image);
+			asset.Tag = ((TagViewModel)value).Tag;
 		}
 	}
 
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag), nameof(IsEnabled))]
-	public partial DomainImage? Image { get; set; }
+	public partial Image? Image { get; set; }
 
 	public bool IsEnabled => Image != null;
 
-	public ClassifierToolingViewModel(ClassifierAnnotator annotator, ImagesViewModel imagesViewModel)
+	public ClassifierToolingViewModel(ImagesViewModel imagesViewModel)
 	{
-		_annotator = annotator;
 		_disposable = imagesViewModel.SelectedImageChanged.Subscribe(_ => Image = imagesViewModel.SelectedImage);
 		Image = imagesViewModel.SelectedImage;
 	}
@@ -55,10 +58,9 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 		_disposable.Dispose();
 	}
 
-	private readonly ClassifierAnnotator _annotator;
-	private DomainAssetsLibrary<DomainClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
+	private AssetsOwner<ClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
 	private readonly IDisposable _disposable;
 
-	private DomainClassifierAsset? Asset =>
+	private ClassifierAsset? Asset =>
 		Image == null ? null : AssetsLibrary?.GetOrMakeAsset(Image);
 }

@@ -5,5 +5,5 @@ namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public interface ObservableTagSelection
 {
-	IObservable<DomainTag?> SelectedTagChanged { get; }
+	IObservable<Tag?> SelectedTagChanged { get; }
 }

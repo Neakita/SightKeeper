@@ -1,6 +1,6 @@
 namespace SightKeeper.Data.DataSets.Classifier;
 
-internal sealed class ClassifierDataSetWrapper(ChangeListener changeListener, Lock editingLock)
+public sealed class ClassifierDataSetWrapper(ChangeListener changeListener, Lock editingLock)
 {
 	public StorableClassifierDataSet Wrap(StorableClassifierDataSet set)
 	{

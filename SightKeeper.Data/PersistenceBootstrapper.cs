@@ -1,15 +1,8 @@
-using MemoryPack;
-using SightKeeper.Data.DataSets;
-using SightKeeper.Data.DataSets.Classifier;
-using SightKeeper.Data.ImageSets;
-using SightKeeper.Data.ImageSets.Images;
-using SightKeeper.Data.Services;
-
 namespace SightKeeper.Data;
 
 public static class PersistenceBootstrapper
 {
-	public static PersistenceServices Setup()
+	/*public static PersistenceServices Setup()
 	{
 		AppDataAccess appDataAccess = new();
 		appDataAccess.Load();
@@ -56,5 +49,5 @@ public static class PersistenceBootstrapper
 		});
 
 		return services;
-	}
+	}*/
 }

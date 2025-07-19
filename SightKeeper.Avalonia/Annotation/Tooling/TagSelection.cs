@@ -4,5 +4,5 @@ namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public interface TagSelection
 {
-	DomainTag? SelectedTag { get; }
+	Tag? SelectedTag { get; }
 }

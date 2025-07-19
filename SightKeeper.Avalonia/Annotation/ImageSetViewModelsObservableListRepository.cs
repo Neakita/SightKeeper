@@ -13,7 +13,7 @@ public sealed class ImageSetViewModelsObservableListRepository : ObservableListR
 {
 	public ReadOnlyObservableList<ImageSetViewModel> Items { get; }
 
-	public ImageSetViewModelsObservableListRepository(ObservableListRepository<DomainImageSet> listRepository, ImageSetEditor editor)
+	public ImageSetViewModelsObservableListRepository(ObservableListRepository<ImageSet> listRepository, ImageSetEditor editor)
 	{
 		Items = listRepository.Items
 			.Transform(library => new ImageSetViewModel(library))
@@ -23,7 +23,7 @@ public sealed class ImageSetViewModelsObservableListRepository : ObservableListR
 		editor.Edited.Subscribe(OnImageSetEdited);
 	}
 
-	private void OnImageSetEdited(DomainImageSet set)
+	private void OnImageSetEdited(ImageSet set)
 	{
 		var viewModel = _viewModelsLookup[set];
 		viewModel.NotifyPropertiesChanged();
@@ -34,5 +34,5 @@ public sealed class ImageSetViewModelsObservableListRepository : ObservableListR
 		Items.Dispose();
 	}
 
-	private readonly IReadOnlyDictionary<DomainImageSet, ImageSetViewModel> _viewModelsLookup;
+	private readonly IReadOnlyDictionary<ImageSet, ImageSetViewModel> _viewModelsLookup;
 }

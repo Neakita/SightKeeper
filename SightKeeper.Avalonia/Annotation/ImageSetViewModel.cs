@@ -4,10 +4,10 @@ namespace SightKeeper.Avalonia.Annotation;
 
 public sealed class ImageSetViewModel : ViewModel, ImageSetDataContext
 {
-	public DomainImageSet Value { get; }
+	public ImageSet Value { get; }
 	public string Name => Value.Name;
 
-	public ImageSetViewModel(DomainImageSet value)
+	public ImageSetViewModel(ImageSet value)
 	{
 		Value = value;
 	}

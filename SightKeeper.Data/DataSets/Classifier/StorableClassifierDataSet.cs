@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-internal interface StorableClassifierDataSet : ClassifierDataSet
+public interface StorableClassifierDataSet : ClassifierDataSet
 {
 	new AssetsOwner<StorableClassifierAsset> AssetsLibrary { get; }
 

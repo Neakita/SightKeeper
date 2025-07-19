@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Images;
 
@@ -9,7 +10,7 @@ internal sealed class AnnotationImageViewModel : AnnotationImageDataContext
 {
 	public DateTimeOffset CreationTimestamp => _image.CreationTimestamp;
 
-	public AnnotationImageViewModel(ImageLoader imageLoader, DomainImage image)
+	public AnnotationImageViewModel(ImageLoader imageLoader, Image image)
 	{
 		_imageLoader = imageLoader;
 		_image = image;
@@ -21,5 +22,5 @@ internal sealed class AnnotationImageViewModel : AnnotationImageDataContext
 	}
 
 	private readonly ImageLoader _imageLoader;
-	private readonly DomainImage _image;
+	private readonly Image _image;
 }
