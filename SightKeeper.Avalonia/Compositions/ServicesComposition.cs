@@ -1,13 +1,11 @@
-﻿#if OS_LINUX
-using SightKeeper.Application.Linux.X11;
-#endif
-using System.Linq;
+﻿using System.Linq;
 using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using HotKeys;
 using HotKeys.SharpHook;
 using Pure.DI;
 using Serilog;
+using Serilog.Core;
 using SharpHook.Reactive;
 using SightKeeper.Application;
 using SightKeeper.Application.ImageSets;
@@ -18,6 +16,8 @@ using SightKeeper.Application.ScreenCapturing.Saving;
 using SixLabors.ImageSharp.PixelFormats;
 #if OS_WINDOWS
 using SightKeeper.Application.Windows;
+#elif OS_LINUX
+using SightKeeper.Application.Linux.X11;
 #endif
 
 namespace SightKeeper.Avalonia.Compositions;
@@ -101,7 +101,12 @@ public sealed class ServicesComposition
 		{
 			var consumer = context.ConsumerTypes.Single();
 			Guard.IsNotNull(consumer);
-			var logger = Log.ForContext(consumer);
+			var logger = _logger.ForContext(consumer);
 			return logger;
 		});
+
+	private readonly Logger _logger =
+		new LoggerConfiguration()
+			.WriteTo.Debug()
+			.CreateLogger();
 }
