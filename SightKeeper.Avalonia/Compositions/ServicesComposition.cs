@@ -1,4 +1,9 @@
-﻿using System.Linq;
+﻿#if OS_WINDOWS
+using SightKeeper.Application.Windows;
+#elif OS_LINUX
+using SightKeeper.Application.Linux.X11;
+#endif
+using System.Linq;
 using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using HotKeys;
@@ -14,11 +19,6 @@ using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.Misc;
 using SixLabors.ImageSharp.PixelFormats;
-#if OS_WINDOWS
-using SightKeeper.Application.Windows;
-#elif OS_LINUX
-using SightKeeper.Application.Linux.X11;
-#endif
 
 namespace SightKeeper.Avalonia.Compositions;
 
@@ -83,7 +83,7 @@ public sealed class ServicesComposition
 		.Bind<IReactiveGlobalHook>()
 		.To(_ =>
 		{
-			var hook = new SimpleReactiveGlobalHook();
+			var hook = new SimpleReactiveGlobalHook(true);
 			hook.RunAsync();
 			return hook;
 		})
