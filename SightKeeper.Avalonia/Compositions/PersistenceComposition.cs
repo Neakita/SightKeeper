@@ -20,11 +20,13 @@ public sealed class PersistenceComposition
 		.Bind<WriteRepository<ImageSet>>()
 		.Bind<ReadRepository<ImageSet>>()
 		.Bind<ObservableRepository<ImageSet>>()
+		.As(Lifetime.Singleton)
 		.To<AppDataImageSetsRepository>()
 
 		.Bind<WriteRepository<DataSet>>()
 		.Bind<ReadRepository<DataSet>>()
 		.Bind<ObservableRepository<DataSet>>()
+		.As(Lifetime.Singleton)
 		.To<AppDataDataSetsRepository>()
 
 		.Bind<ImageWrapper>()
