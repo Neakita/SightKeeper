@@ -5,7 +5,6 @@ using HotKeys;
 using HotKeys.SharpHook;
 using Pure.DI;
 using Serilog;
-using Serilog.Core;
 using SharpHook.Reactive;
 using SightKeeper.Application;
 using SightKeeper.Application.ImageSets;
@@ -102,12 +101,7 @@ public sealed class ServicesComposition
 		{
 			var consumer = context.ConsumerTypes.Single();
 			Guard.IsNotNull(consumer);
-			var logger = _logger.ForContext(consumer);
+			var logger = LoggerBootstrapper.Logger.ForContext(consumer);
 			return logger;
 		});
-
-	private readonly Logger _logger =
-		new LoggerConfiguration()
-			.WriteTo.Debug()
-			.CreateLogger();
 }
