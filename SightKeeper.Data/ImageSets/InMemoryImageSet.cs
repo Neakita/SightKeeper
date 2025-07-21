@@ -4,7 +4,7 @@ using SightKeeper.Domain;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class InMemoryImageSet : StorableImageSet
+public sealed class InMemoryImageSet : StorableImageSet
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;

@@ -1,6 +1,6 @@
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock editingLock) : ImageSetWrapper
+public sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock editingLock) : ImageSetWrapper
 {
 	public StorableImageSet Wrap(StorableImageSet set)
 	{

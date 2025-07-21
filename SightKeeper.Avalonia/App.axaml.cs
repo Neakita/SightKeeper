@@ -1,5 +1,6 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using SightKeeper.Avalonia.Compositions;
 
 namespace SightKeeper.Avalonia;
 

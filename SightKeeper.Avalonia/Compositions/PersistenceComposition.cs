@@ -2,14 +2,16 @@
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.ImageSets.Creating;
+using SightKeeper.Data;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.ImageSets;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Compositions;
 
 public sealed class PersistenceComposition
 {
@@ -25,9 +27,26 @@ public sealed class PersistenceComposition
 		.Bind<ObservableRepository<DataSet>>()
 		.To<AppDataDataSetsRepository>()
 
+		.Bind<ImageWrapper>()
+		.To<StorableImageWrapper>()
+
+		.Bind<ImageSetWrapper>()
+		.To<StorableImageSetWrapper>()
+
 		.Bind<ImageSetFactory<ImageSet>>()
-		.To<WrappedImageSetFactory>()
+		.To<WrappedImageSetFactory>(context =>
+		{
+			context.Inject(out InMemoryImageSetFactory inMemoryImageSetFactory);
+			context.Inject(out ImageSetWrapper wrapper);
+			return new WrappedImageSetFactory(inMemoryImageSetFactory, wrapper);
+		})
 
 		.Bind<DataSetFactory<ClassifierDataSet>>()
-		.To<WrappingClassifierDataSetFactory>();
+		.To<WrappingClassifierDataSetFactory>()
+
+		.Bind<ChangeListener>()
+		.To<PeriodicDataSaver>()
+
+		.Bind<DataSaver>()
+		.To<AppDataAccess>();
 }

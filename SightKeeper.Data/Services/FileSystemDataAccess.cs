@@ -2,7 +2,7 @@ using FlakeId;
 
 namespace SightKeeper.Data.Services;
 
-internal class FileSystemDataAccess
+public class FileSystemDataAccess
 {
 	public string DirectoryPath { get; set; } = "Data";
 	public string FileExtension { get; set; } = ".bin";

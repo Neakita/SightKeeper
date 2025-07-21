@@ -1,4 +1,5 @@
 using Serilog;
+using SightKeeper.Avalonia.Compositions;
 
 namespace SightKeeper.Avalonia;
 

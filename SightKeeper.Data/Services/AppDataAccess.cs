@@ -3,7 +3,7 @@ using MemoryPack;
 
 namespace SightKeeper.Data.Services;
 
-internal sealed class AppDataAccess : DataSaver
+public sealed class AppDataAccess : DataSaver
 {
 	public string FilePath { get; set; } = Path.GetFullPath("App.data");
 	internal AppData Data { get; set; } = new();

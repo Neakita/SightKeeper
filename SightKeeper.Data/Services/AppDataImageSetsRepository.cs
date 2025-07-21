@@ -62,7 +62,7 @@ public sealed class AppDataImageSetsRepository :
 		_removed.Dispose();
 	}
 
-	internal AppDataImageSetsRepository(Lock appDataLock, AppDataAccess appDataAccess, ChangeListener changeListener)
+	public AppDataImageSetsRepository(Lock appDataLock, AppDataAccess appDataAccess, ChangeListener changeListener)
 	{
 		_appDataLock = appDataLock;
 		_appDataAccess = appDataAccess;
