@@ -14,7 +14,7 @@ public sealed class CreateImageSetCommand(
 	ImageSetCreator imageSetCreator)
 	: AsyncCommand
 {
-	protected override async Task Execute()
+	protected override async Task ExecuteAsync()
 	{
 		using ImageSetCreationDialogViewModel creationDialog = new(validator);
 		if (await dialogManager.ShowDialogAsync(creationDialog))
