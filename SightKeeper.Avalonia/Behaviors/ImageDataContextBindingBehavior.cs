@@ -6,6 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Avalonia.Misc;
 
 namespace SightKeeper.Avalonia.Behaviors;
 

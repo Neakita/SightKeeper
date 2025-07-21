@@ -7,6 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Avalonia.Extensions;
+using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Avalonia;
+using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain;
 
 namespace SightKeeper.Avalonia.Extensions;

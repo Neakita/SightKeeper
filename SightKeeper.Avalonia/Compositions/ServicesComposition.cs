@@ -13,6 +13,7 @@ using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.ScreenCapturing.Saving;
+using SightKeeper.Avalonia.Misc;
 using SixLabors.ImageSharp.PixelFormats;
 #if OS_WINDOWS
 using SightKeeper.Application.Windows;

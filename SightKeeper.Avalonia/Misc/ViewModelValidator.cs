@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using FluentValidation;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Misc;
 
 internal sealed class ViewModelValidator<TValidatable> : INotifyDataErrorInfo, IDisposable
 {

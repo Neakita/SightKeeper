@@ -3,7 +3,7 @@ using System.Numerics;
 using Avalonia;
 using SightKeeper.Domain;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Extensions;
 
 internal static class Vector2Extensions
 {

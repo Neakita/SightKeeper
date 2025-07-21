@@ -5,7 +5,7 @@ using Avalonia;
 using Avalonia.Platform;
 using Serilog;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Misc;
 
 public sealed class WriteableBitmapPool : IDisposable
 {

@@ -9,6 +9,7 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 

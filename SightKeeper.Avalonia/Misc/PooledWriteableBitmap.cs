@@ -3,7 +3,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Diagnostics;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Misc;
 
 public sealed class PooledWriteableBitmap : WriteableBitmap
 {

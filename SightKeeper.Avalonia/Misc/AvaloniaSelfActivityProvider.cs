@@ -2,7 +2,7 @@ using System.Linq;
 using Avalonia.Controls.ApplicationLifetimes;
 using SightKeeper.Application;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Misc;
 
 internal sealed class AvaloniaSelfActivityProvider : SelfActivityProvider
 {

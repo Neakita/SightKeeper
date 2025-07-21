@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Misc;
 
 internal sealed class ParametrizedCommandAdapter : ICommand
 {
