@@ -1,8 +1,10 @@
+using System;
+using System.ComponentModel;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-public sealed class ImageSetViewModel : ViewModel, ImageSetDataContext
+public sealed class ImageSetViewModel : ViewModel, ImageSetDataContext, IDisposable
 {
 	public ImageSet Value { get; }
 	public string Name => Value.Name;
@@ -10,10 +12,19 @@ public sealed class ImageSetViewModel : ViewModel, ImageSetDataContext
 	public ImageSetViewModel(ImageSet value)
 	{
 		Value = value;
+		if (value is INotifyPropertyChanged notifyingValue)
+			notifyingValue.PropertyChanged += OnSetPropertyChanged;
 	}
 
-	internal void NotifyPropertiesChanged()
+	public void Dispose()
 	{
-		OnPropertyChanged(nameof(Name));
+		if (Value is INotifyPropertyChanged notifyingValue)
+			notifyingValue.PropertyChanged -= OnSetPropertyChanged;
+	}
+
+	private void OnSetPropertyChanged(object? sender, PropertyChangedEventArgs args)
+	{
+		if (args.PropertyName == nameof(ImageSet.Name))
+			OnPropertyChanged(args);
 	}
 }
