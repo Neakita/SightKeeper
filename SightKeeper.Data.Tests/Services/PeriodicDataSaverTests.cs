@@ -9,12 +9,8 @@ public sealed class PeriodicDataSaverTests
 	public void ShouldCallSaver()
 	{
 		var saver = Substitute.For<DataSaver>();
-		PeriodicDataSaver periodicSaver = new()
-		{
-			DataSaver = saver,
-			Period = TimeSpan.FromMilliseconds(1)
-		};
-		periodicSaver.Start();
+		using PeriodicDataSaver periodicSaver = new(saver);
+		periodicSaver.Period = TimeSpan.FromMilliseconds(1);
 		periodicSaver.SetDataChanged();
 		Thread.Sleep(10);
 		saver.Received().Save();
@@ -24,35 +20,9 @@ public sealed class PeriodicDataSaverTests
 	public void ShouldNotCallSaverWhenDataNotChanged()
 	{
 		var saver = Substitute.For<DataSaver>();
-		PeriodicDataSaver periodicSaver = new()
-		{
-			DataSaver = saver,
-			Period = TimeSpan.FromMilliseconds(1)
-		};
-		periodicSaver.Start();
+		using PeriodicDataSaver periodicSaver = new(saver);
+		periodicSaver.Period = TimeSpan.FromMilliseconds(1);
 		Thread.Sleep(10);
 		saver.DidNotReceive().Save();
-	}
-
-	[Fact]
-	public void ShouldNotStartTwice()
-	{
-		PeriodicDataSaver periodicSaver = new()
-		{
-			DataSaver = Substitute.For<DataSaver>()
-		};
-		periodicSaver.Start();
-		Assert.Throws<ArgumentException>(() => periodicSaver.Start());
-	}
-
-	[Fact]
-	public void ShouldNotStartAfterDisposing()
-	{
-		PeriodicDataSaver periodicSaver = new()
-		{
-			DataSaver = Substitute.For<DataSaver>()
-		};
-		periodicSaver.Dispose();
-		Assert.Throws<ObjectDisposedException>(() => periodicSaver.Start());
 	}
 }

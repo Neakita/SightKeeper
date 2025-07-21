@@ -9,7 +9,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class ImageSetFormatter(
+public sealed class ImageSetFormatter(
 	ImageSetWrapper setWrapper,
 	ImageSetFactory<InMemoryImageSet> imageSetFactory,
 	ImageLookupperPopulator imageLookupperPopulator)

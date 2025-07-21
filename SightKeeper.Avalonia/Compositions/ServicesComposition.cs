@@ -101,7 +101,6 @@ public sealed class ServicesComposition
 		{
 			var consumer = context.ConsumerTypes.Single();
 			Guard.IsNotNull(consumer);
-			var logger = LoggerBootstrapper.Logger.ForContext(consumer);
-			return logger;
+			return Log.ForContext(consumer);
 		});
 }

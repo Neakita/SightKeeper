@@ -3,7 +3,7 @@ using SightKeeper.Data.ImageSets.Images;
 
 namespace SightKeeper.Data;
 
-internal class PopulatableImageLookupper : ImageLookupperPopulator, ImageLookupper
+public class PopulatableImageLookupper : ImageLookupperPopulator, ImageLookupper
 {
 	public void AddImages(IEnumerable<StorableImage> images)
 	{

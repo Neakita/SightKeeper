@@ -47,8 +47,22 @@ public sealed class PersistenceComposition
 		.To<WrappingClassifierDataSetFactory>()
 
 		.Bind<ChangeListener>()
+		.As(Lifetime.Singleton)
 		.To<PeriodicDataSaver>()
 
 		.Bind<DataSaver>()
-		.To<AppDataAccess>();
+		.Bind<AppDataAccess>()
+		.As(Lifetime.Singleton)
+		.To<AppDataAccess>()
+
+		.Bind<ImageSetFactory<InMemoryImageSet>>()
+		.To<InMemoryImageSetFactory>()
+
+		.Bind<ImageLookupperPopulator>()
+		.As(Lifetime.Singleton)
+		.To<PopulatableImageLookupper>()
+
+		.Root<ImageSetFormatter>(nameof(ImageSetFormatter))
+	
+		.Root<AppDataAccess>(nameof(AppDataAccess));
 }
