@@ -3,7 +3,7 @@ using SightKeeper.Application.ScreenCapturing;
 
 namespace SightKeeper.Avalonia.ImageSets.Capturing;
 
-internal sealed class CapturingSettingsViewModel : ViewModel, CapturingSettingsDataContext
+public sealed class CapturingSettingsViewModel : ViewModel, CapturingSettingsDataContext
 {
 	public ushort MaximumWidth => _screenBoundsProvider.MainScreenSize.X;
 	public ushort MaximumHeight => _screenBoundsProvider.MainScreenSize.Y;

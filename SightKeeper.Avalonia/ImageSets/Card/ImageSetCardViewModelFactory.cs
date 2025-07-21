@@ -7,7 +7,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ImageSets.Card;
 
-internal sealed class ImageSetCardViewModelFactory
+public sealed class ImageSetCardViewModelFactory : ImageSetCardDataContextFactory
 {
 	public ImageSetCardViewModelFactory(
 		EditImageSetCommand editImageSetCommand,
@@ -21,7 +21,7 @@ internal sealed class ImageSetCardViewModelFactory
 		_capturer = capturer;
 	}
 
-	public ImageSetCardViewModel CreateImageSetCardViewModel(ImageSet imageSet)
+	public ImageSetCardDataContext CreateImageSetCardDataContext(ImageSet imageSet)
 	{
 		var editCommand = _editImageSetCommand.WithParameter(imageSet);
 		var deleteCommand = _deleteImageSetCommand.WithParameter(imageSet);

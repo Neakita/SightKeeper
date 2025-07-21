@@ -9,7 +9,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ImageSets.Card;
 
-internal sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDataContext, IDisposable
+public sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDataContext, IDisposable
 {
 	public ImageSet ImageSet { get; }
 	public string Name => ImageSet.Name;

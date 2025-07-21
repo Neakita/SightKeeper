@@ -4,37 +4,38 @@ using System.Windows.Input;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.ImageSets.Capturing;
 using SightKeeper.Avalonia.ImageSets.Card;
-using SightKeeper.Avalonia.ImageSets.Commands;
 using SightKeeper.Domain.Images;
-using Vibrance;
 using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.ImageSets;
 
-internal sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDisposable
+public sealed class ImageSetsViewModel : ViewModel, ImageSetsDataContext, IDisposable
 {
-	public ReadOnlyObservableList<ImageSetCardViewModel> ImageSets { get; }
-	IReadOnlyCollection<ImageSetCardDataContext> ImageSetsDataContext.ImageSets => ImageSets;
+	public IReadOnlyCollection<ImageSetCardDataContext> ImageSets { get; }
 	public ICommand CreateImageSetCommand { get; }
 
 	public CapturingSettingsDataContext CapturingSettings { get; }
 
 	public ImageSetsViewModel(
-		CreateImageSetCommand createImageSetCommand,
+		ICommand createImageSetCommand,
 		ObservableListRepository<ImageSet> imageSetsListRepository,
-		ImageSetCardViewModelFactory imageSetCardViewModelFactory,
-		CapturingSettingsViewModel capturingSettings)
+		ImageSetCardDataContextFactory imageSetCardDataContextFactory,
+		CapturingSettingsDataContext capturingSettings)
 	{
 		CreateImageSetCommand = createImageSetCommand;
-		ImageSets = imageSetsListRepository.Items
-			.Transform(imageSetCardViewModelFactory.CreateImageSetCardViewModel)
+		var imageSets = imageSetsListRepository.Items
+			.Transform(imageSetCardDataContextFactory.CreateImageSetCardDataContext)
 			.DisposeMany()
 			.ToObservableList();
+		_disposable = imageSets;
+		ImageSets = imageSets.ToReadOnlyNotifyingList();
 		CapturingSettings = capturingSettings;
 	}
 
 	public void Dispose()
 	{
-		ImageSets.Dispose();
+		_disposable.Dispose();
 	}
+
+	private readonly IDisposable _disposable;
 }
