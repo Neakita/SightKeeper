@@ -11,12 +11,12 @@ internal sealed class ImageSetCardViewModelFactory
 {
 	public ImageSetCardViewModelFactory(
 		EditImageSetCommand editImageSetCommand,
-		DeleteImageSetCommandFactory deleteImageSetCommandFactory,
+		DeleteImageSetCommand deleteImageSetCommand,
 		ImageLoader imageLoader,
 		ImageCapturer capturer)
 	{
 		_editImageSetCommand = editImageSetCommand;
-		_deleteImageSetCommand = deleteImageSetCommandFactory.CreateCommand();
+		_deleteImageSetCommand = deleteImageSetCommand;
 		_imageLoader = imageLoader;
 		_capturer = capturer;
 	}

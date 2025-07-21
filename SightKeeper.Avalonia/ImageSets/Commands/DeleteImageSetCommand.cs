@@ -1,45 +1,36 @@
-using System.Threading.Tasks;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
+﻿using System.Threading.Tasks;
 using Material.Icons;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
+using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ImageSets.Commands;
 
-internal sealed class DeleteImageSetCommandFactory
+public sealed class DeleteImageSetCommand(DialogManager dialogManager, WriteRepository<ImageSet> imageSetsRepository) : AsyncCommand<ImageSet>
 {
-	public required DialogManager DialogManager { get; init; }
-	public required WriteRepository<ImageSet> ImageSetRepository { get; init; }
-
-	public ICommand CreateCommand()
+	protected override async Task ExecuteAsync(ImageSet parameter)
 	{
-		return new AsyncRelayCommand<DomainImageSet>(DeleteImageSetAsync!);
-	}
-
-	private async Task DeleteImageSetAsync(DomainImageSet set)
-	{
-		if (!set.CanDelete())
+		if (!parameter.CanDelete())
 		{
 			var message =
-				$"The library '{set.Name}' cannot be deleted as some dataset references it as asset. " +
+				$"The library '{parameter.Name}' cannot be deleted as some dataset references it as asset. " +
 				$"Delete all associated assets to be able delete the library.";
 			MessageBoxButtonDefinition closeButton = new("Close", MaterialIconKind.Close, true);
 			MessageBoxDialogViewModel dialog = new("The library cannot be deleted", message, closeButton);
-			await DialogManager.ShowDialogAsync(dialog);
+			await dialogManager.ShowDialogAsync(dialog);
 			return;
 		}
 		MessageBoxButtonDefinition deleteButton = new("Delete", MaterialIconKind.Delete);
 		MessageBoxButtonDefinition cancelButton = new("Cancel", MaterialIconKind.Close, true);
 		MessageBoxDialogViewModel deletionConfirmationDialog = new(
 			"Image set deletion confirmation",
-			$"Are you sure you want to permanently delete the image set '{set.Name}'? You will not be able to recover it.",
+			$"Are you sure you want to permanently delete the image set '{parameter.Name}'? You will not be able to recover it.",
 			deleteButton, cancelButton,
 			new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel));
-		if (await DialogManager.ShowDialogAsync(deletionConfirmationDialog) == deleteButton)
-			ImageSetRepository.Remove(set);
+		if (await dialogManager.ShowDialogAsync(deletionConfirmationDialog) == deleteButton)
+			imageSetsRepository.Remove(parameter);
 	}
 }
