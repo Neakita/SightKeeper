@@ -10,12 +10,12 @@ namespace SightKeeper.Avalonia.ImageSets.Card;
 internal sealed class ImageSetCardViewModelFactory
 {
 	public ImageSetCardViewModelFactory(
-		EditImageSetCommandFactory editImageSetCommandFactory,
+		EditImageSetCommand editImageSetCommand,
 		DeleteImageSetCommandFactory deleteImageSetCommandFactory,
 		ImageLoader imageLoader,
 		ImageCapturer capturer)
 	{
-		_editImageSetCommand = editImageSetCommandFactory.CreateCommand();
+		_editImageSetCommand = editImageSetCommand;
 		_deleteImageSetCommand = deleteImageSetCommandFactory.CreateCommand();
 		_imageLoader = imageLoader;
 		_capturer = capturer;
