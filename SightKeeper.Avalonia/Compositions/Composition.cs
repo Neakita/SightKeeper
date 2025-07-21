@@ -7,6 +7,7 @@ public sealed partial class Composition
 	private void Setup() => DI.Setup(nameof(Composition))
 		.Hint(Hint.Resolve, "Off")
 		.Hint(Hint.ThreadSafe, "Off")
+		.Hint(Hint.ToString, "On")
 
 		.DependsOn(nameof(PersistenceComposition))
 		.DependsOn(nameof(ServicesComposition))

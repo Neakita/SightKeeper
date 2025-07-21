@@ -7,6 +7,7 @@ public static class LoggerBootstrapper
 {
 	public static Logger Logger { get; } =
 		new LoggerConfiguration()
+			.MinimumLevel.Verbose()
 			.WriteTo.Debug()
 			.CreateLogger();
 }
