@@ -10,7 +10,7 @@ internal static class AppBootstrapper
 	{
 		SetupLogger();
 		Composition composition = new();
-		LoggerBootstrapper.Logger.Verbose("Composition:\n{composition}", composition.ToString());
+		Log.Verbose("Composition:\n{composition}", composition.ToString());
 		SetupPersistence(composition);
 		return composition;
 	}
