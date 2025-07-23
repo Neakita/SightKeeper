@@ -12,13 +12,8 @@
              xmlns:dataSets="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
              xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ImageSets.Dialogs"
              x:DataType="local:DialogHost"
-             Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static converters:StaticConverters.ContentToOpacityConverter}}">
-	<Interaction.Behaviors>
-		<BehaviorCollection>
-			<behaviors:DisableHitTestWhenOpacityIsZeroBehavior/>
-            <behaviors:HideContentWhenOpacityIsZeroBehavior/>
-		</BehaviorCollection>
-	</Interaction.Behaviors>
+             Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static converters:StaticConverters.ContentToOpacityConverter}}"
+             IsHitTestVisible="{Binding DialogManager.CurrentDialog, Converter={x:Static ObjectConverters.IsNotNull}}">
 	<UserControl.Transitions>
 		<Transitions>
 			<DoubleTransition Property="Opacity" Duration="0:0:0.5">
