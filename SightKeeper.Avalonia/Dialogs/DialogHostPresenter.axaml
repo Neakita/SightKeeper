@@ -10,7 +10,6 @@
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              xmlns:messageBox="clr-namespace:SightKeeper.Avalonia.Dialogs.MessageBox"
              xmlns:dataSets="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
-             xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
              xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ImageSets.Dialogs"
              x:DataType="local:DialogHost"
              Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static converters:StaticConverters.ContentToOpacityConverter}}">
@@ -75,7 +74,7 @@
                                                 Content="{Binding}"
                                                 Classes="regular-padding">
                                     <ContentControl.DataTemplates>
-                                        <DataTemplate DataType="dialogs:ImageSetCreationDialogViewModel">
+                                        <DataTemplate DataType="dialogs:ImageSetDialogDataContext">
                                             <dialogs:ImageSetDialog/>
                                         </DataTemplate>
                                         <DataTemplate DataType="messageBox:MessageBoxDialogViewModel">
