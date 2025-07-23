@@ -3,6 +3,7 @@ using SightKeeper.Application.Windows;
 #elif OS_LINUX
 using SightKeeper.Application.Linux.X11;
 #endif
+using System;
 using System.Linq;
 using CommunityToolkit.Diagnostics;
 using FluentValidation;
@@ -52,32 +53,15 @@ public sealed class ServicesComposition
 		.To<X11ScreenCapturer>()
 #endif
 
-		.Bind<ImageSaver<Bgra32>>()
-		.To<ImmediateImageSaver<Bgra32>>()
-
 		.Bind<PixelConverter<Bgra32, Rgba32>>()
 		.To<Bgra32ToRgba32PixelConverter>()
-
-		.Bind<ImageDataConverterMiddleware<Bgra32, Rgba32>>()
+		
+		.Bind<ImageSaverFactory<Bgra32>>()
 		.To(context =>
 		{
-			context.Inject(out PixelConverter<Bgra32, Rgba32> converter);
-			context.Inject(out ImageDataWriter<Rgba32> dataWriter);
-			return new ImageDataConverterMiddleware<Bgra32, Rgba32>
-			{
-				Converter = converter,
-				Next = dataWriter
-			};
-		})
-
-		.Bind<ImageDataSaver<Bgra32>>()
-		.To(context =>
-		{
-			context.Inject(out ImageDataConverterMiddleware<Bgra32, Rgba32> converter);
-			return new BufferedImageDataSaverMiddleware<Bgra32>
-			{
-				Next = converter
-			};
+			context.Inject(out PixelConverter<Bgra32, Rgba32> pixelConverter);
+			context.Inject(out ImageDataWriter<Rgba32> imageDataWriter);
+			return new BufferedConvertingImageSaverFactory<Bgra32, Rgba32>(Array.MaxLength, 20, pixelConverter, imageDataWriter);
 		})
 
 		.Bind<IReactiveGlobalHook>()

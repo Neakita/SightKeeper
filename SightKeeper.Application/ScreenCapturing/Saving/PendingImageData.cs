@@ -9,30 +9,24 @@ internal sealed class PendingImageData<TPixel> : IDisposable
 {
 	public Image Image { get; }
 
-	public ReadOnlySpan2D<TPixel> Data
-	{
-		get
-		{
-			var memory = _memoryOwner.Memory;
-			var memory2D = memory.AsMemory2D(Image.Size.Y, Image.Size.X);
-			return memory2D.Span;
-		}
-	}
+	public ReadOnlySpan2D<TPixel> Data => _rentedArray.AsSpan2D(Image.Size.Y, Image.Size.X);
 
-	public PendingImageData(Image image, ReadOnlySpan2D<TPixel> data)
+	public PendingImageData(Image image, ArrayPool<TPixel> arrayPool, ReadOnlySpan2D<TPixel> data)
 	{
 		Guard.IsEqualTo(image.Size.X, data.Width);
 		Guard.IsEqualTo(image.Size.Y, data.Height);
 		Image = image;
-		_memoryOwner = MemoryPool<TPixel>.Shared.Rent(ImageDataLength);
-		data.CopyTo(_memoryOwner.Memory.Span);
+		_arrayPool = arrayPool;
+		_rentedArray = arrayPool.Rent(ImageDataLength);
+		data.CopyTo(_rentedArray);
 	}
 
 	public void Dispose()
 	{
-		_memoryOwner.Dispose();
+		_arrayPool.Return(_rentedArray);
 	}
 
-	private readonly IMemoryOwner<TPixel> _memoryOwner;
+	private readonly ArrayPool<TPixel> _arrayPool;
+	private readonly TPixel[] _rentedArray;
 	private int ImageDataLength => Image.Size.X * Image.Size.Y;
 }

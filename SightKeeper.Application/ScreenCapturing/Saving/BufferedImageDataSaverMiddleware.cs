@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
@@ -10,6 +11,7 @@ public sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<TP
 	where TPixel : unmanaged
 {
 	public required ImageDataSaver<TPixel> Next { get; init; }
+	public required ArrayPool<TPixel> ArrayPool { get; init; }
 
 	public ushort MaximumAllowedPendingImages
 	{
@@ -30,7 +32,7 @@ public sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<TP
 	public void SaveData(Image image, ReadOnlySpan2D<TPixel> data)
 	{
 		Guard.IsFalse(IsLimitReached);
-		var pendingData = new PendingImageData<TPixel>(image, data);
+		var pendingData = new PendingImageData<TPixel>(image, ArrayPool, data);
 		_pendingImages.Enqueue(pendingData);
 		OnPendingImagesCountChanged();
 		if (Processing.IsCompleted)
