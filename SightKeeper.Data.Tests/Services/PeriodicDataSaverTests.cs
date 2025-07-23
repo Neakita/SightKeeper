@@ -1,4 +1,5 @@
 using NSubstitute;
+using Serilog;
 using SightKeeper.Data.Services;
 
 namespace SightKeeper.Data.Tests.Services;
@@ -9,7 +10,7 @@ public sealed class PeriodicDataSaverTests
 	public void ShouldCallSaver()
 	{
 		var saver = Substitute.For<DataSaver>();
-		using PeriodicDataSaver periodicSaver = new(saver);
+		using PeriodicDataSaver periodicSaver = new(saver, Substitute.For<ILogger>());
 		periodicSaver.Period = TimeSpan.FromMilliseconds(1);
 		periodicSaver.SetDataChanged();
 		Thread.Sleep(10);
@@ -20,7 +21,7 @@ public sealed class PeriodicDataSaverTests
 	public void ShouldNotCallSaverWhenDataNotChanged()
 	{
 		var saver = Substitute.For<DataSaver>();
-		using PeriodicDataSaver periodicSaver = new(saver);
+		using PeriodicDataSaver periodicSaver = new(saver, Substitute.For<ILogger>());
 		periodicSaver.Period = TimeSpan.FromMilliseconds(1);
 		Thread.Sleep(10);
 		saver.DidNotReceive().Save();
