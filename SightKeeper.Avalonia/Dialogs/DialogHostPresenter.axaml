@@ -37,7 +37,7 @@
                         <ControlTemplate>
                             <Border Background="{TemplateBinding Background}"
                                     HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                                    VerticalAlignment="{TemplateBinding HorizontalAlignment}"/>
+                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"/>
                         </ControlTemplate>
                     </Setter>
                 </ControlTheme>
