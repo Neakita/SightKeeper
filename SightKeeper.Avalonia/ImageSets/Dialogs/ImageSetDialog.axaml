@@ -7,8 +7,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.ImageSets.Dialogs.ImageSetDialog"
              x:DataType="dialogs:ImageSetDialogDataContext"
-             HorizontalAlignment="Center"
-             MinWidth="500">
+             MaxWidth="500"
+             VerticalAlignment="Center">
     <StackPanel Classes="regular-spacing">
         <StackPanel Classes="regular-spacing">
             <HeaderedContentControl Header="Name">
