@@ -57,8 +57,7 @@ public sealed class ImageSetFormatter(
 	private static void WriteImage<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, StorableImage image)
 		where TBufferWriter : IBufferWriter<byte>
 	{
-		var inMemoryImage = image.UnWrapDecorator<InMemoryImage>();
-		writer.WriteUnmanaged(inMemoryImage.Id, inMemoryImage.CreationTimestamp, inMemoryImage.Size);
+		writer.WriteUnmanaged(image.Id, image.CreationTimestamp, image.Size);
 	}
 
 	private InMemoryImageSet ReadGeneralMembers(ref MemoryPackReader reader)

@@ -1,4 +1,3 @@
-using FlakeId;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.ImageSets;
@@ -54,13 +53,16 @@ public sealed class ImageSavingTests
 	private static StorableImageSet CreateSetWithImage(Vector2<ushort> imageSize)
 	{
 		var set = Substitute.For<StorableImageSet>();
-		var image = new InMemoryImage(Id.Create(), default, imageSize);
+		var image = Substitute.For<StorableImage>();
+		image.Size.Returns(imageSize);
 		set.Images.Returns([image]);
 		return set;
 	}
 
 	private static StorableImage CreateImage(DateTimeOffset creationTimestamp)
 	{
-		return new InMemoryImage(Id.Create(), creationTimestamp, default);
+		var image = Substitute.For<StorableImage>();
+		image.CreationTimestamp.Returns(creationTimestamp);
+		return image;
 	}
 }
