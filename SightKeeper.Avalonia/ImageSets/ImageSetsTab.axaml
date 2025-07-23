@@ -12,8 +12,8 @@
     <Design.DataContext>
         <imageSets:DesignImageSetsDataContext/>
     </Design.DataContext>
-    <Grid ColumnDefinitions="* Auto">
-        <ScrollViewer Grid.Column="0" Classes="regular-padding">
+    <Grid ColumnDefinitions="* Auto" Classes="regular-margin medium-spacing">
+        <ScrollViewer Grid.Column="0">
             <StackPanel Classes="medium-spacing">
                 <Border Classes="outer regular-padding">
                     <Button Content="{icons:MaterialIconExt Plus}" Classes="square low-accent"
@@ -37,6 +37,6 @@
         </ScrollViewer>
         <capturing:CapturingSettings Grid.Column="1"
                                      DataContext="{Binding CapturingSettings}"
-                                     Classes="regular-padding"/>
+                                     VerticalAlignment="Top"/>
     </Grid>
 </UserControl>
