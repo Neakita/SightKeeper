@@ -3,7 +3,6 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Data.ImageSets;
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
@@ -75,12 +74,9 @@ public sealed class AppDataImageSetsRepository :
 	private readonly Subject<StorableImageSet> _added = new();
 	private readonly Subject<StorableImageSet> _removed = new();
 
-	private void DeleteImagesData(ImageSet set)
+	private void DeleteImagesData(StorableImageSet set)
 	{
 		foreach (var image in set.Images)
-		{
-			var streamableDataImage = image.UnWrapDecorator<StreamableDataImage>();
-			streamableDataImage.DeleteData();
-		}
+			image.DeleteData();
 	}
 }
