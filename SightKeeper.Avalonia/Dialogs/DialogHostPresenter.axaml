@@ -16,7 +16,7 @@
              IsHitTestVisible="{Binding DialogManager.CurrentDialog, Converter={x:Static ObjectConverters.IsNotNull}}">
 	<UserControl.Transitions>
 		<Transitions>
-			<DoubleTransition Property="Opacity" Duration="0:0:0.5">
+			<DoubleTransition Property="Opacity" Duration="0:0:0.25">
 				<DoubleTransition.Easing>
 					<QuadraticEaseInOut/>
 				</DoubleTransition.Easing>
@@ -87,7 +87,7 @@
 			</TransitioningContentControl.ContentTemplate>
 			<TransitioningContentControl.PageTransition>
                 <PageSlide Orientation="Vertical"
-                           Duration="0:0:0.5"
+                           Duration="0:0:0.25"
                            SlideInEasing="CircularEaseOut"
                            SlideOutEasing="CircularEaseIn"/>
 			</TransitioningContentControl.PageTransition>
