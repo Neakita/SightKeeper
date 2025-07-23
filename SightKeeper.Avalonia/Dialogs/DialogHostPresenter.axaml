@@ -25,7 +25,7 @@
 	</UserControl.Transitions>
 	<Panel>
         <Button Background="#7F000000"
-                Command="{Binding DialogManager.CurrentDialog.CloseCommand}">
+                Command="{Binding DialogManager.CloseCurrentDialogCommand}">
             <Button.Theme>
                 <ControlTheme TargetType="Button">
                     <Setter Property="Template">
