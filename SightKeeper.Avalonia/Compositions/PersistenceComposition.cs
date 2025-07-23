@@ -1,4 +1,5 @@
-﻿using Pure.DI;
+﻿using System.IO;
+using Pure.DI;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.ImageSets.Creating;
@@ -30,7 +31,14 @@ public sealed class PersistenceComposition
 		.To<AppDataDataSetsRepository>()
 
 		.Bind<ImageWrapper>()
-		.To<StorableImageWrapper>()
+		.To<StorableImageWrapper>(_ =>
+		{
+			CompressedFileSystemDataAccess dataAccess = new()
+			{
+				DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Images")
+			};
+			return new StorableImageWrapper(dataAccess);
+		})
 
 		.Bind<ImageSetWrapper>()
 		.To<StorableImageSetWrapper>()

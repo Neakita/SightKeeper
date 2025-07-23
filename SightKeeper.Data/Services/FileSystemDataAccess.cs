@@ -4,7 +4,9 @@ namespace SightKeeper.Data.Services;
 
 public class FileSystemDataAccess
 {
-	public string DirectoryPath { get; set; } = "Data";
+	public const string DefaultDirectoryPath = "Data";
+
+	public string DirectoryPath { get; set; } = DefaultDirectoryPath;
 	public string FileExtension { get; set; } = ".bin";
 
 	public virtual Stream OpenRead(Id id)
