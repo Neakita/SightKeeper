@@ -91,14 +91,10 @@
 				</DataTemplate>
 			</TransitioningContentControl.ContentTemplate>
 			<TransitioningContentControl.PageTransition>
-				<PageSlide Orientation="Vertical" Duration="0:0:0.5">
-					<PageSlide.SlideInEasing>
-						<CircularEaseOut/>
-					</PageSlide.SlideInEasing>
-					<PageSlide.SlideOutEasing>
-						<CircularEaseIn/>
-					</PageSlide.SlideOutEasing>
-				</PageSlide>
+                <PageSlide Orientation="Vertical"
+                           Duration="0:0:0.5"
+                           SlideInEasing="CircularEaseOut"
+                           SlideOutEasing="CircularEaseIn"/>
 			</TransitioningContentControl.PageTransition>
 		</TransitioningContentControl>
 	</Panel>
