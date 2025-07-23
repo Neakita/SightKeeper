@@ -1,10 +1,9 @@
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class DataRemovingImageSet(ImageSet inner) : ImageSet
+internal sealed class ImagesDataRemovingImageSet(StorableImageSet inner) : StorableImageSet
 {
 	public string Name
 	{
@@ -18,21 +17,21 @@ internal sealed class DataRemovingImageSet(ImageSet inner) : ImageSet
 		set => inner.Description = value;
 	}
 
-	public IReadOnlyList<Image> Images => inner.Images;
+	public IReadOnlyList<StorableImage> Images => inner.Images;
 
-	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		return inner.CreateImage(creationTimestamp, size);
 	}
 
-	public IReadOnlyList<Image> GetImagesRange(int index, int count)
+	public IReadOnlyList<StorableImage> GetImagesRange(int index, int count)
 	{
 		return inner.GetImagesRange(index, count);
 	}
 
 	public void RemoveImageAt(int index)
 	{
-		var image = Images[index].UnWrapDecorator<StreamableDataImage>();
+		var image = Images[index];
 		image.DeleteData();
 		inner.RemoveImageAt(index);
 	}
@@ -46,7 +45,7 @@ internal sealed class DataRemovingImageSet(ImageSet inner) : ImageSet
 
 	private void DeleteDataAt(int index)
 	{
-		var image = Images[index].UnWrapDecorator<StreamableDataImage>();
+		var image = Images[index];
 		image.DeleteData();
 	}
 }

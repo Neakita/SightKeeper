@@ -28,4 +28,9 @@ internal static class ImageSetExtensions
 	{
 		return new NotifyingImageSet(set);
 	}
+
+	public static StorableImageSet WithImagesDataRemoving(this StorableImageSet set)
+	{
+		return new ImagesDataRemovingImageSet(set);
+	}
 }

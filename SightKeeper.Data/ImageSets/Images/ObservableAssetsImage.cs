@@ -46,5 +46,10 @@ internal sealed class ObservableAssetsImage(StorableImage inner) : StorableImage
 		_assets.Notify(change);
 	}
 
+	public void DeleteData()
+	{
+		inner.DeleteData();
+	}
+
 	private readonly ExternalObservableCollection<Asset> _assets = new(inner.Assets);
 }

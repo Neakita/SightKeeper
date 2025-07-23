@@ -41,5 +41,9 @@ internal sealed class InMemoryImage : StorableImage
 		Guard.IsTrue(isRemoved);
 	}
 
+	public void DeleteData()
+	{
+	}
+
 	private readonly HashSet<Asset> _assets = new();
 }

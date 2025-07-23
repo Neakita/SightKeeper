@@ -10,4 +10,5 @@ public interface StorableImage : Image
 
     void AddAsset(Asset asset);
     void RemoveAsset(Asset asset);
+    void DeleteData();
 }

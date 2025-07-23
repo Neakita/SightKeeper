@@ -32,7 +32,7 @@ internal sealed class StreamableDataImage(StorableImage inner, FileSystemDataAcc
 		inner.RemoveAsset(asset);
 	}
 
-	internal void DeleteData()
+	public void DeleteData()
 	{
 		dataAccess.Delete(inner.Id);
 	}

@@ -12,6 +12,11 @@ public sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock 
 			// for example when removing images range every image should be checked if it is used by some asset,
 			// so locking appears only after domain rules validated.
 			.WithLocking(editingLock)
+			// Images data removing could be expansive (we can remove hundreds or thousands of images in one call, or do that often),
+			// and there is no need in lock because lock should affect AppData only,
+			// not the image files,
+			// so it shouldn't be locked
+			.WithImagesDataRemoving()
 			// Images observing decorator can also be before domain rules,
 			// but domain rules can often throw exceptions so placing observing decorator after domain rules will make stack trace a bit shorter.
 			// Observer should be able to stream received images, so observable decorator should contain streamable decorator.
