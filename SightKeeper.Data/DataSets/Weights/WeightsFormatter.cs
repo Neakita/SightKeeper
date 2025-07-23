@@ -19,7 +19,8 @@ internal static class WeightsFormatter
 		writer.WriteCollectionHeader(weightsCollection.Count);
 		foreach (var weights in weightsCollection)
 		{
-			var weightsId = weights.GetId();
+			throw new NotImplementedException();
+			/*var weightsId = weights.GetId();
 			writer.WriteUnmanaged(
 				weightsId,
 				weights.Metadata.Model,
@@ -34,7 +35,7 @@ internal static class WeightsFormatter
 				var tag = weights.Tags[i];
 				weightsTagIndexes[i] = tagIndexes[tag];
 			}
-			writer.WriteUnmanagedSpan(weightsTagIndexes);
+			writer.WriteUnmanagedSpan(weightsTagIndexes);*/
 		}
 	}
 
