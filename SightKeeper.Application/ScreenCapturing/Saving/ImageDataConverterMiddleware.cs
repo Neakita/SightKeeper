@@ -1,4 +1,3 @@
-using System.Buffers;
 using CommunityToolkit.HighPerformance;
 using SightKeeper.Domain.Images;
 
@@ -13,10 +12,18 @@ public sealed class ImageDataConverterMiddleware<TSourcePixel, TTargetPixel> : I
 
 	public void SaveData(Image image, ReadOnlySpan2D<TSourcePixel> data)
 	{
-		var bufferSize = data.Width * data.Height;
-		using var bufferOwner = MemoryPool<TTargetPixel>.Shared.Rent(bufferSize);
-		var convertedData = bufferOwner.Memory.AsMemory2D(data.Height, data.Width).Span;
-		Converter.Convert(data, convertedData);
-		Next.SaveData(image, convertedData);
+		var requiredBufferSize = data.Width * data.Height;
+		EnsureBufferCapacity(requiredBufferSize);
+		var bufferAsSpan = _buffer.AsSpan().AsSpan2D(data.Height, data.Width);
+		Converter.Convert(data, bufferAsSpan);
+		Next.SaveData(image, bufferAsSpan);
+	}
+
+	private TTargetPixel[] _buffer = Array.Empty<TTargetPixel>();
+
+	private void EnsureBufferCapacity(int requiredBufferSize)
+	{
+		if (requiredBufferSize > _buffer.Length)
+			_buffer = new TTargetPixel[requiredBufferSize];
 	}
 }
