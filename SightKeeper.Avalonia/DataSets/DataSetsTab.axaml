@@ -14,7 +14,7 @@
     <ScrollViewer Classes="regular-padding">
         <StackPanel Classes="medium-spacing">
             <Border Classes="outer regular-padding">
-                <Button Content="{icons:MaterialIconExt Plus}" Classes="square low-accent"
+                <Button Content="{icons:MaterialIconExt Kind=Plus}" Classes="square low-accent"
                         Command="{Binding CreateDataSetCommand}"
                         ToolTip.Tip="Create new data set"/>
             </Border>

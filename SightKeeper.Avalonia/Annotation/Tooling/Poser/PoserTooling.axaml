@@ -21,7 +21,7 @@
                                     Classes="square"
                                     Command="{Binding DeleteKeyPointCommand}"
                                     CommandParameter="{Binding}"
-                                    Content="{icons:MaterialIconExt Close}"
+                                    Content="{icons:MaterialIconExt Kind=Close}"
                                     ToolTip.Tip="{Binding Name, StringFormat=Delete {0} key point}"
                                     Theme="{DynamicResource EmbeddedButtonTheme}"
                                     Padding="6">

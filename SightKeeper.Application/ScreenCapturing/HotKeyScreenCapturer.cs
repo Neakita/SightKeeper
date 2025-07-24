@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using HotKeys;
 using HotKeys.Handlers;
-using SharpHook.Native;
+using SharpHook.Data;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;

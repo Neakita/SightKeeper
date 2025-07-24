@@ -59,7 +59,7 @@
 									           Classes="caption"
 									           VerticalAlignment="Center"/>
 									<Button Grid.Column="2"
-									        Content="{icons:MaterialIconExt Close}"
+									        Content="{icons:MaterialIconExt Kind=Close}"
 									        Command="{Binding CloseCommand}"
 									        Classes="flat square"/>
 								</Grid>

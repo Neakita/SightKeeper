@@ -11,11 +11,11 @@
 
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.4.0" />
-        <PackageReference Include="FluentValidation" Version="11.11.0" />
-        <PackageReference Include="Serilog" Version="4.2.0" />
+        <PackageReference Include="FluentValidation" Version="12.0.0" />
+        <PackageReference Include="Serilog" Version="4.3.0" />
         <PackageReference Include="SerilogTimings" Version="3.1.0" />
-        <PackageReference Include="SharpHook.Reactive" Version="5.3.9" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />
+        <PackageReference Include="SharpHook.Reactive" Version="6.2.0" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.10" />
         <PackageReference Include="System.Reactive" Version="6.0.1" />
         <PackageReference Include="YamlDotNet" Version="16.3.0" />
     </ItemGroup>

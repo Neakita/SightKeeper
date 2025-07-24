@@ -16,7 +16,7 @@
         <ScrollViewer Grid.Column="0">
             <StackPanel Classes="medium-spacing">
                 <Border Classes="outer regular-padding">
-                    <Button Content="{icons:MaterialIconExt Plus}" Classes="square low-accent"
+                    <Button Content="{icons:MaterialIconExt Kind=Plus}" Classes="square low-accent"
                             Command="{Binding CreateImageSetCommand}"
                             ToolTip.Tip="Create new image set"/>
                 </Border>

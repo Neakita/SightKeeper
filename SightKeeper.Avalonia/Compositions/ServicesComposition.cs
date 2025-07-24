@@ -4,8 +4,6 @@ using SightKeeper.Application.Windows;
 using SightKeeper.Application.Linux.X11;
 #endif
 using System;
-using System.Linq;
-using CommunityToolkit.Diagnostics;
 using FluentValidation;
 using HotKeys;
 using HotKeys.SharpHook;
@@ -67,7 +65,7 @@ public sealed class ServicesComposition
 		.Bind<IReactiveGlobalHook>()
 		.To(_ =>
 		{
-			var hook = new SimpleReactiveGlobalHook(true);
+			var hook = new SimpleReactiveGlobalHook(runAsyncOnBackgroundThread: true);
 			hook.RunAsync();
 			return hook;
 		})
@@ -81,10 +79,5 @@ public sealed class ServicesComposition
 		})
 
 		.Bind<ILogger>()
-		.To(context =>
-		{
-			var consumer = context.ConsumerTypes.Single();
-			Guard.IsNotNull(consumer);
-			return Log.ForContext(consumer);
-		});
+		.To(_ => Log.Logger);
 }
