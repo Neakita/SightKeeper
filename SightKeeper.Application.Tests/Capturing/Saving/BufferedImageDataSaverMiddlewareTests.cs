@@ -1,3 +1,4 @@
+using System.Buffers;
 using CommunityToolkit.HighPerformance;
 using FluentAssertions;
 using NSubstitute;
@@ -79,7 +80,9 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		imageSaver = new FakeImageDataSaver<Rgba32>();
 		BufferedImageDataSaverMiddleware<Rgba32> middleware = new()
 		{
-			Next = imageSaver
+			Next = imageSaver,
+			ArrayPool = ArrayPool<Rgba32>.Create()
+
 		};
 		return middleware;
 	}
