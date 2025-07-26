@@ -11,6 +11,8 @@ using Pure.DI;
 using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application;
+using SightKeeper.Application.DataSets.Creating;
+using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Application.ImageSets.Editing;
@@ -30,6 +32,12 @@ public sealed class ServicesComposition
 
 		.Bind<IValidator<ExistingImageSetData>>()
 		.To<ExistingImageSetDataValidator>()
+
+		.Bind<IValidator<ExistingDataSetData>>()
+		.To<ExistingDataSetDataValidator>()
+	
+		.Bind<IValidator<NewDataSetData>>()
+		.To<NewDataSetDataValidator>()
 
 		.Bind<ObservableListRepository<TT>>()
 		.To<ComposeObservableListRepository<TT>>()
@@ -53,7 +61,7 @@ public sealed class ServicesComposition
 
 		.Bind<PixelConverter<Bgra32, Rgba32>>()
 		.To<Bgra32ToRgba32PixelConverter>()
-		
+
 		.Bind<ImageSaverFactory<Bgra32>>()
 		.To(context =>
 		{

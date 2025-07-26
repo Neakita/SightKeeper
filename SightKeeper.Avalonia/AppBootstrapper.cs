@@ -17,6 +17,7 @@ internal static class AppBootstrapper
 	private static void SetupPersistence(Composition composition)
 	{
 		MemoryPackFormatterProvider.Register(composition.ImageSetFormatter);
+		MemoryPackFormatterProvider.Register(composition.DataSetFormatter);
 		composition.AppDataAccess.Load();
 	}
 }
