@@ -10,9 +10,9 @@ public sealed class KeyPointTagWithoutOwnerException : Exception
 		"Either pass its poser tag owner, or don't pass the key point tag";
 
 	public Tag KeyPointTag { get; }
-	public DomainPoserTag ExpectedOwner { get; }
+	public PoserTag ExpectedOwner { get; }
 
-	public KeyPointTagWithoutOwnerException(Tag keyPointTag, DomainPoserTag expectedOwner) : base(DefaultMessage)
+	public KeyPointTagWithoutOwnerException(Tag keyPointTag, PoserTag expectedOwner) : base(DefaultMessage)
 	{
 		KeyPointTag = keyPointTag;
 		ExpectedOwner = expectedOwner;
