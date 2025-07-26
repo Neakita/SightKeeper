@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Domain.DataSets.Poser;
@@ -40,6 +41,27 @@ public sealed class DomainWeightsLibraryTests
 		IReadOnlyCollection<Tag> tags = [tag];
 		Assert.Throws<ArgumentException>(() => library.CreateWeights(new WeightsMetadata(), tags));
 		innerLibrary.DidNotReceive().CreateWeights(Arg.Any<WeightsMetadata>(), Arg.Any<IReadOnlyCollection<Tag>>());
+	}
+
+	[Fact]
+	public void ShouldSendWeightsMetadataToInnerLibraryWhenCreatingWeights()
+	{
+		var innerLibrary = Substitute.For<WeightsLibrary>();
+		var tagsOwner = Substitute.For<TagsOwner<Tag>>();
+		var library = new DomainWeightsLibrary(
+			innerLibrary,
+			tagsOwner,
+			0);
+		var weightsMetadata = new WeightsMetadata
+		{
+			Model = Model.UltralyticsYoloV11,
+			CreationTimestamp = DateTimeOffset.Now,
+			ModelSize = ModelSize.Small,
+			Metrics = new WeightsMetrics(1, new LossMetrics(2, 3, 4)),
+			Resolution = new Vector2<ushort>(480, 640)
+		};
+		library.CreateWeights(weightsMetadata, ReadOnlyCollection<Tag>.Empty);
+		innerLibrary.Received().CreateWeights(weightsMetadata, Arg.Any<IReadOnlyCollection<Tag>>());
 	}
 
 	[Fact]
