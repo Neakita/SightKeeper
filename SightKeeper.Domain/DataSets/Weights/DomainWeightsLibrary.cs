@@ -45,12 +45,23 @@ public sealed class DomainWeightsLibrary : WeightsLibrary
 	private void ValidateTagOwners(IReadOnlyCollection<Tag> tagsList)
 	{
 		foreach (var tag in tagsList)
-		{
-			UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
-			if (tag.Owner is not DomainPoserTag poserTag)
-				continue;
-			if (!tagsList.Contains(poserTag))
-				throw new KeyPointTagWithoutOwnerException(tag, poserTag);
-		}
+			ValidateTagOwner(tagsList, tag);
+	}
+
+	private void ValidateTagOwner(IReadOnlyCollection<Tag> tagsList, Tag tag)
+	{
+		if (TryValidateAsKeyPointTag(tagsList, tag))
+			return;
+		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(_tagsOwner, tag);
+	}
+
+	private static bool TryValidateAsKeyPointTag(IReadOnlyCollection<Tag> tagsList, Tag tag)
+	{
+		if (tag.Owner is not PoserTag poserTag)
+			return false;
+		if (!tagsList.Contains(poserTag))
+			throw new KeyPointTagWithoutOwnerException(tag, poserTag);
+		return true;
+
 	}
 }
