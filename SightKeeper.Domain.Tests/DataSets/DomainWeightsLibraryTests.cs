@@ -9,6 +9,40 @@ namespace SightKeeper.Domain.Tests.DataSets;
 public sealed class DomainWeightsLibraryTests
 {
 	[Fact]
+	public void ShouldAllowWeightsCreationWhenTagsSatisfiesMinimumTagsCount()
+	{
+		var innerLibrary = Substitute.For<WeightsLibrary>();
+		var tagsOwner = Substitute.For<TagsOwner<Tag>>();
+		var library = new DomainWeightsLibrary(
+			innerLibrary,
+			tagsOwner,
+			2);
+		var tag1 = Substitute.For<Tag>();
+		tag1.Owner.Returns(tagsOwner);
+		var tag2 = Substitute.For<Tag>();
+		tag2.Owner.Returns(tagsOwner);
+		IReadOnlyCollection<Tag> tags = [tag1, tag2];
+		library.CreateWeights(new WeightsMetadata(), tags);
+		innerLibrary.Received().CreateWeights(Arg.Any<WeightsMetadata>(), tags);
+	}
+
+	[Fact]
+	public void ShouldDisallowWeightsCreationWhenTagsDoesNotSatisfiesMinimumTagsCount()
+	{
+		var innerLibrary = Substitute.For<WeightsLibrary>();
+		var tagsOwner = Substitute.For<TagsOwner<Tag>>();
+		var library = new DomainWeightsLibrary(
+			innerLibrary,
+			tagsOwner,
+			2);
+		var tag = Substitute.For<Tag>();
+		tag.Owner.Returns(tagsOwner);
+		IReadOnlyCollection<Tag> tags = [tag];
+		Assert.Throws<ArgumentException>(() => library.CreateWeights(new WeightsMetadata(), tags));
+		innerLibrary.DidNotReceive().CreateWeights(Arg.Any<WeightsMetadata>(), Arg.Any<IReadOnlyCollection<Tag>>());
+	}
+
+	[Fact]
 	public void ShouldGetWeightsFromInnerLibrary()
 	{
 		var innerLibrary = Substitute.For<WeightsLibrary>();
