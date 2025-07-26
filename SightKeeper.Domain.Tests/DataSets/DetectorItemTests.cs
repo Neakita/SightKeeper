@@ -40,7 +40,17 @@ public sealed class DetectorItemTests
 	}
 
 	[Fact]
-	public void ShouldNotAllowSetNotNormalizedBounding()
+	public void ShouldAllowSetNormalizedBounding()
+	{
+		var innerItem = Substitute.For<DetectorItem>();
+		var domainItem = new DomainDetectorItem(innerItem);
+		var bounding = new Bounding(0.2, 0.3, 0.4, 0.5);
+		domainItem.Bounding = bounding;
+		innerItem.Received().Bounding = bounding;
+	}
+
+	[Fact]
+	public void ShouldDisallowSetNotNormalizedBounding()
 	{
 		var innerItem = Substitute.For<DetectorItem>();
 		var domainItem = new DomainDetectorItem(innerItem);
