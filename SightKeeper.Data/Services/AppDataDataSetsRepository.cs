@@ -40,7 +40,7 @@ public sealed class AppDataDataSetsRepository :
 		_removed.Dispose();
 	}
 
-	internal AppDataDataSetsRepository(AppDataAccess appDataAccess, ChangeListener changeListener, Lock appDataLock)
+	public AppDataDataSetsRepository(AppDataAccess appDataAccess, ChangeListener changeListener, Lock appDataLock)
 	{
 		_appDataAccess = appDataAccess;
 		_changeListener = changeListener;

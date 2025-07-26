@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Poser3D;
 
 namespace SightKeeper.Data.DataSets;
 
-internal sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
+public sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 {
 	public required ClassifierDataSetFormatter ClassifierDataSetFormatter { get; init; }
 

@@ -9,7 +9,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-internal sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableClassifierDataSet>
+public sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableClassifierDataSet>
 {
 	public required ImageLookupper ImageLookupper { get; init; }
 	public required ClassifierDataSetWrapper SetWrapper { get; init; }

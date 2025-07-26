@@ -3,7 +3,7 @@ using SightKeeper.Data.ImageSets.Images;
 
 namespace SightKeeper.Data;
 
-internal interface ImageLookupper
+public interface ImageLookupper
 {
 	StorableImage GetImage(Id id);
 }
