@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.Tests.DataSets;
 
-public sealed class DetectorItemTests
+public sealed class DomainDetectorItemTests
 {
 	[Fact]
 	public void ShouldAllowUpdateTag()
