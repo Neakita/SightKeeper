@@ -14,7 +14,7 @@ internal sealed partial class PoserTagsEditorViewModel : ViewModel, PoserTagsEdi
 	public IReadOnlyCollection<EditablePoserTagDataContext> Tags => _tags;
 	ICommand TagsEditorDataContext.CreateTagCommand => CreateTagCommand;
 
-	public PoserTagsEditorViewModel(IEnumerable<DomainPoserTag> existingTags) : this()
+	public PoserTagsEditorViewModel(IEnumerable<PoserTag> existingTags) : this()
 	{
 		foreach (var tag in existingTags)
 		{
