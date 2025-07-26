@@ -3,7 +3,7 @@ using NSubstitute;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Domain.Tests.DataSets.Classifier;
+namespace SightKeeper.Domain.Tests.DataSets;
 
 public sealed class ClassifierAssetTests
 {

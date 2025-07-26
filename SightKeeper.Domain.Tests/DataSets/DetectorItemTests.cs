@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Domain.Tests.DataSets.Detector;
+namespace SightKeeper.Domain.Tests.DataSets;
 
 public sealed class DetectorItemTests
 {
