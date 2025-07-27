@@ -25,7 +25,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 			Images = ReadOnlyObservableList<AnnotationImageDataContext>.Empty;
 			if (Set == null)
 				return;
-			var images = (ObservableList<Image>)Set.Images;
+			var images = (ReadOnlyObservableList<Image>)Set.Images;
 			Images = images.Transform(image => new AnnotationImageViewModel(_imageLoader, image)).ToObservableList();
 		}
 	}
