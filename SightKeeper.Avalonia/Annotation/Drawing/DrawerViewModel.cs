@@ -14,7 +14,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDisposable
 {
-	[ObservableProperty] public partial Image? Image { get; private set; }
+	[ObservableProperty] public partial ImageDataContext? Image { get; private set; }
 
 	public Tag? Tag
 	{
@@ -30,8 +30,6 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDis
 				_boundingDrawer.Tag = value;
 		}
 	}
-
-	ImageDataContext? DrawerDataContext.Image => Image == null ? null : new ImageViewModel(_imageLoader, Image);
 
 	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
 	[ObservableProperty] public partial BoundedItemDataContext? SelectedItem { get; set; }
@@ -55,7 +53,12 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDis
 
 	private void HandleImageSelectionChange(Image? image)
 	{
-		Image = image;
+		if (image == null)
+		{
+			Image = null;
+			return;
+		}
+		Image = new ImageViewModel(_imageLoader, image);
 	}
 
 	public void Dispose()
@@ -70,11 +73,6 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDis
 	private readonly ImageLoader _imageLoader;
 	private readonly Subject<BoundedItemDataContext?> _selectedItemChanged = new();
 	private readonly IDisposable _constructorDisposable;
-
-	partial void OnImageChanged(Image? value)
-	{
-		_itemsViewModel.Image = value;
-	}
 
 	partial void OnSelectedItemChanged(BoundedItemDataContext? value)
 	{

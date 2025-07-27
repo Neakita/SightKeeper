@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive.Disposables;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SightKeeper.Application.Extensions;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -14,34 +17,26 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 {
-	public Image? Image
-	{
-		get;
-		set
-		{
-			field = value;
-			UpdateItems();
-		}
-	}
-
 	[ObservableProperty]
 	public partial IReadOnlyCollection<DrawerItemDataContext> Items { get; private set; } = ReadOnlyCollection<DrawerItemDataContext>.Empty;
 
-	public AssetItemsViewModel(DrawerItemsFactory drawerItemsFactory, DataSetSelection dataSetSelection)
+	public AssetItemsViewModel(DrawerItemsFactory drawerItemsFactory, DataSetSelection dataSetSelection, ImageSelection imageSelection)
 	{
 		_drawerItemsFactory = drawerItemsFactory;
-		_disposable = dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange);
+		dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange).DisposeWith(_constructorDisposable);
+		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
 	}
 
 	public void Dispose()
 	{
-		_disposable.Dispose();
+		_constructorDisposable.Dispose();
 	}
 
 	private readonly DrawerItemsFactory _drawerItemsFactory;
-	private readonly IDisposable _disposable;
+	private readonly CompositeDisposable _constructorDisposable = new();
 	private AssetsContainer<ItemsContainer<AssetItem>>? _assetsLibrary;
-	private ItemsContainer<AssetItem>? Asset => Image == null ? null : _assetsLibrary?.GetOptionalAsset(Image);
+	private Image? _image;
+	private ItemsContainer<AssetItem>? Asset => _image == null ? null : _assetsLibrary?.GetOptionalAsset(_image);
 
 	private void UpdateItems()
 	{
@@ -55,6 +50,12 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 	private void HandleDataSetSelectionChange(DataSet? set)
 	{
 		_assetsLibrary = set?.AssetsLibrary as AssetsContainer<ItemsContainer<AssetItem>>;
+		UpdateItems();
+	}
+
+	private void HandleImageSelectionChange(Image? image)
+	{
+		_image = image;
 		UpdateItems();
 	}
 }
