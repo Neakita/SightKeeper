@@ -1,4 +1,4 @@
-/*using FluentAssertions;
+using FluentAssertions;
 using SightKeeper.Domain.DataSets.Assets.Items;
 
 namespace SightKeeper.Domain.Tests.DataSets;
@@ -36,4 +36,4 @@ public sealed class BoundingTests
 		bounding.Right.Should().Be(right);
 		bounding.Bottom.Should().Be(bottom);
 	}
-}*/
+}
