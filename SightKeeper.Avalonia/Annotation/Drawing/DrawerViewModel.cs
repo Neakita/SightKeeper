@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Images;
-using SightKeeper.Domain.DataSets.Poser;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
@@ -15,21 +15,6 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDisposable
 {
 	[ObservableProperty] public partial ImageDataContext? Image { get; private set; }
-
-	public Tag? Tag
-	{
-		get;
-		set
-		{
-			field = value;
-			_boundingDrawer.Tag = null;
-			_keyPointDrawer.Tag = null;
-			if (value?.Owner is PoserTag)
-				_keyPointDrawer.Tag = value;
-			else
-				_boundingDrawer.Tag = value;
-		}
-	}
 
 	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
 	[ObservableProperty] public partial BoundedItemDataContext? SelectedItem { get; set; }
@@ -48,7 +33,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDis
 		_itemsViewModel = itemsViewModel;
 		_keyPointDrawer = keyPointDrawer;
 		_imageLoader = imageLoader;
-		_constructorDisposable = imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange);
+		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
 	}
 
 	private void HandleImageSelectionChange(Image? image)
@@ -72,7 +57,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDis
 	private readonly KeyPointDrawerViewModel _keyPointDrawer;
 	private readonly ImageLoader _imageLoader;
 	private readonly Subject<BoundedItemDataContext?> _selectedItemChanged = new();
-	private readonly IDisposable _constructorDisposable;
+	private readonly CompositeDisposable _constructorDisposable = new();
 
 	partial void OnSelectedItemChanged(BoundedItemDataContext? value)
 	{

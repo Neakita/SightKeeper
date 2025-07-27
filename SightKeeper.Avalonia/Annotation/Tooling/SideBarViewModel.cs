@@ -10,7 +10,7 @@ using SightKeeper.Avalonia.DataSets;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarComponent, IDisposable
+public sealed partial class SideBarViewModel : ViewModel, AdditionalToolingSelection, IDisposable
 {
 	public ImageSetSelectionDataContext ImageSetSelection { get; }
 	public IReadOnlyCollection<AnnotationButtonDefinition> ButtonDefinitions => _buttonDefinitions;

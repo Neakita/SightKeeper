@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
@@ -16,22 +17,13 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
 public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerDataContext, IDisposable
 {
-	public Tag? Tag
-	{
-		get;
-		set
-		{
-			field = value;
-			CreateItemCommand.NotifyCanExecuteChanged();
-		}
-	}
-
 	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;
 
-	public BoundingDrawerViewModel(DataSetSelection dataSetSelection, ImageSelection imageSelection)
+	public BoundingDrawerViewModel(DataSetSelection dataSetSelection, ImageSelection imageSelection, TagSelectionProvider tagSelectionProvider)
 	{
 		dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange).DisposeWith(_constructorDisposable);
 		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
+		tagSelectionProvider.SelectedTagChanged.Subscribe(HandleTagSelectionChange).DisposeWith(_constructorDisposable);
 	}
 
 	public void Dispose()
@@ -42,16 +34,17 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 	private readonly CompositeDisposable _constructorDisposable = new();
 	private AssetsOwner<ItemsMaker<AssetItem>>? _assetsLibrary;
 	private Image? _image;
-	private bool CanCreateItem => Tag != null && _image != null && _assetsLibrary != null;
+	private Tag? _tag;
+	private bool CanCreateItem => _tag != null && _image != null && _assetsLibrary != null;
 
 	[RelayCommand(CanExecute = nameof(CanCreateItem))]
 	private void CreateItem(Bounding bounding)
 	{
-		Guard.IsNotNull(Tag);
+		Guard.IsNotNull(_tag);
 		Guard.IsNotNull(_image);
 		Guard.IsNotNull(_assetsLibrary);
 		var asset = _assetsLibrary.GetOrMakeAsset(_image);
-		var item = asset.MakeItem(Tag);
+		var item = asset.MakeItem(_tag);
 		item.Bounding = bounding;
 	}
 
@@ -64,6 +57,15 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 	private void HandleImageSelectionChange(Image? image)
 	{
 		_image = image;
+		CreateItemCommand.NotifyCanExecuteChanged();
+	}
+
+	private void HandleTagSelectionChange(Tag? tag)
+	{
+		if (tag == null || tag.IsKeyPointTag())
+			_tag = null;
+		else
+			_tag = tag;
 		CreateItemCommand.NotifyCanExecuteChanged();
 	}
 }

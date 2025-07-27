@@ -63,7 +63,7 @@ public sealed class ViewModelsComposition
 		.Bind<CapturingSettingsDataContext>()
 		.To<CapturingSettingsViewModel>()
 
-		.Bind<AnnotationSideBarComponent>()
+		.Bind<AdditionalToolingSelection>()
 		.To<SideBarViewModel>()
 
 		.Bind<ImageSelection>()

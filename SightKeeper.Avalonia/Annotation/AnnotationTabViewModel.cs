@@ -5,7 +5,6 @@ using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.Annotation.Tooling.Poser;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation;
 
@@ -18,7 +17,7 @@ public sealed class AnnotationTabViewModel : ViewModel, AnnotationTabDataContext
 	public AnnotationTabViewModel(
 		ImagesViewModel images,
 		DrawerViewModel drawer,
-		AnnotationSideBarComponent sideBar)
+		AdditionalToolingSelection sideBar)
 	{
 		SideBar = sideBar;
 		_drawer = drawer;
@@ -42,23 +41,10 @@ public sealed class AnnotationTabViewModel : ViewModel, AnnotationTabDataContext
 	{
 		_additionalToolingDisposable?.Dispose();
 		_additionalToolingDisposable = new CompositeDisposable();
-		if (value is TagSelection tagSelection)
-		{
-			SetDrawerTag(tagSelection.SelectedTag);
-		}
-		if (value is ObservableTagSelection observableTagSelection)
-		{
-			observableTagSelection.SelectedTagChanged.Subscribe(SetDrawerTag).DisposeWith(_additionalToolingDisposable);
-		}
 		if (value is SelectedItemConsumer selectedItemConsumer)
 		{
 			selectedItemConsumer.SelectedItem = Drawer.SelectedItem;
 			_drawer.SelectedItemChanged.Subscribe(item => selectedItemConsumer.SelectedItem = item).DisposeWith(_additionalToolingDisposable);
 		}
-	}
-
-	private void SetDrawerTag(Tag? tag)
-	{
-		_drawer.Tag = tag;
 	}
 }
