@@ -1,7 +1,10 @@
 using System;
+using System.Reactive.Disposables;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Application.Extensions;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -23,39 +26,31 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		}
 	}
 
-	public Image? Image
-	{
-		get;
-		set
-		{
-			field = value;
-			CreateItemCommand.NotifyCanExecuteChanged();
-		}
-	}
-
 	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;
 
-	public BoundingDrawerViewModel(DataSetSelection dataSetSelection)
+	public BoundingDrawerViewModel(DataSetSelection dataSetSelection, ImageSelection imageSelection)
 	{
-		_disposable = dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange);
+		dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange).DisposeWith(_constructorDisposable);
+		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
 	}
 
 	public void Dispose()
 	{
-		_disposable.Dispose();
+		_constructorDisposable.Dispose();
 	}
 
-	private readonly IDisposable _disposable;
+	private readonly CompositeDisposable _constructorDisposable = new();
 	private AssetsOwner<ItemsMaker<AssetItem>>? _assetsLibrary;
-	private bool CanCreateItem => Tag != null && Image != null && _assetsLibrary != null;
+	private Image? _image;
+	private bool CanCreateItem => Tag != null && _image != null && _assetsLibrary != null;
 
 	[RelayCommand(CanExecute = nameof(CanCreateItem))]
 	private void CreateItem(Bounding bounding)
 	{
 		Guard.IsNotNull(Tag);
-		Guard.IsNotNull(Image);
+		Guard.IsNotNull(_image);
 		Guard.IsNotNull(_assetsLibrary);
-		var asset = _assetsLibrary.GetOrMakeAsset(Image);
+		var asset = _assetsLibrary.GetOrMakeAsset(_image);
 		var item = asset.MakeItem(Tag);
 		item.Bounding = bounding;
 	}
@@ -63,6 +58,12 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 	private void HandleDataSetSelectionChange(DataSet? set)
 	{
 		_assetsLibrary = set?.AssetsLibrary as AssetsOwner<ItemsMaker<AssetItem>>;
+		CreateItemCommand.NotifyCanExecuteChanged();
+	}
+
+	private void HandleImageSelectionChange(Image? image)
+	{
+		_image = image;
 		CreateItemCommand.NotifyCanExecuteChanged();
 	}
 }

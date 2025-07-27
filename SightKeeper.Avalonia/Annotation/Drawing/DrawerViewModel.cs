@@ -73,7 +73,6 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDis
 
 	partial void OnImageChanged(Image? value)
 	{
-		_boundingDrawer.Image = value;
 		_itemsViewModel.Image = value;
 	}
 
