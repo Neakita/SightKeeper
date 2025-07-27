@@ -2,6 +2,7 @@
 using Pure.DI;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation;
+using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.DataSets;
@@ -64,18 +65,26 @@ public sealed class ViewModelsComposition
 		.To<CapturingSettingsViewModel>()
 
 		.Bind<AdditionalToolingSelection>()
+		.Bind<SideBarDataContext>()
+		.As(Lifetime.Singleton)
 		.To<SideBarViewModel>()
 
+		.Bind<ImagesDataContext>()
 		.Bind<ImageSelection>()
 		.As(Lifetime.Singleton)
 		.To<ImagesViewModel>()
-	
+
 		.Bind<ImageSetSelectionDataContext>()
 		.Bind<ImageSetSelection>()
 		.As(Lifetime.Singleton)
 		.To<ImageSetSelectionViewModel>()
-	
+
 		.Bind<DataSetSelection>()
 		.As(Lifetime.Singleton)
-		.To<DataSetSelectionViewModel>();
+		.To<DataSetSelectionViewModel>()
+
+		.Bind<DrawerDataContext>()
+		.Bind<SelectedItemProvider>()
+		.As(Lifetime.Singleton)
+		.To<DrawerViewModel>();
 }

@@ -1,50 +1,12 @@
-using System;
-using System.Reactive.Disposables;
-using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
-using SightKeeper.Avalonia.Annotation.Tooling.Poser;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-public sealed class AnnotationTabViewModel : ViewModel, AnnotationTabDataContext, IDisposable
+public sealed class AnnotationTabViewModel : ViewModel, AnnotationTabDataContext
 {
-	public ImagesDataContext Images => _images;
-	public DrawerDataContext Drawer => _drawer;
-	public SideBarDataContext SideBar { get; }
-
-	public AnnotationTabViewModel(
-		ImagesViewModel images,
-		DrawerViewModel drawer,
-		AdditionalToolingSelection sideBar)
-	{
-		SideBar = sideBar;
-		_drawer = drawer;
-		_images = images;
-		sideBar.AdditionalToolingChanged
-			.Subscribe(OnAdditionalToolingChanged)
-			.DisposeWith(_disposable);
-	}
-
-	public void Dispose()
-	{
-		_disposable.Dispose();
-	}
-
-	private readonly ImagesViewModel _images;
-	private readonly DrawerViewModel _drawer;
-	private readonly CompositeDisposable _disposable = new();
-	private CompositeDisposable? _additionalToolingDisposable;
-
-	private void OnAdditionalToolingChanged(object? value)
-	{
-		_additionalToolingDisposable?.Dispose();
-		_additionalToolingDisposable = new CompositeDisposable();
-		if (value is SelectedItemConsumer selectedItemConsumer)
-		{
-			selectedItemConsumer.SelectedItem = Drawer.SelectedItem;
-			_drawer.SelectedItemChanged.Subscribe(item => selectedItemConsumer.SelectedItem = item).DisposeWith(_additionalToolingDisposable);
-		}
-	}
+	public required ImagesDataContext Images { get; init; }
+	public required DrawerDataContext Drawer { get; init; }
+	public required SideBarDataContext SideBar { get; init; }
 }

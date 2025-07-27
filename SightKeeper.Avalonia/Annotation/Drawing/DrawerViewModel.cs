@@ -8,17 +8,18 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Images;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDisposable
+public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, SelectedItemProvider, IDisposable
 {
 	[ObservableProperty] public partial ImageDataContext? Image { get; private set; }
 
 	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
 	[ObservableProperty] public partial BoundedItemDataContext? SelectedItem { get; set; }
-	public IObservable<BoundedItemDataContext?> SelectedItemChanged => _selectedItemChanged.AsObservable();
+	public IObservable<AssetItem?> SelectedItemChanged => _selectedItemChanged.AsObservable();
 	public BoundingDrawerDataContext BoundingDrawer => _boundingDrawer;
 	public KeyPointDrawerDataContext KeyPointDrawer => _keyPointDrawer;
 
@@ -56,12 +57,13 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDis
 	private readonly AssetItemsViewModel _itemsViewModel;
 	private readonly KeyPointDrawerViewModel _keyPointDrawer;
 	private readonly ImageLoader _imageLoader;
-	private readonly Subject<BoundedItemDataContext?> _selectedItemChanged = new();
+	private readonly Subject<AssetItem?> _selectedItemChanged = new();
 	private readonly CompositeDisposable _constructorDisposable = new();
 
 	partial void OnSelectedItemChanged(BoundedItemDataContext? value)
 	{
-		_selectedItemChanged.OnNext(value);
+		var assetItem = (value as BoundedItemViewModel)?.Value as AssetItem;
+		_selectedItemChanged.OnNext(assetItem);
 		_keyPointDrawer.Item = value as PoserItemViewModel;
 	}
 }

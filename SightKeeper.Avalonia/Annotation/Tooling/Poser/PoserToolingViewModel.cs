@@ -7,15 +7,20 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
-using SightKeeper.Avalonia.Annotation.Drawing.Poser;
+using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Misc;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Poser;
 
-public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataContext, TagSelection, ObservableTagSelection, SelectedItemConsumer
+public sealed partial class PoserToolingViewModel :
+	ViewModel,
+	PoserToolingDataContext,
+	TagSelection,
+	ObservableTagSelection,
+	IDisposable
 {
 	public TagsContainer<PoserTag>? TagsSource
 	{
@@ -25,17 +30,6 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 			OnPropertyChanging(nameof(PoserTags));
 			field = value;
 			OnPropertyChanged(nameof(PoserTags));
-		}
-	}
-
-	public BoundedItemDataContext? SelectedItem
-	{
-		set
-		{
-			OnPropertyChanging(nameof(KeyPointTags));
-			_selectedItem = ((PoserItemViewModel?)value)?.Value;
-			KeyPointTags = _selectedItem == null ? ReadOnlyCollection<KeyPointTagDataContext>.Empty : _selectedItem.Tag.KeyPointTags.Select(tag => new KeyPointTagViewModel(tag, new ParametrizedCommandAdapter(DeleteKeyPointCommand, tag))).ToList();
-			OnPropertyChanged(nameof(KeyPointTags));
 		}
 	}
 
@@ -66,6 +60,18 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 
 	public IObservable<Tag?> SelectedTagChanged => _selectedTagChanged.DistinctUntilChanged();
 
+	public PoserToolingViewModel(SelectedItemProvider selectedItemProvider)
+	{
+		_constructorDisposable = selectedItemProvider.SelectedItemChanged.Subscribe(HandleItemSelectionChange);
+	}
+
+	public void Dispose()
+	{
+		_constructorDisposable.Dispose();
+		_selectedTagChanged.Dispose();
+	}
+
+	private readonly IDisposable _constructorDisposable;
 	private readonly Subject<Tag?> _selectedTagChanged = new();
 	private PoserItem? _selectedItem;
 
@@ -95,5 +101,27 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 	private bool CanDeleteKeyPoint(Tag tag)
 	{
 		return _selectedItem != null && _selectedItem.KeyPoints.Any(keyPoint => keyPoint.Tag == tag);
+	}
+
+	private void HandleItemSelectionChange(AssetItem? item)
+	{
+		if (item is PoserItem poserItem)
+		{
+			_selectedItem = poserItem;
+			KeyPointTags = _selectedItem.Tag.KeyPointTags.Select(TagToViewModel).ToList();
+		}
+		else
+		{
+			_selectedItem = null;
+			KeyPointTags = ReadOnlyCollection<KeyPointTagDataContext>.Empty;
+		}
+
+		OnPropertyChanged(nameof(KeyPointTags));
+	}
+
+	private KeyPointTagViewModel TagToViewModel(Tag tag)
+	{
+		var parametrizedDeleteKeyPointCommand = new ParametrizedCommandAdapter(DeleteKeyPointCommand, tag);
+		return new KeyPointTagViewModel(tag, parametrizedDeleteKeyPointCommand);
 	}
 }

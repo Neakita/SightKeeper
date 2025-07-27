@@ -1,4 +1,5 @@
 using System;
+using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling.Classifier;
 using SightKeeper.Avalonia.Annotation.Tooling.Detector;
@@ -10,7 +11,7 @@ using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public sealed class ToolingViewModelFactory(ImageSelection imageSelection)
+public sealed class ToolingViewModelFactory(ImageSelection imageSelection, SelectedItemProvider selectedItemProvider)
 {
 	public ViewModel? CreateToolingViewModel(DataSet? dataSet)
 	{
@@ -29,7 +30,7 @@ public sealed class ToolingViewModelFactory(ImageSelection imageSelection)
 				};
 				return detectorTooling;
 			case PoserDataSet poserDataSet:
-				var poserTooling = new PoserToolingViewModel();
+				var poserTooling = new PoserToolingViewModel(selectedItemProvider);
 				poserTooling.TagsSource = poserDataSet.TagsLibrary;
 				return poserTooling;
 			default:
