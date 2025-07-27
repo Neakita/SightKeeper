@@ -71,7 +71,7 @@ public sealed class DomainWeightsLibraryTests
 		var weights = Substitute.For<Weights>();
 		innerLibrary.Weights.Returns([weights]);
 		var tagsOwner = Substitute.For<TagsOwner<PoserTag>>();
-		DomainWeightsLibrary library = new(innerLibrary, tagsOwner);
+		var library = new DomainWeightsLibrary(innerLibrary, tagsOwner);
 		library.Weights.Should().HaveCount(1).And.Contain(weights);
 	}
 
@@ -80,7 +80,7 @@ public sealed class DomainWeightsLibraryTests
 	{
 		var innerLibrary = Substitute.For<WeightsLibrary>();
 		var tagsOwner = Substitute.For<TagsOwner<PoserTag>>();
-		DomainWeightsLibrary library = new(innerLibrary, tagsOwner);
+		var library = new DomainWeightsLibrary(innerLibrary, tagsOwner);
 		var weights = Substitute.For<Weights>();
 		library.RemoveWeights(weights);
 		innerLibrary.Received().RemoveWeights(weights);
@@ -91,7 +91,7 @@ public sealed class DomainWeightsLibraryTests
 	{
 		var innerLibrary = Substitute.For<WeightsLibrary>();
 		var tagsOwner = Substitute.For<TagsOwner<PoserTag>>();
-		DomainWeightsLibrary library = new(innerLibrary, tagsOwner);
+		var library = new DomainWeightsLibrary(innerLibrary, tagsOwner);
 		var poserTag = Substitute.For<PoserTag>();
 		poserTag.Owner.Returns(tagsOwner);
 		((Tag)poserTag).Owner.Returns(tagsOwner);
@@ -107,7 +107,7 @@ public sealed class DomainWeightsLibraryTests
 	{
 		var innerLibrary = Substitute.For<WeightsLibrary>();
 		var tagsOwner = Substitute.For<TagsOwner<PoserTag>>();
-		DomainWeightsLibrary library = new(innerLibrary, tagsOwner);
+		var library = new DomainWeightsLibrary(innerLibrary, tagsOwner);
 		var poserTag = Substitute.For<PoserTag>();
 		poserTag.Owner.Returns(tagsOwner);
 		((Tag)poserTag).Owner.Returns(tagsOwner);
@@ -115,5 +115,17 @@ public sealed class DomainWeightsLibraryTests
 		keyPointTag.Owner.Returns(poserTag);
 		Assert.Throws<KeyPointTagWithoutOwnerException>(() => library.CreateWeights(new WeightsMetadata(), [keyPointTag]));
 		innerLibrary.DidNotReceive().CreateWeights(Arg.Any<WeightsMetadata>(), Arg.Any<IReadOnlyCollection<Tag>>());
+	}
+
+	[Fact]
+	public void ShouldDisallowWeightsCreationWithDuplicatedTag()
+	{
+		var innerLibrary = Substitute.For<WeightsLibrary>();
+		var tagsOwner = Substitute.For<TagsOwner<PoserTag>>();
+		var library = new DomainWeightsLibrary(innerLibrary, tagsOwner);
+		var tag = Substitute.For<Tag>();
+		var exception = Assert.Throws<DuplicateTagsException>(() => library.CreateWeights(new WeightsMetadata(), [tag, tag]));
+		innerLibrary.DidNotReceive().CreateWeights(Arg.Any<WeightsMetadata>(), Arg.Any<IReadOnlyCollection<Tag>>());
+		exception.Duplicates.Should().HaveCount(1).And.Contain(tag);
 	}
 }
