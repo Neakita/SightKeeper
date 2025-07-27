@@ -13,11 +13,11 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation;
 
-public sealed class AnnotationTabViewModel : ViewModel, IDisposable
+public sealed class AnnotationTabViewModel : ViewModel, AnnotationTabDataContext, IDisposable
 {
 	public ImagesDataContext Images => _images;
 	public DrawerDataContext Drawer => _drawer;
-	public AnnotationSideBarComponent SideBar { get; }
+	public SideBarDataContext SideBar { get; }
 
 	public AnnotationTabViewModel(
 		ImagesViewModel images,
@@ -27,16 +27,16 @@ public sealed class AnnotationTabViewModel : ViewModel, IDisposable
 		SideBar = sideBar;
 		_drawer = drawer;
 		_images = images;
-		SideBar.SelectedImageSetChanged
+		sideBar.SelectedImageSetChanged
 			.Subscribe(OnSelectedImageSetChanged)
 			.DisposeWith(_disposable);
-		SideBar.SelectedDataSetChanged
+		sideBar.SelectedDataSetChanged
 			.Subscribe(OnSelectedDataSetChanged)
 			.DisposeWith(_disposable);
 		_images.SelectedImageChanged
 			.Subscribe(OnSelectedImageChanged)
 			.DisposeWith(_disposable);
-		SideBar.AdditionalToolingChanged
+		sideBar.AdditionalToolingChanged
 			.Subscribe(OnAdditionalToolingChanged)
 			.DisposeWith(_disposable);
 	}
