@@ -2,6 +2,7 @@
 using Pure.DI;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation;
+using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
@@ -63,5 +64,14 @@ public sealed class ViewModelsComposition
 		.To<CapturingSettingsViewModel>()
 
 		.Bind<AnnotationSideBarComponent>()
-		.To<SideBarViewModel>();
+		.To<SideBarViewModel>()
+
+		.Bind<ImageSelection>()
+		.As(Lifetime.Singleton)
+		.To<ImagesViewModel>()
+	
+		.Bind<ImageSetSelectionDataContext>()
+		.Bind<ImageSetSelection>()
+		.As(Lifetime.Singleton)
+		.To<ImageSetSelectionViewModel>();
 }

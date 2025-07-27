@@ -47,7 +47,7 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 
 	public bool IsEnabled => Image != null;
 
-	public ClassifierToolingViewModel(ImagesViewModel imagesViewModel)
+	public ClassifierToolingViewModel(ImageSelection imagesViewModel)
 	{
 		_disposable = imagesViewModel.SelectedImageChanged.Subscribe(_ => Image = imagesViewModel.SelectedImage);
 		Image = imagesViewModel.SelectedImage;

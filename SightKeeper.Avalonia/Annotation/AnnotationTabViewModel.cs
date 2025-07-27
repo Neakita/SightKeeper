@@ -27,9 +27,6 @@ public sealed class AnnotationTabViewModel : ViewModel, AnnotationTabDataContext
 		SideBar = sideBar;
 		_drawer = drawer;
 		_images = images;
-		sideBar.SelectedImageSetChanged
-			.Subscribe(OnSelectedImageSetChanged)
-			.DisposeWith(_disposable);
 		sideBar.SelectedDataSetChanged
 			.Subscribe(OnSelectedDataSetChanged)
 			.DisposeWith(_disposable);
@@ -50,11 +47,6 @@ public sealed class AnnotationTabViewModel : ViewModel, AnnotationTabDataContext
 	private readonly DrawerViewModel _drawer;
 	private readonly CompositeDisposable _disposable = new();
 	private CompositeDisposable? _additionalToolingDisposable;
-
-	private void OnSelectedImageSetChanged(ImageSetViewModel? value)
-	{
-		_images.Set = value?.Value;
-	}
 
 	private void OnSelectedDataSetChanged(DataSetViewModel? value)
 	{

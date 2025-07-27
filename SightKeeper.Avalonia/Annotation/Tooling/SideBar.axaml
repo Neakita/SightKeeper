@@ -15,12 +15,7 @@
             VerticalAlignment="Top">
         <ScrollViewer>
             <StackPanel Classes="regular-spacing">
-                <HeaderedContentControl Header="Image Set">
-                    <ComboBox SelectedItem="{Binding SelectedImageSet}"
-                              ItemsSource="{Binding ImageSets}"
-                              DisplayMemberBinding="{Binding Name}"
-                              PlaceholderText="Not selected"/>
-                </HeaderedContentControl>
+                <local:ImageSetSelectionView DataContext="{Binding ImageSetSelection}"/>
                 <HeaderedContentControl Header="Data Set">
                     <ComboBox DataContext="{Binding DataSetSelection}"
                               SelectedItem="{Binding SelectedDataSet}"

@@ -10,7 +10,7 @@ using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public sealed class ToolingViewModelFactory(ImagesViewModel imagesViewModel)
+public sealed class ToolingViewModelFactory(ImageSelection imageSelection)
 {
 	public ViewModel? CreateToolingViewModel(DataSet? dataSet)
 	{
@@ -19,7 +19,7 @@ public sealed class ToolingViewModelFactory(ImagesViewModel imagesViewModel)
 			case null:
 				return null;
 			case ClassifierDataSet classifierDataSet:
-				var classifierTooling = new ClassifierToolingViewModel(imagesViewModel);
+				var classifierTooling = new ClassifierToolingViewModel(imageSelection);
 				classifierTooling.DataSet = classifierDataSet;
 				return classifierTooling;
 			case DetectorDataSet detectorDataSet:

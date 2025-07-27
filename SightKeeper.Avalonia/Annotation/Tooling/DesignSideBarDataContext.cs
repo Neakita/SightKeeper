@@ -8,13 +8,7 @@ namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 internal sealed class DesignSideBarDataContext : SideBarDataContext, DataSetSelectionDataContext
 {
-	public IReadOnlyCollection<ImageSetDataContext> ImageSets =>
-	[
-		new DesignImageSetDataContext("Image Set 1"),
-		new DesignImageSetDataContext("Image Set 2")
-	];
-
-	public ImageSetDataContext? SelectedImageSet { get; set; }
+	public ImageSetSelectionDataContext ImageSetSelection => new DesignImageSelectionDataContext();
 
 	public IReadOnlyCollection<DataSetDataContext> DataSets =>
 	[

@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;
@@ -39,9 +40,15 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 	public Image? SelectedImage => SelectedImageIndex >= 0 ? Set?.Images[SelectedImageIndex] : null;
 	public IObservable<Image?> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
-	public ImagesViewModel(ImageLoader imageLoader)
+	public ImagesViewModel(ImageSetSelection imageSetSelection, ImageLoader imageLoader)
 	{
+		imageSetSelection.SelectedImageSetChanged.Subscribe(SetImageSet);
 		_imageLoader = imageLoader;
+	}
+
+	private void SetImageSet(ImageSet? set)
+	{
+		Set = set;
 	}
 
 	public void Dispose()

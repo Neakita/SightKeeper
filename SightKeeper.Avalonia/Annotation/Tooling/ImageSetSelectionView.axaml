@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Annotation.Tooling.ImageSetSelectionView"
+             x:DataType="local:ImageSetSelectionDataContext">
+    <HeaderedContentControl Header="Image Set">
+        <ComboBox ItemsSource="{Binding ImageSets}"
+                  SelectedItem="{Binding SelectedImageSet}"
+                  DisplayMemberBinding="{Binding Name}"
+                  PlaceholderText="Not selected"/>
+    </HeaderedContentControl>
+</UserControl>
