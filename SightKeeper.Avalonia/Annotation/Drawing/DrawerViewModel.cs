@@ -12,9 +12,9 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
+public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, IDisposable
 {
-	[ObservableProperty] public partial Image? Image { get; set; }
+	[ObservableProperty] public partial Image? Image { get; private set; }
 
 	public Tag? Tag
 	{
@@ -43,12 +43,25 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 		BoundingDrawerViewModel boundingDrawer,
 		AssetItemsViewModel itemsViewModel,
 		KeyPointDrawerViewModel keyPointDrawer,
-		ImageLoader imageLoader)
+		ImageLoader imageLoader,
+		ImageSelection imageSelection)
 	{
 		_boundingDrawer = boundingDrawer;
 		_itemsViewModel = itemsViewModel;
 		_keyPointDrawer = keyPointDrawer;
 		_imageLoader = imageLoader;
+		_constructorDisposable = imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange);
+	}
+
+	private void HandleImageSelectionChange(Image? image)
+	{
+		Image = image;
+	}
+
+	public void Dispose()
+	{
+		_selectedItemChanged.Dispose();
+		_constructorDisposable.Dispose();
 	}
 
 	private readonly BoundingDrawerViewModel _boundingDrawer;
@@ -56,6 +69,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 	private readonly KeyPointDrawerViewModel _keyPointDrawer;
 	private readonly ImageLoader _imageLoader;
 	private readonly Subject<BoundedItemDataContext?> _selectedItemChanged = new();
+	private readonly IDisposable _constructorDisposable;
 
 	partial void OnImageChanged(Image? value)
 	{

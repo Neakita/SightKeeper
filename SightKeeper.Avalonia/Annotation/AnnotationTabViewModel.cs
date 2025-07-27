@@ -6,7 +6,6 @@ using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.Annotation.Tooling.Poser;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation;
 
@@ -24,9 +23,6 @@ public sealed class AnnotationTabViewModel : ViewModel, AnnotationTabDataContext
 		SideBar = sideBar;
 		_drawer = drawer;
 		_images = images;
-		_images.SelectedImageChanged
-			.Subscribe(OnSelectedImageChanged)
-			.DisposeWith(_disposable);
 		sideBar.AdditionalToolingChanged
 			.Subscribe(OnAdditionalToolingChanged)
 			.DisposeWith(_disposable);
@@ -41,11 +37,6 @@ public sealed class AnnotationTabViewModel : ViewModel, AnnotationTabDataContext
 	private readonly DrawerViewModel _drawer;
 	private readonly CompositeDisposable _disposable = new();
 	private CompositeDisposable? _additionalToolingDisposable;
-
-	private void OnSelectedImageChanged(Image? image)
-	{
-		_drawer.Image = image;
-	}
 
 	private void OnAdditionalToolingChanged(object? value)
 	{
