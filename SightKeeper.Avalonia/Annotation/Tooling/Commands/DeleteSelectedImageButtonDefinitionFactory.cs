@@ -10,9 +10,10 @@ namespace SightKeeper.Avalonia.Annotation.Tooling.Commands;
 
 public sealed class DeleteSelectedImageButtonDefinitionFactory : AnnotationButtonDefinitionFactory
 {
-	public DeleteSelectedImageButtonDefinitionFactory(ImageSelection images)
+	public DeleteSelectedImageButtonDefinitionFactory(ImageSelection imageSelection, ImageSetSelection imageSetSelection)
 	{
-		_images = images;
+		_imageSelection = imageSelection;
+		_imageSetSelection = imageSetSelection;
 	}
 
 	public AnnotationButtonDefinition CreateButtonDefinition() => new()
@@ -22,23 +23,25 @@ public sealed class DeleteSelectedImageButtonDefinitionFactory : AnnotationButto
 		ToolTip = "Delete selected image"
 	};
 
-	private readonly ImageSelection _images;
+	private readonly ImageSelection _imageSelection;
+	private readonly ImageSetSelection _imageSetSelection;
 
 	private DisposableCommand CreateCommand()
 	{
 		RelayCommand command = new(DeleteImage, () => CanDeleteImage);
 		CompositeDisposable disposable = new(2);
-		_images.SelectedImageChanged
+		_imageSelection.SelectedImageChanged
 			.Subscribe(_ => command.NotifyCanExecuteChanged())
 			.DisposeWith(disposable);
 		return new DisposableCommand(command, disposable);
 	}
 
-	private bool CanDeleteImage => _images.SelectedImage?.Assets.Count == 0;
+	private bool CanDeleteImage => _imageSelection.SelectedImage?.Assets.Count == 0;
 
 	private void DeleteImage()
 	{
-		Guard.IsNotNull(_images.Set);
-		_images.Set.RemoveImageAt(_images.SelectedImageIndex);
+		var set = _imageSetSelection.SelectedImageSet;
+		Guard.IsNotNull(set);
+		set.RemoveImageAt(_imageSelection.SelectedImageIndex);
 	}
 }

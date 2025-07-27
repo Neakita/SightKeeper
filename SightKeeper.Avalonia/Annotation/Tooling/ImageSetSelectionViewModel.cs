@@ -23,6 +23,8 @@ internal sealed partial class ImageSetSelectionViewModel : ViewModel, ImageSetSe
 	IObservable<ImageSet?> ImageSetSelection.SelectedImageSetChanged =>
 		_selectedImageSetChanged.Select(viewModel => viewModel?.Value);
 
+	ImageSet? ImageSetSelection.SelectedImageSet => SelectedImageSet?.Value;
+
 	public ImageSetSelectionViewModel(ImageSetViewModelsObservableListRepository imageSets)
 	{
 		ImageSets = imageSets.Items;
