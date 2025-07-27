@@ -50,6 +50,7 @@ internal static class Program
 	private static void SetupLogger()
 	{
 		Log.Logger = new LoggerConfiguration()
+			.MinimumLevel.Verbose()
 			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
 			.WriteTo.Debug()
 			.CreateLogger();
