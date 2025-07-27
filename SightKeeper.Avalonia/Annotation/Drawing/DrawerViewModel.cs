@@ -6,8 +6,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Images;
-using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
@@ -30,17 +28,6 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 				_keyPointDrawer.Tag = value;
 			else
 				_boundingDrawer.Tag = value;
-		}
-	}
-
-	public AssetsOwner<ItemsOwner<AssetItem>>? AssetsLibrary
-	{
-		get;
-		set
-		{
-			field = value;
-			_boundingDrawer.AssetsLibrary = value;
-			_itemsViewModel.AssetsLibrary = value;
 		}
 	}
 

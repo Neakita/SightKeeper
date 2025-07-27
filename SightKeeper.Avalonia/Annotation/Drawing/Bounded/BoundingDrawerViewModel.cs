@@ -1,6 +1,9 @@
+using System;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
+using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
@@ -8,7 +11,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
-public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerDataContext
+public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerDataContext, IDisposable
 {
 	public Tag? Tag
 	{
@@ -30,28 +33,36 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		}
 	}
 
-	public AssetsOwner<ItemsMaker<AssetItem>>? AssetsLibrary
+	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;
+
+	public BoundingDrawerViewModel(DataSetSelection dataSetSelection)
 	{
-		get;
-		set
-		{
-			field = value;
-			CreateItemCommand.NotifyCanExecuteChanged();
-		}
+		_disposable = dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange);
 	}
 
-	private bool CanCreateItem => Tag != null && Image != null && AssetsLibrary != null;
+	public void Dispose()
+	{
+		_disposable.Dispose();
+	}
+
+	private readonly IDisposable _disposable;
+	private AssetsOwner<ItemsMaker<AssetItem>>? _assetsLibrary;
+	private bool CanCreateItem => Tag != null && Image != null && _assetsLibrary != null;
 
 	[RelayCommand(CanExecute = nameof(CanCreateItem))]
 	private void CreateItem(Bounding bounding)
 	{
 		Guard.IsNotNull(Tag);
 		Guard.IsNotNull(Image);
-		Guard.IsNotNull(AssetsLibrary);
-		var asset = AssetsLibrary.GetOrMakeAsset(Image);
+		Guard.IsNotNull(_assetsLibrary);
+		var asset = _assetsLibrary.GetOrMakeAsset(Image);
 		var item = asset.MakeItem(Tag);
 		item.Bounding = bounding;
 	}
 
-	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;
+	private void HandleDataSetSelectionChange(DataSet? set)
+	{
+		_assetsLibrary = set?.AssetsLibrary as AssetsOwner<ItemsMaker<AssetItem>>;
+		CreateItemCommand.NotifyCanExecuteChanged();
+	}
 }

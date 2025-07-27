@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.Images;
@@ -9,7 +12,7 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed partial class AssetItemsViewModel : ViewModel
+public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 {
 	public Image? Image
 	{
@@ -17,37 +20,41 @@ public sealed partial class AssetItemsViewModel : ViewModel
 		set
 		{
 			field = value;
-			OnImageChanged();
-		}
-	}
-
-	public AssetsContainer<ItemsContainer<AssetItem>>? AssetsLibrary
-	{
-		get;
-		set
-		{
-			field = value;
-			OnImageChanged();
+			UpdateItems();
 		}
 	}
 
 	[ObservableProperty]
 	public partial IReadOnlyCollection<DrawerItemDataContext> Items { get; private set; } = ReadOnlyCollection<DrawerItemDataContext>.Empty;
 
-	public AssetItemsViewModel(DrawerItemsFactory drawerItemsFactory)
+	public AssetItemsViewModel(DrawerItemsFactory drawerItemsFactory, DataSetSelection dataSetSelection)
 	{
 		_drawerItemsFactory = drawerItemsFactory;
+		_disposable = dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange);
+	}
+
+	public void Dispose()
+	{
+		_disposable.Dispose();
 	}
 
 	private readonly DrawerItemsFactory _drawerItemsFactory;
-	private ItemsContainer<AssetItem>? Asset => Image == null ? null : AssetsLibrary?.GetOptionalAsset(Image);
+	private readonly IDisposable _disposable;
+	private AssetsContainer<ItemsContainer<AssetItem>>? _assetsLibrary;
+	private ItemsContainer<AssetItem>? Asset => Image == null ? null : _assetsLibrary?.GetOptionalAsset(Image);
 
-	private void OnImageChanged()
+	private void UpdateItems()
 	{
 		if (Asset == null)
 			return;
 		var items = (ObservableList<AssetItem>)Asset.Items;
 		var itemViewModels = items.Transform(_drawerItemsFactory.CreateItemViewModel).ToObservableList();
 		Items = itemViewModels;
+	}
+
+	private void HandleDataSetSelectionChange(DataSet? set)
+	{
+		_assetsLibrary = set?.AssetsLibrary as AssetsContainer<ItemsContainer<AssetItem>>;
+		UpdateItems();
 	}
 }

@@ -73,5 +73,9 @@ public sealed class ViewModelsComposition
 		.Bind<ImageSetSelectionDataContext>()
 		.Bind<ImageSetSelection>()
 		.As(Lifetime.Singleton)
-		.To<ImageSetSelectionViewModel>();
+		.To<ImageSetSelectionViewModel>()
+	
+		.Bind<DataSetSelection>()
+		.As(Lifetime.Singleton)
+		.To<DataSetSelectionViewModel>();
 }

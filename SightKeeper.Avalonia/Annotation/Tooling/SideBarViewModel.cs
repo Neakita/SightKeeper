@@ -18,9 +18,6 @@ public sealed partial class SideBarViewModel : ViewModel, AnnotationSideBarCompo
 	public IObservable<object?> AdditionalToolingChanged => _additionalToolingChanged.AsObservable();
 	public DataSetSelectionDataContext DataSetSelection => _dataSetSelection;
 
-	IObservable<DataSetViewModel?> AnnotationSideBarComponent.SelectedDataSetChanged =>
-		_dataSetSelection.SelectedDataSetChanged;
-
 	public SideBarViewModel(
 		ImageSetSelectionDataContext imageSetSelection,
 		ToolingViewModelFactory toolingViewModelFactory,
