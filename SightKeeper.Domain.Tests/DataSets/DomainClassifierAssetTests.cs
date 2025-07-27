@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.Tests.DataSets;
 
-public sealed class ClassifierAssetTests
+public sealed class DomainClassifierAssetTests
 {
 	[Fact]
 	public void ShouldAllowUpdateTag()

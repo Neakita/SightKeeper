@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Domain.Tests.DataSets;
 
-public sealed class KeyPointTests
+public sealed class DomainKeyPointTests
 {
 	[Fact]
 	public void ShouldAllowUpdatePosition()

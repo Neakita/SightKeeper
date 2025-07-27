@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.Tests.DataSets;
 
-public sealed class Poser2DItemTests
+public sealed class DomainPoser2DItemTests
 {
 	[Fact]
 	public void ShouldClearKeyPointsWhenChangingTag()
