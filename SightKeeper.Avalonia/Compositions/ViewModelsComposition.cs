@@ -80,11 +80,15 @@ public sealed class ViewModelsComposition
 		.To<ImageSetSelectionViewModel>()
 
 		.Bind<DataSetSelection>()
+		.Bind<DataSetSelectionDataContext>()
 		.As(Lifetime.Singleton)
 		.To<DataSetSelectionViewModel>()
 
 		.Bind<DrawerDataContext>()
 		.Bind<SelectedItemProvider>()
 		.As(Lifetime.Singleton)
-		.To<DrawerViewModel>();
+		.To<DrawerViewModel>()
+	
+		.Bind<ActionsDataContext>()
+		.To<ActionsViewModel>();
 }

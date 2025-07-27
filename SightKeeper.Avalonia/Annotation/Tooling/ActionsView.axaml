@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d"
+             x:Class="SightKeeper.Avalonia.Annotation.Tooling.ActionsView"
+             x:DataType="local:ActionsDataContext">
+    <WrapPanel ItemSpacing="8" LineSpacing="8">
+        <Button Classes="square"
+                Command="{Binding DeleteSelectedImageCommand}"
+                ToolTip.Tip="Delete selected image"
+                Content="{icons:MaterialIconExt Kind=ImageRemove}"/>
+        <Button Classes="square"
+                Command="{Binding DeleteSelectedAssetCommand}"
+                ToolTip.Tip="Delete selected asset"
+                Content="{icons:MaterialIconExt Kind=BookmarkRemove}"/>
+    </WrapPanel>
+</UserControl>

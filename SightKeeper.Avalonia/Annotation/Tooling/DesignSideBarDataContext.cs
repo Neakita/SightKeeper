@@ -1,7 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using CommunityToolkit.Mvvm.Input;
-using Material.Icons;
 using SightKeeper.Avalonia.DataSets;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
@@ -20,13 +17,7 @@ internal sealed class DesignSideBarDataContext : SideBarDataContext, DataSetSele
 
 	public DataSetSelectionDataContext DataSetSelection => this;
 
-	public IReadOnlyCollection<AnnotationButtonDefinition> ButtonDefinitions => Enumerable.Repeat(
-		new AnnotationButtonDefinition
-		{
-			IconKind = MaterialIconKind.Abacus,
-			Command = new RelayCommand(() => { }),
-			ToolTip = "The tool tip"
-		}, 5).ToList();
+	public ActionsDataContext Actions => new DesignActionsDataContext();
 
 	public object? AdditionalTooling => null;
 }

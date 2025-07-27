@@ -3,7 +3,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
-             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d"
              d:DesignWidth="200"
              x:Class="SightKeeper.Avalonia.Annotation.Tooling.SideBar"
@@ -23,25 +22,7 @@
                               DisplayMemberBinding="{Binding Name}"
                               PlaceholderText="Not selected"/>
                 </HeaderedContentControl>
-                <ItemsControl ItemsSource="{Binding ButtonDefinitions}"
-                              ClipToBounds="False">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel ItemSpacing="8" LineSpacing="8"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Classes="square"
-                                    Command="{Binding Command}"
-                                    ToolTip.Tip="{Binding ToolTip}">
-                                <Button.Content>
-                                    <icons:MaterialIcon Kind="{Binding IconKind}"/>
-                                </Button.Content>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <local:ActionsView DataContext="{Binding Actions}"/>
                 <local:AdaptiveTooling DataContext="{Binding AdditionalTooling}"/>
             </StackPanel>
         </ScrollViewer>
