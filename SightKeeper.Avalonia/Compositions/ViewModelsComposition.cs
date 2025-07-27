@@ -1,6 +1,8 @@
 ﻿using Material.Icons;
 using Pure.DI;
 using SightKeeper.Application;
+using SightKeeper.Avalonia.Annotation;
+using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.ImageSets;
@@ -29,6 +31,13 @@ public sealed class ViewModelsComposition
 			return new TabItemViewModel(MaterialIconKind.ImageAlbum, "Datasets", viewModel);
 		})
 
+		.Bind<TabItemViewModel>(3)
+		.To(context =>
+		{
+			context.Inject(out AnnotationTabViewModel viewModel);
+			return new TabItemViewModel(MaterialIconKind.ImageEdit, "Annotation", viewModel);
+		})
+
 		.Bind<DialogManager>()
 		.As(Lifetime.Singleton)
 		.To<DialogManager>()
@@ -51,5 +60,8 @@ public sealed class ViewModelsComposition
 		.To<ImageSetCardViewModelFactory>()
 
 		.Bind<CapturingSettingsDataContext>()
-		.To<CapturingSettingsViewModel>();
+		.To<CapturingSettingsViewModel>()
+
+		.Bind<AnnotationSideBarComponent>()
+		.To<SideBarViewModel>();
 }
