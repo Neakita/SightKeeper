@@ -3,7 +3,6 @@ using FluentAssertions;
 using MemoryPack;
 using NSubstitute;
 using SightKeeper.Data.DataSets;
-using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets;
