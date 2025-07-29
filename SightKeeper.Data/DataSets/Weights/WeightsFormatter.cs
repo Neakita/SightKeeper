@@ -12,15 +12,14 @@ internal static class WeightsFormatter
 {
 	public static void WriteWeights<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<Domain.DataSets.Weights.Weights> weightsCollection,
+		IReadOnlyCollection<StorableWeights> weightsCollection,
 		IReadOnlyDictionary<Tag, byte> tagIndexes)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(weightsCollection.Count);
 		foreach (var weights in weightsCollection)
 		{
-			throw new NotImplementedException();
-			/*var weightsId = weights.GetId();
+			var weightsId = weights.Id;
 			writer.WriteUnmanaged(
 				weightsId,
 				weights.Metadata.Model,
@@ -35,7 +34,7 @@ internal static class WeightsFormatter
 				var tag = weights.Tags[i];
 				weightsTagIndexes[i] = tagIndexes[tag];
 			}
-			writer.WriteUnmanagedSpan(weightsTagIndexes);*/
+			writer.WriteUnmanagedSpan(weightsTagIndexes);
 		}
 	}
 
