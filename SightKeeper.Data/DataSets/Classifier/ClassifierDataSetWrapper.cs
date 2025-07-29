@@ -21,6 +21,10 @@ public sealed class ClassifierDataSetWrapper(ChangeListener changeListener, Lock
 			// so it shouldn't be locked
 			.WithWeightsDataRemoving()
 
+			// Changes shouldn't be observed if they aren't valid,
+			// so it should be behind domain rules
+			.WithObservableLibraries()
+
 			// If domain rule is violated and throws an exception,
 			// it should fail as fast as possible and have smaller stack strace
 			.WithDomainRules()

@@ -21,9 +21,8 @@ public sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock 
 			// so it shouldn't be locked
 			.WithImagesDataRemoving()
 
-			// Images observing decorator can also be before domain rules,
-			// but domain rules can often throw exceptions
-			// so placing observing decorator after domain rules will make stack trace a bit shorter.
+			// Changes shouldn't be observed if they aren't valid,
+			// so it should be behind domain rules
 			.WithObservableImages()
 
 			// If domain rule is violated and throws an exception,

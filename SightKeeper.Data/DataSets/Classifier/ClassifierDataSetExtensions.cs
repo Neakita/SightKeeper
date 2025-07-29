@@ -1,5 +1,8 @@
+using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
@@ -30,6 +33,16 @@ internal static class ClassifierDataSetExtensions
 		return new OverrideLibrariesClassifierDataSet(set)
 		{
 			WeightsLibrary = new DataRemovingWeightsLibrary(set.WeightsLibrary)
+		};
+	}
+
+	public static StorableClassifierDataSet WithObservableLibraries(this StorableClassifierDataSet set)
+	{
+		return new OverrideLibrariesClassifierDataSet(set)
+		{
+			TagsLibrary = new ObservableTagsLibrary<Tag>(set.TagsLibrary),
+			AssetsLibrary = new ObservableAssetsLibrary<StorableClassifierAsset>(set.AssetsLibrary),
+			WeightsLibrary = new ObservableWeightsLibrary(set.WeightsLibrary)
 		};
 	}
 }
