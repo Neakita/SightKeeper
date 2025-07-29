@@ -34,4 +34,9 @@ internal static class ImageSetExtensions
 	{
 		return new ImagesDataRemovingImageSet(set);
 	}
+
+	public static StorableImageSet WithImagesDisposing(this StorableImageSet set)
+	{
+		return new DisposingImageSet(set);
+	}
 }

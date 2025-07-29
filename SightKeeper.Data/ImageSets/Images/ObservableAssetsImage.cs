@@ -51,5 +51,11 @@ internal sealed class ObservableAssetsImage(StorableImage inner) : StorableImage
 		inner.DeleteData();
 	}
 
+	public void Dispose()
+	{
+		_assets.Dispose();
+		inner.Dispose();
+	}
+
 	private readonly ExternalObservableCollection<Asset> _assets = new(inner.Assets);
 }

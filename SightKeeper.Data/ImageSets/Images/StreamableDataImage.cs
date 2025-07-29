@@ -36,4 +36,9 @@ internal sealed class StreamableDataImage(StorableImage inner, FileSystemDataAcc
 	{
 		dataAccess.Delete(inner.Id);
 	}
+
+	public void Dispose()
+	{
+		inner.Dispose();
+	}
 }

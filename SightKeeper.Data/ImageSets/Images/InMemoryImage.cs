@@ -45,5 +45,9 @@ internal sealed class InMemoryImage : StorableImage
 	{
 	}
 
+	public void Dispose()
+	{
+	}
+
 	private readonly HashSet<Asset> _assets = new();
 }

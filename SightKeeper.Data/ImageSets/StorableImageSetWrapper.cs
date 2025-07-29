@@ -25,6 +25,10 @@ public sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock 
 			// so it should be behind domain rules
 			.WithObservableImages()
 
+			// We shouldn't dispose images if domain rule is violated,
+			// so this should be behind domain rules
+			.WithImagesDisposing()
+
 			// If domain rule is violated and throws an exception,
 			// it should fail as fast as possible and have smaller stack strace
 			.WithDomainRules()
