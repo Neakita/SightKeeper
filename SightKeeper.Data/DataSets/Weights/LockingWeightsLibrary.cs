@@ -7,10 +7,10 @@ internal sealed class LockingWeightsLibrary(StorableWeightsLibrary inner, Lock e
 {
 	public IReadOnlyCollection<StorableWeights> Weights => inner.Weights;
 
-	public void CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		lock (editingLock)
-			inner.CreateWeights(metadata, tags);
+			return inner.CreateWeights(metadata, tags);
 	}
 
 	public void RemoveWeights(StorableWeights weights)

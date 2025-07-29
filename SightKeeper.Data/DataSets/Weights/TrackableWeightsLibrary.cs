@@ -7,10 +7,11 @@ internal sealed class TrackableWeightsLibrary(StorableWeightsLibrary inner, Chan
 {
 	public IReadOnlyCollection<StorableWeights> Weights => inner.Weights;
 
-	public void CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
-		inner.CreateWeights(metadata, tags);
+		var weights = inner.CreateWeights(metadata, tags);
 		listener.SetDataChanged();
+		return weights;
 	}
 
 	public void RemoveWeights(StorableWeights weights)

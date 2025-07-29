@@ -9,12 +9,13 @@ internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : St
 {
 	public IReadOnlyCollection<StorableWeights> Weights => _weights;
 
-	public void CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		var id = Id.Create();
 		var inMemoryWeights = new InMemoryWeights(id, metadata, tags.ToList());
 		var wrappedWeights = weightsWrapper.Wrap(inMemoryWeights);
 		_weights.Add(wrappedWeights);
+		return wrappedWeights;
 	}
 
 	public void RemoveWeights(StorableWeights weights)

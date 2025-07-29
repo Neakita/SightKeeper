@@ -7,9 +7,9 @@ internal sealed class DataRemovingWeightsLibrary(StorableWeightsLibrary inner) :
 {
 	public IReadOnlyCollection<StorableWeights> Weights => inner.Weights;
 
-	public void CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
-		inner.CreateWeights(metadata, tags);
+		return inner.CreateWeights(metadata, tags);
 	}
 
 	public void RemoveWeights(StorableWeights weights)
