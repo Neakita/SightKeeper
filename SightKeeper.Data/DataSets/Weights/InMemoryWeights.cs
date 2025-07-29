@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class InMemoryWeights : Domain.DataSets.Weights.Weights
+internal sealed class InMemoryWeights : StorableWeights
 {
 	public Id Id { get; }
 	public WeightsMetadata Metadata { get; }

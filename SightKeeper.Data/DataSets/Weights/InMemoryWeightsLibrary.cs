@@ -5,9 +5,9 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : WeightsLibrary
+internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : StorableWeightsLibrary
 {
-	public IReadOnlyCollection<Domain.DataSets.Weights.Weights> Weights => _weights;
+	public IReadOnlyCollection<StorableWeights> Weights => _weights;
 
 	public void CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
@@ -17,9 +17,9 @@ internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : We
 		_weights.Add(wrappedWeights);
 	}
 
-	public void RemoveWeights(Domain.DataSets.Weights.Weights weights)
+	public void RemoveWeights(StorableWeights weights)
 	{
-		bool isRemoved = _weights.Remove(weights);
+		var isRemoved = _weights.Remove(weights);
 		Guard.IsTrue(isRemoved);
 	}
 
@@ -34,5 +34,5 @@ internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : We
 		_weights.Add(wrappedWeights);
 	}
 
-	private readonly List<Domain.DataSets.Weights.Weights> _weights = new();
+	private readonly List<StorableWeights> _weights = new();
 }
