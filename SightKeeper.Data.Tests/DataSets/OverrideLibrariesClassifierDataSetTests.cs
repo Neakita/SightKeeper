@@ -1,8 +1,8 @@
 using FluentAssertions;
 using NSubstitute;
+using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Weights;
-using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Tests.DataSets;
@@ -25,7 +25,7 @@ public sealed class OverrideLibrariesClassifierDataSetTests
 	public void ShouldOverrideAssetsLibrary()
 	{
 		var innerSet = Substitute.For<StorableClassifierDataSet>();
-		var assetsLibrary = Substitute.For<AssetsOwner<StorableClassifierAsset>>();
+		var assetsLibrary = Substitute.For<StorableAssetsOwner<StorableClassifierAsset>>();
 		var set = new OverrideLibrariesClassifierDataSet(innerSet)
 		{
 			AssetsLibrary = assetsLibrary
