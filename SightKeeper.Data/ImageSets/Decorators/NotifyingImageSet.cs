@@ -1,20 +1,36 @@
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
 
-namespace SightKeeper.Data.ImageSets;
+namespace SightKeeper.Data.ImageSets.Decorators;
 
-internal sealed class ImagesDataRemovingImageSet(StorableImageSet inner) : StorableImageSet
+internal sealed class NotifyingImageSet(StorableImageSet inner) : StorableImageSet, INotifyPropertyChanged
 {
+	public event PropertyChangedEventHandler? PropertyChanged;
+
 	public string Name
 	{
 		get => inner.Name;
-		set => inner.Name = value;
+		set
+		{
+			if (value == Name)
+				return;
+			inner.Name = value;
+			OnPropertyChanged();
+		}
 	}
 
 	public string Description
 	{
 		get => inner.Description;
-		set => inner.Description = value;
+		set
+		{
+			if (value == Description)
+				return;
+			inner.Description = value;
+			OnPropertyChanged();
+		}
 	}
 
 	public IReadOnlyList<StorableImage> Images => inner.Images;
@@ -31,21 +47,16 @@ internal sealed class ImagesDataRemovingImageSet(StorableImageSet inner) : Stora
 
 	public void RemoveImageAt(int index)
 	{
-		var image = Images[index];
-		image.DeleteData();
 		inner.RemoveImageAt(index);
 	}
 
 	public void RemoveImagesRange(int index, int count)
 	{
-		for (int i = 0; i < count; i++)
-			DeleteDataAt(index + i);
 		inner.RemoveImagesRange(index, count);
 	}
 
-	private void DeleteDataAt(int index)
+	private void OnPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		var image = Images[index];
-		image.DeleteData();
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }

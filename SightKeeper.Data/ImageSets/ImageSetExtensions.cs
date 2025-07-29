@@ -1,3 +1,4 @@
+using SightKeeper.Data.ImageSets.Decorators;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;

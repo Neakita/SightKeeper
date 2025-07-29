@@ -1,7 +1,7 @@
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
 
-namespace SightKeeper.Data.ImageSets;
+namespace SightKeeper.Data.ImageSets.Decorators;
 
 internal sealed class TrackableImageSet(StorableImageSet imageSet, ChangeListener changeListener) : StorableImageSet
 {
