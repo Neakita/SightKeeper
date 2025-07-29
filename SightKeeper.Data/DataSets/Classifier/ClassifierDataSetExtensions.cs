@@ -1,3 +1,4 @@
+using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Data.DataSets.Classifier;
@@ -22,5 +23,13 @@ internal static class ClassifierDataSetExtensions
 	public static StorableClassifierDataSet WithNotifications(this StorableClassifierDataSet set)
 	{
 		return new NotifyingClassifierDataSet(set);
+	}
+
+	public static StorableClassifierDataSet WithWeightsDataRemoving(this StorableClassifierDataSet set)
+	{
+		return new OverrideLibrariesClassifierDataSet(set)
+		{
+			WeightsLibrary = new DataRemovingWeightsLibrary(set.WeightsLibrary)
+		};
 	}
 }

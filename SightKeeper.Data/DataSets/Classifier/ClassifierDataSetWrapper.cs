@@ -15,6 +15,12 @@ public sealed class ClassifierDataSetWrapper(ChangeListener changeListener, Lock
 			// so locking appears only after domain rules validated.
 			.WithLocking(editingLock)
 
+			// Weights data removing could be expansive (we can remove large weights files),
+			// and there is no need in lock because lock should affect AppData only,
+			// not the weights files,
+			// so it shouldn't be locked
+			.WithWeightsDataRemoving()
+
 			// If domain rule is violated and throws an exception,
 			// it should fail as fast as possible and have smaller stack strace
 			.WithDomainRules()
