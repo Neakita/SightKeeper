@@ -1,9 +1,8 @@
-using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Classifier;
 
-namespace SightKeeper.Data;
+namespace SightKeeper.Data.DataSets.Classifier;
 
-internal static class Extensions
+internal static class ClassifierDataSetExtensions
 {
 	public static StorableClassifierDataSet WithTracking(this StorableClassifierDataSet set, ChangeListener listener)
 	{
