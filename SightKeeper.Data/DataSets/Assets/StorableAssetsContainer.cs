@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal interface StorableAssetsContainer<out TAsset> : AssetsContainer<TAsset>
+public interface StorableAssetsContainer<out TAsset> : AssetsContainer<TAsset>
 {
 	new IReadOnlyCollection<StorableImage> Images { get; }
 	TAsset GetAsset(StorableImage image);

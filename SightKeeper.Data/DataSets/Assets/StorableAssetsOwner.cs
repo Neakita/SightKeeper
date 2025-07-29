@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal interface StorableAssetsOwner<out TAsset> : StorableAssetsContainer<TAsset>, AssetsOwner<TAsset>
+public interface StorableAssetsOwner<out TAsset> : StorableAssetsContainer<TAsset>, AssetsOwner<TAsset>
 {
 	TAsset MakeAsset(StorableImage image);
 	void DeleteAsset(StorableImage image);
