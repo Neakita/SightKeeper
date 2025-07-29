@@ -3,9 +3,9 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class LockingWeightsLibrary(WeightsLibrary inner, Lock editingLock) : WeightsLibrary
+internal sealed class LockingWeightsLibrary(StorableWeightsLibrary inner, Lock editingLock) : StorableWeightsLibrary
 {
-	public IReadOnlyCollection<Domain.DataSets.Weights.Weights> Weights => inner.Weights;
+	public IReadOnlyCollection<StorableWeights> Weights => inner.Weights;
 
 	public void CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
@@ -13,7 +13,7 @@ internal sealed class LockingWeightsLibrary(WeightsLibrary inner, Lock editingLo
 			inner.CreateWeights(metadata, tags);
 	}
 
-	public void RemoveWeights(Domain.DataSets.Weights.Weights weights)
+	public void RemoveWeights(StorableWeights weights)
 	{
 		lock (editingLock)
 			inner.RemoveWeights(weights);

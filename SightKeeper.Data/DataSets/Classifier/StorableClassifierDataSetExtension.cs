@@ -1,7 +1,7 @@
-﻿using SightKeeper.Domain.DataSets.Assets;
+﻿using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
@@ -21,7 +21,7 @@ internal sealed class StorableClassifierDataSetExtension(ClassifierDataSet inner
 
 	public TagsOwner<Tag> TagsLibrary => inner.TagsLibrary;
 	public AssetsOwner<StorableClassifierAsset> AssetsLibrary => extendedInner.AssetsLibrary;
-	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
+	public StorableWeightsLibrary WeightsLibrary => extendedInner.WeightsLibrary;
 
 	AssetsOwner<ClassifierAsset> ClassifierDataSet.AssetsLibrary => inner.AssetsLibrary;
 }

@@ -4,21 +4,23 @@ using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
 internal sealed class InMemoryClassifierDataSet(
 	TagFactory<Tag> tagFactory,
 	AssetFactory<StorableClassifierAsset> assetFactory,
-	WeightsWrapper weightsWrapper) : StorableClassifierDataSet
+	WeightsWrapper weightsWrapper)
+	: StorableClassifierDataSet
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
+
 	public InMemoryTagsLibrary<Tag> TagsLibrary { get; } = new(tagFactory);
 	public InMemoryAssetsLibrary<StorableClassifierAsset> AssetsLibrary { get; } = new(assetFactory);
 	public InMemoryWeightsLibrary WeightsLibrary { get; } = new(weightsWrapper);
+
 	TagsOwner<Tag> DataSet.TagsLibrary => TagsLibrary;
-	WeightsLibrary DataSet.WeightsLibrary => WeightsLibrary;
 	AssetsOwner<StorableClassifierAsset> StorableClassifierDataSet.AssetsLibrary => AssetsLibrary;
+	StorableWeightsLibrary StorableClassifierDataSet.WeightsLibrary => WeightsLibrary;
 }
