@@ -26,4 +26,8 @@ internal sealed class InMemoryWeights : StorableWeights
 	{
 		return null;
 	}
+
+	public void DeleteData()
+	{
+	}
 }
