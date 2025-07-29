@@ -27,8 +27,8 @@ internal sealed class LockingClassifierDataSet(StorableClassifierDataSet inner, 
 		}
 	}
 
-	public TagsOwner<Tag> TagsLibrary { get; } =
-		new LockingTagsLibrary<Tag>(inner.TagsLibrary, editingLock);
+	public TagsOwner<StorableTag> TagsLibrary { get; } =
+		new LockingTagsLibrary<StorableTag>(inner.TagsLibrary, editingLock);
 
 	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; } =
 		new LockingAssetsLibrary<StorableClassifierAsset>(inner.AssetsLibrary, editingLock);

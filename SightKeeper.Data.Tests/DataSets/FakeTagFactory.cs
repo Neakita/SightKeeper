@@ -1,11 +1,10 @@
 using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Tests.DataSets;
 
-internal sealed class FakeTagFactory : TagFactory<Tag>
+internal sealed class FakeTagFactory : TagFactory<StorableTag>
 {
-	public Tag CreateTag(string name)
+	public StorableTag CreateTag(string name)
 	{
 		return new InMemoryTag
 		{

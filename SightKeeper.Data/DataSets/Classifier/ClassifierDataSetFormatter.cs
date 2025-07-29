@@ -5,7 +5,6 @@ using MemoryPack;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
@@ -48,7 +47,7 @@ public sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableCla
 	private static void WriteAssets<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
 		IReadOnlyCollection<StorableClassifierAsset> assets,
-		Dictionary<Tag, byte> tagIndexes)
+		Dictionary<StorableTag, byte> tagIndexes)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(assets.Count);

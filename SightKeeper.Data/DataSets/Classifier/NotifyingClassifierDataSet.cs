@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -34,7 +35,7 @@ internal sealed class NotifyingClassifierDataSet(StorableClassifierDataSet inner
 		}
 	}
 
-	public TagsOwner<Tag> TagsLibrary => inner.TagsLibrary;
+	public TagsOwner<StorableTag> TagsLibrary => inner.TagsLibrary;
 	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary => inner.AssetsLibrary;
 	public StorableWeightsLibrary WeightsLibrary => inner.WeightsLibrary;
 

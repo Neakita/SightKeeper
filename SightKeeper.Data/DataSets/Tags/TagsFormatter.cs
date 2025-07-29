@@ -18,7 +18,7 @@ internal static class TagsFormatter
 		}
 	}
 
-	public static void ReadTags(ref MemoryPackReader reader, InMemoryTagsLibrary<Tag> tagsLibrary)
+	public static void ReadTags(ref MemoryPackReader reader, InMemoryTagsLibrary<StorableTag> tagsLibrary)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var tagsCount));
 		tagsLibrary.EnsureCapacity(tagsCount);

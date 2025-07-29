@@ -1,4 +1,5 @@
 using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -18,7 +19,7 @@ internal sealed class OverrideLibrariesClassifierDataSet(StorableClassifierDataS
 		set => inner.Description = value;
 	}
 
-	public TagsOwner<Tag> TagsLibrary { get; init; } = inner.TagsLibrary;
+	public TagsOwner<StorableTag> TagsLibrary { get; init; } = inner.TagsLibrary;
 	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; init; } = inner.AssetsLibrary;
 	public StorableWeightsLibrary WeightsLibrary { get; init; } = inner.WeightsLibrary;
 }

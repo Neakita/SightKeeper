@@ -1,5 +1,5 @@
 using FlakeId;
-using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
@@ -8,9 +8,9 @@ internal sealed class InMemoryWeights : StorableWeights
 {
 	public Id Id { get; }
 	public WeightsMetadata Metadata { get; }
-	public IReadOnlyList<Tag> Tags { get; }
+	public IReadOnlyList<StorableTag> Tags { get; }
 
-	public InMemoryWeights(Id id, WeightsMetadata metadata, IReadOnlyList<Tag> tags)
+	public InMemoryWeights(Id id, WeightsMetadata metadata, IReadOnlyList<StorableTag> tags)
 	{
 		Id = id;
 		Metadata = metadata;

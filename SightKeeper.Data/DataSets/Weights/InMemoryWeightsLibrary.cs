@@ -1,6 +1,6 @@
 using CommunityToolkit.Diagnostics;
 using FlakeId;
-using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
@@ -9,7 +9,7 @@ internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : St
 {
 	public IReadOnlyCollection<StorableWeights> Weights => _weights;
 
-	public StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<StorableTag> tags)
 	{
 		var id = Id.Create();
 		var inMemoryWeights = new InMemoryWeights(id, metadata, tags.ToList());

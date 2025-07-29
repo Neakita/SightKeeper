@@ -27,8 +27,8 @@ internal sealed class TrackableClassifierDataSet(StorableClassifierDataSet inner
 		}
 	}
 
-	public TagsOwner<Tag> TagsLibrary { get; } =
-		new TrackableTagsLibrary<Tag>(inner.TagsLibrary, listener);
+	public TagsOwner<StorableTag> TagsLibrary { get; } =
+		new TrackableTagsLibrary<StorableTag>(inner.TagsLibrary, listener);
 
 	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; } =
 		new TrackableAssetsLibrary<StorableClassifierAsset>(inner.AssetsLibrary, listener);

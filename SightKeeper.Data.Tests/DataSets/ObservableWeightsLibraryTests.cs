@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using FluentAssertions;
 using NSubstitute;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 using Vibrance.Changes;
 
@@ -17,7 +17,7 @@ public sealed class ObservableWeightsLibraryTests
 		var observableList = (Vibrance.ReadOnlyObservableCollection<StorableWeights>)set.Weights;
 		var observedChanges = new List<Change<StorableWeights>>();
 		using var subscription = observableList.Subscribe(observedChanges.Add);
-		var weights = set.CreateWeights(new WeightsMetadata(), ReadOnlyCollection<Tag>.Empty);
+		var weights = set.CreateWeights(new WeightsMetadata(), ReadOnlyCollection<StorableTag>.Empty);
 		var insertion = observedChanges.Should().ContainSingle().Which.Should().BeOfType<Addition<StorableWeights>>().Subject;
 		insertion.Items.Should().ContainSingle().Which.Should().Be(weights);
 	}

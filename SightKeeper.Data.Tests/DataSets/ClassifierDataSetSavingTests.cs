@@ -2,8 +2,8 @@ using FlakeId;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.DataSets.Classifier;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.ImageSets.Images;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Tests.DataSets;
 
@@ -13,7 +13,7 @@ public sealed class ClassifierDataSetSavingTests
 	public void ShouldPersistAssetTag()
 	{
 		var set = Substitute.For<StorableClassifierDataSet>();
-		var tag = Substitute.For<Tag>();
+		var tag = Substitute.For<StorableTag>();
 		set.TagsLibrary.Tags.Returns([tag]);
 		var image = new InMemoryImage(Id.Create(), default, default);
 		var asset = Substitute.For<StorableClassifierAsset>();

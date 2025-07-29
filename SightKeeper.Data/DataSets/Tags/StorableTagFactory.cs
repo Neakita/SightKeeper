@@ -3,11 +3,11 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class StorableTagFactory : TagFactory<Tag>
+internal sealed class StorableTagFactory : TagFactory<StorableTag>
 {
 	public TagsContainer<Tag>? TagsOwner { get; set; }
 
-	public Tag CreateTag(string name)
+	public StorableTag CreateTag(string name)
 	{
 		Guard.IsNotNull(TagsOwner);
 		return new InMemoryTag

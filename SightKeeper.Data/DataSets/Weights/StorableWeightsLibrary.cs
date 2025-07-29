@@ -1,3 +1,4 @@
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
@@ -6,7 +7,7 @@ namespace SightKeeper.Data.DataSets.Weights;
 public interface StorableWeightsLibrary : WeightsLibrary
 {
 	new IReadOnlyCollection<StorableWeights> Weights { get; }
-	new StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags);
+	StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<StorableTag> tags);
 	void RemoveWeights(StorableWeights weights);
 
 	IReadOnlyCollection<Domain.DataSets.Weights.Weights> WeightsLibrary.Weights => Weights;

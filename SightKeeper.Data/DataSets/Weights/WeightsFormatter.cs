@@ -2,8 +2,8 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
@@ -13,7 +13,7 @@ internal static class WeightsFormatter
 	public static void WriteWeights<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
 		IReadOnlyCollection<StorableWeights> weightsCollection,
-		IReadOnlyDictionary<Tag, byte> tagIndexes)
+		IReadOnlyDictionary<StorableTag, byte> tagIndexes)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(weightsCollection.Count);
@@ -38,7 +38,7 @@ internal static class WeightsFormatter
 		}
 	}
 
-	public static void ReadWeights(ref MemoryPackReader reader, InMemoryWeightsLibrary weightsLibrary, IReadOnlyList<Tag> tags)
+	public static void ReadWeights(ref MemoryPackReader reader, InMemoryWeightsLibrary weightsLibrary, IReadOnlyList<StorableTag> tags)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var weightsCount));
 		weightsLibrary.EnsureCapacity(weightsCount);
@@ -53,7 +53,7 @@ internal static class WeightsFormatter
 				out Vector2<ushort> resolution);
 			Span<byte> tagIndexes = new();
 			reader.ReadUnmanagedSpan(ref tagIndexes);
-			List<Tag> weightsTags = new(tagIndexes.Length);
+			List<StorableTag> weightsTags = new(tagIndexes.Length);
 			foreach (var tagIndex in tagIndexes)
 			{
 				var tag = tags[tagIndex];
