@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-public interface StorableImageSet : ImageSet
+public interface StorableImageSet : ImageSet, IDisposable
 {
 	new IReadOnlyList<StorableImage> Images { get; }
 	new StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size);

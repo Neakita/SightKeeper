@@ -50,4 +50,9 @@ internal sealed class LockingImageSet(StorableImageSet inner, Lock editingLock) 
 		lock (editingLock)
 			inner.RemoveImagesRange(index, count);
 	}
+
+	public void Dispose()
+	{
+		inner.Dispose();
+	}
 }

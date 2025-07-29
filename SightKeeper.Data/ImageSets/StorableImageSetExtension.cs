@@ -39,4 +39,9 @@ internal sealed class StorableImageSetExtension(ImageSet inner, StorableImageSet
 	{
 		inner.RemoveImagesRange(index, count);
 	}
+
+	public void Dispose()
+	{
+		extendedInner.Dispose();
+	}
 }

@@ -39,6 +39,10 @@ public sealed class InMemoryImageSet : StorableImageSet
 		_images.RemoveRange(index, count);
 	}
 
+	public void Dispose()
+	{
+	}
+
 	internal void EnsureCapacity(int capacity)
 	{
 		_images.EnsureCapacity(capacity);

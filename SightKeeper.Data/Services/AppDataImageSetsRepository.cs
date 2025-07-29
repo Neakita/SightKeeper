@@ -43,6 +43,7 @@ public sealed class AppDataImageSetsRepository :
 		}
 		_changeListener.SetDataChanged();
 		_removed.OnNext(set);
+		set.Dispose();
 	}
 
 	void WriteRepository<ImageSet>.Add(ImageSet set)

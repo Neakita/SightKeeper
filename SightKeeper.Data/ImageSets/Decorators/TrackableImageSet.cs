@@ -3,45 +3,45 @@ using SightKeeper.Domain;
 
 namespace SightKeeper.Data.ImageSets.Decorators;
 
-internal sealed class TrackableImageSet(StorableImageSet imageSet, ChangeListener changeListener) : StorableImageSet
+internal sealed class TrackableImageSet(StorableImageSet inner, ChangeListener changeListener) : StorableImageSet
 {
 	public string Name
 	{
-		get => imageSet.Name;
+		get => inner.Name;
 		set
 		{
-			imageSet.Name = value;
+			inner.Name = value;
 			changeListener.SetDataChanged();
 		}
 	}
 
 	public string Description
 	{
-		get => imageSet.Description;
+		get => inner.Description;
 		set
 		{
-			imageSet.Description = value;
+			inner.Description = value;
 			changeListener.SetDataChanged();
 		}
 	}
 
-	public IReadOnlyList<StorableImage> Images => imageSet.Images;
+	public IReadOnlyList<StorableImage> Images => inner.Images;
 
 	public StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
-		var image = imageSet.CreateImage(creationTimestamp, size);
+		var image = inner.CreateImage(creationTimestamp, size);
 		changeListener.SetDataChanged();
 		return image;
 	}
 
 	public IReadOnlyList<StorableImage> GetImagesRange(int index, int count)
 	{
-		return imageSet.GetImagesRange(index, count);
+		return inner.GetImagesRange(index, count);
 	}
 
 	public void RemoveImageAt(int index)
 	{
-		imageSet.RemoveImageAt(index);
+		inner.RemoveImageAt(index);
 		changeListener.SetDataChanged();
 	}
 
@@ -49,7 +49,12 @@ internal sealed class TrackableImageSet(StorableImageSet imageSet, ChangeListene
 	{
 		if (count == 0)
 			return;
-		imageSet.RemoveImagesRange(index, count);
+		inner.RemoveImagesRange(index, count);
 		changeListener.SetDataChanged();
+	}
+
+	public void Dispose()
+	{
+		inner.Dispose();
 	}
 }

@@ -43,6 +43,11 @@ internal sealed class ImagesDataRemovingImageSet(StorableImageSet inner) : Stora
 		inner.RemoveImagesRange(index, count);
 	}
 
+	public void Dispose()
+	{
+		inner.Dispose();
+	}
+
 	private void DeleteDataAt(int index)
 	{
 		var image = Images[index];
