@@ -18,4 +18,9 @@ internal static class ClassifierDataSetExtensions
 	{
 		return new StorableClassifierDataSetExtension(new DomainClassifierDataSet(set), set);
 	}
+
+	public static StorableClassifierDataSet WithNotifications(this StorableClassifierDataSet set)
+	{
+		return new NotifyingClassifierDataSet(set);
+	}
 }
