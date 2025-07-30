@@ -21,6 +21,11 @@ public sealed class ClassifierDataSetWrapper(ChangeListener changeListener, Lock
 			// so it shouldn't be locked
 			.WithWeightsDataRemoving()
 
+			// We don't want to add or remove users when changes are invalid by domain rules,
+			// so it should be behind domain rules.
+			// Events better be fired after tag users updated, so put it behind ObservableLibraries.
+			.WithTagUsersTracking()
+
 			// Changes shouldn't be observed if they aren't valid,
 			// so it should be behind domain rules
 			.WithObservableLibraries()

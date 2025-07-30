@@ -44,4 +44,12 @@ internal static class ClassifierDataSetExtensions
 			WeightsLibrary = new ObservableWeightsLibrary(set.WeightsLibrary)
 		};
 	}
+
+	public static StorableClassifierDataSet WithTagUsersTracking(this StorableClassifierDataSet set)
+	{
+		return new OverrideLibrariesClassifierDataSet(set)
+		{
+			AssetsLibrary = new TagUsersTrackingClassifierAssetsLibrary(set.AssetsLibrary)
+		};
+	}
 }
