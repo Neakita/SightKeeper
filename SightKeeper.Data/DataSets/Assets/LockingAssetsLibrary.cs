@@ -40,4 +40,9 @@ internal sealed class LockingAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset> i
 		lock (editingLock)
 			inner.ClearAssets();
 	}
+
+	public void EnsureCapacity(int capacity)
+	{
+		inner.EnsureCapacity(capacity);
+	}
 }

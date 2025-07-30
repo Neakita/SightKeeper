@@ -44,4 +44,9 @@ internal sealed class TagUsersTrackingClassifierAssetsLibrary(StorableAssetsOwne
 		inner.DeleteAsset(image);
 		asset.Tag.RemoveUser(asset);
 	}
+
+	public void EnsureCapacity(int capacity)
+	{
+		inner.EnsureCapacity(capacity);
+	}
 }

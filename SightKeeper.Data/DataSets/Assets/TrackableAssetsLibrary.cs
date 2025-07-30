@@ -40,4 +40,9 @@ internal sealed class TrackableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset>
 		inner.ClearAssets();
 		listener.SetDataChanged();
 	}
+
+	public void EnsureCapacity(int capacity)
+	{
+		inner.EnsureCapacity(capacity);
+	}
 }

@@ -60,7 +60,7 @@ public sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableCla
 		}
 	}
 
-	private InMemoryClassifierDataSet CreateInMemorySet()
+	private static InMemoryClassifierDataSet CreateInMemorySet()
 	{
 		StorableTagFactory tagFactory = new();
 		StorableClassifierAssetFactory assetFactory = new();
@@ -71,7 +71,7 @@ public sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableCla
 		return inMemorySet;
 	}
 
-	private void ReadAssets(ref MemoryPackReader reader, InMemoryClassifierDataSet set)
+	private void ReadAssets(ref MemoryPackReader reader, StorableClassifierDataSet set)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var assetsCount));
 		set.AssetsLibrary.EnsureCapacity(assetsCount);

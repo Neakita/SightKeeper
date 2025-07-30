@@ -45,7 +45,7 @@ internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFa
 		_assets.Clear();
 	}
 
-	internal void EnsureCapacity(int capacity)
+	public void EnsureCapacity(int capacity)
 	{
 		_assets.EnsureCapacity(capacity);
 	}

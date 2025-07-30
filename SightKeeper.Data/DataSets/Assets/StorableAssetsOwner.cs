@@ -8,6 +8,7 @@ public interface StorableAssetsOwner<out TAsset> : StorableAssetsContainer<TAsse
 {
 	TAsset MakeAsset(StorableImage image);
 	void DeleteAsset(StorableImage image);
+	void EnsureCapacity(int capacity);
 
 	TAsset GetOrMakeAsset(StorableImage image)
 	{

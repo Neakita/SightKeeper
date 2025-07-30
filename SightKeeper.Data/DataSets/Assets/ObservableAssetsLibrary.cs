@@ -60,6 +60,11 @@ internal sealed class ObservableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset
 		_images.Notify(imagesChange);
 	}
 
+	public void EnsureCapacity(int capacity)
+	{
+		inner.EnsureCapacity(capacity);
+	}
+
 	private readonly ExternalObservableCollection<TAsset> _assets = new(inner.Assets);
 	private readonly ExternalObservableCollection<StorableImage> _images = new(inner.Images);
 }
