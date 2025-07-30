@@ -17,4 +17,14 @@ internal sealed class DataRemovingWeightsLibrary(StorableWeightsLibrary inner) :
 		inner.RemoveWeights(weights);
 		weights.DeleteData();
 	}
+
+	public void AddWeights(StorableWeights weights)
+	{
+		inner.AddWeights(weights);
+	}
+
+	public void EnsureCapacity(int capacity)
+	{
+		inner.EnsureCapacity(capacity);
+	}
 }

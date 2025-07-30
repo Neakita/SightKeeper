@@ -29,5 +29,15 @@ internal sealed class ObservableWeightsLibrary(StorableWeightsLibrary inner) : S
 		_weights.Notify(change);
 	}
 
+	public void EnsureCapacity(int capacity)
+	{
+		inner.EnsureCapacity(capacity);
+	}
+
+	public void AddWeights(StorableWeights weights)
+	{
+		inner.AddWeights(weights);
+	}
+
 	private readonly ExternalObservableCollection<StorableWeights> _weights = new(inner.Weights);
 }

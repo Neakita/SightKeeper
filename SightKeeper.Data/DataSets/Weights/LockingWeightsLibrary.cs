@@ -18,4 +18,14 @@ internal sealed class LockingWeightsLibrary(StorableWeightsLibrary inner, Lock e
 		lock (editingLock)
 			inner.RemoveWeights(weights);
 	}
+
+	public void EnsureCapacity(int capacity)
+	{
+		inner.EnsureCapacity(capacity);
+	}
+
+	public void AddWeights(StorableWeights weights)
+	{
+		inner.AddWeights(weights);
+	}
 }

@@ -19,4 +19,14 @@ internal sealed class TrackableWeightsLibrary(StorableWeightsLibrary inner, Chan
 		inner.RemoveWeights(weights);
 		listener.SetDataChanged();
 	}
+
+	public void EnsureCapacity(int capacity)
+	{
+		inner.EnsureCapacity(capacity);
+	}
+
+	public void AddWeights(StorableWeights weights)
+	{
+		inner.AddWeights(weights);
+	}
 }

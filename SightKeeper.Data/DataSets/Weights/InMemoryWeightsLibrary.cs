@@ -24,12 +24,12 @@ internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : St
 		Guard.IsTrue(isRemoved);
 	}
 
-	internal void EnsureCapacity(int capacity)
+	public void EnsureCapacity(int capacity)
 	{
 		_weights.EnsureCapacity(capacity);
 	}
 
-	internal void AddWeights(InMemoryWeights weights)
+	public void AddWeights(StorableWeights weights)
 	{
 		var wrappedWeights = weightsWrapper.Wrap(weights);
 		_weights.Add(wrappedWeights);

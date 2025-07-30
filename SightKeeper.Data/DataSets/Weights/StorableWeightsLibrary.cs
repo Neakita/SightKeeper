@@ -9,6 +9,8 @@ public interface StorableWeightsLibrary : WeightsLibrary
 	new IReadOnlyCollection<StorableWeights> Weights { get; }
 	StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<StorableTag> tags);
 	void RemoveWeights(StorableWeights weights);
+	void EnsureCapacity(int capacity);
+	void AddWeights(StorableWeights weights);
 
 	IReadOnlyCollection<Domain.DataSets.Weights.Weights> WeightsLibrary.Weights => Weights;
 

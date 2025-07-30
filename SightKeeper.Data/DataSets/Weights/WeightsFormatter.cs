@@ -38,7 +38,7 @@ internal static class WeightsFormatter
 		}
 	}
 
-	public static void ReadWeights(ref MemoryPackReader reader, InMemoryWeightsLibrary weightsLibrary, IReadOnlyList<StorableTag> tags)
+	public static void ReadWeights(ref MemoryPackReader reader, StorableWeightsLibrary weightsLibrary, IReadOnlyList<StorableTag> tags)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var weightsCount));
 		weightsLibrary.EnsureCapacity(weightsCount);
