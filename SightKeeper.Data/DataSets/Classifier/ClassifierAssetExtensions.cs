@@ -6,4 +6,9 @@ internal static class ClassifierAssetExtensions
 	{
 		return new TagUsersTrackingClassifierAsset(asset);
 	}
+
+	public static StorableClassifierAsset WithNotifications(this StorableClassifierAsset asset)
+	{
+		return new NotifyingClassifierAsset(asset);
+	}
 }

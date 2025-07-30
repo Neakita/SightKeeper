@@ -14,6 +14,7 @@ internal sealed class StorableClassifierAssetFactory : AssetFactory<StorableClas
 	{
 		Guard.IsNotNull(TagsOwner);
 		return new InMemoryClassifierAsset(image, TagsOwner.Tags[0])
-			.WithTagUsersTracking();
+			.WithTagUsersTracking()
+			.WithNotifications();
 	}
 }
