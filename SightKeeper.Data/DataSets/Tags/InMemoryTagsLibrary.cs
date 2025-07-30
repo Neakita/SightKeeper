@@ -1,8 +1,6 @@
-using SightKeeper.Domain.DataSets.Tags;
-
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class InMemoryTagsLibrary<TTag>(TagFactory<TTag> tagFactory) : TagsOwner<TTag>
+internal sealed class InMemoryTagsLibrary<TTag>(TagFactory<TTag> tagFactory) : StorableTagsOwner<TTag>
 {
 	public IReadOnlyList<TTag> Tags => _tags;
 
@@ -18,7 +16,7 @@ internal sealed class InMemoryTagsLibrary<TTag>(TagFactory<TTag> tagFactory) : T
 		_tags.RemoveAt(index);
 	}
 
-	internal void EnsureCapacity(int capacity)
+	public void EnsureCapacity(int capacity)
 	{
 		_tags.EnsureCapacity(capacity);
 	}

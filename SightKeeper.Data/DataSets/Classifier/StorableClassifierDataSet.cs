@@ -12,7 +12,7 @@ namespace SightKeeper.Data.DataSets.Classifier;
 
 public interface StorableClassifierDataSet : ClassifierDataSet
 {
-	new TagsOwner<StorableTag> TagsLibrary { get; }
+	new StorableTagsOwner<StorableTag> TagsLibrary { get; }
 	new StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; }
 	new StorableWeightsLibrary WeightsLibrary { get; }
 

@@ -4,7 +4,6 @@ using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
@@ -36,7 +35,7 @@ internal sealed class NotifyingClassifierDataSet(StorableClassifierDataSet inner
 		}
 	}
 
-	public TagsOwner<StorableTag> TagsLibrary => inner.TagsLibrary;
+	public StorableTagsOwner<StorableTag> TagsLibrary => inner.TagsLibrary;
 	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary => inner.AssetsLibrary;
 	public StorableWeightsLibrary WeightsLibrary => inner.WeightsLibrary;
 
