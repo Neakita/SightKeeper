@@ -1,4 +1,4 @@
-namespace SightKeeper.Data.DataSets.Classifier;
+namespace SightKeeper.Data.DataSets.Classifier.Assets;
 
 internal static class ClassifierAssetExtensions
 {

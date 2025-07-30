@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.DataSets.Classifier;
+namespace SightKeeper.Data.DataSets.Classifier.Assets;
 
 public interface StorableClassifierAsset : ClassifierAsset
 {

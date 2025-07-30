@@ -1,7 +1,7 @@
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.ImageSets.Images;
 
-namespace SightKeeper.Data.DataSets.Classifier;
+namespace SightKeeper.Data.DataSets.Classifier.Assets;
 
 internal sealed class TagUsersTrackingClassifierAssetsLibrary(StorableAssetsOwner<StorableClassifierAsset> inner) : StorableAssetsOwner<StorableClassifierAsset>
 {

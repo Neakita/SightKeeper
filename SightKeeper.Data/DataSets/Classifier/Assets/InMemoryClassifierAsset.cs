@@ -2,7 +2,7 @@ using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Assets;
 
-namespace SightKeeper.Data.DataSets.Classifier;
+namespace SightKeeper.Data.DataSets.Classifier.Assets;
 
 internal sealed class InMemoryClassifierAsset : StorableClassifierAsset
 {

@@ -4,7 +4,7 @@ using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.DataSets.Classifier;
+namespace SightKeeper.Data.DataSets.Classifier.Assets;
 
 internal sealed class StorableClassifierAssetFactory : AssetFactory<StorableClassifierAsset>
 {
