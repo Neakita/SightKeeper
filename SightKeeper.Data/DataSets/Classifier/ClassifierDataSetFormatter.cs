@@ -67,6 +67,7 @@ public sealed class ClassifierDataSetFormatter(ImageLookupper imageLookupper, In
 			var image = imageLookupper.GetImage(imageId);
 			var asset = set.AssetsLibrary.MakeAsset(image);
 			asset.Tag = set.TagsLibrary.Tags[tagIndex];
+			asset.Tag.AddUser(asset);
 			asset.Usage = usage;
 		}
 	}
