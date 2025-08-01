@@ -5,7 +5,7 @@ using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 
-namespace SightKeeper.Data.DataSets.Classifier;
+namespace SightKeeper.Data.DataSets.Classifier.Decorators;
 
 internal sealed class NotifyingClassifierDataSet(StorableClassifierDataSet inner) : StorableClassifierDataSet, INotifyPropertyChanged
 {

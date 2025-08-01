@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.DataSets.Classifier;
+using SightKeeper.Data.DataSets.Classifier.Decorators;
 
 namespace SightKeeper.Data.Tests.DataSets;
 

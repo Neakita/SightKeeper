@@ -1,6 +1,7 @@
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
+using SightKeeper.Data.DataSets.Classifier.Decorators;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Classifier;
