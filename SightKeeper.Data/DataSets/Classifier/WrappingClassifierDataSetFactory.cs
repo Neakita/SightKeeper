@@ -6,9 +6,10 @@ using SightKeeper.Domain.DataSets.Classifier;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-public sealed class WrappingClassifierDataSetFactory(ClassifierDataSetWrapper wrapper) : DataSetFactory<ClassifierDataSet>
+public sealed class WrappingClassifierDataSetFactory(ClassifierDataSetWrapper wrapper)
+	: InnerAwareDataSetFactory<StorableClassifierDataSet>, DataSetFactory<ClassifierDataSet>
 {
-	public ClassifierDataSet CreateDataSet()
+	public (StorableClassifierDataSet wrappedSet, StorableClassifierDataSet innerSet) CreateDataSet()
 	{
 		StorableTagFactory tagFactory = new();
 		StorableClassifierAssetFactory assetFactory = new();
@@ -17,6 +18,11 @@ public sealed class WrappingClassifierDataSetFactory(ClassifierDataSetWrapper wr
 		var wrappedSet = wrapper.Wrap(inMemorySet);
 		tagFactory.TagsOwner = wrappedSet.TagsLibrary;
 		assetFactory.TagsOwner = wrappedSet.TagsLibrary;
-		return wrappedSet;
+		return (wrappedSet, inMemorySet);
+	}
+
+	ClassifierDataSet DataSetFactory<ClassifierDataSet>.CreateDataSet()
+	{
+		return CreateDataSet().wrappedSet;
 	}
 }

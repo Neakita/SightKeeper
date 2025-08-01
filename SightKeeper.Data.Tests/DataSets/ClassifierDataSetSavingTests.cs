@@ -26,9 +26,6 @@ public sealed class ClassifierDataSetSavingTests
 		persistedSet.AssetsLibrary.Assets.Should().ContainSingle().Which.Tag.Should().Be(persistedTag);
 	}
 
-	private static ClassifierDataSetFormatter Formatter => new()
-	{
-		ImageLookupper = Substitute.For<ImageLookupper>(),
-		SetWrapper = new ClassifierDataSetWrapper(Substitute.For<ChangeListener>(), new Lock())
-	};
+	private static ClassifierDataSetFormatter Formatter => new(Substitute.For<ImageLookupper>(),
+		new WrappingClassifierDataSetFactory(new ClassifierDataSetWrapper(Substitute.For<ChangeListener>(), new Lock())));
 }

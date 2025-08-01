@@ -9,11 +9,8 @@ using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-public sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableClassifierDataSet>
+public sealed class ClassifierDataSetFormatter(ImageLookupper imageLookupper, InnerAwareDataSetFactory<StorableClassifierDataSet> setFactory) : MemoryPackFormatter<StorableClassifierDataSet>
 {
-	public required ImageLookupper ImageLookupper { get; init; }
-	public required ClassifierDataSetWrapper SetWrapper { get; init; }
-
 	public override void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
 		scoped ref StorableClassifierDataSet? dataSet)
@@ -37,12 +34,12 @@ public sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableCla
 			set = null;
 			return;
 		}
-		var inMemorySet = CreateInMemorySet();
-		set = SetWrapper.Wrap(inMemorySet);
-		DataSetGeneralDataFormatter.ReadGeneralData(ref reader, inMemorySet);
-		TagsFormatter.ReadTags(ref reader, inMemorySet.TagsLibrary);
-		ReadAssets(ref reader, inMemorySet);
-		WeightsFormatter.ReadWeights(ref reader, inMemorySet.WeightsLibrary, inMemorySet.TagsLibrary.Tags);
+		var (wrappedSet, innerSet) = setFactory.CreateDataSet();
+		set = wrappedSet;
+		DataSetGeneralDataFormatter.ReadGeneralData(ref reader, innerSet);
+		TagsFormatter.ReadTags(ref reader, innerSet.TagsLibrary);
+		ReadAssets(ref reader, innerSet);
+		WeightsFormatter.ReadWeights(ref reader, innerSet.WeightsLibrary, innerSet.TagsLibrary.Tags);
 	}
 
 	private static void WriteAssets<TBufferWriter>(
@@ -60,17 +57,6 @@ public sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableCla
 		}
 	}
 
-	private static InMemoryClassifierDataSet CreateInMemorySet()
-	{
-		StorableTagFactory tagFactory = new();
-		StorableClassifierAssetFactory assetFactory = new();
-		StorableWeightsWrapper weightsWrapper = new();
-		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory, weightsWrapper);
-		tagFactory.TagsOwner = inMemorySet.TagsLibrary;
-		assetFactory.TagsOwner = inMemorySet.TagsLibrary;
-		return inMemorySet;
-	}
-
 	private void ReadAssets(ref MemoryPackReader reader, StorableClassifierDataSet set)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var assetsCount));
@@ -78,7 +64,7 @@ public sealed class ClassifierDataSetFormatter : MemoryPackFormatter<StorableCla
 		for (int i = 0; i < assetsCount; i++)
 		{
 			reader.ReadUnmanaged(out Id imageId, out byte tagIndex, out AssetUsage usage);
-			var image = ImageLookupper.GetImage(imageId);
+			var image = imageLookupper.GetImage(imageId);
 			var asset = set.AssetsLibrary.MakeAsset(image);
 			asset.Tag = set.TagsLibrary.Tags[tagIndex];
 			asset.Usage = usage;
