@@ -11,7 +11,7 @@ public sealed class WrappingClassifierDataSetFactory(ClassifierDataSetWrapper wr
 {
 	public (StorableClassifierDataSet wrappedSet, StorableClassifierDataSet innerSet) CreateDataSet()
 	{
-		StorableTagFactory tagFactory = new();
+		StorableTagFactory tagFactory = new(changeListener);
 		StorableClassifierAssetFactory assetFactory = new(changeListener, editingLock);
 		StorableWeightsWrapper weightsWrapper = new();
 		var inMemorySet = new InMemoryClassifierDataSet(tagFactory, assetFactory, weightsWrapper);
