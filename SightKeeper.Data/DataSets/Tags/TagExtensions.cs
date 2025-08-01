@@ -11,4 +11,9 @@ internal static class TagExtensions
 	{
 		return new LockingTag(tag, editingLock);
 	}
+
+	public static StorableTag WithNotifications(this StorableTag tag)
+	{
+		return new NotifyingTag(tag);
+	}
 }

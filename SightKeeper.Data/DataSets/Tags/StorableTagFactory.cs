@@ -17,6 +17,7 @@ internal sealed class StorableTagFactory(ChangeListener changeListener, Lock edi
 		};
 		return inMemoryTag
 			.WithTracking(changeListener)
-			.WithLocking(editingLock);
+			.WithLocking(editingLock)
+			.WithNotifications();
 	}
 }
