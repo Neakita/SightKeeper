@@ -4,7 +4,7 @@ using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.Tests.DataSets;
+namespace SightKeeper.Data.Tests.DataSets.Classifier;
 
 public sealed class TagUsersTrackingClassifierAssetTests
 {

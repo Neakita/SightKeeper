@@ -5,7 +5,7 @@ using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Assets;
 
-namespace SightKeeper.Data.Tests.DataSets;
+namespace SightKeeper.Data.Tests.DataSets.Classifier;
 
 public sealed class NotifyingClassifierAssetTests
 {

@@ -3,7 +3,7 @@ using NSubstitute;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Classifier.Decorators;
 
-namespace SightKeeper.Data.Tests.DataSets;
+namespace SightKeeper.Data.Tests.DataSets.Classifier;
 
 public sealed class NotifyingClassifierDataSetTests
 {

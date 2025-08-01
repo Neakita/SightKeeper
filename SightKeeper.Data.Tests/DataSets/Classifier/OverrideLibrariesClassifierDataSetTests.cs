@@ -7,7 +7,7 @@ using SightKeeper.Data.DataSets.Classifier.Decorators;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 
-namespace SightKeeper.Data.Tests.DataSets;
+namespace SightKeeper.Data.Tests.DataSets.Classifier;
 
 public sealed class OverrideLibrariesClassifierDataSetTests
 {
