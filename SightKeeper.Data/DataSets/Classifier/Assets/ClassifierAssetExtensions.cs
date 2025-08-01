@@ -11,4 +11,9 @@ internal static class ClassifierAssetExtensions
 	{
 		return new NotifyingClassifierAsset(asset);
 	}
+
+	public static StorableClassifierAsset WithTracking(this StorableClassifierAsset asset, ChangeListener changeListener)
+	{
+		return new TrackingClassifierAsset(asset, changeListener);
+	}
 }

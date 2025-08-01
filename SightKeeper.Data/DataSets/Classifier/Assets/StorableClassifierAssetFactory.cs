@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier.Assets;
 
-internal sealed class StorableClassifierAssetFactory : AssetFactory<StorableClassifierAsset>
+internal sealed class StorableClassifierAssetFactory(ChangeListener changeListener) : AssetFactory<StorableClassifierAsset>
 {
 	public TagsContainer<StorableTag>? TagsOwner { get; set; }
 
@@ -14,6 +14,7 @@ internal sealed class StorableClassifierAssetFactory : AssetFactory<StorableClas
 	{
 		Guard.IsNotNull(TagsOwner);
 		return new InMemoryClassifierAsset(image, TagsOwner.Tags[0])
+			.WithTracking(changeListener)
 			.WithTagUsersTracking()
 			.WithNotifications();
 	}
