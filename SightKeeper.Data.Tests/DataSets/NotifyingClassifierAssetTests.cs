@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.DataSets.Classifier.Assets;
+using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Assets;
 

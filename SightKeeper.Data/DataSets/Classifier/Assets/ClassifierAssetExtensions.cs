@@ -1,3 +1,5 @@
+using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
+
 namespace SightKeeper.Data.DataSets.Classifier.Assets;
 
 internal static class ClassifierAssetExtensions
