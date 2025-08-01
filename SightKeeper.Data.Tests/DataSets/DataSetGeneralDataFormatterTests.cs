@@ -52,7 +52,7 @@ public sealed class DataSetGeneralDataFormatterTests
 	{
 		using var state = MemoryPackReaderOptionalStatePool.Rent(MemoryPackSerializerOptions.Default);
 		var reader = new MemoryPackReader(buffer, state);
-		InMemoryClassifierDataSet dataSet = new(new FakeTagFactory(), new StorableClassifierAssetFactory(Substitute.For<ChangeListener>()), new StorableWeightsWrapper());
+		InMemoryClassifierDataSet dataSet = new(new FakeTagFactory(), new StorableClassifierAssetFactory(Substitute.For<ChangeListener>(), new Lock()), new StorableWeightsWrapper());
 		DataSetGeneralDataFormatter.ReadGeneralData(ref reader, dataSet);
 		return dataSet;
 	}

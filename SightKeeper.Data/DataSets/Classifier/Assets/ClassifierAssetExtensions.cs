@@ -16,4 +16,9 @@ internal static class ClassifierAssetExtensions
 	{
 		return new TrackingClassifierAsset(asset, changeListener);
 	}
+
+	public static StorableClassifierAsset WithLocking(this StorableClassifierAsset asset, Lock editingLock)
+	{
+		return new LockingClassifierAsset(asset, editingLock);
+	}
 }
