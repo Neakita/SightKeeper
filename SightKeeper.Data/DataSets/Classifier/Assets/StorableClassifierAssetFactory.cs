@@ -13,10 +13,12 @@ internal sealed class StorableClassifierAssetFactory(ChangeListener changeListen
 	public StorableClassifierAsset CreateAsset(StorableImage image)
 	{
 		Guard.IsNotNull(TagsOwner);
-		return new InMemoryClassifierAsset(image, TagsOwner.Tags[0])
+		var wrapped = new InMemoryClassifierAsset(image, TagsOwner.Tags[0])
 			.WithTracking(changeListener)
 			.WithLocking(editingLock)
-			.WithTagUsersTracking()
+			.WithTagUsersTracking(out var initializeUsersTracking)
 			.WithNotifications();
+		initializeUsersTracking(wrapped);
+		return wrapped;
 	}
 }

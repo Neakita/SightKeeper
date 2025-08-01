@@ -1,12 +1,15 @@
 using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier.Assets;
 
 internal static class ClassifierAssetExtensions
 {
-	public static StorableClassifierAsset WithTagUsersTracking(this StorableClassifierAsset asset)
+	public static StorableClassifierAsset WithTagUsersTracking(this StorableClassifierAsset asset, out Action<TagUser> initializeUsersTracking)
 	{
-		return new TagUsersTrackingClassifierAsset(asset);
+		var trackingAsset = new TagUsersTrackingClassifierAsset(asset);
+		initializeUsersTracking = user => trackingAsset.TagUser = user;
+		return trackingAsset;
 	}
 
 	public static StorableClassifierAsset WithNotifications(this StorableClassifierAsset asset)
