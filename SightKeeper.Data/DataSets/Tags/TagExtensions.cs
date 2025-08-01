@@ -6,4 +6,9 @@ internal static class TagExtensions
 	{
 		return new TrackableTag(tag, changeListener);
 	}
+
+	public static StorableTag WithLocking(this StorableTag tag, Lock editingLock)
+	{
+		return new LockingTag(tag, editingLock);
+	}
 }

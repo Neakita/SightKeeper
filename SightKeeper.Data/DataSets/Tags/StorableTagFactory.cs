@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class StorableTagFactory(ChangeListener changeListener) : TagFactory<StorableTag>
+internal sealed class StorableTagFactory(ChangeListener changeListener, Lock editingLock) : TagFactory<StorableTag>
 {
 	public TagsContainer<Tag>? TagsOwner { get; set; }
 
@@ -16,6 +16,7 @@ internal sealed class StorableTagFactory(ChangeListener changeListener) : TagFac
 			Owner = TagsOwner
 		};
 		return inMemoryTag
-			.WithTracking(changeListener);
+			.WithTracking(changeListener)
+			.WithLocking(editingLock);
 	}
 }
