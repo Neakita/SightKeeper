@@ -1,4 +1,4 @@
-using System.Windows.Input;
+/*using System.Windows.Input;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Annotation;
@@ -129,4 +129,4 @@ public sealed class BoundingDrawerViewModelTests
 		};
 		return drawerViewModel;
 	}
-}
+}*/

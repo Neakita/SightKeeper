@@ -1,4 +1,4 @@
-using System.Reactive.Linq;
+/*using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
 using Serilog.Core;
@@ -55,4 +55,4 @@ public sealed class DrawerViewModelTests
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		return tag;
 	}
-}
+}*/

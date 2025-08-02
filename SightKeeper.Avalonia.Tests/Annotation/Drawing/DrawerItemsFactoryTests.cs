@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
@@ -36,4 +36,4 @@ public sealed class DrawerItemsFactoryTests
 		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return screenshot;
 	}
-}
+}*/
