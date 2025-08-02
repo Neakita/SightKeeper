@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -6,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
+using Serilog;
 using SightKeeper.Avalonia.Misc;
 
 namespace SightKeeper.Avalonia.Behaviors;
@@ -56,6 +58,7 @@ internal sealed class ImageDataContextBindingBehavior : Behavior<Image>
 		RecycleBitmap();
 	}
 
+	private static readonly ILogger Logger = Log.ForContext<ImageDataContextBindingBehavior>();
 	private Bitmap? _bitmap;
 	private CancellationTokenSource? _cancellationTokenSource;
 
@@ -91,7 +94,18 @@ internal sealed class ImageDataContextBindingBehavior : Behavior<Image>
 				AssociatedObject.Source = null;
 			return;
 		}
-		_bitmap = await DataContext.Load(TargetSize, cancellationToken);
+		try
+		{
+			_bitmap = await DataContext.Load(TargetSize, cancellationToken);
+		}
+		catch (FileNotFoundException exception)
+		{
+			Logger.Warning(exception, "The image file was not found. It may have been deleted or moved by the user, or an error occurred while writing it.");
+		}
+		catch (IOException exception)
+		{
+			Logger.Warning(exception, "An error occurred while reading the image file. The file may still be being written.");
+		}
 		if (AssociatedObject == null)
 		{
 			if (_bitmap != null)
