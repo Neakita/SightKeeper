@@ -1,45 +1,45 @@
-/*using FluentAssertions;
+using FluentAssertions;
+using NSubstitute;
 using SightKeeper.Application.Training.Assets.Distribution;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Application.Tests.Training;
 
 public sealed class AssetsDistributorTests
 {
 	[Fact]
-	public void ShouldDistributeAssets()
+	public void ShouldDistributeAssetsWithNormalizedRequest()
 	{
-		var assets = Enumerable.Range(0, 100).Select(_ => new FakeAsset
+		var asset = Substitute.For<Asset>();
+		asset.Usage.Returns(AssetUsage.Any);
+		var assets = Enumerable.Repeat(asset, 100);
+		var request = new AssetsDistributionRequest
 		{
-			Image = null!
-		}).ToList();
-		AssetsDistributor distributor = new()
-		{
-			Assets = assets,
-			TrainFraction = 0.8,
-			ValidationFraction = 0.15,
-			TestFraction = 0.05
+			TrainFraction = .8f,
+			ValidationFraction = .15f,
+			TestFraction = .05f
 		};
-		distributor.TrainAssets.Count.Should().Be(80);
-		distributor.ValidationAssets.Count.Should().Be(15);
-		distributor.TestAssets.Count.Should().Be(5);
+		var distribution = AssetsDistributor.DistributeAssets(assets, request);
+		distribution.TrainAssets.Count.Should().Be(80);
+		distribution.ValidationAssets.Count.Should().Be(15);
+		distribution.TestAssets.Count.Should().Be(5);
 	}
 
 	[Fact]
-	public void ShouldDistributeAssetsWhenFractionsSumIsNotOne()
+	public void ShouldDistributeAssetsWithNonNormalizedRequest()
 	{
-		var assets = Enumerable.Range(0, 100).Select(_ => new FakeAsset
+		var asset = Substitute.For<Asset>();
+		asset.Usage.Returns(AssetUsage.Any);
+		var assets = Enumerable.Repeat(asset, 100);
+		var request = new AssetsDistributionRequest
 		{
-			Image = null!
-		}).ToList();
-		AssetsDistributor distributor = new()
-		{
-			Assets = assets,
-			TrainFraction = 80,
-			ValidationFraction = 15,
-			TestFraction = 5
+			TrainFraction = 8,
+			ValidationFraction = 1.5f,
+			TestFraction = 0.5f
 		};
-		distributor.TrainAssets.Count.Should().Be(80);
-		distributor.ValidationAssets.Count.Should().Be(15);
-		distributor.TestAssets.Count.Should().Be(5);
+		var distribution = AssetsDistributor.DistributeAssets(assets, request);
+		distribution.TrainAssets.Count.Should().Be(80);
+		distribution.ValidationAssets.Count.Should().Be(15);
+		distribution.TestAssets.Count.Should().Be(5);
 	}
-}*/
+}

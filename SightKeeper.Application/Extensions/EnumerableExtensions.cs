@@ -21,4 +21,10 @@ internal static class EnumerableExtensions
 		}
 		yield return new Range(startIndex, previousIndex);
 	}
+
+	public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, int seed)
+	{
+		var random = new Random(seed);
+		return source.OrderBy(_ => random.Next());
+	}
 }
