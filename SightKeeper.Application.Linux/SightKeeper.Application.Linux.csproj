@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="CliWrap" Version="3.9.0" />
       <PackageReference Include="System.Numerics.Tensors" Version="9.0.7" />
     </ItemGroup>
 
