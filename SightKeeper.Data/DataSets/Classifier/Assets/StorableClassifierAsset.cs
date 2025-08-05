@@ -11,6 +11,7 @@ public interface StorableClassifierAsset : ClassifierAsset
 {
 	new StorableTag Tag { get; set; }
 	new StorableImage Image { get; }
+	StorableClassifierAsset Innermost { get; }
 
 	Tag ClassifierAsset.Tag
 	{

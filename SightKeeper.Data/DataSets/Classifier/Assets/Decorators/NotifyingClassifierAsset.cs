@@ -32,6 +32,8 @@ internal sealed class NotifyingClassifierAsset(StorableClassifierAsset inner) : 
 		}
 	}
 
+	public StorableClassifierAsset Innermost => inner.Innermost;
+
 	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

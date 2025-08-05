@@ -27,4 +27,6 @@ internal sealed class TrackingClassifierAsset(StorableClassifierAsset inner, Cha
 			changeListener.SetDataChanged();
 		}
 	}
+
+	public StorableClassifierAsset Innermost => inner.Innermost;
 }

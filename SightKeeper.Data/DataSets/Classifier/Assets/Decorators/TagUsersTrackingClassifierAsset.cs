@@ -31,4 +31,6 @@ internal sealed class TagUsersTrackingClassifierAsset(StorableClassifierAsset in
 			Tag.AddUser(TagUser);
 		}
 	}
+
+	public StorableClassifierAsset Innermost => inner.Innermost;
 }

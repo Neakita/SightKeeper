@@ -66,9 +66,9 @@ public sealed class ClassifierDataSetFormatter(ImageLookupper imageLookupper, In
 			reader.ReadUnmanaged(out Id imageId, out byte tagIndex, out AssetUsage usage);
 			var image = imageLookupper.GetImage(imageId);
 			var asset = set.AssetsLibrary.MakeAsset(image);
-			asset.Tag = set.TagsLibrary.Tags[tagIndex];
+			asset.Innermost.Tag = set.TagsLibrary.Tags[tagIndex];
 			asset.Tag.AddUser(asset);
-			asset.Usage = usage;
+			asset.Innermost.Usage = usage;
 		}
 	}
 }

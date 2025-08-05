@@ -9,6 +9,7 @@ internal sealed class InMemoryClassifierAsset : StorableClassifierAsset
 	public StorableImage Image { get; }
 	public AssetUsage Usage { get; set; } = AssetUsage.Any;
 	public StorableTag Tag { get; set; }
+	public StorableClassifierAsset Innermost => this;
 
 	public InMemoryClassifierAsset(StorableImage image, StorableTag tag)
 	{

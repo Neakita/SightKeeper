@@ -27,4 +27,6 @@ internal sealed class LockingClassifierAsset(StorableClassifierAsset inner, Lock
 				inner.Tag = value;
 		}
 	}
+
+	public StorableClassifierAsset Innermost => inner.Innermost;
 }
