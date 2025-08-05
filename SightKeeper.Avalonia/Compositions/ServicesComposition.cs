@@ -87,24 +87,5 @@ public sealed class ServicesComposition
 		})
 
 		.Bind<ILogger>()
-		.To(_ => Log.Logger)
-
-		.Bind<Trainer<DataSet>>()
-		.To<TypeSwitchTrainer>()
-
-		.Bind<Trainer<ClassifierDataSet>>()
-		.To<UltralyticsClassifierTrainer>()
-
-		.Bind<DataSetExporter<ClassifierDataSet>>()
-		.To<ClassifierDataSetExporter>()
-
-		.Bind<ImageExporter>()
-		.To<ImageExporter<Rgba32>>()
-
-		.Bind<CommandRunner>()
-#if OS_WINDOWS
-#elif OS_LINUX
-		.To<LinuxCommandRunner>()
-#endif
-	;
+		.To(_ => Log.Logger);
 }
