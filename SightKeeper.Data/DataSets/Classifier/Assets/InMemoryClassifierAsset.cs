@@ -7,7 +7,7 @@ namespace SightKeeper.Data.DataSets.Classifier.Assets;
 internal sealed class InMemoryClassifierAsset : StorableClassifierAsset
 {
 	public StorableImage Image { get; }
-	public AssetUsage Usage { get; set; }
+	public AssetUsage Usage { get; set; } = AssetUsage.Any;
 	public StorableTag Tag { get; set; }
 
 	public InMemoryClassifierAsset(StorableImage image, StorableTag tag)
