@@ -49,11 +49,12 @@
             <HeaderedContentControl Header="Framerate Limit">
                 <NumericUpDown Value="{Binding FrameRateLimit}"
                                DockPanel.Dock="Right"
-                               Minimum="1"
+                               Minimum="0"
                                Maximum="60"
                                Watermark="Unlimited"
                                FormatString="0.##"
-                               Increment="1">
+                               Increment="1"
+                               ToolTip.Tip="How many images should be taken per second while the hotkey is being held. If this option is not set, as many images as possible are captured. If the value is set to 0, one capture per click is performed. If any value greater than zero is set, approximately as many image captures per second as specified are uniformly performed.">
                     <NumericUpDown.InnerRightContent>
                         <TextBlock
                             IsVisible="{Binding $parent[NumericUpDown].Value, Converter={x:Static ObjectConverters.IsNotNull}}"
