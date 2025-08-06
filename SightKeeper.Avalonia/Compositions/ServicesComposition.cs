@@ -71,6 +71,7 @@ public sealed class ServicesComposition
 		})
 
 		.Bind<IReactiveGlobalHook>()
+		.As(Lifetime.Singleton)
 		.To(_ =>
 		{
 			var hook = new SimpleReactiveGlobalHook(runAsyncOnBackgroundThread: true);
