@@ -5,6 +5,7 @@
     <Project Path="..\HotKeys\HotKeys\HotKeys.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Sightful/">
+    <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls.GestureBox\Sightful.Avalonia.Controls.GestureBox.csproj" Type="Classic C#" />
     <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls.PropertyGrid\Sightful.Avalonia.Controls.PropertyGrid.csproj" Type="Classic C#" />
     <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls.ZoomViewer\Sightful.Avalonia.Controls.ZoomViewer.csproj" Type="Classic C#" />
     <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls\Sightful.Avalonia.Controls.csproj" Type="Classic C#" />

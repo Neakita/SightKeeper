@@ -1,3 +1,4 @@
+using HotKeys;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
@@ -9,4 +10,5 @@ public interface ImageCapturer
 	double? FrameRateLimit { get; set; }
 	ImageSet? Set { get; set; }
 	IObservable<ImageSet?> SetChanged { get; }
+	Gesture Gesture { get; set; }
 }

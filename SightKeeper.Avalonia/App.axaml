@@ -8,6 +8,7 @@
         <StyleInclude Source="avares://Sightful.Avalonia.TreeDataGrid/SightfulTreeDataGridTheme.axaml"/>
         <StyleInclude Source="avares://Sightful.Avalonia.Controls/MultiSlider.axaml"/>
         <StyleInclude Source="avares://Sightful.Avalonia.Controls.ZoomViewer/ZoomViewer.axaml"/>
+        <StyleInclude Source="avares://Sightful.Avalonia.Controls.GestureBox/GestureBox.axaml"/>
     </Application.Styles>
 
 </Application>

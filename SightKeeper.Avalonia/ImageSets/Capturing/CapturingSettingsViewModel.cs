@@ -1,52 +1,55 @@
+using System;
+using HotKeys;
+using Sightful.Avalonia.Controls.GestureBox;
 using SightKeeper.Application;
 using SightKeeper.Application.ScreenCapturing;
 
 namespace SightKeeper.Avalonia.ImageSets.Capturing;
 
-public sealed class CapturingSettingsViewModel : ViewModel, CapturingSettingsDataContext
+public sealed class CapturingSettingsViewModel(ScreenBoundsProvider screenBoundsProvider, ImageCapturer capturer, ObservableSharpHookGesture observableGesture)
+	: ViewModel, CapturingSettingsDataContext
 {
-	public ushort MaximumWidth => _screenBoundsProvider.MainScreenSize.X;
-	public ushort MaximumHeight => _screenBoundsProvider.MainScreenSize.Y;
+	public ushort MaximumWidth => screenBoundsProvider.MainScreenSize.X;
+	public ushort MaximumHeight => screenBoundsProvider.MainScreenSize.Y;
 
 	public ushort Width
 	{
-		get => _capturer.ImageSize.X;
+		get => capturer.ImageSize.X;
 		set
 		{
 			OnPropertyChanging();
-			_capturer.ImageSize = _capturer.ImageSize.WithX(value);
+			capturer.ImageSize = capturer.ImageSize.WithX(value);
 			OnPropertyChanged();
 		}
 	}
 
 	public ushort Height
 	{
-		get => _capturer.ImageSize.Y;
+		get => capturer.ImageSize.Y;
 		set
 		{
 			OnPropertyChanging();
-			_capturer.ImageSize = _capturer.ImageSize.WithY(value);
+			capturer.ImageSize = capturer.ImageSize.WithY(value);
 			OnPropertyChanged();
 		}
 	}
 
 	public double? FrameRateLimit
 	{
-		get => _capturer.FrameRateLimit;
+		get => capturer.FrameRateLimit;
 		set
 		{
 			OnPropertyChanging();
-			_capturer.FrameRateLimit = value;
+			capturer.FrameRateLimit = value;
 			OnPropertyChanged();
 		}
 	}
 
-	public CapturingSettingsViewModel(ScreenBoundsProvider screenBoundsProvider, ImageCapturer capturer)
+	public object? Gesture
 	{
-		_screenBoundsProvider = screenBoundsProvider;
-		_capturer = capturer;
+		get => capturer.Gesture;
+		set => capturer.Gesture = (Gesture?)value ?? HotKeys.Gesture.Empty;
 	}
 
-	private readonly ScreenBoundsProvider _screenBoundsProvider;
-	private readonly ImageCapturer _capturer;
+	public IObservable<GestureEdit> GestureEditsObservable => observableGesture;
 }
