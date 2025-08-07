@@ -6,9 +6,9 @@ namespace SightKeeper.Domain.DataSets.Poser2D;
 
 public interface PoserAsset<out TItem> : ItemsAsset<TItem> where TItem : PoserItem
 {
-	TItem MakeItem(DomainPoserTag tag);
+	TItem MakeItem(PoserTag tag);
 	TItem ItemsMaker<TItem>.MakeItem(Tag tag)
 	{
-		return MakeItem((DomainPoserTag)tag);
+		return MakeItem((PoserTag)tag);
 	}
 }

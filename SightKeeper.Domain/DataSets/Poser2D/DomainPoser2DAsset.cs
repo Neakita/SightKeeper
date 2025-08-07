@@ -18,7 +18,7 @@ public sealed class DomainPoser2DAsset(ItemsAsset<Poser2DItem> inner, TagsContai
 
 	public IReadOnlyList<Poser2DItem> Items => inner.Items;
 
-	public Poser2DItem MakeItem(DomainPoserTag tag)
+	public Poser2DItem MakeItem(PoserTag tag)
 	{
 		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(tagsOwner, tag);
 		return inner.MakeItem(tag);
