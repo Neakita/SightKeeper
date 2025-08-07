@@ -24,6 +24,7 @@ internal sealed class StorableClassifierDataSetExtension(ClassifierDataSet inner
 	public StorableTagsOwner<StorableTag> TagsLibrary => extendedInner.TagsLibrary;
 	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary => extendedInner.AssetsLibrary;
 	public StorableWeightsLibrary WeightsLibrary => extendedInner.WeightsLibrary;
+	public StorableClassifierDataSet Innermost => extendedInner.Innermost;
 
 	AssetsOwner<ClassifierAsset> ClassifierDataSet.AssetsLibrary => inner.AssetsLibrary;
 }

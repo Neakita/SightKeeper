@@ -35,4 +35,6 @@ internal sealed class LockingClassifierDataSet(StorableClassifierDataSet inner, 
 
 	public StorableWeightsLibrary WeightsLibrary { get; } =
 		new LockingWeightsLibrary(inner.WeightsLibrary, editingLock);
+
+	public StorableClassifierDataSet Innermost => inner.Innermost;
 }

@@ -2,6 +2,7 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
+using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
@@ -9,7 +10,7 @@ using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-public sealed class ClassifierDataSetFormatter(ImageLookupper imageLookupper, InnerAwareDataSetFactory<StorableClassifierDataSet> setFactory) : MemoryPackFormatter<StorableClassifierDataSet>
+public sealed class ClassifierDataSetFormatter(ImageLookupper imageLookupper, DataSetFactory<StorableClassifierDataSet> setFactory) : MemoryPackFormatter<StorableClassifierDataSet>
 {
 	public override void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
@@ -34,8 +35,8 @@ public sealed class ClassifierDataSetFormatter(ImageLookupper imageLookupper, In
 			set = null;
 			return;
 		}
-		var (wrappedSet, innerSet) = setFactory.CreateDataSet();
-		set = wrappedSet;
+		set = setFactory.CreateDataSet();
+		var innerSet = set.Innermost;
 		DataSetGeneralDataFormatter.ReadGeneralData(ref reader, innerSet);
 		TagsFormatter.ReadTags(ref reader, innerSet.TagsLibrary);
 		ReadAssets(ref reader, innerSet);

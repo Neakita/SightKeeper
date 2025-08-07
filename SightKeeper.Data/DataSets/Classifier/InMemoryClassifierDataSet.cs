@@ -13,12 +13,8 @@ internal sealed class InMemoryClassifierDataSet(
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
-
-	public InMemoryTagsLibrary<StorableTag> TagsLibrary { get; } = new(tagFactory);
-	public InMemoryAssetsLibrary<StorableClassifierAsset> AssetsLibrary { get; } = new(assetFactory);
-	public InMemoryWeightsLibrary WeightsLibrary { get; } = new(weightsWrapper);
-
-	StorableTagsOwner<StorableTag> StorableClassifierDataSet.TagsLibrary => TagsLibrary;
-	StorableAssetsOwner<StorableClassifierAsset> StorableClassifierDataSet.AssetsLibrary => AssetsLibrary;
-	StorableWeightsLibrary StorableClassifierDataSet.WeightsLibrary => WeightsLibrary;
+	public StorableTagsOwner<StorableTag> TagsLibrary { get; } = new InMemoryTagsLibrary<StorableTag>(tagFactory);
+	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; } = new InMemoryAssetsLibrary<StorableClassifierAsset>(assetFactory);
+	public StorableWeightsLibrary WeightsLibrary { get; } = new InMemoryWeightsLibrary(weightsWrapper);
+	public StorableClassifierDataSet Innermost => this;
 }

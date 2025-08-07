@@ -35,4 +35,6 @@ internal sealed class TrackableClassifierDataSet(StorableClassifierDataSet inner
 
 	public StorableWeightsLibrary WeightsLibrary { get; } =
 		new TrackableWeightsLibrary(inner.WeightsLibrary, listener);
+
+	public StorableClassifierDataSet Innermost => inner.Innermost;
 }

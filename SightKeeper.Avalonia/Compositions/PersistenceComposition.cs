@@ -56,7 +56,7 @@ public sealed class PersistenceComposition
 		})
 
 		.Bind<DataSetFactory<ClassifierDataSet>>()
-		.Bind<InnerAwareDataSetFactory<StorableClassifierDataSet>>()
+		.Bind<DataSetFactory<StorableClassifierDataSet>>()
 		.To<WrappingClassifierDataSetFactory>()
 	
 		.Bind<DataSetFactory<DetectorDataSet>>()

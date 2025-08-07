@@ -39,6 +39,8 @@ internal sealed class NotifyingClassifierDataSet(StorableClassifierDataSet inner
 	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary => inner.AssetsLibrary;
 	public StorableWeightsLibrary WeightsLibrary => inner.WeightsLibrary;
 
+	public StorableClassifierDataSet Innermost => inner.Innermost;
+
 	private void OnPropertyChanged([CallerMemberName] string propertyName = "")
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -22,4 +22,6 @@ internal sealed class OverrideLibrariesClassifierDataSet(StorableClassifierDataS
 	public StorableTagsOwner<StorableTag> TagsLibrary { get; init; } = inner.TagsLibrary;
 	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; init; } = inner.AssetsLibrary;
 	public StorableWeightsLibrary WeightsLibrary { get; init; } = inner.WeightsLibrary;
+
+	public StorableClassifierDataSet Innermost => inner.Innermost;
 }
