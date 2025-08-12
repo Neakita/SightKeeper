@@ -1,7 +1,7 @@
 using MemoryPack;
 using SightKeeper.Data.DataSets.Classifier;
+using SightKeeper.Data.DataSets.Detector;
 using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Poser3D;
 
@@ -10,6 +10,7 @@ namespace SightKeeper.Data.DataSets;
 public sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 {
 	public required ClassifierDataSetFormatter ClassifierDataSetFormatter { get; init; }
+	public required DetectorDataSetFormatter DetectorDataSetFormatter { get; init; }
 
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref DataSet? value)
 	{
@@ -25,9 +26,10 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 				writer.WriteUnionHeader(0);
 				ClassifierDataSetFormatter.Serialize(ref writer, ref classifierDataSet!);
 				break;
-			case DetectorDataSet detectorDataSet:
+			case StorableDetectorDataSet detectorDataSet:
 				writer.WriteUnionHeader(1);
-				throw new NotImplementedException();
+				DetectorDataSetFormatter.Serialize(ref writer, ref detectorDataSet!);
+				break;
 			case Poser2DDataSet poser2DDataSet:
 				writer.WriteUnionHeader(2);
 				throw new NotImplementedException();
@@ -49,6 +51,7 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 		value = tag switch
 		{
 			0 => reader.ReadValueWithFormatter<ClassifierDataSetFormatter, StorableClassifierDataSet>(ClassifierDataSetFormatter),
+			1 => reader.ReadValueWithFormatter<DetectorDataSetFormatter, StorableDetectorDataSet>(DetectorDataSetFormatter),
 			_ => throw new ArgumentOutOfRangeException()
 		};
 	}

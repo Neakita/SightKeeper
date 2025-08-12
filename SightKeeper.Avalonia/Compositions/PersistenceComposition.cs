@@ -6,6 +6,7 @@ using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Data;
 using SightKeeper.Data.DataSets;
 using SightKeeper.Data.DataSets.Classifier;
+using SightKeeper.Data.DataSets.Detector;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
@@ -60,7 +61,8 @@ public sealed class PersistenceComposition
 		.To<WrappingClassifierDataSetFactory>()
 	
 		.Bind<DataSetFactory<DetectorDataSet>>()
-		.To<DataSetFactory<DetectorDataSet>>(_ => null!)
+		.Bind<DataSetFactory<StorableDetectorDataSet>>()
+		.To<WrappingDetectorDataSetFactory>()
 	
 		.Bind<DataSetFactory<Poser2DDataSet>>()
 		.To<DataSetFactory<Poser2DDataSet>>(_ => null!)
