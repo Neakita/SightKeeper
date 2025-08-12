@@ -37,6 +37,7 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 	private AssetsContainer<ItemsContainer<AssetItem>>? _assetsLibrary;
 	private Image? _image;
 	private ItemsContainer<AssetItem>? Asset => _image == null ? null : _assetsLibrary?.GetOptionalAsset(_image);
+	private IDisposable _assetImagesSubscription = Disposable.Empty;
 
 	private void UpdateItems()
 	{
@@ -51,7 +52,14 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 
 	private void HandleDataSetSelectionChange(DataSet? set)
 	{
+		_assetImagesSubscription.Dispose();
+		_assetImagesSubscription = Disposable.Empty;
 		_assetsLibrary = set?.AssetsLibrary as AssetsContainer<ItemsContainer<AssetItem>>;
+		if (_assetsLibrary != null)
+		{
+			var observableAssetImages = (Vibrance.ReadOnlyObservableCollection<Image>)_assetsLibrary.Images;
+			_assetImagesSubscription = observableAssetImages.Subscribe(_ => UpdateItems());
+		}
 		UpdateItems();
 	}
 
