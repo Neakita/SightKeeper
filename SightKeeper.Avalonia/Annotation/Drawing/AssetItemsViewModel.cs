@@ -42,9 +42,8 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 	{
 		if (Asset == null)
 			return;
-		var items = (ObservableList<AssetItem>)Asset.Items;
-		var itemViewModels = items.Transform(_drawerItemsFactory.CreateItemViewModel).ToObservableList();
-		Items = itemViewModels;
+		var items = (ReadOnlyObservableList<AssetItem>)Asset.Items;
+		Items = items.Transform(_drawerItemsFactory.CreateItemViewModel).ToObservableList().ToReadOnlyNotifyingList();
 	}
 
 	private void HandleDataSetSelectionChange(DataSet? set)
