@@ -5,8 +5,8 @@ namespace SightKeeper.Data.DataSets.Assets;
 
 internal sealed class ObservableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset> inner) : StorableAssetsOwner<TAsset>
 {
-	public IReadOnlyCollection<TAsset> Assets => inner.Assets;
-	public IReadOnlyCollection<StorableImage> Images => inner.Images;
+	public IReadOnlyCollection<TAsset> Assets => _assets;
+	public IReadOnlyCollection<StorableImage> Images => _images;
 
 	public bool Contains(StorableImage image)
 	{
