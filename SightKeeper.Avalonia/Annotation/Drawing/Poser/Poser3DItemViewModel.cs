@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Avalonia.Collections;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Application.Annotation;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Poser3D;
 
@@ -13,7 +12,7 @@ public sealed class Poser3DItemViewModel : PoserItemViewModel
 	public override PoserTag Tag => Value.Tag;
 	public override IReadOnlyList<KeyPoint3DViewModel> KeyPoints => _keyPoints;
 
-	public Poser3DItemViewModel(Poser3DItem value, BoundingEditor boundingEditor) : base(boundingEditor)
+	public Poser3DItemViewModel(Poser3DItem value)
 	{
 		Value = value;
 	}

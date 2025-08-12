@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Application.Annotation;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
@@ -34,9 +37,12 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 			Guard.IsNotNull(AssetsLibrary);
 			Guard.IsNotNull(Image);
 			if (value == null)
-				_annotator.DeleteAsset(AssetsLibrary, Image);
-			else
-				_annotator.SetTag(AssetsLibrary, Image, ((TagViewModel)value).Tag);
+			{
+				AssetsLibrary.DeleteAsset(Image);
+				return;
+			}
+			var asset = AssetsLibrary.GetOrMakeAsset(Image);
+			asset.Tag = ((TagViewModel)value).Tag;
 		}
 	}
 
@@ -45,22 +51,33 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 
 	public bool IsEnabled => Image != null;
 
-	public ClassifierToolingViewModel(ClassifierAnnotator annotator, ImagesViewModel imagesViewModel)
+	public ClassifierToolingViewModel(ImageSelection imageSelection)
 	{
-		_annotator = annotator;
-		_disposable = imagesViewModel.SelectedImageChanged.Subscribe(_ => Image = imagesViewModel.SelectedImage);
-		Image = imagesViewModel.SelectedImage;
+		Image = imageSelection.SelectedImage;
+		imageSelection.SelectedImageChanged
+			.Subscribe(_ => Image = imageSelection.SelectedImage)
+			.DisposeWith(_constructionDisposable);
+		imageSelection.SelectedImageChanged
+			.Select(_ => GetAssetsObservable())
+			.Switch()
+			.Subscribe(_ => OnPropertyChanged(nameof(SelectedTag)))
+			.DisposeWith(_constructionDisposable);
+	}
+
+	private IObservable<Unit> GetAssetsObservable()
+	{
+		if (Image?.Assets is IObservable<object> assetsObservable)
+			return assetsObservable.Select(_ => Unit.Default);
+		return Observable.Empty<Unit>();
 	}
 
 	public void Dispose()
 	{
-		_disposable.Dispose();
+		_constructionDisposable.Dispose();
 	}
 
-	private readonly ClassifierAnnotator _annotator;
-	private AssetsLibrary<ClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
-	private readonly IDisposable _disposable;
+	private AssetsOwner<ClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
+	private readonly CompositeDisposable _constructionDisposable = new();
 
-	private ClassifierAsset? Asset =>
-		Image == null ? null : AssetsLibrary?.GetOrMakeAsset(Image);
+	private ClassifierAsset? Asset => Image == null ? null : AssetsLibrary?.GetOptionalAsset(Image);
 }

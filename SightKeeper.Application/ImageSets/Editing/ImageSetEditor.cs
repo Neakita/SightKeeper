@@ -1,19 +1,21 @@
-using System.Reactive.Subjects;
-using SightKeeper.Domain.Images;
+using FluentValidation;
 
 namespace SightKeeper.Application.ImageSets.Editing;
 
-public class ImageSetEditor
+public sealed class ImageSetEditor
 {
-	public IObservable<ImageSet> Edited => _edited;
-
-	public virtual void EditImageSet(ExistingImageSetData data)
+	public ImageSetEditor(IValidator<ExistingImageSetData> validator)
 	{
+		_validator = validator;
+	}
+
+	public void EditImageSet(ExistingImageSetData data)
+	{
+		_validator.Validate(data);
 		var set = data.Set;
 		set.Name = data.Name;
 		set.Description = data.Description;
-		_edited.OnNext(set);
 	}
 
-	private readonly Subject<ImageSet> _edited = new();
+	private readonly IValidator<ExistingImageSetData> _validator;
 }

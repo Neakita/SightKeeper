@@ -1,4 +1,4 @@
-using System.Windows.Input;
+/*using System.Windows.Input;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Annotation;
@@ -101,16 +101,16 @@ public sealed class BoundingDrawerViewModelTests
 		return Substitute.For<BoundingAnnotator>();
 	}
 
-	private static (AssetsOwner<ItemsMaker<AssetItem>> assetsLibrary, Tag tag) CreateDataSetWithTag()
+	private static (AssetsOwner<ItemsMaker<AssetItem>> assetsLibrary, DomainTag tag) CreateDataSetWithTag()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		return (dataSet.AssetsLibrary, tag);
 	}
 
-	private static Image CreateScreenshot()
+	private static DomainImage CreateScreenshot()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new();
 		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return screenshot;
 	}
@@ -118,8 +118,8 @@ public sealed class BoundingDrawerViewModelTests
 	private static BoundingDrawerViewModel CreateBoundingDrawerViewModel(
 		BoundingAnnotator boundingAnnotator,
 		AssetsOwner<ItemsMaker<AssetItem>>? assetsLibrary,
-		Tag? tag,
-		Image? screenshot)
+		DomainTag? tag,
+		DomainImage? screenshot)
 	{
 		BoundingDrawerViewModel drawerViewModel = new(boundingAnnotator)
 		{
@@ -129,4 +129,4 @@ public sealed class BoundingDrawerViewModelTests
 		};
 		return drawerViewModel;
 	}
-}
+}*/

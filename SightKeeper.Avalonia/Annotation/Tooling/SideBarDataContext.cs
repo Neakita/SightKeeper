@@ -1,12 +1,9 @@
-using System.Collections.Generic;
-
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public interface SideBarDataContext
 {
-	IReadOnlyCollection<ImageSetDataContext> ImageSets { get; }
-	ImageSetDataContext? SelectedImageSet { get; set; }
+	ImageSetSelectionDataContext ImageSetSelection { get; }
 	DataSetSelectionDataContext DataSetSelection { get; }
-	IReadOnlyCollection<AnnotationButtonDefinition> ButtonDefinitions { get; }
+	ActionsDataContext Actions { get; }
 	object? AdditionalTooling { get; }
 }

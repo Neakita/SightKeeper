@@ -1,45 +1,35 @@
+using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
-using NSubstitute;
-using Serilog.Core;
-using SightKeeper.Application.ScreenCapturing;
-using SightKeeper.Data.Services;
-using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests;
 
 internal static class Utilities
 {
-	public static AppData Persist(this AppData appData)
+	public static T PersistUsingFormatter<T>(this T value, IMemoryPackFormatter<T> formatter)
 	{
-		FakeIdRepository<Image> idRepository = new();
-		var formatter = new AppDataFormatter(idRepository, new Lock(), Logger.None);
-		MemoryPackFormatterProvider.Register(formatter);
-		var serializedAppData = MemoryPackSerializer.Serialize(appData);
-		var deserializedAppData = MemoryPackSerializer.Deserialize<AppData>(serializedAppData);
-		Guard.IsNotNull(deserializedAppData);
-		return deserializedAppData;
+		var buffer = SerializeUsingFormatter(value, formatter);
+		var persistedValue = DeserializeUsingFormatter(buffer, formatter);
+		Guard.IsNotNull(persistedValue);
+		return persistedValue;
 	}
 
-	public static void AddImageSetToAppData(ImageSet set, AppDataAccess appDataAccess)
+	public static byte[] SerializeUsingFormatter<T>(this T? value, IMemoryPackFormatter<T> formatter)
 	{
-		AppDataImageSetsRepository repository = new()
-		{
-			AppDataLock = new Lock(),
-			AppDataAccess = appDataAccess,
-			ChangeListener = Substitute.For<ChangeListener>(),
-			ImageDataAccess = Substitute.For<WriteImageDataAccess>()
-		};
-		repository.Add(set);
+		ArrayBufferWriter<byte> bufferWriter = new();
+		using var state = MemoryPackWriterOptionalStatePool.Rent(MemoryPackSerializerOptions.Default);
+		var writer = new MemoryPackWriter<ArrayBufferWriter<byte>>(ref bufferWriter, state);
+		formatter.Serialize(ref writer, ref value);
+		writer.Flush();
+		return bufferWriter.WrittenSpan.ToArray();
 	}
 
-	public static void AddDataSetToAppData(DataSet set, AppDataAccess appDataAccess)
+	public static T? DeserializeUsingFormatter<T>(ReadOnlySpan<byte> buffer, IMemoryPackFormatter<T> formatter)
 	{
-		AppDataDataSetsRepository repository = new(
-			appDataAccess,
-			Substitute.For<ChangeListener>(),
-			new Lock());
-		repository.Add(set);
+		using var state = MemoryPackReaderOptionalStatePool.Rent(MemoryPackSerializerOptions.Default);
+		var reader = new MemoryPackReader(buffer, state);
+		var value = default(T);
+		formatter.Deserialize(ref reader, ref value);
+		return value;
 	}
 }

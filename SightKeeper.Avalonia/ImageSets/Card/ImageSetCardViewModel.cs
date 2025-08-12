@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application.ScreenCapturing;
@@ -8,7 +9,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ImageSets.Card;
 
-internal sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDataContext, IDisposable
+public sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDataContext, IDisposable
 {
 	public ImageSet ImageSet { get; }
 	public string Name => ImageSet.Name;
@@ -37,16 +38,15 @@ internal sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDat
 		EditCommand = editCommand;
 		DeleteCommand = deleteCommand;
 		_disposable = capturer.SetChanged.Subscribe(OnCapturerSetChanged);
+		if (value is INotifyPropertyChanged notifyingValue)
+			notifyingValue.PropertyChanged += OnValuePropertyChanged;
 	}
 
 	public void Dispose()
 	{
 		_disposable.Dispose();
-	}
-
-	internal void NotifyPropertiesChanged()
-	{
-		OnPropertyChanged(nameof(Name));
+		if (ImageSet is INotifyPropertyChanged notifyingValue)
+			notifyingValue.PropertyChanged -= OnValuePropertyChanged;
 	}
 
 	private readonly IDisposable _disposable;
@@ -68,5 +68,11 @@ internal sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDat
 	private void OnCapturerSetChanged(ImageSet? set)
 	{
 		OnPropertyChanged(nameof(IsCapturing));
+	}
+
+	private void OnValuePropertyChanged(object? sender, PropertyChangedEventArgs args)
+	{
+		if (args.PropertyName == nameof(ImageSet.Name))
+			OnPropertyChanged(args);
 	}
 }

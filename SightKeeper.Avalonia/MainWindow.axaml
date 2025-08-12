@@ -44,13 +44,13 @@
     </assists:WindowAssist.TopContent>
     <ContentControl Content="{Binding SelectedTab.Content}">
         <ContentControl.DataTemplates>
-            <DataTemplate x:DataType="imageSets:ImageSetsViewModel">
+            <DataTemplate x:DataType="imageSets:ImageSetsDataContext">
                 <imageSets:ImageSetsTab/>
             </DataTemplate>
-            <DataTemplate x:DataType="dataSets:DataSetsViewModel">
+            <DataTemplate x:DataType="dataSets:DataSetsDataContext">
                 <dataSets:DataSetsTab/>
             </DataTemplate>
-            <DataTemplate x:DataType="annotation:AnnotationTabViewModel">
+            <DataTemplate x:DataType="annotation:AnnotationTabDataContext">
                 <annotation:AnnotationTab/>
             </DataTemplate>
         </ContentControl.DataTemplates>

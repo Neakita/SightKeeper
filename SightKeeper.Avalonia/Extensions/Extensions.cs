@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Avalonia;
+using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Extensions;
 
@@ -24,5 +27,10 @@ internal static class Extensions
 	public static ICommand WithParameter(this ICommand command, object? parameter)
 	{
 		return new ParametrizedCommandAdapter(command, parameter);
+	}
+
+	public static bool IsKeyPointTag(this Tag tag)
+	{
+		return tag.Owner is PoserTag;
 	}
 }

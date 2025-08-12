@@ -1,8 +1,10 @@
+using System.Collections.ObjectModel;
+using CommunityToolkit.Diagnostics;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Tests.Capturing;
@@ -12,37 +14,77 @@ public sealed class ImagesCleanerTests
 	[Fact]
 	public void ShouldCleanImages()
 	{
-		ImagesCleaner cleaner = new(new ImageRepository(Substitute.For<WriteImageDataAccess>()))
+		ImagesCleaner cleaner = new()
 		{
 			UnusedImagesLimit = 10
 		};
-		ImageSet set = new();
+		var set = Substitute.For<ImageSet>();
+		var images = Enumerable.Range(0, 15).Select(_ =>
+		{
+			var image = Substitute.For<Image>();
+			image.Assets.Returns(ReadOnlyCollection<Asset>.Empty);
+			image.IsInUse.Returns(false);
+			return image;
+		}).ToList();
+		set.Images.Returns(images);
 		for (int i = 0; i < 15; i++)
 			set.CreateImage(DateTimeOffset.UtcNow.AddMilliseconds(i), new Vector2<ushort>(320, 320));
-		var expectedRemovedImages = set.Images.Take(5).ToList();
 		cleaner.RemoveExceedUnusedImages(set);
-		set.Images.Should().NotContain(expectedRemovedImages);
+		set.Received().RemoveImagesRange(0, 5);
 	}
 
 	[Fact]
 	public void ShouldCleanImagesBypassingUsedOnes()
 	{
-		ImagesCleaner cleaner = new(new ImageRepository(Substitute.For<WriteImageDataAccess>()))
+		ImagesCleaner cleaner = new()
 		{
-			UnusedImagesLimit = 10
+			UnusedImagesLimit = 5
 		};
-		ImageSet set = new();
-		for (int i = 0; i < 15; i++)
-			set.CreateImage(DateTimeOffset.UtcNow.AddMilliseconds(i), new Vector2<ushort>(320, 320));
-		var dataSet = new DetectorDataSet();
-		dataSet.AssetsLibrary.MakeAsset(set.Images[1]);
-		dataSet.AssetsLibrary.MakeAsset(set.Images[3]);
-		var usedImages = set.Images.Where(image => image.IsInUse).ToList();
-		var expectedRemovedImages = set.Images.Where(image => !image.IsInUse).Take(3).ToList();
+		var set = Substitute.For<ImageSet>();
+		var images = Enumerable.Range(0, 15).Select(i =>
+		{
+			var image = Substitute.For<Image>();
+			if (i is 1 or 3)
+			{
+				image.Assets.Returns([Substitute.For<Asset>()]);
+				image.IsInUse.Returns(true);
+			}
+			else
+			{
+				image.Assets.Returns(ReadOnlyCollection<Asset>.Empty);
+				image.IsInUse.Returns(false);
+			}
+
+			return image;
+		}).ToList();
+		set.Images.Returns(images);
 		cleaner.RemoveExceedUnusedImages(set);
-		set.Images.Should().NotContain(expectedRemovedImages);
-		set.Images.Should().Contain(usedImages);
-		// 2 with assets and 10 more reserved
-		set.Images.Count.Should().Be(12);
+		var receivedCalls = set.ReceivedCalls().ToList();
+		var actualRemovedRanges = receivedCalls
+			.Where(call => call.GetMethodInfo().Name == nameof(ImageSet.RemoveImagesRange)).Select(call =>
+			{
+				var arguments = call.GetArguments();
+				var index = arguments[0];
+				Guard.IsNotNull(index);
+				var count = arguments[1];
+				Guard.IsNotNull(count);
+				return Range.FromCount((int)index, (int)count);
+			}).ToList();
+
+		//                         0 1 2 3 4 5 6 7 8 9 A B C D F
+		//                         H H H H H H H H H H H H H H H
+		// these are assets =>       A   A
+		// these are reserved =>                       R R R R R
+		// so these are deleted => X   X   X X X X X X
+
+		Range[] expectedRemovedRanges =
+		[
+			Range.FromCount(0, 1),
+			Range.FromCount(2, 1),
+			Range.FromCount(4, 6)
+		];
+
+		// Should remove starting from end, so reverse expected ranges
+		actualRemovedRanges.Should().ContainInOrder(expectedRemovedRanges.Reverse());
 	}
 }

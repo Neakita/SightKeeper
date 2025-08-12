@@ -1,7 +1,13 @@
+using System;
+using System.Reactive.Disposables;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application.Annotation;
+using SightKeeper.Application.Extensions;
+using SightKeeper.Avalonia.Annotation.Images;
+using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Avalonia.Extensions;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
@@ -9,54 +15,57 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 
-public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerDataContext
+public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerDataContext, IDisposable
 {
-	public Tag? Tag
+	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;
+
+	public BoundingDrawerViewModel(DataSetSelection dataSetSelection, ImageSelection imageSelection, TagSelectionProvider tagSelectionProvider)
 	{
-		get;
-		set
-		{
-			field = value;
-			CreateItemCommand.NotifyCanExecuteChanged();
-		}
+		dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange).DisposeWith(_constructorDisposable);
+		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
+		tagSelectionProvider.SelectedTagChanged.Subscribe(HandleTagSelectionChange).DisposeWith(_constructorDisposable);
 	}
 
-	public Image? Image
+	public void Dispose()
 	{
-		get;
-		set
-		{
-			field = value;
-			CreateItemCommand.NotifyCanExecuteChanged();
-		}
+		_constructorDisposable.Dispose();
 	}
 
-	public AssetsOwner<ItemsMaker<AssetItem>>? AssetsLibrary
-	{
-		get;
-		set
-		{
-			field = value;
-			CreateItemCommand.NotifyCanExecuteChanged();
-		}
-	}
-
-	public BoundingDrawerViewModel(BoundingAnnotator annotator)
-	{
-		_annotator = annotator;
-	}
-
-	private readonly BoundingAnnotator _annotator;
-	private bool CanCreateItem => Tag != null && Image != null && AssetsLibrary != null;
+	private readonly CompositeDisposable _constructorDisposable = new();
+	private AssetsOwner<ItemsMaker<AssetItem>>? _assetsLibrary;
+	private Image? _image;
+	private Tag? _tag;
+	private bool CanCreateItem => _tag != null && _image != null && _assetsLibrary != null;
 
 	[RelayCommand(CanExecute = nameof(CanCreateItem))]
 	private void CreateItem(Bounding bounding)
 	{
-		Guard.IsNotNull(Tag);
-		Guard.IsNotNull(Image);
-		Guard.IsNotNull(AssetsLibrary);
-		_annotator.CreateItem(AssetsLibrary, Image, Tag, bounding);
+		Guard.IsNotNull(_tag);
+		Guard.IsNotNull(_image);
+		Guard.IsNotNull(_assetsLibrary);
+		var asset = _assetsLibrary.GetOrMakeAsset(_image);
+		var item = asset.MakeItem(_tag);
+		item.Bounding = bounding;
 	}
 
-	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;
+	private void HandleDataSetSelectionChange(DataSet? set)
+	{
+		_assetsLibrary = set?.AssetsLibrary as AssetsOwner<ItemsMaker<AssetItem>>;
+		CreateItemCommand.NotifyCanExecuteChanged();
+	}
+
+	private void HandleImageSelectionChange(Image? image)
+	{
+		_image = image;
+		CreateItemCommand.NotifyCanExecuteChanged();
+	}
+
+	private void HandleTagSelectionChange(Tag? tag)
+	{
+		if (tag == null || tag.IsKeyPointTag())
+			_tag = null;
+		else
+			_tag = tag;
+		CreateItemCommand.NotifyCanExecuteChanged();
+	}
 }

@@ -44,7 +44,7 @@ internal sealed partial class PoserTagsEditorViewModel : ViewModel, PoserTagsEdi
 		return !string.IsNullOrWhiteSpace(name) && Tags.All(tag => tag.Name != name);
 	}
 
-	public IEnumerable<Tag> RemovedTags => Enumerable.Empty<Tag>();
+	public IEnumerable<Tag> RemovedTags => Enumerable.Empty<DomainTag>();
 
 	public IEnumerable<EditedTagData> EditedTags =>
 		_tags.OfType<ExistingPoserTagViewModel>().Where(tag => tag.IsEffectivelyEdited);

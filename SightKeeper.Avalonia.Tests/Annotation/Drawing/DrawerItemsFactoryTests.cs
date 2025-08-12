@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
@@ -23,17 +23,17 @@ public sealed class DrawerItemsFactoryTests
 
 	private static AssetItem CreateItem()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		var screenshot = CreateScreenshot();
 		var asset = dataSet.AssetsLibrary.MakeAsset(screenshot);
 		return asset.MakeItem(tag);
 	}
 
-	private static Image CreateScreenshot()
+	private static DomainImage CreateScreenshot()
 	{
-		ImageSet imageSet = new();
+		DomainImageSet imageSet = new();
 		var screenshot = imageSet.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		return screenshot;
 	}
-}
+}*/

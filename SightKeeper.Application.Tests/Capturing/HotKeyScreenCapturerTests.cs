@@ -3,6 +3,7 @@ using FluentAssertions;
 using HotKeys;
 using NSubstitute;
 using SightKeeper.Application.ScreenCapturing;
+using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Application.Tests.Capturing.Saving;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
@@ -80,18 +81,19 @@ public sealed class HotKeyScreenCapturerTests
 	{
 		Subject<Gesture> gestureSubject = new();
 		gestureObserver = gestureSubject;
-		ImageSet imageSet = new();
 		screenCapturer = new FakeScreenCapturer<Rgba32>();
 		var imageSaver = new FakeImageSaver<Rgba32>();
+		var imageSaverFactory = Substitute.For<ImageSaverFactory<Rgba32>>();
+		imageSaverFactory.CreateImageSaver().Returns(imageSaver);
 		HotKeyScreenCapturer<Rgba32> hotKeyScreenCapturer = new()
 		{
+			ImageSaverFactory = imageSaverFactory,
 			ScreenBoundsProvider = new FakeScreenBoundsProvider(new Vector2<ushort>(1920, 1080)),
 			BindingsManager = new BindingsManager(gestureSubject),
-			Set = imageSet,
+			Set = Substitute.For<ImageSet>(),
 			ScreenCapturer = screenCapturer,
-			ImageSaver = imageSaver,
 			SelfActivityProvider = Substitute.For<SelfActivityProvider>(),
-			ImagesCleaner = new ImagesCleaner(new ImageRepository(Substitute.For<WriteImageDataAccess>())),
+			ImagesCleaner = new ImagesCleaner()
 		};
 		return hotKeyScreenCapturer;
 	}

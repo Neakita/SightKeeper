@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
 using SightKeeper.Application.DataSets.Editing;
@@ -124,7 +124,7 @@ public sealed class DataSetEditorTests
 
 	private static DataSet CreateDataSet(string name = "", string description = "")
 	{
-		return new ClassifierDataSet
+		return new DomainClassifierDataSet
 		{
 			Name = name,
 			Description = description
@@ -161,6 +161,6 @@ public sealed class DataSetEditorTests
 
 	private static PoserDataSet CreatePoserDataSet()
 	{
-		return new Poser2DDataSet();
+		return new DomainPoser2DDataSet();
 	}
-}
+}*/

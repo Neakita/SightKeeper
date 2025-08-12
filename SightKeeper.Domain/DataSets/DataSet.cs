@@ -4,12 +4,12 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Domain.DataSets;
 
-public abstract class DataSet
+public interface DataSet
 {
-	public string Name { get; set; } = string.Empty;
-	public string Description { get; set; } = string.Empty;
+	string Name { get; set; }
+	string Description { get; set; }
 
-	public abstract TagsLibrary TagsLibrary { get; }
-	public abstract AssetsOwner<Asset> AssetsLibrary { get; }
-	public abstract WeightsLibrary WeightsLibrary { get; }
+	TagsOwner<Tag> TagsLibrary { get; }
+	AssetsOwner<Asset> AssetsLibrary { get; }
+	WeightsLibrary WeightsLibrary { get; }
 }

@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;

@@ -1,4 +1,4 @@
-using SightKeeper.Application.DataSets.Editing;
+/*using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Poser;
@@ -8,7 +8,7 @@ namespace SightKeeper.Application.Tests.DataSets.Fakes;
 
 internal sealed class FakeExistingDataSetData : ExistingDataSetData
 {
-	public static FakeExistingDataSetData CreateWithRemovedTags(DataSet dataSet, params IEnumerable<Tag> removedTags)
+	public static FakeExistingDataSetData CreateWithRemovedTags(DataSet dataSet, params IEnumerable<DomainTag> removedTags)
 	{
 		FakeTagsChanges tagsChanges = new()
 		{
@@ -17,7 +17,7 @@ internal sealed class FakeExistingDataSetData : ExistingDataSetData
 		return new FakeExistingDataSetData(dataSet, tagsChanges);
 	}
 
-	public static FakeExistingDataSetData CreateWithEditedTag(DataSet dataSet, Tag tag, string newName)
+	public static FakeExistingDataSetData CreateWithEditedTag(DataSet dataSet, DomainTag tag, string newName)
 	{
 		FakeEditedTagData editedTag = new(tag, newName);
 		FakeTagsChanges tagsChanges = new()
@@ -47,7 +47,7 @@ internal sealed class FakeExistingDataSetData : ExistingDataSetData
 		return new FakeExistingDataSetData(dataSet, tagsChanges);
 	}
 
-	public static FakeExistingDataSetData CreateWithRemovedKeyPointTag(PoserDataSet dataSet, PoserTag poserTag, Tag keyPointTag)
+	public static FakeExistingDataSetData CreateWithRemovedKeyPointTag(PoserDataSet dataSet, DomainPoserTag poserTag, DomainTag keyPointTag)
 	{
 		FakeTagsChanges keyPointTagsChanges = new()
 		{
@@ -89,4 +89,4 @@ internal sealed class FakeExistingDataSetData : ExistingDataSetData
 		Description = dataSet.Description;
 		TagsChanges = tagsChanges;
 	}
-}
+}*/

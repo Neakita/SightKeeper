@@ -14,11 +14,11 @@
             <ContextMenu Width="120">
                 <MenuItem
                     Header="Edit"
-                    Icon="{icons:MaterialIconExt Pencil}"
+                    Icon="{icons:MaterialIconExt Kind=Pencil}"
                     Command="{Binding EditCommand}"/>
                 <MenuItem
                     Header="Delete"
-                    Icon="{icons:MaterialIconExt TrashCanOutline}"
+                    Icon="{icons:MaterialIconExt Kind=TrashCanOutline}"
                     Classes="red-accent"
                     Command="{Binding DeleteCommand}"/>
             </ContextMenu>

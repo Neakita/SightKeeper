@@ -1,15 +1,11 @@
 ﻿using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Poser2D;
 
 namespace SightKeeper.Domain.DataSets.Poser3D;
 
-public sealed class Poser3DDataSet : PoserDataSet
+public interface Poser3DDataSet : PoserDataSet
 {
-	public override AssetsLibrary<Poser3DAsset> AssetsLibrary { get; }
-
-	public Poser3DDataSet()
-	{
-		Poser3DAssetsFactory assetsFactory = new(TagsLibrary);
-		AssetsLibrary = new AssetsLibrary<Poser3DAsset>(assetsFactory);
-	}
+	new AssetsOwner<PoserAsset<DomainPoser3DItem>> AssetsLibrary { get; }
+	AssetsOwner<PoserAsset<PoserItem>> PoserDataSet.AssetsLibrary => AssetsLibrary;
 }

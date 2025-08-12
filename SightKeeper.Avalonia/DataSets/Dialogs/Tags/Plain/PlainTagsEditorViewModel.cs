@@ -47,7 +47,7 @@ internal sealed partial class PlainTagsEditorViewModel : ViewModel, PlainTagsEdi
 		return !string.IsNullOrWhiteSpace(name) && Tags.All(tag => tag.Name != name);
 	}
 
-	public IEnumerable<Tag> RemovedTags => Enumerable.Empty<Tag>();
+	public IEnumerable<Tag> RemovedTags => Enumerable.Empty<DomainTag>();
 
 	public IEnumerable<EditedTagData> EditedTags =>
 		_tags.OfType<ExistingTagViewModel>().Where(tag => tag.IsEffectivelyEdited);

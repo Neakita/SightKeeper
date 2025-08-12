@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Avalonia;
 using Serilog;
+using Serilog.Events;
 
 namespace SightKeeper.Avalonia;
 
@@ -20,15 +21,19 @@ internal static class Program
 			var appBuilder = BuildAvaloniaApp();
 			appBuilder.StartWithClassicDesktopLifetime(args);
 		}
+		catch (Exception exception)
+		{
+			LogUnhandledExceptions(LogEventLevel.Fatal, exception, $"{nameof(Program)}.{nameof(Main)}");
+		}
 		finally
 		{
 			Log.CloseAndFlush();
 		}
 	}
 
-	private static void OnTaskSchedulerUnobservedException(object? sender, UnobservedTaskExceptionEventArgs e)
+	private static void OnTaskSchedulerUnobservedException(object? sender, UnobservedTaskExceptionEventArgs exception)
 	{
-		LogUnhandledExceptions(e.Exception, nameof(TaskScheduler));
+		LogUnhandledExceptions(LogEventLevel.Error, exception.Exception, nameof(TaskScheduler));
 	}
 
 	// Avalonia configuration, don't remove; also used by visual designer.
@@ -37,19 +42,17 @@ internal static class Program
 			.UsePlatformDetect()
 			.LogToTrace();
 
-	private static void LogUnhandledExceptions(Exception exception, string source)
+	private static void LogUnhandledExceptions(LogEventLevel level, Exception exception, string source)
 	{
-		Log.Fatal(exception, "Unhandled exception occured from {Source}", source);
+		Log.Write(level, exception, "Unhandled exception occured from {Source}", source);
 	}
 
 	private static void SetupLogger()
 	{
 		Log.Logger = new LoggerConfiguration()
+			.MinimumLevel.Verbose()
 			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-#if DEBUG
 			.WriteTo.Debug()
-#endif
-			.WriteTo.Seq("http://localhost:5341/", apiKey: "YKxpWEmlEG0TwTHJIYuX")
 			.CreateLogger();
 	}
 }

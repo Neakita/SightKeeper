@@ -1,3 +1,6 @@
+using System;
+using Sightful.Avalonia.Controls.GestureBox;
+
 namespace SightKeeper.Avalonia.ImageSets.Capturing;
 
 public interface CapturingSettingsDataContext
@@ -7,4 +10,6 @@ public interface CapturingSettingsDataContext
 	ushort Width { get; set; }
 	ushort Height { get; set; }
 	double? FrameRateLimit { get; set; }
+	object? Gesture { get; set; }
+	IObservable<GestureEdit> GestureEditsObservable { get; }
 }

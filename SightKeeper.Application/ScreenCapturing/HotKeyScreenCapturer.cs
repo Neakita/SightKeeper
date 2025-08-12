@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using HotKeys;
 using HotKeys.Handlers;
-using SharpHook.Native;
+using SharpHook.Data;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
@@ -16,7 +16,7 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 	public required ScreenBoundsProvider ScreenBoundsProvider { get; init; }
 	public required ImagesCleaner ImagesCleaner { get; init; }
 	public required ScreenCapturer<TPixel> ScreenCapturer { get; init; }
-	public required ImageSaver<TPixel> ImageSaver { get; init; }
+	public required ImageSaverFactory<TPixel> ImageSaverFactory { get; init; }
 	public required SelfActivityProvider SelfActivityProvider { get; init; }
 
 	public required BindingsManager BindingsManager
@@ -36,7 +36,8 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 		set
 		{
 			field = value;
-			_binding.IsEnabled = value != null;
+			IsEnabled = value != null;
+			_binding.IsEnabled = IsEnabled;
 			_setChanged.OnNext(value);
 		}
 	}
@@ -76,10 +77,23 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 		_binding.Dispose();
 	}
 
+	private bool IsEnabled
+	{
+		get;
+		set
+		{
+			if (field == value)
+				return;
+			_imageSaver = value ? ImageSaverFactory.CreateImageSaver() : null;
+			field = value;
+		}
+	}
+
 	private const ushort MinimumResolutionDimension = 32;
 	private readonly Subject<ImageSet?> _setChanged = new();
 	private readonly Binding _binding;
 	private Vector2<ushort> Offset => ScreenBoundsProvider.MainScreenCenter - ImageSize / 2;
+	private ImageSaver<TPixel>? _imageSaver;
 
 	private ContinuousHandler GetHandler()
 	{
@@ -102,12 +116,13 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 	{
 		if (SelfActivityProvider.IsOwnWindowActive)
 			return;
-		if (ImageSaver is LimitedSaver { IsLimitReached: true })
+		if (_imageSaver is LimitedSaver { IsLimitReached: true })
 			return;
 		var set = Set;
 		Guard.IsNotNull(set);
 		var imageData = ScreenCapturer.Capture(ImageSize, Offset);
-		ImageSaver.SaveImage(set, imageData, DateTimeOffset.Now);
+		Guard.IsNotNull(_imageSaver);
+		_imageSaver.SaveImage(set, imageData, DateTimeOffset.Now);
 	}
 
 	private void ClearExceedImages()
@@ -115,7 +130,7 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 		var set = Set;
 		if (set == null)
 			return;
-		if (ImageSaver is LimitedSaver limitedSaver)
+		if (_imageSaver is LimitedSaver limitedSaver)
 			limitedSaver.Processing.Wait();
 		ImagesCleaner.RemoveExceedUnusedImages(set);
 	}

@@ -2,22 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application.Annotation;
-using SightKeeper.Application.Extensions;
-using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
-using SightKeeper.Avalonia.Annotation.Drawing.Poser;
+using SightKeeper.Avalonia.Annotation.Drawing;
+using SightKeeper.Avalonia.Misc;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Poser;
 
-public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataContext, TagSelection, ObservableTagSelection, SelectedItemConsumer, IDisposable
+public sealed partial class PoserToolingViewModel :
+	ViewModel,
+	PoserToolingDataContext,
+	TagSelection,
+	ObservableTagSelection,
+	IDisposable
 {
 	public TagsContainer<PoserTag>? TagsSource
 	{
@@ -27,17 +30,6 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 			OnPropertyChanging(nameof(PoserTags));
 			field = value;
 			OnPropertyChanged(nameof(PoserTags));
-		}
-	}
-
-	public BoundedItemDataContext? SelectedItem
-	{
-		set
-		{
-			OnPropertyChanging(nameof(KeyPointTags));
-			_selectedItem = ((PoserItemViewModel?)value)?.Value;
-			KeyPointTags = _selectedItem == null ? ReadOnlyCollection<KeyPointTagDataContext>.Empty : _selectedItem.Tag.KeyPointTags.Select(tag => new KeyPointTagViewModel(tag, new ParametrizedCommandAdapter(DeleteKeyPointCommand, tag))).ToList();
-			OnPropertyChanged(nameof(KeyPointTags));
 		}
 	}
 
@@ -68,23 +60,18 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 
 	public IObservable<Tag?> SelectedTagChanged => _selectedTagChanged.DistinctUntilChanged();
 
-	public PoserToolingViewModel(PoserAnnotator poserAnnotator, ObservablePoserAnnotator observablePoserAnnotator)
+	public PoserToolingViewModel(SelectedItemProvider selectedItemProvider)
 	{
-		_poserAnnotator = poserAnnotator;
-		observablePoserAnnotator.KeyPointCreated
-			.Merge(observablePoserAnnotator.KeyPointDeleted)
-			.Where(data => data.item == _selectedItem)
-			.Subscribe(_ => DeleteKeyPointCommand.NotifyCanExecuteChanged())
-			.DisposeWith(_disposable);
+		_constructorDisposable = selectedItemProvider.SelectedItemChanged.Subscribe(HandleItemSelectionChange);
 	}
 
 	public void Dispose()
 	{
-		_disposable.Dispose();
+		_constructorDisposable.Dispose();
+		_selectedTagChanged.Dispose();
 	}
 
-	private readonly PoserAnnotator _poserAnnotator;
-	private readonly CompositeDisposable _disposable = new();
+	private readonly IDisposable _constructorDisposable;
 	private readonly Subject<Tag?> _selectedTagChanged = new();
 	private PoserItem? _selectedItem;
 
@@ -107,11 +94,34 @@ public sealed partial class PoserToolingViewModel : ViewModel, PoserToolingDataC
 	private void DeleteKeyPoint(Tag tag)
 	{
 		Guard.IsNotNull(_selectedItem);
-		_poserAnnotator.DeleteKeyPoint(_selectedItem, tag);
+		var keyPoint = _selectedItem.KeyPoints.Single(keyPoint => keyPoint.Tag == tag);
+		_selectedItem.DeleteKeyPoint(keyPoint);
 	}
 
 	private bool CanDeleteKeyPoint(Tag tag)
 	{
 		return _selectedItem != null && _selectedItem.KeyPoints.Any(keyPoint => keyPoint.Tag == tag);
+	}
+
+	private void HandleItemSelectionChange(AssetItem? item)
+	{
+		if (item is PoserItem poserItem)
+		{
+			_selectedItem = poserItem;
+			KeyPointTags = _selectedItem.Tag.KeyPointTags.Select(TagToViewModel).ToList();
+		}
+		else
+		{
+			_selectedItem = null;
+			KeyPointTags = ReadOnlyCollection<KeyPointTagDataContext>.Empty;
+		}
+
+		OnPropertyChanged(nameof(KeyPointTags));
+	}
+
+	private KeyPointTagViewModel TagToViewModel(Tag tag)
+	{
+		var parametrizedDeleteKeyPointCommand = new ParametrizedCommandAdapter(DeleteKeyPointCommand, tag);
+		return new KeyPointTagViewModel(tag, parametrizedDeleteKeyPointCommand);
 	}
 }

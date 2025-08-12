@@ -2,14 +2,14 @@ using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Application.Training.Assets.Distribution;
 
-internal sealed class AssetUsageOrderComparer : IComparer<Asset>
+internal sealed class AssetUsageOrderComparer<TAsset> : IComparer<TAsset> where TAsset : Asset
 {
 	public AssetUsageOrderComparer(AssetUsage targetUsage)
 	{
 		_targetUsage = targetUsage;
 	}
 
-	public int Compare(Asset? x, Asset? y)
+	public int Compare(TAsset? x, TAsset? y)
 	{
 		if (ReferenceEquals(x, y)) return 0;
 		if (y is null) return 1;

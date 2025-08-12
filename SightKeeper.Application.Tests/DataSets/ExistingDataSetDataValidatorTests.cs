@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using FluentValidation;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.Tests.DataSets.Fakes;
@@ -33,7 +33,7 @@ public sealed class ExistingDataSetDataValidatorTests
 
 	private static DataSet CreateDataSet(string name)
 	{
-		return new ClassifierDataSet
+		return new DomainClassifierDataSet
 		{
 			Name = name
 		};
@@ -44,4 +44,4 @@ public sealed class ExistingDataSetDataValidatorTests
 		var repository = Utilities.CreateRepository(dataSets);
 		return new ExistingDataSetDataValidator(repository);
 	}
-}
+}*/

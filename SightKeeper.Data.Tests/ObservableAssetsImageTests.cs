@@ -1,0 +1,43 @@
+using FluentAssertions;
+using NSubstitute;
+using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain.DataSets.Assets;
+using Vibrance;
+using Vibrance.Changes;
+
+namespace SightKeeper.Data.Tests;
+
+public sealed class ObservableAssetsImageTests
+{
+	[Fact]
+	public void ShouldObserveAddition()
+	{
+		var image = new ObservableAssetsImage(Substitute.For<StorableImage>());
+		var asset = Substitute.For<Asset>();
+		var observableAssets = image.Assets.Should().BeAssignableTo<ReadOnlyObservableCollection<Asset>>().Subject;
+		List<Change<Asset>> observedChanges = new();
+		observableAssets.Subscribe(observedChanges.Add);
+		image.AddAsset(asset);
+		observedChanges.Should()
+			.ContainSingle()
+			.Which.Should().BeOfType<Addition<Asset>>()
+			.Which.Items.Should().ContainSingle()
+			.Which.Should().BeSameAs(asset);
+	}
+
+	[Fact]
+	public void ShouldObserveRemoval()
+	{
+		var image = new ObservableAssetsImage(Substitute.For<StorableImage>());
+		var asset = Substitute.For<Asset>();
+		var observableAssets = image.Assets.Should().BeAssignableTo<ReadOnlyObservableCollection<Asset>>().Subject;
+		List<Change<Asset>> observedChanges = new();
+		observableAssets.Subscribe(observedChanges.Add);
+		image.RemoveAsset(asset);
+		observedChanges.Should()
+			.ContainSingle()
+			.Which.Should().BeOfType<Removal<Asset>>()
+			.Which.Items.Should().ContainSingle()
+			.Which.Should().BeSameAs(asset);
+	}
+}

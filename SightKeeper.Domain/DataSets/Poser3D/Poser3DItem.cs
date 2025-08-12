@@ -1,16 +1,23 @@
-﻿using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser3D;
 
-public sealed class Poser3DItem : PoserItem<KeyPoint3D>
+public interface Poser3DItem : PoserItem
 {
-	protected override KeyPoint3D CreateKeyPoint(Tag tag)
+	new IReadOnlyCollection<KeyPoint3D> KeyPoints { get; }
+	new KeyPoint3D MakeKeyPoint(Tag tag);
+	void DeleteKeyPoint(KeyPoint3D keyPoint);
+
+	IReadOnlyCollection<KeyPoint> PoserItem.KeyPoints => KeyPoints;
+
+	KeyPoint PoserItem.MakeKeyPoint(Tag tag)
 	{
-		return new KeyPoint3D(tag);
+		return MakeKeyPoint(tag);
 	}
 
-	internal Poser3DItem(PoserTag tag) : base(tag)
+	void PoserItem.DeleteKeyPoint(KeyPoint keyPoint)
 	{
+		DeleteKeyPoint((KeyPoint3D)keyPoint);
 	}
 }

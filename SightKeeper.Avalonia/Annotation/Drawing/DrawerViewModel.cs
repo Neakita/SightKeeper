@@ -1,54 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Images;
-using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Poser;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
+public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, SelectedItemProvider, IDisposable
 {
-	[ObservableProperty] public partial Image? Image { get; set; }
-
-	public Tag? Tag
-	{
-		get;
-		set
-		{
-			field = value;
-			_boundingDrawer.Tag = null;
-			_keyPointDrawer.Tag = null;
-			if (value?.Owner is PoserTag)
-				_keyPointDrawer.Tag = value;
-			else
-				_boundingDrawer.Tag = value;
-		}
-	}
-
-	public AssetsOwner<ItemsOwner<AssetItem>>? AssetsLibrary
-	{
-		get;
-		set
-		{
-			field = value;
-			_boundingDrawer.AssetsLibrary = value;
-			_itemsViewModel.AssetsLibrary = value;
-		}
-	}
-
-	ImageDataContext? DrawerDataContext.Image => Image == null ? null : new ImageViewModel(_imageLoader, Image);
+	[ObservableProperty] public partial ImageDataContext? Image { get; private set; }
 
 	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
 	[ObservableProperty] public partial BoundedItemDataContext? SelectedItem { get; set; }
-	public IObservable<BoundedItemDataContext?> SelectedItemChanged => _selectedItemChanged.AsObservable();
+	public IObservable<AssetItem?> SelectedItemChanged => _selectedItemChanged.AsObservable();
 	public BoundingDrawerDataContext BoundingDrawer => _boundingDrawer;
 	public KeyPointDrawerDataContext KeyPointDrawer => _keyPointDrawer;
 
@@ -56,29 +28,51 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext
 		BoundingDrawerViewModel boundingDrawer,
 		AssetItemsViewModel itemsViewModel,
 		KeyPointDrawerViewModel keyPointDrawer,
-		ImageLoader imageLoader)
+		ImageLoader imageLoader,
+		ImageSelection imageSelection)
 	{
 		_boundingDrawer = boundingDrawer;
 		_itemsViewModel = itemsViewModel;
 		_keyPointDrawer = keyPointDrawer;
 		_imageLoader = imageLoader;
+		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
+		_itemsViewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
+	}
+
+	public void Dispose()
+	{
+		_selectedItemChanged.Dispose();
+		_constructorDisposable.Dispose();
+		_itemsViewModel.PropertyChanged -= OnItemsViewModelPropertyChanged;
 	}
 
 	private readonly BoundingDrawerViewModel _boundingDrawer;
 	private readonly AssetItemsViewModel _itemsViewModel;
 	private readonly KeyPointDrawerViewModel _keyPointDrawer;
 	private readonly ImageLoader _imageLoader;
-	private readonly Subject<BoundedItemDataContext?> _selectedItemChanged = new();
+	private readonly Subject<AssetItem?> _selectedItemChanged = new();
+	private readonly CompositeDisposable _constructorDisposable = new();
 
-	partial void OnImageChanged(Image? value)
+	private void HandleImageSelectionChange(Image? image)
 	{
-		_boundingDrawer.Image = value;
-		_itemsViewModel.Image = value;
+		if (image == null)
+		{
+			Image = null;
+			return;
+		}
+		Image = new ImageViewModel(_imageLoader, image);
 	}
 
 	partial void OnSelectedItemChanged(BoundedItemDataContext? value)
 	{
-		_selectedItemChanged.OnNext(value);
+		var assetItem = (value as BoundedItemViewModel)?.Value as AssetItem;
+		_selectedItemChanged.OnNext(assetItem);
 		_keyPointDrawer.Item = value as PoserItemViewModel;
+	}
+
+	private void OnItemsViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName == nameof(AssetItemsViewModel.Items))
+			OnPropertyChanged(e);
 	}
 }

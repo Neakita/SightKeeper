@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:images="clr-namespace:SightKeeper.Avalonia.Annotation.Images"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             mc:Ignorable="d"
+             x:Class="SightKeeper.Avalonia.Annotation.Images.AnnotationImage"
+             x:DataType="images:AnnotationImageDataContext">
+    <Grid RowDefinitions="* 12 Auto">
+        <Grid.Styles>
+            <Style Selector="TextBlock">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style Selector="icons|MaterialIcon">
+                <Setter Property="Width" Value="12"/>
+                <Setter Property="Height" Value="12"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style Selector="Border.label">
+                <Setter Property="Padding" Value="8 4"/>
+            </Style>
+        </Grid.Styles>
+        <Border Grid.Row="0"
+                CornerRadius="12">
+            <Border.BoxShadow>
+                <MultiBinding Converter="{x:Static images:BooleanToBoxShadowConverter.Instance}">
+                    <Binding Path="#Image.Source" Converter="{x:Static ObjectConverters.IsNotNull}"/>
+                    <DynamicResource ResourceKey="BoxShadow"/>
+                </MultiBinding>
+            </Border.BoxShadow>
+            <Border CornerRadius="12"
+                    ClipToBounds="True">
+                <Panel Name="ImageContainer">
+                    <icons:MaterialIcon Kind="Image"
+                                        IsVisible="{Binding #Image.Source, Converter={x:Static ObjectConverters.IsNull}}"
+                                        Foreground="{StaticResource WatermarkSecondary}"
+                                        RenderTransform="scale(0.5)"
+                                        Opacity="0.05"
+                                        Width="NaN"
+                                        Height="NaN"/>
+                    <Image Name="Image"
+                           Stretch="UniformToFill">
+                        <Image.Resources>
+                            <ResourceDictionary>
+                                <images:SizeToImageTargetSizeConverter x:Key="SizeToImageTargetSizeConverter"
+                                                                       MinimumSize="20" SizeStep="20"/>
+                            </ResourceDictionary>
+                        </Image.Resources>
+                        <Interaction.Behaviors>
+                            <behaviors:ImageDataContextBindingBehavior
+                                DataContext="{Binding}"
+                                TargetSize="{Binding #ImageContainer.Bounds.Size.Width, Converter={StaticResource SizeToImageTargetSizeConverter}}"/>
+                        </Interaction.Behaviors>
+                    </Image>
+                </Panel>
+            </Border>
+        </Border>
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    Classes="small-spacing"
+                    ToolTip.Tip="{Binding CreationTimestamp}"
+                    Background="Transparent">
+            <icons:MaterialIcon Kind="Calendar"/>
+            <TextBlock>
+                <Interaction.Behaviors>
+                    <behaviors:DisplayRelativeDateTimeBehavior
+                        DateTime="{Binding CreationTimestamp}"/>
+                </Interaction.Behaviors>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</UserControl>

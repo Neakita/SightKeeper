@@ -1,120 +1,71 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using Avalonia.Collections;
-using CommunityToolkit.Diagnostics;
-using SightKeeper.Application.Annotation;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Extensions;
-using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
-using SightKeeper.Avalonia.Annotation.Drawing.Poser;
+using SightKeeper.Avalonia.Annotation.Images;
+using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.Images;
+using Vibrance;
+using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing;
 
-public sealed class AssetItemsViewModel
+public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 {
-	public Image? Image
-	{
-		get;
-		set
-		{
-			field = value;
-			UpdateItems();
-		}
-	}
+	[ObservableProperty]
+	public partial IReadOnlyCollection<DrawerItemDataContext> Items { get; private set; } = ReadOnlyCollection<DrawerItemDataContext>.Empty;
 
-	public AssetsContainer<ItemsContainer<AssetItem>>? AssetsLibrary
-	{
-		get;
-		set
-		{
-			field = value;
-			UpdateItems();
-		}
-	}
-
-	public IReadOnlyCollection<DrawerItemDataContext> Items => _items;
-
-	public AssetItemsViewModel(
-		DrawerItemsFactory drawerItemsFactory,
-		KeyPointViewModelFactory keyPointFactory,
-		ObservableBoundingAnnotator observableBoundingAnnotator,
-		ObservablePoserAnnotator observablePoserAnnotator,
-		ObservableAnnotator observableAnnotator)
+	public AssetItemsViewModel(DrawerItemsFactory drawerItemsFactory, DataSetSelection dataSetSelection, ImageSelection imageSelection)
 	{
 		_drawerItemsFactory = drawerItemsFactory;
-		_keyPointFactory = keyPointFactory;
-		observableBoundingAnnotator.ItemCreated
-			.Where(data => data.asset == Asset)
-			.Select(data => data.item)
-			.Subscribe(OnItemCreated)
-			.DisposeWith(_disposable);
-		observablePoserAnnotator.KeyPointCreated.Subscribe(OnKeyPointCreated).DisposeWith(_disposable);
-		observablePoserAnnotator.KeyPointDeleted.Subscribe(OnKeyPointDeleted).DisposeWith(_disposable);
-		observableAnnotator.AssetsChanged.Subscribe(OnAssetsChanged).DisposeWith(_disposable);
+		dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange).DisposeWith(_constructorDisposable);
+		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
 	}
 
-	private void OnAssetsChanged(Image image)
+	public void Dispose()
 	{
-		if (Image != image || AssetsLibrary == null)
-			return;
-		if (!AssetsLibrary.Contains(image))
-			_items.Clear();
+		_constructorDisposable.Dispose();
 	}
 
 	private readonly DrawerItemsFactory _drawerItemsFactory;
-	private readonly KeyPointViewModelFactory _keyPointFactory;
-	private readonly AvaloniaList<DrawerItemDataContext> _items = new();
-	private readonly CompositeDisposable _disposable = new();
-	private ItemsContainer<AssetItem>? Asset => Image == null ? null : AssetsLibrary?.GetOptionalAsset(Image);
+	private readonly CompositeDisposable _constructorDisposable = new();
+	private AssetsContainer<ItemsContainer<AssetItem>>? _assetsLibrary;
+	private Image? _image;
+	private ItemsContainer<AssetItem>? Asset => _image == null ? null : _assetsLibrary?.GetOptionalAsset(_image);
+	private IDisposable _assetImagesSubscription = Disposable.Empty;
 
 	private void UpdateItems()
 	{
-		_items.Clear();
 		if (Asset == null)
-			return;
-		var items = Asset.Items
-			.Select(_drawerItemsFactory.CreateItemViewModel)
-			.SelectMany(AddKeyPoints);
-		_items.AddRange(items);
-	}
-
-	private IEnumerable<DrawerItemDataContext> AddKeyPoints(BoundedItemDataContext item)
-	{
-		yield return item;
-		if (item is not PoserItemViewModel poserItem)
-			yield break;
-		foreach (var keyPoint in poserItem.Value.KeyPoints)
 		{
-			var keyPointViewModel = _keyPointFactory.CreateViewModel(poserItem, keyPoint);
-			yield return keyPointViewModel;
+			Items = ReadOnlyCollection<DrawerItemDataContext>.Empty;
+			return;
 		}
+		var items = (ReadOnlyObservableList<AssetItem>)Asset.Items;
+		Items = items.Transform(_drawerItemsFactory.CreateItemViewModel).ToObservableList().ToReadOnlyNotifyingList();
 	}
 
-	private void OnItemCreated(AssetItem item)
+	private void HandleDataSetSelectionChange(DataSet? set)
 	{
-		var itemViewModel = _drawerItemsFactory.CreateItemViewModel(item);
-		_items.Add(itemViewModel);
+		_assetImagesSubscription.Dispose();
+		_assetImagesSubscription = Disposable.Empty;
+		_assetsLibrary = set?.AssetsLibrary as AssetsContainer<ItemsContainer<AssetItem>>;
+		if (_assetsLibrary != null)
+		{
+			var observableAssetImages = (Vibrance.ReadOnlyObservableCollection<Image>)_assetsLibrary.Images;
+			_assetImagesSubscription = observableAssetImages.Subscribe(_ => UpdateItems());
+		}
+		UpdateItems();
 	}
 
-	private void OnKeyPointCreated((PoserItem item, KeyPoint keyPoint) tuple)
+	private void HandleImageSelectionChange(Image? image)
 	{
-		var itemViewModel = _items.OfType<PoserItemViewModel>().Single(viewModel => viewModel.Value == tuple.item);
-		var keyPointViewModel = _keyPointFactory.CreateViewModel(itemViewModel, tuple.keyPoint);
-		_items.Add(keyPointViewModel);
-	}
-
-	private void OnKeyPointDeleted((PoserItem item, KeyPoint keyPoint) tuple)
-	{
-		var itemViewModel = _items.OfType<PoserItemViewModel>().Single(viewModel => viewModel.Value == tuple.item);
-		var keyPointViewModel = itemViewModel.KeyPoints.Single(viewModel => viewModel.Value == tuple.keyPoint);
-		itemViewModel.RemoveKeyPoint(keyPointViewModel);
-		var isRemoved = _items.Remove(keyPointViewModel);
-		Guard.IsTrue(isRemoved);
+		_image = image;
+		UpdateItems();
 	}
 }

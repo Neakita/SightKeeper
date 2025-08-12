@@ -1,23 +1,23 @@
 using MemoryPack;
 using Serilog;
+using SightKeeper.Avalonia.Compositions;
 
 namespace SightKeeper.Avalonia;
 
 internal static class AppBootstrapper
 {
-	public static void Setup(Composition composition)
+	public static Composition Setup()
 	{
-		SetupLogger();
-		MemoryPackFormatterProvider.Register(composition.AppDataFormatter);
-		composition.AppDataAccess.Load();
-		composition.FileSystemImageRepository.ClearUnassociatedImageFiles();
-		composition.PeriodicDataSaver.Start();
+		Composition composition = new();
+		Log.Verbose("Composition:\n{composition}", composition.ToString());
+		SetupPersistence(composition);
+		return composition;
 	}
 
-	private static void SetupLogger()
+	private static void SetupPersistence(Composition composition)
 	{
-		Log.Logger = new LoggerConfiguration()
-			.WriteTo.Debug()
-			.CreateLogger();
+		MemoryPackFormatterProvider.Register(composition.ImageSetFormatter);
+		MemoryPackFormatterProvider.Register(composition.DataSetFormatter);
+		composition.AppDataAccess.Load();
 	}
 }

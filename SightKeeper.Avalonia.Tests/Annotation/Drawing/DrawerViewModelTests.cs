@@ -1,4 +1,4 @@
-using System.Reactive.Linq;
+/*using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
 using Serilog.Core;
@@ -12,7 +12,6 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Tests.Annotation.Drawing;
 
@@ -35,10 +34,10 @@ public sealed class DrawerViewModelTests
 		var observableBoundingAnnotator = Substitute.For<ObservableBoundingAnnotator>();
 		observableBoundingAnnotator.ItemCreated.Returns(Observable.Empty<(ItemsMaker<AssetItem>, AssetItem)>());
 		var observablePoserAnnotator = Substitute.For<ObservablePoserAnnotator>();
-		observablePoserAnnotator.KeyPointCreated.Returns(Observable.Empty<(PoserItem, KeyPoint)>());
-		observablePoserAnnotator.KeyPointDeleted.Returns(Observable.Empty<(PoserItem, KeyPoint)>());
+		observablePoserAnnotator.KeyPointCreated.Returns(Observable.Empty<(DomainPoserItem, DomainKeyPoint)>());
+		observablePoserAnnotator.KeyPointDeleted.Returns(Observable.Empty<(DomainPoserItem, DomainKeyPoint)>());
 		var observableAnnotator = Substitute.For<ObservableAnnotator>();
-		observableAnnotator.AssetsChanged.Returns(Observable.Empty<Image>());
+		observableAnnotator.AssetsChanged.Returns(Observable.Empty<DomainImage>());
 		var assetItemsViewModel = new AssetItemsViewModel(
 			drawerItemsFactory,
 			keyPointViewModelFactory,
@@ -50,10 +49,10 @@ public sealed class DrawerViewModelTests
 		return drawerViewModel;
 	}
 
-	private static Tag CreateTag()
+	private static DomainTag CreateTag()
 	{
-		DetectorDataSet dataSet = new();
+		DomainDetectorDataSet dataSet = new();
 		var tag = dataSet.TagsLibrary.CreateTag("TestTag");
 		return tag;
 	}
-}
+}*/

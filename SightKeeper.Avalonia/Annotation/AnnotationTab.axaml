@@ -8,7 +8,7 @@
              xmlns:images="clr-namespace:SightKeeper.Avalonia.Annotation.Images"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
              x:Class="SightKeeper.Avalonia.Annotation.AnnotationTab"
-             x:DataType="local:AnnotationTabViewModel">
+             x:DataType="local:AnnotationTabDataContext">
     <Grid Classes="regular-margin">
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="160" MaxWidth="400"/>

@@ -16,11 +16,11 @@
             <ContextMenu Width="120">
                 <MenuItem
                     Header="Edit"
-                    Icon="{icons:MaterialIconExt Pencil}"
+                    Icon="{icons:MaterialIconExt Kind=Pencil}"
                     Command="{Binding EditCommand}"/>
                 <MenuItem
                     Header="Delete"
-                    Icon="{icons:MaterialIconExt TrashCanOutline}"
+                    Icon="{icons:MaterialIconExt Kind=TrashCanOutline}"
                     Classes="red-accent"
                     Command="{Binding DeleteCommand}"/>
             </ContextMenu>
@@ -34,11 +34,11 @@
                     <Button HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
                             Classes="square high-accent"
-                            Content="{icons:MaterialIconExt Record}"
+                            Content="{icons:MaterialIconExt Kind=Record}"
                             IsVisible="{Binding !IsCapturing}"
                             Command="{Binding StartCapturingCommand}"/>
                     <Button Classes="square red-accent"
-                            Content="{icons:MaterialIconExt Stop}"
+                            Content="{icons:MaterialIconExt Kind=Stop}"
                             IsVisible="{Binding IsCapturing}"
                             Command="{Binding StopCapturingCommand}"/>
                 </Panel>

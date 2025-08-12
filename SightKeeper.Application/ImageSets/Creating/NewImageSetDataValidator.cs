@@ -5,8 +5,7 @@ namespace SightKeeper.Application.ImageSets.Creating;
 
 public sealed class NewImageSetDataValidator : AbstractValidator<ImageSetData>
 {
-	public NewImageSetDataValidator(
-		ReadRepository<ImageSet> imageSetRepository)
+	public NewImageSetDataValidator(ReadRepository<ImageSet> imageSetRepository)
 	{
 		_imageSetRepository = imageSetRepository;
 		Include(ImageSetDataValidator.Instance);

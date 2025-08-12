@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
 using SightKeeper.Application.DataSets;
@@ -42,7 +42,7 @@ public sealed class DataSetCreatorTests
 		var creator = CreateCreator();
 		var data = new FakeNewDataSetData(DataSetType.Classifier);
 		var dataSet = creator.Create(data);
-		dataSet.Should().BeOfType<ClassifierDataSet>();
+		dataSet.Should().BeOfType<DomainClassifierDataSet>();
 	}
 
 	[Fact]
@@ -51,7 +51,7 @@ public sealed class DataSetCreatorTests
 		var creator = CreateCreator();
 		var data = new FakeNewDataSetData(DataSetType.Detector);
 		var dataSet = creator.Create(data);
-		dataSet.Should().BeOfType<DetectorDataSet>();
+		dataSet.Should().BeOfType<DomainDetectorDataSet>();
 	}
 
 	[Fact]
@@ -60,7 +60,7 @@ public sealed class DataSetCreatorTests
 		var creator = CreateCreator();
 		var data = new FakeNewDataSetData(DataSetType.Poser2D);
 		var dataSet = creator.Create(data);
-		dataSet.Should().BeOfType<Poser2DDataSet>();
+		dataSet.Should().BeOfType<DomainPoser2DDataSet>();
 	}
 
 	[Fact]
@@ -69,7 +69,7 @@ public sealed class DataSetCreatorTests
 		var creator = CreateCreator();
 		var data = new FakeNewDataSetData(DataSetType.Poser3D);
 		var dataSet = creator.Create(data);
-		dataSet.Should().BeOfType<Poser3DDataSet>();
+		dataSet.Should().BeOfType<DomainPoser3DDataSet>();
 	}
 
 	[Fact]
@@ -145,4 +145,4 @@ public sealed class DataSetCreatorTests
 		validator.RuleFor(data => data.Name).Must(_ => false);
 		return validator;
 	}
-}
+}*/

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using FluentValidation;
 using SightKeeper.Application.ImageSets.Editing;
+using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.ImageSets.Dialogs;

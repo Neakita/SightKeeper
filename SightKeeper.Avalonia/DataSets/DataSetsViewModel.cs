@@ -5,13 +5,15 @@ using SightKeeper.Application;
 using SightKeeper.Avalonia.DataSets.Card;
 using SightKeeper.Avalonia.DataSets.Commands;
 using SightKeeper.Domain.DataSets;
+using Vibrance;
 using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.DataSets;
 
 internal class DataSetsViewModel : ViewModel, DataSetsDataContext, IDisposable
 {
-	public IReadOnlyCollection<DataSetCardDataContext> DataSets { get; }
+	public IReadOnlyCollection<DataSetCardDataContext> DataSets => _dataSets.ToReadOnlyNotifyingList();
+
 	public ICommand CreateDataSetCommand { get; }
 
 	public DataSetsViewModel(
@@ -22,15 +24,14 @@ internal class DataSetsViewModel : ViewModel, DataSetsDataContext, IDisposable
 		var dataSets = dataSetsObservableListRepository.Items
 			.Transform(dataSetCardViewModelFactory.CreateDataSetCardViewModel)
 			.ToObservableList();
-		DataSets = dataSets;
-		_disposable = dataSets;
+		_dataSets = dataSets;
 		CreateDataSetCommand = createDataSetCommandFactory.CreateCommand();
 	}
 
-	private readonly IDisposable _disposable;
+	private readonly ReadOnlyObservableList<DataSetCardDataContext> _dataSets;
 
 	public void Dispose()
 	{
-		_disposable.Dispose();
+		_dataSets.Dispose();
 	}
 }

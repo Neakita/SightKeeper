@@ -9,7 +9,6 @@
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <Nullable>enable</Nullable>
-        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <AssemblyTitle>Sight Keeper</AssemblyTitle>
@@ -21,6 +20,7 @@
     <!--Previewer doesn't support AOT https://github.com/AvaloniaUI/Avalonia/issues/13760#issuecomment-1829411762-->
     <PropertyGroup Condition="'$(Configuration)' != 'Debug'">
         <PublishAot>true</PublishAot>
+        <DebugType>None</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,32 +28,32 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.0" />
-        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.0" />
-        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.0" />
+        <PackageReference Include="Avalonia" Version="11.3.2" />
+        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.2" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.2" />
         <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.2" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.0" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
-        <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.3.0" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.2" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.2" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-        <PackageReference Include="Material.Icons.Avalonia" Version="2.3.1" />
-        <PackageReference Include="Pure.DI" Version="2.1.68">
+        <PackageReference Include="Material.Icons.Avalonia" Version="2.4.1" />
+        <PackageReference Include="Pure.DI" Version="2.2.1">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Serilog" Version="4.2.0" />
+        <PackageReference Include="Serilog" Version="4.3.0" />
         <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0"/>
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\HotKeys\HotKeys.Avalonia\HotKeys.Avalonia.csproj" />
         <ProjectReference Include="..\..\HotKeys\HotKeys\HotKeys.csproj" />
+        <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls.GestureBox\Sightful.Avalonia.Controls.GestureBox.csproj" />
         <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls.ZoomViewer\Sightful.Avalonia.Controls.ZoomViewer.csproj" />
         <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls\Sightful.Avalonia.Controls.csproj"/>
         <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj"/>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Timers;
 using Avalonia;
 using Avalonia.Controls;
@@ -7,6 +8,7 @@ using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 using Humanizer;
+using Serilog;
 using Timer = System.Timers.Timer;
 
 namespace SightKeeper.Avalonia.Behaviors;
@@ -18,6 +20,7 @@ internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 
 	private static readonly HashSet<DisplayRelativeDateTimeBehavior> ActiveBehaviors = new();
 	private static Timer? _timer;
+	private static readonly ILogger Logger = Log.ForContext<DisplayRelativeDateTimeBehavior>();
 
 	public DateTimeOffset DateTime
 	{
@@ -53,7 +56,16 @@ internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 
 	private void OnTimerElapsed(object? sender, ElapsedEventArgs e)
 	{
-		Dispatcher.UIThread.Invoke(UpdateText);
+		try
+		{
+			Dispatcher.UIThread.Invoke(UpdateText);
+		}
+		catch (TaskCanceledException exception)
+		{
+			Logger.Verbose(exception,
+				"An exception was thrown from the dispatcher. " +
+				"The task was probably canceled due to exiting the application, which is ok.");
+		}
 	}
 
 	private void UpdateText()

@@ -1,52 +1,55 @@
 ﻿using CommunityToolkit.Diagnostics;
+using MemoryPack;
+using SightKeeper.Data.ImageSets;
 using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 
-public sealed class AppData
+[MemoryPackable]
+internal sealed partial class AppData
 {
-	public IReadOnlySet<ImageSet> ImageSets => _imageSets;
-	public IReadOnlySet<DataSet> DataSets => _dataSets;
+	public ushort SchemaVersion { get; }
+	public HashSet<StorableImageSet> ImageSets { get; }
+	public HashSet<DataSet> DataSets { get; }
 
+	[MemoryPackConstructor]
 	internal AppData(
-		HashSet<ImageSet> imageSets,
+		ushort schemaVersion,
+		HashSet<StorableImageSet> imageSets,
 		HashSet<DataSet> dataSets)
 	{
-		_imageSets = imageSets;
-		_dataSets = dataSets;
+		SchemaVersion = schemaVersion;
+		ImageSets = imageSets;
+		DataSets = dataSets;
 	}
 
 	internal AppData()
 	{
-		_imageSets = new HashSet<ImageSet>();
-		_dataSets = new HashSet<DataSet>();
+		ImageSets = new HashSet<StorableImageSet>();
+		DataSets = new HashSet<DataSet>();
 	}
 
-	internal void AddImageSet(ImageSet library)
+	public void AddImageSet(StorableImageSet library)
 	{
-		bool isAdded = _imageSets.Add(library);
+		bool isAdded = ImageSets.Add(library);
 		Guard.IsTrue(isAdded);
 	}
 
-	internal void RemoveImageSet(ImageSet library)
+	public void RemoveImageSet(StorableImageSet library)
 	{
-		bool isRemoved = _imageSets.Remove(library);
+		bool isRemoved = ImageSets.Remove(library);
 		Guard.IsTrue(isRemoved);
 	}
 
-	internal void AddDataSet(DataSet dataSet)
+	public void AddDataSet(DataSet dataSet)
 	{
-		bool isAdded = _dataSets.Add(dataSet);
+		bool isAdded = DataSets.Add(dataSet);
 		Guard.IsTrue(isAdded);
 	}
 
-	internal void RemoveDataSet(DataSet dataSet)
+	public void RemoveDataSet(DataSet dataSet)
 	{
-		bool isRemoved = _dataSets.Remove(dataSet);
+		bool isRemoved = DataSets.Remove(dataSet);
 		Guard.IsTrue(isRemoved);
 	}
-
-	private readonly HashSet<ImageSet> _imageSets;
-	private readonly HashSet<DataSet> _dataSets;
 }

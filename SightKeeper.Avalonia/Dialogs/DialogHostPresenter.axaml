@@ -10,19 +10,13 @@
              xmlns:converters="clr-namespace:SightKeeper.Avalonia.Converters"
              xmlns:messageBox="clr-namespace:SightKeeper.Avalonia.Dialogs.MessageBox"
              xmlns:dataSets="clr-namespace:SightKeeper.Avalonia.DataSets.Dialogs"
-             xmlns:imageSets="clr-namespace:SightKeeper.Avalonia.ImageSets"
              xmlns:dialogs="clr-namespace:SightKeeper.Avalonia.ImageSets.Dialogs"
              x:DataType="local:DialogHost"
-             Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static converters:StaticConverters.ContentToOpacityConverter}}">
-	<Interaction.Behaviors>
-		<BehaviorCollection>
-			<behaviors:DisableHitTestWhenOpacityIsZeroBehavior/>
-            <behaviors:HideContentWhenOpacityIsZeroBehavior/>
-		</BehaviorCollection>
-	</Interaction.Behaviors>
+             Opacity="{Binding DialogManager.CurrentDialog, Converter={x:Static converters:StaticConverters.ContentToOpacityConverter}}"
+             IsHitTestVisible="{Binding DialogManager.CurrentDialog, Converter={x:Static ObjectConverters.IsNotNull}}">
 	<UserControl.Transitions>
 		<Transitions>
-			<DoubleTransition Property="Opacity" Duration="0:0:0.5">
+			<DoubleTransition Property="Opacity" Duration="0:0:0.25">
 				<DoubleTransition.Easing>
 					<QuadraticEaseInOut/>
 				</DoubleTransition.Easing>
@@ -31,14 +25,14 @@
 	</UserControl.Transitions>
 	<Panel>
         <Button Background="#7F000000"
-                Command="{Binding DialogManager.CurrentDialog.CloseCommand}">
+                Command="{Binding DialogManager.CloseCurrentDialogCommand}">
             <Button.Theme>
                 <ControlTheme TargetType="Button">
                     <Setter Property="Template">
                         <ControlTemplate>
                             <Border Background="{TemplateBinding Background}"
                                     HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                                    VerticalAlignment="{TemplateBinding HorizontalAlignment}"/>
+                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"/>
                         </ControlTemplate>
                     </Setter>
                 </ControlTheme>
@@ -65,7 +59,7 @@
 									           Classes="caption"
 									           VerticalAlignment="Center"/>
 									<Button Grid.Column="2"
-									        Content="{icons:MaterialIconExt Close}"
+									        Content="{icons:MaterialIconExt Kind=Close}"
 									        Command="{Binding CloseCommand}"
 									        Classes="flat square"/>
 								</Grid>
@@ -75,7 +69,7 @@
                                                 Content="{Binding}"
                                                 Classes="regular-padding">
                                     <ContentControl.DataTemplates>
-                                        <DataTemplate DataType="dialogs:ImageSetCreationDialogViewModel">
+                                        <DataTemplate DataType="dialogs:ImageSetDialogDataContext">
                                             <dialogs:ImageSetDialog/>
                                         </DataTemplate>
                                         <DataTemplate DataType="messageBox:MessageBoxDialogViewModel">
@@ -92,14 +86,10 @@
 				</DataTemplate>
 			</TransitioningContentControl.ContentTemplate>
 			<TransitioningContentControl.PageTransition>
-				<PageSlide Orientation="Vertical" Duration="0:0:0.5">
-					<PageSlide.SlideInEasing>
-						<CircularEaseOut/>
-					</PageSlide.SlideInEasing>
-					<PageSlide.SlideOutEasing>
-						<CircularEaseIn/>
-					</PageSlide.SlideOutEasing>
-				</PageSlide>
+                <PageSlide Orientation="Vertical"
+                           Duration="0:0:0.25"
+                           SlideInEasing="CircularEaseOut"
+                           SlideOutEasing="CircularEaseIn"/>
 			</TransitioningContentControl.PageTransition>
 		</TransitioningContentControl>
 	</Panel>
