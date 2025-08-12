@@ -41,7 +41,10 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 	private void UpdateItems()
 	{
 		if (Asset == null)
+		{
+			Items = ReadOnlyCollection<DrawerItemDataContext>.Empty;
 			return;
+		}
 		var items = (ReadOnlyObservableList<AssetItem>)Asset.Items;
 		Items = items.Transform(_drawerItemsFactory.CreateItemViewModel).ToObservableList().ToReadOnlyNotifyingList();
 	}
