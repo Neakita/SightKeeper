@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -35,7 +36,22 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 		_keyPointDrawer = keyPointDrawer;
 		_imageLoader = imageLoader;
 		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
+		_itemsViewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
 	}
+
+	public void Dispose()
+	{
+		_selectedItemChanged.Dispose();
+		_constructorDisposable.Dispose();
+		_itemsViewModel.PropertyChanged -= OnItemsViewModelPropertyChanged;
+	}
+
+	private readonly BoundingDrawerViewModel _boundingDrawer;
+	private readonly AssetItemsViewModel _itemsViewModel;
+	private readonly KeyPointDrawerViewModel _keyPointDrawer;
+	private readonly ImageLoader _imageLoader;
+	private readonly Subject<AssetItem?> _selectedItemChanged = new();
+	private readonly CompositeDisposable _constructorDisposable = new();
 
 	private void HandleImageSelectionChange(Image? image)
 	{
@@ -47,23 +63,16 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 		Image = new ImageViewModel(_imageLoader, image);
 	}
 
-	public void Dispose()
-	{
-		_selectedItemChanged.Dispose();
-		_constructorDisposable.Dispose();
-	}
-
-	private readonly BoundingDrawerViewModel _boundingDrawer;
-	private readonly AssetItemsViewModel _itemsViewModel;
-	private readonly KeyPointDrawerViewModel _keyPointDrawer;
-	private readonly ImageLoader _imageLoader;
-	private readonly Subject<AssetItem?> _selectedItemChanged = new();
-	private readonly CompositeDisposable _constructorDisposable = new();
-
 	partial void OnSelectedItemChanged(BoundedItemDataContext? value)
 	{
 		var assetItem = (value as BoundedItemViewModel)?.Value as AssetItem;
 		_selectedItemChanged.OnNext(assetItem);
 		_keyPointDrawer.Item = value as PoserItemViewModel;
+	}
+
+	private void OnItemsViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName == nameof(AssetItemsViewModel.Items))
+			OnPropertyChanged(e);
 	}
 }
