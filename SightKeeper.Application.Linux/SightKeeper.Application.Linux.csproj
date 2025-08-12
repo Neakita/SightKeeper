@@ -13,7 +13,7 @@
 
     <ItemGroup>
       <PackageReference Include="CliWrap" Version="3.9.0" />
-      <PackageReference Include="System.Numerics.Tensors" Version="9.0.7" />
+      <PackageReference Include="System.Numerics.Tensors" Version="9.0.8" />
     </ItemGroup>
 
 </Project>
