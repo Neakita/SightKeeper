@@ -14,18 +14,18 @@ public sealed class ClassifierDataSetFormatter(ImageLookupper imageLookupper, Da
 {
 	public override void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		scoped ref StorableClassifierDataSet? dataSet)
+		scoped ref StorableClassifierDataSet? set)
 	{
-		if (dataSet == null)
+		if (set == null)
 		{
 			writer.WriteNullObjectHeader();
 			return;
 		}
-		var tagIndexes = dataSet.TagsLibrary.Tags.Index().ToDictionary(tuple => tuple.Item, tuple => (byte)tuple.Index);
-		DataSetGeneralDataFormatter.WriteGeneralData(ref writer, dataSet);
-		TagsFormatter.WriteTags(ref writer, dataSet.TagsLibrary.Tags);
-		WriteAssets(ref writer, dataSet.AssetsLibrary.Assets, tagIndexes);
-		WeightsFormatter.WriteWeights(ref writer, dataSet.WeightsLibrary.Weights, tagIndexes);
+		var tagIndexes = set.TagsLibrary.Tags.Index().ToDictionary(tuple => tuple.Item, tuple => (byte)tuple.Index);
+		DataSetGeneralDataFormatter.WriteGeneralData(ref writer, set);
+		TagsFormatter.WriteTags(ref writer, set.TagsLibrary.Tags);
+		WriteAssets(ref writer, set.AssetsLibrary.Assets, tagIndexes);
+		WeightsFormatter.WriteWeights(ref writer, set.WeightsLibrary.Weights, tagIndexes);
 	}
 
 	public override void Deserialize(ref MemoryPackReader reader, scoped ref StorableClassifierDataSet? set)
@@ -67,8 +67,9 @@ public sealed class ClassifierDataSetFormatter(ImageLookupper imageLookupper, Da
 			reader.ReadUnmanaged(out Id imageId, out byte tagIndex, out AssetUsage usage);
 			var image = imageLookupper.GetImage(imageId);
 			var asset = set.AssetsLibrary.MakeAsset(image);
-			asset.Innermost.Tag = set.TagsLibrary.Tags[tagIndex];
-			asset.Tag.AddUser(asset);
+			var tag = set.TagsLibrary.Tags[tagIndex];
+			asset.Innermost.Tag = tag;
+			tag.AddUser(asset);
 			asset.Innermost.Usage = usage;
 		}
 	}
