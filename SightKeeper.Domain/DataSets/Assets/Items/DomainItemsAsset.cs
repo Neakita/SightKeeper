@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
-public abstract class DomainItemsAsset<TItem>(TagsContainer<Tag> tagsOwner, ItemsAsset<TItem> inner) : ItemsAsset<TItem> where TItem : BoundedItem
+public sealed class DomainItemsAsset<TItem>(TagsContainer<Tag> tagsOwner, ItemsAsset<TItem> inner) : ItemsAsset<TItem>
 {
 	public Image Image => inner.Image;
 
