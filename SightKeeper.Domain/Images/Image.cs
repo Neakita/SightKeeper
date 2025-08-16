@@ -8,7 +8,9 @@ public interface Image
 	Vector2<ushort> Size { get; }
 	IReadOnlyCollection<Asset> Assets { get; }
 	bool IsInUse => Assets.Count > 0;
+	string? DataFormat { get; }
 
 	Stream? OpenWriteStream();
 	Stream? OpenReadStream();
+	bool TryCopyTo(string filePath);
 }

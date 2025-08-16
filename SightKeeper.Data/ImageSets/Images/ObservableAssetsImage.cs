@@ -11,6 +11,7 @@ internal sealed class ObservableAssetsImage(StorableImage inner) : StorableImage
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 	public Vector2<ushort> Size => inner.Size;
 	public IReadOnlyCollection<Asset> Assets => _assets;
+	public string? DataFormat => inner.DataFormat;
 
 	public Stream? OpenWriteStream()
 	{
@@ -20,6 +21,11 @@ internal sealed class ObservableAssetsImage(StorableImage inner) : StorableImage
 	public Stream? OpenReadStream()
 	{
 		return inner.OpenReadStream();
+	}
+
+	public bool TryCopyTo(string filePath)
+	{
+		return inner.TryCopyTo(filePath);
 	}
 
 	public void AddAsset(Asset asset)

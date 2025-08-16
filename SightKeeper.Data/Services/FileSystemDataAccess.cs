@@ -28,6 +28,15 @@ public class FileSystemDataAccess
 		File.Delete(filePath);
 	}
 
+	public bool TryCopyTo(Id id, string destinationFilePath)
+	{
+		var sourceFilePath = GetFilePath(id);
+		if (!File.Exists(sourceFilePath))
+			return false;
+		File.Copy(sourceFilePath, destinationFilePath);
+		return true;
+	}
+
 	private string GetFilePath(Id id)
 	{
 		var fileName = $"{id}.{FileExtension}";

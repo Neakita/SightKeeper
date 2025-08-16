@@ -11,6 +11,7 @@ internal sealed class InMemoryImage : StorableImage
 	public DateTimeOffset CreationTimestamp { get; }
 	public Vector2<ushort> Size { get; }
 	public IReadOnlyCollection<Asset> Assets => _assets;
+	public string? DataFormat => null;
 
 	public InMemoryImage(Id id, DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
@@ -27,6 +28,11 @@ internal sealed class InMemoryImage : StorableImage
 	public Stream? OpenReadStream()
 	{
 		return null;
+	}
+
+	public bool TryCopyTo(string filePath)
+	{
+		return false;
 	}
 
 	public void AddAsset(Asset asset)

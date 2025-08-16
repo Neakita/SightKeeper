@@ -11,6 +11,7 @@ internal sealed class StreamableDataImage(StorableImage inner, FileSystemDataAcc
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 	public Vector2<ushort> Size => inner.Size;
 	public IReadOnlyCollection<Asset> Assets => inner.Assets;
+	public string DataFormat => dataAccess.FileExtension;
 
 	public Stream OpenWriteStream()
 	{
@@ -20,6 +21,11 @@ internal sealed class StreamableDataImage(StorableImage inner, FileSystemDataAcc
 	public Stream OpenReadStream()
 	{
 		return dataAccess.OpenRead(inner.Id);
+	}
+
+	public bool TryCopyTo(string filePath)
+	{
+		return dataAccess.TryCopyTo(Id, filePath);
 	}
 
 	public void AddAsset(Asset asset)
