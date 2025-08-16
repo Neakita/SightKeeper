@@ -43,6 +43,8 @@ public sealed class ZippedMemoryPackDataSetExporter : DataSetExporter
 		if (imageStream == null)
 			return;
 		var path = Path.Combine("images", image.Id.ToString());
+		if (image.DataFormat != null)
+			path += $".{image.DataFormat}";
 		var entry = archive.CreateEntry(path);
 		await using var stream = entry.Open();
 		await imageStream.CopyToAsync(stream, cancellationToken);
