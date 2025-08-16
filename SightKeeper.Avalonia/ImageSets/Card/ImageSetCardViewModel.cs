@@ -30,7 +30,7 @@ public sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDataC
 	ICommand ImageSetCardDataContext.StartCapturingCommand => StartCapturingCommand;
 	ICommand ImageSetCardDataContext.StopCapturingCommand => StopCapturingCommand;
 
-	public ImageSetCardViewModel(ImageSet value, ICommand editCommand, ICommand deleteCommand, ImageLoader imageLoader, ImageCapturer capturer)
+	public ImageSetCardViewModel(ImageSet value, ICommand editCommand, ICommand deleteCommand, WriteableBitmapImageLoader imageLoader, ImageCapturer capturer)
 	{
 		_imageLoader = imageLoader;
 		_capturer = capturer;
@@ -50,7 +50,7 @@ public sealed partial class ImageSetCardViewModel : ViewModel, ImageSetCardDataC
 	}
 
 	private readonly IDisposable _disposable;
-	private readonly ImageLoader _imageLoader;
+	private readonly WriteableBitmapImageLoader _imageLoader;
 	private readonly ImageCapturer _capturer;
 
 	[RelayCommand]

@@ -13,7 +13,7 @@ internal sealed class DataSetCardViewModel : ViewModel, DataSetCardDataContext
 	public ICommand ExportCommand { get; }
 	public ICommand DeleteCommand { get; }
 
-	public DataSetCardViewModel(DataSet dataSet, ICommand editCommand, ICommand exportCommand, ICommand deleteCommand, ImageLoader imageLoader)
+	public DataSetCardViewModel(DataSet dataSet, ICommand editCommand, ICommand exportCommand, ICommand deleteCommand, WriteableBitmapImageLoader imageLoader)
 	{
 		_dataSet = dataSet;
 		var image = dataSet.AssetsLibrary.Images.FirstOrDefault();

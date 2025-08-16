@@ -28,7 +28,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 		BoundingDrawerViewModel boundingDrawer,
 		AssetItemsViewModel itemsViewModel,
 		KeyPointDrawerViewModel keyPointDrawer,
-		ImageLoader imageLoader,
+		WriteableBitmapImageLoader imageLoader,
 		ImageSelection imageSelection)
 	{
 		_boundingDrawer = boundingDrawer;
@@ -49,7 +49,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 	private readonly BoundingDrawerViewModel _boundingDrawer;
 	private readonly AssetItemsViewModel _itemsViewModel;
 	private readonly KeyPointDrawerViewModel _keyPointDrawer;
-	private readonly ImageLoader _imageLoader;
+	private readonly WriteableBitmapImageLoader _imageLoader;
 	private readonly Subject<AssetItem?> _selectedItemChanged = new();
 	private readonly CompositeDisposable _constructorDisposable = new();
 

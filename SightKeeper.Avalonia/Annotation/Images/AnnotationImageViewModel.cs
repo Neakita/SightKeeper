@@ -10,7 +10,7 @@ internal sealed class AnnotationImageViewModel : AnnotationImageDataContext
 {
 	public DateTimeOffset CreationTimestamp => _image.CreationTimestamp;
 
-	public AnnotationImageViewModel(ImageLoader imageLoader, Image image)
+	public AnnotationImageViewModel(WriteableBitmapImageLoader imageLoader, Image image)
 	{
 		_imageLoader = imageLoader;
 		_image = image;
@@ -21,6 +21,6 @@ internal sealed class AnnotationImageViewModel : AnnotationImageDataContext
 		return await _imageLoader.LoadImageAsync(_image, maximumLargestDimension, cancellationToken);
 	}
 
-	private readonly ImageLoader _imageLoader;
+	private readonly WriteableBitmapImageLoader _imageLoader;
 	private readonly Image _image;
 }

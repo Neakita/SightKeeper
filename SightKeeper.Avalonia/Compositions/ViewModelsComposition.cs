@@ -1,4 +1,5 @@
-﻿using Material.Icons;
+﻿using Avalonia.Platform;
+using Material.Icons;
 using Pure.DI;
 using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation;
@@ -11,7 +12,9 @@ using SightKeeper.Avalonia.ImageSets;
 using SightKeeper.Avalonia.ImageSets.Capturing;
 using SightKeeper.Avalonia.ImageSets.Card;
 using SightKeeper.Avalonia.ImageSets.Commands;
+using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain.Images;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Avalonia.Compositions;
 
@@ -90,5 +93,17 @@ public sealed class ViewModelsComposition
 		.To<DrawerViewModel>()
 	
 		.Bind<ActionsDataContext>()
-		.To<ActionsViewModel>();
+		.To<ActionsViewModel>()
+	
+		.Bind<WriteableBitmapImageLoader>()
+		.To(context =>
+		{
+			context.Inject(out WriteableBitmapPool bitmapPool);
+			context.Inject(out ImageLoader<Rgba32> imageLoader);
+			return new WriteableBitmapImageLoader<Rgba32>(bitmapPool, PixelFormat.Rgb32, imageLoader);
+		})
+	
+		.Bind()
+		.As(Lifetime.Singleton)
+		.To<WriteableBitmapPool>();
 }

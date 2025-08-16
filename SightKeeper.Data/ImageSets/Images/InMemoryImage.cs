@@ -49,5 +49,10 @@ internal sealed class InMemoryImage : StorableImage
 	{
 	}
 
+	public override string ToString()
+	{
+		return $"#{Id.ToString()}";
+	}
+
 	private readonly HashSet<Asset> _assets = new();
 }

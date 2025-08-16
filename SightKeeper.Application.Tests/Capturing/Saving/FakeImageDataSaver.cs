@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Tests.Capturing.Saving;
 
-internal sealed class FakeImageDataSaver<TPixel> : ImageDataSaver<TPixel> where TPixel : unmanaged
+internal sealed class FakeImageDataSaver<TPixel> : ImageDataSaver<TPixel>
 {
 	public List<(Image image, TPixel[,] data)> ReceivedCalls { get; } = new();
 	public bool HoldCalls { get; set; }

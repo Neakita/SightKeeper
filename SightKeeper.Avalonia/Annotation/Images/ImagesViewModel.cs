@@ -17,7 +17,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 	public Image? SelectedImage => SelectedImageIndex >= 0 ? _set?.Images[SelectedImageIndex] : null;
 	public IObservable<Image?> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
-	public ImagesViewModel(ImageSetSelection imageSetSelection, ImageLoader imageLoader)
+	public ImagesViewModel(ImageSetSelection imageSetSelection, WriteableBitmapImageLoader imageLoader)
 	{
 		_disposable = imageSetSelection.SelectedImageSetChanged.Subscribe(SetImageSet);
 		_imageLoader = imageLoader;
@@ -29,7 +29,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 		_selectedImageChanged.Dispose();
 	}
 
-	private readonly ImageLoader _imageLoader;
+	private readonly WriteableBitmapImageLoader _imageLoader;
 	private readonly IDisposable _disposable;
 	private readonly Subject<Image?> _selectedImageChanged = new();
 	private ImageSet? _set;

@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Pure.DI;
+﻿using Pure.DI;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.ImageSets.Creating;
@@ -8,7 +7,6 @@ using SightKeeper.Data.DataSets;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Detector;
 using SightKeeper.Data.ImageSets;
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
@@ -34,16 +32,6 @@ public sealed class PersistenceComposition
 		.Bind<ObservableRepository<DataSet>>()
 		.As(Lifetime.Singleton)
 		.To<AppDataDataSetsRepository>()
-
-		.Bind<ImageWrapper>()
-		.To<StorableImageWrapper>(_ =>
-		{
-			CompressedFileSystemDataAccess dataAccess = new()
-			{
-				DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Images")
-			};
-			return new StorableImageWrapper(dataAccess);
-		})
 
 		.Bind<ImageSetWrapper>()
 		.To<StorableImageSetWrapper>()

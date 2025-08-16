@@ -8,7 +8,6 @@ using SightKeeper.Domain.Images;
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
 public sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<TPixel>, LimitedSaver, PendingImagesCountReporter, IDisposable
-	where TPixel : unmanaged
 {
 	public required ImageDataSaver<TPixel> Next { get; init; }
 	public required ArrayPool<TPixel> ArrayPool { get; init; }

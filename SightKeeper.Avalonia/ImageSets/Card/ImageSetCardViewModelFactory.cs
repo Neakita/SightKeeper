@@ -12,7 +12,7 @@ public sealed class ImageSetCardViewModelFactory : ImageSetCardDataContextFactor
 	public ImageSetCardViewModelFactory(
 		EditImageSetCommand editImageSetCommand,
 		DeleteImageSetCommand deleteImageSetCommand,
-		ImageLoader imageLoader,
+		WriteableBitmapImageLoader imageLoader,
 		ImageCapturer capturer)
 	{
 		_editImageSetCommand = editImageSetCommand;
@@ -30,6 +30,6 @@ public sealed class ImageSetCardViewModelFactory : ImageSetCardDataContextFactor
 
 	private readonly ICommand _editImageSetCommand;
 	private readonly ICommand _deleteImageSetCommand;
-	private readonly ImageLoader _imageLoader;
+	private readonly WriteableBitmapImageLoader _imageLoader;
 	private readonly ImageCapturer _capturer;
 }

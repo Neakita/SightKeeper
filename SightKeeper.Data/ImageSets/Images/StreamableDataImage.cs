@@ -41,4 +41,9 @@ internal sealed class StreamableDataImage(StorableImage inner, FileSystemDataAcc
 	{
 		inner.Dispose();
 	}
+
+	public override string? ToString()
+	{
+		return inner.ToString();
+	}
 }

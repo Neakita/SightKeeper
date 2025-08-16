@@ -11,20 +11,19 @@ public sealed class WriteableBitmapPool : IDisposable
 {
 	private readonly record struct BitmapArchetype(PixelSize Size, PixelFormat? Format);
 
-	public WriteableBitmapPool(ILogger logger)
-	{
-		_logger = logger;
-	}
-
 	public PooledWriteableBitmap Rent(PixelSize size, PixelFormat format)
 	{
 		BitmapArchetype archetype = new(size, format);
 		var bag = GetOrCreateBag(archetype);
 		if (!bag.TryTake(out var bitmap))
+		{
 			bitmap = new PooledWriteableBitmap(this, size, format);
+			Logger.Verbose("New Bitmap created with size {size} and format {format}", size, format);
+		}
+
 		bitmap.MarkAsRented();
 		Interlocked.Increment(ref _rented);
-		_logger.Verbose("Bitmap is rented from a pool. Total rented count: {rented}", _rented);
+		Logger.Verbose("Bitmap is rented from a pool. Total rented count: {rented}", _rented);
 		return bitmap;
 	}
 
@@ -42,11 +41,11 @@ public sealed class WriteableBitmapPool : IDisposable
 		var bag = GetOrCreateBag(archetype);
 		bag.Add(bitmap);
 		Interlocked.Decrement(ref _rented);
-		_logger.Verbose("Bitmap is returned to a pool. Total rented count: {rented}", _rented);
+		Logger.Verbose("Bitmap is returned to a pool. Total rented count: {rented}", _rented);
 	}
 
 	private readonly ConcurrentDictionary<BitmapArchetype, ConcurrentBag<PooledWriteableBitmap>> _bags = new();
-	private readonly ILogger _logger;
+	private static readonly ILogger Logger = Log.ForContext<WriteableBitmapPool>();
 	private int _rented;
 
 	private ConcurrentBag<PooledWriteableBitmap> GetOrCreateBag(BitmapArchetype archetype)

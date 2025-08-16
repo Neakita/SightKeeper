@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Tests.Capturing.Saving;
 
-public sealed class ImageDataWriterTests
+public sealed class BinaryImageDataSaverTests
 {
 	[Fact]
 	public void ShouldWriteDataToStream()
@@ -16,13 +16,13 @@ public sealed class ImageDataWriterTests
 		using MemoryStream stream = new();
 		image.Size.Returns(new Vector2<ushort>(2, 2));
 		image.OpenWriteStream().Returns(stream);
-		ImageDataWriter<Argb32> dataWriter = new();
+		BinaryImageDataSaver<Argb32> dataSaver = new();
 		var pixels =  new Argb32[2, 2];
 		pixels[0, 0] = new Argb32(0x1, 0x2, 0x3);
 		pixels[0, 1] = new Argb32(0x4, 0x5, 0x6);
 		pixels[1, 0] = new Argb32(0x7, 0x8, 0x9);
 		pixels[1, 1] = new Argb32(0xA, 0xB, 0xC);
-		dataWriter.SaveData(image, pixels);
+		dataSaver.SaveData(image, pixels);
 		var receivedPixels = stream.ToArray();
 		receivedPixels.Should().ContainInOrder(
 			0xFF, 0x1, 0x2, 0x3,

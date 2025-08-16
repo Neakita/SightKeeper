@@ -7,7 +7,7 @@ public class FileSystemDataAccess
 	public const string DefaultDirectoryPath = "Data";
 
 	public string DirectoryPath { get; set; } = DefaultDirectoryPath;
-	public string FileExtension { get; set; } = "bin";
+	public required string FileExtension { get; set; }
 
 	public virtual Stream OpenRead(Id id)
 	{

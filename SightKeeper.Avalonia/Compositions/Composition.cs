@@ -12,6 +12,7 @@ public sealed partial class Composition
 		.DependsOn(nameof(PersistenceComposition))
 		.DependsOn(nameof(ServicesComposition))
 		.DependsOn(nameof(ViewModelsComposition))
+		.DependsOn(nameof(PngImagePersistenceComposition))
 
 		.RootBind<MainWindow>(nameof(MainWindow)).To(context =>
 		{

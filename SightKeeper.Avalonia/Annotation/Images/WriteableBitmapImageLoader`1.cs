@@ -6,16 +6,21 @@ using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.HighPerformance;
+using SightKeeper.Application;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
-using SixLabors.ImageSharp.PixelFormats;
 using Yolo.InputProcessing;
 
 namespace SightKeeper.Avalonia.Annotation.Images;
 
-public sealed class ImageLoader(WriteableBitmapPool bitmapPool)
+public sealed class WriteableBitmapImageLoader<TPixel>(
+	WriteableBitmapPool bitmapPool,
+	PixelFormat pixelFormat,
+	ImageLoader<TPixel> imageLoader)
+	: WriteableBitmapImageLoader
+	where TPixel : unmanaged
 {
 	public async Task<PooledWriteableBitmap?> LoadImageAsync(
 		Image image,
@@ -25,7 +30,7 @@ public sealed class ImageLoader(WriteableBitmapPool bitmapPool)
 		var size = maximumLargestDimension == null
 			? image.Size.ToPixelSize()
 			: ComputeSize(image.Size, maximumLargestDimension.Value);
-		var bitmap = bitmapPool.Rent(size, PixelFormat.Rgb32);
+		var bitmap = bitmapPool.Rent(size, pixelFormat);
 		var isRead = await ReadImageDataToBitmapAsync(image, bitmap, cancellationToken);
 		if (isRead)
 			return bitmap;
@@ -33,18 +38,18 @@ public sealed class ImageLoader(WriteableBitmapPool bitmapPool)
 		return null;
 	}
 
-	private static async Task<bool> ReadImageDataToBitmapAsync(
+	private async Task<bool> ReadImageDataToBitmapAsync(
 		Image image,
 		WriteableBitmap bitmap,
 		CancellationToken cancellationToken)
 	{
-		using WriteableBitmapMemoryManager<Rgba32> bitmapMemoryManager = new(bitmap);
+		using WriteableBitmapMemoryManager<TPixel> bitmapMemoryManager = new(bitmap);
 		var imageSize = image.Size.ToPixelSize();
 		if (imageSize == bitmap.PixelSize)
-			return await ReadImageDataAsync(image, bitmapMemoryManager.Memory, cancellationToken);
+			return await imageLoader.LoadImageAsync(image, bitmapMemoryManager.Memory, cancellationToken);
 		var pixelsCount = imageSize.Width * imageSize.Height;
-		using var buffer = MemoryPool<Rgba32>.Shared.Rent(pixelsCount);
-		var isRead = await ReadImageDataAsync(image, buffer.Memory, cancellationToken);
+		using var buffer = MemoryPool<TPixel>.Shared.Rent(pixelsCount);
+		var isRead = await imageLoader.LoadImageAsync(image, buffer.Memory, cancellationToken);
 		if (!isRead)
 			return false;
 		NearestNeighbourImageResizer.Resize(
@@ -53,31 +58,7 @@ public sealed class ImageLoader(WriteableBitmapPool bitmapPool)
 		return true;
 	}
 
-	private static async Task<bool> ReadImageDataAsync(
-		Image image,
-		Memory<Rgba32> target,
-		CancellationToken cancellationToken)
-	{
-		var targetAsBytes = target.Cast<Rgba32, byte>();
-		await using var stream = image.OpenReadStream();
-		if (stream == null)
-			return false;
-		var totalBytesRead = 0;
-		int lastBytesRead;
-		do
-		{
-			// ReadAsync method will throw exception on await if token is canceled and thus degrade performance,
-			// so it's better to manually check the token and return boolean value instead of re-throwing or whatever.
-			if (cancellationToken.IsCancellationRequested)
-				return false;
-			// CancellationToken.None passed as parameter to suppress analyzer.
-			lastBytesRead = await stream.ReadAsync(targetAsBytes[totalBytesRead..], CancellationToken.None);
-			totalBytesRead += lastBytesRead;
-		} while (lastBytesRead > 0);
-		return true;
-	}
-
-	public static PixelSize ComputeSize(Vector2<ushort> imageSize, int maximumLargestDimension)
+	private static PixelSize ComputeSize(Vector2<ushort> imageSize, int maximumLargestDimension)
 	{
 		var sourceLargestDimension = Math.Max(imageSize.X, imageSize.Y);
 		if (sourceLargestDimension < maximumLargestDimension)

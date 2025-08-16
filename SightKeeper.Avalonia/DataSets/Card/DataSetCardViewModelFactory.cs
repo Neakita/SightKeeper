@@ -9,7 +9,7 @@ internal sealed class DataSetCardViewModelFactory(
 	EditDataSetCommand editDataSetCommand,
 	ExportDataSetCommand exportDataSetCommand,
 	DeleteDataSetCommand deleteDataSetCommand,
-	ImageLoader imageLoader)
+	WriteableBitmapImageLoader imageLoader)
 {
 	public DataSetCardViewModel CreateDataSetCardViewModel(DataSet dataSet)
 	{

@@ -1,8 +1,9 @@
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Media.Imaging;
-using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Domain;
 
 namespace SightKeeper.Avalonia;
@@ -23,9 +24,18 @@ internal sealed class DesignImageDataContext : ImageDataContext
 		Bitmap bitmap = new(_sampleImageFilePath);
 		if (maximumLargestDimension == null)
 			return Task.FromResult<Bitmap?>(bitmap);
-		var targetSize = ImageLoader.ComputeSize(new Vector2<ushort>((ushort)bitmap.PixelSize.Width, (ushort)bitmap.PixelSize.Height), maximumLargestDimension.Value);
+		var targetSize = ComputeSize(new Vector2<ushort>((ushort)bitmap.PixelSize.Width, (ushort)bitmap.PixelSize.Height), maximumLargestDimension.Value);
 		var scaledBitmap = bitmap.CreateScaledBitmap(targetSize, BitmapInterpolationMode.None);
 		return Task.FromResult<Bitmap?>(scaledBitmap);
+	}
+
+	private static PixelSize ComputeSize(Vector2<ushort> imageSize, int maximumLargestDimension)
+	{
+		var sourceLargestDimension = Math.Max(imageSize.X, imageSize.Y);
+		if (sourceLargestDimension < maximumLargestDimension)
+			return new PixelSize(imageSize.X, imageSize.Y);
+		var size = imageSize.ToInt32() * maximumLargestDimension / sourceLargestDimension;
+		return new PixelSize(size.X, size.Y);
 	}
 
 	private readonly string _sampleImageFilePath;

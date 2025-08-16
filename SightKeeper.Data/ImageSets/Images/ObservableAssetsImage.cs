@@ -57,5 +57,10 @@ internal sealed class ObservableAssetsImage(StorableImage inner) : StorableImage
 		inner.Dispose();
 	}
 
+	public override string? ToString()
+	{
+		return inner.ToString();
+	}
+
 	private readonly ExternalObservableCollection<Asset> _assets = new(inner.Assets);
 }

@@ -4,6 +4,7 @@ using SightKeeper.Application.Windows;
 using SightKeeper.Application.Linux.X11;
 #endif
 using System;
+using System.Buffers;
 using FluentValidation;
 using HotKeys;
 using HotKeys.SharpHook;
@@ -63,13 +64,28 @@ public sealed class ServicesComposition
 
 		.Bind<PixelConverter<Bgra32, Rgba32>>()
 		.To<Bgra32ToRgba32PixelConverter>()
-
+		
 		.Bind<ImageSaverFactory<Bgra32>>()
 		.To(context =>
 		{
 			context.Inject(out PixelConverter<Bgra32, Rgba32> pixelConverter);
-			context.Inject(out ImageDataWriter<Rgba32> imageDataWriter);
-			return new BufferedConvertingImageSaverFactory<Bgra32, Rgba32>(Array.MaxLength, 20, pixelConverter, imageDataWriter);
+			return new FuncImageSaverFactory<Bgra32>(() =>
+			{
+				var arrayPool = ArrayPool<Bgra32>.Create(Array.MaxLength, 20);
+				context.Inject(out ImageDataSaver<Rgba32> imageDataSaver);
+				return new ImmediateImageSaver<Bgra32>
+				{
+					DataSaver = new BufferedImageDataSaverMiddleware<Bgra32>
+					{
+						Next = new ImageDataConverterMiddleware<Bgra32, Rgba32>
+						{
+							Converter = pixelConverter,
+							Next = imageDataSaver
+						},
+						ArrayPool = arrayPool
+					}
+				};
+			});
 		})
 
 		.Bind<IReactiveGlobalHook>()
