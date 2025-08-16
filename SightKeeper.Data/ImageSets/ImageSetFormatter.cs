@@ -1,10 +1,8 @@
 using System.Buffers;
 using CommunityToolkit.Diagnostics;
-using FlakeId;
 using MemoryPack;
 using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Data.ImageSets.Images;
-using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
@@ -49,15 +47,7 @@ public sealed class ImageSetFormatter(
 	private static void WriteImages<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, StorableImageSet set)
 		where TBufferWriter : IBufferWriter<byte>
 	{
-		writer.WriteCollectionHeader(set.Images.Count);
-		foreach (var image in set.Images)
-			WriteImage(ref writer, image);
-	}
-
-	private static void WriteImage<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, StorableImage image)
-		where TBufferWriter : IBufferWriter<byte>
-	{
-		writer.WriteUnmanaged(image.Id, image.CreationTimestamp, image.Size);
+		writer.WriteValue<IReadOnlyCollection<StorableImage>>(set.Images);
 	}
 
 	private InMemoryImageSet ReadGeneralMembers(ref MemoryPackReader reader)
@@ -74,20 +64,11 @@ public sealed class ImageSetFormatter(
 
 	private static void ReadImages(ref MemoryPackReader reader, InMemoryImageSet inMemorySet)
 	{
-		Guard.IsTrue(reader.TryReadCollectionHeader(out var imagesCount));
-		inMemorySet.EnsureCapacity(imagesCount);
-		for (int i = 0; i < imagesCount; i++)
-		{
-			var image = ReadImage(ref reader);
-			inMemorySet.AddImage(image);
-		}
-	}
-
-	private static InMemoryImage ReadImage(ref MemoryPackReader reader)
-	{
-		reader.ReadUnmanaged(out Id id, out DateTimeOffset creationTimestamp, out Vector2<ushort> size);
-		InMemoryImage image = new(id, creationTimestamp, size);
-		return image;
+		var images = reader.ReadValue<IReadOnlyCollection<StorableImage>>();
+		Guard.IsNotNull(images);
+		inMemorySet.EnsureCapacity(images.Count);
+		foreach (var image in images)
+			inMemorySet.WrapAndInsertImage(image);
 	}
 
 	public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref ImageSet? set) where TBufferWriter : IBufferWriter<byte>

@@ -1,3 +1,4 @@
+using CommunityToolkit.Diagnostics;
 using FlakeId;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
@@ -8,6 +9,7 @@ public sealed class InMemoryImageSet : StorableImageSet
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
+
 	public IReadOnlyList<StorableImage> Images => _images;
 
 	public InMemoryImageSet(ImageWrapper imageWrapper)
@@ -43,15 +45,18 @@ public sealed class InMemoryImageSet : StorableImageSet
 	{
 	}
 
+	public void WrapAndInsertImage(StorableImage image)
+	{
+		var index = _images.BinarySearch(image, ImageCreationTimestampComparer<StorableImage>.Instance);
+		Guard.IsLessThan(index, 0);
+		index = ~index;
+		var wrappedImage = _imageWrapper.Wrap(image);
+		_images.Insert(index, wrappedImage);
+	}
+
 	internal void EnsureCapacity(int capacity)
 	{
 		_images.EnsureCapacity(capacity);
-	}
-
-	internal void AddImage(InMemoryImage image)
-	{
-		var wrappedImage = _imageWrapper.Wrap(image);
-		_images.Add(wrappedImage);
 	}
 
 	private readonly ImageWrapper _imageWrapper;

@@ -52,4 +52,9 @@ internal sealed class DisposingImageSet(StorableImageSet inner) : StorableImageS
 			image.Dispose();
 		inner.Dispose();
 	}
+
+	public void WrapAndInsertImage(StorableImage image)
+	{
+		inner.WrapAndInsertImage(image);
+	}
 }

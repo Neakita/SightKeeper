@@ -11,6 +11,7 @@ using Pure.DI;
 using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application;
+using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ImageSets;
@@ -19,6 +20,7 @@ using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.Misc;
+using SightKeeper.Data.DataSets;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Avalonia.Compositions;
@@ -88,5 +90,8 @@ public sealed class ServicesComposition
 		})
 
 		.Bind<ILogger>()
-		.To(_ => Log.Logger);
+		.To(_ => Log.Logger)
+	
+		.Bind<DataSetExporter>()
+		.To<ZippedMemoryPackDataSetExporter>();
 }

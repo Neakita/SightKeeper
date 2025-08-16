@@ -10,6 +10,7 @@ internal sealed class DesignDataSetCardDataContext : DataSetCardDataContext
 	public string Name { get; }
 	public ImageDataContext? Image { get; }
 	public ICommand EditCommand => new RelayCommand(() => { });
+	public ICommand ExportCommand => new RelayCommand(() => { });
 	public ICommand DeleteCommand => new RelayCommand(() => { });
 
 	public DesignDataSetCardDataContext(string name, string? sampleImageFileName = null)

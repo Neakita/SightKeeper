@@ -2,7 +2,7 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.ImageSets;
+namespace SightKeeper.Data.ImageSets.Decorators;
 
 internal sealed class StorableImageSetExtension(ImageSet inner, StorableImageSet extendedInner) : StorableImageSet
 {
@@ -43,5 +43,10 @@ internal sealed class StorableImageSetExtension(ImageSet inner, StorableImageSet
 	public void Dispose()
 	{
 		extendedInner.Dispose();
+	}
+
+	public void WrapAndInsertImage(StorableImage image)
+	{
+		extendedInner.WrapAndInsertImage(image);
 	}
 }

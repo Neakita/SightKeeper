@@ -17,6 +17,10 @@
                     Icon="{icons:MaterialIconExt Kind=Pencil}"
                     Command="{Binding EditCommand}"/>
                 <MenuItem
+                    Icon="{icons:MaterialIconExt Kind=Export}"
+                    Header="Export"
+                    Command="{Binding ExportCommand}"/>
+                <MenuItem
                     Header="Delete"
                     Icon="{icons:MaterialIconExt Kind=TrashCanOutline}"
                     Classes="red-accent"

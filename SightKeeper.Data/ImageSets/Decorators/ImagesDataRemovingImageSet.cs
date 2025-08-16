@@ -53,4 +53,9 @@ internal sealed class ImagesDataRemovingImageSet(StorableImageSet inner) : Stora
 		var image = Images[index];
 		image.DeleteData();
 	}
+
+	public void WrapAndInsertImage(StorableImage image)
+	{
+		inner.WrapAndInsertImage(image);
+	}
 }

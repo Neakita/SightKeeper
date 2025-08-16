@@ -1,6 +1,7 @@
 using MemoryPack;
 using Serilog;
 using SightKeeper.Avalonia.Compositions;
+using SightKeeper.Data.ImageSets.Images;
 
 namespace SightKeeper.Avalonia;
 
@@ -18,6 +19,7 @@ internal static class AppBootstrapper
 	{
 		MemoryPackFormatterProvider.Register(composition.ImageSetFormatter);
 		MemoryPackFormatterProvider.Register(composition.DataSetFormatter);
+		MemoryPackFormatterProvider.Register(new ImagesFormatter());
 		composition.AppDataAccess.Load();
 	}
 }
