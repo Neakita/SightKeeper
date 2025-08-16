@@ -18,14 +18,14 @@ internal class DataSetsViewModel : ViewModel, DataSetsDataContext, IDisposable
 
 	public DataSetsViewModel(
 		ObservableListRepository<DataSet> dataSetsObservableListRepository,
-		CreateDataSetCommandFactory createDataSetCommandFactory,
+		CreateDataSetCommand createDataSetCommand,
 		DataSetCardViewModelFactory dataSetCardViewModelFactory)
 	{
 		var dataSets = dataSetsObservableListRepository.Items
 			.Transform(dataSetCardViewModelFactory.CreateDataSetCardViewModel)
 			.ToObservableList();
 		_dataSets = dataSets;
-		CreateDataSetCommand = createDataSetCommandFactory.CreateCommand();
+		CreateDataSetCommand = createDataSetCommand;
 	}
 
 	private readonly ReadOnlyObservableList<DataSetCardDataContext> _dataSets;
