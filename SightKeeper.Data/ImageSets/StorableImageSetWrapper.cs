@@ -1,6 +1,6 @@
 namespace SightKeeper.Data.ImageSets;
 
-public sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock editingLock) : ImageSetWrapper
+public sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock editingLock, ImageLookupperPopulator lookupperPopulator) : ImageSetWrapper
 {
 	public StorableImageSet Wrap(StorableImageSet set)
 	{
@@ -28,6 +28,8 @@ public sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock 
 			// We shouldn't dispose images if domain rule is violated,
 			// so this should be behind domain rules
 			.WithImagesDisposing()
+			
+			.WithLookupperPopulator(lookupperPopulator)
 
 			// If domain rule is violated and throws an exception,
 			// it should fail as fast as possible and have smaller stack strace

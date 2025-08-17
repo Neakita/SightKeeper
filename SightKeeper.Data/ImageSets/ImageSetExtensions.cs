@@ -39,4 +39,9 @@ internal static class ImageSetExtensions
 	{
 		return new DisposingImageSet(set);
 	}
+
+	public static StorableImageSet WithLookupperPopulator(this StorableImageSet set, ImageLookupperPopulator populator)
+	{
+		return new PopulateImageLookupperImageSet(set, populator);
+	}
 }
