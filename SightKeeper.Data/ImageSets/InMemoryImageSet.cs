@@ -45,13 +45,14 @@ public sealed class InMemoryImageSet : StorableImageSet
 	{
 	}
 
-	public void WrapAndInsertImage(StorableImage image)
+	public StorableImage WrapAndInsertImage(StorableImage image)
 	{
 		var index = _images.BinarySearch(image, ImageCreationTimestampComparer<StorableImage>.Instance);
 		Guard.IsLessThan(index, 0);
 		index = ~index;
 		var wrappedImage = _imageWrapper.Wrap(image);
 		_images.Insert(index, wrappedImage);
+		return wrappedImage;
 	}
 
 	internal void EnsureCapacity(int capacity)

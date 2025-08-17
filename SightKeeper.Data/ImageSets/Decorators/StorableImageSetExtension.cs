@@ -45,8 +45,8 @@ internal sealed class StorableImageSetExtension(ImageSet inner, StorableImageSet
 		extendedInner.Dispose();
 	}
 
-	public void WrapAndInsertImage(StorableImage image)
+	public StorableImage WrapAndInsertImage(StorableImage image)
 	{
-		extendedInner.WrapAndInsertImage(image);
+		return extendedInner.WrapAndInsertImage(image);
 	}
 }

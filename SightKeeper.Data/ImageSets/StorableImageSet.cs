@@ -9,7 +9,7 @@ public interface StorableImageSet : ImageSet, IDisposable
 	new IReadOnlyList<StorableImage> Images { get; }
 	new StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size);
 	new IReadOnlyList<StorableImage> GetImagesRange(int index, int count);
-	void WrapAndInsertImage(StorableImage image);
+	StorableImage WrapAndInsertImage(StorableImage image);
 
 	IReadOnlyList<Image> ImageSet.Images => Images;
 

@@ -58,8 +58,8 @@ internal sealed class TrackableImageSet(StorableImageSet inner, ChangeListener c
 		inner.Dispose();
 	}
 
-	public void WrapAndInsertImage(StorableImage image)
+	public StorableImage WrapAndInsertImage(StorableImage image)
 	{
-		inner.WrapAndInsertImage(image);
+		return inner.WrapAndInsertImage(image);
 	}
 }

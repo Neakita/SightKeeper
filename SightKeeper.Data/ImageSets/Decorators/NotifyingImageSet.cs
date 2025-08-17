@@ -60,9 +60,9 @@ internal sealed class NotifyingImageSet(StorableImageSet inner) : StorableImageS
 		inner.Dispose();
 	}
 
-	public void WrapAndInsertImage(StorableImage image)
+	public StorableImage WrapAndInsertImage(StorableImage image)
 	{
-		inner.WrapAndInsertImage(image);
+		return inner.WrapAndInsertImage(image);
 	}
 
 	private void OnPropertyChanged([CallerMemberName] string propertyName = "")

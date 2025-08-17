@@ -79,9 +79,9 @@ internal sealed class ObservableImagesImageSet(StorableImageSet inner) : Storabl
 		inner.Dispose();
 	}
 
-	public void WrapAndInsertImage(StorableImage image)
+	public StorableImage WrapAndInsertImage(StorableImage image)
 	{
-		inner.WrapAndInsertImage(image);
+		return inner.WrapAndInsertImage(image);
 	}
 
 	private readonly ExternalObservableList<StorableImage> _images = new(inner.Images);

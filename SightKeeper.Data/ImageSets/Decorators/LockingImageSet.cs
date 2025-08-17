@@ -56,8 +56,8 @@ internal sealed class LockingImageSet(StorableImageSet inner, Lock editingLock) 
 		inner.Dispose();
 	}
 
-	public void WrapAndInsertImage(StorableImage image)
+	public StorableImage WrapAndInsertImage(StorableImage image)
 	{
-		inner.WrapAndInsertImage(image);
+		return inner.WrapAndInsertImage(image);
 	}
 }
