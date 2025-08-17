@@ -9,9 +9,11 @@ public class FileSystemDataAccess
 	public string DirectoryPath { get; set; } = DefaultDirectoryPath;
 	public required string FileExtension { get; set; }
 
-	public virtual Stream OpenRead(Id id)
+	public virtual Stream? OpenRead(Id id)
 	{
 		var filePath = GetFilePath(id);
+		if (!File.Exists(filePath))
+			return null;
 		return File.OpenRead(filePath);
 	}
 

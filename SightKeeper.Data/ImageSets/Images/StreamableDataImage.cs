@@ -18,7 +18,7 @@ internal sealed class StreamableDataImage(StorableImage inner, FileSystemDataAcc
 		return dataAccess.OpenWrite(inner.Id);
 	}
 
-	public Stream OpenReadStream()
+	public Stream? OpenReadStream()
 	{
 		return dataAccess.OpenRead(inner.Id);
 	}
