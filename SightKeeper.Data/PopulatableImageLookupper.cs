@@ -29,6 +29,11 @@ public class PopulatableImageLookupper : ImageLookupperPopulator, ImageLookupper
 		return _images[id];
 	}
 
+	public bool ContainsImage(Id id)
+	{
+		return _images.ContainsKey(id);
+	}
+
 	public void ClearImages()
 	{
 		_images.Clear();

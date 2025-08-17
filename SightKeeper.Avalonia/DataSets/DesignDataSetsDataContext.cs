@@ -21,4 +21,5 @@ internal sealed class DesignDataSetsDataContext : DataSetsDataContext
 	];
 
 	public ICommand CreateDataSetCommand { get; } = new RelayCommand(() => { });
+	public ICommand ImportDataSetCommand { get; } = new RelayCommand(() => { });
 }

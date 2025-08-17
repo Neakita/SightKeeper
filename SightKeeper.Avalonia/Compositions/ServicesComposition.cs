@@ -109,5 +109,8 @@ public sealed class ServicesComposition
 		.To(_ => Log.Logger)
 	
 		.Bind<DataSetExporter>()
-		.To<ZippedMemoryPackDataSetExporter>();
+		.To<ZippedMemoryPackDataSetExporter>()
+	
+		.Bind<DataSetImporter>()
+		.To<ZippedMemoryPackDataSetImporter>();
 }

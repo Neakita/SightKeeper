@@ -6,4 +6,5 @@ namespace SightKeeper.Data;
 public interface ImageLookupper
 {
 	StorableImage GetImage(Id id);
+	bool ContainsImage(Id id);
 }

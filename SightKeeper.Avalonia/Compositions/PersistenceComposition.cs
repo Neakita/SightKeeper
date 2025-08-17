@@ -22,7 +22,9 @@ public sealed class PersistenceComposition
 	private void Setup() => DI.Setup(nameof(PersistenceComposition), CompositionKind.Internal)
 
 		.Bind<WriteRepository<ImageSet>>()
+		.Bind<WriteRepository<StorableImageSet>>()
 		.Bind<ReadRepository<ImageSet>>()
+		.Bind<ReadRepository<StorableImageSet>>()
 		.Bind<ObservableRepository<ImageSet>>()
 		.As(Lifetime.Singleton)
 		.To<AppDataImageSetsRepository>()
@@ -37,6 +39,7 @@ public sealed class PersistenceComposition
 		.To<StorableImageSetWrapper>()
 
 		.Bind<ImageSetFactory<ImageSet>>()
+		.Bind<ImageSetFactory<StorableImageSet>>()
 		.To<WrappedImageSetFactory>(context =>
 		{
 			context.Inject(out InMemoryImageSetFactory inMemoryImageSetFactory);

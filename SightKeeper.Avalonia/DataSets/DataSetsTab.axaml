@@ -14,9 +14,15 @@
     <ScrollViewer Classes="regular-padding">
         <StackPanel Classes="medium-spacing">
             <Border Classes="outer regular-padding">
-                <Button Content="{icons:MaterialIconExt Kind=Plus}" Classes="square low-accent"
-                        Command="{Binding CreateDataSetCommand}"
-                        ToolTip.Tip="Create new data set"/>
+                <StackPanel Orientation="Horizontal"
+                            Classes="regular-spacing">
+                    <Button Content="{icons:MaterialIconExt Kind=Plus}" Classes="square low-accent"
+                            Command="{Binding CreateDataSetCommand}"
+                            ToolTip.Tip="Create new data set"/>
+                    <Button Content="{icons:MaterialIconExt Kind=Import}" Classes="square"
+                            Command="{Binding ImportDataSetCommand}"
+                            ToolTip.Tip="Import data set from zip archive"/>
+                </StackPanel>
             </Border>
             <ItemsControl ItemsSource="{Binding DataSets}"
                           Margin="-8">

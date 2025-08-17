@@ -8,4 +8,5 @@ internal interface DataSetsDataContext
 {
 	IReadOnlyCollection<DataSetCardDataContext> DataSets { get; }
 	ICommand CreateDataSetCommand { get; }
+	ICommand ImportDataSetCommand { get; }
 }

@@ -15,10 +15,12 @@ internal class DataSetsViewModel : ViewModel, DataSetsDataContext, IDisposable
 	public IReadOnlyCollection<DataSetCardDataContext> DataSets => _dataSets.ToReadOnlyNotifyingList();
 
 	public ICommand CreateDataSetCommand { get; }
+	public ICommand ImportDataSetCommand { get; }
 
 	public DataSetsViewModel(
 		ObservableListRepository<DataSet> dataSetsObservableListRepository,
 		CreateDataSetCommand createDataSetCommand,
+		ImportDataSetCommand importDataSetCommand,
 		DataSetCardViewModelFactory dataSetCardViewModelFactory)
 	{
 		var dataSets = dataSetsObservableListRepository.Items
@@ -26,6 +28,7 @@ internal class DataSetsViewModel : ViewModel, DataSetsDataContext, IDisposable
 			.ToObservableList();
 		_dataSets = dataSets;
 		CreateDataSetCommand = createDataSetCommand;
+		ImportDataSetCommand = importDataSetCommand;
 	}
 
 	private readonly ReadOnlyObservableList<DataSetCardDataContext> _dataSets;
