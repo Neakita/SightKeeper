@@ -39,8 +39,7 @@ public sealed class DeleteImageSetCommand(DialogManager dialogManager, WriteRepo
 		MessageBoxDialogViewModel deletionConfirmationDialog = new(
 			"Image set deletion confirmation",
 			$"Are you sure you want to permanently delete the image set '{set.Name}'? You will not be able to recover it.",
-			deleteButton, cancelButton,
-			new MessageBoxButtonDefinition("Cancel", MaterialIconKind.Cancel));
+			deleteButton, cancelButton);
 		var pressedButton = await dialogManager.ShowDialogAsync(deletionConfirmationDialog);
 		return pressedButton == deleteButton;
 	}
