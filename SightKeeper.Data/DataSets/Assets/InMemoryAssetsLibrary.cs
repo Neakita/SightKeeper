@@ -42,6 +42,8 @@ internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFa
 
 	public void ClearAssets()
 	{
+		foreach (var (image, asset) in _assets)
+			image.RemoveAsset(asset);
 		_assets.Clear();
 	}
 
