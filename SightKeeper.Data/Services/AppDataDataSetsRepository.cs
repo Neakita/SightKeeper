@@ -32,6 +32,7 @@ public sealed class AppDataDataSetsRepository :
 		}
 		_changeListener.SetDataChanged();
 		_removed.OnNext(set);
+		set.AssetsLibrary.ClearAssets();
 	}
 
 	public void Dispose()
