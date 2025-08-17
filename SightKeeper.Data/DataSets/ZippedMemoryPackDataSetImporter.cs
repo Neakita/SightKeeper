@@ -92,7 +92,7 @@ public sealed class ZippedMemoryPackDataSetImporter(
 		return dataSet;
 	}
 
-	public static string HandleDuplicate(string newName, IEnumerable<string> existingNames)
+	private static string HandleDuplicate(string newName, IEnumerable<string> existingNames)
 	{
 		var regex = new Regex(@"^(.*?)\s*((\d+))?$");
 		newName = regex.Match(newName).Groups[1].Captures.Single().Value;
