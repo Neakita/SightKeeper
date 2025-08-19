@@ -8,12 +8,12 @@ using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets;
 
 public sealed class ZippedMemoryPackDataSetImporter(
 	ImageLookupper imageLookupper,
-	ReadRepository<StorableImageSet> imageSetsReadRepository,
 	ImageSetFactory<StorableImageSet> imageSetFactory,
 	WriteRepository<StorableImageSet> imageSetsWriteRepository,
 	WriteRepository<DataSet> dataSetsWriteRepository,
@@ -25,13 +25,15 @@ public sealed class ZippedMemoryPackDataSetImporter(
 	{
 		await using var archiveStream = File.OpenRead(filePath);
 		using var archive = new ZipArchive(archiveStream, ZipArchiveMode.Read);
-		await ImportMissingImages(archive);
+		var importedImageSet = await ImportMissingImages(archive);
 		var dataSet = await ReadDataSet(archive);
 		dataSet.Name = HandleDuplicate(dataSet.Name, dataSetsReadRepository.Items.Select(set => set.Name));
+		if (importedImageSet != null)
+			importedImageSet.Name = $"Imported - {dataSet.Name}";
 		dataSetsWriteRepository.Add(dataSet);
 	}
 
-	private async Task ImportMissingImages(ZipArchive archive)
+	private async Task<ImageSet?> ImportMissingImages(ZipArchive archive)
 	{
 		var images = await ImportImagesMetadata(archive);
 		StorableImageSet? importedImagesSet = null;
@@ -39,11 +41,12 @@ public sealed class ZippedMemoryPackDataSetImporter(
 		{
 			if (imageLookupper.ContainsImage(image.Id))
 				continue;
-			importedImagesSet ??= GetOrCreateImportedImagesSet();
+			importedImagesSet ??= CreateImagesSet();
 			var wrappedImage = importedImagesSet.WrapAndInsertImage(image);
 			await CopyImageData(archive, wrappedImage);
 			lookupperPopulator.AddImage(wrappedImage);
 		}
+		return importedImagesSet;
 	}
 
 	private static async Task<IReadOnlyCollection<StorableImage>> ImportImagesMetadata(ZipArchive archive)
@@ -56,14 +59,9 @@ public sealed class ZippedMemoryPackDataSetImporter(
 		return images;
 	}
 
-	private StorableImageSet GetOrCreateImportedImagesSet()
+	private StorableImageSet CreateImagesSet()
 	{
-		const string setName = "Imported";
-		var set = imageSetsReadRepository.Items.FirstOrDefault(set => set.Name == setName);
-		if (set != null)
-			return set;
-		set = imageSetFactory.CreateImageSet();
-		set.Name = setName;
+		var set = imageSetFactory.CreateImageSet();
 		imageSetsWriteRepository.Add(set);
 		return set;
 	}
