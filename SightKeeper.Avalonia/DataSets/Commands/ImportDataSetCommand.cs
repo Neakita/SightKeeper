@@ -17,7 +17,10 @@ internal sealed class ImportDataSetCommand(DataSetImporter setImporter) : AsyncC
 			AllowMultiple = true,
 			FileTypeFilter =
 			[
-				new FilePickerFileType(".zip")
+				new FilePickerFileType("Zip archive")
+				{
+					Patterns = ["*.zip"]
+				}
 			]
 		};
 		var files = await storageProvider.OpenFilePickerAsync(filePickerOptions);
