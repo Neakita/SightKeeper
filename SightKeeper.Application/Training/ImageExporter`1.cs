@@ -10,6 +10,8 @@ public sealed class ImageExporter<TPixel> : ImageExporter where TPixel : unmanag
 {
 	public async Task ExportImageAsync(string filePath, Image image, CancellationToken cancellationToken)
 	{
+		if (File.Exists(filePath))
+			return;
 		if (TryCopy(filePath, image))
 			return;
 		if (await TryCopyViaStreamAsync(filePath, image, cancellationToken))
@@ -23,7 +25,7 @@ public sealed class ImageExporter<TPixel> : ImageExporter where TPixel : unmanag
 
 	private static bool TryCopy(string filePath, Image image)
 	{
-		var targetExtension = Path.GetExtension(filePath.AsSpan());
+		var targetExtension = Path.GetExtension(filePath);
 		// remove the period
 		targetExtension = targetExtension[1..];
 		return image.DataFormat == targetExtension && image.TryCopyTo(filePath);

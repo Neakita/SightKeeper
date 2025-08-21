@@ -5,7 +5,8 @@ internal sealed class COCOAnnotation
 	public int Id { get; set; }
 	public int ImageId { get; set; }
 	public int CategoryId { get; set; }
-	// segmentation and area are skipped
+	public double Area { get; set; }
+	public double[][] Segmentation { get; set; } = Array.Empty<double[]>();
 	public double[] Bbox { get; set; } = Array.Empty<double>();
 	public bool Iscrowd { get; set; }
 }

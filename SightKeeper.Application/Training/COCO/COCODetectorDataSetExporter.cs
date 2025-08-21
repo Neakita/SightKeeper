@@ -18,6 +18,7 @@ public sealed class COCODetectorDataSetExporter(ImageExporter imageExporter) : D
 		AssetsDistributionRequest assetsDistributionRequest,
 		CancellationToken cancellationToken)
 	{
+		Directory.CreateDirectory(DirectoryPath);
 		_imageIds = dataSet.AssetsLibrary.Images.Index().ToDictionary(tuple => tuple.Item, tuple => tuple.Index + 1);
 		_tagIds = dataSet.TagsLibrary.Tags.Index().ToDictionary(tuple => tuple.Item, tuple => tuple.Index + 1);
 		try
@@ -50,7 +51,7 @@ public sealed class COCODetectorDataSetExporter(ImageExporter imageExporter) : D
 
 	private static async Task WriteCOCODataSet(string filePath, COCODataSet set, CancellationToken cancellationToken)
 	{
-		var stream = File.OpenWrite(filePath);
+		await using var stream = File.Open(filePath, FileMode.Create, FileAccess.Write);
 		await JsonSerializer.SerializeAsync(stream, set, COCODataSetSourceGenerationContext.Default.COCODataSet, cancellationToken);
 	}
 
@@ -91,7 +92,10 @@ public sealed class COCODetectorDataSetExporter(ImageExporter imageExporter) : D
 		var itemIndex = 0;
 		foreach (var asset in assets)
 		{
-			var imageId = _imageIds[asset.Image];
+			var image = asset.Image;
+			var imageId = _imageIds[image];
+			var imageWidth = image.Size.X;
+			var imageHeight = image.Size.Y;
 			foreach (var item in asset.Items)
 			{
 				var tagId = _tagIds[item.Tag];
@@ -101,7 +105,7 @@ public sealed class COCODetectorDataSetExporter(ImageExporter imageExporter) : D
 					Id = ++_annotationIdCounter,
 					ImageId = imageId,
 					CategoryId = tagId,
-					Bbox = [bounding.Left, bounding.Top, bounding.Width, bounding.Height]
+					Bbox = [bounding.Left * imageWidth, bounding.Top * imageHeight, bounding.Width * imageWidth, bounding.Height * imageHeight]
 				};
 				itemIndex++;
 			}
@@ -126,6 +130,7 @@ public sealed class COCODetectorDataSetExporter(ImageExporter imageExporter) : D
 
 	private async Task ExportImagesAsync(string directoryPath, IEnumerable<Image> images, CancellationToken cancellationToken)
 	{
+		Directory.CreateDirectory(directoryPath);
 		foreach (var image in images)
 			await ExportImageAsync(directoryPath, image, cancellationToken);
 	}
