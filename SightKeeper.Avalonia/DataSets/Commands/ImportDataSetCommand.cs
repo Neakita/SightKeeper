@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Avalonia.Misc;
@@ -10,21 +9,22 @@ internal sealed class ImportDataSetCommand(DataSetImporter setImporter) : AsyncC
 {
 	protected override async Task ExecuteAsync()
 	{
-		var storageProvider = ((IClassicDesktopStyleApplicationLifetime)global::Avalonia.Application.Current.ApplicationLifetime).MainWindow.StorageProvider;
-		var filePickerOptions = new FilePickerOpenOptions
-		{
-			Title = "Data set import",
-			AllowMultiple = true,
-			FileTypeFilter =
-			[
-				new FilePickerFileType("Zip archive")
-				{
-					Patterns = ["*.zip"]
-				}
-			]
-		};
-		var files = await storageProvider.OpenFilePickerAsync(filePickerOptions);
+		var storageProvider = App.StorageProvider;
+		_pickerOptions.Title = "Data set import";
+		var files = await storageProvider.OpenFilePickerAsync(_pickerOptions);
 		foreach (var file in files)
 			await setImporter.Import(file.Path.LocalPath);
 	}
+	
+	private readonly FilePickerOpenOptions _pickerOptions =  new()
+	{
+		AllowMultiple = true,
+		FileTypeFilter =
+		[
+			new FilePickerFileType("Zip archive")
+			{
+				Patterns = ["*.zip"]
+			}
+		]
+	};
 }
