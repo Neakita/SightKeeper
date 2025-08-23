@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Timers;
 using Avalonia;
@@ -71,6 +72,6 @@ internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 	private void UpdateText()
 	{
 		if (AssociatedObject != null)
-			AssociatedObject.Text = DateTime.Humanize();
+			AssociatedObject.Text = DateTime.Humanize(culture: CultureInfo.InvariantCulture);
 	}
 }
