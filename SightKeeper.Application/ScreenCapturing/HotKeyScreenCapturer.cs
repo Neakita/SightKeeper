@@ -2,8 +2,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.HighPerformance;
 using HotKeys;
 using HotKeys.Handlers;
+using Serilog;
 using SharpHook.Data;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain;
@@ -90,6 +92,7 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 	}
 
 	private const ushort MinimumResolutionDimension = 32;
+	private static readonly ILogger Logger = Log.ForContext<HotKeyScreenCapturer<TPixel>>();
 	private readonly Subject<ImageSet?> _setChanged = new();
 	private readonly Binding _binding;
 	private Vector2<ushort> Offset => ScreenBoundsProvider.MainScreenCenter - ImageSize / 2;
@@ -120,7 +123,16 @@ public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 			return;
 		var set = Set;
 		Guard.IsNotNull(set);
-		var imageData = ScreenCapturer.Capture(ImageSize, Offset);
+		ReadOnlySpan2D<TPixel> imageData;
+		try
+		{
+			imageData = ScreenCapturer.Capture(ImageSize, Offset);
+		}
+		catch (Exception exception)
+		{
+			Logger.Warning(exception, "An exception was thrown when trying to capture screen");
+			return;
+		}
 		Guard.IsNotNull(_imageSaver);
 		_imageSaver.SaveImage(set, imageData, DateTimeOffset.Now);
 	}
