@@ -4,7 +4,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32>
+public sealed class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32>
 {
 	public override void Convert(ReadOnlySpan<Bgra32> source, Span<Rgba32> target)
 	{
@@ -18,6 +18,7 @@ public class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32>
 	}
 
 	private const uint ChannelMask = 0xFF;
+	private static uint[] _buffer = Array.Empty<uint>();
 
 	private static void CopyChannel(ReadOnlySpan<uint> source, int sourceChannelShift, Span<uint> target, int targetChannelShift)
 	{
@@ -32,12 +33,19 @@ public class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32>
 	private static void MergeChannel(ReadOnlySpan<uint> source, int sourceShift, Span<uint> target, int targetShift)
 	{
 		var relativeShift = sourceShift - targetShift;
-		Span<uint> buffer = stackalloc uint[source.Length];
+		EnsureBufferCapacity(source.Length);
+		Span<uint> buffer = _buffer.AsSpan(0, source.Length);
 		TensorPrimitives.BitwiseAnd(source, ChannelMask << sourceShift, buffer);
 		if (relativeShift > 0)
 			TensorPrimitives.ShiftRightLogical(buffer, relativeShift, buffer);
 		else if (relativeShift < 0)
 			TensorPrimitives.ShiftLeft(buffer, -relativeShift, buffer);
 		TensorPrimitives.BitwiseOr(target, buffer, target);
+	}
+
+	private static void EnsureBufferCapacity(int capacity)
+	{
+		if (_buffer.Length < capacity)
+			_buffer = new uint[capacity];
 	}
 }
