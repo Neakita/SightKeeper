@@ -31,7 +31,16 @@ public sealed class WriteableBitmapImageLoader<TPixel>(
 			? image.Size.ToPixelSize()
 			: ComputeSize(image.Size, maximumLargestDimension.Value);
 		var bitmap = bitmapPool.Rent(size, pixelFormat);
-		var isRead = await ReadImageDataToBitmapAsync(image, bitmap, cancellationToken);
+		bool isRead;
+		try
+		{
+			isRead = await ReadImageDataToBitmapAsync(image, bitmap, cancellationToken);
+		}
+		catch
+		{
+			bitmap.ReturnToPool();
+			throw;
+		}
 		if (isRead)
 			return bitmap;
 		bitmap.ReturnToPool();
