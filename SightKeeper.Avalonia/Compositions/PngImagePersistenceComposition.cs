@@ -31,5 +31,9 @@ internal sealed class PngImagePersistenceComposition
 		})
 	
 		.Bind<ImageLoader<TTPixel>>()
-		.To<ImageSharpImageLoader<TTPixel>>();
+		.To(context =>
+		{
+			context.Inject(out ImageSharpImageLoader<TTPixel> imageSharpLoader);
+			return new ThreadedImageLoader<TTPixel>(imageSharpLoader);
+		});
 }
