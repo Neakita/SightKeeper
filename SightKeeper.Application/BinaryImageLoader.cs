@@ -10,6 +10,11 @@ public sealed class BinaryImageLoader<TPixel> : ImageLoader<TPixel> where TPixel
 {
 	public async Task<bool> LoadImageAsync(Image image, Memory<TPixel> target, CancellationToken cancellationToken)
 	{
+		if (cancellationToken.IsCancellationRequested)
+		{
+			Logger.Verbose("Image {image} loading was canceled before opening stream", image);
+			return false;
+		}
 		var targetAsBytes = target.Cast<TPixel, byte>();
 		await using var stream = image.OpenReadStream();
 		if (stream == null)

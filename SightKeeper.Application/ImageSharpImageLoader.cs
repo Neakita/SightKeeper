@@ -11,8 +11,13 @@ public sealed class ImageSharpImageLoader<TPixel> : ImageLoader<TPixel> where TP
 {
 	public async Task<bool> LoadImageAsync(Image image, Memory<TPixel> target, CancellationToken cancellationToken)
 	{
+		if (cancellationToken.IsCancellationRequested)
+		{
+			Logger.Verbose("Image {image} loading was canceled before opening stream", image);
+			return false;
+		}
 		await using var stream = image.OpenReadStream();
-		if (stream == null || cancellationToken.IsCancellationRequested)
+		if (stream == null)
 			return false;
 
 		using var operation = Logger.OperationAt(LogEventLevel.Verbose)
