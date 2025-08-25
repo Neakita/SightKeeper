@@ -3,6 +3,9 @@ using System.Collections.Concurrent;
 using System.Reactive.Subjects;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
+using Serilog;
+using Serilog.Events;
+using SerilogTimings.Extensions;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;
@@ -30,12 +33,14 @@ public sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<TP
 
 	public void SaveData(Image image, ReadOnlySpan2D<TPixel> data)
 	{
+		using var operation = Logger.BeginOperation("Creating image {image} data saving request", image);
 		Guard.IsFalse(IsLimitReached);
 		var pendingData = new PendingImageData<TPixel>(image, ArrayPool, data);
 		_pendingImages.Enqueue(pendingData);
 		OnPendingImagesCountChanged();
 		if (Processing.IsCompleted)
 			Processing = Task.Run(ProcessImages);
+		operation.Complete(LogEventLevel.Verbose);
 	}
 
 	public void Dispose()
@@ -43,6 +48,7 @@ public sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<TP
 		_pendingImagesCount.Dispose();
 	}
 
+	private static readonly ILogger Logger = Log.ForContext<BufferedImageDataSaverMiddleware<TPixel>>();
 	private readonly ConcurrentQueue<PendingImageData<TPixel>> _pendingImages = new();
 	private readonly BehaviorSubject<ushort> _pendingImagesCount = new(0);
 

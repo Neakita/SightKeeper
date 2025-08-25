@@ -1,5 +1,8 @@
 using System.Numerics.Tensors;
 using System.Runtime.InteropServices;
+using Serilog;
+using Serilog.Events;
+using SerilogTimings.Extensions;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.ScreenCapturing;
@@ -8,6 +11,7 @@ public sealed class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32
 {
 	public override void Convert(ReadOnlySpan<Bgra32> source, Span<Rgba32> target)
 	{
+		using var operation = Logger.BeginOperation("Converting {count} pixels", source.Length);
 		var packedSource = MemoryMarshal.Cast<Bgra32, uint>(source);
 		var packedTarget = MemoryMarshal.Cast<Rgba32, uint>(target);
 		// with first call we should erase previous data that can come from ArrayPool
@@ -15,8 +19,10 @@ public sealed class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32
 		MergeChannel(packedSource, 8, packedTarget, 8);
 		MergeChannel(packedSource, 16, packedTarget, 0);
 		TensorPrimitives.Add(packedTarget, ChannelMask << 24, packedTarget);
+		operation.Complete(LogEventLevel.Verbose);
 	}
 
+	private static readonly ILogger Logger = Log.ForContext<Bgra32ToRgba32PixelConverter>();
 	private const uint ChannelMask = 0xFF;
 	private static uint[] _buffer = Array.Empty<uint>();
 
