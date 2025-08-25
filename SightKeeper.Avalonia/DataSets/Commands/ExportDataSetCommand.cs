@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Commands;
 
-internal sealed class ExportDataSetCommand(DataSetExporter exporter) : CancellableAsyncCommand<DataSet>
+internal sealed class ExportDataSetCommand(DataSetExporter<DataSet> exporter) : CancellableAsyncCommand<DataSet>
 {
 	protected override async Task ExecuteAsync(DataSet set, CancellationToken cancellationToken)
 	{
@@ -17,8 +17,8 @@ internal sealed class ExportDataSetCommand(DataSetExporter exporter) : Cancellab
 		var storageFile = await storageProvider.SaveFilePickerAsync(_pickerOptions);
 		if (storageFile == null)
 			return;
-		var stream = await storageFile.OpenWriteAsync();
-		await exporter.ExportAsync(stream, set, cancellationToken);
+		var path = storageFile.Path.LocalPath;
+		await exporter.ExportAsync(path, set, cancellationToken);
 	}
 
 	private readonly FilePickerSaveOptions _pickerOptions = new()

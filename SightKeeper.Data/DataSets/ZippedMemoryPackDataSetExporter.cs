@@ -6,10 +6,11 @@ using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Data.DataSets;
 
-public sealed class ZippedMemoryPackDataSetExporter : DataSetExporter
+public sealed class ZippedMemoryPackDataSetExporter : DataSetExporter<DataSet>
 {
-	public async Task ExportAsync(Stream stream, DataSet set, CancellationToken cancellationToken)
+	public async Task ExportAsync(string archivePath, DataSet set, CancellationToken cancellationToken)
 	{
+		await using var stream = File.Open(archivePath, FileMode.Create); 
 		using var archive = new ZipArchive(stream, ZipArchiveMode.Create);
 		await WriteSetDataAsync(archive, set, cancellationToken);
 		var images = (IReadOnlyCollection<StorableImage>)set.AssetsLibrary.Images;

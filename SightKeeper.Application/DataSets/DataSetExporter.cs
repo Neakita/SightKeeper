@@ -1,8 +1,6 @@
-using SightKeeper.Domain.DataSets;
-
 namespace SightKeeper.Application.DataSets;
 
-public interface DataSetExporter
+public interface DataSetExporter<in TDataSet>
 {
-	Task ExportAsync(Stream stream, DataSet set, CancellationToken cancellationToken);
+	Task ExportAsync(string path, TDataSet set, CancellationToken cancellationToken);
 }

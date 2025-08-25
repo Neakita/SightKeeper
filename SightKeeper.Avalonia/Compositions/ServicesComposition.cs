@@ -1,8 +1,4 @@
-﻿#if OS_WINDOWS
-using SightKeeper.Application.Windows;
-#elif OS_LINUX
-using SightKeeper.Application.Linux.X11;
-#endif
+﻿
 using System;
 using System.Buffers;
 using FluentValidation;
@@ -22,7 +18,13 @@ using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Data.DataSets;
+using SightKeeper.Domain.DataSets;
 using SixLabors.ImageSharp.PixelFormats;
+#if OS_WINDOWS
+using SightKeeper.Application.Windows;
+#elif OS_LINUX
+using SightKeeper.Application.Linux.X11;
+#endif
 
 namespace SightKeeper.Avalonia.Compositions;
 
@@ -108,7 +110,7 @@ public sealed class ServicesComposition
 		.Bind<ILogger>()
 		.To(_ => Log.Logger)
 	
-		.Bind<DataSetExporter>()
+		.Bind<DataSetExporter<DataSet>>()
 		.To<ZippedMemoryPackDataSetExporter>()
 	
 		.Bind<DataSetImporter>()
