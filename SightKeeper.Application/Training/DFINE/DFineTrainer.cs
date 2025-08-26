@@ -1,12 +1,28 @@
-﻿using SightKeeper.Application.Training.Assets.Distribution;
+﻿using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Application.Training.DFINE;
 
-public sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironmentManager environmentManager, DataSetTrainerExporter<DetectorDataSet> exporter) : Trainer<DetectorDataSet>
+public sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironmentManager environmentManager, TrainDataExporter<DetectorDataSet> exporter) : Trainer<DetectorDataSet>
 {
+	public byte BatchSize { get; set; } = 16;
+	public Vector2<ushort> ImageSize { get; set; } = new(320, 320);
+	public DFineModel Model { get; set; } = DFineModel.Nano;
+
+	public async Task<Weights> TrainAsync(TrainData<DetectorDataSet> data, CancellationToken cancellationToken)
+	{
+		var environmentCommandRunner = await environmentManager.ActivateAsync(CondaEnvironmentPath, PythonVersion, cancellationToken);
+		await InstallDFineAsync(environmentCommandRunner, cancellationToken);
+		var tagsCount = data.Tags.Count();
+		await Configurator.ConfigureAsync(BatchSize, ImageSize, (byte)tagsCount, Model, OutputDirectoryPath, cancellationToken);
+		await exporter.ExportAsync(DataSetPath, data, cancellationToken);
+		var configFilePath = Path.Combine(ModelConfigsDirectoryPath, Model.ConfigName);
+		await environmentCommandRunner.ExecuteCommandAsync($"python {TrainPythonScriptPath} -c {configFilePath} --seed=0", cancellationToken);
+		return null!;
+	}
+
 	private const string PythonVersion = "3.11.9";
 	private static readonly string WorkingDirectory = Path.Combine("environments", "D-FINE");
 	private static readonly string CondaEnvironmentPath = Path.Combine(WorkingDirectory, "conda-environment");
@@ -17,23 +33,6 @@ public sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironmentMa
 	private static readonly string ModelConfigsDirectoryPath = Path.Combine(RepositoryPath, "configs", "dfine", "custom");
 	private static readonly string OutputDirectoryPath = Path.Combine(WorkingDirectory, "artifacts");
 	private static readonly DFineConfigurator Configurator = new(RepositoryPath, DataSetPath);
-
-	public async Task<Weights> TrainAsync(
-		DetectorDataSet dataSet,
-		AssetsDistributionRequest assetsDistributionRequest,
-		CancellationToken cancellationToken)
-	{
-		var environmentCommandRunner = await environmentManager.ActivateAsync(CondaEnvironmentPath, PythonVersion, cancellationToken);
-		await InstallDFineAsync(environmentCommandRunner, cancellationToken);
-		var tagsCount = dataSet.TagsLibrary.Tags.Count;
-		var model = DFineModel.Nano;
-		await Configurator.ConfigureAsync(16, new Vector2<ushort>(320, 320), (byte)tagsCount, model, OutputDirectoryPath, cancellationToken);
-		exporter.DirectoryPath = DataSetPath;
-		await exporter.ExportAsync(dataSet, assetsDistributionRequest, cancellationToken);
-		var configFilePath = Path.Combine(ModelConfigsDirectoryPath, model.ConfigName);
-		await environmentCommandRunner.ExecuteCommandAsync($"python {TrainPythonScriptPath} -c {configFilePath} --seed=0", cancellationToken);
-		return null!;
-	}
 
 	private async Task InstallDFineAsync(CommandRunner environmentCommandRunner, CancellationToken cancellationToken)
 	{

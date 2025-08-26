@@ -1,10 +1,12 @@
+using System.Collections.ObjectModel;
+
 namespace SightKeeper.Application.Training.COCO;
 
 internal sealed class COCODataSet
 {
 	public COCODataSetInfo Info { get; set; } = new();
-	public COCOImage[] Images { get; set; } = Array.Empty<COCOImage>();
-	public COCOAnnotation[] Annotations { get; set; } = Array.Empty<COCOAnnotation>();
-	public COCOCategory[] Categories { get; set; } = Array.Empty<COCOCategory>();
-	public COCOLicense[] Licenses { get; set; } = Array.Empty<COCOLicense>();
+	public IReadOnlyList<COCOImage> Images { get; set; } = ReadOnlyCollection<COCOImage>.Empty;
+	public IReadOnlyList<COCOAnnotation> Annotations { get; set; } = ReadOnlyCollection<COCOAnnotation>.Empty;
+	public IReadOnlyList<COCOCategory> Categories { get; set; } = ReadOnlyCollection<COCOCategory>.Empty;
+	public IReadOnlyList<COCOLicense> Licenses { get; set; } = ReadOnlyCollection<COCOLicense>.Empty;
 }

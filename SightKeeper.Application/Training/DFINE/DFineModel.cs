@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Application.Training.DFINE;
 
-internal sealed class DFineModel
+public sealed class DFineModel
 {
 	public static DFineModel Nano { get; } = new("dfine_hgnetv2_n_custom.yml");
 	public static DFineModel Small { get; } = new("dfine_hgnetv2_s_custom.yml");
