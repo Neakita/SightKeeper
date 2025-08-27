@@ -27,6 +27,11 @@ public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>,
 		return new Vector2<T>(first.X - second.X, first.Y - second.Y);
 	}
 
+	public static Vector2<T> operator -(Vector2<T> value)
+	{
+		return new Vector2<T>(-value.X, -value.Y);
+	}
+
 	public static Vector2<T> operator *(Vector2<T> first, T second)
 	{
 		return new Vector2<T>(first.X * second, first.Y * second);
@@ -85,6 +90,13 @@ public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>,
 		var x = X.ToUInt32(provider);
 		var y = Y.ToUInt32(provider);
 		return new Vector2<uint>(x, y);
+	}
+
+	public Vector2<double> ToDouble(IFormatProvider? provider = null)
+	{
+		var x = X.ToDouble(provider);
+		var y = Y.ToDouble(provider);
+		return new Vector2<double>(x, y);
 	}
 
 	public bool Equals(Vector2<T> other)
