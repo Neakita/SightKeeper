@@ -59,14 +59,14 @@ public sealed class ServicesComposition
 
 		.Bind<ScreenCapturer<Bgra32>>()
 #if OS_WINDOWS
-		.To<DX11ScreenCapturer>()
+		.To<SustainableScreenCapturer<Bgra32, DX11ScreenCapturer>>()
 #elif OS_LINUX
 		.To<X11ScreenCapturer>()
 #endif
 
 		.Bind<PixelConverter<Bgra32, Rgba32>>()
 		.To<Bgra32ToRgba32PixelConverter>()
-		
+
 		.Bind<ImageSaverFactory<Bgra32>>()
 		.To(context =>
 		{
