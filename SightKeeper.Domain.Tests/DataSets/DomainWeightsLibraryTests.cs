@@ -57,7 +57,7 @@ public sealed class DomainWeightsLibraryTests
 			Model = Model.DFine,
 			CreationTimestamp = DateTimeOffset.Now,
 			ModelSize = ModelSize.Small,
-			Metrics = new WeightsMetrics(1, new LossMetrics(2, 3, 4)),
+			Metrics = new WeightsMetrics(1, new LossMetrics(2, 3)),
 			Resolution = new Vector2<ushort>(480, 640)
 		};
 		library.CreateWeights(weightsMetadata, ReadOnlyCollection<Tag>.Empty);
