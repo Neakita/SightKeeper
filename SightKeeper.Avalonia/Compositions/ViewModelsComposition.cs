@@ -13,6 +13,7 @@ using SightKeeper.Avalonia.ImageSets.Capturing;
 using SightKeeper.Avalonia.ImageSets.Card;
 using SightKeeper.Avalonia.ImageSets.Commands;
 using SightKeeper.Avalonia.Misc;
+using SightKeeper.Avalonia.Training;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -41,6 +42,13 @@ public sealed class ViewModelsComposition
 		{
 			context.Inject(out AnnotationTabViewModel viewModel);
 			return new TabItemViewModel(MaterialIconKind.ImageEdit, "Annotation", viewModel);
+		})
+
+		.Bind<TabItemViewModel>(4)
+		.To(context =>
+		{
+			context.Inject(out TrainingViewModel viewModel);
+			return new TabItemViewModel(MaterialIconKind.School, "Training", viewModel);
 		})
 
 		.Bind<DialogManager>()

@@ -1,7 +1,38 @@
-﻿namespace SightKeeper.Application.Training.Data;
+﻿using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Poser2D;
+using SightKeeper.Domain.DataSets.Poser3D;
 
-public interface TrainData<out TAsset>
+namespace SightKeeper.Application.Training.Data;
+
+public static class TrainData
 {
-	IEnumerable<TagData> Tags { get; }
-	IEnumerable<TAsset> Assets { get; }
+	public static TrainData<AssetData> Create(DataSet dataSet)
+	{
+		var tagsData = dataSet.TagsLibrary.Tags.Select(tag => new TagDataValue(tag.Name)).ToList();
+		var tagsDataLookup = dataSet.TagsLibrary.Tags.Zip(tagsData).ToDictionary(tuple => tuple.First, tuple => tuple.Second);
+		return dataSet switch
+		{
+			ClassifierDataSet classifierDataSet => throw new NotImplementedException(),
+			DetectorDataSet detectorDataSet => new TrainDataValue<ItemsAssetData<AssetItemData>>(tagsData, detectorDataSet.AssetsLibrary.Assets.Select(ConvertAsset)),
+			Poser2DDataSet poser2DDataSet => throw new NotImplementedException(),
+			Poser3DDataSet poser3DDataSet => throw new NotImplementedException(),
+			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
+		};
+
+		ItemsAssetData<AssetItemData> ConvertAsset(ItemsAsset<DetectorItem> asset)
+		{
+			var image = new ImageDataValue(asset.Image);
+			var items = asset.Items.Select(ConvertItem).ToList();
+			return new ItemsAssetDataValue<AssetItemData>(image, asset.Usage, items);
+		}
+
+		AssetItemData ConvertItem(DetectorItem item)
+		{
+			var tag = tagsDataLookup[item.Tag];
+			return new AssetItemDataValue(tag, item.Bounding);
+		}
+	}
 }

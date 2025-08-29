@@ -1,0 +1,32 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:SightKeeper.Avalonia.Training"
+             mc:Ignorable="d"
+             x:Class="SightKeeper.Avalonia.Training.TrainingTab"
+             x:DataType="local:TrainingDataContext">
+    <StackPanel Classes="regular-spacing regular-margin"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+        <HeaderedContentControl Header="Data set">
+            <ComboBox ItemsSource="{Binding DataSets}"
+                      SelectedItem="{Binding DataSet}"
+                      DisplayMemberBinding="{Binding Name}"/>
+        </HeaderedContentControl>
+        <HeaderedContentControl Header="Width">
+            <NumericUpDown Value="{Binding Width}"
+                           Increment="32"
+                           Minimum="32"/>
+        </HeaderedContentControl>
+        <HeaderedContentControl Header="Height">
+            <NumericUpDown Value="{Binding Height}"
+                           Increment="32"
+                           Minimum="32"/>
+        </HeaderedContentControl>
+        <Button Command="{Binding StartTrainingCommand}"
+                Content="Start"/>
+        <Button Command="{Binding StopTrainingCommand}"
+                Content="Abort"/>
+    </StackPanel>
+</UserControl>

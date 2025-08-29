@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Buffers;
 using FluentValidation;
 using HotKeys;
@@ -16,6 +15,12 @@ using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Application.ImageSets.Editing;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.ScreenCapturing.Saving;
+using SightKeeper.Application.Training;
+using SightKeeper.Application.Training.Assets.Distribution;
+using SightKeeper.Application.Training.COCO;
+using SightKeeper.Application.Training.Data;
+using SightKeeper.Application.Training.Data.Transforming;
+using SightKeeper.Application.Training.DFINE;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Data.DataSets;
 using SightKeeper.Domain.DataSets;
@@ -109,10 +114,56 @@ public sealed class ServicesComposition
 
 		.Bind<ILogger>()
 		.To(_ => Log.Logger)
-	
+
 		.Bind<DataSetExporter<DataSet>>()
 		.To<ZippedMemoryPackDataSetExporter>()
-	
+
 		.Bind<DataSetImporter>()
-		.To<ZippedMemoryPackDataSetImporter>();
+		.To<ZippedMemoryPackDataSetImporter>()
+
+		.Bind<Trainer<AssetData>>()
+		.To<TypeSwitchTrainer>()
+
+		.Bind<Trainer<ItemsAssetData<AssetItemData>>>()
+		.To<DFineTrainer>()
+
+		.Bind<CondaEnvironmentManager>()
+#if OS_WINDOWS
+		.To<StatelessWindowsCondaEnvironmentManager>()
+#elif OS_LINUX
+
+#endif
+		.Bind<TrainDataExporter<ItemsAssetData<AssetItemData>>>()
+		.To(context =>
+		{
+			TrainDataExporter<ItemsAssetData<AssetItemData>> exporter = new COCODetectorDataSetExporter();
+			exporter = new DistributedTrainDataExporter<ItemsAssetData<AssetItemData>>(exporter);
+			context.Inject(out TrainDataTransformer<ItemsAssetData<AssetItemData>> transformer);
+			exporter = new TransformingTrainDataExporter<ItemsAssetData<AssetItemData>>(exporter, transformer);
+			return exporter;
+		})
+
+		.Bind<CommandRunner>()
+#if OS_WINDOWS
+		.To(_ =>
+		{
+			CommandRunner commandRunner = new ArgumentCommandRunner("cmd.exe");
+			commandRunner = new WindowsArgumentCarryCommandRunner(commandRunner);
+			return commandRunner;
+		})
+#elif OS_LINUX
+
+#endif
+
+		.Bind<TrainDataTransformer<ItemsAssetData<AssetItemData>>>()
+		.To<CropTransformer<ItemsAssetData<AssetItemData>>>()
+
+		.Bind<CropRectanglesProvider<ItemsAssetData<AssetItemData>>>()
+		.To<RandomItemsCropRectanglesProvider<ItemsAssetData<AssetItemData>, AssetItemData>>()
+	
+		.Bind<AssetCropper<ItemsAssetData<AssetItemData>>>()
+		.To<ItemsAssetCropper<AssetItemData>>()
+	
+		.Bind<ItemCropper<AssetItemData>>()
+		.To<AssetItemCropper>();
 }
