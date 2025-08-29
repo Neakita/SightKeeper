@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.Training.Assets.Distribution;
+using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Application.Tests.Training;
@@ -10,7 +11,7 @@ public sealed class AssetsDistributorTests
 	[Fact]
 	public void ShouldDistributeAssetsWithNormalizedRequest()
 	{
-		var asset = Substitute.For<Asset>();
+		var asset = Substitute.For<AssetData>();
 		asset.Usage.Returns(AssetUsage.Any);
 		var assets = Enumerable.Repeat(asset, 100);
 		var request = new AssetsDistributionRequest
@@ -28,7 +29,7 @@ public sealed class AssetsDistributorTests
 	[Fact]
 	public void ShouldDistributeAssetsWithNonNormalizedRequest()
 	{
-		var asset = Substitute.For<Asset>();
+		var asset = Substitute.For<AssetData>();
 		asset.Usage.Returns(AssetUsage.Any);
 		var assets = Enumerable.Repeat(asset, 100);
 		var request = new AssetsDistributionRequest
