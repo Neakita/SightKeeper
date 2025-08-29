@@ -9,6 +9,6 @@ public sealed class ItemsAssetCropper<TItem>(ItemCropper<TItem> itemCropper) : A
 	{
 		var image = new CroppedImageData(asset.Image, cropRectangle);
 		var items = itemCropper.CropItems(asset.Items, cropRectangle, asset.Image.Size).ToList();
-		return new ItemsAssetDataValue<TItem>(image, items);
+		return new ItemsAssetDataValue<TItem>(image, asset.Usage, items);
 	}
 }
