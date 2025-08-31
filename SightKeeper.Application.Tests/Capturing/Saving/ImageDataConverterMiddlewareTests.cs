@@ -23,7 +23,7 @@ public sealed class ImageDataConverterMiddlewareTests
 		};
 		var pixels = new Bgra32[4, 4];
 		Random.Shared.NextBytes(pixels.AsSpan().AsBytes());
-		middleware.SaveData(Substitute.For<Image>(), pixels);
+		middleware.SaveData(Substitute.For<ManagedImage>(), pixels);
 		var receivedPixels = converter.ReceivedCalls.Should().ContainSingle().Subject;
 		receivedPixels.Should().BeEquivalentTo(pixels);
 	}
@@ -42,7 +42,7 @@ public sealed class ImageDataConverterMiddlewareTests
 		};
 		var pixels = new Bgra32[4, 4];
 		Random.Shared.NextBytes(pixels.AsSpan().AsBytes());
-		middleware.SaveData(Substitute.For<Image>(), pixels);
+		middleware.SaveData(Substitute.For<ManagedImage>(), pixels);
 		var receivedPixels = imageSaver.ReceivedCalls.Should().ContainSingle().Subject.data;
 		receivedPixels.Should().BeEquivalentTo(converterPixels);
 	}

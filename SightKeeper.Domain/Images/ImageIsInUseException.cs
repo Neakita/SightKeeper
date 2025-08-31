@@ -2,13 +2,13 @@ namespace SightKeeper.Domain.Images;
 
 public sealed class ImageIsInUseException : Exception
 {
-	public static void ThrowForDeletionIfInUse(ImageSet set, Image image)
+	public static void ThrowForDeletionIfInUse(ImageSet set, ManagedImage image)
 	{
 		if (image.Assets.Count > 0)
 			ThrowForDeletion(set, image);
 	}
 
-	private static void ThrowForDeletion(ImageSet set, Image image)
+	private static void ThrowForDeletion(ImageSet set, ManagedImage image)
 	{
 		const string message =
 			"The image is being used by some asset, so it cannot be deleted. " +
@@ -17,9 +17,9 @@ public sealed class ImageIsInUseException : Exception
 	}
 
 	public ImageSet Set { get; }
-	public Image Image { get; }
+	public ManagedImage Image { get; }
 
-	public ImageIsInUseException(string? message, ImageSet set, Image image) : base(message)
+	public ImageIsInUseException(string? message, ImageSet set, ManagedImage image) : base(message)
 	{
 		Set = set;
 		Image = image;

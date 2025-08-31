@@ -8,7 +8,7 @@ public sealed class ImageDataConverterMiddleware<TSourcePixel, TTargetPixel> : I
 	public required PixelConverter<TSourcePixel, TTargetPixel> Converter { get; init; }
 	public required ImageDataSaver<TTargetPixel> Next { get; init; }
 
-	public void SaveData(Image image, ReadOnlySpan2D<TSourcePixel> data)
+	public void SaveData(ManagedImage image, ReadOnlySpan2D<TSourcePixel> data)
 	{
 		var requiredBufferSize = data.Width * data.Height;
 		EnsureBufferCapacity(requiredBufferSize);

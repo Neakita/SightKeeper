@@ -15,17 +15,17 @@ public interface StorableAssetsOwner<out TAsset> : StorableAssetsContainer<TAsse
 		return GetOptionalAsset(image) ?? MakeAsset(image);
 	}
 
-	TAsset AssetsOwner<TAsset>.MakeAsset(Image image)
+	TAsset AssetsOwner<TAsset>.MakeAsset(ManagedImage image)
 	{
 		return MakeAsset((StorableImage)image);
 	}
 
-	void AssetsOwner<TAsset>.DeleteAsset(Image image)
+	void AssetsOwner<TAsset>.DeleteAsset(ManagedImage image)
 	{
 		DeleteAsset((StorableImage)image);
 	}
 
-	TAsset AssetsOwner<TAsset>.GetOrMakeAsset(Image image)
+	TAsset AssetsOwner<TAsset>.GetOrMakeAsset(ManagedImage image)
 	{
 		return GetOrMakeAsset((StorableImage)image);
 	}

@@ -31,7 +31,7 @@ public sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<TP
 
 	public Task Processing { get; private set; } = Task.CompletedTask;
 
-	public void SaveData(Image image, ReadOnlySpan2D<TPixel> data)
+	public void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data)
 	{
 		using var operation = Logger.BeginOperation("Creating image {image} data saving request", image);
 		Guard.IsFalse(IsLimitReached);

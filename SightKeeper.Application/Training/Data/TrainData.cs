@@ -24,9 +24,8 @@ public static class TrainData
 
 		ItemsAssetData<AssetItemData> ConvertAsset(ItemsAsset<DetectorItem> asset)
 		{
-			var image = new ImageDataValue(asset.Image);
 			var items = asset.Items.Select(ConvertItem).ToList();
-			return new ItemsAssetDataValue<AssetItemData>(image, asset.Usage, items);
+			return new ItemsAssetDataValue<AssetItemData>(asset.Image, asset.Usage, items);
 		}
 
 		AssetItemData ConvertItem(DetectorItem item)

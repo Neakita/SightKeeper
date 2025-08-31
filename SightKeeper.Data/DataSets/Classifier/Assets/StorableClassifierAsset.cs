@@ -19,5 +19,5 @@ public interface StorableClassifierAsset : ClassifierAsset
 		set => Tag = (StorableTag)value;
 	}
 
-	Image Asset.Image => Image;
+	ManagedImage Asset.Image => Image;
 }

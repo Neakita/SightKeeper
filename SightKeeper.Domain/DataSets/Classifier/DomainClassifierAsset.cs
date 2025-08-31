@@ -6,7 +6,7 @@ namespace SightKeeper.Domain.DataSets.Classifier;
 
 public sealed class DomainClassifierAsset(ClassifierAsset inner) : ClassifierAsset
 {
-	public Image Image => inner.Image;
+	public ManagedImage Image => inner.Image;
 
 	public AssetUsage Usage
 	{

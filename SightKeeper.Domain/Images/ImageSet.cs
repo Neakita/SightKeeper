@@ -8,10 +8,10 @@ public interface ImageSet
 	/// <remarks>
 	/// Sorted by creation timestamp: first is the earliest, last is the latest
 	/// </remarks>
-	IReadOnlyList<Image> Images { get; }
+	IReadOnlyList<ManagedImage> Images { get; }
 
-	Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size);
-	IReadOnlyList<Image> GetImagesRange(int index, int count);
+	ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size);
+	IReadOnlyList<ManagedImage> GetImagesRange(int index, int count);
 
 	void RemoveImageAt(int index);
 	void RemoveImagesRange(int index, int count);

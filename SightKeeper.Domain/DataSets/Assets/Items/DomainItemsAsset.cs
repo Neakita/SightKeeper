@@ -5,7 +5,7 @@ namespace SightKeeper.Domain.DataSets.Assets.Items;
 
 public sealed class DomainItemsAsset<TItem>(TagsContainer<Tag> tagsOwner, ItemsAsset<TItem> inner) : ItemsAsset<TItem>
 {
-	public Image Image => inner.Image;
+	public ManagedImage Image => inner.Image;
 
 	public AssetUsage Usage
 	{

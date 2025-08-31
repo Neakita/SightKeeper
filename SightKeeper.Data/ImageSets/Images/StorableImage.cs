@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-public interface StorableImage : Image, IDisposable
+public interface StorableImage : ManagedImage, IDisposable
 {
 	Id Id { get; }
 

@@ -5,8 +5,8 @@ namespace SightKeeper.Domain.DataSets.Assets;
 public interface AssetsContainer<out TAsset>
 {
 	IReadOnlyCollection<TAsset> Assets { get; }
-	IReadOnlyCollection<Image> Images { get; }
-	TAsset GetAsset(Image image);
-	TAsset? GetOptionalAsset(Image image);
-	bool Contains(Image image);
+	IReadOnlyCollection<ManagedImage> Images { get; }
+	TAsset GetAsset(ManagedImage image);
+	TAsset? GetOptionalAsset(ManagedImage image);
+	bool Contains(ManagedImage image);
 }

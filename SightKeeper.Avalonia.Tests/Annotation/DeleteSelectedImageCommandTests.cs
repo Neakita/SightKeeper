@@ -15,7 +15,7 @@ public sealed class DeleteSelectedImageCommandTests
 	public void ShouldRaiseCanExecuteChangedWhenSelectedImageAssetsChanged()
 	{
 		var imageSelection = Substitute.For<ImageSelection>();
-		var image = Substitute.For<Image>();
+		var image = Substitute.For<ManagedImage>();
 		imageSelection.SelectedImage.Returns(image);
 		imageSelection.SelectedImageChanged.Returns(Observable.Return(image));
 		var assets = new FakeAssets();

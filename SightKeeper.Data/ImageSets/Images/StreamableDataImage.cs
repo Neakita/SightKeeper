@@ -2,6 +2,8 @@ using FlakeId;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
@@ -12,6 +14,26 @@ internal sealed class StreamableDataImage(StorableImage inner, FileSystemDataAcc
 	public Vector2<ushort> Size => inner.Size;
 	public IReadOnlyCollection<Asset> Assets => inner.Assets;
 	public string DataFormat => dataAccess.FileExtension;
+
+	public Image? Load(CancellationToken cancellationToken)
+	{
+		return dataAccess.LoadImage(Id, cancellationToken);
+	}
+
+	public Image<TPixel>? Load<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
+	{
+		return dataAccess.LoadImage<TPixel>(Id, cancellationToken);
+	}
+
+	public Task<Image?> LoadAsync(CancellationToken cancellationToken)
+	{
+		return dataAccess.LoadImageAsync(Id, cancellationToken);
+	}
+
+	public Task<Image<TPixel>?> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
+	{
+		return dataAccess.LoadImageAsync<TPixel>(Id, cancellationToken);
+	}
 
 	public Stream OpenWriteStream()
 	{

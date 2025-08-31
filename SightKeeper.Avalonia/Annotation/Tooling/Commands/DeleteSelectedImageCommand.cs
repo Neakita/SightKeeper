@@ -39,7 +39,7 @@ public sealed class DeleteSelectedImageCommand : Command, IDisposable
 	private readonly ImageSetSelection _imageSetSelection;
 	private readonly IDisposable _constructorDisposable;
 
-	private static IObservable<Unit> GetAssetsObservable(Image? image)
+	private static IObservable<Unit> GetAssetsObservable(ManagedImage? image)
 	{
 		if (image?.Assets is IObservable<object> assetsObservable)
 			return assetsObservable.Select(_ => Unit.Default);

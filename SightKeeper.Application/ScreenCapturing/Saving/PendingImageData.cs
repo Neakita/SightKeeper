@@ -7,11 +7,11 @@ namespace SightKeeper.Application.ScreenCapturing.Saving;
 
 internal sealed class PendingImageData<TPixel> : IDisposable
 {
-	public Image Image { get; }
+	public ManagedImage Image { get; }
 
 	public ReadOnlySpan2D<TPixel> Data => _rentedArray.AsSpan2D(Image.Size.Y, Image.Size.X);
 
-	public PendingImageData(Image image, ArrayPool<TPixel> arrayPool, ReadOnlySpan2D<TPixel> data)
+	public PendingImageData(ManagedImage image, ArrayPool<TPixel> arrayPool, ReadOnlySpan2D<TPixel> data)
 	{
 		Guard.IsEqualTo(image.Size.X, data.Width);
 		Guard.IsEqualTo(image.Size.Y, data.Height);

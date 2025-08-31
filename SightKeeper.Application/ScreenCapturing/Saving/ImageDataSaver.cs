@@ -5,5 +5,5 @@ namespace SightKeeper.Application.ScreenCapturing.Saving;
 
 public interface ImageDataSaver<TPixel>
 {
-	void SaveData(Image image, ReadOnlySpan2D<TPixel> data);
+	void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data);
 }

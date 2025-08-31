@@ -12,7 +12,7 @@ public sealed class BinaryImageDataSaverTests
 	[Fact]
 	public void ShouldWriteDataToStream()
 	{
-		var image = Substitute.For<Image>();
+		var image = Substitute.For<ManagedImage>();
 		using MemoryStream stream = new();
 		image.Size.Returns(new Vector2<ushort>(2, 2));
 		image.OpenWriteStream().Returns(stream);

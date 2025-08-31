@@ -8,7 +8,7 @@ namespace SightKeeper.Avalonia;
 
 internal sealed class ImageViewModel : ImageDataContext
 {
-	public ImageViewModel(WriteableBitmapImageLoader imageLoader, Image image)
+	public ImageViewModel(WriteableBitmapImageLoader imageLoader, ManagedImage image)
 	{
 		_imageLoader = imageLoader;
 		_image = image;
@@ -20,5 +20,5 @@ internal sealed class ImageViewModel : ImageDataContext
 	}
 
 	private readonly WriteableBitmapImageLoader _imageLoader;
-	private readonly Image _image;
+	private readonly ManagedImage _image;
 }

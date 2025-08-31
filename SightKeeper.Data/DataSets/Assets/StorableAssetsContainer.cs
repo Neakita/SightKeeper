@@ -11,19 +11,19 @@ public interface StorableAssetsContainer<out TAsset> : AssetsContainer<TAsset>
 	TAsset? GetOptionalAsset(StorableImage image);
 	bool Contains(StorableImage image);
 
-	IReadOnlyCollection<Image> AssetsContainer<TAsset>.Images => Images;
+	IReadOnlyCollection<ManagedImage> AssetsContainer<TAsset>.Images => Images;
 
-	TAsset AssetsContainer<TAsset>.GetAsset(Image image)
+	TAsset AssetsContainer<TAsset>.GetAsset(ManagedImage image)
 	{
 		return GetAsset((StorableImage)image);
 	}
 
-	TAsset? AssetsContainer<TAsset>.GetOptionalAsset(Image image)
+	TAsset? AssetsContainer<TAsset>.GetOptionalAsset(ManagedImage image)
 	{
 		return GetOptionalAsset((StorableImage)image);
 	}
 
-	bool AssetsContainer<TAsset>.Contains(Image image)
+	bool AssetsContainer<TAsset>.Contains(ManagedImage image)
 	{
 		return Contains((StorableImage)image);
 	}

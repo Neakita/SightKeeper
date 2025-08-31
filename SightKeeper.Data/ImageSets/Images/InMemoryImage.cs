@@ -2,6 +2,8 @@ using CommunityToolkit.Diagnostics;
 using FlakeId;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
@@ -18,6 +20,26 @@ internal sealed class InMemoryImage : StorableImage
 		Id = id;
 		CreationTimestamp = creationTimestamp;
 		Size = size;
+	}
+
+	public Image? Load(CancellationToken cancellationToken)
+	{
+		return null;
+	}
+
+	public Image<TPixel>? Load<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
+	{
+		return null;
+	}
+
+	public Task<Image?> LoadAsync(CancellationToken cancellationToken)
+	{
+		return Task.FromResult<Image?>(null);
+	}
+
+	public Task<Image<TPixel>?> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
+	{
+		return Task.FromResult<Image<TPixel>?>(null);
 	}
 
 	public Stream? OpenWriteStream()

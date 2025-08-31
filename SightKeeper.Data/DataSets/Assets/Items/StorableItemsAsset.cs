@@ -14,7 +14,7 @@ public interface StorableItemsAsset<out TItem> : ItemsAsset<TItem>
 
 	TItem MakeItem(StorableTag tag);
 
-	Image Asset.Image => Image;
+	ManagedImage Asset.Image => Image;
 
 	TItem ItemsMaker<TItem>.MakeItem(Tag tag)
 	{

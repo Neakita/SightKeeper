@@ -5,10 +5,15 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application;
 
-public sealed class ThreadedImageLoader<TPixel>(ImageLoader<TPixel> inner) : ImageLoader<TPixel>
+public sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 {
+	public bool LoadImage(ImageData imageData, Memory<TPixel> target, CancellationToken cancellationToken)
+	{
+		// there is nothing we can do
+		return _inner.LoadImage(imageData, target, cancellationToken);
+	}
 
-	public Task<bool> LoadImageAsync(Image image, Memory<TPixel> target, CancellationToken cancellationToken)
+	public Task<bool> LoadImageAsync(ImageData imageData, Memory<TPixel> target, CancellationToken cancellationToken)
 	{
 		var completionSource = new TaskCompletionSource<bool>();
 		cancellationToken.Register(static state =>
@@ -17,44 +22,38 @@ public sealed class ThreadedImageLoader<TPixel>(ImageLoader<TPixel> inner) : Ima
 			if (completionSource.TrySetResult(false))
 				Logger.Verbose("Image loading was canceled by cancellationToken registered callback");
 		}, completionSource);
-		var request = new LoadImageRequest(image, target, completionSource, cancellationToken);
+		var request = new LoadImageRequest(imageData, target, completionSource, cancellationToken);
 		bool isWritten = _channel.Writer.TryWrite(request);
 		Guard.IsTrue(isWritten);
-		StartProcessingIfNecessary();
 		return completionSource.Task;
 	}
 
 	private static readonly ILogger Logger = Log.Logger.ForContext<ThreadedImageLoader<TPixel>>();
 	private readonly Channel<LoadImageRequest> _channel = Channel.CreateUnbounded<LoadImageRequest>();
-	private readonly Lock _processingTaskLock = new();
-	private Task _processingTask = Task.CompletedTask;
+	private readonly ImageLoader<TPixel> _inner;
+
+	public ThreadedImageLoader(ImageLoader<TPixel> inner)
+	{
+		_inner = inner;
+		_ = new TaskFactory().StartNew(LoadImages, TaskCreationOptions.LongRunning);
+	}
 
 	private sealed record LoadImageRequest(
-		Image Image,
+		ImageData Image,
 		Memory<TPixel> Target,
 		TaskCompletionSource<bool> CompletionSource,
 		CancellationToken CancellationToken);
 
-	private void StartProcessingIfNecessary()
-	{
-		if (!_processingTask.IsCompleted)
-			return;
-		lock (_processingTaskLock)
-		{
-			if (!_processingTask.IsCompleted)
-				return;
-			_processingTask = Task.Run(LoadImagesAsync);
-		}
-	}
-
-	private async Task LoadImagesAsync()
+	private void LoadImages()
 	{
 		while (_channel.Reader.TryRead(out var request))
 		{
+			if (request.CancellationToken.IsCancellationRequested)
+				continue;
 			bool isLoaded;
 			try
 			{
-				isLoaded = await inner.LoadImageAsync(request.Image, request.Target, request.CancellationToken);
+				isLoaded = _inner.LoadImage(request.Image, request.Target, request.CancellationToken);
 			}
 			catch (Exception exception)
 			{

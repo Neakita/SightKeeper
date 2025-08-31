@@ -1,56 +1,35 @@
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
-using SixLabors.ImageSharp;
+using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
-using Image = SightKeeper.Domain.Images.Image;
 
 namespace SightKeeper.Application;
 
 public sealed class ImageSharpImageLoader<TPixel> : ImageLoader<TPixel> where TPixel : unmanaged, IPixel<TPixel>
 {
-	public async Task<bool> LoadImageAsync(Image image, Memory<TPixel> target, CancellationToken cancellationToken)
+	public bool LoadImage(ImageData imageData, Memory<TPixel> target, CancellationToken cancellationToken)
 	{
-		if (cancellationToken.IsCancellationRequested)
-		{
-			Logger.Verbose("Image {image} loading was canceled before opening stream", image);
-			return false;
-		}
-		await using var stream = image.OpenReadStream();
-		if (stream == null)
-			return false;
-
 		using var operation = Logger.OperationAt(LogEventLevel.Verbose)
-			.Begin("Loading image {image} with size {size}", image, image.Size);
-
-		Image<TPixel> imageData;
-		try
-		{
-			imageData = await SixLabors.ImageSharp.Image.LoadAsync<TPixel>(stream, CancellationToken.None);
-		}
-		catch (UnknownImageFormatException exception)
-		{
-			Logger.Warning(
-				exception,
-				"An exception was thrown when trying to load an image {image}. " +
-				"The image was probably corrupted when the application unexpectedly shut down.",
-				image);
-			operation.SetException(exception);
+			.Begin("Loading image {image} with size {size}", imageData, imageData.Size);
+		using var image = imageData.Load<TPixel>(cancellationToken);
+		if (image == null || cancellationToken.IsCancellationRequested)
 			return false;
-		}
+		image.CopyPixelDataTo(target.Span);
+		operation.Complete();
+		return true;
+	}
 
-		try
-		{
-			if (cancellationToken.IsCancellationRequested)
-				return false;
-			imageData.CopyPixelDataTo(target.Span);
-			operation.Complete("Length", target.Span.Length);
-			return true;
-		}
-		finally
-		{
-			imageData.Dispose();
-		}
+	public async Task<bool> LoadImageAsync(ImageData imageData, Memory<TPixel> target, CancellationToken cancellationToken)
+	{
+		using var operation = Logger.OperationAt(LogEventLevel.Verbose)
+			.Begin("Loading image {image} with size {size}", imageData, imageData.Size);
+		using var image = await imageData.LoadAsync<TPixel>(cancellationToken);
+		if (image == null || cancellationToken.IsCancellationRequested)
+			return false;
+		image.CopyPixelDataTo(target.Span);
+		operation.Complete();
+		return true;
 	}
 
 	private static readonly ILogger Logger = Log.ForContext<ImageSharpImageLoader<TPixel>>();

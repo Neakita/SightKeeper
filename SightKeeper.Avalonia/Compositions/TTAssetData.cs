@@ -1,6 +1,7 @@
 ﻿using System;
 using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Compositions;
 

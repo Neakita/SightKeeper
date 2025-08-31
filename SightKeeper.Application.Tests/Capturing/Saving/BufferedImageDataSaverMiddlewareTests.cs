@@ -17,7 +17,7 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		var middleware = CreateMiddleware(out var imageSaver);
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
-		var image = Substitute.For<Image>();
+		var image = Substitute.For<ManagedImage>();
 		image.Size.Returns(new Vector2<ushort>(320, 320));
 		for (int i = 0; i < 10; i++)
 			middleware.SaveData(image, pixels);
@@ -33,7 +33,7 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
 		// first call data will be dequeued even when calls halt
-		var image = Substitute.For<Image>();
+		var image = Substitute.For<ManagedImage>();
 		image.Size.Returns(new Vector2<ushort>(320, 320));
 		middleware.SaveData(image, pixels);
 		for (int i = 0; i < 10; i++)
@@ -47,7 +47,7 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		var middleware = CreateMiddleware(10, out var imageSaver);
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
-		var image = Substitute.For<Image>();
+		var image = Substitute.For<ManagedImage>();
 		image.Size.Returns(new Vector2<ushort>(320, 320));
 		for (int i = 0; i < 10; i++)
 			middleware.SaveData(image, pixels);
@@ -63,7 +63,7 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		var middleware = CreateMiddleware(10, out var imageSaver);
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
-		var image = Substitute.For<Image>();
+		var image = Substitute.For<ManagedImage>();
 		image.Size.Returns(new Vector2<ushort>(320, 320));
 		for (int i = 0; i < 10; i++)
 		{

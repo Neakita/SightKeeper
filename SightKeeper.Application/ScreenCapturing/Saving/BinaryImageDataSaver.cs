@@ -10,7 +10,7 @@ namespace SightKeeper.Application.ScreenCapturing.Saving;
 public sealed class BinaryImageDataSaver<TPixel> : ImageDataSaver<TPixel>
 	where TPixel : unmanaged
 {
-	public void SaveData(Image image, ReadOnlySpan2D<TPixel> data)
+	public void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data)
 	{
 		using var stream = image.OpenWriteStream();
 		Guard.IsNotNull(stream);

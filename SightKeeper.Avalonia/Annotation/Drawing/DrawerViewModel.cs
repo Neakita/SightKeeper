@@ -53,7 +53,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 	private readonly Subject<AssetItem?> _selectedItemChanged = new();
 	private readonly CompositeDisposable _constructorDisposable = new();
 
-	private void HandleImageSelectionChange(Image? image)
+	private void HandleImageSelectionChange(ManagedImage? image)
 	{
 		if (image == null)
 		{

@@ -4,11 +4,11 @@ namespace SightKeeper.Domain.DataSets.Assets;
 
 public interface AssetsOwner<out TAsset> : AssetsContainer<TAsset>
 {
-	TAsset MakeAsset(Image image);
-	void DeleteAsset(Image image);
+	TAsset MakeAsset(ManagedImage image);
+	void DeleteAsset(ManagedImage image);
 	void ClearAssets();
 
-	TAsset GetOrMakeAsset(Image image)
+	TAsset GetOrMakeAsset(ManagedImage image)
 	{
 		return GetOptionalAsset(image) ?? MakeAsset(image);
 	}

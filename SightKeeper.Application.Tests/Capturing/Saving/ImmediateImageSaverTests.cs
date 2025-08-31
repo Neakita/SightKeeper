@@ -18,7 +18,7 @@ public sealed class ImmediateImageSaverTests
 			DataSaver = dataSaver
 		};
 		var set = Substitute.For<ImageSet>();
-		var image = Substitute.For<Image>();
+		var image = Substitute.For<ManagedImage>();
 		var data = new Argb32[2, 2];
 		data[0, 0] = new Argb32(0x1, 0x2, 0x3);
 		data[0, 1] = new Argb32(0x4, 0x5, 0x6);

@@ -17,7 +17,7 @@ public sealed class ObservableImagesImageSetTests
 	{
 		ObservableImagesImageSet set = new(Substitute.For<StorableImageSet>());
 		var observableList = (ReadOnlyObservableList<StorableImage>)set.Images;
-		List<IndexedChange<Image>> observedChanges = new();
+		List<IndexedChange<ManagedImage>> observedChanges = new();
 		using var subscription = observableList.Subscribe(observedChanges.Add);
 		var image = set.CreateImage(DateTimeOffset.UtcNow, new Vector2<ushort>(320, 320));
 		var insertion = observedChanges.Should().ContainSingle().Which.Should().BeOfType<Insertion<StorableImage>>().Subject;
@@ -33,7 +33,7 @@ public sealed class ObservableImagesImageSetTests
 		innerSet.Images.Returns([image]);
 		ObservableImagesImageSet set = new(innerSet);
 		var observableList = (ReadOnlyObservableList<StorableImage>)set.Images;
-		List<IndexedChange<Image>> observedChanges = new();
+		List<IndexedChange<ManagedImage>> observedChanges = new();
 		using var subscription = observableList.Subscribe(observedChanges.Add);
 		set.RemoveImageAt(0);
 		var removal = observedChanges.Should().ContainSingle(change => change is IndexedRemoval<StorableImage>).Subject.As<IndexedRemoval<StorableImage>>();
@@ -52,7 +52,7 @@ public sealed class ObservableImagesImageSetTests
 		innerSet.GetImagesRange(0, 2).Returns([image1, image2]);
 		ObservableImagesImageSet set = new(innerSet);
 		var observableList = (ReadOnlyObservableList<StorableImage>)set.Images;
-		List<IndexedChange<Image>> observedChanges = new();
+		List<IndexedChange<ManagedImage>> observedChanges = new();
 		using var subscription = observableList.Subscribe(observedChanges.Add);
 		set.RemoveImagesRange(0, 2);
 		var removal = observedChanges.Should().ContainSingle(change => change is IndexedRemoval<StorableImage>).Subject.As<IndexedRemoval<StorableImage>>();

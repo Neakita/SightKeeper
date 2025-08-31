@@ -14,8 +14,8 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 {
 	public IReadOnlyCollection<AnnotationImageDataContext> Images => _images.ToReadOnlyNotifyingList();
 	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
-	public Image? SelectedImage => SelectedImageIndex >= 0 ? _set?.Images[SelectedImageIndex] : null;
-	public IObservable<Image?> SelectedImageChanged => _selectedImageChanged.AsObservable();
+	public ManagedImage? SelectedImage => SelectedImageIndex >= 0 ? _set?.Images[SelectedImageIndex] : null;
+	public IObservable<ManagedImage?> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
 	public ImagesViewModel(ImageSetSelection imageSetSelection, WriteableBitmapImageLoader imageLoader)
 	{
@@ -31,7 +31,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 
 	private readonly WriteableBitmapImageLoader _imageLoader;
 	private readonly IDisposable _disposable;
-	private readonly Subject<Image?> _selectedImageChanged = new();
+	private readonly Subject<ManagedImage?> _selectedImageChanged = new();
 	private ImageSet? _set;
 	private ReadOnlyObservableList<AnnotationImageDataContext> _images = ReadOnlyObservableList<AnnotationImageDataContext>.Empty;
 
@@ -42,7 +42,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 		_images = ReadOnlyObservableList<AnnotationImageDataContext>.Empty;
 		if (_set == null)
 			return;
-		var images = (ReadOnlyObservableList<Image>)_set.Images;
+		var images = (ReadOnlyObservableList<ManagedImage>)_set.Images;
 		_images = images.Transform(image => new AnnotationImageViewModel(_imageLoader, image)).ToObservableList();
 		OnPropertyChanged(nameof(Images));
 	}

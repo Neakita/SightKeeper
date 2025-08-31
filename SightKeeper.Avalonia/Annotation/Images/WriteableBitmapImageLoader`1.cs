@@ -23,7 +23,7 @@ public sealed class WriteableBitmapImageLoader<TPixel>(
 	where TPixel : unmanaged
 {
 	public async Task<PooledWriteableBitmap?> LoadImageAsync(
-		Image image,
+		ManagedImage image,
 		int? maximumLargestDimension,
 		CancellationToken cancellationToken)
 	{
@@ -48,7 +48,7 @@ public sealed class WriteableBitmapImageLoader<TPixel>(
 	}
 
 	private async Task<bool> ReadImageDataToBitmapAsync(
-		Image image,
+		ManagedImage image,
 		WriteableBitmap bitmap,
 		CancellationToken cancellationToken)
 	{

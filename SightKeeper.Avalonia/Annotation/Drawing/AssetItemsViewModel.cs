@@ -35,7 +35,7 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 	private readonly DrawerItemsFactory _drawerItemsFactory;
 	private readonly CompositeDisposable _constructorDisposable = new();
 	private AssetsContainer<ItemsContainer<AssetItem>>? _assetsLibrary;
-	private Image? _image;
+	private ManagedImage? _image;
 	private ItemsContainer<AssetItem>? Asset => _image == null ? null : _assetsLibrary?.GetOptionalAsset(_image);
 	private IDisposable _assetImagesSubscription = Disposable.Empty;
 
@@ -57,13 +57,13 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 		_assetsLibrary = set?.AssetsLibrary as AssetsContainer<ItemsContainer<AssetItem>>;
 		if (_assetsLibrary != null)
 		{
-			var observableAssetImages = (Vibrance.ReadOnlyObservableCollection<Image>)_assetsLibrary.Images;
+			var observableAssetImages = (Vibrance.ReadOnlyObservableCollection<ManagedImage>)_assetsLibrary.Images;
 			_assetImagesSubscription = observableAssetImages.Subscribe(_ => UpdateItems());
 		}
 		UpdateItems();
 	}
 
-	private void HandleImageSelectionChange(Image? image)
+	private void HandleImageSelectionChange(ManagedImage? image)
 	{
 		_image = image;
 		UpdateItems();

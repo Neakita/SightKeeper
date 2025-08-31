@@ -2,7 +2,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 
-internal sealed class ImageCreationTimestampComparer<TImage> : IComparer<TImage> where TImage : Image
+internal sealed class ImageCreationTimestampComparer<TImage> : IComparer<TImage> where TImage : ManagedImage
 {
 	public static ImageCreationTimestampComparer<TImage> Instance { get; } = new();
 

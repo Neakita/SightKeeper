@@ -8,7 +8,7 @@ namespace SightKeeper.Domain.DataSets.Poser2D;
 
 public sealed class DomainPoser2DAsset(ItemsAsset<Poser2DItem> inner, TagsContainer<DomainPoserTag> tagsOwner) : PoserAsset<Poser2DItem>
 {
-	public Image Image => inner.Image;
+	public ManagedImage Image => inner.Image;
 
 	public AssetUsage Usage
 	{

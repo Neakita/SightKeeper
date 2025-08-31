@@ -21,7 +21,7 @@ public sealed class ImagesCleanerTests
 		var set = Substitute.For<ImageSet>();
 		var images = Enumerable.Range(0, 15).Select(_ =>
 		{
-			var image = Substitute.For<Image>();
+			var image = Substitute.For<ManagedImage>();
 			image.Assets.Returns(ReadOnlyCollection<Asset>.Empty);
 			image.IsInUse.Returns(false);
 			return image;
@@ -43,7 +43,7 @@ public sealed class ImagesCleanerTests
 		var set = Substitute.For<ImageSet>();
 		var images = Enumerable.Range(0, 15).Select(i =>
 		{
-			var image = Substitute.For<Image>();
+			var image = Substitute.For<ManagedImage>();
 			if (i is 1 or 3)
 			{
 				image.Assets.Returns([Substitute.For<Asset>()]);

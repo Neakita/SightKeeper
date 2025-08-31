@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text.Json;
+using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Training.Data;
+using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.COCO;
@@ -108,7 +110,8 @@ public sealed class COCODetectorDataSetExporter : TrainDataExporter<ItemsAssetDa
 
 	private static async Task ExportImage(string filePath, ImageData data, CancellationToken cancellationToken)
 	{
-		using var image = data.Image;
+		using var image = await data.LoadAsync(cancellationToken);
+		Guard.IsNotNull(image);
 		await image.SaveAsync(filePath, cancellationToken);
 	}
 }

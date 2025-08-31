@@ -8,7 +8,7 @@ namespace SightKeeper.Avalonia.Annotation.Images;
 public interface WriteableBitmapImageLoader
 {
 	Task<PooledWriteableBitmap?> LoadImageAsync(
-		Image image,
+		ManagedImage image,
 		int? maximumLargestDimension,
 		CancellationToken cancellationToken);
 }

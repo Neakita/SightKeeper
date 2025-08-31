@@ -17,9 +17,9 @@ public sealed class DomainImageSet(ImageSet inner) : ImageSet
 	/// <remarks>
 	/// Sorted by creation timestamp: first is the earliest, last is the latest
 	/// </remarks>
-	public IReadOnlyList<Image> Images => inner.Images;
+	public IReadOnlyList<ManagedImage> Images => inner.Images;
 
-	public Image CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		ValidateImageSize(size);
 		if (Images.Count > 0 && creationTimestamp <= Images[^1].CreationTimestamp)
@@ -32,7 +32,7 @@ public sealed class DomainImageSet(ImageSet inner) : ImageSet
 		return inner.CreateImage(creationTimestamp, size);
 	}
 
-	public IReadOnlyList<Image> GetImagesRange(int index, int count)
+	public IReadOnlyList<ManagedImage> GetImagesRange(int index, int count)
 	{
 		return inner.GetImagesRange(index, count);
 	}

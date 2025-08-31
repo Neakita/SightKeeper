@@ -3,15 +3,16 @@ using CommunityToolkit.HighPerformance;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
+using SightKeeper.Domain.Images;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
-using Image = SightKeeper.Domain.Images.Image;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
 public sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : ImageDataSaver<TPixel> where TPixel : unmanaged, IPixel<TPixel>
 {
-	public void SaveData(Image image, ReadOnlySpan2D<TPixel> data)
+	public void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data)
 	{
 		using var stream = image.OpenWriteStream();
 		Guard.IsNotNull(stream);
@@ -36,7 +37,7 @@ public sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : Im
 		fixed (void* pointer = span)
 		{
 			var bufferSizeInBytes = span.AsBytes().Length;
-			using var imageData = SixLabors.ImageSharp.Image.WrapMemory<TPixel>(pointer, bufferSizeInBytes, data.Width, data.Height);
+			using var imageData = Image.WrapMemory<TPixel>(pointer, bufferSizeInBytes, data.Width, data.Height);
 			imageData.Save(stream, encoder);
 		}
 		return true;
@@ -50,7 +51,7 @@ public sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : Im
 			_buffer = new TPixel[requiredBufferLength];
 		}
 		data.CopyTo(_buffer);
-		var imageData = SixLabors.ImageSharp.Image.WrapMemory<TPixel>(_buffer, data.Width, data.Height);
+		var imageData = Image.WrapMemory<TPixel>(_buffer, data.Width, data.Height);
 		imageData.Save(stream, encoder);
 	}
 }

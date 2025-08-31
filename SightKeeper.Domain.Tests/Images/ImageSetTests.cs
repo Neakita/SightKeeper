@@ -12,7 +12,7 @@ public sealed class ImageSetTests
 	public void ShouldNotAllowDeleteImageWithAsset()
 	{
 		var innerSet = Substitute.For<ImageSet>();
-		var image = Substitute.For<Image>();
+		var image = Substitute.For<ManagedImage>();
 		image.Assets.Returns([Substitute.For<Asset>()]);
 		innerSet.Images.Returns([image]);
 		var domainSet = new DomainImageSet(innerSet);
@@ -26,7 +26,7 @@ public sealed class ImageSetTests
 	public void ShouldAllowDeleteImageWithoutAssets()
 	{
 		var innerSet = Substitute.For<ImageSet>();
-		var image = Substitute.For<Image>();
+		var image = Substitute.For<ManagedImage>();
 		image.Assets.Returns(ReadOnlyCollection<Asset>.Empty);
 		innerSet.Images.Returns([image]);
 		var domainSet = new DomainImageSet(innerSet);
@@ -50,7 +50,7 @@ public sealed class ImageSetTests
 		var domainSet = new DomainImageSet(innerSet);
 		var creationTimestamp = DateTimeOffset.Now;
 		var size = new Vector2<ushort>(480, 480);
-		var expectedImage = Substitute.For<Image>();
+		var expectedImage = Substitute.For<ManagedImage>();
 		innerSet.CreateImage(creationTimestamp, size).Returns(expectedImage);
 		var image = domainSet.CreateImage(creationTimestamp, size);
 		image.Should().Be(expectedImage);
@@ -62,7 +62,7 @@ public sealed class ImageSetTests
 		var earlierTimestamp = DateTimeOffset.UtcNow;
 		var laterTimestamp = earlierTimestamp.AddHours(2);
 		var innerSet = Substitute.For<ImageSet>();
-		var laterImage = Substitute.For<Image>();
+		var laterImage = Substitute.For<ManagedImage>();
 		laterImage.CreationTimestamp.Returns(laterTimestamp);
 		innerSet.Images.Returns([laterImage]);
 		var domainSet = new DomainImageSet(innerSet);
@@ -77,7 +77,7 @@ public sealed class ImageSetTests
 	public void ShouldGetImagesRange()
 	{
 		var innerSet = Substitute.For<ImageSet>();
-		IReadOnlyList<Image> expectedImages = [Substitute.For<Image>(), Substitute.For<Image>()];
+		IReadOnlyList<ManagedImage> expectedImages = [Substitute.For<ManagedImage>(), Substitute.For<ManagedImage>()];
 		innerSet.GetImagesRange(1, 2).Returns(expectedImages);
 		var domainSet = new DomainImageSet(innerSet);
 		var images = domainSet.GetImagesRange(1, 2);

@@ -47,7 +47,7 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 	}
 
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(SelectedTag), nameof(IsEnabled))]
-	public partial Image? Image { get; set; }
+	public partial ManagedImage? Image { get; set; }
 
 	public bool IsEnabled => Image != null;
 
