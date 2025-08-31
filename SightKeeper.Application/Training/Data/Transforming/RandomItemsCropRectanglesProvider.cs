@@ -6,8 +6,8 @@ using SixLabors.ImageSharp;
 namespace SightKeeper.Application.Training.Data.Transforming;
 
 public sealed class RandomItemsCropRectanglesProvider<TAsset, TItem>(RandomItemsCropSettings settings) : CropRectanglesProvider<TAsset>
-	where TAsset : ItemsAssetData<TItem>
-	where TItem : AssetItemData
+	where TAsset : ReadOnlyItemsAsset<TItem>
+	where TItem : ReadOnlyAssetItem
 {
 	public IEnumerable<Rectangle> GetCropRectangles(TAsset asset)
 	{

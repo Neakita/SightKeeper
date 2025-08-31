@@ -10,6 +10,7 @@ using SightKeeper.Application.Training;
 using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Training;
 
@@ -23,13 +24,13 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 	ICommand TrainingDataContext.StartTrainingCommand => StartTrainingCommand;
 	ICommand TrainingDataContext.StopTrainingCommand => StartTrainingCommand.CreateCancelCommand();
 
-	public TrainingViewModel(ObservableListRepository<DataSet> dataSets, Trainer<AssetData> trainer)
+	public TrainingViewModel(ObservableListRepository<DataSet> dataSets, Trainer<ReadOnlyAsset> trainer)
 	{
 		_trainer = trainer;
 		DataSets = dataSets.Items;
 	}
 
-	private readonly Trainer<AssetData> _trainer;
+	private readonly Trainer<ReadOnlyAsset> _trainer;
 	private bool CanStartTraining => DataSet != null;
 
 	[RelayCommand(CanExecute = nameof(CanStartTraining), IncludeCancelCommand = true)]

@@ -1,9 +1,8 @@
-using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Application.Training.Assets.Distribution;
 
-internal sealed class AssetUsageOrderComparer<TAsset> : IComparer<TAsset> where TAsset : AssetData
+internal sealed class AssetUsageOrderComparer<TAsset> : IComparer<TAsset> where TAsset : ReadOnlyAsset
 {
 	public AssetUsageOrderComparer(AssetUsage targetUsage)
 	{

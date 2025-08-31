@@ -2,20 +2,21 @@
 using System.Text.Json;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Training.Data;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.COCO;
 
-public sealed class COCODetectorDataSetExporter : TrainDataExporter<ItemsAssetData<AssetItemData>>
+public sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyItemsAsset<ReadOnlyAssetItem>>
 {
 	public int CategoriesInitialId { get; set; } = 0;
 	public IdCounter ImageIdCounter { get; set; } = new();
 	public IdCounter AnnotationIdCounter { get; set; } = new();
 	public bool ResetIdCounters { get; set; } = true;
 
-	public async Task ExportAsync(string directoryPath, TrainData<ItemsAssetData<AssetItemData>> data, CancellationToken cancellationToken)
+	public async Task ExportAsync(string directoryPath, TrainData<ReadOnlyItemsAsset<ReadOnlyAssetItem>> data, CancellationToken cancellationToken)
 	{
 		ResetCountersIfNecessary();
 		var imagesDirectoryPath = Path.Combine(directoryPath, "images");
@@ -91,7 +92,7 @@ public sealed class COCODetectorDataSetExporter : TrainDataExporter<ItemsAssetDa
 		};
 	}
 
-	private COCOAnnotation CreateAnnotation(AssetItemData item, COCOImage image)
+	private COCOAnnotation CreateAnnotation(ReadOnlyAssetItem item, COCOImage image)
 	{
 		var bounding = item.Bounding;
 		return new COCOAnnotation

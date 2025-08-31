@@ -1,10 +1,9 @@
 using SightKeeper.Application.Extensions;
-using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Application.Training.Assets.Distribution;
 
-internal sealed class DistributionSession<TAsset> where TAsset : AssetData
+internal sealed class DistributionSession<TAsset> where TAsset : ReadOnlyAsset
 {
 	public DistributionSession(IEnumerable<TAsset> assets)
 	{

@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.Training.Data;
 
-public sealed class AssetItemDataValue : AssetItemData
+public sealed class AssetItemDataValue : ReadOnlyAssetItem
 {
 	public ReadOnlyTag Tag { get; }
 	public Bounding Bounding { get; }

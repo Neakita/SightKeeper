@@ -1,4 +1,5 @@
 ﻿using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
@@ -9,25 +10,25 @@ namespace SightKeeper.Application.Training.Data;
 
 public static class TrainData
 {
-	public static TrainData<AssetData> Create(DataSet dataSet)
+	public static TrainData<ReadOnlyAsset> Create(DataSet dataSet)
 	{
 		var tags = dataSet.TagsLibrary.Tags;
 		return dataSet switch
 		{
 			ClassifierDataSet classifierDataSet => throw new NotImplementedException(),
-			DetectorDataSet detectorDataSet => new TrainDataValue<ItemsAssetData<AssetItemData>>(tags, detectorDataSet.AssetsLibrary.Assets.Select(ConvertAsset)),
+			DetectorDataSet detectorDataSet => new TrainDataValue<ReadOnlyItemsAsset<ReadOnlyAssetItem>>(tags, detectorDataSet.AssetsLibrary.Assets.Select(ConvertAsset)),
 			Poser2DDataSet poser2DDataSet => throw new NotImplementedException(),
 			Poser3DDataSet poser3DDataSet => throw new NotImplementedException(),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
 		};
 
-		ItemsAssetData<AssetItemData> ConvertAsset(ItemsAsset<DetectorItem> asset)
+		ReadOnlyItemsAsset<ReadOnlyAssetItem> ConvertAsset(ItemsAsset<DetectorItem> asset)
 		{
 			var items = asset.Items.Select(ConvertItem).ToList();
-			return new ItemsAssetDataValue<AssetItemData>(asset.Image, asset.Usage, items);
+			return new ReadOnlyItemsAssetValue<ReadOnlyAssetItem>(asset.Image, asset.Usage, items);
 		}
 
-		AssetItemData ConvertItem(DetectorItem item)
+		ReadOnlyAssetItem ConvertItem(DetectorItem item)
 		{
 			return new AssetItemDataValue(item.Tag, item.Bounding);
 		}

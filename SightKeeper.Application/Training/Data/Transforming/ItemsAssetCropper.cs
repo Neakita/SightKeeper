@@ -1,14 +1,15 @@
-﻿using SixLabors.ImageSharp;
+﻿using SightKeeper.Domain.DataSets.Assets.Items;
+using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public sealed class ItemsAssetCropper<TItem>(ItemCropper<TItem> itemCropper) : AssetCropper<ItemsAssetData<TItem>>
-	where TItem : AssetItemData
+public sealed class ItemsAssetCropper<TItem>(ItemCropper<TItem> itemCropper) : AssetCropper<ReadOnlyItemsAsset<TItem>>
+	where TItem : ReadOnlyAssetItem
 {
-	public ItemsAssetData<TItem> CropAsset(ItemsAssetData<TItem> asset, Rectangle cropRectangle)
+	public ReadOnlyItemsAsset<TItem> CropAsset(ReadOnlyItemsAsset<TItem> asset, Rectangle cropRectangle)
 	{
 		var image = new CroppedImageData(asset.Image, cropRectangle);
 		var items = itemCropper.CropItems(asset.Items, cropRectangle, asset.Image.Size).ToList();
-		return new ItemsAssetDataValue<TItem>(image, asset.Usage, items);
+		return new ReadOnlyItemsAssetValue<TItem>(image, asset.Usage, items);
 	}
 }

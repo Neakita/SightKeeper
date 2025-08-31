@@ -1,8 +1,9 @@
 ﻿using SightKeeper.Application.Training.Data;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Application.Training.Assets.Distribution;
 
-public sealed class DistributedTrainDataExporter<TAsset>(TrainDataExporter<TAsset> inner) : TrainDataExporter<TAsset> where TAsset : AssetData
+public sealed class DistributedTrainDataExporter<TAsset>(TrainDataExporter<TAsset> inner) : TrainDataExporter<TAsset> where TAsset : ReadOnlyAsset
 {
 	public AssetsDistributionRequest DistributionRequest { get; set; } = new()
 	{

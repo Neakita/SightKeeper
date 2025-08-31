@@ -24,6 +24,8 @@ using SightKeeper.Application.Training.DFINE;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Data.DataSets;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SixLabors.ImageSharp.PixelFormats;
 #if OS_WINDOWS
 using SightKeeper.Application.Windows;
@@ -121,10 +123,10 @@ public sealed class ServicesComposition
 		.Bind<DataSetImporter>()
 		.To<ZippedMemoryPackDataSetImporter>()
 
-		.Bind<Trainer<AssetData>>()
+		.Bind<Trainer<ReadOnlyAsset>>()
 		.To<TypeSwitchTrainer>()
 
-		.Bind<Trainer<ItemsAssetData<AssetItemData>>>()
+		.Bind<Trainer<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
 		.To<DFineTrainer>()
 
 		.Bind<CondaEnvironmentManager>()
@@ -133,13 +135,13 @@ public sealed class ServicesComposition
 #elif OS_LINUX
 
 #endif
-		.Bind<TrainDataExporter<ItemsAssetData<AssetItemData>>>()
+		.Bind<TrainDataExporter<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
 		.To(context =>
 		{
-			TrainDataExporter<ItemsAssetData<AssetItemData>> exporter = new COCODetectorDataSetExporter();
-			exporter = new DistributedTrainDataExporter<ItemsAssetData<AssetItemData>>(exporter);
-			context.Inject(out TrainDataTransformer<ItemsAssetData<AssetItemData>> transformer);
-			exporter = new TransformingTrainDataExporter<ItemsAssetData<AssetItemData>>(exporter, transformer);
+			TrainDataExporter<ReadOnlyItemsAsset<ReadOnlyAssetItem>> exporter = new COCODetectorDataSetExporter();
+			exporter = new DistributedTrainDataExporter<ReadOnlyItemsAsset<ReadOnlyAssetItem>>(exporter);
+			context.Inject(out TrainDataTransformer<ReadOnlyItemsAsset<ReadOnlyAssetItem>> transformer);
+			exporter = new TransformingTrainDataExporter<ReadOnlyItemsAsset<ReadOnlyAssetItem>>(exporter, transformer);
 			return exporter;
 		})
 
@@ -155,15 +157,15 @@ public sealed class ServicesComposition
 
 #endif
 
-		.Bind<TrainDataTransformer<ItemsAssetData<AssetItemData>>>()
-		.To<CropTransformer<ItemsAssetData<AssetItemData>>>()
+		.Bind<TrainDataTransformer<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
+		.To<CropTransformer<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
 
-		.Bind<CropRectanglesProvider<ItemsAssetData<AssetItemData>>>()
-		.To<RandomItemsCropRectanglesProvider<ItemsAssetData<AssetItemData>, AssetItemData>>()
+		.Bind<CropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
+		.To<RandomItemsCropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyAssetItem>, ReadOnlyAssetItem>>()
 	
-		.Bind<AssetCropper<ItemsAssetData<AssetItemData>>>()
-		.To<ItemsAssetCropper<AssetItemData>>()
+		.Bind<AssetCropper<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
+		.To<ItemsAssetCropper<ReadOnlyAssetItem>>()
 	
-		.Bind<ItemCropper<AssetItemData>>()
+		.Bind<ItemCropper<ReadOnlyAssetItem>>()
 		.To<AssetItemCropper>();
 }
