@@ -2,6 +2,7 @@
 using System.Text.Json;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Training.Data;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp;
 
@@ -46,7 +47,7 @@ public sealed class COCODetectorDataSetExporter : TrainDataExporter<ItemsAssetDa
 	}
 
 	private IReadOnlyList<COCOCategory> _categories = ReadOnlyCollection<COCOCategory>.Empty;
-	private IReadOnlyDictionary<TagData, int> _categoryIds = ReadOnlyDictionary<TagData, int>.Empty;
+	private IReadOnlyDictionary<ReadOnlyTag, int> _categoryIds = ReadOnlyDictionary<ReadOnlyTag, int>.Empty;
 
 	private void ResetCountersIfNecessary()
 	{
@@ -56,11 +57,11 @@ public sealed class COCODetectorDataSetExporter : TrainDataExporter<ItemsAssetDa
 		AnnotationIdCounter.Reset();
 	}
 
-	private void ProcessCategories(IEnumerable<TagData> tags)
+	private void ProcessCategories(IEnumerable<ReadOnlyTag> tags)
 	{
 		var idCounter = CategoriesInitialId;
 		var categories = new List<COCOCategory>();
-		var categoryIdLookup = new Dictionary<TagData, int>();
+		var categoryIdLookup = new Dictionary<ReadOnlyTag, int>();
 		foreach (var tag in tags)
 		{
 			var categoryId = idCounter++;

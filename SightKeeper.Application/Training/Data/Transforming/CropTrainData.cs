@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Application.Training.Data.Transforming;
+﻿using SightKeeper.Domain.DataSets.Tags;
+
+namespace SightKeeper.Application.Training.Data.Transforming;
 
 public sealed class CropTrainData<TAsset>(
 	TrainData<TAsset> inner,
@@ -6,7 +8,7 @@ public sealed class CropTrainData<TAsset>(
 	AssetCropper<TAsset> assetCropper)
 	: TrainData<TAsset>
 {
-	public IEnumerable<TagData> Tags => inner.Tags;
+	public IEnumerable<ReadOnlyTag> Tags => inner.Tags;
 
 	public IEnumerable<TAsset> Assets => inner.Assets.SelectMany(CropToItems);
 

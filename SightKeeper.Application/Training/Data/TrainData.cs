@@ -11,12 +11,11 @@ public static class TrainData
 {
 	public static TrainData<AssetData> Create(DataSet dataSet)
 	{
-		var tagsData = dataSet.TagsLibrary.Tags.Select(tag => new TagDataValue(tag.Name)).ToList();
-		var tagsDataLookup = dataSet.TagsLibrary.Tags.Zip(tagsData).ToDictionary(tuple => tuple.First, tuple => tuple.Second);
+		var tags = dataSet.TagsLibrary.Tags;
 		return dataSet switch
 		{
 			ClassifierDataSet classifierDataSet => throw new NotImplementedException(),
-			DetectorDataSet detectorDataSet => new TrainDataValue<ItemsAssetData<AssetItemData>>(tagsData, detectorDataSet.AssetsLibrary.Assets.Select(ConvertAsset)),
+			DetectorDataSet detectorDataSet => new TrainDataValue<ItemsAssetData<AssetItemData>>(tags, detectorDataSet.AssetsLibrary.Assets.Select(ConvertAsset)),
 			Poser2DDataSet poser2DDataSet => throw new NotImplementedException(),
 			Poser3DDataSet poser3DDataSet => throw new NotImplementedException(),
 			_ => throw new ArgumentOutOfRangeException(nameof(dataSet))
@@ -30,8 +29,7 @@ public static class TrainData
 
 		AssetItemData ConvertItem(DetectorItem item)
 		{
-			var tag = tagsDataLookup[item.Tag];
-			return new AssetItemDataValue(tag, item.Bounding);
+			return new AssetItemDataValue(item.Tag, item.Bounding);
 		}
 	}
 }

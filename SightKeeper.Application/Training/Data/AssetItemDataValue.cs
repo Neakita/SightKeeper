@@ -1,13 +1,14 @@
 ﻿using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.Training.Data;
 
 public sealed class AssetItemDataValue : AssetItemData
 {
-	public TagData Tag { get; }
+	public ReadOnlyTag Tag { get; }
 	public Bounding Bounding { get; }
 
-	public AssetItemDataValue(TagData tag, Bounding bounding)
+	public AssetItemDataValue(ReadOnlyTag tag, Bounding bounding)
 	{
 		Tag = tag;
 		Bounding = bounding;

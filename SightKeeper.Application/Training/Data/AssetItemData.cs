@@ -1,9 +1,10 @@
 ﻿using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.Training.Data;
 
 public interface AssetItemData
 {
-	TagData Tag { get; }
+	ReadOnlyTag Tag { get; }
 	Bounding Bounding { get; }
 }
