@@ -29,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj" />
+      <ProjectReference Include="..\..\SightKeeper.Data\SightKeeper.Data.csproj" />
     </ItemGroup>
 
     <ItemGroup>
