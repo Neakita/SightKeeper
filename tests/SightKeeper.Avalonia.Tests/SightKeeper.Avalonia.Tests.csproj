@@ -33,7 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\SightKeeper.Avalonia\SightKeeper.Avalonia.csproj" />
+      <ProjectReference Include="..\..\src\SightKeeper.Avalonia\SightKeeper.Avalonia.csproj" />
     </ItemGroup>
 
     <ItemGroup>

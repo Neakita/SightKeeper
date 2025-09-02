@@ -51,14 +51,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\HotKeys\HotKeys.Avalonia\HotKeys.Avalonia.csproj" />
-        <ProjectReference Include="..\..\HotKeys\HotKeys\HotKeys.csproj" />
-        <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls.GestureBox\Sightful.Avalonia.Controls.GestureBox.csproj" />
-        <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls.ZoomViewer\Sightful.Avalonia.Controls.ZoomViewer.csproj" />
-        <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.Controls\Sightful.Avalonia.Controls.csproj"/>
-        <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj"/>
-        <ProjectReference Include="..\..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid\Sightful.Avalonia.TreeDataGrid.csproj"/>
-        <ProjectReference Include="..\..\Vibrance\Vibrance\Vibrance.csproj" />
+        <ProjectReference Include="..\..\..\HotKeys\HotKeys.Avalonia\HotKeys.Avalonia.csproj" />
+        <ProjectReference Include="..\..\..\HotKeys\HotKeys\HotKeys.csproj" />
+        <ProjectReference Include="..\..\..\Sightful.Theme\Sightful.Avalonia.Controls.GestureBox\Sightful.Avalonia.Controls.GestureBox.csproj" />
+        <ProjectReference Include="..\..\..\Sightful.Theme\Sightful.Avalonia.Controls.ZoomViewer\Sightful.Avalonia.Controls.ZoomViewer.csproj" />
+        <ProjectReference Include="..\..\..\Sightful.Theme\Sightful.Avalonia.Controls\Sightful.Avalonia.Controls.csproj"/>
+        <ProjectReference Include="..\..\..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj"/>
+        <ProjectReference Include="..\..\..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid\Sightful.Avalonia.TreeDataGrid.csproj"/>
+        <ProjectReference Include="..\..\..\Vibrance\Vibrance\Vibrance.csproj" />
         <ProjectReference Include="..\SightKeeper.Data\SightKeeper.Data.csproj"/>
         <ProjectReference Condition="$([MSBuild]::IsOSPlatform('Windows'))" Include="..\SightKeeper.Application.Windows\SightKeeper.Application.Windows.csproj"/>
         <ProjectReference Condition="$([MSBuild]::IsOSPlatform('Linux'))" Include="..\SightKeeper.Application.Linux\SightKeeper.Application.Linux.csproj"/>
