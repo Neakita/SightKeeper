@@ -7,10 +7,10 @@ namespace SightKeeper.Application;
 
 public sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 {
-	public bool LoadImage(ImageData imageData, Memory<TPixel> target, CancellationToken cancellationToken)
+	public ThreadedImageLoader(ImageLoader<TPixel> inner)
 	{
-		// there is nothing we can do
-		return _inner.LoadImage(imageData, target, cancellationToken);
+		_inner = inner;
+		_ = Task.Run(LoadImagesAsync);
 	}
 
 	public Task<bool> LoadImageAsync(ImageData imageData, Memory<TPixel> target, CancellationToken cancellationToken)
@@ -32,20 +32,15 @@ public sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 	private readonly Channel<LoadImageRequest> _channel = Channel.CreateUnbounded<LoadImageRequest>();
 	private readonly ImageLoader<TPixel> _inner;
 
-	public ThreadedImageLoader(ImageLoader<TPixel> inner)
-	{
-		_inner = inner;
-		_ = new TaskFactory().StartNew(LoadImages, TaskCreationOptions.LongRunning);
-	}
-
 	private sealed record LoadImageRequest(
 		ImageData Image,
 		Memory<TPixel> Target,
 		TaskCompletionSource<bool> CompletionSource,
 		CancellationToken CancellationToken);
 
-	private void LoadImages()
+	private async Task LoadImagesAsync()
 	{
+		while (await _channel.Reader.WaitToReadAsync())
 		while (_channel.Reader.TryRead(out var request))
 		{
 			if (request.CancellationToken.IsCancellationRequested)
@@ -53,7 +48,7 @@ public sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 			bool isLoaded;
 			try
 			{
-				isLoaded = _inner.LoadImage(request.Image, request.Target, request.CancellationToken);
+				isLoaded = await _inner.LoadImageAsync(request.Image, request.Target, request.CancellationToken);
 			}
 			catch (Exception exception)
 			{
