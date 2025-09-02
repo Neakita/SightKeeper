@@ -18,4 +18,4 @@ SightKeeper is a desktop application for Windows and Linux that handles the comp
 4.  **Deploy:** Exports trained models to `ONNX` format for efficient inference using `ONNX Runtime`, supporting both CPU and GPU via CUDA.
 
 ## Showcase
-> TBD
+![Annotation_showcase](https://github.com/user-attachments/assets/84711b5c-50a4-4fd8-833f-431d923ff88a)
