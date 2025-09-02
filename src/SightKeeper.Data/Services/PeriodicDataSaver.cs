@@ -38,8 +38,7 @@ public sealed class PeriodicDataSaver : ChangeListener, IDisposable
 
 	private void Start()
 	{
-		var factory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
-		factory.StartNew(SavePeriodically);
+		Task.Run(SavePeriodically);
 	}
 
 	private async Task SavePeriodically()
