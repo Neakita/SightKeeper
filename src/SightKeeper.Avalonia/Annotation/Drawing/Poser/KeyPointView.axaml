@@ -35,8 +35,6 @@
                 </Style>
             </behaviors:AddStylesBehavior.Styles>
         </behaviors:AddStylesBehavior>
-        <poser:KeyPointVisibilityBehavior DataContext="{Binding}"
-                                          Thumb="Thumb"/>
         <poser:DraggableKeyPointBehavior Position="{Binding Position}"
                                          ListBox="{Binding $parent[ListBox]}"
                                          DrawingCanvas="{Binding RelativeSource={RelativeSource AncestorType=Canvas}}"

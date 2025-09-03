@@ -1,10 +1,9 @@
 ﻿using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Domain.DataSets.Poser3D;
+namespace SightKeeper.Domain.DataSets.Poser;
 
-public sealed class DomainPoser3DItem(Poser3DItem inner) : Poser3DItem
+public sealed class DomainPoserItem(PoserItem inner) : PoserItem
 {
 	public Bounding Bounding
 	{
@@ -27,17 +26,17 @@ public sealed class DomainPoser3DItem(Poser3DItem inner) : Poser3DItem
 		}
 	}
 
-	public IReadOnlyCollection<KeyPoint3D> KeyPoints => inner.KeyPoints;
+	public IReadOnlyCollection<KeyPoint> KeyPoints => inner.KeyPoints;
 
-	public void DeleteKeyPoint(KeyPoint3D keyPoint)
-	{
-		inner.DeleteKeyPoint(keyPoint);
-	}
-
-	public KeyPoint3D MakeKeyPoint(Tag tag)
+	public KeyPoint MakeKeyPoint(Tag tag)
 	{
 		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(Tag, tag);
 		return inner.MakeKeyPoint(tag);
+	}
+
+	public void DeleteKeyPoint(KeyPoint keyPoint)
+	{
+		inner.DeleteKeyPoint(keyPoint);
 	}
 
 	public void ClearKeyPoints()

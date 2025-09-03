@@ -1,12 +1,10 @@
 ﻿using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Domain.DataSets.Poser2D;
+namespace SightKeeper.Domain.DataSets.Poser;
 
-public sealed class DomainPoser2DAsset(ItemsAsset<Poser2DItem> inner, TagsContainer<DomainPoserTag> tagsOwner) : PoserAsset<Poser2DItem>
+public sealed class DomainPoserAsset(PoserAsset inner, TagsContainer<DomainPoserTag> tagsOwner) : PoserAsset
 {
 	public ManagedImage Image => inner.Image;
 
@@ -16,9 +14,9 @@ public sealed class DomainPoser2DAsset(ItemsAsset<Poser2DItem> inner, TagsContai
 		set => inner.Usage = value;
 	}
 
-	public IReadOnlyList<Poser2DItem> Items => inner.Items;
+	public IReadOnlyList<PoserItem> Items => inner.Items;
 
-	public Poser2DItem MakeItem(PoserTag tag)
+	public PoserItem MakeItem(PoserTag tag)
 	{
 		UnexpectedTagsOwnerException.ThrowIfTagsOwnerDoesNotMatch(tagsOwner, tag);
 		return inner.MakeItem(tag);

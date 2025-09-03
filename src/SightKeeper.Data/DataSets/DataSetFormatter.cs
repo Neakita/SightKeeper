@@ -2,8 +2,7 @@ using MemoryPack;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Detector;
 using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.DataSets.Poser2D;
-using SightKeeper.Domain.DataSets.Poser3D;
+using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Data.DataSets;
 
@@ -30,11 +29,8 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 				writer.WriteUnionHeader(1);
 				DetectorDataSetFormatter.Serialize(ref writer, ref detectorDataSet!);
 				break;
-			case Poser2DDataSet poser2DDataSet:
+			case PoserDataSet poserDataSet:
 				writer.WriteUnionHeader(2);
-				throw new NotImplementedException();
-			case Poser3DDataSet poser3DDataSet:
-				writer.WriteUnionHeader(3);
 				throw new NotImplementedException();
 			default:
 				throw new ArgumentOutOfRangeException(nameof(value));

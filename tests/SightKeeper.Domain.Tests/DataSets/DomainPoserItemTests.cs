@@ -2,12 +2,11 @@ using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
-using SightKeeper.Domain.DataSets.Poser2D;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.Tests.DataSets;
 
-public sealed class DomainPoser2DItemTests
+public sealed class DomainPoserItemTests
 {
 	[Fact]
 	public void ShouldClearKeyPointsWhenChangingTag()
@@ -18,9 +17,9 @@ public sealed class DomainPoser2DItemTests
 		// some weird NSubstitute & interface default implementation behavior
 		((Tag)initialTag).Owner.Returns(tagsOwner);
 		((Tag)newTag).Owner.Returns(tagsOwner);
-		var innerItem = Substitute.For<Poser2DItem>();
+		var innerItem = Substitute.For<PoserItem>();
 		innerItem.Tag.Returns(initialTag);
-		DomainPoser2DItem domainItem = new(innerItem);
+		DomainPoserItem domainItem = new(innerItem);
 		domainItem.Tag = newTag;
 		innerItem.Received().ClearKeyPoints();
 	}
@@ -28,8 +27,8 @@ public sealed class DomainPoser2DItemTests
 	[Fact]
 	public void ShouldAllowSetBounding()
 	{
-		var innerItem = Substitute.For<Poser2DItem>();
-		DomainPoser2DItem domainItem = new(innerItem);
+		var innerItem = Substitute.For<PoserItem>();
+		DomainPoserItem domainItem = new(innerItem);
 		var bounding = new Bounding(.1, .2, .3, .4);
 		domainItem.Bounding = bounding;
 		innerItem.Received().Bounding = bounding;
@@ -38,8 +37,8 @@ public sealed class DomainPoser2DItemTests
 	[Fact]
 	public void ShouldDisallowSetNotNormalizedBounding()
 	{
-		var innerItem = Substitute.For<Poser2DItem>();
-		DomainPoser2DItem domainItem = new(innerItem);
+		var innerItem = Substitute.For<PoserItem>();
+		DomainPoserItem domainItem = new(innerItem);
 		var bounding = new Bounding(1, 2, 3, 4);
 		var exception = Assert.Throws<ItemBoundingConstraintException>(() => domainItem.Bounding = bounding);
 		innerItem.DidNotReceive().Bounding = Arg.Any<Bounding>();
@@ -50,8 +49,8 @@ public sealed class DomainPoser2DItemTests
 	[Fact]
 	public void ShouldAllowMakeKeyPoint()
 	{
-		var innerItem = Substitute.For<Poser2DItem>();
-		DomainPoser2DItem domainItem = new(innerItem);
+		var innerItem = Substitute.For<PoserItem>();
+		DomainPoserItem domainItem = new(innerItem);
 		var poserTag = Substitute.For<PoserTag>();
 		var keyPointTag = Substitute.For<Tag>();
 		keyPointTag.Owner.Returns(poserTag);
@@ -66,8 +65,8 @@ public sealed class DomainPoser2DItemTests
 	[Fact]
 	public void ShouldDisallowMakeKeyPointWithDifferentTagOwner()
 	{
-		var innerItem = Substitute.For<Poser2DItem>();
-		DomainPoser2DItem domainItem = new(innerItem);
+		var innerItem = Substitute.For<PoserItem>();
+		DomainPoserItem domainItem = new(innerItem);
 		var poserTag = Substitute.For<PoserTag>();
 		var keyPointTag = Substitute.For<Tag>();
 		innerItem.Tag.Returns(poserTag);

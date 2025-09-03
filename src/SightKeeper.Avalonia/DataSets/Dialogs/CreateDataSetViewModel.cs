@@ -37,7 +37,7 @@ internal sealed class CreateDataSetViewModel : DataSetDialogViewModel, NewDataSe
 		_tagsEditor = value switch
 		{
 			DataSetType.Classifier or DataSetType.Detector => new PlainTagsEditorViewModel(),
-			DataSetType.Poser2D or DataSetType.Poser3D => new PoserTagsEditorViewModel(),
+			DataSetType.Poser => new PoserTagsEditorViewModel(),
 			_ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
 		};
 		OnPropertyChanged(nameof(TagsEditor));

@@ -4,8 +4,6 @@ using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
-using SightKeeper.Domain.DataSets.Poser2D;
-using SightKeeper.Domain.DataSets.Poser3D;
 
 namespace SightKeeper.Application.DataSets.Creating;
 
@@ -15,8 +13,7 @@ public sealed class DataSetCreator
 	public required WriteRepository<DataSet> Repository { get; init; }
 	public required DataSetFactory<ClassifierDataSet> ClassifierFactory { get; init; }
 	public required DataSetFactory<DetectorDataSet> DetectorFactory { get; init; }
-	public required DataSetFactory<Poser2DDataSet> Poser2DFactory { get; init; }
-	public required DataSetFactory<Poser3DDataSet> Poser3DFactory { get; init; }
+	public required DataSetFactory<PoserDataSet> PoserFactory { get; init; }
 
 	public DataSet Create(NewDataSetData data)
 	{
@@ -34,8 +31,7 @@ public sealed class DataSetCreator
 		{
 			DataSetType.Classifier => ClassifierFactory,
 			DataSetType.Detector => DetectorFactory,
-			DataSetType.Poser2D => Poser2DFactory,
-			DataSetType.Poser3D => Poser3DFactory,
+			DataSetType.Poser => PoserFactory,
 			_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
 		};
 		return factory.CreateDataSet();

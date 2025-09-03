@@ -64,7 +64,7 @@ internal sealed class FakeNewDataSetData : NewDataSetData
 	{
 		Name = string.Empty;
 		Description = string.Empty;
-		Type = DataSetType.Poser2D;
+		Type = DataSetType.Poser;
 		NewTags = newTags;
 	}
 }

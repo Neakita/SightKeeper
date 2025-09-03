@@ -13,8 +13,7 @@ public sealed partial class DataSetTypePickerViewModel : ViewModel, IDisposable
 	[
 		DataSetType.Classifier,
 		DataSetType.Detector,
-		DataSetType.Poser2D,
-		DataSetType.Poser3D
+		DataSetType.Poser
 	];
 
 	[ObservableProperty] public partial DataSetType SelectedType { get; set; }
