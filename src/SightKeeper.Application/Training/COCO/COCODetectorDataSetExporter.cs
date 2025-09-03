@@ -2,6 +2,7 @@
 using System.Text.Json;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Training.Data;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
@@ -16,7 +17,7 @@ public sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyItem
 	public IdCounter AnnotationIdCounter { get; set; } = new();
 	public bool ResetIdCounters { get; set; } = true;
 
-	public async Task ExportAsync(string directoryPath, TrainData<ReadOnlyItemsAsset<ReadOnlyAssetItem>> data, CancellationToken cancellationToken)
+	public async Task ExportAsync(string directoryPath, ReadOnlyDataSet<ReadOnlyItemsAsset<ReadOnlyAssetItem>> data, CancellationToken cancellationToken)
 	{
 		ResetCountersIfNecessary();
 		var imagesDirectoryPath = Path.Combine(directoryPath, "images");

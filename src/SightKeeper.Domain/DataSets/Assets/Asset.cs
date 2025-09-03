@@ -2,8 +2,11 @@
 
 namespace SightKeeper.Domain.DataSets.Assets;
 
-public interface Asset
+public interface Asset : ReadOnlyAsset
 {
-	ManagedImage Image { get; }
-	AssetUsage Usage { get; set; }
+	new ManagedImage Image { get; }
+	new AssetUsage Usage { get; set; }
+
+	ImageData ReadOnlyAsset.Image => Image;
+	AssetUsage ReadOnlyAsset.Usage => Usage;
 }

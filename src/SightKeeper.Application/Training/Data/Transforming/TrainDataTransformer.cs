@@ -1,6 +1,8 @@
-﻿namespace SightKeeper.Application.Training.Data.Transforming;
+﻿using SightKeeper.Domain.DataSets;
+
+namespace SightKeeper.Application.Training.Data.Transforming;
 
 public interface TrainDataTransformer<TAsset>
 {
-	TrainData<TAsset> Transform(TrainData<TAsset> data);
+	ReadOnlyDataSet<TAsset> Transform(ReadOnlyDataSet<TAsset> data);
 }

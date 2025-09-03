@@ -3,14 +3,14 @@ using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal sealed class StorableAssetsOwnerExtension<TTag, TExtendedTag>(
-	AssetsOwner<TTag> inner,
-	StorableAssetsOwner<TExtendedTag> extendedInner)
-	: StorableAssetsOwner<TExtendedTag>
-	where TTag : notnull
-	where TExtendedTag : TTag
+internal sealed class StorableAssetsOwnerExtension<TAsset, TExtendedAsset>(
+	AssetsOwner<TAsset> inner,
+	StorableAssetsOwner<TExtendedAsset> extendedInner)
+	: StorableAssetsOwner<TExtendedAsset>
+	where TAsset : notnull
+	where TExtendedAsset : TAsset
 {
-	public IReadOnlyCollection<TExtendedTag> Assets => (IReadOnlyCollection<TExtendedTag>)inner.Assets;
+	public IReadOnlyCollection<TExtendedAsset> Assets => (IReadOnlyCollection<TExtendedAsset>)inner.Assets;
 	public IReadOnlyCollection<StorableImage> Images => extendedInner.Images;
 
 	public bool Contains(StorableImage image)
@@ -18,14 +18,14 @@ internal sealed class StorableAssetsOwnerExtension<TTag, TExtendedTag>(
 		return extendedInner.Contains(image);
 	}
 
-	public TExtendedTag GetAsset(StorableImage image)
+	public TExtendedAsset GetAsset(StorableImage image)
 	{
-		return (TExtendedTag)inner.GetAsset(image);
+		return (TExtendedAsset)inner.GetAsset(image);
 	}
 
-	public TExtendedTag? GetOptionalAsset(StorableImage image)
+	public TExtendedAsset? GetOptionalAsset(StorableImage image)
 	{
-		return (TExtendedTag?)inner.GetOptionalAsset(image);
+		return (TExtendedAsset?)inner.GetOptionalAsset(image);
 	}
 
 	public void ClearAssets()
@@ -33,9 +33,9 @@ internal sealed class StorableAssetsOwnerExtension<TTag, TExtendedTag>(
 		inner.ClearAssets();
 	}
 
-	public TExtendedTag MakeAsset(StorableImage image)
+	public TExtendedAsset MakeAsset(StorableImage image)
 	{
-		return (TExtendedTag)inner.MakeAsset(image);
+		return (TExtendedAsset)inner.MakeAsset(image);
 	}
 
 	public void DeleteAsset(StorableImage image)

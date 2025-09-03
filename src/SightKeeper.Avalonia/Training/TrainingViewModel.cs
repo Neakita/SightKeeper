@@ -7,7 +7,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Application;
 using SightKeeper.Application.Training;
-using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -38,7 +37,6 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 	{
 		Guard.IsNotNull(DataSet);
 		_trainer.ImageSize = new Vector2<ushort>(Width, Height);
-		var data = TrainData.Create(DataSet);
-		await _trainer.TrainAsync(data, cancellationToken);
+		await _trainer.TrainAsync((ReadOnlyDataSet<ReadOnlyAsset>)DataSet, cancellationToken);
 	}
 }
