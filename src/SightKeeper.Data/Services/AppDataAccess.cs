@@ -6,6 +6,7 @@ namespace SightKeeper.Data.Services;
 public sealed class AppDataAccess : DataSaver
 {
 	public string FilePath { get; set; } = Path.GetFullPath("App.data");
+	public string BackupFilePath { get; set; } = Path.GetFullPath("AppBackup.data");
 	internal AppData Data { get; set; } = new();
 
 	public void Load()
@@ -24,6 +25,8 @@ public sealed class AppDataAccess : DataSaver
 	public void Save()
 	{
 		var serializedData = MemoryPackSerializer.Serialize(Data);
+		if (File.Exists(FilePath))
+			File.Copy(FilePath, BackupFilePath, true);
 		File.WriteAllBytes(FilePath, serializedData);
 	}
 }
