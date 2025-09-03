@@ -20,6 +20,6 @@ public interface StorableDetectorDataSet : DetectorDataSet
 	StorableDetectorDataSet Innermost { get; }
 
 	TagsOwner<Tag> DataSet.TagsLibrary => TagsLibrary;
-	AssetsOwner<ItemsAsset<DetectorItem>> DetectorDataSet.AssetsLibrary => AssetsLibrary;
+	AssetsOwner<ItemsAsset<DetectorItem>> DataSet<ItemsAsset<DetectorItem>>.AssetsLibrary => AssetsLibrary;
 	WeightsLibrary DataSet.WeightsLibrary => WeightsLibrary;
 }

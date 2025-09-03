@@ -18,6 +18,6 @@ public interface StorableClassifierDataSet : ClassifierDataSet
 	StorableClassifierDataSet Innermost { get; }
 
 	TagsOwner<Tag> DataSet.TagsLibrary => TagsLibrary;
-	AssetsOwner<ClassifierAsset> ClassifierDataSet.AssetsLibrary => AssetsLibrary;
+	AssetsOwner<ClassifierAsset> DataSet<ClassifierAsset>.AssetsLibrary => AssetsLibrary;
 	WeightsLibrary DataSet.WeightsLibrary => WeightsLibrary;
 }
