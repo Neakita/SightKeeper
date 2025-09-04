@@ -8,6 +8,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Images;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.Images;
@@ -17,7 +18,7 @@ namespace SightKeeper.Avalonia.Annotation.Tooling.Classifier;
 public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierToolingDataContext, IDisposable
 {
 	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
-	public partial ClassifierDataSet? DataSet { get; set; }
+	public partial DataSet<ClassifierAsset>? DataSet { get; set; }
 
 	public IEnumerable<TagDataContext> Tags
 	{

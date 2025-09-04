@@ -1,12 +1,12 @@
-using SightKeeper.Domain;
+﻿using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.DataSets.Classifier.Decorators;
+namespace SightKeeper.Data.DataSets.Decorators;
 
-internal sealed class OverrideLibrariesClassifierDataSet(ClassifierDataSet inner) : ClassifierDataSet, Decorator<ClassifierDataSet>
+internal sealed class OverrideLibrariesDataSet<TAsset>(DataSet<TAsset> inner) : DataSet<TAsset>, Decorator<DataSet<TAsset>>
 {
 	public string Name
 	{
@@ -21,7 +21,7 @@ internal sealed class OverrideLibrariesClassifierDataSet(ClassifierDataSet inner
 	}
 
 	public TagsOwner<Tag> TagsLibrary { get; init; } = inner.TagsLibrary;
-	public AssetsOwner<ClassifierAsset> AssetsLibrary { get; init; } = inner.AssetsLibrary;
+	public AssetsOwner<TAsset> AssetsLibrary { get; init; } = inner.AssetsLibrary;
 	public WeightsLibrary WeightsLibrary { get; init; } = inner.WeightsLibrary;
-	public ClassifierDataSet Inner => inner;
+	public DataSet<TAsset> Inner => inner;
 }

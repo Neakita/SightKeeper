@@ -18,7 +18,7 @@ public sealed class DomainWeightsLibrary : WeightsLibrary
 		_inner.RemoveWeights(weights);
 	}
 
-	internal DomainWeightsLibrary(WeightsLibrary inner, TagsContainer<Tag> tagsOwner, int minimumTagsCount = 1)
+	internal DomainWeightsLibrary(WeightsLibrary inner, TagsContainer<Tag> tagsOwner, int minimumTagsCount)
 	{
 		_inner = inner;
 		_minimumTagsCount = minimumTagsCount;

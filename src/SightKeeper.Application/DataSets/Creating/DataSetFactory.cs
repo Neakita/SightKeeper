@@ -1,6 +1,8 @@
+using SightKeeper.Domain.DataSets;
+
 namespace SightKeeper.Application.DataSets.Creating;
 
-public interface DataSetFactory<out TDataSet>
+public interface DataSetFactory<out TAsset>
 {
-	TDataSet CreateDataSet();
+	DataSet<TAsset> CreateDataSet();
 }

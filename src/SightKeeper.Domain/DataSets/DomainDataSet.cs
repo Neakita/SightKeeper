@@ -1,11 +1,10 @@
 ﻿using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Domain.DataSets.Detector;
+namespace SightKeeper.Domain.DataSets;
 
-public sealed class DomainDetectorDataSet : DetectorDataSet, Decorator<DetectorDataSet>
+public sealed class DomainDataSet<TAsset> : DataSet<TAsset>, Decorator<DataSet<TAsset>>
 {
 	public string Name
 	{
@@ -20,15 +19,15 @@ public sealed class DomainDetectorDataSet : DetectorDataSet, Decorator<DetectorD
 	}
 
 	public TagsOwner<Tag> TagsLibrary { get; }
-	public AssetsOwner<ItemsAsset<DetectorItem>> AssetsLibrary { get; }
+	public AssetsOwner<TAsset> AssetsLibrary { get; }
 	public WeightsLibrary WeightsLibrary { get; }
-	public DetectorDataSet Inner { get; }
+	public DataSet<TAsset> Inner { get; }
 
-	public DomainDetectorDataSet(DetectorDataSet inner)
+	public DomainDataSet(DataSet<TAsset> inner, int minimumTagsCount)
 	{
 		Inner = inner;
 		TagsLibrary = new DomainTagsLibrary<Tag>(inner.TagsLibrary);
 		AssetsLibrary = inner.AssetsLibrary;
-		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, TagsLibrary);
+		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, TagsLibrary, minimumTagsCount);
 	}
 }

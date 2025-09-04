@@ -1,16 +1,16 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
-namespace SightKeeper.Data.DataSets.Detector.Decorators;
+namespace SightKeeper.Data.DataSets.Decorators;
 
-internal sealed class NotifyingDetectorDataSet(DetectorDataSet inner) : DetectorDataSet, Decorator<DetectorDataSet>, INotifyPropertyChanged
+internal sealed class NotifyingDataSet<TAsset>(DataSet<TAsset> inner) : DataSet<TAsset>, Decorator<DataSet<TAsset>>, INotifyPropertyChanged
 {
+	public DataSet<TAsset> Inner => inner;
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public string Name
@@ -18,6 +18,8 @@ internal sealed class NotifyingDetectorDataSet(DetectorDataSet inner) : Detector
 		get => inner.Name;
 		set
 		{
+			if (Name == value)
+				return;
 			inner.Name = value;
 			OnPropertyChanged();
 		}
@@ -28,17 +30,18 @@ internal sealed class NotifyingDetectorDataSet(DetectorDataSet inner) : Detector
 		get => inner.Description;
 		set
 		{
+			if (Description == value)
+				return;
 			inner.Description = value;
 			OnPropertyChanged();
 		}
 	}
 
 	public TagsOwner<Tag> TagsLibrary => inner.TagsLibrary;
-	public AssetsOwner<ItemsAsset<DetectorItem>> AssetsLibrary => inner.AssetsLibrary;
+	public AssetsOwner<TAsset> AssetsLibrary => inner.AssetsLibrary;
 	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
-	public DetectorDataSet Inner => inner;
 
-	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+	private void OnPropertyChanged([CallerMemberName] string propertyName = "")
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}

@@ -1,10 +1,10 @@
-using SightKeeper.Domain.DataSets.Classifier;
+﻿using SightKeeper.Domain.DataSets;
 
-namespace SightKeeper.Data.DataSets.Classifier;
+namespace SightKeeper.Data.DataSets;
 
-public sealed class ClassifierDataSetWrapper(ChangeListener changeListener, Lock editingLock)
+public sealed class DataSetWrapper(ChangeListener changeListener, Lock editingLock)
 {
-	public ClassifierDataSet Wrap(ClassifierDataSet set)
+	public DataSet<TAsset> Wrap<TAsset>(DataSet<TAsset> set)
 	{
 		return set
 

@@ -5,6 +5,7 @@ using SightKeeper.Avalonia.Annotation.Tooling.Classifier;
 using SightKeeper.Avalonia.Annotation.Tooling.Detector;
 using SightKeeper.Avalonia.Annotation.Tooling.Poser;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
@@ -19,11 +20,11 @@ public sealed class ToolingViewModelFactory(ImageSelection imageSelection, Selec
 		{
 			case null:
 				return null;
-			case ClassifierDataSet classifierDataSet:
+			case DataSet<ClassifierAsset> classifierDataSet:
 				var classifierTooling = new ClassifierToolingViewModel(imageSelection);
 				classifierTooling.DataSet = classifierDataSet;
 				return classifierTooling;
-			case DetectorDataSet detectorDataSet:
+			case DataSet<ItemsAsset<DetectorItem>> detectorDataSet:
 				DetectorToolingViewModel detectorTooling = new()
 				{
 					TagsContainer = detectorDataSet.TagsLibrary

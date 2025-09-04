@@ -9,6 +9,7 @@ using SightKeeper.Data.DataSets.Detector;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
@@ -43,10 +44,10 @@ public sealed class PersistenceComposition
 			return new WrappedImageSetFactory(inMemoryImageSetFactory, wrapper);
 		})
 
-		.Bind<DataSetFactory<ClassifierDataSet>>()
+		.Bind<DataSetFactory<ClassifierAsset>>()
 		.To<WrappingClassifierDataSetFactory>()
 	
-		.Bind<DataSetFactory<DetectorDataSet>>()
+		.Bind<DataSetFactory<ItemsAsset<DetectorItem>>>()
 		.To<WrappingDetectorDataSetFactory>()
 	
 		.Bind<DataSetFactory<PoserDataSet>>()
