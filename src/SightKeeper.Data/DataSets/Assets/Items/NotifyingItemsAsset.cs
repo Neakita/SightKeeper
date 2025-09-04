@@ -1,18 +1,18 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets.Items;
 
-internal sealed class NotifyingItemsAsset<TItem>(StorableItemsAsset<TItem> inner) : StorableItemsAsset<TItem>, INotifyPropertyChanged
+internal sealed class NotifyingItemsAsset<TItem>(ItemsAsset<TItem> inner) : ItemsAsset<TItem>, Decorator<ItemsAsset<TItem>>, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	public StorableImage Image => inner.Image;
-
-	public StorableItemsAsset<TItem> Innermost => inner.Innermost;
+	public ManagedImage Image => inner.Image;
 
 	public AssetUsage Usage
 	{
@@ -24,7 +24,7 @@ internal sealed class NotifyingItemsAsset<TItem>(StorableItemsAsset<TItem> inner
 		}
 	}
 
-	public TItem MakeItem(StorableTag tag)
+	public TItem MakeItem(Tag tag)
 	{
 		return inner.MakeItem(tag);
 	}
@@ -40,6 +40,8 @@ internal sealed class NotifyingItemsAsset<TItem>(StorableItemsAsset<TItem> inner
 	{
 		inner.ClearItems();
 	}
+
+	public ItemsAsset<TItem> Inner => inner;
 
 	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{

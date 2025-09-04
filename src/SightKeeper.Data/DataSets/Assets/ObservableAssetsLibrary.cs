@@ -1,24 +1,25 @@
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.Images;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal sealed class ObservableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset> inner) : StorableAssetsOwner<TAsset>
+internal sealed class ObservableAssetsLibrary<TAsset>(AssetsOwner<TAsset> inner) : AssetsOwner<TAsset>
 {
 	public IReadOnlyCollection<TAsset> Assets => _assets;
-	public IReadOnlyCollection<StorableImage> Images => _images;
+	public IReadOnlyCollection<ManagedImage> Images => _images;
 
-	public bool Contains(StorableImage image)
+	public bool Contains(ManagedImage image)
 	{
 		return inner.Contains(image);
 	}
 
-	public TAsset GetAsset(StorableImage image)
+	public TAsset GetAsset(ManagedImage image)
 	{
 		return inner.GetAsset(image);
 	}
 
-	public TAsset? GetOptionalAsset(StorableImage image)
+	public TAsset? GetOptionalAsset(ManagedImage image)
 	{
 		return inner.GetOptionalAsset(image);
 	}
@@ -28,14 +29,14 @@ internal sealed class ObservableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset
 		inner.ClearAssets();
 	}
 
-	public TAsset MakeAsset(StorableImage image)
+	public TAsset MakeAsset(ManagedImage image)
 	{
 		var asset = inner.MakeAsset(image);
 		var assetsChange = new Addition<TAsset>
 		{
 			Items = [asset]
 		};
-		var imagesChange = new Addition<StorableImage>
+		var imagesChange = new Addition<ManagedImage>
 		{
 			Items = [image]
 		};
@@ -44,7 +45,7 @@ internal sealed class ObservableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset
 		return asset;
 	}
 
-	public void DeleteAsset(StorableImage image)
+	public void DeleteAsset(ManagedImage image)
 	{
 		var asset = GetAsset(image);
 		inner.DeleteAsset(image);
@@ -52,7 +53,7 @@ internal sealed class ObservableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset
 		{
 			Items = [asset]
 		};
-		var imagesChange = new Addition<StorableImage>
+		var imagesChange = new Addition<ManagedImage>
 		{
 			Items = [image]
 		};
@@ -60,11 +61,6 @@ internal sealed class ObservableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset
 		_images.Notify(imagesChange);
 	}
 
-	public void EnsureCapacity(int capacity)
-	{
-		inner.EnsureCapacity(capacity);
-	}
-
 	private readonly ExternalObservableCollection<TAsset> _assets = new(inner.Assets);
-	private readonly ExternalObservableCollection<StorableImage> _images = new(inner.Images);
+	private readonly ExternalObservableCollection<ManagedImage> _images = new(inner.Images);
 }

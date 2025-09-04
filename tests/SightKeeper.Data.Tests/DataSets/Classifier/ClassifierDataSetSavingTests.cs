@@ -2,9 +2,10 @@ using FlakeId;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.DataSets.Classifier;
-using SightKeeper.Data.DataSets.Classifier.Assets;
-using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests.DataSets.Classifier;
 
@@ -13,11 +14,11 @@ public sealed class ClassifierDataSetSavingTests
 	[Fact]
 	public void ShouldPersistAssetTag()
 	{
-		var set = Substitute.For<StorableClassifierDataSet>();
-		var tag = Substitute.For<StorableTag>();
+		var set = Substitute.For<ClassifierDataSet>();
+		var tag = Substitute.For<Tag>();
 		set.TagsLibrary.Tags.Returns([tag]);
 		var image = new InMemoryImage(Id.Create(), default, default);
-		var asset = Substitute.For<StorableClassifierAsset>();
+		var asset = Substitute.For<ClassifierAsset>();
 		set.AssetsLibrary.Assets.Returns([asset]);
 		asset.Tag.Returns(tag);
 		asset.Image.Returns(image);
@@ -29,11 +30,11 @@ public sealed class ClassifierDataSetSavingTests
 	[Fact]
 	public void ShouldPersistTagUser()
 	{
-		var set = Substitute.For<StorableClassifierDataSet>();
-		var tag = Substitute.For<StorableTag>();
+		var set = Substitute.For<ClassifierDataSet>();
+		var tag = Substitute.For<Tag>();
 		set.TagsLibrary.Tags.Returns([tag]);
-		var image = Substitute.For<StorableImage>();
-		var asset = Substitute.For<StorableClassifierAsset>();
+		var image = Substitute.For<ManagedImage>();
+		var asset = Substitute.For<ClassifierAsset>();
 		set.AssetsLibrary.Assets.Returns([asset]);
 		asset.Tag.Returns(tag);
 		asset.Image.Returns(image);

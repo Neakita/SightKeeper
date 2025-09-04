@@ -1,30 +1,30 @@
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFactory) : StorableAssetsOwner<TAsset> where TAsset : Asset
+internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFactory) : AssetsOwner<TAsset> where TAsset : Asset
 {
 	public IReadOnlyCollection<TAsset> Assets => _assets.Values;
-	public IReadOnlyCollection<StorableImage> Images => _assets.Keys;
+	public IReadOnlyCollection<ManagedImage> Images => _assets.Keys;
 
-	public TAsset GetAsset(StorableImage image)
+	public TAsset GetAsset(ManagedImage image)
 	{
 		return _assets[image];
 	}
 
-	public TAsset? GetOptionalAsset(StorableImage image)
+	public TAsset? GetOptionalAsset(ManagedImage image)
 	{
 		return _assets.GetValueOrDefault(image);
 	}
 
-	public bool Contains(StorableImage image)
+	public bool Contains(ManagedImage image)
 	{
 		return _assets.ContainsKey(image);
 	}
 
-	public TAsset MakeAsset(StorableImage image)
+	public TAsset MakeAsset(ManagedImage image)
 	{
 		var asset = assetFactory.CreateAsset(image);
 		_assets.Add(image, asset);
@@ -32,7 +32,7 @@ internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFa
 		return asset;
 	}
 
-	public void DeleteAsset(StorableImage image)
+	public void DeleteAsset(ManagedImage image)
 	{
 		var asset = GetAsset(image);
 		bool isRemoved = _assets.Remove(image);
@@ -52,5 +52,5 @@ internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFa
 		_assets.EnsureCapacity(capacity);
 	}
 
-	private readonly Dictionary<StorableImage, TAsset> _assets = new();
+	private readonly Dictionary<ManagedImage, TAsset> _assets = new();
 }

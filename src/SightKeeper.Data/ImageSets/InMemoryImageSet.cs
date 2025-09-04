@@ -2,23 +2,24 @@ using CommunityToolkit.Diagnostics;
 using FlakeId;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-public sealed class InMemoryImageSet : StorableImageSet
+public sealed class InMemoryImageSet : ImageSet
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
 
-	public IReadOnlyList<StorableImage> Images => _images;
+	public IReadOnlyList<ManagedImage> Images => _images;
 
 	public InMemoryImageSet(ImageWrapper imageWrapper)
 	{
 		_imageWrapper = imageWrapper;
-		_images = new List<StorableImage>();
+		_images = new List<ManagedImage>();
 	}
 
-	public StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		InMemoryImage inMemoryImage = new(Id.Create(), creationTimestamp, size);
 		var wrappedImage = _imageWrapper.Wrap(inMemoryImage);
@@ -26,7 +27,7 @@ public sealed class InMemoryImageSet : StorableImageSet
 		return wrappedImage;
 	}
 
-	public IReadOnlyList<StorableImage> GetImagesRange(int index, int count)
+	public IReadOnlyList<ManagedImage> GetImagesRange(int index, int count)
 	{
 		return _images.GetRange(index, count);
 	}
@@ -45,9 +46,9 @@ public sealed class InMemoryImageSet : StorableImageSet
 	{
 	}
 
-	public StorableImage WrapAndInsertImage(StorableImage image)
+	public ManagedImage WrapAndInsertImage(ManagedImage image)
 	{
-		var index = _images.BinarySearch(image, ImageCreationTimestampComparer<StorableImage>.Instance);
+		var index = _images.BinarySearch(image, ImageCreationTimestampComparer.Instance);
 		Guard.IsLessThan(index, 0);
 		index = ~index;
 		var wrappedImage = _imageWrapper.Wrap(image);
@@ -61,5 +62,5 @@ public sealed class InMemoryImageSet : StorableImageSet
 	}
 
 	private readonly ImageWrapper _imageWrapper;
-	private readonly List<StorableImage> _images;
+	private readonly List<ManagedImage> _images;
 }

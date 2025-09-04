@@ -1,25 +1,26 @@
-using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
 
-internal sealed class TagUsersTrackingClassifierAssetsLibrary(StorableAssetsOwner<StorableClassifierAsset> inner) : StorableAssetsOwner<StorableClassifierAsset>
+internal sealed class TagUsersTrackingClassifierAssetsLibrary(AssetsOwner<ClassifierAsset> inner) : AssetsOwner<ClassifierAsset>
 {
-	public IReadOnlyCollection<StorableClassifierAsset> Assets => inner.Assets;
+	public IReadOnlyCollection<ClassifierAsset> Assets => inner.Assets;
 
-	public IReadOnlyCollection<StorableImage> Images => inner.Images;
+	public IReadOnlyCollection<ManagedImage> Images => inner.Images;
 
-	public bool Contains(StorableImage image)
+	public bool Contains(ManagedImage image)
 	{
 		return inner.Contains(image);
 	}
 
-	public StorableClassifierAsset GetAsset(StorableImage image)
+	public ClassifierAsset GetAsset(ManagedImage image)
 	{
 		return inner.GetAsset(image);
 	}
 
-	public StorableClassifierAsset? GetOptionalAsset(StorableImage image)
+	public ClassifierAsset? GetOptionalAsset(ManagedImage image)
 	{
 		return inner.GetOptionalAsset(image);
 	}
@@ -31,22 +32,17 @@ internal sealed class TagUsersTrackingClassifierAssetsLibrary(StorableAssetsOwne
 		inner.ClearAssets();
 	}
 
-	public StorableClassifierAsset MakeAsset(StorableImage image)
+	public ClassifierAsset MakeAsset(ManagedImage image)
 	{
 		var asset = inner.MakeAsset(image);
 		asset.Tag.AddUser(asset);
 		return asset;
 	}
 
-	public void DeleteAsset(StorableImage image)
+	public void DeleteAsset(ManagedImage image)
 	{
 		var asset = GetAsset(image);
 		inner.DeleteAsset(image);
 		asset.Tag.RemoveUser(asset);
-	}
-
-	public void EnsureCapacity(int capacity)
-	{
-		inner.EnsureCapacity(capacity);
 	}
 }

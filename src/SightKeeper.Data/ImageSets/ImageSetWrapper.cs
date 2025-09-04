@@ -1,6 +1,8 @@
+using SightKeeper.Domain.Images;
+
 namespace SightKeeper.Data.ImageSets;
 
 public interface ImageSetWrapper
 {
-	StorableImageSet Wrap(StorableImageSet set);
+	ImageSet Wrap(ImageSet set);
 }

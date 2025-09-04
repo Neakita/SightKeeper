@@ -1,18 +1,20 @@
+using SightKeeper.Domain.DataSets.Tags;
+
 namespace SightKeeper.Data.DataSets.Tags;
 
 internal static class TagExtensions
 {
-	public static StorableTag WithTracking(this StorableTag tag, ChangeListener changeListener)
+	public static Tag WithTracking(this Tag tag, ChangeListener changeListener)
 	{
 		return new TrackableTag(tag, changeListener);
 	}
 
-	public static StorableTag WithLocking(this StorableTag tag, Lock editingLock)
+	public static Tag WithLocking(this Tag tag, Lock editingLock)
 	{
 		return new LockingTag(tag, editingLock);
 	}
 
-	public static StorableTag WithNotifications(this StorableTag tag)
+	public static Tag WithNotifications(this Tag tag)
 	{
 		return new NotifyingTag(tag);
 	}

@@ -2,12 +2,13 @@ using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
 using SightKeeper.Domain;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-public sealed class ImagesFormatter : MemoryPackFormatter<IReadOnlyCollection<StorableImage>>
+public sealed class ImagesFormatter : MemoryPackFormatter<IReadOnlyCollection<ManagedImage>>
 {
-	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref IReadOnlyCollection<StorableImage>? images)
+	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref IReadOnlyCollection<ManagedImage>? images)
 	{
 		if (images == null)
 		{
@@ -19,10 +20,10 @@ public sealed class ImagesFormatter : MemoryPackFormatter<IReadOnlyCollection<St
 			writer.WriteUnmanaged(image.Id, image.CreationTimestamp, image.Size);
 	}
 
-	public override void Deserialize(ref MemoryPackReader reader, scoped ref IReadOnlyCollection<StorableImage>? images)
+	public override void Deserialize(ref MemoryPackReader reader, scoped ref IReadOnlyCollection<ManagedImage>? images)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var imagesCount));
-		var imagesArray = new StorableImage[imagesCount];
+		var imagesArray = new ManagedImage[imagesCount];
 		for (int i = 0; i < imagesCount; i++)
 		{
 			var image = ReadImage(ref reader);

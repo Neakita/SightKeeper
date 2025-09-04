@@ -1,8 +1,10 @@
+using SightKeeper.Domain.Images;
+
 namespace SightKeeper.Data.ImageSets;
 
 public sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock editingLock, ImageLookupperPopulator lookupperPopulator) : ImageSetWrapper
 {
-	public StorableImageSet Wrap(StorableImageSet set)
+	public ImageSet Wrap(ImageSet set)
 	{
 		return set
 

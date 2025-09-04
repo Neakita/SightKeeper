@@ -1,13 +1,15 @@
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.DataSets.Assets.Items;
 
-internal sealed class ObservableItemsAsset<TItem>(StorableItemsAsset<TItem> inner) : StorableItemsAsset<TItem>
+internal sealed class ObservableItemsAsset<TItem>(ItemsAsset<TItem> inner) : ItemsAsset<TItem>, Decorator<ItemsAsset<TItem>>
 {
-	public StorableImage Image => inner.Image;
+	public ManagedImage Image => inner.Image;
 
 	public AssetUsage Usage
 	{
@@ -17,9 +19,7 @@ internal sealed class ObservableItemsAsset<TItem>(StorableItemsAsset<TItem> inne
 
 	public IReadOnlyList<TItem> Items => _items;
 
-	public StorableItemsAsset<TItem> Innermost => inner.Innermost;
-
-	public TItem MakeItem(StorableTag tag)
+	public TItem MakeItem(Tag tag)
 	{
 		var index = _items.Count;
 		var item = inner.MakeItem(tag);
@@ -54,6 +54,8 @@ internal sealed class ObservableItemsAsset<TItem>(StorableItemsAsset<TItem> inne
 		};
 		_items.Notify(change);
 	}
+
+	public ItemsAsset<TItem> Inner => inner;
 
 	private readonly ExternalObservableList<TItem> _items = new(inner.Items);
 }

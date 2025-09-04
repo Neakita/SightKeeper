@@ -43,4 +43,14 @@ public sealed class DomainPoserTag(PoserTag inner) : PoserTag
 		TagIsInUseException.ThrowForDeletionIfInUse(tag);
 		inner.DeleteKeyPointTag(tag);
 	}
+
+	public void AddUser(TagUser user)
+	{
+		inner.AddUser(user);
+	}
+
+	public void RemoveUser(TagUser user)
+	{
+		inner.RemoveUser(user);
+	}
 }

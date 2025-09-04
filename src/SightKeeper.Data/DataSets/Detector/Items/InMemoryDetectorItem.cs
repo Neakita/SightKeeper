@@ -1,11 +1,11 @@
-using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector.Items;
 
-internal sealed class InMemoryDetectorItem(Bounding bounding, StorableTag tag) : StorableDetectorItem
+internal sealed class InMemoryDetectorItem(Bounding bounding, Tag tag) : DetectorItem
 {
 	public Bounding Bounding { get; set; } = bounding;
-	public StorableTag Tag { get; set; } = tag;
-	public StorableDetectorItem Innermost => this;
+	public Tag Tag { get; set; } = tag;
 }

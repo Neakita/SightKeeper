@@ -1,30 +1,20 @@
-using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class DataRemovingWeightsLibrary(StorableWeightsLibrary inner) : StorableWeightsLibrary
+internal sealed class DataRemovingWeightsLibrary(WeightsLibrary inner) : WeightsLibrary
 {
-	public IReadOnlyCollection<StorableWeights> Weights => inner.Weights;
+	public IReadOnlyCollection<Domain.DataSets.Weights.Weights> Weights => inner.Weights;
 
-	public StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<StorableTag> tags)
+	public Domain.DataSets.Weights.Weights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		return inner.CreateWeights(metadata, tags);
 	}
 
-	public void RemoveWeights(StorableWeights weights)
+	public void RemoveWeights(Domain.DataSets.Weights.Weights weights)
 	{
 		inner.RemoveWeights(weights);
 		weights.DeleteData();
-	}
-
-	public void AddWeights(StorableWeights weights)
-	{
-		inner.AddWeights(weights);
-	}
-
-	public void EnsureCapacity(int capacity)
-	{
-		inner.EnsureCapacity(capacity);
 	}
 }

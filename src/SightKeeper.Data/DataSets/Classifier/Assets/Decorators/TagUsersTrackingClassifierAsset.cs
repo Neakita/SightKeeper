@@ -1,14 +1,15 @@
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
 
-internal sealed class TagUsersTrackingClassifierAsset(StorableClassifierAsset inner) : StorableClassifierAsset
+internal sealed class TagUsersTrackingClassifierAsset(ClassifierAsset inner) : ClassifierAsset, Decorator<ClassifierAsset>
 {
-	public StorableImage Image => inner.Image;
+	public ManagedImage Image => inner.Image;
 
 	public AssetUsage Usage
 	{
@@ -18,7 +19,7 @@ internal sealed class TagUsersTrackingClassifierAsset(StorableClassifierAsset in
 	
 	public TagUser? TagUser { get; set; }
 
-	public StorableTag Tag
+	public Tag Tag
 	{
 		get => inner.Tag;
 		set
@@ -32,5 +33,5 @@ internal sealed class TagUsersTrackingClassifierAsset(StorableClassifierAsset in
 		}
 	}
 
-	public StorableClassifierAsset Innermost => inner.Innermost;
+	public ClassifierAsset Inner => inner;
 }

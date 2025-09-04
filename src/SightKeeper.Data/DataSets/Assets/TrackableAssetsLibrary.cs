@@ -1,35 +1,36 @@
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal sealed class TrackableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset> inner, ChangeListener listener) : StorableAssetsOwner<TAsset>
+internal sealed class TrackableAssetsLibrary<TAsset>(AssetsOwner<TAsset> inner, ChangeListener listener) : AssetsOwner<TAsset>
 {
 	public IReadOnlyCollection<TAsset> Assets => inner.Assets;
-	public IReadOnlyCollection<StorableImage> Images => inner.Images;
+	public IReadOnlyCollection<ManagedImage> Images => inner.Images;
 
-	public TAsset GetAsset(StorableImage image)
+	public TAsset GetAsset(ManagedImage image)
 	{
 		return inner.GetAsset(image);
 	}
 
-	public TAsset? GetOptionalAsset(StorableImage image)
+	public TAsset? GetOptionalAsset(ManagedImage image)
 	{
 		return inner.GetOptionalAsset(image);
 	}
 
-	public bool Contains(StorableImage image)
+	public bool Contains(ManagedImage image)
 	{
 		return inner.Contains(image);
 	}
 
-	public TAsset MakeAsset(StorableImage image)
+	public TAsset MakeAsset(ManagedImage image)
 	{
 		var asset = inner.MakeAsset(image);
 		listener.SetDataChanged();
 		return asset;
 	}
 
-	public void DeleteAsset(StorableImage image)
+	public void DeleteAsset(ManagedImage image)
 	{
 		inner.DeleteAsset(image);
 		listener.SetDataChanged();
@@ -39,10 +40,5 @@ internal sealed class TrackableAssetsLibrary<TAsset>(StorableAssetsOwner<TAsset>
 	{
 		inner.ClearAssets();
 		listener.SetDataChanged();
-	}
-
-	public void EnsureCapacity(int capacity)
-	{
-		inner.EnsureCapacity(capacity);
 	}
 }

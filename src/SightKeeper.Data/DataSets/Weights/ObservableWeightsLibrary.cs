@@ -1,17 +1,17 @@
-using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class ObservableWeightsLibrary(StorableWeightsLibrary inner) : StorableWeightsLibrary
+internal sealed class ObservableWeightsLibrary(WeightsLibrary inner) : WeightsLibrary
 {
-	public IReadOnlyCollection<StorableWeights> Weights => _weights;
+	public IReadOnlyCollection<Domain.DataSets.Weights.Weights> Weights => _weights;
 
-	public StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<StorableTag> tags)
+	public Domain.DataSets.Weights.Weights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		var weights = inner.CreateWeights(metadata, tags);
-		var change = new Addition<StorableWeights>
+		var change = new Addition<Domain.DataSets.Weights.Weights>
 		{
 			Items = [weights]
 		};
@@ -19,25 +19,15 @@ internal sealed class ObservableWeightsLibrary(StorableWeightsLibrary inner) : S
 		return weights;
 	}
 
-	public void RemoveWeights(StorableWeights weights)
+	public void RemoveWeights(Domain.DataSets.Weights.Weights weights)
 	{
 		inner.RemoveWeights(weights);
-		var change = new Removal<StorableWeights>
+		var change = new Removal<Domain.DataSets.Weights.Weights>
 		{
 			Items = [weights]
 		};
 		_weights.Notify(change);
 	}
 
-	public void EnsureCapacity(int capacity)
-	{
-		inner.EnsureCapacity(capacity);
-	}
-
-	public void AddWeights(StorableWeights weights)
-	{
-		inner.AddWeights(weights);
-	}
-
-	private readonly ExternalObservableCollection<StorableWeights> _weights = new(inner.Weights);
+	private readonly ExternalObservableCollection<Domain.DataSets.Weights.Weights> _weights = new(inner.Weights);
 }

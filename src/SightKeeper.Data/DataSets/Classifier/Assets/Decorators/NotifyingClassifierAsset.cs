@@ -1,16 +1,18 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
 
-internal sealed class NotifyingClassifierAsset(StorableClassifierAsset inner) : StorableClassifierAsset, INotifyPropertyChanged
+internal sealed class NotifyingClassifierAsset(ClassifierAsset inner) : ClassifierAsset, Decorator<ClassifierAsset>, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	public StorableImage Image => inner.Image;
+	public ManagedImage Image => inner.Image;
 
 	public AssetUsage Usage
 	{
@@ -22,7 +24,7 @@ internal sealed class NotifyingClassifierAsset(StorableClassifierAsset inner) : 
 		}
 	}
 
-	public StorableTag Tag
+	public Tag Tag
 	{
 		get => inner.Tag;
 		set
@@ -32,7 +34,7 @@ internal sealed class NotifyingClassifierAsset(StorableClassifierAsset inner) : 
 		}
 	}
 
-	public StorableClassifierAsset Innermost => inner.Innermost;
+	public ClassifierAsset Inner => inner;
 
 	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{

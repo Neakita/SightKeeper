@@ -1,8 +1,9 @@
+using SightKeeper.Domain.DataSets.Tags;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class ObservableTagsLibrary<TTag>(StorableTagsOwner<TTag> inner) : StorableTagsOwner<TTag>
+internal sealed class ObservableTagsLibrary<TTag>(TagsOwner<TTag> inner) : TagsOwner<TTag>
 {
 	public IReadOnlyList<TTag> Tags => _tags;
 
@@ -32,8 +33,4 @@ internal sealed class ObservableTagsLibrary<TTag>(StorableTagsOwner<TTag> inner)
 	}
 
 	private readonly ExternalObservableList<TTag> _tags = new(inner.Tags);
-	public void EnsureCapacity(int capacity)
-	{
-		inner.EnsureCapacity(capacity);
-	}
 }

@@ -1,14 +1,15 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Assets.Items;
-using SightKeeper.Data.DataSets.Detector.Items;
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Detector.Decorators;
 
-internal sealed class NotifyingDetectorDataSet(StorableDetectorDataSet inner) : StorableDetectorDataSet, INotifyPropertyChanged
+internal sealed class NotifyingDetectorDataSet(DetectorDataSet inner) : DetectorDataSet, Decorator<DetectorDataSet>, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -32,13 +33,10 @@ internal sealed class NotifyingDetectorDataSet(StorableDetectorDataSet inner) : 
 		}
 	}
 
-	public StorableDetectorDataSet Innermost => inner.Innermost;
-
-	public StorableTagsOwner<StorableTag> TagsLibrary => inner.TagsLibrary;
-
-	public StorableAssetsOwner<StorableItemsAsset<StorableDetectorItem>> AssetsLibrary => inner.AssetsLibrary;
-
-	public StorableWeightsLibrary WeightsLibrary => inner.WeightsLibrary;
+	public TagsOwner<Tag> TagsLibrary => inner.TagsLibrary;
+	public AssetsOwner<ItemsAsset<DetectorItem>> AssetsLibrary => inner.AssetsLibrary;
+	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
+	public DetectorDataSet Inner => inner;
 
 	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{

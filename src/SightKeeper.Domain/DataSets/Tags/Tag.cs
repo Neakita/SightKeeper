@@ -8,4 +8,7 @@ public interface Tag : ReadOnlyTag
 	IReadOnlyCollection<TagUser> Users { get; }
 
 	string ReadOnlyTag.Name => Name;
+
+	void AddUser(TagUser user);
+	void RemoveUser(TagUser user);
 }

@@ -13,7 +13,7 @@ public sealed class TagsFormatterTests
 	public void ShouldPersistTagName()
 	{
 		const string tagName = "The tag";
-		var tag = Substitute.For<StorableTag>();
+		var tag = Substitute.For<Tag>();
 		tag.Name.Returns(tagName);
 		var persistedTag = Persist(tag);
 		persistedTag.Name.Should().Be(tagName);
@@ -50,7 +50,7 @@ public sealed class TagsFormatterTests
 	{
 		using var state = MemoryPackReaderOptionalStatePool.Rent(MemoryPackSerializerOptions.Default);
 		var reader = new MemoryPackReader(buffer, state);
-		InMemoryTagsLibrary<StorableTag> library = new(new FakeTagFactory());
+		InMemoryTagsLibrary<Tag> library = new(new FakeTagFactory());
 		TagsFormatter.ReadTags(ref reader, library);
 		return library.Tags;
 	}

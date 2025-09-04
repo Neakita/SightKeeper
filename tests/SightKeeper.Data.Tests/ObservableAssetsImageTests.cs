@@ -2,6 +2,7 @@ using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;
 
@@ -12,7 +13,7 @@ public sealed class ObservableAssetsImageTests
 	[Fact]
 	public void ShouldObserveAddition()
 	{
-		var image = new ObservableAssetsImage(Substitute.For<StorableImage>());
+		var image = new ObservableAssetsImage(Substitute.For<ManagedImage>());
 		var asset = Substitute.For<Asset>();
 		var observableAssets = image.Assets.Should().BeAssignableTo<ReadOnlyObservableCollection<Asset>>().Subject;
 		List<Change<Asset>> observedChanges = new();
@@ -28,7 +29,7 @@ public sealed class ObservableAssetsImageTests
 	[Fact]
 	public void ShouldObserveRemoval()
 	{
-		var image = new ObservableAssetsImage(Substitute.For<StorableImage>());
+		var image = new ObservableAssetsImage(Substitute.For<ManagedImage>());
 		var asset = Substitute.For<Asset>();
 		var observableAssets = image.Assets.Should().BeAssignableTo<ReadOnlyObservableCollection<Asset>>().Subject;
 		List<Change<Asset>> observedChanges = new();

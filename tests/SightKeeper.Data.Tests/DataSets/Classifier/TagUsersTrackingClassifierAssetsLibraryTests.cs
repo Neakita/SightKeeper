@@ -1,9 +1,9 @@
 using NSubstitute;
-using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests.DataSets.Classifier;
 
@@ -12,39 +12,39 @@ public sealed class TagUsersTrackingClassifierAssetsLibraryTests
 	[Fact]
 	public void ShouldAddTagUserToTagWhenMakingAsset()
 	{
-		var innerLibrary = Substitute.For<StorableAssetsOwner<StorableClassifierAsset>>();
+		var innerLibrary = Substitute.For<AssetsOwner<ClassifierAsset>>();
 		var library = new TagUsersTrackingClassifierAssetsLibrary(innerLibrary);
-		var asset = Substitute.For<StorableClassifierAsset>();
-		var tag = Substitute.For<StorableTag>();
+		var asset = Substitute.For<ClassifierAsset>();
+		var tag = Substitute.For<Tag>();
 		asset.Tag.Returns(tag);
-		innerLibrary.MakeAsset(Arg.Any<StorableImage>()).Returns(asset);
-		library.MakeAsset(Substitute.For<StorableImage>());
+		innerLibrary.MakeAsset(Arg.Any<ManagedImage>()).Returns(asset);
+		library.MakeAsset(Substitute.For<ManagedImage>());
 		tag.Received().AddUser(asset);
 	}
 
 	[Fact]
 	public void ShouldRemoveTagUserFromTagWhenRemovingAsset()
 	{
-		var innerLibrary = Substitute.For<StorableAssetsOwner<StorableClassifierAsset>>();
+		var innerLibrary = Substitute.For<AssetsOwner<ClassifierAsset>>();
 		var library = new TagUsersTrackingClassifierAssetsLibrary(innerLibrary);
-		var asset = Substitute.For<StorableClassifierAsset>();
-		var tag = Substitute.For<StorableTag>();
-		innerLibrary.GetAsset(Arg.Any<StorableImage>()).Returns(asset);
+		var asset = Substitute.For<ClassifierAsset>();
+		var tag = Substitute.For<Tag>();
+		innerLibrary.GetAsset(Arg.Any<ManagedImage>()).Returns(asset);
 		asset.Tag.Returns(tag);
-		library.DeleteAsset(Substitute.For<StorableImage>());
+		library.DeleteAsset(Substitute.For<ManagedImage>());
 		tag.Received().RemoveUser(asset);
 	}
 
 	[Fact]
 	public void ShouldRemoveTagUsersFromTagsWhenClearingAssets()
 	{
-		var innerLibrary = Substitute.For<StorableAssetsOwner<StorableClassifierAsset>>();
+		var innerLibrary = Substitute.For<AssetsOwner<ClassifierAsset>>();
 		var library = new TagUsersTrackingClassifierAssetsLibrary(innerLibrary);
-		var tag1 = Substitute.For<StorableTag>();
-		var tag2 = Substitute.For<StorableTag>();
-		var asset1 = Substitute.For<StorableClassifierAsset>();
-		var asset2 = Substitute.For<StorableClassifierAsset>();
-		var asset3 = Substitute.For<StorableClassifierAsset>();
+		var tag1 = Substitute.For<Tag>();
+		var tag2 = Substitute.For<Tag>();
+		var asset1 = Substitute.For<ClassifierAsset>();
+		var asset2 = Substitute.For<ClassifierAsset>();
+		var asset3 = Substitute.For<ClassifierAsset>();
 		asset1.Tag.Returns(tag1);
 		asset2.Tag.Returns(tag2);
 		asset3.Tag.Returns(tag2);

@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
-public sealed class DomainItemsAsset<TItem>(TagsContainer<Tag> tagsOwner, ItemsAsset<TItem> inner) : ItemsAsset<TItem>
+public sealed class DomainItemsAsset<TItem>(TagsContainer<Tag> tagsOwner, ItemsAsset<TItem> inner) : ItemsAsset<TItem>, Decorator<ItemsAsset<TItem>>
 {
 	public ManagedImage Image => inner.Image;
 
@@ -30,4 +30,6 @@ public sealed class DomainItemsAsset<TItem>(TagsContainer<Tag> tagsOwner, ItemsA
 	{
 		inner.ClearItems();
 	}
+
+	public ItemsAsset<TItem> Inner => inner;
 }

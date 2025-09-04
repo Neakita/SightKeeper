@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Tests.DataSets;
 
@@ -9,7 +10,7 @@ public sealed class NotifyingTagTests
 	[Fact]
 	public void ShouldRaisePropertyChangedForName()
 	{
-		var innerTag = Substitute.For<StorableTag>();
+		var innerTag = Substitute.For<Tag>();
 		var notifyingTag = new NotifyingTag(innerTag);
 		using var monitor = notifyingTag.Monitor();
 		notifyingTag.Name = "new name";
@@ -19,7 +20,7 @@ public sealed class NotifyingTagTests
 	[Fact]
 	public void ShouldRaisePropertyChangedForColor()
 	{
-		var innerTag = Substitute.For<StorableTag>();
+		var innerTag = Substitute.For<Tag>();
 		var notifyingTag = new NotifyingTag(innerTag);
 		using var monitor = notifyingTag.Monitor();
 		notifyingTag.Color = 123;

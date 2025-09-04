@@ -1,20 +1,22 @@
 using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
 internal sealed class InMemoryClassifierDataSet(
-	TagFactory<StorableTag> tagFactory,
-	AssetFactory<StorableClassifierAsset> assetFactory,
+	TagFactory<Tag> tagFactory,
+	AssetFactory<ClassifierAsset> assetFactory,
 	WeightsWrapper weightsWrapper)
-	: StorableClassifierDataSet
+	: ClassifierDataSet
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
-	public StorableTagsOwner<StorableTag> TagsLibrary { get; } = new InMemoryTagsLibrary<StorableTag>(tagFactory);
-	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; } = new InMemoryAssetsLibrary<StorableClassifierAsset>(assetFactory);
-	public StorableWeightsLibrary WeightsLibrary { get; } = new InMemoryWeightsLibrary(weightsWrapper);
-	public StorableClassifierDataSet Innermost => this;
+	public TagsOwner<Tag> TagsLibrary { get; } = new InMemoryTagsLibrary<Tag>(tagFactory);
+	public AssetsOwner<ClassifierAsset> AssetsLibrary { get; } = new InMemoryAssetsLibrary<ClassifierAsset>(assetFactory);
+	public WeightsLibrary WeightsLibrary { get; } = new InMemoryWeightsLibrary(weightsWrapper);
 }

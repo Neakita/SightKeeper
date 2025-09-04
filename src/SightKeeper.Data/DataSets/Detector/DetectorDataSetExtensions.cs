@@ -1,26 +1,26 @@
 using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Detector.Decorators;
-using SightKeeper.Data.DataSets.Detector.Items;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector;
 
 internal static class DetectorDataSetExtensions
 {
-	public static StorableDetectorDataSet WithTracking(this StorableDetectorDataSet set, ChangeListener listener)
+	public static DetectorDataSet WithTracking(this DetectorDataSet set, ChangeListener listener)
 	{
 		return new TrackableDetectorDataSet(set, listener);
 	}
 
-	public static StorableDetectorDataSet WithLocking(this StorableDetectorDataSet set, Lock editingLock)
+	public static DetectorDataSet WithLocking(this DetectorDataSet set, Lock editingLock)
 	{
 		return new LockingDetectorDataSet(set, editingLock);
 	}
 
-	public static StorableDetectorDataSet WithWeightsDataRemoving(this StorableDetectorDataSet set)
+	public static DetectorDataSet WithWeightsDataRemoving(this DetectorDataSet set)
 	{
 		return new OverrideLibrariesDetectorDataSet(set)
 		{
@@ -28,18 +28,18 @@ internal static class DetectorDataSetExtensions
 		};
 	}
 
-	public static StorableDetectorDataSet WithObservableLibraries(this StorableDetectorDataSet set)
+	public static DetectorDataSet WithObservableLibraries(this DetectorDataSet set)
 	{
 		return new OverrideLibrariesDetectorDataSet(set)
 		{
-			TagsLibrary = new ObservableTagsLibrary<StorableTag>(set.TagsLibrary),
-			AssetsLibrary = new ObservableAssetsLibrary<StorableItemsAsset<StorableDetectorItem>>(set.AssetsLibrary),
+			TagsLibrary = new ObservableTagsLibrary<Tag>(set.TagsLibrary),
+			AssetsLibrary = new ObservableAssetsLibrary<ItemsAsset<DetectorItem>>(set.AssetsLibrary),
 			WeightsLibrary = new ObservableWeightsLibrary(set.WeightsLibrary)
 		};
 	}
 
-	public static StorableDetectorDataSet WithDomainRules(this StorableDetectorDataSet set)
+	public static DetectorDataSet WithDomainRules(this DetectorDataSet set)
 	{
-		return new StorableDetectorDataSetExtension(new DomainDetectorDataSet(set), set);
+		return new DomainDetectorDataSet(set);
 	}
 }

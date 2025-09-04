@@ -2,12 +2,13 @@ using FlakeId;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class StreamableDataImage(StorableImage inner, FileSystemDataAccess dataAccess) : StorableImage
+internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAccess dataAccess) : ManagedImage
 {
 	public Id Id => inner.Id;
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;

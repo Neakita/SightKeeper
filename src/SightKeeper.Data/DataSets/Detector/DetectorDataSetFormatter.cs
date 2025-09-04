@@ -7,14 +7,17 @@ using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Detector.Items;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector;
 
-public sealed class DetectorDataSetFormatter(ImageLookupper imageLookupper, DataSetFactory<StorableDetectorDataSet> setFactory) : MemoryPackFormatter<StorableDetectorDataSet>
+public sealed class DetectorDataSetFormatter(ImageLookupper imageLookupper, DataSetFactory<DetectorDataSet> setFactory) : MemoryPackFormatter<DetectorDataSet>
 {
-	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref StorableDetectorDataSet? dataSet)
+	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref DetectorDataSet? dataSet)
 	{
 		if (dataSet == null)
 		{
@@ -28,7 +31,7 @@ public sealed class DetectorDataSetFormatter(ImageLookupper imageLookupper, Data
 		WeightsFormatter.WriteWeights(ref writer, dataSet.WeightsLibrary.Weights, tagIndexes);
 	}
 
-	public override void Deserialize(ref MemoryPackReader reader, scoped ref StorableDetectorDataSet? set)
+	public override void Deserialize(ref MemoryPackReader reader, scoped ref DetectorDataSet? set)
 	{
 		if (reader.PeekIsNull())
 		{
@@ -36,7 +39,7 @@ public sealed class DetectorDataSetFormatter(ImageLookupper imageLookupper, Data
 			return;
 		}
 		set = setFactory.CreateDataSet();
-		var innerSet = set.Innermost;
+		var innerSet = set.UnWrapDecorator<InMemoryDetectorDataSet>();
 		DataSetGeneralDataFormatter.ReadGeneralData(ref reader, innerSet);
 		TagsFormatter.ReadTags(ref reader, innerSet.TagsLibrary);
 		ReadAssets(ref reader, innerSet);
@@ -45,8 +48,8 @@ public sealed class DetectorDataSetFormatter(ImageLookupper imageLookupper, Data
 
 	private static void WriteAssets<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<StorableItemsAsset<StorableDetectorItem>> assets,
-		Dictionary<StorableTag, byte> tagIndexes)
+		IReadOnlyCollection<ItemsAsset<DetectorItem>> assets,
+		Dictionary<Tag, byte> tagIndexes)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(assets.Count);
@@ -60,8 +63,8 @@ public sealed class DetectorDataSetFormatter(ImageLookupper imageLookupper, Data
 
 	private static void WriteItems<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<StorableDetectorItem> items,
-		Dictionary<StorableTag, byte> tagIndexes)
+		IReadOnlyCollection<DetectorItem> items,
+		Dictionary<Tag, byte> tagIndexes)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(items.Count);
@@ -72,21 +75,21 @@ public sealed class DetectorDataSetFormatter(ImageLookupper imageLookupper, Data
 		}
 	}
 
-	private void ReadAssets(ref MemoryPackReader reader, StorableDetectorDataSet set)
+	private void ReadAssets(ref MemoryPackReader reader, DetectorDataSet set)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var assetsCount));
-		set.AssetsLibrary.EnsureCapacity(assetsCount);
 		for (int i = 0; i < assetsCount; i++)
 		{
 			reader.ReadUnmanaged(out Id imageId, out AssetUsage usage);
 			var image = imageLookupper.GetImage(imageId);
 			var asset = set.AssetsLibrary.MakeAsset(image);
-			asset.Innermost.Usage = usage;
+			var innermostAsset = asset.UnWrapDecorator<InMemoryItemsAsset<DetectorItem>>();
+			innermostAsset.Usage = usage;
 			ReadItems(ref reader, set.TagsLibrary.Tags, asset);
 		}
 	}
 
-	private static void ReadItems(ref MemoryPackReader reader, IReadOnlyList<StorableTag> tags, ItemsOwner<StorableDetectorItem> itemsOwner)
+	private static void ReadItems(ref MemoryPackReader reader, IReadOnlyList<Tag> tags, ItemsOwner<DetectorItem> itemsOwner)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var itemsCount));
 		for (int i = 0; i < itemsCount; i++)
@@ -95,7 +98,8 @@ public sealed class DetectorDataSetFormatter(ImageLookupper imageLookupper, Data
 			var tag = tags[tagIndex];
 			var item = itemsOwner.MakeItem(tag);
 			tag.AddUser(item);
-			item.Innermost.Bounding = bounding;
+			var innermostItem = item.UnWrapDecorator<InMemoryDetectorItem>();
+			innermostItem.Bounding = bounding;
 		}
 	}
 }

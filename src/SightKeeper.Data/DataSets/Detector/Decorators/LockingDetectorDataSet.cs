@@ -1,12 +1,16 @@
 using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Assets.Items;
-using SightKeeper.Data.DataSets.Detector.Items;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Detector.Decorators;
 
-internal sealed class LockingDetectorDataSet(StorableDetectorDataSet inner, Lock editingLock) : StorableDetectorDataSet
+internal sealed class LockingDetectorDataSet(DetectorDataSet inner, Lock editingLock) : DetectorDataSet, Decorator<DetectorDataSet>
 {
 	public string Name
 	{
@@ -28,14 +32,14 @@ internal sealed class LockingDetectorDataSet(StorableDetectorDataSet inner, Lock
 		}
 	}
 
-	public StorableTagsOwner<StorableTag> TagsLibrary { get; } =
-		new LockingTagsLibrary<StorableTag>(inner.TagsLibrary, editingLock);
+	public TagsOwner<Tag> TagsLibrary { get; } =
+		new LockingTagsLibrary<Tag>(inner.TagsLibrary, editingLock);
 
-	public StorableAssetsOwner<StorableItemsAsset<StorableDetectorItem>> AssetsLibrary { get; } =
-		new LockingAssetsLibrary<StorableItemsAsset<StorableDetectorItem>>(inner.AssetsLibrary, editingLock);
+	public AssetsOwner<ItemsAsset<DetectorItem>> AssetsLibrary { get; } =
+		new LockingAssetsLibrary<ItemsAsset<DetectorItem>>(inner.AssetsLibrary, editingLock);
 
-	public StorableWeightsLibrary WeightsLibrary { get; } =
+	public WeightsLibrary WeightsLibrary { get; } =
 		new LockingWeightsLibrary(inner.WeightsLibrary, editingLock);
 
-	public StorableDetectorDataSet Innermost => inner.Innermost;
+	public DetectorDataSet Inner => inner;
 }

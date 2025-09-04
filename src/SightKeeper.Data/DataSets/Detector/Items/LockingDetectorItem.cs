@@ -1,9 +1,11 @@
-using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector.Items;
 
-internal sealed class LockingDetectorItem(StorableDetectorItem inner, Lock editingLock) : StorableDetectorItem
+internal sealed class LockingDetectorItem(DetectorItem inner, Lock editingLock) : DetectorItem, Decorator<DetectorItem>
 {
 	public Bounding Bounding
 	{
@@ -15,7 +17,7 @@ internal sealed class LockingDetectorItem(StorableDetectorItem inner, Lock editi
 		}
 	}
 
-	public StorableTag Tag
+	public Tag Tag
 	{
 		get => inner.Tag;
 		set
@@ -25,5 +27,5 @@ internal sealed class LockingDetectorItem(StorableDetectorItem inner, Lock editi
 		}
 	}
 
-	public StorableDetectorItem Innermost => inner.Innermost;
+	public DetectorItem Inner => inner;
 }

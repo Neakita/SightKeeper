@@ -1,12 +1,12 @@
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
+using SightKeeper.Domain.Images;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.ImageSets.Decorators;
 
 // could be named ObservableImageSet,
 // but I want to specify it handles only Images observability
-internal sealed class ObservableImagesImageSet(StorableImageSet inner) : StorableImageSet
+internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 {
 	public string Name
 	{
@@ -20,15 +20,15 @@ internal sealed class ObservableImagesImageSet(StorableImageSet inner) : Storabl
 		set => inner.Description = value;
 	}
 
-	public IReadOnlyList<StorableImage> Images => _images;
+	public IReadOnlyList<ManagedImage> Images => _images;
 
-	public StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		var index = Images.Count;
 		var image = inner.CreateImage(creationTimestamp, size);
 		if (_images.HasObservers)
 		{
-			Insertion<StorableImage> change = new()
+			Insertion<ManagedImage> change = new()
 			{
 				Index = index,
 				Items = [image]
@@ -38,7 +38,7 @@ internal sealed class ObservableImagesImageSet(StorableImageSet inner) : Storabl
 		return image;
 	}
 
-	public IReadOnlyList<StorableImage> GetImagesRange(int index, int count)
+	public IReadOnlyList<ManagedImage> GetImagesRange(int index, int count)
 	{
 		return inner.GetImagesRange(index, count);
 	}
@@ -49,7 +49,7 @@ internal sealed class ObservableImagesImageSet(StorableImageSet inner) : Storabl
 		inner.RemoveImageAt(index);
 		if (_images.HasObservers)
 		{
-			IndexedRemoval<StorableImage> change = new()
+			IndexedRemoval<ManagedImage> change = new()
 			{
 				Index = index,
 				Items = [image]
@@ -64,7 +64,7 @@ internal sealed class ObservableImagesImageSet(StorableImageSet inner) : Storabl
 		inner.RemoveImagesRange(index, count);
 		if (_images.HasObservers)
 		{
-			IndexedRemoval<StorableImage> change = new()
+			IndexedRemoval<ManagedImage> change = new()
 			{
 				Index = index,
 				Items = images
@@ -79,10 +79,5 @@ internal sealed class ObservableImagesImageSet(StorableImageSet inner) : Storabl
 		inner.Dispose();
 	}
 
-	public StorableImage WrapAndInsertImage(StorableImage image)
-	{
-		return inner.WrapAndInsertImage(image);
-	}
-
-	private readonly ExternalObservableList<StorableImage> _images = new(inner.Images);
+	private readonly ExternalObservableList<ManagedImage> _images = new(inner.Images);
 }

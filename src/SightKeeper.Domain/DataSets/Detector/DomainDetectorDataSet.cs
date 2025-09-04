@@ -5,31 +5,30 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Domain.DataSets.Detector;
 
-public sealed class DomainDetectorDataSet : DetectorDataSet
+public sealed class DomainDetectorDataSet : DetectorDataSet, Decorator<DetectorDataSet>
 {
 	public string Name
 	{
-		get => _inner.Name;
-		set => _inner.Name = value;
+		get => Inner.Name;
+		set => Inner.Name = value;
 	}
 
 	public string Description
 	{
-		get => _inner.Description;
-		set => _inner.Description = value;
+		get => Inner.Description;
+		set => Inner.Description = value;
 	}
 
 	public TagsOwner<Tag> TagsLibrary { get; }
 	public AssetsOwner<ItemsAsset<DetectorItem>> AssetsLibrary { get; }
 	public WeightsLibrary WeightsLibrary { get; }
+	public DetectorDataSet Inner { get; }
 
 	public DomainDetectorDataSet(DetectorDataSet inner)
 	{
-		_inner = inner;
+		Inner = inner;
 		TagsLibrary = new DomainTagsLibrary<Tag>(inner.TagsLibrary);
 		AssetsLibrary = inner.AssetsLibrary;
 		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, TagsLibrary);
 	}
-
-	private readonly DetectorDataSet _inner;
 }

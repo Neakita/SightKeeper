@@ -1,15 +1,15 @@
 using CommunityToolkit.Diagnostics;
 using FlakeId;
-using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : StorableWeightsLibrary
+internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : WeightsLibrary
 {
-	public IReadOnlyCollection<StorableWeights> Weights => _weights;
+	public IReadOnlyCollection<Domain.DataSets.Weights.Weights> Weights => _weights;
 
-	public StorableWeights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<StorableTag> tags)
+	public Domain.DataSets.Weights.Weights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		var id = Id.Create();
 		var inMemoryWeights = new InMemoryWeights(id, metadata, tags.ToList());
@@ -18,7 +18,7 @@ internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : St
 		return wrappedWeights;
 	}
 
-	public void RemoveWeights(StorableWeights weights)
+	public void RemoveWeights(Domain.DataSets.Weights.Weights weights)
 	{
 		var isRemoved = _weights.Remove(weights);
 		Guard.IsTrue(isRemoved);
@@ -29,11 +29,11 @@ internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : St
 		_weights.EnsureCapacity(capacity);
 	}
 
-	public void AddWeights(StorableWeights weights)
+	public void AddWeights(Domain.DataSets.Weights.Weights weights)
 	{
 		var wrappedWeights = weightsWrapper.Wrap(weights);
 		_weights.Add(wrappedWeights);
 	}
 
-	private readonly List<StorableWeights> _weights = new();
+	private readonly List<Domain.DataSets.Weights.Weights> _weights = new();
 }

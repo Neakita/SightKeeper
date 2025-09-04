@@ -1,17 +1,17 @@
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets.Items;
 
-internal sealed class InMemoryItemsAsset<TItem>(StorableImage image, AssetItemFactory<TItem> itemFactory) : StorableItemsAsset<TItem>
+internal sealed class InMemoryItemsAsset<TItem>(ManagedImage image, AssetItemFactory<TItem> itemFactory) : ItemsAsset<TItem>
 {
-	public StorableImage Image { get; } = image;
+	public ManagedImage Image { get; } = image;
 	public IReadOnlyList<TItem> Items => _items;
 	public AssetUsage Usage { get; set; } = AssetUsage.Any;
-	public StorableItemsAsset<TItem> Innermost => this;
 
-	public TItem MakeItem(StorableTag tag)
+	public TItem MakeItem(Tag tag)
 	{
 		var item = itemFactory.CreateItem(tag);
 		_items.Add(item);

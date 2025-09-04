@@ -1,12 +1,15 @@
-﻿using SightKeeper.Domain.DataSets.Tags;
+﻿using FlakeId;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Weights;
 
 public interface Weights : TagUser
 {
+	Id Id { get; }
 	WeightsMetadata Metadata { get; }
 	IReadOnlyList<Tag> Tags { get; }
 
 	Stream? OpenWriteSteam();
 	Stream? OpenReadStream();
+	void DeleteData();
 }

@@ -1,11 +1,12 @@
 using FlakeId;
 using FluentAssertions;
 using NSubstitute;
-using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Detector;
-using SightKeeper.Data.DataSets.Detector.Items;
-using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests.DataSets.Detector;
 
@@ -14,12 +15,12 @@ public sealed class DetectorDataSetFormatterTests
 	[Fact]
 	public void ShouldPersistItemTag()
 	{
-		var set = Substitute.For<StorableDetectorDataSet>();
-		var tag = Substitute.For<StorableTag>();
+		var set = Substitute.For<DetectorDataSet>();
+		var tag = Substitute.For<Tag>();
 		set.TagsLibrary.Tags.Returns([tag]);
 		var image = new InMemoryImage(Id.Create(), default, default);
-		var asset = Substitute.For<StorableItemsAsset<StorableDetectorItem>>();
-		var item = Substitute.For<StorableDetectorItem>();
+		var asset = Substitute.For<ItemsAsset<DetectorItem>>();
+		var item = Substitute.For<DetectorItem>();
 		set.AssetsLibrary.Assets.Returns([asset]);
 		asset.Items.Returns([item]);
 		item.Tag.Returns(tag);
@@ -32,13 +33,13 @@ public sealed class DetectorDataSetFormatterTests
 	[Fact]
 	public void ShouldPersistTagUser()
 	{
-		var set = Substitute.For<StorableDetectorDataSet>();
-		var tag = Substitute.For<StorableTag>();
+		var set = Substitute.For<DetectorDataSet>();
+		var tag = Substitute.For<Tag>();
 		set.TagsLibrary.Tags.Returns([tag]);
-		var image = Substitute.For<StorableImage>();
-		var asset = Substitute.For<StorableItemsAsset<StorableDetectorItem>>();
+		var image = Substitute.For<ManagedImage>();
+		var asset = Substitute.For<ItemsAsset<DetectorItem>>();
 		set.AssetsLibrary.Assets.Returns([asset]);
-		var item = Substitute.For<StorableDetectorItem>();
+		var item = Substitute.For<DetectorItem>();
 		asset.Items.Returns([item]);
 		item.Tag.Returns(tag);
 		asset.Image.Returns(image);

@@ -1,36 +1,36 @@
 using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
 using SightKeeper.Data.DataSets.Classifier.Decorators;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
 internal static class ClassifierDataSetExtensions
 {
-	public static StorableClassifierDataSet WithTracking(this StorableClassifierDataSet set, ChangeListener listener)
+	public static ClassifierDataSet WithTracking(this ClassifierDataSet set, ChangeListener listener)
 	{
 		return new TrackableClassifierDataSet(set, listener);
 	}
 
-	public static StorableClassifierDataSet WithLocking(this StorableClassifierDataSet set, Lock editingLock)
+	public static ClassifierDataSet WithLocking(this ClassifierDataSet set, Lock editingLock)
 	{
 		return new LockingClassifierDataSet(set, editingLock);
 	}
 
-	public static StorableClassifierDataSet WithDomainRules(this StorableClassifierDataSet set)
+	public static ClassifierDataSet WithDomainRules(this ClassifierDataSet set)
 	{
-		return new StorableClassifierDataSetExtension(new DomainClassifierDataSet(set), set);
+		return new DomainClassifierDataSet(set);
 	}
 
-	public static StorableClassifierDataSet WithNotifications(this StorableClassifierDataSet set)
+	public static ClassifierDataSet WithNotifications(this ClassifierDataSet set)
 	{
 		return new NotifyingClassifierDataSet(set);
 	}
 
-	public static StorableClassifierDataSet WithWeightsDataRemoving(this StorableClassifierDataSet set)
+	public static ClassifierDataSet WithWeightsDataRemoving(this ClassifierDataSet set)
 	{
 		return new OverrideLibrariesClassifierDataSet(set)
 		{
@@ -38,17 +38,17 @@ internal static class ClassifierDataSetExtensions
 		};
 	}
 
-	public static StorableClassifierDataSet WithObservableLibraries(this StorableClassifierDataSet set)
+	public static ClassifierDataSet WithObservableLibraries(this ClassifierDataSet set)
 	{
 		return new OverrideLibrariesClassifierDataSet(set)
 		{
-			TagsLibrary = new ObservableTagsLibrary<StorableTag>(set.TagsLibrary),
-			AssetsLibrary = new ObservableAssetsLibrary<StorableClassifierAsset>(set.AssetsLibrary),
+			TagsLibrary = new ObservableTagsLibrary<Tag>(set.TagsLibrary),
+			AssetsLibrary = new ObservableAssetsLibrary<ClassifierAsset>(set.AssetsLibrary),
 			WeightsLibrary = new ObservableWeightsLibrary(set.WeightsLibrary)
 		};
 	}
 
-	public static StorableClassifierDataSet WithTagUsersTracking(this StorableClassifierDataSet set)
+	public static ClassifierDataSet WithTagUsersTracking(this ClassifierDataSet set)
 	{
 		return new OverrideLibrariesClassifierDataSet(set)
 		{

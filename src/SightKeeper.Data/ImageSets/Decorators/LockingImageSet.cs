@@ -1,9 +1,9 @@
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Decorators;
 
-internal sealed class LockingImageSet(StorableImageSet inner, Lock editingLock) : StorableImageSet
+internal sealed class LockingImageSet(ImageSet inner, Lock editingLock) : ImageSet
 {
 	public string Name
 	{
@@ -25,15 +25,15 @@ internal sealed class LockingImageSet(StorableImageSet inner, Lock editingLock) 
 		}
 	}
 
-	public IReadOnlyList<StorableImage> Images => inner.Images;
+	public IReadOnlyList<ManagedImage> Images => inner.Images;
 
-	public StorableImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		lock (editingLock)
 			return inner.CreateImage(creationTimestamp, size);
 	}
 
-	public IReadOnlyList<StorableImage> GetImagesRange(int index, int count)
+	public IReadOnlyList<ManagedImage> GetImagesRange(int index, int count)
 	{
 		lock (editingLock)
 			return inner.GetImagesRange(index, count);
@@ -54,10 +54,5 @@ internal sealed class LockingImageSet(StorableImageSet inner, Lock editingLock) 
 	public void Dispose()
 	{
 		inner.Dispose();
-	}
-
-	public StorableImage WrapAndInsertImage(StorableImage image)
-	{
-		return inner.WrapAndInsertImage(image);
 	}
 }

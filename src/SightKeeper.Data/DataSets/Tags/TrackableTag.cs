@@ -2,7 +2,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class TrackableTag(StorableTag inner, ChangeListener changeListener) : StorableTag
+internal sealed class TrackableTag(Tag inner, ChangeListener changeListener) : Tag
 {
 	public string Name
 	{

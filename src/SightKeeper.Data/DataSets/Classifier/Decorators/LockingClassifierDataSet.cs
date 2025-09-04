@@ -1,11 +1,15 @@
 using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Classifier.Decorators;
 
-internal sealed class LockingClassifierDataSet(StorableClassifierDataSet inner, Lock editingLock) : StorableClassifierDataSet
+internal sealed class LockingClassifierDataSet(ClassifierDataSet inner, Lock editingLock) : ClassifierDataSet, Decorator<ClassifierDataSet>
 {
 	public string Name
 	{
@@ -27,14 +31,14 @@ internal sealed class LockingClassifierDataSet(StorableClassifierDataSet inner, 
 		}
 	}
 
-	public StorableTagsOwner<StorableTag> TagsLibrary { get; } =
-		new LockingTagsLibrary<StorableTag>(inner.TagsLibrary, editingLock);
+	public TagsOwner<Tag> TagsLibrary { get; } =
+		new LockingTagsLibrary<Tag>(inner.TagsLibrary, editingLock);
 
-	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; } =
-		new LockingAssetsLibrary<StorableClassifierAsset>(inner.AssetsLibrary, editingLock);
+	public AssetsOwner<ClassifierAsset> AssetsLibrary { get; } =
+		new LockingAssetsLibrary<ClassifierAsset>(inner.AssetsLibrary, editingLock);
 
-	public StorableWeightsLibrary WeightsLibrary { get; } =
+	public WeightsLibrary WeightsLibrary { get; } =
 		new LockingWeightsLibrary(inner.WeightsLibrary, editingLock);
 
-	public StorableClassifierDataSet Innermost => inner.Innermost;
+	public ClassifierDataSet Inner => inner;
 }

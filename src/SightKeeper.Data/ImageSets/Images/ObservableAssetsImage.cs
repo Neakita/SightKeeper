@@ -1,13 +1,14 @@
 using FlakeId;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class ObservableAssetsImage(StorableImage inner) : StorableImage
+internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage
 {
 	public Id Id => inner.Id;
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;

@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class NotifyingTag(StorableTag inner) : StorableTag, INotifyPropertyChanged
+internal sealed class NotifyingTag(Tag inner) : Tag, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -1,8 +1,8 @@
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.ImageSets;
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests.Images;
 
@@ -42,26 +42,26 @@ public sealed class ImageSavingTests
 
 	private static ImageSetFormatter SetFormatter => new(new FakeImageSetWrapper(), new InMemoryImageSetFactory(new FakeImageWrapper()), Substitute.For<ImageLookupperPopulator>());
 
-	private static StorableImageSet CreateSetWithImages(params IEnumerable<DateTimeOffset> imageCreationTimestamps)
+	private static ImageSet CreateSetWithImages(params IEnumerable<DateTimeOffset> imageCreationTimestamps)
 	{
-		var set = Substitute.For<StorableImageSet>();
+		var set = Substitute.For<ImageSet>();
 		var images = imageCreationTimestamps.Select(CreateImage).ToList();
 		set.Images.Returns(images);
 		return set;
 	}
 
-	private static StorableImageSet CreateSetWithImage(Vector2<ushort> imageSize)
+	private static ImageSet CreateSetWithImage(Vector2<ushort> imageSize)
 	{
-		var set = Substitute.For<StorableImageSet>();
-		var image = Substitute.For<StorableImage>();
+		var set = Substitute.For<ImageSet>();
+		var image = Substitute.For<ManagedImage>();
 		image.Size.Returns(imageSize);
 		set.Images.Returns([image]);
 		return set;
 	}
 
-	private static StorableImage CreateImage(DateTimeOffset creationTimestamp)
+	private static ManagedImage CreateImage(DateTimeOffset creationTimestamp)
 	{
-		var image = Substitute.For<StorableImage>();
+		var image = Substitute.For<ManagedImage>();
 		image.CreationTimestamp.Returns(creationTimestamp);
 		return image;
 	}

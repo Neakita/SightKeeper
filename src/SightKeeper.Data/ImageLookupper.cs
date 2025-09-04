@@ -1,10 +1,10 @@
 using FlakeId;
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 
 public interface ImageLookupper
 {
-	StorableImage GetImage(Id id);
+	ManagedImage GetImage(Id id);
 	bool ContainsImage(Id id);
 }

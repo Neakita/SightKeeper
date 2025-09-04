@@ -1,6 +1,8 @@
+using SightKeeper.Domain.DataSets.Tags;
+
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class InMemoryTagsLibrary<TTag>(TagFactory<TTag> tagFactory) : StorableTagsOwner<TTag>
+internal sealed class InMemoryTagsLibrary<TTag>(TagFactory<TTag> tagFactory) : TagsOwner<TTag>
 {
 	public IReadOnlyList<TTag> Tags => _tags;
 

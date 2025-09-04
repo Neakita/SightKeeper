@@ -1,11 +1,12 @@
-using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Classifier.Assets;
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Classifier.Decorators;
 
-internal sealed class OverrideLibrariesClassifierDataSet(StorableClassifierDataSet inner) : StorableClassifierDataSet
+internal sealed class OverrideLibrariesClassifierDataSet(ClassifierDataSet inner) : ClassifierDataSet, Decorator<ClassifierDataSet>
 {
 	public string Name
 	{
@@ -19,9 +20,8 @@ internal sealed class OverrideLibrariesClassifierDataSet(StorableClassifierDataS
 		set => inner.Description = value;
 	}
 
-	public StorableTagsOwner<StorableTag> TagsLibrary { get; init; } = inner.TagsLibrary;
-	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; init; } = inner.AssetsLibrary;
-	public StorableWeightsLibrary WeightsLibrary { get; init; } = inner.WeightsLibrary;
-
-	public StorableClassifierDataSet Innermost => inner.Innermost;
+	public TagsOwner<Tag> TagsLibrary { get; init; } = inner.TagsLibrary;
+	public AssetsOwner<ClassifierAsset> AssetsLibrary { get; init; } = inner.AssetsLibrary;
+	public WeightsLibrary WeightsLibrary { get; init; } = inner.WeightsLibrary;
+	public ClassifierDataSet Inner => inner;
 }

@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Detector;
 
-public sealed class DomainDetectorItem(DetectorItem inner) : DetectorItem
+public sealed class DomainDetectorItem(DetectorItem inner) : DetectorItem, Decorator<DetectorItem>
 {
 	public Tag Tag
 	{
@@ -24,4 +24,6 @@ public sealed class DomainDetectorItem(DetectorItem inner) : DetectorItem
 			inner.Bounding = value;
 		}
 	}
+
+	public DetectorItem Inner => inner;
 }

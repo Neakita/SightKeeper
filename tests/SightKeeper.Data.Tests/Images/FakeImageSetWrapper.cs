@@ -1,10 +1,11 @@
 using SightKeeper.Data.ImageSets;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Tests.Images;
 
 internal sealed class FakeImageSetWrapper : ImageSetWrapper
 {
-	public StorableImageSet Wrap(StorableImageSet set)
+	public ImageSet Wrap(ImageSet set)
 	{
 		return set;
 	}

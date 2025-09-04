@@ -2,8 +2,8 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
-using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
@@ -12,8 +12,8 @@ internal static class WeightsFormatter
 {
 	public static void WriteWeights<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<StorableWeights> weightsCollection,
-		IReadOnlyDictionary<StorableTag, byte> tagIndexes)
+		IReadOnlyCollection<Domain.DataSets.Weights.Weights> weightsCollection,
+		IReadOnlyDictionary<Tag, byte> tagIndexes)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(weightsCollection.Count);
@@ -38,10 +38,11 @@ internal static class WeightsFormatter
 		}
 	}
 
-	public static void ReadWeights(ref MemoryPackReader reader, StorableWeightsLibrary weightsLibrary, IReadOnlyList<StorableTag> tags)
+	public static void ReadWeights(ref MemoryPackReader reader, WeightsLibrary library, IReadOnlyList<Tag> tags)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var weightsCount));
-		weightsLibrary.EnsureCapacity(weightsCount);
+		var innermostLibrary = library.UnWrapDecorator<InMemoryWeightsLibrary>();
+		innermostLibrary.EnsureCapacity(weightsCount);
 		for (int i = 0; i < weightsCount; i++)
 		{
 			reader.ReadUnmanaged(
@@ -53,7 +54,7 @@ internal static class WeightsFormatter
 				out Vector2<ushort> resolution);
 			Span<byte> tagIndexes = new();
 			reader.ReadUnmanagedSpan(ref tagIndexes);
-			List<StorableTag> weightsTags = new(tagIndexes.Length);
+			List<Tag> weightsTags = new(tagIndexes.Length);
 			foreach (var tagIndex in tagIndexes)
 			{
 				var tag = tags[tagIndex];
@@ -68,7 +69,7 @@ internal static class WeightsFormatter
 				Resolution = resolution
 			};
 			var weights = new InMemoryWeights(id, weightsMetadata, weightsTags);
-			weightsLibrary.AddWeights(weights);
+			innermostLibrary.AddWeights(weights);
 		}
 	}
 }

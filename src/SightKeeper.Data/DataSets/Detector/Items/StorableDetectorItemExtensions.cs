@@ -4,22 +4,22 @@ namespace SightKeeper.Data.DataSets.Detector.Items;
 
 internal static class StorableDetectorItemExtensions
 {
-	public static StorableDetectorItem WithTracking(this StorableDetectorItem item, ChangeListener listener)
+	public static DetectorItem WithTracking(this DetectorItem item, ChangeListener listener)
 	{
 		return new TrackableDetectorItem(item, listener);
 	}
 
-	public static StorableDetectorItem WithLocking(this StorableDetectorItem item, Lock editingLock)
+	public static DetectorItem WithLocking(this DetectorItem item, Lock editingLock)
 	{
 		return new LockingDetectorItem(item, editingLock);
 	}
 
-	public static StorableDetectorItem WithDomainRules(this StorableDetectorItem item)
+	public static DetectorItem WithDomainRules(this DetectorItem item)
 	{
-		return new StorableDetectorItemExtension(new DomainDetectorItem(item), item);
+		return new DomainDetectorItem(item);
 	}
 
-	public static StorableDetectorItem WithNotifications(this StorableDetectorItem item)
+	public static DetectorItem WithNotifications(this DetectorItem item)
 	{
 		return new NotifyingDetectorItem(item);
 	}

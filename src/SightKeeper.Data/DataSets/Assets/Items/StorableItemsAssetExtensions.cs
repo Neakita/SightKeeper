@@ -5,28 +5,27 @@ namespace SightKeeper.Data.DataSets.Assets.Items;
 
 internal static class StorableItemsAssetExtensions
 {
-	public static StorableItemsAsset<TItem> WithTracking<TItem>(this StorableItemsAsset<TItem> asset, ChangeListener listener)
+	public static ItemsAsset<TItem> WithTracking<TItem>(this ItemsAsset<TItem> asset, ChangeListener listener)
 	{
 		return new TrackableItemsAsset<TItem>(asset, listener);
 	}
 
-	public static StorableItemsAsset<TItem> WithLocking<TItem>(this StorableItemsAsset<TItem> asset, Lock editingLock)
+	public static ItemsAsset<TItem> WithLocking<TItem>(this ItemsAsset<TItem> asset, Lock editingLock)
 	{
 		return new LockingItemsAsset<TItem>(asset, editingLock);
 	}
 
-	public static StorableItemsAsset<TItem> WithObservableItems<TItem>(this StorableItemsAsset<TItem> asset)
+	public static ItemsAsset<TItem> WithObservableItems<TItem>(this ItemsAsset<TItem> asset)
 	{
 		return new ObservableItemsAsset<TItem>(asset);
 	}
 
-	public static StorableItemsAsset<TItem> WithDomainRules<TItem>(this StorableItemsAsset<TItem> asset, TagsOwner<Tag> tagsOwner)
+	public static ItemsAsset<TItem> WithDomainRules<TItem>(this ItemsAsset<TItem> asset, TagsOwner<Tag> tagsOwner)
 	{
-		return new StorableItemsAssetExtension<TItem>(
-			new DomainItemsAsset<TItem>(tagsOwner, asset), asset);
+		return new DomainItemsAsset<TItem>(tagsOwner, asset);
 	}
 
-	public static StorableItemsAsset<TItem> WithNotifications<TItem>(this StorableItemsAsset<TItem> asset)
+	public static ItemsAsset<TItem> WithNotifications<TItem>(this ItemsAsset<TItem> asset)
 	{
 		return new NotifyingItemsAsset<TItem>(asset);
 	}

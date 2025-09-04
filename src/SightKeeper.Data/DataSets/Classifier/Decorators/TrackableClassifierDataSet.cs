@@ -1,11 +1,15 @@
 using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Classifier.Decorators;
 
-internal sealed class TrackableClassifierDataSet(StorableClassifierDataSet inner, ChangeListener listener) : StorableClassifierDataSet
+internal sealed class TrackableClassifierDataSet(ClassifierDataSet inner, ChangeListener listener) : ClassifierDataSet, Decorator<ClassifierDataSet>
 {
 	public string Name
 	{
@@ -27,14 +31,14 @@ internal sealed class TrackableClassifierDataSet(StorableClassifierDataSet inner
 		}
 	}
 
-	public StorableTagsOwner<StorableTag> TagsLibrary { get; } =
-		new TrackableTagsLibrary<StorableTag>(inner.TagsLibrary, listener);
+	public TagsOwner<Tag> TagsLibrary { get; } =
+		new TrackableTagsLibrary<Tag>(inner.TagsLibrary, listener);
 
-	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary { get; } =
-		new TrackableAssetsLibrary<StorableClassifierAsset>(inner.AssetsLibrary, listener);
+	public AssetsOwner<ClassifierAsset> AssetsLibrary { get; } =
+		new TrackableAssetsLibrary<ClassifierAsset>(inner.AssetsLibrary, listener);
 
-	public StorableWeightsLibrary WeightsLibrary { get; } =
+	public WeightsLibrary WeightsLibrary { get; } =
 		new TrackableWeightsLibrary(inner.WeightsLibrary, listener);
 
-	public StorableClassifierDataSet Innermost => inner.Innermost;
+	public ClassifierDataSet Inner => inner;
 }

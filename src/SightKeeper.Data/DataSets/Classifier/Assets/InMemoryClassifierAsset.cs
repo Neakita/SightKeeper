@@ -1,17 +1,18 @@
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Classifier.Assets;
 
-internal sealed class InMemoryClassifierAsset : StorableClassifierAsset
+internal sealed class InMemoryClassifierAsset : ClassifierAsset
 {
-	public StorableImage Image { get; }
+	public ManagedImage Image { get; }
 	public AssetUsage Usage { get; set; } = AssetUsage.Any;
-	public StorableTag Tag { get; set; }
-	public StorableClassifierAsset Innermost => this;
+	public Tag Tag { get; set; }
+	public ClassifierAsset Innermost => this;
 
-	public InMemoryClassifierAsset(StorableImage image, StorableTag tag)
+	public InMemoryClassifierAsset(ManagedImage image, Tag tag)
 	{
 		Image = image;
 		Tag = tag;

@@ -1,8 +1,10 @@
+using SightKeeper.Domain.DataSets.Detector;
+
 namespace SightKeeper.Data.DataSets.Detector;
 
 public sealed class DetectorDataSetWrapper(ChangeListener changeListener, Lock editingLock)
 {
-	public StorableDetectorDataSet Wrap(StorableDetectorDataSet set)
+	public DetectorDataSet Wrap(DetectorDataSet set)
 	{
 		return set
 			.WithTracking(changeListener)

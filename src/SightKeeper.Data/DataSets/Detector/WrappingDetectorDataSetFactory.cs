@@ -11,14 +11,14 @@ public sealed class WrappingDetectorDataSetFactory(
 	DetectorDataSetWrapper wrapper,
 	ChangeListener changeListener,
 	Lock editingLock)
-	: DataSetFactory<StorableDetectorDataSet>, DataSetFactory<DetectorDataSet>
+	: DataSetFactory<DetectorDataSet>
 {
-	public StorableDetectorDataSet CreateDataSet()
+	public DetectorDataSet CreateDataSet()
 	{
 		var tagFactory = new StorableTagFactory(changeListener, editingLock);
 		var itemFactory = new StorableDetectorItemFactory(changeListener, editingLock);
 		var assetFactory =
-			new StorableItemsAssetFactory<StorableDetectorItem>(itemFactory, changeListener, editingLock);
+			new StorableItemsAssetFactory<DetectorItem>(itemFactory, changeListener, editingLock);
 		var inMemorySet = new InMemoryDetectorDataSet(tagFactory, assetFactory, new StorableWeightsWrapper());
 		var wrappedSet = wrapper.Wrap(inMemorySet);
 		tagFactory.TagsOwner = wrappedSet.TagsLibrary;

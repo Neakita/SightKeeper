@@ -6,7 +6,7 @@ using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Data.ImageSets;
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.Images;
 
@@ -14,8 +14,8 @@ namespace SightKeeper.Data.DataSets;
 
 public sealed class ZippedMemoryPackDataSetImporter(
 	ImageLookupper imageLookupper,
-	ImageSetFactory<StorableImageSet> imageSetFactory,
-	WriteRepository<StorableImageSet> imageSetsWriteRepository,
+	ImageSetFactory<ImageSet> imageSetFactory,
+	WriteRepository<ImageSet> imageSetsWriteRepository,
 	WriteRepository<DataSet> dataSetsWriteRepository,
 	ReadRepository<DataSet> dataSetsReadRepository,
 	ImageLookupperPopulator lookupperPopulator)
@@ -36,37 +36,38 @@ public sealed class ZippedMemoryPackDataSetImporter(
 	private async Task<ImageSet?> ImportMissingImages(ZipArchive archive)
 	{
 		var images = await ImportImagesMetadata(archive);
-		StorableImageSet? importedImagesSet = null;
+		ImageSet? importedImagesSet = null;
 		foreach (var image in images)
 		{
 			if (imageLookupper.ContainsImage(image.Id))
 				continue;
 			importedImagesSet ??= CreateImagesSet();
-			var wrappedImage = importedImagesSet.WrapAndInsertImage(image);
+			var innerImportedImagesSet = importedImagesSet.UnWrapDecorator<InMemoryImageSet>();
+			var wrappedImage = innerImportedImagesSet.WrapAndInsertImage(image);
 			await CopyImageData(archive, wrappedImage);
 			lookupperPopulator.AddImage(wrappedImage);
 		}
 		return importedImagesSet;
 	}
 
-	private static async Task<IReadOnlyCollection<StorableImage>> ImportImagesMetadata(ZipArchive archive)
+	private static async Task<IReadOnlyCollection<ManagedImage>> ImportImagesMetadata(ZipArchive archive)
 	{
 		var entry = archive.GetEntry("images.bin");
 		Guard.IsNotNull(entry);
 		await using var stream = entry.Open();
-		var images = await MemoryPackSerializer.DeserializeAsync<IReadOnlyCollection<StorableImage>>(stream);
+		var images = await MemoryPackSerializer.DeserializeAsync<IReadOnlyCollection<ManagedImage>>(stream);
 		Guard.IsNotNull(images);
 		return images;
 	}
 
-	private StorableImageSet CreateImagesSet()
+	private ImageSet CreateImagesSet()
 	{
 		var set = imageSetFactory.CreateImageSet();
 		imageSetsWriteRepository.Add(set);
 		return set;
 	}
 
-	private static async Task CopyImageData(ZipArchive archive, StorableImage image)
+	private static async Task CopyImageData(ZipArchive archive, ManagedImage image)
 	{
 		var entryPath = Path.Combine("images", image.Id.ToString());
 		if (!string.IsNullOrWhiteSpace(image.DataFormat))

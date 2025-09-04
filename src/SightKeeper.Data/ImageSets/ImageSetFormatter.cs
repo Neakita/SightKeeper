@@ -2,7 +2,6 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using SightKeeper.Application.ImageSets.Creating;
-using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
@@ -11,9 +10,9 @@ public sealed class ImageSetFormatter(
 	ImageSetWrapper setWrapper,
 	ImageSetFactory<InMemoryImageSet> imageSetFactory,
 	ImageLookupperPopulator imageLookupperPopulator)
-    : MemoryPackFormatter<StorableImageSet>, IMemoryPackFormatter<ImageSet>
+    : MemoryPackFormatter<ImageSet>
 {
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref StorableImageSet? set)
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref ImageSet? set)
 	{
 		if (set == null)
 		{
@@ -24,7 +23,7 @@ public sealed class ImageSetFormatter(
 		WriteImages(ref writer, set);
 	}
 
-	public override void Deserialize(ref MemoryPackReader reader, scoped ref StorableImageSet? set)
+	public override void Deserialize(ref MemoryPackReader reader, scoped ref ImageSet? set)
 	{
 		if (reader.PeekIsNull())
 		{
@@ -44,10 +43,10 @@ public sealed class ImageSetFormatter(
 		writer.WriteString(set.Description);
 	}
 
-	private static void WriteImages<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, StorableImageSet set)
+	private static void WriteImages<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, ImageSet set)
 		where TBufferWriter : IBufferWriter<byte>
 	{
-		writer.WriteValue<IReadOnlyCollection<StorableImage>>(set.Images);
+		writer.WriteValue<IReadOnlyCollection<ManagedImage>>(set.Images);
 	}
 
 	private InMemoryImageSet ReadGeneralMembers(ref MemoryPackReader reader)
@@ -64,23 +63,10 @@ public sealed class ImageSetFormatter(
 
 	private static void ReadImages(ref MemoryPackReader reader, InMemoryImageSet inMemorySet)
 	{
-		var images = reader.ReadValue<IReadOnlyCollection<StorableImage>>();
+		var images = reader.ReadValue<IReadOnlyCollection<ManagedImage>>();
 		Guard.IsNotNull(images);
 		inMemorySet.EnsureCapacity(images.Count);
 		foreach (var image in images)
 			inMemorySet.WrapAndInsertImage(image);
-	}
-
-	public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref ImageSet? set) where TBufferWriter : IBufferWriter<byte>
-	{
-		var storableSet = (StorableImageSet?)set;
-		Serialize(ref writer, ref storableSet);
-	}
-
-	public void Deserialize(ref MemoryPackReader reader, scoped ref ImageSet? set)
-	{
-		StorableImageSet? storableSet = null;
-		Deserialize(ref reader, ref storableSet);
-		set = storableSet;
 	}
 }

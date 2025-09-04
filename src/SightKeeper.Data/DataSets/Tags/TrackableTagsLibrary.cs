@@ -1,6 +1,8 @@
+using SightKeeper.Domain.DataSets.Tags;
+
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class TrackableTagsLibrary<TTag>(StorableTagsOwner<TTag> inner, ChangeListener listener) : StorableTagsOwner<TTag>
+internal sealed class TrackableTagsLibrary<TTag>(TagsOwner<TTag> inner, ChangeListener listener) : TagsOwner<TTag>
 {
 	public IReadOnlyList<TTag> Tags => inner.Tags;
 
@@ -15,10 +17,5 @@ internal sealed class TrackableTagsLibrary<TTag>(StorableTagsOwner<TTag> inner, 
 	{
 		inner.DeleteTagAt(index);
 		listener.SetDataChanged();
-	}
-
-	public void EnsureCapacity(int capacity)
-	{
-		inner.EnsureCapacity(capacity);
 	}
 }

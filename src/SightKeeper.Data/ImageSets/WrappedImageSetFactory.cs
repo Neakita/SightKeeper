@@ -3,25 +3,20 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-public sealed class WrappedImageSetFactory : ImageSetFactory<StorableImageSet>, ImageSetFactory<ImageSet>
+public sealed class WrappedImageSetFactory : ImageSetFactory<ImageSet>
 {
-	public WrappedImageSetFactory(ImageSetFactory<StorableImageSet> innerFactory, ImageSetWrapper wrapper)
+	public WrappedImageSetFactory(ImageSetFactory<ImageSet> innerFactory, ImageSetWrapper wrapper)
 	{
         _innerFactory = innerFactory;
 		_setWrapper = wrapper;
 	}
 
-	public StorableImageSet CreateImageSet()
+	public ImageSet CreateImageSet()
     {
         var innerSet = _innerFactory.CreateImageSet();
 		return _setWrapper.Wrap(innerSet);
 	}
 
-	ImageSet ImageSetFactory<ImageSet>.CreateImageSet()
-	{
-		return CreateImageSet();
-	}
-
-	private readonly ImageSetFactory<StorableImageSet> _innerFactory;
+	private readonly ImageSetFactory<ImageSet> _innerFactory;
 	private readonly ImageSetWrapper _setWrapper;
 }

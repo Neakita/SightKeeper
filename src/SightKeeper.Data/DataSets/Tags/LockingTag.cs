@@ -2,7 +2,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class LockingTag(StorableTag inner, Lock editingLock): StorableTag
+internal sealed class LockingTag(Tag inner, Lock editingLock): Tag
 {
 	public string Name
 	{

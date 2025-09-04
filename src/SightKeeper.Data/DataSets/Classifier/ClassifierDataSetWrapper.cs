@@ -1,8 +1,10 @@
+using SightKeeper.Domain.DataSets.Classifier;
+
 namespace SightKeeper.Data.DataSets.Classifier;
 
 public sealed class ClassifierDataSetWrapper(ChangeListener changeListener, Lock editingLock)
 {
-	public StorableClassifierDataSet Wrap(StorableClassifierDataSet set)
+	public ClassifierDataSet Wrap(ClassifierDataSet set)
 	{
 		return set
 

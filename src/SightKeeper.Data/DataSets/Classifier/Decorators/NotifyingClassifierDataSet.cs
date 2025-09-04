@@ -1,14 +1,16 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Data.DataSets.Classifier.Assets;
-using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Classifier;
+using SightKeeper.Domain.DataSets.Tags;
+using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Classifier.Decorators;
 
-internal sealed class NotifyingClassifierDataSet(StorableClassifierDataSet inner) : StorableClassifierDataSet, INotifyPropertyChanged
+internal sealed class NotifyingClassifierDataSet(ClassifierDataSet inner) : ClassifierDataSet, Decorator<ClassifierDataSet>, INotifyPropertyChanged
 {
+	public ClassifierDataSet Inner => inner;
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public string Name
@@ -35,11 +37,9 @@ internal sealed class NotifyingClassifierDataSet(StorableClassifierDataSet inner
 		}
 	}
 
-	public StorableTagsOwner<StorableTag> TagsLibrary => inner.TagsLibrary;
-	public StorableAssetsOwner<StorableClassifierAsset> AssetsLibrary => inner.AssetsLibrary;
-	public StorableWeightsLibrary WeightsLibrary => inner.WeightsLibrary;
-
-	public StorableClassifierDataSet Innermost => inner.Innermost;
+	public TagsOwner<Tag> TagsLibrary => inner.TagsLibrary;
+	public AssetsOwner<ClassifierAsset> AssetsLibrary => inner.AssetsLibrary;
+	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
 
 	private void OnPropertyChanged([CallerMemberName] string propertyName = "")
 	{

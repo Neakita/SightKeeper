@@ -1,8 +1,8 @@
-using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
 internal interface AssetFactory<out TAsset>
 {
-	TAsset CreateAsset(StorableImage image);
+	TAsset CreateAsset(ManagedImage image);
 }

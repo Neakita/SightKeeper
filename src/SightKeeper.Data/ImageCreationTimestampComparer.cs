@@ -2,11 +2,11 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 
-internal sealed class ImageCreationTimestampComparer<TImage> : IComparer<TImage> where TImage : ManagedImage
+internal sealed class ImageCreationTimestampComparer : IComparer<ImageData>
 {
-	public static ImageCreationTimestampComparer<TImage> Instance { get; } = new();
+	public static ImageCreationTimestampComparer Instance { get; } = new();
 
-	public int Compare(TImage? x, TImage? y)
+	public int Compare(ImageData? x, ImageData? y)
 	{
 		if (ReferenceEquals(x, y))
 			return 0;

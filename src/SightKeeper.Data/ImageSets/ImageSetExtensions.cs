@@ -5,42 +5,42 @@ namespace SightKeeper.Data.ImageSets;
 
 internal static class ImageSetExtensions
 {
-	public static StorableImageSet WithDomainRules(this StorableImageSet set)
+	public static ImageSet WithDomainRules(this ImageSet set)
 	{
-		return new StorableImageSetExtension(new DomainImageSet(set), set);
+		return new DomainImageSet(set);
 	}
 
-	public static StorableImageSet WithTracking(this StorableImageSet set, ChangeListener listener)
+	public static ImageSet WithTracking(this ImageSet set, ChangeListener listener)
 	{
 		return new TrackableImageSet(set, listener);
 	}
 
-	public static StorableImageSet WithLocking(this StorableImageSet set, Lock editingLock)
+	public static ImageSet WithLocking(this ImageSet set, Lock editingLock)
 	{
 		return new LockingImageSet(set, editingLock);
 	}
 
-	public static StorableImageSet WithObservableImages(this StorableImageSet set)
+	public static ImageSet WithObservableImages(this ImageSet set)
 	{
 		return new ObservableImagesImageSet(set);
 	}
 
-	public static StorableImageSet WithNotifications(this StorableImageSet set)
+	public static ImageSet WithNotifications(this ImageSet set)
 	{
 		return new NotifyingImageSet(set);
 	}
 
-	public static StorableImageSet WithImagesDataRemoving(this StorableImageSet set)
+	public static ImageSet WithImagesDataRemoving(this ImageSet set)
 	{
 		return new ImagesDataRemovingImageSet(set);
 	}
 
-	public static StorableImageSet WithImagesDisposing(this StorableImageSet set)
+	public static ImageSet WithImagesDisposing(this ImageSet set)
 	{
 		return new DisposingImageSet(set);
 	}
 
-	public static StorableImageSet WithLookupperPopulator(this StorableImageSet set, ImageLookupperPopulator populator)
+	public static ImageSet WithLookupperPopulator(this ImageSet set, ImageLookupperPopulator populator)
 	{
 		return new PopulateImageLookupperImageSet(set, populator);
 	}

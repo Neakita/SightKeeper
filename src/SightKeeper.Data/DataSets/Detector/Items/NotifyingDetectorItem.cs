@@ -1,27 +1,37 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector.Items;
 
-internal sealed class NotifyingDetectorItem(StorableDetectorItem inner) : StorableDetectorItem, INotifyPropertyChanged
+internal sealed class NotifyingDetectorItem(DetectorItem inner) : DetectorItem, INotifyPropertyChanged, Decorator<DetectorItem>
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public Bounding Bounding
 	{
 		get => inner.Bounding;
-		set => inner.Bounding = value;
+		set
+		{
+			inner.Bounding = value;
+			OnPropertyChanged();
+		}
 	}
 
-	public StorableTag Tag
+	public Tag Tag
 	{
 		get => inner.Tag;
-		set => inner.Tag = value;
+		set
+		{
+			inner.Tag = value;
+			OnPropertyChanged();
+		}
 	}
 
-	public StorableDetectorItem Innermost => inner.Innermost;
+	public DetectorItem Inner => inner;
 
 	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{
