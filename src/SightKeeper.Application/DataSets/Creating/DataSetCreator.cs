@@ -6,18 +6,19 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.DataSets.Creating;
 
 public sealed class DataSetCreator
 {
 	public required IValidator<NewDataSetData> Validator { get; init; }
-	public required WriteRepository<DataSet<Asset>> Repository { get; init; }
-	public required DataSetFactory<ClassifierAsset> ClassifierFactory { get; init; }
-	public required DataSetFactory<ItemsAsset<DetectorItem>> DetectorFactory { get; init; }
-	public required DataSetFactory<ItemsAsset<PoserItem>> PoserFactory { get; init; }
+	public required WriteRepository<DataSet<Tag, Asset>> Repository { get; init; }
+	public required DataSetFactory<Tag, ClassifierAsset> ClassifierFactory { get; init; }
+	public required DataSetFactory<Tag, ItemsAsset<DetectorItem>> DetectorFactory { get; init; }
+	public required DataSetFactory<PoserTag, ItemsAsset<PoserItem>> PoserFactory { get; init; }
 
-	public DataSet<Asset> Create(NewDataSetData data)
+	public DataSet<Tag, Asset> Create(NewDataSetData data)
 	{
 		Validator.ValidateAndThrow(data);
 		var dataSet = CreateDataSet(data.Type);
@@ -27,9 +28,9 @@ public sealed class DataSetCreator
 		return dataSet;
 	}
 
-	private DataSet<Asset> CreateDataSet(DataSetType type)
+	private DataSet<Tag, Asset> CreateDataSet(DataSetType type)
 	{
-		DataSetFactory<Asset> factory = type switch
+		DataSetFactory<Tag, Asset> factory = type switch
 		{
 			DataSetType.Classifier => ClassifierFactory,
 			DataSetType.Detector => DetectorFactory,
@@ -39,13 +40,13 @@ public sealed class DataSetCreator
 		return factory.CreateDataSet();
 	}
 
-	private static void SetGeneralData(DataSet<Asset> dataSet, DataSetData data)
+	private static void SetGeneralData(DataSet<Tag, Asset> dataSet, DataSetData data)
 	{
 		dataSet.Name = data.Name;
 		dataSet.Description = data.Description;
 	}
 
-	private static void AddTags(DataSet<Asset> dataSet, IEnumerable<NewTagData> tagsData)
+	private static void AddTags(DataSet<Tag, Asset> dataSet, IEnumerable<NewTagData> tagsData)
 	{
 		foreach (var tagData in tagsData)
 		{

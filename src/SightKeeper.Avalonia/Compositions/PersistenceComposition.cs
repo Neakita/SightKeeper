@@ -13,7 +13,9 @@ using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.Images;
+using Tag = SightKeeper.Domain.DataSets.Tags.Tag;
 
 namespace SightKeeper.Avalonia.Compositions;
 
@@ -27,9 +29,9 @@ public sealed class PersistenceComposition
 		.As(Lifetime.Singleton)
 		.To<AppDataImageSetsRepository>()
 
-		.Bind<WriteRepository<DataSet<Asset>>>()
-		.Bind<ReadRepository<DataSet<Asset>>>()
-		.Bind<ObservableRepository<DataSet<Asset>>>()
+		.Bind<WriteRepository<DataSet<Tag, Asset>>>()
+		.Bind<ReadRepository<DataSet<Tag, Asset>>>()
+		.Bind<ObservableRepository<DataSet<Tag, Asset>>>()
 		.As(Lifetime.Singleton)
 		.To<AppDataDataSetsRepository>()
 
@@ -44,14 +46,14 @@ public sealed class PersistenceComposition
 			return new WrappedImageSetFactory(inMemoryImageSetFactory, wrapper);
 		})
 
-		.Bind<DataSetFactory<ClassifierAsset>>()
+		.Bind<DataSetFactory<Tag, ClassifierAsset>>()
 		.To<WrappingClassifierDataSetFactory>()
 	
-		.Bind<DataSetFactory<ItemsAsset<DetectorItem>>>()
+		.Bind<DataSetFactory<Tag, ItemsAsset<DetectorItem>>>()
 		.To<WrappingDetectorDataSetFactory>()
 	
-		.Bind<DataSetFactory<PoserDataSet>>()
-		.To<DataSetFactory<PoserDataSet>>(_ => null!)
+		.Bind<DataSetFactory<PoserTag, ItemsAsset<PoserItem>>>()
+		.To<DataSetFactory<PoserTag, ItemsAsset<PoserItem>>>(_ => null!)
 
 		.Bind<ChangeListener>()
 		.As(Lifetime.Singleton)

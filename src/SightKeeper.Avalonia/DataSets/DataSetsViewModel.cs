@@ -6,6 +6,7 @@ using SightKeeper.Avalonia.DataSets.Card;
 using SightKeeper.Avalonia.DataSets.Commands;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 using Vibrance;
 using Vibrance.Changes;
 
@@ -19,7 +20,7 @@ internal class DataSetsViewModel : ViewModel, DataSetsDataContext, IDisposable
 	public ICommand ImportDataSetCommand { get; }
 
 	public DataSetsViewModel(
-		ObservableListRepository<DataSet<Asset>> dataSetsObservableListRepository,
+		ObservableListRepository<DataSet<Tag, Asset>> dataSetsObservableListRepository,
 		CreateDataSetCommand createDataSetCommand,
 		ImportDataSetCommand importDataSetCommand,
 		DataSetCardViewModelFactory dataSetCardViewModelFactory)

@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
@@ -28,9 +29,9 @@ public sealed partial class DataSetSelectionViewModel : ViewModel, DataSetSelect
 		set => SelectedDataSet = (DataSetViewModel?)value;
 	}
 
-	DataSet<Asset>? DataSetSelection.SelectedDataSet => SelectedDataSet?.Value;
+	DataSet<Tag, Asset>? DataSetSelection.SelectedDataSet => SelectedDataSet?.Value;
 
-	IObservable<DataSet<Asset>?> DataSetSelection.SelectedDataSetChanged =>
+	IObservable<DataSet<Tag, Asset>?> DataSetSelection.SelectedDataSetChanged =>
 		SelectedDataSetChanged.Select(dataSetViewModel => dataSetViewModel?.Value);
 
 	public void Dispose()

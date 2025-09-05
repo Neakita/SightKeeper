@@ -4,8 +4,8 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Application.Training;
 
-public interface Trainer<in TAsset>
+public interface Trainer<in TTag, in TAsset>
 {
 	Vector2<ushort> ImageSize { get; set; }
-	Task<WeightsData> TrainAsync(ReadOnlyDataSet<TAsset> data, CancellationToken cancellationToken);
+	Task<WeightsData> TrainAsync(ReadOnlyDataSet<TTag, TAsset> data, CancellationToken cancellationToken);
 }

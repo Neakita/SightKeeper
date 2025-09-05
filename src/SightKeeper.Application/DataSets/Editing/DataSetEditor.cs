@@ -26,9 +26,9 @@ public class DataSetEditor : IDisposable
 		_dataSetEdited.Dispose();
 	}
 
-	private readonly Subject<DataSet<Asset>> _dataSetEdited = new();
+	private readonly Subject<DataSet<Tag, Asset>> _dataSetEdited = new();
 
-	private static void SetGeneralData(DataSet<Asset> dataSet, DataSetData data)
+	private static void SetGeneralData(DataSet<Tag, Asset> dataSet, DataSetData data)
 	{
 		dataSet.Name = data.Name;
 		dataSet.Description = data.Description;

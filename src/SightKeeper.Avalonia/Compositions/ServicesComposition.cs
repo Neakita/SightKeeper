@@ -27,6 +27,7 @@ using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SixLabors.ImageSharp.PixelFormats;
+using Tag = SightKeeper.Domain.DataSets.Tags.Tag;
 #if OS_WINDOWS
 using SightKeeper.Application.Windows;
 #elif OS_LINUX
@@ -117,7 +118,7 @@ public sealed class ServicesComposition
 		.Bind<ILogger>()
 		.To(_ => Log.Logger)
 
-		.Bind<DataSetExporter<DataSet<Asset>>>()
+		.Bind<DataSetExporter<DataSet<Tag, Asset>>>()
 		.To<ZippedMemoryPackDataSetExporter>()
 
 		.Bind<DataSetImporter>()

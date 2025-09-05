@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
-internal sealed class OverrideLibrariesDataSet<TAsset>(DataSet<TAsset> inner) : DataSet<TAsset>, Decorator<DataSet<TAsset>>
+internal sealed class OverrideLibrariesDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner) : DataSet<TTag, TAsset>, Decorator<DataSet<TTag, TAsset>>
 {
 	public string Name
 	{
@@ -20,8 +20,8 @@ internal sealed class OverrideLibrariesDataSet<TAsset>(DataSet<TAsset> inner) : 
 		set => inner.Description = value;
 	}
 
-	public TagsOwner<Tag> TagsLibrary { get; init; } = inner.TagsLibrary;
+	public TagsOwner<TTag> TagsLibrary { get; init; } = inner.TagsLibrary;
 	public AssetsOwner<TAsset> AssetsLibrary { get; init; } = inner.AssetsLibrary;
 	public WeightsLibrary WeightsLibrary { get; init; } = inner.WeightsLibrary;
-	public DataSet<TAsset> Inner => inner;
+	public DataSet<TTag, TAsset> Inner => inner;
 }

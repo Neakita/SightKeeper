@@ -3,6 +3,7 @@ using System.Windows.Input;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Card;
 
@@ -14,7 +15,7 @@ internal sealed class DataSetCardViewModel : ViewModel, DataSetCardDataContext
 	public ICommand ExportCommand { get; }
 	public ICommand DeleteCommand { get; }
 
-	public DataSetCardViewModel(DataSet<Asset> dataSet, ICommand editCommand, ICommand exportCommand, ICommand deleteCommand, WriteableBitmapImageLoader imageLoader)
+	public DataSetCardViewModel(DataSet<Tag, Asset> dataSet, ICommand editCommand, ICommand exportCommand, ICommand deleteCommand, WriteableBitmapImageLoader imageLoader)
 	{
 		_dataSet = dataSet;
 		var image = dataSet.AssetsLibrary.Images.FirstOrDefault();
@@ -25,5 +26,5 @@ internal sealed class DataSetCardViewModel : ViewModel, DataSetCardDataContext
 		DeleteCommand = deleteCommand;
 	}
 
-	private readonly DataSet<Asset> _dataSet;
+	private readonly DataSet<Tag, Asset> _dataSet;
 }

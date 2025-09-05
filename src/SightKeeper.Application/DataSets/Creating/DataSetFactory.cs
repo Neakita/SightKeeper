@@ -2,7 +2,7 @@ using SightKeeper.Domain.DataSets;
 
 namespace SightKeeper.Application.DataSets.Creating;
 
-public interface DataSetFactory<out TAsset>
+public interface DataSetFactory<out TTag, out TAsset>
 {
-	DataSet<TAsset> CreateDataSet();
+	DataSet<TTag, TAsset> CreateDataSet();
 }

@@ -1,12 +1,13 @@
 using FluentValidation;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
 public sealed class ExistingDataSetDataValidator : AbstractValidator<ExistingDataSetData>
 {
-	public ExistingDataSetDataValidator(ReadRepository<DataSet<Asset>> dataSetsRepository)
+	public ExistingDataSetDataValidator(ReadRepository<DataSet<Tag, Asset>> dataSetsRepository)
 	{
 		_dataSetsRepository = dataSetsRepository;
 		Include(DataSetDataValidator.Instance);
@@ -16,9 +17,9 @@ public sealed class ExistingDataSetDataValidator : AbstractValidator<ExistingDat
 			.WithMessage("Name must be unique");
 	}
 
-	private readonly ReadRepository<DataSet<Asset>> _dataSetsRepository;
+	private readonly ReadRepository<DataSet<Tag, Asset>> _dataSetsRepository;
 
-	private bool IsNameFree(DataSet<Asset> subject, string name)
+	private bool IsNameFree(DataSet<Tag, Asset> subject, string name)
 	{
 		return _dataSetsRepository.Items.All(dataSet => dataSet == subject || dataSet.Name != name);
 	}

@@ -25,7 +25,7 @@ internal sealed class ClassifierAssetsFormatter(ImageLookupper imageLookupper) :
 		}
 	}
 
-	public void Deserialize(ref MemoryPackReader reader, DataSet<ClassifierAsset> set)
+	public void Deserialize(ref MemoryPackReader reader, DataSet<Tag, ClassifierAsset> set)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var assetsCount));
 		for (int i = 0; i < assetsCount; i++)

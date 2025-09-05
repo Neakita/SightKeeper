@@ -4,6 +4,7 @@ using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
@@ -23,7 +24,7 @@ internal abstract partial class DataSetDialogViewModel : DialogViewModel<bool>, 
 		DataSetEditor = new DataSetEditorViewModel();
 	}
 
-	public DataSetDialogViewModel(DataSet<Asset> dataSet)
+	public DataSetDialogViewModel(DataSet<Tag, Asset> dataSet)
 	{
 		DataSetEditor = new DataSetEditorViewModel(dataSet);
 	}

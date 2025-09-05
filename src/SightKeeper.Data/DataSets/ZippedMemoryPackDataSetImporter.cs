@@ -9,6 +9,7 @@ using SightKeeper.Data.ImageSets;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets;
@@ -17,8 +18,8 @@ public sealed class ZippedMemoryPackDataSetImporter(
 	ImageLookupper imageLookupper,
 	ImageSetFactory<ImageSet> imageSetFactory,
 	WriteRepository<ImageSet> imageSetsWriteRepository,
-	WriteRepository<DataSet<Asset>> dataSetsWriteRepository,
-	ReadRepository<DataSet<Asset>> dataSetsReadRepository,
+	WriteRepository<DataSet<Tag, Asset>> dataSetsWriteRepository,
+	ReadRepository<DataSet<Tag, Asset>> dataSetsReadRepository,
 	ImageLookupperPopulator lookupperPopulator)
 	: DataSetImporter
 {
@@ -82,12 +83,12 @@ public sealed class ZippedMemoryPackDataSetImporter(
 		await readStream.CopyToAsync(writeStream);
 	}
 
-	private static async Task<DataSet<Asset>> ReadDataSet(ZipArchive archive)
+	private static async Task<DataSet<Tag, Asset>> ReadDataSet(ZipArchive archive)
 	{
 		var entry = archive.GetEntry("data.bin");
 		Guard.IsNotNull(entry);
 		await using var stream = entry.Open();
-		var dataSet = await MemoryPackSerializer.DeserializeAsync<DataSet<Asset>>(stream);
+		var dataSet = await MemoryPackSerializer.DeserializeAsync<DataSet<Tag, Asset>>(stream);
 		Guard.IsNotNull(dataSet);
 		return dataSet;
 	}

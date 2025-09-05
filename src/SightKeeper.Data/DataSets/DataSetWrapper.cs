@@ -1,10 +1,11 @@
 ﻿using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets;
 
 public sealed class DataSetWrapper(ChangeListener changeListener, Lock editingLock)
 {
-	public DataSet<TAsset> Wrap<TAsset>(DataSet<TAsset> set)
+	public DataSet<TTag, TAsset> Wrap<TTag, TAsset>(DataSet<TTag, TAsset> set) where TTag : Tag
 	{
 		return set
 

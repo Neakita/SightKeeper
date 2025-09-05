@@ -4,6 +4,7 @@ using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
@@ -35,7 +36,7 @@ public sealed partial class SideBarViewModel : ViewModel, SideBarDataContext, Ad
 		_constructorDisposable.Dispose();
 	}
 
-	private void OnSelectedDataSetChanged(DataSet<Asset>? value)
+	private void OnSelectedDataSetChanged(DataSet<Tag, Asset>? value)
 	{
 		AdditionalTooling = _toolingViewModelFactory.CreateToolingViewModel(value);
 		_additionalToolingChanged.OnNext(AdditionalTooling);

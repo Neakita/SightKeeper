@@ -9,6 +9,7 @@ using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;
@@ -50,7 +51,7 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 		Items = items.Transform(_drawerItemsFactory.CreateItemViewModel).ToObservableList().ToReadOnlyNotifyingList();
 	}
 
-	private void HandleDataSetSelectionChange(DataSet<Asset>? set)
+	private void HandleDataSetSelectionChange(DataSet<Tag, Asset>? set)
 	{
 		_assetImagesSubscription.Dispose();
 		_assetImagesSubscription = Disposable.Empty;

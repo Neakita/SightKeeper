@@ -29,7 +29,7 @@ internal sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFor
 		}
 	}
 
-	public void Deserialize(ref MemoryPackReader reader, DataSet<ItemsAsset<TItem>> set)
+	public void Deserialize(ref MemoryPackReader reader, DataSet<Tag, ItemsAsset<TItem>> set)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var assetsCount));
 		for (int i = 0; i < assetsCount; i++)

@@ -3,6 +3,7 @@ using SightKeeper.Avalonia.DataSets.Commands;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Card;
 
@@ -12,7 +13,7 @@ internal sealed class DataSetCardViewModelFactory(
 	DeleteDataSetCommand deleteDataSetCommand,
 	WriteableBitmapImageLoader imageLoader)
 {
-	public DataSetCardViewModel CreateDataSetCardViewModel(DataSet<Asset> dataSet)
+	public DataSetCardViewModel CreateDataSetCardViewModel(DataSet<Tag, Asset> dataSet)
 	{
 		return new DataSetCardViewModel(
 			dataSet,

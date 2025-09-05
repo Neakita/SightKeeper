@@ -8,9 +8,8 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
-internal sealed class NotifyingDataSet<TAsset>(DataSet<TAsset> inner) : DataSet<TAsset>, Decorator<DataSet<TAsset>>, INotifyPropertyChanged
+internal sealed class NotifyingDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner) : DataSet<TTag, TAsset>, Decorator<DataSet<TTag, TAsset>>, INotifyPropertyChanged
 {
-	public DataSet<TAsset> Inner => inner;
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public string Name
@@ -37,9 +36,10 @@ internal sealed class NotifyingDataSet<TAsset>(DataSet<TAsset> inner) : DataSet<
 		}
 	}
 
-	public TagsOwner<Tag> TagsLibrary => inner.TagsLibrary;
+	public TagsOwner<TTag> TagsLibrary => inner.TagsLibrary;
 	public AssetsOwner<TAsset> AssetsLibrary => inner.AssetsLibrary;
 	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
+	public DataSet<TTag, TAsset> Inner => inner;
 
 	private void OnPropertyChanged([CallerMemberName] string propertyName = "")
 	{

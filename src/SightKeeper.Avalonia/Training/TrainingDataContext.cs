@@ -2,13 +2,14 @@
 using System.Windows.Input;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Training;
 
 public interface TrainingDataContext
 {
-	IReadOnlyCollection<DataSet<Asset>> DataSets { get; }
-	DataSet<Asset>? DataSet { get; set; }
+	IReadOnlyCollection<DataSet<Tag, Asset>> DataSets { get; }
+	DataSet<Tag, Asset>? DataSet { get; set; }
 	ushort Width { get; set; }
 	ushort Height { get; set; }
 	ICommand StartTrainingCommand { get; }

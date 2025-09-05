@@ -13,5 +13,5 @@ public interface AssetsFormatter<in TAsset>
 		Dictionary<Tag, byte> tagIndexes)
 		where TBufferWriter : IBufferWriter<byte>;
 
-	void Deserialize(ref MemoryPackReader reader, DataSet<TAsset> set);
+	void Deserialize(ref MemoryPackReader reader, DataSet<Tag, TAsset> set);
 }

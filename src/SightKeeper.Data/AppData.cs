@@ -2,6 +2,7 @@
 using MemoryPack;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
@@ -11,13 +12,13 @@ internal sealed partial class AppData
 {
 	public ushort SchemaVersion { get; }
 	public HashSet<ImageSet> ImageSets { get; }
-	public HashSet<DataSet<Asset>> DataSets { get; }
+	public HashSet<DataSet<Tag, Asset>> DataSets { get; }
 
 	[MemoryPackConstructor]
 	internal AppData(
 		ushort schemaVersion,
 		HashSet<ImageSet> imageSets,
-		HashSet<DataSet<Asset>> dataSets)
+		HashSet<DataSet<Tag, Asset>> dataSets)
 	{
 		SchemaVersion = schemaVersion;
 		ImageSets = imageSets;
@@ -27,7 +28,7 @@ internal sealed partial class AppData
 	internal AppData()
 	{
 		ImageSets = new HashSet<ImageSet>();
-		DataSets = new HashSet<DataSet<Asset>>();
+		DataSets = new HashSet<DataSet<Tag, Asset>>();
 	}
 
 	public void AddImageSet(ImageSet library)
@@ -42,13 +43,13 @@ internal sealed partial class AppData
 		Guard.IsTrue(isRemoved);
 	}
 
-	public void AddDataSet(DataSet<Asset> dataSet)
+	public void AddDataSet(DataSet<Tag, Asset> dataSet)
 	{
 		bool isAdded = DataSets.Add(dataSet);
 		Guard.IsTrue(isAdded);
 	}
 
-	public void RemoveDataSet(DataSet<Asset> dataSet)
+	public void RemoveDataSet(DataSet<Tag, Asset> dataSet)
 	{
 		bool isRemoved = DataSets.Remove(dataSet);
 		Guard.IsTrue(isRemoved);

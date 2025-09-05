@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Domain.DataSets;
 
-public sealed class DomainDataSet<TAsset> : DataSet<TAsset>, Decorator<DataSet<TAsset>>
+public sealed class DomainDataSet<TTag, TAsset> : DataSet<TTag, TAsset>, Decorator<DataSet<TTag, TAsset>> where TTag : Tag
 {
 	public string Name
 	{
@@ -18,16 +18,16 @@ public sealed class DomainDataSet<TAsset> : DataSet<TAsset>, Decorator<DataSet<T
 		set => Inner.Description = value;
 	}
 
-	public TagsOwner<Tag> TagsLibrary { get; }
+	public TagsOwner<TTag> TagsLibrary { get; }
 	public AssetsOwner<TAsset> AssetsLibrary { get; }
 	public WeightsLibrary WeightsLibrary { get; }
-	public DataSet<TAsset> Inner { get; }
+	public DataSet<TTag, TAsset> Inner { get; }
 
-	public DomainDataSet(DataSet<TAsset> inner, int minimumTagsCount)
+	public DomainDataSet(DataSet<TTag, TAsset> inner, int minimumTagsCount)
 	{
 		Inner = inner;
-		TagsLibrary = new DomainTagsLibrary<Tag>(inner.TagsLibrary);
+		TagsLibrary = new DomainTagsLibrary<TTag>(inner.TagsLibrary);
 		AssetsLibrary = inner.AssetsLibrary;
-		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, TagsLibrary, minimumTagsCount);
+		WeightsLibrary = new DomainWeightsLibrary(inner.WeightsLibrary, (TagsContainer<Tag>)TagsLibrary, minimumTagsCount);
 	}
 }

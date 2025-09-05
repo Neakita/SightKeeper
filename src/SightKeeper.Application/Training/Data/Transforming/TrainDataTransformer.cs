@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public interface TrainDataTransformer<TAsset>
+public interface TrainDataTransformer<TTag, TAsset>
 {
-	ReadOnlyDataSet<TAsset> Transform(ReadOnlyDataSet<TAsset> data);
+	ReadOnlyDataSet<TTag, TAsset> Transform(ReadOnlyDataSet<TTag, TAsset> data);
 }

@@ -9,28 +9,30 @@ using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public sealed class ToolingViewModelFactory(ImageSelection imageSelection, SelectedItemProvider selectedItemProvider)
 {
-	public ViewModel? CreateToolingViewModel(DataSet<Asset>? dataSet)
+	public ViewModel? CreateToolingViewModel(DataSet<Tag, Asset>? dataSet)
 	{
 		switch (dataSet)
 		{
 			case null:
 				return null;
-			case DataSet<ClassifierAsset> classifierDataSet:
+			case DataSet<Tag, ClassifierAsset> classifierDataSet:
 				var classifierTooling = new ClassifierToolingViewModel(imageSelection);
 				classifierTooling.DataSet = classifierDataSet;
 				return classifierTooling;
-			case DataSet<ItemsAsset<DetectorItem>> detectorDataSet:
+			case DataSet<Tag, ItemsAsset<DetectorItem>> detectorDataSet:
 				DetectorToolingViewModel detectorTooling = new()
 				{
 					TagsContainer = detectorDataSet.TagsLibrary
 				};
 				return detectorTooling;
-			case PoserDataSet poserDataSet:
+			case DataSet<PoserTag, ItemsAsset<PoserItem>> poserDataSet:
 				var poserTooling = new PoserToolingViewModel(selectedItemProvider);
 				poserTooling.TagsSource = poserDataSet.TagsLibrary;
 				return poserTooling;

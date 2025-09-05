@@ -3,13 +3,14 @@ using MemoryPack;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets;
 
-public sealed class ZippedMemoryPackDataSetExporter : DataSetExporter<DataSet<Asset>>
+public sealed class ZippedMemoryPackDataSetExporter : DataSetExporter<DataSet<Tag, Asset>>
 {
-	public async Task ExportAsync(string archivePath, DataSet<Asset> set, CancellationToken cancellationToken)
+	public async Task ExportAsync(string archivePath, DataSet<Tag, Asset> set, CancellationToken cancellationToken)
 	{
 		await using var stream = File.Open(archivePath, FileMode.Create); 
 		using var archive = new ZipArchive(stream, ZipArchiveMode.Create);
@@ -19,7 +20,7 @@ public sealed class ZippedMemoryPackDataSetExporter : DataSetExporter<DataSet<As
 		await WriteImagesAsync(archive, images, cancellationToken);
 	}
 
-	private static async Task WriteSetDataAsync(ZipArchive archive, DataSet<Asset> set, CancellationToken cancellationToken)
+	private static async Task WriteSetDataAsync(ZipArchive archive, DataSet<Tag, Asset> set, CancellationToken cancellationToken)
 	{
 		var entry = archive.CreateEntry("data.bin");
 		await using var stream = entry.Open();

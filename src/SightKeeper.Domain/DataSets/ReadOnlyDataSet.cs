@@ -1,9 +1,7 @@
-﻿using SightKeeper.Domain.DataSets.Tags;
+﻿namespace SightKeeper.Domain.DataSets;
 
-namespace SightKeeper.Domain.DataSets;
-
-public interface ReadOnlyDataSet<out TAsset>
+public interface ReadOnlyDataSet<out TTag, out TAsset>
 {
-	IEnumerable<ReadOnlyTag> Tags { get; }
+	IEnumerable<TTag> Tags { get; }
 	IEnumerable<TAsset> Assets { get; }
 }

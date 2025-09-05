@@ -11,61 +11,61 @@ namespace SightKeeper.Data.DataSets;
 
 internal static class DataSetExtensions
 {
-	public static DataSet<TAsset> WithTracking<TAsset>(this DataSet<TAsset> set, ChangeListener listener)
+	public static DataSet<TTag, TAsset> WithTracking<TTag, TAsset>(this DataSet<TTag, TAsset> set, ChangeListener listener)
 	{
-		return new TrackableDataSet<TAsset>(set, listener);
+		return new TrackableDataSet<TTag, TAsset>(set, listener);
 	}
 
-	public static DataSet<TAsset> WithLocking<TAsset>(this DataSet<TAsset> set, Lock editingLock)
+	public static DataSet<TTag, TAsset> WithLocking<TTag, TAsset>(this DataSet<TTag, TAsset> set, Lock editingLock)
 	{
-		return new LockingDataSet<TAsset>(set, editingLock);
+		return new LockingDataSet<TTag, TAsset>(set, editingLock);
 	}
 
-	public static DataSet<TAsset> WithDomainRules<TAsset>(this DataSet<TAsset> set)
+	public static DataSet<TTag, TAsset> WithDomainRules<TTag, TAsset>(this DataSet<TTag, TAsset> set) where TTag : Tag
 	{
 		var minimumTagsCount = set switch
 		{
-			DataSet<ClassifierAsset> => 2,
+			DataSet<Tag, ClassifierAsset> => 2,
 			_ => 1
 		};
-		return new DomainDataSet<TAsset>(set, minimumTagsCount);
+		return new DomainDataSet<TTag, TAsset>(set, minimumTagsCount);
 	}
 
-	public static DataSet<TAsset> WithNotifications<TAsset>(this DataSet<TAsset> set)
+	public static DataSet<TTag, TAsset> WithNotifications<TTag, TAsset>(this DataSet<TTag, TAsset> set)
 	{
-		return new NotifyingDataSet<TAsset>(set);
+		return new NotifyingDataSet<TTag, TAsset>(set);
 	}
 
-	public static DataSet<TAsset> WithWeightsDataRemoving<TAsset>(this DataSet<TAsset> set)
+	public static DataSet<TTag, TAsset> WithWeightsDataRemoving<TTag, TAsset>(this DataSet<TTag, TAsset> set)
 	{
-		return new OverrideLibrariesDataSet<TAsset>(set)
+		return new OverrideLibrariesDataSet<TTag, TAsset>(set)
 		{
 			WeightsLibrary = new DataRemovingWeightsLibrary(set.WeightsLibrary)
 		};
 	}
 
-	public static DataSet<TAsset> WithObservableLibraries<TAsset>(this DataSet<TAsset> set)
+	public static DataSet<TTag, TAsset> WithObservableLibraries<TTag, TAsset>(this DataSet<TTag, TAsset> set)
 	{
-		return new OverrideLibrariesDataSet<TAsset>(set)
+		return new OverrideLibrariesDataSet<TTag, TAsset>(set)
 		{
-			TagsLibrary = new ObservableTagsLibrary<Tag>(set.TagsLibrary),
+			TagsLibrary = new ObservableTagsLibrary<TTag>(set.TagsLibrary),
 			AssetsLibrary = new ObservableAssetsLibrary<TAsset>(set.AssetsLibrary),
 			WeightsLibrary = new ObservableWeightsLibrary(set.WeightsLibrary)
 		};
 	}
 
-	public static DataSet<TAsset> WithTagUsersTracking<TAsset>(this DataSet<TAsset> set)
+	public static DataSet<TTag, TAsset> WithTagUsersTracking<TTag, TAsset>(this DataSet<TTag, TAsset> set)
 	{
 		return set switch
 		{
-			DataSet<ClassifierAsset> classifierSet => (DataSet<TAsset>)classifierSet.WithTagUsersTracking(),
+			DataSet<Tag, ClassifierAsset> classifierSet => (DataSet<TTag, TAsset>)classifierSet.WithTagUsersTracking(),
 			_ => set
 		};
 	}
 
-	private static DataSet<ClassifierAsset> WithTagUsersTracking(this DataSet<ClassifierAsset> set)
+	private static DataSet<Tag, ClassifierAsset> WithTagUsersTracking(this DataSet<Tag, ClassifierAsset> set)
 	{
-		return new OverrideLibrariesDataSet<ClassifierAsset>(set)
+		return new OverrideLibrariesDataSet<Tag, ClassifierAsset>(set)
 		{
 			AssetsLibrary = new TagUsersTrackingClassifierAssetsLibrary(set.AssetsLibrary)
 		};

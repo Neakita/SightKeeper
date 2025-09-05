@@ -9,7 +9,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
-internal sealed class LockingDataSet<TAsset>(DataSet<TAsset> inner, Lock editingLock) : DataSet<TAsset>, Decorator<DataSet<TAsset>>
+internal sealed class LockingDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner, Lock editingLock) : DataSet<TTag, TAsset>, Decorator<DataSet<TTag, TAsset>>
 {
 	public string Name
 	{
@@ -31,8 +31,8 @@ internal sealed class LockingDataSet<TAsset>(DataSet<TAsset> inner, Lock editing
 		}
 	}
 
-	public TagsOwner<Tag> TagsLibrary { get; } =
-		new LockingTagsLibrary<Tag>(inner.TagsLibrary, editingLock);
+	public TagsOwner<TTag> TagsLibrary { get; } =
+		new LockingTagsLibrary<TTag>(inner.TagsLibrary, editingLock);
 
 	public AssetsOwner<TAsset> AssetsLibrary { get; } =
 		new LockingAssetsLibrary<TAsset>(inner.AssetsLibrary, editingLock);
@@ -40,5 +40,5 @@ internal sealed class LockingDataSet<TAsset>(DataSet<TAsset> inner, Lock editing
 	public WeightsLibrary WeightsLibrary { get; } =
 		new LockingWeightsLibrary(inner.WeightsLibrary, editingLock);
 
-	public DataSet<TAsset> Inner => inner;
+	public DataSet<TTag, TAsset> Inner => inner;
 }

@@ -11,15 +11,16 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets;
 
-public sealed class DataSetFormatter : MemoryPackFormatter<DataSet<Asset>>
+public sealed class DataSetFormatter : MemoryPackFormatter<DataSet<Tag, Asset>>
 {
 	public DataSetFormatter(
-		DataSetFactory<ClassifierAsset> classifierFactory,
-		DataSetFactory<ItemsAsset<DetectorItem>> detectorFactory,
-		DataSetFactory<ItemsAsset<PoserItem>> poserFactory,
+		DataSetFactory<Tag, ClassifierAsset> classifierFactory,
+		DataSetFactory<Tag, ItemsAsset<DetectorItem>> detectorFactory,
+		DataSetFactory<PoserTag, ItemsAsset<PoserItem>> poserFactory,
 		AssetsFormatter<Asset> assetsFormatter)
 	{
 		_classifierFactory = classifierFactory;
@@ -30,7 +31,7 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet<Asset>>
 
 	public override void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		scoped ref DataSet<Asset>? set)
+		scoped ref DataSet<Tag, Asset>? set)
 	{
 		if (set == null)
 		{
@@ -39,9 +40,9 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet<Asset>>
 		}
 		ushort unionTag = set switch
 		{
-			DataSet<ClassifierAsset> => 0,
-			DataSet<ItemsAsset<DetectorItem>> => 1,
-			DataSet<ItemsAsset<PoserItem>> => 2,
+			DataSet<Tag, ClassifierAsset> => 0,
+			DataSet<Tag, ItemsAsset<DetectorItem>> => 1,
+			DataSet<PoserTag, ItemsAsset<PoserItem>> => 2,
 			_ => throw new ArgumentOutOfRangeException(nameof(set))
 		};
 		writer.WriteUnionHeader(unionTag);
@@ -52,7 +53,7 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet<Asset>>
 		WeightsFormatter.WriteWeights(ref writer, set.WeightsLibrary.Weights, tagIndexes);
 	}
 
-	public override void Deserialize(ref MemoryPackReader reader, scoped ref DataSet<Asset>? set)
+	public override void Deserialize(ref MemoryPackReader reader, scoped ref DataSet<Tag, Asset>? set)
 	{
 		if (reader.PeekIsNull())
 		{
@@ -67,15 +68,15 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet<Asset>>
 			2 => _poserFactory.CreateDataSet(),
 			_ => throw new ArgumentOutOfRangeException(nameof(unionTag), unionTag, null)
 		};
-		var innerSet = set.UnWrapDecorator<InMemoryDataSet<Asset>>();
+		var innerSet = set.UnWrapDecorator<InMemoryDataSet<Tag, Asset>>();
 		DataSetGeneralDataFormatter.ReadGeneralData(ref reader, innerSet);
 		TagsFormatter.ReadTags(ref reader, innerSet.TagsLibrary);
 		_assetsFormatter.Deserialize(ref reader, innerSet);
 		WeightsFormatter.ReadWeights(ref reader, innerSet.WeightsLibrary, innerSet.TagsLibrary.Tags);
 	}
 
-	private readonly DataSetFactory<ClassifierAsset> _classifierFactory;
-	private readonly DataSetFactory<ItemsAsset<DetectorItem>> _detectorFactory;
-	private readonly DataSetFactory<ItemsAsset<PoserItem>> _poserFactory;
+	private readonly DataSetFactory<Tag, ClassifierAsset> _classifierFactory;
+	private readonly DataSetFactory<Tag, ItemsAsset<DetectorItem>> _detectorFactory;
+	private readonly DataSetFactory<PoserTag, ItemsAsset<PoserItem>> _poserFactory;
 	private readonly AssetsFormatter<Asset> _assetsFormatter;
 }

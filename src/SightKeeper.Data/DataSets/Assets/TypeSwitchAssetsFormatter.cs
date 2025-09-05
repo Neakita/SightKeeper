@@ -37,14 +37,14 @@ internal sealed class TypeSwitchAssetsFormatter : AssetsFormatter<Asset>
 		}
 	}
 
-	public void Deserialize(ref MemoryPackReader reader, DataSet<Asset> set)
+	public void Deserialize(ref MemoryPackReader reader, DataSet<Tag, Asset> set)
 	{
 		switch (set)
 		{
-			case DataSet<ClassifierAsset> classifierSet:
+			case DataSet<Tag, ClassifierAsset> classifierSet:
 				_classifierAssetsFormatter.Deserialize(ref reader, classifierSet);
 				break;
-			case DataSet<ItemsAsset<AssetItem>> itemsSet:
+			case DataSet<Tag, ItemsAsset<AssetItem>> itemsSet:
 				_itemsAssetFormatter.Deserialize(ref reader, itemsSet);
 				break;
 			default:

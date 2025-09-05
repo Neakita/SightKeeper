@@ -9,7 +9,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
-internal sealed class TrackableDataSet<TAsset>(DataSet<TAsset> inner, ChangeListener listener) : DataSet<TAsset>, Decorator<DataSet<TAsset>>
+internal sealed class TrackableDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner, ChangeListener listener) : DataSet<TTag, TAsset>, Decorator<DataSet<TTag, TAsset>>
 {
 	public string Name
 	{
@@ -31,8 +31,8 @@ internal sealed class TrackableDataSet<TAsset>(DataSet<TAsset> inner, ChangeList
 		}
 	}
 
-	public TagsOwner<Tag> TagsLibrary { get; } =
-		new TrackableTagsLibrary<Tag>(inner.TagsLibrary, listener);
+	public TagsOwner<TTag> TagsLibrary { get; } =
+		new TrackableTagsLibrary<TTag>(inner.TagsLibrary, listener);
 
 	public AssetsOwner<TAsset> AssetsLibrary { get; } =
 		new TrackableAssetsLibrary<TAsset>(inner.AssetsLibrary, listener);
@@ -40,5 +40,5 @@ internal sealed class TrackableDataSet<TAsset>(DataSet<TAsset> inner, ChangeList
 	public WeightsLibrary WeightsLibrary { get; } =
 		new TrackableWeightsLibrary(inner.WeightsLibrary, listener);
 
-	public DataSet<TAsset> Inner => inner;
+	public DataSet<TTag, TAsset> Inner => inner;
 }
