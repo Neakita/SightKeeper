@@ -5,15 +5,16 @@ using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.DataSets.Commands;
 
 internal sealed class DeleteDataSetCommand(
 	DialogManager dialogManager,
-	WriteRepository<DataSet> writeDataSetsRepository)
-	: AsyncCommand<DataSet>
+	WriteRepository<DataSet<Asset>> writeDataSetsRepository)
+	: AsyncCommand<DataSet<Asset>>
 {
-	protected override async Task ExecuteAsync(DataSet dataSet)
+	protected override async Task ExecuteAsync(DataSet<Asset> dataSet)
 	{
 		MessageBoxButtonDefinition deletionButton = new("Delete", MaterialIconKind.Delete);
 		MessageBoxDialogViewModel dialog = new(

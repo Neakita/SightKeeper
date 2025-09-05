@@ -9,10 +9,10 @@ using SightKeeper.Data.DataSets.Detector;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
-using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Compositions;
@@ -27,9 +27,9 @@ public sealed class PersistenceComposition
 		.As(Lifetime.Singleton)
 		.To<AppDataImageSetsRepository>()
 
-		.Bind<WriteRepository<DataSet>>()
-		.Bind<ReadRepository<DataSet>>()
-		.Bind<ObservableRepository<DataSet>>()
+		.Bind<WriteRepository<DataSet<Asset>>>()
+		.Bind<ReadRepository<DataSet<Asset>>>()
+		.Bind<ObservableRepository<DataSet<Asset>>>()
 		.As(Lifetime.Singleton)
 		.To<AppDataDataSetsRepository>()
 

@@ -50,7 +50,7 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 		Items = items.Transform(_drawerItemsFactory.CreateItemViewModel).ToObservableList().ToReadOnlyNotifyingList();
 	}
 
-	private void HandleDataSetSelectionChange(DataSet? set)
+	private void HandleDataSetSelectionChange(DataSet<Asset>? set)
 	{
 		_assetImagesSubscription.Dispose();
 		_assetImagesSubscription = Disposable.Empty;

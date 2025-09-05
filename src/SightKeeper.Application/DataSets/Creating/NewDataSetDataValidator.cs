@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Application.DataSets.Creating;
 
 public sealed class NewDataSetDataValidator : AbstractValidator<NewDataSetData>
 {
-	public NewDataSetDataValidator(ReadRepository<DataSet> dataSetsRepository)
+	public NewDataSetDataValidator(ReadRepository<DataSet<Asset>> dataSetsRepository)
 	{
 		_dataSetsRepository = dataSetsRepository;
 		Include(DataSetDataValidator.Instance);
@@ -15,7 +16,7 @@ public sealed class NewDataSetDataValidator : AbstractValidator<NewDataSetData>
 			.WithMessage("Name must be unique");
 	}
 
-	private readonly ReadRepository<DataSet> _dataSetsRepository;
+	private readonly ReadRepository<DataSet<Asset>> _dataSetsRepository;
 
 	private bool IsNameFree(string name)
 	{

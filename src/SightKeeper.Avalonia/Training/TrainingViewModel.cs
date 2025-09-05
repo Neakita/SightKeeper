@@ -15,15 +15,15 @@ namespace SightKeeper.Avalonia.Training;
 
 internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 {
-	public IReadOnlyCollection<DataSet> DataSets { get; }
-	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]public partial DataSet? DataSet { get; set; }
+	public IReadOnlyCollection<DataSet<Asset>> DataSets { get; }
+	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]public partial DataSet<Asset>? DataSet { get; set; }
 	[ObservableProperty] public partial ushort Width { get; set; } = 320;
 	[ObservableProperty] public partial ushort Height { get; set; } = 320;
 
 	ICommand TrainingDataContext.StartTrainingCommand => StartTrainingCommand;
 	ICommand TrainingDataContext.StopTrainingCommand => StartTrainingCommand.CreateCancelCommand();
 
-	public TrainingViewModel(ObservableListRepository<DataSet> dataSets, Trainer<ReadOnlyAsset> trainer)
+	public TrainingViewModel(ObservableListRepository<DataSet<Asset>> dataSets, Trainer<ReadOnlyAsset> trainer)
 	{
 		_trainer = trainer;
 		DataSets = dataSets.Items;
@@ -37,6 +37,6 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 	{
 		Guard.IsNotNull(DataSet);
 		_trainer.ImageSize = new Vector2<ushort>(Width, Height);
-		await _trainer.TrainAsync((ReadOnlyDataSet<ReadOnlyAsset>)DataSet, cancellationToken);
+		await _trainer.TrainAsync(DataSet, cancellationToken);
 	}
 }

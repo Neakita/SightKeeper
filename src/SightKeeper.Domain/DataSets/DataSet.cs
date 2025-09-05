@@ -4,15 +4,15 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Domain.DataSets;
 
-public interface DataSet : ReadOnlyDataSet
+public interface DataSet<out TAsset> : ReadOnlyDataSet<TAsset>
 {
 	string Name { get; set; }
 	string Description { get; set; }
 
 	TagsOwner<Tag> TagsLibrary { get; }
-	AssetsOwner<Asset> AssetsLibrary { get; }
+	AssetsOwner<TAsset> AssetsLibrary { get; }
 	WeightsLibrary WeightsLibrary { get; }
 
-	IEnumerable<ReadOnlyTag> ReadOnlyDataSet.Tags => TagsLibrary.Tags;
-	IEnumerable<ReadOnlyAsset> ReadOnlyDataSet.Assets => AssetsLibrary.Assets;
+	IEnumerable<ReadOnlyTag> ReadOnlyDataSet<TAsset>.Tags => TagsLibrary.Tags;
+	IEnumerable<TAsset> ReadOnlyDataSet<TAsset>.Assets => AssetsLibrary.Assets;
 }

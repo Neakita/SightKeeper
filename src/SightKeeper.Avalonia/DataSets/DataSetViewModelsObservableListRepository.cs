@@ -1,6 +1,7 @@
 ﻿using System;
 using SightKeeper.Application;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 using Vibrance;
 using Vibrance.Changes;
 
@@ -10,7 +11,7 @@ public sealed class DataSetViewModelsObservableListRepository : ObservableListRe
 {
 	public ReadOnlyObservableList<DataSetViewModel> Items { get; }
 
-    public DataSetViewModelsObservableListRepository(ObservableListRepository<DataSet> listRepository)
+    public DataSetViewModelsObservableListRepository(ObservableListRepository<DataSet<Asset>> listRepository)
     {
 	    Items = listRepository.Items
 		    .Transform(dataSet => new DataSetViewModel(dataSet))

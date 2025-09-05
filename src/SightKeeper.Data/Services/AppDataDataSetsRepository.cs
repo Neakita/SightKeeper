@@ -2,20 +2,21 @@
 using System.Reactive.Subjects;
 using SightKeeper.Application;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Data.Services;
 
 public sealed class AppDataDataSetsRepository :
-	ReadRepository<DataSet>,
-	ObservableRepository<DataSet>,
-	WriteRepository<DataSet>,
+	ReadRepository<DataSet<Asset>>,
+	ObservableRepository<DataSet<Asset>>,
+	WriteRepository<DataSet<Asset>>,
 	IDisposable
 {
-	public IReadOnlyCollection<DataSet> Items => _appDataAccess.Data.DataSets;
-	public IObservable<DataSet> Added => _added.AsObservable();
-	public IObservable<DataSet> Removed => _removed.AsObservable();
+	public IReadOnlyCollection<DataSet<Asset>> Items => _appDataAccess.Data.DataSets;
+	public IObservable<DataSet<Asset>> Added => _added.AsObservable();
+	public IObservable<DataSet<Asset>> Removed => _removed.AsObservable();
 
-	public void Add(DataSet set)
+	public void Add(DataSet<Asset> set)
 	{
 		lock (_appDataLock)
 			_appDataAccess.Data.AddDataSet(set);
@@ -23,7 +24,7 @@ public sealed class AppDataDataSetsRepository :
 		_added.OnNext(set);
 	}
 
-	public void Remove(DataSet set)
+	public void Remove(DataSet<Asset> set)
 	{
 		lock (_appDataLock)
 		{
@@ -51,6 +52,6 @@ public sealed class AppDataDataSetsRepository :
 	private readonly AppDataAccess _appDataAccess;
 	private readonly ChangeListener _changeListener;
 	private readonly Lock _appDataLock;
-	private readonly Subject<DataSet> _added = new();
-	private readonly Subject<DataSet> _removed = new();
+	private readonly Subject<DataSet<Asset>> _added = new();
+	private readonly Subject<DataSet<Asset>> _removed = new();
 }

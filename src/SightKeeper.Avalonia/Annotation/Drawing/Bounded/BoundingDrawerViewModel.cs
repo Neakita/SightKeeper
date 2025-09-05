@@ -48,7 +48,7 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		item.Bounding = bounding;
 	}
 
-	private void HandleDataSetSelectionChange(DataSet? set)
+	private void HandleDataSetSelectionChange(DataSet<Asset>? set)
 	{
 		_assetsLibrary = set?.AssetsLibrary as AssetsOwner<ItemsMaker<AssetItem>>;
 		CreateItemCommand.NotifyCanExecuteChanged();

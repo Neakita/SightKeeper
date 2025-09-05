@@ -1,10 +1,11 @@
 using System;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 public interface DataSetSelection
 {
-	DataSet? SelectedDataSet { get; }
-	IObservable<DataSet?> SelectedDataSetChanged { get; }
+	DataSet<Asset>? SelectedDataSet { get; }
+	IObservable<DataSet<Asset>?> SelectedDataSetChanged { get; }
 }

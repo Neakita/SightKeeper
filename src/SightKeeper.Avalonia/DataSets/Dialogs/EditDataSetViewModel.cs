@@ -5,10 +5,10 @@ using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Detector;
-using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
@@ -16,9 +16,9 @@ internal sealed class EditDataSetViewModel : DataSetDialogViewModel, ExistingDat
 {
 	public override string Header => $"Edit {DataSet.Name}";
 	public override TagsEditorDataContext TagsEditor { get; }
-	public DataSet DataSet { get; }
+	public DataSet<Asset> DataSet { get; }
 
-	public EditDataSetViewModel(DataSet dataSet) : base(dataSet)
+	public EditDataSetViewModel(DataSet<Asset> dataSet) : base(dataSet)
 	{
 		DataSet = dataSet;
 		TagsEditor = dataSet switch

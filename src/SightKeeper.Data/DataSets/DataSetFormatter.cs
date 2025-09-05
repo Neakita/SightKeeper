@@ -14,12 +14,12 @@ using SightKeeper.Domain.DataSets.Poser;
 
 namespace SightKeeper.Data.DataSets;
 
-public sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
+public sealed class DataSetFormatter : MemoryPackFormatter<DataSet<Asset>>
 {
 	public DataSetFormatter(
-		DataSetFactory<DataSet<ClassifierAsset>> classifierFactory,
-		DataSetFactory<DataSet<ItemsAsset<DetectorItem>>> detectorFactory,
-		DataSetFactory<DataSet<ItemsAsset<PoserItem>>> poserFactory,
+		DataSetFactory<ClassifierAsset> classifierFactory,
+		DataSetFactory<ItemsAsset<DetectorItem>> detectorFactory,
+		DataSetFactory<ItemsAsset<PoserItem>> poserFactory,
 		AssetsFormatter<Asset> assetsFormatter)
 	{
 		_classifierFactory = classifierFactory;
@@ -30,7 +30,7 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 
 	public override void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		scoped ref DataSet? set)
+		scoped ref DataSet<Asset>? set)
 	{
 		if (set == null)
 		{
@@ -52,7 +52,7 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 		WeightsFormatter.WriteWeights(ref writer, set.WeightsLibrary.Weights, tagIndexes);
 	}
 
-	public override void Deserialize(ref MemoryPackReader reader, scoped ref DataSet? set)
+	public override void Deserialize(ref MemoryPackReader reader, scoped ref DataSet<Asset>? set)
 	{
 		if (reader.PeekIsNull())
 		{
@@ -74,8 +74,8 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet>
 		WeightsFormatter.ReadWeights(ref reader, innerSet.WeightsLibrary, innerSet.TagsLibrary.Tags);
 	}
 
-	private readonly DataSetFactory<DataSet<ClassifierAsset>> _classifierFactory;
-	private readonly DataSetFactory<DataSet<ItemsAsset<DetectorItem>>> _detectorFactory;
-	private readonly DataSetFactory<DataSet<ItemsAsset<PoserItem>>> _poserFactory;
+	private readonly DataSetFactory<ClassifierAsset> _classifierFactory;
+	private readonly DataSetFactory<ItemsAsset<DetectorItem>> _detectorFactory;
+	private readonly DataSetFactory<ItemsAsset<PoserItem>> _poserFactory;
 	private readonly AssetsFormatter<Asset> _assetsFormatter;
 }

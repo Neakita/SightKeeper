@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
@@ -12,7 +13,7 @@ internal sealed partial class DataSetEditorViewModel : ViewModel, DataSetEditorD
 	{
 	}
 
-	public DataSetEditorViewModel(DataSet dataSet)
+	public DataSetEditorViewModel(DataSet<Asset> dataSet)
 	{
 		Name = dataSet.Name;
 		Description = dataSet.Description;

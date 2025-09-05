@@ -2,6 +2,7 @@ using System.Reactive.Subjects;
 using FluentValidation;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -25,9 +26,9 @@ public class DataSetEditor : IDisposable
 		_dataSetEdited.Dispose();
 	}
 
-	private readonly Subject<DataSet> _dataSetEdited = new();
+	private readonly Subject<DataSet<Asset>> _dataSetEdited = new();
 
-	private static void SetGeneralData(DataSet dataSet, DataSetData data)
+	private static void SetGeneralData(DataSet<Asset> dataSet, DataSetData data)
 	{
 		dataSet.Name = data.Name;
 		dataSet.Description = data.Description;
