@@ -7,9 +7,9 @@ namespace SightKeeper.Data.DataSets.Weights;
 
 internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : WeightsLibrary
 {
-	public IReadOnlyCollection<Domain.DataSets.Weights.Weights> Weights => _weights;
+	public IReadOnlyCollection<WeightsData> Weights => _weights;
 
-	public Domain.DataSets.Weights.Weights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public WeightsData CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		var id = Id.Create();
 		var inMemoryWeights = new InMemoryWeights(id, metadata, tags.ToList());
@@ -18,7 +18,7 @@ internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : We
 		return wrappedWeights;
 	}
 
-	public void RemoveWeights(Domain.DataSets.Weights.Weights weights)
+	public void RemoveWeights(WeightsData weights)
 	{
 		var isRemoved = _weights.Remove(weights);
 		Guard.IsTrue(isRemoved);
@@ -29,11 +29,11 @@ internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : We
 		_weights.EnsureCapacity(capacity);
 	}
 
-	public void AddWeights(Domain.DataSets.Weights.Weights weights)
+	public void AddWeights(WeightsData weights)
 	{
 		var wrappedWeights = weightsWrapper.Wrap(weights);
 		_weights.Add(wrappedWeights);
 	}
 
-	private readonly List<Domain.DataSets.Weights.Weights> _weights = new();
+	private readonly List<WeightsData> _weights = new();
 }

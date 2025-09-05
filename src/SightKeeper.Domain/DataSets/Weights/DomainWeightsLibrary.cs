@@ -5,15 +5,15 @@ namespace SightKeeper.Domain.DataSets.Weights;
 
 public sealed class DomainWeightsLibrary : WeightsLibrary
 {
-	public IReadOnlyCollection<Weights> Weights => _inner.Weights;
+	public IReadOnlyCollection<WeightsData> Weights => _inner.Weights;
 
-	public Weights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public WeightsData CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		ValidateTags(tags);
 		return _inner.CreateWeights(metadata, tags);
 	}
 
-	public void RemoveWeights(Weights weights)
+	public void RemoveWeights(WeightsData weights)
 	{
 		_inner.RemoveWeights(weights);
 	}

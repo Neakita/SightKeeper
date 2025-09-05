@@ -12,7 +12,7 @@ public sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironmentMa
 	public Vector2<ushort> ImageSize { get; set; } = new(320, 320);
 	public DFineModel Model { get; set; } = DFineModel.Nano;
 
-	public async Task<Weights> TrainAsync(ReadOnlyDataSet<ReadOnlyItemsAsset<ReadOnlyAssetItem>> data, CancellationToken cancellationToken)
+	public async Task<WeightsData> TrainAsync(ReadOnlyDataSet<ReadOnlyItemsAsset<ReadOnlyAssetItem>> data, CancellationToken cancellationToken)
 	{
 		var environmentCommandRunner = await environmentManager.ActivateAsync(CondaEnvironmentPath, PythonVersion, cancellationToken);
 		await InstallDFineAsync(environmentCommandRunner, cancellationToken);

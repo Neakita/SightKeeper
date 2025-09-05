@@ -19,7 +19,7 @@ public sealed class TypeSwitchTrainer(Trainer<ReadOnlyItemsAsset<ReadOnlyAssetIt
 		}
 	}
 
-	public Task<Weights> TrainAsync(ReadOnlyDataSet<ReadOnlyAsset> data, CancellationToken cancellationToken)
+	public Task<WeightsData> TrainAsync(ReadOnlyDataSet<ReadOnlyAsset> data, CancellationToken cancellationToken)
 	{
 		return data switch
 		{

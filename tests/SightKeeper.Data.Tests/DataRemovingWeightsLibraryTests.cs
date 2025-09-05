@@ -11,7 +11,7 @@ public sealed class DataRemovingWeightsLibraryTests
 	{
 		var innerLibrary = Substitute.For<WeightsLibrary>();
 		var library = new DataRemovingWeightsLibrary(innerLibrary);
-		var weights = Substitute.For<Weights>();
+		var weights = Substitute.For<WeightsData>();
 		library.RemoveWeights(weights);
 		weights.Received().DeleteData();
 	}

@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Weights;
 
-public interface Weights : TagUser
+public interface WeightsData : TagUser
 {
 	Id Id { get; }
 	WeightsMetadata Metadata { get; }

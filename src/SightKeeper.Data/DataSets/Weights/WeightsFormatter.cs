@@ -12,7 +12,7 @@ internal static class WeightsFormatter
 {
 	public static void WriteWeights<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<Domain.DataSets.Weights.Weights> weightsCollection,
+		IReadOnlyCollection<WeightsData> weightsCollection,
 		IReadOnlyDictionary<Tag, byte> tagIndexes)
 		where TBufferWriter : IBufferWriter<byte>
 	{

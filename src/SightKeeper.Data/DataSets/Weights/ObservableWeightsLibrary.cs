@@ -6,12 +6,12 @@ namespace SightKeeper.Data.DataSets.Weights;
 
 internal sealed class ObservableWeightsLibrary(WeightsLibrary inner) : WeightsLibrary
 {
-	public IReadOnlyCollection<Domain.DataSets.Weights.Weights> Weights => _weights;
+	public IReadOnlyCollection<WeightsData> Weights => _weights;
 
-	public Domain.DataSets.Weights.Weights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public WeightsData CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		var weights = inner.CreateWeights(metadata, tags);
-		var change = new Addition<Domain.DataSets.Weights.Weights>
+		var change = new Addition<WeightsData>
 		{
 			Items = [weights]
 		};
@@ -19,15 +19,15 @@ internal sealed class ObservableWeightsLibrary(WeightsLibrary inner) : WeightsLi
 		return weights;
 	}
 
-	public void RemoveWeights(Domain.DataSets.Weights.Weights weights)
+	public void RemoveWeights(WeightsData weights)
 	{
 		inner.RemoveWeights(weights);
-		var change = new Removal<Domain.DataSets.Weights.Weights>
+		var change = new Removal<WeightsData>
 		{
 			Items = [weights]
 		};
 		_weights.Notify(change);
 	}
 
-	private readonly ExternalObservableCollection<Domain.DataSets.Weights.Weights> _weights = new(inner.Weights);
+	private readonly ExternalObservableCollection<WeightsData> _weights = new(inner.Weights);
 }

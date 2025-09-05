@@ -14,25 +14,25 @@ public sealed class ObservableWeightsLibraryTests
 	public void ShouldObserveWeightsCreation()
 	{
 		var set = new ObservableWeightsLibrary(Substitute.For<WeightsLibrary>());
-		var observableList = (Vibrance.ReadOnlyObservableCollection<Weights>)set.Weights;
-		var observedChanges = new List<Change<Weights>>();
+		var observableList = (Vibrance.ReadOnlyObservableCollection<WeightsData>)set.Weights;
+		var observedChanges = new List<Change<WeightsData>>();
 		using var subscription = observableList.Subscribe(observedChanges.Add);
 		var weights = set.CreateWeights(new WeightsMetadata(), ReadOnlyCollection<Tag>.Empty);
-		var insertion = observedChanges.Should().ContainSingle().Which.Should().BeOfType<Addition<Weights>>().Subject;
+		var insertion = observedChanges.Should().ContainSingle().Which.Should().BeOfType<Addition<WeightsData>>().Subject;
 		insertion.Items.Should().ContainSingle().Which.Should().Be(weights);
 	}
 
 	[Fact]
 	public void ShouldObserveWeightsRemoval()
 	{
-		var weights = Substitute.For<Weights>();
+		var weights = Substitute.For<WeightsData>();
 		var innerSet = Substitute.For<WeightsLibrary>();
 		var set = new ObservableWeightsLibrary(innerSet);
-		var observableList = (Vibrance.ReadOnlyObservableCollection<Weights>)set.Weights;
-		var observedChanges = new List<Change<Weights>>();
+		var observableList = (Vibrance.ReadOnlyObservableCollection<WeightsData>)set.Weights;
+		var observedChanges = new List<Change<WeightsData>>();
 		using var subscription = observableList.Subscribe(observedChanges.Add);
 		set.RemoveWeights(weights);
-		var removal = observedChanges.Should().ContainSingle(change => change is Removal<Weights>).Subject.As<Removal<Weights>>();
+		var removal = observedChanges.Should().ContainSingle(change => change is Removal<WeightsData>).Subject.As<Removal<WeightsData>>();
 		removal.Items.Should().ContainSingle().Which.Should().Be(weights);
 	}
 }

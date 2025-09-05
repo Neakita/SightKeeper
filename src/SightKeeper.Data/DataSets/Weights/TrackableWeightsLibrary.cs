@@ -5,16 +5,16 @@ namespace SightKeeper.Data.DataSets.Weights;
 
 internal sealed class TrackableWeightsLibrary(WeightsLibrary inner, ChangeListener listener) : WeightsLibrary
 {
-	public IReadOnlyCollection<Domain.DataSets.Weights.Weights> Weights => inner.Weights;
+	public IReadOnlyCollection<WeightsData> Weights => inner.Weights;
 
-	public Domain.DataSets.Weights.Weights CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public WeightsData CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		var weights = inner.CreateWeights(metadata, tags);
 		listener.SetDataChanged();
 		return weights;
 	}
 
-	public void RemoveWeights(Domain.DataSets.Weights.Weights weights)
+	public void RemoveWeights(WeightsData weights)
 	{
 		inner.RemoveWeights(weights);
 		listener.SetDataChanged();

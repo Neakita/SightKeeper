@@ -1,6 +1,8 @@
+using SightKeeper.Domain.DataSets.Weights;
+
 namespace SightKeeper.Data.DataSets.Weights;
 
 internal interface WeightsWrapper
 {
-	Domain.DataSets.Weights.Weights Wrap(Domain.DataSets.Weights.Weights weights);
+	WeightsData Wrap(WeightsData weights);
 }

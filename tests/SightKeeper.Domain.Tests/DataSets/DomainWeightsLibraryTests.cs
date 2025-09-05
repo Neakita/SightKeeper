@@ -68,7 +68,7 @@ public sealed class DomainWeightsLibraryTests
 	public void ShouldGetWeightsFromInnerLibrary()
 	{
 		var innerLibrary = Substitute.For<WeightsLibrary>();
-		var weights = Substitute.For<Weights>();
+		var weights = Substitute.For<WeightsData>();
 		innerLibrary.Weights.Returns([weights]);
 		var tagsOwner = Substitute.For<TagsOwner<PoserTag>>();
 		var library = new DomainWeightsLibrary(innerLibrary, tagsOwner, 1);
@@ -81,7 +81,7 @@ public sealed class DomainWeightsLibraryTests
 		var innerLibrary = Substitute.For<WeightsLibrary>();
 		var tagsOwner = Substitute.For<TagsOwner<PoserTag>>();
 		var library = new DomainWeightsLibrary(innerLibrary, tagsOwner, 1);
-		var weights = Substitute.For<Weights>();
+		var weights = Substitute.For<WeightsData>();
 		library.RemoveWeights(weights);
 		innerLibrary.Received().RemoveWeights(weights);
 	}
