@@ -93,4 +93,13 @@ public sealed class DomainImageSetTests
 		domainSet.RemoveImagesRange(2, 4);
 		innerSet.Received().RemoveImagesRange(2, 4);
 	}
+
+	[Fact]
+	public void ShouldDisposeInner()
+	{
+		var innerSet = Substitute.For<ImageSet>();
+		var domainSet = new DomainImageSet(innerSet);
+		domainSet.Dispose();
+		innerSet.Received().Dispose();
+	}
 }
