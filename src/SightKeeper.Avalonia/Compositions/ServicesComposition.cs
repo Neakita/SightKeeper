@@ -26,6 +26,7 @@ using SightKeeper.Data.DataSets;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Tags;
 using SixLabors.ImageSharp.PixelFormats;
 using Tag = SightKeeper.Domain.DataSets.Tags.Tag;
 #if OS_WINDOWS
@@ -124,10 +125,10 @@ public sealed class ServicesComposition
 		.Bind<DataSetImporter>()
 		.To<ZippedMemoryPackDataSetImporter>()
 
-		.Bind<Trainer<ReadOnlyAsset>>()
+		.Bind<Trainer<ReadOnlyTag, ReadOnlyAsset>>()
 		.To<TypeSwitchTrainer>()
 
-		.Bind<Trainer<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
+		.Bind<Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
 		.To<DFineTrainer>()
 
 		.Bind<CondaEnvironmentManager>()
@@ -136,13 +137,13 @@ public sealed class ServicesComposition
 #elif OS_LINUX
 
 #endif
-		.Bind<TrainDataExporter<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
+		.Bind<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
 		.To(context =>
 		{
-			TrainDataExporter<ReadOnlyItemsAsset<ReadOnlyAssetItem>> exporter = new COCODetectorDataSetExporter();
-			exporter = new DistributedTrainDataExporter<ReadOnlyItemsAsset<ReadOnlyAssetItem>>(exporter);
-			context.Inject(out TrainDataTransformer<ReadOnlyItemsAsset<ReadOnlyAssetItem>> transformer);
-			exporter = new TransformingTrainDataExporter<ReadOnlyItemsAsset<ReadOnlyAssetItem>>(exporter, transformer);
+			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> exporter = new COCODetectorDataSetExporter();
+			exporter = new DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>(exporter);
+			context.Inject(out TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> transformer);
+			exporter = new TransformingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>(exporter, transformer);
 			return exporter;
 		})
 
@@ -158,8 +159,8 @@ public sealed class ServicesComposition
 
 #endif
 
-		.Bind<TrainDataTransformer<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
-		.To<CropTransformer<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
+		.Bind<TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
+		.To<CropTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
 
 		.Bind<CropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
 		.To<RandomItemsCropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyAssetItem>, ReadOnlyAssetItem>>()
