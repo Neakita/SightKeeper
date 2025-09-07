@@ -4,7 +4,7 @@ using NSubstitute;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Domain.Tests.Images;
+namespace SightKeeper.Domain.Tests;
 
 public sealed class DomainImageSetTests
 {
