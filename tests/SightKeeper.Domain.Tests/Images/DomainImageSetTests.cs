@@ -6,7 +6,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Domain.Tests.Images;
 
-public sealed class ImageSetTests
+public sealed class DomainImageSetTests
 {
 	[Fact]
 	public void ShouldNotAllowDeleteImageWithAsset()
