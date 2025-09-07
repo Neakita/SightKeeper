@@ -61,16 +61,6 @@ public readonly struct Vector2<T> : IEquatable<Vector2<T>> where T : INumber<T>,
 		Y = y;
 	}
 
-	public Vector2<T> WithX(T value)
-	{
-		return new Vector2<T>(value, Y);
-	}
-
-	public Vector2<T> WithY(T value)
-	{
-		return new Vector2<T>(X, value);
-	}
-
 	public Vector2<ushort> ToUInt16(IFormatProvider? provider = null)
 	{
 		var x = X.ToUInt16(provider);

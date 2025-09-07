@@ -18,7 +18,7 @@ public sealed class CapturingSettingsViewModel(ScreenBoundsProvider screenBounds
 		set
 		{
 			OnPropertyChanging();
-			capturer.ImageSize = capturer.ImageSize.WithX(value);
+			capturer.ImageSize = capturer.ImageSize with { X = value };
 			OnPropertyChanged();
 		}
 	}
@@ -29,7 +29,7 @@ public sealed class CapturingSettingsViewModel(ScreenBoundsProvider screenBounds
 		set
 		{
 			OnPropertyChanging();
-			capturer.ImageSize = capturer.ImageSize.WithY(value);
+			capturer.ImageSize = capturer.ImageSize with { Y = value };
 			OnPropertyChanged();
 		}
 	}
