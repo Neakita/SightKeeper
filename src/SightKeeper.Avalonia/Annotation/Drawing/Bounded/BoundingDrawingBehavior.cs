@@ -154,6 +154,6 @@ public sealed class BoundingDrawingBehavior : Behavior<Canvas>
 
 	private static Bounding CreateBounding(Point point1, Point point2)
 	{
-		return new Bounding(point1.X, point1.Y, point2.X, point2.Y);
+		return Bounding.FromPoints(point1.X, point1.Y, point2.X, point2.Y);
 	}
 }

@@ -33,9 +33,7 @@ public sealed class RandomItemsCropRectanglesProvider<TAsset, TItem>(RandomItems
 
 	private Rectangle GetCropRectangle(TItem item, Vector2<ushort> imageSize)
 	{
-		var sizedItemBounding = new Bounding(
-			item.Bounding.Position * imageSize.ToDouble(),
-			item.Bounding.Size * imageSize.ToDouble());
+		var sizedItemBounding = item.Bounding * imageSize.ToDouble();
 		var cropRectanglePosition = sizedItemBounding.Center - settings.TargetSize.ToDouble() / 2;
 		cropRectanglePosition += GetRandomOffset(sizedItemBounding, imageSize);
 		var roundedCropRectanglePosition = cropRectanglePosition.ToUInt16();

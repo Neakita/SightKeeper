@@ -28,7 +28,7 @@ public sealed class BoundingDrawingBehaviorTests
 		var behavior = CreateBehavior(command);
 		_canvas = CreateCanvas(behavior);
 		_window = PrepareWindow(_canvas);
-		Bounding bounding = new(0.1, 0.2, 0.3, 0.4);
+		var bounding = Bounding.FromLTRB(0.1, 0.2, 0.3, 0.4);
 		DrawBoundingAtCanvas(bounding);
 		AssertCommandReceivedExecuteWithBounding(command, bounding);
 	}
@@ -41,7 +41,7 @@ public sealed class BoundingDrawingBehaviorTests
 		var behavior = CreateBehavior(command);
 		_canvas = CreateCanvas(behavior);
 		_window = PrepareWindow(_canvas);
-		Bounding bounding = new(0.1, 0.2, 0.3, 0.4);
+		var bounding = Bounding.FromLTRB(0.1, 0.2, 0.3, 0.4);
 		DrawBoundingAtCanvas(bounding);
 		command.DidNotReceive().Execute(Arg.Any<Bounding>());
 	}
@@ -55,7 +55,7 @@ public sealed class BoundingDrawingBehaviorTests
 		var behavior = CreateBehavior(command, drawingItemTemplate);
 		_canvas = CreateCanvas(behavior);
 		_window = PrepareWindow(_canvas);
-		Bounding bounding = new(0.1, 0.2, 0.3, 0.4);
+		var bounding = Bounding.FromLTRB(0.1, 0.2, 0.3, 0.4);
 		BeginDrawBoundingAtCanvas(bounding);
 		_canvas.Children.Should().Contain(control => IsDisplays(control, bounding));
 	}
@@ -69,7 +69,7 @@ public sealed class BoundingDrawingBehaviorTests
 		var behavior = CreateBehavior(command, drawingItemTemplate);
 		_canvas = CreateCanvas(behavior);
 		_window = PrepareWindow(_canvas);
-		Bounding bounding = new(0.1, 0.2, 0.3, 0.4);
+		var bounding = Bounding.FromLTRB(0.1, 0.2, 0.3, 0.4);
 		BeginDrawBoundingAtCanvas(bounding);
 		_canvas.Children.Should().NotContain(control => IsDisplays(control, bounding));
 	}
@@ -178,7 +178,7 @@ public sealed class BoundingDrawingBehaviorTests
 		Guard.IsNotNull(_canvas);
 		var canvasWidth = _canvas.Bounds.Width;
 		var canvasHeight = _canvas.Bounds.Height;
-		Bounding displayedBounding = new(
+		var displayedBounding = Bounding.FromLTRB(
 			control.Bounds.Left / canvasWidth,
 			control.Bounds.Top / canvasHeight,
 			control.Bounds.Right / canvasWidth,
@@ -191,6 +191,6 @@ public sealed class BoundingDrawingBehaviorTests
 	{
 		Guard.IsNotNull(_canvas);
 		var normalizedSize = absoluteSize / new Vector2<double>(_canvas.Width, _canvas.Height);
-		return new Bounding(new Vector2<double>(0.1, 0.2), normalizedSize);
+		return Bounding.FromSize(new Vector2<double>(0.1, 0.2), normalizedSize);
 	}
 }

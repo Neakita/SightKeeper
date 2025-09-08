@@ -36,4 +36,28 @@ public sealed class BoundingTests
 		bounding.Right.Should().Be(right);
 		bounding.Bottom.Should().Be(bottom);
 	}
+
+	[Fact]
+	public void CenterShouldBeBetweenPoints()
+	{
+		const double left = .1;
+		const double top = .2;
+		const double right = .3;
+		const double bottom = .4;
+		var bounding = Bounding.FromLTRB(left, top, right, bottom);
+		var expectedCenter = new Vector2<double>(
+			(left + right) / 2,
+			(top + bottom) / 2);
+		bounding.Center.Should().Be(expectedCenter);
+	}
+
+	[Fact]
+	public void ShouldCreateFromPositionAndSize()
+	{
+		var position = new Vector2<double>(.1, .2);
+		var size = new Vector2<double>(.3, .4);
+		var bounding = Bounding.FromSize(position, size);
+		bounding.Position.Should().Be(position);
+		bounding.Size.Should().Be(size);
+	}
 }

@@ -14,7 +14,6 @@ public sealed class DomainPoserItemTests
 		var initialTag = Substitute.For<PoserTag>();
 		var newTag = Substitute.For<PoserTag>();
 		var tagsOwner = Substitute.For<TagsOwner<PoserTag>>();
-		// some weird NSubstitute & interface default implementation behavior
 		((Tag)initialTag).Owner.Returns(tagsOwner);
 		((Tag)newTag).Owner.Returns(tagsOwner);
 		var innerItem = Substitute.For<PoserItem>();
@@ -29,7 +28,7 @@ public sealed class DomainPoserItemTests
 	{
 		var innerItem = Substitute.For<PoserItem>();
 		DomainPoserItem domainItem = new(innerItem);
-		var bounding = new Bounding(.1, .2, .3, .4);
+		var bounding = Bounding.FromLTRB(.1, .2, .3, .4);
 		domainItem.Bounding = bounding;
 		innerItem.Received().Bounding = bounding;
 	}
@@ -39,7 +38,7 @@ public sealed class DomainPoserItemTests
 	{
 		var innerItem = Substitute.For<PoserItem>();
 		DomainPoserItem domainItem = new(innerItem);
-		var bounding = new Bounding(1, 2, 3, 4);
+		var bounding = Bounding.FromLTRB(1, 2, 3, 4);
 		var exception = Assert.Throws<ItemBoundingConstraintException>(() => domainItem.Bounding = bounding);
 		innerItem.DidNotReceive().Bounding = Arg.Any<Bounding>();
 		exception.Item.Should().Be(domainItem);

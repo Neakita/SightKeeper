@@ -4,7 +4,28 @@ public readonly struct Bounding : IEquatable<Bounding>
 {
 	public static Bounding FromPoints(Vector2<double> point1, Vector2<double> point2)
 	{
-		return new Bounding(point1.X, point1.Y, point2.X, point2.Y);
+		return FromPoints(point1.X, point1.Y, point2.X, point2.Y);
+	}
+
+	public static Bounding FromPoints(double x1, double y1, double x2, double y2)
+	{
+		Sort(ref x1, ref x2);
+		Sort(ref y1, ref y2);
+		var width = x2 - x1;
+		var height = y2 - y1;
+		return new Bounding(x1, y1, width, height);
+	}
+
+	public static Bounding FromLTRB(double left, double top, double right, double bottom)
+	{
+		var width = right - left;
+		var height = bottom - top;
+		return new Bounding(left, top, width, height);
+	}
+
+	public static Bounding FromSize(Vector2<double> position, Vector2<double> size)
+	{
+		return new Bounding(position.X, position.Y, size.X, size.Y);
 	}
 
 	public static bool operator ==(Bounding left, Bounding right)
@@ -19,102 +40,36 @@ public readonly struct Bounding : IEquatable<Bounding>
 
 	public static Bounding operator *(Bounding bounding, Vector2<double> vector)
 	{
-		return new Bounding(bounding.Position * vector, bounding.Size * vector);
+		return FromSize(bounding.Position * vector, bounding.Size * vector);
 	}
 
 	public static Bounding operator /(Bounding bounding, Vector2<double> vector)
 	{
-		return new Bounding(bounding.Position / vector, bounding.Size / vector);
+		return FromSize(bounding.Position / vector, bounding.Size / vector);
 	}
 
-	public Vector2<double> Position { get; init; }
-	public Vector2<double> Size { get; init; }
+	public Vector2<double> Position => new(Left, Top);
+	public Vector2<double> Size => new(Width, Height);
 	public Vector2<double> Center => Position + Size / 2;
-	public double Left
-	{
-		get => Position.X;
-		init
-		{
-			Width -= value - Position.X;
-			Position = Position with { X = value };
-		}
-	}
 
-	public double Right
-	{
-		get => Position.X + Size.X;
-		init => Size = Size with { X = value - Position.X };
-	}
-
-	public double Top
-	{
-		get => Position.Y;
-		init
-		{
-			Height -= value - Position.Y;
-			Position = Position with { Y = value };
-		}
-	}
-
-	public double Bottom
-	{
-		get => Position.Y + Size.Y;
-		init => Size = Size with { Y = value - Position.Y };
-	}
-
-	public double Width
-	{
-		get => Size.X;
-		init => Size = Size with { X = value };
-	}
-
-	public double Height
-	{
-		get => Size.Y;
-		init => Size = Size with { Y = value };
-	}
+	public double Left { get; }
+	public double Top { get; }
+	public double Width { get; }
+	public double Height { get; }
+	public double Right => Left + Width;
+	public double Bottom => Top + Height;
 
 	public Vector2<double> TopLeft => new(Left, Top);
 	public Vector2<double> TopRight => new(Right, Top);
 	public Vector2<double> BottomLeft => new(Left, Bottom);
 	public Vector2<double> BottomRight => new(Right, Bottom);
 
-	public Bounding()
+	private Bounding(double left, double top, double width, double height)
 	{
-	}
-
-	public Bounding(double x1, double y1, double x2, double y2)
-	{
-		Sort(ref x1, ref x2);
-		Sort(ref y1, ref y2);
-		Position = new Vector2<double>(x1, y1);
-		Size = new Vector2<double>(x2 - x1, y2 - y1);
-	}
-
-	public Bounding(Vector2<double> position, Vector2<double> size)
-	{
-		Position = position;
-		Size = size;
-	}
-
-	public Bounding WithLeft(double value)
-	{
-		return new Bounding(value, Top, Right, Bottom);
-	}
-
-	public Bounding WithTop(double value)
-	{
-		return new Bounding(Left, value, Right, Bottom);
-	}
-
-	public Bounding WithRight(double value)
-	{
-		return new Bounding(Left, Top, value, Bottom);
-	}
-
-	public Bounding WithBottom(double value)
-	{
-		return new Bounding(Left, Top, Right, value);
+		Left = left;
+		Top = top;
+		Width = width;
+		Height = height;
 	}
 
 	public bool Equals(Bounding other)

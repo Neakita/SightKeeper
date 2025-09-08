@@ -18,7 +18,7 @@ internal sealed class DesignDrawerDataContext : DrawerDataContext
 			new DesignBoundedItemDataContext
 			{
 				Name = "Bloat",
-				Bounding = new Bounding(0.415, 0.36, 0.525, 0.7),
+				Bounding = Bounding.FromLTRB(0.415, 0.36, 0.525, 0.7),
 				Color = Color.FromRgb(0xF0, 0x22, 0x22)
 			},
 			new DesignKeyPointDataContext

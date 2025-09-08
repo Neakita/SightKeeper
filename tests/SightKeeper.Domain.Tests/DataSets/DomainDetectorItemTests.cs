@@ -44,7 +44,7 @@ public sealed class DomainDetectorItemTests
 	{
 		var innerItem = Substitute.For<DetectorItem>();
 		var domainItem = new DomainDetectorItem(innerItem);
-		var bounding = new Bounding(0.2, 0.3, 0.4, 0.5);
+		var bounding = Bounding.FromLTRB(0.2, 0.3, 0.4, 0.5);
 		domainItem.Bounding = bounding;
 		innerItem.Received().Bounding = bounding;
 	}
@@ -54,7 +54,7 @@ public sealed class DomainDetectorItemTests
 	{
 		var innerItem = Substitute.For<DetectorItem>();
 		var domainItem = new DomainDetectorItem(innerItem);
-		var bounding = new Bounding(2, 3, 4, 5);
+		var bounding = Bounding.FromLTRB(2, 3, 4, 5);
 		var exception = Assert.Throws<ItemBoundingConstraintException>(() => domainItem.Bounding = bounding);
 		innerItem.DidNotReceive().Bounding = Arg.Any<Bounding>();
 		exception.Item.Should().Be(domainItem);

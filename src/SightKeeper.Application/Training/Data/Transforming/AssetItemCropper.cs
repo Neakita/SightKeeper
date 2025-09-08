@@ -21,11 +21,7 @@ public sealed class AssetItemCropper : ItemCropper<ReadOnlyAssetItem>
 	private static bool TryCrop(Bounding itemBounding, Rectangle cropRectangle, Vector2<ushort> imageSize, out Bounding croppedBounding)
 	{
 		croppedBounding = default;
-		var sizedItemBounding = new Bounding(
-			itemBounding.Left * imageSize.X,
-			itemBounding.Top * imageSize.Y,
-			itemBounding.Right * imageSize.X,
-			itemBounding.Bottom * imageSize.Y);
+		var sizedItemBounding = itemBounding * imageSize.ToDouble();
 		var sizedTopLeft = sizedItemBounding.TopLeft - new Vector2<double>(cropRectangle.Left, cropRectangle.Top);
 		var sizedBottomRight = sizedItemBounding.BottomRight - new Vector2<double>(cropRectangle.Left, cropRectangle.Top);
 
@@ -45,15 +41,8 @@ public sealed class AssetItemCropper : ItemCropper<ReadOnlyAssetItem>
 		right = Math.Clamp(right, 0, 1);
 		bottom = Math.Clamp(bottom, 0, 1);
 		
-		croppedBounding = new Bounding(left, top, right, bottom);
+		croppedBounding = Bounding.FromLTRB(left, top, right, bottom);
 
 		return true;
-	}
-
-	private static Vector2<double> Clamp(Vector2<double> value, Vector2<double> minimum, Vector2<double> maximum)
-	{
-		return new Vector2<double>(
-			Math.Clamp(value.X, minimum.X, maximum.X),
-			Math.Clamp(value.Y, minimum.Y, maximum.Y));
 	}
 }
