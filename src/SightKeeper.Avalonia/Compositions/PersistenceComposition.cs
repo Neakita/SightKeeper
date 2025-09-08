@@ -11,8 +11,6 @@ using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Classifier;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.Images;
 using Tag = SightKeeper.Domain.DataSets.Tags.Tag;

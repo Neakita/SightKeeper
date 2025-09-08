@@ -1,7 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.Tests.DataSets;

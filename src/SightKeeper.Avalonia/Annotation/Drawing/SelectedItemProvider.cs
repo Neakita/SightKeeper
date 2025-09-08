@@ -5,5 +5,5 @@ namespace SightKeeper.Avalonia.Annotation.Drawing;
 
 public interface SelectedItemProvider
 {
-	IObservable<AssetItem?> SelectedItemChanged { get; }
+	IObservable<DetectorItem?> SelectedItemChanged { get; }
 }

@@ -1,8 +1,7 @@
-﻿using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Tags;
+﻿using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Domain.DataSets.Classifier;
+namespace SightKeeper.Domain.DataSets.Assets;
 
 public sealed class DomainClassifierAsset(ClassifierAsset inner) : ClassifierAsset
 {

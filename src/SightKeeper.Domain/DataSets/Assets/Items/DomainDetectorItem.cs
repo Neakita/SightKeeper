@@ -1,7 +1,6 @@
-﻿using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Tags;
+﻿using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Domain.DataSets.Detector;
+namespace SightKeeper.Domain.DataSets.Assets.Items;
 
 public sealed class DomainDetectorItem(DetectorItem inner) : DetectorItem, Decorator<DetectorItem>
 {

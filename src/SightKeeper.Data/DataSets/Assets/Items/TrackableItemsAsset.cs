@@ -1,7 +1,6 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets.Items;
@@ -22,9 +21,9 @@ internal sealed class TrackableItemsAsset<TItem>(ItemsAsset<TItem> inner, Change
 
 	public IReadOnlyList<TItem> Items => inner.Items;
 
-	public TItem MakeItem(Tag tag)
+	public TItem MakeItem()
 	{
-		var item = inner.MakeItem(tag);
+		var item = inner.MakeItem();
 		listener.SetDataChanged();
 		return item;
 	}

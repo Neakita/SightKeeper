@@ -3,7 +3,6 @@ using MemoryPack;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Assets;
@@ -12,7 +11,7 @@ internal sealed class TypeSwitchAssetsFormatter : AssetsFormatter<Asset>
 {
 	public TypeSwitchAssetsFormatter(
 		AssetsFormatter<ClassifierAsset> classifierAssetsFormatter,
-		AssetsFormatter<ItemsAsset<AssetItem>> itemsAssetFormatter)
+		AssetsFormatter<ItemsAsset<DetectorItem>> itemsAssetFormatter)
 	{
 		_classifierAssetsFormatter = classifierAssetsFormatter;
 		_itemsAssetFormatter = itemsAssetFormatter;
@@ -29,7 +28,7 @@ internal sealed class TypeSwitchAssetsFormatter : AssetsFormatter<Asset>
 			case IReadOnlyCollection<ClassifierAsset> classifierAssets:
 				_classifierAssetsFormatter.Serialize(ref writer, classifierAssets, tagIndexes);
 				break;
-			case IReadOnlyCollection<ItemsAsset<AssetItem>> itemsAssets:
+			case IReadOnlyCollection<ItemsAsset<DetectorItem>> itemsAssets:
 				_itemsAssetFormatter.Serialize(ref writer, itemsAssets, tagIndexes);
 				break;
 			default:
@@ -44,7 +43,7 @@ internal sealed class TypeSwitchAssetsFormatter : AssetsFormatter<Asset>
 			case DataSet<Tag, ClassifierAsset> classifierSet:
 				_classifierAssetsFormatter.Deserialize(ref reader, classifierSet);
 				break;
-			case DataSet<Tag, ItemsAsset<AssetItem>> itemsSet:
+			case DataSet<Tag, ItemsAsset<DetectorItem>> itemsSet:
 				_itemsAssetFormatter.Deserialize(ref reader, itemsSet);
 				break;
 			default:
@@ -53,5 +52,5 @@ internal sealed class TypeSwitchAssetsFormatter : AssetsFormatter<Asset>
 	}
 
 	private readonly AssetsFormatter<ClassifierAsset> _classifierAssetsFormatter;
-	private readonly AssetsFormatter<ItemsAsset<AssetItem>> _itemsAssetFormatter;
+	private readonly AssetsFormatter<ItemsAsset<DetectorItem>> _itemsAssetFormatter;
 }

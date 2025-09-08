@@ -1,5 +1,4 @@
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Classifier.Assets.Decorators;

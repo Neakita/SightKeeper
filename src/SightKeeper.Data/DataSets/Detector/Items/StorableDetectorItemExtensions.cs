@@ -1,4 +1,4 @@
-using SightKeeper.Domain.DataSets.Detector;
+using SightKeeper.Domain.DataSets.Assets.Items;
 
 namespace SightKeeper.Data.DataSets.Detector.Items;
 

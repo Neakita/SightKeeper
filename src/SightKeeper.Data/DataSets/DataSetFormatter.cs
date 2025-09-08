@@ -8,8 +8,6 @@ using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Classifier;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -41,8 +39,8 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet<Tag, Asset>>
 		ushort unionTag = set switch
 		{
 			DataSet<Tag, ClassifierAsset> => 0,
-			DataSet<Tag, ItemsAsset<DetectorItem>> => 1,
 			DataSet<PoserTag, ItemsAsset<PoserItem>> => 2,
+			DataSet<Tag, ItemsAsset<DetectorItem>> => 1,
 			_ => throw new ArgumentOutOfRangeException(nameof(set))
 		};
 		writer.WriteUnionHeader(unionTag);

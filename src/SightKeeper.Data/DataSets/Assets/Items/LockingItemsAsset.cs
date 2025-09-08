@@ -1,7 +1,6 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets.Items;
@@ -22,10 +21,10 @@ internal sealed class LockingItemsAsset<TItem>(ItemsAsset<TItem> inner, Lock edi
 
 	public IReadOnlyList<TItem> Items => inner.Items;
 
-	public TItem MakeItem(Tag tag)
+	public TItem MakeItem()
 	{
 		lock (editingLock)
-			return inner.MakeItem(tag);
+			return inner.MakeItem();
 	}
 
 	public void DeleteItemAt(int index)

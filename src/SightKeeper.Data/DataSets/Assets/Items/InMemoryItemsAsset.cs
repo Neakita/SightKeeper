@@ -1,6 +1,5 @@
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets.Items;
@@ -11,9 +10,9 @@ internal sealed class InMemoryItemsAsset<TItem>(ManagedImage image, AssetItemFac
 	public IReadOnlyList<TItem> Items => _items;
 	public AssetUsage Usage { get; set; } = AssetUsage.Any;
 
-	public TItem MakeItem(Tag tag)
+	public TItem MakeItem()
 	{
-		var item = itemFactory.CreateItem(tag);
+		var item = itemFactory.CreateItem();
 		_items.Add(item);
 		return item;
 	}

@@ -10,7 +10,6 @@ using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Classifier;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 

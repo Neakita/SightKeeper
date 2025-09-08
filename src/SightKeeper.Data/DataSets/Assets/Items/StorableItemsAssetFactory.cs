@@ -16,7 +16,6 @@ internal sealed class StorableItemsAssetFactory<TItem>(AssetItemFactory<TItem> i
 			.WithTracking(changeListener)
 			.WithLocking(editingLock)
 			.WithObservableItems()
-			.WithDomainRules(TagsOwner)
 			.WithNotifications();
 	}
 }

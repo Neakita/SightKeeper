@@ -20,7 +20,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 
 	public IReadOnlyCollection<DrawerItemDataContext> Items => _itemsViewModel.Items;
 	[ObservableProperty] public partial BoundedItemDataContext? SelectedItem { get; set; }
-	public IObservable<AssetItem?> SelectedItemChanged => _selectedItemChanged.AsObservable();
+	public IObservable<DetectorItem?> SelectedItemChanged => _selectedItemChanged.AsObservable();
 	public BoundingDrawerDataContext BoundingDrawer => _boundingDrawer;
 	public KeyPointDrawerDataContext KeyPointDrawer => _keyPointDrawer;
 
@@ -50,7 +50,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 	private readonly AssetItemsViewModel _itemsViewModel;
 	private readonly KeyPointDrawerViewModel _keyPointDrawer;
 	private readonly WriteableBitmapImageLoader _imageLoader;
-	private readonly Subject<AssetItem?> _selectedItemChanged = new();
+	private readonly Subject<DetectorItem?> _selectedItemChanged = new();
 	private readonly CompositeDisposable _constructorDisposable = new();
 
 	private void HandleImageSelectionChange(ManagedImage? image)
@@ -65,7 +65,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 
 	partial void OnSelectedItemChanged(BoundedItemDataContext? value)
 	{
-		var assetItem = (value as BoundedItemViewModel)?.Value as AssetItem;
+		var assetItem = (value as BoundedItemViewModel)?.Value as DetectorItem;
 		_selectedItemChanged.OnNext(assetItem);
 		_keyPointDrawer.Item = value as PoserItemViewModel;
 	}

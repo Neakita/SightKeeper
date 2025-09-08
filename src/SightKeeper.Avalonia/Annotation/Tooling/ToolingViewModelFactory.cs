@@ -7,8 +7,6 @@ using SightKeeper.Avalonia.Annotation.Tooling.Poser;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Classifier;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -26,16 +24,16 @@ public sealed class ToolingViewModelFactory(ImageSelection imageSelection, Selec
 				var classifierTooling = new ClassifierToolingViewModel(imageSelection);
 				classifierTooling.DataSet = classifierDataSet;
 				return classifierTooling;
+			case DataSet<PoserTag, ItemsAsset<PoserItem>> poserDataSet:
+				var poserTooling = new PoserToolingViewModel(selectedItemProvider);
+				poserTooling.TagsSource = poserDataSet.TagsLibrary;
+				return poserTooling;
 			case DataSet<Tag, ItemsAsset<DetectorItem>> detectorDataSet:
 				DetectorToolingViewModel detectorTooling = new()
 				{
 					TagsContainer = detectorDataSet.TagsLibrary
 				};
 				return detectorTooling;
-			case DataSet<PoserTag, ItemsAsset<PoserItem>> poserDataSet:
-				var poserTooling = new PoserToolingViewModel(selectedItemProvider);
-				poserTooling.TagsSource = poserDataSet.TagsLibrary;
-				return poserTooling;
 			default:
 				throw new ArgumentOutOfRangeException(nameof(dataSet));
 		}

@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets.Items;
@@ -24,9 +23,9 @@ internal sealed class NotifyingItemsAsset<TItem>(ItemsAsset<TItem> inner) : Item
 		}
 	}
 
-	public TItem MakeItem(Tag tag)
+	public TItem MakeItem()
 	{
-		return inner.MakeItem(tag);
+		return inner.MakeItem();
 	}
 
 	public IReadOnlyList<TItem> Items => inner.Items;

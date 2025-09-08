@@ -5,7 +5,6 @@ using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector;
@@ -23,6 +22,7 @@ public sealed class WrappingDetectorDataSetFactory(
 		var assetFactory = new StorableItemsAssetFactory<DetectorItem>(itemFactory, changeListener, editingLock);
 		var inMemorySet = new InMemoryDataSet<Tag, ItemsAsset<DetectorItem>>(tagFactory, assetFactory, new StorableWeightsWrapper());
 		var wrappedSet = wrapper.Wrap(inMemorySet);
+		itemFactory.TagsContainer = inMemorySet.TagsLibrary;
 		tagFactory.TagsOwner = wrappedSet.TagsLibrary;
 		assetFactory.TagsOwner = wrappedSet.TagsLibrary;
 		return wrappedSet;

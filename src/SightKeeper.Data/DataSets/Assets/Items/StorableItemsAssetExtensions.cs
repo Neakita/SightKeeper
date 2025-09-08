@@ -1,5 +1,4 @@
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Assets.Items;
 
@@ -18,11 +17,6 @@ internal static class StorableItemsAssetExtensions
 	public static ItemsAsset<TItem> WithObservableItems<TItem>(this ItemsAsset<TItem> asset)
 	{
 		return new ObservableItemsAsset<TItem>(asset);
-	}
-
-	public static ItemsAsset<TItem> WithDomainRules<TItem>(this ItemsAsset<TItem> asset, TagsOwner<Tag> tagsOwner)
-	{
-		return new DomainItemsAsset<TItem>(tagsOwner, asset);
 	}
 
 	public static ItemsAsset<TItem> WithNotifications<TItem>(this ItemsAsset<TItem> asset)

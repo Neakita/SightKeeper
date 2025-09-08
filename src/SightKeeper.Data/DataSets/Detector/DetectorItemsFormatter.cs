@@ -5,7 +5,6 @@ using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Detector.Items;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Detector;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector;
@@ -28,10 +27,11 @@ internal sealed class DetectorItemsFormatter : ItemsFormatter<DetectorItem>
 		for (int i = 0; i < itemsCount; i++)
 		{
 			reader.ReadUnmanaged(out byte tagIndex, out Bounding bounding);
-			var tag = tags[tagIndex];
-			var item = itemsOwner.MakeItem(tag);
-			tag.AddUser(item);
+			var item = itemsOwner.MakeItem();
 			var innermostItem = item.UnWrapDecorator<InMemoryDetectorItem>();
+			var tag = tags[tagIndex];
+			innermostItem.Tag = tag;
+			tag.AddUser(item);
 			innermostItem.Bounding = bounding;
 		}
 	}

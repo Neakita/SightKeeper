@@ -32,7 +32,7 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 	}
 
 	private readonly CompositeDisposable _constructorDisposable = new();
-	private AssetsOwner<ItemsMaker<AssetItem>>? _assetsLibrary;
+	private AssetsOwner<ItemsMaker<DetectorItem>>? _assetsLibrary;
 	private ManagedImage? _image;
 	private Tag? _tag;
 	private bool CanCreateItem => _tag != null && _image != null && _assetsLibrary != null;
@@ -44,13 +44,14 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		Guard.IsNotNull(_image);
 		Guard.IsNotNull(_assetsLibrary);
 		var asset = _assetsLibrary.GetOrMakeAsset(_image);
-		var item = asset.MakeItem(_tag);
+		var item = asset.MakeItem();
+		item.Tag = _tag;
 		item.Bounding = bounding;
 	}
 
 	private void HandleDataSetSelectionChange(DataSet<Tag, Asset>? set)
 	{
-		_assetsLibrary = set?.AssetsLibrary as AssetsOwner<ItemsMaker<AssetItem>>;
+		_assetsLibrary = set?.AssetsLibrary as AssetsOwner<ItemsMaker<DetectorItem>>;
 		CreateItemCommand.NotifyCanExecuteChanged();
 	}
 

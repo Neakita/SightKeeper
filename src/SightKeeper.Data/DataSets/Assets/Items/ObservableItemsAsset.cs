@@ -1,7 +1,6 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 using Vibrance.Changes;
 
@@ -19,10 +18,10 @@ internal sealed class ObservableItemsAsset<TItem>(ItemsAsset<TItem> inner) : Ite
 
 	public IReadOnlyList<TItem> Items => _items;
 
-	public TItem MakeItem(Tag tag)
+	public TItem MakeItem()
 	{
 		var index = _items.Count;
-		var item = inner.MakeItem(tag);
+		var item = inner.MakeItem();
 		var change = new Insertion<TItem>
 		{
 			Items = [item],

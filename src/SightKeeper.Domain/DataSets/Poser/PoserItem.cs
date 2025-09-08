@@ -3,12 +3,17 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser;
 
-public interface PoserItem : AssetItem
+public interface PoserItem : DetectorItem
 {
 	new PoserTag Tag { get; set; }
-	Tag AssetItem.Tag => Tag;
 	IReadOnlyCollection<KeyPoint> KeyPoints { get; }
 	KeyPoint MakeKeyPoint(Tag tag);
 	void DeleteKeyPoint(KeyPoint keyPoint);
 	void ClearKeyPoints();
+
+	Tag DetectorItem.Tag
+	{
+		get => Tag;
+		set => Tag = (PoserTag)value;
+	}
 }

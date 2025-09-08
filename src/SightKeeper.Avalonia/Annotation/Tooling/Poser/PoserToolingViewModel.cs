@@ -103,7 +103,7 @@ public sealed partial class PoserToolingViewModel :
 		return _selectedItem != null && _selectedItem.KeyPoints.Any(keyPoint => keyPoint.Tag == tag);
 	}
 
-	private void HandleItemSelectionChange(AssetItem? item)
+	private void HandleItemSelectionChange(DetectorItem? item)
 	{
 		if (item is PoserItem poserItem)
 		{

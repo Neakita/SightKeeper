@@ -35,9 +35,9 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 
 	private readonly DrawerItemsFactory _drawerItemsFactory;
 	private readonly CompositeDisposable _constructorDisposable = new();
-	private AssetsContainer<ItemsContainer<AssetItem>>? _assetsLibrary;
+	private AssetsContainer<ItemsContainer<DetectorItem>>? _assetsLibrary;
 	private ManagedImage? _image;
-	private ItemsContainer<AssetItem>? Asset => _image == null ? null : _assetsLibrary?.GetOptionalAsset(_image);
+	private ItemsContainer<DetectorItem>? Asset => _image == null ? null : _assetsLibrary?.GetOptionalAsset(_image);
 	private IDisposable _assetImagesSubscription = Disposable.Empty;
 
 	private void UpdateItems()
@@ -47,7 +47,7 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 			Items = ReadOnlyCollection<DrawerItemDataContext>.Empty;
 			return;
 		}
-		var items = (ReadOnlyObservableList<AssetItem>)Asset.Items;
+		var items = (ReadOnlyObservableList<DetectorItem>)Asset.Items;
 		Items = items.Transform(_drawerItemsFactory.CreateItemViewModel).ToObservableList().ToReadOnlyNotifyingList();
 	}
 
@@ -55,7 +55,7 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 	{
 		_assetImagesSubscription.Dispose();
 		_assetImagesSubscription = Disposable.Empty;
-		_assetsLibrary = set?.AssetsLibrary as AssetsContainer<ItemsContainer<AssetItem>>;
+		_assetsLibrary = set?.AssetsLibrary as AssetsContainer<ItemsContainer<DetectorItem>>;
 		if (_assetsLibrary != null)
 		{
 			var observableAssetImages = (Vibrance.ReadOnlyObservableCollection<ManagedImage>)_assetsLibrary.Images;

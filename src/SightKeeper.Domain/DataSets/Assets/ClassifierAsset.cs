@@ -1,7 +1,6 @@
-using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Domain.DataSets.Classifier;
+namespace SightKeeper.Domain.DataSets.Assets;
 
 public interface ClassifierAsset : Asset, TagUser
 {
