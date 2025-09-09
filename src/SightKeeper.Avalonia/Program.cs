@@ -24,6 +24,7 @@ internal static class Program
 		catch (Exception exception)
 		{
 			LogUnhandledExceptions(LogEventLevel.Fatal, exception, $"{nameof(Program)}.{nameof(Main)}");
+			throw;
 		}
 		finally
 		{
