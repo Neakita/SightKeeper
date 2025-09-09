@@ -4,6 +4,8 @@ using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Data;
 using SightKeeper.Data.DataSets;
+using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Detector;
 using SightKeeper.Data.ImageSets;
@@ -13,7 +15,7 @@ using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.Images;
-using Tag = SightKeeper.Domain.DataSets.Tags.Tag;
+using DomainTag = SightKeeper.Domain.DataSets.Tags.Tag;
 
 namespace SightKeeper.Avalonia.Compositions;
 
@@ -27,9 +29,9 @@ public sealed class PersistenceComposition
 		.As(Lifetime.Singleton)
 		.To<AppDataImageSetsRepository>()
 
-		.Bind<WriteRepository<DataSet<Tag, Asset>>>()
-		.Bind<ReadRepository<DataSet<Tag, Asset>>>()
-		.Bind<ObservableRepository<DataSet<Tag, Asset>>>()
+		.Bind<WriteRepository<DataSet<DomainTag, Asset>>>()
+		.Bind<ReadRepository<DataSet<DomainTag, Asset>>>()
+		.Bind<ObservableRepository<DataSet<DomainTag, Asset>>>()
 		.As(Lifetime.Singleton)
 		.To<AppDataDataSetsRepository>()
 
@@ -44,10 +46,10 @@ public sealed class PersistenceComposition
 			return new WrappedImageSetFactory(inMemoryImageSetFactory, wrapper);
 		})
 
-		.Bind<DataSetFactory<Tag, ClassifierAsset>>()
+		.Bind<DataSetFactory<DomainTag, ClassifierAsset>>()
 		.To<WrappingClassifierDataSetFactory>()
 	
-		.Bind<DataSetFactory<Tag, ItemsAsset<DetectorItem>>>()
+		.Bind<DataSetFactory<DomainTag, ItemsAsset<DetectorItem>>>()
 		.To<WrappingDetectorDataSetFactory>()
 	
 		.Bind<DataSetFactory<PoserTag, ItemsAsset<PoserItem>>>()
@@ -69,6 +71,18 @@ public sealed class PersistenceComposition
 		.Bind<ImageLookupper>()
 		.As(Lifetime.Singleton)
 		.To<PopulatableImageLookupper>()
+		
+		.Bind<AssetsFormatter<Asset>>()
+		.To<TypeSwitchAssetsFormatter>()
+		
+		.Bind<AssetsFormatter<ClassifierAsset>>()
+		.To<ClassifierAssetsFormatter>()
+		
+		.Bind<AssetsFormatter<ItemsAsset<DetectorItem>>>()
+		.To<ItemsAssetsFormatter<DetectorItem>>()
+		
+		.Bind<ItemsFormatter<DetectorItem>>()
+		.To<DetectorItemsFormatter>()
 
 		.Root<ImageSetFormatter>(nameof(ImageSetFormatter))
 		.Root<DataSetFormatter>(nameof(DataSetFormatter))

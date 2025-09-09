@@ -44,7 +44,7 @@ public sealed class ZippedMemoryPackDataSetImporter(
 			if (imageLookupper.ContainsImage(image.Id))
 				continue;
 			importedImagesSet ??= CreateImagesSet();
-			var innerImportedImagesSet = importedImagesSet.UnWrapDecorator<InMemoryImageSet>();
+			var innerImportedImagesSet = importedImagesSet.GetInnermost<InMemoryImageSet>();
 			var wrappedImage = innerImportedImagesSet.WrapAndInsertImage(image);
 			await CopyImageData(archive, wrappedImage);
 			lookupperPopulator.AddImage(wrappedImage);

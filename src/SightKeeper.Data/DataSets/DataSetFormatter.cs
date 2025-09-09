@@ -66,7 +66,7 @@ public sealed class DataSetFormatter : MemoryPackFormatter<DataSet<Tag, Asset>>
 			2 => _poserFactory.CreateDataSet(),
 			_ => throw new ArgumentOutOfRangeException(nameof(unionTag), unionTag, null)
 		};
-		var innerSet = set.UnWrapDecorator<InMemoryDataSet<Tag, Asset>>();
+		var innerSet = set.GetInnermost<DataSet<Tag, Asset>>();
 		DataSetGeneralDataFormatter.ReadGeneralData(ref reader, innerSet);
 		TagsFormatter.ReadTags(ref reader, innerSet.TagsLibrary);
 		_assetsFormatter.Deserialize(ref reader, innerSet);

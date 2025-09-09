@@ -11,7 +11,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFormatter, ImageLookupper imageLookupper) : AssetsFormatter<ItemsAsset<TItem>>
+public sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFormatter, ImageLookupper imageLookupper) : AssetsFormatter<ItemsAsset<TItem>>
 {
 	public void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
@@ -36,7 +36,7 @@ internal sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFor
 			reader.ReadUnmanaged(out Id imageId, out AssetUsage usage);
 			var image = imageLookupper.GetImage(imageId);
 			var asset = set.AssetsLibrary.MakeAsset(image);
-			var innermostAsset = asset.UnWrapDecorator<InMemoryItemsAsset<DetectorItem>>();
+			var innermostAsset = asset.GetInnermost<ItemsAsset<DetectorItem>>();
 			innermostAsset.Usage = usage;
 			itemsFormatter.ReadItems(ref reader, set.TagsLibrary.Tags, asset);
 		}

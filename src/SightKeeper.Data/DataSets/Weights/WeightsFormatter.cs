@@ -41,8 +41,7 @@ internal static class WeightsFormatter
 	public static void ReadWeights(ref MemoryPackReader reader, WeightsLibrary library, IReadOnlyList<Tag> tags)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var weightsCount));
-		var innermostLibrary = library.UnWrapDecorator<InMemoryWeightsLibrary>();
-		innermostLibrary.EnsureCapacity(weightsCount);
+		var innermostLibrary = library.GetInnermost<InMemoryWeightsLibrary>();
 		for (int i = 0; i < weightsCount; i++)
 		{
 			reader.ReadUnmanaged(

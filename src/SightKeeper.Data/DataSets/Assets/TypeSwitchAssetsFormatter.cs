@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal sealed class TypeSwitchAssetsFormatter : AssetsFormatter<Asset>
+public sealed class TypeSwitchAssetsFormatter : AssetsFormatter<Asset>
 {
 	public TypeSwitchAssetsFormatter(
 		AssetsFormatter<ClassifierAsset> classifierAssetsFormatter,
