@@ -28,18 +28,18 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.3" />
-        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.3" />
-        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.3" />
+        <PackageReference Include="Avalonia" Version="11.3.7" />
+        <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.7" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.7" />
         <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.3" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.7" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.3" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.3" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.3.7" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.7" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="Humanizer.Core" Version="2.14.1" />
         <PackageReference Include="Material.Icons.Avalonia" Version="2.4.1" />
-        <PackageReference Include="Pure.DI" Version="2.2.2">
+        <PackageReference Include="Pure.DI" Version="2.2.13">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
