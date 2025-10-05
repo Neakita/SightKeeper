@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
+﻿namespace SightKeeper.Avalonia.Dialogs;
 
-namespace SightKeeper.Avalonia.Dialogs;
-
-internal interface DialogHost : INotifyPropertyChanged
+internal interface DialogHost
 {
 	DialogManager DialogManager { get; }
 }
