@@ -8,7 +8,6 @@ public interface Dialog
 	string Header { get; }
 	ICommand CloseCommand { get; }
 	Task WaitAsync();
-	void Close();
 }
 
 public interface Dialog<TResult> : Dialog

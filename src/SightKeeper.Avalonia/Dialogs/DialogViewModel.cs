@@ -15,7 +15,7 @@ internal abstract partial class DialogViewModel : ViewModel, Dialog
 	}
 
 	[RelayCommand]
-	public void Close()
+	private void Close()
 	{
 		_completionSource.SetResult();
 	}
