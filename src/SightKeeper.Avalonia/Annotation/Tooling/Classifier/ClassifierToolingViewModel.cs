@@ -15,20 +15,9 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Classifier;
 
-public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierToolingDataContext, IDisposable
+internal sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierToolingDataContext, IDisposable
 {
-	[ObservableProperty, NotifyPropertyChangedFor(nameof(Tags))]
-	public partial DataSet<Tag, ClassifierAsset>? DataSet { get; set; }
-
-	public IEnumerable<TagDataContext> Tags
-	{
-		get
-		{
-			if (DataSet == null)
-				return Enumerable.Empty<TagDataContext>();
-			return DataSet.TagsLibrary.Tags.Select(tag => new TagViewModel(tag));
-		}
-	}
+	public IEnumerable<TagDataContext> Tags => _dataSet.TagsLibrary.Tags.Select(tag => new TagViewModel(tag));
 
 	public TagDataContext? SelectedTag
 	{
@@ -52,8 +41,9 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 
 	public bool IsEnabled => Image != null;
 
-	public ClassifierToolingViewModel(ImageSelection imageSelection)
+	public ClassifierToolingViewModel(DataSet<Tag, ClassifierAsset> dataSet, ImageSelection imageSelection)
 	{
+		_dataSet = dataSet;
 		Image = imageSelection.SelectedImage;
 		imageSelection.SelectedImageChanged
 			.Subscribe(_ => Image = imageSelection.SelectedImage)
@@ -65,20 +55,20 @@ public sealed partial class ClassifierToolingViewModel : ViewModel, ClassifierTo
 			.DisposeWith(_constructionDisposable);
 	}
 
+	public void Dispose()
+	{
+		_constructionDisposable.Dispose();
+	}
+
+	private readonly DataSet<Tag, ClassifierAsset> _dataSet;
+	private readonly CompositeDisposable _constructionDisposable = new();
+	private AssetsOwner<ClassifierAsset> AssetsLibrary => _dataSet.AssetsLibrary;
+	private ClassifierAsset? Asset => Image == null ? null : AssetsLibrary.GetOptionalAsset(Image);
+
 	private IObservable<Unit> GetAssetsObservable()
 	{
 		if (Image?.Assets is IObservable<object> assetsObservable)
 			return assetsObservable.Select(_ => Unit.Default);
 		return Observable.Empty<Unit>();
 	}
-
-	public void Dispose()
-	{
-		_constructionDisposable.Dispose();
-	}
-
-	private AssetsOwner<ClassifierAsset>? AssetsLibrary => DataSet?.AssetsLibrary;
-	private readonly CompositeDisposable _constructionDisposable = new();
-
-	private ClassifierAsset? Asset => Image == null ? null : AssetsLibrary?.GetOptionalAsset(Image);
 }

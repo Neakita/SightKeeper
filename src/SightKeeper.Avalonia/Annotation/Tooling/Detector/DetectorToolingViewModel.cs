@@ -6,28 +6,10 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Detector;
 
-internal sealed class DetectorToolingViewModel : ViewModel, DetectorToolingDataContext, TagSelection, ObservableTagSelection
+internal sealed class DetectorToolingViewModel(TagsContainer<Tag> tagsContainer)
+	: ViewModel, DetectorToolingDataContext, TagSelection, ObservableTagSelection
 {
-	public TagsContainer<Tag>? TagsContainer
-	{
-		get;
-		set
-		{
-			OnPropertyChanging(nameof(Tags));
-			field = value;
-			OnPropertyChanged(nameof(Tags));
-		}
-	}
-
-	public IEnumerable<TagDataContext> Tags
-	{
-		get
-		{
-			if (TagsContainer == null)
-				return Enumerable.Empty<TagDataContext>();
-			return TagsContainer.Tags.Select(tag => new TagViewModel(tag));
-		}
-	}
+	public IEnumerable<TagDataContext> Tags => tagsContainer.Tags.Select(tag => new TagViewModel(tag));
 
 	public TagDataContext? SelectedTag
 	{

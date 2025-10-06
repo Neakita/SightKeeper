@@ -22,26 +22,7 @@ public sealed partial class PoserToolingViewModel :
 	ObservableTagSelection,
 	IDisposable
 {
-	public TagsContainer<PoserTag>? TagsSource
-	{
-		get;
-		set
-		{
-			OnPropertyChanging(nameof(PoserTags));
-			field = value;
-			OnPropertyChanged(nameof(PoserTags));
-		}
-	}
-
-	public IEnumerable<TagDataContext> PoserTags
-	{
-		get
-		{
-			if (TagsSource == null)
-				return Enumerable.Empty<TagDataContext>();
-			return TagsSource.Tags.Select(tag => new TagViewModel(tag));
-		}
-	}
+	public IEnumerable<TagDataContext> PoserTags => _tagsSource.Tags.Select(tag => new TagViewModel(tag));
 
 	[ObservableProperty]
 	public partial IReadOnlyCollection<KeyPointTagDataContext> KeyPointTags { get; private set; } =
@@ -60,8 +41,9 @@ public sealed partial class PoserToolingViewModel :
 
 	public IObservable<Tag?> SelectedTagChanged => _selectedTagChanged.DistinctUntilChanged();
 
-	public PoserToolingViewModel(SelectedItemProvider selectedItemProvider)
+	public PoserToolingViewModel(TagsContainer<PoserTag> tagsSource, SelectedItemProvider selectedItemProvider)
 	{
+		_tagsSource = tagsSource;
 		_constructorDisposable = selectedItemProvider.SelectedItemChanged.Subscribe(HandleItemSelectionChange);
 	}
 
@@ -71,6 +53,7 @@ public sealed partial class PoserToolingViewModel :
 		_selectedTagChanged.Dispose();
 	}
 
+	private readonly TagsContainer<PoserTag> _tagsSource;
 	private readonly IDisposable _constructorDisposable;
 	private readonly Subject<Tag?> _selectedTagChanged = new();
 	private PoserItem? _selectedItem;
