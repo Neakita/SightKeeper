@@ -16,6 +16,7 @@ internal abstract partial class DataSetDialogViewModel : DialogViewModel<bool>, 
 
 	DataSetEditorDataContext DataSetDialogDataContext.DataSetEditor => DataSetEditor;
 	TagsEditorDataContext DataSetDialogDataContext.TagsEditor => TagsEditor;
+	DataSetTypePickerDataContext? DataSetDialogDataContext.TypePicker => TypePicker;
 	ICommand DataSetDialogDataContext.ApplyCommand => ApplyCommand;
 	ICommand DataSetDialogDataContext.CloseCommand => CloseCommand;
 

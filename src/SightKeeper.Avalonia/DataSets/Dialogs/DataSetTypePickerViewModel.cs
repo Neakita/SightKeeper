@@ -1,32 +1,35 @@
 using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Application.DataSets;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
-public sealed partial class DataSetTypePickerViewModel : ViewModel, IDisposable
+internal sealed partial class DataSetTypePickerViewModel(IReadOnlyCollection<DataSetTypeViewModel> types)
+	: ViewModel, DataSetTypePickerDataContext, IDisposable
 {
-	public static ImmutableArray<DataSetType> Types { get; } =
-	[
-		DataSetType.Classifier,
-		DataSetType.Detector,
-		DataSetType.Poser
-	];
+	public IReadOnlyCollection<DataSetTypeViewModel> Types => types;
+	[ObservableProperty] public partial DataSetTypeViewModel SelectedType { get; set; } = types.First();
+	public IObservable<DataSetTypeViewModel> TypeChanged => _typeChanged.AsObservable();
 
-	[ObservableProperty] public partial DataSetType SelectedType { get; set; }
-	public IObservable<DataSetType> TypeChanged => _typeChanged.AsObservable();
+	IReadOnlyCollection<DataSetTypeDataContext> DataSetTypePickerDataContext.Types => Types;
+
+	DataSetTypeDataContext DataSetTypePickerDataContext.SelectedType
+	{
+		get => SelectedType;
+		set => SelectedType = (DataSetTypeViewModel)value;
+	}
 
 	public void Dispose()
 	{
 		_typeChanged.Dispose();
 	}
 
-	private readonly Subject<DataSetType> _typeChanged = new();
+	private readonly Subject<DataSetTypeViewModel> _typeChanged = new();
 
-	partial void OnSelectedTypeChanged(DataSetType value)
+	partial void OnSelectedTypeChanged(DataSetTypeViewModel value)
 	{
 		_typeChanged.OnNext(value);
 	}

@@ -7,7 +7,7 @@ public interface DataSetDialogDataContext
 {
 	DataSetEditorDataContext DataSetEditor { get; }
 	TagsEditorDataContext TagsEditor { get; }
-	DataSetTypePickerViewModel? TypePicker { get; }
+	DataSetTypePickerDataContext? TypePicker { get; }
 	ICommand ApplyCommand { get; }
 	ICommand CloseCommand { get; }
 }

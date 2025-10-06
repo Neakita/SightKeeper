@@ -2,40 +2,21 @@
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
-using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.DataSets.Creating;
 
-public sealed class DataSetCreator
+public sealed class DataSetCreator(IValidator<NewDataSetData> validator, WriteRepository<DataSet<Tag, Asset>> repository)
 {
-	public required IValidator<NewDataSetData> Validator { get; init; }
-	public required WriteRepository<DataSet<Tag, Asset>> Repository { get; init; }
-	public required DataSetFactory<Tag, ClassifierAsset> ClassifierFactory { get; init; }
-	public required DataSetFactory<Tag, ItemsAsset<DetectorItem>> DetectorFactory { get; init; }
-	public required DataSetFactory<PoserTag, ItemsAsset<PoserItem>> PoserFactory { get; init; }
-
 	public DataSet<Tag, Asset> Create(NewDataSetData data)
 	{
-		Validator.ValidateAndThrow(data);
-		var dataSet = CreateDataSet(data.Type);
+		validator.ValidateAndThrow(data);
+		var dataSet = data.Factory.CreateDataSet();
 		SetGeneralData(dataSet, data);
 		AddTags(dataSet, data.NewTags);
-		Repository.Add(dataSet);
+		repository.Add(dataSet);
 		return dataSet;
-	}
-
-	private DataSet<Tag, Asset> CreateDataSet(DataSetType type)
-	{
-		DataSetFactory<Tag, Asset> factory = type switch
-		{
-			DataSetType.Classifier => ClassifierFactory,
-			DataSetType.Detector => DetectorFactory,
-			DataSetType.Poser => PoserFactory,
-			_ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
-		};
-		return factory.CreateDataSet();
 	}
 
 	private static void SetGeneralData(DataSet<Tag, Asset> dataSet, DataSetData data)

@@ -1,6 +1,5 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application.DataSets;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 
@@ -24,17 +23,14 @@ internal sealed class DesignDataSetDialogDataContext : DataSetDialogDataContext
 			"Cyst", "Alpha Clot", "Slasher", "Stalker", "Crawler", "Gorefast", "Bloat", "Siren",
 			"Husk", "E.D.A.R.", "Quarter Pound", "Scrake", "Fleshpound", "Rioter", "Elite Crawler", "Gorefiend",
 			"Dr. Hans Volter", "Patriarch", "King Fleshpound", "Abomination", "Matriarch"),
-		TypePicker = new DataSetTypePickerViewModel
-		{
-			SelectedType = DataSetType.Detector
-		}
+		TypePicker = new DesignDataSetTypePickerDataContext("Classifier", "Detector", "Poser")
 	};
 
 	public required DataSetEditorDataContext DataSetEditor { get; init; }
 
 	public required TagsEditorDataContext TagsEditor { get; init; }
 
-	public DataSetTypePickerViewModel? TypePicker { get; init; }
+	public DataSetTypePickerDataContext? TypePicker { get; init; }
 
 	public ICommand ApplyCommand => new RelayCommand(() => { });
 	public ICommand CloseCommand => new RelayCommand(() => { });
