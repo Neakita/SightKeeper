@@ -8,7 +8,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
-public sealed partial class SideBarViewModel : ViewModel, SideBarDataContext, AdditionalToolingSelection, IDisposable
+internal sealed partial class SideBarViewModel : ViewModel, SideBarDataContext, AdditionalToolingSelection, IDisposable
 {
 	public ImageSetSelectionDataContext ImageSetSelection { get; }
 	public DataSetSelectionDataContext DataSetSelection { get; }
