@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using CommunityToolkit.Diagnostics;
-using SightKeeper.Application.Extensions;
 using Vibrance;
 
 namespace SightKeeper.Application;
@@ -11,8 +11,12 @@ public sealed class ComposeObservableListRepository<T> : ObservableListRepositor
 
     public ComposeObservableListRepository(ObservableRepository<T> observableRepository, ReadRepository<T> readRepository)
     {
-	    observableRepository.Added.Subscribe(_items.Add).DisposeWith(_disposable);
-	    observableRepository.Removed.Subscribe(item => Guard.IsTrue(_items.Remove(item))).DisposeWith(_disposable);
+	    observableRepository.Added
+		    .Subscribe(_items.Add)
+		    .DisposeWith(_disposable);
+	    observableRepository.Removed
+		    .Subscribe(item => Guard.IsTrue(_items.Remove(item)))
+		    .DisposeWith(_disposable);
 	    _items.AddRange(readRepository.Items);
     }
 

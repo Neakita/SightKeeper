@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain.DataSets;
@@ -24,8 +24,12 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 	public AssetItemsViewModel(DrawerItemsFactory drawerItemsFactory, DataSetSelection dataSetSelection, ImageSelection imageSelection)
 	{
 		_drawerItemsFactory = drawerItemsFactory;
-		dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange).DisposeWith(_constructorDisposable);
-		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
+		dataSetSelection.SelectedDataSetChanged
+			.Subscribe(HandleDataSetSelectionChange)
+			.DisposeWith(_constructorDisposable);
+		imageSelection.SelectedImageChanged
+			.Subscribe(HandleImageSelectionChange)
+			.DisposeWith(_constructorDisposable);
 	}
 
 	public void Dispose()

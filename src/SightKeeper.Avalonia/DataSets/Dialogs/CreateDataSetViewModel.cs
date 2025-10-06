@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using SightKeeper.Application.DataSets;
+using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
@@ -19,16 +20,18 @@ internal sealed class CreateDataSetViewModel : DataSetDialogViewModel, NewDataSe
 
 	public CreateDataSetViewModel()
 	{
-		_typePickerSubscription = TypePicker.TypeChanged.Subscribe(OnDataSetTypeChanged);
+		TypePicker.TypeChanged
+			.Subscribe(OnDataSetTypeChanged)
+			.DisposeWith(_disposable);
 	}
 
 	public void Dispose()
 	{
 		TypePicker.Dispose();
-		_typePickerSubscription.Dispose();
+		_disposable.Dispose();
 	}
 
-	private readonly IDisposable _typePickerSubscription;
+	private readonly CompositeDisposable _disposable = new();
 	private TagsEditorDataContext _tagsEditor = new PlainTagsEditorViewModel();
 
 	private void OnDataSetTypeChanged(DataSetType value)

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using HotKeys;
 using SharpHook;
 using SharpHook.Reactive;
 using Sightful.Avalonia.Controls.GestureBox;
-using SightKeeper.Application.Extensions;
 
 namespace SightKeeper.Avalonia.ImageSets.Capturing;
 
@@ -13,10 +13,18 @@ public sealed class ObservableSharpHookGesture : IObservable<GestureEdit>, IDisp
 {
 	public ObservableSharpHookGesture(IReactiveGlobalHook hook)
 	{
-		hook.KeyPressed.Subscribe(OnKeyPressed).DisposeWith(_constructorDisposable);
-		hook.MousePressed.Subscribe(OnMousePressed).DisposeWith(_constructorDisposable);
-		hook.KeyReleased.Subscribe(OnKeyReleased).DisposeWith(_constructorDisposable);
-		hook.MouseReleased.Subscribe(OnMouseReleased).DisposeWith(_constructorDisposable);
+		hook.KeyPressed
+			.Subscribe(OnKeyPressed)
+			.DisposeWith(_constructorDisposable);
+		hook.MousePressed
+			.Subscribe(OnMousePressed)
+			.DisposeWith(_constructorDisposable);
+		hook.KeyReleased
+			.Subscribe(OnKeyReleased)
+			.DisposeWith(_constructorDisposable);
+		hook.MouseReleased
+			.Subscribe(OnMouseReleased)
+			.DisposeWith(_constructorDisposable);
 	}
 
 	public IDisposable Subscribe(IObserver<GestureEdit> observer)

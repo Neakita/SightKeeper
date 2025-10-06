@@ -1,9 +1,9 @@
 using System;
 using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.Extensions;
@@ -21,9 +21,15 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 
 	public BoundingDrawerViewModel(DataSetSelection dataSetSelection, ImageSelection imageSelection, TagSelectionProvider tagSelectionProvider)
 	{
-		dataSetSelection.SelectedDataSetChanged.Subscribe(HandleDataSetSelectionChange).DisposeWith(_constructorDisposable);
-		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
-		tagSelectionProvider.SelectedTagChanged.Subscribe(HandleTagSelectionChange).DisposeWith(_constructorDisposable);
+		dataSetSelection.SelectedDataSetChanged
+			.Subscribe(HandleDataSetSelectionChange)
+			.DisposeWith(_constructorDisposable);
+		imageSelection.SelectedImageChanged
+			.Subscribe(HandleImageSelectionChange)
+			.DisposeWith(_constructorDisposable);
+		tagSelectionProvider.SelectedTagChanged
+			.Subscribe(HandleTagSelectionChange)
+			.DisposeWith(_constructorDisposable);
 	}
 
 	public void Dispose()

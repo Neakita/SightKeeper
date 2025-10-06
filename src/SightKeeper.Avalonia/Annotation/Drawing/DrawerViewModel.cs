@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Disposables;
+using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Application.Extensions;
 using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Images;
@@ -35,7 +35,9 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 		_itemsViewModel = itemsViewModel;
 		_keyPointDrawer = keyPointDrawer;
 		_imageLoader = imageLoader;
-		imageSelection.SelectedImageChanged.Subscribe(HandleImageSelectionChange).DisposeWith(_constructorDisposable);
+		imageSelection.SelectedImageChanged
+			.Subscribe(HandleImageSelectionChange)
+			.DisposeWith(_constructorDisposable);
 		_itemsViewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
 	}
 
