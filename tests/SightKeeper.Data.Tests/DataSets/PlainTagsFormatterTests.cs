@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Tests.DataSets;
 
-public sealed class TagsFormatterTests
+public sealed class PlainTagsFormatterTests
 {
 	[Fact]
 	public void ShouldPersistTagName()
@@ -38,20 +38,22 @@ public sealed class TagsFormatterTests
 
 	private static byte[] Serialize(params IReadOnlyCollection<Tag> tags)
 	{
+		var formatter = new PlainTagsFormatter();
 		ArrayBufferWriter<byte> bufferWriter = new();
 		using var state = MemoryPackWriterOptionalStatePool.Rent(MemoryPackSerializerOptions.Default);
 		var writer = new MemoryPackWriter<ArrayBufferWriter<byte>>(ref bufferWriter, state);
-		TagsFormatter.WriteTags(ref writer, tags);
+		formatter.WriteTags(ref writer, tags);
 		writer.Flush();
 		return bufferWriter.WrittenSpan.ToArray();
 	}
 
 	private static IReadOnlyCollection<Tag> Deserialize(ReadOnlySpan<byte> buffer)
 	{
+		var formatter = new PlainTagsFormatter();
 		using var state = MemoryPackReaderOptionalStatePool.Rent(MemoryPackSerializerOptions.Default);
 		var reader = new MemoryPackReader(buffer, state);
 		InMemoryTagsLibrary<Tag> library = new(new FakeTagFactory());
-		TagsFormatter.ReadTags(ref reader, library);
+		formatter.ReadTags(ref reader, library);
 		return library.Tags;
 	}
 }

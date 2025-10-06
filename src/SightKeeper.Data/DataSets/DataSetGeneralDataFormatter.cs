@@ -11,11 +11,12 @@ internal static class DataSetGeneralDataFormatter
 {
 	public static void WriteGeneralData<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		DataSet<Tag, Asset> set)
+		string name,
+		string description)
 		where TBufferWriter : IBufferWriter<byte>
 	{
-		writer.WriteString(set.Name);
-		writer.WriteString(set.Description);
+		writer.WriteString(name);
+		writer.WriteString(description);
 	}
 
 	public static void ReadGeneralData(ref MemoryPackReader reader, DataSet<Tag, Asset> dataSet)

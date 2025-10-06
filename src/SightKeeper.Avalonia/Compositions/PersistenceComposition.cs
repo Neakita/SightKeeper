@@ -8,6 +8,7 @@ using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Detector;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
@@ -83,6 +84,34 @@ public sealed class PersistenceComposition
 		
 		.Bind<ItemsFormatter<DetectorItem>>()
 		.To<DetectorItemsFormatter>()
+		
+		.Bind<MemoryPackDataSetDeserializer>(0)
+		.To<MemoryPackDataSetDeserializer<DomainTag, ClassifierAsset>>()
+		
+		.Bind<MemoryPackDataSetDeserializer>(1)
+		.To<MemoryPackDataSetDeserializer<DomainTag, ItemsAsset<DetectorItem>>>()
+		
+		/*.Bind<MemoryPackDataSetDeserializer>(2)
+		.To<MemoryPackDataSetDeserializer<PoserTag, ItemsAsset<PoserItem>>>()*/
+		
+		.Bind<TagsFormatter<DomainTag>>()
+		.To<PlainTagsFormatter>()
+		
+		.Bind<TagsFormatter<PoserTag>>()
+		.To<PoserTagsFormatter>()
+		
+		/*.Bind().To<IReadOnlyList<MemoryPackDataSetDeserializer>>(context =>
+		{
+			context.Inject(out MemoryPackDataSetDeserializer<DomainTag, ClassifierAsset> classifierDeserializer);
+			context.Inject(out MemoryPackDataSetDeserializer<DomainTag, ItemsAsset<DetectorItem>> detectorDeserializer);
+			context.Inject(out MemoryPackDataSetDeserializer<PoserTag, ItemsAsset<PoserItem>> poserDeserializer);
+			return
+			[
+				classifierDeserializer,
+				detectorDeserializer,
+				poserDeserializer
+			];
+		})*/
 
 		.Root<ImageSetFormatter>(nameof(ImageSetFormatter))
 		.Root<DataSetFormatter>(nameof(DataSetFormatter))
