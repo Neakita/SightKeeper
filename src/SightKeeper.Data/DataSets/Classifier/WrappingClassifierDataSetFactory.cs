@@ -8,7 +8,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-public sealed class WrappingClassifierDataSetFactory(DataSetWrapper wrapper, ChangeListener changeListener, Lock editingLock)
+internal sealed class WrappingClassifierDataSetFactory(DataSetWrapper wrapper, ChangeListener changeListener, Lock editingLock)
 	: DataSetFactory<Tag, ClassifierAsset>
 {
 	public DataSet<Tag, ClassifierAsset> CreateDataSet()

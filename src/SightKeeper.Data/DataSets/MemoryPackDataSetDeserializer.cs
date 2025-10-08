@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets;
 
-public interface MemoryPackDataSetDeserializer
+internal interface MemoryPackDataSetDeserializer
 {
 	DataSet<Tag, Asset> Deserialize(ref MemoryPackReader reader);
 }

@@ -6,7 +6,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class AppDataImageSetsRepository :
+internal sealed class AppDataImageSetsRepository :
 	ReadRepository<ImageSet>,
 	ObservableRepository<ImageSet>,
 	WriteRepository<ImageSet>,

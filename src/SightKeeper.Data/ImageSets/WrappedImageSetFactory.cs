@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-public sealed class WrappedImageSetFactory : ImageSetFactory<ImageSet>
+internal sealed class WrappedImageSetFactory : ImageSetFactory<ImageSet>
 {
 	public WrappedImageSetFactory(ImageSetFactory<ImageSet> innerFactory, ImageSetWrapper wrapper)
 	{

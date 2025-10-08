@@ -2,7 +2,7 @@ using Serilog;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class PeriodicDataSaver(DataSaver dataSaver, ILogger logger) : ChangeListener, IDisposable
+internal sealed class PeriodicDataSaver(DataSaver dataSaver, ILogger logger) : ChangeListener, IDisposable
 {
 	public TimeSpan Period
 	{

@@ -2,7 +2,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-public sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock editingLock, ImageLookupperPopulator lookupperPopulator) : ImageSetWrapper
+internal sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock editingLock, ImageLookupperPopulator lookupperPopulator) : ImageSetWrapper
 {
 	public ImageSet Wrap(ImageSet set)
 	{

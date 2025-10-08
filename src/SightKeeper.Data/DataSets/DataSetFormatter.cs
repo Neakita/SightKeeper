@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets;
 
-public sealed class DataSetFormatter(IReadOnlyList<MemoryPackDataSetDeserializer> deserializersByUnionTag)
+internal sealed class DataSetFormatter(IReadOnlyList<MemoryPackDataSetDeserializer> deserializersByUnionTag)
 	: MemoryPackFormatter<DataSet<Tag, Asset>>
 {
 	public override void Serialize<TBufferWriter>(

@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-public sealed class PlainTagsFormatter : TagsFormatter<Tag>
+internal sealed class PlainTagsFormatter : TagsFormatter<Tag>
 {
 	public void WriteTags<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, IReadOnlyCollection<Tag> tags)
 		where TBufferWriter : IBufferWriter<byte>

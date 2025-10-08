@@ -10,7 +10,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets;
 
-public sealed class MemoryPackDataSetDeserializer<TTag, TAsset>(
+internal sealed class MemoryPackDataSetDeserializer<TTag, TAsset>(
 	DataSetFactory<TTag, TAsset> dataSetFactory,
 	TagsFormatter<TTag> tagsFormatter,
 	AssetsFormatter<TAsset> assetsFormatter)

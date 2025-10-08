@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Data;
 
-public interface ImageLookupperPopulator
+internal interface ImageLookupperPopulator
 {
 	void AddImages(IEnumerable<ManagedImage> images);
 	void AddImage(ManagedImage image);

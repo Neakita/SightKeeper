@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 
-public interface ImageLookupper
+internal interface ImageLookupper
 {
 	ManagedImage GetImage(Id id);
 	bool ContainsImage(Id id);

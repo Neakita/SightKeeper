@@ -3,7 +3,7 @@ using FlakeId;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class CompressedFileSystemDataAccess : FileSystemDataAccess
+internal sealed class CompressedFileSystemDataAccess : FileSystemDataAccess
 {
 	public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.SmallestSize;
 

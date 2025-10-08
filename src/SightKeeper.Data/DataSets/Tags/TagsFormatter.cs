@@ -4,7 +4,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-public interface TagsFormatter<in TTag>
+internal interface TagsFormatter<in TTag>
 {
 	void WriteTags<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,

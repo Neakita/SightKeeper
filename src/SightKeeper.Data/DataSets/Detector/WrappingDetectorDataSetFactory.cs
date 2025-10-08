@@ -9,7 +9,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector;
 
-public sealed class WrappingDetectorDataSetFactory(
+internal sealed class WrappingDetectorDataSetFactory(
 	DataSetWrapper wrapper,
 	ChangeListener changeListener,
 	Lock editingLock)

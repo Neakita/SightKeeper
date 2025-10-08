@@ -4,7 +4,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
-public class FileSystemDataAccess
+internal class FileSystemDataAccess
 {
 	public const string DefaultDirectoryPath = "Data";
 

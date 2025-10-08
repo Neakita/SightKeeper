@@ -6,7 +6,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-public sealed class ImagesFormatter : MemoryPackFormatter<IReadOnlyCollection<ManagedImage>>
+internal sealed class ImagesFormatter : MemoryPackFormatter<IReadOnlyCollection<ManagedImage>>
 {
 	public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref IReadOnlyCollection<ManagedImage>? images)
 	{

@@ -1,6 +1,6 @@
 namespace SightKeeper.Data.Services;
 
-public interface DataSaver
+internal interface DataSaver
 {
 	void Save();
 }

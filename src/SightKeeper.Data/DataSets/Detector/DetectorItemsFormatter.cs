@@ -8,7 +8,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector;
 
-public sealed class DetectorItemsFormatter : ItemsFormatter<DetectorItem>
+internal sealed class DetectorItemsFormatter : ItemsFormatter<DetectorItem>
 {
 	public void WriteItems<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, IReadOnlyCollection<DetectorItem> items, Dictionary<Tag, byte> tagIndexes) where TBufferWriter : IBufferWriter<byte>
 	{

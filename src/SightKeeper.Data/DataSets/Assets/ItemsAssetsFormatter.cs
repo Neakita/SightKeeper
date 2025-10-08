@@ -11,7 +11,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-public sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFormatter, ImageLookupper imageLookupper) : AssetsFormatter<ItemsAsset<TItem>>
+internal sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFormatter, ImageLookupper imageLookupper) : AssetsFormatter<ItemsAsset<TItem>>
 {
 	public void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,

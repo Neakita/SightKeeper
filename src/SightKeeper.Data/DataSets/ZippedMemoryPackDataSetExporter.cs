@@ -8,7 +8,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets;
 
-public sealed class ZippedMemoryPackDataSetExporter : DataSetExporter<DataSet<Tag, Asset>>
+internal sealed class ZippedMemoryPackDataSetExporter : DataSetExporter<DataSet<Tag, Asset>>
 {
 	public async Task ExportAsync(string archivePath, DataSet<Tag, Asset> set, CancellationToken cancellationToken)
 	{

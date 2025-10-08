@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class AppDataDataSetsRepository :
+internal sealed class AppDataDataSetsRepository :
 	ReadRepository<DataSet<Tag, Asset>>,
 	ObservableRepository<DataSet<Tag, Asset>>,
 	WriteRepository<DataSet<Tag, Asset>>,

@@ -14,7 +14,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets;
 
-public sealed class ZippedMemoryPackDataSetImporter(
+internal sealed class ZippedMemoryPackDataSetImporter(
 	ImageLookupper imageLookupper,
 	ImageSetFactory<ImageSet> imageSetFactory,
 	WriteRepository<ImageSet> imageSetsWriteRepository,

@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data;
 
-public class PopulatableImageLookupper : ImageLookupperPopulator, ImageLookupper
+internal class PopulatableImageLookupper : ImageLookupperPopulator, ImageLookupper
 {
 	public void AddImages(IEnumerable<ManagedImage> images)
 	{

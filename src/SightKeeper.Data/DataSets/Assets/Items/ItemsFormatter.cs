@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Assets.Items;
 
-public interface ItemsFormatter<in TItem>
+internal interface ItemsFormatter<in TItem>
 {
 	void WriteItems<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,

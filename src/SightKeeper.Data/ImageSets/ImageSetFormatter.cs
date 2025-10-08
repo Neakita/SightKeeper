@@ -6,7 +6,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-public sealed class ImageSetFormatter(
+internal sealed class ImageSetFormatter(
 	ImageSetWrapper setWrapper,
 	ImageSetFactory<InMemoryImageSet> imageSetFactory,
 	ImageLookupperPopulator imageLookupperPopulator)

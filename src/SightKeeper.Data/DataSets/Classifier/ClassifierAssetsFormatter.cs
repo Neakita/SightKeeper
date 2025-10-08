@@ -10,7 +10,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-public sealed class ClassifierAssetsFormatter(ImageLookupper imageLookupper) : AssetsFormatter<ClassifierAsset>
+internal sealed class ClassifierAssetsFormatter(ImageLookupper imageLookupper) : AssetsFormatter<ClassifierAsset>
 {
 	public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, IReadOnlyCollection<ClassifierAsset> assets, Dictionary<Tag, byte> tagIndexes) where TBufferWriter : IBufferWriter<byte>
 	{

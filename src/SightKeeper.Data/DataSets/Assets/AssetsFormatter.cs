@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-public interface AssetsFormatter<in TAsset>
+internal interface AssetsFormatter<in TAsset>
 {
 	void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
