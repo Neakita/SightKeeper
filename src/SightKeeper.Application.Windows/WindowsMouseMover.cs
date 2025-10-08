@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 
 namespace SightKeeper.Application.Windows;
 
-public sealed class WindowsMouseMover : MouseMover
+internal sealed class WindowsMouseMover : MouseMover
 {
     public IObservable<(int xDelta, int yDelta)> Moved => _moved.AsObservable();
 

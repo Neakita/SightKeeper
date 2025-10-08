@@ -7,7 +7,7 @@ namespace SightKeeper.Application.Windows;
 /// <summary>
 /// Helper class containing User32 API functions
 /// </summary>
-public static class User32
+internal static class User32
 {
 	[DllImport("user32.dll")]
 	internal static extern IntPtr GetForegroundWindow();

@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Application.Windows;
 
-public sealed class WindowsArgumentCarryCommandRunner(CommandRunner inner) : CommandRunner
+internal sealed class WindowsArgumentCarryCommandRunner(CommandRunner inner) : CommandRunner
 {
 	public Task ExecuteCommandAsync(string command, CancellationToken cancellationToken)
 	{
