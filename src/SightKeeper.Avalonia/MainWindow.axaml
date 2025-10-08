@@ -43,7 +43,7 @@
                    VerticalAlignment="Center"
                    IsHitTestVisible="False"/>
     </assists:WindowAssist.TopContent>
-    <ContentControl Content="{Binding SelectedTab.Content}">
+    <ContentControl Content="{Binding Content}">
         <ContentControl.DataTemplates>
             <DataTemplate x:DataType="imageSets:ImageSetsDataContext">
                 <imageSets:ImageSetsTab/>

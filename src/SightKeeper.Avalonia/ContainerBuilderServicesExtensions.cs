@@ -87,6 +87,20 @@ internal static class ContainerBuilderServicesExtensions
 		builder.RegisterType<DrawerItemsFactory>();
 	}
 
+	public static void AddCommands(this ContainerBuilder builder)
+	{
+		builder.RegisterType<CreateImageSetCommand>();
+		builder.RegisterType<EditImageSetCommand>();
+		builder.RegisterType<DeleteImageSetCommand>();
+		builder.RegisterType<CreateDataSetCommand>();
+		builder.RegisterType<ImportDataSetCommand>();
+		builder.RegisterType<EditDataSetCommand>();
+		builder.RegisterType<ExportDataSetCommand>();
+		builder.RegisterType<DeleteDataSetCommand>();
+		builder.RegisterType<DeleteSelectedImageCommand>();
+		builder.RegisterType<DeleteSelectedAssetCommand>();
+	}
+
 	public static void AddViewModels(this ContainerBuilder builder)
 	{
 		AddTabs(builder);
@@ -193,7 +207,7 @@ internal static class ContainerBuilderServicesExtensions
 		});
 	}
 
-	public static void AddTabs(ContainerBuilder builder)
+	private static void AddTabs(ContainerBuilder builder)
 	{
 		builder.AddTabItemViewModel<ImageSetsViewModel>(MaterialIconKind.FolderMultipleImage, "Images");
 		builder.AddTabItemViewModel<DataSetsViewModel>(MaterialIconKind.ImageAlbum, "Datasets");
@@ -201,30 +215,23 @@ internal static class ContainerBuilderServicesExtensions
 		builder.AddTabItemViewModel<TrainingViewModel>(MaterialIconKind.School, "Training");
 	}
 
-	public static void AddTabItemViewModel<TContent>(
+	private static void AddTabItemViewModel<TContent>(
 		this ContainerBuilder builder,
 		MaterialIconKind iconKind,
 		string header)
-		where TContent : notnull
+		where TContent : class
 	{
 		builder.Register(context =>
 		{
-			var content = context.Resolve<TContent>();
-			return new TabItemViewModel(iconKind, header, content);
-		}).As<TabItemViewModel>();
-	}
+			var scope = context.Resolve<ILifetimeScope>();
+			return new TabItemViewModel(iconKind, header, ContentFactory);
 
-	public static void AddCommands(this ContainerBuilder builder)
-	{
-		builder.RegisterType<CreateImageSetCommand>();
-		builder.RegisterType<EditImageSetCommand>();
-		builder.RegisterType<DeleteImageSetCommand>();
-		builder.RegisterType<CreateDataSetCommand>();
-		builder.RegisterType<ImportDataSetCommand>();
-		builder.RegisterType<EditDataSetCommand>();
-		builder.RegisterType<ExportDataSetCommand>();
-		builder.RegisterType<DeleteDataSetCommand>();
-		builder.RegisterType<DeleteSelectedImageCommand>();
-		builder.RegisterType<DeleteSelectedAssetCommand>();
+			(object, IDisposable) ContentFactory()
+			{
+				var contentScope = scope.BeginLifetimeScope(typeof(TContent));
+				var content = contentScope.Resolve<TContent>();
+				return (content, contentScope);
+			}
+		}).As<TabItemViewModel>();
 	}
 }

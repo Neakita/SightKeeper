@@ -1,10 +1,11 @@
-﻿using Material.Icons;
+﻿using System;
+using Material.Icons;
 
 namespace SightKeeper.Avalonia;
 
-public sealed class TabItemViewModel(MaterialIconKind iconKind, string header, object? content) : ViewModel
+public sealed class TabItemViewModel(MaterialIconKind iconKind, string header, Func<(object, IDisposable)> contentFactory) : ViewModel
 {
 	public MaterialIconKind IconKind => iconKind;
 	public string Header => header;
-	public object? Content => content;
+	public Func<(object, IDisposable)> ContentFactory => contentFactory;
 }
