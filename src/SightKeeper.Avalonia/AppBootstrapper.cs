@@ -1,25 +1,27 @@
-using MemoryPack;
-using Serilog;
-using SightKeeper.Avalonia.Compositions;
-using SightKeeper.Data.ImageSets.Images;
+using Autofac;
+using SightKeeper.Application;
+using SightKeeper.Data;
 
 namespace SightKeeper.Avalonia;
 
 internal static class AppBootstrapper
 {
-	public static Composition Setup()
+	public static IContainer Setup()
 	{
-		Composition composition = new();
-		Log.Verbose("Composition:\n{composition}", composition.ToString());
-		SetupPersistence(composition);
-		return composition;
-	}
-
-	private static void SetupPersistence(Composition composition)
-	{
-		MemoryPackFormatterProvider.Register(composition.ImageSetFormatter);
-		MemoryPackFormatterProvider.Register(composition.DataSetFormatter);
-		MemoryPackFormatterProvider.Register(new ImagesFormatter());
-		composition.AppDataAccess.Load();
+		var builder = new ContainerBuilder();
+		builder.AddPersistence();
+		builder.AddApplicationServices();
+		builder.AddOSSpecificServices();
+		builder.AddAvaloniaServices();
+		builder.AddLogger();
+		builder.AddPresentationServices();
+		builder.AddCommands();
+		builder.AddViewModels();
+		var container = builder.Build();
+		container.UseBinarySerialization();
+		container.LoadData();
+		container.UseAutoSaving();
+		container.UseHotKeys();
+		return container;
 	}
 }

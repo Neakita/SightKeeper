@@ -1,3 +1,4 @@
+using Autofac;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
@@ -26,11 +27,18 @@ internal sealed class App : global::Avalonia.Application
 
 	public override void OnFrameworkInitializationCompleted()
 	{
-		var composition = AppBootstrapper.Setup();
+		var container = AppBootstrapper.Setup();
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
-			desktopLifetime.MainWindow = composition.MainWindow;
+		{
+			var window = new MainWindow
+			{
+				DataContext = container.Resolve<MainViewModel>()
+			};
+			desktopLifetime.MainWindow = window;
+		}
+
 		if (ApplicationLifetime is IControlledApplicationLifetime controlledLifetime)
-			controlledLifetime.Exit += (_, _) => composition.Dispose();
+			controlledLifetime.Exit += (_, _) => container.Dispose();
 		base.OnFrameworkInitializationCompleted();
 	}
 }

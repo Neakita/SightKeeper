@@ -2,7 +2,7 @@ using Serilog;
 
 namespace SightKeeper.Data.Services;
 
-public sealed class PeriodicDataSaver : ChangeListener, IDisposable
+public sealed class PeriodicDataSaver(DataSaver dataSaver, ILogger logger) : ChangeListener, IDisposable
 {
 	public TimeSpan Period
 	{
@@ -10,11 +10,9 @@ public sealed class PeriodicDataSaver : ChangeListener, IDisposable
 		set => _timer.Period = value;
 	}
 
-	public PeriodicDataSaver(DataSaver dataSaver, ILogger logger)
+	public void Start()
 	{
-		_dataSaver = dataSaver;
-		_logger = logger;
-		Start();
+		Task.Run(SavePeriodically);
 	}
 
 	public void SetDataChanged()
@@ -30,16 +28,9 @@ public sealed class PeriodicDataSaver : ChangeListener, IDisposable
 		_disposed = true;
 	}
 
-	private readonly DataSaver _dataSaver;
-	private readonly ILogger _logger;
 	private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(1));
 	private bool _dataChangedSinceLastSave;
 	private bool _disposed;
-
-	private void Start()
-	{
-		Task.Run(SavePeriodically);
-	}
 
 	private async Task SavePeriodically()
 	{
@@ -58,11 +49,11 @@ public sealed class PeriodicDataSaver : ChangeListener, IDisposable
 	{
 		try
 		{
-			_dataSaver.Save();
+			dataSaver.Save();
 		}
 		catch (Exception exception)
 		{
-			_logger.Error(exception, "An exception was thrown when trying to save the data");
+			logger.Error(exception, "An exception was thrown when trying to save the data");
 		}
 	}
 }

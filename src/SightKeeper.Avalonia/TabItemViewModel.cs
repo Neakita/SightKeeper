@@ -2,16 +2,9 @@
 
 namespace SightKeeper.Avalonia;
 
-public sealed class TabItemViewModel : ViewModel
+public sealed class TabItemViewModel(MaterialIconKind iconKind, string header, object? content) : ViewModel
 {
-	public MaterialIconKind IconKind { get; }
-	public string Header { get; }
-	public ViewModel Content { get; }
-	
-	public TabItemViewModel(MaterialIconKind iconKind, string header, ViewModel content)
-	{
-		IconKind = iconKind;
-		Header = header;
-		Content = content;
-	}
+	public MaterialIconKind IconKind => iconKind;
+	public string Header => header;
+	public object? Content => content;
 }
