@@ -1,6 +1,6 @@
 namespace SightKeeper.Application.Linux.X11;
 
-public enum PixmapFormat
+internal enum PixmapFormat
 {
 	XYBitmap = 0,
 	XYPixmap = 1,

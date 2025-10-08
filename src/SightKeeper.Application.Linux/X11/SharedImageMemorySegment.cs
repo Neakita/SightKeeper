@@ -24,9 +24,8 @@ internal sealed class SharedImageMemorySegment<TPixel> : IDisposable
 
 	public unsafe void FetchData(int screen, Vector2<ushort> offset)
 	{
-		const ulong allPlanes = unchecked((ulong)~0);
 		var drawable = (UIntPtr)LibX.XRootWindow(_display, screen);
-		LibXExt.XShmGetImage(_display, drawable, _image.ximage, offset.X, offset.Y, allPlanes);
+		LibXExt.XShmGetImage(_display, drawable, _image.ximage, offset.X, offset.Y, Planes.AllPlanes);
 		// xlib doesn't use most significant byte but fills it with zeros
 		// because of that ImageSharp treats it as fully transparent Bgra32.
 		// If the pipeline does not require the significance of this byte, it's possible to leave it with zeros

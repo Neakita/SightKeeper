@@ -12,7 +12,7 @@ internal static unsafe partial class LibXExt
 
 	[LibraryImport(DllName)]
 	[return: MarshalAs(UnmanagedType.Bool)]
-	public static partial bool XShmGetImage(IntPtr display, UIntPtr drawable, XImage* image, int x, int y, ulong planeMask);
+	public static partial bool XShmGetImage(IntPtr display, UIntPtr drawable, XImage* image, int x, int y, Planes planeMask);
 
 	[LibraryImport(DllName, SetLastError = true)]
 	public static partial int XShmQueryExtension(IntPtr display);
