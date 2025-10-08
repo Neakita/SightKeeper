@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Avalonia.Platform;
 using Material.Icons;
 using SightKeeper.Application;
@@ -18,14 +19,19 @@ using SightKeeper.Avalonia.DataSets.Card;
 using SightKeeper.Avalonia.DataSets.Commands;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.Dialogs;
+using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ImageSets;
 using SightKeeper.Avalonia.ImageSets.Capturing;
 using SightKeeper.Avalonia.ImageSets.Card;
 using SightKeeper.Avalonia.ImageSets.Commands;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Avalonia.Training;
+using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
+
 #if OS_WINDOWS
 
 #elif OS_LINUX
@@ -79,7 +85,6 @@ internal static class ContainerBuilderServicesExtensions
 		builder.RegisterType<DataSetViewModelsObservableListRepository>();
 		builder.RegisterType<ToolingViewModelFactory>();
 		builder.RegisterType<DrawerItemsFactory>();
-		builder.RegisterType<DataSetCardViewModelFactory>();
 	}
 
 	public static void AddViewModels(this ContainerBuilder builder)
@@ -141,6 +146,51 @@ internal static class ContainerBuilderServicesExtensions
 		builder.RegisterType<ClassifierToolingViewModel>();
 		builder.RegisterType<DetectorToolingViewModel>();
 		builder.RegisterType<PoserToolingViewModel>();
+		builder.RegisterType<AnnotationTabViewModel>();
+		builder.RegisterType<TrainingViewModel>();
+
+		builder.Register(context =>
+		{
+			var editDataSetCommand = context.Resolve<EditDataSetCommand>();
+			var exportDataSetCommand = context.Resolve<ExportDataSetCommand>();
+			var deleteDataSetCommand = context.Resolve<DeleteDataSetCommand>();
+			var imageLoader = context.Resolve<WriteableBitmapImageLoader>();
+			return new Func<DataSet<Tag, Asset>, DataSetCardViewModel>(dataSet =>
+			{
+				return new DataSetCardViewModel(
+					dataSet,
+					editDataSetCommand.WithParameter(dataSet),
+					exportDataSetCommand.WithParameter(dataSet),
+					deleteDataSetCommand.WithParameter(dataSet),
+					imageLoader);
+			});
+		});
+
+		builder.Register(context =>
+		{
+			var dataSetsObservableRepository = context.Resolve<ObservableListRepository<DataSet<Tag, Asset>>>();
+			var createDataSetCommand = context.Resolve<CreateDataSetCommand>();
+			var importDataSetCommand = context.Resolve<ImportDataSetCommand>();
+			var dataSetCardViewModelFactory = context.Resolve<Func<DataSet<Tag, Asset>, DataSetCardViewModel>>();
+			return new DataSetsViewModel(
+				dataSetsObservableRepository,
+				createDataSetCommand,
+				importDataSetCommand,
+				dataSetCardViewModelFactory);
+		});
+
+		builder.Register(context =>
+		{
+			var createImageSetCommand = context.Resolve<CreateImageSetCommand>();
+			var imageSetsListRepository = context.Resolve<ObservableListRepository<ImageSet>>();
+			var imageSetCardDataContextFactory = context.Resolve<ImageSetCardDataContextFactory>();
+			var capturingSettings = context.Resolve<CapturingSettingsDataContext>();
+			return new ImageSetsViewModel(
+				createImageSetCommand,
+				imageSetsListRepository,
+				imageSetCardDataContextFactory,
+				capturingSettings);
+		});
 	}
 
 	public static void AddTabs(ContainerBuilder builder)
@@ -157,7 +207,6 @@ internal static class ContainerBuilderServicesExtensions
 		string header)
 		where TContent : notnull
 	{
-		builder.RegisterType<TContent>();
 		builder.Register(context =>
 		{
 			var content = context.Resolve<TContent>();
