@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public interface AssetCropper<TAsset>
+internal interface AssetCropper<TAsset>
 {
 	TAsset CropAsset(TAsset asset, Rectangle cropRectangle);
 }

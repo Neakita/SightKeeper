@@ -1,11 +1,12 @@
 ﻿using System.Threading.Channels;
 using CommunityToolkit.Diagnostics;
 using Serilog;
+using SightKeeper.Application;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Data;
 
-public sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
+internal sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 {
 	public ThreadedImageLoader(ImageLoader<TPixel> inner)
 	{

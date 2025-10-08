@@ -6,7 +6,7 @@ using SixLabors.ImageSharp.Processing;
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public sealed class CroppedImageData(ImageData inner, Rectangle cropRectangle) : ImageData
+internal sealed class CroppedImageData(ImageData inner, Rectangle cropRectangle) : ImageData
 {
 	public Vector2<ushort> Size => new((ushort)cropRectangle.Width, (ushort)cropRectangle.Height);
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;

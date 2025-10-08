@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public sealed class CropTransformer<TTag, TAsset>(CropRectanglesProvider<TAsset> cropRectanglesProvider, AssetCropper<TAsset> cropper) : TrainDataTransformer<TTag, TAsset>
+internal sealed class CropTransformer<TTag, TAsset>(CropRectanglesProvider<TAsset> cropRectanglesProvider, AssetCropper<TAsset> cropper) : TrainDataTransformer<TTag, TAsset>
 {
 	public ReadOnlyDataSet<TTag, TAsset> Transform(ReadOnlyDataSet<TTag, TAsset> data)
 	{

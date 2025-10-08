@@ -3,14 +3,15 @@ using CommunityToolkit.HighPerformance;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
+using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Application.ScreenCapturing.Saving;
+namespace SightKeeper.Data;
 
-public sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : ImageDataSaver<TPixel> where TPixel : unmanaged, IPixel<TPixel>
+internal sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : ImageDataSaver<TPixel> where TPixel : unmanaged, IPixel<TPixel>
 {
 	public void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data)
 	{

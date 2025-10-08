@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ImageSets.Editing;
 
-public sealed class ExistingImageSetDataValidator : AbstractValidator<ExistingImageSetData>
+internal sealed class ExistingImageSetDataValidator : AbstractValidator<ExistingImageSetData>
 {
 	public ExistingImageSetDataValidator(ReadRepository<ImageSet> repository)
 	{

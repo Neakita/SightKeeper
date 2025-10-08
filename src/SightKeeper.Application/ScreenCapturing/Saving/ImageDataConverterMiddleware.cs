@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-public sealed class ImageDataConverterMiddleware<TSourcePixel, TTargetPixel> : ImageDataSaver<TSourcePixel>
+internal sealed class ImageDataConverterMiddleware<TSourcePixel, TTargetPixel> : ImageDataSaver<TSourcePixel>
 {
 	public required PixelConverter<TSourcePixel, TTargetPixel> Converter { get; init; }
 	public required ImageDataSaver<TTargetPixel> Next { get; init; }

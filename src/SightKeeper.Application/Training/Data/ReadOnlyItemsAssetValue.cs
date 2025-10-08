@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Training.Data;
 
-public sealed class ReadOnlyItemsAssetValue<TItem> : ReadOnlyItemsAsset<TItem>
+internal sealed class ReadOnlyItemsAssetValue<TItem> : ReadOnlyItemsAsset<TItem>
 {
 	public ImageData Image { get; }
 	public AssetUsage Usage { get; }

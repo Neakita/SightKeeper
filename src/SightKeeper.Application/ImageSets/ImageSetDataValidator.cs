@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace SightKeeper.Application.ImageSets;
 
-public sealed class ImageSetDataValidator : AbstractValidator<ImageSetData>
+internal sealed class ImageSetDataValidator : AbstractValidator<ImageSetData>
 {
 	public static ImageSetDataValidator Instance { get; } = new(); 
 

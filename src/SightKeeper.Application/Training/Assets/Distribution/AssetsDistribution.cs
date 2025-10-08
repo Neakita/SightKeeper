@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 
 namespace SightKeeper.Application.Training.Assets.Distribution;
 
-public sealed class AssetsDistribution<TAsset>
+internal sealed class AssetsDistribution<TAsset>
 {
 	public static AssetsDistribution<TAsset> Empty { get; } = new()
 	{

@@ -5,7 +5,7 @@ using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public sealed class RandomItemsCropRectanglesProvider<TAsset, TItem>(RandomItemsCropSettings settings) : CropRectanglesProvider<TAsset>
+internal sealed class RandomItemsCropRectanglesProvider<TAsset, TItem>(RandomItemsCropSettings settings) : CropRectanglesProvider<TAsset>
 	where TAsset : ReadOnlyItemsAsset<TItem>
 	where TItem : ReadOnlyAssetItem
 {

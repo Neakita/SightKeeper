@@ -1,6 +1,6 @@
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-public interface ImageSaverFactory<TPixel>
+internal interface ImageSaverFactory<TPixel>
 {
 	ImageSaver<TPixel> CreateImageSaver();
 }

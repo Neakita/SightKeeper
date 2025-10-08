@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Application.Training.DFINE;
 
-public sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironmentManager environmentManager, TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> exporter) : Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>
+internal sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironmentManager environmentManager, TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> exporter) : Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>
 {
 	public byte BatchSize { get; set; } = 16;
 	public Vector2<ushort> ImageSize { get; set; } = new(320, 320);

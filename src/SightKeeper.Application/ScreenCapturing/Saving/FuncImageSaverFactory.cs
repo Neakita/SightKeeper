@@ -1,6 +1,6 @@
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-public sealed class FuncImageSaverFactory<TPixel> : ImageSaverFactory<TPixel>
+internal sealed class FuncImageSaverFactory<TPixel> : ImageSaverFactory<TPixel>
 {
 	public FuncImageSaverFactory(Func<ImageSaver<TPixel>> func)
 	{

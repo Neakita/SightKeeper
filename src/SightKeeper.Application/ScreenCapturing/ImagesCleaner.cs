@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public sealed class ImagesCleaner
+internal sealed class ImagesCleaner
 {
 	public ushort UnusedImagesLimit { get; set; } = 500;
 

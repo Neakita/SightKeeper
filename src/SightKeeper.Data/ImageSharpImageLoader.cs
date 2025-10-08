@@ -1,12 +1,13 @@
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
+using SightKeeper.Application;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Data;
 
-public sealed class ImageSharpImageLoader<TPixel> : ImageLoader<TPixel> where TPixel : unmanaged, IPixel<TPixel>
+internal sealed class ImageSharpImageLoader<TPixel> : ImageLoader<TPixel> where TPixel : unmanaged, IPixel<TPixel>
 {
 	public async Task<bool> LoadImageAsync(ImageData imageData, Memory<TPixel> target, CancellationToken cancellationToken)
 	{

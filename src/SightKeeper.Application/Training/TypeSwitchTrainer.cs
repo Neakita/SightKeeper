@@ -8,7 +8,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Application.Training;
 
-public sealed class TypeSwitchTrainer(Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> detectorTrainer) : Trainer<ReadOnlyTag, ReadOnlyAsset>
+internal sealed class TypeSwitchTrainer(Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> detectorTrainer) : Trainer<ReadOnlyTag, ReadOnlyAsset>
 {
 	public Vector2<ushort> ImageSize
 	{

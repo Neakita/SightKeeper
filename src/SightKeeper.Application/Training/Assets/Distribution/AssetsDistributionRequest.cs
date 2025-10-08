@@ -1,6 +1,6 @@
 namespace SightKeeper.Application.Training.Assets.Distribution;
 
-public sealed class AssetsDistributionRequest
+internal sealed class AssetsDistributionRequest
 {
 	public float FractionsSum => TrainFraction + ValidationFraction + TestFraction;
 	public float TrainFraction { get; init; }

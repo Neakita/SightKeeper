@@ -1,6 +1,6 @@
 namespace SightKeeper.Application;
 
-public readonly struct Range
+internal readonly struct Range
 {
 	public static Range FromCount(int start, int count)
 	{

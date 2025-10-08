@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public sealed class TransformingTrainDataExporter<TTag, TAsset>(TrainDataExporter<TTag, TAsset> inner, TrainDataTransformer<TTag, TAsset> transformer) : TrainDataExporter<TTag, TAsset>
+internal sealed class TransformingTrainDataExporter<TTag, TAsset>(TrainDataExporter<TTag, TAsset> inner, TrainDataTransformer<TTag, TAsset> transformer) : TrainDataExporter<TTag, TAsset>
 {
 	public Task ExportAsync(string path, ReadOnlyDataSet<TTag, TAsset> data, CancellationToken cancellationToken)
 	{

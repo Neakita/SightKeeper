@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public sealed class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32>
+internal sealed class Bgra32ToRgba32PixelConverter : PixelConverter<Bgra32, Rgba32>
 {
 	public override void Convert(ReadOnlySpan<Bgra32> source, Span<Rgba32> target)
 	{

@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public sealed class RandomItemsCropSettings
+internal sealed class RandomItemsCropSettings
 {
 	public Vector2<ushort> TargetSize { get; set; } = new(320, 320);
 	public double IoUThreshold { get; set; } = .2;

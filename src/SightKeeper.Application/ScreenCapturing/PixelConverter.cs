@@ -3,7 +3,7 @@ using CommunityToolkit.HighPerformance;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public abstract class PixelConverter<TFrom, TTo>
+internal abstract class PixelConverter<TFrom, TTo>
 {
 	public virtual void Convert(ReadOnlySpan2D<TFrom> source, Span2D<TTo> target)
 	{

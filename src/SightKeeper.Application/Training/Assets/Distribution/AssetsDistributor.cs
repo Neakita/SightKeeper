@@ -2,7 +2,7 @@ using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Application.Training.Assets.Distribution;
 
-public static class AssetsDistributor
+internal static class AssetsDistributor
 {
 	public static AssetsDistribution<TAsset> DistributeAssets<TAsset>(IEnumerable<TAsset> assets, AssetsDistributionRequest request) where TAsset : ReadOnlyAsset
 	{

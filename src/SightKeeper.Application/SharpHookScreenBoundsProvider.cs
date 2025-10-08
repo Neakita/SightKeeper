@@ -3,7 +3,7 @@ using SightKeeper.Domain;
 
 namespace SightKeeper.Application;
 
-public sealed class SharpHookScreenBoundsProvider : ScreenBoundsProvider
+internal sealed class SharpHookScreenBoundsProvider : ScreenBoundsProvider
 {
 	public Vector2<ushort> MainScreenSize => GetPrimaryScreenBounds();
 

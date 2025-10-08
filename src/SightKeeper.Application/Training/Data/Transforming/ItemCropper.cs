@@ -4,7 +4,7 @@ using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public interface ItemCropper<TItem>
+internal interface ItemCropper<TItem>
 {
 	IEnumerable<TItem> CropItems(IEnumerable<TItem> items, Rectangle cropRectangle, Vector2<ushort> imageSize)
 	{

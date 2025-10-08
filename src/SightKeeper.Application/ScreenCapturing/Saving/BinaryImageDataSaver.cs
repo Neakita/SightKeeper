@@ -7,7 +7,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-public sealed class BinaryImageDataSaver<TPixel> : ImageDataSaver<TPixel>
+internal sealed class BinaryImageDataSaver<TPixel> : ImageDataSaver<TPixel>
 	where TPixel : unmanaged
 {
 	public void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data)

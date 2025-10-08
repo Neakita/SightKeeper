@@ -13,7 +13,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing;
 
-public sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
+internal sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 {
 	public required ScreenBoundsProvider ScreenBoundsProvider { get; init; }
 	public required ImagesCleaner ImagesCleaner { get; init; }

@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.Training.Data;
 
-public sealed class ReadOnlyDataSetValue<TTag, TAsset> : ReadOnlyDataSet<TTag, TAsset>
+internal sealed class ReadOnlyDataSetValue<TTag, TAsset> : ReadOnlyDataSet<TTag, TAsset>
 {
 	public IEnumerable<TTag> Tags { get; }
 	public IEnumerable<TAsset> Assets { get; }

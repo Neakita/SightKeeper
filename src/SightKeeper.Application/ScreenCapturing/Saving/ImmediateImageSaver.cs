@@ -4,7 +4,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-public sealed class ImmediateImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSaver
+internal sealed class ImmediateImageSaver<TPixel> : ImageSaver<TPixel>, LimitedSaver
 	where TPixel : unmanaged
 {
 	public required ImageDataSaver<TPixel> DataSaver { get; init; }

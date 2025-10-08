@@ -10,7 +10,7 @@ using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.COCO;
 
-public sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>
+internal sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>
 {
 	public int CategoriesInitialId { get; set; } = 0;
 	public IdCounter ImageIdCounter { get; set; } = new();

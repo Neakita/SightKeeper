@@ -1,9 +1,8 @@
 ﻿using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-public sealed class CropTrainData<TTag, TAsset>(
+internal sealed class CropTrainData<TTag, TAsset>(
 	ReadOnlyDataSet<TTag, TAsset> inner,
 	CropRectanglesProvider<TAsset> cropRectanglesProvider,
 	AssetCropper<TAsset> assetCropper)

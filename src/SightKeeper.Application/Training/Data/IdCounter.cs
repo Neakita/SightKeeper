@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Application.Training.Data;
 
-public sealed class IdCounter(int initialId = 0)
+internal sealed class IdCounter(int initialId = 0)
 {
 	public int NextId => _id++;
 

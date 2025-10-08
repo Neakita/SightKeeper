@@ -5,7 +5,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.DataSets.Editing;
 
-public sealed class ExistingDataSetDataValidator : AbstractValidator<ExistingDataSetData>
+internal sealed class ExistingDataSetDataValidator : AbstractValidator<ExistingDataSetData>
 {
 	public ExistingDataSetDataValidator(ReadRepository<DataSet<Tag, Asset>> dataSetsRepository)
 	{
