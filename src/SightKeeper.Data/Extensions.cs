@@ -1,6 +1,8 @@
-﻿namespace SightKeeper.Domain;
+﻿using SightKeeper.Domain;
 
-public static class DecoratorExtensions
+namespace SightKeeper.Data;
+
+internal static class Extensions
 {
 	public static T GetInnermost<T>(this object obj)
 	{
