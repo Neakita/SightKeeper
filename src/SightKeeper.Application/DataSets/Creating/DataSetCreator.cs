@@ -31,12 +31,12 @@ public sealed class DataSetCreator(IValidator<NewDataSetData> validator, WriteRe
 		{
 			var tag = dataSet.TagsLibrary.CreateTag(tagData.Name);
 			tag.Color = tagData.Color;
-			if (tag is DomainPoserTag poserTag)
+			if (tag is PoserTag poserTag)
 				CreateKeyPointTags(poserTag, (NewPoserTagData)tagData);
 		}
 	}
 
-	private static void CreateKeyPointTags(DomainPoserTag tag, NewPoserTagData data)
+	private static void CreateKeyPointTags(PoserTag tag, NewPoserTagData data)
 	{
 		foreach (var keyPointTagData in data.KeyPointTags)
 		{
