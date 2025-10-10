@@ -2,6 +2,7 @@
 using Autofac;
 using Material.Icons;
 using SightKeeper.Application;
+using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
@@ -15,6 +16,8 @@ using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.DataSets.Card;
 using SightKeeper.Avalonia.DataSets.Commands;
 using SightKeeper.Avalonia.DataSets.Dialogs;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ImageSets;
 using SightKeeper.Avalonia.ImageSets.Capturing;
@@ -23,6 +26,7 @@ using SightKeeper.Avalonia.ImageSets.Commands;
 using SightKeeper.Avalonia.Training;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
@@ -114,6 +118,11 @@ internal static class ViewModelsExtensions
 				importDataSetCommand,
 				dataSetCardViewModelFactory);
 		});
+
+		builder.AddDataSetType<Tag, ClassifierAsset, PlainTagsEditorViewModel>("Classifier");
+		builder.AddDataSetType<Tag, ItemsAsset<DetectorItem>, PlainTagsEditorViewModel>("Detector");
+
+		builder.RegisterType<PlainTagsEditorViewModel>();
 	}
 
 	private static void AddAnnotationTabDependencies(this ContainerBuilder builder)
@@ -186,5 +195,18 @@ internal static class ViewModelsExtensions
 				return (content, contentScope);
 			}
 		}).As<TabItemViewModel>();
+	}
+
+	private static void AddDataSetType<TTag, TAsset, TTagsEditor>(this ContainerBuilder builder, string name)
+		where TAsset : class
+		where TTagsEditor : class
+	{
+		builder.Register(context =>
+		{
+			var dataSetFactory = context.Resolve<DataSetFactory<TTag, TAsset>>();
+			var tagsEditorFactory = context.Resolve<Func<TTagsEditor>>();
+
+			return new DataSetTypeViewModel(name, (DataSetFactory<Tag, Asset>)dataSetFactory, (Func<TagsEditorDataContext>)tagsEditorFactory);
+		});
 	}
 }
