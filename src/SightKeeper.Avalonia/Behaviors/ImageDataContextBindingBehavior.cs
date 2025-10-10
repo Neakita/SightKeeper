@@ -96,7 +96,7 @@ internal sealed class ImageDataContextBindingBehavior : Behavior<Image>
 		}
 		try
 		{
-			_bitmap = await DataContext.Load(TargetSize, cancellationToken);
+			_bitmap = await DataContext.LoadAsync(TargetSize, cancellationToken);
 		}
 		catch (FileNotFoundException exception)
 		{

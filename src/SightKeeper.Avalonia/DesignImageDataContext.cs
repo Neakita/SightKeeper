@@ -19,7 +19,7 @@ internal sealed class DesignImageDataContext : ImageDataContext
 		_sampleImageFilePath = Path.Combine(projectDirectory!.FullName, SamplesDirectoryName, sampleImageFileName);
 	}
 
-	public Task<Bitmap?> Load(int? maximumLargestDimension, CancellationToken cancellationToken)
+	public Task<Bitmap?> LoadAsync(int? maximumLargestDimension, CancellationToken cancellationToken)
 	{
 		Bitmap bitmap = new(_sampleImageFilePath);
 		if (maximumLargestDimension == null)

@@ -16,7 +16,7 @@ internal sealed class AnnotationImageViewModel : AnnotationImageDataContext
 		_image = image;
 	}
 
-	public async Task<Bitmap?> Load(int? maximumLargestDimension, CancellationToken cancellationToken)
+	public async Task<Bitmap?> LoadAsync(int? maximumLargestDimension, CancellationToken cancellationToken)
 	{
 		return await _imageLoader.LoadImageAsync(_image, maximumLargestDimension, cancellationToken);
 	}

@@ -6,5 +6,5 @@ namespace SightKeeper.Avalonia;
 
 public interface ImageDataContext
 {
-	Task<Bitmap?> Load(int? maximumLargestDimension, CancellationToken cancellationToken);
+	Task<Bitmap?> LoadAsync(int? maximumLargestDimension, CancellationToken cancellationToken);
 }

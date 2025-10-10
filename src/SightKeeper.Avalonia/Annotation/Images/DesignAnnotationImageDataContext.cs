@@ -15,9 +15,9 @@ internal sealed class DesignAnnotationImageDataContext : AnnotationImageDataCont
 		CreationTimestamp = creationTimestamp;
 	}
 
-	public Task<Bitmap?> Load(int? maximumLargestDimension, CancellationToken cancellationToken)
+	public Task<Bitmap?> LoadAsync(int? maximumLargestDimension, CancellationToken cancellationToken)
 	{
-		return _imageDataContext.Load(maximumLargestDimension, cancellationToken);
+		return _imageDataContext.LoadAsync(maximumLargestDimension, cancellationToken);
 	}
 
 	private readonly DesignImageDataContext _imageDataContext;
