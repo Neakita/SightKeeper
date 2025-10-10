@@ -5,7 +5,7 @@ using Autofac.Core.Resolving.Pipeline;
 using CommunityToolkit.Diagnostics;
 using Serilog;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Infrastructure;
 
 internal sealed class SerilogMiddleware : IResolveMiddleware
 {

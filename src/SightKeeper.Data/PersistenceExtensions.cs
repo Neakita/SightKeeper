@@ -23,7 +23,7 @@ using SixLabors.ImageSharp.Formats.Png;
 
 namespace SightKeeper.Data;
 
-public static class ContainerBuilderPersistenceExtensions
+public static class PersistenceExtensions
 {
 	public static void AddPersistence(this ContainerBuilder builder)
 	{

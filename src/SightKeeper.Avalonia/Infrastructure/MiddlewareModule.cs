@@ -3,7 +3,7 @@ using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac.Core.Resolving.Pipeline;
 
-namespace SightKeeper.Avalonia;
+namespace SightKeeper.Avalonia.Infrastructure;
 
 internal sealed class MiddlewareModule(IResolveMiddleware middleware) : Module
 {

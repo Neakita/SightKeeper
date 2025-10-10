@@ -24,7 +24,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application;
 
-public static class ContainerBuilderApplicationServicesExtensions
+public static class ApplicationServicesExtensions
 {
 	public static void AddApplicationServices(this ContainerBuilder builder)
 	{

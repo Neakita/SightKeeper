@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Avalonia.Infrastructure;
 
 namespace SightKeeper.Avalonia;
 
