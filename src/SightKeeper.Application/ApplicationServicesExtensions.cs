@@ -71,25 +71,22 @@ public static class ApplicationServicesExtensions
 
 		builder.Register(context =>
 		{
-			return new FuncImageSaverFactory<Bgra32>(() =>
+			var pixelConverter = context.Resolve<PixelConverter<Bgra32, Rgba32>>();
+			var imageDataSaver = context.Resolve<ImageDataSaver<Rgba32>>();
+			var arrayPool = ArrayPool<Bgra32>.Create(Array.MaxLength, 20);
+			return new ImmediateImageSaver<Bgra32>
 			{
-				var pixelConverter = context.Resolve<PixelConverter<Bgra32, Rgba32>>();
-				var imageDataSaver = context.Resolve<ImageDataSaver<Rgba32>>();
-				var arrayPool = ArrayPool<Bgra32>.Create(Array.MaxLength, 20);
-				return new ImmediateImageSaver<Bgra32>
+				DataSaver = new BufferedImageDataSaverMiddleware<Bgra32>
 				{
-					DataSaver = new BufferedImageDataSaverMiddleware<Bgra32>
+					Next = new ImageDataConverterMiddleware<Bgra32, Rgba32>
 					{
-						Next = new ImageDataConverterMiddleware<Bgra32, Rgba32>
-						{
-							Converter = pixelConverter,
-							Next = imageDataSaver
-						},
-						ArrayPool = arrayPool
-					}
-				};
-			});
-		}).As<ImageSaverFactory<Bgra32>>();
+						Converter = pixelConverter,
+						Next = imageDataSaver
+					},
+					ArrayPool = arrayPool
+				}
+			};
+		}).As<ImageSaver<Bgra32>>();
 
 		builder.RegisterType<ImagesCleaner>();
 	}

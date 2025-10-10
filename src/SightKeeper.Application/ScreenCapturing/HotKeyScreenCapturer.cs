@@ -18,7 +18,7 @@ internal sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 	public required ScreenBoundsProvider ScreenBoundsProvider { get; init; }
 	public required ImagesCleaner ImagesCleaner { get; init; }
 	public required ScreenCapturer<TPixel> ScreenCapturer { get; init; }
-	public required ImageSaverFactory<TPixel> ImageSaverFactory { get; init; }
+	public required Func<ImageSaver<TPixel>> ImageSaverFactory { get; init; }
 	public required SelfActivityProvider SelfActivityProvider { get; init; }
 
 	public required BindingsManager BindingsManager
@@ -86,7 +86,7 @@ internal sealed class HotKeyScreenCapturer<TPixel> : ImageCapturer, IDisposable
 		{
 			if (field == value)
 				return;
-			_imageSaver = value ? ImageSaverFactory.CreateImageSaver() : null;
+			_imageSaver = value ? ImageSaverFactory() : null;
 			field = value;
 		}
 	}
