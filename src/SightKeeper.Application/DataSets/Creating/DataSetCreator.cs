@@ -12,7 +12,7 @@ public sealed class DataSetCreator(IValidator<NewDataSetData> validator, WriteRe
 	public DataSet<Tag, Asset> Create(NewDataSetData data)
 	{
 		validator.ValidateAndThrow(data);
-		var dataSet = data.Factory.CreateDataSet();
+		var dataSet = data.DataSetFactory.CreateDataSet();
 		SetGeneralData(dataSet, data);
 		AddTags(dataSet, data.NewTags);
 		repository.Add(dataSet);

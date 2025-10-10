@@ -47,6 +47,6 @@ internal sealed class CreateDataSetViewModel : DataSetDialogViewModel, NewDataSe
 
 	public string Description => DataSetEditor.Description;
 
-	public DataSetFactory<Tag, Asset> Factory => TypePicker.SelectedType.Factory;
+	public DataSetFactory<Tag, Asset> DataSetFactory => TypePicker.SelectedType.DataSetFactory;
 	public IEnumerable<NewTagData> NewTags => ((TagsChanges)_tagsEditor).NewTags;
 }

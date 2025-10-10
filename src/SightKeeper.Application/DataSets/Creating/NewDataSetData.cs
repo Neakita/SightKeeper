@@ -6,6 +6,6 @@ namespace SightKeeper.Application.DataSets.Creating;
 
 public interface NewDataSetData : DataSetData
 {
-	DataSetFactory<Tag, Asset> Factory { get; }
+	DataSetFactory<Tag, Asset> DataSetFactory { get; }
 	IEnumerable<NewTagData> NewTags { get; }
 }

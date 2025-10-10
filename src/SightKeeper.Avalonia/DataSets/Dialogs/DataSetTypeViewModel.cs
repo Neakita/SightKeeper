@@ -8,10 +8,10 @@ namespace SightKeeper.Avalonia.DataSets.Dialogs;
 
 internal sealed class DataSetTypeViewModel(
 	string name,
-	DataSetFactory<Tag, Asset> factory,
+	DataSetFactory<Tag, Asset> dataSetFactory,
 	Func<TagsEditorDataContext> tagsEditorFactory) : DataSetTypeDataContext
 {
 	public string Name => name;
-	public DataSetFactory<Tag, Asset> Factory => factory;
+	public DataSetFactory<Tag, Asset> DataSetFactory => dataSetFactory;
 	public TagsEditorDataContext TagsEditorDataContext => tagsEditorFactory();
 }
