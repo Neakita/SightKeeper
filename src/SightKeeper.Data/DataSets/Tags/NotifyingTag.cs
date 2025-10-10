@@ -1,10 +1,11 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class NotifyingTag(Tag inner) : Tag, INotifyPropertyChanged
+internal sealed class NotifyingTag(Tag inner) : Tag, Decorator<Tag>, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -29,8 +30,8 @@ internal sealed class NotifyingTag(Tag inner) : Tag, INotifyPropertyChanged
 	}
 
 	public TagsContainer<Tag> Owner => inner.Owner;
-
 	public IReadOnlyCollection<TagUser> Users => inner.Users;
+	public Tag Inner => inner;
 
 	public void AddUser(TagUser user)
 	{

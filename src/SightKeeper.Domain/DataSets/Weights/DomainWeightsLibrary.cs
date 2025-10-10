@@ -3,29 +3,29 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Weights;
 
-public sealed class DomainWeightsLibrary : WeightsLibrary
+public sealed class DomainWeightsLibrary : WeightsLibrary, Decorator<WeightsLibrary>
 {
-	public IReadOnlyCollection<WeightsData> Weights => _inner.Weights;
+	public IReadOnlyCollection<WeightsData> Weights => Inner.Weights;
+	public WeightsLibrary Inner { get; }
 
 	public WeightsData CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
 		ValidateTags(tags);
-		return _inner.CreateWeights(metadata, tags);
+		return Inner.CreateWeights(metadata, tags);
 	}
 
 	public void RemoveWeights(WeightsData weights)
 	{
-		_inner.RemoveWeights(weights);
+		Inner.RemoveWeights(weights);
 	}
 
 	internal DomainWeightsLibrary(WeightsLibrary inner, TagsContainer<Tag> tagsOwner, int minimumTagsCount)
 	{
-		_inner = inner;
+		Inner = inner;
 		_minimumTagsCount = minimumTagsCount;
 		_tagsOwner = tagsOwner;
 	}
 
-	private readonly WeightsLibrary _inner;
 	private readonly int _minimumTagsCount;
 	private readonly TagsContainer<Tag> _tagsOwner;
 
@@ -62,6 +62,5 @@ public sealed class DomainWeightsLibrary : WeightsLibrary
 		if (!tagsList.Contains(poserTag))
 			throw new KeyPointTagWithoutOwnerException(tag, poserTag);
 		return true;
-
 	}
 }

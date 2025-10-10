@@ -1,11 +1,13 @@
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class DataRemovingWeightsLibrary(WeightsLibrary inner) : WeightsLibrary
+internal sealed class DataRemovingWeightsLibrary(WeightsLibrary inner) : WeightsLibrary, Decorator<WeightsLibrary>
 {
 	public IReadOnlyCollection<WeightsData> Weights => inner.Weights;
+	public WeightsLibrary Inner => inner;
 
 	public WeightsData CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
 	{
