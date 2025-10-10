@@ -3,6 +3,7 @@ using MemoryPack;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
@@ -12,10 +13,11 @@ namespace SightKeeper.Data.DataSets.Decorators;
 
 internal sealed class SerializableDataSet<TTag, TAsset>(
 	DataSet<TTag, TAsset> inner,
-	ushort unionHeader,
+	ushort unionTag,
 	TagsFormatter<TTag> tagsFormatter,
 	AssetsFormatter<TAsset> assetsFormatter)
-	: DataSet<TTag, TAsset> where TTag : Tag
+	: DataSet<TTag, TAsset>, Decorator<DataSet<TTag, TAsset>>, MemoryPackSerializable
+	where TTag : Tag
 {
 	public string Name
 	{
@@ -30,15 +32,14 @@ internal sealed class SerializableDataSet<TTag, TAsset>(
 	}
 
 	public TagsOwner<TTag> TagsLibrary => inner.TagsLibrary;
-
 	public AssetsOwner<TAsset> AssetsLibrary => inner.AssetsLibrary;
-
 	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
-	
+	public DataSet<TTag, TAsset> Inner => inner;
+
 	public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer)
 		where TBufferWriter : IBufferWriter<byte>
 	{
-		writer.WriteUnionHeader(unionHeader);
+		writer.WriteUnionHeader(unionTag);
 		var tagIndexes = TagsLibrary.Tags.Index().ToDictionary(tuple => (Tag)tuple.Item, tuple => (byte)tuple.Index);
 		DataSetGeneralDataFormatter.WriteGeneralData(ref writer, Name, Description);
 		tagsFormatter.WriteTags(ref writer, TagsLibrary.Tags);

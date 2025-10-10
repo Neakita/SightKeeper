@@ -34,7 +34,8 @@ internal sealed class PlainTagsFormatter : TagsFormatter<Tag>
 		var tagName = reader.ReadString();
 		Guard.IsNotNull(tagName);
 		var tag = tagsLibrary.CreateTag(tagName);
-		tag.Color = reader.ReadUnmanaged<uint>();
+		var innermostTag = tag.GetInnermost<TTag>();
+		innermostTag.Color = reader.ReadUnmanaged<uint>();
 		return tag;
 	}
 }

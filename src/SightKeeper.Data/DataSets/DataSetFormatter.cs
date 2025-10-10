@@ -1,6 +1,5 @@
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
-using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;

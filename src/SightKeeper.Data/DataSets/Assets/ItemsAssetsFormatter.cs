@@ -3,7 +3,6 @@ using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets.Items;
-using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
@@ -36,9 +35,9 @@ internal sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFor
 			reader.ReadUnmanaged(out Id imageId, out AssetUsage usage);
 			var image = imageLookupper.GetImage(imageId);
 			var asset = set.AssetsLibrary.MakeAsset(image);
-			var innermostAsset = asset.GetInnermost<ItemsAsset<DetectorItem>>();
+			var innermostAsset = asset.GetInnermost<ItemsAsset<TItem>>();
 			innermostAsset.Usage = usage;
-			itemsFormatter.ReadItems(ref reader, set.TagsLibrary.Tags, asset);
+			itemsFormatter.ReadItems(ref reader, set.TagsLibrary.Tags, innermostAsset);
 		}
 	}
 }

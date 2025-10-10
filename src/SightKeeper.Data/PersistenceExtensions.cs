@@ -9,6 +9,9 @@ using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Detector;
+using SightKeeper.Data.DataSets.Poser;
+using SightKeeper.Data.DataSets.Poser.Items;
+using SightKeeper.Data.DataSets.Poser.Items.KeyPoints;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.ImageSets.Images;
@@ -88,8 +91,12 @@ public static class PersistenceExtensions
 	{
 		builder.RegisterType<StorableImageSetWrapper>()
 			.As<ImageSetWrapper>();
-		
-		builder.RegisterType<DataSetWrapper>();
+
+		builder.RegisterType<KeyPointWrapper>();
+
+		builder.AddDataSetWrapper<Tag, ClassifierAsset>(0);
+		builder.AddDataSetWrapper<Tag, ItemsAsset<DetectorItem>>(1);
+		builder.AddDataSetWrapper<PoserTag, ItemsAsset<PoserItem>>(2);
 	}
 
 	private static void AddFactories(this ContainerBuilder builder)
@@ -105,6 +112,14 @@ public static class PersistenceExtensions
 
 		builder.RegisterType<WrappingDetectorDataSetFactory>()
 			.As<DataSetFactory<Tag, ItemsAsset<DetectorItem>>>();
+
+		builder.RegisterType<WrappingPoserDataSetFactory>()
+			.As<DataSetFactory<PoserTag, ItemsAsset<PoserItem>>>();
+
+		builder.RegisterType<InMemoryKeyPointFactory>()
+			.As<KeyPointFactory>();
+		
+		builder.RegisterDecorator<WrappingKeyPointFactory, KeyPointFactory>();
 	}
 
 	private static void AddFormatters(this ContainerBuilder builder)
@@ -118,8 +133,14 @@ public static class PersistenceExtensions
 		builder.RegisterType<ItemsAssetsFormatter<DetectorItem>>()
 			.As<AssetsFormatter<ItemsAsset<DetectorItem>>>();
 
+		builder.RegisterType<ItemsAssetsFormatter<PoserItem>>()
+			.As<AssetsFormatter<ItemsAsset<PoserItem>>>();
+
 		builder.RegisterType<DetectorItemsFormatter>()
 			.As<ItemsFormatter<DetectorItem>>();
+
+		builder.RegisterType<PoserItemsFormatter>()
+			.As<ItemsFormatter<PoserItem>>();
 
 		builder.RegisterType<PlainTagsFormatter>()
 			.As<TagsFormatter<Tag>>();
@@ -137,6 +158,9 @@ public static class PersistenceExtensions
 			.As<MemoryPackDataSetDeserializer>();
 
 		builder.RegisterType<MemoryPackDataSetDeserializer<Tag, ItemsAsset<DetectorItem>>>()
+			.As<MemoryPackDataSetDeserializer>();
+
+		builder.RegisterType<MemoryPackDataSetDeserializer<PoserTag, ItemsAsset<PoserItem>>>()
 			.As<MemoryPackDataSetDeserializer>();
 	}
 
@@ -161,5 +185,23 @@ public static class PersistenceExtensions
 			.As(typeof(ImageLoader<>));
 
 		builder.RegisterGenericDecorator(typeof(ThreadedImageLoader<>), typeof(ImageLoader<>));
+	}
+
+	private static void AddDataSetWrapper<TTag, TAsset>(this ContainerBuilder builder, ushort unionTag)
+		where TTag : Tag
+	{
+		builder.Register(context =>
+		{
+			var changeListener = context.Resolve<ChangeListener>();
+			var editingLock = context.Resolve<Lock>();
+			var tagsFormatter = context.Resolve<TagsFormatter<TTag>>();
+			var assetsFormatter = context.Resolve<AssetsFormatter<TAsset>>(); 
+			return new DataSetWrapper<TTag, TAsset>(
+				changeListener,
+				editingLock,
+				unionTag,
+				tagsFormatter,
+				assetsFormatter);
+		});
 	}
 }

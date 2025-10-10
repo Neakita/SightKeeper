@@ -18,6 +18,7 @@ using SightKeeper.Avalonia.DataSets.Commands;
 using SightKeeper.Avalonia.DataSets.Dialogs;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
+using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.ImageSets;
 using SightKeeper.Avalonia.ImageSets.Capturing;
@@ -27,6 +28,7 @@ using SightKeeper.Avalonia.Training;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
@@ -121,8 +123,10 @@ internal static class ViewModelsExtensions
 
 		builder.AddDataSetType<Tag, ClassifierAsset, PlainTagsEditorViewModel>("Classifier");
 		builder.AddDataSetType<Tag, ItemsAsset<DetectorItem>, PlainTagsEditorViewModel>("Detector");
+		builder.AddDataSetType<PoserTag, ItemsAsset<PoserItem>, PoserTagsEditorViewModel>("Poser");
 
 		builder.RegisterType<PlainTagsEditorViewModel>();
+		builder.RegisterType<PoserTagsEditorViewModel>();
 	}
 
 	private static void AddAnnotationTabDependencies(this ContainerBuilder builder)

@@ -19,18 +19,6 @@ internal sealed partial class ExistingPoserTagViewModel : EditableTagViewModel, 
 
 	public bool IsEffectivelyEdited => Name != Tag.Name || Color.ToUInt32() != Tag.Color;
 
-	public ExistingPoserTagViewModel(PoserTag tag)
-	{
-		Tag = tag;
-		Name = tag.Name;
-		Color = Color.FromUInt32(tag.Color);
-		foreach (var keyPointTag in tag.KeyPointTags)
-		{
-			ExistingTagViewModel keyPointTagViewModel = new(keyPointTag);
-			_keyPointTags.Add(keyPointTagViewModel);
-		}
-	}
-
 	public IReadOnlyCollection<EditableTagDataContext> KeyPointTags => _keyPointTags;
 
 	ICommand EditablePoserTagDataContext.CreateKeyPointTagCommand => CreateKeyPointTagCommand;
@@ -43,6 +31,18 @@ internal sealed partial class ExistingPoserTagViewModel : EditableTagViewModel, 
 		_keyPointTags.OfType<ExistingTagViewModel>().Where(tag => tag.IsEffectivelyEdited);
 
 	public IEnumerable<NewTagData> NewTags => _keyPointTags.OfType<NewPoserTagViewModel>();
+
+	public ExistingPoserTagViewModel(PoserTag tag)
+	{
+		Tag = tag;
+		Name = tag.Name;
+		Color = Color.FromUInt32(tag.Color);
+		foreach (var keyPointTag in tag.KeyPointTags)
+		{
+			var keyPointTagViewModel = new ExistingTagViewModel(keyPointTag);
+			_keyPointTags.Add(keyPointTagViewModel);
+		}
+	}
 
 	private readonly AvaloniaList<EditableTagViewModel> _keyPointTags = new();
 

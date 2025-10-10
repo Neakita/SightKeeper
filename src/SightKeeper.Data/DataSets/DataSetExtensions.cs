@@ -70,4 +70,9 @@ internal static class DataSetExtensions
 			AssetsLibrary = new TagUsersTrackingClassifierAssetsLibrary(set.AssetsLibrary)
 		};
 	}
+
+	public static DataSet<TTag, TAsset> WithSerialization<TTag, TAsset>(this DataSet<TTag, TAsset> set, ushort unionTag, TagsFormatter<TTag> tagsFormatter, AssetsFormatter<TAsset> assetsFormatter) where TTag : Tag
+	{
+		return new SerializableDataSet<TTag, TAsset>(set, unionTag, tagsFormatter, assetsFormatter);
+	}
 }

@@ -1,11 +1,14 @@
-﻿using SightKeeper.Domain.DataSets;
+﻿using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets;
 
-internal sealed class DataSetWrapper(ChangeListener changeListener, Lock editingLock)
+internal sealed class DataSetWrapper<TTag, TAsset>(ChangeListener changeListener, Lock editingLock, ushort unionTag, TagsFormatter<TTag> tagsFormatter, AssetsFormatter<TAsset> assetsFormatter)
+	where TTag : Tag
 {
-	public DataSet<TTag, TAsset> Wrap<TTag, TAsset>(DataSet<TTag, TAsset> set) where TTag : Tag
+	public DataSet<TTag, TAsset> Wrap(DataSet<TTag, TAsset> set)
 	{
 		return set
 
@@ -36,6 +39,8 @@ internal sealed class DataSetWrapper(ChangeListener changeListener, Lock editing
 			// If domain rule is violated and throws an exception,
 			// it should fail as fast as possible and have smaller stack strace
 			.WithDomainRules()
+			
+			.WithSerialization(unionTag, tagsFormatter, assetsFormatter)
 
 			// INPC interface should be exposed to consumer,
 			// so he can type test and cast it,

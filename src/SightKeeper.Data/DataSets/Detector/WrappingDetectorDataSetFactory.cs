@@ -10,7 +10,7 @@ using SightKeeper.Domain.DataSets.Tags;
 namespace SightKeeper.Data.DataSets.Detector;
 
 internal sealed class WrappingDetectorDataSetFactory(
-	DataSetWrapper wrapper,
+	DataSetWrapper<Tag, ItemsAsset<DetectorItem>> wrapper,
 	ChangeListener changeListener,
 	Lock editingLock)
 	: DataSetFactory<Tag, ItemsAsset<DetectorItem>>
