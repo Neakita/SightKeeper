@@ -19,7 +19,8 @@
                      ItemsSource="{Binding TypePicker.Types}"
                      Theme="{DynamicResource RadioButtonsListBoxTheme}"
                      Classes="horizontal"
-                     IsVisible="{Binding TypePicker, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                     IsVisible="{Binding TypePicker, Converter={x:Static ObjectConverters.IsNotNull}}"
+                     DisplayMemberBinding="{Binding Name}"/>
             <tags:TagsEditor DataContext="{Binding TagsEditor}"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal"
