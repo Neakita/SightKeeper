@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.DataSets.Poser;
 
-public sealed class DomainPoserTag(PoserTag inner) : PoserTag
+public sealed class DomainPoserTag(PoserTag inner) : PoserTag, Decorator<PoserTag>
 {
 	public string Name
 	{
@@ -21,10 +21,9 @@ public sealed class DomainPoserTag(PoserTag inner) : PoserTag
 	}
 
 	public TagsContainer<PoserTag> Owner => inner.Owner;
-
 	public IReadOnlyCollection<TagUser> Users => inner.Users;
-
 	public IReadOnlyList<Tag> KeyPointTags => inner.KeyPointTags;
+	public PoserTag Inner => inner;
 
 	public Tag CreateKeyPointTag(string name)
 	{

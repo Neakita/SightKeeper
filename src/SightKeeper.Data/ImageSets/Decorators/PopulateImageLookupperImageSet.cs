@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Decorators;
 
-internal sealed class PopulateImageLookupperImageSet(ImageSet inner, ImageLookupperPopulator populator) : ImageSet
+internal sealed class PopulateImageLookupperImageSet(ImageSet inner, ImageLookupperPopulator populator) : ImageSet, Decorator<ImageSet>
 {
 	public string Name
 	{
@@ -18,6 +18,7 @@ internal sealed class PopulateImageLookupperImageSet(ImageSet inner, ImageLookup
 	}
 
 	public IReadOnlyList<ManagedImage> Images => inner.Images;
+	public ImageSet Inner => inner;
 
 	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{

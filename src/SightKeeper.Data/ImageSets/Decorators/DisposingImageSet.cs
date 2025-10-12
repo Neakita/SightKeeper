@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Decorators;
 
-internal sealed class DisposingImageSet(ImageSet inner) : ImageSet
+internal sealed class DisposingImageSet(ImageSet inner) : ImageSet, Decorator<ImageSet>
 {
 	public string Name
 	{
@@ -18,6 +18,7 @@ internal sealed class DisposingImageSet(ImageSet inner) : ImageSet
 	}
 
 	public IReadOnlyList<ManagedImage> Images => inner.Images;
+	public ImageSet Inner => inner;
 
 	public IReadOnlyList<ManagedImage> GetImagesRange(int index, int count)
 	{

@@ -1,10 +1,11 @@
-﻿using SightKeeper.Domain.DataSets.Assets.Items;
+﻿using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.DataSets.Poser.Items;
+namespace SightKeeper.Data.DataSets.Poser.Items.Decorators;
 
-internal sealed class TrackablePoserItem(PoserItem inner, ChangeListener listener) : PoserItem
+internal sealed class TrackablePoserItem(PoserItem inner, ChangeListener listener) : PoserItem, Decorator<PoserItem>
 {
 	public Bounding Bounding
 	{
@@ -27,6 +28,7 @@ internal sealed class TrackablePoserItem(PoserItem inner, ChangeListener listene
 	}
 
 	public IReadOnlyCollection<KeyPoint> KeyPoints => inner.KeyPoints;
+	public PoserItem Inner => inner;
 
 	public KeyPoint MakeKeyPoint(Tag tag)
 	{

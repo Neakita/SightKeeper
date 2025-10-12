@@ -5,7 +5,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Decorators;
 
-internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, INotifyPropertyChanged
+internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, Decorator<ImageSet>, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -34,6 +34,7 @@ internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, INotifyPrope
 	}
 
 	public IReadOnlyList<ManagedImage> Images => inner.Images;
+	public ImageSet Inner => inner;
 
 	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{

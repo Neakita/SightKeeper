@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Poser;
 
-public sealed class DomainPoserItem(PoserItem inner) : PoserItem
+public sealed class DomainPoserItem(PoserItem inner) : PoserItem, Decorator<PoserItem>
 {
 	public Bounding Bounding
 	{
@@ -27,6 +27,7 @@ public sealed class DomainPoserItem(PoserItem inner) : PoserItem
 	}
 
 	public IReadOnlyCollection<KeyPoint> KeyPoints => inner.KeyPoints;
+	public PoserItem Inner => inner;
 
 	public KeyPoint MakeKeyPoint(Tag tag)
 	{

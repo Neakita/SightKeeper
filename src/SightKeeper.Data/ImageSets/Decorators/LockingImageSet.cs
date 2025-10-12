@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Decorators;
 
-internal sealed class LockingImageSet(ImageSet inner, Lock editingLock) : ImageSet
+internal sealed class LockingImageSet(ImageSet inner, Lock editingLock) : ImageSet, Decorator<ImageSet>
 {
 	public string Name
 	{
@@ -26,6 +26,7 @@ internal sealed class LockingImageSet(ImageSet inner, Lock editingLock) : ImageS
 	}
 
 	public IReadOnlyList<ManagedImage> Images => inner.Images;
+	public ImageSet Inner => inner;
 
 	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{

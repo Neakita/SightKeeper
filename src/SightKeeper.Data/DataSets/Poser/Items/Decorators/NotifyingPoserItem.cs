@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.DataSets.Poser.Items;
+namespace SightKeeper.Data.DataSets.Poser.Items.Decorators;
 
-internal sealed class NotifyingPoserItem(PoserItem inner) : PoserItem, INotifyPropertyChanged
+internal sealed class NotifyingPoserItem(PoserItem inner) : PoserItem, Decorator<PoserItem>, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -31,6 +32,7 @@ internal sealed class NotifyingPoserItem(PoserItem inner) : PoserItem, INotifyPr
 	}
 
 	public IReadOnlyCollection<KeyPoint> KeyPoints => inner.KeyPoints;
+	public PoserItem Inner => inner;
 
 	public KeyPoint MakeKeyPoint(Tag tag)
 	{

@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Domain.Images;
 
-public sealed class DomainImageSet(ImageSet inner) : ImageSet
+public sealed class DomainImageSet(ImageSet inner) : ImageSet, Decorator<ImageSet>
 {
 	public string Name
 	{
@@ -18,6 +18,7 @@ public sealed class DomainImageSet(ImageSet inner) : ImageSet
 	/// Sorted by creation timestamp: first is the earliest, last is the latest
 	/// </remarks>
 	public IReadOnlyList<ManagedImage> Images => inner.Images;
+	public ImageSet Inner => inner;
 
 	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{

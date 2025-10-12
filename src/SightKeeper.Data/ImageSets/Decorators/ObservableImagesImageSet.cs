@@ -6,7 +6,7 @@ namespace SightKeeper.Data.ImageSets.Decorators;
 
 // could be named ObservableImageSet,
 // but I want to specify it handles only Images observability
-internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
+internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet, Decorator<ImageSet>
 {
 	public string Name
 	{
@@ -21,6 +21,7 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet
 	}
 
 	public IReadOnlyList<ManagedImage> Images => _images;
+	public ImageSet Inner => inner;
 
 	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{

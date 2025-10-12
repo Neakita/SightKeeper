@@ -1,17 +1,19 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Poser.Tags.Decorators;
 
-internal sealed class NotifyingPoserTag(PoserTag inner) : PoserTag, INotifyPropertyChanged
+internal sealed class NotifyingPoserTag(PoserTag inner) : PoserTag, Decorator<PoserTag>, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public TagsContainer<PoserTag> Owner => inner.Owner;
 	public IReadOnlyCollection<TagUser> Users => inner.Users;
 	public IReadOnlyList<Tag> KeyPointTags => inner.KeyPointTags;
+	public PoserTag Inner => inner;
 
 	public string Name
 	{
