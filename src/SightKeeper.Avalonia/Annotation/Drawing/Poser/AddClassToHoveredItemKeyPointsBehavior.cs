@@ -101,9 +101,7 @@ internal sealed class AddClassToHoveredItemKeyPointsBehavior : Behavior<ListBox>
 	private Control GetAssociatedItemContainer(KeyPointViewModel keyPoint)
 	{
 		Guard.IsNotNull(AssociatedObject);
-		var item = AssociatedObject.Items
-			.OfType<PoserItemViewModel>()
-			.Single(item => item.KeyPoints.Contains(keyPoint));
+		var item = keyPoint.Item;
 		var itemContainer = AssociatedObject.ContainerFromItem(item);
 		Guard.IsNotNull(itemContainer);
 		return itemContainer;
