@@ -4,11 +4,13 @@ using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
+using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 using Vibrance;
@@ -43,16 +45,40 @@ public sealed partial class AssetItemsViewModel : ViewModel, IDisposable
 	private ManagedImage? _image;
 	private ItemsContainer<DetectorItem>? Asset => _image == null ? null : _assetsLibrary?.GetOptionalAsset(_image);
 	private IDisposable _assetImagesSubscription = Disposable.Empty;
+	private IDisposable _itemsDisposable = Disposable.Empty;
 
 	private void UpdateItems()
 	{
+		_itemsDisposable.Dispose();
+		_itemsDisposable = Disposable.Empty;
 		if (Asset == null)
 		{
 			Items = ReadOnlyCollection<DrawerItemDataContext>.Empty;
 			return;
 		}
+
+		var disposable = new CompositeDisposable();
 		var items = (ReadOnlyObservableList<DetectorItem>)Asset.Items;
-		Items = items.Transform(_drawerItemsFactory.CreateItemViewModel).ToObservableList().ToReadOnlyNotifyingList();
+
+		ReadOnlyObservableList<DrawerItemDataContext> observableItems = items
+			.Transform(_drawerItemsFactory.CreateItemViewModel)
+			.DisposeMany()
+			.ToObservableList();
+		observableItems.DisposeWith(disposable);
+		if (items is ReadOnlyObservableList<PoserItem>)
+		{
+			var observableKeyPoints = observableItems.TransformMany(item =>
+			{
+				var poserItem = (PoserItemViewModel)item;
+				return poserItem.KeyPoints;
+			});
+			observableItems = observableItems.Concatenate(observableKeyPoints).ToObservableList();
+			observableItems.DisposeWith(disposable);
+		}
+		Items = observableItems
+			.ToObservableList()
+			.ToReadOnlyNotifyingList();
+		_itemsDisposable = disposable;
 	}
 
 	private void HandleDataSetSelectionChange(DataSet<Tag, Asset>? set)
