@@ -4,9 +4,10 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Poser.Items.KeyPoints.Decorators;
 
-internal sealed class TrackableKeyPoint(KeyPoint inner, ChangeListener listener) : KeyPoint
+internal sealed class TrackableKeyPoint(KeyPoint inner, ChangeListener listener) : KeyPoint, Decorator<KeyPoint>
 {
 	public Tag Tag => inner.Tag;
+	public KeyPoint Inner => inner;
 
 	public Vector2<double> Position
 	{

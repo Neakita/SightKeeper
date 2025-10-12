@@ -4,9 +4,10 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Poser.Items.KeyPoints.Decorators;
 
-internal sealed class LockingKeyPoint(KeyPoint inner, Lock editingLock) : KeyPoint
+internal sealed class LockingKeyPoint(KeyPoint inner, Lock editingLock) : KeyPoint, Decorator<KeyPoint>
 {
 	public Tag Tag => inner.Tag;
+	public KeyPoint Inner => inner;
 
 	public Vector2<double> Position
 	{

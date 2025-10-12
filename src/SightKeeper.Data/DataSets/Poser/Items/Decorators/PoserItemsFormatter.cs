@@ -65,8 +65,9 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 			reader.ReadUnmanaged(out byte keyPointTagIndex, out Vector2<double> position);
 			var keyPointTag = keyPointTags[keyPointTagIndex];
 			var keyPoint = item.MakeKeyPoint(keyPointTag);
+			var innermostKeyPoint = keyPoint.GetInnermost<KeyPoint>();
 			keyPointTag.AddUser(keyPoint);
-			keyPoint.Position = position;
+			innermostKeyPoint.Position = position;
 		}
 	}
 }

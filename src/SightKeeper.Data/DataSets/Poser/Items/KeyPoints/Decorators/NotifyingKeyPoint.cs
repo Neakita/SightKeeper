@@ -6,11 +6,12 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Poser.Items.KeyPoints.Decorators;
 
-internal sealed class NotifyingKeyPoint(KeyPoint inner) : KeyPoint, INotifyPropertyChanged
+internal sealed class NotifyingKeyPoint(KeyPoint inner) : KeyPoint, Decorator<KeyPoint>, INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public Tag Tag => inner.Tag;
+	public KeyPoint Inner => inner;
 
 	public Vector2<double> Position
 	{
