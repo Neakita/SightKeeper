@@ -17,6 +17,7 @@ internal sealed class StorablePoserItemFactory(ChangeListener changeListener, Lo
 		return new InMemoryPoserItem(tag, keyPointFactory)
 			.WithTracking(changeListener)
 			.WithLocking(editingLock)
+			.WithObservableKeyPoints()
 			.WithDomainRules()
 			.WithNotifications();
 	}
