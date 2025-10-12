@@ -1,10 +1,11 @@
 ﻿using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.DataSets.Tags;
+namespace SightKeeper.Data.DataSets.Poser.Tags;
 
 internal sealed class PoserTagsFormatter : TagsFormatter<PoserTag>
 {
@@ -28,8 +29,9 @@ internal sealed class PoserTagsFormatter : TagsFormatter<PoserTag>
 		{
 			var poserTag = PlainTagsFormatter.ReadTag(ref reader, tagsLibrary);
 			Guard.IsTrue(reader.TryReadCollectionHeader(out var keyPointTagsCount));
+			var innerPoserTag = poserTag.GetInnermost<PoserTag>();
 			for (int j = 0; j < keyPointTagsCount; j++)
-				PlainTagsFormatter.ReadTag(ref reader, poserTag);
+				PlainTagsFormatter.ReadTag(ref reader, innerPoserTag);
 		}
 	}
 }
