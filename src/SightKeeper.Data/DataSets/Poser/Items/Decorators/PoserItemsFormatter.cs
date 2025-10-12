@@ -22,7 +22,7 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 		{
 			var tagIndex = tagIndexes[item.Tag];
 			writer.WriteUnmanaged(tagIndex, item.Bounding);
-			WriteKeyPoints(writer, tagIndexes, item);
+			WriteKeyPoints(ref writer, tagIndexes, item);
 		}
 	}
 
@@ -52,7 +52,7 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 	}
 
 	private static void WriteKeyPoints<TBufferWriter>(
-		MemoryPackWriter<TBufferWriter> writer,
+		ref MemoryPackWriter<TBufferWriter> writer,
 		IReadOnlyDictionary<Tag, byte> tagIndexes,
 		PoserItem item)
 		where TBufferWriter : IBufferWriter<byte>
