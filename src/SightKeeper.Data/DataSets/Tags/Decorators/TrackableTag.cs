@@ -1,7 +1,7 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.DataSets.Tags;
+namespace SightKeeper.Data.DataSets.Tags.Decorators;
 
 internal sealed class TrackableTag(Tag inner, ChangeListener changeListener) : Tag, Decorator<Tag>
 {

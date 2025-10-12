@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.DataSets.Tags;
+namespace SightKeeper.Data.DataSets.Tags.Decorators;
 
 internal sealed class NotifyingTag(Tag inner) : Tag, Decorator<Tag>, INotifyPropertyChanged
 {

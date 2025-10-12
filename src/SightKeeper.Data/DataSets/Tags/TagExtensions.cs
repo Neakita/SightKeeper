@@ -1,3 +1,4 @@
+using SightKeeper.Data.DataSets.Tags.Decorators;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;

@@ -1,7 +1,7 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.DataSets.Tags;
+namespace SightKeeper.Data.DataSets.Tags.Decorators;
 
 internal sealed class LockingTag(Tag inner, Lock editingLock): Tag, Decorator<Tag>
 {
