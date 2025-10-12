@@ -5,10 +5,10 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Drawing.Poser;
 
-public sealed class KeyPointViewModel : ViewModel, KeyPointDataContext
+public sealed class KeyPointViewModel(PoserItemViewModel item, KeyPoint value) : ViewModel, KeyPointDataContext
 {
-	public PoserItemViewModel Item { get; }
-	public KeyPoint Value { get; }
+	public PoserItemViewModel Item => item;
+	public KeyPoint Value => value;
 	public Tag Tag => Value.Tag;
 
 	public Vector2<double> Position
@@ -20,13 +20,7 @@ public sealed class KeyPointViewModel : ViewModel, KeyPointDataContext
 	public string Name => Tag.Name;
 	public Color Color => Color.FromUInt32(Tag.Color);
 
-	public KeyPointViewModel(PoserItemViewModel item, KeyPoint value)
-	{
-		Item = item;
-		Value = value;
-	}
-
-	private void SetKeyPointPosition(KeyPoint keyPoint, Vector2<double> position)
+	private static void SetKeyPointPosition(KeyPoint keyPoint, Vector2<double> position)
 	{
 		keyPoint.Position = position;
 	}
