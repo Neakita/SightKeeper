@@ -7,7 +7,7 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Data.DataSets.Poser.Items;
+namespace SightKeeper.Data.DataSets.Poser.Items.Decorators;
 
 internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 {
@@ -39,15 +39,7 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 			innermostItem.Tag = poserTag;
 			tag.AddUser(item);
 			innermostItem.Bounding = bounding;
-			Guard.IsTrue(reader.TryReadCollectionHeader(out var keyPointsCount));
-			for (int j = 0; j < keyPointsCount; j++)
-			{
-				reader.ReadUnmanaged(out byte keyPointTagIndex, out Vector2<double> position);
-				var keyPointTag = poserTag.KeyPointTags[keyPointTagIndex];
-				var keyPoint = item.MakeKeyPoint(keyPointTag);
-				keyPointTag.AddUser(keyPoint);
-				keyPoint.Position = position;
-			}
+			ReadKeyPoints(ref reader, poserTag.KeyPointTags, innermostItem);
 		}
 	}
 
@@ -62,6 +54,19 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 		{
 			var keyPointTagIndex = tagIndexes[item.Tag];
 			writer.WriteUnmanaged(keyPointTagIndex, keyPoint.Position);
+		}
+	}
+
+	private static void ReadKeyPoints(ref MemoryPackReader reader, IReadOnlyList<Tag> keyPointTags, PoserItem item)
+	{
+		Guard.IsTrue(reader.TryReadCollectionHeader(out var keyPointsCount));
+		for (int j = 0; j < keyPointsCount; j++)
+		{
+			reader.ReadUnmanaged(out byte keyPointTagIndex, out Vector2<double> position);
+			var keyPointTag = keyPointTags[keyPointTagIndex];
+			var keyPoint = item.MakeKeyPoint(keyPointTag);
+			keyPointTag.AddUser(keyPoint);
+			keyPoint.Position = position;
 		}
 	}
 }
