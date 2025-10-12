@@ -10,8 +10,9 @@ using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Classifier;
 using SightKeeper.Data.DataSets.Detector;
 using SightKeeper.Data.DataSets.Poser;
-using SightKeeper.Data.DataSets.Poser.Items;
+using SightKeeper.Data.DataSets.Poser.Items.Decorators;
 using SightKeeper.Data.DataSets.Poser.Items.KeyPoints;
+using SightKeeper.Data.DataSets.Poser.Tags;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.ImageSets.Images;
@@ -22,6 +23,7 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Png;
 
 namespace SightKeeper.Data;
@@ -176,7 +178,8 @@ public static class PersistenceExtensions
 			return new StorableImageWrapper(dataAccess);
 		}).As<ImageWrapper>();
 
-		builder.RegisterType<PngEncoder>();
+		builder.RegisterType<PngEncoder>()
+			.As<IImageEncoder>();
 
 		builder.RegisterGeneric(typeof(ImageSharpImageDataSaver<>))
 			.As(typeof(ImageDataSaver<>));
