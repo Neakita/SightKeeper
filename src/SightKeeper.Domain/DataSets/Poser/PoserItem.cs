@@ -6,7 +6,7 @@ namespace SightKeeper.Domain.DataSets.Poser;
 public interface PoserItem : DetectorItem
 {
 	new PoserTag Tag { get; set; }
-	IReadOnlyCollection<KeyPoint> KeyPoints { get; }
+	IReadOnlyList<KeyPoint> KeyPoints { get; }
 	KeyPoint MakeKeyPoint(Tag tag);
 	void DeleteKeyPoint(KeyPoint keyPoint);
 	void ClearKeyPoints();

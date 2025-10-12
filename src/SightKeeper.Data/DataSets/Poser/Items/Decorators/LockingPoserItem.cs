@@ -19,7 +19,7 @@ internal sealed class LockingPoserItem(PoserItem inner, Lock editingLock) : Pose
 		set => inner.Tag = value;
 	}
 
-	public IReadOnlyCollection<KeyPoint> KeyPoints => inner.KeyPoints;
+	public IReadOnlyList<KeyPoint> KeyPoints => inner.KeyPoints;
 	public PoserItem Inner => inner;
 
 	public KeyPoint MakeKeyPoint(Tag tag)

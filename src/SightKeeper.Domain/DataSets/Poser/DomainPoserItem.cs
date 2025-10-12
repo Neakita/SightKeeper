@@ -26,7 +26,7 @@ public sealed class DomainPoserItem(PoserItem inner) : PoserItem, Decorator<Pose
 		}
 	}
 
-	public IReadOnlyCollection<KeyPoint> KeyPoints => inner.KeyPoints;
+	public IReadOnlyList<KeyPoint> KeyPoints => inner.KeyPoints;
 	public PoserItem Inner => inner;
 
 	public KeyPoint MakeKeyPoint(Tag tag)

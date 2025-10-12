@@ -27,7 +27,7 @@ internal sealed class TrackablePoserItem(PoserItem inner, ChangeListener listene
 		}
 	}
 
-	public IReadOnlyCollection<KeyPoint> KeyPoints => inner.KeyPoints;
+	public IReadOnlyList<KeyPoint> KeyPoints => inner.KeyPoints;
 	public PoserItem Inner => inner;
 
 	public KeyPoint MakeKeyPoint(Tag tag)

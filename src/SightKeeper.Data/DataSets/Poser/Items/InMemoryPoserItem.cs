@@ -10,7 +10,7 @@ internal sealed class InMemoryPoserItem(PoserTag tag, KeyPointFactory keyPointFa
 {
 	public Bounding Bounding { get; set; }
 	public PoserTag Tag { get; set; } = tag;
-	public IReadOnlyCollection<KeyPoint> KeyPoints => _keyPoints;
+	public IReadOnlyList<KeyPoint> KeyPoints => _keyPoints;
 
 	public KeyPoint MakeKeyPoint(Tag tag)
 	{
@@ -30,5 +30,5 @@ internal sealed class InMemoryPoserItem(PoserTag tag, KeyPointFactory keyPointFa
 		_keyPoints.Clear();
 	}
 
-	private List<KeyPoint> _keyPoints = new();
+	private readonly List<KeyPoint> _keyPoints = new();
 }
