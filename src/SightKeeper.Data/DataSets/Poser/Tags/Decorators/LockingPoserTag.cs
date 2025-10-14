@@ -31,16 +31,6 @@ internal sealed class LockingPoserTag(PoserTag inner, Lock editingLock) : PoserT
 		}
 	}
 
-	public void AddUser(TagUser user)
-	{
-		inner.AddUser(user);
-	}
-
-	public void RemoveUser(TagUser user)
-	{
-		inner.RemoveUser(user);
-	}
-
 	public Tag CreateKeyPointTag(string name)
 	{
 		lock (editingLock)

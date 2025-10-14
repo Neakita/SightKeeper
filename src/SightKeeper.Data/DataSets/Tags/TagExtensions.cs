@@ -19,4 +19,9 @@ internal static class TagExtensions
 	{
 		return new NotifyingTag(tag);
 	}
+
+	public static Tag WithEditableUsers(this Tag tag)
+	{
+		return new EditableUsersTag(tag);
+	}
 }

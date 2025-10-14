@@ -1,3 +1,4 @@
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 
@@ -27,14 +28,14 @@ internal sealed class TagUsersTrackingClassifierAssetsLibrary(AssetsOwner<Classi
 	public void ClearAssets()
 	{
 		foreach (var asset in Assets)
-			asset.Tag.RemoveUser(asset);
+			asset.Tag.Get<EditableTagUsers>().RemoveUser(asset);
 		inner.ClearAssets();
 	}
 
 	public ClassifierAsset MakeAsset(ManagedImage image)
 	{
 		var asset = inner.MakeAsset(image);
-		asset.Tag.AddUser(asset);
+		asset.Tag.Get<EditableTagUsers>().AddUser(asset);
 		return asset;
 	}
 
@@ -42,6 +43,6 @@ internal sealed class TagUsersTrackingClassifierAssetsLibrary(AssetsOwner<Classi
 	{
 		var asset = GetAsset(image);
 		inner.DeleteAsset(image);
-		asset.Tag.RemoveUser(asset);
+		asset.Tag.Get<EditableTagUsers>().RemoveUser(asset);
 	}
 }

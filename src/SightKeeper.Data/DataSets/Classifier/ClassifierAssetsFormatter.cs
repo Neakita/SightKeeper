@@ -3,7 +3,7 @@ using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets;
-using SightKeeper.Domain;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
@@ -34,7 +34,7 @@ internal sealed class ClassifierAssetsFormatter(ImageLookupper imageLookupper) :
 			var tag = set.TagsLibrary.Tags[tagIndex];
 			var innermostAsset = asset.GetInnermost<ClassifierAsset>();
 			innermostAsset.Tag = tag;
-			tag.AddUser(asset);
+			tag.Get<EditableTagUsers>().AddUser(asset);
 			innermostAsset.Usage = usage;
 		}
 	}

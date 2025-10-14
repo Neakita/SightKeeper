@@ -35,16 +35,6 @@ internal sealed class NotifyingPoserTag(PoserTag inner) : PoserTag, Decorator<Po
 		}
 	}
 
-	public void AddUser(TagUser user)
-	{
-		inner.AddUser(user);
-	}
-
-	public void RemoveUser(TagUser user)
-	{
-		inner.RemoveUser(user);
-	}
-
 	public Tag CreateKeyPointTag(string name)
 	{
 		return inner.CreateKeyPointTag(name);

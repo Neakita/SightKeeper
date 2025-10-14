@@ -19,4 +19,9 @@ internal static class PoserTagExtensions
 	{
 		return new NotifyingPoserTag(tag);
 	}
+
+	public static PoserTag WithEditableUsers(this PoserTag tag)
+	{
+		return new EditableUsersPoserTag(tag);
+	}
 }

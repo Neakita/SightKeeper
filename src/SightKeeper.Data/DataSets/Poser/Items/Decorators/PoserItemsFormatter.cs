@@ -2,6 +2,7 @@
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets.Items;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
@@ -37,7 +38,7 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 			var tag = tags[tagIndex];
 			var poserTag = (PoserTag)tag;
 			innermostItem.Tag = poserTag;
-			tag.AddUser(item);
+			tag.Get<EditableTagUsers>().AddUser(item);
 			innermostItem.Bounding = bounding;
 			ReadKeyPoints(ref reader, poserTag.KeyPointTags, innermostItem);
 		}
@@ -66,7 +67,7 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 			var keyPointTag = keyPointTags[keyPointTagIndex];
 			var keyPoint = item.MakeKeyPoint(keyPointTag);
 			var innermostKeyPoint = keyPoint.GetInnermost<KeyPoint>();
-			keyPointTag.AddUser(keyPoint);
+			keyPointTag.Get<EditableTagUsers>().AddUser(keyPoint);
 			innermostKeyPoint.Position = position;
 		}
 	}

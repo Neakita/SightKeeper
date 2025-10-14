@@ -21,6 +21,7 @@ internal sealed class StorablePoserTagFactory(ChangeListener changeListener, Loc
 		var wrappedTag = inMemoryTag
 			.WithTracking(changeListener)
 			.WithLocking(editingLock)
+			.WithEditableUsers()
 			.WithNotifications();
 		keyPointTagFactory.TagsOwner = wrappedTag;
 		return wrappedTag;

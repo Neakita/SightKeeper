@@ -33,16 +33,6 @@ internal sealed class NotifyingTag(Tag inner) : Tag, Decorator<Tag>, INotifyProp
 	public IReadOnlyCollection<TagUser> Users => inner.Users;
 	public Tag Inner => inner;
 
-	public void AddUser(TagUser user)
-	{
-		inner.AddUser(user);
-	}
-
-	public void RemoveUser(TagUser user)
-	{
-		inner.RemoveUser(user);
-	}
-
 	private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

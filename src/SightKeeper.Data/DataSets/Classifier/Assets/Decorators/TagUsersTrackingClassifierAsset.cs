@@ -1,4 +1,5 @@
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
@@ -26,9 +27,9 @@ internal sealed class TagUsersTrackingClassifierAsset(ClassifierAsset inner) : C
 			if (Tag == value)
 				return;
 			Guard.IsNotNull(TagUser);
-			Tag.RemoveUser(TagUser);
+			Tag.Get<EditableTagUsers>().RemoveUser(TagUser);
 			inner.Tag = value;
-			Tag.AddUser(TagUser);
+			Tag.Get<EditableTagUsers>().AddUser(TagUser);
 		}
 	}
 

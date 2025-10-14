@@ -2,6 +2,7 @@
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets.Items;
+using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -29,7 +30,7 @@ internal sealed class DetectorItemsFormatter : ItemsFormatter<DetectorItem>
 			var innermostItem = item.GetInnermost<DetectorItem>();
 			var tag = tags[tagIndex];
 			innermostItem.Tag = tag;
-			tag.AddUser(item);
+			tag.Get<EditableTagUsers>().AddUser(item);
 			innermostItem.Bounding = bounding;
 		}
 	}

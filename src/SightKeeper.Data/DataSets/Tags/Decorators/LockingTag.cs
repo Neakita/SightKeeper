@@ -28,14 +28,4 @@ internal sealed class LockingTag(Tag inner, Lock editingLock): Tag, Decorator<Ta
 	public TagsContainer<Tag> Owner => inner.Owner;
 	public IReadOnlyCollection<TagUser> Users => inner.Users;
 	public Tag Inner => inner;
-
-	public void AddUser(TagUser user)
-	{
-		inner.AddUser(user);
-	}
-
-	public void RemoveUser(TagUser user)
-	{
-		inner.RemoveUser(user);
-	}
 }
