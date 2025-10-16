@@ -27,9 +27,9 @@ internal sealed class TagUsersTrackingClassifierAsset(ClassifierAsset inner) : C
 			if (Tag == value)
 				return;
 			Guard.IsNotNull(TagUser);
-			Tag.Get<EditableTagUsers>().RemoveUser(TagUser);
+			Tag.GetFirst<EditableTagUsers>().RemoveUser(TagUser);
 			inner.Tag = value;
-			Tag.Get<EditableTagUsers>().AddUser(TagUser);
+			Tag.GetFirst<EditableTagUsers>().AddUser(TagUser);
 		}
 	}
 

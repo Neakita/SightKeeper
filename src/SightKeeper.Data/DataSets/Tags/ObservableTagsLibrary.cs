@@ -3,7 +3,7 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class ObservableTagsLibrary<TTag>(TagsOwner<TTag> inner) : TagsOwner<TTag>
+internal sealed class ObservableTagsLibrary<TTag>(TagsOwner<TTag> inner) : TagsOwner<TTag>, IDisposable
 {
 	public IReadOnlyList<TTag> Tags => _tags;
 
@@ -30,6 +30,11 @@ internal sealed class ObservableTagsLibrary<TTag>(TagsOwner<TTag> inner) : TagsO
 			Items = [tag]
 		};
 		_tags.Notify(change);
+	}
+
+	public void Dispose()
+	{
+		_tags.Dispose();
 	}
 
 	private readonly ExternalObservableList<TTag> _tags = new(inner.Tags);

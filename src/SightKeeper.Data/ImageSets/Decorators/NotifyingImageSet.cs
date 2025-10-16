@@ -56,11 +56,6 @@ internal sealed class NotifyingImageSet(ImageSet inner) : ImageSet, Decorator<Im
 		inner.RemoveImagesRange(index, count);
 	}
 
-	public void Dispose()
-	{
-		inner.Dispose();
-	}
-
 	private void OnPropertyChanged([CallerMemberName] string propertyName = "")
 	{
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

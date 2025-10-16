@@ -4,7 +4,7 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal sealed class ObservableAssetsLibrary<TAsset>(AssetsOwner<TAsset> inner) : AssetsOwner<TAsset>
+internal sealed class ObservableAssetsLibrary<TAsset>(AssetsOwner<TAsset> inner) : AssetsOwner<TAsset>, IDisposable
 {
 	public IReadOnlyCollection<TAsset> Assets => _assets;
 	public IReadOnlyCollection<ManagedImage> Images => _images;
@@ -59,6 +59,12 @@ internal sealed class ObservableAssetsLibrary<TAsset>(AssetsOwner<TAsset> inner)
 		};
 		_assets.Notify(assetsChange);
 		_images.Notify(imagesChange);
+	}
+
+	public void Dispose()
+	{
+		_assets.Dispose();
+		_images.Dispose();
 	}
 
 	private readonly ExternalObservableCollection<TAsset> _assets = new(inner.Assets);

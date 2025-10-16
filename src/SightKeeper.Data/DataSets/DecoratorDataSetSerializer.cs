@@ -10,7 +10,7 @@ internal sealed class DecoratorDataSetSerializer : Serializer<DataSet<Tag, Asset
 {
 	public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, DataSet<Tag, Asset> set) where TBufferWriter : IBufferWriter<byte>
 	{
-		var serializable = set.Get<MemoryPackSerializable>();
+		var serializable = set.GetFirst<MemoryPackSerializable>();
 		serializable.Serialize(ref writer);
 	}
 }

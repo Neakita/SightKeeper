@@ -3,6 +3,7 @@
 namespace SightKeeper.Data.Services;
 
 internal sealed class InMemoryRepository<T>(Lock editingLock, ChangeListener changeListener) : Repository<T>, ShortcutWriteRepository<T>
+	where T : notnull
 {
 	public IReadOnlyCollection<T> Items => _items;
 	public IObservable<T> Added => _added;
@@ -32,9 +33,9 @@ internal sealed class InMemoryRepository<T>(Lock editingLock, ChangeListener cha
 		}
 		if (item is DeletableData removableData)
 			removableData.DeleteData();
-		_removed.OnNext(item);
-		if (item is IDisposable disposable)
+		foreach (var disposable in item.Get<IDisposable>())
 			disposable.Dispose();
+		_removed.OnNext(item);
 	}
 
 	public void Dispose()

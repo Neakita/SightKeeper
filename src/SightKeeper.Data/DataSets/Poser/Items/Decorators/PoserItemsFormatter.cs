@@ -38,7 +38,7 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 			var tag = tags[tagIndex];
 			var poserTag = (PoserTag)tag;
 			innermostItem.Tag = poserTag;
-			tag.Get<EditableTagUsers>().AddUser(item);
+			tag.GetFirst<EditableTagUsers>().AddUser(item);
 			innermostItem.Bounding = bounding;
 			ReadKeyPoints(ref reader, poserTag.KeyPointTags, innermostItem);
 		}
@@ -67,7 +67,7 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 			var keyPointTag = keyPointTags[keyPointTagIndex];
 			var keyPoint = item.MakeKeyPoint(keyPointTag);
 			var innermostKeyPoint = keyPoint.GetInnermost<KeyPoint>();
-			keyPointTag.Get<EditableTagUsers>().AddUser(keyPoint);
+			keyPointTag.GetFirst<EditableTagUsers>().AddUser(keyPoint);
 			innermostKeyPoint.Position = position;
 		}
 	}

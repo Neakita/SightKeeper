@@ -5,7 +5,7 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class ObservableWeightsLibrary(WeightsLibrary inner) : WeightsLibrary, Decorator<WeightsLibrary>
+internal sealed class ObservableWeightsLibrary(WeightsLibrary inner) : WeightsLibrary, Decorator<WeightsLibrary>, IDisposable
 {
 	public IReadOnlyCollection<WeightsData> Weights => _weights;
 	public WeightsLibrary Inner => inner;
@@ -29,6 +29,11 @@ internal sealed class ObservableWeightsLibrary(WeightsLibrary inner) : WeightsLi
 			Items = [weights]
 		};
 		_weights.Notify(change);
+	}
+
+	public void Dispose()
+	{
+		_weights.Dispose();
 	}
 
 	private readonly ExternalObservableCollection<WeightsData> _weights = new(inner.Weights);

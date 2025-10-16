@@ -53,9 +53,4 @@ internal sealed class TrackableImageSet(ImageSet inner, ChangeListener changeLis
 		inner.RemoveImagesRange(index, count);
 		changeListener.SetDataChanged();
 	}
-
-	public void Dispose()
-	{
-		inner.Dispose();
-	}
 }

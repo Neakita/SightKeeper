@@ -28,14 +28,14 @@ internal sealed class TagUsersTrackingClassifierAssetsLibrary(AssetsOwner<Classi
 	public void ClearAssets()
 	{
 		foreach (var asset in Assets)
-			asset.Tag.Get<EditableTagUsers>().RemoveUser(asset);
+			asset.Tag.GetFirst<EditableTagUsers>().RemoveUser(asset);
 		inner.ClearAssets();
 	}
 
 	public ClassifierAsset MakeAsset(ManagedImage image)
 	{
 		var asset = inner.MakeAsset(image);
-		asset.Tag.Get<EditableTagUsers>().AddUser(asset);
+		asset.Tag.GetFirst<EditableTagUsers>().AddUser(asset);
 		return asset;
 	}
 
@@ -43,6 +43,6 @@ internal sealed class TagUsersTrackingClassifierAssetsLibrary(AssetsOwner<Classi
 	{
 		var asset = GetAsset(image);
 		inner.DeleteAsset(image);
-		asset.Tag.Get<EditableTagUsers>().RemoveUser(asset);
+		asset.Tag.GetFirst<EditableTagUsers>().RemoveUser(asset);
 	}
 }

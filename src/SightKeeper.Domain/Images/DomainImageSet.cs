@@ -55,11 +55,6 @@ public sealed class DomainImageSet(ImageSet inner) : ImageSet, Decorator<ImageSe
 		inner.RemoveImagesRange(index, count);
 	}
 
-	public void Dispose()
-	{
-		inner.Dispose();
-	}
-
 	private static void ValidateImageSize(Vector2<ushort> size)
 	{
 		ValidateImageSize(size.X);

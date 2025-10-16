@@ -30,7 +30,7 @@ internal sealed class DetectorItemsFormatter : ItemsFormatter<DetectorItem>
 			var innermostItem = item.GetInnermost<DetectorItem>();
 			var tag = tags[tagIndex];
 			innermostItem.Tag = tag;
-			tag.Get<EditableTagUsers>().AddUser(item);
+			tag.GetFirst<EditableTagUsers>().AddUser(item);
 			innermostItem.Bounding = bounding;
 		}
 	}

@@ -6,7 +6,7 @@ namespace SightKeeper.Data.ImageSets.Decorators;
 
 // could be named ObservableImageSet,
 // but I want to specify it handles only Images observability
-internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet, Decorator<ImageSet>
+internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet, Decorator<ImageSet>, IDisposable
 {
 	public string Name
 	{
@@ -77,7 +77,6 @@ internal sealed class ObservableImagesImageSet(ImageSet inner) : ImageSet, Decor
 	public void Dispose()
 	{
 		_images.Dispose();
-		inner.Dispose();
 	}
 
 	private readonly ExternalObservableList<ManagedImage> _images = new(inner.Images);

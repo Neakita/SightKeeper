@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Decorators;
 
-internal sealed class PopulateImageLookupperImageSet(ImageSet inner, ImageLookupperPopulator populator) : ImageSet, Decorator<ImageSet>
+internal sealed class PopulateImageLookupperImageSet(ImageSet inner, ImageLookupperPopulator populator) : ImageSet, Decorator<ImageSet>, IDisposable
 {
 	public string Name
 	{
@@ -53,6 +53,5 @@ internal sealed class PopulateImageLookupperImageSet(ImageSet inner, ImageLookup
 	{
 		foreach (var image in Images)
 			populator.RemoveImage(image);
-		inner.Dispose();
 	}
 }

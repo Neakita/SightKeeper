@@ -51,9 +51,4 @@ internal sealed class LockingImageSet(ImageSet inner, Lock editingLock) : ImageS
 		lock (editingLock)
 			inner.RemoveImagesRange(index, count);
 	}
-
-	public void Dispose()
-	{
-		inner.Dispose();
-	}
 }

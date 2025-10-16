@@ -95,15 +95,6 @@ public sealed class DomainImageSetTests
 	}
 
 	[Fact]
-	public void ShouldDisposeInner()
-	{
-		var innerSet = Substitute.For<ImageSet>();
-		var domainSet = new DomainImageSet(innerSet);
-		domainSet.Dispose();
-		innerSet.Received().Dispose();
-	}
-
-	[Fact]
 	public void ShouldGetNameFromInner()
 	{
 		var innerSet = Substitute.For<ImageSet>();

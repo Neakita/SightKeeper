@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Decorators;
 
-internal sealed class DisposingImageSet(ImageSet inner) : ImageSet, Decorator<ImageSet>
+internal sealed class DisposingImageSet(ImageSet inner) : ImageSet, Decorator<ImageSet>, IDisposable
 {
 	public string Name
 	{
@@ -51,6 +51,5 @@ internal sealed class DisposingImageSet(ImageSet inner) : ImageSet, Decorator<Im
 	{
 		foreach (var image in Images)
 			image.Dispose();
-		inner.Dispose();
 	}
 }

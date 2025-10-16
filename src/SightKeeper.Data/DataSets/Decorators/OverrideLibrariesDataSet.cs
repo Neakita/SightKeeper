@@ -6,7 +6,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
-internal sealed class OverrideLibrariesDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner) : DataSet<TTag, TAsset>, Decorator<DataSet<TTag, TAsset>>
+internal sealed class OverrideLibrariesDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner) : DataSet<TTag, TAsset>, Decorator<DataSet<TTag, TAsset>>, IDisposable
 {
 	public string Name
 	{
@@ -24,4 +24,15 @@ internal sealed class OverrideLibrariesDataSet<TTag, TAsset>(DataSet<TTag, TAsse
 	public AssetsOwner<TAsset> AssetsLibrary { get; init; } = inner.AssetsLibrary;
 	public WeightsLibrary WeightsLibrary { get; init; } = inner.WeightsLibrary;
 	public DataSet<TTag, TAsset> Inner => inner;
+
+	public void Dispose()
+	{
+		Dispose(TagsLibrary, AssetsLibrary, WeightsLibrary);
+	}
+
+	private static void Dispose(params IEnumerable<object> objects)
+	{
+		foreach (var disposable in objects.OfType<IDisposable>())
+			disposable.Dispose();
+	}
 }

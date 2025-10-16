@@ -2,7 +2,7 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data.ImageSets;
+namespace SightKeeper.Data.ImageSets.Decorators;
 
 internal sealed class DeletableDataImageSet(ImageSet inner) : ImageSet, DeletableData, Decorator<ImageSet>
 {
@@ -45,10 +45,5 @@ internal sealed class DeletableDataImageSet(ImageSet inner) : ImageSet, Deletabl
 	public void RemoveImagesRange(int index, int count)
 	{
 		inner.RemoveImagesRange(index, count);
-	}
-
-	public void Dispose()
-	{
-		inner.Dispose();
 	}
 }

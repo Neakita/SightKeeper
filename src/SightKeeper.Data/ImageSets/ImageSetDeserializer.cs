@@ -34,7 +34,7 @@ internal sealed class ImageSetDeserializer(
 
 	private void ReadImages(ref MemoryPackReader reader, ImageSet set)
 	{
-		var settableInitialImages = set.Get<SettableInitialItems<ManagedImage>>();
+		var settableInitialImages = set.GetFirst<SettableInitialItems<ManagedImage>>();
 		var images = imagesDeserializer.Deserialize(ref reader);
 		settableInitialImages.EnsureCapacity(images.Count);
 		foreach (var image in images)

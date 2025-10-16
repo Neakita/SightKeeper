@@ -44,11 +44,6 @@ internal sealed class ImagesDataRemovingImageSet(ImageSet inner) : ImageSet, Dec
 		inner.RemoveImagesRange(index, count);
 	}
 
-	public void Dispose()
-	{
-		inner.Dispose();
-	}
-
 	private void DeleteDataAt(int index)
 	{
 		var image = Images[index];

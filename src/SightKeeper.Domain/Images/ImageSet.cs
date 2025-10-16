@@ -1,6 +1,6 @@
 namespace SightKeeper.Domain.Images;
 
-public interface ImageSet : IDisposable
+public interface ImageSet
 {
 	string Name { get; set; }
 	string Description { get; set; }

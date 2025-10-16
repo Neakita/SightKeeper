@@ -37,10 +37,6 @@ internal sealed class InMemoryImageSet(ImageWrapper imageWrapper) : ImageSet, Se
 		_images.RemoveRange(index, count);
 	}
 
-	public void Dispose()
-	{
-	}
-
 	public ManagedImage WrapAndInsert(ManagedImage image)
 	{
 		var index = _images.BinarySearch(image, ImageCreationTimestampComparer.Instance);

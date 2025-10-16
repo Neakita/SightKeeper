@@ -9,12 +9,17 @@ internal static class Extensions
 {
 	public static T GetInnermost<T>(this object obj)
 	{
-		return obj.GetSelfAndChildren().OfType<T>().Last();
+		return obj.Get<T>().Last();
 	}
 
-	public static T Get<T>(this object obj)
+	public static T GetFirst<T>(this object obj)
 	{
-		return obj.GetSelfAndChildren().OfType<T>().First();
+		return obj.Get<T>().First();
+	}
+
+	public static IEnumerable<T> Get<T>(this object obj)
+	{
+		return obj.GetSelfAndChildren().OfType<T>();
 	}
 
 	private static IEnumerable<object> GetSelfAndChildren(this object obj)

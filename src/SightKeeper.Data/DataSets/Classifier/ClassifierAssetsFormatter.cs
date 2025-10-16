@@ -34,7 +34,7 @@ internal sealed class ClassifierAssetsFormatter(ImageLookupper imageLookupper) :
 			var tag = set.TagsLibrary.Tags[tagIndex];
 			var innermostAsset = asset.GetInnermost<ClassifierAsset>();
 			innermostAsset.Tag = tag;
-			tag.Get<EditableTagUsers>().AddUser(asset);
+			tag.GetFirst<EditableTagUsers>().AddUser(asset);
 			innermostAsset.Usage = usage;
 		}
 	}
