@@ -36,12 +36,11 @@ public static class PersistenceExtensions
 		builder.AddWrappers();
 		builder.AddFactories();
 		builder.AddFormatters();
+		builder.AddSerializers();
 		builder.AddDeserializers();
 		builder.AddPng();
 
-		builder.RegisterType<AppDataAccess>()
-			.SingleInstance()
-			.AsSelf()
+		builder.RegisterType<MemoryPackDataSaver>()
 			.As<DataSaver>();
 
 		builder.RegisterType<PopulatableImageLookupper>()
@@ -63,30 +62,21 @@ public static class PersistenceExtensions
 			.SingleInstance()
 			.AsSelf()
 			.As<ChangeListener>();
+
+		builder.RegisterType<MemoryPackDataLoader>()
+			.As<DataLoader>();
 	}
 
 	private static void AddRepositories(this ContainerBuilder builder)
 	{
-		builder.AddImageSetsRepository();
-		builder.AddDataSetsRepository();
-	}
-
-	private static void AddImageSetsRepository(this ContainerBuilder builder)
-	{
-		builder.RegisterType<AppDataImageSetsRepository>()
+		builder.RegisterGeneric(typeof(InMemoryRepository<>))
 			.SingleInstance()
-			.As<WriteRepository<ImageSet>>()
-			.As<ReadRepository<ImageSet>>()
-			.As<ObservableRepository<ImageSet>>();
-	}
-
-	private static void AddDataSetsRepository(this ContainerBuilder builder)
-	{
-		builder.RegisterType<AppDataDataSetsRepository>()
-			.SingleInstance()
-			.As<WriteRepository<DataSet<Tag, Asset>>>()
-			.As<ReadRepository<DataSet<Tag, Asset>>>()
-			.As<ObservableRepository<DataSet<Tag, Asset>>>();
+			.As(typeof(Repository<>))
+			.As(typeof(WriteRepository<>))
+			.As(typeof(ReadRepository<>))
+			.As(typeof(ObservableRepository<>))
+			.As(typeof(ShortcutWriteRepository<>));
+		builder.RegisterDecorator<EnsureCanDeleteImageSetRepository, Repository<ImageSet>>();
 	}
 
 	private static void AddWrappers(this ContainerBuilder builder)
@@ -126,9 +116,6 @@ public static class PersistenceExtensions
 
 	private static void AddFormatters(this ContainerBuilder builder)
 	{
-		builder.RegisterType<TypeSwitchAssetsFormatter>()
-			.As<AssetsFormatter<Asset>>();
-
 		builder.RegisterType<ClassifierAssetsFormatter>()
 			.As<AssetsFormatter<ClassifierAsset>>();
 
@@ -149,21 +136,56 @@ public static class PersistenceExtensions
 
 		builder.RegisterType<PoserTagsFormatter>()
 			.As<TagsFormatter<PoserTag>>();
+	}
 
-		builder.RegisterType<ImageSetFormatter>();
-		builder.RegisterType<DataSetFormatter>();
+	private static void AddSerializers(this ContainerBuilder builder)
+	{
+		builder.RegisterType<ReadOnlyCollectionSerializer<ImageSet>>()
+			.As<Serializer<IReadOnlyCollection<ImageSet>>>();
+
+		builder.RegisterType<ImageSetSerializer>()
+			.As<Serializer<ImageSet>>();
+
+		builder.RegisterType<ReadOnlyCollectionSerializer<DataSet<Tag, Asset>>>()
+			.As<Serializer<IReadOnlyCollection<DataSet<Tag, Asset>>>>();
+
+		builder.RegisterType<DecoratorDataSetSerializer>()
+			.As<Serializer<DataSet<Tag, Asset>>>();
+
+		builder.RegisterType<ReadOnlyCollectionSerializer<ManagedImage>>()
+			.As<Serializer<IReadOnlyCollection<ManagedImage>>>();
+
+		builder.RegisterType<ImageSerializer>()
+			.As<Serializer<ManagedImage>>();
 	}
 
 	private static void AddDeserializers(this ContainerBuilder builder)
 	{
-		builder.RegisterType<MemoryPackDataSetDeserializer<Tag, ClassifierAsset>>()
-			.As<MemoryPackDataSetDeserializer>();
+		builder.RegisterType<DataSetDeserializer<Tag, ClassifierAsset>>()
+			.As<Deserializer<DataSet<Tag, Asset>>>();
 
-		builder.RegisterType<MemoryPackDataSetDeserializer<Tag, ItemsAsset<DetectorItem>>>()
-			.As<MemoryPackDataSetDeserializer>();
+		builder.RegisterType<DataSetDeserializer<Tag, ItemsAsset<DetectorItem>>>()
+			.As<Deserializer<DataSet<Tag, Asset>>>();
 
-		builder.RegisterType<MemoryPackDataSetDeserializer<PoserTag, ItemsAsset<PoserItem>>>()
-			.As<MemoryPackDataSetDeserializer>();
+		builder.RegisterType<DataSetDeserializer<PoserTag, ItemsAsset<PoserItem>>>()
+			.As<Deserializer<DataSet<Tag, Asset>>>();
+
+		builder.RegisterComposite<UnionTagSelectorDataSetDeserializer, Deserializer<DataSet<Tag, Asset>>>();
+
+		builder.RegisterType<ReadOnlyCollectionDeserializer<ImageSet>>()
+			.As<Deserializer<IEnumerable<ImageSet>>>();
+
+		builder.RegisterType<ReadOnlyCollectionDeserializer<DataSet<Tag, Asset>>>()
+			.As<Deserializer<IEnumerable<DataSet<Tag, Asset>>>>();
+
+		builder.RegisterType<ImageSetDeserializer>()
+			.As<Deserializer<ImageSet>>();
+
+		builder.RegisterType<ReadOnlyCollectionDeserializer<ManagedImage>>()
+			.As<Deserializer<IReadOnlyCollection<ManagedImage>>>();
+
+		builder.RegisterType<ImageDeserializer>()
+			.As<Deserializer<ManagedImage>>();
 	}
 
 	private static void AddPng(this ContainerBuilder builder)

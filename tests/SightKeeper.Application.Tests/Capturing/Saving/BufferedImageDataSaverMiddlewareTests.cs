@@ -22,7 +22,7 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		for (int i = 0; i < 10; i++)
 			middleware.SaveData(image, pixels);
 		// first call data dequeues nearly instantly
-		Thread.Sleep(1);
+		Thread.Sleep(50);
 		middleware.PendingImagesCount.Value.Should().Be(9);
 	}
 
@@ -32,10 +32,12 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		var middleware = CreateMiddleware(10, out var imageSaver);
 		var pixels = CreateRandomPixels(320, 320);
 		imageSaver.HoldCalls = true;
-		// first call data will be dequeued even when calls halt
 		var image = Substitute.For<ManagedImage>();
 		image.Size.Returns(new Vector2<ushort>(320, 320));
+		// first call data will be dequeued even when calls halt
 		middleware.SaveData(image, pixels);
+		// starting process might take some time
+		Thread.Sleep(50);
 		for (int i = 0; i < 10; i++)
 			middleware.SaveData(image, pixels);
 		middleware.IsLimitReached.Should().BeTrue();
@@ -51,7 +53,6 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		image.Size.Returns(new Vector2<ushort>(320, 320));
 		for (int i = 0; i < 10; i++)
 			middleware.SaveData(image, pixels);
-
 		imageSaver.HoldCalls = false;
 		Thread.Sleep(100);
 		middleware.PendingImagesCount.Value.Should().Be(0);
@@ -66,10 +67,7 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		var image = Substitute.For<ManagedImage>();
 		image.Size.Returns(new Vector2<ushort>(320, 320));
 		for (int i = 0; i < 10; i++)
-		{
 			middleware.SaveData(image, pixels);
-		}
-
 		imageSaver.HoldCalls = false;
 		Thread.Sleep(100);
 		imageSaver.ReceivedCalls.Should().HaveCount(10);
@@ -82,7 +80,6 @@ public sealed class BufferedImageDataSaverMiddlewareTests
 		{
 			Next = imageSaver,
 			ArrayPool = ArrayPool<Rgba32>.Create()
-
 		};
 		return middleware;
 	}

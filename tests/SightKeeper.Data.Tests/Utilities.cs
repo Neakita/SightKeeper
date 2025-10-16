@@ -1,35 +1,25 @@
 using System.Buffers;
-using CommunityToolkit.Diagnostics;
 using MemoryPack;
+using SightKeeper.Data.Services;
 
 namespace SightKeeper.Data.Tests;
 
 internal static class Utilities
 {
-	public static T PersistUsingFormatter<T>(this T value, IMemoryPackFormatter<T> formatter)
-	{
-		var buffer = SerializeUsingFormatter(value, formatter);
-		var persistedValue = DeserializeUsingFormatter(buffer, formatter);
-		Guard.IsNotNull(persistedValue);
-		return persistedValue;
-	}
-
-	public static byte[] SerializeUsingFormatter<T>(this T? value, IMemoryPackFormatter<T> formatter)
+	public static byte[] Serialize<T>(this Serializer<T> serializer, T value)
 	{
 		ArrayBufferWriter<byte> bufferWriter = new();
 		using var state = MemoryPackWriterOptionalStatePool.Rent(MemoryPackSerializerOptions.Default);
 		var writer = new MemoryPackWriter<ArrayBufferWriter<byte>>(ref bufferWriter, state);
-		formatter.Serialize(ref writer, ref value);
+		serializer.Serialize(ref writer, value);
 		writer.Flush();
 		return bufferWriter.WrittenSpan.ToArray();
 	}
 
-	public static T? DeserializeUsingFormatter<T>(ReadOnlySpan<byte> buffer, IMemoryPackFormatter<T> formatter)
+	public static T Deserialize<T>(this Deserializer<T> deserializer, byte[] bytes)
 	{
 		using var state = MemoryPackReaderOptionalStatePool.Rent(MemoryPackSerializerOptions.Default);
-		var reader = new MemoryPackReader(buffer, state);
-		var value = default(T);
-		formatter.Deserialize(ref reader, ref value);
-		return value;
+		var reader = new MemoryPackReader(bytes, state);
+		return deserializer.Deserialize(ref reader);
 	}
 }

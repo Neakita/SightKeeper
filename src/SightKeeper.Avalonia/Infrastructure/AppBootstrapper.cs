@@ -29,7 +29,6 @@ internal static class AppBootstrapper
 
 	private static void InitializeServices(this IContainer container)
 	{
-		container.UseBinarySerialization();
 		container.LoadData();
 		container.UseAutoSaving();
 		container.UseHotKeys();

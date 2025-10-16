@@ -10,7 +10,7 @@ internal sealed class PeriodicDataSaver : ChangeListener, IDisposable
 		set => _timer.Period = value;
 	}
 
-	public PeriodicDataSaver(DataSaver dataSaver, ILogger logger)
+	public PeriodicDataSaver(Lazy<DataSaver> dataSaver, ILogger logger)
 	{
 		_dataSaver = dataSaver;
 		_logger = logger;
@@ -43,7 +43,7 @@ internal sealed class PeriodicDataSaver : ChangeListener, IDisposable
 	}
 
 	private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(1));
-	private readonly DataSaver _dataSaver;
+	private readonly Lazy<DataSaver> _dataSaver;
 	private readonly ILogger _logger;
 	private Task? _processingTask;
 	private bool _dataChangedSinceLastSave;
@@ -68,7 +68,7 @@ internal sealed class PeriodicDataSaver : ChangeListener, IDisposable
 	{
 		try
 		{
-			_dataSaver.Save();
+			_dataSaver.Value.Save();
 		}
 		catch (Exception exception)
 		{

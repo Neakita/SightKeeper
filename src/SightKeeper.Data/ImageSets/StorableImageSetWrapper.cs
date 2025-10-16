@@ -32,6 +32,7 @@ internal sealed class StorableImageSetWrapper(ChangeListener changeListener, Loc
 			.WithImagesDisposing()
 			
 			.WithLookupperPopulator(lookupperPopulator)
+			.WithDeletableData()
 
 			// If domain rule is violated and throws an exception,
 			// it should fail as fast as possible and have smaller stack strace

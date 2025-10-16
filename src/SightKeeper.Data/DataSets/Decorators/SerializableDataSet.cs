@@ -41,9 +41,19 @@ internal sealed class SerializableDataSet<TTag, TAsset>(
 	{
 		writer.WriteUnionHeader(unionTag);
 		var tagIndexes = TagsLibrary.Tags.Index().ToDictionary(tuple => (Tag)tuple.Item, tuple => (byte)tuple.Index);
-		DataSetGeneralDataFormatter.WriteGeneralData(ref writer, Name, Description);
+		WriteGeneralData(ref writer, Name, Description);
 		tagsFormatter.WriteTags(ref writer, TagsLibrary.Tags);
 		assetsFormatter.Serialize(ref writer, AssetsLibrary.Assets, tagIndexes);
 		WeightsFormatter.WriteWeights(ref writer, WeightsLibrary.Weights, tagIndexes);
+	}
+
+	private static void WriteGeneralData<TBufferWriter>(
+		ref MemoryPackWriter<TBufferWriter> writer,
+		string name,
+		string description)
+		where TBufferWriter : IBufferWriter<byte>
+	{
+		writer.WriteString(name);
+		writer.WriteString(description);
 	}
 }

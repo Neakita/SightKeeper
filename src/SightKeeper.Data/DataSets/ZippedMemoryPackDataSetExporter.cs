@@ -1,5 +1,4 @@
 using System.IO.Compression;
-using MemoryPack;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -8,7 +7,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets;
 
-internal sealed class ZippedMemoryPackDataSetExporter : DataSetExporter<DataSet<Tag, Asset>>
+internal sealed class ZippedMemoryPackDataSetExporter(Serializer<DataSet<Tag, Asset>> dataSetSerializer, Serializer<IReadOnlyCollection<ManagedImage>> imagesSerializer) : DataSetExporter<DataSet<Tag, Asset>>
 {
 	public async Task ExportAsync(string archivePath, DataSet<Tag, Asset> set, CancellationToken cancellationToken)
 	{
@@ -20,18 +19,18 @@ internal sealed class ZippedMemoryPackDataSetExporter : DataSetExporter<DataSet<
 		await WriteImagesAsync(archive, images, cancellationToken);
 	}
 
-	private static async Task WriteSetDataAsync(ZipArchive archive, DataSet<Tag, Asset> set, CancellationToken cancellationToken)
+	private async Task WriteSetDataAsync(ZipArchive archive, DataSet<Tag, Asset> set, CancellationToken cancellationToken)
 	{
 		var entry = archive.CreateEntry("data.bin");
 		await using var stream = entry.Open();
-		await MemoryPackSerializer.SerializeAsync(stream, set, cancellationToken: cancellationToken);
+		await dataSetSerializer.SerializeAsync(stream, set, cancellationToken);
 	}
 
-	private static async Task WriteImagesMetadataAsync(ZipArchive archive, IReadOnlyCollection<ManagedImage> images, CancellationToken cancellationToken)
+	private async Task WriteImagesMetadataAsync(ZipArchive archive, IReadOnlyCollection<ManagedImage> images, CancellationToken cancellationToken)
 	{
 		var entry = archive.CreateEntry("images.bin");
 		await using var stream = entry.Open();
-		await MemoryPackSerializer.SerializeAsync(stream, images, cancellationToken: cancellationToken);
+		await imagesSerializer.SerializeAsync(stream, images, cancellationToken);
 	}
 
 	private static async Task WriteImagesAsync(ZipArchive archive, IEnumerable<ManagedImage> images, CancellationToken cancellationToken)

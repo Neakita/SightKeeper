@@ -21,4 +21,39 @@
       <ProjectReference Include="..\SightKeeper.Domain\SightKeeper.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="DataSets\Assets\TypeSwitchAssetsFormatter.cs" />
+      <Compile Remove="DataSets\DataSetGeneralDataFormatter.cs" />
+      <Compile Remove="DataSets\MemoryPackDataSetDeserializer.cs" />
+      <Compile Remove="ImageSets\Images\ImagesFormatter.cs" />
+      <Compile Remove="ImageSets\ImageSetFormatter.cs" />
+      <Compile Remove="Services\AppDataDataSetsRepository.cs" />
+      <Compile Remove="Services\AppDataImageSetsRepository.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="DataSets\Assets\TypeSwitchAssetsFormatter.cs" />
+      <Compile Remove="DataSets\DataSetFormatter.cs" />
+      <Compile Remove="DataSets\DataSetGeneralDataFormatter.cs" />
+      <Compile Remove="DataSets\MemoryPackDataSetDeserializer.cs" />
+      <Compile Remove="ImageSets\Images\ImagesFormatter.cs" />
+      <Compile Remove="ImageSets\ImageSetFormatter.cs" />
+      <Compile Remove="Services\AppDataAccess.cs" />
+      <Compile Remove="Services\AppDataDataSetsRepository.cs" />
+      <Compile Remove="Services\AppDataImageSetsRepository.cs" />
+      <Compile Remove="AppData.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="DataSets\Assets\TypeSwitchAssetsFormatter.cs" />
+      <Compile Remove="DataSets\DataSetFormatter.cs" />
+      <Compile Remove="DataSets\DataSetGeneralDataFormatter.cs" />
+      <Compile Remove="DataSets\MemoryPackDataSetDeserializer.cs" />
+      <Compile Remove="ImageSets\Images\ImagesFormatter.cs" />
+      <Compile Remove="ImageSets\ImageSetFormatter.cs" />
+      <Compile Remove="Services\AppDataAccess.cs" />
+      <Compile Remove="Services\AppDataDataSetsRepository.cs" />
+      <Compile Remove="AppData.cs" />
+    </ItemGroup>
+
 </Project>

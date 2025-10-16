@@ -38,4 +38,9 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Images\ImageSavingTests.cs" />
+      <Compile Remove="Images\ImageSetsSavingTests.cs" />
+    </ItemGroup>
+
 </Project>

@@ -44,4 +44,9 @@ internal static class ImageSetExtensions
 	{
 		return new PopulateImageLookupperImageSet(set, populator);
 	}
+
+	public static ImageSet WithDeletableData(this ImageSet set)
+	{
+		return new DeletableDataImageSet(set);
+	}
 }

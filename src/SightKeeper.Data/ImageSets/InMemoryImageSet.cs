@@ -1,28 +1,23 @@
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class InMemoryImageSet : ImageSet
+internal sealed class InMemoryImageSet(ImageWrapper imageWrapper) : ImageSet, SettableInitialItems<ManagedImage>
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;
 
 	public IReadOnlyList<ManagedImage> Images => _images;
 
-	public InMemoryImageSet(ImageWrapper imageWrapper)
-	{
-		_imageWrapper = imageWrapper;
-		_images = new List<ManagedImage>();
-	}
-
 	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)
 	{
 		InMemoryImage inMemoryImage = new(Id.Create(), creationTimestamp, size);
-		var wrappedImage = _imageWrapper.Wrap(inMemoryImage);
+		var wrappedImage = imageWrapper.Wrap(inMemoryImage);
 		_images.Add(wrappedImage);
 		return wrappedImage;
 	}
@@ -46,21 +41,20 @@ internal sealed class InMemoryImageSet : ImageSet
 	{
 	}
 
-	public ManagedImage WrapAndInsertImage(ManagedImage image)
+	public ManagedImage WrapAndInsert(ManagedImage image)
 	{
 		var index = _images.BinarySearch(image, ImageCreationTimestampComparer.Instance);
 		Guard.IsLessThan(index, 0);
 		index = ~index;
-		var wrappedImage = _imageWrapper.Wrap(image);
+		var wrappedImage = imageWrapper.Wrap(image);
 		_images.Insert(index, wrappedImage);
 		return wrappedImage;
 	}
 
-	internal void EnsureCapacity(int capacity)
+	public void EnsureCapacity(int capacity)
 	{
 		_images.EnsureCapacity(capacity);
 	}
 
-	private readonly ImageWrapper _imageWrapper;
-	private readonly List<ManagedImage> _images;
+	private readonly List<ManagedImage> _images = new();
 }

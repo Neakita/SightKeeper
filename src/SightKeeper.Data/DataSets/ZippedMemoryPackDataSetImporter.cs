@@ -1,12 +1,10 @@
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Diagnostics;
-using MemoryPack;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.ImageSets.Creating;
-using SightKeeper.Data.ImageSets;
-using SightKeeper.Domain;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
@@ -20,7 +18,9 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 	WriteRepository<ImageSet> imageSetsWriteRepository,
 	WriteRepository<DataSet<Tag, Asset>> dataSetsWriteRepository,
 	ReadRepository<DataSet<Tag, Asset>> dataSetsReadRepository,
-	ImageLookupperPopulator lookupperPopulator)
+	ImageLookupperPopulator lookupperPopulator,
+	Deserializer<IReadOnlyCollection<ManagedImage>> imagesDeserializer,
+	Deserializer<DataSet<Tag, Asset>> dataSetDeserializer)
 	: DataSetImporter
 {
 	public async Task Import(string filePath)
@@ -44,20 +44,20 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 			if (imageLookupper.ContainsImage(image.Id))
 				continue;
 			importedImagesSet ??= CreateImagesSet();
-			var innerImportedImagesSet = importedImagesSet.GetInnermost<InMemoryImageSet>();
-			var wrappedImage = innerImportedImagesSet.WrapAndInsertImage(image);
+			var settableInitialImages = importedImagesSet.GetInnermost<SettableInitialItems<ManagedImage>>();
+			var wrappedImage = settableInitialImages.WrapAndInsert(image);
 			await CopyImageData(archive, wrappedImage);
 			lookupperPopulator.AddImage(wrappedImage);
 		}
 		return importedImagesSet;
 	}
 
-	private static async Task<IReadOnlyCollection<ManagedImage>> ImportImagesMetadata(ZipArchive archive)
+	private async Task<IReadOnlyCollection<ManagedImage>> ImportImagesMetadata(ZipArchive archive)
 	{
 		var entry = archive.GetEntry("images.bin");
 		Guard.IsNotNull(entry);
 		await using var stream = entry.Open();
-		var images = await MemoryPackSerializer.DeserializeAsync<IReadOnlyCollection<ManagedImage>>(stream);
+		var images = await imagesDeserializer.DeserializeAsync(stream);
 		Guard.IsNotNull(images);
 		return images;
 	}
@@ -83,12 +83,12 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 		await readStream.CopyToAsync(writeStream);
 	}
 
-	private static async Task<DataSet<Tag, Asset>> ReadDataSet(ZipArchive archive)
+	private async Task<DataSet<Tag, Asset>> ReadDataSet(ZipArchive archive)
 	{
 		var entry = archive.GetEntry("data.bin");
 		Guard.IsNotNull(entry);
 		await using var stream = entry.Open();
-		var dataSet = await MemoryPackSerializer.DeserializeAsync<DataSet<Tag, Asset>>(stream);
+		var dataSet = await dataSetDeserializer.DeserializeAsync(stream);
 		Guard.IsNotNull(dataSet);
 		return dataSet;
 	}
