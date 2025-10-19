@@ -7,11 +7,12 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, EditableImageAssets, IDisposable
+internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, EditableImageAssets, Decorator<ManagedImage>, IDisposable
 {
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 	public Vector2<ushort> Size => inner.Size;
 	public IReadOnlyCollection<Asset> Assets => _assets;
+	public ManagedImage Inner => inner;
 
 	public Image? Load(CancellationToken cancellationToken)
 	{
