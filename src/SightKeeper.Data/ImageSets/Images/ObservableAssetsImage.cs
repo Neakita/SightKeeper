@@ -43,11 +43,6 @@ internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, 
 		return inner.OpenReadStream();
 	}
 
-	public bool TryCopyTo(string filePath)
-	{
-		return inner.TryCopyTo(filePath);
-	}
-
 	public void Add(Asset asset)
 	{
 		inner.GetFirst<EditableImageAssets>().Add(asset);

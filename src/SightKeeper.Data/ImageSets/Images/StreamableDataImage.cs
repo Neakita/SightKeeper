@@ -45,11 +45,6 @@ internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAcce
 		return dataAccess.OpenRead(Id);
 	}
 
-	public bool TryCopyTo(string filePath)
-	{
-		return dataAccess.TryCopyTo(Id, filePath);
-	}
-
 	public void DeleteData()
 	{
 		dataAccess.Delete(Id);
