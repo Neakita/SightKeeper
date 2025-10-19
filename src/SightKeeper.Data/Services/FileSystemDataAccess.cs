@@ -1,10 +1,11 @@
 using FlakeId;
+using Serilog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
-internal class FileSystemDataAccess
+internal class FileSystemDataAccess(ILogger logger)
 {
 	public const string DefaultDirectoryPath = "Data";
 
@@ -14,7 +15,7 @@ internal class FileSystemDataAccess
 	public Image? LoadImage(Id id, CancellationToken cancellationToken)
 	{
 		using var stream = OpenRead(id);
-		if (stream == null || cancellationToken.IsCancellationRequested)
+		if (cancellationToken.IsCancellationRequested)
 			return null;
 		return Image.Load(stream);
 	}
@@ -22,8 +23,6 @@ internal class FileSystemDataAccess
 	public Image<TPixel>? LoadImage<TPixel>(Id id, CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
 	{
 		using var stream = OpenRead(id);
-		if (stream == null)
-			return null;
 		if (cancellationToken.IsCancellationRequested)
 			return null;
 		return Image.Load<TPixel>(stream);
@@ -32,17 +31,29 @@ internal class FileSystemDataAccess
 	public async Task<Image?> LoadImageAsync(Id id, CancellationToken cancellationToken)
 	{
 		await using var stream = OpenRead(id);
-		if (stream == null)
+		try
+		{
+			return await Image.LoadAsync(stream, cancellationToken);
+		}
+		catch (TaskCanceledException exception)
+		{
+			logger.Verbose(exception, "Image loading was cancelled");
 			return null;
-		return await Image.LoadAsync(stream, cancellationToken);
+		}
 	}
 
 	public async Task<Image<TPixel>?> LoadImageAsync<TPixel>(Id id, CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
 	{
 		await using var stream = OpenRead(id);
-		if (stream == null)
+		try
+		{
+			return await Image.LoadAsync<TPixel>(stream, cancellationToken);
+		}
+		catch (TaskCanceledException exception)
+		{
+			logger.Verbose(exception, "Image loading was cancelled");
 			return null;
-		return await Image.LoadAsync<TPixel>(stream, cancellationToken);
+		}
 	}
 
 	public virtual Stream OpenRead(Id id)
