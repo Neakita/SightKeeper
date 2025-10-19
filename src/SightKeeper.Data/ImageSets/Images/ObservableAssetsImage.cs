@@ -72,11 +72,6 @@ internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, 
 		_assets.Notify(change);
 	}
 
-	public void DeleteData()
-	{
-		inner.DeleteData();
-	}
-
 	public void Dispose()
 	{
 		_assets.Dispose();

@@ -1,3 +1,4 @@
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
@@ -33,7 +34,7 @@ internal sealed class ImagesDataRemovingImageSet(ImageSet inner) : ImageSet, Dec
 	public void RemoveImageAt(int index)
 	{
 		var image = Images[index];
-		image.DeleteData();
+		DeleteData(image);
 		inner.RemoveImageAt(index);
 	}
 
@@ -47,6 +48,12 @@ internal sealed class ImagesDataRemovingImageSet(ImageSet inner) : ImageSet, Dec
 	private void DeleteDataAt(int index)
 	{
 		var image = Images[index];
-		image.DeleteData();
+		DeleteData(image);
+	}
+
+	private static void DeleteData(ManagedImage image)
+	{
+		var deletableImageData = image.GetFirst<DeletableImageData>();
+		deletableImageData.DeleteData();
 	}
 }

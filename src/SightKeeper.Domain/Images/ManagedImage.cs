@@ -9,6 +9,5 @@ public interface ManagedImage : ImageData
 
 	Stream? OpenWriteStream();
 	Stream? OpenReadStream();
-	void DeleteData();
 	bool TryCopyTo(string filePath);
 }

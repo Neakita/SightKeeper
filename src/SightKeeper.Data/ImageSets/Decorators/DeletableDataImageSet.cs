@@ -24,7 +24,10 @@ internal sealed class DeletableDataImageSet(ImageSet inner) : ImageSet, Deletabl
 	public void DeleteData()
 	{
 		foreach (var image in Images)
-			image.DeleteData();
+		{
+			var deletableData = image.GetFirst<DeletableData>();
+			deletableData.DeleteData();
+		}
 	}
 
 	public ManagedImage CreateImage(DateTimeOffset creationTimestamp, Vector2<ushort> size)

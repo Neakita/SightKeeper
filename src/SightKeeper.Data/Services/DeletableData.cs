@@ -1,6 +1,6 @@
 ﻿namespace SightKeeper.Data.Services;
 
-public interface DeletableData
+internal interface DeletableData
 {
 	void DeleteData();
 }
