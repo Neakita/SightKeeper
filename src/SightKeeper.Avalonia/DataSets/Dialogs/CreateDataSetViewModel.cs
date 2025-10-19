@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
+using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 using PlainTagsEditorViewModel = SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain.PlainTagsEditorViewModel;
@@ -47,6 +49,6 @@ internal sealed class CreateDataSetViewModel : DataSetDialogViewModel, NewDataSe
 
 	public string Description => DataSetEditor.Description;
 
-	public DataSetFactory<Tag, Asset> DataSetFactory => TypePicker.SelectedType.DataSetFactory;
+	public Factory<DataSet<Tag, Asset>> DataSetFactory => TypePicker.SelectedType.DataSetFactory;
 	public IEnumerable<NewTagData> NewTags => ((TagsChanges)_tagsEditor).NewTags;
 }

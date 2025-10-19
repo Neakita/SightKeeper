@@ -2,7 +2,6 @@
 using Autofac;
 using Material.Icons;
 using SightKeeper.Application;
-using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
@@ -207,10 +206,10 @@ internal static class ViewModelsExtensions
 	{
 		builder.Register(context =>
 		{
-			var dataSetFactory = context.Resolve<DataSetFactory<TTag, TAsset>>();
+			var dataSetFactory = context.Resolve<Factory<DataSet<TTag, TAsset>>>();
 			var tagsEditorFactory = context.Resolve<Func<TTagsEditor>>();
 
-			return new DataSetTypeViewModel(name, (DataSetFactory<Tag, Asset>)dataSetFactory, (Func<TagsEditorDataContext>)tagsEditorFactory);
+			return new DataSetTypeViewModel(name, (Factory<DataSet<Tag, Asset>>)dataSetFactory, (Func<TagsEditorDataContext>)tagsEditorFactory);
 		});
 	}
 }

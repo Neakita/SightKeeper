@@ -1,4 +1,4 @@
-using SightKeeper.Application.DataSets.Creating;
+using SightKeeper.Application;
 using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
@@ -13,9 +13,9 @@ internal sealed class WrappingClassifierDataSetFactory(
 	DataSetWrapper<Tag, ClassifierAsset> wrapper,
 	ChangeListener changeListener,
 	Lock editingLock)
-	: DataSetFactory<Tag, ClassifierAsset>
+	: Factory<DataSet<Tag, ClassifierAsset>>
 {
-	public DataSet<Tag, ClassifierAsset> CreateDataSet()
+	public DataSet<Tag, ClassifierAsset> Create()
 	{
 		StorableTagFactory tagFactory = new(changeListener, editingLock);
 		StorableClassifierAssetFactory assetFactory = new(changeListener, editingLock);

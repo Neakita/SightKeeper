@@ -1,4 +1,4 @@
-using SightKeeper.Application.DataSets.Creating;
+using SightKeeper.Application;
 using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Detector.Items;
 using SightKeeper.Data.DataSets.Tags;
@@ -14,9 +14,9 @@ internal sealed class WrappingDetectorDataSetFactory(
 	DataSetWrapper<Tag, ItemsAsset<DetectorItem>> wrapper,
 	ChangeListener changeListener,
 	Lock editingLock)
-	: DataSetFactory<Tag, ItemsAsset<DetectorItem>>
+	: Factory<DataSet<Tag, ItemsAsset<DetectorItem>>>
 {
-	public DataSet<Tag, ItemsAsset<DetectorItem>> CreateDataSet()
+	public DataSet<Tag, ItemsAsset<DetectorItem>> Create()
 	{
 		var tagFactory = new StorableTagFactory(changeListener, editingLock);
 		var itemFactory = new StorableDetectorItemFactory(changeListener, editingLock);

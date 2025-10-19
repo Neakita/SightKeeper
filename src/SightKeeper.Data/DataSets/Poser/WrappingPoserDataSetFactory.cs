@@ -1,4 +1,4 @@
-﻿using SightKeeper.Application.DataSets.Creating;
+﻿using SightKeeper.Application;
 using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Poser.Items;
 using SightKeeper.Data.DataSets.Poser.Items.KeyPoints;
@@ -16,9 +16,9 @@ internal sealed class WrappingPoserDataSetFactory(
 	ChangeListener changeListener,
 	Lock editingLock,
 	KeyPointFactory keyPointFactory)
-	: DataSetFactory<PoserTag, ItemsAsset<PoserItem>>
+	: Factory<DataSet<PoserTag, ItemsAsset<PoserItem>>>
 {
-	public DataSet<PoserTag, ItemsAsset<PoserItem>> CreateDataSet()
+	public DataSet<PoserTag, ItemsAsset<PoserItem>> Create()
 	{
 		var tagFactory = new StorablePoserTagFactory(changeListener, editingLock);
 		var itemFactory = new StorablePoserItemFactory(changeListener, editingLock, keyPointFactory);

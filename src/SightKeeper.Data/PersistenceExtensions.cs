@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
-using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Data.DataSets;
 using SightKeeper.Data.DataSets.Assets;
@@ -101,13 +100,13 @@ public static class PersistenceExtensions
 		builder.RegisterDecorator<WrappedImageSetFactory, Factory<ImageSet>>();
 
 		builder.RegisterType<WrappingClassifierDataSetFactory>()
-			.As<DataSetFactory<Tag, ClassifierAsset>>();
+			.As<Factory<DataSet<Tag, ClassifierAsset>>>();
 
 		builder.RegisterType<WrappingDetectorDataSetFactory>()
-			.As<DataSetFactory<Tag, ItemsAsset<DetectorItem>>>();
+			.As<Factory<DataSet<Tag, ItemsAsset<DetectorItem>>>>();
 
 		builder.RegisterType<WrappingPoserDataSetFactory>()
-			.As<DataSetFactory<PoserTag, ItemsAsset<PoserItem>>>();
+			.As<Factory<DataSet<PoserTag, ItemsAsset<PoserItem>>>>();
 
 		builder.RegisterType<InMemoryKeyPointFactory>()
 			.As<KeyPointFactory>();
