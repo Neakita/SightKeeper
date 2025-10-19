@@ -4,21 +4,25 @@ using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Classifier;
 
-internal sealed class ClassifierAssetsFormatter(ImageLookupper imageLookupper) : AssetsFormatter<ClassifierAsset>
+internal sealed class ClassifierAssetsFormatter(ImageLookupper imageLookupper, TagIndexProvider tagIndexProvider) : AssetsFormatter<ClassifierAsset>
 {
-	public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, IReadOnlyCollection<ClassifierAsset> assets, Dictionary<Tag, byte> tagIndexes) where TBufferWriter : IBufferWriter<byte>
+	public void Serialize<TBufferWriter>(
+		ref MemoryPackWriter<TBufferWriter> writer,
+		IReadOnlyCollection<ClassifierAsset> assets)
+		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(assets.Count);
 		foreach (var asset in assets)
 		{
 			var imageId = asset.Image.Id;
-			var tagIndex = tagIndexes[asset.Tag];
+			var tagIndex = tagIndexProvider.GetTagIndex(asset.Tag);
 			writer.WriteUnmanaged(imageId, tagIndex, asset.Usage);
 		}
 	}

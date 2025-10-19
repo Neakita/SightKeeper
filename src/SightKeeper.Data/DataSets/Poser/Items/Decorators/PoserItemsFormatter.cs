@@ -3,6 +3,7 @@ using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
@@ -10,20 +11,19 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Poser.Items.Decorators;
 
-internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
+internal sealed class PoserItemsFormatter(TagIndexProvider tagIndexProvider) : ItemsFormatter<PoserItem>
 {
 	public void WriteItems<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<PoserItem> items,
-		IReadOnlyDictionary<Tag, byte> tagIndexes)
+		IReadOnlyCollection<PoserItem> items)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(items.Count);
 		foreach (var item in items)
 		{
-			var tagIndex = tagIndexes[item.Tag];
+			var tagIndex = tagIndexProvider.GetTagIndex(item.Tag);
 			writer.WriteUnmanaged(tagIndex, item.Bounding);
-			WriteKeyPoints(ref writer, tagIndexes, item);
+			WriteKeyPoints(ref writer, item);
 		}
 	}
 
@@ -44,16 +44,15 @@ internal sealed class PoserItemsFormatter : ItemsFormatter<PoserItem>
 		}
 	}
 
-	private static void WriteKeyPoints<TBufferWriter>(
+	private void WriteKeyPoints<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyDictionary<Tag, byte> tagIndexes,
 		PoserItem item)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(item.KeyPoints.Count);
 		foreach (var keyPoint in item.KeyPoints)
 		{
-			var keyPointTagIndex = tagIndexes[item.Tag];
+			var keyPointTagIndex = tagIndexProvider.GetTagIndex(keyPoint.Tag);
 			writer.WriteUnmanaged(keyPointTagIndex, keyPoint.Position);
 		}
 	}

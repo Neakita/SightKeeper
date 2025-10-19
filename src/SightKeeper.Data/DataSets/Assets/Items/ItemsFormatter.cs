@@ -9,8 +9,7 @@ internal interface ItemsFormatter<in TItem>
 {
 	void WriteItems<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<TItem> items,
-		IReadOnlyDictionary<Tag, byte> tagIndexes)
+		IReadOnlyCollection<TItem> items)
 		where TBufferWriter : IBufferWriter<byte>;
 
 	void ReadItems(ref MemoryPackReader reader, IReadOnlyList<Tag> tags, ItemsOwner<TItem> itemsOwner);

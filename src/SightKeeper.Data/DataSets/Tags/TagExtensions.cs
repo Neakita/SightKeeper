@@ -24,4 +24,9 @@ internal static class TagExtensions
 	{
 		return new EditableUsersTag(tag);
 	}
+
+	public static Tag WithIndex(this Tag tag)
+	{
+		return new IndexedTag(tag);
+	}
 }

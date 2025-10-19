@@ -24,4 +24,14 @@ internal static class PoserTagExtensions
 	{
 		return new EditableUsersPoserTag(tag);
 	}
+
+	public static PoserTag WithIndex(this PoserTag tag)
+	{
+		return new IndexedPoserTag(tag);
+	}
+
+	public static PoserTag WithIndexedTagTracking(this PoserTag tag)
+	{
+		return new IndexedTagTrackingPoserTag(tag);
+	}
 }

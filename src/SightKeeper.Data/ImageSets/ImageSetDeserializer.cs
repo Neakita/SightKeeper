@@ -9,17 +9,17 @@ namespace SightKeeper.Data.ImageSets;
 internal sealed class ImageSetDeserializer(
 	ImageSetFactory<ImageSet> setFactory,
 	Deserializer<IReadOnlyCollection<ManagedImage>> imagesDeserializer,
-	ImageLookupperPopulator lookupperPopulator,
-	ImageSetWrapper wrapper) :
+	ImageLookupperPopulator lookupperPopulator) :
 	Deserializer<ImageSet>
 {
 	public ImageSet Deserialize(ref MemoryPackReader reader)
 	{
 		var set = setFactory.CreateImageSet();
-		ReadGeneralInfo(ref reader, set);
-		ReadImages(ref reader, set);
-		lookupperPopulator.AddImages(set.Images);
-		return wrapper.Wrap(set);
+		var innerSet = set.GetInnermost<ImageSet>();
+		ReadGeneralInfo(ref reader, innerSet);
+		ReadImages(ref reader, innerSet);
+		lookupperPopulator.AddImages(innerSet.Images);
+		return set;
 	}
 
 	private static void ReadGeneralInfo(ref MemoryPackReader reader, ImageSet set)

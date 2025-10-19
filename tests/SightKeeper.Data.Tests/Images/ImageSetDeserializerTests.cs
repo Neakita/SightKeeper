@@ -52,9 +52,7 @@ public sealed class ImageSetDeserializerTests
 		imageSetFactory.CreateImageSet().Returns(_ => Substitute.For<ImageSet, SettableInitialItems<ManagedImage>>());
 		var imagesDeserializer = new SubstituteDeserializer<IReadOnlyCollection<ManagedImage>>(() => images);
 		var imageLookupperPopulator = Substitute.For<ImageLookupperPopulator>();
-		var imageSetWrapper = Substitute.For<ImageSetWrapper>();
-		imageSetWrapper.Wrap(Arg.Any<ImageSet>()).Returns(call => call.Arg<ImageSet>());
-		var imageSetDeserializer = new ImageSetDeserializer(imageSetFactory, imagesDeserializer, imageLookupperPopulator, imageSetWrapper);
+		var imageSetDeserializer = new ImageSetDeserializer(imageSetFactory, imagesDeserializer, imageLookupperPopulator);
 		return (imageSetDeserializer, imagesDeserializer);
 	}
 

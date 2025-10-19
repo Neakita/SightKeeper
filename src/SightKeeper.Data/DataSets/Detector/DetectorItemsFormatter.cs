@@ -3,19 +3,23 @@ using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Detector;
 
-internal sealed class DetectorItemsFormatter : ItemsFormatter<DetectorItem>
+internal sealed class DetectorItemsFormatter(TagIndexProvider tagIndexProvider) : ItemsFormatter<DetectorItem>
 {
-	public void WriteItems<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, IReadOnlyCollection<DetectorItem> items, IReadOnlyDictionary<Tag, byte> tagIndexes) where TBufferWriter : IBufferWriter<byte>
+	public void WriteItems<TBufferWriter>(
+		ref MemoryPackWriter<TBufferWriter> writer,
+		IReadOnlyCollection<DetectorItem> items)
+		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(items.Count);
 		foreach (var item in items)
 		{
-			var tagIndex = tagIndexes[item.Tag];
+			var tagIndex = tagIndexProvider.GetTagIndex(item.Tag);
 			writer.WriteUnmanaged(tagIndex, item.Bounding);
 		}
 	}

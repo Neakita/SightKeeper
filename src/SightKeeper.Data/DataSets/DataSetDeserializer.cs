@@ -14,7 +14,8 @@ namespace SightKeeper.Data.DataSets;
 internal sealed class DataSetDeserializer<TTag, TAsset>(
 	DataSetFactory<TTag, TAsset> dataSetFactory,
 	TagsFormatter<TTag> tagsFormatter,
-	AssetsFormatter<TAsset> assetsFormatter) :
+	AssetsFormatter<TAsset> assetsFormatter,
+	WeightsFormatter weightsFormatter) :
 	Deserializer<DataSet<Tag, Asset>>
 	where TTag : Tag
 	where TAsset : Asset
@@ -26,7 +27,7 @@ internal sealed class DataSetDeserializer<TTag, TAsset>(
 		ReadGeneralData(ref reader, (DataSet<Tag, Asset>)innerSet);
 		tagsFormatter.ReadTags(ref reader, innerSet.TagsLibrary);
 		assetsFormatter.Deserialize(ref reader, (DataSet<Tag, TAsset>)innerSet);
-		WeightsFormatter.ReadWeights(ref reader, innerSet.WeightsLibrary, (IReadOnlyList<Tag>)innerSet.TagsLibrary.Tags);
+		weightsFormatter.ReadWeights(ref reader, innerSet.WeightsLibrary, (IReadOnlyList<Tag>)innerSet.TagsLibrary.Tags);
 		return (DataSet<Tag, Asset>)set;
 	}
 

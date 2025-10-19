@@ -2,18 +2,18 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal static class WeightsFormatter
+internal sealed class WeightsFormatter(TagIndexProvider tagIndexProvider)
 {
-	public static void WriteWeights<TBufferWriter>(
+	public void WriteWeights<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<WeightsData> weightsCollection,
-		IReadOnlyDictionary<Tag, byte> tagIndexes)
+		IReadOnlyCollection<WeightsData> weightsCollection)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(weightsCollection.Count);
@@ -32,13 +32,13 @@ internal static class WeightsFormatter
 			for (int i = 0; i < weights.Tags.Count; i++)
 			{
 				var tag = weights.Tags[i];
-				weightsTagIndexes[i] = tagIndexes[tag];
+				weightsTagIndexes[i] = tagIndexProvider.GetTagIndex(tag);
 			}
 			writer.WriteUnmanagedSpan(weightsTagIndexes);
 		}
 	}
 
-	public static void ReadWeights(ref MemoryPackReader reader, WeightsLibrary library, IReadOnlyList<Tag> tags)
+	public void ReadWeights(ref MemoryPackReader reader, WeightsLibrary library, IReadOnlyList<Tag> tags)
 	{
 		Guard.IsTrue(reader.TryReadCollectionHeader(out var weightsCount));
 		var innermostLibrary = library.GetFirst<InMemoryWeightsLibrary>();

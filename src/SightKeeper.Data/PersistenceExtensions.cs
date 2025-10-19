@@ -14,6 +14,7 @@ using SightKeeper.Data.DataSets.Poser.Items.Decorators;
 using SightKeeper.Data.DataSets.Poser.Items.KeyPoints;
 using SightKeeper.Data.DataSets.Poser.Tags;
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
@@ -65,6 +66,9 @@ public static class PersistenceExtensions
 
 		builder.RegisterType<MemoryPackDataLoader>()
 			.As<DataLoader>();
+
+		builder.RegisterType<DecoratorTagIndexProvider>()
+			.As<TagIndexProvider>();
 	}
 
 	private static void AddRepositories(this ContainerBuilder builder)
@@ -136,6 +140,8 @@ public static class PersistenceExtensions
 
 		builder.RegisterType<PoserTagsFormatter>()
 			.As<TagsFormatter<PoserTag>>();
+
+		builder.RegisterType<WeightsFormatter>();
 	}
 
 	private static void AddSerializers(this ContainerBuilder builder)
@@ -220,13 +226,15 @@ public static class PersistenceExtensions
 			var changeListener = context.Resolve<ChangeListener>();
 			var editingLock = context.Resolve<Lock>();
 			var tagsFormatter = context.Resolve<TagsFormatter<TTag>>();
-			var assetsFormatter = context.Resolve<AssetsFormatter<TAsset>>(); 
+			var assetsFormatter = context.Resolve<AssetsFormatter<TAsset>>();
+			var weightsFormatter = context.Resolve<WeightsFormatter>();
 			return new DataSetWrapper<TTag, TAsset>(
 				changeListener,
 				editingLock,
 				unionTag,
 				tagsFormatter,
-				assetsFormatter);
+				assetsFormatter,
+				weightsFormatter);
 		});
 	}
 }

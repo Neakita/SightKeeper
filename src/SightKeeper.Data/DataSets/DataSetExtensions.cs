@@ -71,8 +71,16 @@ internal static class DataSetExtensions
 		};
 	}
 
-	public static DataSet<TTag, TAsset> WithSerialization<TTag, TAsset>(this DataSet<TTag, TAsset> set, ushort unionTag, TagsFormatter<TTag> tagsFormatter, AssetsFormatter<TAsset> assetsFormatter) where TTag : Tag
+	public static DataSet<TTag, TAsset> WithSerialization<TTag, TAsset>(this DataSet<TTag, TAsset> set, ushort unionTag, TagsFormatter<TTag> tagsFormatter, AssetsFormatter<TAsset> assetsFormatter, WeightsFormatter weightsFormatter) where TTag : Tag
 	{
-		return new SerializableDataSet<TTag, TAsset>(set, unionTag, tagsFormatter, assetsFormatter);
+		return new SerializableDataSet<TTag, TAsset>(set, unionTag, tagsFormatter, assetsFormatter, weightsFormatter);
+	}
+
+	public static DataSet<TTag, TAsset> WithIndexedTagTracking<TTag, TAsset>(this DataSet<TTag, TAsset> set) where TTag : notnull
+	{
+		return new OverrideLibrariesDataSet<TTag, TAsset>(set)
+		{
+			TagsLibrary = new IndexedTagTrackingTagsLibrary<TTag>(set.TagsLibrary)
+		};
 	}
 }

@@ -14,8 +14,7 @@ internal sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFor
 {
 	public void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<ItemsAsset<TItem>> assets,
-		Dictionary<Tag, byte> tagIndexes)
+		IReadOnlyCollection<ItemsAsset<TItem>> assets)
 		where TBufferWriter : IBufferWriter<byte>
 	{
 		writer.WriteCollectionHeader(assets.Count);
@@ -23,7 +22,7 @@ internal sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFor
 		{
 			var imageId = asset.Image.Id;
 			writer.WriteUnmanaged(imageId, asset.Usage);
-			itemsFormatter.WriteItems(ref writer, asset.Items, tagIndexes);
+			itemsFormatter.WriteItems(ref writer, asset.Items);
 		}
 	}
 

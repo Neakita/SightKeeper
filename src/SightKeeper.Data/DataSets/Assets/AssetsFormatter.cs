@@ -9,8 +9,7 @@ internal interface AssetsFormatter<in TAsset>
 {
 	void Serialize<TBufferWriter>(
 		ref MemoryPackWriter<TBufferWriter> writer,
-		IReadOnlyCollection<TAsset> assets,
-		Dictionary<Tag, byte> tagIndexes)
+		IReadOnlyCollection<TAsset> assets)
 		where TBufferWriter : IBufferWriter<byte>;
 
 	void Deserialize(ref MemoryPackReader reader, DataSet<Tag, TAsset> set);
