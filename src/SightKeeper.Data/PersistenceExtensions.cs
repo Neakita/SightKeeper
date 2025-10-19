@@ -14,6 +14,7 @@ using SightKeeper.Data.DataSets.Poser.Tags;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Data.ImageSets;
+using SightKeeper.Data.ImageSets.Decorators;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
@@ -81,8 +82,7 @@ public static class PersistenceExtensions
 
 	private static void AddWrappers(this ContainerBuilder builder)
 	{
-		builder.RegisterType<StorableImageSetWrapper>()
-			.As<Wrapper<ImageSet>>();
+		builder.AddImageSetWrappers();
 
 		builder.RegisterType<KeyPointWrapper>();
 
@@ -232,5 +232,50 @@ public static class PersistenceExtensions
 				assetsFormatter,
 				weightsFormatter);
 		});
+	}
+
+	private static void AddImageSetWrappers(this ContainerBuilder builder)
+	{
+		// Tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,
+		// and then tracking decorator will send another notification.
+		builder.AddImageSetDecoratorWrapper<TrackableImageSet>();
+
+		// Locking of domain rules can be relatively computationally heavy,
+		// for example when removing images range every image should be checked if it is used by some asset,
+		// so locking appears only after domain rules validated.
+		builder.AddImageSetDecoratorWrapper<LockingImageSet>();
+
+		// Images data removing could be expansive (we can remove hundreds or thousands of images in one call, or do that often),
+		// and there is no need in lock because lock should affect AppData only,
+		// not the image files,
+		// so it shouldn't be locked
+		builder.AddImageSetDecoratorWrapper<ImagesDataRemovingImageSet>();
+
+		builder.AddImageSetDecoratorWrapper<ObservableImagesImageSet>();
+
+		// We shouldn't dispose images if domain rule is violated,
+		// so this should be behind domain rules
+		builder.AddImageSetDecoratorWrapper<DisposingImageSet>();
+		
+		// will be needed when repository tries to remove the set
+		builder.AddImageSetDecoratorWrapper<DeletableDataImageSet>();
+
+		// If domain rule is violated and throws an exception,
+		// it should fail as fast as possible and have smaller stack strace
+		builder.AddImageSetDecoratorWrapper<DomainImageSet>();
+
+		// INPC interface should be exposed to consumer,
+		// so he can type test and cast it,
+		// so it should be the outermost layer
+		builder.AddImageSetDecoratorWrapper<NotifyingImageSet>();
+
+		builder.RegisterComposite<CompositeWrapper<ImageSet>, Wrapper<ImageSet>>();
+	}
+
+	private static void AddImageSetDecoratorWrapper<TDecorator>(this ContainerBuilder builder) where TDecorator : ImageSet
+	{
+		builder.RegisterType<TDecorator>();
+		builder.RegisterType<FuncWrapper<TDecorator, ImageSet>>()
+			.As<Wrapper<ImageSet>>();
 	}
 }
