@@ -10,11 +10,8 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-internal sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<TPixel>, LimitedSaver, PendingImagesCountReporter, IDisposable
+internal sealed class BufferedImageDataSaverMiddleware<TPixel>(ImageDataSaver<TPixel> inner) : ImageDataSaver<TPixel>, LimitedSaver, PendingImagesCountReporter, IDisposable
 {
-	public required ImageDataSaver<TPixel> Next { get; init; }
-	public required ArrayPool<TPixel> ArrayPool { get; init; }
-
 	public ushort MaximumAllowedPendingImages
 	{
 		get;
@@ -35,7 +32,7 @@ internal sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<
 	{
 		using var operation = Logger.BeginOperation("Creating image {image} data saving request", image);
 		Guard.IsFalse(IsLimitReached);
-		var pendingData = new PendingImageData<TPixel>(image, ArrayPool, data);
+		var pendingData = new PendingImageData<TPixel>(image, _arrayPool, data);
 		_pendingImages.Enqueue(pendingData);
 		OnPendingImagesCountChanged();
 		if (Processing.IsCompleted)
@@ -50,6 +47,7 @@ internal sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<
 
 	private static readonly ILogger Logger = Log.ForContext<BufferedImageDataSaverMiddleware<TPixel>>();
 	private readonly ConcurrentQueue<PendingImageData<TPixel>> _pendingImages = new();
+	private readonly ArrayPool<TPixel> _arrayPool = ArrayPool<TPixel>.Create(Array.MaxLength, 20);
 	private readonly BehaviorSubject<ushort> _pendingImagesCount = new(0);
 
 	private void ProcessImages()
@@ -59,7 +57,7 @@ internal sealed class BufferedImageDataSaverMiddleware<TPixel> : ImageDataSaver<
 			try
 			{
 				OnPendingImagesCountChanged();
-				Next.SaveData(pendingData.Image, pendingData.Data);
+				inner.SaveData(pendingData.Image, pendingData.Data);
 			}
 			finally
 			{

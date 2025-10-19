@@ -13,10 +13,7 @@ public sealed class ImmediateImageSaverTests
 	public void ShouldCreateImageAndDelegateDataSaving()
 	{
 		var dataSaver = new FakeImageDataSaver<Argb32>();
-		ImmediateImageSaver<Argb32> saver = new()
-		{
-			DataSaver = dataSaver
-		};
+		ImmediateImageSaver<Argb32> saver = new(dataSaver);
 		var set = Substitute.For<ImageSet>();
 		var image = Substitute.For<ManagedImage>();
 		var data = new Argb32[2, 2];

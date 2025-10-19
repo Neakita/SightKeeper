@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using Autofac;
+﻿using Autofac;
 using FluentValidation;
 using HotKeys;
 using HotKeys.SharpHook;
@@ -69,24 +68,13 @@ public static class ApplicationServicesExtensions
 		builder.RegisterType<Bgra32ToRgba32PixelConverter>()
 			.As<PixelConverter<Bgra32, Rgba32>>();
 
-		builder.Register(context =>
-		{
-			var pixelConverter = context.Resolve<PixelConverter<Bgra32, Rgba32>>();
-			var imageDataSaver = context.Resolve<ImageDataSaver<Rgba32>>();
-			var arrayPool = ArrayPool<Bgra32>.Create(Array.MaxLength, 20);
-			return new ImmediateImageSaver<Bgra32>
-			{
-				DataSaver = new BufferedImageDataSaverMiddleware<Bgra32>
-				{
-					Next = new ImageDataConverterMiddleware<Bgra32, Rgba32>
-					{
-						Converter = pixelConverter,
-						Next = imageDataSaver
-					},
-					ArrayPool = arrayPool
-				}
-			};
-		}).As<ImageSaver<Bgra32>>();
+		builder.RegisterType<ImageDataConverterMiddleware<Bgra32, Rgba32>>()
+			.As<ImageDataSaver<Bgra32>>();
+		
+		builder.RegisterDecorator<BufferedImageDataSaverMiddleware<Bgra32>, ImageDataSaver<Bgra32>>();
+
+		builder.RegisterType<ImmediateImageSaver<Bgra32>>()
+			.As<ImageSaver<Bgra32>>();
 
 		builder.RegisterType<ImagesCleaner>();
 	}

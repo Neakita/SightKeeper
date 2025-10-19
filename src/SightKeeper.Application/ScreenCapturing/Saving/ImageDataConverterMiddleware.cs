@@ -3,18 +3,18 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
-internal sealed class ImageDataConverterMiddleware<TSourcePixel, TTargetPixel> : ImageDataSaver<TSourcePixel>
+internal sealed class ImageDataConverterMiddleware<TSourcePixel, TTargetPixel>(
+	ImageDataSaver<TTargetPixel> next,
+	PixelConverter<TSourcePixel, TTargetPixel> converter)
+	: ImageDataSaver<TSourcePixel>
 {
-	public required PixelConverter<TSourcePixel, TTargetPixel> Converter { get; init; }
-	public required ImageDataSaver<TTargetPixel> Next { get; init; }
-
 	public void SaveData(ManagedImage image, ReadOnlySpan2D<TSourcePixel> data)
 	{
 		var requiredBufferSize = data.Width * data.Height;
 		EnsureBufferCapacity(requiredBufferSize);
 		var bufferAsSpan = _buffer.AsSpan().AsSpan2D(data.Height, data.Width);
-		Converter.Convert(data, bufferAsSpan);
-		Next.SaveData(image, bufferAsSpan);
+		converter.Convert(data, bufferAsSpan);
+		next.SaveData(image, bufferAsSpan);
 	}
 
 	private TTargetPixel[] _buffer = Array.Empty<TTargetPixel>();
