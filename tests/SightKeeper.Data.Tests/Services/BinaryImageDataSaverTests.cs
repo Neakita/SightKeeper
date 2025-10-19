@@ -1,11 +1,11 @@
 using FluentAssertions;
 using NSubstitute;
-using SightKeeper.Application.ScreenCapturing.Saving;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Application.Tests.Capturing.Saving;
+namespace SightKeeper.Data.Tests.Services;
 
 public sealed class BinaryImageDataSaverTests
 {

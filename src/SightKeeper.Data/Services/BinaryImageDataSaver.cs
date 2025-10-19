@@ -3,9 +3,10 @@ using CommunityToolkit.HighPerformance;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
+using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Application.ScreenCapturing.Saving;
+namespace SightKeeper.Data.Services;
 
 internal sealed class BinaryImageDataSaver<TPixel> : ImageDataSaver<TPixel>
 	where TPixel : unmanaged
