@@ -1,5 +1,6 @@
 using System.IO.Compression;
 using SightKeeper.Application.DataSets;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -45,7 +46,9 @@ internal sealed class ZippedMemoryPackDataSetExporter(Serializer<DataSet<Tag, As
 		await using var imageStream = image.OpenReadStream();
 		if (imageStream == null)
 			return;
-		var path = Path.Combine("images", image.Id.ToString());
+		var idHolder = image.GetFirst<IdHolder>();
+		var imageId = idHolder.Id;
+		var path = Path.Combine("images", imageId.ToString());
 		if (image.DataFormat != null)
 			path += $".{image.DataFormat}";
 		var entry = archive.CreateEntry(path);

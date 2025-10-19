@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -39,7 +40,9 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 		ImageSet? importedImagesSet = null;
 		foreach (var image in images)
 		{
-			if (imageLookupper.ContainsImage(image.Id))
+			var idHolder = image.GetFirst<IdHolder>();
+			var imageId = idHolder.Id;
+			if (imageLookupper.ContainsImage(imageId))
 				continue;
 			importedImagesSet ??= CreateImagesSet();
 			var settableInitialImages = importedImagesSet.GetInnermost<SettableInitialItems<ManagedImage>>();
@@ -68,7 +71,9 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 
 	private static async Task CopyImageData(ZipArchive archive, ManagedImage image)
 	{
-		var entryPath = Path.Combine("images", image.Id.ToString());
+		var idHolder = image.GetFirst<IdHolder>();
+		var imageId = idHolder.Id;
+		var entryPath = Path.Combine("images", imageId.ToString());
 		if (!string.IsNullOrWhiteSpace(image.DataFormat))
 			entryPath += $".{image.DataFormat}";
 		var entry = archive.GetEntry(entryPath);

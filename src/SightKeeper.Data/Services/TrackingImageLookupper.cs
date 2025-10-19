@@ -1,5 +1,7 @@
-﻿using FlakeId;
+﻿using CommunityToolkit.Diagnostics;
+using FlakeId;
 using SightKeeper.Application;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;
@@ -37,8 +39,23 @@ internal sealed class TrackingImageLookupper : ImageLookupper, IDisposable
 	private void HandleImagesChange(IndexedChange<ManagedImage> change)
 	{
 		foreach (var oldImage in change.OldItems)
-			_images.Remove(oldImage.Id);
+			Remove(oldImage);
 		foreach (var newImage in change.NewItems)
-			_images.Add(newImage.Id, newImage);
+			Add(newImage);
+	}
+
+	private void Remove(ManagedImage image)
+	{
+		var idHolder = image.GetFirst<IdHolder>();
+		var imageId = idHolder.Id;
+		var isRemoved = _images.Remove(imageId);
+		Guard.IsTrue(isRemoved);
+	}
+
+	private void Add(ManagedImage image)
+	{
+		var idHolder = image.GetFirst<IdHolder>();
+		var imageId = idHolder.Id;
+		_images.Add(imageId, image);
 	}
 }

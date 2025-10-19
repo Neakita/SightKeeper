@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class InMemoryImage : ManagedImage, EditableImageAssets
+internal sealed class InMemoryImage : ManagedImage, EditableImageAssets, IdHolder
 {
 	public Id Id { get; }
 	public DateTimeOffset CreationTimestamp { get; }

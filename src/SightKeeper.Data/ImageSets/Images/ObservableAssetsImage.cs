@@ -1,4 +1,3 @@
-using FlakeId;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
@@ -10,7 +9,6 @@ namespace SightKeeper.Data.ImageSets.Images;
 
 internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, EditableImageAssets, IDisposable
 {
-	public Id Id => inner.Id;
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 	public Vector2<ushort> Size => inner.Size;
 	public IReadOnlyCollection<Asset> Assets => _assets;

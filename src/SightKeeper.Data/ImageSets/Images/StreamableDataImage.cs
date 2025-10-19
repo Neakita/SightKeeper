@@ -10,7 +10,6 @@ namespace SightKeeper.Data.ImageSets.Images;
 
 internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAccess dataAccess) : ManagedImage
 {
-	public Id Id => inner.Id;
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 	public Vector2<ushort> Size => inner.Size;
 	public IReadOnlyCollection<Asset> Assets => inner.Assets;
@@ -38,12 +37,12 @@ internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAcce
 
 	public Stream OpenWriteStream()
 	{
-		return dataAccess.OpenWrite(inner.Id);
+		return dataAccess.OpenWrite(Id);
 	}
 
 	public Stream? OpenReadStream()
 	{
-		return dataAccess.OpenRead(inner.Id);
+		return dataAccess.OpenRead(Id);
 	}
 
 	public bool TryCopyTo(string filePath)
@@ -53,11 +52,13 @@ internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAcce
 
 	public void DeleteData()
 	{
-		dataAccess.Delete(inner.Id);
+		dataAccess.Delete(Id);
 	}
 
 	public override string? ToString()
 	{
 		return inner.ToString();
 	}
+
+	private Id Id => inner.GetFirst<IdHolder>().Id;
 }

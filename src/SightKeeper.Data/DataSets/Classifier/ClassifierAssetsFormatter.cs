@@ -4,6 +4,7 @@ using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -21,7 +22,9 @@ internal sealed class ClassifierAssetsFormatter(ImageLookupper imageLookupper, T
 		writer.WriteCollectionHeader(assets.Count);
 		foreach (var asset in assets)
 		{
-			var imageId = asset.Image.Id;
+			var image = asset.Image;
+			var idHolder = image.GetFirst<IdHolder>();
+			var imageId = idHolder.Id;
 			var tagIndex = tagIndexProvider.GetTagIndex(asset.Tag);
 			writer.WriteUnmanaged(imageId, tagIndex, asset.Usage);
 		}

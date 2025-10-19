@@ -3,6 +3,7 @@ using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Assets.Items;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -21,7 +22,9 @@ internal sealed class ItemsAssetsFormatter<TItem>(ItemsFormatter<TItem> itemsFor
 		writer.WriteCollectionHeader(assets.Count);
 		foreach (var asset in assets)
 		{
-			var imageId = asset.Image.Id;
+			var image = asset.Image;
+			var idHolder = image.GetFirst<IdHolder>();
+			var imageId = idHolder.Id;
 			writer.WriteUnmanaged(imageId, asset.Usage);
 			itemsFormatter.WriteItems(ref writer, asset.Items);
 		}

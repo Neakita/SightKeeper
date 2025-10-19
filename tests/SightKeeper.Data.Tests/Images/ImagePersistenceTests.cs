@@ -28,14 +28,14 @@ public sealed class ImagePersistenceTests
 
 	private static ManagedImage CreateImage(DateTimeOffset creationTimestamp)
 	{
-		var image = Substitute.For<ManagedImage>();
+		var image = Substitute.For<ManagedImage, IdHolder>();
 		image.CreationTimestamp.Returns(creationTimestamp);
 		return image;
 	}
 
 	private static ManagedImage CreateImage(Vector2<ushort> size)
 	{
-		var image = Substitute.For<ManagedImage>();
+		var image = Substitute.For<ManagedImage, IdHolder>();
 		image.Size.Returns(size);
 		return image;
 	}

@@ -10,6 +10,8 @@ internal sealed class ImageSerializer : Serializer<ManagedImage>
 	public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, ManagedImage image)
 		where TBufferWriter : IBufferWriter<byte>
 	{
-		writer.WriteUnmanaged(image.Id, image.CreationTimestamp, image.Size);
+		var idHolder = image.GetFirst<IdHolder>();
+		var imageId = idHolder.Id;
+		writer.WriteUnmanaged(imageId, image.CreationTimestamp, image.Size);
 	}
 }
