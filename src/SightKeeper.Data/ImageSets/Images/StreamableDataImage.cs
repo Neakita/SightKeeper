@@ -8,12 +8,12 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAccess dataAccess) : ManagedImage
+internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAccess dataAccess) : ManagedImage, FileExtensionProvider
 {
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 	public Vector2<ushort> Size => inner.Size;
 	public IReadOnlyCollection<Asset> Assets => inner.Assets;
-	public string DataFormat => dataAccess.FileExtension;
+	public string FileExtension => dataAccess.FileExtension;
 
 	public Image? Load(CancellationToken cancellationToken)
 	{

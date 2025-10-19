@@ -48,9 +48,9 @@ internal sealed class ZippedMemoryPackDataSetExporter(Serializer<DataSet<Tag, As
 			return;
 		var idHolder = image.GetFirst<IdHolder>();
 		var imageId = idHolder.Id;
-		var path = Path.Combine("images", imageId.ToString());
-		if (image.DataFormat != null)
-			path += $".{image.DataFormat}";
+		var fileExtensionProvider = image.GetFirst<FileExtensionProvider>();
+		var fileName = $"{imageId.ToString()}.{fileExtensionProvider.FileExtension}";
+		var path = Path.Combine("images", fileName);
 		var entry = archive.CreateEntry(path);
 		await using var stream = entry.Open();
 		await imageStream.CopyToAsync(stream, cancellationToken);

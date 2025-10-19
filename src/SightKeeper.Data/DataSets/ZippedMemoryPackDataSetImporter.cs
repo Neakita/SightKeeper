@@ -73,9 +73,9 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 	{
 		var idHolder = image.GetFirst<IdHolder>();
 		var imageId = idHolder.Id;
-		var entryPath = Path.Combine("images", imageId.ToString());
-		if (!string.IsNullOrWhiteSpace(image.DataFormat))
-			entryPath += $".{image.DataFormat}";
+		var fileExtensionProvider = image.GetFirst<FileExtensionProvider>();
+		var fileName = $"{imageId.ToString()}.{fileExtensionProvider}";
+		var entryPath = Path.Combine("images", fileName);
 		var entry = archive.GetEntry(entryPath);
 		if (entry == null)
 			return;

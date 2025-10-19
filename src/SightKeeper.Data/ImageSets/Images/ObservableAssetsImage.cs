@@ -12,7 +12,6 @@ internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, 
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 	public Vector2<ushort> Size => inner.Size;
 	public IReadOnlyCollection<Asset> Assets => _assets;
-	public string? DataFormat => inner.DataFormat;
 
 	public Image? Load(CancellationToken cancellationToken)
 	{

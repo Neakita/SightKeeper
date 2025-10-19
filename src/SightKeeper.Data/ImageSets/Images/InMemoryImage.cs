@@ -8,20 +8,13 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class InMemoryImage : ManagedImage, EditableImageAssets, IdHolder
+internal sealed class InMemoryImage(Id id, DateTimeOffset creationTimestamp, Vector2<ushort> size)
+	: ManagedImage, EditableImageAssets, IdHolder
 {
-	public Id Id { get; }
-	public DateTimeOffset CreationTimestamp { get; }
-	public Vector2<ushort> Size { get; }
+	public Id Id => id;
+	public DateTimeOffset CreationTimestamp => creationTimestamp;
+	public Vector2<ushort> Size => size;
 	public IReadOnlyCollection<Asset> Assets => _assets;
-	public string? DataFormat => null;
-
-	public InMemoryImage(Id id, DateTimeOffset creationTimestamp, Vector2<ushort> size)
-	{
-		Id = id;
-		CreationTimestamp = creationTimestamp;
-		Size = size;
-	}
 
 	public Image? Load(CancellationToken cancellationToken)
 	{
