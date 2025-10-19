@@ -1,22 +1,17 @@
-using SightKeeper.Application.ImageSets.Creating;
+using SightKeeper.Application;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class WrappedImageSetFactory : ImageSetFactory<ImageSet>
+internal sealed class WrappedImageSetFactory(
+	Factory<ImageSet> innerFactory,
+	Wrapper<ImageSet> wrapper)
+	: Factory<ImageSet>
 {
-	public WrappedImageSetFactory(ImageSetFactory<ImageSet> innerFactory, ImageSetWrapper wrapper)
-	{
-        _innerFactory = innerFactory;
-		_setWrapper = wrapper;
-	}
-
-	public ImageSet CreateImageSet()
+	public ImageSet Create()
     {
-        var innerSet = _innerFactory.CreateImageSet();
-		return _setWrapper.Wrap(innerSet);
+        var innerSet = innerFactory.Create();
+		return wrapper.Wrap(innerSet);
 	}
-
-	private readonly ImageSetFactory<ImageSet> _innerFactory;
-	private readonly ImageSetWrapper _setWrapper;
 }

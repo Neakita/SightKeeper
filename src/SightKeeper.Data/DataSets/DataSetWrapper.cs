@@ -6,7 +6,12 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets;
 
-internal sealed class DataSetWrapper<TTag, TAsset>(ChangeListener changeListener, Lock editingLock, ushort unionTag, TagsFormatter<TTag> tagsFormatter, AssetsFormatter<TAsset> assetsFormatter, WeightsFormatter weightsFormatter)
+internal sealed class DataSetWrapper<TTag, TAsset>(
+	ChangeListener changeListener,
+	Lock editingLock, ushort unionTag,
+	TagsFormatter<TTag> tagsFormatter,
+	AssetsFormatter<TAsset> assetsFormatter,
+	WeightsFormatter weightsFormatter)
 	where TTag : Tag
 {
 	public DataSet<TTag, TAsset> Wrap(DataSet<TTag, TAsset> set)

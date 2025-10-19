@@ -1,11 +1,12 @@
 using CommunityToolkit.Diagnostics;
 using FlakeId;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Weights;
 
-internal sealed class InMemoryWeightsLibrary(WeightsWrapper weightsWrapper) : WeightsLibrary
+internal sealed class InMemoryWeightsLibrary(Wrapper<WeightsData> weightsWrapper) : WeightsLibrary
 {
 	public IReadOnlyCollection<WeightsData> Weights => _weights;
 

@@ -3,7 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class StorableImageWrapper(FileSystemDataAccess dataAccess) : ImageWrapper
+internal sealed class StorableImageWrapper(FileSystemDataAccess dataAccess) : Wrapper<ManagedImage>
 {
 	public ManagedImage Wrap(ManagedImage image)
 	{

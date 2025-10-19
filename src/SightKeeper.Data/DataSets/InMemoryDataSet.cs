@@ -1,6 +1,7 @@
 ﻿using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
@@ -11,7 +12,7 @@ namespace SightKeeper.Data.DataSets;
 internal sealed class InMemoryDataSet<TTag, TAsset>(
 	TagFactory<TTag> tagFactory,
 	AssetFactory<TAsset> assetFactory,
-	WeightsWrapper weightsWrapper)
+	Wrapper<WeightsData> weightsWrapper)
 	: DataSet<TTag, TAsset>
 	where TAsset : Asset
 {

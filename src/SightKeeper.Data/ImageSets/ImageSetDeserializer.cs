@@ -1,20 +1,20 @@
 ﻿using CommunityToolkit.Diagnostics;
 using MemoryPack;
-using SightKeeper.Application.ImageSets.Creating;
+using SightKeeper.Application;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
 internal sealed class ImageSetDeserializer(
-	ImageSetFactory<ImageSet> setFactory,
+	Factory<ImageSet> setFactory,
 	Deserializer<IReadOnlyCollection<ManagedImage>> imagesDeserializer,
 	ImageLookupperPopulator lookupperPopulator) :
 	Deserializer<ImageSet>
 {
 	public ImageSet Deserialize(ref MemoryPackReader reader)
 	{
-		var set = setFactory.CreateImageSet();
+		var set = setFactory.Create();
 		var innerSet = set.GetInnermost<ImageSet>();
 		ReadGeneralInfo(ref reader, innerSet);
 		ReadImages(ref reader, innerSet);

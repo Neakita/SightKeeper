@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
-using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -14,7 +13,7 @@ namespace SightKeeper.Data.DataSets;
 
 internal sealed class ZippedMemoryPackDataSetImporter(
 	ImageLookupper imageLookupper,
-	ImageSetFactory<ImageSet> imageSetFactory,
+	Factory<ImageSet> imageSetFactory,
 	WriteRepository<ImageSet> imageSetsWriteRepository,
 	WriteRepository<DataSet<Tag, Asset>> dataSetsWriteRepository,
 	ReadRepository<DataSet<Tag, Asset>> dataSetsReadRepository,
@@ -64,7 +63,7 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 
 	private ImageSet CreateImagesSet()
 	{
-		var set = imageSetFactory.CreateImageSet();
+		var set = imageSetFactory.Create();
 		imageSetsWriteRepository.Add(set);
 		return set;
 	}

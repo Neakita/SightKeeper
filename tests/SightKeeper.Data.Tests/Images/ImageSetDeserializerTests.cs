@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NSubstitute;
-using SightKeeper.Application.ImageSets.Creating;
+using SightKeeper.Application;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.Images;
@@ -48,8 +48,8 @@ public sealed class ImageSetDeserializerTests
 
 	private static (ImageSetDeserializer, SubstituteDeserializer<IReadOnlyCollection<ManagedImage>>) CreateDeserializer(IReadOnlyCollection<ManagedImage> images)
 	{
-		var imageSetFactory = Substitute.For<ImageSetFactory<ImageSet>>();
-		imageSetFactory.CreateImageSet().Returns(_ => Substitute.For<ImageSet, SettableInitialItems<ManagedImage>>());
+		var imageSetFactory = Substitute.For<Factory<ImageSet>>();
+		imageSetFactory.Create().Returns(_ => Substitute.For<ImageSet, SettableInitialItems<ManagedImage>>());
 		var imagesDeserializer = new SubstituteDeserializer<IReadOnlyCollection<ManagedImage>>(() => images);
 		var imageLookupperPopulator = Substitute.For<ImageLookupperPopulator>();
 		var imageSetDeserializer = new ImageSetDeserializer(imageSetFactory, imagesDeserializer, imageLookupperPopulator);

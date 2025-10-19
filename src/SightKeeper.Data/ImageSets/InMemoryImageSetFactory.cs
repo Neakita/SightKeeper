@@ -1,11 +1,12 @@
-﻿using SightKeeper.Application.ImageSets.Creating;
-using SightKeeper.Data.ImageSets.Images;
+﻿using SightKeeper.Application;
+using SightKeeper.Data.Services;
+using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal class InMemoryImageSetFactory(ImageWrapper imageWrapper) : ImageSetFactory<InMemoryImageSet>
+internal class InMemoryImageSetFactory(Wrapper<ManagedImage> imageWrapper) : Factory<InMemoryImageSet>
 {
-    public InMemoryImageSet CreateImageSet()
+    public InMemoryImageSet Create()
     {
         return new InMemoryImageSet(imageWrapper);
     }

@@ -7,7 +7,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class InMemoryImageSet(ImageWrapper imageWrapper) : ImageSet, SettableInitialItems<ManagedImage>
+internal sealed class InMemoryImageSet(Wrapper<ManagedImage> imageWrapper) : ImageSet, SettableInitialItems<ManagedImage>
 {
 	public string Name { get; set; } = string.Empty;
 	public string Description { get; set; } = string.Empty;

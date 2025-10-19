@@ -2,7 +2,6 @@
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.DataSets.Creating;
-using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Data.DataSets;
 using SightKeeper.Data.DataSets.Assets;
@@ -86,7 +85,7 @@ public static class PersistenceExtensions
 	private static void AddWrappers(this ContainerBuilder builder)
 	{
 		builder.RegisterType<StorableImageSetWrapper>()
-			.As<ImageSetWrapper>();
+			.As<Wrapper<ImageSet>>();
 
 		builder.RegisterType<KeyPointWrapper>();
 
@@ -98,10 +97,10 @@ public static class PersistenceExtensions
 	private static void AddFactories(this ContainerBuilder builder)
 	{
 		builder.RegisterType<InMemoryImageSetFactory>()
-			.As<ImageSetFactory<ImageSet>>()
-			.As<ImageSetFactory<InMemoryImageSet>>();
+			.As<Factory<ImageSet>>()
+			.As<Factory<InMemoryImageSet>>();
 
-		builder.RegisterDecorator<WrappedImageSetFactory, ImageSetFactory<ImageSet>>();
+		builder.RegisterDecorator<WrappedImageSetFactory, Factory<ImageSet>>();
 
 		builder.RegisterType<WrappingClassifierDataSetFactory>()
 			.As<DataSetFactory<Tag, ClassifierAsset>>();
@@ -204,7 +203,7 @@ public static class PersistenceExtensions
 				FileExtension = "png"
 			};
 			return new StorableImageWrapper(dataAccess);
-		}).As<ImageWrapper>();
+		}).As<Wrapper<ManagedImage>>();
 
 		builder.RegisterType<PngEncoder>()
 			.As<IImageEncoder>();
