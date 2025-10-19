@@ -76,7 +76,10 @@ public static class ApplicationServicesExtensions
 		builder.RegisterType<ImmediateImageSaver<Bgra32>>()
 			.As<ImageSaver<Bgra32>>();
 
-		builder.RegisterType<ImagesCleaner>();
+		builder.RegisterType<ImagesCleaner>()
+			.SingleInstance()
+			.AsSelf()
+			.As<UnusedImagesLimitManager>();
 	}
 
 	private static void AddTraining(this ContainerBuilder builder)

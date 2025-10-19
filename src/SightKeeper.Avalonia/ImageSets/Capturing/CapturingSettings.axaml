@@ -62,6 +62,12 @@
                     </NumericUpDown.InnerRightContent>
                 </NumericUpDown>
             </HeaderedContentControl>
+            <HeaderedContentControl Header="Unused Images Limit">
+                <NumericUpDown Value="{Binding UnusedImagesLimit}"
+                               Minimum="100"
+                               Increment="100"
+                               Watermark="Unlimited"/>
+            </HeaderedContentControl>
             <HeaderedContentControl Header="Hot Key">
                 <gestureBox:GestureBox Gesture="{Binding Gesture, Converter={x:Static local:FormattedSharpHookGestureConverter.Instance}}"
                                        GestureEditsObservable="{Binding GestureEditsObservable, Converter={x:Static local:FormattedSharpHookGestureObservableConverter.Instance}}"/>

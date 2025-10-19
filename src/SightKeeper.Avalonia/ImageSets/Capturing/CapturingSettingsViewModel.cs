@@ -6,7 +6,7 @@ using SightKeeper.Application.ScreenCapturing;
 
 namespace SightKeeper.Avalonia.ImageSets.Capturing;
 
-public sealed class CapturingSettingsViewModel(ScreenBoundsProvider screenBoundsProvider, ImageCapturer capturer, ObservableSharpHookGesture observableGesture)
+public sealed class CapturingSettingsViewModel(ScreenBoundsProvider screenBoundsProvider, ImageCapturer capturer, ObservableSharpHookGesture observableGesture, UnusedImagesLimitManager unusedImagesLimitManager)
 	: ViewModel, CapturingSettingsDataContext
 {
 	public ushort MaximumWidth => screenBoundsProvider.MainScreenSize.X;
@@ -41,6 +41,17 @@ public sealed class CapturingSettingsViewModel(ScreenBoundsProvider screenBounds
 		{
 			OnPropertyChanging();
 			capturer.FrameRateLimit = value;
+			OnPropertyChanged();
+		}
+	}
+
+	public ushort? UnusedImagesLimit
+	{
+		get => unusedImagesLimitManager.UnusedImagesLimit;
+		set
+		{
+			OnPropertyChanging();
+			unusedImagesLimitManager.UnusedImagesLimit = value;
 			OnPropertyChanged();
 		}
 	}

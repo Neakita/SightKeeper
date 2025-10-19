@@ -13,6 +13,7 @@ internal sealed partial class DesignCapturingSettingsViewModel : ViewModel, Capt
 	[ObservableProperty] public partial ushort Width { get; set; } = 320;
 	[ObservableProperty] public partial ushort Height { get; set; } = 320;
 	[ObservableProperty] public partial double? FrameRateLimit { get; set; }
+	public ushort? UnusedImagesLimit { get; set; }
 
 	public object? Gesture { get; set; }
 	public IObservable<GestureEdit> GestureEditsObservable { get; } = Observable.Empty<GestureEdit>();
