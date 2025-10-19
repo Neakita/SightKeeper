@@ -66,11 +66,6 @@ internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAcce
 		dataAccess.Delete(inner.Id);
 	}
 
-	public void Dispose()
-	{
-		inner.Dispose();
-	}
-
 	public override string? ToString()
 	{
 		return inner.ToString();

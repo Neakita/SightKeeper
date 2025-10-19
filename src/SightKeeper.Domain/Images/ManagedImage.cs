@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets.Assets;
 
 namespace SightKeeper.Domain.Images;
 
-public interface ManagedImage : ImageData, IDisposable
+public interface ManagedImage : ImageData
 {
 	Id Id { get; }
 	IReadOnlyCollection<Asset> Assets { get; }

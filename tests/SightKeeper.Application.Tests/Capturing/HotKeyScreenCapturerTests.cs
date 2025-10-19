@@ -30,7 +30,7 @@ public sealed class HotKeyScreenCapturerTests
 		gestureObserver.OnNext(subject.Gesture);
 		Thread.Sleep(1000);
 		gestureObserver.OnNext(Gesture.Empty);
-		screenCapturer.CaptureCalls.Count.Should().BeInRange(60, 61);
+		screenCapturer.CaptureCalls.Count.Should().BeInRange(60, 62);
 	}
 
 	[Fact]

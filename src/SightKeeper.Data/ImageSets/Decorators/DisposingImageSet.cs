@@ -33,7 +33,7 @@ internal sealed class DisposingImageSet(ImageSet inner) : ImageSet, Decorator<Im
 	public void RemoveImageAt(int index)
 	{
 		var image = Images[index];
-		image.Dispose();
+		Dispose(image);
 		inner.RemoveImageAt(index);
 	}
 
@@ -42,7 +42,7 @@ internal sealed class DisposingImageSet(ImageSet inner) : ImageSet, Decorator<Im
 		for (int i = index; i < index + count; i++)
 		{
 			var image = Images[i];
-			image.Dispose();
+			Dispose(image);
 		}
 		inner.RemoveImagesRange(index, count);
 	}
@@ -50,6 +50,12 @@ internal sealed class DisposingImageSet(ImageSet inner) : ImageSet, Decorator<Im
 	public void Dispose()
 	{
 		foreach (var image in Images)
-			image.Dispose();
+			Dispose(image);
+	}
+
+	private static void Dispose(ManagedImage image)
+	{
+		foreach (var disposable in image.Get<IDisposable>())
+			disposable.Dispose();
 	}
 }

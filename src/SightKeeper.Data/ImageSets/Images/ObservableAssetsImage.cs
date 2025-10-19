@@ -8,7 +8,7 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage
+internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, IDisposable
 {
 	public Id Id => inner.Id;
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
@@ -83,7 +83,6 @@ internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage
 	public void Dispose()
 	{
 		_assets.Dispose();
-		inner.Dispose();
 	}
 
 	public override string? ToString()

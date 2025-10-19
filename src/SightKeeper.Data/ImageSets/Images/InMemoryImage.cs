@@ -74,10 +74,6 @@ internal sealed class InMemoryImage : ManagedImage
 	{
 	}
 
-	public void Dispose()
-	{
-	}
-
 	public override string ToString()
 	{
 		return $"#{Id.ToString()}";
