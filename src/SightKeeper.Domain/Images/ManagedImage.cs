@@ -10,8 +10,6 @@ public interface ManagedImage : ImageData
 	bool IsInUse => Assets.Count > 0;
 	string? DataFormat { get; }
 
-	void AddAsset(Asset asset);
-	void RemoveAsset(Asset asset);
 	Stream? OpenWriteStream();
 	Stream? OpenReadStream();
 	void DeleteData();

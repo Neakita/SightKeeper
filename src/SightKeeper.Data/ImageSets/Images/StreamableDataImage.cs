@@ -51,16 +51,6 @@ internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAcce
 		return dataAccess.TryCopyTo(Id, filePath);
 	}
 
-	public void AddAsset(Asset asset)
-	{
-		inner.AddAsset(asset);
-	}
-
-	public void RemoveAsset(Asset asset)
-	{
-		inner.RemoveAsset(asset);
-	}
-
 	public void DeleteData()
 	{
 		dataAccess.Delete(inner.Id);

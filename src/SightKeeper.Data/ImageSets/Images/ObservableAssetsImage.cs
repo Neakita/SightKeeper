@@ -8,7 +8,7 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, IDisposable
+internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, EditableImageAssets, IDisposable
 {
 	public Id Id => inner.Id;
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
@@ -51,9 +51,9 @@ internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, 
 		return inner.TryCopyTo(filePath);
 	}
 
-	public void AddAsset(Asset asset)
+	public void Add(Asset asset)
 	{
-		inner.AddAsset(asset);
+		inner.GetFirst<EditableImageAssets>().Add(asset);
 		if (!_assets.HasObservers)
 			return;
 		Addition<Asset> change = new()
@@ -63,9 +63,9 @@ internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, 
 		_assets.Notify(change);
 	}
 
-	public void RemoveAsset(Asset asset)
+	public void Remove(Asset asset)
 	{
-		inner.RemoveAsset(asset);
+		inner.GetFirst<EditableImageAssets>().Remove(asset);
 		if (!_assets.HasObservers)
 			return;
 		Removal<Asset> change = new()

@@ -1,4 +1,5 @@
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 
@@ -28,7 +29,7 @@ internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFa
 	{
 		var asset = assetFactory.CreateAsset(image);
 		_assets.Add(image, asset);
-		image.AddAsset(asset);
+		image.GetFirst<EditableImageAssets>().Add(asset);
 		return asset;
 	}
 
@@ -37,19 +38,14 @@ internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFa
 		var asset = GetAsset(image);
 		bool isRemoved = _assets.Remove(image);
 		Guard.IsTrue(isRemoved);
-		image.RemoveAsset(asset);
+		image.GetFirst<EditableImageAssets>().Remove(asset);
 	}
 
 	public void ClearAssets()
 	{
 		foreach (var (image, asset) in _assets)
-			image.RemoveAsset(asset);
+			image.GetFirst<EditableImageAssets>().Remove(asset);
 		_assets.Clear();
-	}
-
-	public void EnsureCapacity(int capacity)
-	{
-		_assets.EnsureCapacity(capacity);
 	}
 
 	private readonly Dictionary<ManagedImage, TAsset> _assets = new();

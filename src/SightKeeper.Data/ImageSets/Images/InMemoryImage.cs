@@ -8,7 +8,7 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
-internal sealed class InMemoryImage : ManagedImage
+internal sealed class InMemoryImage : ManagedImage, EditableImageAssets
 {
 	public Id Id { get; }
 	public DateTimeOffset CreationTimestamp { get; }
@@ -58,13 +58,13 @@ internal sealed class InMemoryImage : ManagedImage
 		return false;
 	}
 
-	public void AddAsset(Asset asset)
+	public void Add(Asset asset)
 	{
 		bool isAdded = _assets.Add(asset);
 		Guard.IsTrue(isAdded);
 	}
 
-	public void RemoveAsset(Asset asset)
+	public void Remove(Asset asset)
 	{
 		bool isRemoved = _assets.Remove(asset);
 		Guard.IsTrue(isRemoved);

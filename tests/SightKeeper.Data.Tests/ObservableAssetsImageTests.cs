@@ -13,12 +13,12 @@ public sealed class ObservableAssetsImageTests
 	[Fact]
 	public void ShouldObserveAddition()
 	{
-		var image = new ObservableAssetsImage(Substitute.For<ManagedImage>());
+		var image = new ObservableAssetsImage(Substitute.For<ManagedImage, EditableImageAssets>());
 		var asset = Substitute.For<Asset>();
 		var observableAssets = image.Assets.Should().BeAssignableTo<ReadOnlyObservableCollection<Asset>>().Subject;
 		List<Change<Asset>> observedChanges = new();
 		observableAssets.Subscribe(observedChanges.Add);
-		image.AddAsset(asset);
+		image.Add(asset);
 		observedChanges.Should()
 			.ContainSingle()
 			.Which.Should().BeOfType<Addition<Asset>>()
@@ -29,16 +29,38 @@ public sealed class ObservableAssetsImageTests
 	[Fact]
 	public void ShouldObserveRemoval()
 	{
-		var image = new ObservableAssetsImage(Substitute.For<ManagedImage>());
+		var image = new ObservableAssetsImage(Substitute.For<ManagedImage, EditableImageAssets>());
 		var asset = Substitute.For<Asset>();
 		var observableAssets = image.Assets.Should().BeAssignableTo<ReadOnlyObservableCollection<Asset>>().Subject;
 		List<Change<Asset>> observedChanges = new();
 		observableAssets.Subscribe(observedChanges.Add);
-		image.RemoveAsset(asset);
+		image.Remove(asset);
 		observedChanges.Should()
 			.ContainSingle()
 			.Which.Should().BeOfType<Removal<Asset>>()
 			.Which.Items.Should().ContainSingle()
 			.Which.Should().BeSameAs(asset);
+	}
+
+	[Fact]
+	public void ShouldPropagateAddition()
+	{
+		var innerImage = Substitute.For<ManagedImage, EditableImageAssets>();
+		var image = new ObservableAssetsImage(innerImage);
+		var asset = Substitute.For<Asset>();
+		image.Add(asset);
+		var editableAssetsImage = (EditableImageAssets)innerImage;
+		editableAssetsImage.Received().Add(asset);
+	}
+
+	[Fact]
+	public void ShouldPropagateRemoval()
+	{
+		var innerImage = Substitute.For<ManagedImage, EditableImageAssets>();
+		var image = new ObservableAssetsImage(innerImage);
+		var asset = Substitute.For<Asset>();
+		image.Remove(asset);
+		var editableAssetsImage = (EditableImageAssets)innerImage;
+		editableAssetsImage.Received().Remove(asset);
 	}
 }
