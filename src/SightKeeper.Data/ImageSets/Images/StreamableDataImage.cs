@@ -9,7 +9,7 @@ using SixLabors.ImageSharp.PixelFormats;
 namespace SightKeeper.Data.ImageSets.Images;
 
 internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAccess dataAccess)
-	: ManagedImage, DeletableImageData, FileExtensionProvider, Decorator<ManagedImage>
+	: ManagedImage, DeletableImageData, FileExtensionProvider, StreamableData, Decorator<ManagedImage>
 {
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 	public Vector2<ushort> Size => inner.Size;
@@ -42,7 +42,7 @@ internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAcce
 		return dataAccess.OpenWrite(Id);
 	}
 
-	public Stream? OpenReadStream()
+	public Stream OpenReadStream()
 	{
 		return dataAccess.OpenRead(Id);
 	}

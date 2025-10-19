@@ -45,11 +45,9 @@ internal class FileSystemDataAccess
 		return await Image.LoadAsync<TPixel>(stream, cancellationToken);
 	}
 
-	public virtual Stream? OpenRead(Id id)
+	public virtual Stream OpenRead(Id id)
 	{
 		var filePath = GetFilePath(id);
-		if (!File.Exists(filePath))
-			return null;
 		return File.OpenRead(filePath);
 	}
 

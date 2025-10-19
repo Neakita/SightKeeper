@@ -4,6 +4,7 @@ using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
 using SightKeeper.Application.ScreenCapturing.Saving;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
@@ -13,7 +14,8 @@ internal sealed class BinaryImageDataSaver<TPixel> : ImageDataSaver<TPixel>
 {
 	public void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data)
 	{
-		using var stream = image.OpenWriteStream();
+		var streamableData = image.GetFirst<StreamableData>();
+		using var stream = streamableData.OpenWriteStream();
 		Guard.IsNotNull(stream);
 		using var operation = Logger.OperationAt(LogEventLevel.Verbose, LogEventLevel.Error)
 			.Begin("Saving image {image} with size {size}", image, image.Size);

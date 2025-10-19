@@ -34,16 +34,6 @@ internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, 
 		return inner.LoadAsync<TPixel>(cancellationToken);
 	}
 
-	public Stream? OpenWriteStream()
-	{
-		return inner.OpenWriteStream();
-	}
-
-	public Stream? OpenReadStream()
-	{
-		return inner.OpenReadStream();
-	}
-
 	public void Add(Asset asset)
 	{
 		inner.GetFirst<EditableImageAssets>().Add(asset);

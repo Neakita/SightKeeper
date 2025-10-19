@@ -7,11 +7,9 @@ internal sealed class CompressedFileSystemDataAccess : FileSystemDataAccess
 {
 	public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.SmallestSize;
 
-	public override Stream? OpenRead(Id id)
+	public override Stream OpenRead(Id id)
 	{
 		var stream = base.OpenRead(id);
-		if (stream == null)
-			return null;
 		return new ZLibStream(stream, CompressionMode.Decompress);
 	}
 

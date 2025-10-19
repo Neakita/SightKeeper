@@ -6,7 +6,4 @@ public interface ManagedImage : ImageData
 {
 	IReadOnlyCollection<Asset> Assets { get; }
 	bool IsInUse => Assets.Count > 0;
-
-	Stream? OpenWriteStream();
-	Stream? OpenReadStream();
 }

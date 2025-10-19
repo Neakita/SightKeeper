@@ -43,9 +43,8 @@ internal sealed class ZippedMemoryPackDataSetExporter(Serializer<DataSet<Tag, As
 
 	private static async Task WriteImageAsync(ZipArchive archive, ManagedImage image, CancellationToken cancellationToken)
 	{
-		await using var imageStream = image.OpenReadStream();
-		if (imageStream == null)
-			return;
+		var streamableData = image.GetFirst<StreamableData>();
+		await using var imageStream = streamableData.OpenReadStream();
 		var idHolder = image.GetFirst<IdHolder>();
 		var imageId = idHolder.Id;
 		var fileExtensionProvider = image.GetFirst<FileExtensionProvider>();

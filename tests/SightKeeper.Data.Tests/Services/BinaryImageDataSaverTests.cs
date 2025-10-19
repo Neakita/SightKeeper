@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
@@ -12,10 +13,10 @@ public sealed class BinaryImageDataSaverTests
 	[Fact]
 	public void ShouldWriteDataToStream()
 	{
-		var image = Substitute.For<ManagedImage>();
+		var image = Substitute.For<ManagedImage, StreamableData>();
 		using MemoryStream stream = new();
 		image.Size.Returns(new Vector2<ushort>(2, 2));
-		image.OpenWriteStream().Returns(stream);
+		((StreamableData)image).OpenWriteStream().Returns(stream);
 		BinaryImageDataSaver<Argb32> dataSaver = new();
 		var pixels =  new Argb32[2, 2];
 		pixels[0, 0] = new Argb32(0x1, 0x2, 0x3);

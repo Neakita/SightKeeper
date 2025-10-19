@@ -80,7 +80,8 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 		if (entry == null)
 			return;
 		await using var readStream = entry.Open();
-		await using var writeStream = image.OpenWriteStream();
+		var streamableData = image.GetFirst<StreamableData>();
+		await using var writeStream = streamableData.OpenWriteStream();
 		Guard.IsNotNull(writeStream);
 		await readStream.CopyToAsync(writeStream);
 	}

@@ -1,9 +1,9 @@
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
 using SightKeeper.Application.ScreenCapturing.Saving;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
@@ -15,8 +15,8 @@ internal sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : 
 {
 	public void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data)
 	{
-		using var stream = image.OpenWriteStream();
-		Guard.IsNotNull(stream);
+		var streamableData = image.GetFirst<StreamableData>();
+		using var stream = streamableData.OpenWriteStream();
 		using var operation = Logger.OperationAt(LogEventLevel.Verbose, LogEventLevel.Error)
 			.Begin("Saving image {image} with size {size}", image, image.Size);
 		if (TrySaveContiguousSpan(data, stream))
@@ -47,12 +47,15 @@ internal sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : 
 	private void SaveWithBuffer(ReadOnlySpan2D<TPixel> data, Stream stream)
 	{
 		var requiredBufferLength = data.Width * data.Height;
-		if (_buffer.Length < requiredBufferLength)
-		{
-			_buffer = new TPixel[requiredBufferLength];
-		}
+		EnsureBufferCapacity(requiredBufferLength);
 		data.CopyTo(_buffer);
 		var imageData = Image.WrapMemory<TPixel>(_buffer, data.Width, data.Height);
 		imageData.Save(stream, encoder);
+	}
+
+	private void EnsureBufferCapacity(int requiredBufferLength)
+	{
+		if (_buffer.Length < requiredBufferLength)
+			_buffer = new TPixel[requiredBufferLength];
 	}
 }
