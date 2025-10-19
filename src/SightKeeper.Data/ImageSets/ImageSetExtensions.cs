@@ -41,11 +41,6 @@ internal static class ImageSetExtensions
 		return new DisposingImageSet(set);
 	}
 
-	public static ImageSet WithLookupperPopulator(this ImageSet set, ImageLookupperPopulator populator)
-	{
-		return new PopulateImageLookupperImageSet(set, populator);
-	}
-
 	public static ImageSet WithDeletableData(this ImageSet set)
 	{
 		return new DeletableDataImageSet(set);

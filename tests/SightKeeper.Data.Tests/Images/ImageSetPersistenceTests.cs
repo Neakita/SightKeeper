@@ -37,8 +37,7 @@ public sealed class ImageSetPersistenceTests
 			var imageSetFactory = Substitute.For<Factory<ImageSet>>();
 			imageSetFactory.Create().Returns(_ => Substitute.For<ImageSet, SettableInitialItems<ManagedImage>>());
 			var imagesDeserializer = new SubstituteDeserializer<IReadOnlyCollection<ManagedImage>>(() => []);
-			var imageLookupperPopulator = Substitute.For<ImageLookupperPopulator>();
-			return new ImageSetDeserializer(imageSetFactory, imagesDeserializer, imageLookupperPopulator);
+			return new ImageSetDeserializer(imageSetFactory, imagesDeserializer);
 		}
 	}
 

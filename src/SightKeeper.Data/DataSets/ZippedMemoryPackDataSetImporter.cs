@@ -17,7 +17,6 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 	WriteRepository<ImageSet> imageSetsWriteRepository,
 	WriteRepository<DataSet<Tag, Asset>> dataSetsWriteRepository,
 	ReadRepository<DataSet<Tag, Asset>> dataSetsReadRepository,
-	ImageLookupperPopulator lookupperPopulator,
 	Deserializer<IReadOnlyCollection<ManagedImage>> imagesDeserializer,
 	Deserializer<DataSet<Tag, Asset>> dataSetDeserializer)
 	: DataSetImporter
@@ -46,7 +45,6 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 			var settableInitialImages = importedImagesSet.GetInnermost<SettableInitialItems<ManagedImage>>();
 			var wrappedImage = settableInitialImages.WrapAndInsert(image);
 			await CopyImageData(archive, wrappedImage);
-			lookupperPopulator.AddImage(wrappedImage);
 		}
 		return importedImagesSet;
 	}

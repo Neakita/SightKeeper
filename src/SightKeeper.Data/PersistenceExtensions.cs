@@ -43,10 +43,8 @@ public static class PersistenceExtensions
 		builder.RegisterType<MemoryPackDataSaver>()
 			.As<DataSaver>();
 
-		builder.RegisterType<PopulatableImageLookupper>()
+		builder.RegisterType<TrackingImageLookupper>()
 			.SingleInstance()
-			.AsSelf()
-			.As<ImageLookupperPopulator>()
 			.As<ImageLookupper>();
 
 		builder.RegisterType<ZippedMemoryPackDataSetExporter>()

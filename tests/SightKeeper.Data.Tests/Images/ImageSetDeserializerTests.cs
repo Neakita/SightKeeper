@@ -51,8 +51,7 @@ public sealed class ImageSetDeserializerTests
 		var imageSetFactory = Substitute.For<Factory<ImageSet>>();
 		imageSetFactory.Create().Returns(_ => Substitute.For<ImageSet, SettableInitialItems<ManagedImage>>());
 		var imagesDeserializer = new SubstituteDeserializer<IReadOnlyCollection<ManagedImage>>(() => images);
-		var imageLookupperPopulator = Substitute.For<ImageLookupperPopulator>();
-		var imageSetDeserializer = new ImageSetDeserializer(imageSetFactory, imagesDeserializer, imageLookupperPopulator);
+		var imageSetDeserializer = new ImageSetDeserializer(imageSetFactory, imagesDeserializer);
 		return (imageSetDeserializer, imagesDeserializer);
 	}
 

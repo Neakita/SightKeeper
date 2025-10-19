@@ -3,11 +3,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.ImageSets;
 
-internal sealed class StorableImageSetWrapper(
-	ChangeListener changeListener,
-	Lock editingLock,
-	ImageLookupperPopulator lookupperPopulator)
-	: Wrapper<ImageSet>
+internal sealed class StorableImageSetWrapper(ChangeListener changeListener, Lock editingLock) : Wrapper<ImageSet>
 {
 	public ImageSet Wrap(ImageSet set)
 	{
@@ -35,8 +31,7 @@ internal sealed class StorableImageSetWrapper(
 			// We shouldn't dispose images if domain rule is violated,
 			// so this should be behind domain rules
 			.WithImagesDisposing()
-			
-			.WithLookupperPopulator(lookupperPopulator)
+
 			.WithDeletableData()
 
 			// If domain rule is violated and throws an exception,

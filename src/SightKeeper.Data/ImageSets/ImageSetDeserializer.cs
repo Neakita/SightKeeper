@@ -8,8 +8,7 @@ namespace SightKeeper.Data.ImageSets;
 
 internal sealed class ImageSetDeserializer(
 	Factory<ImageSet> setFactory,
-	Deserializer<IReadOnlyCollection<ManagedImage>> imagesDeserializer,
-	ImageLookupperPopulator lookupperPopulator) :
+	Deserializer<IReadOnlyCollection<ManagedImage>> imagesDeserializer) :
 	Deserializer<ImageSet>
 {
 	public ImageSet Deserialize(ref MemoryPackReader reader)
@@ -18,7 +17,6 @@ internal sealed class ImageSetDeserializer(
 		var innerSet = set.GetInnermost<ImageSet>();
 		ReadGeneralInfo(ref reader, innerSet);
 		ReadImages(ref reader, innerSet);
-		lookupperPopulator.AddImages(innerSet.Images);
 		return set;
 	}
 

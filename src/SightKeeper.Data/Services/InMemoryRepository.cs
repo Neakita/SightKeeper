@@ -22,6 +22,7 @@ internal sealed class InMemoryRepository<T>(Lock editingLock, ChangeListener cha
 	void ShortcutWriteRepository<T>.Add(T item)
 	{
 		_items.Add(item);
+		_added.OnNext(item);
 	}
 
 	public void Remove(T item)
