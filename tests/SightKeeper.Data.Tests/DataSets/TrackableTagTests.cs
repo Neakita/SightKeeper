@@ -1,5 +1,6 @@
 using NSubstitute;
 using SightKeeper.Data.DataSets.Tags.Decorators;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.Tests.DataSets;

@@ -9,7 +9,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Data;
+namespace SightKeeper.Data.Services;
 
 internal sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : ImageDataSaver<TPixel> where TPixel : unmanaged, IPixel<TPixel>
 {

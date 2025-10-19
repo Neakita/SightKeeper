@@ -2,7 +2,7 @@
 using FlakeId;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data;
+namespace SightKeeper.Data.Services;
 
 internal class PopulatableImageLookupper : ImageLookupperPopulator, ImageLookupper
 {

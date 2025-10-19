@@ -4,6 +4,7 @@ using SightKeeper.Data.DataSets.Poser.Items;
 using SightKeeper.Data.DataSets.Poser.Items.KeyPoints;
 using SightKeeper.Data.DataSets.Poser.Tags;
 using SightKeeper.Data.DataSets.Weights;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;

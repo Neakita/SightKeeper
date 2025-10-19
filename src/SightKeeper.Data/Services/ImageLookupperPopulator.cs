@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data;
+namespace SightKeeper.Data.Services;
 
 internal interface ImageLookupperPopulator
 {

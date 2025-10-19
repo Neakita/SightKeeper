@@ -4,7 +4,7 @@ using Serilog;
 using SightKeeper.Application;
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Data;
+namespace SightKeeper.Data.Services;
 
 internal sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 {

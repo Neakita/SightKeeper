@@ -1,5 +1,6 @@
 ﻿using System.Buffers;
 using MemoryPack;
+using SightKeeper.Data.Services;
 
 namespace SightKeeper.Data.Tests;
 

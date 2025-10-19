@@ -5,7 +5,7 @@ using SightKeeper.Application;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Data;
+namespace SightKeeper.Data.Services;
 
 internal sealed class ImageSharpImageLoader<TPixel> : ImageLoader<TPixel> where TPixel : unmanaged, IPixel<TPixel>
 {

@@ -1,5 +1,6 @@
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.DataSets.Assets;
+using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
