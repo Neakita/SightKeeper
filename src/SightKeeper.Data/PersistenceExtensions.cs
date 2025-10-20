@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Serilog;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.ScreenCapturing.Saving;
@@ -194,7 +195,7 @@ public static class PersistenceExtensions
 	{
 		builder.Register(_ =>
 		{
-			FileSystemDataAccess dataAccess = new()
+			FileSystemDataAccess dataAccess = new(Log.ForContext<FileSystemDataAccess>())
 			{
 				DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Images"),
 				FileExtension = "png"

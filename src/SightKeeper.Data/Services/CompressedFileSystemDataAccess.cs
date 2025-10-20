@@ -1,9 +1,10 @@
 using System.IO.Compression;
 using FlakeId;
+using Serilog;
 
 namespace SightKeeper.Data.Services;
 
-internal sealed class CompressedFileSystemDataAccess : FileSystemDataAccess
+internal sealed class CompressedFileSystemDataAccess(ILogger logger) : FileSystemDataAccess(logger)
 {
 	public CompressionLevel CompressionLevel { get; set; } = CompressionLevel.SmallestSize;
 
