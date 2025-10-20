@@ -12,6 +12,7 @@ public interface TrainingDataContext
 	DataSet<Tag, Asset>? DataSet { get; set; }
 	ushort Width { get; set; }
 	ushort Height { get; set; }
+	bool IsTraining { get; }
 	ICommand StartTrainingCommand { get; }
 	ICommand StopTrainingCommand { get; }
 }

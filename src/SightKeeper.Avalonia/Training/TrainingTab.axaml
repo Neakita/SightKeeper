@@ -3,30 +3,42 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Training"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Training.TrainingTab"
              x:DataType="local:TrainingDataContext">
-    <StackPanel Classes="regular-spacing regular-margin"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top">
-        <HeaderedContentControl Header="Data set">
-            <ComboBox ItemsSource="{Binding DataSets}"
-                      SelectedItem="{Binding DataSet}"
-                      DisplayMemberBinding="{Binding Name}"/>
-        </HeaderedContentControl>
-        <HeaderedContentControl Header="Width">
-            <NumericUpDown Value="{Binding Width}"
-                           Increment="32"
-                           Minimum="32"/>
-        </HeaderedContentControl>
-        <HeaderedContentControl Header="Height">
-            <NumericUpDown Value="{Binding Height}"
-                           Increment="32"
-                           Minimum="32"/>
-        </HeaderedContentControl>
-        <Button Command="{Binding StartTrainingCommand}"
-                Content="Start"/>
-        <Button Command="{Binding StopTrainingCommand}"
-                Content="Abort"/>
-    </StackPanel>
+    <Design.DataContext>
+        <local:DesignTrainingDataContext/>
+    </Design.DataContext>
+    <Border Classes="regular-margin outer"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top">
+        <StackPanel Classes="regular-spacing regular-margin"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+            <HeaderedContentControl Header="Data set">
+                <ComboBox ItemsSource="{Binding DataSets}"
+                          SelectedItem="{Binding DataSet}"
+                          DisplayMemberBinding="{Binding Name}"/>
+            </HeaderedContentControl>
+            <HeaderedContentControl Header="Width">
+                <NumericUpDown Value="{Binding Width}"
+                               Increment="32"
+                               Minimum="32"/>
+            </HeaderedContentControl>
+            <HeaderedContentControl Header="Height">
+                <NumericUpDown Value="{Binding Height}"
+                               Increment="32"
+                               Minimum="32"/>
+            </HeaderedContentControl>
+            <Button Command="{Binding StartTrainingCommand}"
+                    Content="{icons:MaterialIconExt Kind=Play}"
+                    Classes="square high-accent"
+                    IsVisible="{Binding !IsTraining}"/>
+            <Button Command="{Binding StopTrainingCommand}"
+                    Content="{icons:MaterialIconExt Kind=Stop}"
+                    Classes="square red-accent"
+                    IsVisible="{Binding IsTraining}"/>
+        </StackPanel>
+    </Border>
 </UserControl>
