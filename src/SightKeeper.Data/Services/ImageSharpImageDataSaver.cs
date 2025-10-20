@@ -11,13 +11,13 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
-internal sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : ImageDataSaver<TPixel> where TPixel : unmanaged, IPixel<TPixel>
+internal sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder, ILogger logger) : ImageDataSaver<TPixel> where TPixel : unmanaged, IPixel<TPixel>
 {
 	public void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data)
 	{
 		var streamableData = image.GetFirst<StreamableData>();
 		using var stream = streamableData.OpenWriteStream();
-		using var operation = Logger.OperationAt(LogEventLevel.Verbose, LogEventLevel.Error)
+		using var operation = logger.OperationAt(LogEventLevel.Verbose, LogEventLevel.Error)
 			.Begin("Saving image {image} with size {size}", image, image.Size);
 		if (TrySaveContiguousSpan(data, stream))
 		{
@@ -28,7 +28,6 @@ internal sealed class ImageSharpImageDataSaver<TPixel>(IImageEncoder encoder) : 
 		operation.Complete("contiguous", false);
 	}
 
-	private static readonly ILogger Logger = Log.ForContext<ImageSharpImageDataSaver<TPixel>>();
 	private TPixel[] _buffer = Array.Empty<TPixel>();
 
 	private unsafe bool TrySaveContiguousSpan(ReadOnlySpan2D<TPixel> data, Stream stream)

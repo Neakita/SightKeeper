@@ -8,30 +8,30 @@ namespace SightKeeper.Data.Services;
 
 internal sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 {
-	public ThreadedImageLoader(ImageLoader<TPixel> inner)
+	public ThreadedImageLoader(ImageLoader<TPixel> inner, ILogger logger)
 	{
 		_inner = inner;
+		_logger = logger;
 		Task.Run(ProcessRequestsAsync);
 	}
 
 	public Task<bool> LoadImageAsync(ImageData imageData, Memory<TPixel> target, CancellationToken cancellationToken)
 	{
 		var completionSource = new TaskCompletionSource<bool>();
-		cancellationToken.Register(static state =>
+		cancellationToken.Register(() =>
 		{
-			var completionSource = (TaskCompletionSource<bool>)state!;
 			if (completionSource.TrySetResult(false))
-				Logger.Verbose("Image loading was canceled by cancellationToken registered callback");
-		}, completionSource);
+				_logger.Verbose("Image loading was canceled by cancellationToken registered callback");
+		});
 		var request = new LoadImageRequest(imageData, target, completionSource, cancellationToken);
 		bool isWritten = _requestsChannel.Writer.TryWrite(request);
 		Guard.IsTrue(isWritten);
 		return completionSource.Task;
 	}
 
-	private static readonly ILogger Logger = Log.Logger.ForContext<ThreadedImageLoader<TPixel>>();
 	private readonly Channel<LoadImageRequest> _requestsChannel = Channel.CreateUnbounded<LoadImageRequest>();
 	private readonly ImageLoader<TPixel> _inner;
+	private readonly ILogger _logger;
 
 	private sealed record LoadImageRequest(
 		ImageData Image,
@@ -56,7 +56,7 @@ internal sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 		{
 			var isExceptionSet = request.CompletionSource.TrySetException(exception);
 			if (!isExceptionSet)
-				Log.Logger.Warning(exception, "An exception was thrown while processing image {image} load request, but couldn't be set to CompletionSource", request.Image);
+				_logger.Warning(exception, "An exception was thrown while processing image {image} load request, but couldn't be set to CompletionSource", request.Image);
 		}
 	}
 
@@ -66,6 +66,6 @@ internal sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 			return;
 		var isLoaded = await _inner.LoadImageAsync(request.Image, request.Target, request.CancellationToken);
 		if (request.CompletionSource.TrySetResult(isLoaded))
-			Logger.Verbose("Threaded image {image} loading result set: {isLoaded}", request.Image, isLoaded);
+			_logger.Verbose("Threaded image {image} loading result set: {isLoaded}", request.Image, isLoaded);
 	}
 }

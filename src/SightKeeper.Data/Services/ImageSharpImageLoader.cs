@@ -7,11 +7,11 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
-internal sealed class ImageSharpImageLoader<TPixel> : ImageLoader<TPixel> where TPixel : unmanaged, IPixel<TPixel>
+internal sealed class ImageSharpImageLoader<TPixel>(ILogger logger) : ImageLoader<TPixel> where TPixel : unmanaged, IPixel<TPixel>
 {
 	public async Task<bool> LoadImageAsync(ImageData imageData, Memory<TPixel> target, CancellationToken cancellationToken)
 	{
-		using var operation = Logger.OperationAt(LogEventLevel.Verbose)
+		using var operation = logger.OperationAt(LogEventLevel.Verbose)
 			.Begin("Loading image {image} with size {size}", imageData, imageData.Size);
 		using var image = await imageData.LoadAsync<TPixel>(cancellationToken);
 		if (image == null || cancellationToken.IsCancellationRequested)
@@ -20,6 +20,4 @@ internal sealed class ImageSharpImageLoader<TPixel> : ImageLoader<TPixel> where 
 		operation.Complete();
 		return true;
 	}
-
-	private static readonly ILogger Logger = Log.ForContext<ImageSharpImageLoader<TPixel>>();
 }

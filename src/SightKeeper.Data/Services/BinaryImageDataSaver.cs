@@ -9,7 +9,7 @@ using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;
 
-internal sealed class BinaryImageDataSaver<TPixel> : ImageDataSaver<TPixel>
+internal sealed class BinaryImageDataSaver<TPixel>(ILogger logger) : ImageDataSaver<TPixel>
 	where TPixel : unmanaged
 {
 	public void SaveData(ManagedImage image, ReadOnlySpan2D<TPixel> data)
@@ -17,7 +17,7 @@ internal sealed class BinaryImageDataSaver<TPixel> : ImageDataSaver<TPixel>
 		var streamableData = image.GetFirst<StreamableData>();
 		using var stream = streamableData.OpenWriteStream();
 		Guard.IsNotNull(stream);
-		using var operation = Logger.OperationAt(LogEventLevel.Verbose, LogEventLevel.Error)
+		using var operation = logger.OperationAt(LogEventLevel.Verbose, LogEventLevel.Error)
 			.Begin("Saving image {image} with size {size}", image, image.Size);
 		if (TryWriteContiguousSpan(data, stream))
 		{
@@ -27,8 +27,6 @@ internal sealed class BinaryImageDataSaver<TPixel> : ImageDataSaver<TPixel>
 		WriteRowByRow(data, stream);
 		operation.Complete("contiguous", false);
 	}
-
-	private static readonly ILogger Logger = Log.ForContext<BinaryImageDataSaver<TPixel>>();
 
 	private static bool TryWriteContiguousSpan(ReadOnlySpan2D<TPixel> data, Stream stream)
 	{

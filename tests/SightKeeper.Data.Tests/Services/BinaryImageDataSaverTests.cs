@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NSubstitute;
+using Serilog;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
@@ -17,7 +18,7 @@ public sealed class BinaryImageDataSaverTests
 		using MemoryStream stream = new();
 		image.Size.Returns(new Vector2<ushort>(2, 2));
 		((StreamableData)image).OpenWriteStream().Returns(stream);
-		BinaryImageDataSaver<Argb32> dataSaver = new();
+		BinaryImageDataSaver<Argb32> dataSaver = new(Substitute.For<ILogger>());
 		var pixels =  new Argb32[2, 2];
 		pixels[0, 0] = new Argb32(0x1, 0x2, 0x3);
 		pixels[0, 1] = new Argb32(0x4, 0x5, 0x6);
