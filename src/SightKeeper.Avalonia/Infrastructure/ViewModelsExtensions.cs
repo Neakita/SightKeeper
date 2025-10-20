@@ -165,6 +165,7 @@ internal static class ViewModelsExtensions
 		builder.RegisterType<DetectorToolingViewModel>();
 		builder.RegisterType<PoserToolingViewModel>();
 		builder.RegisterType<AnnotationTabViewModel>();
+		builder.RegisterType<AnnotationImageViewModel>();
 	}
 
 	private static void AddTrainingTabDependencies(this ContainerBuilder builder)

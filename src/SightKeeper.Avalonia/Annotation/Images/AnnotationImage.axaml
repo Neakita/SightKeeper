@@ -7,8 +7,12 @@
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Annotation.Images.AnnotationImage"
-             x:DataType="images:AnnotationImageDataContext">
-    <Grid RowDefinitions="* 12 Auto">
+             x:DataType="images:AnnotationImageDataContext"
+             d:DataContext="{x:Static images:DesignAnnotationImageDataContext.Asset}"
+             d:DesignWidth="300"
+             d:DesignHeight="300">
+    <Grid RowDefinitions="* Auto"
+          RowSpacing="12">
         <Grid.Styles>
             <Style Selector="TextBlock">
                 <Setter Property="FontSize" Value="12"/>
@@ -58,7 +62,16 @@
                 </Panel>
             </Border>
         </Border>
-        <StackPanel Grid.Row="2"
+        <icons:MaterialIcon Grid.Row="0"
+                            Foreground="ForestGreen"
+                            Width="30"
+                            Height="30"
+                            Kind="BookmarkCheck"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            IsVisible="{Binding IsAsset}"
+                            Margin="0 -2 16 0"/>
+        <StackPanel Grid.Row="1"
                     Orientation="Horizontal"
                     Classes="small-spacing"
                     ToolTip.Tip="{Binding CreationTimestamp}"

@@ -5,20 +5,21 @@ using Avalonia.Media.Imaging;
 
 namespace SightKeeper.Avalonia.Annotation.Images;
 
-internal sealed class DesignAnnotationImageDataContext : AnnotationImageDataContext
+internal sealed class DesignAnnotationImageDataContext(
+	string sampleImageFileName,
+	DateTimeOffset creationTimestamp,
+	bool isAsset)
+	: AnnotationImageDataContext
 {
-	public DateTimeOffset CreationTimestamp { get; }
+	public static DesignAnnotationImageDataContext Asset => new("kfSample1.jpg", DateTimeOffset.Now.AddMinutes(3), true);
 
-	public DesignAnnotationImageDataContext(string sampleImageFileName, DateTimeOffset creationTimestamp)
-	{
-		_imageDataContext = new DesignImageDataContext(sampleImageFileName);
-		CreationTimestamp = creationTimestamp;
-	}
+	public DateTimeOffset CreationTimestamp => creationTimestamp;
+	public bool IsAsset => isAsset;
 
 	public Task<Bitmap?> LoadAsync(int? maximumLargestDimension, CancellationToken cancellationToken)
 	{
 		return _imageDataContext.LoadAsync(maximumLargestDimension, cancellationToken);
 	}
 
-	private readonly DesignImageDataContext _imageDataContext;
+	private readonly DesignImageDataContext _imageDataContext = new(sampleImageFileName);
 }

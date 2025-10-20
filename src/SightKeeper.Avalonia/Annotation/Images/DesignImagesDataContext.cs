@@ -21,7 +21,7 @@ internal sealed class DesignImagesDataContext : ImagesDataContext
 	private static IEnumerable<AnnotationImageDataContext> GetImages()
 	{
 		return GetTimestamps().Select((creationTimestamp, index) =>
-			new DesignAnnotationImageDataContext(SampleImageFileNames[index % SampleImageFileNames.Count], creationTimestamp));
+			new DesignAnnotationImageDataContext(SampleImageFileNames[index % SampleImageFileNames.Count], creationTimestamp, index < 4));
 	}
 
 	private static IEnumerable<DateTimeOffset> GetTimestamps()

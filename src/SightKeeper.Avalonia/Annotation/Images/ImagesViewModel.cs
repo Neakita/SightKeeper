@@ -10,17 +10,17 @@ using Vibrance.Changes;
 
 namespace SightKeeper.Avalonia.Annotation.Images;
 
-public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, ImageSelection, IDisposable
+internal sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, ImageSelection, IDisposable
 {
 	public IReadOnlyCollection<AnnotationImageDataContext> Images => _images.ToReadOnlyNotifyingList();
 	[ObservableProperty] public partial int SelectedImageIndex { get; set; } = -1;
 	public ManagedImage? SelectedImage => SelectedImageIndex >= 0 ? _set?.Images[SelectedImageIndex] : null;
 	public IObservable<ManagedImage?> SelectedImageChanged => _selectedImageChanged.AsObservable();
 
-	public ImagesViewModel(ImageSetSelection imageSetSelection, WriteableBitmapImageLoader imageLoader)
+	public ImagesViewModel(ImageSetSelection imageSetSelection, Func<ManagedImage, AnnotationImageViewModel> imageViewModelFactory)
 	{
 		_disposable = imageSetSelection.SelectedImageSetChanged.Subscribe(SetImageSet);
-		_imageLoader = imageLoader;
+		_imageViewModelFactory = imageViewModelFactory;
 	}
 
 	public void Dispose()
@@ -29,7 +29,7 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 		_selectedImageChanged.Dispose();
 	}
 
-	private readonly WriteableBitmapImageLoader _imageLoader;
+	private readonly Func<ManagedImage, AnnotationImageViewModel> _imageViewModelFactory;
 	private readonly IDisposable _disposable;
 	private readonly Subject<ManagedImage?> _selectedImageChanged = new();
 	private ImageSet? _set;
@@ -43,7 +43,10 @@ public sealed partial class ImagesViewModel : ViewModel, ImagesDataContext, Imag
 		if (_set == null)
 			return;
 		var images = (ReadOnlyObservableList<ManagedImage>)_set.Images;
-		_images = images.Transform(image => new AnnotationImageViewModel(_imageLoader, image)).ToObservableList();
+		_images = images
+			.Transform(_imageViewModelFactory)
+			.DisposeMany()
+			.ToObservableList();
 		OnPropertyChanged(nameof(Images));
 	}
 
