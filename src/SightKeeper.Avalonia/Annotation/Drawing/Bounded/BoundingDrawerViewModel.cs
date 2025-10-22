@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
+using System.Reactive.Subjects;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
@@ -18,6 +19,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerDataContext, IDisposable
 {
 	ICommand BoundingDrawerDataContext.CreateItemCommand => CreateItemCommand;
+	public IObservable<DetectorItem> ItemDrawn => _itemDrawn;
 
 	public BoundingDrawerViewModel(DataSetSelection dataSetSelection, ImageSelection imageSelection, TagSelectionProvider tagSelectionProvider)
 	{
@@ -35,9 +37,11 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 	public void Dispose()
 	{
 		_constructorDisposable.Dispose();
+		_itemDrawn.Dispose();
 	}
 
 	private readonly CompositeDisposable _constructorDisposable = new();
+	private readonly Subject<DetectorItem> _itemDrawn = new();
 	private AssetsOwner<ItemsMaker<DetectorItem>>? _assetsLibrary;
 	private ManagedImage? _image;
 	private Tag? _tag;
@@ -53,6 +57,7 @@ public sealed partial class BoundingDrawerViewModel : ViewModel, BoundingDrawerD
 		var item = asset.MakeItem();
 		item.Tag = _tag;
 		item.Bounding = bounding;
+		_itemDrawn.OnNext(item);
 	}
 
 	private void HandleDataSetSelectionChange(DataSet<Tag, Asset>? set)

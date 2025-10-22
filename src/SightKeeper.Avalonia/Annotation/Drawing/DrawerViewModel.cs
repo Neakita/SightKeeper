@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
@@ -39,6 +40,7 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 			.Subscribe(HandleImageSelectionChange)
 			.DisposeWith(_constructorDisposable);
 		_itemsViewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
+		_boundingDrawer.ItemDrawn.Subscribe(OnItemDrawn).DisposeWith(_constructorDisposable);
 	}
 
 	public void Dispose()
@@ -76,5 +78,11 @@ public sealed partial class DrawerViewModel : ViewModel, DrawerDataContext, Sele
 	{
 		if (e.PropertyName == nameof(AssetItemsViewModel.Items))
 			OnPropertyChanged(e);
+	}
+
+	private void OnItemDrawn(DetectorItem item)
+	{
+		var itemViewModel = Items.OfType<BoundedItemViewModel>().First(itemViewModel => itemViewModel.Value == item);
+		SelectedItem = itemViewModel;
 	}
 }
