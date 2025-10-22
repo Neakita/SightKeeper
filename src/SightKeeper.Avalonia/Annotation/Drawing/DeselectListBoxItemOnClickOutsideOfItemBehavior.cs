@@ -15,10 +15,19 @@ internal sealed class DeselectListBoxItemOnClickOutsideOfItemBehavior : Behavior
 	public static readonly StyledProperty<ClickMode> ClickModeProperty =
 		Button.ClickModeProperty.AddOwner<DeselectListBoxItemOnClickOutsideOfItemBehavior>();
 
+	public static readonly StyledProperty<KeyModifiers> ModifiersProperty =
+		AvaloniaProperty.Register<DeselectListBoxItemOnClickOutsideOfItemBehavior, KeyModifiers>(nameof(Modifiers));
+
 	public ClickMode ClickMode
 	{
 		get => GetValue(ClickModeProperty);
 		set => SetValue(ClickModeProperty, value);
+	}
+
+	public KeyModifiers Modifiers
+	{
+		get => GetValue(ModifiersProperty);
+		set => SetValue(ModifiersProperty, value);
 	}
 
 	protected override void OnAttached()
@@ -64,6 +73,8 @@ internal sealed class DeselectListBoxItemOnClickOutsideOfItemBehavior : Behavior
 
 	private void OnAssociatedObjectClicked(object? sender, PointerEventArgs e)
 	{
+		if (e.KeyModifiers != Modifiers)
+			return;
 		Guard.IsNotNull(e.Source);
 		Guard.IsNotNull(AssociatedObject);
 		var visualSource = (Visual)e.Source;
