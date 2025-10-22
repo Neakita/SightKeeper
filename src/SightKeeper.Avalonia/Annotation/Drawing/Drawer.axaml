@@ -15,6 +15,10 @@
              x:DataType="local:DrawerDataContext"
              d:DataContext="{x:Static design:DesignDrawerDataContext.WithImage}">
     <zoomViewer:ZoomViewer>
+        <Interaction.Behaviors>
+            <behaviors:DrawingZoomHotKeysBinding ZoomInHotKey="OemPlus"
+                                                 ZoomOutHotKey="OemMinus"/>
+        </Interaction.Behaviors>
         <zoomViewer:ZoomViewer.ForegroundContent>
             <ListBox ItemsSource="{Binding Items}"
                      SelectedItem="{Binding SelectedItem}"
