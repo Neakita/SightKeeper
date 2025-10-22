@@ -10,14 +10,14 @@ using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.COCO;
 
-internal sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>
+internal sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
 {
 	public int CategoriesInitialId { get; set; } = 0;
 	public IdCounter ImageIdCounter { get; set; } = new();
 	public IdCounter AnnotationIdCounter { get; set; } = new();
 	public bool ResetIdCounters { get; set; } = true;
 
-	public async Task ExportAsync(string directoryPath, ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> data, CancellationToken cancellationToken)
+	public async Task ExportAsync(string directoryPath, ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data, CancellationToken cancellationToken)
 	{
 		ResetCountersIfNecessary();
 		var imagesDirectoryPath = Path.Combine(directoryPath, "images");
@@ -93,7 +93,7 @@ internal sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyTa
 		};
 	}
 
-	private COCOAnnotation CreateAnnotation(ReadOnlyAssetItem item, COCOImage image)
+	private COCOAnnotation CreateAnnotation(ReadOnlyDetectorItem item, COCOImage image)
 	{
 		var bounding = item.Bounding;
 		return new COCOAnnotation

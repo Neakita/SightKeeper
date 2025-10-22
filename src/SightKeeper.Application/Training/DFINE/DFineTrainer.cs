@@ -7,13 +7,13 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Application.Training.DFINE;
 
-internal sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironmentManager environmentManager, TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> exporter) : Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>
+internal sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironmentManager environmentManager, TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> exporter) : Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
 {
 	public byte BatchSize { get; set; } = 16;
 	public Vector2<ushort> ImageSize { get; set; } = new(320, 320);
 	public DFineModel Model { get; set; } = DFineModel.Nano;
 
-	public async Task<WeightsData> TrainAsync(ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> data, CancellationToken cancellationToken)
+	public async Task<WeightsData> TrainAsync(ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data, CancellationToken cancellationToken)
 	{
 		var environmentCommandRunner = await environmentManager.ActivateAsync(CondaEnvironmentPath, PythonVersion, cancellationToken);
 		await InstallDFineAsync(environmentCommandRunner, cancellationToken);

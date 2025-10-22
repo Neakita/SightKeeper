@@ -8,7 +8,7 @@ namespace SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 public abstract class BoundedItemViewModel : ViewModel, BoundedItemDataContext
 {
 	public abstract Tag Tag { get; }
-	public abstract BoundedItem Value { get; }
+	public abstract DetectorItem Value { get; }
 
 	public Bounding Bounding
 	{
@@ -24,7 +24,7 @@ public abstract class BoundedItemViewModel : ViewModel, BoundedItemDataContext
 	public string Name => Tag.Name;
 	public Color Color => Color.FromUInt32(Tag.Color);
 
-	private static void SetItemBounding(BoundedItem item, Bounding bounding)
+	private static void SetItemBounding(DetectorItem item, Bounding bounding)
 	{
 		item.Bounding = bounding;
 	}

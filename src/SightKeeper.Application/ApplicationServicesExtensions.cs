@@ -88,29 +88,29 @@ public static class ApplicationServicesExtensions
 			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
 
 		builder.RegisterType<DFineTrainer>()
-			.As<Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>>();
+			.As<Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 		
 		builder.Register(context =>
 		{
-			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> exporter = new COCODetectorDataSetExporter();
-			exporter = new DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>(exporter);
-			var transformer = context.Resolve<TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>>();
-			exporter = new TransformingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>(exporter, transformer);
+			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> exporter = new COCODetectorDataSetExporter();
+			exporter = new DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>(exporter);
+			var transformer = context.Resolve<TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+			exporter = new TransformingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>(exporter, transformer);
 			return exporter;
-		}).As<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>>();
+		}).As<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 
-		builder.RegisterType<CropTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>>()
-			.As<TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>>>();
+		builder.RegisterType<CropTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
+			.As<TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 
 		builder
-			.RegisterType<RandomItemsCropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyAssetItem>, ReadOnlyAssetItem>>()
-			.As<CropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>();
+			.RegisterType<RandomItemsCropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyDetectorItem>, ReadOnlyDetectorItem>>()
+			.As<CropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 
-		builder.RegisterType<ItemsAssetCropper<ReadOnlyAssetItem>>()
-			.As<AssetCropper<ReadOnlyItemsAsset<ReadOnlyAssetItem>>>();
+		builder.RegisterType<ItemsAssetCropper<ReadOnlyDetectorItem>>()
+			.As<AssetCropper<ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 
 		builder.RegisterType<AssetItemCropper>()
-			.As<ItemCropper<ReadOnlyAssetItem>>();
+			.As<ItemCropper<ReadOnlyDetectorItem>>();
 
 		builder.RegisterType<RandomItemsCropSettings>();
 	}

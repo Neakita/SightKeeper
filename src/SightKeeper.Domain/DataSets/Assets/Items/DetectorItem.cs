@@ -2,7 +2,10 @@ using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
-public interface DetectorItem : BoundedItem, TagUser
+public interface DetectorItem : TagUser, ReadOnlyDetectorItem
 {
-	Tag Tag { get; set; }
+	new Bounding Bounding { get; set; }
+	new Tag Tag { get; set; }
+	ReadOnlyTag ReadOnlyDetectorItem.Tag => Tag;
+	Bounding ReadOnlyDetectorItem.Bounding => Bounding;
 }

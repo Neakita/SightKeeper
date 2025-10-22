@@ -4,7 +4,7 @@ using SixLabors.ImageSharp;
 namespace SightKeeper.Application.Training.Data.Transforming;
 
 internal sealed class ItemsAssetCropper<TItem>(ItemCropper<TItem> itemCropper) : AssetCropper<ReadOnlyItemsAsset<TItem>>
-	where TItem : ReadOnlyAssetItem
+	where TItem : ReadOnlyDetectorItem
 {
 	public ReadOnlyItemsAsset<TItem> CropAsset(ReadOnlyItemsAsset<TItem> asset, Rectangle cropRectangle)
 	{

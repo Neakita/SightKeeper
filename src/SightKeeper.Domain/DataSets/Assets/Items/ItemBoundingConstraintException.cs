@@ -2,23 +2,23 @@ namespace SightKeeper.Domain.DataSets.Assets.Items;
 
 public sealed class ItemBoundingConstraintException : Exception
 {
-	public static void ThrowIfNotNormalized(BoundedItem item, Bounding value)
+	public static void ThrowIfNotNormalized(DetectorItem item, Bounding value)
 	{
 		if (!IsNormalized(value))
 			ThrowForNotNormalized(item, value);
 	}
 
-	private static void ThrowForNotNormalized(BoundedItem item, Bounding value)
+	private static void ThrowForNotNormalized(DetectorItem item, Bounding value)
 	{
 		const string message =
 			"Bounding must be normalized, i.e. it must not have side coordinates less than 0 or greater than 1";
 		throw new ItemBoundingConstraintException(message, item, value);
 	}
 
-	public BoundedItem Item { get; }
+	public DetectorItem Item { get; }
 	public Bounding Value { get; }
 
-	public ItemBoundingConstraintException(string? message, BoundedItem item, Bounding value) : base(message)
+	public ItemBoundingConstraintException(string? message, DetectorItem item, Bounding value) : base(message)
 	{
 		Item = item;
 		Value = value;

@@ -7,7 +7,7 @@ namespace SightKeeper.Application.Training.Data.Transforming;
 
 internal sealed class RandomItemsCropRectanglesProvider<TAsset, TItem>(RandomItemsCropSettings settings) : CropRectanglesProvider<TAsset>
 	where TAsset : ReadOnlyItemsAsset<TItem>
-	where TItem : ReadOnlyAssetItem
+	where TItem : ReadOnlyDetectorItem
 {
 	public IEnumerable<Rectangle> GetCropRectangles(TAsset asset)
 	{

@@ -5,13 +5,17 @@ using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.Data.Transforming;
 
-internal sealed class AssetItemCropper : ItemCropper<ReadOnlyAssetItem>
+internal sealed class AssetItemCropper : ItemCropper<ReadOnlyDetectorItem>
 {
-	public bool TryCrop(ReadOnlyAssetItem item, Rectangle cropRectangle, Vector2<ushort> imageSize, [MaybeNullWhen(false)] out ReadOnlyAssetItem croppedItem)
+	public bool TryCrop(ReadOnlyDetectorItem item, Rectangle cropRectangle, Vector2<ushort> imageSize, [MaybeNullWhen(false)] out ReadOnlyDetectorItem croppedItem)
 	{
 		if (TryCrop(item.Bounding, cropRectangle, imageSize, out var croppedBounding))
 		{
-			croppedItem = new AssetItemDataValue(item.Tag, croppedBounding);
+			croppedItem = new AssetItemDataValue
+			{
+				Tag = item.Tag,
+				Bounding = croppedBounding
+			};
 			return true;
 		}
 		croppedItem = null;

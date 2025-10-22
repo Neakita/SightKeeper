@@ -1,5 +1,4 @@
-﻿using SightKeeper.Application.Training.Data;
-using SightKeeper.Domain;
+﻿using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
@@ -8,7 +7,7 @@ using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Application.Training;
 
-internal sealed class TypeSwitchTrainer(Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> detectorTrainer) : Trainer<ReadOnlyTag, ReadOnlyAsset>
+internal sealed class TypeSwitchTrainer(Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> detectorTrainer) : Trainer<ReadOnlyTag, ReadOnlyAsset>
 {
 	public Vector2<ushort> ImageSize
 	{
@@ -24,7 +23,7 @@ internal sealed class TypeSwitchTrainer(Trainer<ReadOnlyTag, ReadOnlyItemsAsset<
 	{
 		return data switch
 		{
-			ReadOnlyDataSetValue<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyAssetItem>> detectorData => detectorTrainer.TrainAsync(detectorData, cancellationToken),
+			ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> detectorData => detectorTrainer.TrainAsync(detectorData, cancellationToken),
 			_ => throw new ArgumentOutOfRangeException(nameof(data))
 		};
 	}

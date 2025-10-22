@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Domain.DataSets.Assets.Items;
 
-public interface ReadOnlyAssetItem
+public interface ReadOnlyDetectorItem
 {
 	ReadOnlyTag Tag { get; }
 	Bounding Bounding { get; }
