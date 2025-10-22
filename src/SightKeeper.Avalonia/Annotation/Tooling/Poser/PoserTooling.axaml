@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:poser="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.Poser"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d" d:DesignWidth="150" d:DesignHeight="300"
              x:Class="SightKeeper.Avalonia.Annotation.Tooling.Poser.PoserTooling"
              x:DataType="poser:PoserToolingDataContext"
@@ -14,6 +15,9 @@
             <ListBox ItemsSource="{Binding KeyPointTags}"
                      SelectedItem="{Binding SelectedKeyPointTag}"
                      Classes="compact">
+                <Interaction.Behaviors>
+                    <behaviors:SelectItemViaHotKey Modifiers="Shift"/>
+                </Interaction.Behaviors>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel>
@@ -43,6 +47,9 @@
                      SelectedItem="{Binding SelectedPoserTag}"
                      DisplayMemberBinding="{Binding Name}"
                      Classes="compact">
+                <Interaction.Behaviors>
+                    <behaviors:SelectItemViaHotKey/>
+                </Interaction.Behaviors>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel/>
