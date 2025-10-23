@@ -3,7 +3,6 @@ using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Application.Training.DFINE;
 
@@ -13,7 +12,7 @@ internal sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironment
 	public Vector2<ushort> ImageSize { get; set; } = new(320, 320);
 	public DFineModel Model { get; set; } = DFineModel.Nano;
 
-	public async Task<WeightsData> TrainAsync(ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data, CancellationToken cancellationToken)
+	public async Task TrainAsync(ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data, CancellationToken cancellationToken)
 	{
 		var environmentCommandRunner = await environmentManager.ActivateAsync(CondaEnvironmentPath, PythonVersion, cancellationToken);
 		await InstallDFineAsync(environmentCommandRunner, cancellationToken);
@@ -22,7 +21,6 @@ internal sealed class DFineTrainer(CommandRunner commandRunner, CondaEnvironment
 		await exporter.ExportAsync(DataSetPath, data, cancellationToken);
 		var configFilePath = Path.Combine(ModelConfigsDirectoryPath, Model.ConfigName);
 		await environmentCommandRunner.ExecuteCommandAsync($"python {TrainPythonScriptPath} -c {configFilePath} --seed=0", cancellationToken);
-		return null!;
 	}
 
 	private const string PythonVersion = "3.11.9";
