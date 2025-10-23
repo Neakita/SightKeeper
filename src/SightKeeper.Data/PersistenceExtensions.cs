@@ -33,10 +33,10 @@ namespace SightKeeper.Data;
 
 public static class PersistenceExtensions
 {
-	public static void AddPersistence(this ContainerBuilder builder)
+	public static void AddPersistence(this ContainerBuilder builder, PersistenceOptions options)
 	{
 		builder.AddRepositories();
-		builder.AddWrappers();
+		builder.AddWrappers(options);
 		builder.AddFactories();
 		builder.AddFormatters();
 		builder.AddSerializers();
@@ -69,6 +69,9 @@ public static class PersistenceExtensions
 
 		builder.RegisterType<DecoratorTagIndexProvider>()
 			.As<TagIndexProvider>();
+
+		builder.RegisterType<DecoratorLifetimeScopeProvider>()
+			.As<LifetimeScopeProvider>();
 	}
 
 	private static void AddRepositories(this ContainerBuilder builder)
@@ -83,13 +86,13 @@ public static class PersistenceExtensions
 		builder.RegisterDecorator<EnsureCanDeleteImageSetRepository, Repository<ImageSet>>();
 	}
 
-	private static void AddWrappers(this ContainerBuilder builder)
+	private static void AddWrappers(this ContainerBuilder builder, PersistenceOptions options)
 	{
 		builder.AddImageSetWrappers();
 
 		builder.RegisterType<KeyPointWrapper>();
 
-		builder.AddDataSetWrappers<Tag, ClassifierAsset>(0, 2, containerBuilder =>
+		builder.AddDataSetWrappers<Tag, ClassifierAsset>(0, 2, options.ClassifierDataSetScopeConfiguration, containerBuilder =>
 		{
 			containerBuilder.AddDataSetDecoratorWrapper<Tag, ClassifierAsset>(set =>
 			{
@@ -99,8 +102,8 @@ public static class PersistenceExtensions
 				};
 			});
 		});
-		builder.AddDataSetWrappers<Tag, ItemsAsset<DetectorItem>>(1, 1);
-		builder.AddDataSetWrappers<PoserTag, ItemsAsset<PoserItem>>(2, 1);
+		builder.AddDataSetWrappers<Tag, ItemsAsset<DetectorItem>>(1, 1, options.DetectorDataSetScopeConfiguration);
+		builder.AddDataSetWrappers<PoserTag, ItemsAsset<PoserItem>>(2, 1, options.PoserDataSetScopeConfiguration);
 	}
 
 	private static void AddFactories(this ContainerBuilder builder)
@@ -276,6 +279,7 @@ public static class PersistenceExtensions
 		this ContainerBuilder builder,
 		ushort unionTag,
 		byte minimumTagsCount,
+		Action<ContainerBuilder>? setScopeConfiguration,
 		Action<ContainerBuilder>? additional = null)
 		where TTag : Tag
 	{
@@ -326,6 +330,15 @@ public static class PersistenceExtensions
 			return new FuncWrapper<DataSet<TTag, TAsset>, DataSet<TTag, TAsset>>(set => 
 			{
 				return new SerializableDataSet<TTag, TAsset>(set, unionTag, tagsFormatter, assetsFormatter, weightsFormatter);
+			});
+		}).As<Wrapper<DataSet<TTag, TAsset>>>();
+
+		builder.Register(context =>
+		{
+			var contextScope = context.Resolve<ILifetimeScope>();
+			return new FuncWrapper<DataSet<TTag, TAsset>, DataSet<TTag, TAsset>>(set =>
+			{
+				return new DataSetLifetimeScopeProviderDecorator<TTag, TAsset>(set, contextScope, setScopeConfiguration);
 			});
 		}).As<Wrapper<DataSet<TTag, TAsset>>>();
 

@@ -41,6 +41,22 @@ public static class ApplicationServicesExtensions
 		builder.RegisterType<DataSetEditor>();
 	}
 
+	public static void AddClassifierServices(this ContainerBuilder builder)
+	{
+	}
+
+	public static void AddDetectorServices(this ContainerBuilder builder)
+	{
+		builder.RegisterType<CastingTrainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
+			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
+		builder.RegisterType<DFineTrainer>()
+			.As<Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+	}
+
+	public static void AddPoserServices(this ContainerBuilder builder)
+	{
+	}
+
 	private static void AddValidators(this ContainerBuilder builder)
 	{
 		builder.RegisterType<NewImageSetDataValidator>()
@@ -84,12 +100,9 @@ public static class ApplicationServicesExtensions
 
 	private static void AddTraining(this ContainerBuilder builder)
 	{
-		builder.RegisterType<TypeSwitchTrainer>()
+		builder.RegisterType<LifetimeTrainer>()
 			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
 
-		builder.RegisterType<DFineTrainer>()
-			.As<Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
-		
 		builder.Register(context =>
 		{
 			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> exporter = new COCODetectorDataSetExporter();

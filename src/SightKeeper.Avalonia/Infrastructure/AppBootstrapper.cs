@@ -17,7 +17,22 @@ internal static class AppBootstrapper
 
 	private static void AddServices(this ContainerBuilder builder)
 	{
-		builder.AddPersistence();
+		var persistenceOptions = new PersistenceOptions
+		{
+			ClassifierDataSetScopeConfiguration = classifierBuilder =>
+			{
+				classifierBuilder.AddClassifierServices();
+			},
+			DetectorDataSetScopeConfiguration = detectorBuilder =>
+			{
+				detectorBuilder.AddDetectorServices();
+			},
+			PoserDataSetScopeConfiguration = poserBuilder =>
+			{
+				poserBuilder.AddPoserServices();
+			}
+		};
+		builder.AddPersistence(persistenceOptions);
 		builder.AddApplicationServices();
 		builder.AddOSSpecificServices();
 		builder.AddAvaloniaServices();
