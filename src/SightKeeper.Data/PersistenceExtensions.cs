@@ -7,6 +7,8 @@ using SightKeeper.Data.DataSets;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Classifier;
+using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
+using SightKeeper.Data.DataSets.Decorators;
 using SightKeeper.Data.DataSets.Detector;
 using SightKeeper.Data.DataSets.Poser;
 using SightKeeper.Data.DataSets.Poser.Items.Decorators;
@@ -87,9 +89,18 @@ public static class PersistenceExtensions
 
 		builder.RegisterType<KeyPointWrapper>();
 
-		builder.AddDataSetWrapper<Tag, ClassifierAsset>(0);
-		builder.AddDataSetWrapper<Tag, ItemsAsset<DetectorItem>>(1);
-		builder.AddDataSetWrapper<PoserTag, ItemsAsset<PoserItem>>(2);
+		builder.AddDataSetWrappers<Tag, ClassifierAsset>(0, 2, containerBuilder =>
+		{
+			containerBuilder.AddDataSetDecoratorWrapper<Tag, ClassifierAsset>(set =>
+			{
+				return new OverrideLibrariesDataSet<Tag, ClassifierAsset>(set)
+				{
+					AssetsLibrary = new TagUsersTrackingClassifierAssetsLibrary(set.AssetsLibrary)
+				};
+			});
+		});
+		builder.AddDataSetWrappers<Tag, ItemsAsset<DetectorItem>>(1, 1);
+		builder.AddDataSetWrappers<PoserTag, ItemsAsset<PoserItem>>(2, 1);
 	}
 
 	private static void AddFactories(this ContainerBuilder builder)
@@ -215,26 +226,6 @@ public static class PersistenceExtensions
 		builder.RegisterGenericDecorator(typeof(ThreadedImageLoader<>), typeof(ImageLoader<>));
 	}
 
-	private static void AddDataSetWrapper<TTag, TAsset>(this ContainerBuilder builder, ushort unionTag)
-		where TTag : Tag
-	{
-		builder.Register(context =>
-		{
-			var changeListener = context.Resolve<ChangeListener>();
-			var editingLock = context.Resolve<Lock>();
-			var tagsFormatter = context.Resolve<TagsFormatter<TTag>>();
-			var assetsFormatter = context.Resolve<AssetsFormatter<TAsset>>();
-			var weightsFormatter = context.Resolve<WeightsFormatter>();
-			return new DataSetWrapper<TTag, TAsset>(
-				changeListener,
-				editingLock,
-				unionTag,
-				tagsFormatter,
-				assetsFormatter,
-				weightsFormatter);
-		});
-	}
-
 	private static void AddImageSetWrappers(this ContainerBuilder builder)
 	{
 		// Tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,
@@ -273,10 +264,100 @@ public static class PersistenceExtensions
 		builder.RegisterComposite<CompositeWrapper<ImageSet>, Wrapper<ImageSet>>();
 	}
 
-	private static void AddImageSetDecoratorWrapper<TDecorator>(this ContainerBuilder builder) where TDecorator : ImageSet
+	private static void AddImageSetDecoratorWrapper<TDecorator>(this ContainerBuilder builder)
+		where TDecorator : ImageSet
 	{
 		builder.RegisterType<TDecorator>();
 		builder.RegisterType<FuncWrapper<TDecorator, ImageSet>>()
 			.As<Wrapper<ImageSet>>();
+	}
+
+	private static void AddDataSetWrappers<TTag, TAsset>(
+		this ContainerBuilder builder,
+		ushort unionTag,
+		byte minimumTagsCount,
+		Action<ContainerBuilder>? additional = null)
+		where TTag : Tag
+	{
+		// Tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,
+		// and then tracking decorator will send another notification.
+		builder.AddDataSetDecoratorWrapper<TrackableDataSet<TTag, TAsset>, TTag, TAsset>();
+
+		// Locking of domain rules can be relatively computationally heavy,
+		// for example when removing images range every image should be checked if it is used by some asset,
+		// so locking appears only after domain rules validated.
+		builder.AddDataSetDecoratorWrapper<LockingDataSet<TTag, TAsset>, TTag, TAsset>();
+
+		// Weights data removing could be expansive (we can remove large weights files),
+		// and there is no need in lock because lock should affect AppData only,
+		// not the weights files,
+		// so it shouldn't be locked
+		builder.AddDataSetDecoratorWrapper<TTag, TAsset>(set =>
+		{
+			return new OverrideLibrariesDataSet<TTag, TAsset>(set)
+			{
+				WeightsLibrary = new DataRemovingWeightsLibrary(set.WeightsLibrary)
+			};
+		});
+
+		builder.AddDataSetDecoratorWrapper<TTag, TAsset>(set =>
+		{
+			return new OverrideLibrariesDataSet<TTag, TAsset>(set)
+			{
+				TagsLibrary = new ObservableTagsLibrary<TTag>(set.TagsLibrary),
+				AssetsLibrary = new ObservableAssetsLibrary<TAsset>(set.AssetsLibrary),
+				WeightsLibrary = new ObservableWeightsLibrary(set.WeightsLibrary)
+			};
+		});
+		
+		builder.AddDataSetDecoratorWrapper<TTag, TAsset>(set =>
+		{
+			return new OverrideLibrariesDataSet<TTag, TAsset>(set)
+			{
+				TagsLibrary = new IndexedTagTrackingTagsLibrary<TTag>(set.TagsLibrary)
+			};
+		});
+
+		builder.Register(context =>
+		{
+			var tagsFormatter = context.Resolve<TagsFormatter<TTag>>();
+			var assetsFormatter = context.Resolve<AssetsFormatter<TAsset>>();
+			var weightsFormatter = context.Resolve<WeightsFormatter>();
+			return new FuncWrapper<DataSet<TTag, TAsset>, DataSet<TTag, TAsset>>(set => 
+			{
+				return new SerializableDataSet<TTag, TAsset>(set, unionTag, tagsFormatter, assetsFormatter, weightsFormatter);
+			});
+		}).As<Wrapper<DataSet<TTag, TAsset>>>();
+
+		additional?.Invoke(builder);
+
+		// If domain rule is violated and throws an exception,
+		// it should fail as fast as possible and have smaller stack strace
+		builder.AddDataSetDecoratorWrapper<TTag, TAsset>(set =>
+		{
+			return new DomainDataSet<TTag, TAsset>(set, minimumTagsCount);
+		});
+
+		// INPC interface should be exposed to consumer,
+		// so he can type test and cast it,
+		// so it should be the outermost layer
+		builder.AddDataSetDecoratorWrapper<NotifyingDataSet<TTag, TAsset>, TTag, TAsset>();
+
+		builder.RegisterComposite<CompositeWrapper<DataSet<TTag, TAsset>>, Wrapper<DataSet<TTag, TAsset>>>();
+	}
+
+	private static void AddDataSetDecoratorWrapper<TDecorator, TTag, TAsset>(this ContainerBuilder builder)
+		where TDecorator : DataSet<TTag, TAsset>
+	{
+		builder.RegisterType<TDecorator>();
+		builder.RegisterType<FuncWrapper<TDecorator, DataSet<TTag, TAsset>>>()
+			.As<Wrapper<DataSet<TTag, TAsset>>>();
+	}
+
+	private static void AddDataSetDecoratorWrapper<TTag, TAsset>(this ContainerBuilder builder, Func<DataSet<TTag, TAsset>, DataSet<TTag,TAsset>> func)
+	{
+		var wrapper = new FuncWrapper<DataSet<TTag, TAsset>, DataSet<TTag, TAsset>>(func);
+		builder.RegisterInstance(wrapper)
+			.As<Wrapper<DataSet<TTag, TAsset>>>();
 	}
 }

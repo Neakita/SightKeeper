@@ -19,14 +19,14 @@ public sealed class DomainWeightsLibrary : WeightsLibrary, Decorator<WeightsLibr
 		Inner.RemoveWeights(weights);
 	}
 
-	internal DomainWeightsLibrary(WeightsLibrary inner, TagsContainer<Tag> tagsOwner, int minimumTagsCount)
+	internal DomainWeightsLibrary(WeightsLibrary inner, TagsContainer<Tag> tagsOwner, byte minimumTagsCount)
 	{
 		Inner = inner;
 		_minimumTagsCount = minimumTagsCount;
 		_tagsOwner = tagsOwner;
 	}
 
-	private readonly int _minimumTagsCount;
+	private readonly byte _minimumTagsCount;
 	private readonly TagsContainer<Tag> _tagsOwner;
 
 	private void ValidateTags(IReadOnlyCollection<Tag> tagsList)

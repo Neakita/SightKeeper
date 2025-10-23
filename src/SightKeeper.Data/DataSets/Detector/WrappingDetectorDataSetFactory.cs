@@ -11,7 +11,7 @@ using SightKeeper.Domain.DataSets.Tags;
 namespace SightKeeper.Data.DataSets.Detector;
 
 internal sealed class WrappingDetectorDataSetFactory(
-	DataSetWrapper<Tag, ItemsAsset<DetectorItem>> wrapper,
+	Wrapper<DataSet<Tag, ItemsAsset<DetectorItem>>> wrapper,
 	ChangeListener changeListener,
 	Lock editingLock)
 	: Factory<DataSet<Tag, ItemsAsset<DetectorItem>>>

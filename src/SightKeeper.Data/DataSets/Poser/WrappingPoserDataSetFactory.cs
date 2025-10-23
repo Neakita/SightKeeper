@@ -12,7 +12,7 @@ using SightKeeper.Domain.DataSets.Poser;
 namespace SightKeeper.Data.DataSets.Poser;
 
 internal sealed class WrappingPoserDataSetFactory(
-	DataSetWrapper<PoserTag, ItemsAsset<PoserItem>> wrapper,
+	Wrapper<DataSet<PoserTag, ItemsAsset<PoserItem>>> wrapper,
 	ChangeListener changeListener,
 	Lock editingLock,
 	KeyPointFactory keyPointFactory)

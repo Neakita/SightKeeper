@@ -23,7 +23,7 @@ public sealed class DomainDataSet<TTag, TAsset> : DataSet<TTag, TAsset>, Decorat
 	public WeightsLibrary WeightsLibrary { get; }
 	public DataSet<TTag, TAsset> Inner { get; }
 
-	public DomainDataSet(DataSet<TTag, TAsset> inner, int minimumTagsCount)
+	public DomainDataSet(DataSet<TTag, TAsset> inner, byte minimumTagsCount)
 	{
 		Inner = inner;
 		TagsLibrary = new DomainTagsLibrary<TTag>(inner.TagsLibrary);
