@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Serilog;
 using SightKeeper.Application;
 using SightKeeper.Application.Training;
 using SightKeeper.Domain;
@@ -26,13 +28,15 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 	ICommand TrainingDataContext.StartTrainingCommand => StartTrainingCommand;
 	ICommand TrainingDataContext.StopTrainingCommand => StartTrainingCommand.CreateCancelCommand();
 
-	public TrainingViewModel(ObservableListRepository<DataSet<Tag, Asset>> dataSets, Trainer<ReadOnlyTag, ReadOnlyAsset> trainer)
+	public TrainingViewModel(ObservableListRepository<DataSet<Tag, Asset>> dataSets, Trainer<ReadOnlyTag, ReadOnlyAsset> trainer, ILogger logger)
 	{
 		_trainer = trainer;
+		_logger = logger;
 		DataSets = dataSets.Items;
 	}
 
 	private readonly Trainer<ReadOnlyTag, ReadOnlyAsset> _trainer;
+	private readonly ILogger _logger;
 	private bool CanStartTraining => DataSet != null;
 
 	[RelayCommand(CanExecute = nameof(CanStartTraining), IncludeCancelCommand = true)]
@@ -44,6 +48,10 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 		try
 		{
 			await _trainer.TrainAsync(DataSet, cancellationToken);
+		}
+		catch (OperationCanceledException exception)
+		{
+			_logger.Debug(exception, "Training was cancelled");
 		}
 		finally
 		{
