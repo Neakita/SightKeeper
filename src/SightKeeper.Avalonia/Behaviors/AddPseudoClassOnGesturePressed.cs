@@ -47,7 +47,7 @@ internal sealed class AddPseudoClassOnGesturePressed : Behavior<Visual>, Continu
 		Guard.IsNotNull(AssociatedObject);
 		var topLevel = TopLevel.GetTopLevel(AssociatedObject);
 		Guard.IsNotNull(topLevel);
-		var observableGesture = topLevel.ObserveInputStates().Filter().ToGesture();
+		var observableGesture = topLevel.ObserveInputStates().ToGesture();
 		_bindingsManager = new BindingsManager(observableGesture);
 		_binding = _bindingsManager.CreateBinding(this);
 		_binding.Gesture = ConvertGesture(Gesture);

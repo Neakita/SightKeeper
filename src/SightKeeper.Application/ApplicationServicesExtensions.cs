@@ -137,7 +137,7 @@ public static class ApplicationServicesExtensions
 		builder.Register(context =>
 		{
 			var hook = context.Resolve<IReactiveGlobalHook>();
-			var gestures = hook.ObserveInputStates().Filter().ToGesture();
+			var gestures = hook.ObserveInputStates().ToGesture();
 			return new BindingsManager(gestures);
 		});
 	}
