@@ -270,7 +270,7 @@ public static class PersistenceExtensions
 	private static void AddImageSetDecoratorWrapper<TDecorator>(this ContainerBuilder builder)
 		where TDecorator : ImageSet
 	{
-		builder.RegisterType<TDecorator>();
+		builder.RegisterType<TDecorator>().ExternallyOwned();
 		builder.RegisterType<FuncWrapper<TDecorator, ImageSet>>()
 			.As<Wrapper<ImageSet>>();
 	}
