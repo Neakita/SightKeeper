@@ -1,6 +1,6 @@
 namespace SightKeeper.Application;
 
-public class StatelessCondaEnvironmentManager(CommandRunner condaCommandRunner) : CondaEnvironmentManager
+public sealed class StatelessCondaEnvironmentManager(CommandRunner condaCommandRunner) : CondaEnvironmentManager
 {
 	public async Task<CommandRunner> ActivateAsync(string environmentDirectoryPath, string pythonVersion, CancellationToken cancellationToken)
 	{

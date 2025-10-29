@@ -1,6 +1,6 @@
 namespace SightKeeper.Application.Linux;
 
-internal class BashCondaCommandRunner(CommandRunner inner, CondaLocator condaLocator) : CommandRunner
+internal sealed class BashCondaCommandRunner(CommandRunner inner, CondaLocator condaLocator) : CommandRunner
 {
 	public Task ExecuteCommandAsync(string command, CancellationToken cancellationToken)
 	{
