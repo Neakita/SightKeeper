@@ -53,7 +53,7 @@ internal static class Extensions
 		}
 	}
 	
-	public static async ValueTask<T?> DeserializeAsync<T>(
+	public static async ValueTask<T> DeserializeAsync<T>(
 		this Deserializer<T> deserializer,
 		Stream stream,
 		CancellationToken cancellationToken = default)

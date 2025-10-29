@@ -1,6 +1,6 @@
 using System.IO.Compression;
-using System.Text.RegularExpressions;
 using CommunityToolkit.Diagnostics;
+using FlakeId;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Data.ImageSets.Images;
@@ -17,7 +17,6 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 	Factory<ImageSet> imageSetFactory,
 	WriteRepository<ImageSet> imageSetsWriteRepository,
 	WriteRepository<DataSet<Tag, Asset>> dataSetsWriteRepository,
-	ReadRepository<DataSet<Tag, Asset>> dataSetsReadRepository,
 	Deserializer<IReadOnlyCollection<ManagedImage>> imagesDeserializer,
 	Deserializer<DataSet<Tag, Asset>> dataSetDeserializer)
 	: DataSetImporter
@@ -26,30 +25,27 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 	{
 		await using var archiveStream = File.OpenRead(filePath);
 		using var archive = new ZipArchive(archiveStream, ZipArchiveMode.Read);
-		var importedImageSet = await ImportMissingImages(archive);
+		var imageSet = await ImportMissingImages(archive);
+		if (imageSet.Images.Any())
+			imageSetsWriteRepository.Add(imageSet);
 		var dataSet = await ReadDataSet(archive);
-		dataSet.Name = HandleDuplicate(dataSet.Name, dataSetsReadRepository.Items.Select(set => set.Name));
-		if (importedImageSet != null)
-			importedImageSet.Name = $"Imported - {dataSet.Name}";
+		SetName(imageSet, $"Imported - {dataSet.Name}");
 		dataSetsWriteRepository.Add(dataSet);
 	}
 
-	private async Task<ImageSet?> ImportMissingImages(ZipArchive archive)
+	private async Task<ImageSet> ImportMissingImages(ZipArchive archive)
 	{
 		var images = await ImportImagesMetadata(archive);
-		ImageSet? importedImagesSet = null;
+		var imageSet = imageSetFactory.Create();
+		var settableInitialImages = imageSet.GetInnermost<SettableInitialItems<ManagedImage>>();
 		foreach (var image in images)
 		{
-			var idHolder = image.GetFirst<IdHolder>();
-			var imageId = idHolder.Id;
-			if (imageLookupper.ContainsImage(imageId))
+			if (!IsMissing(image))
 				continue;
-			importedImagesSet ??= CreateImagesSet();
-			var settableInitialImages = importedImagesSet.GetInnermost<SettableInitialItems<ManagedImage>>();
 			var wrappedImage = settableInitialImages.WrapAndInsert(image);
 			await CopyImageData(archive, wrappedImage);
 		}
-		return importedImagesSet;
+		return imageSet;
 	}
 
 	private async Task<IReadOnlyCollection<ManagedImage>> ImportImagesMetadata(ZipArchive archive)
@@ -62,28 +58,51 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 		return images;
 	}
 
-	private ImageSet CreateImagesSet()
+	private bool IsMissing(ManagedImage image)
 	{
-		var set = imageSetFactory.Create();
-		imageSetsWriteRepository.Add(set);
-		return set;
+		var imageId = GetId(image);
+		return !imageLookupper.ContainsImage(imageId);
 	}
 
 	private static async Task CopyImageData(ZipArchive archive, ManagedImage image)
 	{
-		var idHolder = image.GetFirst<IdHolder>();
-		var imageId = idHolder.Id;
-		var fileExtensionProvider = image.GetFirst<FileExtensionProvider>();
-		var fileName = $"{imageId.ToString()}.{fileExtensionProvider}";
-		var entryPath = Path.Combine("images", fileName);
-		var entry = archive.GetEntry(entryPath);
-		if (entry == null)
-			return;
-		await using var readStream = entry.Open();
-		var streamableData = image.GetFirst<StreamableData>();
-		await using var writeStream = streamableData.OpenWriteStream();
-		Guard.IsNotNull(writeStream);
+		await using var readStream = OpenArchivedImageStream(archive, image);
+		await using var writeStream = OpenImageWriteStream(image);
 		await readStream.CopyToAsync(writeStream);
+	}
+
+	private static Stream OpenArchivedImageStream(ZipArchive archive, ManagedImage image)
+	{
+		var entry = GetArchivedImageEntry(archive, image);
+		return entry.Open();
+	}
+
+	private static ZipArchiveEntry GetArchivedImageEntry(ZipArchive archive, ManagedImage image)
+	{
+		var entryPath = GetImageEntryPath(image);
+		var entry = archive.GetEntry(entryPath);
+		Guard.IsNotNull(entry);
+		return entry;
+	}
+
+	private static string GetImageEntryPath(ManagedImage image)
+	{
+		var imageId = GetId(image);
+		var fileExtensionProvider = image.GetFirst<FileExtensionProvider>();
+		var fileName = $"{imageId.ToString()}.{fileExtensionProvider.FileExtension}";
+		return $"images\\{fileName}";
+	}
+
+	private static Stream OpenImageWriteStream(ManagedImage image)
+	{
+		var streamableData = image.GetFirst<StreamableData>();
+		return streamableData.OpenWriteStream();
+	}
+
+	private static Id GetId(ManagedImage image)
+	{
+		var idHolder = image.GetFirst<IdHolder>();
+		return idHolder.Id;
 	}
 
 	private async Task<DataSet<Tag, Asset>> ReadDataSet(ZipArchive archive)
@@ -91,24 +110,11 @@ internal sealed class ZippedMemoryPackDataSetImporter(
 		var entry = archive.GetEntry("data.bin");
 		Guard.IsNotNull(entry);
 		await using var stream = entry.Open();
-		var dataSet = await dataSetDeserializer.DeserializeAsync(stream);
-		Guard.IsNotNull(dataSet);
-		return dataSet;
+		return await dataSetDeserializer.DeserializeAsync(stream);
 	}
 
-	private static string HandleDuplicate(string newName, IEnumerable<string> existingNames)
+	private static void SetName(ImageSet imageSet, string name)
 	{
-		var regex = new Regex(@"^(.*?)\s*((\d+))?$");
-		newName = regex.Match(newName).Groups[1].Captures.Single().Value;
-		var usedIndexes = existingNames.Select(name => regex.Match(name))
-			.Where(match => match.Groups[1].Captures.Single().Value == newName)
-			.Select(match => match.Groups[3].Captures.SingleOrDefault()?.Value)
-			.Select(index => string.IsNullOrWhiteSpace(index) ? 0 : int.Parse(index))
-			.ToHashSet();
-		if (!usedIndexes.Contains(0))
-			return newName;
-		for (int i = 1;; i++)
-			if (!usedIndexes.Contains(i))
-				return $"{newName} {i}";
+		imageSet.GetInnermost<ImageSet>().Name = name;
 	}
 }
