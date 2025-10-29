@@ -1,43 +1,26 @@
 using FlakeId;
-using Serilog;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
-internal class FileSystemDataAccess(ILogger logger)
+internal class FileSystemDataAccess
 {
 	public const string DefaultDirectoryPath = "Data";
 
 	public string DirectoryPath { get; set; } = DefaultDirectoryPath;
 	public required string FileExtension { get; set; }
 
-	public async Task<Image?> LoadImageAsync(Id id, CancellationToken cancellationToken)
+	public async Task<Image> LoadImageAsync(Id id, CancellationToken cancellationToken)
 	{
 		await using var stream = OpenRead(id);
-		try
-		{
-			return await Image.LoadAsync(stream, cancellationToken);
-		}
-		catch (TaskCanceledException exception)
-		{
-			logger.Verbose(exception, "Image loading was cancelled");
-			return null;
-		}
+		return await Image.LoadAsync(stream, cancellationToken);
 	}
 
-	public async Task<Image<TPixel>?> LoadImageAsync<TPixel>(Id id, CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
+	public async Task<Image<TPixel>> LoadImageAsync<TPixel>(Id id, CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
 	{
 		await using var stream = OpenRead(id);
-		try
-		{
-			return await Image.LoadAsync<TPixel>(stream, cancellationToken);
-		}
-		catch (TaskCanceledException exception)
-		{
-			logger.Verbose(exception, "Image loading was cancelled");
-			return null;
-		}
+		return await Image.LoadAsync<TPixel>(stream, cancellationToken);
 	}
 
 	public virtual Stream OpenRead(Id id)

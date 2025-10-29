@@ -16,8 +16,6 @@ internal sealed class ImageSharpImageLoader<TPixel>(ILogger logger) : ImageLoade
 			.Begin("Loading image {image} with size {size}", imageData, imageData.Size);
 		var loadable = imageData.GetFirst<LoadableImage>();
 		using var image = await loadable.LoadAsync<TPixel>(cancellationToken);
-		if (image == null || cancellationToken.IsCancellationRequested)
-			return false;
 		image.CopyPixelDataTo(target.Span);
 		operation.Complete();
 		return true;

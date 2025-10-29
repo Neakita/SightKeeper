@@ -1,6 +1,8 @@
 ﻿using System.Threading.Channels;
 using CommunityToolkit.Diagnostics;
 using Serilog;
+using Serilog.Events;
+using SerilogTimings.Extensions;
 using SightKeeper.Application;
 using SightKeeper.Domain.Images;
 
@@ -48,15 +50,24 @@ internal sealed class ThreadedImageLoader<TPixel> : ImageLoader<TPixel>
 
 	private async Task TryProcessRequestAsync(LoadImageRequest request)
 	{
+		using var operation = _logger.OperationAt(LogEventLevel.Verbose).Begin("Image loading request processing");
 		try
 		{
 			await ProcessRequestAsync(request);
+			operation.Complete();
+		}
+		catch (TaskCanceledException exception)
+		{
+			var isResultSet = request.CompletionSource.TrySetResult(false);
+			_logger.Verbose(exception, "Image {image} loading was cancelled via an exception. Is result set: {isResultSet}", request.Image, isResultSet);
+			operation.SetException(exception);
 		}
 		catch (Exception exception)
 		{
 			var isExceptionSet = request.CompletionSource.TrySetException(exception);
 			if (!isExceptionSet)
 				_logger.Warning(exception, "An exception was thrown while processing image {image} load request, but couldn't be set to CompletionSource", request.Image);
+			operation.SetException(exception);
 		}
 	}
 

@@ -18,12 +18,12 @@ internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAcce
 	public string FileExtension => dataAccess.FileExtension;
 	public ManagedImage Inner => inner;
 
-	public Task<Image?> LoadAsync(CancellationToken cancellationToken)
+	public Task<Image> LoadAsync(CancellationToken cancellationToken)
 	{
 		return dataAccess.LoadImageAsync(Id, cancellationToken);
 	}
 
-	public Task<Image<TPixel>?> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
+	public Task<Image<TPixel>> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
 	{
 		return dataAccess.LoadImageAsync<TPixel>(Id, cancellationToken);
 	}

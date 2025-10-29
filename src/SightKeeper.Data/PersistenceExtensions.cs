@@ -209,7 +209,7 @@ public static class PersistenceExtensions
 	{
 		builder.Register(_ =>
 		{
-			FileSystemDataAccess dataAccess = new(Log.ForContext<FileSystemDataAccess>())
+			FileSystemDataAccess dataAccess = new()
 			{
 				DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Images"),
 				FileExtension = "png"

@@ -11,20 +11,16 @@ internal sealed class CroppedImageData(ImageData innerData, LoadableImage innerL
 	public Vector2<ushort> Size => new((ushort)cropRectangle.Width, (ushort)cropRectangle.Height);
 	public DateTimeOffset CreationTimestamp => innerData.CreationTimestamp;
 
-	public async Task<Image?> LoadAsync(CancellationToken cancellationToken)
+	public async Task<Image> LoadAsync(CancellationToken cancellationToken)
 	{
 		var image = await innerLoadable.LoadAsync(cancellationToken);
-		if (image == null)
-			return null;
 		Crop(image);
 		return image;
 	}
 
-	public async Task<Image<TPixel>?> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
+	public async Task<Image<TPixel>> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
 	{
 		var image = await innerLoadable.LoadAsync<TPixel>(cancellationToken);
-		if (image == null)
-			return null;
 		Crop(image);
 		return image;
 	}

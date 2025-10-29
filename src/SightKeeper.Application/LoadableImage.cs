@@ -5,6 +5,6 @@ namespace SightKeeper.Application;
 
 public interface LoadableImage
 {
-	Task<Image?> LoadAsync(CancellationToken cancellationToken);
-	Task<Image<TPixel>?> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>;
+	Task<Image> LoadAsync(CancellationToken cancellationToken);
+	Task<Image<TPixel>> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>;
 }
