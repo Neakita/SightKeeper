@@ -2,7 +2,7 @@
 
 public sealed class CondaLocator(IReadOnlyCollection<string> possiblePaths)
 {
-	public string CondaActivationBatchFilePath => Path.Combine(LocateCondaDirectory(), "bin", "activate"); 
+	public string CondaActivationScriptPath => Path.Combine(LocateCondaDirectory(), "bin", "activate"); 
 
 	private string LocateCondaDirectory()
 	{

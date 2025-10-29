@@ -4,7 +4,7 @@ internal sealed class WindowsCondaCommandRunner(CommandRunner inner, CondaLocato
 {
 	public Task ExecuteCommandAsync(string command, CancellationToken cancellationToken)
 	{
-		var condaActivationBatchFilePath = condaLocator.CondaActivationBatchFilePath;
+		var condaActivationBatchFilePath = condaLocator.CondaActivationScriptPath;
 		command = $"CALL {condaActivationBatchFilePath} && {command}";
 		return inner.ExecuteCommandAsync(command, cancellationToken);
 	}

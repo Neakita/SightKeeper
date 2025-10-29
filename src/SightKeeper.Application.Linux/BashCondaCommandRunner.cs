@@ -4,7 +4,7 @@ internal class BashCondaCommandRunner(CommandRunner inner, CondaLocator condaLoc
 {
 	public Task ExecuteCommandAsync(string command, CancellationToken cancellationToken)
 	{
-		var condaActivationBatchFilePath = condaLocator.CondaActivationBatchFilePath;
+		var condaActivationBatchFilePath = condaLocator.CondaActivationScriptPath;
 		command = $"source {condaActivationBatchFilePath} && {command}";
 		return inner.ExecuteCommandAsync(command, cancellationToken);
 	}
