@@ -11,8 +11,12 @@ public static class ContainerBuilderWindowsServicesExtensions
 		builder.RegisterType<SustainableScreenCapturer<Bgra32, DX11ScreenCapturer>>()
 			.As<ScreenCapturer<Bgra32>>();
 
-		builder.RegisterType<StatelessWindowsCondaEnvironmentManager>()
-			.As<CondaEnvironmentManager>();
+		builder.Register(context =>
+		{
+			var commandRunner = context.Resolve<CommandRunner>();
+			commandRunner = new WindowsCondaCommandRunner(commandRunner);
+			return new StatelessCondaEnvironmentManager(commandRunner);
+		}).As<CondaEnvironmentManager>();
 
 		builder.Register(_ =>
 		{

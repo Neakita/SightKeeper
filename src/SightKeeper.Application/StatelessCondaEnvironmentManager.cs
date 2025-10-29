@@ -1,10 +1,9 @@
-﻿namespace SightKeeper.Application.Windows;
+namespace SightKeeper.Application;
 
-internal sealed class StatelessWindowsCondaEnvironmentManager(CommandRunner commandRunner) : CondaEnvironmentManager
+public class StatelessCondaEnvironmentManager(CommandRunner condaCommandRunner) : CondaEnvironmentManager
 {
 	public async Task<CommandRunner> ActivateAsync(string environmentDirectoryPath, string pythonVersion, CancellationToken cancellationToken)
 	{
-		var condaCommandRunner = new WindowsCondaCommandRunner(commandRunner);
 		await EnsureEnvironmentExistsAsync(condaCommandRunner, environmentDirectoryPath, pythonVersion, cancellationToken);
 		return new CondaEnvironmentCommandRunner(condaCommandRunner, environmentDirectoryPath);
 	}
