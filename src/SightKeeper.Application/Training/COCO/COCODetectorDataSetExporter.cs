@@ -2,6 +2,7 @@
 using System.Text.Json;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Application.Training.Data;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
@@ -113,7 +114,8 @@ internal sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyTa
 
 	private static async Task ExportImage(string filePath, ImageData data, CancellationToken cancellationToken)
 	{
-		using var image = await data.LoadAsync(cancellationToken);
+		var loadableImage = data.GetFirst<LoadableImage>();
+		using var image = await loadableImage.LoadAsync(cancellationToken);
 		Guard.IsNotNull(image);
 		await image.SaveAsync(filePath, cancellationToken);
 	}

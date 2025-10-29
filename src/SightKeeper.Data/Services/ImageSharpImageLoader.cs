@@ -2,6 +2,7 @@ using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
 using SightKeeper.Application;
+using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -13,7 +14,8 @@ internal sealed class ImageSharpImageLoader<TPixel>(ILogger logger) : ImageLoade
 	{
 		using var operation = logger.OperationAt(LogEventLevel.Verbose)
 			.Begin("Loading image {image} with size {size}", imageData, imageData.Size);
-		using var image = await imageData.LoadAsync<TPixel>(cancellationToken);
+		var loadable = imageData.GetFirst<LoadableImage>();
+		using var image = await loadable.LoadAsync<TPixel>(cancellationToken);
 		if (image == null || cancellationToken.IsCancellationRequested)
 			return false;
 		image.CopyPixelDataTo(target.Span);
