@@ -5,6 +5,7 @@ using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Data.Services;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;

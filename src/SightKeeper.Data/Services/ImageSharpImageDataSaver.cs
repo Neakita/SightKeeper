@@ -4,6 +4,7 @@ using Serilog.Events;
 using SerilogTimings.Extensions;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;

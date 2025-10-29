@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using SightKeeper.Application;
+using SightKeeper.Domain;
 
 namespace SightKeeper.Data.Services;
 

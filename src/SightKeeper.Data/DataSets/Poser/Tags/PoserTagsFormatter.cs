@@ -2,6 +2,7 @@
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 

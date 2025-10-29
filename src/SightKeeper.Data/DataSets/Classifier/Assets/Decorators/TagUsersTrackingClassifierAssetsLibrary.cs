@@ -1,4 +1,5 @@
 using SightKeeper.Data.DataSets.Tags;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
 

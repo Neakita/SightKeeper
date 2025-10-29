@@ -2,6 +2,7 @@ using System.IO.Compression;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;

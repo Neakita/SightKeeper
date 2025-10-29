@@ -5,6 +5,7 @@ using Serilog.Events;
 using SerilogTimings.Extensions;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;

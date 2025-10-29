@@ -2,6 +2,7 @@
 using FlakeId;
 using SightKeeper.Application;
 using SightKeeper.Data.ImageSets.Images;
+using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using Vibrance;
 using Vibrance.Changes;

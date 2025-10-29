@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Subjects;
+using SightKeeper.Domain;
 
 namespace SightKeeper.Data.Services;
 

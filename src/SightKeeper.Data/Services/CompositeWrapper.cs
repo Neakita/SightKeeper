@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Data.Services;
+﻿using SightKeeper.Domain;
+
+namespace SightKeeper.Data.Services;
 
 internal sealed class CompositeWrapper<T>(IReadOnlyCollection<Wrapper<T>> wrappers) : Wrapper<T>
 	where T : notnull

@@ -1,6 +1,7 @@
 using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
