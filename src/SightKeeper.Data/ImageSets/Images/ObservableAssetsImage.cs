@@ -1,8 +1,6 @@
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.ImageSets.Images;
@@ -13,16 +11,6 @@ internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, 
 	public Vector2<ushort> Size => inner.Size;
 	public IReadOnlyCollection<Asset> Assets => _assets;
 	public ManagedImage Inner => inner;
-
-	public Task<Image?> LoadAsync(CancellationToken cancellationToken)
-	{
-		return inner.LoadAsync(cancellationToken);
-	}
-
-	public Task<Image<TPixel>?> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
-	{
-		return inner.LoadAsync<TPixel>(cancellationToken);
-	}
 
 	public void Add(Asset asset)
 	{

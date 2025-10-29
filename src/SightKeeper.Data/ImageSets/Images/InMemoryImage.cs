@@ -3,8 +3,6 @@ using FlakeId;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.ImageSets.Images;
 
@@ -16,16 +14,6 @@ internal sealed class InMemoryImage(Id id, DateTimeOffset creationTimestamp, Vec
 	public Vector2<ushort> Size => size;
 	public IReadOnlyCollection<Asset> Assets => _assets;
 
-	public Task<Image?> LoadAsync(CancellationToken cancellationToken)
-	{
-		return Task.FromResult<Image?>(null);
-	}
-
-	public Task<Image<TPixel>?> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
-	{
-		return Task.FromResult<Image<TPixel>?>(null);
-	}
-
 	public void Add(Asset asset)
 	{
 		bool isAdded = _assets.Add(asset);
@@ -36,10 +24,6 @@ internal sealed class InMemoryImage(Id id, DateTimeOffset creationTimestamp, Vec
 	{
 		bool isRemoved = _assets.Remove(asset);
 		Guard.IsTrue(isRemoved);
-	}
-
-	public void DeleteData()
-	{
 	}
 
 	public override string ToString()
