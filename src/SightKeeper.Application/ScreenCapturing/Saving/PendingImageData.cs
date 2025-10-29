@@ -9,7 +9,7 @@ internal sealed class PendingImageData<TPixel> : IDisposable
 {
 	public ManagedImage Image { get; }
 
-	public ReadOnlySpan2D<TPixel> Data => _rentedArray.AsSpan2D(Image.Size.Y, Image.Size.X);
+	public ReadOnlySpan2D<TPixel> Data => _rentedArray.AsSpan().AsSpan2D(Image.Size.Y, Image.Size.X);
 
 	public PendingImageData(ManagedImage image, ArrayPool<TPixel> arrayPool, ReadOnlySpan2D<TPixel> data)
 	{
