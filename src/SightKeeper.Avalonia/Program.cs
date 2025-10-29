@@ -54,6 +54,7 @@ internal static class Program
 			.MinimumLevel.Verbose()
 			.WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
 			.WriteTo.Debug()
+			.WriteTo.Seq("http://localhost:5341", apiKey: "BRg2xJ9C6cCK2faabIR8")
 			.CreateLogger();
 	}
 }
