@@ -12,10 +12,13 @@ public static class ContainerBuilderLinuxServicesExtensions
 		builder.RegisterType<X11ScreenCapturer>()
 			.As<ScreenCapturer<Bgra32>>();
 
+		builder.AddCondaLocator();
+
 		builder.Register(context =>
 		{
 			var commandRunner = context.Resolve<CommandRunner>();
-			commandRunner = new BashCondaCommandRunner(commandRunner);
+			var condaLocator = context.Resolve<CondaLocator>();
+			commandRunner = new BashCondaCommandRunner(commandRunner, condaLocator);
 			return new StatelessCondaEnvironmentManager(commandRunner);
 		}).As<CondaEnvironmentManager>();
 
@@ -26,5 +29,17 @@ public static class ContainerBuilderLinuxServicesExtensions
 				return commandRunner;
 			})
 			.As<CommandRunner>();
+	}
+
+	private static void AddCondaLocator(this ContainerBuilder builder)
+	{
+		var userDirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+		IReadOnlyCollection<string> possiblePaths =
+		[
+			Path.Combine(userDirectoryPath, "miniconda3"),
+			Path.Combine(userDirectoryPath, "Programs", "miniconda3")
+		];
+		var condaLocator = new CondaLocator(possiblePaths);
+		builder.RegisterInstance(condaLocator);
 	}
 }

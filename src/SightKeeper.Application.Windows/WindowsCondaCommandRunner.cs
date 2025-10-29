@@ -1,10 +1,10 @@
 ﻿namespace SightKeeper.Application.Windows;
 
-internal sealed class WindowsCondaCommandRunner(CommandRunner inner) : CommandRunner
+internal sealed class WindowsCondaCommandRunner(CommandRunner inner, CondaLocator condaLocator) : CommandRunner
 {
 	public Task ExecuteCommandAsync(string command, CancellationToken cancellationToken)
 	{
-		var condaActivationBatchFilePath = CondaLocator.CondaActivationBatchFilePath;
+		var condaActivationBatchFilePath = condaLocator.CondaActivationBatchFilePath;
 		command = $"CALL {condaActivationBatchFilePath} && {command}";
 		return inner.ExecuteCommandAsync(command, cancellationToken);
 	}
