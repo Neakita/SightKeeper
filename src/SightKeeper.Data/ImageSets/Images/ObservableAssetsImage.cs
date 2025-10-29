@@ -14,16 +14,6 @@ internal sealed class ObservableAssetsImage(ManagedImage inner) : ManagedImage, 
 	public IReadOnlyCollection<Asset> Assets => _assets;
 	public ManagedImage Inner => inner;
 
-	public Image? Load(CancellationToken cancellationToken)
-	{
-		return null;
-	}
-
-	public Image<TPixel>? Load<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
-	{
-		return null;
-	}
-
 	public Task<Image?> LoadAsync(CancellationToken cancellationToken)
 	{
 		return inner.LoadAsync(cancellationToken);

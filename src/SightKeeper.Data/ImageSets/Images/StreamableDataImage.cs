@@ -17,16 +17,6 @@ internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAcce
 	public string FileExtension => dataAccess.FileExtension;
 	public ManagedImage Inner => inner;
 
-	public Image? Load(CancellationToken cancellationToken)
-	{
-		return dataAccess.LoadImage(Id, cancellationToken);
-	}
-
-	public Image<TPixel>? Load<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
-	{
-		return dataAccess.LoadImage<TPixel>(Id, cancellationToken);
-	}
-
 	public Task<Image?> LoadAsync(CancellationToken cancellationToken)
 	{
 		return dataAccess.LoadImageAsync(Id, cancellationToken);

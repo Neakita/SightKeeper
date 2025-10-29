@@ -16,16 +16,6 @@ internal sealed class InMemoryImage(Id id, DateTimeOffset creationTimestamp, Vec
 	public Vector2<ushort> Size => size;
 	public IReadOnlyCollection<Asset> Assets => _assets;
 
-	public Image? Load(CancellationToken cancellationToken)
-	{
-		return null;
-	}
-
-	public Image<TPixel>? Load<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
-	{
-		return null;
-	}
-
 	public Task<Image?> LoadAsync(CancellationToken cancellationToken)
 	{
 		return Task.FromResult<Image?>(null);
@@ -34,21 +24,6 @@ internal sealed class InMemoryImage(Id id, DateTimeOffset creationTimestamp, Vec
 	public Task<Image<TPixel>?> LoadAsync<TPixel>(CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
 	{
 		return Task.FromResult<Image<TPixel>?>(null);
-	}
-
-	public Stream? OpenWriteStream()
-	{
-		return null;
-	}
-
-	public Stream? OpenReadStream()
-	{
-		return null;
-	}
-
-	public bool TryCopyTo(string filePath)
-	{
-		return false;
 	}
 
 	public void Add(Asset asset)

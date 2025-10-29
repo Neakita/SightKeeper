@@ -12,22 +12,6 @@ internal class FileSystemDataAccess(ILogger logger)
 	public string DirectoryPath { get; set; } = DefaultDirectoryPath;
 	public required string FileExtension { get; set; }
 
-	public Image? LoadImage(Id id, CancellationToken cancellationToken)
-	{
-		using var stream = OpenRead(id);
-		if (cancellationToken.IsCancellationRequested)
-			return null;
-		return Image.Load(stream);
-	}
-
-	public Image<TPixel>? LoadImage<TPixel>(Id id, CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
-	{
-		using var stream = OpenRead(id);
-		if (cancellationToken.IsCancellationRequested)
-			return null;
-		return Image.Load<TPixel>(stream);
-	}
-
 	public async Task<Image?> LoadImageAsync(Id id, CancellationToken cancellationToken)
 	{
 		await using var stream = OpenRead(id);
