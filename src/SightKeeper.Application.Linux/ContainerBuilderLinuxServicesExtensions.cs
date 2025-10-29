@@ -22,13 +22,7 @@ public static class ContainerBuilderLinuxServicesExtensions
 			return new StatelessCondaEnvironmentManager(commandRunner);
 		}).As<CondaEnvironmentManager>();
 
-		builder.Register(_ =>
-			{
-				CommandRunner commandRunner = new ArgumentCommandRunner("/bin/bash");
-				commandRunner = new BashArgumentCarryCommandRunner(commandRunner);
-				return commandRunner;
-			})
-			.As<CommandRunner>();
+		builder.AddCommandRunner();
 	}
 
 	private static void AddCondaLocator(this ContainerBuilder builder)
@@ -41,5 +35,15 @@ public static class ContainerBuilderLinuxServicesExtensions
 		];
 		var condaLocator = new CondaLocator(possiblePaths);
 		builder.RegisterInstance(condaLocator);
+	}
+
+	private static void AddCommandRunner(this ContainerBuilder builder)
+	{
+		var commandRunner = new ArgumentCommandRunner("/bin/bash");
+
+		builder.RegisterInstance(commandRunner)
+			.As<CommandRunner>();
+
+		builder.RegisterDecorator<BashArgumentCarryCommandRunner, CommandRunner>();
 	}
 }
