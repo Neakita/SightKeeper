@@ -4,16 +4,14 @@ using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
 using SightKeeper.Application.Training.Data;
-using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
-using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.COCO;
 
-internal sealed class COCODetectorDataSetExporter(ILogger logger) : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
+internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, ILogger logger) : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
 {
 	public int CategoriesInitialId { get; set; } = 0;
 	public IdCounter ImageIdCounter { get; set; } = new();
@@ -33,7 +31,7 @@ internal sealed class COCODetectorDataSetExporter(ILogger logger) : TrainDataExp
 			var image = CreateCOCOImage(asset.Image);
 			images.Add(image);
 			var imageFilePath = Path.Combine(imagesDirectoryPath, image.FileName);
-			await ExportImage(imageFilePath, asset.Image, cancellationToken);
+			await imageExporter.ExportImageAsync(imageFilePath, asset.Image, cancellationToken);
 			foreach (var item in asset.Items)
 			{
 				var annotation = CreateAnnotation(item, image);
@@ -111,15 +109,6 @@ internal sealed class COCODetectorDataSetExporter(ILogger logger) : TrainDataExp
 				bounding.Height * image.Height
 			]
 		};
-	}
-
-	private async Task ExportImage(string filePath, ImageData data, CancellationToken cancellationToken)
-	{
-		using var operation = logger.OperationAt(LogEventLevel.Verbose).Begin("Image {image} export", data);
-		var loadableImage = data.GetFirst<LoadableImage>();
-		using var image = await loadableImage.LoadAsync(cancellationToken);
-		await image.SaveAsync(filePath, cancellationToken);
-		operation.Complete();
 	}
 
 	private async Task ExportData(string dataSetFilePath, COCODataSet dataSet, CancellationToken cancellationToken)

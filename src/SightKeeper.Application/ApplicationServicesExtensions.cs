@@ -128,6 +128,8 @@ public static class ApplicationServicesExtensions
 			.As<ItemCropper<ReadOnlyDetectorItem>>();
 
 		builder.RegisterType<RandomItemsCropSettings>();
+
+		builder.RegisterType<ImageExporter>();
 	}
 
 	private static void RegisterHotKeys(this ContainerBuilder builder)
