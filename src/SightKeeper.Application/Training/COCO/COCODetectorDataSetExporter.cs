@@ -13,14 +13,9 @@ namespace SightKeeper.Application.Training.COCO;
 
 internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, ILogger logger) : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
 {
-	public int CategoriesInitialId { get; set; } = 0;
-	public IdCounter ImageIdCounter { get; set; } = new();
-	public IdCounter AnnotationIdCounter { get; set; } = new();
-	public bool ResetIdCounters { get; set; } = true;
-
 	public async Task ExportAsync(string directoryPath, ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data, CancellationToken cancellationToken)
 	{
-		ResetCountersIfNecessary();
+		Reset();
 		var imagesDirectoryPath = Path.Combine(directoryPath, "images");
 		Directory.CreateDirectory(imagesDirectoryPath);
 		ProcessCategories(data.Tags);
@@ -50,18 +45,18 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 
 	private IReadOnlyList<COCOCategory> _categories = ReadOnlyCollection<COCOCategory>.Empty;
 	private IReadOnlyDictionary<ReadOnlyTag, int> _categoryIds = ReadOnlyDictionary<ReadOnlyTag, int>.Empty;
+	private int _imageIdCounter;
+	private int _annotationIdCounter;
 
-	private void ResetCountersIfNecessary()
+	private void Reset()
 	{
-		if (!ResetIdCounters)
-			return;
-		ImageIdCounter.Reset();
-		AnnotationIdCounter.Reset();
+		_imageIdCounter = 0;
+		_annotationIdCounter = 0;
 	}
 
 	private void ProcessCategories(IEnumerable<ReadOnlyTag> tags)
 	{
-		var idCounter = CategoriesInitialId;
+		var idCounter = 0;
 		var categories = new List<COCOCategory>();
 		var categoryIdLookup = new Dictionary<ReadOnlyTag, int>();
 		foreach (var tag in tags)
@@ -81,7 +76,7 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 
 	private COCOImage CreateCOCOImage(ImageData data)
 	{
-		var imageId = ImageIdCounter.NextId;
+		var imageId = _imageIdCounter++;
 		var imageFileName = $"{imageId}.png";
 		return new COCOImage
 		{
@@ -98,7 +93,7 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 		var bounding = item.Bounding;
 		return new COCOAnnotation
 		{
-			Id = AnnotationIdCounter.NextId,
+			Id = _annotationIdCounter++,
 			ImageId = image.Id,
 			CategoryId = _categoryIds[item.Tag],
 			Bbox =
