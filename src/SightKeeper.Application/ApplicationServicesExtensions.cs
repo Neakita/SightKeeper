@@ -103,14 +103,16 @@ public static class ApplicationServicesExtensions
 		builder.RegisterType<LifetimeTrainer>()
 			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
 
-		builder.Register(context =>
-		{
-			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> exporter = new COCODetectorDataSetExporter();
-			exporter = new DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>(exporter);
-			var transformer = context.Resolve<TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
-			exporter = new TransformingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>(exporter, transformer);
-			return exporter;
-		}).As<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+		builder.RegisterType<COCODetectorDataSetExporter>()
+			.As<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+		
+		builder.RegisterDecorator<
+			DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>,
+			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+
+		builder.RegisterDecorator<
+			TransformingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>,
+			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 
 		builder.RegisterType<CropTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
 			.As<TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
@@ -134,11 +136,7 @@ public static class ApplicationServicesExtensions
 			.SingleInstance()
 			.As<IReactiveGlobalHook>();
 
-		builder.Register(context =>
-		{
-			var hook = context.Resolve<IReactiveGlobalHook>();
-			var gestures = hook.ObserveInputStates().ToGesture();
-			return new BindingsManager(gestures);
-		});
+		builder.RegisterType<BindingsManager>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.Resolve<IReactiveGlobalHook>().ObserveInputStates().ToGesture());
 	}
 }

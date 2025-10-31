@@ -10,16 +10,8 @@ public static class WindowsServicesExtensions
 	{
 		builder.RegisterType<SustainableScreenCapturer<Bgra32, DX11ScreenCapturer>>()
 			.As<ScreenCapturer<Bgra32>>();
-		
-		builder.RegisterCondaLocator();
 
-		builder.Register(context =>
-		{
-			var commandRunner = context.Resolve<CommandRunner>();
-			var condaLocator = context.Resolve<CondaLocator>();
-			commandRunner = new WindowsCondaCommandRunner(commandRunner, condaLocator);
-			return new StatelessCondaEnvironmentManager(commandRunner);
-		}).As<CondaEnvironmentManager>();
+		builder.RegisterCondaLocator();
 
 		builder.Register(_ =>
 		{
@@ -27,6 +19,13 @@ public static class WindowsServicesExtensions
 			commandRunner = new WindowsArgumentCarryCommandRunner(commandRunner);
 			return commandRunner;
 		}).As<CommandRunner>();
+
+		builder.RegisterType<WindowsCondaCommandRunner>()
+			.Named<CommandRunner>("conda");
+
+		builder.RegisterType<StatelessCondaEnvironmentManager>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.ResolveNamed<CommandRunner>("conda"))
+			.As<CondaEnvironmentManager>();
 	}
 
 	private static void RegisterCondaLocator(this ContainerBuilder builder)

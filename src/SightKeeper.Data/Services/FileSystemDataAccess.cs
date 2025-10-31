@@ -4,12 +4,12 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 
-internal class FileSystemDataAccess
+internal class FileSystemDataAccess(string fileExtension)
 {
 	public const string DefaultDirectoryPath = "Data";
 
 	public string DirectoryPath { get; set; } = DefaultDirectoryPath;
-	public required string FileExtension { get; set; }
+	public string FileExtension => fileExtension;
 
 	public async Task<Image> LoadImageAsync(Id id, CancellationToken cancellationToken)
 	{
@@ -44,7 +44,7 @@ internal class FileSystemDataAccess
 
 	private string GetFilePath(Id id)
 	{
-		var fileName = $"{id}.{FileExtension}";
+		var fileName = $"{id}.{fileExtension}";
 		var filePath = Path.Combine(DirectoryPath, fileName);
 		return filePath;
 	}

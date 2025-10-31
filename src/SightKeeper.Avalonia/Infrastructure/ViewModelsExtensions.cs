@@ -15,7 +15,6 @@ using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.DataSets.Card;
 using SightKeeper.Avalonia.DataSets.Commands;
 using SightKeeper.Avalonia.DataSets.Dialogs;
-using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags.Poser;
 using SightKeeper.Avalonia.Extensions;
@@ -29,7 +28,6 @@ using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Infrastructure;
 
@@ -52,44 +50,22 @@ internal static class ViewModelsExtensions
 
 	private static void RegisterImageSetsTabDependencies(this ContainerBuilder builder)
 	{
-		builder.Register(context =>
-		{
-			var createImageSetCommand = context.Resolve<CreateImageSetCommand>();
-			var imageSetRepository = context.Resolve<ObservableListRepository<ImageSet>>();
-			var imageSetCardDataContextFactory = context.Resolve<ImageSetCardDataContextFactory>();
-			var capturingSettingsDataContext = context.Resolve<CapturingSettingsDataContext>();
-			return new ImageSetsViewModel(
-				createImageSetCommand,
-				imageSetRepository,
-				imageSetCardDataContextFactory,
-				capturingSettingsDataContext);
-		});
-
 		builder.RegisterType<ImageSetCardViewModelFactory>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.Resolve<EditImageSetCommand>())
 			.As<ImageSetCardDataContextFactory>();
 
 		builder.RegisterType<CapturingSettingsViewModel>()
 			.As<CapturingSettingsDataContext>();
-
-		builder.Register(context =>
-		{
-			var createImageSetCommand = context.Resolve<CreateImageSetCommand>();
-			var imageSetsListRepository = context.Resolve<ObservableListRepository<ImageSet>>();
-			var imageSetCardDataContextFactory = context.Resolve<ImageSetCardDataContextFactory>();
-			var capturingSettings = context.Resolve<CapturingSettingsDataContext>();
-			return new ImageSetsViewModel(
-				createImageSetCommand,
-				imageSetsListRepository,
-				imageSetCardDataContextFactory,
-				capturingSettings);
-		});
+		
+		builder.RegisterType<ImageSetsViewModel>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.Resolve<CreateImageSetCommand>());
 	}
 
 	private static void RegisterDataSetsTabDependencies(this ContainerBuilder builder)
 	{
 		builder.RegisterType<CreateDataSetViewModel>();
 		builder.RegisterType<DataSetTypePickerViewModel>();
-
+		
 		builder.Register(context =>
 		{
 			var editDataSetCommand = context.Resolve<EditDataSetCommand>();
@@ -107,18 +83,9 @@ internal static class ViewModelsExtensions
 			});
 		});
 
-		builder.Register(context =>
-		{
-			var dataSetsObservableRepository = context.Resolve<ObservableListRepository<DataSet<Tag, Asset>>>();
-			var createDataSetCommand = context.Resolve<CreateDataSetCommand>();
-			var importDataSetCommand = context.Resolve<ImportDataSetCommand>();
-			var dataSetCardViewModelFactory = context.Resolve<Func<DataSet<Tag, Asset>, DataSetCardViewModel>>();
-			return new DataSetsViewModel(
-				dataSetsObservableRepository,
-				createDataSetCommand,
-				importDataSetCommand,
-				dataSetCardViewModelFactory);
-		});
+		builder.RegisterType<DataSetsViewModel>()
+			.WithParameter((info, _) => info.Position == 1, (_, context) => context.Resolve<CreateDataSetCommand>())
+			.WithParameter((info, _) => info.Position == 2, (_, context) => context.Resolve<ImportDataSetCommand>());
 
 		builder.AddDataSetType<Tag, ClassifierAsset, PlainTagsEditorViewModel>("Classifier");
 		builder.AddDataSetType<Tag, ItemsAsset<DetectorItem>, PlainTagsEditorViewModel>("Detector");
@@ -205,12 +172,8 @@ internal static class ViewModelsExtensions
 		where TAsset : class
 		where TTagsEditor : class
 	{
-		builder.Register(context =>
-		{
-			var dataSetFactory = context.Resolve<Factory<DataSet<TTag, TAsset>>>();
-			var tagsEditorFactory = context.Resolve<Func<TTagsEditor>>();
-
-			return new DataSetTypeViewModel(name, (Factory<DataSet<Tag, Asset>>)dataSetFactory, (Func<TagsEditorDataContext>)tagsEditorFactory);
-		});
+		builder.RegisterType<DataSetTypeViewModel>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.Resolve<Factory<DataSet<TTag, TAsset>>>())
+			.WithParameter((info, _) => info.Position == 1, (_, context) => context.Resolve<Func<TTagsEditor>>());
 	}
 }

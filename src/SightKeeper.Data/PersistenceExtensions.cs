@@ -88,6 +88,10 @@ public static class PersistenceExtensions
 	private static void RegisterWrappers(this ContainerBuilder builder, PersistenceOptions options)
 	{
 		builder.RegisterImageSetWrappers();
+		
+		builder.RegisterType<StorableImageWrapper>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.ResolveNamed<FileSystemDataAccess>("images"))
+			.As<Wrapper<ManagedImage>>();
 
 		builder.RegisterType<KeyPointWrapper>();
 
@@ -206,15 +210,10 @@ public static class PersistenceExtensions
 
 	private static void RegisterPng(this ContainerBuilder builder)
 	{
-		builder.Register(_ =>
-		{
-			FileSystemDataAccess dataAccess = new()
-			{
-				DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Images"),
-				FileExtension = "png"
-			};
-			return new StorableImageWrapper(dataAccess);
-		}).As<Wrapper<ManagedImage>>();
+		builder.RegisterType<FileSystemDataAccess>()
+			.WithParameter(new PositionalParameter(0, "png"))
+			.OnActivating(args => args.Instance.DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Images"))
+			.Named<FileSystemDataAccess>("images");
 
 		builder.RegisterType<PngEncoder>()
 			.As<IImageEncoder>();

@@ -22,12 +22,9 @@ internal static class PresentationServicesExtensions
 		builder.RegisterType<DialogManager>()
 			.SingleInstance();
 
-		builder.Register(context =>
-		{
-			var bitmapPool = context.Resolve<WriteableBitmapPool>();
-			var imageLoader = context.Resolve<ImageLoader<Rgba32>>();
-			return new WriteableBitmapImageLoader<Rgba32>(bitmapPool, PixelFormat.Rgb32, imageLoader);
-		}).As<WriteableBitmapImageLoader>();
+		builder.RegisterType<WriteableBitmapImageLoader<Rgba32>>()
+			.WithParameter(new TypedParameter(typeof(PixelFormat), PixelFormat.Rgb32))
+			.As<WriteableBitmapImageLoader>();
 
 		builder.RegisterType<WriteableBitmapPool>()
 			.SingleInstance();
