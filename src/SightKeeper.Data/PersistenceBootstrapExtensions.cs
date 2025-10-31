@@ -3,7 +3,7 @@ using SightKeeper.Data.Services;
 
 namespace SightKeeper.Data;
 
-public static class ContainerPersistenceExtensions
+public static class PersistenceBootstrapExtensions
 {
 	public static void UseAutoSaving(this IContainer container)
 	{

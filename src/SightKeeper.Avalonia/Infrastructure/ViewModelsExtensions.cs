@@ -35,22 +35,22 @@ namespace SightKeeper.Avalonia.Infrastructure;
 
 internal static class ViewModelsExtensions
 {
-	public static void AddViewModels(this ContainerBuilder builder)
+	public static void RegisterViewModels(this ContainerBuilder builder)
 	{
-		builder.AddGenerics();
-		builder.AddTabs();
-		builder.AddImageSetsTabDependencies();
-		builder.AddDataSetsTabDependencies();
-		builder.AddAnnotationTabDependencies();
-		builder.AddTrainingTabDependencies();
+		builder.RegisterGeneral();
+		builder.RegisterTabs();
+		builder.RegisterImageSetsTabDependencies();
+		builder.RegisterDataSetsTabDependencies();
+		builder.RegisterAnnotationTabDependencies();
+		builder.RegisterTrainingTabDependencies();
 	}
 
-	private static void AddGenerics(this ContainerBuilder builder)
+	private static void RegisterGeneral(this ContainerBuilder builder)
 	{
 		builder.RegisterType<MainViewModel>();
 	}
 
-	private static void AddImageSetsTabDependencies(this ContainerBuilder builder)
+	private static void RegisterImageSetsTabDependencies(this ContainerBuilder builder)
 	{
 		builder.Register(context =>
 		{
@@ -85,7 +85,7 @@ internal static class ViewModelsExtensions
 		});
 	}
 
-	private static void AddDataSetsTabDependencies(this ContainerBuilder builder)
+	private static void RegisterDataSetsTabDependencies(this ContainerBuilder builder)
 	{
 		builder.RegisterType<CreateDataSetViewModel>();
 		builder.RegisterType<DataSetTypePickerViewModel>();
@@ -128,7 +128,7 @@ internal static class ViewModelsExtensions
 		builder.RegisterType<PoserTagsEditorViewModel>();
 	}
 
-	private static void AddAnnotationTabDependencies(this ContainerBuilder builder)
+	private static void RegisterAnnotationTabDependencies(this ContainerBuilder builder)
 	{
 		builder.RegisterType<SideBarViewModel>()
 			.SingleInstance()
@@ -168,12 +168,12 @@ internal static class ViewModelsExtensions
 		builder.RegisterType<AnnotationImageViewModel>();
 	}
 
-	private static void AddTrainingTabDependencies(this ContainerBuilder builder)
+	private static void RegisterTrainingTabDependencies(this ContainerBuilder builder)
 	{
 		builder.RegisterType<TrainingViewModel>();
 	}
 
-	private static void AddTabs(this ContainerBuilder builder)
+	private static void RegisterTabs(this ContainerBuilder builder)
 	{
 		builder.AddTabItemViewModel<ImageSetsViewModel>(MaterialIconKind.FolderMultipleImage, "Images");
 		builder.AddTabItemViewModel<DataSetsViewModel>(MaterialIconKind.ImageAlbum, "Datasets");

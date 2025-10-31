@@ -9,37 +9,28 @@ internal static class AppBootstrapper
 	public static IContainer Setup()
 	{
 		var builder = new ContainerBuilder();
-		builder.AddServices();
+		builder.RegisterServices();
 		var container = builder.Build();
 		container.InitializeServices();
 		return container;
 	}
 
-	private static void AddServices(this ContainerBuilder builder)
+	private static void RegisterServices(this ContainerBuilder builder)
 	{
 		var persistenceOptions = new PersistenceOptions
 		{
-			ClassifierDataSetScopeConfiguration = classifierBuilder =>
-			{
-				classifierBuilder.AddClassifierServices();
-			},
-			DetectorDataSetScopeConfiguration = detectorBuilder =>
-			{
-				detectorBuilder.AddDetectorServices();
-			},
-			PoserDataSetScopeConfiguration = poserBuilder =>
-			{
-				poserBuilder.AddPoserServices();
-			}
+			ClassifierDataSetScopeConfiguration = ApplicationServicesExtensions.RegisterClassifierServices,
+			DetectorDataSetScopeConfiguration = ApplicationServicesExtensions.RegisterDetectorServices,
+			PoserDataSetScopeConfiguration = ApplicationServicesExtensions.RegisterPoserServices
 		};
 		builder.AddPersistence(persistenceOptions);
-		builder.AddApplicationServices();
-		builder.AddOSSpecificServices();
-		builder.AddAvaloniaServices();
-		builder.AddLogger();
-		builder.AddPresentationServices();
-		builder.AddCommands();
-		builder.AddViewModels();
+		builder.RegisterApplicationServices();
+		builder.RegisterOSSpecificServices();
+		builder.RegisterAvaloniaServices();
+		builder.RegisterLogger();
+		builder.RegisterPresentationServices();
+		builder.RegisterCommands();
+		builder.RegisterViewModels();
 	}
 
 	private static void InitializeServices(this IContainer container)

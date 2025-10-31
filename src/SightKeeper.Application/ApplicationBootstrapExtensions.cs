@@ -3,7 +3,7 @@ using SharpHook.Reactive;
 
 namespace SightKeeper.Application;
 
-public static class ContainerApplicationServicesExtensions
+public static class ApplicationBootstrapExtensions
 {
 	public static void UseHotKeys(this IContainer container)
 	{

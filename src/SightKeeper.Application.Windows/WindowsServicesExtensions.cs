@@ -4,14 +4,14 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Windows;
 
-public static class ContainerBuilderWindowsServicesExtensions
+public static class WindowsServicesExtensions
 {
-	public static void AddWindowsServices(this ContainerBuilder builder)
+	public static void RegisterWindowsServices(this ContainerBuilder builder)
 	{
 		builder.RegisterType<SustainableScreenCapturer<Bgra32, DX11ScreenCapturer>>()
 			.As<ScreenCapturer<Bgra32>>();
 		
-		builder.AddCondaLocator();
+		builder.RegisterCondaLocator();
 
 		builder.Register(context =>
 		{
@@ -29,7 +29,7 @@ public static class ContainerBuilderWindowsServicesExtensions
 		}).As<CommandRunner>();
 	}
 
-	private static void AddCondaLocator(this ContainerBuilder builder)
+	private static void RegisterCondaLocator(this ContainerBuilder builder)
 	{
 		var userDirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 		IReadOnlyCollection<string> possiblePaths =

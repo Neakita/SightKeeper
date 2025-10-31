@@ -5,16 +5,16 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Application.Linux;
 
-public static class ContainerBuilderLinuxServicesExtensions
+public static class LinuxServicesExtensions
 {
-	public static void AddLinuxServices(this ContainerBuilder builder)
+	public static void RegisterLinuxServices(this ContainerBuilder builder)
 	{
 		builder.RegisterType<X11ScreenCapturer>()
 			.As<ScreenCapturer<Bgra32>>();
 
-		builder.AddCondaLocator();
+		builder.RegisterCondaLocator();
 
-		builder.AddCommandRunner();
+		builder.RegisterCommandRunner();
 
 		builder.RegisterType<BashCondaCommandRunner>()
 			.Named<CommandRunner>("conda");
@@ -24,7 +24,7 @@ public static class ContainerBuilderLinuxServicesExtensions
 			.As<CondaEnvironmentManager>();
 	}
 
-	private static void AddCondaLocator(this ContainerBuilder builder)
+	private static void RegisterCondaLocator(this ContainerBuilder builder)
 	{
 		var userDirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 		IReadOnlyCollection<string> possiblePaths =
@@ -36,7 +36,7 @@ public static class ContainerBuilderLinuxServicesExtensions
 		builder.RegisterInstance(condaLocator);
 	}
 
-	private static void AddCommandRunner(this ContainerBuilder builder)
+	private static void RegisterCommandRunner(this ContainerBuilder builder)
 	{
 		CommandRunner commandRunner = new ArgumentCommandRunner("/bin/bash");
 		commandRunner = new BashArgumentCarryCommandRunner(commandRunner);

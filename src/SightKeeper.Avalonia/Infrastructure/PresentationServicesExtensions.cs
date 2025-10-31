@@ -17,7 +17,7 @@ namespace SightKeeper.Avalonia.Infrastructure;
 
 internal static class PresentationServicesExtensions
 {
-	public static void AddPresentationServices(this ContainerBuilder builder)
+	public static void RegisterPresentationServices(this ContainerBuilder builder)
 	{
 		builder.RegisterType<DialogManager>()
 			.SingleInstance();
@@ -42,7 +42,7 @@ internal static class PresentationServicesExtensions
 		builder.RegisterType<DrawerItemsFactory>();
 	}
 
-	public static void AddCommands(this ContainerBuilder builder)
+	public static void RegisterCommands(this ContainerBuilder builder)
 	{
 		builder.RegisterType<CreateImageSetCommand>();
 		builder.RegisterType<EditImageSetCommand>();

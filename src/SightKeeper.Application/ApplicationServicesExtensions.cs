@@ -25,12 +25,12 @@ namespace SightKeeper.Application;
 
 public static class ApplicationServicesExtensions
 {
-	public static void AddApplicationServices(this ContainerBuilder builder)
+	public static void RegisterApplicationServices(this ContainerBuilder builder)
 	{
-		builder.AddValidators();
-		builder.AddImageCapturing();
-		builder.AddTraining();
-		builder.AddHotKeys();
+		builder.RegisterValidators();
+		builder.RegisterImageCapturing();
+		builder.RegisterTraining();
+		builder.RegisterHotKeys();
 
 		builder.RegisterGeneric(typeof(ComposeObservableListRepository<>))
 			.As(typeof(ObservableListRepository<>));
@@ -41,11 +41,11 @@ public static class ApplicationServicesExtensions
 		builder.RegisterType<DataSetEditor>();
 	}
 
-	public static void AddClassifierServices(this ContainerBuilder builder)
+	public static void RegisterClassifierServices(this ContainerBuilder builder)
 	{
 	}
 
-	public static void AddDetectorServices(this ContainerBuilder builder)
+	public static void RegisterDetectorServices(this ContainerBuilder builder)
 	{
 		builder.RegisterType<CastingTrainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
 			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
@@ -53,11 +53,11 @@ public static class ApplicationServicesExtensions
 			.As<Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 	}
 
-	public static void AddPoserServices(this ContainerBuilder builder)
+	public static void RegisterPoserServices(this ContainerBuilder builder)
 	{
 	}
 
-	private static void AddValidators(this ContainerBuilder builder)
+	private static void RegisterValidators(this ContainerBuilder builder)
 	{
 		builder.RegisterType<NewImageSetDataValidator>()
 			.As<IValidator<ImageSetData>>();
@@ -72,7 +72,7 @@ public static class ApplicationServicesExtensions
 			.As<IValidator<NewDataSetData>>();
 	}
 
-	private static void AddImageCapturing(this ContainerBuilder builder)
+	private static void RegisterImageCapturing(this ContainerBuilder builder)
 	{
 		builder.RegisterType<HotKeyScreenCapturer<Bgra32>>()
 			.SingleInstance()
@@ -98,7 +98,7 @@ public static class ApplicationServicesExtensions
 			.As<UnusedImagesLimitManager>();
 	}
 
-	private static void AddTraining(this ContainerBuilder builder)
+	private static void RegisterTraining(this ContainerBuilder builder)
 	{
 		builder.RegisterType<LifetimeTrainer>()
 			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
@@ -128,7 +128,7 @@ public static class ApplicationServicesExtensions
 		builder.RegisterType<RandomItemsCropSettings>();
 	}
 
-	private static void AddHotKeys(this ContainerBuilder builder)
+	private static void RegisterHotKeys(this ContainerBuilder builder)
 	{
 		builder.Register(_ => new ReactiveGlobalHook(runAsyncOnBackgroundThread: true))
 			.SingleInstance()

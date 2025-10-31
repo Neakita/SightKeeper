@@ -11,22 +11,22 @@ namespace SightKeeper.Avalonia.Infrastructure;
 
 internal static class ServicesExtensions
 {
-	public static void AddAvaloniaServices(this ContainerBuilder builder)
+	public static void RegisterAvaloniaServices(this ContainerBuilder builder)
 	{
 		builder.RegisterType<AvaloniaSelfActivityProvider>()
 			.As<SelfActivityProvider>();
 	}
 
-	public static void AddOSSpecificServices(this ContainerBuilder builder)
+	public static void RegisterOSSpecificServices(this ContainerBuilder builder)
 	{
 #if OS_WINDOWS
-		builder.AddWindowsServices();
+		builder.RegisterWindowsServices();
 #elif OS_LINUX
-		builder.AddLinuxServices();
+		builder.RegisterLinuxServices();
 #endif
 	}
 
-	public static void AddLogger(this ContainerBuilder builder)
+	public static void RegisterLogger(this ContainerBuilder builder)
 	{
 		builder.RegisterModule(new MiddlewareModule(new SerilogMiddleware()));
 	}
