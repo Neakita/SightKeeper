@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Serilog;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.ScreenCapturing.Saving;
@@ -33,15 +32,15 @@ namespace SightKeeper.Data;
 
 public static class PersistenceExtensions
 {
-	public static void AddPersistence(this ContainerBuilder builder, PersistenceOptions options)
+	public static void RegisterPersistence(this ContainerBuilder builder, PersistenceOptions options)
 	{
-		builder.AddRepositories();
-		builder.AddWrappers(options);
-		builder.AddFactories();
-		builder.AddFormatters();
-		builder.AddSerializers();
-		builder.AddDeserializers();
-		builder.AddPng();
+		builder.RegisterRepositories();
+		builder.RegisterWrappers(options);
+		builder.RegisterFactories();
+		builder.RegisterFormatters();
+		builder.RegisterSerializers();
+		builder.RegisterDeserializers();
+		builder.RegisterPng();
 
 		builder.RegisterType<MemoryPackDataSaver>()
 			.As<DataSaver>();
@@ -74,7 +73,7 @@ public static class PersistenceExtensions
 			.As<LifetimeScopeProvider>();
 	}
 
-	private static void AddRepositories(this ContainerBuilder builder)
+	private static void RegisterRepositories(this ContainerBuilder builder)
 	{
 		builder.RegisterGeneric(typeof(InMemoryRepository<>))
 			.SingleInstance()
@@ -86,15 +85,15 @@ public static class PersistenceExtensions
 		builder.RegisterDecorator<EnsureCanDeleteImageSetRepository, Repository<ImageSet>>();
 	}
 
-	private static void AddWrappers(this ContainerBuilder builder, PersistenceOptions options)
+	private static void RegisterWrappers(this ContainerBuilder builder, PersistenceOptions options)
 	{
-		builder.AddImageSetWrappers();
+		builder.RegisterImageSetWrappers();
 
 		builder.RegisterType<KeyPointWrapper>();
 
-		builder.AddDataSetWrappers<Tag, ClassifierAsset>(0, 2, options.ClassifierDataSetScopeConfiguration, containerBuilder =>
+		builder.RegisterDataSetWrappers<Tag, ClassifierAsset>(0, 2, options.ClassifierDataSetScopeConfiguration, containerBuilder =>
 		{
-			containerBuilder.AddDataSetDecoratorWrapper<Tag, ClassifierAsset>(set =>
+			containerBuilder.RegisterDataSetDecoratorWrapper<Tag, ClassifierAsset>(set =>
 			{
 				return new OverrideLibrariesDataSet<Tag, ClassifierAsset>(set)
 				{
@@ -102,11 +101,11 @@ public static class PersistenceExtensions
 				};
 			});
 		});
-		builder.AddDataSetWrappers<Tag, ItemsAsset<DetectorItem>>(1, 1, options.DetectorDataSetScopeConfiguration);
-		builder.AddDataSetWrappers<PoserTag, ItemsAsset<PoserItem>>(2, 1, options.PoserDataSetScopeConfiguration);
+		builder.RegisterDataSetWrappers<Tag, ItemsAsset<DetectorItem>>(1, 1, options.DetectorDataSetScopeConfiguration);
+		builder.RegisterDataSetWrappers<PoserTag, ItemsAsset<PoserItem>>(2, 1, options.PoserDataSetScopeConfiguration);
 	}
 
-	private static void AddFactories(this ContainerBuilder builder)
+	private static void RegisterFactories(this ContainerBuilder builder)
 	{
 		builder.RegisterType<InMemoryImageSetFactory>()
 			.As<Factory<ImageSet>>()
@@ -129,7 +128,7 @@ public static class PersistenceExtensions
 		builder.RegisterDecorator<WrappingKeyPointFactory, KeyPointFactory>();
 	}
 
-	private static void AddFormatters(this ContainerBuilder builder)
+	private static void RegisterFormatters(this ContainerBuilder builder)
 	{
 		builder.RegisterType<ClassifierAssetsFormatter>()
 			.As<AssetsFormatter<ClassifierAsset>>();
@@ -155,7 +154,7 @@ public static class PersistenceExtensions
 		builder.RegisterType<WeightsFormatter>();
 	}
 
-	private static void AddSerializers(this ContainerBuilder builder)
+	private static void RegisterSerializers(this ContainerBuilder builder)
 	{
 		builder.RegisterType<ReadOnlyCollectionSerializer<ImageSet>>()
 			.As<Serializer<IReadOnlyCollection<ImageSet>>>();
@@ -176,7 +175,7 @@ public static class PersistenceExtensions
 			.As<Serializer<ManagedImage>>();
 	}
 
-	private static void AddDeserializers(this ContainerBuilder builder)
+	private static void RegisterDeserializers(this ContainerBuilder builder)
 	{
 		builder.RegisterType<DataSetDeserializer<Tag, ClassifierAsset>>()
 			.As<Deserializer<DataSet<Tag, Asset>>>();
@@ -205,7 +204,7 @@ public static class PersistenceExtensions
 			.As<Deserializer<ManagedImage>>();
 	}
 
-	private static void AddPng(this ContainerBuilder builder)
+	private static void RegisterPng(this ContainerBuilder builder)
 	{
 		builder.Register(_ =>
 		{
@@ -229,45 +228,45 @@ public static class PersistenceExtensions
 		builder.RegisterGenericDecorator(typeof(ThreadedImageLoader<>), typeof(ImageLoader<>));
 	}
 
-	private static void AddImageSetWrappers(this ContainerBuilder builder)
+	private static void RegisterImageSetWrappers(this ContainerBuilder builder)
 	{
 		// Tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,
 		// and then tracking decorator will send another notification.
-		builder.AddImageSetDecoratorWrapper<TrackableImageSet>();
+		builder.RegisterImageSetDecoratorWrapper<TrackableImageSet>();
 
 		// Locking of domain rules can be relatively computationally heavy,
 		// for example when removing images range every image should be checked if it is used by some asset,
 		// so locking appears only after domain rules validated.
-		builder.AddImageSetDecoratorWrapper<LockingImageSet>();
+		builder.RegisterImageSetDecoratorWrapper<LockingImageSet>();
 
 		// Images data removing could be expansive (we can remove hundreds or thousands of images in one call, or do that often),
 		// and there is no need in lock because lock should affect AppData only,
 		// not the image files,
 		// so it shouldn't be locked
-		builder.AddImageSetDecoratorWrapper<ImagesDataRemovingImageSet>();
+		builder.RegisterImageSetDecoratorWrapper<ImagesDataRemovingImageSet>();
 
-		builder.AddImageSetDecoratorWrapper<ObservableImagesImageSet>();
+		builder.RegisterImageSetDecoratorWrapper<ObservableImagesImageSet>();
 
 		// We shouldn't dispose images if domain rule is violated,
 		// so this should be behind domain rules
-		builder.AddImageSetDecoratorWrapper<DisposingImageSet>();
+		builder.RegisterImageSetDecoratorWrapper<DisposingImageSet>();
 		
 		// will be needed when repository tries to remove the set
-		builder.AddImageSetDecoratorWrapper<DeletableDataImageSet>();
+		builder.RegisterImageSetDecoratorWrapper<DeletableDataImageSet>();
 
 		// If domain rule is violated and throws an exception,
 		// it should fail as fast as possible and have smaller stack strace
-		builder.AddImageSetDecoratorWrapper<DomainImageSet>();
+		builder.RegisterImageSetDecoratorWrapper<DomainImageSet>();
 
 		// INPC interface should be exposed to consumer,
 		// so he can type test and cast it,
 		// so it should be the outermost layer
-		builder.AddImageSetDecoratorWrapper<NotifyingImageSet>();
+		builder.RegisterImageSetDecoratorWrapper<NotifyingImageSet>();
 
 		builder.RegisterComposite<CompositeWrapper<ImageSet>, Wrapper<ImageSet>>();
 	}
 
-	private static void AddImageSetDecoratorWrapper<TDecorator>(this ContainerBuilder builder)
+	private static void RegisterImageSetDecoratorWrapper<TDecorator>(this ContainerBuilder builder)
 		where TDecorator : ImageSet
 	{
 		builder.RegisterType<TDecorator>().ExternallyOwned();
@@ -275,7 +274,7 @@ public static class PersistenceExtensions
 			.As<Wrapper<ImageSet>>();
 	}
 
-	private static void AddDataSetWrappers<TTag, TAsset>(
+	private static void RegisterDataSetWrappers<TTag, TAsset>(
 		this ContainerBuilder builder,
 		ushort unionTag,
 		byte minimumTagsCount,
@@ -285,18 +284,18 @@ public static class PersistenceExtensions
 	{
 		// Tracking is locked because we don't want potential double saving when after modifying saving thread will immediately save and consider changes handled,
 		// and then tracking decorator will send another notification.
-		builder.AddDataSetDecoratorWrapper<TrackableDataSet<TTag, TAsset>, TTag, TAsset>();
+		builder.RegisterDataSetDecoratorWrapper<TrackableDataSet<TTag, TAsset>, TTag, TAsset>();
 
 		// Locking of domain rules can be relatively computationally heavy,
 		// for example when removing images range every image should be checked if it is used by some asset,
 		// so locking appears only after domain rules validated.
-		builder.AddDataSetDecoratorWrapper<LockingDataSet<TTag, TAsset>, TTag, TAsset>();
+		builder.RegisterDataSetDecoratorWrapper<LockingDataSet<TTag, TAsset>, TTag, TAsset>();
 
 		// Weights data removing could be expansive (we can remove large weights files),
 		// and there is no need in lock because lock should affect AppData only,
 		// not the weights files,
 		// so it shouldn't be locked
-		builder.AddDataSetDecoratorWrapper<TTag, TAsset>(set =>
+		builder.RegisterDataSetDecoratorWrapper<TTag, TAsset>(set =>
 		{
 			return new OverrideLibrariesDataSet<TTag, TAsset>(set)
 			{
@@ -304,7 +303,7 @@ public static class PersistenceExtensions
 			};
 		});
 
-		builder.AddDataSetDecoratorWrapper<TTag, TAsset>(set =>
+		builder.RegisterDataSetDecoratorWrapper<TTag, TAsset>(set =>
 		{
 			return new OverrideLibrariesDataSet<TTag, TAsset>(set)
 			{
@@ -314,7 +313,7 @@ public static class PersistenceExtensions
 			};
 		});
 		
-		builder.AddDataSetDecoratorWrapper<TTag, TAsset>(set =>
+		builder.RegisterDataSetDecoratorWrapper<TTag, TAsset>(set =>
 		{
 			return new OverrideLibrariesDataSet<TTag, TAsset>(set)
 			{
@@ -346,7 +345,7 @@ public static class PersistenceExtensions
 
 		// If domain rule is violated and throws an exception,
 		// it should fail as fast as possible and have smaller stack strace
-		builder.AddDataSetDecoratorWrapper<TTag, TAsset>(set =>
+		builder.RegisterDataSetDecoratorWrapper<TTag, TAsset>(set =>
 		{
 			return new DomainDataSet<TTag, TAsset>(set, minimumTagsCount);
 		});
@@ -354,12 +353,12 @@ public static class PersistenceExtensions
 		// INPC interface should be exposed to consumer,
 		// so he can type test and cast it,
 		// so it should be the outermost layer
-		builder.AddDataSetDecoratorWrapper<NotifyingDataSet<TTag, TAsset>, TTag, TAsset>();
+		builder.RegisterDataSetDecoratorWrapper<NotifyingDataSet<TTag, TAsset>, TTag, TAsset>();
 
 		builder.RegisterComposite<CompositeWrapper<DataSet<TTag, TAsset>>, Wrapper<DataSet<TTag, TAsset>>>();
 	}
 
-	private static void AddDataSetDecoratorWrapper<TDecorator, TTag, TAsset>(this ContainerBuilder builder)
+	private static void RegisterDataSetDecoratorWrapper<TDecorator, TTag, TAsset>(this ContainerBuilder builder)
 		where TDecorator : DataSet<TTag, TAsset>
 	{
 		builder.RegisterType<TDecorator>();
@@ -367,7 +366,7 @@ public static class PersistenceExtensions
 			.As<Wrapper<DataSet<TTag, TAsset>>>();
 	}
 
-	private static void AddDataSetDecoratorWrapper<TTag, TAsset>(this ContainerBuilder builder, Func<DataSet<TTag, TAsset>, DataSet<TTag,TAsset>> func)
+	private static void RegisterDataSetDecoratorWrapper<TTag, TAsset>(this ContainerBuilder builder, Func<DataSet<TTag, TAsset>, DataSet<TTag,TAsset>> func)
 	{
 		var wrapper = new FuncWrapper<DataSet<TTag, TAsset>, DataSet<TTag, TAsset>>(func);
 		builder.RegisterInstance(wrapper)

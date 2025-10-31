@@ -23,7 +23,7 @@ internal static class AppBootstrapper
 			DetectorDataSetScopeConfiguration = ApplicationServicesExtensions.RegisterDetectorServices,
 			PoserDataSetScopeConfiguration = ApplicationServicesExtensions.RegisterPoserServices
 		};
-		builder.AddPersistence(persistenceOptions);
+		builder.RegisterPersistence(persistenceOptions);
 		builder.RegisterApplicationServices();
 		builder.RegisterOSSpecificServices();
 		builder.RegisterAvaloniaServices();
