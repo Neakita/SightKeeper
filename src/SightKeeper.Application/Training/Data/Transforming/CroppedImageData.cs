@@ -25,6 +25,11 @@ internal sealed class CroppedImageData(ImageData innerData, LoadableImage innerL
 		return image;
 	}
 
+	public override string? ToString()
+	{
+		return innerData.ToString();
+	}
+
 	private void Crop(Image image)
 	{
 		image.Mutate(context => context.Crop(cropRectangle));

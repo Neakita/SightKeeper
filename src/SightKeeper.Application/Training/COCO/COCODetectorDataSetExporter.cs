@@ -1,5 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text.Json;
+using Serilog;
+using Serilog.Events;
+using SerilogTimings.Extensions;
 using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
@@ -10,7 +13,7 @@ using SixLabors.ImageSharp;
 
 namespace SightKeeper.Application.Training.COCO;
 
-internal sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
+internal sealed class COCODetectorDataSetExporter(ILogger logger) : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
 {
 	public int CategoriesInitialId { get; set; } = 0;
 	public IdCounter ImageIdCounter { get; set; } = new();
@@ -44,8 +47,7 @@ internal sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyTa
 			Categories = _categories
 		};
 		var dataSetFilePath = Path.Combine(directoryPath, "data.json");
-		await using var dataSetStream = File.Open(dataSetFilePath, FileMode.Create);
-		await JsonSerializer.SerializeAsync(dataSetStream, dataSet, COCODataSetSourceGenerationContext.Default.COCODataSet, cancellationToken);
+		await ExportData(dataSetFilePath, dataSet, cancellationToken);
 	}
 
 	private IReadOnlyList<COCOCategory> _categories = ReadOnlyCollection<COCOCategory>.Empty;
@@ -111,10 +113,20 @@ internal sealed class COCODetectorDataSetExporter : TrainDataExporter<ReadOnlyTa
 		};
 	}
 
-	private static async Task ExportImage(string filePath, ImageData data, CancellationToken cancellationToken)
+	private async Task ExportImage(string filePath, ImageData data, CancellationToken cancellationToken)
 	{
+		using var operation = logger.OperationAt(LogEventLevel.Verbose).Begin("Image {image} export", data);
 		var loadableImage = data.GetFirst<LoadableImage>();
 		using var image = await loadableImage.LoadAsync(cancellationToken);
 		await image.SaveAsync(filePath, cancellationToken);
+		operation.Complete();
+	}
+
+	private async Task ExportData(string dataSetFilePath, COCODataSet dataSet, CancellationToken cancellationToken)
+	{
+		using var operation = logger.OperationAt(LogEventLevel.Debug).Begin("Data export");
+		await using var dataSetStream = File.Open(dataSetFilePath, FileMode.Create);
+		await JsonSerializer.SerializeAsync(dataSetStream, dataSet, COCODataSetSourceGenerationContext.Default.COCODataSet, cancellationToken);
+		operation.Complete();
 	}
 }
