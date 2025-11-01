@@ -27,4 +27,18 @@ internal static class EnumerableExtensions
 		var random = new Random(seed);
 		return source.OrderBy(_ => random.Next());
 	}
+
+	public static IEnumerable<T> Select<T, TState>(this IEnumerable<T> source, TState state, Func<T, TState, T> selector)
+	{
+		return source.Select(item => selector(item, state));
+	}
+
+	public static IEnumerable<T> Do<T, TState>(this IEnumerable<T> source, TState state, Action<T, TState> action)
+	{
+		foreach (var item in source)
+		{
+			action(item, state);
+			yield return item;
+		}
+	}
 }

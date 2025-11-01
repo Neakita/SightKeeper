@@ -1,9 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
+using SightKeeper.Application.Extensions;
 using SightKeeper.Application.Training.Data;
+using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
@@ -15,102 +16,146 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 {
 	public async Task ExportAsync(string directoryPath, ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data, CancellationToken cancellationToken)
 	{
-		Reset();
-		var imagesDirectoryPath = Path.Combine(directoryPath, "images");
-		Directory.CreateDirectory(imagesDirectoryPath);
-		ProcessCategories(data.Tags);
-		var images = new List<COCOImage>();
-		var annotations = new List<COCOAnnotation>();
-		foreach (var asset in data.Assets)
+		try
 		{
-			var image = CreateCOCOImage(asset.Image);
-			images.Add(image);
-			var imageFilePath = Path.Combine(imagesDirectoryPath, image.FileName);
-			await imageExporter.ExportImageAsync(imageFilePath, asset.Image, cancellationToken);
-			foreach (var item in asset.Items)
-			{
-				var annotation = CreateAnnotation(item, image);
-				annotations.Add(annotation);
-			}
+			ProcessCategories(data.Tags);
+			var assets = data.Assets.ToList();
+			ProcessAssets(assets);
+			var images = assets.Select(asset => asset.Image).ToList();
+			ProcessImages(images);
+			var imagesPath = Path.Combine(directoryPath, "images");
+			await ExportImagesAsync(imagesPath, images, cancellationToken);
+			var dataFilePath = Path.Combine(directoryPath, "data.json");
+			await ExportDataAsync(dataFilePath, cancellationToken);
 		}
-		var dataSet = new COCODataSet
+		finally
 		{
-			Images = images,
-			Annotations = annotations,
-			Categories = _categories
-		};
-		var dataSetFilePath = Path.Combine(directoryPath, "data.json");
-		await ExportData(dataSetFilePath, dataSet, cancellationToken);
+			Clear();
+		}
 	}
 
-	private IReadOnlyList<COCOCategory> _categories = ReadOnlyCollection<COCOCategory>.Empty;
-	private IReadOnlyDictionary<ReadOnlyTag, int> _categoryIds = ReadOnlyDictionary<ReadOnlyTag, int>.Empty;
-	private int _imageIdCounter;
+	private readonly Dictionary<ReadOnlyTag, int> _categoryIds = new();
+	private readonly List<COCOCategory> _categories = new();
+	private readonly List<COCOImage> _images = new();
+	private readonly List<COCOAnnotation> _annotations = new();
 	private int _annotationIdCounter;
-
-	private void Reset()
+	private COCODataSet DataSet => new()
 	{
-		_imageIdCounter = 0;
-		_annotationIdCounter = 0;
-	}
+		Images = _images,
+		Annotations = _annotations,
+		Categories = _categories
+	};
 
 	private void ProcessCategories(IEnumerable<ReadOnlyTag> tags)
 	{
-		var idCounter = 0;
-		var categories = new List<COCOCategory>();
-		var categoryIdLookup = new Dictionary<ReadOnlyTag, int>();
-		foreach (var tag in tags)
-		{
-			var categoryId = idCounter++;
-			var category = new COCOCategory
-			{
-				Id = categoryId,
-				Name = tag.Name
-			};
-			categories.Add(category);
-			categoryIdLookup.Add(tag, categoryId);
-		}
-		_categories = categories;
-		_categoryIds = categoryIdLookup;
+		tags = tags.ToList();
+		var categories = tags.Select(CreateCategory);
+		_categories.AddRange(categories);
+		foreach (var (index, tag) in tags.Index())
+			_categoryIds.Add(tag, index);
 	}
 
-	private COCOImage CreateCOCOImage(ImageData data)
+	private static COCOCategory CreateCategory(ReadOnlyTag tag, int id)
 	{
-		var imageId = _imageIdCounter++;
-		var imageFileName = $"{imageId}.png";
-		return new COCOImage
+		return new COCOCategory
 		{
-			Id = imageId,
-			Width = data.Size.X,
-			Height = data.Size.Y,
-			FileName = imageFileName,
-			DateCaptured = data.CreationTimestamp.DateTime
+			Id = id,
+			Name = tag.Name
 		};
 	}
 
-	private COCOAnnotation CreateAnnotation(ReadOnlyDetectorItem item, COCOImage image)
+	private void ProcessAssets(IEnumerable<ReadOnlyItemsAsset<ReadOnlyDetectorItem>> assets)
+	{
+		var annotations = assets.SelectMany(CreateAnnotations);
+		_annotations.AddRange(annotations);
+	}
+
+	private IEnumerable<COCOAnnotation> CreateAnnotations(ReadOnlyItemsAsset<ReadOnlyDetectorItem> asset, int index)
+	{
+		return asset.Items
+			.Select(asset.Image.Size, Denormalize)
+			.Select(CreateAnnotation)
+			.Do(index, SetImageId);
+	}
+
+	private static ReadOnlyDetectorItem Denormalize(ReadOnlyDetectorItem item, Vector2<ushort> imageSize)
+	{
+		return new DetectorItemValue
+		{
+			Tag = item.Tag,
+			Bounding = item.Bounding * imageSize.ToDouble()
+		};
+	}
+
+	private COCOAnnotation CreateAnnotation(ReadOnlyDetectorItem item)
 	{
 		var bounding = item.Bounding;
 		return new COCOAnnotation
 		{
 			Id = _annotationIdCounter++,
-			ImageId = image.Id,
 			CategoryId = _categoryIds[item.Tag],
 			Bbox =
 			[
-				bounding.Left * image.Width,
-				bounding.Top * image.Height,
-				bounding.Width * image.Width,
-				bounding.Height * image.Height
+				bounding.Left,
+				bounding.Top,
+				bounding.Width,
+				bounding.Height
 			]
 		};
 	}
 
-	private async Task ExportData(string dataSetFilePath, COCODataSet dataSet, CancellationToken cancellationToken)
+	private static void SetImageId(COCOAnnotation annotation, int id)
+	{
+		annotation.ImageId = id;
+	}
+
+	private void ProcessImages(IEnumerable<ImageData> images)
+	{
+		var cocoImages = images.Select(CreateCOCOImage);
+		_images.AddRange(cocoImages);
+	}
+
+	private static COCOImage CreateCOCOImage(ImageData data, int id)
+	{
+		return new COCOImage
+		{
+			Id = id,
+			Width = data.Size.X,
+			Height = data.Size.Y,
+			FileName = GetImageFileName(id),
+			DateCaptured = data.CreationTimestamp.DateTime
+		};
+	}
+
+	private async Task ExportImagesAsync(string directoryPath, IEnumerable<ImageData> images, CancellationToken cancellationToken)
+	{
+		foreach (var (index, image) in images.Index())
+		{
+			var fileName = GetImageFileName(index);
+			var imageFilePath = Path.Combine(directoryPath, fileName);
+			await imageExporter.ExportImageAsync(imageFilePath, image, cancellationToken);
+		}
+	}
+
+	private static string GetImageFileName(int id)
+	{
+		return $"{id}.png";
+	}
+
+	private async Task ExportDataAsync(string filePath, CancellationToken cancellationToken)
 	{
 		using var operation = logger.OperationAt(LogEventLevel.Debug).Begin("Data export");
-		await using var dataSetStream = File.Open(dataSetFilePath, FileMode.Create);
-		await JsonSerializer.SerializeAsync(dataSetStream, dataSet, COCODataSetSourceGenerationContext.Default.COCODataSet, cancellationToken);
+		await using var dataSetStream = File.Open(filePath, FileMode.Create);
+		await JsonSerializer.SerializeAsync(dataSetStream, DataSet, COCODataSetSourceGenerationContext.Default.COCODataSet, cancellationToken);
 		operation.Complete();
+	}
+
+	private void Clear()
+	{
+		_categoryIds.Clear();
+		_categories.Clear();
+		_images.Clear();
+		_annotations.Clear();
+		_annotationIdCounter = 0;
 	}
 }

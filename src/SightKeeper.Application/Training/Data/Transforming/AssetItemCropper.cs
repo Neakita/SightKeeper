@@ -11,7 +11,7 @@ internal sealed class AssetItemCropper : ItemCropper<ReadOnlyDetectorItem>
 	{
 		if (TryCrop(item.Bounding, cropRectangle, imageSize, out var croppedBounding))
 		{
-			croppedItem = new AssetItemDataValue
+			croppedItem = new DetectorItemValue
 			{
 				Tag = item.Tag,
 				Bounding = croppedBounding
