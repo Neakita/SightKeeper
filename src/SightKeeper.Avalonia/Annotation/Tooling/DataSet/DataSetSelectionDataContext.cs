@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using SightKeeper.Avalonia.DataSets;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.DataSet;
 
 public interface DataSetSelectionDataContext
 {

@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.Actions;
 
 public interface ActionsDataContext
 {

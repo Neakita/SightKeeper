@@ -5,6 +5,7 @@ using NSubstitute;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.Annotation.Tooling.Commands;
+using SightKeeper.Avalonia.Annotation.Tooling.ImageSet;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Avalonia.Tests.Annotation;

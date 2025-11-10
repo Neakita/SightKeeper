@@ -3,7 +3,7 @@ using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.DataSet;
 
 public interface DataSetSelection
 {

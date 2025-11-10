@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Avalonia.Annotation.Images;
+using SightKeeper.Avalonia.Annotation.Tooling.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;

@@ -1,4 +1,4 @@
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.Tags;
 
 internal sealed class DesignTagDataContext : TagDataContext
 {

@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Avalonia.Annotation.Tooling.DataSet;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;

@@ -9,8 +9,12 @@ using SightKeeper.Avalonia.Annotation.Drawing.Bounded;
 using SightKeeper.Avalonia.Annotation.Drawing.Poser;
 using SightKeeper.Avalonia.Annotation.Images;
 using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Avalonia.Annotation.Tooling.Actions;
+using SightKeeper.Avalonia.Annotation.Tooling.Adaptive;
 using SightKeeper.Avalonia.Annotation.Tooling.Classifier;
+using SightKeeper.Avalonia.Annotation.Tooling.DataSet;
 using SightKeeper.Avalonia.Annotation.Tooling.Detector;
+using SightKeeper.Avalonia.Annotation.Tooling.ImageSet;
 using SightKeeper.Avalonia.Annotation.Tooling.Poser;
 using SightKeeper.Avalonia.DataSets;
 using SightKeeper.Avalonia.DataSets.Card;
@@ -29,6 +33,8 @@ using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
+using DataSetSelectionViewModel = SightKeeper.Avalonia.Annotation.Tooling.DataSet.DataSetSelectionViewModel;
+using ImageSetSelectionViewModel = SightKeeper.Avalonia.Annotation.Tooling.ImageSet.ImageSetSelectionViewModel;
 
 namespace SightKeeper.Avalonia.Infrastructure;
 

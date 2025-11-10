@@ -3,6 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
+             xmlns:dataSet="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.DataSet"
+             xmlns:actions="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.Actions"
+             xmlns:adaptive="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.Adaptive"
+             xmlns:imageSet="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.ImageSet"
              mc:Ignorable="d"
              d:DesignWidth="200"
              x:Class="SightKeeper.Avalonia.Annotation.Tooling.SideBar"
@@ -14,16 +18,10 @@
             VerticalAlignment="Top">
         <ScrollViewer>
             <StackPanel Classes="regular-spacing">
-                <local:ImageSetSelectionView DataContext="{Binding ImageSetSelection}"/>
-                <HeaderedContentControl Header="Data Set">
-                    <ComboBox DataContext="{Binding DataSetSelection}"
-                              SelectedItem="{Binding SelectedDataSet}"
-                              ItemsSource="{Binding DataSets}"
-                              DisplayMemberBinding="{Binding Name}"
-                              PlaceholderText="Not selected"/>
-                </HeaderedContentControl>
-                <local:ActionsView DataContext="{Binding Actions}"/>
-                <local:AdaptiveTooling DataContext="{Binding AdditionalTooling}"/>
+                <imageSet:ImageSetSelectionView DataContext="{Binding ImageSetSelection}"/>
+                <dataSet:DataSetSelectionView DataContext="{Binding DataSetSelection}"/>
+                <actions:ActionsView DataContext="{Binding Actions}"/>
+                <adaptive:AdaptiveTooling DataContext="{Binding AdditionalTooling}"/>
             </StackPanel>
         </ScrollViewer>
     </Border>

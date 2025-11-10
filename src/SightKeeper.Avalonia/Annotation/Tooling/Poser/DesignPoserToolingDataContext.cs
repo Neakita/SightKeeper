@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using SightKeeper.Avalonia.Annotation.Tooling.Tags;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling.Poser;
 

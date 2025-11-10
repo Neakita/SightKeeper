@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.ImageSet;
 
 public interface ImageSetSelectionDataContext
 {

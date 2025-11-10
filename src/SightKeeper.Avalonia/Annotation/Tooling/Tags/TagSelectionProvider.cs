@@ -1,8 +1,9 @@
 using System;
 using System.Reactive.Linq;
+using SightKeeper.Avalonia.Annotation.Tooling.Adaptive;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.Tags;
 
 public sealed class TagSelectionProvider(AdditionalToolingSelection additionalToolingSelection)
 {

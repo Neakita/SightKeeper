@@ -8,7 +8,7 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
 using SightKeeper.Domain.DataSets.Tags;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.Adaptive;
 
 internal sealed class ToolingViewModelFactory(
 	Func<DataSet<Tag, ClassifierAsset>, ClassifierToolingViewModel> classifierToolingFactory,

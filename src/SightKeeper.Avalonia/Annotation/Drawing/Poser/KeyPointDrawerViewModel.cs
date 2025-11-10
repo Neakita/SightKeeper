@@ -5,6 +5,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Avalonia.Annotation.Tooling;
+using SightKeeper.Avalonia.Annotation.Tooling.Tags;
 using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;

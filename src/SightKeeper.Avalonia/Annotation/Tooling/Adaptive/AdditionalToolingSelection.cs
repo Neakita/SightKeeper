@@ -1,6 +1,6 @@
 using System;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.Adaptive;
 
 public interface AdditionalToolingSelection
 {

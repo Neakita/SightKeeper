@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:actions="clr-namespace:SightKeeper.Avalonia.Annotation.Tooling.Actions"
              mc:Ignorable="d"
-             x:Class="SightKeeper.Avalonia.Annotation.Tooling.ActionsView"
-             x:DataType="local:ActionsDataContext">
+             x:Class="SightKeeper.Avalonia.Annotation.Tooling.Actions.ActionsView"
+             x:DataType="actions:ActionsDataContext">
     <WrapPanel ItemSpacing="8" LineSpacing="8">
         <Button Classes="square"
                 Command="{Binding DeleteSelectedImageCommand}"

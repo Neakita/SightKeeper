@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using SightKeeper.Avalonia.Annotation.Tooling.Actions;
+using SightKeeper.Avalonia.Annotation.Tooling.DataSet;
+using SightKeeper.Avalonia.Annotation.Tooling.ImageSet;
 using SightKeeper.Avalonia.DataSets;
 
 namespace SightKeeper.Avalonia.Annotation.Tooling;
 
 internal sealed class DesignSideBarDataContext : SideBarDataContext, DataSetSelectionDataContext
 {
-	public ImageSetSelectionDataContext ImageSetSelection => new DesignImageSelectionDataContext();
+	public ImageSetSelectionDataContext ImageSetSelection => new DesignImageSetSelectionDataContext();
 
 	public IReadOnlyCollection<DataSetDataContext> DataSets =>
 	[

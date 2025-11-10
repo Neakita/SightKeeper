@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.ImageSet;
 
-internal sealed class DesignImageSelectionDataContext : ImageSetSelectionDataContext
+internal sealed class DesignImageSetSelectionDataContext : ImageSetSelectionDataContext
 {
 	public IReadOnlyCollection<ImageSetDataContext> ImageSets =>
 	[

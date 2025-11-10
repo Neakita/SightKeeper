@@ -8,6 +8,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SightKeeper.Avalonia.Annotation.Drawing;
+using SightKeeper.Avalonia.Annotation.Tooling.Tags;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;

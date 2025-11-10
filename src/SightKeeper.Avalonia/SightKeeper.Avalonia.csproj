@@ -61,6 +61,22 @@
         <ProjectReference Condition="$([MSBuild]::IsOSPlatform('Linux'))" Include="..\SightKeeper.Application.Linux\SightKeeper.Application.Linux.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Annotation\Tooling\SelectionDataContext`1.cs" />
+      <Compile Update="Annotation\Tooling\Actions\ActionsView.axaml.cs">
+        <DependentUpon>ActionsView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Annotation\Tooling\Adaptive\AdaptiveTooling.axaml.cs">
+        <DependentUpon>AdaptiveTooling.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Annotation\Tooling\ImageSet\ImageSetSelectionView.axaml.cs">
+        <DependentUpon>ImageSetSelectionView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
         <DefineConstants>OS_WINDOWS</DefineConstants>
     </PropertyGroup>

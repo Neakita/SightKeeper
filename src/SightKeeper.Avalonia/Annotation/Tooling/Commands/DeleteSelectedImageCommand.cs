@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Avalonia.Annotation.Images;
+using SightKeeper.Avalonia.Annotation.Tooling.ImageSet;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain.Images;
 

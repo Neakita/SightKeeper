@@ -1,7 +1,7 @@
 using System.Windows.Input;
 using SightKeeper.Avalonia.Annotation.Tooling.Commands;
 
-namespace SightKeeper.Avalonia.Annotation.Tooling;
+namespace SightKeeper.Avalonia.Annotation.Tooling.Actions;
 
 public sealed class ActionsViewModel(
 	DeleteSelectedImageCommand deleteSelectedImageCommand,
