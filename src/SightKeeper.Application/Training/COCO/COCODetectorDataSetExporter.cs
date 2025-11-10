@@ -14,26 +14,40 @@ namespace SightKeeper.Application.Training.COCO;
 
 internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, ILogger logger) : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
 {
-	public async Task ExportAsync(string directoryPath, ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data, CancellationToken cancellationToken)
+	public async Task ExportAsync(
+		string directoryPath,
+		ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data,
+		CancellationToken cancellationToken)
 	{
 		try
 		{
 			ProcessCategories(data.Tags);
-			var assets = data.Assets.ToList();
-			ProcessAssets(assets);
-			var images = assets.Select(asset => asset.Image).ToList();
+			data = MaterializeData(data);
+			ProcessAssets(data.Assets);
+			var images = MaterializeImages(data);
 			ProcessImages(images);
-			var imagesPath = Path.Combine(directoryPath, "images");
-			await imageExporter.ExportImagesAsync(imagesPath, images, cancellationToken);
-
-			logger.Information("Exporting data");
-			var dataFilePath = Path.Combine(directoryPath, "data.json");
-			await ExportDataAsync(dataFilePath, cancellationToken);
+			await ExportImagesAsync(cancellationToken, directoryPath, images);
+			await ExportDataAsync(directoryPath, cancellationToken);
 		}
 		finally
 		{
 			Clear();
 		}
+	}
+
+	private async Task ExportImagesAsync(CancellationToken cancellationToken, string directoryPath, List<ImageData> images)
+	{
+		logger.Information("Exporting images");
+		var imagesPath = Path.Combine(directoryPath, "images");
+		await imageExporter.ExportImagesAsync(imagesPath, images, cancellationToken);
+	}
+
+	private List<ImageData> MaterializeImages(ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data)
+	{
+		using var operation = logger.OperationAt(LogEventLevel.Debug).Begin("Images materialization");
+		var images = data.Assets.Select(asset => asset.Image).ToList();
+		operation.Complete();
+		return images;
 	}
 
 	private readonly Dictionary<ReadOnlyTag, int> _categoryIds = new();
@@ -50,6 +64,7 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 
 	private void ProcessCategories(IEnumerable<ReadOnlyTag> tags)
 	{
+		logger.Information("Processing categories");
 		tags = tags.ToList();
 		var categories = tags.Select(CreateCategory);
 		_categories.AddRange(categories);
@@ -66,8 +81,20 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 		};
 	}
 
+	private ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> MaterializeData(
+		ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data)
+	{
+		using var operation = logger.OperationAt(LogEventLevel.Debug).Begin("Data meterialization");
+		data = new ReadOnlyDataSetValue<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>(
+			data.Tags.ToList(),
+			data.Assets.ToList());
+		operation.Complete();
+		return data;
+	}
+
 	private void ProcessAssets(IEnumerable<ReadOnlyItemsAsset<ReadOnlyDetectorItem>> assets)
 	{
+		logger.Information("Processing assets");
 		var annotations = assets.SelectMany(CreateAnnotations);
 		_annotations.AddRange(annotations);
 	}
@@ -113,6 +140,7 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 
 	private void ProcessImages(IEnumerable<ImageData> images)
 	{
+		logger.Information("Processing images");
 		var cocoImages = images.Select(CreateCOCOImage);
 		_images.AddRange(cocoImages);
 	}
@@ -134,8 +162,10 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 		return $"{id}.png";
 	}
 
-	private async Task ExportDataAsync(string filePath, CancellationToken cancellationToken)
+	private async Task ExportDataAsync(string directoryPath, CancellationToken cancellationToken)
 	{
+		var filePath = Path.Combine(directoryPath, "data.json");
+		logger.Information("Exporting data");
 		using var operation = logger.OperationAt(LogEventLevel.Debug).Begin("Data export");
 		await using var dataSetStream = File.Open(filePath, FileMode.Create);
 		await JsonSerializer.SerializeAsync(dataSetStream, DataSet, COCODataSetSourceGenerationContext.Default.COCODataSet, cancellationToken);
