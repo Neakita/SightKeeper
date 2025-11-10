@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive.Disposables;
 using Autofac;
 using Material.Icons;
 using SightKeeper.Application;
@@ -137,18 +138,19 @@ internal static class ViewModelsExtensions
 
 	private static void RegisterTrainingTabDependencies(this ContainerBuilder builder)
 	{
-		builder.RegisterType<TrainingViewModel>();
+		builder.RegisterType<TrainingViewModel>()
+			.SingleInstance();
 	}
 
 	private static void RegisterTabs(this ContainerBuilder builder)
 	{
-		builder.AddTabItemViewModel<ImageSetsViewModel>(MaterialIconKind.FolderMultipleImage, "Images");
-		builder.AddTabItemViewModel<DataSetsViewModel>(MaterialIconKind.ImageAlbum, "Datasets");
-		builder.AddTabItemViewModel<AnnotationTabViewModel>(MaterialIconKind.ImageEdit, "Annotation");
-		builder.AddTabItemViewModel<TrainingViewModel>(MaterialIconKind.School, "Training");
+		builder.RegisterScopedTab<ImageSetsViewModel>(MaterialIconKind.FolderMultipleImage, "Images");
+		builder.RegisterScopedTab<DataSetsViewModel>(MaterialIconKind.ImageAlbum, "Datasets");
+		builder.RegisterScopedTab<AnnotationTabViewModel>(MaterialIconKind.ImageEdit, "Annotation");
+		builder.RegisterTab<TrainingViewModel>(MaterialIconKind.School, "Training");
 	}
 
-	private static void AddTabItemViewModel<TContent>(
+	private static void RegisterScopedTab<TContent>(
 		this ContainerBuilder builder,
 		MaterialIconKind iconKind,
 		string header)
@@ -164,6 +166,25 @@ internal static class ViewModelsExtensions
 				var contentScope = scope.BeginLifetimeScope(typeof(TContent));
 				var content = contentScope.Resolve<TContent>();
 				return (content, contentScope);
+			}
+		}).As<TabItemViewModel>();
+	}
+
+	private static void RegisterTab<TContent>(
+		this ContainerBuilder builder,
+		MaterialIconKind iconKind,
+		string header)
+		where TContent : class
+	{
+		builder.Register(context =>
+		{
+			var scope = context.Resolve<ILifetimeScope>();
+			return new TabItemViewModel(iconKind, header, ContentFactory);
+
+			(object, IDisposable) ContentFactory()
+			{
+				var content = scope.Resolve<TContent>();
+				return (content, Disposable.Empty);
 			}
 		}).As<TabItemViewModel>();
 	}
