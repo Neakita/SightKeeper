@@ -10,7 +10,7 @@ using SixLabors.ImageSharp.PixelFormats;
 namespace SightKeeper.Data.ImageSets.Images;
 
 internal sealed class StreamableDataImage(ManagedImage inner, FileSystemDataAccess dataAccess)
-	: ManagedImage, DeletableImageData, FileExtensionProvider, StreamableData, LoadableImage, Decorator<ManagedImage>
+	: ManagedImage, DeletableData, FileExtensionProvider, StreamableData, LoadableImage, Decorator<ManagedImage>
 {
 	public DateTimeOffset CreationTimestamp => inner.CreationTimestamp;
 	public Vector2<ushort> Size => inner.Size;
