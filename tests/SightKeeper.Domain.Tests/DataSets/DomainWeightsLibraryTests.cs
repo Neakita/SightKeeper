@@ -54,9 +54,7 @@ public sealed class DomainWeightsLibraryTests
 			0);
 		var weightsMetadata = new WeightsMetadata
 		{
-			Model = Model.DFine,
 			CreationTimestamp = DateTimeOffset.Now,
-			ModelSize = ModelSize.Small,
 			Metrics = new WeightsMetrics(1, new LossMetrics(2, 3)),
 			Resolution = new Vector2<ushort>(480, 640)
 		};
