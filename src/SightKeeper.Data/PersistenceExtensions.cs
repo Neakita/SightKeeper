@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Builder;
 using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
 using SightKeeper.Application.ScreenCapturing.Saving;
@@ -331,14 +332,8 @@ public static class PersistenceExtensions
 			});
 		}).As<Wrapper<DataSet<TTag, TAsset>>>();
 
-		builder.Register(context =>
-		{
-			var contextScope = context.Resolve<ILifetimeScope>();
-			return new FuncWrapper<DataSet<TTag, TAsset>, DataSet<TTag, TAsset>>(set =>
-			{
-				return new DataSetLifetimeScopeProviderDecorator<TTag, TAsset>(set, contextScope, setScopeConfiguration);
-			});
-		}).As<Wrapper<DataSet<TTag, TAsset>>>();
+		builder.RegisterDataSetDecoratorWrapper<DataSetLifetimeScopeProviderDecorator<TTag, TAsset>, TTag, TAsset>()
+			.WithParameter(new PositionalParameter(1, setScopeConfiguration));
 
 		additional?.Invoke(builder);
 
@@ -357,12 +352,12 @@ public static class PersistenceExtensions
 		builder.RegisterComposite<CompositeWrapper<DataSet<TTag, TAsset>>, Wrapper<DataSet<TTag, TAsset>>>();
 	}
 
-	private static void RegisterDataSetDecoratorWrapper<TDecorator, TTag, TAsset>(this ContainerBuilder builder)
+	private static IRegistrationBuilder<TDecorator, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterDataSetDecoratorWrapper<TDecorator, TTag, TAsset>(this ContainerBuilder builder)
 		where TDecorator : DataSet<TTag, TAsset>
 	{
-		builder.RegisterType<TDecorator>();
 		builder.RegisterType<FuncWrapper<TDecorator, DataSet<TTag, TAsset>>>()
 			.As<Wrapper<DataSet<TTag, TAsset>>>();
+		return builder.RegisterType<TDecorator>();
 	}
 
 	private static void RegisterDataSetDecoratorWrapper<TTag, TAsset>(this ContainerBuilder builder, Func<DataSet<TTag, TAsset>, DataSet<TTag,TAsset>> func)

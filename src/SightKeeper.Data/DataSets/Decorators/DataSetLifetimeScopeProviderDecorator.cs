@@ -11,14 +11,11 @@ namespace SightKeeper.Data.DataSets.Decorators;
 
 internal sealed class DataSetLifetimeScopeProviderDecorator<TTag, TAsset>(
 	DataSet<TTag, TAsset> inner,
-	ILifetimeScope lifetimeScope,
 	Action<ContainerBuilder>? configurationAction) :
 	DataSet<TTag, TAsset>,
 	Decorator<DataSet<TTag, TAsset>>,
 	LifetimeScopeProviderDecorator,
-	PostWrappingInitializable<DataSet<TTag, TAsset>>,
-	IDisposable,
-	IAsyncDisposable
+	PostWrappingInitializable<DataSet<TTag, TAsset>>
 {
 	public string Name
 	{
@@ -36,35 +33,21 @@ internal sealed class DataSetLifetimeScopeProviderDecorator<TTag, TAsset>(
 	public AssetsOwner<TAsset> AssetsLibrary => inner.AssetsLibrary;
 	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
 	public DataSet<TTag, TAsset> Inner => inner;
-	public ILifetimeScope LifetimeScope
-	{
-		get
-		{
-			Guard.IsNotNull(_lifetimeScope);
-			return _lifetimeScope;
-		}
-	}
 
 	public void Initialize(DataSet<TTag, TAsset> wrapped)
 	{
-		_lifetimeScope = lifetimeScope.BeginLifetimeScope(builder =>
+		_wrapped = wrapped;
+	}
+
+	public ILifetimeScope BeginLifetimeScope(ILifetimeScope scope)
+	{
+		Guard.IsNotNull(_wrapped);
+		return scope.BeginLifetimeScope(typeof(DataSet<TTag, TAsset>), builder =>
 		{
-			builder.RegisterInstance(wrapped);
+			builder.RegisterInstance(_wrapped);
 			configurationAction?.Invoke(builder);
 		});
 	}
 
-	public void Dispose()
-	{
-		Guard.IsNotNull(_lifetimeScope);
-		_lifetimeScope.Dispose();
-	}
-
-	public async ValueTask DisposeAsync()
-	{
-		Guard.IsNotNull(_lifetimeScope);
-		await _lifetimeScope.DisposeAsync();
-	}
-
-	private ILifetimeScope? _lifetimeScope;
+	private DataSet<TTag, TAsset>? _wrapped;
 }

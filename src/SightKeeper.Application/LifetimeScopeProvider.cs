@@ -4,5 +4,5 @@ namespace SightKeeper.Application;
 
 public interface LifetimeScopeProvider
 {
-	ILifetimeScope GetLifetimeScope(object obj);
+	ILifetimeScope BeginLifetimeScope(object obj, ILifetimeScope scope);
 }

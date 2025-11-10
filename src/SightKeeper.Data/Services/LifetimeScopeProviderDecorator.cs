@@ -4,5 +4,5 @@ namespace SightKeeper.Data.Services;
 
 internal interface LifetimeScopeProviderDecorator
 {
-	ILifetimeScope LifetimeScope { get; }
+	ILifetimeScope BeginLifetimeScope(ILifetimeScope scope);
 }

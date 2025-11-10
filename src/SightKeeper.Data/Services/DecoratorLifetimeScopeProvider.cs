@@ -6,8 +6,8 @@ namespace SightKeeper.Data.Services;
 
 internal sealed class DecoratorLifetimeScopeProvider : LifetimeScopeProvider
 {
-	public ILifetimeScope GetLifetimeScope(object obj)
+	public ILifetimeScope BeginLifetimeScope(object obj, ILifetimeScope scope)
 	{
-		return obj.GetFirst<LifetimeScopeProviderDecorator>().LifetimeScope;
+		return obj.GetFirst<LifetimeScopeProviderDecorator>().BeginLifetimeScope(scope);
 	}
 }
