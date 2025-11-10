@@ -55,7 +55,6 @@ public sealed class DomainWeightsLibraryTests
 		var weightsMetadata = new WeightsMetadata
 		{
 			CreationTimestamp = DateTimeOffset.Now,
-			Metrics = new WeightsMetrics(1, new LossMetrics(2, 3)),
 			Resolution = new Vector2<ushort>(480, 640)
 		};
 		library.CreateWeights(weightsMetadata, ReadOnlyCollection<Tag>.Empty);

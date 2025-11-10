@@ -23,7 +23,6 @@ internal sealed class WeightsFormatter(TagIndexProvider tagIndexProvider)
 			writer.WriteUnmanaged(
 				weightsId,
 				weights.Metadata.CreationTimestamp,
-				weights.Metadata.Metrics,
 				weights.Metadata.Resolution);
 			writer.WriteString(weights.Metadata.Model);
 			using var memoryOwner = MemoryPool<byte>.Shared.Rent(weights.Tags.Count);
@@ -46,7 +45,6 @@ internal sealed class WeightsFormatter(TagIndexProvider tagIndexProvider)
 			reader.ReadUnmanaged(
 				out Id id,
 				out DateTimeOffset creationTimestamp,
-				out WeightsMetrics metrics,
 				out Vector2<ushort> resolution);
 			var model = reader.ReadString();
 			Guard.IsNotNull(model);
@@ -62,7 +60,6 @@ internal sealed class WeightsFormatter(TagIndexProvider tagIndexProvider)
 			{
 				Model = model,
 				CreationTimestamp = creationTimestamp,
-				Metrics = metrics,
 				Resolution = resolution
 			};
 			var weights = new InMemoryWeights(id, weightsMetadata, weightsTags);
