@@ -5,6 +5,7 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
+using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
 using CommunityToolkit.Diagnostics;
 
@@ -63,13 +64,16 @@ internal sealed class InlinesBinding : Behavior<TextBlock>
 
 	private void OnInlinesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	{
-		Guard.IsNotNull(AssociatedObject);
-		Guard.IsNotNull(AssociatedObject.Inlines);
-		if (e.OldItems != null)
-			AssociatedObject.Inlines.RemoveRange(e.OldStartingIndex, e.OldItems.Count);
-		if (e.NewItems == null)
-			return;
-		var runs = e.NewItems.Cast<string>().Select(str => new Run(str + '\n'));
-		AssociatedObject.Inlines.InsertRange(e.NewStartingIndex, runs);
+		Dispatcher.UIThread.Invoke(() =>
+		{
+			Guard.IsNotNull(AssociatedObject);
+			Guard.IsNotNull(AssociatedObject.Inlines);
+			if (e.OldItems != null)
+				AssociatedObject.Inlines.RemoveRange(e.OldStartingIndex, e.OldItems.Count);
+			if (e.NewItems == null)
+				return;
+			var runs = e.NewItems.Cast<string>().Select(str => new Run(str + '\n'));
+			AssociatedObject.Inlines.InsertRange(e.NewStartingIndex, runs);
+		});
 	}
 }
