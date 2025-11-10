@@ -129,7 +129,8 @@ public static class ApplicationServicesExtensions
 
 		builder.RegisterType<RandomItemsCropSettings>();
 
-		builder.RegisterType<ImageExporter>();
+		builder.RegisterType<ParallelImageExporter>()
+			.As<ImageExporter>();
 	}
 
 	private static void RegisterHotKeys(this ContainerBuilder builder)

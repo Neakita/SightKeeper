@@ -24,7 +24,9 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 			var images = assets.Select(asset => asset.Image).ToList();
 			ProcessImages(images);
 			var imagesPath = Path.Combine(directoryPath, "images");
-			await ExportImagesAsync(imagesPath, images, cancellationToken);
+			await imageExporter.ExportImagesAsync(imagesPath, images, cancellationToken);
+
+			logger.Information("Exporting data");
 			var dataFilePath = Path.Combine(directoryPath, "data.json");
 			await ExportDataAsync(dataFilePath, cancellationToken);
 		}
@@ -125,16 +127,6 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 			FileName = GetImageFileName(id),
 			DateCaptured = data.CreationTimestamp.DateTime
 		};
-	}
-
-	private async Task ExportImagesAsync(string directoryPath, IEnumerable<ImageData> images, CancellationToken cancellationToken)
-	{
-		foreach (var (index, image) in images.Index())
-		{
-			var fileName = GetImageFileName(index);
-			var imageFilePath = Path.Combine(directoryPath, fileName);
-			await imageExporter.ExportImageAsync(imageFilePath, image, cancellationToken);
-		}
 	}
 
 	private static string GetImageFileName(int id)
