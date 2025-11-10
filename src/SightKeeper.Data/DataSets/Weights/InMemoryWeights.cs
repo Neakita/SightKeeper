@@ -16,18 +16,4 @@ internal sealed class InMemoryWeights : WeightsData
 		Metadata = metadata;
 		Tags = tags;
 	}
-
-	public Stream? OpenWriteSteam()
-	{
-		return null;
-	}
-
-	public Stream? OpenReadStream()
-	{
-		return null;
-	}
-
-	public void DeleteData()
-	{
-	}
 }
