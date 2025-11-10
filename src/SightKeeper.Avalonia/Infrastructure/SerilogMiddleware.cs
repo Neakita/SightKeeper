@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Autofac;
 using Autofac.Core;
 using Autofac.Core.Resolving.Pipeline;
 using CommunityToolkit.Diagnostics;
@@ -11,17 +12,17 @@ internal sealed class SerilogMiddleware : IResolveMiddleware
 {
 	public PipelinePhase Phase => PipelinePhase.ParameterSelection;
 
-	public void Execute(ResolveRequestContext context, Action<ResolveRequestContext> next)
+	public void Execute(ResolveRequestContext requestContext, Action<ResolveRequestContext> next)
 	{
-		context.ChangeParameters(context.Parameters.Append(
+		requestContext.ChangeParameters(requestContext.Parameters.Append(
 			new ResolvedParameter(
 				(p, _) => p.ParameterType == typeof(ILogger),
-				(p, _) =>
+				(p, context) =>
 				{
 					Guard.IsNotNull(p.Member.DeclaringType);
-					return Log.ForContext(p.Member.DeclaringType);
+					return context.Resolve<ILogger>().ForContext(p.Member.DeclaringType);
 				})
 		));
-		next(context);
+		next(requestContext);
 	}
 }
