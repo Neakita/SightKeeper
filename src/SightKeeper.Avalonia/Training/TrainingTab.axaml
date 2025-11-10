@@ -4,41 +4,56 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Training"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Training.TrainingTab"
              x:DataType="local:TrainingDataContext">
     <Design.DataContext>
         <local:DesignTrainingDataContext/>
     </Design.DataContext>
-    <Border Classes="regular-margin outer"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top">
-        <StackPanel Classes="regular-spacing regular-margin"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top">
-            <HeaderedContentControl Header="Data set">
-                <ComboBox ItemsSource="{Binding DataSets}"
-                          SelectedItem="{Binding DataSet}"
-                          DisplayMemberBinding="{Binding Name}"/>
-            </HeaderedContentControl>
-            <HeaderedContentControl Header="Width">
-                <NumericUpDown Value="{Binding Width}"
-                               Increment="32"
-                               Minimum="32"/>
-            </HeaderedContentControl>
-            <HeaderedContentControl Header="Height">
-                <NumericUpDown Value="{Binding Height}"
-                               Increment="32"
-                               Minimum="32"/>
-            </HeaderedContentControl>
-            <Button Command="{Binding StartTrainingCommand}"
-                    Content="{icons:MaterialIconExt Kind=Play}"
-                    Classes="square high-accent"
-                    IsVisible="{Binding !IsTraining}"/>
-            <Button Command="{Binding StopTrainingCommand}"
-                    Content="{icons:MaterialIconExt Kind=Stop}"
-                    Classes="square red-accent"
-                    IsVisible="{Binding IsTraining}"/>
-        </StackPanel>
-    </Border>
+    <Grid ColumnDefinitions="Auto *"
+          Classes="regular-margin medium-spacing">
+        <Border Grid.Column="0"
+                Classes="outer"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+            <StackPanel Classes="regular-spacing regular-margin"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top">
+                <HeaderedContentControl Header="Data set">
+                    <ComboBox ItemsSource="{Binding DataSets}"
+                              SelectedItem="{Binding DataSet}"
+                              DisplayMemberBinding="{Binding Name}"/>
+                </HeaderedContentControl>
+                <HeaderedContentControl Header="Width">
+                    <NumericUpDown Value="{Binding Width}"
+                                   Increment="32"
+                                   Minimum="32"/>
+                </HeaderedContentControl>
+                <HeaderedContentControl Header="Height">
+                    <NumericUpDown Value="{Binding Height}"
+                                   Increment="32"
+                                   Minimum="32"/>
+                </HeaderedContentControl>
+                <Button Command="{Binding StartTrainingCommand}"
+                        Content="{icons:MaterialIconExt Kind=Play}"
+                        Classes="square high-accent"
+                        IsVisible="{Binding !IsTraining}"/>
+                <Button Command="{Binding StopTrainingCommand}"
+                        Content="{icons:MaterialIconExt Kind=Stop}"
+                        Classes="square red-accent"
+                        IsVisible="{Binding IsTraining}"/>
+            </StackPanel>
+        </Border>
+        <Border Grid.Column="1"
+                Classes="outer regular-padding">
+            <TextBlock MinWidth="100"
+                       FontSize="12"
+                       Foreground="{DynamicResource SecondaryForeground}">
+                <Interaction.Behaviors>
+                    <behaviors:InlinesBinding Inlines="{Binding LogLines}"/>
+                </Interaction.Behaviors>
+            </TextBlock>
+        </Border>
+    </Grid>
 </UserControl>

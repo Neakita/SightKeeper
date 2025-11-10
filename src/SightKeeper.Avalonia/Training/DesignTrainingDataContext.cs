@@ -17,4 +17,9 @@ internal sealed class DesignTrainingDataContext : TrainingDataContext
 	public bool IsTraining => false;
 	public ICommand StartTrainingCommand => CommandStubs.Enabled;
 	public ICommand StopTrainingCommand => CommandStubs.Disabled;
+	public IEnumerable<string> LogLines =>
+	[
+		"Data exported",
+		"Training started"
+	];
 }

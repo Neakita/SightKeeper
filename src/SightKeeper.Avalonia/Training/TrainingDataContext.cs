@@ -15,4 +15,5 @@ public interface TrainingDataContext
 	bool IsTraining { get; }
 	ICommand StartTrainingCommand { get; }
 	ICommand StopTrainingCommand { get; }
+	IEnumerable<string> LogLines { get; }
 }
