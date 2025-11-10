@@ -13,7 +13,7 @@ internal sealed class ParallelImageExporter(ILogger logger) : ImageExporter
 	public Task ExportImagesAsync(string directoryPath, IReadOnlyCollection<ImageData> images, CancellationToken cancellationToken)
 	{
 		var progressLock = new Lock();
-		var etaComputer = new ETAComputer(images.Count);
+		var etaComputer = new RemainingTimeEstimator(images.Count);
 		var processedImages = 0;
 		var lastLog = Stopwatch.StartNew();
 		var lastInformationLog = Stopwatch.StartNew();
@@ -36,7 +36,7 @@ internal sealed class ParallelImageExporter(ILogger logger) : ImageExporter
 					lastInformationLog.Restart();
 					logLevel = LogEventLevel.Information;
 				}
-				var eta = etaComputer.Compute(processedImages);
+				var eta = etaComputer.Estimate(processedImages);
 				logger.Write(logLevel, "Exporting images {imageIndex}/{totalImages} ETA: {ETA} ({CompletionTimestamp})",
 					index, images.Count, eta, DateTime.Now + eta);
 			}
