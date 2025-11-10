@@ -321,16 +321,8 @@ public static class PersistenceExtensions
 			};
 		});
 
-		builder.Register(context =>
-		{
-			var tagsFormatter = context.Resolve<TagsFormatter<TTag>>();
-			var assetsFormatter = context.Resolve<AssetsFormatter<TAsset>>();
-			var weightsFormatter = context.Resolve<WeightsFormatter>();
-			return new FuncWrapper<DataSet<TTag, TAsset>, DataSet<TTag, TAsset>>(set => 
-			{
-				return new SerializableDataSet<TTag, TAsset>(set, unionTag, tagsFormatter, assetsFormatter, weightsFormatter);
-			});
-		}).As<Wrapper<DataSet<TTag, TAsset>>>();
+		builder.RegisterDataSetDecoratorWrapper<SerializableDataSet<TTag, TAsset>, TTag, TAsset>()
+			.WithParameter(new PositionalParameter(1, unionTag));
 
 		builder.RegisterDataSetDecoratorWrapper<DataSetLifetimeScopeProviderDecorator<TTag, TAsset>, TTag, TAsset>()
 			.WithParameter(new PositionalParameter(1, setScopeConfiguration));
@@ -339,10 +331,8 @@ public static class PersistenceExtensions
 
 		// If domain rule is violated and throws an exception,
 		// it should fail as fast as possible and have smaller stack strace
-		builder.RegisterDataSetDecoratorWrapper<TTag, TAsset>(set =>
-		{
-			return new DomainDataSet<TTag, TAsset>(set, minimumTagsCount);
-		});
+		builder.RegisterDataSetDecoratorWrapper<DomainDataSet<TTag, TAsset>, TTag, TAsset>()
+			.WithParameter(new PositionalParameter(1, minimumTagsCount));
 
 		// INPC interface should be exposed to consumer,
 		// so he can type test and cast it,
