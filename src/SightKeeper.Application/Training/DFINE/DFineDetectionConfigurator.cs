@@ -1,9 +1,12 @@
-﻿namespace SightKeeper.Application.Training.DFINE;
+﻿using Serilog;
 
-internal sealed class DFineDetectionConfigurator(string repositoryDirectoryPath, string dataSetDirectoryPath)
+namespace SightKeeper.Application.Training.DFINE;
+
+internal sealed class DFineDetectionConfigurator(ILogger logger, string repositoryDirectoryPath, string dataSetDirectoryPath)
 {
 	public async Task AdjustConfigAsync(byte tagsCount, CancellationToken cancellationToken)
 	{
+		logger.Information("Adjusting detection config");
 		if (!File.Exists(OriginalDetectionConfigPath))
 			File.Copy(DetectionConfigPath, OriginalDetectionConfigPath);
 

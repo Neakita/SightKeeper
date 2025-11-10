@@ -1,13 +1,15 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Diagnostics;
+using Serilog;
 
 namespace SightKeeper.Application.Training.DFINE;
 
-internal sealed class DFineSizedModelConfigurator(string repositoryDirectoryPath)
+internal sealed class DFineSizedModelConfigurator(ILogger logger, string repositoryDirectoryPath)
 {
 	public async Task AdjustModelConfigAsync(DFineModel model, byte batchSize, string outputDirectoryPath, CancellationToken cancellationToken)
 	{
+		logger.Information("Adjusting sized model config");
 		var configPath = Path.Combine(ModelConfigsDirectoryPath, model.ConfigName);
 		var originalConfigName = $"original_{model.ConfigName}";
 		var originalConfigPath = Path.Combine(ModelConfigsDirectoryPath, originalConfigName);

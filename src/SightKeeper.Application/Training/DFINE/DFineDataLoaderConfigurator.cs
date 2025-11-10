@@ -1,11 +1,13 @@
-﻿using SightKeeper.Domain;
+﻿using Serilog;
+using SightKeeper.Domain;
 
 namespace SightKeeper.Application.Training.DFINE;
 
-internal sealed class DFineDataLoaderConfigurator(string repositoryPath)
+internal sealed class DFineDataLoaderConfigurator(ILogger logger, string repositoryPath)
 {
 	public async Task AdjustDataLoaderConfigAsync(byte batchSize, Vector2<ushort> inputSize, CancellationToken cancellationToken)
 	{
+		logger.Information("Adjusting data loading config");
 		if (!File.Exists(OriginalDataLoaderConfigPath))
 			File.Copy(DataLoaderConfigPath, OriginalDataLoaderConfigPath);
 

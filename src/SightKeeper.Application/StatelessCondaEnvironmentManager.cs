@@ -1,18 +1,22 @@
+using Serilog;
+
 namespace SightKeeper.Application;
 
-public sealed class StatelessCondaEnvironmentManager(CommandRunner condaCommandRunner) : CondaEnvironmentManager
+public sealed class StatelessCondaEnvironmentManager(CommandRunner condaCommandRunner, ILogger logger) : CondaEnvironmentManager
 {
 	public async Task<CommandRunner> ActivateAsync(string environmentDirectoryPath, string pythonVersion, CancellationToken cancellationToken)
 	{
-		await EnsureEnvironmentExistsAsync(condaCommandRunner, environmentDirectoryPath, pythonVersion, cancellationToken);
+		logger.Information("Activating environment {environmentDirectoryPath}", environmentDirectoryPath);
+		await EnsureEnvironmentExistsAsync(environmentDirectoryPath, pythonVersion, cancellationToken);
 		return new CondaEnvironmentCommandRunner(condaCommandRunner, environmentDirectoryPath);
 	}
 
-	private static Task EnsureEnvironmentExistsAsync(CommandRunner condaCommandRunner, string environmentDirectoryPath, string pythonVersion, CancellationToken cancellationToken)
+	private Task EnsureEnvironmentExistsAsync(string environmentDirectoryPath, string pythonVersion, CancellationToken cancellationToken)
 	{
+		logger.Debug("Ensuring {environmentDirectoryPath} environment exists", environmentDirectoryPath);
 		if (EnvironmentExists(environmentDirectoryPath))
 			return Task.CompletedTask;
-		return CreateEnvironmentAsync(condaCommandRunner, environmentDirectoryPath, pythonVersion, cancellationToken);
+		return CreateEnvironmentAsync(environmentDirectoryPath, pythonVersion, cancellationToken);
 	}
 
 	private static bool EnvironmentExists(string environmentDirectoryPath)
@@ -21,8 +25,9 @@ public sealed class StatelessCondaEnvironmentManager(CommandRunner condaCommandR
 		       Directory.EnumerateFileSystemEntries(environmentDirectoryPath).Any();
 	}
 
-	private static Task CreateEnvironmentAsync(CommandRunner condaCommandRunner, string directoryPath, string? pythonVersion, CancellationToken cancellationToken)
+	private Task CreateEnvironmentAsync(string directoryPath, string? pythonVersion, CancellationToken cancellationToken)
 	{
+		logger.Information("Creating environment {directoryPath} with python version {pythonVersion}", directoryPath, pythonVersion);
 		var createCommand = $"conda create --prefix {directoryPath} --yes";
 		if (pythonVersion != null)
 			createCommand += $" python={pythonVersion}";

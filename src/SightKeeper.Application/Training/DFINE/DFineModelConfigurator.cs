@@ -1,11 +1,13 @@
-﻿using SightKeeper.Domain;
+﻿using Serilog;
+using SightKeeper.Domain;
 
 namespace SightKeeper.Application.Training.DFINE;
 
-internal sealed class DFineModelConfigurator(string repositoryDirectoryPath)
+internal sealed class DFineModelConfigurator(ILogger logger, string repositoryDirectoryPath)
 {
 	public async Task AdjustModelConfigAsync(Vector2<ushort> inputSize, CancellationToken cancellationToken)
 	{
+		logger.Information("Adjusting model config");
 		if (!File.Exists(OriginalConfigPath))
 			File.Copy(ConfigPath, OriginalConfigPath);
 
