@@ -21,7 +21,8 @@ internal sealed class ParallelImageExporter(ILogger logger) : ImageExporter
 		{
 			var (index, data) = tuple;
 			var imageFileName = GetImageFileName(index);
-			await ExportImageAsync(imageFileName, data, bodyCancellationToken);
+			var imageFilePath = Path.Combine(directoryPath, imageFileName);
+			await ExportImageAsync(imageFilePath, data, bodyCancellationToken);
 			Interlocked.Increment(ref processedImages);
 			if (lastLog.Elapsed < TimeSpan.FromMilliseconds(100))
 				return;
