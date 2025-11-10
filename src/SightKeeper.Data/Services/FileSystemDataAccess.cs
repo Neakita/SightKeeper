@@ -11,18 +11,6 @@ internal class FileSystemDataAccess(string fileExtension)
 	public string DirectoryPath { get; set; } = DefaultDirectoryPath;
 	public string FileExtension => fileExtension;
 
-	public async Task<Image> LoadImageAsync(Id id, CancellationToken cancellationToken)
-	{
-		await using var stream = OpenRead(id);
-		return await Image.LoadAsync(stream, cancellationToken);
-	}
-
-	public async Task<Image<TPixel>> LoadImageAsync<TPixel>(Id id, CancellationToken cancellationToken) where TPixel : unmanaged, IPixel<TPixel>
-	{
-		await using var stream = OpenRead(id);
-		return await Image.LoadAsync<TPixel>(stream, cancellationToken);
-	}
-
 	public virtual Stream OpenRead(Id id)
 	{
 		var filePath = GetFilePath(id);
