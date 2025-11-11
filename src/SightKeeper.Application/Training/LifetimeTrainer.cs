@@ -15,7 +15,6 @@ internal sealed class LifetimeTrainer(LifetimeScopeProvider lifetimeScopeProvide
 		await using var dataScope = lifetimeScopeProvider.BeginLifetimeScope(data, lifetimeScope);
 		await using var trainingScope = dataScope.BeginLifetimeScope(typeof(LifetimeTrainer));
 		var trainer = trainingScope.Resolve<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
-		trainer.ImageSize = ImageSize;
 		await trainer.TrainAsync(data, cancellationToken);
 	}
 }

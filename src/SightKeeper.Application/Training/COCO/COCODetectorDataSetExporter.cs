@@ -14,6 +14,9 @@ namespace SightKeeper.Application.Training.COCO;
 
 internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, ILogger logger) : TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
 {
+	public string DataFileName { get; set; } = "data.json";
+	public string ImagesSubDirectoryPath { get; set; } = "images";
+
 	public async Task ExportAsync(
 		string directoryPath,
 		ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data,
@@ -37,8 +40,10 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 
 	private async Task ExportImagesAsync(CancellationToken cancellationToken, string directoryPath, List<ImageData> images)
 	{
-		logger.Information("Exporting images");
-		var imagesPath = Path.Combine(directoryPath, "images");
+		logger.Debug("Exporting images");
+		var imagesPath = directoryPath;
+		if (!string.IsNullOrEmpty(ImagesSubDirectoryPath))
+			imagesPath = Path.Combine(directoryPath, ImagesSubDirectoryPath);
 		await imageExporter.ExportImagesAsync(imagesPath, images, cancellationToken);
 	}
 
@@ -64,7 +69,7 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 
 	private void ProcessCategories(IEnumerable<ReadOnlyTag> tags)
 	{
-		logger.Information("Processing categories");
+		logger.Debug("Processing categories");
 		tags = tags.ToList();
 		var categories = tags.Select(CreateCategory);
 		_categories.AddRange(categories);
@@ -84,7 +89,7 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 	private ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> MaterializeData(
 		ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data)
 	{
-		using var operation = logger.OperationAt(LogEventLevel.Debug).Begin("Data meterialization");
+		using var operation = logger.OperationAt(LogEventLevel.Debug).Begin("Data materialization");
 		data = new ReadOnlyDataSetValue<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>(
 			data.Tags.ToList(),
 			data.Assets.ToList());
@@ -94,7 +99,7 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 
 	private void ProcessAssets(IEnumerable<ReadOnlyItemsAsset<ReadOnlyDetectorItem>> assets)
 	{
-		logger.Information("Processing assets");
+		logger.Debug("Processing assets");
 		var annotations = assets.SelectMany(CreateAnnotations);
 		_annotations.AddRange(annotations);
 	}
@@ -140,7 +145,7 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 
 	private void ProcessImages(IEnumerable<ImageData> images)
 	{
-		logger.Information("Processing images");
+		logger.Debug("Processing images");
 		var cocoImages = images.Select(CreateCOCOImage);
 		_images.AddRange(cocoImages);
 	}
@@ -164,8 +169,8 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 
 	private async Task ExportDataAsync(string directoryPath, CancellationToken cancellationToken)
 	{
-		var filePath = Path.Combine(directoryPath, "data.json");
-		logger.Information("Exporting data");
+		var filePath = Path.Combine(directoryPath, DataFileName);
+		logger.Debug("Exporting data");
 		using var operation = logger.OperationAt(LogEventLevel.Debug).Begin("Data export");
 		await using var dataSetStream = File.Open(filePath, FileMode.Create);
 		await JsonSerializer.SerializeAsync(dataSetStream, DataSet, COCODataSetSourceGenerationContext.Default.COCODataSet, cancellationToken);

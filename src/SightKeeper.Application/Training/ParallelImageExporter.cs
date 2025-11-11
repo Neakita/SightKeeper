@@ -12,6 +12,7 @@ internal sealed class ParallelImageExporter(ILogger logger) : ImageExporter
 {
 	public Task ExportImagesAsync(string directoryPath, IReadOnlyCollection<ImageData> images, CancellationToken cancellationToken)
 	{
+		Directory.CreateDirectory(directoryPath);
 		var progressLock = new Lock();
 		var etaComputer = new RemainingTimeEstimator(images.Count);
 		var processedImages = 0;

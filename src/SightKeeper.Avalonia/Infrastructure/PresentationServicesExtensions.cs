@@ -1,9 +1,7 @@
 ﻿using Autofac;
 using Avalonia.Platform;
-using SightKeeper.Application;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Images;
-using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.Annotation.Tooling.Adaptive;
 using SightKeeper.Avalonia.Annotation.Tooling.Commands;
 using SightKeeper.Avalonia.Annotation.Tooling.ImageSet;

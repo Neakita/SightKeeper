@@ -6,7 +6,7 @@ public sealed class StatelessCondaEnvironmentManager(CommandRunner condaCommandR
 {
 	public async Task<CommandRunner> ActivateAsync(string environmentDirectoryPath, string pythonVersion, CancellationToken cancellationToken)
 	{
-		logger.Information("Activating environment {environmentDirectoryPath}", environmentDirectoryPath);
+		logger.Information("Preparing environment {environmentDirectoryPath}", environmentDirectoryPath);
 		await EnsureEnvironmentExistsAsync(environmentDirectoryPath, pythonVersion, cancellationToken);
 		return new CondaEnvironmentCommandRunner(condaCommandRunner, environmentDirectoryPath);
 	}

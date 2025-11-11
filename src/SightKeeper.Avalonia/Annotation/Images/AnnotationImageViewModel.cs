@@ -4,7 +4,6 @@ using System.Reactive.Disposables.Fluent;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
-using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.Annotation.Tooling.DataSet;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;

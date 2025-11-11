@@ -25,16 +25,6 @@
                               SelectedItem="{Binding DataSet}"
                               DisplayMemberBinding="{Binding Name}"/>
                 </HeaderedContentControl>
-                <HeaderedContentControl Header="Width">
-                    <NumericUpDown Value="{Binding Width}"
-                                   Increment="32"
-                                   Minimum="32"/>
-                </HeaderedContentControl>
-                <HeaderedContentControl Header="Height">
-                    <NumericUpDown Value="{Binding Height}"
-                                   Increment="32"
-                                   Minimum="32"/>
-                </HeaderedContentControl>
                 <Button Command="{Binding StartTrainingCommand}"
                         Content="{icons:MaterialIconExt Kind=Play}"
                         Classes="square high-accent"

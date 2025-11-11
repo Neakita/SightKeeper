@@ -2,6 +2,7 @@
 using FluentValidation;
 using HotKeys;
 using HotKeys.SharpHook;
+using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
@@ -15,7 +16,7 @@ using SightKeeper.Application.Training.Assets.Distribution;
 using SightKeeper.Application.Training.COCO;
 using SightKeeper.Application.Training.Data;
 using SightKeeper.Application.Training.Data.Transforming;
-using SightKeeper.Application.Training.DFINE;
+using SightKeeper.Application.Training.RFDETR;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
@@ -49,7 +50,7 @@ public static class ApplicationServicesExtensions
 	{
 		builder.RegisterType<CastingTrainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
 			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
-		builder.RegisterType<DFineTrainer>()
+		builder.RegisterType<RFDETRDetectorTrainer>()
 			.As<Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 	}
 
@@ -104,11 +105,24 @@ public static class ApplicationServicesExtensions
 			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
 
 		builder.RegisterType<COCODetectorDataSetExporter>()
+			.OnActivated(args =>
+			{
+				args.Instance.DataFileName = "_annotations.coco.json";
+				args.Instance.ImagesSubDirectoryPath = string.Empty;
+			})
 			.As<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 		
-		builder.RegisterDecorator<
-			DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>,
-			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+		builder.RegisterDecorator<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>((context, _, exporter) =>
+		{
+			var logger = context.Resolve<ILogger>();
+			logger = logger.ForContext<DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+			return new DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>(exporter, logger)
+			{
+				TrainDirectoryName = "train",
+				ValidationDirectoryName = "valid",
+				TestDirectoryName = "test"
+			};
+		});
 
 		builder.RegisterDecorator<
 			TransformingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>,

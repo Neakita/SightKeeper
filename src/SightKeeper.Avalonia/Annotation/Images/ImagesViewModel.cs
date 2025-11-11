@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SightKeeper.Avalonia.Annotation.Tooling;
 using SightKeeper.Avalonia.Annotation.Tooling.ImageSet;
 using SightKeeper.Domain.Images;
 using Vibrance;

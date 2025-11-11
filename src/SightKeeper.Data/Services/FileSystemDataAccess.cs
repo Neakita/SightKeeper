@@ -1,6 +1,4 @@
 using FlakeId;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace SightKeeper.Data.Services;
 

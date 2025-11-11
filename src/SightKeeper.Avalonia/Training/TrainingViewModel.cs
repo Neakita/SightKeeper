@@ -12,7 +12,6 @@ using Serilog;
 using SightKeeper.Application;
 using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc;
-using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
@@ -24,8 +23,6 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 	public IReadOnlyCollection<DataSet<Tag, Asset>> DataSets { get; }
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
 	public partial DataSet<Tag, Asset>? DataSet { get; set; }
-	[ObservableProperty] public partial ushort Width { get; set; } = 320;
-	[ObservableProperty] public partial ushort Height { get; set; } = 320;
 	[ObservableProperty] public partial bool IsTraining { get; private set; }
 
 	ICommand TrainingDataContext.StartTrainingCommand => StartTrainingCommand;
@@ -73,7 +70,6 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 	private async Task StartTraining(CancellationToken cancellationToken)
 	{
 		Guard.IsNotNull(DataSet);
-		_trainer.ImageSize = new Vector2<ushort>(Width, Height);
 		IsTraining = true;
 		try
 		{
