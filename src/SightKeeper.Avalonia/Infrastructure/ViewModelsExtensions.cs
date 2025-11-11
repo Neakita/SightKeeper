@@ -145,6 +145,7 @@ internal static class ViewModelsExtensions
 	private static void RegisterTrainingTabDependencies(this ContainerBuilder builder)
 	{
 		builder.RegisterType<TrainingViewModel>()
+			.WithParameter((info, _) => info.Position == 2, (_, context) => context.ResolveNamed<IObservable<object>>("training progress"))
 			.SingleInstance();
 	}
 

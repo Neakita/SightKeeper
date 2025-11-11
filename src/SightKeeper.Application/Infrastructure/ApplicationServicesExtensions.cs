@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Reactive.Subjects;
+using Autofac;
 using FluentValidation;
 using HotKeys;
 using HotKeys.SharpHook;
@@ -53,6 +54,7 @@ public static class ApplicationServicesExtensions
 		builder.RegisterType<CastingTrainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
 			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
 		builder.RegisterType<RFDETRDetectorTrainer>()
+			.WithParameter((info, _) => info.Position == 3, (_, context) => context.ResolveNamed<IObserver<object>>("training progress"))
 			.As<Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
 	}
 
@@ -146,7 +148,13 @@ public static class ApplicationServicesExtensions
 		builder.RegisterType<RandomItemsCropSettings>();
 
 		builder.RegisterType<ParallelImageExporter>()
+			.WithParameter((info, _) => info.Position == 1, (_, context) => context.ResolveNamed<IObserver<object>>("training progress"))
 			.As<ImageExporter>();
+
+		builder.RegisterType<Subject<object>>()
+			.SingleInstance()
+			.Named<IObservable<object>>("training progress")
+			.Named<IObserver<object>>("training progress");
 	}
 
 	private static void RegisterHotKeys(this ContainerBuilder builder)

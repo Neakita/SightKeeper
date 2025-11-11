@@ -12,7 +12,8 @@ namespace SightKeeper.Application.Training.RFDETR;
 internal sealed class RFDETRDetectorTrainer(
 	CondaEnvironmentManager environmentManager,
 	TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> exporter,
-	ILogger logger) : Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
+	ILogger logger,
+	IObserver<object> progressObserver) : Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
 {
 	public byte BatchSize { get; set; } = 4;
 	public ushort Resolution { get; set; } = 320;
@@ -31,12 +32,14 @@ internal sealed class RFDETRDetectorTrainer(
 
 	private Task<CommandRunner> ActivateEnvironmentAsync(CancellationToken cancellationToken)
 	{
+		progressObserver.OnNext("Preparing environment");
 		return environmentManager.ActivateAsync(CondaEnvironmentPath, PythonVersion, cancellationToken);
 	}
 
 	private async Task ExportData(ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data,
 		CancellationToken cancellationToken)
 	{
+		progressObserver.OnNext("Exporting data");
 		logger.Information("Exporting data");
 		await exporter.ExportAsync(DataSetPath, data, cancellationToken);
 	}

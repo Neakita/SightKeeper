@@ -16,14 +16,14 @@ namespace SightKeeper.Avalonia.Behaviors;
 
 internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 {
-	public static readonly StyledProperty<DateTimeOffset> DateTimeProperty =
-		AvaloniaProperty.Register<DisplayRelativeDateTimeBehavior, DateTimeOffset>(nameof(DateTime));
+	public static readonly StyledProperty<object> DateTimeProperty =
+		AvaloniaProperty.Register<DisplayRelativeDateTimeBehavior, object>(nameof(DateTime));
 
 	private static readonly HashSet<DisplayRelativeDateTimeBehavior> ActiveBehaviors = new();
 	private static Timer? _timer;
 	private static readonly ILogger Logger = Log.ForContext<DisplayRelativeDateTimeBehavior>();
 
-	public DateTimeOffset DateTime
+	public object DateTime
 	{
 		get => GetValue(DateTimeProperty);
 		set => SetValue(DateTimeProperty, value);
@@ -55,6 +55,13 @@ internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 		_timer = null;
 	}
 
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+	{
+		base.OnPropertyChanged(change);
+		if (change.Property == DateTimeProperty)
+			UpdateText();
+	}
+
 	private void OnTimerElapsed(object? sender, ElapsedEventArgs e)
 	{
 		try
@@ -71,7 +78,13 @@ internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 
 	private void UpdateText()
 	{
-		if (AssociatedObject != null)
-			AssociatedObject.Text = DateTime.Humanize(culture: CultureInfo.InvariantCulture);
+		if (AssociatedObject == null)
+			return;
+		AssociatedObject.Text = DateTime switch
+		{
+			DateTime dateTime => dateTime.Humanize(culture: CultureInfo.InvariantCulture),
+			DateTimeOffset dateTimeOffset => dateTimeOffset.Humanize(culture: CultureInfo.InvariantCulture),
+			_ => string.Empty
+		};
 	}
 }

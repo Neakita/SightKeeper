@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -14,4 +15,5 @@ public interface TrainingDataContext
 	ICommand StartTrainingCommand { get; }
 	ICommand StopTrainingCommand { get; }
 	IEnumerable<string> LogLines { get; }
+	IObservable<object> Progress { get; }
 }

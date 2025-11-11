@@ -20,6 +20,7 @@ namespace SightKeeper.Avalonia.Training;
 
 internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext, IDisposable, IAsyncDisposable
 {
+	public IObservable<object> Progress { get; }
 	public IReadOnlyCollection<DataSet<Tag, Asset>> DataSets { get; }
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
 	public partial DataSet<Tag, Asset>? DataSet { get; set; }
@@ -29,8 +30,9 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 	ICommand TrainingDataContext.StopTrainingCommand => StartTrainingCommand.CreateCancelCommand();
 	public IEnumerable<string> LogLines { get; }
 
-	public TrainingViewModel(ObservableListRepository<DataSet<Tag, Asset>> dataSets, ILifetimeScope lifetime)
+	public TrainingViewModel(ObservableListRepository<DataSet<Tag, Asset>> dataSets, ILifetimeScope lifetime, IObservable<object> trainingProgress)
 	{
+		Progress = trainingProgress;
 		var logLines = new AvaloniaList<string>();
 		var sink = new CollectionSink(logLines)
 		{

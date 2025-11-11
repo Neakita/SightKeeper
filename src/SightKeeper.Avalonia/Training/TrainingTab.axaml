@@ -5,6 +5,8 @@
              xmlns:local="clr-namespace:SightKeeper.Avalonia.Training"
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:training="clr-namespace:SightKeeper.Application.Training;assembly=SightKeeper.Application"
              mc:Ignorable="d"
              x:Class="SightKeeper.Avalonia.Training.TrainingTab"
              x:DataType="local:TrainingDataContext">
@@ -12,8 +14,25 @@
         <local:DesignTrainingDataContext/>
     </Design.DataContext>
     <Grid ColumnDefinitions="Auto *"
+          RowDefinitions="Auto *"
           Classes="regular-margin medium-spacing">
         <Border Grid.Column="0"
+                Grid.Row="0"
+                Classes="outer regular-padding">
+            <ContentControl Content="{Binding Progress^, FallbackValue=Idle}">
+                <ContentControl.DataTemplates>
+                    <DataTemplate DataType="system:String">
+                        <TextBlock Text="{Binding}"
+                                   Foreground="{DynamicResource WatermarkPrimary}"/>
+                    </DataTemplate>
+                    <DataTemplate DataType="training:Progress">
+                        <local:ProgressView/>
+                    </DataTemplate>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+        </Border>
+        <Border Grid.Column="0"
+                Grid.Row="1"
                 Classes="outer"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top">
@@ -36,6 +55,8 @@
             </StackPanel>
         </Border>
         <Border Grid.Column="1"
+                Grid.Row="0"
+                Grid.RowSpan="2"
                 Classes="outer regular-padding">
             <TextBlock MinWidth="100"
                        FontSize="12"

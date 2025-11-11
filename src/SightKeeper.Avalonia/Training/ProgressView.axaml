@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:behaviors="clr-namespace:SightKeeper.Avalonia.Behaviors"
+             xmlns:training="clr-namespace:SightKeeper.Application.Training;assembly=SightKeeper.Application"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SightKeeper.Avalonia.Training.ProgressView"
+             x:DataType="training:Progress">
+    <StackPanel Classes="small-spacing">
+        <TextBlock FontSize="14"
+                   Foreground="{DynamicResource WatermarkPrimary}">
+            <Run Text="{Binding Label}"/>
+            <Run Text="{Binding Current}"
+                 Foreground="{DynamicResource PrimaryForeground}"/>
+            <Run Text="/"/>
+            <Run Text="{Binding Total}"/>
+            <Run Text="{Binding Percentage, StringFormat=P0}"/>
+        </TextBlock>
+        <TextBlock FontSize="12"
+                   Foreground="{DynamicResource WatermarkPrimary}"
+                   IsVisible="{Binding EstimatedTimeOfArrival, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <Interaction.Behaviors>
+                <behaviors:DisplayRelativeDateTimeBehavior DateTime="{Binding EstimatedTimeOfArrival}"/>
+            </Interaction.Behaviors>
+        </TextBlock>
+    </StackPanel>
+</UserControl>

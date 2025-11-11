@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace SightKeeper.Application.Misc;
 
-internal sealed class RemainingTimeEstimator(double finalProgress)
+public sealed class RemainingTimeEstimator(double finalProgress)
 {
 	public TimeSpan? Estimate(double progress)
 	{
