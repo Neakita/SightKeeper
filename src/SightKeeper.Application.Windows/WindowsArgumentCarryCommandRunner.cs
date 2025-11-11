@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Application.Windows;
+﻿using SightKeeper.Application.Interop.CLI;
+
+namespace SightKeeper.Application.Windows;
 
 internal sealed class WindowsArgumentCarryCommandRunner(CommandRunner inner) : CommandRunner
 {

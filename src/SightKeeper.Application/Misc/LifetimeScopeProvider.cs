@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Misc;
 
 public interface LifetimeScopeProvider
 {

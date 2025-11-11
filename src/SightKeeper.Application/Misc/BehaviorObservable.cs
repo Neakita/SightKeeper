@@ -1,6 +1,6 @@
 using System.Reactive.Subjects;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Misc;
 
 public sealed class BehaviorObservable<T> : IObservable<T>
 {

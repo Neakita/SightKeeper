@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Application;
+﻿namespace SightKeeper.Application.Misc;
 
 public interface WriteRepository<in T>
 {

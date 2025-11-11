@@ -9,7 +9,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Serilog;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Application.Training;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain.DataSets;

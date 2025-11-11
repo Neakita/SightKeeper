@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Application;
+﻿namespace SightKeeper.Application.Interop.CLI;
 
 public sealed class CondaEnvironmentCommandRunner : CommandRunner
 {

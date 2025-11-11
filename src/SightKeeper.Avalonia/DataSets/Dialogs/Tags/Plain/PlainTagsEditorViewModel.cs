@@ -4,8 +4,8 @@ using System.Reactive.Subjects;
 using System.Windows.Input;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.Input;
-using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Tags;
+using SightKeeper.Application.Misc;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Avalonia.DataSets.Dialogs.Tags.Plain;

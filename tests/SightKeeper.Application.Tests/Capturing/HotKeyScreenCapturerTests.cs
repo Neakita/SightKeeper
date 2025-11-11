@@ -2,6 +2,7 @@ using System.Reactive.Subjects;
 using FluentAssertions;
 using HotKeys;
 using NSubstitute;
+using SightKeeper.Application.Interop;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.Tests.Capturing.Saving;
 using SightKeeper.Domain;

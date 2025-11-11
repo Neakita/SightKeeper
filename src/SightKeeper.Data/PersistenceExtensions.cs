@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Autofac.Builder;
-using SightKeeper.Application;
 using SightKeeper.Application.DataSets;
+using SightKeeper.Application.Misc;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Data.DataSets;
 using SightKeeper.Data.DataSets.Assets;

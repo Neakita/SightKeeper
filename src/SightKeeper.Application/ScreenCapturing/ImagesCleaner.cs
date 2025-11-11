@@ -1,5 +1,6 @@
 using SightKeeper.Application.Extensions;
 using SightKeeper.Domain.Images;
+using Range = SightKeeper.Application.Misc.Range;
 
 namespace SightKeeper.Application.ScreenCapturing;
 

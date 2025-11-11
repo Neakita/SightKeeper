@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
-using SightKeeper.Application;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Tags;
+using SightKeeper.Application.Misc;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;

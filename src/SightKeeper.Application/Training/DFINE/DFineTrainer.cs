@@ -1,4 +1,6 @@
 ﻿using Serilog;
+using SightKeeper.Application.Interop.CLI;
+using SightKeeper.Application.Interop.Conda;
 using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;

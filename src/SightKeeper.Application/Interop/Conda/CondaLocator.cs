@@ -1,4 +1,4 @@
-﻿namespace SightKeeper.Application;
+﻿namespace SightKeeper.Application.Interop.Conda;
 
 public sealed class CondaLocator(IReadOnlyCollection<string> possiblePaths)
 {

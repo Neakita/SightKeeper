@@ -1,4 +1,4 @@
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Misc;
 
 internal readonly struct Range
 {

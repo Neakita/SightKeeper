@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Material.Icons;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Avalonia.Dialogs;
 using SightKeeper.Avalonia.Dialogs.MessageBox;
 using SightKeeper.Avalonia.Misc;

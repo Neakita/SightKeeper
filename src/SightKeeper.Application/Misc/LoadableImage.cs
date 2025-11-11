@@ -1,7 +1,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Misc;
 
 public interface LoadableImage
 {

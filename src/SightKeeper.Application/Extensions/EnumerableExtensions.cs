@@ -1,3 +1,5 @@
+using Range = SightKeeper.Application.Misc.Range;
+
 namespace SightKeeper.Application.Extensions;
 
 internal static class EnumerableExtensions

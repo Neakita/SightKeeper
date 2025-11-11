@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Misc;
 
 internal sealed class RemainingTimeEstimator(double finalProgress)
 {

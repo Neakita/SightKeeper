@@ -1,6 +1,6 @@
 using System.Linq;
 using Avalonia.Controls.ApplicationLifetimes;
-using SightKeeper.Application;
+using SightKeeper.Application.Interop;
 
 namespace SightKeeper.Avalonia.Misc;
 

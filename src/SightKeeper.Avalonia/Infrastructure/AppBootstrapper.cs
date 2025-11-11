@@ -1,5 +1,5 @@
 using Autofac;
-using SightKeeper.Application;
+using SightKeeper.Application.Infrastructure;
 using SightKeeper.Data;
 
 namespace SightKeeper.Avalonia.Infrastructure;

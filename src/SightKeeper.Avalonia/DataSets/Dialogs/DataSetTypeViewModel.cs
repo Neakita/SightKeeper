@@ -1,5 +1,5 @@
 ﻿using System;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Avalonia.DataSets.Dialogs.Tags;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;

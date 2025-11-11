@@ -1,7 +1,7 @@
 ﻿using CliWrap;
 using Serilog;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Interop.CLI;
 
 public class ArgumentCommandRunner(string shellPath) : CommandRunner
 {

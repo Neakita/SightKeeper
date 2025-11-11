@@ -1,3 +1,5 @@
+using SightKeeper.Application.Misc;
+
 namespace SightKeeper.Application.ScreenCapturing.Saving;
 
 public interface PendingImagesCountReporter

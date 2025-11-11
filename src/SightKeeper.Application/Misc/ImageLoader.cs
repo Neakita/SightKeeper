@@ -1,6 +1,6 @@
 using SightKeeper.Domain.Images;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Misc;
 
 public interface ImageLoader<TPixel>
 {

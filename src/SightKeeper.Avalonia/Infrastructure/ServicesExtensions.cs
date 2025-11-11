@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using Autofac;
-using Serilog;
-using SightKeeper.Application;
-using SightKeeper.Avalonia.Misc;
-#if OS_WINDOWS
+﻿#if OS_WINDOWS
 using SightKeeper.Application.Windows;
 #elif OS_LINUX
 using SightKeeper.Application.Linux;
 #endif
+using System.Collections.Generic;
+using Autofac;
+using Serilog;
+using SightKeeper.Application.Interop;
+using SightKeeper.Avalonia.Misc;
 
 namespace SightKeeper.Avalonia.Infrastructure;
 

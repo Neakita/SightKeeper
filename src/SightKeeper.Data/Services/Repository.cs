@@ -1,4 +1,4 @@
-﻿using SightKeeper.Application;
+﻿using SightKeeper.Application.Misc;
 
 namespace SightKeeper.Data.Services;
 

@@ -7,6 +7,7 @@ using HotKeys;
 using HotKeys.Handlers;
 using Serilog;
 using SharpHook.Data;
+using SightKeeper.Application.Interop;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;

@@ -1,4 +1,7 @@
-﻿namespace SightKeeper.Application.Windows;
+﻿using SightKeeper.Application.Interop.CLI;
+using SightKeeper.Application.Interop.Conda;
+
+namespace SightKeeper.Application.Windows;
 
 internal sealed class WindowsCondaCommandRunner(CommandRunner inner, CondaLocator condaLocator) : CommandRunner
 {

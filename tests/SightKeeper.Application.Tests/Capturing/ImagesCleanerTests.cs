@@ -6,6 +6,7 @@ using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.Images;
+using Range = SightKeeper.Application.Misc.Range;
 
 namespace SightKeeper.Application.Tests.Capturing;
 

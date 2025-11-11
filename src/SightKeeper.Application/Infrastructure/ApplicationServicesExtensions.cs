@@ -9,6 +9,8 @@ using SightKeeper.Application.DataSets.Editing;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Creating;
 using SightKeeper.Application.ImageSets.Editing;
+using SightKeeper.Application.Interop;
+using SightKeeper.Application.Misc;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Application.Training;
@@ -22,7 +24,7 @@ using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Infrastructure;
 
 public static class ApplicationServicesExtensions
 {

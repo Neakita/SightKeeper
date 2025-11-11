@@ -2,7 +2,7 @@ using System.Collections.Specialized;
 using System.Windows.Input;
 using FluentAssertions;
 using NSubstitute;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Avalonia.ImageSets;
 using SightKeeper.Avalonia.ImageSets.Capturing;
 using SightKeeper.Avalonia.ImageSets.Card;

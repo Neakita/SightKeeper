@@ -1,4 +1,4 @@
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Misc;
 
 internal sealed class ReverseComparer<T>(IComparer<T> comparer) : IComparer<T>
 {

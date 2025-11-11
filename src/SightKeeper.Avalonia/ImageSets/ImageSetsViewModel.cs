@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Avalonia.ImageSets.Capturing;
 using SightKeeper.Avalonia.ImageSets.Card;
 using SightKeeper.Domain.Images;

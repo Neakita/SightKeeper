@@ -1,7 +1,7 @@
 using System;
 using HotKeys;
 using Sightful.Avalonia.Controls.GestureBox;
-using SightKeeper.Application;
+using SightKeeper.Application.Interop;
 using SightKeeper.Application.ScreenCapturing;
 
 namespace SightKeeper.Avalonia.ImageSets.Capturing;

@@ -1,6 +1,7 @@
 using Serilog;
+using SightKeeper.Application.Interop.CLI;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Interop.Conda;
 
 public sealed class StatelessCondaEnvironmentManager(CommandRunner condaCommandRunner, ILogger logger) : CondaEnvironmentManager
 {

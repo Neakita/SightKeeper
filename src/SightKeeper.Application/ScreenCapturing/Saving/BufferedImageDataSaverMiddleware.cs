@@ -6,6 +6,7 @@ using CommunityToolkit.HighPerformance;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
+using SightKeeper.Application.Misc;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.ScreenCapturing.Saving;

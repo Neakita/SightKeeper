@@ -1,5 +1,5 @@
 using FlakeId;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Assets;

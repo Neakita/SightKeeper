@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using SightKeeper.Application.Interop.CLI;
+using SightKeeper.Application.Interop.Conda;
 using SightKeeper.Application.ScreenCapturing;
 using SixLabors.ImageSharp.PixelFormats;
 

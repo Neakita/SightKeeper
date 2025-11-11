@@ -1,5 +1,5 @@
 using System;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using Vibrance;
 using Vibrance.Changes;
 

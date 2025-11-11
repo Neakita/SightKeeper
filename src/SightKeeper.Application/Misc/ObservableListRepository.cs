@@ -1,6 +1,6 @@
 using Vibrance;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Misc;
 
 public interface ObservableListRepository<out T>
 {

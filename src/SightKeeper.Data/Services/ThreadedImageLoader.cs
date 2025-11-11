@@ -3,7 +3,7 @@ using CommunityToolkit.Diagnostics;
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.Services;

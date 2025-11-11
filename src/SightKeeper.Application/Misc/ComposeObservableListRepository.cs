@@ -3,7 +3,7 @@ using System.Reactive.Disposables.Fluent;
 using CommunityToolkit.Diagnostics;
 using Vibrance;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Misc;
 
 internal sealed class ComposeObservableListRepository<T> : ObservableListRepository<T>, IDisposable
 {

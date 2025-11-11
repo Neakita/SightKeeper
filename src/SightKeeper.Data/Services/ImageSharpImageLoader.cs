@@ -1,7 +1,7 @@
 using Serilog;
 using Serilog.Events;
 using SerilogTimings.Extensions;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
 using SixLabors.ImageSharp.PixelFormats;

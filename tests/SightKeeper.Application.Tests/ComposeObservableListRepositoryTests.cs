@@ -1,6 +1,7 @@
 using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
+using SightKeeper.Application.Misc;
 
 namespace SightKeeper.Application.Tests;
 

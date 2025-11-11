@@ -1,3 +1,5 @@
+using SightKeeper.Application.Interop.CLI;
+
 namespace SightKeeper.Application.Linux;
 
 internal sealed class BashArgumentCarryCommandRunner(CommandRunner inner) : CommandRunner

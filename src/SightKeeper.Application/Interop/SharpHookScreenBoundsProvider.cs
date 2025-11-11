@@ -1,7 +1,7 @@
 using SharpHook.Providers;
 using SightKeeper.Domain;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Interop;
 
 internal sealed class SharpHookScreenBoundsProvider : ScreenBoundsProvider
 {

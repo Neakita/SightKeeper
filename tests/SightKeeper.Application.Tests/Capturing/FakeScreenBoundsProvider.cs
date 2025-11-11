@@ -1,3 +1,4 @@
+using SightKeeper.Application.Interop;
 using SightKeeper.Domain;
 
 namespace SightKeeper.Application.Tests.Capturing;

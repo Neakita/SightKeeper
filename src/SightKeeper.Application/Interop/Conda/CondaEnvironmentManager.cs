@@ -1,4 +1,6 @@
-﻿namespace SightKeeper.Application;
+﻿using SightKeeper.Application.Interop.CLI;
+
+namespace SightKeeper.Application.Interop.Conda;
 
 public interface CondaEnvironmentManager
 {

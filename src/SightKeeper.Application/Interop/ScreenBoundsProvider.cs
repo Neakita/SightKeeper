@@ -1,6 +1,6 @@
 ﻿using SightKeeper.Domain;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Interop;
 
 public interface ScreenBoundsProvider
 {

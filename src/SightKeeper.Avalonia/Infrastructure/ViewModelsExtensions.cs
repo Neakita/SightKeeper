@@ -2,7 +2,7 @@
 using System.Reactive.Disposables;
 using Autofac;
 using Material.Icons;
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Avalonia.Annotation;
 using SightKeeper.Avalonia.Annotation.Drawing;
 using SightKeeper.Avalonia.Annotation.Drawing.Bounded;

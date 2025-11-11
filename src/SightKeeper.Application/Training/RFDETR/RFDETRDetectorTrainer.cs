@@ -1,5 +1,7 @@
 using System.Text;
 using Serilog;
+using SightKeeper.Application.Interop.CLI;
+using SightKeeper.Application.Interop.Conda;
 using SightKeeper.Application.Training.Data;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets.Items;

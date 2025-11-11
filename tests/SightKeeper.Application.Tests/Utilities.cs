@@ -2,6 +2,7 @@ using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Application.ImageSets;
 using SightKeeper.Application.ImageSets.Editing;
+using SightKeeper.Application.Misc;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Application.Tests;

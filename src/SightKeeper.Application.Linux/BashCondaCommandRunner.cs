@@ -1,3 +1,6 @@
+using SightKeeper.Application.Interop.CLI;
+using SightKeeper.Application.Interop.Conda;
+
 namespace SightKeeper.Application.Linux;
 
 internal sealed class BashCondaCommandRunner(CommandRunner inner, CondaLocator condaLocator) : CommandRunner

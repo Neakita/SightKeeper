@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using SharpHook.Reactive;
 
-namespace SightKeeper.Application;
+namespace SightKeeper.Application.Infrastructure;
 
 public static class ApplicationBootstrapExtensions
 {

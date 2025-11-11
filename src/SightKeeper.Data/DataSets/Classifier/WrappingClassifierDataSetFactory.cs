@@ -1,4 +1,4 @@
-using SightKeeper.Application;
+using SightKeeper.Application.Misc;
 using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Tags;
 using SightKeeper.Data.DataSets.Weights;
