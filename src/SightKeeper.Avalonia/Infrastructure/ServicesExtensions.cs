@@ -30,7 +30,7 @@ internal static class ServicesExtensions
 
 	public static void RegisterLogger(this ContainerBuilder builder)
 	{
-		builder.Register(_ => Log.Logger);
+		builder.RegisterInstance(Log.Logger).ExternallyOwned();
 		builder.RegisterComposite<ILogger>((_, services) => CreateCompositeLogger(services));
 		builder.RegisterModule(new MiddlewareModule(new SerilogMiddleware()));
 	}
