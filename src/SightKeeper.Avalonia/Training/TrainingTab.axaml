@@ -34,7 +34,7 @@
         <Border Grid.Column="0"
                 Grid.Row="1"
                 Classes="outer"
-                HorizontalAlignment="Left"
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Top">
             <StackPanel Classes="regular-spacing regular-margin"
                         HorizontalAlignment="Left"
