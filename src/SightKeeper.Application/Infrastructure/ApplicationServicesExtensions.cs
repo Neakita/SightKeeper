@@ -151,8 +151,7 @@ public static class ApplicationServicesExtensions
 			.WithParameter((info, _) => info.Position == 1, (_, context) => context.ResolveNamed<IObserver<object>>("training progress"))
 			.As<ImageExporter>();
 
-		builder.RegisterType<Subject<object>>()
-			.SingleInstance()
+		builder.RegisterInstance(new BehaviorSubject<object>("Idle"))
 			.Named<IObservable<object>>("training progress")
 			.Named<IObserver<object>>("training progress");
 	}
