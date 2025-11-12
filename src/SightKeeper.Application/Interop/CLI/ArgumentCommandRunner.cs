@@ -8,22 +8,34 @@ public class ArgumentCommandRunner(string shellPath) : CommandRunner
 	static ArgumentCommandRunner()
 	{
 		var logger = Log.ForContext<ArgumentCommandRunner>();
-		OutputPipeTarget = PipeTarget.ToDelegate(output => logger.Verbose("{output}", output));
-		ErrorPipeTarget = PipeTarget.ToDelegate(error => logger.Error("{error}", error));
+		OutputLogPipe = PipeTarget.ToDelegate(output => logger.Verbose("{output}", output));
+		ErrorLogPipe = PipeTarget.ToDelegate(error => logger.Error("{error}", error));
 	}
 
-	public Task ExecuteCommandAsync(string command, CancellationToken cancellationToken)
+	public Task ExecuteCommandAsync(
+		string command,
+		IObserver<string>? outputObserver,
+		IObserver<string>? errorObserver,
+		CancellationToken cancellationToken)
 	{
 		Log.Debug("Executing {command}", command);
+		var outputPipe = OutputLogPipe;
+		var errorPipe = ErrorLogPipe;
+		if (outputObserver != null)
+			outputPipe = PipeTarget.Merge(PipeTarget.ToDelegate(outputObserver.OnNext), outputPipe);
+		if (errorObserver != null)
+			errorPipe = PipeTarget.Merge(PipeTarget.ToDelegate(errorObserver.OnNext), errorPipe);
+		outputPipe = PipeTarget.Merge(outputPipe, OutputLogPipe);
+		errorPipe = PipeTarget.Merge(errorPipe, ErrorLogPipe);
 		return Cli.Wrap(shellPath)
 			.WithWorkingDirectory(WorkingDirectory)
 			.WithArguments(command)
-			.WithStandardOutputPipe(OutputPipeTarget)
-			.WithStandardErrorPipe(ErrorPipeTarget)
+			.WithStandardOutputPipe(outputPipe)
+			.WithStandardErrorPipe(errorPipe)
 			.ExecuteAsync(cancellationToken);
 	}
 
 	private static readonly string WorkingDirectory = Directory.GetCurrentDirectory();
-	private static readonly PipeTarget OutputPipeTarget;
-	private static readonly PipeTarget ErrorPipeTarget;
+	private static readonly PipeTarget OutputLogPipe;
+	private static readonly PipeTarget ErrorLogPipe;
 }
