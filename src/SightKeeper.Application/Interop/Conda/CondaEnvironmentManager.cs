@@ -6,6 +6,6 @@ public interface CondaEnvironmentManager
 {
 	Task<CommandRunner> ActivateAsync(
 		string environmentDirectoryPath,
-		string pythonVersion,
+		string? pythonVersion,
 		CancellationToken cancellationToken);
 }

@@ -80,7 +80,7 @@
             <TextBlock>
                 <Interaction.Behaviors>
                     <behaviors:DisplayRelativeDateTimeBehavior
-                        DateTime="{Binding CreationTimestamp.DateTime}"/>
+                        Value="{Binding CreationTimestamp.DateTime}"/>
                 </Interaction.Behaviors>
             </TextBlock>
         </StackPanel>

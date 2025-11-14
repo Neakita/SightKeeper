@@ -21,7 +21,8 @@
                    Foreground="{DynamicResource WatermarkPrimary}"
                    IsVisible="{Binding EstimatedTimeOfArrival, Converter={x:Static ObjectConverters.IsNotNull}}">
             <Interaction.Behaviors>
-                <behaviors:DisplayRelativeDateTimeBehavior DateTime="{Binding EstimatedTimeOfArrival}"/>
+                <behaviors:DisplayRelativeDateTimeBehavior Value="{Binding EstimatedTimeOfArrival}"
+                                                           AsTimeSpan="True"/>
             </Interaction.Behaviors>
         </TextBlock>
     </StackPanel>

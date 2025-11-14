@@ -16,17 +16,26 @@ namespace SightKeeper.Avalonia.Behaviors;
 
 internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 {
-	public static readonly StyledProperty<object> DateTimeProperty =
-		AvaloniaProperty.Register<DisplayRelativeDateTimeBehavior, object>(nameof(DateTime));
+	public static readonly StyledProperty<object> ValueProperty =
+		AvaloniaProperty.Register<DisplayRelativeDateTimeBehavior, object>(nameof(Value));
+
+	public static readonly StyledProperty<bool> AsTimeSpanProperty =
+		AvaloniaProperty.Register<DisplayRelativeDateTimeBehavior, bool>(nameof(Value));
 
 	private static readonly HashSet<DisplayRelativeDateTimeBehavior> ActiveBehaviors = new();
 	private static Timer? _timer;
 	private static readonly ILogger Logger = Log.ForContext<DisplayRelativeDateTimeBehavior>();
 
-	public object DateTime
+	public object Value
 	{
-		get => GetValue(DateTimeProperty);
-		set => SetValue(DateTimeProperty, value);
+		get => GetValue(ValueProperty);
+		set => SetValue(ValueProperty, value);
+	}
+
+	public bool AsTimeSpan
+	{
+		get => GetValue(AsTimeSpanProperty);
+		set => SetValue(AsTimeSpanProperty, value);
 	}
 
 	protected override void OnAttachedToVisualTree()
@@ -58,7 +67,7 @@ internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
 	{
 		base.OnPropertyChanged(change);
-		if (change.Property == DateTimeProperty)
+		if (change.Property == ValueProperty)
 			UpdateText();
 	}
 
@@ -80,8 +89,10 @@ internal sealed class DisplayRelativeDateTimeBehavior : Behavior<TextBlock>
 	{
 		if (AssociatedObject == null)
 			return;
-		AssociatedObject.Text = DateTime switch
+		AssociatedObject.Text = Value switch
 		{
+			DateTime dateTime when AsTimeSpan => (dateTime - DateTime.Now).Humanize(culture: CultureInfo.InvariantCulture),
+			DateTimeOffset dateTimeOffset when AsTimeSpan => (dateTimeOffset - DateTimeOffset.Now).Humanize(culture: CultureInfo.InvariantCulture),
 			DateTime dateTime => dateTime.Humanize(culture: CultureInfo.InvariantCulture),
 			DateTimeOffset dateTimeOffset => dateTimeOffset.Humanize(culture: CultureInfo.InvariantCulture),
 			_ => string.Empty

@@ -5,14 +5,14 @@ namespace SightKeeper.Application.Interop.Conda;
 
 public sealed class StatelessCondaEnvironmentManager(CommandRunner condaCommandRunner, ILogger logger) : CondaEnvironmentManager
 {
-	public async Task<CommandRunner> ActivateAsync(string environmentDirectoryPath, string pythonVersion, CancellationToken cancellationToken)
+	public async Task<CommandRunner> ActivateAsync(string environmentDirectoryPath, string? pythonVersion, CancellationToken cancellationToken)
 	{
 		logger.Information("Preparing environment {environmentDirectoryPath}", environmentDirectoryPath);
 		await EnsureEnvironmentExistsAsync(environmentDirectoryPath, pythonVersion, cancellationToken);
 		return new CondaEnvironmentCommandRunner(condaCommandRunner, environmentDirectoryPath);
 	}
 
-	private Task EnsureEnvironmentExistsAsync(string environmentDirectoryPath, string pythonVersion, CancellationToken cancellationToken)
+	private Task EnsureEnvironmentExistsAsync(string environmentDirectoryPath, string? pythonVersion, CancellationToken cancellationToken)
 	{
 		logger.Debug("Ensuring {environmentDirectoryPath} environment exists", environmentDirectoryPath);
 		if (EnvironmentExists(environmentDirectoryPath))
@@ -29,9 +29,9 @@ public sealed class StatelessCondaEnvironmentManager(CommandRunner condaCommandR
 	private Task CreateEnvironmentAsync(string directoryPath, string? pythonVersion, CancellationToken cancellationToken)
 	{
 		logger.Information("Creating environment {directoryPath} with python version {pythonVersion}", directoryPath, pythonVersion);
-		var createCommand = $"conda create --prefix {directoryPath} --yes";
+		var createCommand = $"conda create --prefix {directoryPath} --yes python";
 		if (pythonVersion != null)
-			createCommand += $" python={pythonVersion}";
+			createCommand += $"={pythonVersion}";
 		return condaCommandRunner.ExecuteCommandAsync(createCommand, cancellationToken);
 	}
 }
