@@ -2,6 +2,7 @@ using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using FlakeId;
 using MemoryPack;
+using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Weights;
 
@@ -33,7 +34,7 @@ internal static class WeightsFormatter
 	private static void WriteWeights<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, WeightsData weights)
 		where TBufferWriter : IBufferWriter<byte>
 	{
-		var weightsId = weights.Id;
+		var weightsId = GetWeightsId(weights);
 		writer.WriteUnmanaged(weightsId);
 		WriteMetadata(ref writer, weights.Metadata);
 	}
@@ -72,5 +73,11 @@ internal static class WeightsFormatter
 			CreationTimestamp = creationTimestamp,
 			Resolution = resolution
 		};
+	}
+
+	private static Id GetWeightsId(WeightsData weights)
+	{
+		var idHolder = weights.GetFirst<IdHolder>();
+		return idHolder.Id;
 	}
 }
