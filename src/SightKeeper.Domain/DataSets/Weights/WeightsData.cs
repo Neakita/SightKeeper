@@ -1,9 +1,8 @@
 ﻿using FlakeId;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Domain.DataSets.Weights;
 
-public interface WeightsData : TagUser
+public interface WeightsData
 {
 	Id Id { get; }
 	WeightsMetadata Metadata { get; }
