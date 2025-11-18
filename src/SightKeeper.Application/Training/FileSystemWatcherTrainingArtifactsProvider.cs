@@ -9,7 +9,7 @@ namespace SightKeeper.Application.Training;
 
 internal sealed class FileSystemWatcherTrainingArtifactsProvider : TrainingArtifactsProvider, IDisposable
 {
-	public ReadOnlyObservableList<WeightsArtifact> Artifacts => _artifacts;
+	public ReadOnlyObservableList<TrainingArtifact> Artifacts => _artifacts;
 
 	public FileSystemWatcherTrainingArtifactsProvider(string path, string filter, IObservable<EpochResult> epochs, ILogger logger)
 	{
@@ -31,7 +31,7 @@ internal sealed class FileSystemWatcherTrainingArtifactsProvider : TrainingArtif
 		{
 			_logger.Debug("Adding existing artifact \"{FilePath}\"", filePath);
 			var fileName = Path.GetFileName(filePath);
-			var artifact = new WeightsArtifact
+			var artifact = new TrainingArtifact
 			{
 				FileName = fileName
 			};
@@ -49,7 +49,7 @@ internal sealed class FileSystemWatcherTrainingArtifactsProvider : TrainingArtif
 		_watcher.Dispose();
 	}
 
-	private readonly ObservableList<WeightsArtifact> _artifacts = new();
+	private readonly ObservableList<TrainingArtifact> _artifacts = new();
 	private readonly FileSystemWatcher _watcher;
 	private readonly ILogger _logger;
 	private readonly CompositeDisposable _disposable = new();
@@ -59,7 +59,7 @@ internal sealed class FileSystemWatcherTrainingArtifactsProvider : TrainingArtif
 	{
 		Guard.IsNotNull(e.Name);
 		_logger.Verbose("File \"{FileName}\" creation observed", e.Name);
-		var artifact = new WeightsArtifact
+		var artifact = new TrainingArtifact
 		{
 			FileName = e.Name
 		};

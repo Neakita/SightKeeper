@@ -1,11 +1,11 @@
-﻿using SightKeeper.Data.DataSets.Assets;
+﻿using SightKeeper.Data.DataSets.Artifacts;
+using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Artifacts;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
@@ -37,8 +37,8 @@ internal sealed class LockingDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner, 
 	public AssetsOwner<TAsset> AssetsLibrary { get; } =
 		new LockingAssetsLibrary<TAsset>(inner.AssetsLibrary, editingLock);
 
-	public WeightsLibrary WeightsLibrary { get; } =
-		new LockingWeightsLibrary(inner.WeightsLibrary, editingLock);
+	public ArtifactsLibrary ArtifactsLibrary { get; } =
+		new LockingArtifactsLibrary(inner.ArtifactsLibrary, editingLock);
 
 	public DataSet<TTag, TAsset> Inner => inner;
 }

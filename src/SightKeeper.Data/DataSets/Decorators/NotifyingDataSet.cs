@@ -2,9 +2,9 @@
 using System.Runtime.CompilerServices;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Artifacts;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
@@ -38,7 +38,7 @@ internal sealed class NotifyingDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner
 
 	public TagsOwner<TTag> TagsLibrary => inner.TagsLibrary;
 	public AssetsOwner<TAsset> AssetsLibrary => inner.AssetsLibrary;
-	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
+	public ArtifactsLibrary ArtifactsLibrary => inner.ArtifactsLibrary;
 	public DataSet<TTag, TAsset> Inner => inner;
 
 	private void OnPropertyChanged([CallerMemberName] string propertyName = "")

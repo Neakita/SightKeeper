@@ -3,9 +3,9 @@ using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Artifacts;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
@@ -31,7 +31,7 @@ internal sealed class DataSetLifetimeScopeProviderDecorator<TTag, TAsset>(
 
 	public TagsOwner<TTag> TagsLibrary => inner.TagsLibrary;
 	public AssetsOwner<TAsset> AssetsLibrary => inner.AssetsLibrary;
-	public WeightsLibrary WeightsLibrary => inner.WeightsLibrary;
+	public ArtifactsLibrary ArtifactsLibrary => inner.ArtifactsLibrary;
 	public DataSet<TTag, TAsset> Inner => inner;
 
 	public void Initialize(DataSet<TTag, TAsset> wrapped)

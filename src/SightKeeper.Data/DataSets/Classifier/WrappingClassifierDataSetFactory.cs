@@ -1,7 +1,7 @@
 using SightKeeper.Application.Misc;
+using SightKeeper.Data.DataSets.Artifacts;
 using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -19,8 +19,8 @@ internal sealed class WrappingClassifierDataSetFactory(
 	{
 		StorableTagFactory tagFactory = new(changeListener, editingLock);
 		StorableClassifierAssetFactory assetFactory = new(changeListener, editingLock);
-		StorableWeightsWrapper weightsWrapper = new();
-		var inMemorySet = new InMemoryDataSet<Tag, ClassifierAsset>(tagFactory, assetFactory, weightsWrapper);
+		StorableArtifactWrapper artifactWrapper = new();
+		var inMemorySet = new InMemoryDataSet<Tag, ClassifierAsset>(tagFactory, assetFactory, artifactWrapper);
 		var wrappedSet = wrapper.Wrap(inMemorySet);
 		tagFactory.TagsOwner = wrappedSet.TagsLibrary;
 		assetFactory.TagsOwner = wrappedSet.TagsLibrary;

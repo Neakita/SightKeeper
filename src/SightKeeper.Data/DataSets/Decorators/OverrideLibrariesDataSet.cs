@@ -1,8 +1,8 @@
 ﻿using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Artifacts;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
@@ -22,12 +22,12 @@ internal sealed class OverrideLibrariesDataSet<TTag, TAsset>(DataSet<TTag, TAsse
 
 	public TagsOwner<TTag> TagsLibrary { get; init; } = inner.TagsLibrary;
 	public AssetsOwner<TAsset> AssetsLibrary { get; init; } = inner.AssetsLibrary;
-	public WeightsLibrary WeightsLibrary { get; init; } = inner.WeightsLibrary;
+	public ArtifactsLibrary ArtifactsLibrary { get; init; } = inner.ArtifactsLibrary;
 	public DataSet<TTag, TAsset> Inner => inner;
 
 	public void Dispose()
 	{
-		Dispose(TagsLibrary, AssetsLibrary, WeightsLibrary);
+		Dispose(TagsLibrary, AssetsLibrary, ArtifactsLibrary);
 	}
 
 	private static void Dispose(params IEnumerable<object> objects)

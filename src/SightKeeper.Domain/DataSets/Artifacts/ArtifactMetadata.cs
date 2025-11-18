@@ -1,6 +1,6 @@
-namespace SightKeeper.Domain.DataSets.Weights;
+namespace SightKeeper.Domain.DataSets.Artifacts;
 
-public sealed class WeightsMetadata
+public sealed class ArtifactMetadata
 {
 	public required string Model { get; init; }
 	public required string Format { get; init; }

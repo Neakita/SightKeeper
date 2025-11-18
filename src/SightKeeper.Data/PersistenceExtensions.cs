@@ -4,6 +4,7 @@ using SightKeeper.Application.DataSets;
 using SightKeeper.Application.Misc;
 using SightKeeper.Application.ScreenCapturing.Saving;
 using SightKeeper.Data.DataSets;
+using SightKeeper.Data.DataSets.Artifacts;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Classifier;
@@ -15,7 +16,6 @@ using SightKeeper.Data.DataSets.Poser.Items.Decorators;
 using SightKeeper.Data.DataSets.Poser.Items.KeyPoints;
 using SightKeeper.Data.DataSets.Poser.Tags;
 using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Data.ImageSets;
 using SightKeeper.Data.ImageSets.Decorators;
 using SightKeeper.Data.ImageSets.Images;
@@ -288,15 +288,15 @@ public static class PersistenceExtensions
 		// so locking appears only after domain rules validated.
 		builder.RegisterDataSetDecoratorWrapper<LockingDataSet<TTag, TAsset>, TTag, TAsset>();
 
-		// Weights data removing could be expansive (we can remove large weights files),
+		// Artifacts data removing could be expansive (we can remove large artifacts files),
 		// and there is no need in lock because lock should affect AppData only,
-		// not the weights files,
+		// not the artifacts files,
 		// so it shouldn't be locked
 		builder.RegisterDataSetDecoratorWrapper<TTag, TAsset>(set =>
 		{
 			return new OverrideLibrariesDataSet<TTag, TAsset>(set)
 			{
-				WeightsLibrary = new DataRemovingWeightsLibrary(set.WeightsLibrary)
+				ArtifactsLibrary = new DataRemovingArtifactsLibrary(set.ArtifactsLibrary)
 			};
 		});
 
@@ -306,7 +306,7 @@ public static class PersistenceExtensions
 			{
 				TagsLibrary = new ObservableTagsLibrary<TTag>(set.TagsLibrary),
 				AssetsLibrary = new ObservableAssetsLibrary<TAsset>(set.AssetsLibrary),
-				WeightsLibrary = new ObservableWeightsLibrary(set.WeightsLibrary)
+				ArtifactsLibrary = new ObservableArtifactsLibrary(set.ArtifactsLibrary)
 			};
 		});
 		

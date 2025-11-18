@@ -4,5 +4,5 @@ namespace SightKeeper.Application.Training;
 
 public interface TrainingArtifactsProvider
 {
-	ReadOnlyObservableList<WeightsArtifact> Artifacts { get; }
+	ReadOnlyObservableList<TrainingArtifact> Artifacts { get; }
 }

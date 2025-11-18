@@ -2,7 +2,7 @@
 
 namespace SightKeeper.Application.Training;
 
-public sealed class WeightsArtifact
+public sealed class TrainingArtifact
 {
 	public string FileName { get; init; } = string.Empty;
 	public EpochResult? EpochResult { get; set; }

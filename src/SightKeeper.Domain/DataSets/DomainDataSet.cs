@@ -1,6 +1,6 @@
-﻿using SightKeeper.Domain.DataSets.Assets;
+﻿using SightKeeper.Domain.DataSets.Artifacts;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Domain.DataSets;
 
@@ -22,6 +22,6 @@ public sealed class DomainDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner)
 
 	public TagsOwner<TTag> TagsLibrary { get; } = new DomainTagsLibrary<TTag>(inner.TagsLibrary);
 	public AssetsOwner<TAsset> AssetsLibrary => Inner.AssetsLibrary;
-	public WeightsLibrary WeightsLibrary => Inner.WeightsLibrary;
+	public ArtifactsLibrary ArtifactsLibrary => Inner.ArtifactsLibrary;
 	public DataSet<TTag, TAsset> Inner => inner;
 }

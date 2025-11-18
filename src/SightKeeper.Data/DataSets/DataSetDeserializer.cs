@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Diagnostics;
 using MemoryPack;
 using SightKeeper.Application.Misc;
+using SightKeeper.Data.DataSets.Artifacts;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
@@ -27,7 +27,7 @@ internal sealed class DataSetDeserializer<TTag, TAsset>(
 		ReadGeneralData(ref reader, (DataSet<Tag, Asset>)innerSet);
 		tagsFormatter.ReadTags(ref reader, innerSet.TagsLibrary);
 		assetsFormatter.Deserialize(ref reader, (DataSet<Tag, TAsset>)innerSet);
-		WeightsFormatter.ReadWeights(ref reader, innerSet.WeightsLibrary);
+		ArtifactsFormatter.ReadArtifact(ref reader, innerSet.ArtifactsLibrary);
 		return (DataSet<Tag, Asset>)set;
 	}
 

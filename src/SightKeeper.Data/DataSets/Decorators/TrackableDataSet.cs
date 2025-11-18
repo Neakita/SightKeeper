@@ -1,12 +1,12 @@
-﻿using SightKeeper.Data.DataSets.Assets;
+﻿using SightKeeper.Data.DataSets.Artifacts;
+using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Tags;
-using SightKeeper.Data.DataSets.Weights;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Artifacts;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Data.DataSets.Decorators;
 
@@ -38,8 +38,8 @@ internal sealed class TrackableDataSet<TTag, TAsset>(DataSet<TTag, TAsset> inner
 	public AssetsOwner<TAsset> AssetsLibrary { get; } =
 		new TrackableAssetsLibrary<TAsset>(inner.AssetsLibrary, listener);
 
-	public WeightsLibrary WeightsLibrary { get; } =
-		new TrackableWeightsLibrary(inner.WeightsLibrary, listener);
+	public ArtifactsLibrary ArtifactsLibrary { get; } =
+		new TrackableArtifactsLibrary(inner.ArtifactsLibrary, listener);
 
 	public DataSet<TTag, TAsset> Inner => inner;
 }
