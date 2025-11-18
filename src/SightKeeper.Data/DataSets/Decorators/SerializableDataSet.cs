@@ -15,8 +15,7 @@ internal sealed class SerializableDataSet<TTag, TAsset>(
 	DataSet<TTag, TAsset> inner,
 	ushort unionTag,
 	TagsFormatter<TTag> tagsFormatter,
-	AssetsFormatter<TAsset> assetsFormatter,
-	WeightsFormatter weightsFormatter)
+	AssetsFormatter<TAsset> assetsFormatter)
 	: DataSet<TTag, TAsset>, Decorator<DataSet<TTag, TAsset>>, MemoryPackSerializable
 	where TTag : Tag
 {
@@ -44,7 +43,7 @@ internal sealed class SerializableDataSet<TTag, TAsset>(
 		WriteGeneralData(ref writer, Name, Description);
 		tagsFormatter.WriteTags(ref writer, TagsLibrary.Tags);
 		assetsFormatter.Serialize(ref writer, AssetsLibrary.Assets);
-		weightsFormatter.WriteWeights(ref writer, WeightsLibrary.Weights);
+		WeightsFormatter.WriteWeights(ref writer, WeightsLibrary.Weights);
 	}
 
 	private static void WriteGeneralData<TBufferWriter>(

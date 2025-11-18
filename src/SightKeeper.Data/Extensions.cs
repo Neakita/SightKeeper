@@ -1,4 +1,5 @@
-﻿using MemoryPack;
+﻿using CommunityToolkit.Diagnostics;
+using MemoryPack;
 using MemoryPack.Internal;
 using SightKeeper.Data.Services;
 
@@ -38,5 +39,12 @@ internal static class Extensions
 		using var state = MemoryPackReaderOptionalStatePool.Rent(MemoryPackSerializerOptions.Default);
 		var reader = new MemoryPackReader(bytes, state);
 		return deserializer.Deserialize(ref reader);
+	}
+
+	public static string ReadNotNullString(this ref MemoryPackReader reader)
+	{
+		var value = reader.ReadString();
+		Guard.IsNotNull(value);
+		return value;
 	}
 }

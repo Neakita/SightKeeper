@@ -19,6 +19,7 @@ public sealed class ObservableWeightsLibraryTests
 		var weightsMetadata = new WeightsMetadata
 		{
 			Model = string.Empty,
+			Format = string.Empty,
 			CreationTimestamp = default,
 			Resolution = default
 		};

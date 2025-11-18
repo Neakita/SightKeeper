@@ -155,8 +155,6 @@ public static class PersistenceExtensions
 
 		builder.RegisterType<PoserTagsFormatter>()
 			.As<TagsFormatter<PoserTag>>();
-
-		builder.RegisterType<WeightsFormatter>();
 	}
 
 	private static void RegisterSerializers(this ContainerBuilder builder)
