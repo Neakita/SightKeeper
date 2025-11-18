@@ -1,5 +1,4 @@
 using SightKeeper.Domain;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
 using Vibrance.Changes;
 
@@ -10,9 +9,9 @@ internal sealed class ObservableWeightsLibrary(WeightsLibrary inner) : WeightsLi
 	public IReadOnlyCollection<WeightsData> Weights => _weights;
 	public WeightsLibrary Inner => inner;
 
-	public WeightsData CreateWeights(WeightsMetadata metadata, IReadOnlyCollection<Tag> tags)
+	public WeightsData CreateWeights(WeightsMetadata metadata)
 	{
-		var weights = inner.CreateWeights(metadata, tags);
+		var weights = inner.CreateWeights(metadata);
 		var change = new Addition<WeightsData>
 		{
 			Items = [weights]

@@ -3,7 +3,6 @@ using NSubstitute;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
-using SightKeeper.Domain.DataSets.Weights;
 
 namespace SightKeeper.Domain.Tests.DataSets;
 
@@ -15,7 +14,7 @@ public sealed class DomainDataSetTests
 		var innerSet = Substitute.For<DataSet<Tag, Asset>>();
 		const string name = "the name";
 		innerSet.Name.Returns(name);
-		var domainSet = new DomainDataSet<Tag, Asset>(innerSet, 1);
+		var domainSet = new DomainDataSet<Tag, Asset>(innerSet);
 		domainSet.Name.Returns(name);
 	}
 
@@ -24,7 +23,7 @@ public sealed class DomainDataSetTests
 	{
 		var innerSet = Substitute.For<DataSet<Tag, Asset>>();
 		const string name = "the name";
-		var domainSet = new DomainDataSet<Tag, Asset>(innerSet, 1);
+		var domainSet = new DomainDataSet<Tag, Asset>(innerSet);
 		domainSet.Name = name;
 		innerSet.Received().Name = name;
 	}
@@ -35,7 +34,7 @@ public sealed class DomainDataSetTests
 		var innerSet = Substitute.For<DataSet<Tag, Asset>>();
 		const string description = "the description";
 		innerSet.Description.Returns(description);
-		var domainSet = new DomainDataSet<Tag, Asset>(innerSet, 1);
+		var domainSet = new DomainDataSet<Tag, Asset>(innerSet);
 		domainSet.Description.Returns(description);
 	}
 
@@ -44,7 +43,7 @@ public sealed class DomainDataSetTests
 	{
 		var innerSet = Substitute.For<DataSet<Tag, Asset>>();
 		const string description = "the description";
-		var domainSet = new DomainDataSet<Tag, Asset>(innerSet, 1);
+		var domainSet = new DomainDataSet<Tag, Asset>(innerSet);
 		domainSet.Description = description;
 		innerSet.Received().Description = description;
 	}
@@ -53,7 +52,7 @@ public sealed class DomainDataSetTests
 	public void ShouldHaveDomainTagsLibrary()
 	{
 		var innerSet = Substitute.For<DataSet<Tag, Asset>>();
-		var domainSet = new DomainDataSet<Tag, Asset>(innerSet, 1);
+		var domainSet = new DomainDataSet<Tag, Asset>(innerSet);
 		domainSet.TagsLibrary.Should().BeOfType<DomainTagsLibrary<Tag>>();
 	}
 
@@ -61,15 +60,7 @@ public sealed class DomainDataSetTests
 	public void ShouldGetAssetsLibraryFromInner()
 	{
 		var innerSet = Substitute.For<DataSet<Tag, Asset>>();
-		var domainSet = new DomainDataSet<Tag, Asset>(innerSet, 1);
+		var domainSet = new DomainDataSet<Tag, Asset>(innerSet);
 		domainSet.AssetsLibrary.Should().Be(innerSet.AssetsLibrary);
-	}
-
-	[Fact]
-	public void ShouldHaveDomainWeightsLibrary()
-	{
-		var innerSet = Substitute.For<DataSet<Tag, Asset>>();
-		var domainSet = new DomainDataSet<Tag, Asset>(innerSet, 1);
-		domainSet.WeightsLibrary.Should().BeOfType<DomainWeightsLibrary>();
 	}
 }

@@ -28,7 +28,7 @@ internal sealed class DataSetDeserializer<TTag, TAsset>(
 		ReadGeneralData(ref reader, (DataSet<Tag, Asset>)innerSet);
 		tagsFormatter.ReadTags(ref reader, innerSet.TagsLibrary);
 		assetsFormatter.Deserialize(ref reader, (DataSet<Tag, TAsset>)innerSet);
-		weightsFormatter.ReadWeights(ref reader, innerSet.WeightsLibrary, (IReadOnlyList<Tag>)innerSet.TagsLibrary.Tags);
+		weightsFormatter.ReadWeights(ref reader, innerSet.WeightsLibrary);
 		return (DataSet<Tag, Asset>)set;
 	}
 

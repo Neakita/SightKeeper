@@ -7,5 +7,4 @@ public interface WeightsData : TagUser
 {
 	Id Id { get; }
 	WeightsMetadata Metadata { get; }
-	IReadOnlyList<Tag> Tags { get; }
 }

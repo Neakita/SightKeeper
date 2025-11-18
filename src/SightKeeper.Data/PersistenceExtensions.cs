@@ -96,7 +96,7 @@ public static class PersistenceExtensions
 
 		builder.RegisterType<KeyPointWrapper>();
 
-		builder.RegisterDataSetWrappers<Tag, ClassifierAsset>(0, 2, options.ClassifierDataSetScopeConfiguration, containerBuilder =>
+		builder.RegisterDataSetWrappers<Tag, ClassifierAsset>(0, options.ClassifierDataSetScopeConfiguration, containerBuilder =>
 		{
 			containerBuilder.RegisterDataSetDecoratorWrapper<Tag, ClassifierAsset>(set =>
 			{
@@ -106,8 +106,8 @@ public static class PersistenceExtensions
 				};
 			});
 		});
-		builder.RegisterDataSetWrappers<Tag, ItemsAsset<DetectorItem>>(1, 1, options.DetectorDataSetScopeConfiguration);
-		builder.RegisterDataSetWrappers<PoserTag, ItemsAsset<PoserItem>>(2, 1, options.PoserDataSetScopeConfiguration);
+		builder.RegisterDataSetWrappers<Tag, ItemsAsset<DetectorItem>>(1, options.DetectorDataSetScopeConfiguration);
+		builder.RegisterDataSetWrappers<PoserTag, ItemsAsset<PoserItem>>(2, options.PoserDataSetScopeConfiguration);
 	}
 
 	private static void RegisterFactories(this ContainerBuilder builder)
@@ -277,7 +277,6 @@ public static class PersistenceExtensions
 	private static void RegisterDataSetWrappers<TTag, TAsset>(
 		this ContainerBuilder builder,
 		ushort unionTag,
-		byte minimumTagsCount,
 		Action<ContainerBuilder>? setScopeConfiguration,
 		Action<ContainerBuilder>? additional = null)
 		where TTag : Tag
@@ -331,8 +330,7 @@ public static class PersistenceExtensions
 
 		// If domain rule is violated and throws an exception,
 		// it should fail as fast as possible and have smaller stack strace
-		builder.RegisterDataSetDecoratorWrapper<DomainDataSet<TTag, TAsset>, TTag, TAsset>()
-			.WithParameter(new PositionalParameter(1, minimumTagsCount));
+		builder.RegisterDataSetDecoratorWrapper<DomainDataSet<TTag, TAsset>, TTag, TAsset>();
 
 		// INPC interface should be exposed to consumer,
 		// so he can type test and cast it,

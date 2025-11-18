@@ -2,7 +2,7 @@ namespace SightKeeper.Domain.DataSets.Weights;
 
 public sealed class WeightsMetadata
 {
-	public string Model { get; init; } = string.Empty;
-	public DateTimeOffset CreationTimestamp { get; init; }
-	public Vector2<ushort> Resolution { get; init; }
+	public required string Model { get; init; }
+	public required DateTimeOffset CreationTimestamp { get; init; }
+	public required Vector2<ushort> Resolution { get; init; }
 }

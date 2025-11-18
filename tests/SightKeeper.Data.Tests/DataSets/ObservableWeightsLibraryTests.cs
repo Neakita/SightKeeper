@@ -1,9 +1,8 @@
-using System.Collections.ObjectModel;
 using FluentAssertions;
 using NSubstitute;
 using SightKeeper.Data.DataSets.Weights;
-using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.DataSets.Weights;
+using Vibrance;
 using Vibrance.Changes;
 
 namespace SightKeeper.Data.Tests.DataSets;
@@ -14,10 +13,16 @@ public sealed class ObservableWeightsLibraryTests
 	public void ShouldObserveWeightsCreation()
 	{
 		var set = new ObservableWeightsLibrary(Substitute.For<WeightsLibrary>());
-		var observableList = (Vibrance.ReadOnlyObservableCollection<WeightsData>)set.Weights;
+		var observableList = (ReadOnlyObservableCollection<WeightsData>)set.Weights;
 		var observedChanges = new List<Change<WeightsData>>();
 		using var subscription = observableList.Subscribe(observedChanges.Add);
-		var weights = set.CreateWeights(new WeightsMetadata(), ReadOnlyCollection<Tag>.Empty);
+		var weightsMetadata = new WeightsMetadata
+		{
+			Model = string.Empty,
+			CreationTimestamp = default,
+			Resolution = default
+		};
+		var weights = set.CreateWeights(weightsMetadata);
 		var insertion = observedChanges.Should().ContainSingle().Which.Should().BeOfType<Addition<WeightsData>>().Subject;
 		insertion.Items.Should().ContainSingle().Which.Should().Be(weights);
 	}
@@ -28,7 +33,7 @@ public sealed class ObservableWeightsLibraryTests
 		var weights = Substitute.For<WeightsData>();
 		var innerSet = Substitute.For<WeightsLibrary>();
 		var set = new ObservableWeightsLibrary(innerSet);
-		var observableList = (Vibrance.ReadOnlyObservableCollection<WeightsData>)set.Weights;
+		var observableList = (ReadOnlyObservableCollection<WeightsData>)set.Weights;
 		var observedChanges = new List<Change<WeightsData>>();
 		using var subscription = observableList.Subscribe(observedChanges.Add);
 		set.RemoveWeights(weights);
