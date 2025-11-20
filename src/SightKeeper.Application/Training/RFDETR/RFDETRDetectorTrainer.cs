@@ -1,20 +1,21 @@
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
-using CommunityToolkit.Diagnostics;
 using Serilog;
 using SightKeeper.Application.Interop.CLI;
 using SightKeeper.Application.Interop.Conda;
-using SightKeeper.Application.Misc;
 
 namespace SightKeeper.Application.Training.RFDETR;
 
 internal sealed class RFDETRDetectorTrainer(
 	CondaEnvironmentManager environmentManager,
 	ILogger logger,
-	IObserver<object> progressObserver) : Trainer
+	IObserver<object> progressObserver)
+	: Trainer, OutputProvider, OptionsHolder, TrainingPathsProvider
 {
 	public RFDETRTrainingOptions TrainingOptions { get; set; } = new();
+	public IObservable<string> Output => _output;
+	public TrainingOptions Options => TrainingOptions;
+	public string OutputDirectoryPath => Path.Combine(WorkingDirectory, "artifacts");
 
 	public async Task TrainAsync(CancellationToken cancellationToken)
 	{
@@ -33,20 +34,8 @@ internal sealed class RFDETRDetectorTrainer(
 	{
 		progressObserver.OnNext("Starting training");
 		logger.Information("Starting training");
-		var outputParser = new RFDETROutputParser(logger.ForContext<RFDETROutputParser>());
 		using var output = new Subject<string>();
-		var epochResults = outputParser.Parse(output).Publish();
-		using var epochResultsSubscription = epochResults.Connect();
-		using var fileSystemWatcherTrainingArtifactsProvider = new FileSystemWatcherTrainingArtifactsProvider(
-			OutputDirectoryPath,
-			"*.pth",
-			epochResults,
-			logger.ForContext<FileSystemWatcherTrainingArtifactsProvider>());
-		_timeEstimator = new RemainingTimeEstimator(TrainingOptions.Epochs);
-		using var progressSubscription = epochResults
-			.Select(ToProgress)
-			.Subscribe(progressObserver);
-		await environmentCommandRunner.ExecuteCommandAsync(TrainCommand, output, null, cancellationToken);
+		await environmentCommandRunner.ExecuteCommandAsync(TrainCommand, _output, null, cancellationToken);
 		progressObserver.OnNext("Training completed");
 	}
 
@@ -54,9 +43,8 @@ internal sealed class RFDETRDetectorTrainer(
 	private static readonly string CondaEnvironmentPath = Path.Combine(WorkingDirectory, "conda-environment");
 	internal static readonly string DataSetPath = Path.Combine(WorkingDirectory, "dataset");
 	private static readonly string TrainPythonScriptPath = Path.Combine("Training", "RFDETR", "train.py");
-	private static readonly string OutputDirectoryPath = Path.Combine(WorkingDirectory, "artifacts");
 
-	private RemainingTimeEstimator? _timeEstimator;
+	private readonly Subject<string> _output = new();
 	private string TrainCommand
 	{
 		get
@@ -79,17 +67,5 @@ internal sealed class RFDETRDetectorTrainer(
 	{
 		logger.Information("Installing RF-DETR");
 		await environmentCommandRunner.ExecuteCommandAsync("pip install rfdetr", cancellationToken);
-	}
-
-	private Progress ToProgress(EpochResult epochResult)
-	{
-		Guard.IsNotNull(_timeEstimator);
-		return new Progress
-		{
-			Label = "Training",
-			Total = TrainingOptions.Epochs,
-			Current = epochResult.EpochNumber + 1,
-			EstimatedTimeOfArrival = DateTime.Now + _timeEstimator.Estimate(epochResult.EpochNumber + 1)
-		};
 	}
 }

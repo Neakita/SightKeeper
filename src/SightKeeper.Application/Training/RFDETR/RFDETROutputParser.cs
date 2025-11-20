@@ -6,7 +6,7 @@ using Serilog;
 
 namespace SightKeeper.Application.Training.RFDETR;
 
-internal sealed class RFDETROutputParser(ILogger logger)
+internal sealed class RFDETROutputParser(ILogger logger) : OutputParser
 {
 	public IObservable<EpochResult> Parse(IObservable<string> output)
 	{

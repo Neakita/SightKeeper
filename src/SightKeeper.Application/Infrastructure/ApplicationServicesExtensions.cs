@@ -3,6 +3,7 @@ using Autofac;
 using FluentValidation;
 using HotKeys;
 using HotKeys.SharpHook;
+using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
@@ -85,6 +86,9 @@ public static class ApplicationServicesExtensions
 
 		builder.RegisterType<CastingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
 			.As<TrainDataExporter<ReadOnlyTag, ReadOnlyAsset>>();
+
+		builder.RegisterType<RFDETROutputParser>()
+			.As<OutputParser>();
 	}
 
 	public static void RegisterPoserServices(this ContainerBuilder builder)
@@ -141,6 +145,18 @@ public static class ApplicationServicesExtensions
 		builder.RegisterInstance(new BehaviorSubject<object>("Idle"))
 			.Named<IObservable<object>>("training progress")
 			.Named<IObserver<object>>("training progress");
+		
+		builder.RegisterType<OutputHandlingTrainer>()
+			.WithParameter((info, _) => info.Position == 2, (_, context) => context.ResolveNamed<IObserver<object>>("training progress"));
+		
+		builder.RegisterDecorator<Trainer>((context, _, trainer) =>
+		{
+			var outputParser = context.Resolve<OutputParser>();
+			var progressObserver = context.ResolveNamed<IObserver<object>>("training progress");
+			var logger = context.Resolve<ILogger>().ForContext<OutputHandlingTrainer>();
+			return new OutputHandlingTrainer(trainer, outputParser, progressObserver, logger);
+		});
+			
 	}
 
 	private static void RegisterHotKeys(this ContainerBuilder builder)

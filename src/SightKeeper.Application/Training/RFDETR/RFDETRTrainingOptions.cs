@@ -1,6 +1,6 @@
 namespace SightKeeper.Application.Training.RFDETR;
 
-internal sealed class RFDETRTrainingOptions
+internal sealed class RFDETRTrainingOptions : TrainingOptions
 {
 	public byte BatchSize { get; set; } = 4;
 	public byte GradientAccumulationSteps { get; set; } = 4;
