@@ -14,11 +14,7 @@ internal sealed class RFDETRDetectorTrainer(
 	ILogger logger,
 	IObserver<object> progressObserver) : Trainer
 {
-	public byte BatchSize { get; set; } = 4;
-	public ushort Resolution { get; set; } = 320;
-	public RFDETRModel Model { get; set; } = RFDETRModel.Nano;
-	public ushort Epochs { get; set; } = 100;
-	public byte GradientAccumulationSteps { get; set; } = 4;
+	public RFDETRTrainingOptions TrainingOptions { get; set; } = new();
 
 	public async Task TrainAsync(CancellationToken cancellationToken)
 	{
@@ -46,7 +42,7 @@ internal sealed class RFDETRDetectorTrainer(
 			"*.pth",
 			epochResults,
 			logger.ForContext<FileSystemWatcherTrainingArtifactsProvider>());
-		_timeEstimator = new RemainingTimeEstimator(Epochs);
+		_timeEstimator = new RemainingTimeEstimator(TrainingOptions.Epochs);
 		using var progressSubscription = epochResults
 			.Select(ToProgress)
 			.Subscribe(progressObserver);
@@ -68,13 +64,13 @@ internal sealed class RFDETRDetectorTrainer(
 			var builder = new StringBuilder();
 			builder.AppendJoin(' ',
 				"python", TrainPythonScriptPath,
-				"--model", Model.Argument,
+				"--model", TrainingOptions.Model.Argument,
 				"--dataset_dir", DataSetPath,
-				"--epochs", Epochs,
-				"--batch_size", BatchSize,
-				"--grad_accum_steps", GradientAccumulationSteps,
+				"--epochs", TrainingOptions.Epochs,
+				"--batch_size", TrainingOptions.BatchSize,
+				"--grad_accum_steps", TrainingOptions.GradientAccumulationSteps,
 				"--output_dir", OutputDirectoryPath,
-				"--resolution", Resolution);
+				"--resolution", TrainingOptions.Resolution);
 			return builder.ToString();
 		}
 	}
@@ -91,7 +87,7 @@ internal sealed class RFDETRDetectorTrainer(
 		return new Progress
 		{
 			Label = "Training",
-			Total = Epochs,
+			Total = TrainingOptions.Epochs,
 			Current = epochResult.EpochNumber + 1,
 			EstimatedTimeOfArrival = DateTime.Now + _timeEstimator.Estimate(epochResult.EpochNumber + 1)
 		};
