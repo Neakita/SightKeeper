@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 using Serilog;
 using SightKeeper.Application.Misc;
 using SightKeeper.Application.Training;
+using SightKeeper.Application.Training.Data;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -20,6 +21,7 @@ namespace SightKeeper.Avalonia.Training;
 
 internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext, IDisposable, IAsyncDisposable
 {
+	private readonly LifetimeScopeProvider _lifetimeScopeProvider;
 	public IObservable<object> Progress { get; }
 	public IReadOnlyCollection<DataSet<Tag, Asset>> DataSets { get; }
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(StartTrainingCommand))]
@@ -30,8 +32,9 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 	ICommand TrainingDataContext.StopTrainingCommand => StartTrainingCommand.CreateCancelCommand();
 	public IEnumerable<string> LogLines { get; }
 
-	public TrainingViewModel(ObservableListRepository<DataSet<Tag, Asset>> dataSets, ILifetimeScope lifetime, IObservable<object> trainingProgress)
+	public TrainingViewModel(ObservableListRepository<DataSet<Tag, Asset>> dataSets, ILifetimeScope lifetime, IObservable<object> trainingProgress, LifetimeScopeProvider lifetimeScopeProvider)
 	{
+		_lifetimeScopeProvider = lifetimeScopeProvider;
 		Progress = trainingProgress;
 		var logLines = new AvaloniaList<string>();
 		var sink = new CollectionSink(logLines)
@@ -43,12 +46,9 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 			.WriteTo.Sink(sink)
 			.CreateLogger();
 		LogLines = logLines;
-		_lifetime = lifetime.BeginLifetimeScope(typeof(TrainingViewModel), builder =>
-		{
-			builder.RegisterInstance(logger)
-				.As<ILogger>();
-		});
-		_trainer = _lifetime.Resolve<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
+
+		_lifetime = lifetime.BeginLifetimeScope(typeof(TrainingViewModel), builder => builder.RegisterInstance(logger)
+			.As<ILogger>());
 		_logger = _lifetime.Resolve<ILogger>();
 		DataSets = dataSets.Items;
 	}
@@ -63,7 +63,6 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 		await _lifetime.DisposeAsync();
 	}
 
-	private readonly Trainer<ReadOnlyTag, ReadOnlyAsset> _trainer;
 	private readonly ILogger _logger;
 	private readonly ILifetimeScope _lifetime;
 	private bool CanStartTraining => DataSet != null;
@@ -75,7 +74,11 @@ internal sealed partial class TrainingViewModel : ViewModel, TrainingDataContext
 		IsTraining = true;
 		try
 		{
-			await _trainer.TrainAsync(DataSet, cancellationToken);
+			await using var dataSetScope = _lifetimeScopeProvider.BeginLifetimeScope(DataSet, _lifetime);
+			var dataExporter = dataSetScope.Resolve<TrainDataExporter<ReadOnlyTag, ReadOnlyAsset>>();
+			await dataExporter.ExportAsync(DataSet, cancellationToken);
+			var trainer = dataSetScope.Resolve<Trainer>();
+			await trainer.TrainAsync(cancellationToken);
 		}
 		catch (OperationCanceledException exception)
 		{

@@ -1,8 +1,6 @@
-using SightKeeper.Domain.DataSets;
-
 namespace SightKeeper.Application.Training;
 
-public interface Trainer<in TTag, in TAsset>
+public interface Trainer
 {
-	Task TrainAsync(ReadOnlyDataSet<TTag, TAsset> data, CancellationToken cancellationToken);
+	Task TrainAsync(CancellationToken cancellationToken);
 }

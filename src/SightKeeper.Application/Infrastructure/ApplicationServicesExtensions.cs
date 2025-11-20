@@ -3,7 +3,6 @@ using Autofac;
 using FluentValidation;
 using HotKeys;
 using HotKeys.SharpHook;
-using Serilog;
 using SharpHook.Reactive;
 using SightKeeper.Application.DataSets.Creating;
 using SightKeeper.Application.DataSets.Editing;
@@ -51,11 +50,41 @@ public static class ApplicationServicesExtensions
 
 	public static void RegisterDetectorServices(this ContainerBuilder builder)
 	{
-		builder.RegisterType<CastingTrainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
-			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
 		builder.RegisterType<RFDETRDetectorTrainer>()
-			.WithParameter((info, _) => info.Position == 3, (_, context) => context.ResolveNamed<IObserver<object>>("training progress"))
-			.As<Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+			.WithParameter((info, _) => info.Position == 2, (_, context) => context.ResolveNamed<IObserver<object>>("training progress"))
+			.As<Trainer>();
+		
+		builder.RegisterType<DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.ResolveNamed<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>("train"))
+			.WithParameter((info, _) => info.Position == 1, (_, context) => context.ResolveNamed<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>("validation"))
+			.WithParameter((info, _) => info.Position == 2, (_, context) => context.ResolveNamed<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>("test"))
+			.As<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+		
+		builder.RegisterTrainingDataExporter("train", "train");
+		builder.RegisterTrainingDataExporter("valid", "validation");
+		builder.RegisterTrainingDataExporter("test", "test");
+
+		builder.RegisterDecorator<
+			TransformingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>,
+			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+
+		builder.RegisterType<CropTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
+			.As<TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+
+		builder
+			.RegisterType<RandomItemsCropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyDetectorItem>, ReadOnlyDetectorItem>>()
+			.As<CropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+
+		builder.RegisterType<ItemsAssetCropper<ReadOnlyDetectorItem>>()
+			.As<AssetCropper<ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
+
+		builder.RegisterType<AssetItemCropper>()
+			.As<ItemCropper<ReadOnlyDetectorItem>>();
+
+		builder.RegisterType<RandomItemsCropSettings>();
+
+		builder.RegisterType<CastingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
+			.As<TrainDataExporter<ReadOnlyTag, ReadOnlyAsset>>();
 	}
 
 	public static void RegisterPoserServices(this ContainerBuilder builder)
@@ -105,48 +134,6 @@ public static class ApplicationServicesExtensions
 
 	private static void RegisterTraining(this ContainerBuilder builder)
 	{
-		builder.RegisterType<LifetimeTrainer>()
-			.As<Trainer<ReadOnlyTag, ReadOnlyAsset>>();
-
-		builder.RegisterType<COCODetectorDataSetExporter>()
-			.OnActivated(args =>
-			{
-				args.Instance.DataFileName = "_annotations.coco.json";
-				args.Instance.ImagesSubDirectoryPath = string.Empty;
-			})
-			.As<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
-		
-		builder.RegisterDecorator<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>((context, _, exporter) =>
-		{
-			var logger = context.Resolve<ILogger>();
-			logger = logger.ForContext<DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
-			return new DistributedTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>(exporter, logger)
-			{
-				TrainDirectoryName = "train",
-				ValidationDirectoryName = "valid",
-				TestDirectoryName = "test"
-			};
-		});
-
-		builder.RegisterDecorator<
-			TransformingTrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>,
-			TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
-
-		builder.RegisterType<CropTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>()
-			.As<TrainDataTransformer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
-
-		builder
-			.RegisterType<RandomItemsCropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyDetectorItem>, ReadOnlyDetectorItem>>()
-			.As<CropRectanglesProvider<ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
-
-		builder.RegisterType<ItemsAssetCropper<ReadOnlyDetectorItem>>()
-			.As<AssetCropper<ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>();
-
-		builder.RegisterType<AssetItemCropper>()
-			.As<ItemCropper<ReadOnlyDetectorItem>>();
-
-		builder.RegisterType<RandomItemsCropSettings>();
-
 		builder.RegisterType<ParallelImageExporter>()
 			.WithParameter((info, _) => info.Position == 1, (_, context) => context.ResolveNamed<IObserver<object>>("training progress"))
 			.As<ImageExporter>();
@@ -164,5 +151,17 @@ public static class ApplicationServicesExtensions
 
 		builder.RegisterType<BindingsManager>()
 			.WithParameter((info, _) => info.Position == 0, (_, context) => context.Resolve<IReactiveGlobalHook>().ObserveInputStates().ToGesture());
+	}
+
+	private static void RegisterTrainingDataExporter(this ContainerBuilder builder, string subDirectory, string name)
+	{
+		builder.RegisterType<COCODetectorDataSetExporter>()
+			.OnActivated(args =>
+			{
+				args.Instance.DataFileName = "_annotations.coco.json";
+				args.Instance.ImagesSubDirectoryPath = string.Empty;
+				args.Instance.DirectoryPath = Path.Combine(RFDETRDetectorTrainer.DataSetPath, subDirectory);
+			})
+			.Named<TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>>(name);
 	}
 }

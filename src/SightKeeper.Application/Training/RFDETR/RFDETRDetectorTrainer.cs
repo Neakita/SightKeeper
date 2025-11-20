@@ -6,18 +6,13 @@ using Serilog;
 using SightKeeper.Application.Interop.CLI;
 using SightKeeper.Application.Interop.Conda;
 using SightKeeper.Application.Misc;
-using SightKeeper.Application.Training.Data;
-using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.DataSets.Assets.Items;
-using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.Training.RFDETR;
 
 internal sealed class RFDETRDetectorTrainer(
 	CondaEnvironmentManager environmentManager,
-	TrainDataExporter<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> exporter,
 	ILogger logger,
-	IObserver<object> progressObserver) : Trainer<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>>
+	IObserver<object> progressObserver) : Trainer
 {
 	public byte BatchSize { get; set; } = 4;
 	public ushort Resolution { get; set; } = 320;
@@ -25,13 +20,10 @@ internal sealed class RFDETRDetectorTrainer(
 	public ushort Epochs { get; set; } = 100;
 	public byte GradientAccumulationSteps { get; set; } = 4;
 
-	public async Task TrainAsync(
-		ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data,
-		CancellationToken cancellationToken)
+	public async Task TrainAsync(CancellationToken cancellationToken)
 	{
 		var environmentCommandRunner = await ActivateEnvironmentAsync(cancellationToken);
 		await InstallRFDETRAsync(environmentCommandRunner, cancellationToken);
-		await ExportData(data, cancellationToken);
 		await TrainAsync(environmentCommandRunner, cancellationToken);
 	}
 
@@ -39,15 +31,6 @@ internal sealed class RFDETRDetectorTrainer(
 	{
 		progressObserver.OnNext("Preparing environment");
 		return environmentManager.ActivateAsync(CondaEnvironmentPath, null, cancellationToken);
-	}
-
-	private async Task ExportData(
-		ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data,
-		CancellationToken cancellationToken)
-	{
-		progressObserver.OnNext("Exporting data");
-		logger.Information("Exporting data");
-		await exporter.ExportAsync(DataSetPath, data, cancellationToken);
 	}
 
 	private async Task TrainAsync(CommandRunner environmentCommandRunner, CancellationToken cancellationToken)
@@ -73,7 +56,7 @@ internal sealed class RFDETRDetectorTrainer(
 
 	private static readonly string WorkingDirectory = Path.Combine("environments", "RF-DETR");
 	private static readonly string CondaEnvironmentPath = Path.Combine(WorkingDirectory, "conda-environment");
-	private static readonly string DataSetPath = Path.Combine(WorkingDirectory, "dataset");
+	internal static readonly string DataSetPath = Path.Combine(WorkingDirectory, "dataset");
 	private static readonly string TrainPythonScriptPath = Path.Combine("Training", "RFDETR", "train.py");
 	private static readonly string OutputDirectoryPath = Path.Combine(WorkingDirectory, "artifacts");
 

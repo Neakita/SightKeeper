@@ -16,9 +16,9 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 {
 	public string DataFileName { get; set; } = "data.json";
 	public string ImagesSubDirectoryPath { get; set; } = "images";
+	public string DirectoryPath { get; set; } = "data";
 
 	public async Task ExportAsync(
-		string directoryPath,
 		ReadOnlyDataSet<ReadOnlyTag, ReadOnlyItemsAsset<ReadOnlyDetectorItem>> data,
 		CancellationToken cancellationToken)
 	{
@@ -29,8 +29,8 @@ internal sealed class COCODetectorDataSetExporter(ImageExporter imageExporter, I
 			ProcessAssets(data.Assets);
 			var images = MaterializeImages(data);
 			ProcessImages(images);
-			await ExportImagesAsync(cancellationToken, directoryPath, images);
-			await ExportDataAsync(directoryPath, cancellationToken);
+			await ExportImagesAsync(cancellationToken, DirectoryPath, images);
+			await ExportDataAsync(DirectoryPath, cancellationToken);
 		}
 		finally
 		{
