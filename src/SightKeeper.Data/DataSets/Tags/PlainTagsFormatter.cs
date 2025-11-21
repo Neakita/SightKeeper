@@ -1,6 +1,7 @@
 using System.Buffers;
 using CommunityToolkit.Diagnostics;
 using MemoryPack;
+using SightKeeper.Data.DataSets.Tags.Decorators;
 using SightKeeper.Domain;
 using SightKeeper.Domain.DataSets.Tags;
 
@@ -32,11 +33,18 @@ internal sealed class PlainTagsFormatter : TagsFormatter<Tag>
 
 	public static TTag ReadTag<TTag>(ref MemoryPackReader reader, TagsOwner<TTag> tagsLibrary) where TTag : Tag
 	{
-		var tagName = reader.ReadString();
-		Guard.IsNotNull(tagName);
+		var tagName = reader.ReadNotNullString();
+		var tagIndex = tagsLibrary.Tags.Count;
 		var tag = tagsLibrary.CreateTag(tagName);
 		var innermostTag = tag.GetInnermost<TTag>();
 		innermostTag.Color = reader.ReadUnmanaged<uint>();
+		SetTagIndex(tag, (byte)tagIndex);
 		return tag;
+	}
+
+	private static void SetTagIndex(Tag tag, byte index)
+	{
+		var indexHolder = tag.GetFirst<TagIndexHolder>();
+		indexHolder.Index = index;
 	}
 }
