@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Diagnostics;
-using SightKeeper.Data.DataSets.Assets.Items;
+using SightKeeper.Application.Misc;
 using SightKeeper.Data.DataSets.Poser.Items.KeyPoints;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
@@ -13,14 +13,14 @@ internal sealed class StorablePoserItemFactory(
 	ChangeListener changeListener,
 	Lock editingLock,
 	KeyPointFactory keyPointFactory)
-	: AssetItemFactory<PoserItem>, PostWrappingInitializable<DataSet<PoserTag, ReadOnlyAsset>>
+	: Factory<PoserItem>, PostWrappingInitializable<DataSet<PoserTag, ReadOnlyAsset>>
 {
 	public void Initialize(DataSet<PoserTag, ReadOnlyAsset> wrapped)
 	{
 		_tagsContainer = wrapped.TagsLibrary;
 	}
 
-	public PoserItem CreateItem()
+	public PoserItem Create()
 	{
 		Guard.IsNotNull(_tagsContainer);
 		var tag = _tagsContainer.Tags[0];

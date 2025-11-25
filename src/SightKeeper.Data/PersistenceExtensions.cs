@@ -23,7 +23,6 @@ using SightKeeper.Data.ImageSets.Decorators;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
-using SightKeeper.Domain.DataSets.Artifacts;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
@@ -157,13 +156,13 @@ public static class PersistenceExtensions
 			.As<AssetFactory<ItemsAsset<DetectorItem>>>();
 
 		builder.RegisterType<StorableDetectorItemFactory>()
-			.As<AssetItemFactory<DetectorItem>>();
+			.As<Factory<DetectorItem>>();
 
 		builder.RegisterType<StorableItemsAssetFactory<PoserItem>>()
 			.As<AssetFactory<ItemsAsset<PoserItem>>>();
 
 		builder.RegisterType<StorablePoserItemFactory>()
-			.As<AssetItemFactory<PoserItem>>();
+			.As<Factory<PoserItem>>();
 
 		builder.RegisterType<StorablePoserTagFactory>()
 			.As<TagFactory<PoserTag>>();

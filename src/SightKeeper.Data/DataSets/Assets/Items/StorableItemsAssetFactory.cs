@@ -1,4 +1,5 @@
 using CommunityToolkit.Diagnostics;
+using SightKeeper.Application.Misc;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
@@ -9,7 +10,7 @@ using SightKeeper.Domain.Images;
 namespace SightKeeper.Data.DataSets.Assets.Items;
 
 internal sealed class StorableItemsAssetFactory<TItem>(
-	AssetItemFactory<TItem> itemFactory,
+	Factory<TItem> itemFactory,
 	ChangeListener changeListener,
 	Lock editingLock)
 	: AssetFactory<ItemsAsset<TItem>>, PostWrappingInitializable<DataSet<Tag, ReadOnlyAsset>>
