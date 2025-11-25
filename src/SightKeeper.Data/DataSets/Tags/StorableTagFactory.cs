@@ -1,20 +1,33 @@
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.Services;
+using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Data.DataSets.Tags;
 
-internal sealed class StorableTagFactory(ChangeListener changeListener, Lock editingLock) : TagFactory<Tag>
+internal sealed class StorableTagFactory(
+	ChangeListener changeListener,
+	Lock editingLock)
+	: TagFactory<Tag>, PostWrappingInitializable<DataSet<Tag, ReadOnlyAsset>>
 {
-	public TagsContainer<Tag>? TagsOwner { get; set; }
+	public void Initialize(DataSet<Tag, ReadOnlyAsset> wrapped)
+	{
+		_tagsOwner = wrapped.TagsLibrary;
+	}
+
+	public void Initialize(TagsContainer<Tag> tagsOwner)
+	{
+		_tagsOwner = tagsOwner;
+	}
 
 	public Tag CreateTag(string name)
 	{
-		Guard.IsNotNull(TagsOwner);
+		Guard.IsNotNull(_tagsOwner);
 		var inMemoryTag = new InMemoryTag
 		{
 			Name = name,
-			Owner = TagsOwner
+			Owner = _tagsOwner
 		};
 		return inMemoryTag
 			.WithTracking(changeListener)
@@ -23,4 +36,6 @@ internal sealed class StorableTagFactory(ChangeListener changeListener, Lock edi
 			.WithEditableUsers()
 			.WithNotifications();
 	}
+
+	private TagsContainer<Tag>? _tagsOwner;
 }

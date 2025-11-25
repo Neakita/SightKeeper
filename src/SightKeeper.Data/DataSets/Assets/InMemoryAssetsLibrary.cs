@@ -1,15 +1,25 @@
 using CommunityToolkit.Diagnostics;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Domain;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 using SightKeeper.Domain.Images;
 
 namespace SightKeeper.Data.DataSets.Assets;
 
-internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFactory) : AssetsOwner<TAsset> where TAsset : Asset
+internal sealed class InMemoryAssetsLibrary<TAsset>(AssetFactory<TAsset> assetFactory)
+	: AssetsOwner<TAsset>, PostWrappingInitializable<DataSet<Tag, ReadOnlyAsset>>
+	where TAsset : Asset
 {
 	public IReadOnlyCollection<TAsset> Assets => _assets.Values;
 	public IReadOnlyCollection<ManagedImage> Images => _assets.Keys;
+
+	public void Initialize(DataSet<Tag, ReadOnlyAsset> wrapped)
+	{
+		if (assetFactory is PostWrappingInitializable<DataSet<Tag, ReadOnlyAsset>> initializable)
+			initializable.Initialize(wrapped);
+	}
 
 	public TAsset GetAsset(ManagedImage image)
 	{

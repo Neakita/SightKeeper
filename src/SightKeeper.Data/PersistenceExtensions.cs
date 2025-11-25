@@ -8,10 +8,12 @@ using SightKeeper.Data.DataSets.Artifacts;
 using SightKeeper.Data.DataSets.Assets;
 using SightKeeper.Data.DataSets.Assets.Items;
 using SightKeeper.Data.DataSets.Classifier;
+using SightKeeper.Data.DataSets.Classifier.Assets;
 using SightKeeper.Data.DataSets.Classifier.Assets.Decorators;
 using SightKeeper.Data.DataSets.Decorators;
 using SightKeeper.Data.DataSets.Detector;
-using SightKeeper.Data.DataSets.Poser;
+using SightKeeper.Data.DataSets.Detector.Items;
+using SightKeeper.Data.DataSets.Poser.Items;
 using SightKeeper.Data.DataSets.Poser.Items.Decorators;
 using SightKeeper.Data.DataSets.Poser.Items.KeyPoints;
 using SightKeeper.Data.DataSets.Poser.Tags;
@@ -21,6 +23,7 @@ using SightKeeper.Data.ImageSets.Decorators;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Artifacts;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
@@ -118,19 +121,57 @@ public static class PersistenceExtensions
 
 		builder.RegisterDecorator<WrappedImageSetFactory, Factory<ImageSet>>();
 
-		builder.RegisterType<WrappingClassifierDataSetFactory>()
+		builder.RegisterType<InMemoryDataSetFactory<Tag, ClassifierAsset>>()
+			.As<Factory<InMemoryDataSet<Tag, ClassifierAsset>>>();
+
+		builder.RegisterType<WrappingFactory<DataSet<Tag, ClassifierAsset>>>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.Resolve<Factory<InMemoryDataSet<Tag, ClassifierAsset>>>())
 			.As<Factory<DataSet<Tag, ClassifierAsset>>>();
 
-		builder.RegisterType<WrappingDetectorDataSetFactory>()
+		builder.RegisterType<InMemoryDataSetFactory<Tag, ItemsAsset<DetectorItem>>>()
+			.As<Factory<InMemoryDataSet<Tag, ItemsAsset<DetectorItem>>>>();
+
+		builder.RegisterType<WrappingFactory<DataSet<Tag, ItemsAsset<DetectorItem>>>>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.Resolve<Factory<InMemoryDataSet<Tag, ItemsAsset<DetectorItem>>>>())
 			.As<Factory<DataSet<Tag, ItemsAsset<DetectorItem>>>>();
 
-		builder.RegisterType<WrappingPoserDataSetFactory>()
+		builder.RegisterType<InMemoryDataSetFactory<PoserTag, ItemsAsset<PoserItem>>>()
+			.As<Factory<InMemoryDataSet<PoserTag, ItemsAsset<PoserItem>>>>();
+
+		builder.RegisterType<WrappingFactory<DataSet<PoserTag, ItemsAsset<PoserItem>>>>()
+			.WithParameter((info, _) => info.Position == 0, (_, context) => context.Resolve<Factory<InMemoryDataSet<PoserTag, ItemsAsset<PoserItem>>>>())
 			.As<Factory<DataSet<PoserTag, ItemsAsset<PoserItem>>>>();
 
 		builder.RegisterType<InMemoryKeyPointFactory>()
 			.As<KeyPointFactory>();
-		
+
 		builder.RegisterDecorator<WrappingKeyPointFactory, KeyPointFactory>();
+
+		builder.RegisterType<StorableTagFactory>()
+			.As<TagFactory<Tag>>();
+
+		builder.RegisterType<StorableClassifierAssetFactory>()
+			.As<AssetFactory<ClassifierAsset>>();
+
+		builder.RegisterType<StorableItemsAssetFactory<DetectorItem>>()
+			.As<AssetFactory<ItemsAsset<DetectorItem>>>();
+
+		builder.RegisterType<StorableDetectorItemFactory>()
+			.As<AssetItemFactory<DetectorItem>>();
+
+		builder.RegisterType<StorableItemsAssetFactory<PoserItem>>()
+			.As<AssetFactory<ItemsAsset<PoserItem>>>();
+
+		builder.RegisterType<StorablePoserItemFactory>()
+			.As<AssetItemFactory<PoserItem>>();
+
+		builder.RegisterType<StorablePoserTagFactory>()
+			.As<TagFactory<PoserTag>>();
+
+		builder.RegisterType<FileSystemDataAccess>()
+			.WithParameter(new PositionalParameter(0, string.Empty))
+			.OnActivating(args => args.Instance.DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Artifacts"))
+			.Named<FileSystemDataAccess>("artifacts");
 	}
 
 	private static void RegisterFormatters(this ContainerBuilder builder)
