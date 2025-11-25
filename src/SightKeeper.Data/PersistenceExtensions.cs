@@ -168,8 +168,11 @@ public static class PersistenceExtensions
 			.As<TagFactory<PoserTag>>();
 
 		builder.RegisterType<FileSystemDataAccess>()
-			.WithParameter(new PositionalParameter(0, string.Empty))
-			.OnActivating(args => args.Instance.DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Artifacts"))
+			.OnActivating(args =>
+			{
+				args.Instance.FileExtension = string.Empty;
+				args.Instance.DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Artifacts");
+			})
 			.Named<FileSystemDataAccess>("artifacts");
 	}
 
@@ -250,8 +253,11 @@ public static class PersistenceExtensions
 	private static void RegisterPng(this ContainerBuilder builder)
 	{
 		builder.RegisterType<FileSystemDataAccess>()
-			.WithParameter(new PositionalParameter(0, "png"))
-			.OnActivating(args => args.Instance.DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Images"))
+			.OnActivating(args =>
+			{
+				args.Instance.FileExtension = "png";
+				args.Instance.DirectoryPath = Path.Combine(FileSystemDataAccess.DefaultDirectoryPath, "Images");
+			})
 			.Named<FileSystemDataAccess>("images");
 
 		builder.RegisterType<PngEncoder>()

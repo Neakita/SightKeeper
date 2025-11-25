@@ -2,12 +2,12 @@ using FlakeId;
 
 namespace SightKeeper.Data.Services;
 
-internal class FileSystemDataAccess(string fileExtension)
+internal class FileSystemDataAccess
 {
 	public const string DefaultDirectoryPath = "Data";
 
 	public string DirectoryPath { get; set; } = DefaultDirectoryPath;
-	public string FileExtension => fileExtension;
+	public string FileExtension { get; set; } = string.Empty;
 
 	public virtual Stream OpenRead(Id id)
 	{
@@ -30,7 +30,7 @@ internal class FileSystemDataAccess(string fileExtension)
 
 	private string GetFilePath(Id id)
 	{
-		var fileName = $"{id}.{fileExtension}";
+		var fileName = $"{id}.{FileExtension}";
 		var filePath = Path.Combine(DirectoryPath, fileName);
 		return filePath;
 	}
