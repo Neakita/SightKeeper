@@ -44,7 +44,7 @@ internal sealed class PlainTagsFormatter : TagsFormatter<Tag>
 
 	private static void SetTagIndex(Tag tag, byte index)
 	{
-		var indexHolder = tag.GetFirst<TagIndexHolder>();
-		indexHolder.Index = index;
+		var indexHolder = tag.Get<TagIndexHolder>().SingleOrDefault();
+		indexHolder?.Index = index;
 	}
 }
