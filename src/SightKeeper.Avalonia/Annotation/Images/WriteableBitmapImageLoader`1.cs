@@ -11,7 +11,7 @@ using SightKeeper.Avalonia.Extensions;
 using SightKeeper.Avalonia.Misc;
 using SightKeeper.Domain;
 using SightKeeper.Domain.Images;
-using Yolo.InputProcessing;
+using TensorWeaver.InputProcessing;
 
 namespace SightKeeper.Avalonia.Annotation.Images;
 

@@ -1,32 +1,32 @@
 ﻿<Solution>
   <Folder Name="/HotKeys/">
-    <Project Path="..\HotKeys\HotKeys.Avalonia\HotKeys.Avalonia.csproj" Type="Classic C#" />
-    <Project Path="..\HotKeys\HotKeys.SharpHook\HotKeys.SharpHook.csproj" Type="Classic C#" />
-    <Project Path="..\HotKeys\HotKeys\HotKeys.csproj" Type="Classic C#" />
+    <Project Path="..\HotKeys\HotKeys.Avalonia\HotKeys.Avalonia.csproj" Type="C#" />
+    <Project Path="..\HotKeys\HotKeys.SharpHook\HotKeys.SharpHook.csproj" Type="C#" />
+    <Project Path="..\HotKeys\HotKeys\HotKeys.csproj" Type="C#" />
   </Folder>
   <Folder Name="/Sightful/">
-    <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls.GestureBox\Sightful.Avalonia.Controls.GestureBox.csproj" Type="Classic C#" />
-    <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls.PropertyGrid\Sightful.Avalonia.Controls.PropertyGrid.csproj" Type="Classic C#" />
-    <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls.ZoomViewer\Sightful.Avalonia.Controls.ZoomViewer.csproj" Type="Classic C#" />
-    <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls\Sightful.Avalonia.Controls.csproj" Type="Classic C#" />
-    <Project Path="..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid\Sightful.Avalonia.TreeDataGrid.csproj" Type="Classic C#" />
-    <Project Path="..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj" Type="Classic C#" />
+    <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls.GestureBox\Sightful.Avalonia.Controls.GestureBox.csproj" Type="C#" />
+    <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls.PropertyGrid\Sightful.Avalonia.Controls.PropertyGrid.csproj" Type="C#" />
+    <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls.ZoomViewer\Sightful.Avalonia.Controls.ZoomViewer.csproj" Type="C#" />
+    <Project Path="..\Sightful.Theme\Sightful.Avalonia.Controls\Sightful.Avalonia.Controls.csproj" Type="C#" />
+    <Project Path="..\Sightful.Theme\Sightful.Avalonia.TreeDataGrid\Sightful.Avalonia.TreeDataGrid.csproj" Type="C#" />
+    <Project Path="..\Sightful.Theme\Sightful.Avalonia\Sightful.Avalonia.csproj" Type="C#" />
+  </Folder>
+  <Folder Name="/TensorWeaver/">
+    <Project Path="../TensorWeaver/TensorWeaver.ImageSharp/TensorWeaver.ImageSharp.csproj" />
+    <Project Path="../TensorWeaver/TensorWeaver/TensorWeaver.csproj" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="tests\SightKeeper.Application.Tests\SightKeeper.Application.Tests.csproj" Type="Classic C#" />
-    <Project Path="tests\SightKeeper.Avalonia.Tests\SightKeeper.Avalonia.Tests.csproj" Type="Classic C#" />
-    <Project Path="tests\SightKeeper.Data.Tests\SightKeeper.Data.Tests.csproj" Type="Classic C#" />
-    <Project Path="tests\SightKeeper.Domain.Tests\SightKeeper.Domain.Tests.csproj" Type="Classic C#" />
+    <Project Path="tests\SightKeeper.Application.Tests\SightKeeper.Application.Tests.csproj" Type="C#" />
+    <Project Path="tests\SightKeeper.Avalonia.Tests\SightKeeper.Avalonia.Tests.csproj" Type="C#" />
+    <Project Path="tests\SightKeeper.Data.Tests\SightKeeper.Data.Tests.csproj" Type="C#" />
+    <Project Path="tests\SightKeeper.Domain.Tests\SightKeeper.Domain.Tests.csproj" Type="C#" />
   </Folder>
-  <Folder Name="/Yolo/">
-    <Project Path="..\Yolo\Yolo.ImageSharp\Yolo.ImageSharp.csproj" Type="Classic C#" />
-    <Project Path="..\Yolo\Yolo\Yolo.csproj" Type="Classic C#" />
-  </Folder>
-  <Project Path="..\Vibrance\Vibrance\Vibrance.csproj" Type="Classic C#" />
-  <Project Path="src\SightKeeper.Application.Linux\SightKeeper.Application.Linux.csproj" Type="Classic C#" />
-  <Project Path="src\SightKeeper.Application.Windows\SightKeeper.Application.Windows.csproj" Type="Classic C#" />
-  <Project Path="src\SightKeeper.Application\SightKeeper.Application.csproj" Type="Classic C#" />
-  <Project Path="src\SightKeeper.Avalonia\SightKeeper.Avalonia.csproj" Type="Classic C#" />
-  <Project Path="src\SightKeeper.Data\SightKeeper.Data.csproj" Type="Classic C#" />
-  <Project Path="src\SightKeeper.Domain\SightKeeper.Domain.csproj" Type="Classic C#" />
+  <Project Path="..\Vibrance\Vibrance\Vibrance.csproj" Type="C#" />
+  <Project Path="src\SightKeeper.Application.Linux\SightKeeper.Application.Linux.csproj" Type="C#" />
+  <Project Path="src\SightKeeper.Application.Windows\SightKeeper.Application.Windows.csproj" Type="C#" />
+  <Project Path="src\SightKeeper.Application\SightKeeper.Application.csproj" Type="C#" />
+  <Project Path="src\SightKeeper.Avalonia\SightKeeper.Avalonia.csproj" Type="C#" />
+  <Project Path="src\SightKeeper.Data\SightKeeper.Data.csproj" Type="C#" />
+  <Project Path="src\SightKeeper.Domain\SightKeeper.Domain.csproj" Type="C#" />
 </Solution>

@@ -8,7 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Yolo\Yolo\Yolo.csproj" />
       <ProjectReference Include="..\SightKeeper.Application\SightKeeper.Application.csproj" />
     </ItemGroup>
 

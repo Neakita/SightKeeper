@@ -5,7 +5,6 @@ using SharpDX.DXGI;
 using SightKeeper.Application.ScreenCapturing;
 using SightKeeper.Domain;
 using SixLabors.ImageSharp.PixelFormats;
-using Yolo;
 using Device = SharpDX.Direct3D11.Device;
 using MapFlags = SharpDX.Direct3D11.MapFlags;
 using Resource = SharpDX.DXGI.Resource;
@@ -27,7 +26,7 @@ internal sealed class DX11ScreenCapturer : ScreenCapturer<Bgra32>, IDisposable
 		_output1 = output.QueryInterface<Output1>();
 		int width = output.Description.DesktopBounds.Right;
 		int height = output.Description.DesktopBounds.Bottom;
-		_size = new Vector2D<int>(width, height);
+		_size = new Vector2<int>(width, height);
 		Texture2DDescription textureDesc = new()
 		{
 			CpuAccessFlags = CpuAccessFlags.Read,
@@ -48,7 +47,7 @@ internal sealed class DX11ScreenCapturer : ScreenCapturer<Bgra32>, IDisposable
 	private readonly Output1 _output1;
 	private readonly Device _device;
 	private readonly Texture2D _screenTexture;
-	private readonly Vector2D<int> _size;
+	private readonly Vector2<int> _size;
 	private readonly Factory1 _factory;
 	private readonly OutputDuplication _outputDuplication;
 	private Resource? _screenResource;
