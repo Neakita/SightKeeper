@@ -23,6 +23,7 @@ using SightKeeper.Data.ImageSets.Decorators;
 using SightKeeper.Data.ImageSets.Images;
 using SightKeeper.Data.Services;
 using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Artifacts;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Poser;
@@ -110,6 +111,9 @@ public static class PersistenceExtensions
 		});
 		builder.RegisterDataSetWrappers<Tag, ItemsAsset<DetectorItem>>(1, options.DetectorDataSetScopeConfiguration);
 		builder.RegisterDataSetWrappers<PoserTag, ItemsAsset<PoserItem>>(2, options.PoserDataSetScopeConfiguration);
+
+		builder.RegisterType<StorableArtifactWrapper>()
+			.As<Wrapper<Artifact>>();
 	}
 
 	private static void RegisterFactories(this ContainerBuilder builder)
