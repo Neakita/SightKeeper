@@ -2,7 +2,6 @@
 using System.Reactive.Disposables.Fluent;
 using CommunityToolkit.Diagnostics;
 using Serilog;
-using SightKeeper.Application.Training.RFDETR;
 using Vibrance;
 
 namespace SightKeeper.Application.Training;
@@ -11,32 +10,17 @@ internal sealed class FileSystemWatcherTrainingArtifactsProvider : TrainingArtif
 {
 	public ReadOnlyObservableList<TrainingArtifact> Artifacts => _artifacts;
 
-	public FileSystemWatcherTrainingArtifactsProvider(string path, string filter, IObservable<EpochResult> epochs, ILogger logger)
+	public FileSystemWatcherTrainingArtifactsProvider(string directoryPath, string filter, Func<string, TrainingArtifact> artifactFactory, IObservable<EpochResult> epochs, ILogger logger)
 	{
+		_artifactFactory = artifactFactory;
 		_logger = logger;
-		_watcher = new FileSystemWatcher(path, filter);
+		_watcher = new FileSystemWatcher(directoryPath, filter);
 		_watcher.Created += OnFileCreated;
 		_watcher.Changed += OnFileChanged;
 		_watcher.Deleted += OnFileDeleted;
 		_watcher.Error += OnWatcherError;
 		_watcher.EnableRaisingEvents = true;
-		AddExistingArtifacts(path, filter);
 		epochs.Subscribe(OnEpochPassed).DisposeWith(_disposable);
-	}
-
-	private void AddExistingArtifacts(string path, string filter)
-	{
-		var filePaths = Directory.GetFiles(path, filter);
-		foreach (var filePath in filePaths)
-		{
-			_logger.Debug("Adding existing artifact \"{FilePath}\"", filePath);
-			var fileName = Path.GetFileName(filePath);
-			var artifact = new TrainingArtifact
-			{
-				FileName = fileName
-			};
-			_artifacts.Add(artifact);
-		}
 	}
 
 	public void Dispose()
@@ -51,34 +35,42 @@ internal sealed class FileSystemWatcherTrainingArtifactsProvider : TrainingArtif
 
 	private readonly ObservableList<TrainingArtifact> _artifacts = new();
 	private readonly FileSystemWatcher _watcher;
+	private readonly Func<string, TrainingArtifact> _artifactFactory;
 	private readonly ILogger _logger;
 	private readonly CompositeDisposable _disposable = new();
-	private readonly HashSet<string> _filesChangedLastEpoch = new();
+	private readonly HashSet<TrainingArtifact> _artifactsChangedLastEpoch = new();
 
 	private void OnFileCreated(object sender, FileSystemEventArgs e)
 	{
 		Guard.IsNotNull(e.Name);
 		_logger.Verbose("File \"{FileName}\" creation observed", e.Name);
-		var artifact = new TrainingArtifact
-		{
-			FileName = e.Name
-		};
+		var artifact = CreateArtifact(e.FullPath);
 		_artifacts.Add(artifact);
-		_filesChangedLastEpoch.Add(e.Name);
+		_artifactsChangedLastEpoch.Add(artifact);
 	}
 
 	private void OnFileChanged(object sender, FileSystemEventArgs e)
 	{
 		_logger.Verbose("File \"{FileName}\" change observed", e.Name);
-		if (e.Name != null)
-			_filesChangedLastEpoch.Add(e.Name);
+		if (e.Name == null)
+			return;
+		var artifact = _artifacts.SingleOrDefault(artifact => artifact.FileName == e.Name);
+		if (artifact == null)
+		{
+			artifact = CreateArtifact(e.FullPath);
+			_artifacts.Add(artifact);
+		}
+		_artifactsChangedLastEpoch.Add(artifact);
+		artifact.Timestamp = DateTime.Now;
 	}
 
 	private void OnFileDeleted(object sender, FileSystemEventArgs e)
 	{
 		_logger.Debug("File \"{FileName}\" deletion observed", e.Name);
 		var index = _artifacts.Index().First(artifact => artifact.Item.FileName == e.Name).Index;
+		var artifact = _artifacts[index];
 		_artifacts.RemoveAt(index);
+		_artifactsChangedLastEpoch.Remove(artifact);
 	}
 
 	private void OnWatcherError(object sender, ErrorEventArgs e)
@@ -88,11 +80,16 @@ internal sealed class FileSystemWatcherTrainingArtifactsProvider : TrainingArtif
 
 	private void OnEpochPassed(EpochResult result)
 	{
-		foreach (var artifact in _artifacts.Where(artifact => _filesChangedLastEpoch.Contains(artifact.FileName)))
+		foreach (var artifact in _artifactsChangedLastEpoch)
 		{
-			artifact.EpochResult = result;
+			artifact.Epoch = result;
 			_logger.Verbose("Artifact {fileName} epoch result updated", artifact.FileName);
 		}
-		_filesChangedLastEpoch.Clear();
+		_artifactsChangedLastEpoch.Clear();
+	}
+
+	private TrainingArtifact CreateArtifact(string filePath)
+	{
+		return _artifactFactory(filePath);
 	}
 }

@@ -20,6 +20,7 @@ using SightKeeper.Application.Training.COCO;
 using SightKeeper.Application.Training.Data;
 using SightKeeper.Application.Training.Data.Transforming;
 using SightKeeper.Application.Training.RFDETR;
+using SightKeeper.Domain.DataSets;
 using SightKeeper.Domain.DataSets.Assets;
 using SightKeeper.Domain.DataSets.Assets.Items;
 using SightKeeper.Domain.DataSets.Tags;
@@ -145,6 +146,11 @@ public static class ApplicationServicesExtensions
 		builder.RegisterInstance(new BehaviorSubject<object>("Idle"))
 			.Named<IObservable<object>>("training progress")
 			.Named<IObserver<object>>("training progress");
+
+		builder.RegisterType<MutableCompositeTrainingArtifactsProvider>()
+			.SingleInstance()
+			.AsSelf()
+			.As<TrainingArtifactsProvider>();
 		
 		builder.RegisterType<OutputHandlingTrainer>()
 			.WithParameter((info, _) => info.Position == 2, (_, context) => context.ResolveNamed<IObserver<object>>("training progress"));
@@ -154,9 +160,10 @@ public static class ApplicationServicesExtensions
 			var outputParser = context.Resolve<OutputParser>();
 			var progressObserver = context.ResolveNamed<IObserver<object>>("training progress");
 			var logger = context.Resolve<ILogger>().ForContext<OutputHandlingTrainer>();
-			return new OutputHandlingTrainer(trainer, outputParser, progressObserver, logger);
+			var dataSet = context.Resolve<DataSet<ReadOnlyTag, ReadOnlyAsset>>();
+			var mutableCompositeTrainingArtifactsProvider = context.Resolve<MutableCompositeTrainingArtifactsProvider>();
+			return new OutputHandlingTrainer(trainer, outputParser, progressObserver, logger, dataSet, mutableCompositeTrainingArtifactsProvider);
 		});
-			
 	}
 
 	private static void RegisterHotKeys(this ContainerBuilder builder)

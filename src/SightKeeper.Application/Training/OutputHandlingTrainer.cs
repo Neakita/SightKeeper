@@ -4,7 +4,9 @@ using System.Reactive.Linq;
 using CommunityToolkit.Diagnostics;
 using Serilog;
 using SightKeeper.Application.Misc;
-using SightKeeper.Application.Training.RFDETR;
+using SightKeeper.Domain.DataSets;
+using SightKeeper.Domain.DataSets.Assets;
+using SightKeeper.Domain.DataSets.Tags;
 
 namespace SightKeeper.Application.Training;
 
@@ -12,7 +14,9 @@ internal sealed class OutputHandlingTrainer(
 	Trainer trainer,
 	OutputParser outputParser,
 	IObserver<object> progressObserver,
-	ILogger logger)
+	ILogger logger,
+	DataSet<ReadOnlyTag, ReadOnlyAsset> dataSet,
+	MutableCompositeTrainingArtifactsProvider mutableCompositeTrainingArtifactsProvider)
 	: Trainer
 {
 	public async Task TrainAsync(CancellationToken cancellationToken)
@@ -55,13 +59,26 @@ internal sealed class OutputHandlingTrainer(
 	{
 		if (trainer is not TrainingPathsProvider pathsProvider)
 			return Disposable.Empty;
-		var artifactsProvider = new FileSystemWatcherTrainingArtifactsProvider(
-			pathsProvider.OutputDirectoryPath,
-			"*.pth",
-			epochResults,
-			logger.ForContext<FileSystemWatcherTrainingArtifactsProvider>());
-		return artifactsProvider;
-
+		var disposable = new CompositeDisposable();
+		try
+		{
+			var artifactsProvider = new FileSystemWatcherTrainingArtifactsProvider(
+				pathsProvider.OutputDirectoryPath,
+				"*.pth",
+				CreateArtifact,
+				epochResults,
+				logger.ForContext<FileSystemWatcherTrainingArtifactsProvider>());
+			artifactsProvider.DisposeWith(disposable);
+			mutableCompositeTrainingArtifactsProvider.Add(artifactsProvider);
+			Disposable.Create(artifactsProvider, mutableCompositeTrainingArtifactsProvider.Remove)
+				.DisposeWith(disposable);
+			return disposable;
+		}
+		catch
+		{
+			disposable.Dispose();
+			throw;
+		}
 	}
 
 	private Progress ToProgress(EpochResult epochResult)
@@ -73,6 +90,18 @@ internal sealed class OutputHandlingTrainer(
 			Total = ((OptionsHolder)trainer).Options.Epochs,
 			Current = epochResult.EpochNumber + 1,
 			EstimatedTimeOfArrival = DateTime.Now + _timeEstimator.Estimate(epochResult.EpochNumber + 1)
+		};
+	}
+
+	private TrainingArtifact CreateArtifact(string filePath)
+	{
+		return new TrainingArtifact
+		{
+			FilePath = filePath,
+			DataSet = dataSet,
+			Model = ((OptionsHolder)trainer).Options.Model,
+			Format = "PyTorch",
+			Resolution = ((OptionsHolder)trainer).Options.Resolution
 		};
 	}
 }

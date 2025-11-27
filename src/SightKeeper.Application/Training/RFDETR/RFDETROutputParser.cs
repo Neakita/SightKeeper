@@ -65,7 +65,8 @@ internal sealed class RFDETROutputParser(ILogger logger) : OutputParser
 
 		return new EpochResult
 		{
-			EpochNumber = epochNumber
+			EpochNumber = epochNumber + 1,
+			Timestamp = DateTime.Now
 		};
 	}
 

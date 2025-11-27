@@ -44,7 +44,11 @@ internal sealed class DataSetLifetimeScopeProviderDecorator<TTag, TAsset>(
 		Guard.IsNotNull(_wrapped);
 		return scope.BeginLifetimeScope(typeof(DataSet<TTag, TAsset>), builder =>
 		{
-			builder.RegisterInstance(_wrapped);
+			builder.RegisterInstance(_wrapped)
+				.As<DataSet<TTag, TAsset>>()
+				.As<ReadOnlyDataSet<TTag, TAsset>>()
+				.As<DataSet<ReadOnlyTag, ReadOnlyAsset>>()
+				.As<ReadOnlyDataSet<ReadOnlyTag, ReadOnlyAsset>>();
 			configurationAction?.Invoke(builder);
 		});
 	}

@@ -1,3 +1,5 @@
+using SightKeeper.Domain;
+
 namespace SightKeeper.Application.Training.RFDETR;
 
 internal sealed class RFDETRTrainingOptions : TrainingOptions
@@ -7,4 +9,8 @@ internal sealed class RFDETRTrainingOptions : TrainingOptions
 	public ushort Resolution { get; set; } = 320;
 	public RFDETRModel Model { get; set; } = RFDETRModel.Nano;
 	public ushort Epochs { get; set; } = 100;
+
+	string TrainingOptions.Model => Model.Name;
+
+	Vector2<ushort> TrainingOptions.Resolution => new(Resolution, Resolution);
 }
